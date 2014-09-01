@@ -121,8 +121,6 @@
 		</div>
 		<div class="box-content">
 			<span>Should be csv/xls/xlsx file with at least those columns: date, amount or (credit and debit), description </span>
-			<%console.log('files', files);%>
-
 			<table class="table">
 				<tbody>
 					<%_.each(files, function(file) {%>
@@ -131,6 +129,13 @@
 						<td><input type="radio" name="YodleeBankFile" value="<%-file.Id%>"/></td>
 					</tr>
 					<%});%>
+					<tr>
+						<td colspan="2">
+							<form id="bankFilesUploadZone" class="dropzone" action="@Url.Action("UploadFile", "MarketPlaces", new { Area = "Underwriter" })">
+								<div class="dz-message dz-with-text">Drag or Click to upload the bank document.</div>
+							</form>
+						</td>
+					</tr>
 					<tr>
 						<td colspan="2">
 							<div class="pull-right">

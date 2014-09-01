@@ -85,6 +85,10 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
             @$el.find(".mps-tables").show()
             @$el.find('#parse-yodlee-container').hide().empty()
 
+        EzBob.App.vent.on 'ct:marketplaces.addedFile', () =>
+            @model.fetch().done( () =>
+                @parseYodlee()
+            )
 
         @
     # end of initialize

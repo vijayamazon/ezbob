@@ -139,6 +139,11 @@
         _this.$el.find(".mps-tables").show();
         return _this.$el.find('#parse-yodlee-container').hide().empty();
       });
+      EzBob.App.vent.on('ct:marketplaces.addedFile', function() {
+        return _this.model.fetch().done(function() {
+          return _this.parseYodlee();
+        });
+      });
       return this;
     };
 

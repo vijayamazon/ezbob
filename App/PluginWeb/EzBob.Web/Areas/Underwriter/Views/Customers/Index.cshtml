@@ -382,11 +382,15 @@
 		@{
 			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("UploadHmrcController", "SaveFile");
 			OneUploadLimitation oAlertDocOul = CurrentValues.Instance.GetUploadLimitations("AlertDocsController", "UploadDoc");
+			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
 		}
 
 		EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
 		EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
 
+    	EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
+    	EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
+    	
 		EzBob.Config.AlertDocMaxFileSize = +(@oAlertDocOul.FileSize / 1048576.0).toFixed(2);
 		EzBob.Config.AlertDocAcceptedFiles = '@oAlertDocOul.AcceptedFiles';
 

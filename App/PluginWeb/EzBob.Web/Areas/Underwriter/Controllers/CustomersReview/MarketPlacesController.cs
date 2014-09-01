@@ -3,7 +3,10 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Web;
 	using System.Web.Mvc;
+	using CompanyFiles;
+	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -363,5 +366,59 @@
 			}
 			return Json(new {});
 		}
+
+		[HttpPost]
+		public ActionResult UploadFile() {
+			Response.AddHeader("x-frame-options", "SAMEORIGIN");
+
+			int customerId;
+
+			if (!int.TryParse(Request.Headers["ezbob-underwriter-customer-id"], out customerId)) {
+				return Json(new {error = "Failed to upload files: customer id header is missing."});
+			}
+
+			OneUploadLimitation oLimitations = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
+			var customer = _customers.Get(customerId);
+			
+			try {
+				new Transactional(() => {
+					var serviceInfo = new CompanyFilesServiceInfo();
+					var name = serviceInfo.DisplayName;
+					var cf = new CompanyFilesDatabaseMarketPlace();
+					var mp = _helper.SaveOrUpdateCustomerMarketplace(customer.Name + "_" + name, cf, null, customer);
+					var rdh = mp.Marketplace.GetRetrieveDataHelper(_helper);
+					rdh.UpdateCustomerMarketplaceFirst(mp.Id);
+					//nResult = mp.Id;
+				}).Execute();
+			} catch (Exception ex) {
+				Log.Error(ex);
+			}
+
+
+			for (int i = 0; i < Request.Files.Count; ++i) {
+				HttpPostedFileBase file = Request.Files[i];
+
+				if (file != null) {
+					var content = new byte[file.ContentLength];
+
+					int nRead = file.InputStream.Read(content, 0, file.ContentLength);
+
+					if (nRead != file.ContentLength) {
+						Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
+						continue;
+					} // if
+
+					string sMimeType = oLimitations.DetectFileMimeType(content, file.FileName);
+
+					if (string.IsNullOrWhiteSpace(sMimeType)) {
+						Log.WarnFormat("Not saving file #" + (i + 1) + ": " + file.FileName + " because it has unsupported MIME type.");
+						continue;
+					} // if
+
+					m_oServiceClient.Instance.CompanyFilesUpload(customerId, file.FileName, content, file.ContentType);
+				}
+			}
+			return Json(new { });
+		} // UploadedFiles
 	}
 }

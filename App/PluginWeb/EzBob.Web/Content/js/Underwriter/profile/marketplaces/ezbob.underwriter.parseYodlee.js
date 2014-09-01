@@ -7,6 +7,7 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 
 	initialize: function(options) {
 		this.customerId = options.customerId;
+		this.model.on("reset change sync", this.render, this);
 	}, // initialize
 	events: {
 		"click .back": "back",
@@ -16,9 +17,13 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 		var companyFiles = _.find(this.model.models, function (model) {
 			return model.get('CompanyFiles') != null;
 		}) || {};
-		return { files: companyFiles.get('CompanyFiles').Files };
+		return {
+			customerId: this.customerId,
+			files: companyFiles.get('CompanyFiles').Files
+		};
 	},
 	onRender: function () {
+		this.initDropzone();
 		return this;
 	}, // onRender
 	
@@ -34,6 +39,78 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 	
 	back: function () {
 		EzBob.App.vent.trigger('ct:marketplaces.parseYodleeBack');
-	}
+	},
 	
-}); // EzBob.Underwriter.UploadHmrcView
+	initDropzone: function () {
+		this.clearDropzone();
+		var self = this;
+
+		this.Dropzone = new Dropzone(this.$el.find('#bankFilesUploadZone')[0], {
+			url: window.gRootPath + "Underwriter/MarketPlaces/UploadFile",
+			parallelUploads: 1,
+			uploadMultiple: true,
+			maxFilesize: EzBob.Config.CompanyFilesMaxFileSize,
+			acceptedFiles: EzBob.Config.CompanyFilesAcceptedFiles,
+			autoProcessQueue: true,
+			headers: { 'ezbob-underwriter-customer-id': self.customerId, },
+
+			init: function () {
+				var oDropzone = this;
+
+				oDropzone.on('success', function (oFile, oResponse) {
+					EzBob.ServerLog.debug(
+						'Upload',
+						(oResponse.success ? '' : 'NOT'),
+						'succeeded. File name is', oFile.name,
+						' file size is', oFile.size,
+						' file type is', oFile.type,
+						' Error message:', oResponse.error
+					);
+
+					if (oResponse.success) {
+						EzBob.App.trigger('info', 'Upload successful: ' + oFile.name);
+					}
+					else if (oResponse.error) {
+						EzBob.App.trigger('error', oResponse.error);
+					}
+					else {
+						EzBob.App.trigger('error', 'Failed to upload ' + oFile.name);
+					} // if
+				}); // on success
+
+				oDropzone.on('error', function (oFile, sErrorMsg, oXhr) {
+					EzBob.ServerLog.warn(
+						'Upload error.',
+						' File name is', oFile.name,
+						' file size is', oFile.size,
+						' file type is', oFile.type,
+						' Error message:', sErrorMsg
+					);
+
+					if (oXhr && (oXhr.status === 404)) {
+						EzBob.App.trigger('error',
+							'Error uploading ' + oFile.name + ': file is too large. ' +
+								'Please contact customercare@ezbob.com'
+						);
+					} else {
+						EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
+						console.log('Error uploading ' + oFile.name + ': ' + sErrorMsg);
+					}
+				}); // always
+
+				oDropzone.on('complete', function (oFile) {
+					oDropzone.removeFile(oFile);
+					EzBob.App.vent.trigger('ct:marketplaces.addedFile');
+				}); // always
+			}, // init
+		}); // create a dropzone
+	}, // initDropzone
+	
+	clearDropzone: function () {
+		if (this.Dropzone) {
+			this.Dropzone.destroy();
+			this.Dropzone = null;
+		} // if
+	}, // clearDropzone
+	
+}); 
