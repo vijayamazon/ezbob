@@ -287,7 +287,6 @@
     <Compile Include="Code\AgreementsModelBuilder.cs" />
     <Compile Include="Code\Bank\YodleeAccountNotFoundException.cs" />
     <Compile Include="Code\Bank\YodleeAccountChecker.cs" />
-    <Compile Include="Code\Bank\IYodleeAccountChecker.cs" />
     <Compile Include="Code\ConcentAgreementHelper.cs" />
     <Compile Include="Code\LoanBuilder.cs" />
     <Compile Include="Code\LoanCreator.cs" />
