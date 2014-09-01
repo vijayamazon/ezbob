@@ -6,8 +6,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text.RegularExpressions;
-	using EzBob.CommonLib;
-	using Model.Experian;
 	using Newtonsoft.Json;
 	using Common;
 	using DatabaseWrapper;
@@ -15,6 +13,7 @@
 	using Model.Database;
 	using Model.Database.Repository;
 	using Model.Marketplaces.Yodlee;
+	using StructureMap;
 
 	#endregion using
 
@@ -73,14 +72,19 @@
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
-			// var yodleeGroupRepository = new YodleeGroupRepository(_session).GetAll().ToList();
-			// var yodleeGroupRuleMapRepository = new YodleeGroupRuleMapRepository(_session).GetAll().ToList();
-
-			// LogData("Yodlee Orders Data", customerMarketPlace, ordersData);
-
 			if (ordersData == null)
 			{
 				return;
+			}
+
+			//don't store parsed data twice
+			if (databaseCustomerMarketPlace.DisplayName == "ParsedBank") {
+				if (customerMarketPlace.YodleeOrders.Any() &&
+				    customerMarketPlace.YodleeOrders.SelectMany(x => x.OrderItems)
+				                       .Any(x => x.accountName == ordersData.Data.Keys.First().accountName)) {
+					_Log.InfoFormat("ParsedBank same file won't be stored in db");
+					return;
+				}
 			}
 
 			DateTime submittedDate = DateTime.UtcNow;
@@ -181,7 +185,7 @@
 							hasDetails = bankTransaction.hasDetails,
 							transactionId = bankTransaction.transactionId,
 							transactionCategory =
-								_MP_YodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(
+								_yodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(
 									bankTransaction.transactionCategoryId),
 							classUpdationSource = bankTransaction.classUpdationSource,
 							lastCategorised = bankTransaction.lastCategorised,
@@ -458,12 +462,38 @@
 
 		#endregion method HasYodleeOrders
 
+		#region method GetFileInfo
+		
+		public FileInfo GetFileInfo(int fileId) {
+			var companyFiledRepo = ObjectFactory.GetInstance<CompanyFilesMetaDataRepository>();
+			var file = companyFiledRepo.Get(fileId);
+			if (file != null) {
+				return new FileInfo(file.FileName, file.FilePath, file.FileContentType);
+			}
+
+			return null;
+		}
+
+		#endregion method GetFileInfo
+
+		#region method GetLastTransactionId
+		public int GetLastTransactionId() {
+			try {
+				var t = new YodleeTransactionRepository(_session);
+				return t.GetAll().Max(x => x.Id);
+			}
+			catch (Exception) {
+				return 0;
+			}
+		}
+		#endregion method GetLastTransactionId
 		#endregion public
 
 		#region private
 
-		private readonly IMP_YodleeTransactionCategoriesRepository _MP_YodleeTransactionCategoriesRepository;
+		private readonly IMP_YodleeTransactionCategoriesRepository _yodleeTransactionCategoriesRepository;
 		private readonly YodleeBanksRepository _yodleeBanksRepository;
+
 		#region method GetExperianDirectors
 
 		private List<string> GetExperianDirectors(Customer customer)
@@ -593,7 +623,7 @@
 					yodleeGroupRuleMapRepository,
 					oTransaction.description,
 					oTransaction.transactionBaseType,
-					(int)oTransaction.transactionAmount.Value,
+					(int)(oTransaction.transactionAmount.HasValue ? oTransaction.transactionAmount.Value : 0),
 					mp.Customer.Id,
 					mp.Customer.PersonalInfo.Surname,
 					directors

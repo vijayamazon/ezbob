@@ -175,11 +175,17 @@
 	{
 		public override bool AreEqual(BankTransactionData a, BankTransactionData b)
 		{
+			if (string.IsNullOrEmpty(a.srcElementId) && string.IsNullOrEmpty(b.srcElementId)) {
+				return false;
+			}
 			return (a.srcElementId == b.srcElementId);
 		} // AreEqual
 
 		public override int HashCode(BankTransactionData a)
 		{
+			if (string.IsNullOrEmpty(a.srcElementId)) {
+				return a.bankTransactionId.GetHashCode();
+			}
 			return a.srcElementId.GetHashCode();
 		} // HashCode
 	} // class YodleeOrderComparer
@@ -188,11 +194,19 @@
 	{
 		public override bool AreEqual(MP_YodleeOrderItemBankTransaction a, MP_YodleeOrderItemBankTransaction b)
 		{
+			if (string.IsNullOrEmpty(a.srcElementId) && string.IsNullOrEmpty(b.srcElementId)) {
+				return a.Id == b.Id;
+			}
+
 			return a.srcElementId == b.srcElementId;
 		}
 
 		public override int HashCode(MP_YodleeOrderItemBankTransaction a)
 		{
+			if (string.IsNullOrEmpty(a.srcElementId)) {
+				return a.Id.GetHashCode();
+			}
+
 			return a.srcElementId.GetHashCode();
 		}
 	}

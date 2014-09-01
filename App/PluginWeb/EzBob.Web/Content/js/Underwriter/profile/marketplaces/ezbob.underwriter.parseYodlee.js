@@ -16,8 +16,6 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 		var companyFiles = _.find(this.model.models, function (model) {
 			return model.get('CompanyFiles') != null;
 		}) || {};
-
-		console.log('companyFiles.Files', companyFiles, companyFiles.get('CompanyFiles').Files);
 		return { files: companyFiles.get('CompanyFiles').Files };
 	},
 	onRender: function () {
@@ -25,7 +23,13 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 	}, // onRender
 	
 	parseYodlee: function () {
-		console.log('parse', this.$el.find("[name='YodleeBankFile']:checked").val());
+		var fileId = this.$el.find("[name='YodleeBankFile']:checked").val();
+		if (fileId) {
+			var xhr = $.post(window.gRootPath + "Underwriter/MarketPlaces/ParseYodlee", { fileId: fileId, customerId: this.customerId });
+			xhr.done(function() {
+				EzBob.ShowMessageTimeout("Parsing of file began, refresh in a while", "Parsing began", 3);
+			});
+		}
 	},
 	
 	back: function () {

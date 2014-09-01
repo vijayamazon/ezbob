@@ -92,7 +92,7 @@
 						HmrcBank(oHmrc);
 				} // if
 
-				if (oYodlee != null) {
+				if (oYodlee != null && oYodlee.Yodlee != null) {
 					using (m_oTimeCounter.AddStep("Yodlee affordability build time"))
 						SaveBankStatement(oYodlee.Yodlee.BankStatementAnnualizedModel);
 				} // if

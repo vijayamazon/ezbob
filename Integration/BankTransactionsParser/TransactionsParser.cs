@@ -14,7 +14,7 @@
 
 	public class TransactionsParser {
 		private static readonly ConsoleLog log = new ConsoleLog();
-		public BankAccount ParseFile(string filePath) {
+		public ParsedBankAccount ParseFile(string filePath) {
 			try {
 				string file = null;
 				if (filePath.EndsWith(".csv")) {
@@ -121,11 +121,11 @@
 			File.WriteAllLines(path, commaDelimited);
 		}
 
-		public BankAccount ParseCsv(string filePath) {
+		public ParsedBankAccount ParseCsv(string filePath) {
 			return ParseCsv(GetBytesFromFile(filePath), filePath);
 		}
 
-		public BankAccount ParseCsv(byte[] content, string fileName) {
+		public ParsedBankAccount ParseCsv(byte[] content, string fileName) {
 			log.Debug("parsing {0}", fileName);
 			Stream stream = new MemoryStream(content);
 			var csvData = new DataTable();
@@ -174,12 +174,12 @@
 			//PrintDataTable(csvData);
 		}
 
-		private BankAccount BuildBankAccount(DataTable dataTable, HeaderColumns headerColumns, string fileName) {
-			var bankAccount = new BankAccount { Name = fileName, Transactions = new List<BankTransaction>() };
+		private ParsedBankAccount BuildBankAccount(DataTable dataTable, HeaderColumns headerColumns, string fileName) {
+			var bankAccount = new ParsedBankAccount { Name = fileName, Transactions = new List<ParsedBankTransaction>() };
 
 			foreach (DataRow row in dataTable.Rows) {
 				try {
-					var transaction = new BankTransaction();
+					var transaction = new ParsedBankTransaction();
 					transaction.Description = row[headerColumns.Description].ToString();
 
 					transaction.Date = ParseDate(row[headerColumns.Date].ToString());

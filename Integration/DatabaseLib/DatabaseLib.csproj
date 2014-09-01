@@ -72,6 +72,7 @@
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
     <Compile Include="Common\Coin.cs" />
+    <Compile Include="Common\FileInfo.cs" />
     <Compile Include="DatabaseDataHelper\amazon.cs" />
     <Compile Include="DatabaseDataHelper\channelgrabber.cs" />
     <Compile Include="DatabaseDataHelper\ebay.cs" />

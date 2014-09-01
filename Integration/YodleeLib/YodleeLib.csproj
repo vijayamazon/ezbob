@@ -103,6 +103,10 @@
       <Project>{DC706B41-2B3E-4082-B390-51AABAC065D3}</Project>
       <Name>NHibernateWrapper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BankTransactionsParser\BankTransactionsParser.csproj">
+      <Project>{56d43f8f-f0c7-4b46-b902-0dd3978966e4}</Project>
+      <Name>BankTransactionsParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>

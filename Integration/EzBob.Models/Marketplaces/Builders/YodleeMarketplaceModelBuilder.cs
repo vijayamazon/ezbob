@@ -160,6 +160,7 @@ namespace EzBob.Models.Marketplaces.Builders
 					var yodleeTransactionModel = new YodleeTransactionModel
 					{
 						transactionBaseType = transaction.transactionBaseType,
+						transactionType = transaction.transactionType,
 						transactionDate = (transaction.postDate.date ?? transaction.transactionDate.date).Value,
 						categoryName = transaction.memo,
 						categoryType = transaction.userDescription,

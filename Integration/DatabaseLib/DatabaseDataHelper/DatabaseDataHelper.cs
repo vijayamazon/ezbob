@@ -120,7 +120,7 @@ namespace EZBob.DatabaseLib {
 			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
-			_MP_YodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
+			_yodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);

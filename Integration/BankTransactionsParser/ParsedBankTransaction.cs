@@ -2,7 +2,7 @@
 	using System;
 	using System.Globalization;
 
-	public class BankTransaction {
+	public class ParsedBankTransaction {
 		public DateTime Date { get; set; }
 		public decimal Amount { get; set; }
 		public bool IsCredit { get; set; }

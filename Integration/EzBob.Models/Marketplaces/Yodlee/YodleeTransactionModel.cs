@@ -7,6 +7,7 @@ namespace EzBob.Models.Marketplaces
 		public YodleeTransactionModel()
 		{
 			transactionBaseType = "-";
+			transactionType = "-";
 			transactionDate = new DateTime();
 			ezbobGroup = "-";
 			ezbobSubGroup = "-";
@@ -19,6 +20,7 @@ namespace EzBob.Models.Marketplaces
 		}
 
 		public string transactionBaseType { get; set; }
+		public string transactionType { get; set; }
 		public DateTime transactionDate { get; set; }
 		public string ezbobGroup { get; set; }
 		public string ezbobSubGroup { get; set; }

@@ -90,13 +90,9 @@
 			var yodleeMain = new YodleeMain();
 			var oEsi = new YodleeServiceInfo();
 
-			var items = _session
-				.QueryOver<MP_CustomerMarketPlace>()
-				.Where(m => m.Customer.Id == customer.Id)
-				.JoinQueryOver(m => m.Marketplace)
-				.Where(m => m.InternalId == oEsi.InternalId)
-				.List()
-				.Select(m => Serialized.Deserialize<YodleeSecurityInfo>(m.SecurityData).ItemId).ToList();
+			var items = customer.CustomerMarketPlaces
+				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
+				.Select(mp => Serialized.Deserialize<YodleeSecurityInfo>(mp.SecurityData).ItemId).ToList();
 				
 			long itemId = yodleeMain.GetItemId(yodleeAccount.Username, decryptedPassword, items, out displayname, out csId);
 
@@ -172,22 +168,19 @@
 
 			var oEsi = new YodleeServiceInfo();
 
-			var yodlees = _session
-				.QueryOver<MP_CustomerMarketPlace>()
-				.Where(m => m.Customer.Id == customer.Id)
-				.JoinQueryOver(m => m.Marketplace)
-				.Where(m => m.InternalId == oEsi.InternalId)
-				.List();
+			var yodlees = customer.CustomerMarketPlaces
+				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
+				.ToList();
 
 			if (yodlees.Count == 0)
 			{
-				return View(new { error = "Error Loanding Bank Accounts" });
+				return View(new { error = "Error loading bank accounts" });
 			}
 			
 			var lu = yodleeMain.LoginUser(yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
 			if (lu == null)
 			{
-				return View(new { error = "Error Loging to Yodlee Account" });
+				return View(new { error = "Error logging to yodlee account" });
 			}
 
 			MP_CustomerMarketPlace umi = displayName == null ? yodlees[0] : yodlees.FirstOrDefault(y => y.DisplayName == displayName); //TODO Currently refreshes the first one

@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
@@ -41,6 +42,8 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly CompanyFilesMetaDataRepository _companyFiles;
 		private readonly IWorkplaceContext _context;
+		private readonly DatabaseDataHelper _helper;
+		private readonly MarketPlaceRepository _mpTypes;
 
 		public MarketPlacesController(CustomerRepository customers,
 			AnalyisisFunctionValueRepository functions,
@@ -54,7 +57,9 @@
 			YodleeGroupRuleMapRepository yodleeGroupRuleMapRepository,
 			ISession session, 
 			CompanyFilesMetaDataRepository companyFiles, 
-			IWorkplaceContext context)
+			IWorkplaceContext context, 
+			DatabaseDataHelper helper, 
+			MarketPlaceRepository mpTypes)
 		{
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
@@ -70,6 +75,8 @@
 			_session = session;
 			_companyFiles = companyFiles;
 			_context = context;
+			_helper = helper;
+			_mpTypes = mpTypes;
 		}
 
 		[Ajax]
@@ -323,6 +330,38 @@
 				return fs;
 			}
 			return null;
+		}
+
+		[Ajax]
+		public JsonResult ParseYodlee(int customerId, int fileId) {
+			var customer = _customers.Get(customerId);
+			var yodlee = new YodleeServiceInfo();
+			var yodleeMp = customer.CustomerMarketPlaces.FirstOrDefault(mp => mp.Marketplace.InternalId == yodlee.InternalId && mp.DisplayName == "ParsedBank");
+
+
+			if (yodleeMp != null) {
+				var data = Serialized.Deserialize<YodleeSecurityInfo>(yodleeMp.SecurityData);
+				data.ItemId = fileId;
+				yodleeMp.SecurityData = new Serialized(data);
+				_session.Flush();
+				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, yodleeMp.Id, false, _context.UserId);
+			} else {
+				int marketPlaceId = _mpTypes.GetAll().First(a => a.InternalId == yodlee.InternalId).Id;
+
+				var securityData = new YodleeSecurityInfo {
+					ItemId = fileId,
+					Name = "",
+					Password = "",
+					MarketplaceId = marketPlaceId,
+					CsId = 0
+				};
+
+				var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
+				var mp = _helper.SaveOrUpdateCustomerMarketplace("ParsedBank", yodleeDatabaseMarketPlace, securityData, customer);
+				
+				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, false, _context.UserId);
+			}
+			return Json(new {});
 		}
 	}
 }

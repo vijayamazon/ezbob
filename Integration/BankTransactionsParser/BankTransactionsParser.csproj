@@ -47,9 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BankAccount.cs" />
+    <Compile Include="ParsedBankAccount.cs" />
     <Compile Include="HeaderColumns.cs" />
-    <Compile Include="BankTransaction.cs" />
+    <Compile Include="ParsedBankTransaction.cs" />
     <Compile Include="ListExtension.cs" />
     <Compile Include="TransactionsParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
