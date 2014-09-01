@@ -20,7 +20,7 @@
 			this.customerId = customerId;
 		}
 
-		public bool MakeDecision(AutoDecisionResponse response)
+		public bool MakeDecision(AutoDecisionRejectionResponse response)
 		{
 			try
 			{
@@ -43,6 +43,8 @@
 
 					response.UserStatus = "Rejected";
 					response.SystemDecision = "Reject";
+					response.DecidedToReject = true;
+
 					return true;
 				}
 

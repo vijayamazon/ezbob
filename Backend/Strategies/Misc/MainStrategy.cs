@@ -24,6 +24,7 @@
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly MedalScoreCalculator medalScoreCalculator;
 		private readonly NewMedalScoreCalculator offlineMedalCalculator;
+		private readonly AutoDecisionMaker autoDecisionMaker;
 
 		// Inputs
 		private readonly int customerId;
@@ -152,6 +153,7 @@
 			avoidAutomaticDecision = avoidAutoDecision;
 			underwriterCheck = isUnderwriterForced;
 			overrideApprovedRejected = true;
+			autoDecisionMaker = new AutoDecisionMaker(DB, Log);
 		}
 
 		public override void Execute()
@@ -163,76 +165,59 @@
 			GetPersonalInfo();
 
 			SetAutoDecisionAvailability();
-			GetCompanySeniorityDays();
 
-			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
-			{
-				PerformCompanyExperianCheck();
-				PerformConsumerExperianCheck();
+			GetExperianData();
 
-				minExperianScore = experianConsumerScore;
-				maxExperianScore = experianConsumerScore;
-				initialExperianConsumerScore = experianConsumerScore;
-
-				PerformExperianConsumerCheckForDirectors();
-
-				GetAml();
-				GetBwa();
-			}
-			else
-			{
-				experianConsumerScore = GetCurrentExperianScore();
-				GetMaxCompanyExperianScore();
-				minExperianScore = experianConsumerScore;
-				maxExperianScore = experianConsumerScore;
-				initialExperianConsumerScore = experianConsumerScore;
-			}
+			GetZooplaData();
 
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
 
 			if (underwriterCheck)
 			{
-				GetZooplaData();
 				SetEndTimestamp();
 				return;
 			}
 
 			GetLastCashRequestData();
 
-			CalcAndCapOffer();
-			
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(
-				customerId,
-				minExperianScore,
-				maxExperianScore,
-				maxCompanyScore,
-				totalSumOfOrders1YTotalForRejection,
-				totalSumOfOrders3MTotalForRejection,
-				yodlee1YForRejection,
-				yodlee3MForRejection,
-				offeredCreditLine,
-				marketplaceSeniorityDays,
-				enableAutomaticReRejection,
-				enableAutomaticRejection,
-				enableAutomaticReApproval,
-				enableAutomaticApproval,
-				loanOfferReApprovalFullAmountOld,
-				loanOfferReApprovalFullAmount,
-				loanOfferReApprovalRemainingAmount,
-				loanOfferReApprovalRemainingAmountOld,
-				customerStatusIsEnabled,
-				customerStatusIsWarning,
-				isBrokerCustomer,
-				typeOfBusiness == "Limited" || typeOfBusiness == "LLP",
-				companySeniorityDays,
-				isOffline,
-				customerStatusName,
-				consumerCaisDetailWorstStatuses,
-				DB,
-				Log
-			);
+			AutoDecisionRejectionResponse autoDecisionRejectionResponse = ProcessRejections();
 
-			if (autoDecisionResponse.IsAutoApproval)
+			if (autoDecisionRejectionResponse.DecidedToReject)
+			{
+				modelLoanOffer = 0;
+
+				if ((autoDecisionRejectionResponse.IsReRejected && !enableAutomaticReRejection) ||
+					(!autoDecisionRejectionResponse.IsReRejected && !enableAutomaticRejection))
+				{
+					SendRejectionExplanationMail(autoDecisionRejectionResponse.IsReRejected
+													 ? "Mandrill - User supposed to be re-rejected by the strategy"
+													 : "Mandrill - User supposed to be rejected by the strategy",
+												 autoDecisionRejectionResponse.RejectionModel);
+				}
+				else
+				{
+					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy", autoDecisionRejectionResponse.RejectionModel);
+
+					new RejectUser(customerId, true, DB, Log).Execute();
+
+					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionRejectionResponse.AutoRejectReason);
+				}
+			}
+
+			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
+
+			CalcAndCapOffer();
+
+			if (isOffline)
+			{
+				CalculateAndSaveOfflineMedal();
+			}
+			
+			ProcessApprovals(autoDecisionRejectionResponse);
+
+			autoDecisionMaker.LogDecision(customerId, autoDecisionRejectionResponse, autoDecisionResponse);
+
+			if (autoDecisionResponse != null && autoDecisionResponse.IsAutoApproval)
 			{
 				modelLoanOffer = autoDecisionResponse.AutoApproveAmount;
 
@@ -241,7 +226,7 @@
 					offeredCreditLine = modelLoanOffer;
 				}
 			}
-			else if (autoDecisionResponse.IsAutoBankBasedApproval)
+			else if (autoDecisionResponse != null && autoDecisionResponse.IsAutoBankBasedApproval)
 			{
 				modelLoanOffer = autoDecisionResponse.BankBasedAutoApproveAmount;
 
@@ -251,14 +236,18 @@
 				}
 			}
 
-			if (autoDecisionResponse.SystemDecision == "Reject")
+			if (autoDecisionResponse == null)
 			{
-				modelLoanOffer = 0;
+				UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent, autoDecisionRejectionResponse.CreditResult,
+					autoDecisionRejectionResponse.SystemDecision, autoDecisionRejectionResponse.UserStatus, null, 0);
+			}
+			else
+			{
+				UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent, autoDecisionResponse.CreditResult, autoDecisionResponse.SystemDecision,
+					autoDecisionResponse.UserStatus, autoDecisionResponse.AppValidFor, autoDecisionResponse.RepaymentPeriod);
 			}
 
-			UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent);
-
-			if (autoDecisionResponse.UserStatus == "Approved")
+			if (autoDecisionResponse != null && autoDecisionResponse.UserStatus == "Approved")
 			{
 				if (autoDecisionResponse.IsAutoApproval)
 				{
@@ -285,48 +274,112 @@
 					}
 				}
 			}
-			else if (autoDecisionResponse.UserStatus == "Rejected")
-			{
-				if ((autoDecisionResponse.IsReRejected && !enableAutomaticReRejection) ||
-				    (!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
-				{
-					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected
-						                             ? "Mandrill - User supposed to be re-rejected by the strategy"
-						                             : "Mandrill - User supposed to be rejected by the strategy",
-					                             autoDecisionResponse.RejectionModel);
-				}
-				else
-				{
-					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy", autoDecisionResponse.RejectionModel);
-
-					new RejectUser(customerId, true, DB, Log).Execute();
-
-					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
-				}
-			}
 			else
 			{
 				SendWaitingForDecisionMail();
 			}
 
-			if (autoDecisionResponse.CreditResult != "Rejected" && autoDecisionResponse.SystemDecision != "Reject" && isHomeOwner)
+			SetEndTimestamp();
+		}
+
+		private void ProcessApprovals(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
+		{
+			if (!autoDecisionRejectionResponse.DecidedToReject)
 			{
-				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.SystemDecision, propertyStatusDescription);
+				autoDecisionResponse = autoDecisionMaker.MakeDecision(
+					customerId,
+					minExperianScore,
+					maxExperianScore,
+					maxCompanyScore,
+					totalSumOfOrders1YTotalForRejection,
+					totalSumOfOrders3MTotalForRejection,
+					yodlee1YForRejection,
+					yodlee3MForRejection,
+					offeredCreditLine,
+					marketplaceSeniorityDays,
+					enableAutomaticReRejection,
+					enableAutomaticRejection,
+					enableAutomaticReApproval,
+					enableAutomaticApproval,
+					loanOfferReApprovalFullAmountOld,
+					loanOfferReApprovalFullAmount,
+					loanOfferReApprovalRemainingAmount,
+					loanOfferReApprovalRemainingAmountOld,
+					customerStatusIsEnabled,
+					customerStatusIsWarning,
+					isBrokerCustomer,
+					typeOfBusiness == "Limited" || typeOfBusiness == "LLP",
+					companySeniorityDays,
+					isOffline,
+					customerStatusName,
+					consumerCaisDetailWorstStatuses,
+					DB,
+					Log
+					);
+			}
+		}
+
+		private void GetLandRegistryDataIfNotRejected(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
+		{
+			if (autoDecisionRejectionResponse.CreditResult != "Rejected" && !autoDecisionRejectionResponse.DecidedToReject && isHomeOwner)
+			{
+				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, propertyStatusDescription);
 				GetLandRegistry();
 			}
 			else
 			{
-				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.SystemDecision, propertyStatusDescription);
+				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, propertyStatusDescription);
 			}
+		}
 
-			GetZooplaData();
+		private AutoDecisionRejectionResponse ProcessRejections()
+		{
+			AutoDecisionRejectionResponse autoDecisionRejectionResponse = autoDecisionMaker.MakeRejectionDecision(
+				customerId,
+				maxExperianScore,
+				maxCompanyScore,
+				totalSumOfOrders1YTotalForRejection,
+				totalSumOfOrders3MTotalForRejection,
+				yodlee1YForRejection,
+				yodlee3MForRejection,
+				marketplaceSeniorityDays,
+				enableAutomaticReRejection,
+				enableAutomaticRejection,
+				customerStatusIsEnabled,
+				customerStatusIsWarning,
+				isBrokerCustomer,
+				typeOfBusiness == "Limited" || typeOfBusiness == "LLP",
+				companySeniorityDays,
+				isOffline,
+				customerStatusName
+				);
+			return autoDecisionRejectionResponse;
+		}
 
-			if (isOffline)
+		private void GetExperianData()
+		{
+			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
-				CalculateAndSaveOfflineMedal();
-			}
+				PerformCompanyExperianCheck();
+				PerformConsumerExperianCheck();
 
-			SetEndTimestamp();
+				minExperianScore = experianConsumerScore;
+				maxExperianScore = experianConsumerScore;
+				initialExperianConsumerScore = experianConsumerScore;
+
+				PerformExperianConsumerCheckForDirectors();
+
+				GetAml();
+				GetBwa();
+			}
+			else
+			{
+				experianConsumerScore = GetCurrentExperianScore();
+				GetMaxCompanyExperianScore();
+				minExperianScore = experianConsumerScore;
+				maxExperianScore = experianConsumerScore;
+				initialExperianConsumerScore = experianConsumerScore;
+			}
 		}
 
 		private void GetLandRegistry()
@@ -365,38 +418,51 @@
 
 			offeredCreditLine = modelLoanOffer;
 
-			if (isHomeOwner && maxCapHomeOwner < loanOfferReApprovalSum)
+			bool isHomeOwnerAccordingToLandRegistry = false;
+			DataTable dt = DB.ExecuteReader(
+				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			if (dt.Rows.Count == 1)
+			{
+				var sr = new SafeReader(dt.Rows[0]);
+				isHomeOwnerAccordingToLandRegistry = sr["IsOwner"];
+			}
+
+			if (isHomeOwnerAccordingToLandRegistry && maxCapHomeOwner < loanOfferReApprovalSum)
 			{
 				loanOfferReApprovalSum = maxCapHomeOwner;
 			}
 
-			if (!isHomeOwner && maxCapNotHomeOwner < loanOfferReApprovalSum)
+			if (!isHomeOwnerAccordingToLandRegistry && maxCapNotHomeOwner < loanOfferReApprovalSum)
 			{
 				loanOfferReApprovalSum = maxCapNotHomeOwner;
 			}
 
-			if (isHomeOwner && maxCapHomeOwner < offeredCreditLine)
+			if (isHomeOwnerAccordingToLandRegistry && maxCapHomeOwner < offeredCreditLine)
 			{
 				offeredCreditLine = maxCapHomeOwner;
 			}
 
-			if (!isHomeOwner && maxCapNotHomeOwner < offeredCreditLine)
+			if (!isHomeOwnerAccordingToLandRegistry && maxCapNotHomeOwner < offeredCreditLine)
 			{
 				offeredCreditLine = maxCapNotHomeOwner;
 			}
 		}
-
-		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase)
+		
+		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase, string creditResult, string systemDecision, string userStatus, DateTime? appValidFor, int repaymentPeriod)
 		{
 			DB.ExecuteNonQuery(
 				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
-				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
-				new QueryParameter("Status", autoDecisionResponse.UserStatus),
+				new QueryParameter("CreditResult", creditResult),
+				new QueryParameter("SystemDecision", systemDecision),
+				new QueryParameter("Status", userStatus),
 				new QueryParameter("Medal", medalType.ToString()),
-				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor),
+				new QueryParameter("ValidFor", appValidFor),
 				new QueryParameter("Now", DateTime.UtcNow),
 				new QueryParameter("OverrideApprovedRejected", overrideApprovedRejected)
 			);
@@ -420,7 +486,7 @@
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
 				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
-				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
+				new QueryParameter("SystemDecision", systemDecision),
 				new QueryParameter("MedalType", medalType.ToString()),
 				new QueryParameter("ScorePoints", scoringResult),
 				new QueryParameter("ExpirianRating", experianConsumerScore),
@@ -428,7 +494,7 @@
 				new QueryParameter("InterestRate", interestAccordingToPast == -1 ? loanInterestBase : interestAccordingToPast),
 				new QueryParameter("ManualSetupFeeAmount", manualSetupFeeAmount),
 				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent),
-				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod),
+				new QueryParameter("RepaymentPeriod", repaymentPeriod),
 				new QueryParameter("Now", DateTime.UtcNow)
 			);
 		}
@@ -443,7 +509,7 @@
 				{"Surname", appSurname},
 				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision}
+				{"SystemDecision", "WaitingForDecision"}
 			});
 		}
 
@@ -1039,6 +1105,8 @@
 			int numOfLoans = results["NumOfLoans"];
 			isFirstLoan = numOfLoans == 0;
 			typeOfBusiness = results["TypeOfBusiness"];
+
+			GetCompanySeniorityDays();
 		}
 
 		private void SendRejectionExplanationMail(string templateName, RejectionModel rejection)

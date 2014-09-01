@@ -7,7 +7,62 @@
 
 	public class AutoDecisionMaker
 	{
-		public static AutoDecisionResponse MakeDecision(
+		private readonly AConnection db;
+		private readonly ASafeLog log;
+
+		public AutoDecisionMaker(AConnection db, ASafeLog log)
+		{
+			this.db = db;
+			this.log = log;
+		}
+
+		public AutoDecisionRejectionResponse MakeRejectionDecision(
+			int customerId,
+			int maxExperianScore,
+			int maxCompanyScore, 
+			double totalSumOfOrders1YTotalForRejection,
+			double totalSumOfOrders3MTotalForRejection,
+			double yodlee1YForRejection,
+			double yodlee3MForRejection,
+			double marketplaceSeniorityDays,
+			bool enableAutomaticReRejection,
+			bool enableAutomaticRejection,
+			bool customerStatusIsEnabled,
+			bool customerStatusIsWarning,
+			bool isBrokerCustomer,
+			bool isLimitedCompany,
+			int companySeniorityDays,
+			bool isOffline,
+			string customerStatusName)
+		{
+			log.Info("Starting auto decision");
+			var autoDecisionResponse = new AutoDecisionRejectionResponse();
+
+			if (new ReRejection(customerId, enableAutomaticReRejection, db, log).MakeDecision(autoDecisionResponse))
+			{
+				autoDecisionResponse.DecisionName = "Re-rejection";
+			}
+			else
+			{
+				var rejection = new Rejection(customerId, totalSumOfOrders1YTotalForRejection,
+											  totalSumOfOrders3MTotalForRejection,
+											  yodlee1YForRejection,
+											  yodlee3MForRejection, marketplaceSeniorityDays, enableAutomaticRejection,
+											  maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
+											  customerStatusIsWarning, isBrokerCustomer, isLimitedCompany, companySeniorityDays,
+											  isOffline, customerStatusName, db, log);
+				var isRejected = rejection.MakeDecision(autoDecisionResponse);
+				log.Debug(rejection.ToString());
+				if (isRejected)
+				{
+					autoDecisionResponse.DecisionName = "Rejection";
+				}
+			}
+
+			return autoDecisionResponse;
+		}
+
+		public AutoDecisionResponse MakeDecision(
 			int customerId,
 			int minExperianScore,
 			int maxExperianScore, 
@@ -16,7 +71,7 @@
 			double totalSumOfOrders3MTotalForRejection,
 			double yodlee1YForRejection,
 			double yodlee3MForRejection,
-			int offeredCreditLine, 
+			int offeredCreditLine,
 			double marketplaceSeniorityDays,
 			bool enableAutomaticReRejection, 
 			bool enableAutomaticRejection, 
@@ -38,52 +93,36 @@
 			ASafeLog oLog)
 		{
 			oLog.Info("Starting auto decision");
-			var autoDecisionResponse = new AutoDecisionResponse();
-			string decisionName = "Manual";
-			var conditions = new List<AutoDecisionCondition>();
+			var autoDecisionResponse = new AutoDecisionResponse {DecisionName = "Manual"};
 
-			if (new ReRejection(customerId, enableAutomaticReRejection, oDb, oLog).MakeDecision(autoDecisionResponse))
-			{
-				decisionName = "Re-rejection";
-			}
-			else if (new ReApproval(customerId, enableAutomaticReApproval, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalFullAmountOld, 
+			if (new ReApproval(customerId, enableAutomaticReApproval, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalFullAmountOld, 
 				loanOfferReApprovalRemainingAmountOld, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
-				decisionName = "Re-Approval";
+				autoDecisionResponse.DecisionName = "Re-Approval";
 			}
 			else if (new Approval(customerId, minExperianScore, offeredCreditLine, enableAutomaticApproval, consumerCaisDetailWorstStatuses, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
-				decisionName = "Approval";
+				autoDecisionResponse.DecisionName = "Approval";
 			}
 			else if (new BankBasedApproval(customerId, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
-				decisionName = "Bank Based Approval";
+				autoDecisionResponse.DecisionName = "Bank Based Approval";
 			}
 			else
-			{
-				var rejection = new Rejection(conditions, customerId, totalSumOfOrders1YTotalForRejection,
-				                              totalSumOfOrders3MTotalForRejection,
-				                              yodlee1YForRejection,
-				                              yodlee3MForRejection, marketplaceSeniorityDays, enableAutomaticRejection,
-				                              maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
-				                              customerStatusIsWarning, isBrokerCustomer, isLimitedCompany, companySeniorityDays,
-				                              isOffline, customerStatusName, oDb, oLog);
-				var isRejected = rejection.MakeDecision(autoDecisionResponse);
-				oLog.Debug(rejection.ToString());
-				if (isRejected)
-				{
-					decisionName = "Rejection";
-				}
-			}
-
-			if (decisionName == "Manual")
 			{
 				autoDecisionResponse.CreditResult = "WaitingForDecision";
 				autoDecisionResponse.UserStatus = "Manual";
 				autoDecisionResponse.SystemDecision = "Manual";
 			}
 
-			int decisionId = oDb.ExecuteScalar<int>(
+			return autoDecisionResponse;
+		}
+
+		public void LogDecision(int customerId, AutoDecisionRejectionResponse autoDecisionRejectionResponse, AutoDecisionResponse autoDecisionResponse)
+		{
+			string decisionName = autoDecisionRejectionResponse.DecidedToReject ? autoDecisionRejectionResponse.DecisionName : autoDecisionResponse.DecisionName;
+
+			int decisionId = db.ExecuteScalar<int>(
 				"AutoDecisionRecord",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
@@ -91,9 +130,9 @@
 				new QueryParameter("Date", DateTime.UtcNow)
 			);
 
-			foreach (AutoDecisionCondition condition in conditions)
+			foreach (AutoDecisionCondition condition in autoDecisionRejectionResponse.RejectionConditions)
 			{
-				oDb.ExecuteNonQuery(
+				db.ExecuteNonQuery(
 					"AutoDecisionConditionRecord",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("DecisionId", decisionId),
@@ -102,8 +141,6 @@
 					new QueryParameter("Description", condition.Description)
 				);
 			}
-
-			return autoDecisionResponse;
 		}
 	}
 }

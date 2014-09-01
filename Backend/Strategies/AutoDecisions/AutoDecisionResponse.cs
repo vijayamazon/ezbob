@@ -19,5 +19,6 @@
 		public int RepaymentPeriod { get; set; }
 		public int BankBasedAutoApproveAmount { get; set; }
 		public RejectionModel RejectionModel { get; set; }
+		public string DecisionName { get; set; }
 	}
 }
