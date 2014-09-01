@@ -17,6 +17,7 @@
 								<th>Zoopla</th>
 								<th>Land Registry</th>
 								<th>Copy</th>
+								<th>Remove</th>
 							</tr>
 						</thead>
 						<tbody class="box-content">
@@ -44,12 +45,17 @@
 										<%});%>
 									</div>
 									<%} else {%>
-									<button class="btn btn-primary btnEnquiry" data-postcode="<%-prop.Postcode%>" data-addressid="<%-prop.AddressId%>" data-address="<%-prop.FormattedAddress%>">Enquiry</button>
+									    <button class="btn btn-primary btnEnquiry" data-postcode="<%-prop.Postcode%>" data-addressid="<%-prop.AddressId%>" data-address="<%-prop.FormattedAddress%>">Enquiry</button>
 									<%}%>
 								</td>
 								<td class="copy-buttons">
 									<button class="btn btn-link btn-copy" data-address="<%-prop.FormattedAddress%>">Copy</button>
 								</td>
+                                <td>
+                                    <% if (prop.AddressType == 'Other') { %>
+                                        <button class="btn btn-primary btnNoLongerOwned" data-addressid="<%-prop.AddressId%>">Remove</button>
+                                    <% } %>
+                                </td>
 							</tr>
 							<% }); %>
 						</tbody>

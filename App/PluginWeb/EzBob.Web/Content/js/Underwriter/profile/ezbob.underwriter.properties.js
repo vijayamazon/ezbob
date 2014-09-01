@@ -2,15 +2,20 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.Properties = Backbone.Model.extend({
-	url: function () {
-		return window.gRootPath + "Underwriter/Properties/Index/" + this.customerId;
-	}
+    idAttribute: 'Id',
+    url: function () {
+        if (this.customerId != undefined) {
+            return window.gRootPath + "Underwriter/Properties/Index/" + this.customerId;
+        }
+
+        return window.gRootPath + "Underwriter/Properties/Index/" + this.id;
+    }
 });
 
 EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 	template: '#propertiesTemplate',
 	initialize: function () {
-		this.model.on("reset sync", this.render, this);
+		this.model.on("reset change sync", this.render, this);
 	},
 	onRender: function () {
 		var that = this;
@@ -42,6 +47,7 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 	events: {
 		"click .zooplaRecheck": "recheckZoopla",
 		"click .btnEnquiry": "showLandRegistry",
+		"click .btnNoLongerOwned": "markAsNoLongerOwned"
 	},
 	recheckZoopla: function () {
 		BlockUi("On");
@@ -62,7 +68,7 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 		var titles = null;
 		if (addressId) {
 			var properties = this.model.get('Properties');
-			var prop = _.find(properties, function (prop) { return prop.AddressId == addressId; });
+			var prop = _.find(properties, function (currentProperty) { return currentProperty.AddressId == addressId; });
 			titles = _.flatten(_.map(prop.LandRegistryEnquiries, function (enq) { return enq.Titles; }));
 		}
 
@@ -74,6 +80,25 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 		BlockUi("Off");
 		Backbone.history.loadUrl();
 		return false;
+	},
+	markAsNoLongerOwned: function (el) {
+	    var addressId = $(el.currentTarget).data('addressid');
+	    var that = this;
+	    
+	    EzBob.ShowMessage(
+			"Do you really want to remove this owned address?",
+			"Please confirm",
+			function () {
+			    var xhr = $.post("" + window.gRootPath + "Underwriter/Properties/RemoveAddress?addressId=" + addressId);
+			    xhr.done(function () {
+			        EzBob.ShowMessageTimeout('Address was removed', 'Success');
+			        that.model.fetch();
+			    });
+			},
+			"Remove",
+			null,
+			"Cancel"
+		);
 	},
 });
 

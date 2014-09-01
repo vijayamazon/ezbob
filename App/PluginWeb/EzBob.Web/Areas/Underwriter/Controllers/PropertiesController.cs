@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
@@ -41,7 +42,6 @@
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}
 
-
 		[Ajax]
 		[HttpGet]
 		public JsonResult Zoopla(int customerId, bool recheck)
@@ -49,7 +49,16 @@
 			var sh = new StrategyHelper();
 			sh.GetZooplaData(customerId, true);
 
-			return Json(new {}, JsonRequestBehavior.AllowGet);
+			return Json(new { }, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public void RemoveAddress(int addressId)
+		{
+			CustomerAddress noLongerOwnedAddress = _customerAddressRepository.Get(addressId);
+			noLongerOwnedAddress.AddressType = CustomerAddressType.OtherPropertyAddressRemoved;
+			_customerAddressRepository.SaveOrUpdate(noLongerOwnedAddress);
 		}
 
 		[Ajax]
