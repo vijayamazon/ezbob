@@ -54,6 +54,7 @@
 			ValidateOffer(cus);
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1));
 
+			bool isFakeLoanCreate = (card == null);
 			var cr = cus.LastCashRequest;
 
 			var calculator = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
@@ -64,8 +65,16 @@
 			PacnetReturnData ret;
 			if (PacnetSafeGuard(cus, transfered))
 			{
-				ret = SendMoney(cus, transfered);
-				VerifyAvailableFunds(transfered);
+				if (!isFakeLoanCreate) {
+					ret = SendMoney(cus, transfered);
+					VerifyAvailableFunds(transfered);
+				}
+				else {
+					ret = new PacnetReturnData() {
+						Status = "Done",
+						TrackingNumber = "fake"
+					};
+				}
 			}
 			else
 			{
@@ -84,16 +93,16 @@
 
 			loan.GenerateRefNumber(cus.RefNumber, cus.Loans.Count);
 
-			var loanTransaction = new PacnetTransaction
-									  {
-										  Amount = loan.LoanAmount,
-										  Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
-										  PostDate = now,
-										  Status = LoanTransactionStatus.InProgress,
-										  TrackingNumber = ret.TrackingNumber,
-										  PacnetStatus = ret.Status,
-										  Fees = fee
-									  };
+			var loanTransaction = new PacnetTransaction {
+				Amount = loan.LoanAmount,
+				Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
+				PostDate = now,
+				Status = isFakeLoanCreate ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
+				TrackingNumber = ret.TrackingNumber,
+				PacnetStatus = ret.Status,
+				Fees = fee
+			};
+
 			loan.AddTransaction(loanTransaction);
 
 			var aprCalc = new APRCalculator();
@@ -114,8 +123,9 @@
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
 
 			_session.Flush();
-
-			m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
+			if (!isFakeLoanCreate) {
+				m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
+			}
 
 			return loan;
 		}
