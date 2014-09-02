@@ -27,10 +27,13 @@ rem Start EzServiceHost minimised
 echo service start
 start /MIN /D %TARGET_PATH% %TARGET_PATH%\EzServiceHost.exe
 
-rem Start iisexpress minimised
-echo iis start
+rem Start iisexpress minimised - App site
+echo iis app start
 start /MIN /D "C:\Program Files (x86)\IIS Express" iisexpress.exe /config:"%USERPROFILE%\Documents\IISExpress\config\applicationhost.config" /site:"EzBob.Web" /apppool:"Clr4IntegratedAppPool"
 
+rem Start iisexpress minimised - API site
+echo iis api start
+start /MIN /D "C:\Program Files (x86)\IIS Express" iisexpress.exe /config:"%USERPROFILE%\Documents\IISExpress\config\applicationhost.config" /site:"Demo" /apppool:"Clr4IntegratedAppPool"
 
 cd ../../../../.. 
 

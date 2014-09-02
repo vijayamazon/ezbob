@@ -1,0 +1,68 @@
+@using System.Web.Http.Description
+@using System.Collections.ObjectModel
+@model Collection<ApiDescription>
+
+@{
+	ViewBag.Title = "Ezbob Demo Web API Help Page";
+
+	// Group APIs by controller
+	ILookup<string, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor.ControllerName);
+}
+
+	<header>
+		<div class="content-wrapper">
+			<div class="float-left">
+				<h1>@ViewBag.Title</h1>
+			</div>
+		</div>
+	</header>
+<div id="body">
+	<section class="featured">
+		<div class="content-wrapper">
+			<h2>Introduction</h2>
+			<p>
+				This is a demo API showing basic principles of creating a web API.
+			</p>
+
+			<h3>Some notes for developers</h3>
+
+			<dl>
+				<dt>Documentation</dt>
+				<dd>Documentation is taken from inline XML documentation (lines stating with ///).
+					To enable this:
+					<ol>
+						<li>Obviously write the documentation itself.</li>
+						<li>In file <b>Areas/HelpPage/App_Start/HelpPageConfig.cs</b> uncomment the line
+							<code>config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml")));</code>
+						</li>
+						<li>Open project properties, go to <b>Build</b> tab and under Output, check <b>XML documentation file</b>. In the edit box, type <b>App_Data/XmlDocument.xml</b>.</li>
+					</ol>
+					<a href="http://www.asp.net/web-api/overview/creating-web-apis/creating-api-help-pages" target="_blank">More details here.</a>
+				</dd>
+				
+				<dt>Routing</dt>
+				<dd>
+					Observe the file <b>App_Start/WebApiConfig.cs</b>. It contains:
+					<pre>
+config.Routes.MapHttpRoute(
+	name: "DefaultApi",
+	routeTemplate: "api/{controller}/{id}",
+	defaults: new { id = RouteParameter.Optional }
+);
+					</pre>
+					Controller actions that receive the optional <b>id</b> parameter <b>must</b> name this argument exactly as <b>id</b>.
+					Otherwise routing will fail.
+				</dd>
+			</dl>
+		</div>
+	</section>
+	<section class="content-wrapper main-content clear-fix">
+		@foreach (var group in apiGroups) {
+			@Html.DisplayFor(m => group, "ApiGroup")
+		}
+	</section>
+</div>
+
+@section Scripts {
+	<link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
+}

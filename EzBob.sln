@@ -209,6 +209,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ezbob.Backend.ModelsWithDB"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankTransactionsParser", "Integration\BankTransactionsParser\BankTransactionsParser.csproj", "{56D43F8F-F0C7-4B46-B902-0DD3978966E4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{42421C65-FC57-42BA-880F-2D6D34FB0DBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Api\Demo\Demo.csproj", "{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1064,6 +1068,16 @@ Global
 		{56D43F8F-F0C7-4B46-B902-0DD3978966E4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{56D43F8F-F0C7-4B46-B902-0DD3978966E4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{56D43F8F-F0C7-4B46-B902-0DD3978966E4}.Release|x86.ActiveCfg = Release|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1164,6 +1178,7 @@ Global
 		{93B2B33D-53CD-4B77-895B-6A35DD813967} = {B6B0B4B2-0F41-4CC9-92E3-0E61A3AD19A4}
 		{1A82452F-4488-41F1-84CC-BF8CAAF4A839} = {B6B0B4B2-0F41-4CC9-92E3-0E61A3AD19A4}
 		{BADDE16C-DC34-4A2A-8B08-DA0D0CAE6FEC} = {56B1D88A-BA10-43B9-ADFB-70226BAB68A1}
+		{D9A96906-C2B4-4BCD-BF42-E043CF825D5B} = {42421C65-FC57-42BA-880F-2D6D34FB0DBF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
