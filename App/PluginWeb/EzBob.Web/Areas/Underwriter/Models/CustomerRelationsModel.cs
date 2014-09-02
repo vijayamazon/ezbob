@@ -47,6 +47,7 @@
 		public string Rank { get; set; }
 		public string Comment { get; set; }
 		public string Type { get; set; }
+		public string PhoneNumber { get; set; }
 
 		public static CustomerRelationsModel Create(CustomerRelations customerRelations)
 		{
@@ -58,7 +59,8 @@
 				Rank = customerRelations.Rank == null ? "-" : customerRelations.Rank.Name,
 				DateTime = customerRelations.Timestamp,
 				Comment = customerRelations.Comment,
-				Type = customerRelations.Type
+				Type = customerRelations.Type,
+				PhoneNumber = customerRelations.PhoneNumber
 			};
 		}
 
