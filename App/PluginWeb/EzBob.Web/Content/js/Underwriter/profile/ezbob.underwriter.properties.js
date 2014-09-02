@@ -18,7 +18,8 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 		this.model.on("reset change sync", this.render, this);
 	},
 	onRender: function () {
-		var that = this;
+	    var that = this;
+
 		$(document).ready(function () {
 			$('#ownedPropertiesTable').dataTable({
 				sDom: 't'
@@ -47,7 +48,46 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 	events: {
 		"click .zooplaRecheck": "recheckZoopla",
 		"click .btnEnquiry": "showLandRegistry",
-		"click .btnNoLongerOwned": "markAsNoLongerOwned"
+		"click .btnNoLongerOwned": "markAsNoLongerOwned",
+		"click #addOwnedAddress": "addOwnedAddress"
+	},
+	addOwnedAddress: function () {
+	    var popUp = new EzBob.Popup({
+	        postcode: $.trim($('#addOwnedAddressPostcode').val()),
+	        uiEventControlIdPrefix: 'underwriter-add-property',
+	        callback: this.addAddressCallback,
+	        caller: this
+	    });
+	    
+	    popUp.render();
+	    popUp.SearchByPostcode();
+	},
+	addAddressCallback: function (address, caller) {
+	    var that = this;
+	    this.addingAddress = address;
+	    address.fetch().done(function () {
+	        var xhr = $.post(window.gRootPath + "Underwriter/Properties/AddAddress?customerId=" + caller.model.id
+			    + "&addressId=" + that.addingAddress.get('Id')
+			    + "&organisation=" + that.addingAddress.get('Organisation')
+			    + "&line1=" + that.addingAddress.get('Line1')
+			    + "&line2=" + that.addingAddress.get('Line2')
+			    + "&line3=" + that.addingAddress.get('Line3')
+			    + "&town=" + that.addingAddress.get('Town')
+			    + "&county=" + that.addingAddress.get('County')
+			    + "&postcode=" + that.addingAddress.get('Postcode')
+			    + "&country=" + that.addingAddress.get('Country')
+			    + "&rawpostcode=" + that.addingAddress.get('Rawpostcode')
+			    + "&deliverypointsuffix=" + that.addingAddress.get('Deliverypointsuffix')
+			    + "&nohouseholds=" + that.addingAddress.get('Nohouseholds')
+			    + "&smallorg=" + that.addingAddress.get('Smallorg')
+			    + "&pobox=" + that.addingAddress.get('Pobox')
+			    + "&mailsortcode=" + that.addingAddress.get('Mailsortcode')
+			    + "&udprn=" + that.addingAddress.get('Udprn')
+			);
+	        xhr.done(function () {
+	            caller.model.fetch();
+	        });
+	    });
 	},
 	recheckZoopla: function () {
 		BlockUi("On");

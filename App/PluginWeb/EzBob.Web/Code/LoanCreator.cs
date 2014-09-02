@@ -212,7 +212,6 @@
 			}
 		}
 
-
 		public virtual string GetCustomerNameForPacNet(Customer customer)
 		{
 			string name = string.Format("{0} {1}", customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname);

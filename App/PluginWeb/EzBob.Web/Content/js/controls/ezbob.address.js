@@ -1,10 +1,12 @@
 ﻿var EzBob = EzBob || {};
 
 EzBob.Popup = Backbone.View.extend({
-	initialize: function (options) {
+    initialize: function (options) {
 		this.template = $('#address-popup-template').html();
 		this.defaultPostcode = options.postcode;
 		this.uiEventControlIdPrefix = options.uiEventControlIdPrefix;
+		this.callback = options.callback;
+		this.caller = options.caller;
 
 		if (!window.gRootPath) {
 			this.rootPath = '/';
@@ -302,9 +304,13 @@ EzBob.Popup = Backbone.View.extend({
 			addressModel.fetch();
 		} // if dummy
 
-		this.model.add(addressModel);
-
-		this.$el.dialog('close');
+	    if (this.callback == undefined) {
+	        this.model.add(addressModel);
+	    } else {
+	        this.callback(addressModel, this.caller);
+	    }
+	    
+	    this.$el.dialog('close');
 		this.remove();
 		this.unbind();
 
@@ -338,9 +344,13 @@ EzBob.Popup = Backbone.View.extend({
 			"Udprn": "0"
 		};
 
-		this.model.add(addressModel);
+		if (this.callback == undefined) {
+	        this.model.add(addressModel);
+	    } else {
+	        this.callback(addressModel, this.caller);
+	    }
 
-		this.$el.dialog('close');
+	    this.$el.dialog('close');
 		this.remove();
 		this.unbind();
 

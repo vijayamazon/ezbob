@@ -2105,3 +2105,12 @@ ul.alert-list {
 .verfied-phone {
     color: #00AB5D;
 }
+
+.add-owned-address-button-alignment {
+    margin-top: -10px;
+    height: 36px;
+}
+
+.add-owned-address-postcode-width {
+    width: 120px !important;
+}
