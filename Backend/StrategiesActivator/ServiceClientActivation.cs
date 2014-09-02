@@ -698,6 +698,12 @@ crm:           CRM");
 		} // NotifySalesOnNewCustomer
 
 		[Activation]
+		private void Shutdown() {
+			ActionMetaData res = m_oAdminClient.Shutdown();
+			m_oLog.Msg("Shutdown request result: status = {0}, comment = '{1}'", res.Status, res.Comment);
+		} // Shutdown
+
+		[Activation]
 		private void ListActiveActions() {
 			StringListActionResult res = m_oAdminClient.ListActiveActions();
 
