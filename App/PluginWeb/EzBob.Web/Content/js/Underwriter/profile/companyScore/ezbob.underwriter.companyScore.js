@@ -86,7 +86,7 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		var that = this;
 		BlockUi("on");
-		$.post(window.gRootPath + "Underwriter/CreditBureau/IsCompanyCacheRelevant", { customerId: this.model.get("Id") })
+		$.post(window.gRootPath + "Underwriter/CreditBureau/IsCompanyCacheRelevant", { customerId: this.model.customerId })
 			.done(function(response) {
 				if (response.NoCompany) {
 					EzBob.ShowMessage("Customer don't have a company", "Nothing to recheck");
@@ -112,7 +112,7 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 	RunCompanyCheck: function (forceCheck) {
 		BlockUi("on");
 
-		$.post(window.gRootPath + "Underwriter/CreditBureau/RunCompanyCheck", { id: this.model.get("Id"), forceCheck: forceCheck })
+		$.post(window.gRootPath + "Underwriter/CreditBureau/RunCompanyCheck", { id: this.model.customerId, forceCheck: forceCheck })
 			.done(function(response) {
 				EzBob.ShowMessage(response.Message, "Information");
 			})
