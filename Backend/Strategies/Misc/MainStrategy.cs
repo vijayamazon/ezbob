@@ -247,36 +247,39 @@
 					autoDecisionResponse.UserStatus, autoDecisionResponse.AppValidFor, autoDecisionResponse.RepaymentPeriod);
 			}
 
-			if (autoDecisionResponse != null && autoDecisionResponse.UserStatus == "Approved")
+			if (autoDecisionResponse != null) // Means that wasn't rejected
 			{
-				if (autoDecisionResponse.IsAutoApproval)
+				if (autoDecisionResponse.UserStatus == "Approved")
 				{
-					UpdateApprovalData();
-					SendApprovalMails(scoringResult.MaxOfferPercent);
+					if (autoDecisionResponse.IsAutoApproval)
+					{
+						UpdateApprovalData();
+						SendApprovalMails(scoringResult.MaxOfferPercent);
 
-					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
-				}
-				else if (autoDecisionResponse.IsAutoBankBasedApproval)
-				{
-					UpdateBankBasedApprovalData();
-					SendBankBasedApprovalMails();
+						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
+					}
+					else if (autoDecisionResponse.IsAutoBankBasedApproval)
+					{
+						UpdateBankBasedApprovalData();
+						SendBankBasedApprovalMails();
 
-					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto bank based approval");
+						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto bank based approval");
+					}
+					else
+					{
+						UpdateReApprovalData();
+						SendReApprovalMails();
+
+						if (enableAutomaticReApproval)
+						{
+							strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
+						}
+					}
 				}
 				else
 				{
-					UpdateReApprovalData();
-					SendReApprovalMails();
-
-					if (enableAutomaticReApproval)
-					{
-						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
-					}
+					SendWaitingForDecisionMail();
 				}
-			}
-			else
-			{
-				SendWaitingForDecisionMail();
 			}
 
 			SetEndTimestamp();
@@ -1142,7 +1145,7 @@
 				{"Surname", appSurname},
 				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision},
+				{"SystemDecision", "Reject"},
 				{"ExperianConsumerScore", initialExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianConsumerScore", lowCreditScore.ToString(CultureInfo.InvariantCulture)},
 				{"TotalAnnualTurnover", totalSumOfOrders1YTotalForRejection.ToString("C2")},
