@@ -43,7 +43,7 @@
 
 			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
 			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
-			var message = (EzbobSmsMessage)twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, m_sContent, "");
+			var message = EzbobSmsMessage.FromSmsMessage(twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, m_sContent, ""));
 			message.UserId = m_nUserId;
 			message.UnderwriterId = m_nUnderwriterId;
 

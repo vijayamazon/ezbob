@@ -6,6 +6,16 @@
 
 	public class EzbobSmsMessage : SMSMessage
 	{
+		public static EzbobSmsMessage FromSmsMessage(SMSMessage smsMessage) {
+			var model = new EzbobSmsMessage();
+			if (smsMessage != null) {
+				smsMessage.Traverse((inst, propInfo) => propInfo.SetValue((SMSMessage) model, propInfo.GetValue(smsMessage)));
+			} else {
+				model.Status = "null";
+			}
+			return model;
+		}
+
 		[NonTraversable]
 		public int Id { get; set; }
 

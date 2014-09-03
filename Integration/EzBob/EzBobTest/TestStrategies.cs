@@ -297,6 +297,12 @@ namespace EzBobTest
 		}
 
 		[Test]
+		public void TestGenerateCode() {
+			var s = new GenerateMobileCode("011111111", m_oDB, m_oLog);
+			s.Execute();
+		}
+
+		[Test]
 		public void TestBrokerInstantOffer() {
 			var s = new BrokerInstantOffer(new BrokerInstantOfferRequest() {
 				BrokerId = 21348,

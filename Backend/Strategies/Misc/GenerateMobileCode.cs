@@ -109,7 +109,7 @@
 			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
 
 
-			var message = (EzbobSmsMessage)twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, content, "");
+			EzbobSmsMessage message = EzbobSmsMessage.FromSmsMessage(twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, content, ""));
 
 			message.UserId = null;
 			message.UnderwriterId = 1; //system id
