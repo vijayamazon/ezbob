@@ -36,14 +36,25 @@
     };
 
     YourInfoMainView.prototype.setInputReadOnly = function(isReadOnly) {
+      var otherPropertiesModels;
+
       this.$el.find('.personEditInput').attr('readonly', isReadOnly).attr('modifed', !isReadOnly);
       this.$el.find('#PersonalAddress .addAddressInput').attr('modifed', !isReadOnly);
+      this.$el.find('#OtherPropertiesAddresses .addAddressInput').attr('modifed', !isReadOnly);
       if (isReadOnly) {
-        this.$el.find('.submit-personal, .cancel, .addAddressInput,#PersonalAddress .addAddress, .removeAddress, .attardi-input, .required').hide();
+        this.$el.find('.submit-personal, .cancel,#PersonalAddress .addAddressInput,#PersonalAddress .addAddress,#PersonalAddress .removeAddress,#PersonalAddress .attardi-input,#PersonalAddress .required').hide();
+        otherPropertiesModels = this.model.get('OtherPropertiesAddresses');
+        if (otherPropertiesModels === void 0 || otherPropertiesModels.length < 1) {
+          this.$el.find('#otherPropertiesDiv').hide();
+        } else {
+          this.$el.find('#otherPropertiesDiv .removeAddress').hide();
+        }
         this.$el.find('textarea').removeClass('form_field').css('margin-top', 0);
         return this.$el.find('.edit-personal').show();
       } else {
         this.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show();
+        this.$el.find('#otherPropertiesDiv').show();
+        this.$el.find('#otherPropertiesDiv .removeAddress').show();
         return this.$el.find('.edit-personal').hide();
       }
     };

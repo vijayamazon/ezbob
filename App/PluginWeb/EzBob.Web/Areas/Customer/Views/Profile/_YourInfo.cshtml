@@ -73,10 +73,10 @@
 				<input type="text" value="<%-PropertyStatus.Description%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:residential-status" />
 			</div>
 		</div>
-    
-        <div class="controls">
+
+        <div id="otherPropertiesDiv" class="controls">
 			<div class="addressEdit">
-                @EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal", "otherPropertiesAddress canDisabledAddress")
+                @EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal")
 			</div>
 		</div>
 

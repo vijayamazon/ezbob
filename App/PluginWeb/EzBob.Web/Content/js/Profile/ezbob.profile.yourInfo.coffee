@@ -19,15 +19,27 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
        form: 'form.editYourInfoForm'
 
     setInputReadOnly:(isReadOnly) ->
+        # TODO: why is it 'modifed' and not 'modified' & where is it even used
         @.$el.find('.personEditInput').attr('readonly', isReadOnly).attr('modifed', !isReadOnly)
         @.$el.find('#PersonalAddress .addAddressInput').attr('modifed', !isReadOnly)
+        @.$el.find('#OtherPropertiesAddresses .addAddressInput').attr('modifed', !isReadOnly)
 
         if isReadOnly
-            @.$el.find('.submit-personal, .cancel, .addAddressInput,#PersonalAddress .addAddress, .removeAddress, .attardi-input, .required').hide()
+            @.$el.find('.submit-personal, .cancel,#PersonalAddress .addAddressInput,#PersonalAddress .addAddress,#PersonalAddress .removeAddress,#PersonalAddress .attardi-input,#PersonalAddress .required').hide()
+
+            otherPropertiesModels = @model.get('OtherPropertiesAddresses')
+            if (otherPropertiesModels == undefined || otherPropertiesModels.length < 1)
+                @.$el.find('#otherPropertiesDiv').hide()
+            else
+                @.$el.find('#otherPropertiesDiv .removeAddress').hide()
+
             @.$el.find('textarea').removeClass('form_field').css('margin-top', 0)
             @.$el.find('.edit-personal').show()
          else 
             @.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show()
+            @.$el.find('#otherPropertiesDiv').show()
+            @.$el.find('#otherPropertiesDiv .removeAddress').show()
+
             @.$el.find('.edit-personal').hide()
 
     editPersonalViewShow: ->
