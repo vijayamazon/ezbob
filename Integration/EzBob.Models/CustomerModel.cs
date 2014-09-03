@@ -126,6 +126,7 @@ namespace EzBob.Models {
 		public bool IsBrokerFill { get; set; }
 		public bool DefaultCardSelectionAllowed { get; set; }
 
+		public bool IsWhiteLabel { get; set; }
 	} // class CustomerModel
 
 	#endregion class CustomerModel

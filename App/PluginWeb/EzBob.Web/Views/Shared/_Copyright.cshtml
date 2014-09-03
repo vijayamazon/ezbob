@@ -1,9 +1,15 @@
 ﻿<div id="copyrights">
 	<div class="copyrights-inner">
-		<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687
-		ICO Registration Number: Z2946778.<br/>
-		<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
-		Registered Address: 145 – 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br/>
-		&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
+		@if (!string.IsNullOrEmpty(ViewBag.FooterText)) {
+			@Html.Raw(ViewBag.FooterText)
+			@Html.Raw(@"<br>powered by <span class='bold'>ezbob</span>")
+		}else{
+			@Html.Raw(@"
+				<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br/>
+				<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
+				Registered Address: 145 – 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br/>
+				&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
+			")
+		}
 	</div>
 </div>

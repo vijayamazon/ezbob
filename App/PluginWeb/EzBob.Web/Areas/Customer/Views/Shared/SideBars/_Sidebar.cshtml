@@ -78,47 +78,47 @@
 	</div>*@
 
     <div class="item-call-us">
-        <a href="tel:08000114787">
+        <a href="tel:@ViewBag.Phone">
             <div class="item">
                 <div class="icon">
                     <img src="@Url.Content("~/Content/img/customer-sidebar/call.png")" alt="Call now" width="50" height="45" class="sb-icon" />
                 </div>
                 <div class="text">
                     <h3>Call now</h3>
-                    0800 011 4787
+                    @ViewBag.Phone
                 </div>
             </div>
         </a>
     </div>
+	@if (string.IsNullOrEmpty(ViewBag.WhiteLabel)) {
+		<div class="item-email-us">
+			<a href="mailto:customercare@ezbob.com">
+				<div class="item">
+					<div class="icon">
+						<img src="@Url.Content("~/Content/img/customer-sidebar/email.png")" alt="Email us" width="50" height="45" class="sb-icon" />
+					</div>
+					<div class="text">
+						<h3>Email us</h3>
+						customercare@ezbob.com
+					</div>
+				</div>
+			</a>
+		</div>
 
-    <div class="item-email-us">
-        <a href="mailto:customercare@ezbob.com">
-            <div class="item">
-                <div class="icon">
-                    <img src="@Url.Content("~/Content/img/customer-sidebar/email.png")" alt="Email us" width="50" height="45" class="sb-icon" />
-                </div>
-                <div class="text">
-                    <h3>Email us</h3>
-                    customercare@ezbob.com
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <div class="item-chat-now">
-        <a href="javascript:$('.lpchat-image').click()">
-            <div class="item">
-                <div class="icon">
-                    <img src="@Url.Content("~/Content/img/customer-sidebar/chat.png")" alt="Chat now" width="50" height="45" class="sb-icon" />
-                </div>
-                <div class="text">
-                    <h3>Chat now</h3>
-                    Online help available just click
-                </div>
-            </div>
-        </a>
-    </div>
-
+		<div class="item-chat-now">
+			<a href="javascript:$('.lpchat-image').click()">
+				<div class="item">
+					<div class="icon">
+						<img src="@Url.Content("~/Content/img/customer-sidebar/chat.png")" alt="Chat now" width="50" height="45" class="sb-icon" />
+					</div>
+					<div class="text">
+						<h3>Chat now</h3>
+						Online help available just click
+					</div>
+				</div>
+			</a>
+		</div>
+	}
     
 </div>
 

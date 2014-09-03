@@ -18,6 +18,7 @@
 	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using System.Web;
+	using Web.Models;
 
 	public class CustomerModelBuilder {
 		public CustomerModelBuilder(
@@ -39,24 +40,28 @@
 			m_oExperianDirectors = oDbHelper.ExperianDirectorRepository;
 		} // constructor
 
-		public CustomerModel BuildWizardModel(Customer cus, HttpSessionStateBase session, bool isProfile = false) {
+		public WizardModel BuildWizardModel(Customer cus, HttpSessionStateBase session, bool isProfile = false) {
+			var wizardModel = new WizardModel();
+
 			var customerModel = new CustomerModel {
 				loggedIn = cus != null,
 				bankAccountAdded = false,
 			};
 
+			wizardModel.Customer = customerModel;
+
 			if (!customerModel.loggedIn) {
 				customerModel.IsBrokerFill = (session[Constant.Broker.FillsForCustomer] ?? Constant.No).ToString() == Constant.Yes;
-				return customerModel;
+				return wizardModel;
 			} // if
 
 			if (cus == null)
-				return customerModel;
+				return wizardModel;
 
 			var customer = m_oCustomerRepository.GetAndInitialize(cus.Id);
 
 			if (customer == null)
-				return customerModel;
+				return wizardModel;
 
 			var user = m_oUsers.Get(cus.Id);
 
@@ -255,7 +260,7 @@
 			customerModel.IsBrokerFill = customer.FilledByBroker;
 			customerModel.DefaultCardSelectionAllowed = customer.DefaultCardSelectionAllowed;
 
-			return customerModel;
+			return wizardModel;
 		} // BuildWizardModel
 
 		private QuickOfferModel BuildQuickOfferModel(Customer c) {

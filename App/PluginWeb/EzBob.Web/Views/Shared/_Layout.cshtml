@@ -9,6 +9,10 @@
     var controller = (string)ViewContext.RouteData.Values["controller"];
     var authCookie = Request.IsAuthenticated ? "auth" : "";
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+	if(string.IsNullOrEmpty(ViewBag.Phone))
+	{
+		ViewBag.Phone = "0800-011-4787";
+	}
 }
 <!DOCTYPE html>
 <html>
@@ -53,7 +57,7 @@
             <div class="header-inner">
                 <div class="header-logo">
                     <a href="http://www.ezbob.com">
-                        <img src="@Url.Content("~/Content/css/images/header/ezbob_logo-white.png")" class="newlogo" width="128" height="34">
+	                    <div class="newlogo" ></div>
                     </a>
                 </div>
                 <div class="header-info" style="display: none;">
@@ -68,7 +72,7 @@
                     </li>
                     <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })" class="button btn-grey">Login</a></li>
                     <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="button btn-green">Sign Up</a></li>
-                    <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
+                    <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;@ViewBag.Phone</div></li>
                 </ul>
             </div>
         </div>

@@ -160,7 +160,7 @@ EzBob.WizardView = EzBob.View.extend({
             $('#user-menu').hide();
         var that = this;
 
-        if (!this.customer.get('IsBrokerFill')) {
+        if (!this.customer.get('IsBrokerFill') && !this.customer.get('IsWhiteLabel')) {
             this.vip.fetch().done(function() {
                 if (that.vip.get('VipEnabled') && !that.vip.get('RequestedVip')) {
                     that.VipView = new EzBob.VipView({ model: that.vip, el: that.$el.find('.vip-container') });

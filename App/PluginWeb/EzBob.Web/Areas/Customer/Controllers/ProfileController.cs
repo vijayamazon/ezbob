@@ -52,7 +52,7 @@
 
 		[IsSuccessfullyRegisteredFilter]
 		public ViewResult Index() {
-			var wizardModel = new WizardModel { Customer = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, true) };
+			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, true);
 			ViewData["ShowChangePasswordPage"] = m_oContext.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = m_oSession
