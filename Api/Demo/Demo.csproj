@@ -146,6 +146,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -165,14 +168,19 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\SecureValuesController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Filters\CopyStatusToHeaderAttribute.cs" />
+    <Compile Include="Controllers\Versions\v1\LoginController.cs" />
+    <Compile Include="Controllers\Versions\v1\SecureValuesController.cs" />
+    <Compile Include="Controllers\Versions\v1\ValuesController.cs" />
+    <Compile Include="Filters\ValidateActionPermissionAttribute.cs" />
+    <Compile Include="Filters\ValidateSessionTokenAttribute.cs" />
+    <Compile Include="Filters\HandleActionExecutedAttribute.cs" />
     <Compile Include="Filters\ValidateAppKeyAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Return.cs" />
+    <Compile Include="Infrastructure\SecurityStub.cs" />
+    <Compile Include="Infrastructure\ValueStorage.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\ValueModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

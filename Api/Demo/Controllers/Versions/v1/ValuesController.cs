@@ -1,19 +1,30 @@
-﻿namespace Demo.Controllers {
+﻿namespace Demo.Controllers.Versions.v1 {
 	using System;
 	using System.Collections.Generic;
 	using System.Net;
-	using System.Net.Http;
 	using System.Web.Http;
-	using Models;
-	using Filters;
+	using Demo.Models;
+	using Demo.Filters;
+	using Infrastructure;
 
 	/// <summary>
 	/// Provides an example of an anonymous API.
 	/// </summary>
-	[CopyStatusToHeader]
 	[ValidateAppKey]
+	[RoutePrefix("api/v1/values")]
 	public class ValuesController : ApiController {
 		#region public
+
+		#region constructor
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ValuesController() {
+			m_oValues = ValueStorage.Instance;
+		} // constructor
+
+		#endregion constructor
 
 		#region load all values action
 
@@ -25,25 +36,19 @@
 		/// </para>
 		/// </summary>
 		/// <returns>List of all currently existing values.</returns>
+		[Route("")]
 		public IEnumerable<ValueModel> Get() {
 			try {
-				if (ms_oValues.Count < 1) {
-					throw new HttpResponseException(new HttpResponseMessage {
-						StatusCode = HttpStatusCode.NoContent,
-						ReasonPhrase = "There are no items in the list.",
-					});
-				} // if
+				if (m_oValues.IsEmpty)
+					throw Return.Status(HttpStatusCode.NoContent, "There are no items in the list.");
 
-				return ms_oValues.Values;
+				return m_oValues.Values;
 			}
 			catch (HttpResponseException) {
 				throw;
 			}
 			catch (Exception e) {
-				throw new HttpResponseException(new HttpResponseMessage {
-					StatusCode = HttpStatusCode.InternalServerError,
-					ReasonPhrase = string.Format("Failed to retrieve item list: {0}", e.Message),
-				});
+				throw Return.Error("Failed to retrieve item list: {0}", e.Message);
 			} // try
 		} // Get
 
@@ -60,25 +65,19 @@
 		/// </summary>
 		/// <param name="nID">Value id to look for.</param>
 		/// <returns>Corresponding value when requested id exists, or empty output and HTTP status code of 404 otherwise.</returns>
+		[Route("{nID:int}")]
 		public ValueModel Get(int nID) {
 			try {
-				if (!ms_oValues.ContainsKey(nID)) {
-					throw new HttpResponseException(new HttpResponseMessage {
-						StatusCode = HttpStatusCode.NotFound,
-						ReasonPhrase = string.Format("No item found with the requested id ({0}).", nID),
-					});
-				} // if
+				if (!m_oValues.Contains(nID))
+					throw Return.NotFound("No item found with the requested id ({0}).", nID);
 
-				return ms_oValues[nID];
+				return m_oValues[nID];
 			}
 			catch (HttpResponseException) {
 				throw;
 			}
 			catch (Exception e) {
-				throw new HttpResponseException(new HttpResponseMessage {
-					StatusCode = HttpStatusCode.InternalServerError,
-					ReasonPhrase = string.Format("Failed to retrieve item with the requested id ({0}): {1}", nID, e.Message),
-				});
+				throw Return.Error("Failed to retrieve item list: {0}", e.Message);
 			} // try
 		} // Get
 
@@ -95,22 +94,21 @@
 		/// </summary>
 		/// <param name="oValue">New value details.</param>
 		/// <returns>A new value that has been created.</returns>
+		[Route("")]
 		public ValueModel Post([FromBody]ValueModel oValue) {
 			try {
 				if (string.IsNullOrWhiteSpace(oValue.Title))
-					throw new NullReferenceException("Value title cannot be an empty string.");
+					throw Return.Status(HttpStatusCode.NotAcceptable, "Value title cannot be an empty string.");
 
-				oValue.ID = ms_nIDGen++;
-
-				ms_oValues[oValue.ID] = oValue;
+				m_oValues += oValue;
 
 				return oValue;
 			}
+			catch (HttpResponseException) {
+				throw;
+			}
 			catch (Exception e) {
-				throw new HttpResponseException(new HttpResponseMessage {
-					StatusCode = HttpStatusCode.InternalServerError,
-					ReasonPhrase = string.Format("Failed to create a new item: {0}", e.Message),
-				});
+				throw Return.Error("Failed to create a new item: {0}", e.Message);
 			} // try
 		} // Post
 
@@ -127,32 +125,21 @@
 		/// </summary>
 		/// <param name="nID">Id of value to update.</param>
 		/// <param name="oValue">New value details.</param>
+		[Route("{nID:int}")]
 		public void Put(int nID, [FromBody]ValueModel oValue) {
 			try {
-				if (!ms_oValues.ContainsKey(nID)) {
-					throw new HttpResponseException(new HttpResponseMessage {
-						StatusCode = HttpStatusCode.NotFound,
-						ReasonPhrase = string.Format("No item found with the requested id ({0}).", nID),
-					});
-				} // if
+				oValue.ID = nID;
 
-				var oOld = ms_oValues[oValue.ID];
-				oOld.Title = oValue.Title;
-				oOld.Content = oValue.Content;
+				if (!m_oValues.Update(oValue))
+					throw Return.NotFound("No item found with the requested id ({0}).", nID);
 
-				throw new HttpResponseException(new HttpResponseMessage {
-					StatusCode = HttpStatusCode.OK,
-					ReasonPhrase = string.Format("Item with the requested id ({0}) has been updated.", nID),
-				});
+				throw Return.Success("Item with the requested id ({0}) has been updated.", nID);
 			}
 			catch (HttpResponseException) {
 				throw;
 			}
 			catch (Exception e) {
-				throw new HttpResponseException(new HttpResponseMessage {
-					StatusCode = HttpStatusCode.InternalServerError,
-					ReasonPhrase = string.Format("Failed to update item with the requested id ({0}): {1}", nID, e.Message),
-				});
+				throw Return.Error("Failed to update item with the requested id ({0}): {1}", nID, e.Message);
 			} // try
 		} // Put
 
@@ -168,28 +155,19 @@
 		/// </para>
 		/// </summary>
 		/// <param name="nID">Id of value to update.</param>
+		[Route("{nID:int}")]
 		public void Delete(int nID) {
 			try {
-				if (!ms_oValues.ContainsKey(nID)) {
-					throw new HttpResponseException(new HttpResponseMessage {
-						StatusCode = HttpStatusCode.NotFound,
-						ReasonPhrase = string.Format("No item found with the requested id ({0}).", nID),
-					});
-				} // if
+				if (!m_oValues.Remove(nID))
+					throw Return.NotFound("No item found with the requested id ({0}).", nID);
 
-				throw new HttpResponseException(new HttpResponseMessage {
-					StatusCode = HttpStatusCode.OK,
-					ReasonPhrase = string.Format("Item with the requested id ({0}) has been removed.", nID),
-				});
+				throw Return.Success("Item with the requested id ({0}) has been removed.", nID);
 			}
 			catch (HttpResponseException) {
 				throw;
 			}
 			catch (Exception e) {
-				throw new HttpResponseException(new HttpResponseMessage {
-					StatusCode = HttpStatusCode.InternalServerError,
-					ReasonPhrase = string.Format("Failed to remove item with the requested id ({0}): {1}", nID, e.Message),
-				});
+				throw Return.Error("Failed to remove item with the requested id ({0}): {1}", nID, e.Message);
 			} // try
 		} // Delete
 
@@ -197,11 +175,6 @@
 
 		#endregion public
 
-		#region private
-
-		private static readonly SortedDictionary<int, ValueModel> ms_oValues = new SortedDictionary<int, ValueModel>();
-		private static int ms_nIDGen = 1;
-
-		#endregion private
+		private ValueStorage m_oValues;
 	} // class ValuesController
 } // namespace
