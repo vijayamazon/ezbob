@@ -31,7 +31,11 @@ namespace Demo.Areas.HelpPage
             _documentNavigator = xpath.CreateNavigator();
         }
 
-        public virtual string GetDocumentation(HttpActionDescriptor actionDescriptor)
+	    public string GetDocumentation(HttpControllerDescriptor controllerDescriptor) {
+	    return "";
+	    }
+
+	    public virtual string GetDocumentation(HttpActionDescriptor actionDescriptor)
         {
             XPathNavigator methodNode = GetMethodNode(actionDescriptor);
             if (methodNode != null)
@@ -66,7 +70,11 @@ namespace Demo.Areas.HelpPage
             return null;
         }
 
-        private XPathNavigator GetMethodNode(HttpActionDescriptor actionDescriptor)
+	    public string GetResponseDocumentation(HttpActionDescriptor actionDescriptor) {
+		    return "";
+	    }
+
+	    private XPathNavigator GetMethodNode(HttpActionDescriptor actionDescriptor)
         {
             ReflectedHttpActionDescriptor reflectedActionDescriptor = actionDescriptor as ReflectedHttpActionDescriptor;
             if (reflectedActionDescriptor != null)
