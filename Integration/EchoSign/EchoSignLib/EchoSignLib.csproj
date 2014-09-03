@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="EchoSignEnvelope.cs" />
     <Compile Include="EchoSignFacade.cs" />
     <Compile Include="EchoSignSendResult.cs" />
