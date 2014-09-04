@@ -366,7 +366,7 @@
 			var toBeRemoved = new List<CustomerAddress>();
 			foreach (CustomerAddress previouslyDefinedOtherProperty in customer.AddressInfo.OtherPropertiesAddresses)
 			{
-				bool isInNewList = otherPropertiesAddresses.Any(newlyDefinedOtherProperty => newlyDefinedOtherProperty.AddressId == previouslyDefinedOtherProperty.AddressId);
+				bool isInNewList = otherPropertiesAddresses != null && otherPropertiesAddresses.Any(newlyDefinedOtherProperty => newlyDefinedOtherProperty.AddressId == previouslyDefinedOtherProperty.AddressId);
 
 				if (!isInNewList)
 				{
@@ -380,14 +380,17 @@
 				removedAddress.AddressType = CustomerAddressType.OtherPropertyAddressRemoved;
 			}
 
-			foreach (CustomerAddress otherPropertyAddress in otherPropertiesAddresses)
+			if (otherPropertiesAddresses != null)
 			{
-				if (otherPropertyAddress.AddressId == 0)
+				foreach (CustomerAddress otherPropertyAddress in otherPropertiesAddresses)
 				{
-					otherPropertyAddress.AddressType = CustomerAddressType.OtherPropertyAddress;
-					otherPropertyAddress.Customer = customer;
-					customerAddressRepository.SaveOrUpdate(otherPropertyAddress);
-					customer.AddressInfo.OtherPropertiesAddresses.Add(otherPropertyAddress);
+					if (otherPropertyAddress.AddressId == 0)
+					{
+						otherPropertyAddress.AddressType = CustomerAddressType.OtherPropertyAddress;
+						otherPropertyAddress.Customer = customer;
+						customerAddressRepository.SaveOrUpdate(otherPropertyAddress);
+						customer.AddressInfo.OtherPropertiesAddresses.Add(otherPropertyAddress);
+					}
 				}
 			}
 
