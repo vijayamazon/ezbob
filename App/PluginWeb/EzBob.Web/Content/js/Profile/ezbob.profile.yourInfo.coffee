@@ -37,7 +37,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
             @.$el.find('.edit-personal').show()
          else 
             @.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show()
-            @.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').show()
+            @.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .addAddressContainer').show()
 
             @.$el.find('.edit-personal').hide()
 
@@ -207,7 +207,7 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
             name: 'OtherPropertiesAddresses',
             max: 3,
             required: "empty",
-            isShowClear: true,
+            isShowClear: false,
             uiEventControlIdPrefix: @otherPropertiesAddresses.getEl(@otherPropertiesAddresses.el).attr('data-ui-event-control-id-prefix')
         })
         @otherPropertiesAddresses.show(otherPropertiesAddressesView)

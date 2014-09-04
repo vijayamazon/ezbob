@@ -53,7 +53,7 @@
         return this.$el.find('.edit-personal').show();
       } else {
         this.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show();
-        this.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').show();
+        this.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .addAddressContainer').show();
         return this.$el.find('.edit-personal').hide();
       }
     };
@@ -282,7 +282,7 @@
         name: 'OtherPropertiesAddresses',
         max: 3,
         required: "empty",
-        isShowClear: true,
+        isShowClear: false,
         uiEventControlIdPrefix: this.otherPropertiesAddresses.getEl(this.otherPropertiesAddresses.el).attr('data-ui-event-control-id-prefix')
       });
       this.otherPropertiesAddresses.show(otherPropertiesAddressesView);
