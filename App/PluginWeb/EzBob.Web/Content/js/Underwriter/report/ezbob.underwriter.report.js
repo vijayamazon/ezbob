@@ -110,8 +110,8 @@
         return false;
       }
       if (this.ui.datesDdl.val() === 'Custom') {
-        from = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').startDate);
-        to = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').endDate);
+        from = moment(this.ui.dateRange.data('daterangepicker').startDate).format("YYYY-MM-DD");
+        to = moment(this.ui.dateRange.data('daterangepicker').endDate).format("YYYY-MM-DD");
         return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReportDates/?reportId=" + (this.ui.reportsDdl.val()) + "&from=" + from + "&to=" + to + "&customer=" + (this.ui.customer.val()) + "&nonCash=" + (this.ui.nonCash.val());
       } else {
         return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReport/?reportId=" + (this.ui.reportsDdl.val()) + "&reportDate=" + (this.ui.datesDdl.val()) + "&customer=" + (this.ui.customer.val()) + "&nonCash=" + (this.ui.nonCash.val());
@@ -126,8 +126,9 @@
         return false;
       }
       if (this.ui.datesDdl.val() === 'Custom') {
-        fromDate = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').startDate);
-        toDate = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').endDate);
+        fromDate = moment(this.ui.dateRange.data('daterangepicker').startDate).format("YYYY-MM-DD");
+        toDate = moment(this.ui.dateRange.data('daterangepicker').endDate).format("YYYY-MM-DD");
+        console.log('fromDate, toDate', fromDate, toDate);
         xhr = $.post("" + window.gRootPath + "Underwriter/Report/GetReportDates", {
           reportId: this.ui.reportsDdl.val(),
           from: fromDate,

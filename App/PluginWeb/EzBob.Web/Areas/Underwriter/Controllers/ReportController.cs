@@ -37,6 +37,8 @@
 		[HttpPost]
 		public JsonResult GetReportDates(int reportId, DateTime from, DateTime to, string customer, bool? nonCash) {
 			var report = GetReport(reportId);
+			from = DateTime.SpecifyKind(from, DateTimeKind.Utc);
+			to = DateTime.SpecifyKind(to, DateTimeKind.Utc);
 			var rptDef = new ReportQuery(report, from, to, customer, nonCash);
 			var oColumnTypes = new List<string>();
 			var oDB = new SqlConnection();
@@ -53,6 +55,8 @@
 		[HttpPost]
 		public JsonResult GetReport(int reportId, ReportDate reportDate, string customer, bool? nonCash) {
 			var dates = ReporDateRanges.GetDates(reportDate);
+			dates.From = DateTime.SpecifyKind(dates.From, DateTimeKind.Utc);
+			dates.To = DateTime.SpecifyKind(dates.To, DateTimeKind.Utc);
 			return GetReportDates(reportId, dates.From, dates.To, customer, nonCash);
 		}
 

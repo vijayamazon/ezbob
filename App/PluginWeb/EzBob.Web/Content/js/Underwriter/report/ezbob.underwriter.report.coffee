@@ -74,8 +74,8 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
             return false
         
         if(@ui.datesDdl.val() == 'Custom')
-            from = EzBob.formatDateTimeCS(@ui.dateRange.data('daterangepicker').startDate)
-            to = EzBob.formatDateTimeCS(@ui.dateRange.data('daterangepicker').endDate)
+            from = moment(@ui.dateRange.data('daterangepicker').startDate).format("YYYY-MM-DD")
+            to = moment(@ui.dateRange.data('daterangepicker').endDate).format("YYYY-MM-DD")
             
             window.location = "#{window.gRootPath}Underwriter/Report/DownloadReportDates/?reportId=#{@ui.reportsDdl.val()}&from=#{from}&to=#{to}&customer=#{@ui.customer.val()}&nonCash=#{@ui.nonCash.val()}" 
         else
@@ -87,8 +87,9 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
             return false
 
         if(@ui.datesDdl.val() == 'Custom')
-            fromDate = EzBob.formatDateTimeCS(@ui.dateRange.data('daterangepicker').startDate)
-            toDate = EzBob.formatDateTimeCS(@ui.dateRange.data('daterangepicker').endDate)
+            fromDate = moment(@ui.dateRange.data('daterangepicker').startDate).format("YYYY-MM-DD")
+            toDate = moment(@ui.dateRange.data('daterangepicker').endDate).format("YYYY-MM-DD")
+            console.log('fromDate, toDate', fromDate, toDate)
             xhr = $.post("#{window.gRootPath}Underwriter/Report/GetReportDates", 
                 reportId : @ui.reportsDdl.val()
                 from : fromDate
