@@ -24,11 +24,13 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @.$el.find('#PersonalAddress .addAddressInput').attr('modifed', !isReadOnly)
         @.$el.find('#OtherPropertiesAddresses .addAddressInput').attr('modifed', !isReadOnly)
 
+        isOwnerOfOtherProperties = this.model.get('PropertyStatus').IsOwnerOfOtherProperties
+
         if isReadOnly
             @.$el.find('.submit-personal, .cancel,#PersonalAddress .addAddressInput,#PersonalAddress .addAddress,#PersonalAddress .removeAddress,#PersonalAddress .attardi-input,#PersonalAddress .required').hide()
 
             otherPropertiesModels = @model.get('OtherPropertiesAddresses')
-            if (otherPropertiesModels == undefined || otherPropertiesModels.length < 1)
+            if (!isOwnerOfOtherProperties || otherPropertiesModels == undefined || otherPropertiesModels.length < 1)
                 @.$el.find('#otherPropertiesDiv').hide()
             else
                 @.$el.find('#otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').hide()
@@ -37,7 +39,9 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
             @.$el.find('.edit-personal').show()
          else 
             @.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show()
-            @.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .addAddressContainer').show()
+
+            if (isOwnerOfOtherProperties)
+                @.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .addAddressContainer').show()
 
             @.$el.find('.edit-personal').hide()
 

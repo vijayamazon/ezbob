@@ -36,15 +36,16 @@
     };
 
     YourInfoMainView.prototype.setInputReadOnly = function(isReadOnly) {
-      var otherPropertiesModels;
+      var isOwnerOfOtherProperties, otherPropertiesModels;
 
       this.$el.find('.personEditInput').attr('readonly', isReadOnly).attr('modifed', !isReadOnly);
       this.$el.find('#PersonalAddress .addAddressInput').attr('modifed', !isReadOnly);
       this.$el.find('#OtherPropertiesAddresses .addAddressInput').attr('modifed', !isReadOnly);
+      isOwnerOfOtherProperties = this.model.get('PropertyStatus').IsOwnerOfOtherProperties;
       if (isReadOnly) {
         this.$el.find('.submit-personal, .cancel,#PersonalAddress .addAddressInput,#PersonalAddress .addAddress,#PersonalAddress .removeAddress,#PersonalAddress .attardi-input,#PersonalAddress .required').hide();
         otherPropertiesModels = this.model.get('OtherPropertiesAddresses');
-        if (otherPropertiesModels === void 0 || otherPropertiesModels.length < 1) {
+        if (!isOwnerOfOtherProperties || otherPropertiesModels === void 0 || otherPropertiesModels.length < 1) {
           this.$el.find('#otherPropertiesDiv').hide();
         } else {
           this.$el.find('#otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').hide();
@@ -53,7 +54,9 @@
         return this.$el.find('.edit-personal').show();
       } else {
         this.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show();
-        this.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .addAddressContainer').show();
+        if (isOwnerOfOtherProperties) {
+          this.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .addAddressContainer').show();
+        }
         return this.$el.find('.edit-personal').hide();
       }
     };
