@@ -78,7 +78,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Details() {
-			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, true);
+			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, true);
 			return Json(details.Customer, JsonRequestBehavior.AllowGet);
 		} // Details
 
