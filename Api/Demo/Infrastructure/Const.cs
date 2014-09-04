@@ -18,8 +18,5 @@
 		public static class Data {
 			public const string UserName = "user-name";
 		} // class Data
-
-		public const string UserToken = "user-token";
-		public const string AdminToken = "admin-token";
 	} // class Const
 } // namespace

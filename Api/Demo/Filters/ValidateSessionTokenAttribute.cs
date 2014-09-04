@@ -29,7 +29,7 @@
 
 			string sToken = oRequest.Headers.GetValues(Const.Headers.SessionToken).First();
 
-			ActiveUserInfo oUserInfo = m_oSecurity.ValidateSessionToken(sToken);
+			ActiveUserInfo oUserInfo = m_oSecurity.ValidateSessionToken(sToken, actionContext.Request.GetRemoteIp());
 
 			actionContext.Request.SetUserName(null);
 

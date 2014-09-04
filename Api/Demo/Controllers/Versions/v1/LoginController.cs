@@ -26,7 +26,7 @@
 			try {
 				var oSec = new SecurityStub();
 
-				string sToken = oSec.Login(oModel);
+				string sToken = oSec.Login(oModel, Request.GetRemoteIp());
 
 				if (string.IsNullOrWhiteSpace(sToken))
 					throw Return.Status(HttpStatusCode.Unauthorized, "Invalid user name or password.");

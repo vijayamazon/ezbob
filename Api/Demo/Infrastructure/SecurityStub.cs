@@ -1,5 +1,6 @@
 ﻿namespace Demo.Infrastructure {
 	using System.Collections.Generic;
+	using Ezbob.Logger;
 	using Models;
 
 	internal enum TokenValidity {
@@ -25,38 +26,69 @@
 			return sAppKey == "1234";
 		} // IsAppKeyValid
 
-		public string Login(LoginModel oModel) {
+		public string Login(LoginModel oModel, string sRemoteAddress) {
 			if (oModel == null)
 				return null;
 
-			string sToken = null;
+			SessionToken oToken = null;
 
 			if ((oModel.UserName == Const.UserNames.Admin) && (oModel.Password == "123456"))
-				sToken = Const.AdminToken;
+				oToken = new SessionToken(oModel.UserName, sRemoteAddress);
 
 			if ((oModel.UserName == Const.UserNames.User) && (oModel.Password == "654321"))
-				sToken = Const.UserToken;
+				oToken = new SessionToken(oModel.UserName, sRemoteAddress);
 
-			if (sToken != null)
-				ms_oTokens.Add(sToken);
+			if (oToken != null) {
+				ms_oLog.Debug(
+					"User '{0}' from '{1}' has got a token '{2}' ({3}).",
+					oModel.UserName,
+					sRemoteAddress,
+					oToken.Packed,
+					oToken.Encoded
+				);
 
-			return sToken;
+				ms_oTokens.Add(oToken.Encoded);
+				return oToken.Encoded;
+			} // if
+
+			return null;
 		} // Login
 
-		public ActiveUserInfo ValidateSessionToken(string sToken) {
+		public ActiveUserInfo ValidateSessionToken(string sToken, string sRemoteAddress) {
 			if (!ms_oTokens.Contains(sToken))
 				return new ActiveUserInfo { TokenValidity = TokenValidity.Invalid, };
 
-			// TODO: other checks: remote IP, expiration time...
+			SessionToken oToken = SessionToken.Deserialize(sToken);
+
+			if (oToken == null)
+				return new ActiveUserInfo { TokenValidity = TokenValidity.Invalid, };
+
+			ms_oLog.Debug(
+				"Token '{0}' has been decoded to '{1}'.",
+				sToken,
+				oToken.Packed
+			);
+
+			if (sRemoteAddress != oToken.RemoteAddress) {
+				ms_oLog.Alert(
+					"Token's remote address '{0}' differs from actual remote address '{1}'.",
+					oToken.RemoteAddress,
+					sRemoteAddress
+					);
+
+				return new ActiveUserInfo { TokenValidity = TokenValidity.Invalid, };
+			} // if
+
+			ms_oLog.Debug("Token's '{0}' remote address matches.", oToken.Packed);
+
+			// TODO: other checks: expiration time...
 
 			var oRes = new ActiveUserInfo {
 				TokenValidity = TokenValidity.Valid,
+				UserName = oToken.UserName,
 			};
 
-			if (sToken == Const.AdminToken)
-				oRes.UserName = Const.UserNames.Admin;
-			else if (sToken == Const.UserToken)
-				oRes.UserName = Const.UserNames.User;
+			ms_oLog.Debug("Token '{0}' is valid.", oToken.Packed);
 
 			return oRes;
 		} // ValidateSessionToken
@@ -66,5 +98,7 @@
 		} // IsActionEnabled
 
 		private static readonly SortedSet<string> ms_oTokens = new SortedSet<string>();
+
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(SecurityStub));
 	} // class SecurityStub
 } // namespace
