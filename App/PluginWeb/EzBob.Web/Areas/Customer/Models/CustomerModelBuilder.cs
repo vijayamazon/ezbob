@@ -3,6 +3,7 @@
 	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Broker;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -28,8 +29,8 @@
 			PaymentRolloverRepository paymentRolloverRepository,
 			ICustomerInviteFriendRepository customerInviteFriendRepository,
 			PerksRepository perksRepository,
-			DatabaseDataHelper oDbHelper
-		) {
+			DatabaseDataHelper oDbHelper, 
+			WhiteLabelProviderRepository whiteLabelProviderRepository) {
 			m_oQuestions = questions;
 			m_oCustomerRepository = customerRepository;
 			m_oUsers = users;
@@ -38,15 +39,22 @@
 			m_oPerksRepository = perksRepository;
 			m_oChangeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
 			m_oExperianDirectors = oDbHelper.ExperianDirectorRepository;
+			_whiteLabelProviderRepository = whiteLabelProviderRepository;
 		} // constructor
 
-		public WizardModel BuildWizardModel(Customer cus, HttpSessionStateBase session, bool isProfile = false) {
+		public WizardModel BuildWizardModel(Customer cus, HttpSessionStateBase session, string profile, bool isProfile = false) {
 			var wizardModel = new WizardModel();
 
 			var customerModel = new CustomerModel {
 				loggedIn = cus != null,
 				bankAccountAdded = false,
 			};
+
+			if (!string.IsNullOrEmpty(profile)) {
+				wizardModel.WhiteLabel = _whiteLabelProviderRepository.GetByName(profile);
+				customerModel.IsWhiteLabel = wizardModel.WhiteLabel != null;
+				customerModel.WhiteLabelId = wizardModel.WhiteLabel != null ? wizardModel.WhiteLabel.Id : 0;
+			}
 
 			wizardModel.Customer = customerModel;
 
@@ -60,10 +68,17 @@
 
 			var customer = m_oCustomerRepository.GetAndInitialize(cus.Id);
 
-			if (customer == null)
+			if (customer == null) {
 				return wizardModel;
+			}
 
 			var user = m_oUsers.Get(cus.Id);
+
+			if (customer.WhiteLabel != null) {
+				wizardModel.WhiteLabel = customer.WhiteLabel;
+				customerModel.IsWhiteLabel = wizardModel.WhiteLabel != null;
+				customerModel.WhiteLabelId = customer.WhiteLabel.Id;
+			}
 
 			customerModel.Id = customer.Id;
 			customerModel.userName = user.Name;
@@ -310,5 +325,6 @@
 		private readonly ICustomerInviteFriendRepository m_oCustomerInviteFriendRepository;
 		private readonly PerksRepository m_oPerksRepository;
 		private readonly ExperianDirectorRepository m_oExperianDirectors;
+		private readonly WhiteLabelProviderRepository _whiteLabelProviderRepository;
 	} // CustomerModelBuilder
 } // namespace

@@ -19,7 +19,6 @@
 	using Infrastructure.csrf;
 	using ServiceClientProxy;
 	using StructureMap;
-	using Web.Models;
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Linq;
@@ -52,7 +51,7 @@
 
 		[IsSuccessfullyRegisteredFilter]
 		public ViewResult Index() {
-			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, true);
+			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, true);
 			ViewData["ShowChangePasswordPage"] = m_oContext.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = m_oSession
@@ -79,7 +78,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Details() {
-			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, true);
+			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, true);
 			return Json(details, JsonRequestBehavior.AllowGet);
 		} // Details
 

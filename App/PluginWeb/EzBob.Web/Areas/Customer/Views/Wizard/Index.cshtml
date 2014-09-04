@@ -29,9 +29,11 @@
 	@if (Model.WhiteLabel != null) {
 		<style>
 			.newlogo {
-				background-image:url(data:image/png;base64,@Model.WhiteLabel.Logo);
+				background-image:url(data:@Model.WhiteLabel.LogoImageType;base64,@Model.WhiteLabel.Logo);
 				background-repeat: no-repeat;
 				background-size: contain;
+				width: @Model.WhiteLabel.LogoWidthPx;
+				height: @Model.WhiteLabel.LogoHeightPx;
 			}
 
 			.header-logo,
@@ -45,7 +47,6 @@
 				display: none !important;
 			}
 		</style>
-		
 	}
 }
 

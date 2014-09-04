@@ -17,6 +17,7 @@ namespace EzBob.Web.Controllers {
 	using DbConstants;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Broker;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Repository;
@@ -47,6 +48,7 @@ namespace EzBob.Web.Controllers {
 		#region constructor
 
 		public AccountController() {
+			
 			m_oDatabaseHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
 			m_oUsers = ObjectFactory.GetInstance<IUsersRepository>();
 			m_oCustomers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -56,9 +58,10 @@ namespace EzBob.Web.Controllers {
 			m_oTestCustomers = ObjectFactory.GetInstance<ITestCustomerRepository>();
 			m_oCustomerStatusesRepository = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
 			m_oBrokerHelper = new BrokerHelper();
-			m_oLogOffMode = (LogOffMode)(int)ConfigManager.CurrentValues.Instance.LogOffMode;
+			m_oLogOffMode = (LogOffMode)(int)CurrentValues.Instance.LogOffMode;
 			m_oVipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
+			_whiteLabelProviderRepository = ObjectFactory.GetInstance <WhiteLabelProviderRepository>();
 		} // constructor
 
 		#endregion constructor
@@ -341,7 +344,8 @@ namespace EzBob.Web.Controllers {
 			double? amount,
 			string mobilePhone,
 			string mobileCode,
-			string isInCaptchaMode
+			string isInCaptchaMode,
+			int whiteLabelId
 		) {
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);
@@ -379,7 +383,7 @@ namespace EzBob.Web.Controllers {
 				var blm = new WizardBrokerLeadModel(Session);
 
 				new Transactional(
-					() => customer = CreateCustomer(model.EMail, promoCode, amount, mobilePhone, mobilePhoneVerified, blm.BrokerFillsForCustomer)
+					() => customer = CreateCustomer(model.EMail, promoCode, amount, mobilePhone, mobilePhoneVerified, blm.BrokerFillsForCustomer, whiteLabelId)
 				).Execute();
 
 				string link = m_oServiceClient.Instance.EmailConfirmationGenerate(customer.Id).Address;
@@ -766,13 +770,13 @@ namespace EzBob.Web.Controllers {
 			double? amount,
 			string mobilePhone,
 			bool mobilePhoneVerified,
-			bool brokerFillsForCustomer
+			bool brokerFillsForCustomer,
+			int whiteLabelId
 		) {
 			var user = m_oUsers.GetUserByLogin(email);
 			var g = new RefNumberGenerator(m_oCustomers);
 			var isAutomaticTest = IsAutomaticTest(email);
 			var vip = m_oVipRequestRepository.RequestedVip(email);
-
 			var customer = new Customer {
 				Name = email,
 				Id = user.Id,
@@ -787,7 +791,8 @@ namespace EzBob.Web.Controllers {
 				PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, MobilePhoneVerified = mobilePhoneVerified},
 				TrustPilotStatus = m_oDatabaseHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
 				GreetingMailSentDate = DateTime.UtcNow,
-				Vip = vip
+				Vip = vip,
+				WhiteLabel = whiteLabelId != 0 ? _whiteLabelProviderRepository.GetAll().FirstOrDefault(x => x.Id == whiteLabelId) : null
 			};
 
 			ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
@@ -1033,6 +1038,7 @@ namespace EzBob.Web.Controllers {
 		private readonly LogOffMode m_oLogOffMode;
 		private readonly IVipRequestRepository m_oVipRequestRepository;
 		private readonly AConnection m_oDB;
+		private readonly WhiteLabelProviderRepository _whiteLabelProviderRepository;
 
 		#endregion fields
 

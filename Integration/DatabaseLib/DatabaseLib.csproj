@@ -90,6 +90,7 @@
     <Compile Include="Model\Database\Broker\Broker.cs" />
     <Compile Include="Model\Database\Broker\BrokerMap.cs" />
     <Compile Include="Model\Database\Broker\BrokerRepository.cs" />
+    <Compile Include="Model\Database\Broker\WhiteLabelProvider.cs" />
     <Compile Include="Model\Database\Campaign\Campaign.cs" />
     <Compile Include="Model\Database\Campaign\CampaignType.cs" />
     <Compile Include="Model\Database\Campaign\CampaignClients.cs" />

@@ -4,6 +4,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Script.Serialization;
+	using Broker;
 	using CustomerRelations;
 	using Loans;
 	using Iesi.Collections.Generic;
@@ -694,6 +695,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual QuickOffer QuickOffer { get; set; }
 
 		public virtual Broker.Broker Broker { get; set; }
+
+		public virtual WhiteLabelProvider WhiteLabel { get; set; }
 
 		public virtual bool FilledByBroker { get; set; }
 

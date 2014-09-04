@@ -215,7 +215,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			References(x => x.QuickOffer, "QuickOfferID").Nullable().Cascade.All();
 
 			References(x => x.Broker, "BrokerID").Cascade.None();
-
+			References(x => x.WhiteLabel, "WhiteLabelId").Cascade.All();
+			
 			Map(x => x.FilledByBroker);
 			Map(x => x.Vip);
 			Map(x => x.DefaultCardSelectionAllowed);

@@ -10,5 +10,6 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
 		public virtual string SourceRef { get; set; }
 		public virtual decimal EstimatedMonthlyClientAmount { get; set; }
 		public virtual string Password { get; set; }
+		public virtual WhiteLabelProvider WhiteLabel { get; set; }
 	} // class Broker
 } // namespace EZBob.DatabaseLib.Model.Database.Broker
