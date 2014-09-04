@@ -45,6 +45,11 @@
 
 		oTabs.tabs('disable', 0);
 
+		$('.set-anonymous-api').hide();
+		$('.set-named-api').show();
+
+		$('.page-title').text('Anonymous API demo');
+
 		console.log('Anonymous API mode selected.');
 	} // setAnonymousApi
 
@@ -56,6 +61,11 @@
 		oHeadersFunc = getNamedHeaders;
 
 		oTabs.tabs('enable', 0);
+
+		$('.set-anonymous-api').show();
+		$('.set-named-api').hide();
+
+		$('.page-title').text('Named API demo');
 
 		console.log('Named API mode selected.');
 	} // setNamedApi
@@ -72,7 +82,16 @@
 			Password: $('.password', oContainer).val(), 
 		};
 
+		if ((oInputData.UserName === '') || (oInputData.Password === '')) {
+			oLastStatus.text('Both user name and password must be specified.');
+			console.log(sFuncName, 'complete.');
+			return;
+		} // if
+
 		console.log(sFuncName + ':', 'sending', oInputData);
+
+		$('.logged-in-user-name').text('');
+		$('.session-token').val('');
 
 		$.ajax(sLoginUrl, {
 			type: 'POST',
@@ -168,6 +187,7 @@
 
 		if (isNaN(sValueID)) {
 			oLastStatus.text('Please specify value id.');
+			console.log(sFuncName, 'complete.');
 			return;
 		} // if
 
@@ -259,6 +279,7 @@
 
 		if (isNaN(sValueID)) {
 			oLastStatus.text('Please specify value id.');
+			console.log(sFuncName, 'complete.');
 			return;
 		} // if
 
@@ -311,6 +332,7 @@
 
 		if (isNaN(sValueID)) {
 			oLastStatus.text('Please specify value id.');
+			console.log(sFuncName, 'complete.');
 			return;
 		} // if
 
