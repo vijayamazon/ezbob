@@ -47,14 +47,13 @@
         if (otherPropertiesModels === void 0 || otherPropertiesModels.length < 1) {
           this.$el.find('#otherPropertiesDiv').hide();
         } else {
-          this.$el.find('#otherPropertiesDiv .removeAddress').hide();
+          this.$el.find('#otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').hide();
         }
         this.$el.find('textarea').removeClass('form_field').css('margin-top', 0);
         return this.$el.find('.edit-personal').show();
       } else {
         this.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show();
-        this.$el.find('#otherPropertiesDiv').show();
-        this.$el.find('#otherPropertiesDiv .removeAddress').show();
+        this.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').show();
         return this.$el.find('.edit-personal').hide();
       }
     };

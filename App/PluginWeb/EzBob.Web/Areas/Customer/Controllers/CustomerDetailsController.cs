@@ -90,7 +90,8 @@
 			CashRequestBuilder oCashRequestBuilder,
 			DirectorRepository oDirectorRepository,
 			PropertyStatusRepository propertyStatusRepository,
-			CustomerPhoneRepository customerPhoneRepository
+			CustomerPhoneRepository customerPhoneRepository,
+			CustomerAddressRepository customerAddressRepository
 		) {
 			m_oContext = oContext;
 			m_oDatabaseHelper = oDatabaseHelper;
@@ -101,6 +102,7 @@
 			m_oDirectorRepository = oDirectorRepository;
 			this.propertyStatusRepository = propertyStatusRepository;
 			this.customerPhoneRepository = customerPhoneRepository;
+			this.customerAddressRepository = customerAddressRepository;
 		} // constructor
 
 		#endregion constructor
@@ -360,6 +362,34 @@
 				addressInfo.PersonalAddress,
 				CustomerAddressType.PersonalAddress
 			);
+			
+			var toBeRemoved = new List<CustomerAddress>();
+			foreach (CustomerAddress previouslyDefinedOtherProperty in customer.AddressInfo.OtherPropertiesAddresses)
+			{
+				bool isInNewList = otherPropertiesAddresses.Any(newlyDefinedOtherProperty => newlyDefinedOtherProperty.AddressId == previouslyDefinedOtherProperty.AddressId);
+
+				if (!isInNewList)
+				{
+					toBeRemoved.Add(previouslyDefinedOtherProperty);
+				}
+			}
+
+			foreach (CustomerAddress removedAddress in toBeRemoved)
+			{
+				customer.AddressInfo.OtherPropertiesAddresses.Remove(removedAddress);
+				removedAddress.AddressType = CustomerAddressType.OtherPropertyAddressRemoved;
+			}
+
+			foreach (CustomerAddress otherPropertyAddress in otherPropertiesAddresses)
+			{
+				if (otherPropertyAddress.AddressId == 0)
+				{
+					otherPropertyAddress.AddressType = CustomerAddressType.OtherPropertyAddress;
+					otherPropertyAddress.Customer = customer;
+					customerAddressRepository.SaveOrUpdate(otherPropertyAddress);
+					customer.AddressInfo.OtherPropertiesAddresses.Add(otherPropertyAddress);
+				}
+			}
 
 			var company = customer.Company;
 			if (company != null)
@@ -496,6 +526,7 @@
 
 			AddAddressInfoToHistory(oldPersonalInfo.PersonalAddress, newPersonalInfo.PersonalAddress, customer, "Personal Address");
 			AddAddressInfoToHistory(oldPersonalInfo.CompanyAddress, newPersonalInfo.CompanyAddress, customer, "Company Address");
+			AddAddressInfoToHistory(oldPersonalInfo.OtherPropertiesAddresses, newPersonalInfo.OtherPropertiesAddresses, customer, "Other Properties Addresses");
 		} // SaveEditHistory
 
 
@@ -1068,6 +1099,7 @@
 				MobilePhone = customer.PersonalInfo.MobilePhone,
 				BusinessPhone = businessPhone,
 				PersonalAddress = customer.AddressInfo.PersonalAddress.ToList(),
+				OtherPropertiesAddresses = customer.AddressInfo.OtherPropertiesAddresses.ToList(),
 				OverallTurnOver = customer.PersonalInfo.OverallTurnOver.ToString(),
 				WebSiteTurnover = customer.PersonalInfo.WebSiteTurnOver.ToString()
 			};
@@ -1124,6 +1156,7 @@
 		private readonly DirectorRepository m_oDirectorRepository;
 		private readonly PropertyStatusRepository propertyStatusRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
+		private readonly CustomerAddressRepository customerAddressRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CustomerDetailsController));
 
 		#endregion private properties

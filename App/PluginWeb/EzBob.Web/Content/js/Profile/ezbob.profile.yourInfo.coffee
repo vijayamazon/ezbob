@@ -31,14 +31,13 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
             if (otherPropertiesModels == undefined || otherPropertiesModels.length < 1)
                 @.$el.find('#otherPropertiesDiv').hide()
             else
-                @.$el.find('#otherPropertiesDiv .removeAddress').hide()
+                @.$el.find('#otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').hide()
 
             @.$el.find('textarea').removeClass('form_field').css('margin-top', 0)
             @.$el.find('.edit-personal').show()
          else 
             @.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show()
-            @.$el.find('#otherPropertiesDiv').show()
-            @.$el.find('#otherPropertiesDiv .removeAddress').show()
+            @.$el.find('#otherPropertiesDiv, #otherPropertiesDiv .removeAddress, #otherPropertiesDiv .addAddressContainer').show()
 
             @.$el.find('.edit-personal').hide()
 
