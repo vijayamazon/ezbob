@@ -1,7 +1,7 @@
 ﻿<style>
-
-th, td { padding: 3px; }
-
+	th, td {
+		padding: 3px;
+	}
 </style>
 
 <div id="body">
@@ -13,101 +13,136 @@ th, td { padding: 3px; }
 		</div>
 	</section>
 	<section class="content-wrapper main-content clear-fix">
+		<div>
+			<button type="button" class="set-anonymous-api">Anonymous API</button>
+			<button type="button" class="set-named-api">Named API</button>
+		</div>
+
 		<div>App key: <input type="text" class="app-key" value="1234" /></div>
 
-		<div class="anonymous-api">
-			<h2>Anonymous API demo</h2>
-			<div id="anonymous-api-body">
-				<ul>
-					<li><a href="#anonymous-read-all">Read all items</a></li>
-					<li><a href="#anonymous-read-one">Read an item by id</a></li>
-					<li><a href="#anonymous-create">Create a new item</a></li>
-					<li><a href="#anonymous-update">Update an item by id</a></li>
-					<li><a href="#anonymous-delete">Delete an item by id</a></li>
-				</ul>
+		<div class="named-related">
+			<div>User name: <span class="logged-in-user-name"></span></div>
+			<div>Session token: <input type="text" class="session-token" value="" /></div>
+		</div>
 
-				<div id="anonymous-read-all">
-					<h3>Read all values</h3>
-					<button type="button" class="do-read-all">Read</button>
+		<div id="tabs">
+			<ul>
+				<li><a href="#login-form">Login</a></li>
+				<li><a href="#read-all">Read all items</a></li>
+				<li><a href="#read-one">Read an item by id</a></li>
+				<li><a href="#create">Create a new item</a></li>
+				<li><a href="#update">Update an item by id</a></li>
+				<li><a href="#delete">Delete an item by id</a></li>
+			</ul>
 
-					<table>
-						<caption><h3>Result</h3></caption>
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Title</th>
-								<th>Content</th>
-							</tr>
-						</thead>
-						<tbody class="results"></tbody>
-						<tfoot style="display: none;">
-							<tr class="result-template">
-								<td data-field-name="ID"></td>
-								<td data-field-name="Title"></td>
-								<td data-field-name="Content"></td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
+			<div id="login-form">
+				<h3>Login</h3>
 
-				<div id="anonymous-read-one">
-					<h3>Read one value</h3>
-					<input type="number" class="value-id" />
-					<button type="button" class="do-read-one">Read</button>
+				Available logins: <b>admin/123456</b> and <b>user/654321</b>.
 
-					<h3>Result</h3>
-					<div class="results">
-						<div>ID: <span data-field-name="ID"></span></div>
-						<div>Title: <span data-field-name="Title"></span></div>
-						<div>Content: <span data-field-name="Content"></span></div>
-					</div>
-				</div>
+				<table>
+					<tbody>
+						<tr>
+							<th>User name</th>
+							<td><input type="text" class="user-name" /></td>
+						</tr>
+						<tr>
+							<th>Password</th>
+							<td><input type="password" class="password" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="do-login">Login</button>
+			</div>
 
-				<div id="anonymous-create">
-					<h3>Create a new item</h3>
-					<table>
-						<tbody>
-							<tr>
-								<th>Title</th>
-								<td><input type="text" class="title"/></td>
-							</tr>
-							<tr>
-								<th>Content</th>
-								<td><input type="text" class="content"/></td>
-							</tr>
-						</tbody>
-					</table>
-					<button type="button" class="do-create">Create</button>
-				</div>
+			<div id="read-all">
+				<h3>Read all values</h3>
+				<button type="button" class="do-read-all">Read</button>
 
-				<div id="anonymous-update">
-					<h3>Update an item</h3>
-					<table>
-						<tbody>
-							<tr>
-								<th>ID</th>
-								<td><input type="number" class="value-id"/></td>
-							</tr>
-							<tr>
-								<th>Title</th>
-								<td><input type="text" class="title"/></td>
-							</tr>
-							<tr>
-								<th>Content</th>
-								<td><input type="text" class="content"/></td>
-							</tr>
-						</tbody>
-					</table>
-					<button type="button" class="do-update">Update</button>
-				</div>
+				<table>
+					<caption>
+						<h3>Result</h3>
+					</caption>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Title</th>
+							<th>Content</th>
+						</tr>
+					</thead>
+					<tbody class="results"></tbody>
+					<tfoot style="display: none;">
+						<tr class="result-template">
+							<td data-field-name="ID"></td>
+							<td data-field-name="Title"></td>
+							<td data-field-name="Content"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
 
-				<div id="anonymous-delete">
-					<h3>Delete one value</h3>
-					<input type="number" class="value-id" />
-					<button type="button" class="do-delete">Delete</button>
+			<div id="read-one">
+				<h3>Read one value</h3>
+				<input type="number" class="value-id" />
+				<button type="button" class="do-read-one">Read</button>
+
+				<h3>Result</h3>
+				<div class="results">
+					<div>ID: <span data-field-name="ID"></span></div>
+					<div>Title: <span data-field-name="Title"></span></div>
+					<div>Content: <span data-field-name="Content"></span></div>
 				</div>
 			</div>
-		</div><!-- anonymous api demo -->
+
+			<div id="create">
+				<h3>Create a new item</h3>
+				<table>
+					<tbody>
+						<tr>
+							<th>Title</th>
+							<td>
+								<input type="text" class="title" /></td>
+						</tr>
+						<tr>
+							<th>Content</th>
+							<td>
+								<input type="text" class="content" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="do-create">Create</button>
+			</div>
+
+			<div id="update">
+				<h3>Update an item</h3>
+				<table>
+					<tbody>
+						<tr>
+							<th>ID</th>
+							<td>
+								<input type="number" class="value-id" /></td>
+						</tr>
+						<tr>
+							<th>Title</th>
+							<td>
+								<input type="text" class="title" /></td>
+						</tr>
+						<tr>
+							<th>Content</th>
+							<td>
+								<input type="text" class="content" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="do-update">Update</button>
+			</div>
+
+			<div id="delete">
+				<h3>Delete one value</h3>
+				<input type="number" class="value-id" />
+				<button type="button" class="do-delete">Delete</button>
+			</div>
+		</div>
 
 		<h3>Last action status</h3>
 		<div class="last-action-status">No last action.</div>
@@ -121,7 +156,7 @@ th, td { padding: 3px; }
 	<script src="~/Content/js/lib/jquery.set_display_value.js"></script>
 	<script src="~/Content/js/lib/jquery.load_display_value.js"></script>
 
-	<script src="~/Content/js/anonymous-api.js"></script>
-	
+	<script src="~/Content/js/demo.js"></script>
+
 	<link rel="stylesheet" href="~/Content/js/lib/jquery-ui-1.11.1.custom/jquery-ui.css">
 }
