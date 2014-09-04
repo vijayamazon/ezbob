@@ -279,10 +279,13 @@
 				.Add("~/Content/js/EzBob.DataTables.Helper.js")
 				.Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.grids.js")
 
+				//broker
+				.Add("~/Content/js/underwriter/broker/ezbob.underwriter.broker.profile.js")
+				.Add("~/Content/js/underwriter/broker/ezbob.underwriter.broker.whitelabel.js")
+
 				//profile
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.customerFullModel.coffee")
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.profile.js")
-				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.broker.profile.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.profileHead.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.js")

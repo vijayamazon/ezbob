@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
 	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database.Broker;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using Infrastructure;
@@ -8,6 +9,7 @@
 	using Infrastructure.csrf;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 
 	public class BrokersController : Controller {
 		#region constructor
@@ -99,6 +101,47 @@
 		} // AttachCustomer
 
 		#endregion action AttachCustomer
+
+		#region action LoadWhiteLabel
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		public JsonResult LoadWhiteLabel(int nBrokerID) {
+			ms_oLog.Debug("Load broker white label request for broker {0}...", nBrokerID);
+
+			var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
+			var broker = brokerRepo.Get(nBrokerID);
+			if (broker != null) {
+				return Json(new {WhiteLabel = broker.WhiteLabel ?? new WhiteLabelProvider()}, JsonRequestBehavior.AllowGet);
+			}
+
+			return Json(new {error = "broker not found"});
+		} // LoadCustomers
+
+		#endregion action LoadWhiteLabel
+
+		#region action SaveWhiteLabel
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult SaveWhiteLabel(int nBrokerID, WhiteLabelProvider whiteLabel) {
+			ms_oLog.Debug("Load broker white label request for broker {0}...", nBrokerID);
+
+			var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
+			var broker = brokerRepo.Get(nBrokerID);
+			if (broker != null) {
+				broker.WhiteLabel = whiteLabel;
+				return Json(new { broker.WhiteLabel }, JsonRequestBehavior.AllowGet);
+			}
+
+			return Json(new { error = "broker not found" });
+		} // LoadCustomers
+
+		#endregion action SaveWhiteLabel
+
 
 		#region private
 

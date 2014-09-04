@@ -277,7 +277,11 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 
 	show: function(id, type) {
 		this.brokerID = id;
+		
+		this.whiteLabelModel = this.whiteLabelModel || new EzBob.Underwriter.BrokerWhiteLabelModel({ brokerID: this.brokerID });
+		
 		this.$el.show();
+		
 		this.handleTabSwitch(type);
 
 		EzBob.handleUserLayoutSetting();
@@ -305,13 +309,14 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		case 'broker-customers-grid':
 			this.reloadCustomerGrid();
 			break;
-
 		case 'broker-profile-summary':
 			this.displayBrokerProperties();
 			break;
-
 		case 'broker-relations':
 			this.startDisplayBrokerRelations();
+			break;
+		case 'broker-whitelabel':
+			this.whiteLabel();
 			break;
 		} // switch
 	}, // redrawCurrentTab
@@ -394,4 +399,10 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 				oAdjustFunc(oCol);
 		});
 	}, // adjustAoColumn
+	
+	whiteLabel: function () {
+		var self = this;
+		self.BrokerWhiteLabelView = new EzBob.Underwriter.BrokerWhiteLabelView({ model: self.whiteLabelModel, el: self.$el.find('.broker-whitelabel-root-el') });
+	}
+	
 }); // EzBob.Underwriter.BrokerProfileView

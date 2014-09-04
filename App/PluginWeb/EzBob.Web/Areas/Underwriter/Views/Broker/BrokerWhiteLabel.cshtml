@@ -1,0 +1,29 @@
+﻿@model dynamic
+
+<script id="broker-white-label-template" type="text/template">
+	<div>
+		<%if(whiteLabel.WhiteLabel.Id != 0){ var wl = whiteLabel.WhiteLabel; %>
+		<div>Name: <%-wl.Name%></div>
+		<div>Email: <%-wl.Email%></div>
+		<div>Phone: <%-wl.Phone%></div>
+		<div>Leading Color: <div class="whitelabel-color" style="background-color: <%-wl.LeadingColor%>;"></div></div>
+		<div>Secondary Color: <div class="whitelabel-color" style="background-color: <%-wl.SecondoryColor%>;"></div></div>
+		<div> Logo: <div style="background-image:url(data:<%-wl.LogoImageType%>;base64,<%-wl.Logo%>); width: <%-wl.LogoWidthPx%>px; height: <%-wl.LogoHeightPx%>px;"></div></div>
+		<div>Connectors to enable: <%-wl.ConnectorsToEnable%></div>
+		<div>Finish wizard text: <span><%=wl.FinishWizardText%></span></div>
+		<div>Footer text: <span><%=wl.FooterText%></span></div>
+		<div>Mobile phone text message: <%-wl.MobilePhoneTextMessage%></div>
+		<%} else {%>
+		<div>No white label, add new</div>
+		<%}%>
+	</div>
+
+	<form id="whitelabel-form">
+		<div>
+			<%console.log('data', whiteLabel);%>
+		</div>
+	</form>
+	
+
+
+</script>

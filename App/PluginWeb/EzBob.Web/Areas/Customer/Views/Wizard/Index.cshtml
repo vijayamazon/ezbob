@@ -32,8 +32,8 @@
 				background-image:url(data:@Model.WhiteLabel.LogoImageType;base64,@Model.WhiteLabel.Logo);
 				background-repeat: no-repeat;
 				background-size: contain;
-				width: @Model.WhiteLabel.LogoWidthPx;
-				height: @Model.WhiteLabel.LogoHeightPx;
+				width: @Html.Raw(Model.WhiteLabel.LogoWidthPx.ToString() + "px");
+				height: @Html.Raw(Model.WhiteLabel.LogoHeightPx.ToString() + "px");
 			}
 
 			.header-logo,

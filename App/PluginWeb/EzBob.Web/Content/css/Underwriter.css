@@ -2114,3 +2114,18 @@ ul.alert-list {
 .add-owned-address-postcode-width {
     width: 120px !important;
 }
+
+.whitelabel-color {
+    display:inline-block;
+    border:black 1px solid;
+    width:50px;
+    height:19px; 
+    vertical-align: middle;
+}
+
+.whitelabel-logo {
+    display: inline-block; 
+    vertical-align: middle;
+    background-repeat: no-repeat; 
+    background-size: contain;
+}
