@@ -42,7 +42,7 @@
 
 		public ScoreResult CalculateMedalScore(int customerId)
 		{
-			
+			Results = new ScoreResult();
 			var inputData = GatherData(customerId);
 			return CalculateMedalScore(inputData);
 		}
