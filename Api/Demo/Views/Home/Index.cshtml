@@ -1,4 +1,10 @@
-﻿<div id="body">
+﻿<style>
+
+th, td { padding: 3px; }
+
+</style>
+
+<div id="body">
 	<section class="featured">
 		<div class="content-wrapper">
 			<hgroup class="title">
@@ -7,6 +13,115 @@
 		</div>
 	</section>
 	<section class="content-wrapper main-content clear-fix">
-		Glad to see you here.
+		<div>App key: <input type="text" class="app-key" value="1234" /></div>
+
+		<div class="anonymous-api">
+			<h2>Anonymous API demo</h2>
+			<div id="anonymous-api-body">
+				<ul>
+					<li><a href="#anonymous-read-all">Read all items</a></li>
+					<li><a href="#anonymous-read-one">Read an item by id</a></li>
+					<li><a href="#anonymous-create">Create a new item</a></li>
+					<li><a href="#anonymous-update">Update an item by id</a></li>
+					<li><a href="#anonymous-delete">Delete an item by id</a></li>
+				</ul>
+
+				<div id="anonymous-read-all">
+					<h3>Read all values</h3>
+					<button type="button" class="do-read-all">Read</button>
+
+					<table>
+						<caption><h3>Result</h3></caption>
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Title</th>
+								<th>Content</th>
+							</tr>
+						</thead>
+						<tbody class="results"></tbody>
+						<tfoot style="display: none;">
+							<tr class="result-template">
+								<td data-field-name="ID"></td>
+								<td data-field-name="Title"></td>
+								<td data-field-name="Content"></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+
+				<div id="anonymous-read-one">
+					<h3>Read one value</h3>
+					<input type="number" class="value-id" />
+					<button type="button" class="do-read-one">Read</button>
+
+					<h3>Result</h3>
+					<div class="results">
+						<div>ID: <span data-field-name="ID"></span></div>
+						<div>Title: <span data-field-name="Title"></span></div>
+						<div>Content: <span data-field-name="Content"></span></div>
+					</div>
+				</div>
+
+				<div id="anonymous-create">
+					<h3>Create a new item</h3>
+					<table>
+						<tbody>
+							<tr>
+								<th>Title</th>
+								<td><input type="text" class="title"/></td>
+							</tr>
+							<tr>
+								<th>Content</th>
+								<td><input type="text" class="content"/></td>
+							</tr>
+						</tbody>
+					</table>
+					<button type="button" class="do-create">Create</button>
+				</div>
+
+				<div id="anonymous-update">
+					<h3>Update an item</h3>
+					<table>
+						<tbody>
+							<tr>
+								<th>ID</th>
+								<td><input type="number" class="value-id"/></td>
+							</tr>
+							<tr>
+								<th>Title</th>
+								<td><input type="text" class="title"/></td>
+							</tr>
+							<tr>
+								<th>Content</th>
+								<td><input type="text" class="content"/></td>
+							</tr>
+						</tbody>
+					</table>
+					<button type="button" class="do-update">Update</button>
+				</div>
+
+				<div id="anonymous-delete">
+					<h3>Delete one value</h3>
+					<input type="number" class="value-id" />
+					<button type="button" class="do-delete">Delete</button>
+				</div>
+			</div>
+		</div><!-- anonymous api demo -->
+
+		<h3>Last action status</h3>
+		<div class="last-action-status">No last action.</div>
 	</section>
 </div>
+
+@section scripts {
+	<script src="~/Content/js/lib/jquery-2.1.1.js"></script>
+	<script src="~/Content/js/lib/jquery-ui-1.11.1.custom/jquery-ui.js"></script>
+
+	<script src="~/Content/js/lib/jquery.set_display_value.js"></script>
+	<script src="~/Content/js/lib/jquery.load_display_value.js"></script>
+
+	<script src="~/Content/js/anonymous-api.js"></script>
+	
+	<link rel="stylesheet" href="~/Content/js/lib/jquery-ui-1.11.1.custom/jquery-ui.css">
+}

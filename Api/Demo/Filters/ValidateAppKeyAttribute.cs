@@ -14,7 +14,7 @@
 
 			HttpRequestMessage oRequest = actionContext.Request;
 
-			if (!oRequest.Headers.Contains(AppKeyHeader)) {
+			if (!oRequest.Headers.Contains(Const.Headers.AppKey)) {
 				actionContext.Response = HandleActionExecutedAttribute.CreateResponse(
 					actionContext.Request,
 					HttpStatusCode.Unauthorized,
@@ -24,7 +24,7 @@
 				return;
 			} // if
 
-			string sAppKey = oRequest.Headers.GetValues(AppKeyHeader).First();
+			string sAppKey = oRequest.Headers.GetValues(Const.Headers.AppKey).First();
 
 			var oSec = new SecurityStub();
 
@@ -37,7 +37,5 @@
 				);
 			} // if
 		} // OnActionExecuting
-
-		private const string AppKeyHeader = "app-key";
 	} // ValidateAppKeyAttribute
 } // namespace

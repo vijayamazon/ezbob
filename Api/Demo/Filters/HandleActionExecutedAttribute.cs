@@ -5,6 +5,7 @@
 	using System.Net;
 	using System.Net.Http;
 	using System.Web.Http.Filters;
+	using Infrastructure;
 
 	/// <summary>
 	/// 
@@ -25,19 +26,19 @@
 				return;
 
 			oResponse.Headers.Add(
-				OutputStatusHeaderName,
+				Const.Headers.OutputStatus,
 				((int)oResponse.StatusCode).ToString(CultureInfo.InvariantCulture)
 			);
 
 			if (oRequest == null)
 				return;
 
-			if (!oRequest.Headers.Contains(InputHeaderName))
+			if (!oRequest.Headers.Contains(Const.Headers.OutputStatusCfg))
 				return;
 
-			string sHeader = oRequest.Headers.GetValues(InputHeaderName).First();
+			string sHeader = oRequest.Headers.GetValues(Const.Headers.OutputStatusCfg).First();
 
-			if (!sHeader.Equals(Yes, StringComparison.InvariantCultureIgnoreCase) && !sHeader.Equals(True, StringComparison.InvariantCultureIgnoreCase))
+			if (!sHeader.Equals(Const.Yes, StringComparison.InvariantCultureIgnoreCase) && !sHeader.Equals(Const.True, StringComparison.InvariantCultureIgnoreCase))
 				return;
 
 			oResponse.StatusCode = HttpStatusCode.OK;
@@ -49,10 +50,5 @@
 			FillResponse(actionExecutedContext.Response, actionExecutedContext.Request);
 		} // OnActionExecuted
 
-		private const string InputHeaderName = "output-status-header-only";
-		private const string Yes = "yes";
-		private const string True = "true";
-
-		private const string OutputStatusHeaderName = "output-status-code";
 	} // class HandleActionExecutedAttribute
 } // namespace

@@ -9,10 +9,16 @@
 	} // enum TokenValidity
 
 	internal enum Action {
+		Read,
 		Create,
 		Edit,
 		Delete,
 	} // enum Action
+
+	internal struct ActiveUserInfo {
+		public string UserName;
+		public TokenValidity TokenValidity;
+	} // struct ActiveUserInfo
 
 	internal class SecurityStub {
 		public bool IsAppKeyValid(string sAppKey) {
@@ -25,11 +31,11 @@
 
 			string sToken = null;
 
-			if ((oModel.UserName == "admin") && (oModel.Password == "123456"))
-				sToken = AdminToken;
+			if ((oModel.UserName == Const.UserNames.Admin) && (oModel.Password == "123456"))
+				sToken = Const.AdminToken;
 
-			if ((oModel.UserName == "user") && (oModel.Password == "654321"))
-				sToken = UserToken;
+			if ((oModel.UserName == Const.UserNames.User) && (oModel.Password == "654321"))
+				sToken = Const.UserToken;
 
 			if (sToken != null)
 				ms_oTokens.Add(sToken);
@@ -37,21 +43,27 @@
 			return sToken;
 		} // Login
 
-		public TokenValidity ValidateSessionToke(string sToken) {
+		public ActiveUserInfo ValidateSessionToken(string sToken) {
 			if (!ms_oTokens.Contains(sToken))
-				return TokenValidity.Invalid;
+				return new ActiveUserInfo { TokenValidity = TokenValidity.Invalid, };
 
 			// TODO: other checks: remote IP, expiration time...
 
-			return TokenValidity.Valid;
+			var oRes = new ActiveUserInfo {
+				TokenValidity = TokenValidity.Valid,
+			};
+
+			if (sToken == Const.AdminToken)
+				oRes.UserName = Const.UserNames.Admin;
+			else if (sToken == Const.UserToken)
+				oRes.UserName = Const.UserNames.User;
+
+			return oRes;
 		} // ValidateSessionToken
 
-		public bool IsActionEnabled(string sToken, Action nAction) {
-			return sToken == AdminToken;
+		public bool IsActionEnabled(string sUserName, Action nAction) {
+			return (nAction == Action.Read) || (sUserName == Const.UserNames.Admin);
 		} // IsActionEnabled
-
-		private const string UserToken = "user-token";
-		private const string AdminToken = "admin-token";
 
 		private static readonly SortedSet<string> ms_oTokens = new SortedSet<string>();
 	} // class SecurityStub

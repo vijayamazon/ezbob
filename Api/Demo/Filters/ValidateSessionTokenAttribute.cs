@@ -11,7 +11,6 @@
 	internal class ValidateSessionTokenAttribute : ActionFilterAttribute {
 		public ValidateSessionTokenAttribute() {
 			m_oSecurity = new SecurityStub();
-			m_sToken = null;
 		} // constructor
 
 		public override void OnActionExecuting(System.Web.Http.Controllers.HttpActionContext actionContext) {
@@ -19,7 +18,7 @@
 
 			HttpRequestMessage oRequest = actionContext.Request;
 
-			if (!oRequest.Headers.Contains(SessionTokenHeader)) {
+			if (!oRequest.Headers.Contains(Const.Headers.SessionToken)) {
 				actionContext.Response = HandleActionExecutedAttribute.CreateResponse(
 					actionContext.Request,
 					HttpStatusCode.Forbidden,
@@ -28,11 +27,17 @@
 				return;
 			} // if
 
-			m_sToken = oRequest.Headers.GetValues(SessionTokenHeader).First();
+			string sToken = oRequest.Headers.GetValues(Const.Headers.SessionToken).First();
 
-			TokenValidity nValidity = m_oSecurity.ValidateSessionToke(m_sToken);
+			ActiveUserInfo oUserInfo = m_oSecurity.ValidateSessionToken(sToken);
 
-			switch (nValidity) {
+			actionContext.Request.SetUserName(null);
+
+			switch (oUserInfo.TokenValidity) {
+			case TokenValidity.Valid:
+				actionContext.Request.SetUserName(oUserInfo.UserName);
+				return;
+
 			case TokenValidity.Expired:
 				actionContext.Response = HandleActionExecutedAttribute.CreateResponse(
 					actionContext.Request,
@@ -46,15 +51,13 @@
 					actionContext.Request,
 					HttpStatusCode.Unauthorized,
 					"Invalid session token specified ({0}).",
-					m_sToken
+					sToken
 				);
 				return;
 			} // switch
 		} // OnActionExecuting
 
-		protected string m_sToken;
 		protected SecurityStub m_oSecurity;
 
-		private const string SessionTokenHeader = "session-token";
 	} // ValidateSessionTokenAttribute
 } // namespace

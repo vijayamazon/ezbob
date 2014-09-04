@@ -10,7 +10,7 @@
 		public override void OnActionExecuting(System.Web.Http.Controllers.HttpActionContext actionContext) {
 			base.OnActionExecuting(actionContext);
 
-			if (!m_oSecurity.IsActionEnabled(m_sToken, m_nAction)) {
+			if (!m_oSecurity.IsActionEnabled(actionContext.Request.GetUserName(), m_nAction)) {
 				actionContext.Response = HandleActionExecutedAttribute.CreateResponse(
 					actionContext.Request,
 					HttpStatusCode.Forbidden,

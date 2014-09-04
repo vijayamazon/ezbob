@@ -178,6 +178,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Const.cs" />
+    <Compile Include="Infrastructure\HttpRequestMessageExt.cs" />
     <Compile Include="Infrastructure\Return.cs" />
     <Compile Include="Infrastructure\SecurityStub.cs" />
     <Compile Include="Infrastructure\ValueStorage.cs" />
@@ -187,6 +189,34 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\js\anonymous-api.js" />
+    <Content Include="Content\js\lib\jquery-2.1.1.js" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\external\jquery\jquery.js" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\index.html" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\jquery-ui.css" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\jquery-ui.js" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\jquery-ui.min.css" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\jquery-ui.min.js" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\jquery-ui.structure.css" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\jquery-ui.structure.min.css" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\jquery-ui.theme.css" />
+    <Content Include="Content\js\lib\jquery-ui-1.11.1.custom\jquery-ui.theme.min.css" />
+    <Content Include="Content\js\lib\jquery.load_display_value.js" />
+    <Content Include="Content\js\lib\jquery.set_display_value.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -320,7 +350,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>61048</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57973/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
