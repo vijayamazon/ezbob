@@ -81,6 +81,38 @@
 						bool stopSendingEmails = safeReader["StopSendingEmails"];
 						if (!stopSendingEmails)
 						{
+							// TODO: Once Emma prepares the templates - Set template, variables and send mail for each case here
+							//if (daysBetween <= 6)
+							//{
+							//}
+							//else if (daysBetween == 7)
+							//{
+
+							//}
+							//else if (daysBetween <= 13)
+							//{
+
+							//}
+							//else if (daysBetween == 14)
+							//{
+
+							//}
+							//else if (daysBetween <= 29)
+							//{
+
+							//}
+							//else if (daysBetween == 30)
+							//{
+
+							//}
+							//else
+							//{
+							//	// log - no mails should be sent
+							//}
+
+
+
+							// this logic is not correct and the mail should be removed from here
 							string templateName = feeAmount >= partialPaymentCharge
 								? "Mandrill - Late fee was added (7D late)"
 								: "Mandrill - Late fee was added (14D late)";
