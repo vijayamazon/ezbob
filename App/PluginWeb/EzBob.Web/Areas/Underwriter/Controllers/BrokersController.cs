@@ -1,6 +1,8 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
+	using System.Web;
 	using System.Web.Mvc;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Broker;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
@@ -113,10 +115,10 @@
 			var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
 			var broker = brokerRepo.Get(nBrokerID);
 			if (broker != null) {
-				return Json(new {WhiteLabel = broker.WhiteLabel ?? new WhiteLabelProvider()}, JsonRequestBehavior.AllowGet);
+				return Json(new { WhiteLabel = broker.WhiteLabel ?? new WhiteLabelProvider() }, JsonRequestBehavior.AllowGet);
 			}
 
-			return Json(new {error = "broker not found"});
+			return Json(new { error = "broker not found" });
 		} // LoadCustomers
 
 		#endregion action LoadWhiteLabel
@@ -127,14 +129,43 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult SaveWhiteLabel(int nBrokerID, WhiteLabelProvider whiteLabel) {
-			ms_oLog.Debug("Load broker white label request for broker {0}...", nBrokerID);
+		public JsonResult SaveWhiteLabel(int brokerId, WhiteLabelProvider whiteLabel) {
+			ms_oLog.Debug("Save broker white label request for broker {0}...", brokerId);
+
+			var whiteLabelRepo = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
+			
+			if (whiteLabelRepo.GetByName(whiteLabel.Name) != null) {
+				return Json(new { error = "white label with such name already exists" });
+			}
 
 			var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
-			var broker = brokerRepo.Get(nBrokerID);
+			
+			var broker = brokerRepo.Get(brokerId);
 			if (broker != null) {
+
+				whiteLabel.LogoWidthPx = 128;
+				whiteLabel.LogoHeightPx = 34;
 				broker.WhiteLabel = whiteLabel;
 				return Json(new { broker.WhiteLabel }, JsonRequestBehavior.AllowGet);
+			}
+
+			return Json(new { error = "broker not found" });
+		} // LoadCustomers
+
+		
+		[HttpPost]
+		public JsonResult UploadLogo() {
+			Response.AddHeader("x-frame-options", "SAMEORIGIN");
+
+			if (Request.Files.Count != 1) {
+				return Json(new { error = "Only one logo upload supported" });
+			}
+
+			HttpPostedFileBase file = Request.Files[0];
+			if (file != null) {
+				var content = new byte[file.ContentLength];
+				file.InputStream.Read(content, 0, file.ContentLength);
+				return Json(new { Logo = Convert.ToBase64String(content), LogoType = file.ContentType });
 			}
 
 			return Json(new { error = "broker not found" });

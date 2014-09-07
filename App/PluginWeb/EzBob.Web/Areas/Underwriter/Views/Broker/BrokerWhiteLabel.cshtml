@@ -6,24 +6,63 @@
 		<div>Name: <%-wl.Name%></div>
 		<div>Email: <%-wl.Email%></div>
 		<div>Phone: <%-wl.Phone%></div>
-		<div>Leading Color: <div class="whitelabel-color" style="background-color: <%-wl.LeadingColor%>;"></div></div>
-		<div>Secondary Color: <div class="whitelabel-color" style="background-color: <%-wl.SecondoryColor%>;"></div></div>
-		<div> Logo: <div style="background-image:url(data:<%-wl.LogoImageType%>;base64,<%-wl.Logo%>); width: <%-wl.LogoWidthPx%>px; height: <%-wl.LogoHeightPx%>px;"></div></div>
+		<div>Leading color:
+			<div class="whitelabel-color" style="background-color: <%-wl.LeadingColor%>;"></div>
+		</div>
+		<div>Secondary color:
+			<div class="whitelabel-color" style="background-color: <%-wl.SecondoryColor%>;"></div>
+		</div>
+		<div>Logo:
+			<div class="whitelabel-logo" style="background-image: url(data:<%-wl.LogoImageType%>;base64,<%-wl.Logo%>); width: <%-wl.LogoWidthPx%>px; height: <%-wl.LogoHeightPx%>px;"></div>
+		</div>
 		<div>Connectors to enable: <%-wl.ConnectorsToEnable%></div>
 		<div>Finish wizard text: <span><%=wl.FinishWizardText%></span></div>
 		<div>Footer text: <span><%=wl.FooterText%></span></div>
 		<div>Mobile phone text message: <%-wl.MobilePhoneTextMessage%></div>
+		<div>Preview: <a href="@ConfigManager.CurrentValues.Instance.CustomerSite.Value/Customer/Wizard/?provider=<%-wl.Name%>" target="_blank">Preview</a></div>
 		<%} else {%>
-		<div>No white label, add new</div>
+		
+		<div class="form_field_container">No white label, add new</div>
+		<br />
+		<form id="logoUploadZone" class="dropzone col-md-3" action="@Url.Action("UploadLogo", "Brokers", new { Area = "Underwriter" })">
+			<div class="dz-message dz-with-text">Drag or Click to upload the logo.</div>
+		</form>
+
+		<form id="whitelabel-form" action="@Url.Action("SaveWhiteLabel", "Brokers", new { Area = "Underwriter" })">
+			<div class="col-md-8">
+				@{ int nInstantOfferTabIdx = 0; }
+				@Input("Name", "Name", ++nInstantOfferTabIdx)
+				@Input("Email", "Email", ++nInstantOfferTabIdx)
+				@Input("Phone", "Phone", ++nInstantOfferTabIdx)
+				@Input("LeadingColor", "Leading color", ++nInstantOfferTabIdx, type: "color", val: "#FFFFFF")
+				@Input("SecondoryColor", "Secondory color", ++nInstantOfferTabIdx, type: "color", val: "#FFFFFF")
+				@Input("ConnectorsToEnable", "Connectors to enable", ++nInstantOfferTabIdx)
+				@Input("FinishWizardText", "Finish wizard text", ++nInstantOfferTabIdx)
+				@Input("FooterText", "Footer text", ++nInstantOfferTabIdx)
+				@Input("MobilePhoneTextMessage", "Mobile phone text message", ++nInstantOfferTabIdx)
+
+				<input type="hidden" name="brokerId" id="brokerId" value="<%-brokerId%>" />
+				<input type="hidden" name="Logo" id="Logo" />
+				<input type="hidden" name="LogoImageType" id="LogoImageType" />
+				<div class="form_buttons_container">
+					<div class="attardi-button">
+						<button type="submit" id="saveWhiteLabel" class="pull-right btn btn-primary btn-wide" tabindex="@{ WriteLiteral(++nInstantOfferTabIdx); }">Save white label</button>
+					</div>
+				</div>
+			</div>
+		</form>
 		<%}%>
 	</div>
-
-	<form id="whitelabel-form">
-		<div>
-			<%console.log('data', whiteLabel);%>
-		</div>
-	</form>
-	
-
-
 </script>
+
+@helper Input(string name, string caption, int tabindex, bool isReq = true, string type = "text", string val = null) {
+	var img = name + "Image";
+	var req = isReq ? "required" : "";
+	<div class="form_field_container">
+		<label class="attardi-input">
+			<span class="attardi-has-data">@caption</span>
+			<input type="@type" name="@name" id="@name" tabindex="@tabindex" class="form_field" value="@val" />
+			<img id="@img" class="field_status @req" />
+		</label>
+	</div>
+}
