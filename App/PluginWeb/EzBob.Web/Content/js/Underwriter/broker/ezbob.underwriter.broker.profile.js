@@ -278,7 +278,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 	show: function(id, type) {
 		this.brokerID = id;
 		
-		this.whiteLabelModel = this.whiteLabelModel || new EzBob.Underwriter.BrokerWhiteLabelModel({ brokerID: this.brokerID });
+		this.whiteLabelModel = new EzBob.Underwriter.BrokerWhiteLabelModel({ brokerID: this.brokerID });
 		
 		this.$el.show();
 		
@@ -402,7 +402,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 	
 	whiteLabel: function () {
 		var self = this;
-		self.BrokerWhiteLabelView = new EzBob.Underwriter.BrokerWhiteLabelView({ model: self.whiteLabelModel, el: self.$el.find('.broker-whitelabel-root-el') });
+		self.BrokerWhiteLabelView = new EzBob.Underwriter.BrokerWhiteLabelView({ model: self.whiteLabelModel, el: self.$el.find('.broker-whitelabel-root-el'), brokerId: self.brokerID });
 	}
 	
 }); // EzBob.Underwriter.BrokerProfileView
