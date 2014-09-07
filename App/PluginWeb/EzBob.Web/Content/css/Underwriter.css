@@ -2129,3 +2129,7 @@ ul.alert-list {
     background-repeat: no-repeat; 
     background-size: contain;
 }
+
+.aml-button-margin {
+    margin-right: 5px;
+}
