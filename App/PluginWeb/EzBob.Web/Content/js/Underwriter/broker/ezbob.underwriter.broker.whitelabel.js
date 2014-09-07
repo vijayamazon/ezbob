@@ -23,13 +23,17 @@ EzBob.Underwriter.BrokerWhiteLabelView = EzBob.ItemView.extend({
 		'focusout input': 'doNothing',
 		'blur input': 'doNothing',
 		
-		'click #saveWhiteLabel': 'saveWhiteLabel'
+		'click #saveWhiteLabel': 'saveWhiteLabel',
+		'click #backWhitelabel': 'toggleUpdate',
+		'click #updateWhiteLabel': 'toggleUpdate'
 	},
 	ui: {
 		LogoUploadZone: '#logoUploadZone',
 		Form: '#whitelabel-form',
 		Logo: '#Logo',
 		LogoImageType: '#LogoImageType',
+		Details: '.whitelabel-details',
+		Update: '.whitelabel-update'
 	},
 	
 	serializeData: function () {
@@ -101,5 +105,9 @@ EzBob.Underwriter.BrokerWhiteLabelView = EzBob.ItemView.extend({
 		} // if
 	}, // clearDropzone
 	
-
+	toggleUpdate: function (e) {
+		e.preventDefault();
+		this.ui.Details.toggle();
+		this.ui.Update.toggle();
+	}
 });

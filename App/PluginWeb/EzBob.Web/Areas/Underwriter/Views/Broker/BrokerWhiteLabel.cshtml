@@ -2,67 +2,95 @@
 
 <script id="broker-white-label-template" type="text/template">
 	<div>
-		<%if(whiteLabel.WhiteLabel.Id != 0){ var wl = whiteLabel.WhiteLabel; %>
-		<div>Name: <%-wl.Name%></div>
-		<div>Email: <%-wl.Email%></div>
-		<div>Phone: <%-wl.Phone%></div>
-		<div>Leading color:
-			<div class="whitelabel-color" style="background-color: <%-wl.LeadingColor%>;"></div>
+		<% var wl = {}; if(whiteLabel.WhiteLabel.Id != 0){ wl = whiteLabel.WhiteLabel || {}; %>
+		<div class="whitelabel-details">
+			<div>Name: <%-wl.Name%></div>
+			<div>Email: <%-wl.Email%></div>
+			<div>Phone: <%-wl.Phone%></div>
+			<div>
+				Leading color:
+				<div class="whitelabel-color" style="background-color: <%-wl.LeadingColor%>;"></div>
+			</div>
+			<div>
+				Secondary color:
+				<div class="whitelabel-color" style="background-color: <%-wl.SecondoryColor%>;"></div>
+			</div>
+			<div>
+				Logo:
+				<div class="whitelabel-logo" style="background-image: url(data:<%-wl.LogoImageType%>;base64,<%-wl.Logo%>); width: <%-wl.LogoWidthPx%>px; height: <%-wl.LogoHeightPx%>px;"></div>
+			</div>
+			<div>Connectors to enable: <%-wl.ConnectorsToEnable%></div>
+			<div>Finish wizard text: <span><%=wl.FinishWizardText%></span></div>
+			<div>Footer text: <span><%=wl.FooterText%></span></div>
+			<div>Mobile phone text message: <%-wl.MobilePhoneTextMessage%></div>
+			<div>Preview: <a href="@ConfigManager.CurrentValues.Instance.CustomerSite.Value/Customer/Wizard/?provider=<%-wl.Name%>" target="_blank">Preview</a></div>
+
+			<div class="form_buttons_container">
+				<div class="attardi-button">
+					<button id="updateWhiteLabel" class="pull-right btn btn-primary btn-wide">Update</button>
+				</div>
+			</div>
 		</div>
-		<div>Secondary color:
-			<div class="whitelabel-color" style="background-color: <%-wl.SecondoryColor%>;"></div>
+		<div class="whitelabel-update" style="display:none">
+			@AddUpdate(Url.Action("UpdateWhiteLabel", "Brokers", new { Area = "Underwriter" }), "Update")
 		</div>
-		<div>Logo:
-			<div class="whitelabel-logo" style="background-image: url(data:<%-wl.LogoImageType%>;base64,<%-wl.Logo%>); width: <%-wl.LogoWidthPx%>px; height: <%-wl.LogoHeightPx%>px;"></div>
-		</div>
-		<div>Connectors to enable: <%-wl.ConnectorsToEnable%></div>
-		<div>Finish wizard text: <span><%=wl.FinishWizardText%></span></div>
-		<div>Footer text: <span><%=wl.FooterText%></span></div>
-		<div>Mobile phone text message: <%-wl.MobilePhoneTextMessage%></div>
-		<div>Preview: <a href="@ConfigManager.CurrentValues.Instance.CustomerSite.Value/Customer/Wizard/?provider=<%-wl.Name%>" target="_blank">Preview</a></div>
 		<%} else {%>
 		
 		<div class="form_field_container">No white label, add new</div>
 		<br />
-		<form id="logoUploadZone" class="dropzone col-md-3" action="@Url.Action("UploadLogo", "Brokers", new { Area = "Underwriter" })">
-			<div class="dz-message dz-with-text">Drag or Click to upload the logo.</div>
-		</form>
-
-		<form id="whitelabel-form" action="@Url.Action("SaveWhiteLabel", "Brokers", new { Area = "Underwriter" })">
-			<div class="col-md-8">
-				@{ int nInstantOfferTabIdx = 0; }
-				@Input("Name", "Name", ++nInstantOfferTabIdx)
-				@Input("Email", "Email", ++nInstantOfferTabIdx)
-				@Input("Phone", "Phone", ++nInstantOfferTabIdx)
-				@Input("LeadingColor", "Leading color", ++nInstantOfferTabIdx, type: "color", val: "#FFFFFF")
-				@Input("SecondoryColor", "Secondory color", ++nInstantOfferTabIdx, type: "color", val: "#FFFFFF")
-				@Input("ConnectorsToEnable", "Connectors to enable", ++nInstantOfferTabIdx)
-				@Input("FinishWizardText", "Finish wizard text", ++nInstantOfferTabIdx)
-				@Input("FooterText", "Footer text", ++nInstantOfferTabIdx)
-				@Input("MobilePhoneTextMessage", "Mobile phone text message", ++nInstantOfferTabIdx)
-
-				<input type="hidden" name="brokerId" id="brokerId" value="<%-brokerId%>" />
-				<input type="hidden" name="Logo" id="Logo" />
-				<input type="hidden" name="LogoImageType" id="LogoImageType" />
-				<div class="form_buttons_container">
-					<div class="attardi-button">
-						<button type="submit" id="saveWhiteLabel" class="pull-right btn btn-primary btn-wide" tabindex="@{ WriteLiteral(++nInstantOfferTabIdx); }">Save white label</button>
-					</div>
-				</div>
-			</div>
-		</form>
+		@AddUpdate(Url.Action("SaveWhiteLabel", "Brokers", new { Area = "Underwriter" }), "Save")
 		<%}%>
 	</div>
 </script>
 
-@helper Input(string name, string caption, int tabindex, bool isReq = true, string type = "text", string val = null) {
+
+@helper AddUpdate(string action, string type) {
+	var caption = type + " white label";
+	
+	<form id="logoUploadZone" class="dropzone col-md-3" action="@Url.Action("UploadLogo", "Brokers", new { Area = "Underwriter" })">
+		<div class="dz-message dz-with-text">Drag or Click to upload the logo.</div>
+	</form>
+
+	<form id="whitelabel-form" action="@action">
+		<div class="col-md-8">
+			@{ int nInstantOfferTabIdx = 0; }
+			@Input(this, "Name", "Name", ++nInstantOfferTabIdx, val: "<%-wl.Name%>")
+			@Input(this, "Email", "Email", ++nInstantOfferTabIdx,val: "<%-wl.Email%>")
+			@Input(this, "Phone", "Phone", ++nInstantOfferTabIdx, val: "<%-wl.Phone%>")
+			@Input(this, "LeadingColor", "Leading color", ++nInstantOfferTabIdx, type: "color", val: "<%-wl.LeadingColor || '#FFFFFF' %>")
+			@Input(this, "SecondoryColor", "Secondory color", ++nInstantOfferTabIdx, type: "color", val: "<%-wl.SecondoryColor || '#FFFFFF' %>")
+			@Input(this, "ConnectorsToEnable", "Connectors to enable", ++nInstantOfferTabIdx, val: "<%-wl.ConnectorsToEnable%>")
+			@Input(this, "FinishWizardText", "Finish wizard text", ++nInstantOfferTabIdx, val: "<%-wl.FinishWizardText%>")
+			@Input(this, "FooterText", "Footer text", ++nInstantOfferTabIdx, val: "<%-wl.FooterText%>")
+			@Input(this, "MobilePhoneTextMessage", "Mobile phone text message", ++nInstantOfferTabIdx, val: "<%-wl.MobilePhoneTextMessage%>")
+			
+			<input type="hidden" name="WhiteLabelId" value="<%-wl.Id%>"/>
+			<input type="hidden" name="brokerId" id="brokerId" value="<%-brokerId%>" />
+			<input type="hidden" name="Logo" id="Logo" />
+			<input type="hidden" name="LogoImageType" id="LogoImageType" />
+			<div class="form_buttons_container">
+				<div class="attardi-button">
+					<button type="submit" id="saveWhiteLabel" class="pull-right btn btn-primary btn-wide" tabindex="@{ WriteLiteral(++nInstantOfferTabIdx); }">@caption</button>
+					@if (type == "Update") {
+						<button id="backWhitelabel" class="pull-right btn btn-primary btn-wide reset-button-margin">Back</button>
+					}
+				</div>
+			</div>
+		</div>
+	</form>
+}
+
+@helper Input(WebPageBase page, string name, string caption, int tabindex, bool isReq = true, string type = "text", string val = null) {
 	var img = name + "Image";
 	var req = isReq ? "required" : "";
+
+	var sInput = string.Format("<input id=\"{0}\" name=\"{0}\" type=\"{1}\" value=\"{2}\" class=\"form-control\" tabindex=\"{3}\" />", name, type, val, tabindex);
 	<div class="form_field_container">
 		<label class="attardi-input">
 			<span class="attardi-has-data">@caption</span>
-			<input type="@type" name="@name" id="@name" tabindex="@tabindex" class="form_field" value="@val" />
+			@{ page.WriteLiteral(sInput); }
 			<img id="@img" class="field_status @req" />
 		</label>
 	</div>
 }
+

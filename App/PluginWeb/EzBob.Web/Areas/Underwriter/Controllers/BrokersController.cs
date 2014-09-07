@@ -2,7 +2,6 @@
 	using System;
 	using System.Web;
 	using System.Web.Mvc;
-	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Broker;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
@@ -104,7 +103,7 @@
 
 		#endregion action AttachCustomer
 
-		#region action LoadWhiteLabel
+		#region White Label
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -120,10 +119,6 @@
 
 			return Json(new { error = "broker not found" });
 		} // LoadCustomers
-
-		#endregion action LoadWhiteLabel
-
-		#region action SaveWhiteLabel
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -150,8 +145,35 @@
 			}
 
 			return Json(new { error = "broker not found" });
-		} // LoadCustomers
+		} 
 
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult UpdateWhiteLabel(int whiteLabelId, WhiteLabelProvider whiteLabel) {
+			ms_oLog.Debug("Update broker white label request for white label {0}...", whiteLabelId);
+
+			var whiteLabelRepo = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
+			var wl = whiteLabelRepo.Get(whiteLabelId);
+			if (wl == null) {
+				return Json(new { error = "white label not found" });
+			}
+
+			wl.Logo = whiteLabel.Logo ?? wl.Logo;
+			wl.LogoImageType = whiteLabel.LogoImageType ?? wl.LogoImageType;
+			wl.Name = whiteLabel.Name ?? wl.Name;
+			wl.Phone = whiteLabel.Phone ?? wl.Phone;
+			wl.LeadingColor = whiteLabel.LeadingColor ?? wl.LeadingColor;
+			wl.SecondoryColor = whiteLabel.SecondoryColor ?? wl.SecondoryColor;
+			wl.Email = whiteLabel.Email ?? wl.Email;
+			wl.FinishWizardText = whiteLabel.FinishWizardText ?? wl.FinishWizardText;
+			wl.FooterText = whiteLabel.FooterText ?? wl.FooterText;
+			wl.ConnectorsToEnable = whiteLabel.ConnectorsToEnable ?? wl.ConnectorsToEnable;
+
+			whiteLabelRepo.Update(wl);
+			return Json(new { success = true });
+		} 
 		
 		[HttpPost]
 		public JsonResult UploadLogo() {
@@ -169,10 +191,9 @@
 			}
 
 			return Json(new { error = "broker not found" });
-		} // LoadCustomers
+		} 
 
-		#endregion action SaveWhiteLabel
-
+		#endregion White Label
 
 		#region private
 

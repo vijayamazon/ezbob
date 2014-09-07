@@ -24,10 +24,7 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
 	public class WhiteLabelProviderMap : ClassMap<WhiteLabelProvider> {
 		public WhiteLabelProviderMap() {
 			Table("WhiteLabelProvider");
-			DynamicUpdate();
-
-			Cache.ReadWrite().Region("LongTerm").ReadWrite();
-
+			
 			Id(x => x.Id);
 			Map(x => x.Name).Length(50);
 			Map(x => x.Email).Length(300);
