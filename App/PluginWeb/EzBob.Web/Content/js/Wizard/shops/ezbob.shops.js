@@ -74,7 +74,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var lc;
 		var accountTypeName;
 
-		if (this.isWhiteLabel()) {
+		if (this.isWhiteLabel() && !this.isProfile()) {
 			this['HMRC'] = new EzBob.HmrcAccountInfoView({
 				model: acc,
 				companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
@@ -408,6 +408,10 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
 		} // if
 
+		if (this.isWhiteLabel() && !this.isProfile()) {
+			this.storeList.find('.group-title').hide();
+		}
+		
 		this.storeList.find(sShow).show();
 		this.storeList.find(sRemove).remove();
 
