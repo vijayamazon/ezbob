@@ -1106,6 +1106,30 @@ namespace ConfigManager {
 
 		#endregion property IsSmsValidationActive
 
+		#region property IovationUrl
+
+		public virtual VariableValue IovationUrl {
+			get { return this[Variables.IovationUrl]; } // get
+		} // IovationUrl
+
+		#endregion property IovationUrl
+
+		#region property IovationSubscriberCode
+
+		public virtual VariableValue IovationSubscriberCode {
+			get { return this[Variables.IovationSubscriberCode]; } // get
+		} // IovationSubscriberCode
+
+		#endregion property IovationSubscriberCode
+
+		#region property IovationAccountCode
+
+		public virtual VariableValue IovationAccountCode {
+			get { return this[Variables.IovationAccountCode]; } // get
+		} // IovationAccountCode
+
+		#endregion property IovationAccountCode
+
 		#region property LandRegistryProd
 
 		public virtual VariableValue LandRegistryProd {
