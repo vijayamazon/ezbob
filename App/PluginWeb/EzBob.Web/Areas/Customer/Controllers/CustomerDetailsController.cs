@@ -975,14 +975,6 @@
 				lst => customer.AddressInfo.OtherPropertiesAddresses = lst
 			);
 
-			if (customer.AddressInfo.OtherPropertiesAddresses != null)
-			{
-				foreach (CustomerAddress ca in customer.AddressInfo.OtherPropertiesAddresses)
-				{
-					customerAddressRepository.SaveOrUpdate(ca);
-				}
-			}
-
 			SavePhones(customer.Id, personalInfo.MobilePhone, personalInfo.DaytimePhone);
 
 			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);

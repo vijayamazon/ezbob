@@ -103,6 +103,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 				 .AsSet()
 				 .KeyColumn("customerId")
 				 .Where("addressType=" + Convert.ToInt32(CustomerAddressType.OtherPropertyAddress))
+				 .Cascade.AllDeleteOrphan()
 				 .Inverse()
 				 .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 			});
