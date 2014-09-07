@@ -15,6 +15,6 @@ BEGIN
 	IF @StopSendingEmails IS NULL 
 		SET @StopSendingEmails = 0
 
-	SELECT CASE WHEN @StopSendingEmails = 1 THEN 1 ELSE 0 END AS StopSendingEmails
+	SELECT CAST(CASE WHEN @StopSendingEmails = 1 THEN 1 ELSE 0 END AS BIT) AS StopSendingEmails
 END
 GO

@@ -5,7 +5,7 @@
 	using System.Globalization;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EzBob.Backend.Strategies.MailStrategies.API;
+	using MailStrategies.API;
 	using PaymentServices.PayPoint;
 
 	public class SetLateLoanStatus : AStrategy {
