@@ -19,7 +19,8 @@ BEGIN
 		l.MaxDelinquencyDays, 
 		l.RefNum, 
 		ls.Delinquency AS InstallmentDelinquency, 
-		ls.CustomInstallmentDate 
+		ls.CustomInstallmentDate,
+		ls.LastNoticeSent		
 	FROM 
 		loanschedule ls 
 		LEFT JOIN Loan l ON 

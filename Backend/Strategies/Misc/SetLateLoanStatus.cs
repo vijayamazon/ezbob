@@ -55,11 +55,13 @@
 				DateTime date = sr["Date"];
 				decimal amountDue = sr["AmountDue"];
 				int loanId = sr["LoanId"];
+				int loanScheduleId = sr["LoanScheduleId"];
 				decimal interest = sr["Interest"];
 				string mail = sr["email"];
 				string firstName = sr["FirstName"];
 				string refNum = sr["RefNum"];
 				DateTime customInstallmentDate = sr["CustomInstallmentDate"];
+				bool sentLastNotice = sr["LastNoticeSent"];
 
 				if (customInstallmentDate != default(DateTime)) {
 					if (date < customInstallmentDate)
@@ -70,65 +72,89 @@
 				int feeAmount, feeType;
 				CalculateFee(daysBetween, interest, out feeAmount, out feeType);
 
-				if (feeType != 0) {
+				bool appliedLateCharge = false;
+				if (feeType != 0)
+				{
 					var papi = new PayPointApi();
-					bool applyLateCharge = papi.ApplyLateCharge(feeAmount, loanId, feeType);
-
-					if (applyLateCharge)
-					{
-						DataTable dt = DB.ExecuteReader("ShouldStopSendingLateMails", new QueryParameter("LoanId", loanId));
-						var safeReader = new SafeReader(dt.Rows[0]);
-						bool stopSendingEmails = safeReader["StopSendingEmails"];
-						if (!stopSendingEmails)
-						{
-							// TODO: Once Emma prepares the templates - Set template, variables and send mail for each case here
-							//if (daysBetween <= 6)
-							//{
-							//}
-							//else if (daysBetween == 7)
-							//{
-
-							//}
-							//else if (daysBetween <= 13)
-							//{
-
-							//}
-							//else if (daysBetween == 14)
-							//{
-
-							//}
-							//else if (daysBetween <= 29)
-							//{
-
-							//}
-							//else if (daysBetween == 30)
-							//{
-
-							//}
-							//else
-							//{
-							//	// log - no mails should be sent
-							//}
-
-
-
-							// this logic is not correct and the mail should be removed from here
-							string templateName = feeAmount >= partialPaymentCharge
-								? "Mandrill - Late fee was added (7D late)"
-								: "Mandrill - Late fee was added (14D late)";
-
-							var variables = new Dictionary<string, string> {
-								{"FirstName", firstName},
-								{"ScheduledAmount", amountDue.ToString(CultureInfo.InvariantCulture)},
-								{"RefNum", refNum},
-								{"FeeAmount", feeAmount.ToString(CultureInfo.InvariantCulture)},
-								{"DaysBetween", daysBetween.ToString(CultureInfo.InvariantCulture)}
-							};
-
-							mailer.Send(templateName, variables, new Addressee(mail));
-						}
-					} // if
+					appliedLateCharge = papi.ApplyLateCharge(feeAmount, loanId, feeType);
 				} // if
+
+				DataTable dt = DB.ExecuteReader("ShouldStopSendingLateMails", new QueryParameter("LoanId", loanId));
+				var safeReader = new SafeReader(dt.Rows[0]);
+				bool stopSendingEmails = safeReader["StopSendingEmails"];
+				string templateName = null;
+
+				if (!stopSendingEmails)
+				{
+					// TODO: Once Emma prepares the templates - Set template, variables and send mail for each case here
+					if (daysBetween < collectionPeriod1) // 7
+					{
+						//subject = "ezbob - you missed your payment";
+						templateName = "TBDTBDTBDTBDTBD";
+					}
+					else if (daysBetween < collectionPeriod2) // 14
+					{
+						if (appliedLateCharge)
+						{
+							templateName = "TBDTBDTBDTBDTBD"; // another template with another subject
+							// send the fee added mail
+							//subject = "ezbob - £20 late fee was added to your account";
+						}
+						else
+						{
+							// send other mail
+							//subject = "ezbob - Warning - £20 late fee was added to your account";
+							templateName = "TBDTBDTBDTBDTBD";
+						}
+					}
+					else if (daysBetween < collectionPeriod3) // 30
+					{
+						if (appliedLateCharge)
+						{
+							// 40
+							templateName = "TBDTBDTBDTBDTBD";
+						}
+						else
+						{
+							// missed your payment more than 14...
+							templateName = "TBDTBDTBDTBDTBD";
+						}
+					}
+					else if (!sentLastNotice)
+					{
+						templateName = "TBDTBDTBDTBDTBD";
+
+						DB.ExecuteNonQuery(
+							"UpdateLastNotice",
+							CommandSpecies.StoredProcedure,
+							new QueryParameter("LoanScheduleId", loanScheduleId));
+					}
+					else
+					{
+						Log.Info("Processed late scheduled payment id:{0}, since last notice was already sent nothing was done.", loanScheduleId);
+					}
+
+					if (templateName != null)
+					{
+						// create variables and send mail
+					}
+
+
+					// this logic is not correct and the mail should be removed from here
+					//string templateName = feeAmount >= partialPaymentCharge
+					//	? "Mandrill - Late fee was added (7D late)"
+					//	: "Mandrill - Late fee was added (14D late)";
+
+					//var variables = new Dictionary<string, string> {
+					//			{"FirstName", firstName},
+					//			{"ScheduledAmount", amountDue.ToString(CultureInfo.InvariantCulture)},
+					//			{"RefNum", refNum},
+					//			{"FeeAmount", feeAmount.ToString(CultureInfo.InvariantCulture)},
+					//			{"DaysBetween", daysBetween.ToString(CultureInfo.InvariantCulture)}
+					//		};
+
+					//mailer.Send(templateName, variables, new Addressee(mail));
+				}
 
 				AccumulateFee(loanId, daysBetween, amountDue);
 				

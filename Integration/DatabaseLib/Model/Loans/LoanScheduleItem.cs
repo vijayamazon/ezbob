@@ -1,12 +1,9 @@
-﻿using System;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using FluentNHibernate.Mapping;
-using Iesi.Collections.Generic;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Database.Loans
+﻿namespace EZBob.DatabaseLib.Model.Database.Loans
 {
+	using System;
+	using Model.Loans;
+	using Iesi.Collections.Generic;
+	using NHibernate.Type;
 	using System.ComponentModel;
 
 	public class LoanScheduleItem
@@ -86,6 +83,8 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 		/// Дата предидущего installment, или дата создания кредита, если instalmment первый.
 		/// </summary>
 		public virtual DateTime PrevInstallmentDate { get; set; }
+		
+		public virtual bool LastNoticeSent { get; set; }
 
 		private decimal _interestRate;
 
@@ -157,7 +156,8 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 					RepaymentAmount = this.RepaymentAmount,
 					Fees = this.Fees,
 					FeesPaid = this.FeesPaid,
-					Status = this.Status
+					Status = this.Status,
+					LastNoticeSent = this.LastNoticeSent
 				};
 			return newItem;
 		}
@@ -193,6 +193,10 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
+	using FluentNHibernate.Mapping;
+	using Loans;
+	using NHibernate.Type;
+
 	public class LoanScheduleMap : ClassMap<LoanScheduleItem>
 	{
 		public LoanScheduleMap()
@@ -213,6 +217,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.Delinquency);
 			Map(x => x.Fees);
 			Map(x => x.FeesPaid);
+			Map(x => x.LastNoticeSent);
 			References(x => x.Loan, "LoanId");
 			HasMany(x => x.Rollovers)
 			   .AsSet()
