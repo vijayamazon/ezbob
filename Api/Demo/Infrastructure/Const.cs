@@ -4,6 +4,7 @@
 		public const string True = "true";
 
 		public static class Headers {
+			public const string ApiVersion = "api-version";
 			public const string AppKey = "app-key";
 			public const string SessionToken = "session-token";
 			public const string OutputStatusCfg = "output-status-header-only";

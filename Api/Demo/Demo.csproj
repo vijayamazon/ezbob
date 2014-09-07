@@ -172,9 +172,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Versions\v1\LoginController.cs" />
-    <Compile Include="Controllers\Versions\v1\SecureValuesController.cs" />
-    <Compile Include="Controllers\Versions\v1\ValuesController.cs" />
+    <Compile Include="Controllers\Versions\DemoApiControllerBase.cs" />
+    <Compile Include="Controllers\Versions\v1\v1LoginController.cs" />
+    <Compile Include="Controllers\Versions\v1\v1SecureValuesController.cs" />
+    <Compile Include="Controllers\Versions\v1\v1ValuesController.cs" />
+    <Compile Include="Controllers\Versions\v2\v2SecureValuesController.cs" />
+    <Compile Include="Controllers\Versions\v2\v2ValuesController.cs" />
+    <Compile Include="Controllers\Versions\v2\v2LoginController.cs" />
+    <Compile Include="Filters\DemoActionFilterAttribute.cs" />
     <Compile Include="Filters\ValidateActionPermissionAttribute.cs" />
     <Compile Include="Filters\ValidateSessionTokenAttribute.cs" />
     <Compile Include="Filters\HandleActionExecutedAttribute.cs" />

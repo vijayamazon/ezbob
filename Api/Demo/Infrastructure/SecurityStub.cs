@@ -1,4 +1,5 @@
 ﻿namespace Demo.Infrastructure {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Logger;
 	using Models;
@@ -74,14 +75,22 @@
 					"Token's remote address '{0}' differs from actual remote address '{1}'.",
 					oToken.RemoteAddress,
 					sRemoteAddress
-					);
+				);
 
 				return new ActiveUserInfo { TokenValidity = TokenValidity.Invalid, };
 			} // if
 
 			ms_oLog.Debug("Token's '{0}' remote address matches.", oToken.Packed);
 
-			// TODO: other checks: expiration time...
+			TimeSpan oDelta = DateTime.UtcNow - oToken.IssueTime;
+
+			if (oDelta.TotalSeconds >= 30) {
+				ms_oLog.Debug("Token '{0}' has been expired.", oToken.Packed);
+
+				ms_oTokens.Remove(sToken);
+
+				return new ActiveUserInfo { TokenValidity = TokenValidity.Expired, };
+			} // if
 
 			var oRes = new ActiveUserInfo {
 				TokenValidity = TokenValidity.Valid,

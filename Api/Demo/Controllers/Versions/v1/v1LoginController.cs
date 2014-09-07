@@ -9,8 +9,9 @@
 	/// <summary>
 	/// Validates user credentials.
 	/// </summary>
+	[HandleActionExecuted(1)]
 	[RoutePrefix("api/v1/login")]
-	public class LoginController : ApiController {
+	public class V1LoginController : DemoApiControllerBase {
 		// POST api/login
 		/// <summary>
 		/// Validates user login credentials.
@@ -29,7 +30,7 @@
 				string sToken = oSec.Login(oModel, Request.GetRemoteIp());
 
 				if (string.IsNullOrWhiteSpace(sToken))
-					throw Return.Status(HttpStatusCode.Unauthorized, "Invalid user name or password.");
+					throw Return.Status(ApiVersion, HttpStatusCode.Unauthorized, "Invalid user name or password.");
 
 				return sToken;
 			}
@@ -37,7 +38,7 @@
 				throw;
 			}
 			catch (Exception e) {
-				throw Return.Error("Failed to validate user credentials: {0}.", e.Message);
+				throw Return.Error(ApiVersion, "Failed to validate user credentials: {0}.", e.Message);
 			} // try
 		} // Post
 	} // class LoginController

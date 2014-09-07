@@ -2,6 +2,10 @@
 	th, td {
 		padding: 3px;
 	}
+
+	label { display: inline; }
+
+	input[name="api-version"] { width: 20px; }
 </style>
 
 <div id="body">
@@ -21,6 +25,13 @@
 		<h2 class="page-title"></h2>
 
 		<div>App key: <input type="text" class="app-key" value="1234" /></div>
+		
+		<div>API version
+			<input type="radio" name="api-version" id="api-version-1" value="1" checked="checked" />
+			<label for="api-version-1">Version 1</label>
+			<input type="radio" name="api-version" id="api-version-2" value="2" />
+			<label for="api-version-2">Version 2</label>
+		</div>
 
 		<div class="named-related">
 			<div>User name: <span class="logged-in-user-name"></span></div>
@@ -39,8 +50,12 @@
 
 			<div id="login-form">
 				<h3>Login</h3>
+				
+				Session timeout is 30 seconds.
 
-				Available logins: <b>admin/123456</b> and <b>user/654321</b>.
+				Available logins: <button type="button" class="do-login-admin">admin/123456</button> and
+				<button type="button" class="do-login-user">user/654321</button> or use any other combination
+				to check "login failed" situation.
 
 				<table>
 					<tbody>

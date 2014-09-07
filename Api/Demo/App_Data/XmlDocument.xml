@@ -396,12 +396,12 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="T:Demo.Controllers.Versions.v1.LoginController">
+        <member name="T:Demo.Controllers.Versions.v1.V1LoginController">
             <summary>
             Validates user credentials.
             </summary>
         </member>
-        <member name="M:Demo.Controllers.Versions.v1.LoginController.Post(Demo.Models.LoginModel)">
+        <member name="M:Demo.Controllers.Versions.v1.V1LoginController.Post(Demo.Models.LoginModel)">
             <summary>
             Validates user login credentials.
             <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
@@ -526,6 +526,127 @@
             </para>
             </summary>
             <param name="nID">Id of value to update.</param>
+        </member>
+        <member name="T:Demo.Controllers.Versions.v1.V2SecureValuesController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2SecureValuesController.Get">
+            <summary>
+            Gets list of all currently existing values.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <returns>List of all currently existing values.</returns>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2SecureValuesController.Get(System.Int32)">
+            <summary>
+            Gets specified value by its id.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="nID">Value id to look for.</param>
+            <returns>Corresponding value when requested id exists, or empty output and HTTP status code of 404 otherwise.</returns>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2SecureValuesController.Post(Demo.Models.ValueModel)">
+            <summary>
+            Creates a new value.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="oValue">New value details.</param>
+            <returns>A new value that has been created.</returns>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2SecureValuesController.Put(System.Int32,Demo.Models.ValueModel)">
+            <summary>
+            Updates existing value by its id. HTTP status code 404 is returned when no value found by requested id.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="nID">Id of value to update.</param>
+            <param name="oValue">New value details.</param>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2SecureValuesController.Delete(System.Int32)">
+            <summary>
+            Deletes existing value by its id. HTTP status code 404 is returned when no value found by requested id.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="nID">Id of value to update.</param>
+        </member>
+        <member name="T:Demo.Controllers.Versions.v1.V2ValuesController">
+            <summary>
+            Provides an example of an anonymous API.
+            </summary>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2ValuesController.Get">
+            <summary>
+            Gets list of all currently existing values.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <returns>List of all currently existing values.</returns>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2ValuesController.Get(System.Int32)">
+            <summary>
+            Gets specified value by its id.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="nID">Value id to look for.</param>
+            <returns>Corresponding value when requested id exists, or empty output and HTTP status code of 404 otherwise.</returns>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2ValuesController.Post(Demo.Models.ValueModel)">
+            <summary>
+            Creates a new value.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="oValue">New value details.</param>
+            <returns>A new value that has been created.</returns>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2ValuesController.Put(System.Int32,Demo.Models.ValueModel)">
+            <summary>
+            Updates existing value by its id. HTTP status code 404 is returned when no value found by requested id.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="nID">Id of value to update.</param>
+            <param name="oValue">New value details.</param>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2ValuesController.Delete(System.Int32)">
+            <summary>
+            Deletes existing value by its id. HTTP status code 404 is returned when no value found by requested id.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="nID">Id of value to update.</param>
+        </member>
+        <member name="T:Demo.Controllers.Versions.v1.V2LoginController">
+            <summary>
+            Validates user credentials.
+            </summary>
+        </member>
+        <member name="M:Demo.Controllers.Versions.v1.V2LoginController.Post(Demo.Models.LoginModel)">
+            <summary>
+            Validates user login credentials.
+            <para>appkey header must be provided. HTTP status code 403 is returned when this header is missing.
+            HTTP status code 401 is returned when this header contains an unexpected value.
+            </para>
+            </summary>
+            <param name="oModel">User credentials (user name, password, app key).</param>
+            <returns>Session token when credentials have been validated; HTTP status code 401 on unsuccessful login.</returns>
         </member>
         <member name="T:Demo.Filters.ValidateSessionTokenAttribute">
             <summary>

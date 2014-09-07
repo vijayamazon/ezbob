@@ -1,11 +1,7 @@
 ﻿$(document).ready(function() {
-	var sBaseUrl = 'http://localhost:57973/api/v1';
-
 	var sApiUrl;
 
 	var oHeadersFunc;
-
-	var sLoginUrl = sBaseUrl + '/login';
 
 	var oTabs = $('#tabs').tabs();
 	
@@ -13,6 +9,8 @@
 	$('.set-named-api').click(setNamedApi);
 
 	$('.do-login').click(login);
+	$('.do-login-admin').click(function(evt) { login(evt, 'admin', '123456'); });
+	$('.do-login-user').click(function(evt) { login(evt, 'user', '654321'); });
 	$('.do-read-all').click(readAll);
 	$('.do-read-one').click(readOne);
 	$('.do-create').click(create);
@@ -20,6 +18,10 @@
 	$('.do-delete').click(deleteOne);
 
 	var oLastStatus = $('.last-action-status');
+
+	function getBaseUrl() {
+		return 'http://localhost:57973/api/v' + $('[name="api-version"]:checked').val();
+	} // getBaseUrl
 
 	function getAnonymousHeaders() {
 		return {
@@ -34,7 +36,7 @@
 	} // getNamedHeaders
 
 	function setAnonymousApi() {
-		sApiUrl = sBaseUrl + '/values';
+		sApiUrl = '/values';
 
 		$('.named-related').hide();
 
@@ -54,7 +56,7 @@
 	} // setAnonymousApi
 
 	function setNamedApi() {
-		sApiUrl = sBaseUrl + '/svals';
+		sApiUrl = '/svals';
 
 		$('.named-related').show();
 
@@ -70,7 +72,7 @@
 		console.log('Named API mode selected.');
 	} // setNamedApi
 
-	function login() {
+	function login(evt, sUserName, sPassword) {
 		var sFuncName = 'login';
 
 		console.log(sFuncName, 'started...');
@@ -78,8 +80,8 @@
 		var oContainer = $('#login-form');
 
 		var oInputData = {
-			UserName: $('.user-name', oContainer).val(),
-			Password: $('.password', oContainer).val(), 
+			UserName: sUserName || $('.user-name', oContainer).val(),
+			Password: sPassword || $('.password', oContainer).val(), 
 		};
 
 		if ((oInputData.UserName === '') || (oInputData.Password === '')) {
@@ -93,7 +95,7 @@
 		$('.logged-in-user-name').text('');
 		$('.session-token').val('');
 
-		$.ajax(sLoginUrl, {
+		$.ajax(getBaseUrl() + '/login', {
 			type: 'POST',
 
 			contentType: 'application/json',
@@ -135,7 +137,7 @@
 
 		var oResults = $('.results', oContainer).empty();
 
-		$.ajax(sApiUrl, {
+		$.ajax(getBaseUrl() + sApiUrl, {
 			type: 'GET',
 
 			contentType: 'application/json',
@@ -195,7 +197,7 @@
 
 		$('span', oResults).empty();
 
-		$.ajax(sApiUrl + '/' + sValueID, {
+		$.ajax(getBaseUrl() + sApiUrl + '/' + sValueID, {
 			type: 'GET',
 
 			contentType: 'application/json',
@@ -238,7 +240,7 @@
 
 		console.log(sFuncName + ':', 'sending', oInputData);
 
-		$.ajax(sApiUrl, {
+		$.ajax(getBaseUrl() + sApiUrl, {
 			type: 'POST',
 
 			contentType: 'application/json',
@@ -290,7 +292,7 @@
 
 		console.log(sFuncName + ':', 'sending', oInputData);
 
-		$.ajax(sApiUrl + '/' + sValueID, {
+		$.ajax(getBaseUrl() + sApiUrl + '/' + sValueID, {
 			type: 'PUT',
 
 			contentType: 'application/json',
@@ -336,7 +338,7 @@
 			return;
 		} // if
 
-		$.ajax(sApiUrl + '/' + sValueID, {
+		$.ajax(getBaseUrl() + sApiUrl + '/' + sValueID, {
 			type: 'DELETE',
 
 			contentType: 'application/json',

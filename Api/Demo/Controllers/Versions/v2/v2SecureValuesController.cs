@@ -1,31 +1,16 @@
 ﻿namespace Demo.Controllers.Versions.v1 {
-	using System;
 	using System.Collections.Generic;
-	using System.Net;
 	using System.Web.Http;
 	using Demo.Filters;
-	using Infrastructure;
 	using Models;
 	using Action = Infrastructure.Action;
 
 	/// <summary>
 	/// 
 	/// </summary>
-	[RoutePrefix("api/v1/svals")]
-	public class SecureValuesController : ApiController {
-		#region public
-
-		#region constructor
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public SecureValuesController() {
-			m_oValues = ValueStorage.Instance;
-		} // constructor
-
-		#endregion constructor
-
+	[HandleActionExecuted(2)]
+	[RoutePrefix("api/v2/svals")]
+	public class V2SecureValuesController : SecureValuesController {
 		#region load all values action
 
 		// GET api/values
@@ -39,18 +24,7 @@
 		[ValidateSessionToken]
 		[Route("")]
 		public IEnumerable<ValueModel> Get() {
-			try {
-				if (m_oValues.IsEmpty)
-					throw Return.Status(HttpStatusCode.NoContent, "There are no items in the list.");
-
-				return m_oValues.Values;
-			}
-			catch (HttpResponseException) {
-				throw;
-			}
-			catch (Exception e) {
-				throw Return.Error("Failed to retrieve item list: {0}", e.Message);
-			} // try
+			return base.Get();
 		} // Get
 
 		#endregion load all values action
@@ -69,18 +43,7 @@
 		[ValidateSessionToken]
 		[Route("{nID:int}")]
 		public ValueModel Get(int nID) {
-			try {
-				if (!m_oValues.Contains(nID))
-					throw Return.NotFound("No item found with the requested id ({0}).", nID);
-
-				return m_oValues[nID];
-			}
-			catch (HttpResponseException) {
-				throw;
-			}
-			catch (Exception e) {
-				throw Return.Error("Failed to retrieve item list: {0}", e.Message);
-			} // try
+			return base.Get(nID);
 		} // Get
 
 		#endregion load one value action
@@ -99,20 +62,7 @@
 		[ValidateActionPermission(Action.Create)]
 		[Route("")]
 		public ValueModel Post([FromBody]ValueModel oValue) {
-			try {
-				if (string.IsNullOrWhiteSpace(oValue.Title))
-					throw Return.Status(HttpStatusCode.NotAcceptable, "Value title cannot be an empty string.");
-
-				m_oValues += oValue;
-
-				return oValue;
-			}
-			catch (HttpResponseException) {
-				throw;
-			}
-			catch (Exception e) {
-				throw Return.Error("Failed to create a new item: {0}", e.Message);
-			} // try
+			return base.Post(oValue);
 		} // Post
 
 		#endregion create value action
@@ -131,20 +81,7 @@
 		[ValidateActionPermission(Action.Edit)]
 		[Route("{nID:int}")]
 		public void Put(int nID, [FromBody]ValueModel oValue) {
-			try {
-				oValue.ID = nID;
-
-				if (!m_oValues.Update(oValue))
-					throw Return.NotFound("No item found with the requested id ({0}).", nID);
-
-				throw Return.Success("Item with the requested id ({0}) has been updated.", nID);
-			}
-			catch (HttpResponseException) {
-				throw;
-			}
-			catch (Exception e) {
-				throw Return.Error("Failed to update item with the requested id ({0}): {1}", nID, e.Message);
-			} // try
+			base.Put(nID, oValue);
 		} // Put
 
 		#endregion update value action
@@ -162,24 +99,9 @@
 		[ValidateActionPermission(Action.Delete)]
 		[Route("{nID:int}")]
 		public void Delete(int nID) {
-			try {
-				if (!m_oValues.Remove(nID))
-					throw Return.NotFound("No item found with the requested id ({0}).", nID);
-
-				throw Return.Success("Item with the requested id ({0}) has been removed.", nID);
-			}
-			catch (HttpResponseException) {
-				throw;
-			}
-			catch (Exception e) {
-				throw Return.Error("Failed to remove item with the requested id ({0}): {1}", nID, e.Message);
-			} // try
+			base.Delete(nID);
 		} // Delete
 
 		#endregion delete value action
-
-		#endregion public
-
-		private ValueStorage m_oValues;
 	} // class SecureValueController
 } // namespace

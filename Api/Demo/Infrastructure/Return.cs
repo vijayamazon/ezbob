@@ -5,22 +5,22 @@
 	using Filters;
 
 	internal static class Return {
-		public static HttpResponseException Success(string sFormat = "", params object[] args) {
+		public static HttpResponseException Success(int nApiVersion, string sFormat = "", params object[] args) {
 			string sMsg = string.IsNullOrWhiteSpace(sFormat) ? "Success." : string.Format(sFormat, args);
-			return Status(HttpStatusCode.OK, sMsg);
+			return Status(nApiVersion, HttpStatusCode.OK, sMsg);
 		} // Success
 
-		public static HttpResponseException Error(string sFormat = "", params object[] args) {
+		public static HttpResponseException Error(int nApiVersion, string sFormat = "", params object[] args) {
 			string sMsg = string.IsNullOrWhiteSpace(sFormat) ? "Internal server error." : string.Format(sFormat, args);
-			return Status(HttpStatusCode.InternalServerError, sMsg);
+			return Status(nApiVersion, HttpStatusCode.InternalServerError, sMsg);
 		} // Error
 
-		public static HttpResponseException NotFound(string sFormat = "", params object[] args) {
+		public static HttpResponseException NotFound(int nApiVersion, string sFormat = "", params object[] args) {
 			string sMsg = string.IsNullOrWhiteSpace(sFormat) ? "Not found." : string.Format(sFormat, args);
-			return Status(HttpStatusCode.NotFound, sMsg);
+			return Status(nApiVersion, HttpStatusCode.NotFound, sMsg);
 		} // NotFound
 
-		public static HttpResponseException Status(HttpStatusCode nCode, string sFormat = "", params object[] args) {
+		public static HttpResponseException Status(int nApiVersion, HttpStatusCode nCode, string sFormat = "", params object[] args) {
 			string sMsg = string.IsNullOrWhiteSpace(sFormat) ? nCode.ToString() : string.Format(sFormat, args);
 
 			var oResponse = new HttpResponseMessage {
@@ -28,7 +28,7 @@
 				ReasonPhrase = sMsg,
 			};
 
-			HandleActionExecutedAttribute.FillResponse(oResponse);
+			HandleActionExecutedAttribute.FillResponse(nApiVersion, oResponse);
 
 			return new HttpResponseException(oResponse);
 		} // Error
