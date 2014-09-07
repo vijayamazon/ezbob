@@ -5,13 +5,28 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.WhiteLabel = Model.WhiteLabel == null ? null : Model.WhiteLabel.Name;
     var customer = Model.Customer;
     customer.IsProfile = true;
     var currVals = CurrentValues.Instance;
 }
 
-@section css {
+@section css{
     @BundleHelper.RenderProfileCss()
+
+	@if (Model.WhiteLabel != null) {
+		<style>
+			.whiteLabel {
+				background-image:url(data:@Model.WhiteLabel.LogoImageType;base64,@Model.WhiteLabel.Logo);
+				background-repeat: no-repeat;
+				background-size: contain;
+				width: @Html.Raw(Model.WhiteLabel.LogoWidthPx.ToString() + "px");
+				height: @Html.Raw(Model.WhiteLabel.LogoHeightPx.ToString() + "px");
+				vertical-align: middle;
+				display: inline-block;
+			}
+		</style>
+	}
 }
 
 <script id="profile-main-template" type="text/template">
@@ -393,34 +408,36 @@
 
 <div class="hide">
     <div id="thankyou_help" class="help_window">
-        <h2 class="form_section">Your application is complete!</h2>
-        @if (customer.IsOffline.HasValue && customer.IsOffline.Value)
-        {
-            <div class="offline">
-                <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
-                <p>
-                    In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
-					If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
-                </p>
-                <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-            </div>
-        }
-        else
-        {
-            <div class="notoffline">
-                <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
-                <p>
-                    In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
-					If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
-                </p>
-                <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-            </div>
-        }
-        <p>
-            Thank You,<br>
-            The <span class="bold">ezbob</span> Team
-        </p>
-
+	    <h2 class="form_section">Your application is complete!</h2>
+		@if (Model.WhiteLabel != null && Model.WhiteLabel.Id != 0) {
+			@Html.Raw(Model.WhiteLabel.FinishWizardText)
+		}
+		else {
+			if (customer.IsOffline.HasValue && customer.IsOffline.Value) {
+				 <div class="offline">
+					 <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
+					 <p>
+						 In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
+						 If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
+					 </p>
+					 <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+				 </div>
+			 }
+			 else {
+				 <div class="notoffline">
+					 <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
+					 <p>
+						 In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
+						 If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
+					 </p>
+					 <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+				 </div>
+			 }
+			<p>
+				Thank You,<br>
+				          The <span class="bold">ezbob</span> Team
+			</p>
+		}
         <div class="alignright" style="padding: 0 10px 0 0;">
             <button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:thank-you-popup">Continue</button>
         </div>

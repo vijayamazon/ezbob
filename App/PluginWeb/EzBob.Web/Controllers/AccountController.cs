@@ -777,6 +777,13 @@ namespace EzBob.Web.Controllers {
 			var g = new RefNumberGenerator(m_oCustomers);
 			var isAutomaticTest = IsAutomaticTest(email);
 			var vip = m_oVipRequestRepository.RequestedVip(email);
+			var whiteLabel = whiteLabelId != 0 ? _whiteLabelProviderRepository.GetAll().FirstOrDefault(x => x.Id == whiteLabelId) : null;
+			Broker broker = null;
+			if (whiteLabel != null) {
+				var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
+				broker = brokerRepo.GetAll().FirstOrDefault(x => x.WhiteLabel == whiteLabel);
+			}
+
 			var customer = new Customer {
 				Name = email,
 				Id = user.Id,
@@ -792,7 +799,8 @@ namespace EzBob.Web.Controllers {
 				TrustPilotStatus = m_oDatabaseHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
 				GreetingMailSentDate = DateTime.UtcNow,
 				Vip = vip,
-				WhiteLabel = whiteLabelId != 0 ? _whiteLabelProviderRepository.GetAll().FirstOrDefault(x => x.Id == whiteLabelId) : null
+				WhiteLabel = whiteLabel,
+				Broker = broker
 			};
 
 			ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);

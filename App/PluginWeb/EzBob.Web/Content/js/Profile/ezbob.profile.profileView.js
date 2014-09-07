@@ -58,10 +58,16 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
             window.location.href = "#GetCash";
         */
         if (this.customer.get('hasLoans'))
-            window.location.href = "#AccountActivity";
-        $('.header-info').show();
-        $('.header-info-text').text('MY ACCOUNT');
-        return this;
+        	window.location.href = "#AccountActivity";
+
+	    if (this.customer.get('IsWhiteLabel')) {
+	    	$('.header-info').show();
+		    $('.header-info-text').html('<div class="whiteLabel"></div>');
+	    } else {
+		    $('.header-info').show();
+		    $('.header-info-text').text('MY ACCOUNT');
+	    }
+	    return this;
     },
 
     loanDetails: function (id) {

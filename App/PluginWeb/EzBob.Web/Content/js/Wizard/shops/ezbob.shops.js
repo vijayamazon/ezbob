@@ -9,6 +9,8 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 	isProfile: function() { return this.fromCustomer('IsProfile'); },
 
+	isWhiteLabel: function() {return this.fromCustomer('IsWhiteLabel'); },
+	
 	fromCustomer: function(sPropName) {
 		var oCustomer = this.model.get('customer');
 
@@ -72,44 +74,54 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var lc;
 		var accountTypeName;
 
-		for (accountTypeName in oAllCgVendors) {
-			lc = accountTypeName.toLowerCase();
+		if (this.isWhiteLabel()) {
+			this['HMRC'] = new EzBob.HmrcAccountInfoView({
+				model: acc,
+				companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
+			});
+			
+			this.stores = {
+				Yodlee: { view: this.YodleeAccountInfoView },
+				CompanyFiles: { view: this.companyFilesAccountInfoView },
+				HMRC: { view: this['HMRC'] }
+			};
+			
+		} else {
+			this.stores = {
+				eBay: { view: this.EbayStoreView },
+				Amazon: { view: this.AmazonStoreInfoView },
+				paypal: { view: this.PayPalInfoView },
+				EKM: { view: this.EKMAccountInfoView },
+				PayPoint: { view: this.PayPointAccountInfoView },
+				Yodlee: { view: this.YodleeAccountInfoView },
+				FreeAgent: { view: this.FreeAgentAccountInfoView },
+				Sage: { view: this.sageAccountInfoView },
+				CompanyFiles: { view: this.companyFilesAccountInfoView },
+			};
 
-			var acc = new EzBob.CgAccounts([], { accountType: accountTypeName });
+			for (accountTypeName in oAllCgVendors) {
+				lc = accountTypeName.toLowerCase();
 
-			this[lc + 'Accounts'] = acc;
+				var acc = new EzBob.CgAccounts([], { accountType: accountTypeName });
 
-			if (lc === 'hmrc') {
-				this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView({
-					model: acc,
-					companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
-				});
-			}
-			else {
-				this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({
-					model: acc,
-					accountType: accountTypeName,
-				});
-			} // if
-		} // for each account type
+				this[lc + 'Accounts'] = acc;
 
-		this.stores = {
-			eBay:         { view: this.EbayStoreView },
-			Amazon:       { view: this.AmazonStoreInfoView },
-			paypal:       { view: this.PayPalInfoView },
-			EKM:          { view: this.EKMAccountInfoView },
-			PayPoint:     { view: this.PayPointAccountInfoView },
-			Yodlee:       { view: this.YodleeAccountInfoView },
-			FreeAgent:    { view: this.FreeAgentAccountInfoView },
-			Sage:         { view: this.sageAccountInfoView },
-			CompanyFiles: { view: this.companyFilesAccountInfoView },
-		};
+				if (lc === 'hmrc') {
+					this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView({
+						model: acc,
+						companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
+					});
+				} else {
+					this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({
+						model: acc,
+						accountType: accountTypeName,
+					});
+				} // if
 
-		for (accountTypeName in oAllCgVendors) {
-			lc = accountTypeName.toLowerCase();
-			this.stores[accountTypeName] = { view: this[lc + 'AccountInfoView'] };
-		} // for each account type
-
+				this.stores[accountTypeName] = { view: this[lc + 'AccountInfoView'] };
+			} // for each account type
+		}
+		
 		this.storeList = $(_.template($("#store-info").html(), { }));
 
 		EzBob.App.on('ct:storebase.shops.connect', this.connect, this);
@@ -382,9 +394,11 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			if (isProfile) {
 				this.storeList.find('.marketplace-button.show-more').hide();
 				this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
-			}
-			else
+			} else if (this.isWhiteLabel()) {
+				this.storeList.find('.marketplace-button.show-more').hide();
+			} else {
 				this.storeList.find('.btn-showmore').show();
+			}
 		}
 		else {
 			sShow = '.online_entry_message';
@@ -459,8 +473,8 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			} // if
 		} // for
 
-		var hasEbay = this.stores.eBay.button.shops.length > 0;
-		var hasPaypal = this.stores.paypal.button.shops.length > 0;
+		var hasEbay = this.stores.eBay && this.stores.eBay.button.shops.length > 0;
+		var hasPaypal = this.stores.paypal && this.stores.paypal.button.shops.length > 0;
 
 		this.$el.find('.eBayPaypalRule').toggleClass('hide', !(hasEbay && !hasPaypal));
 
