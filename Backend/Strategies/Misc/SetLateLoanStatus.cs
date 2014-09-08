@@ -86,43 +86,21 @@
 
 				if (!stopSendingEmails)
 				{
-					// TODO: Once Emma prepares the templates - Set template, variables and send mail for each case here
 					if (daysBetween < collectionPeriod1) // 7
 					{
-						//subject = "ezbob - you missed your payment";
-						templateName = "TBDTBDTBDTBDTBD";
+						templateName = "Mandrill - ezbob - you missed your payment";
 					}
 					else if (daysBetween < collectionPeriod2) // 14
 					{
-						if (appliedLateCharge)
-						{
-							templateName = "TBDTBDTBDTBDTBD"; // another template with another subject
-							// send the fee added mail
-							//subject = "ezbob - £20 late fee was added to your account";
-						}
-						else
-						{
-							// send other mail
-							//subject = "ezbob - Warning - £20 late fee was added to your account";
-							templateName = "TBDTBDTBDTBDTBD";
-						}
+						templateName = appliedLateCharge ? "Mandrill - ezbob - £20 late fee was added to your account" : "Mandrill - ezbob - Warning - you missed your payment for more than 7 days";
 					}
 					else if (daysBetween < collectionPeriod3) // 30
 					{
-						if (appliedLateCharge)
-						{
-							// 40
-							templateName = "TBDTBDTBDTBDTBD";
-						}
-						else
-						{
-							// missed your payment more than 14...
-							templateName = "TBDTBDTBDTBDTBD";
-						}
+						templateName = appliedLateCharge ? "Mandrill - Warning notice - ezbob - £40 late fee was added" : "Mandrill - Warning notice - ezbob - you missed your payment for more than 14 days";
 					}
 					else if (!sentLastNotice)
 					{
-						templateName = "TBDTBDTBDTBDTBD";
+						templateName = "Mandrill - ezbob - Last warning - Debt recovery agency";
 
 						DB.ExecuteNonQuery(
 							"UpdateLastNotice",
@@ -136,24 +114,16 @@
 
 					if (templateName != null)
 					{
-						// create variables and send mail
+						var variables = new Dictionary<string, string>
+							{
+								{"FirstName", firstName},
+								{"ScheduledAmount", amountDue.ToString(CultureInfo.InvariantCulture)},
+								{"RefNum", refNum},
+								{"FeeAmount", feeAmount.ToString(CultureInfo.InvariantCulture)},
+								{"AmountCharged", amountDue.ToString(CultureInfo.InvariantCulture)}
+							};
+						mailer.Send(templateName, variables, new Addressee(mail));
 					}
-
-
-					// this logic is not correct and the mail should be removed from here
-					//string templateName = feeAmount >= partialPaymentCharge
-					//	? "Mandrill - Late fee was added (7D late)"
-					//	: "Mandrill - Late fee was added (14D late)";
-
-					//var variables = new Dictionary<string, string> {
-					//			{"FirstName", firstName},
-					//			{"ScheduledAmount", amountDue.ToString(CultureInfo.InvariantCulture)},
-					//			{"RefNum", refNum},
-					//			{"FeeAmount", feeAmount.ToString(CultureInfo.InvariantCulture)},
-					//			{"DaysBetween", daysBetween.ToString(CultureInfo.InvariantCulture)}
-					//		};
-
-					//mailer.Send(templateName, variables, new Addressee(mail));
 				}
 
 				AccumulateFee(loanId, daysBetween, amountDue);
