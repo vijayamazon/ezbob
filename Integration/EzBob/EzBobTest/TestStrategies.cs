@@ -303,6 +303,12 @@ namespace EzBobTest
 			s.Execute();
 		}
 
+
+		[Test]
+		public void testFraud() {
+			var s = new FraudChecker(21340, FraudMode.FullCheck, m_oDB, m_oLog);
+			s.Execute();
+		}
 		[Test]
 		public void TestBrokerInstantOffer() {
 			var s = new BrokerInstantOffer(new BrokerInstantOfferRequest() {
