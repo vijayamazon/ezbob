@@ -825,14 +825,23 @@ EzBob.formatPoundsAsInt = function (val) {
 };
 
 EzBob.formatPoundsAsThousands = function (val) {
-    return EzBob.formatPoundsFormat(val / 1000, EzBob.moneyFormatAsThousands) + 'k';
+    if (val < 1000 && val >= 100) {
+        return EzBob.formatPoundsFormat(Math.round((val / 1000) * 10) / 10, EzBob.moneyFormat1) + 'k';
+    }
+    return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.moneyFormatAsThousands) + 'k';
 };
 
 EzBob.formatPoundsAsThousandsNoDecimals = function (val) {
+    if (val < 1000 && val >= 100) {
+        return EzBob.formatPoundsFormat(Math.round((val / 1000) * 10) / 10, EzBob.moneyFormat1) + 'k';
+    }
     return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.moneyFormatNoDecimals) + 'k';
 };
 
 EzBob.formatPoundsAsThousandsNoDecimalsNoSign = function (val) {
+    if (val < 1000 && val >= 100) {
+        return EzBob.formatPoundsFormat(Math.round((val / 1000) * 10) / 10, EzBob.moneyFormat1) + 'k';
+    }
     return EzBob.formatPoundsFormat(Math.round(val / 1000), EzBob.moneyFormatNoDecimalsNoSign) + 'k';
 };
 
