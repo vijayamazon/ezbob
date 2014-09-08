@@ -1,3 +1,4 @@
+
 IF OBJECT_ID('RptPendingReport') IS NULL
 	EXECUTE('CREATE PROCEDURE RptPendingReport AS SELECT 1')
 GO
@@ -52,7 +53,7 @@ BEGIN
 		A.PersonalScore,
 		A.CompanyScore,
 		A.NumOfDefaults,
-		IsBroker = CASE WHEN C.BrokerID IS NULL THEN 'BROKER' ELSE '' end,
+		IsBroker = CASE WHEN C.BrokerID IS NOT NULL THEN 'BROKER ' + b.ContactName ELSE '' end,
 		CR.Name AS CRMStatus,
 		CR.Comment,
 		CASE 
@@ -66,6 +67,7 @@ BEGIN
 			AND C.CreditResult = 'ApprovedPending' 
 			AND C.IsTest = 0
 		LEFT JOIN #CRMFinal CR ON CR.CustomerId = C.Id
+		LEFT JOIN Broker b ON b.BrokerID = C.BrokerID
 
 	------------------------------------------------------------------------------
 
