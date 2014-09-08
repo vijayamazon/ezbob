@@ -24,6 +24,7 @@
 		{
 			this.log = log;
 			this.db = db;
+			Results = new ScoreResult();
 		}
 
 		public ScoreResult CalculateMedalScore(ScoreResult inputData) {
@@ -42,7 +43,7 @@
 
 		public ScoreResult CalculateMedalScore(int customerId)
 		{
-			Results = new ScoreResult();
+			
 			var inputData = GatherData(customerId);
 			return CalculateMedalScore(inputData);
 		}
