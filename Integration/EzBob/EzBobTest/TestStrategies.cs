@@ -298,7 +298,8 @@ namespace EzBobTest
 
 		[Test]
 		public void TestGenerateCode() {
-			var s = new GenerateMobileCode("011111111", m_oDB, m_oLog);
+			//http://freesmsreceive.com/+441300452045.php
+			var s = new GenerateMobileCode("01300452045", m_oDB, m_oLog);
 			s.Execute();
 		}
 

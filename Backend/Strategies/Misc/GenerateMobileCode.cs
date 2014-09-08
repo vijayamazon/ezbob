@@ -108,12 +108,12 @@
 
 			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
 
-
+			var dateSent = DateTime.UtcNow;
 			EzbobSmsMessage message = EzbobSmsMessage.FromSmsMessage(twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, content, ""));
 
 			message.UserId = null;
 			message.UnderwriterId = 1; //system id
-
+			message.DateSent = dateSent;
 			DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure, DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
 			
 

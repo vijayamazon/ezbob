@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc
 {
+	using System;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -43,9 +44,11 @@
 
 			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
 			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
+			var dateSent = DateTime.UtcNow;
 			var message = EzbobSmsMessage.FromSmsMessage(twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, m_sContent, ""));
 			message.UserId = m_nUserId;
 			message.UnderwriterId = m_nUnderwriterId;
+			message.DateSent = dateSent;
 
 			DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure,
 							DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
