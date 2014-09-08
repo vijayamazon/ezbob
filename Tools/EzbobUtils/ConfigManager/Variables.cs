@@ -59,6 +59,7 @@ namespace ConfigManager {
 		BankBasedApprovalSilentToAddress,
 		BrokerCommissionEnabled,
 		BrokerForceCaptcha,
+		BrokerInstantOfferEnabled,
 		BrokerMaxPerNumber,
 		BrokerMaxPerPage,
 		BrokerSetupFeeRate,

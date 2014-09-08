@@ -1,4 +1,7 @@
-﻿<div class="customer-sidebar-content">
+﻿@model dynamic
+@{ ViewBag.Phone = ViewBag.Phone ?? "0800-011-4787"; }
+
+<div class="customer-sidebar-content">
     <div class="item-fully-secured">
         <a href="javascript:((function(x){if(x.hasClass('hide')){x.slideDown('slow').removeClass('hide');}else{x.slideUp('slow').addClass('hide');}})($('div.customer-sidebar-content div.item-security-seals')))">
             <div class="item">

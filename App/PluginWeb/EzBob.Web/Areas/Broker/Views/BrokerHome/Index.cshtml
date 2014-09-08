@@ -314,8 +314,10 @@
 										<li><a href="#section-dashboard-account-info">Account information</a></li>
 										<li class="divider-vertical"></li>
 										<li><a href="#section-dashboard-terms-and-conditions">Terms and conditions</a></li>
-										<li class="divider-vertical"></li>
-										<li><a href="#section-dashboard-instant-offer">Instant offer</a></li>
+										@if (CurrentValues.Instance.BrokerInstantOfferEnabled) {
+											<li class="divider-vertical"></li>
+											<li><a href="#section-dashboard-instant-offer">Instant offer</a></li>
+										}
 									</ul>
 								</div>
 							</div>
@@ -522,8 +524,9 @@
 
 								<div class="terms-and-conditions">Loading...</div>
 							</div>
-							
-							@{ Html.RenderPartial("InstantOffer"); }
+							@if (CurrentValues.Instance.BrokerInstantOfferEnabled) {
+								Html.RenderPartial("InstantOffer");
+							}
 						</div>
 						<!-- section-customer-list -->
 

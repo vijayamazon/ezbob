@@ -35,3 +35,4 @@ BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationAccountCode', '', 'a unique id, you choose, that represents the account in your system. Account codes can be UTF-8 up to 80 bytes.')
 	END
 END
+GO

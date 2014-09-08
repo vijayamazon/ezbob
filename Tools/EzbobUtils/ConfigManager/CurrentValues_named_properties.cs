@@ -419,6 +419,14 @@ namespace ConfigManager {
 
 		#endregion property BrokerForceCaptcha
 
+		#region property BrokerInstantOfferEnabled
+
+		public virtual VariableValue BrokerInstantOfferEnabled {
+			get { return this[Variables.BrokerInstantOfferEnabled]; } // get
+		} // BrokerInstantOfferEnabled
+
+		#endregion property BrokerInstantOfferEnabled
+
 		#region property BrokerMaxPerNumber
 
 		public virtual VariableValue BrokerMaxPerNumber {
