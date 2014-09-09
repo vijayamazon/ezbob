@@ -940,9 +940,10 @@
 
 			customer.ConsentToSearch = personalInfo.ConsentToSearch;
 
-			if (customer.PersonalInfo != null)
+			if (customer.PersonalInfo != null) {
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
-			
+				personalInfo.MobilePhoneVerified = customer.PersonalInfo.MobilePhoneVerified;
+			}
 			customer.PropertyStatus = propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == personalInfo.PropertyStatus);
 
 			customer.PersonalInfo = personalInfo;
