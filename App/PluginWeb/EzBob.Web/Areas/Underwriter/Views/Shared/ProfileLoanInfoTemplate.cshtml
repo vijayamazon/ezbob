@@ -7,12 +7,12 @@
     </tr>
 }
 
-@helper RowCell(string title, string value)
+@helper RowCell(string title, string value, string css = "")
 {
     <tr>
         <td>
             <span class="customer-details-title">@Html.Raw(title)</span>
-            <span class="pull-right">@Html.Raw(value)</span>
+            <span class="@Html.Raw(css) pull-right">@Html.Raw(value)</span>
         </td>
     </tr>
 }
@@ -234,7 +234,7 @@
                     </span>
                     <span class="pull-right">
 						<% if (data.BrokerName) { %>
-							<a class="go-to-broker" href="#" data-broker-id="<%- data.BrokerID %>"><%- data.BrokerName %></a>
+							<a class="go-to-broker ez-green" href="#" data-broker-id="<%- data.BrokerID %>"><%- data.BrokerName %></a>
 						<% } else { %>
 							<%- data.BrokerName %>
 						<% } %>
@@ -243,17 +243,17 @@
             </tr>
         </tbody>
         <tbody class="broker-details-rows with-broker" style="display: none;">
-			@RowCell("Firm name", "<%- data.BrokerFirmName %>")
+			@RowCell("Firm name", "<%- data.BrokerFirmName %>", "ez-green")
             <tr>
                 <td>
                     <span class="customer-details-title">Email</span>
-                    <span class="pull-right">
+                    <span class="pull-right ez-green">
                         <%- data.BrokerContactEmail.length <= 15 ? data.BrokerContactEmail : data.BrokerContactEmail.substring(0,12)+'...' %>
                         <i data-title="<%- data.BrokerContactEmail %>" class="tltp-left <%=getIcon()%>"/>
                     </span>
                 </td>
             </tr>
-			@RowCell("Mobile", "<%- data.BrokerContactMobile %>")
+			@RowCell("Mobile", "<%- data.BrokerContactMobile %>", "ez-green")
         </tbody>
         <tbody class="box-content">
             <tr>
