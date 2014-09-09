@@ -28,6 +28,7 @@
 			};
 
 			TemplateName = m_bIsFirst ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)";
+			TemplateName = (m_bIsFirst && CustomerData.IsCampaign) ? "Mandrill - Approval Campaign (1st time)" : TemplateName;
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables
