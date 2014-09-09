@@ -48,10 +48,9 @@
 				{"ValidFor", ((int)validHours).ToString(CultureInfo.InvariantCulture)}
 			};
 
-
-			TemplateName = numOfApprovals == 1
-				? "Mandrill - Approval (1st time)"
-				: "Mandrill - Approval (not 1st time)";
+			var m_bIsFirst = numOfApprovals <= 1;
+			TemplateName = m_bIsFirst ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)";
+			TemplateName = (m_bIsFirst && CustomerData.IsCampaign) ? "Mandrill - Approval Campaign (1st time)" : TemplateName;
 
 		} // SetTemplateAndVariables
 
