@@ -33,7 +33,7 @@
 
 		public override string ToString() {
 			return string.Format(
-				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9} {10}, broker: {11}, filled by broker: {12}",
+				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9} {10}{11}, broker: {12}, filled by broker: {13}",
 				Id,
 				FirstName,
 				Surname,
@@ -45,7 +45,7 @@
 				DaytimePhone,
 				IsTest ? "yes" : "no",
 				IsWhiteLabel ? ", white label" : "",
-				IsCampaign ? ", campaign" : ""
+				IsCampaign ? ", campaign" : "",
 				BrokerID > 0 ? BrokerID.ToString() : "none",
 				IsFilledByBroker ? "yes" : "no"
 			);

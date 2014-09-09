@@ -60,10 +60,9 @@ BEGIN
 		c.Id AS UserID,
 		CASE
 			WHEN c.WhiteLabelId IS NOT NULL THEN CAST(1 AS BIT)
-		CASE WHEN c.WhiteLabelId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsWhiteLabel,
-		@IsCampaign AS IsCampaign
 			ELSE CAST(0 AS BIT)
 		END AS IsWhiteLabel,
+		@IsCampaign AS IsCampaign,
 		ISNULL(c.BrokerID, 0) AS BrokerID,
 		c.FilledByBroker AS IsFilledByBroker
 	FROM
