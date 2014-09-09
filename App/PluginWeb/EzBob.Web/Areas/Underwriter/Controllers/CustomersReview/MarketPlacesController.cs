@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Web;
 	using System.Web.Mvc;
+	using Code;
 	using CompanyFiles;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
@@ -334,8 +335,25 @@
 					FileName = fileMetaData.FileName, 
 					Inline = true, 
 				};
+
 				Response.AppendHeader("Content-Disposition", cd.ToString());
-				return File(document, fileMetaData.FileContentType);
+
+
+				if (fileMetaData.FileContentType.Contains("image") || 
+					fileMetaData.FileContentType.Contains("pdf") || 
+					fileMetaData.FileContentType.Contains("html") ||
+				    fileMetaData.FileContentType.Contains("text")) {
+					return File(document, fileMetaData.FileContentType);
+				}
+
+				var pdfDocument = AgreementRenderer.ConvertToPdf(document);
+
+				if (pdfDocument != null) {
+					return File(pdfDocument, "application/pdf");
+				}
+				else {
+					return File(document, fileMetaData.FileContentType);
+				}
 			}
 			return null;
 		}

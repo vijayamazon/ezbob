@@ -42,5 +42,20 @@
                 return streamForDoc.ToArray();
             }            
         }
+
+		public static byte[] ConvertToPdf(byte[] file) {
+			try {
+				var stream = new MemoryStream(file);
+				var doc = new Document(stream, null, LoadFormat.Auto, null);
+
+				using (var streamForDoc = new MemoryStream()) {
+					doc.Save(streamForDoc, SaveFormat.Pdf);
+					return streamForDoc.ToArray();
+				}
+			}
+			catch (Exception ex) {
+				return null;
+			}
+		}
     }
 }
