@@ -273,7 +273,8 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
 		{
-			var s = _session.Query<MP_YodleeOrderItemBankTransaction>().Where(t => t.YodleeOrderItem.Order.CustomerMarketPlace.Id == mp.Id)
+			var s = _session.Query<MP_YodleeOrderItemBankTransaction>()
+				.Where(t => t.YodleeOrderItem.Order.CustomerMarketPlace == mp)
 				.Where(t => t.postDate.HasValue || t.transactionDate.HasValue)
 				.Select(oi => oi.postDate ?? oi.transactionDate);
 			return !s.Any() ? null : s.Min();
@@ -281,15 +282,12 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
 		{
-			var s = _session.Query<MP_YodleeOrderItemBankTransaction>().Where(t => t.YodleeOrderItem.Order.CustomerMarketPlace.Id == mp.Id)
-				.Where(t => t.postDate.HasValue || t.transactionDate.HasValue);
+			var s = _session.Query<MP_YodleeOrderItemBankTransaction>()
+				.Where(t => t.YodleeOrderItem.Order.CustomerMarketPlace == mp)
+				.Where(t => t.postDate.HasValue || t.transactionDate.HasValue)
+				.Select(oi => oi.postDate ?? oi.transactionDate);
 
-			if (s.Count() != 0)
-			{
-				return s.Max(oi => oi.postDate ?? oi.transactionDate);
-			}
-
-			return null;
+			return !s.Any() ? null : s.Max();
 		}
 	}
 }

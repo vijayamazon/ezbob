@@ -322,8 +322,12 @@
 				accountInfo.Quarters = quarters.ToArray();
 				accountInfo.MonthsDisplayed = monthsList.ToArray();
 
-				if (caisDetails.AccountBalances.Any()) {
-					accountInfo.BalanceHistory = caisDetails.AccountBalances.Where(x => x.AccountBalance.HasValue).Select(x => x.AccountBalance.Value.ToString(CultureInfo.InvariantCulture)).Aggregate((a, b) => a + "," + b);
+				if (caisDetails.AccountBalances.Any(x => x.AccountBalance.HasValue)) {
+					accountInfo.BalanceHistory = caisDetails.AccountBalances
+						.Where(x => x.AccountBalance.HasValue)
+						.Select(x => x.AccountBalance.Value.ToString(CultureInfo.InvariantCulture))
+						.Reverse()
+						.Aggregate((a, b) => a + "," + b);
 				}
 				accList.Add(accountInfo);
 			}
