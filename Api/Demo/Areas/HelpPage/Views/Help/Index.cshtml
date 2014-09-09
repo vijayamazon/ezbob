@@ -40,7 +40,7 @@
 					<a href="http://www.asp.net/web-api/overview/creating-web-apis/creating-api-help-pages" target="_blank">More details here.</a>
 				</dd>
 				
-				<dt>Routing</dt>
+				<dt>Routing - via mapping</dt>
 				<dd>
 					Observe the file <b>App_Start/WebApiConfig.cs</b>. It contains:
 					<pre>
@@ -52,6 +52,35 @@ config.Routes.MapHttpRoute(
 					</pre>
 					Controller actions that receive the optional <b>id</b> parameter <b>must</b> name this argument exactly as <b>id</b>.
 					Otherwise routing will fail.
+				</dd>
+				
+				<dt>Routing - via attributes</dt>
+				<dd>
+					Every controller class is marked with <b>Route</b> attribute that specifies a path.
+					Every action is also marked with <b>Route</b> attribute that specifies action arguments or an empty string.
+				</dd>
+				
+				<dt>Anonymous API - common requirements</dt>
+				<dd>
+					<ol>
+						<li>Every API user receives a unique app key.</li>
+						<li>DDOS protection: configuration on IIS level.</li>
+						<li>App key is sent on every request.</li>
+						<li>We store app key and remote address for reference.</li>
+						<li>Limit remote addresses to white list?</li>
+					</ol>
+				</dd>
+
+				<dt>Named API - common requirements</dt>
+				<dd>
+					<ol>
+						<li>Every API user receives a unique app key.</li>
+						<li>DDOS protection: configuration on IIS level.</li>
+						<li>App key, user name and password are sent on logon. A session token is returned.</li>
+						<li>The token must be sent with every request.</li>
+						<li>Token expires after some time - relogin to continue.</li>
+						<li>We validate remote address vs token and store them for references.</li>
+					</ol>
 				</dd>
 			</dl>
 		</div>
