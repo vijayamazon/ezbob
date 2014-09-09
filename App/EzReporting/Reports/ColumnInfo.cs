@@ -10,6 +10,7 @@ namespace Reports {
 		ID,
 		Other,
 		UserID,
+		BrokerID,
 	} // enum ValueType
 
 	#endregion enum ValueType
@@ -41,6 +42,11 @@ namespace Reports {
 			case '#':
 				FieldName = FieldName.Substring(1);
 				ValueType = ValueType.UserID;
+				break;
+			
+			case '^':
+				FieldName = FieldName.Substring(1);
+				ValueType = ValueType.BrokerID;
 				break;
 
 			case '!':
@@ -100,6 +106,7 @@ namespace Reports {
 
 			case ValueType.UserID:
 			case ValueType.ID:
+			case ValueType.BrokerID:
 				return "G" + nPrecision;
 
 			case ValueType.Percent:

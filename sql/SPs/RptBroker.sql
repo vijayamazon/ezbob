@@ -10,6 +10,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT 
+		B.BrokerID BrokerID,
 		B.ContactName Name,
 		B.FirmName Company,
 		B.ContactMobile Mobile,
@@ -27,7 +28,7 @@ BEGIN
 		@DateStart <= B.AgreedToTermsDate AND B.AgreedToTermsDate < @DateEnd
 		AND
 		B.IsTest = 0
-	GROUP BY B.ContactName, B.FirmName, B.ContactMobile, B.ContactOtherPhone, B.ContactEmail, B.AgreedToTermsDate, B.ReferredBy
+	GROUP BY B.BrokerID, B.ContactName, B.FirmName, B.ContactMobile, B.ContactOtherPhone, B.ContactEmail, B.AgreedToTermsDate, B.ReferredBy
 	ORDER BY
 		B.AgreedToTermsDate DESC
 END

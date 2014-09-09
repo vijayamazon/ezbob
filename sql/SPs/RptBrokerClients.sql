@@ -9,7 +9,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-SELECT x.Id, x.Status, x.FullName, x.Name, x.DaytimePhone, x.MobilePhone, x.GreetingMailSentDate, x.ContactName, x.ContactMobile, x.FirmName, 
+SELECT x.Id, x.Status, x.FullName, x.Name, x.DaytimePhone, x.MobilePhone, x.GreetingMailSentDate, x.BrokerID, x.ContactName, x.ContactMobile, x.FirmName, 
    CASE WHEN x.ManagerApprovedSum = 0 THEN NULL ELSE x.ManagerApprovedSum END ApprovedAmount, 
    CASE WHEN x.AmountTaken = 0 THEN NULL ELSE x.AmountTaken END TakenAmount FROM
 (
@@ -50,6 +50,7 @@ SELECT x.Id, x.Status, x.FullName, x.Name, x.DaytimePhone, x.MobilePhone, x.Gree
 		C.DaytimePhone,
 		C.MobilePhone,
 		C.GreetingMailSentDate,
+		B.BrokerID,
 		B.ContactName,
 		B.ContactMobile,
 		B.FirmName,

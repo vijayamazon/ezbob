@@ -104,14 +104,22 @@
 							if (IsNumber(oValue)) {
 								ATag oInnerTag = new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2)));
 
-								if (col.ValueType == ValueType.UserID) {
+								if (col.ValueType == ValueType.UserID || col.ValueType == ValueType.BrokerID) {
 									var oLink = new A();
 
 									oLink.Append(oInnerTag);
 									oLink.Target.Append("_blank");
-									oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers?customerid=" + oValue);
-									oLink.Alt.Append("Open this customer in underwriter.");
-									oLink.Title.Append("Open this customer in underwriter.");
+
+									var titleText = "Open this customer in underwriter.";
+									if (col.ValueType == ValueType.UserID) {
+										oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers?customerid=" + oValue);
+									} else {
+										oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers#broker/" + oValue);
+										titleText = "Open this broker in underwriter.";
+									}
+
+									oLink.Alt.Append(titleText);
+									oLink.Title.Append(titleText);
 
 									oInnerTag = oLink;
 
