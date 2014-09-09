@@ -13,6 +13,18 @@
 
 		public override string Name { get { return "Email Under Review"; } }
 
+		#region method LoadRecipientData
+
+		protected override void LoadRecipientData() {
+			base.LoadRecipientData();
+
+			if (CustomerData.IsWhiteLabel) {
+				SendToCustomer = false;
+			}
+		}
+
+		#endregion method LoadRecipientData
+
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {

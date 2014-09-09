@@ -22,6 +22,18 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region protected
 
+		#region method LoadRecipientData
+
+		protected override void LoadRecipientData() {
+			base.LoadRecipientData();
+
+			if (CustomerData.IsWhiteLabel) {
+				SendToCustomer = false;
+			}
+		}
+
+		#endregion method LoadRecipientData
+
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {

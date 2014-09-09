@@ -47,7 +47,7 @@ namespace EzBobTest
 		[Test]
 		public void Greeting()
 		{
-			var s = new Greeting(3060, "dfgdfsg", m_oDB, m_oLog);
+			var s = new Greeting(21401, "stasd+confirm@ezbob.com", m_oDB, m_oLog);
 			s.Execute();
 		}
 
