@@ -132,6 +132,18 @@
     </div>
 </script>
 
+<script id="marketplace-template" type="text/template">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mps-tables">
+                @MarketPlaces()
+            </div>
+            <div id="hmrc-upload-container" class="box"></div>
+			<div id="parse-yodlee-container"></div>
+        </div>
+    </div>
+</script>
+
 @helper MarketPlaces()
 {
     <div style="overflow: auto">
@@ -177,22 +189,23 @@
 
 					var sSourceLabels = 'source_labels_on';
 					var showAsNew = !m.IsNew ? 'hidden-field' : '';
+					var disabled = m.Disabled ? 'disabled': '';
 					%>
-					<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
-                        <td class="account-logo">
+					<tr data-id="<%- m.Id %>">
+                        <td class="account-logo <%- disabled%>">
                             <div class="source_labels new-ribbon <%-showAsNew%>"></div>
                             <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
                         </td>
-                        <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
-                        <td class="centered"><%- m.age %></td>
-                        <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.monthSales) %><br />
+                        <td class="<%- disabled%>"><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
+                        <td class="centered <%- disabled%>"><%- m.age %></td>
+                        <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals( m.monthSales) %><br />
                             <label class="small-text"><%- m.monthAnnualizedSales != 0 ? EzBob.formatPoundsNoDecimals(m.monthAnnualizedSales) : '' %> </label>
                         </td>
-                        <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
-                        <td class="centered"><%- m.RaitingPercent%> %</td>
-                        <td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
-                        <td><% if(m.Disabled) print ("Disabled") %></td>
-                        <td><%- m.UpdatingStatus %> <%- m.LastChecked%>
+                        <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
+                        <td class="centered <%- disabled%>"><%- m.RaitingPercent%> %</td>
+                        <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
+                        <td class="<%- disabled%>"><% if(m.Disabled) print ("Disabled") %></td>
+                        <td class="<%- disabled%>"><%- m.UpdatingStatus %> <%- m.LastChecked%>
 							<% if (m.UpdateError) { %>
 								<button class="btn btn-primary btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>
                             <br />
@@ -202,7 +215,7 @@
                             <div style="width: 100px;">
                                 <%if(m.IsHistory) { print(EzBob.formatDateWithoutTime(m.History)); } else {%>
 					            <% if (m.Disabled) { %>
-                                <a href="#" class="btn btn-mini btn-success show-tooltip enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
+                                <a href="#" class="btn btn-mini btn-primary show-tooltip enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
                                 <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
                                 <% }
 					            else { %>
@@ -267,28 +280,29 @@
 				}; // function ll
 
 				var sSourceLabels = 'source_labels_on';
-				var showAsNew = !m.IsNew ? 'hidden-field' : '';
+	            var showAsNew = !m.IsNew ? 'hidden-field' : '';
+	            var disabled = m.Disabled ? 'disabled': '';
 				%>
-				<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
-                    <td class="account-logo">
+				<tr data-id="<%- m.Id %>">
+                    <td class="account-logo <%- disabled%>">
                         <div class="source_labels new-ribbon  <%-showAsNew%>"></div>
                         <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
                     </td>
-                    <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
-                    <td class="centered"><%- m.age %></td>
-                    <td class="centered"><%- ll('TransactionsNumber') %></td>
-                    <td class="centered"><%- ll('MonthInPayments') %><br />
+                    <td class="<%- disabled%>"><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
+                    <td class="centered <%- disabled%>"><%- m.age %></td>
+                    <td class="centered <%- disabled%>"><%- ll('TransactionsNumber') %></td>
+                    <td class="centered <%- disabled%>"><%- ll('MonthInPayments') %><br />
                         <label class="small-text"><%- m.monthAnnualizedSales != 0 ? EzBob.formatPoundsNoDecimals(m.monthAnnualizedSales) : '' %></label></td>
-                    <td class="centered"><%- ll('TotalNetInPayments') %></td>
-                    <td class="centered"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll('TotalNetOutPayments') %></td>
-                    <td><%- m.UpdatingStatus %> <%- m.LastChecked%>
+                    <td class="centered <%- disabled%>"><%- ll('TotalNetInPayments') %></td>
+                    <td class="centered <%- disabled%>"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll('TotalNetOutPayments') %></td>
+                    <td class="<%- disabled%>"><%- m.UpdatingStatus %> <%- m.LastChecked%>
 						<% if(m.UpdateError){%>
 							<button class="btn btn-mini btn-primary mp-error-description" data-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>
                         <%}%>
                     </td>
                     <td><%if(m.IsHistory) { print(EzBob.formatDateWithoutTime(m.History)); } else {%>
 				            <% if (m.Disabled) { %>
-				            <a href="#" class="btn btn-mini btn-success enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
+				            <a href="#" class="btn btn-mini btn-primary enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
                         <% }
 				            else { 
 				            if (m.Name.toLowerCase() !== 'yodlee') { %>
@@ -310,17 +324,3 @@
     <div id="marketplaces-history"></div>
     <div id="marketplace-details"></div>
 }
-
-
-<script id="marketplace-template" type="text/template">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="mps-tables">
-                @MarketPlaces()
-            </div>
-            <div id="hmrc-upload-container" class="box"></div>
-			<div id="parse-yodlee-container"></div>
-        </div>
-    </div>
-</script>
-
