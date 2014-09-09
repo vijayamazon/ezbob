@@ -15,7 +15,7 @@
                 <tbody>
                     <%_.each(m.CompanyFiles.Files, function(file) {%>
                     <tr class="company-files-tr" data-file-id="<%-file.Id%>">
-                        <td><a href="<%-gRootPath+'Underwriter/MarketPlaces/DownloadCompanyFile?fileId=' + file.Id%>"><%=file.FileName%></a></td>
+                        <td><a href="@Url.Action("DownloadCompanyFile", "MarketPlaces", new { Area="Underwriter"})/?fileId=<%-file.Id%>" target="_blank"><%=file.FileName%></a></td>
                         <td><%=EzBob.formatDate2(file.Uploaded)%></td>
                     </tr>
                     <%});%>

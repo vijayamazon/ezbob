@@ -322,15 +322,20 @@
 			_yodleeSearchWordsRepository.DeleteWord(word);
 		}
 
-		public FileResult DownloadCompanyFile(int fileId)
+		public ActionResult DownloadCompanyFile(int fileId)
 		{
 			var file = m_oServiceClient.Instance.GetCompanyFile(_context.UserId, fileId);
 			var fileMetaData = _companyFiles.Get(fileId);
 			if (file != null && fileMetaData != null)
 			{
-				FileResult fs = new FileContentResult(file, fileMetaData.FileContentType);
-				fs.FileDownloadName = fileMetaData.FileName;
-				return fs;
+				var document = file;
+				var cd = new System.Net.Mime.ContentDisposition
+				{
+					FileName = fileMetaData.FileName, 
+					Inline = true, 
+				};
+				Response.AppendHeader("Content-Disposition", cd.ToString());
+				return File(document, fileMetaData.FileContentType);
 			}
 			return null;
 		}
