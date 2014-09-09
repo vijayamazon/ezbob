@@ -18,10 +18,9 @@
 		protected override void LoadRecipientData() {
 			base.LoadRecipientData();
 
-			if (CustomerData.IsWhiteLabel) {
+			if (CustomerData.IsFilledByBroker || CustomerData.IsWhiteLabel)
 				SendToCustomer = false;
-			}
-		}
+		} // LoadRecipientData
 
 		#endregion method LoadRecipientData
 

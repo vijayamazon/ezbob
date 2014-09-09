@@ -9,6 +9,17 @@
 
 		public override string Name { get { return "More AML Information"; } } // Name
 
+		#region method LoadRecipientData
+
+		protected override void LoadRecipientData() {
+			base.LoadRecipientData();
+
+			if (CustomerData.IsFilledByBroker)
+				SendToCustomer = false;
+		} // LoadRecipientData
+
+		#endregion method LoadRecipientData
+
 		#region method SetTemplateAndSubjectAndVariables
 
 		protected override void SetTemplateAndVariables() {

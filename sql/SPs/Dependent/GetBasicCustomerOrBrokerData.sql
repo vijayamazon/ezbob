@@ -27,7 +27,10 @@ BEGIN
 			b.IsTest,
 			'' AS Postcode,
 			'' AS City,
-			b.BrokerID AS UserID
+			b.BrokerID AS UserID,
+			CONVERT(BIT, 0) AS IsWhiteLabel,
+			CONVERT(BIT, 0) AS BrokerID,
+			CONVERT(BIT, 0) AS IsFilledByBroker
 		FROM
 			Broker b
 		WHERE

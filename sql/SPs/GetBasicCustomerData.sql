@@ -58,12 +58,20 @@ BEGIN
 		a.Postcode,
 		a.Town AS City,
 		c.Id AS UserID,
+		CASE
+			WHEN c.WhiteLabelId IS NOT NULL THEN CAST(1 AS BIT)
 		CASE WHEN c.WhiteLabelId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsWhiteLabel,
 		@IsCampaign AS IsCampaign
+			ELSE CAST(0 AS BIT)
+		END AS IsWhiteLabel,
+		ISNULL(c.BrokerID, 0) AS BrokerID,
+		c.FilledByBroker AS IsFilledByBroker
 	FROM
-		Customer c LEFT JOIN CustomerAddress a ON c.Id=a.CustomerId AND a.addressType=1
+		Customer c
+		LEFT JOIN CustomerAddress a
+			ON c.Id = a.CustomerId
+			AND a.addressType = 1
 	WHERE
 		c.Id = @CustomerId
 END
-
 GO

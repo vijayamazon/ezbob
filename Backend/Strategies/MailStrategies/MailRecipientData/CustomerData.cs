@@ -33,7 +33,7 @@
 
 		public override string ToString() {
 			return string.Format(
-				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9} {10}",
+				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9} {10}, broker: {11}, filled by broker: {12}",
 				Id,
 				FirstName,
 				Surname,
@@ -46,6 +46,8 @@
 				IsTest ? "yes" : "no",
 				IsWhiteLabel ? ", white label" : "",
 				IsCampaign ? ", campaign" : ""
+				BrokerID > 0 ? BrokerID.ToString() : "none",
+				IsFilledByBroker ? "yes" : "no"
 			);
 		} // ToString
 
@@ -67,8 +69,10 @@
 		public virtual string Postcode { get; protected set; }
 		public virtual string City { get; protected set; }
 		public virtual int UserID { get; protected set; }
-		public virtual bool IsWhiteLabel {get; protected set; }
+		public virtual bool IsWhiteLabel { get; protected set; }
 		public virtual bool IsCampaign { get; protected set; }
+		public virtual int BrokerID { get; protected set; }
+		public virtual bool IsFilledByBroker { get; protected set; }
 
 		#endregion properties
 
@@ -105,6 +109,8 @@
 			UserID = sr["UserID"];
 			IsWhiteLabel = sr["IsWhiteLabel"];
 			IsCampaign = sr["IsCampaign"];
+			BrokerID = sr["BrokerID"];
+			IsFilledByBroker = sr["IsFilledByBroker"];
 		} // Load
 
 		#endregion private
