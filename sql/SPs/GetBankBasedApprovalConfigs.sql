@@ -31,7 +31,7 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalMinNumberOfPayers') AS BankBasedMinNumberOfPayers,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalMinAnnualizedTurnover') AS BankBasedMinAnnualizedTurnover,
 		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalIsEnabled') AS BankBasedApprovalIsEnabled,
-		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNumOfMonthsToLookForDefaults') AS BankBasedApprovalNumOfMonthsToLookForDefaults,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNumOfMonthsToLookForDefaults') AS BankBasedApprovalNumOfMonthsToLookForDefaults,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNumOfMonthBackForVatCheck') AS BankBasedApprovalNumOfMonthBackForVatCheck,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'MinLoanAmount') AS MinLoanAmount
 END
