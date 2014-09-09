@@ -197,7 +197,12 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.$el.find('[data-toggle="tooltip"]').tooltip({
             'placement': 'bottom'
         });
-        
+
+        var that = this;
+        this.$el.find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            that.drawSparklineGraphs();
+        });
+
         EzBob.handleUserLayoutSetting();
     },
 
@@ -242,6 +247,20 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                 }
             });
         }
+	    
+        if (this.expCompany && this.expCompany.length > 0 && !this.expCompany[0].Error) {
+        	_.each(this.expCompany, function (c, j) {
+        		var compC = that.$el.find("#companyScoreCanvas" + j);
+        		that.halfDonut(compC, compC.data('color'), compC.data('percent'));
+        		if (c.IsLimited) {
+        			var profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').reverse().join(',');
+        			that.$el.find("#companyProfit" + j).attr('values', profit);
+        			var equity = _.pluck(c.FinDataHistories, 'TangibleEquity').reverse().join(',');
+        			that.$el.find("#companyEquity" + j).attr('values', equity);
+        		}
+        	});
+        }
+
         this.drawSparklineGraphs();
     },
     drawSparklineGraphs: function() {
@@ -259,6 +278,12 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                 ':': '#cfcfcf'
             }
         });
+	    
+        this.$el.find('.bar-sparkline').sparkline("html", {
+        	type: 'bar',
+        	barColor: '#cfcfcf',
+        	height: "50px"
+        });
     },
     drawGraphs: function() {
         var properties = this.propertiesModel.toJSON();
@@ -269,26 +294,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.halfDonut(cc, cc.data('color'), cc.data('percent'));
         var cii = this.$el.find("#consumerCIICanvas");
         this.halfDonut(cii, cii.data('color'), cii.data('percent'));
-        if (this.expCompany && this.expCompany.length > 0 && !this.expCompany[0].Error) {
-            _.each(this.expCompany, (function (_this) {
-                return function (c, i) {
-                    var compC, equity, profit;
-                    compC = _this.$el.find("#companyScoreCanvas" + i);
-                    _this.halfDonut(compC, compC.data('color'), compC.data('percent'));
-                    if (c.IsLimited) {
-                        profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').reverse().join(',');
-                        _this.$el.find("#companyProfit" + i).attr('values', profit);
-                        equity = _.pluck(c.FinDataHistories, 'TangibleEquity').reverse().join(',');
-                        return _this.$el.find("#companyEquity" + i).attr('values', equity);
-                    }
-                };
-            })(this));
-        }
-        this.$el.find('.bar-sparkline').sparkline("html", {
-            type: 'bar',
-            barColor: '#cfcfcf',
-            height: "50px"
-        });
+
         if (this.experianModel && this.experianModel.get('Directors')) {
             var directors = this.experianModel.get('Directors').length;
             var i = 0;
