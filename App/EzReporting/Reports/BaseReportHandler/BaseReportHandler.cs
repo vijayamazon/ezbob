@@ -740,7 +740,7 @@
 
 			DataTable tbl = rpt.Execute(DB);
 
-			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ByIssuedLoans, today, tomorrow, this);
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ByIssuedLoans, false, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			var oRows = new List<LoansIssuedRow>();
@@ -1049,7 +1049,7 @@
 		#region method CreateAccountingLoanBalanceReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow) {
-			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance, today, tomorrow, this);
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance, false, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			var rpt = new ReportQuery(report) {

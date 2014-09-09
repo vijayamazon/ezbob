@@ -18,7 +18,7 @@
 		#region method Run
 
 		public List<CciReportItem> Run() {
-			var ei = new EarnedInterest.EarnedInterest(m_oDB, EarnedInterest.EarnedInterest.WorkingMode.CciCustomers, DateTime.UtcNow, DateTime.UtcNow, this);
+			var ei = new EarnedInterest.EarnedInterest(m_oDB, EarnedInterest.EarnedInterest.WorkingMode.CciCustomers, false, DateTime.UtcNow, DateTime.UtcNow, this);
 
 			SortedDictionary<int, decimal> oEarnedInterestList = ei.Run();
 			

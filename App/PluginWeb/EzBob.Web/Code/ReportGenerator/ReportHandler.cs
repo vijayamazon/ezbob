@@ -29,6 +29,9 @@
 				case ReportType.RPT_EARNED_INTEREST:
 					return BuildEarnedInterestReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
+				case ReportType.RPT_EARNED_INTEREST_ALL_CUSTOMERS:
+					return BuildEarnedInterestAllCustomersReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
+
 				case ReportType.RPT_FINANCIAL_STATS:
 					return BuildFinancialStatsReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
@@ -80,6 +83,9 @@
 
 				case ReportType.RPT_EARNED_INTEREST:
 					return BuildEarnedInterestXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				case ReportType.RPT_EARNED_INTEREST_ALL_CUSTOMERS:
+					return BuildEarnedInterestAllCustomersXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 				case ReportType.RPT_FINANCIAL_STATS:
 					return BuildFinancialStatsXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);

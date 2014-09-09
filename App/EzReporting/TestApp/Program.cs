@@ -284,6 +284,7 @@ namespace TestApp {
 			var ea = new EarnedInterest(
 				oDB,
 				EarnedInterest.WorkingMode.AccountingLoanBalance,
+				false,
 				new DateTime(2014, 1, 15),
 				new DateTime(2014, 2, 15),
 				log
@@ -520,6 +521,7 @@ namespace TestApp {
 			var ea = new EarnedInterest(
 				oDB,
 				EarnedInterest.WorkingMode.ByIssuedLoans,
+				false,
 				new DateTime(2012, 9, 1),
 				new DateTime(2018, 3, 8),
 				log

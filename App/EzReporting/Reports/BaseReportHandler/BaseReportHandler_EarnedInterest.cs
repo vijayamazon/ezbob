@@ -15,7 +15,7 @@
 		#region method BuildEarnedInterestReport
 
 		public ATag BuildEarnedInterestReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
-			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, today, tomorrow);
+			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, false, today, tomorrow);
 
 			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
@@ -24,15 +24,37 @@
 
 		#endregion method BuildEarnedInterestReport
 
+		#region method BuildEarnedInterestAllCustomersReport
+
+		public ATag BuildEarnedInterestAllCustomersReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, true, today, tomorrow);
+
+			return new Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
+				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+		} // BuildEarnedInterestAllCustomersReport
+
+		#endregion method BuildEarnedInterestAllCustomersReport
+
 		#region method BuildEarnedInterestXls
 
 		public ExcelPackage BuildEarnedInterestXls(Report report, DateTime today, DateTime tomorrow) {
-			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, today, tomorrow);
+			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, false, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
 		} // BuildEarnedInterestXls
 
 		#endregion method BuildEarnedInterestXls
+
+		#region method BuildEarnedInterestAllCustomersXls
+
+		public ExcelPackage BuildEarnedInterestAllCustomersXls(Report report, DateTime today, DateTime tomorrow) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, true, today, tomorrow);
+
+			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
+		} // BuildEarnedInterestXls
+
+		#endregion method BuildEarnedInterestAllCustomersXls
 
 		#endregion public
 
@@ -167,8 +189,8 @@
 
 		#region method CreateEarnedInterestReport
 
-		private KeyValuePair<ReportQuery, DataTable> CreateEarnedInterestReport(Report report, DateTime today, DateTime tomorrow) {
-			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ForPeriod, today, tomorrow, this);
+		private KeyValuePair<ReportQuery, DataTable> CreateEarnedInterestReport(Report report, bool bIgnoreCustomerStatus, DateTime today, DateTime tomorrow) {
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ForPeriod, bIgnoreCustomerStatus, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			var rpt = new ReportQuery(report) {

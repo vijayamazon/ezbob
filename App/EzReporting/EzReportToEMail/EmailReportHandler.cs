@@ -86,6 +86,10 @@ namespace EzReportToEMail {
 							HandleGenericReport(report, dToday, sender, BuildEarnedInterestReport, BuildEarnedInterestXls);
 							break;
 
+						case ReportType.RPT_EARNED_INTEREST_ALL_CUSTOMERS:
+							HandleGenericReport(report, dToday, sender, BuildEarnedInterestAllCustomersReport, BuildEarnedInterestAllCustomersXls);
+							break;
+
 						case ReportType.RPT_FINANCIAL_STATS:
 							HandleGenericReport(report, dToday, sender, BuildFinancialStatsReport, BuildFinancialStatsXls);
 							break;

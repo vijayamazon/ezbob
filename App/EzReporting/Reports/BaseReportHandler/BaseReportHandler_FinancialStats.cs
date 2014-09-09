@@ -49,7 +49,7 @@
 
 			DataTable oOutput = rpt.Execute(DB);
 			
-			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ForPeriod, today, tomorrow, this);
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ForPeriod, false, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			oOutput.Rows.Add(0, "Earned interest", earned.Sum(pair => pair.Value));

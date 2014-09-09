@@ -48,7 +48,14 @@
 
 		#region constructor
 
-		public EarnedInterest(AConnection oDB, WorkingMode nMode, DateTime oDateOne, DateTime oDateTwo, ASafeLog oLog = null) : base(oLog) {
+		public EarnedInterest(
+			AConnection oDB,
+			WorkingMode nMode,
+			bool bIgnoreCustomerStatus,
+			DateTime oDateOne,
+			DateTime oDateTwo,
+			ASafeLog oLog = null
+		) : base(oLog) {
 			VerboseLogging = false;
 
 			m_oDB = oDB;
@@ -67,6 +74,8 @@
 			m_oBadPeriods = new SortedDictionary<int, BadPeriods>();
 
 			m_nMode = nMode;
+
+			m_bIgnoreCustomerStatus = bIgnoreCustomerStatus;
 		} // constructor
 
 		#endregion constructor
@@ -145,6 +154,11 @@
 		#region method FillCustomerStatuses
 
 		private void FillCustomerStatuses() {
+			if (m_bIgnoreCustomerStatus) {
+				Debug("Not loading customer statuses: ignore customer status flag is set.");
+				return;
+			} // if
+
 			m_oDB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					try {
@@ -319,6 +333,8 @@
 		private readonly AConnection m_oDB;
 
 		private readonly WorkingMode m_nMode;
+
+		private readonly bool m_bIgnoreCustomerStatus;
 
 		#endregion fields
 
