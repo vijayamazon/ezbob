@@ -44,7 +44,8 @@
 				MobilePhone,
 				DaytimePhone,
 				IsTest ? "yes" : "no",
-				IsWhiteLabel ? ", white label" : ""
+				IsWhiteLabel ? ", white label" : "",
+				IsCampaign ? ", campaign" : ""
 			);
 		} // ToString
 
@@ -67,6 +68,7 @@
 		public virtual string City { get; protected set; }
 		public virtual int UserID { get; protected set; }
 		public virtual bool IsWhiteLabel {get; protected set; }
+		public virtual bool IsCampaign { get; protected set; }
 
 		#endregion properties
 
@@ -102,6 +104,7 @@
 			City = sr["City"];
 			UserID = sr["UserID"];
 			IsWhiteLabel = sr["IsWhiteLabel"];
+			IsCampaign = sr["IsCampaign"];
 		} // Load
 
 		#endregion private

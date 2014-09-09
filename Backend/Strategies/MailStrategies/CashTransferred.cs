@@ -28,10 +28,8 @@
 				{"LOANREFNUM", loanRefNum}
 			};
 
-			TemplateName = isFirst
-				               ? "Mandrill - Took Loan (1st loan)"
-				               : "Mandrill - Took Loan (not 1st loan)";
-
+			TemplateName = isFirst ? "Mandrill - Took Loan (1st loan)" : "Mandrill - Took Loan (not 1st loan)";
+			TemplateName = (isFirst && CustomerData.IsCampaign) ? "Mandrill - Took Loan Campaign (1st loan)" : TemplateName;
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables

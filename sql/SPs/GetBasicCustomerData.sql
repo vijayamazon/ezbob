@@ -15,6 +15,34 @@ BEGIN
 	WHERE 
 		l.CustomerId = @CustomerId
 
+	DECLARE @IsCampaign BIT = 0
+
+	IF EXISTS (
+		SELECT 
+			cc.CustomerId 
+		FROM 
+			CampaignMail cm INNER JOIN Campaign c ON cm.Name = c.Name 
+		INNER JOIN 
+			CampaignClients cc ON cc.CampaignId = c.Id 
+		WHERE 
+			cm.IsCampaign = 1 
+			AND
+			cc.CustomerId=@CustomerId
+			
+		UNION
+		SELECT
+			c.Id AS CustomerId 
+		FROM
+			Customer c INNER JOIN CampaignMail cm ON cm.Name = c.ReferenceSource 
+		WHERE 
+			c.Id = @CustomerId 
+			AND
+			cm.IsCampaign = 0
+	) 
+	BEGIN
+		SET @IsCampaign = 1
+	END
+
 	SELECT
 		c.Id,
 		c.FirstName,
@@ -30,7 +58,8 @@ BEGIN
 		a.Postcode,
 		a.Town AS City,
 		c.Id AS UserID,
-		CASE WHEN c.WhiteLabelId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsWhiteLabel
+		CASE WHEN c.WhiteLabelId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsWhiteLabel,
+		@IsCampaign AS IsCampaign
 	FROM
 		Customer c LEFT JOIN CustomerAddress a ON c.Id=a.CustomerId AND a.addressType=1
 	WHERE
