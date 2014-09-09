@@ -737,6 +737,7 @@
 
 			Log.Info("Getting turnovers and seniority");
 
+			// TODO: Should be out of this method
 			MpsTotals totals = strategyHelper.GetMpsTotals(customerId);
 			totalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
 			totalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
