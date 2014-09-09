@@ -26,11 +26,12 @@
 				{"EMAIL", CustomerData.Mail},
 				{"LOANREFNUM", loanRefNum}
 			};
+	
+			var isFirst = CustomerData.NumOfLoans <= 1;
+			Log.Debug("CashTransferred Is FirstLoan: {0} num of loans: {1}", isFirst, CustomerData.NumOfLoans);
 
-			TemplateName = CustomerData.NumOfLoans == 1
-				               ? "Mandrill - Took Loan (1st loan)"
-				               : "Mandrill - Took Loan (not 1st loan)";
-
+			TemplateName = isFirst ? "Mandrill - Took Loan (1st loan)" : "Mandrill - Took Loan (not 1st loan)";
+			TemplateName = (isFirst && CustomerData.IsCampaign) ? "Mandrill - Took Loan Campaign (1st loan)" : TemplateName;
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables

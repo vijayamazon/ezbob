@@ -25,7 +25,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
-			TemplateName = CustomerData.IsOffline ? "Greeting - Offline" : "Greeting";
+			TemplateName = CustomerData.IsCampaign ? "Greeting - Campaign" : "Greeting";
 
 			Variables = new Dictionary<string, string> {
 				{"Email", CustomerData.Mail},

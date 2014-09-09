@@ -33,7 +33,7 @@
 
 		public override string ToString() {
 			return string.Format(
-				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9}",
+				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9} {10}",
 				Id,
 				FirstName,
 				Surname,
@@ -43,7 +43,8 @@
 				NumOfLoans,
 				MobilePhone,
 				DaytimePhone,
-				IsTest ? "yes" : "no"
+				IsTest ? "yes" : "no",
+				IsCampaign ? ", campaign" : ""
 			);
 		} // ToString
 
@@ -65,6 +66,7 @@
 		public virtual string Postcode { get; protected set; }
 		public virtual string City { get; protected set; }
 		public virtual int UserID { get; protected set; }
+		public virtual bool IsCampaign { get; protected set; }
 
 		#endregion properties
 
@@ -99,6 +101,7 @@
 			Postcode = sr["Postcode"];
 			City = sr["City"];
 			UserID = sr["UserID"];
+			IsCampaign = sr["IsCampaign"];
 		} // Load
 
 		#endregion private
