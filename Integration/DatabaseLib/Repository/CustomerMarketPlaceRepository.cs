@@ -142,6 +142,16 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
             return mpCustomerMarketPlace.PayPalTransactions.Max(o => o.Created);
         }
 
+		public DateTime? GetLastPayPalTransactionDate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			var mpCustomerMarketPlace = GetMarketPlace(databaseCustomerMarketPlace);
+			if (mpCustomerMarketPlace == null || mpCustomerMarketPlace.PayPalTransactions.Count == 0) {
+				return null;
+			}
+
+			var transactionsDates = mpCustomerMarketPlace.PayPalTransactions.SelectMany(x => x.TransactionItems).Select(x => x.Created).ToList();
+			return transactionsDates.Any() ? transactionsDates.Max() : (DateTime?)null;
+		}
+
         public MP_CustomerMarketPlace GetMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
         {
             //return GetAll().FirstOrDefault(cmp => cmp.Id == databaseCustomerMarketPlace.Id);

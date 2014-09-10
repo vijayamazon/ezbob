@@ -85,7 +85,7 @@ namespace EzBob.PayPal
 						elapsedTimeInfo,
 						databaseCustomerMarketPlace.Id,
 						ElapsedDataMemberType.RetrieveDataFromDatabase,
-						() => Helper.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace)
+						() => Helper.GetLastPayPalTransactionDate(databaseCustomerMarketPlace)
 					);
 
 					if (!startDate.HasValue)
@@ -107,26 +107,24 @@ namespace EzBob.PayPal
 						SendTimeoutInMinutes = CurrentValues.Instance.PayPalSendTimeoutInMinutes
 					};
 
-					var newTransactionsList = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+					MP_PayPalTransaction mpTransaction = null;
+					var trnList = new PayPalTransactionsList(DateTime.UtcNow);
+					trnList.RequestsCounter = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 						elapsedTimeInfo,
 						databaseCustomerMarketPlace.Id,
 						ElapsedDataMemberType.RetrieveDataFromExternalService,
-						() => PayPalServiceHelper.GetTransactionData(reqInfo)
+						() => PayPalServiceHelper.GetTransactionData(reqInfo, data => {
+							mpTransaction = Helper.SavePayPalTransactionInfo(databaseCustomerMarketPlace, data, historyRecord, mpTransaction);
+							return trnList.TryAddNewData(data);
+						})
 					);
 
-					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-						elapsedTimeInfo,
-						databaseCustomerMarketPlace.Id,
-						ElapsedDataMemberType.StoreDataToDatabase,
-						() => Helper.SavePayPalTransactionInfo(databaseCustomerMarketPlace, newTransactionsList, historyRecord)
-					);
-
-					if (newTransactionsList != null) {
+					if (trnList.Count > 0) {
 						var allTransactions = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 							elapsedTimeInfo,
 							databaseCustomerMarketPlace.Id,
 							ElapsedDataMemberType.RetrieveDataFromDatabase,
-							() => Helper.GetAllPayPalTransactions(newTransactionsList.SubmittedDate, databaseCustomerMarketPlace)
+							() => Helper.GetAllPayPalTransactions(trnList.SubmittedDate, databaseCustomerMarketPlace)
 						);
 
 						var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -149,8 +147,8 @@ namespace EzBob.PayPal
 
 					return new UpdateActionResultInfo {
 						Name = UpdateActionResultType.TransactionItemsCount,
-						Value = newTransactionsList == null ? null : (object)newTransactionsList.Count,
-						RequestsCounter = newTransactionsList == null ? null : newTransactionsList.RequestsCounter,
+						Value = trnList.Count,
+						RequestsCounter = trnList.RequestsCounter,
 						ElapsedTime = elapsedTimeInfo
 					};
 				}

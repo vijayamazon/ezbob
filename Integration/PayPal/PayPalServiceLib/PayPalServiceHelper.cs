@@ -1,5 +1,8 @@
 namespace EzBob.PayPalServiceLib
 {
+	using System;
+	using System.Collections.Generic;
+	using CommonLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
 	using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
 	using PayPalDbLib.Models;
@@ -19,9 +22,9 @@ namespace EzBob.PayPalServiceLib
 			return PayPalPermissionServiceHelper.GetAccountInfo( securityData );				
 		}
 
-		public static PayPalTransactionsList GetTransactionData(PayPalRequestInfo reqInfo)
+		public static RequestsCounterData GetTransactionData(PayPalRequestInfo reqInfo, Func<List<PayPalTransactionItem>, bool> action)
 		{			
-			return new PayPalServicePaymentsProHelper().GetTransactionData( reqInfo );
+			return new PayPalServicePaymentsProHelper().GetTransactionData( reqInfo, action);
 		}
 
         public static GetRequestPermissionsUrlResponse GetRequestPermissionsUrl(string callback)

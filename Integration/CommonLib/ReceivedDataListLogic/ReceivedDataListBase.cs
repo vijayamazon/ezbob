@@ -21,7 +21,7 @@ namespace EzBob.CommonLib.ReceivedDataListLogic
 
 		public RequestsCounterData RequestsCounter { get; set; }
 
-		public DateTime SubmittedDate { get; private set; }
+		public DateTime SubmittedDate { get; set; }
 
 		public void IncrementRequests( string method = null, string details = null )
 		{

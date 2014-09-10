@@ -13,6 +13,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Transactions
 {
 	public class PayPalTransactionsList : ReceivedDataListTimeMarketTimeDependentBase<PayPalTransactionItem>
 	{
+
 		public PayPalTransactionsList(DateTime submittedDate, IEnumerable<PayPalTransactionItem> collection = null) 
 			: base(submittedDate, collection)
 		{

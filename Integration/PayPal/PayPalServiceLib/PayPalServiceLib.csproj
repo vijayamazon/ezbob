@@ -139,49 +139,97 @@
     <None Include="Service References\com.paypal.service\EnhancedDataTypes.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.AddressVerifyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.AddressVerifyResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BAUpdateResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BillAgreementUpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BillOutstandingAmountResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BillOutstandingAmountResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BillUserResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BillUserResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMButtonSearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMButtonSearchResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMCreateButtonResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMCreateButtonResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMGetButtonDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMGetButtonDetailsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMGetInventoryResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMGetInventoryResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMManageButtonStatusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMManageButtonStatusResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMSetInventoryResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMSetInventoryResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMUpdateButtonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.BMUpdateButtonResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CancelRecoupResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CancelRecoupResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CompleteRecoupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CompleteRecoupResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CreateBillingAgreementResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CreateBillingAgreementResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CreateMobilePaymentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CreateMobilePaymentResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CreateRecurringPaymentsProfileResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CreateRecurringPaymentsProfileResponseType.datasource">
@@ -190,121 +238,247 @@
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.CustomSecurityHeaderType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoAuthorizationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoAuthorizationResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoCancelResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoCancelResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoCaptureResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoCaptureResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoDirectPaymentResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoDirectPaymentResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoExpressCheckoutPaymentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoExpressCheckoutPaymentResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoMobileCheckoutPaymentResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoMobileCheckoutPaymentResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoNonReferencedCreditResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoNonReferencedCreditResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoReauthorizationResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoReauthorizationResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoReferenceTransactionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoReferenceTransactionResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoUATPAuthorizationResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoUATPAuthorizationResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoUATPExpressCheckoutPaymentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoUATPExpressCheckoutPaymentResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoVoidResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.DoVoidResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.EnterBoardingResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.EnterBoardingResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ExecuteCheckoutOperationsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ExecuteCheckoutOperationsResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ExternalRememberMeOptOutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ExternalRememberMeOptOutResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetAccessPermissionDetailsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetAccessPermissionDetailsResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetAuthDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetAuthDetailsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetBalanceResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetBalanceResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetBillingAgreementCustomerDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetBillingAgreementCustomerDetailsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetBoardingDetailsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetBoardingDetailsResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetExpressCheckoutDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetExpressCheckoutDetailsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetIncentiveEvaluationResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetIncentiveEvaluationResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetMobileStatusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetMobileStatusResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetPalDetailsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetPalDetailsResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetRecurringPaymentsProfileDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetRecurringPaymentsProfileDetailsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetTransactionDetailsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.GetTransactionDetailsResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.InitiateRecoupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.InitiateRecoupResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ManagePendingTransactionStatusResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ManagePendingTransactionStatusResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ManageRecurringPaymentsProfileStatusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ManageRecurringPaymentsProfileStatusResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.MassPayResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.MassPayResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.RefundTransactionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.RefundTransactionResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ReverseTransactionResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.ReverseTransactionResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetAccessPermissionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetAccessPermissionsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetAuthFlowParamResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetAuthFlowParamResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetCustomerBillingAgreementResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetCustomerBillingAgreementResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetExpressCheckoutResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetExpressCheckoutResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetMobileCheckoutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.SetMobileCheckoutResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.TransactionSearchResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.TransactionSearchResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.UpdateAccessPermissionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.UpdateAccessPermissionsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.UpdateAuthorizationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.UpdateAuthorizationResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.UpdateRecurringPaymentsProfileResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\com.paypal.service\EzBob.PayPalServiceLib.com.paypal.service.UpdateRecurringPaymentsProfileResponseType.datasource">
@@ -327,7 +501,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

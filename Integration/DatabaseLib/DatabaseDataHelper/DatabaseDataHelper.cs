@@ -724,19 +724,22 @@ namespace EZBob.DatabaseLib {
 			_FunctionValuesWriterHelper.SetData(databaseCustomerMarketPlace, data, historyRecord);
 		}
 
-		public void SavePayPalTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalTransactionsList data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+		public MP_PayPalTransaction SavePayPalTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, List<PayPalTransactionItem> data, MP_CustomerMarketplaceUpdatingHistory historyRecord, MP_PayPalTransaction mpTransaction) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
-			LogData("Transaction Data", customerMarketPlace, data);
+			//LogData("Transaction Data", customerMarketPlace, data);
 
 			if (data == null) {
-				return;
+				return mpTransaction;
 			}
-			var mpTransaction = new MP_PayPalTransaction {
-				CustomerMarketPlace = customerMarketPlace,
-				Created = data.SubmittedDate.ToUniversalTime(),
-				HistoryRecord = historyRecord
-			};
+
+			if (mpTransaction == null) {
+				mpTransaction = new MP_PayPalTransaction {
+					CustomerMarketPlace = customerMarketPlace,
+					Created = DateTime.UtcNow,
+					HistoryRecord = historyRecord
+				};
+			}
 
 			if (data.Count != 0) {
 				foreach (var dataItem in data) {
@@ -765,12 +768,19 @@ namespace EZBob.DatabaseLib {
 
 			customerMarketPlace.PayPalTransactions.Add(mpTransaction);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+
+			return mpTransaction;
 		}
 
 		#region Last Request Dates
 		public DateTime? GetLastPayPalTransactionRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			return _CustomerMarketplaceRepository.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace);
 		}
+
+		public DateTime? GetLastPayPalTransactionDate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			return _CustomerMarketplaceRepository.GetLastPayPalTransactionDate(databaseCustomerMarketPlace);
+		}
+
 		#endregion
 
 		public void StoretoDatabaseTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TeraPeakDatabaseSellerData data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
