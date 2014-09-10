@@ -176,9 +176,9 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			if (!oResponse.good_to_go) {
 				var oDlg = that.$el.find('#refresh-accounts-dlg');
 
-				oDlg.find('.skip-refresh-accounts').click(function() {
-					event.preventDefault();
-					event.stopPropagation();
+				oDlg.find('.skip-refresh-accounts').click(function(e) {
+					e.preventDefault();
+					e.stopPropagation();
 
 					EzBob.UiAction.saveOne('click', this);
 
@@ -261,9 +261,9 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			.addClass('button btn-green')
 			.attr(
 				'ui-event-control-id', 'refresh-account:' + sUiEventControlID
-			).click(function() {
-				event.preventDefault();
-				event.stopPropagation();
+			).click(function(e) {
+				e.preventDefault();
+				e.stopPropagation();
 
 				EzBob.UiAction.saveOne('click', this);
 
