@@ -201,7 +201,15 @@
 							case "PShip3P":
 								{
 									companyTypeCode = "N";
-									var res = service.GetNotLimitedBusinessData(experianRefNum, customerId, true, false);
+									ExperianLib.Ebusiness.NonLimitedResults res = null;
+									try
+									{
+										res = service.GetNotLimitedBusinessData(experianRefNum, customerId, true, false);
+									}
+									catch (Exception e)
+									{
+										Log.Warn("Exception during retrieval of non limited data. For customer:{0} experianRefNum:{1} Error:{2}", customerId, experianRefNum, e);
+									}
 									if (res != null)
 									{
 										if (!string.IsNullOrEmpty(res.CompanyName))

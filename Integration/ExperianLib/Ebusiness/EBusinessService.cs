@@ -110,6 +110,12 @@
 
 		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
+			if (oRes == null)
+			{
+				ms_oLog.Warn("Failed fetching non limited data. Customer:{0} RefNumber:{1}", customerId, regNumber);
+				return null;
+			}
+
 			oRes.MaxBureauScore = oRes.BureauScore;
 			ms_oLog.Info("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", oRes.BureauScore, oRes.MaxBureauScore, customerId, regNumber);
 			return oRes;
