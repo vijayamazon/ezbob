@@ -38,9 +38,9 @@
     YourInfoMainView.prototype.setInputReadOnly = function(isReadOnly) {
       var isOwnerOfOtherProperties, otherPropertiesModels;
 
-      this.$el.find('.personEditInput').attr('readonly', isReadOnly).attr('modifed', !isReadOnly);
-      this.$el.find('#PersonalAddress .addAddressInput').attr('modifed', !isReadOnly);
-      this.$el.find('#OtherPropertiesAddresses .addAddressInput').attr('modifed', !isReadOnly);
+      this.$el.find('.personEditInput').attr('readonly', isReadOnly);
+      this.$el.find('#PersonalAddress .addAddressInput');
+      this.$el.find('#OtherPropertiesAddresses .addAddressInput');
       isOwnerOfOtherProperties = this.model.get('PropertyStatus').IsOwnerOfOtherProperties;
       otherPropertiesModels = this.model.get('OtherPropertiesAddresses');
       if (isReadOnly) {

@@ -19,10 +19,9 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
        form: 'form.editYourInfoForm'
 
     setInputReadOnly:(isReadOnly) ->
-        # TODO: why is it 'modifed' and not 'modified' & where is it even used
-        @.$el.find('.personEditInput').attr('readonly', isReadOnly).attr('modifed', !isReadOnly)
-        @.$el.find('#PersonalAddress .addAddressInput').attr('modifed', !isReadOnly)
-        @.$el.find('#OtherPropertiesAddresses .addAddressInput').attr('modifed', !isReadOnly)
+        @.$el.find('.personEditInput').attr('readonly', isReadOnly)
+        @.$el.find('#PersonalAddress .addAddressInput')
+        @.$el.find('#OtherPropertiesAddresses .addAddressInput')
 
         isOwnerOfOtherProperties = this.model.get('PropertyStatus').IsOwnerOfOtherProperties
         otherPropertiesModels = @model.get('OtherPropertiesAddresses')
