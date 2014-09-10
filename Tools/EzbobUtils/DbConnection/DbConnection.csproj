@@ -53,7 +53,9 @@
     <Compile Include="ConnectionWrapper.cs" />
     <Compile Include="DbCommandExt.cs" />
     <Compile Include="DbConnectionGenerator.cs" />
+    <Compile Include="Pool\DbConnectionPool.cs" />
     <Compile Include="IResultRow.cs" />
+    <Compile Include="Pool\PooledConnection.cs" />
     <Compile Include="SafeReader.cs" />
     <Compile Include="DbException.cs" />
     <Compile Include="enums.cs" />

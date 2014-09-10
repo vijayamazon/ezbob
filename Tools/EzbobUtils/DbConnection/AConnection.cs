@@ -10,6 +10,7 @@
 	using System.Globalization;
 
 	using Ezbob.Logger;
+	using Pool;
 	using Utils;
 
 	public abstract class AConnection : SafeLog {
@@ -18,7 +19,7 @@
 		#region method GetPersistent
 
 		public virtual ConnectionWrapper GetPersistent() {
-			return new ConnectionWrapper(CreateConnection(), true).Open();
+			return TakeFromPool(true).Open();
 		} // GetPersistent
 
 		#endregion method GetPersistent
@@ -435,12 +436,16 @@
 			m_sConnectionString = sConnectionString;
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
 			m_nCommandTimeout = 30;
+
+			ms_oPool.Log.SetInternal(log);
 		} // constructor
 
 		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) : base(log) {
 			Env = oEnv;
 			m_sConnectionString = null;
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
+
+			ms_oPool.Log.SetInternal(log);
 		} // Env
 
 		#endregion constructor
@@ -670,7 +675,12 @@
 			string sArgsForLog,
 			Guid guid
 		) {
-			using (var oConnection = oConnectionToUse ?? new ConnectionWrapper(CreateConnection(), nMode == ExecMode.Enumerable)) {
+			ConnectionWrapper oConnection = null;
+
+			bool bAllesInOrdnung = true;
+
+			try {
+				oConnection = oConnectionToUse ?? TakeFromPool(nMode == ExecMode.Enumerable);
 				command.Connection = oConnection.Connection;
 
 				if (oConnection.Transaction != null)
@@ -703,7 +713,19 @@
 				default:
 					throw new ArgumentOutOfRangeException("nMode");
 				} // switch
-			} // using connection
+			}
+			catch (Exception) {
+				bAllesInOrdnung = false;
+				throw;
+			}
+			finally {
+				if (oConnection != null) {
+					if (bAllesInOrdnung)
+						ms_oPool.Take(oConnection.Pooled);
+					else
+						ms_oPool.Drop(oConnection.Pooled);
+				} // if
+			} // try
 		} // RunOnce
 
 		#endregion method RunOnce
@@ -767,6 +789,8 @@
 
 		#region private
 
+		#region method AddColumn
+
 		private static void AddColumn(DataTable tbl, Type oType) {
 			bool bIsNullable = TypeUtils.IsNullable(oType);
 
@@ -775,6 +799,28 @@
 				bIsNullable ? Nullable.GetUnderlyingType(oType) : oType
 			);
 		} // AddColumn
+
+		#endregion method AddColumn
+
+		#region method TakeFromPool
+
+		private ConnectionWrapper TakeFromPool(bool bPersistent) {
+			PooledConnection pc = ms_oPool.Give();
+
+			if (pc == null)
+				throw new NullReferenceException("Cannot create a DB connection.");
+
+			if (pc.Connection == null)
+				pc.Connection = CreateConnection();
+
+			Debug("Connection {1} is taken from the pool for the {0} time.", pc.OutOfPoolCount, pc.PoolItemID);
+
+			return new ConnectionWrapper(pc, bPersistent);
+		} // TakeFromPool
+
+		#endregion method TakeFromPool
+
+		private static readonly DbConnectionPool ms_oPool = new DbConnectionPool(100);
 
 		#endregion private
 	} // AConnection

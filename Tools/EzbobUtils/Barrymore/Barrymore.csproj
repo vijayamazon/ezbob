@@ -67,6 +67,8 @@
     <Compile Include="JsonUtils\JsonExtensions.cs" />
     <Compile Include="MimeTypes\MimeType.cs" />
     <Compile Include="MimeTypes\MimeTypeResolver.cs" />
+    <Compile Include="ObjectPool\IPoolable.cs" />
+    <Compile Include="ObjectPool\ObjectPool.cs" />
     <Compile Include="ObjList.cs" />
     <Compile Include="ParsedValue\ParsedValue.cs" />
     <Compile Include="OrdinalNumber.cs" />

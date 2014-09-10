@@ -1,13 +1,14 @@
 ﻿namespace Ezbob.Database {
-	using System;
+	using System.Data;
 	using System.Data.Common;
+	using Pool;
 
-	public class ConnectionWrapper : IDisposable {
+	public class ConnectionWrapper {
 		#region constructor
 
-		public ConnectionWrapper(DbConnection oConnection, bool bIsPersistent) {
-			Connection = oConnection;
-			IsPersistent = bIsPersistent;
+		public ConnectionWrapper(PooledConnection oPooled, bool bIsPersistent) {
+			Connection = oPooled.Connection;
+			Pooled = oPooled;
 			IsOpen = false;
 			Transaction = null;
 		} // constructor
@@ -23,7 +24,8 @@
 			if (Connection == null)
 				return this;
 
-			Connection.Open();
+			if (Connection.State == ConnectionState.Closed)
+				Connection.Open();
 
 			IsOpen = true;
 
@@ -31,15 +33,6 @@
 		} // Open
 
 		#endregion method Open
-
-		#region method Dispose
-
-		public void Dispose() {
-			if (!IsPersistent)
-				Close();
-		} // Dispose
-
-		#endregion method Dispose
 
 		#region method Close
 
@@ -101,10 +94,10 @@
 
 		public DbConnection Connection { get; private set; }
 
-		public bool IsPersistent { get; private set; }
-
 		public bool IsOpen { get; private set; }
 
 		public DbTransaction Transaction { get; private set; }
+
+		public PooledConnection Pooled { get; private set; }
 	} // class ConnectionWrapper
 } // namespace

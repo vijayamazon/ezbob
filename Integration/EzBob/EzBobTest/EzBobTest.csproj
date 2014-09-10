@@ -90,6 +90,7 @@
     <Compile Include="ErrorRetryingFixture.cs" />
     <Compile Include="TimeBoundaryCalculationTests.cs" />
     <Compile Include="TestRetrieveDataHelper.cs" />
+    <Compile Include="TestObjectPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\App\HmrcHarvester\HmrcHarvester\HmrcHarvester.csproj">

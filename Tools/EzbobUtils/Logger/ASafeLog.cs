@@ -20,6 +20,19 @@
 	public abstract class ASafeLog : IDisposable {
 		#region public
 
+		#region method SetInternal
+
+		public virtual void SetInternal(ASafeLog oLog, bool bOverwriteExisting = false) {
+			lock (ms_oLock) {
+				if (m_oLog == null)
+					m_oLog = oLog;
+				else if (bOverwriteExisting)
+					m_oLog = oLog;
+			} // if
+		} // SetInternal
+
+		#endregion method SetInternal
+
 		#region method NotifyStartStop
 
 		public virtual void NotifyStart(Severity nSeverity = Severity.Info) {
@@ -223,6 +236,7 @@
 		#region private
 
 		private ASafeLog m_oLog { get; set; }
+		private static readonly object ms_oLock = new object();
 
 		#endregion private
 	} // class ASafeLog
