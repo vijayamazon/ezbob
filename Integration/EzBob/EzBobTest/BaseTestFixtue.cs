@@ -7,6 +7,7 @@
 	using EzBob.PayPal;
 	using EzBob.eBayLib;
 	using Ezbob.Database;
+	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using Ezbob.RegistryScanner;
 	using FreeAgent;
@@ -53,6 +54,8 @@
 			m_oDB = new SqlConnection(oLog4NetCfg.Environment, m_oLog);
 
 			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
+			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 		} // Init
 
 		protected AConnection m_oDB;

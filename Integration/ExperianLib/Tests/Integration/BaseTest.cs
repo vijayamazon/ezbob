@@ -3,6 +3,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Database;
+	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using log4net;
 	using NHibernate;
@@ -33,6 +34,8 @@
 
 
 			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
+			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 		} // Start
 
 		protected AConnection m_oDB;

@@ -5,6 +5,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Database;
+	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using Ezbob.RegistryScanner;
 	using NHibernate;
@@ -32,6 +33,8 @@
 			});
 
 			CurrentValues.Init(DbConnectionGenerator.Get(Log), Log);
+			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 		}
 
 		[Test]

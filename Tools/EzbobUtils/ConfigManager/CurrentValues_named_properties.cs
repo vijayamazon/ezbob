@@ -567,6 +567,22 @@ namespace ConfigManager {
 
 		#endregion property CompanyScoreParserConfiguration
 
+		#region property ConnectionPoolMaxSize
+
+		public virtual VariableValue ConnectionPoolMaxSize {
+			get { return this[Variables.ConnectionPoolMaxSize]; } // get
+		} // ConnectionPoolMaxSize
+
+		#endregion property ConnectionPoolMaxSize
+
+		#region property ConnectionPoolReuseCount
+
+		public virtual VariableValue ConnectionPoolReuseCount {
+			get { return this[Variables.ConnectionPoolReuseCount]; } // get
+		} // ConnectionPoolReuseCount
+
+		#endregion property CompanyScoreParserConfiguration
+
 		#region property CustomerSite
 
 		public virtual VariableValue CustomerSite {

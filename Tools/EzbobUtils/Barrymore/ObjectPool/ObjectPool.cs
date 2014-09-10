@@ -9,6 +9,7 @@
 		#region constructor
 
 		public ObjectPool(int nMaxSize, ASafeLog oLog = null) {
+			m_nIDGenerator = 0;
 			Log = new SafeLog(oLog);
 			m_sName = string.Format("ObjectPool<{0}>", typeof (T));
 
@@ -22,7 +23,7 @@
 			m_oPool = new Queue<T>();
 			m_oLock = new object();
 
-			MaxSize = nMaxSize;
+			m_nMaxSize = nMaxSize;
 			m_nCurrentlyOut = 0;
 
 			Log.Debug("New {0} has been created with max size of {1}.", this, MaxSize);
@@ -44,7 +45,19 @@
 
 		#region property MaxSize
 
-		public int MaxSize { get; private set; }
+		public int MaxSize {
+			get {
+				lock (m_oLock)
+					return m_nMaxSize;
+			} // get
+			set {
+				lock (m_oLock) {
+					m_nMaxSize = Math.Max(value, 1);
+				} // lock
+			} // set
+		} // MaxSize
+
+		private int m_nMaxSize;
 
 		#endregion property MaxSize
 
@@ -76,7 +89,7 @@
 
 		public virtual T Give() {
 			lock (m_oLock) {
-				if (m_nCurrentlyOut >= MaxSize) {
+				if (m_nCurrentlyOut >= m_nMaxSize) {
 					Log.Debug("The pool {0} cannot give any object as everything is currently out.", this.StringifyStatus());
 					return null;
 				} // if
@@ -90,7 +103,7 @@
 				}
 				else {
 					obj = new T {
-						PoolItemID = ++ms_IDGenerator
+						PoolItemID = ++m_nIDGenerator,
 					};
 
 					sMsg = "new";
@@ -114,7 +127,7 @@
 			} // if
 
 			lock (m_oLock) {
-				if (m_oPool.Count >= MaxSize) {
+				if (m_oPool.Count >= m_nMaxSize) {
 					Log.Debug("The pool {0} is full, object {1} has not been taken.", this.StringifyStatus(), obj.PoolItemID);
 					return false;
 				} // if
@@ -178,8 +191,7 @@
 		private readonly Queue<T> m_oPool;
 		private readonly object m_oLock;
 		private readonly string m_sName;
-
-		private static ulong ms_IDGenerator = 0;
+		private ulong m_nIDGenerator;
 
 		#region method StringifyStatus
 
@@ -190,7 +202,7 @@
 				m_nCurrentlyOut,
 				m_oPool.Count,
 				m_oPool.Count + m_nCurrentlyOut,
-				MaxSize
+				m_nMaxSize
 			);
 		} // StringifyStatus
 

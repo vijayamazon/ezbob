@@ -16,6 +16,10 @@
 
 		#endregion static constructor
 
+		public delegate void ReloadOnTimer();
+
+		public static event ReloadOnTimer OnReloadByTimer;
+
 		#region public
 
 		#region singleton
@@ -60,17 +64,33 @@
 		#region method GetUploadLimitations
 
 		public virtual UploadLimitations GetUploadLimitations() {
+			bool bReloaded;
+			UploadLimitations oResult;
+
 			lock (ms_oInstanceLock) {
-				ReloadIfNeeded();
-				return m_oUploadLimitations;
+				bReloaded = ReloadIfNeeded();
+				oResult = m_oUploadLimitations;
 			} // lock
+
+			if (bReloaded && (OnReloadByTimer != null))
+				OnReloadByTimer();
+
+			return oResult;
 		} // GetUploadLimitations
 
 		public virtual OneUploadLimitation GetUploadLimitations(string sControllerName, string sActionName) {
+			bool bReloaded;
+			OneUploadLimitation oResult;
+
 			lock (ms_oInstanceLock) {
-				ReloadIfNeeded();
-				return m_oUploadLimitations[sControllerName, sActionName];
+				bReloaded = ReloadIfNeeded();
+				oResult = m_oUploadLimitations[sControllerName, sActionName];
 			} // lock
+
+			if (bReloaded && (OnReloadByTimer != null))
+				OnReloadByTimer();
+
+			return oResult;
 		} // GetUploadLimitations
 
 		#endregion method GetUploadLimitations
@@ -78,10 +98,18 @@
 		#region method GetByID
 
 		public virtual VariableValue GetByID(int nID) {
+			bool bReloaded;
+			VariableValue oResult;
+
 			lock (ms_oInstanceLock) {
-				ReloadIfNeeded();
-				return m_oByID.ContainsKey(nID) ? m_oByID[nID] : null;
+				bReloaded = ReloadIfNeeded();
+				oResult = m_oByID.ContainsKey(nID) ? m_oByID[nID] : null;
 			} // lock
+
+			if (bReloaded && (OnReloadByTimer != null))
+				OnReloadByTimer();
+
+			return oResult;
 		} // GetByID
 
 		#endregion method GetByID
@@ -90,10 +118,18 @@
 
 		public virtual VariableValue this[Variables nIdx] {
 			get {
+				bool bReloaded;
+				VariableValue oResult;
+
 				lock (ms_oInstanceLock) {
-					ReloadIfNeeded();
-					return UnsafeGet(nIdx);
+					bReloaded = ReloadIfNeeded();
+					oResult = UnsafeGet(nIdx);
 				} // lock
+
+				if (bReloaded && (OnReloadByTimer != null))
+					OnReloadByTimer();
+
+				return oResult;
 			} // get
 		} // indexer
 
@@ -248,34 +284,47 @@
 		#region method UpdateOne
 
 		public virtual VariableValue UpdateOne(Variables nName, string sValue) {
+			bool bReloaded;
+			VariableValue oResult = null;
+
 			lock (ms_oInstanceLock) {
-				ReloadIfNeeded();
+				bReloaded = ReloadIfNeeded();
 
 				VariableValue v = m_oData.ContainsKey(nName) ? m_oData[nName] : null;
 
 				if (v != null) {
 					v.Update(sValue);
-					return v.ID > 0 ? v : null;
+					oResult = v.ID > 0 ? v : null;
 				} // if
-
-				return null;
 			} // lock
+
+			if (bReloaded && (OnReloadByTimer != null))
+				OnReloadByTimer();
+
+			return oResult;
 		} // UpdateOne
 
 		#endregion method UpdateOne
 
 		#region method ReloadIfNeeded
 
-		private void ReloadIfNeeded() {
+		private bool ReloadIfNeeded() {
 			if (m_nRefreshIntervalMinutes <= 0)
-				return;
+				return false;
 
 			double nAge = (DateTime.UtcNow - m_oLastReloadTime).TotalMinutes;
 
-			if (nAge > int.MaxValue)
+			if (nAge > int.MaxValue) {
 				ReLoad();
-			else if (nAge > m_nRefreshIntervalMinutes)
+				return true;
+			}
+
+			if (nAge > m_nRefreshIntervalMinutes) {
 				ReLoad();
+				return true;
+			} // if
+
+			return false;
 		} // ReloadIfNeeded
 
 		#endregion method ReloadIfNeeded

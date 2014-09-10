@@ -17,6 +17,7 @@
 	using Areas.Underwriter.Models.Reports;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Database;
+	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Filters;
@@ -83,6 +84,8 @@
 					Log.NotifyStart();
 
 					CurrentValues.Init(DbConnectionGenerator.Get(Log), Log, oLimitations => oLimitations.UpdateWebSiteCfg("Ezbob.Web"));
+					DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+					AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 
 					Ezbob.RegistryScanner.Scanner.Register();
 

@@ -18,6 +18,7 @@
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using Ezbob.Database;
+	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
@@ -210,8 +211,15 @@
 				InstanceID = m_oCfg.InstanceID
 			});
 
+			CurrentValues.ReloadOnTimer oOnTimer = () => {
+				DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+				AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
+			};
+
 			CurrentValues.Init(m_oDB, m_oLog);
 			CurrentValues.Instance.RefreshIntervalMinutes = CurrentValues.Instance.EzServiceUpdateConfiguration;
+			oOnTimer();
+			CurrentValues.OnReloadByTimer += oOnTimer;
 
 			return true;
 		} // Init

@@ -16,6 +16,14 @@
 	public abstract class AConnection : SafeLog {
 		#region public
 
+		#region method UpdateConnectionPoolMaxSize
+
+		public static void UpdateConnectionPoolMaxSize(int nMaxSize) {
+			ms_oPool.MaxSize = nMaxSize;
+		} // UpdateConnectionPoolMaxSize
+
+		#endregion method UpdateConnectionPoolMaxSize
+
 		#region method GetPersistent
 
 		public virtual ConnectionWrapper GetPersistent() {
@@ -820,7 +828,7 @@
 
 		#endregion method TakeFromPool
 
-		private static readonly DbConnectionPool ms_oPool = new DbConnectionPool(100);
+		private static readonly DbConnectionPool ms_oPool = new DbConnectionPool();
 
 		#endregion private
 	} // AConnection

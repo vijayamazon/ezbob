@@ -14,6 +14,7 @@ namespace EzBobTest
 	using EzBob.eBayLib.Config;
 	using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant;
 	using Ezbob.Database;
+	using Ezbob.Database.Pool;
 	using Ezbob.RegistryScanner;
 	using Ezbob.Utils.Serialization;
 	using FreeAgent;
@@ -81,6 +82,8 @@ namespace EzBobTest
 			m_oDB = new SqlConnection(oLog4NetCfg.Environment, m_oLog);
 
 			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
+			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
         }
 
 		[Test]

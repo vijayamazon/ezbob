@@ -77,6 +77,8 @@ namespace ConfigManager {
 		CompanyFilesSavePath,
 		CompanyScoreNonLimitedParserConfiguration,
 		CompanyScoreParserConfiguration,
+		ConnectionPoolMaxSize,
+		ConnectionPoolReuseCount,
 		CustomerSite,
 		CustomerStateRefreshInterval,
 		CustomerAnalyticsDefaultHistoryYears,

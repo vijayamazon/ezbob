@@ -1,5 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
+	using ConfigManager;
 	using Ezbob.Database;
+	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 
 	public class UpdateConfigurationVariables : AStrategy {
@@ -24,6 +26,8 @@
 			} // lock
 
 			ConfigManager.CurrentValues.ReInit();
+			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 
 			lock (updateConfigurationVariablesLock)
 			{

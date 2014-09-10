@@ -10,6 +10,7 @@
 	using EzServiceConfigurationLoader;
 	using System;
 	using Ezbob.Backend.Models;
+	using Ezbob.Database.Pool;
 	using ServiceClientProxy.EzServiceReference;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -42,6 +43,8 @@
 			m_oDB = new SqlConnection(env, m_oLog);
 
 			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
+			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 
 			Configuration cfg;
 
