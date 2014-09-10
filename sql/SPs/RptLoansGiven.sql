@@ -12,12 +12,13 @@ ALTER PROCEDURE [dbo].[RptLoansGiven]
 AS
 BEGIN
 	SELECT
-		l.Id AS LoanID,
 		l.Date,
 		c.Id AS ClientID,
+		l.Id AS LoanID,
 		c.Name AS ClientEmail,
 		c.Fullname AS ClientName,
 		lt.Name AS LoanTypeName,
+		CASE WHEN ls.LoanSourceName = 'EU' THEN 'EU' ELSE '' END AS EU,
 		ISNULL(out.Fees, 0) AS SetupFee,
 		ISNULL(out.Amount, 0) AS LoanAmount,
 		s.Period,
@@ -43,6 +44,7 @@ BEGIN
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 		LEFT JOIN CustomerStatuses cs ON cs.Id = c.CollectionStatus
 		INNER JOIN LoanType lt ON l.LoanTypeId = lt.Id
+		INNER JOIN LoanSource ls ON ls.LoanSourceID = l.LoanSourceID
 		INNER JOIN (
 			SELECT
 				s.LoanId,

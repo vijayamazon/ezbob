@@ -7,14 +7,16 @@ ALTER PROCEDURE RptCustomerStatus
 @DateEnd DATETIME
 AS
 BEGIN
-	SELECT C.Id CustomerId,C.Fullname,S.Name Status,L.Principal 
-	FROM Customer C,CustomerStatuses S,Loan L 
+	SELECT C.Id CustomerId,C.Fullname,CS.Name Status,L.Principal, 
+		CASE WHEN LS.LoanSourceName = 'EU' THEN 'EU' ELSE '' END AS EU
+	FROM Customer C,CustomerStatuses CS,Loan L, LoanSource LS
 	WHERE L.CustomerId = C.Id 
-	AND S.Id = C.CollectionStatus 
+	AND CS.Id = C.CollectionStatus 
 	AND C.IsTest = 0 
 	AND CollectionStatus != 0  
 	AND L.Principal > 0 
-	ORDER BY S.Name,L.Principal DESC
+	AND L.LoanSourceID = LS.LoanSourceID
+	ORDER BY CS.Name,L.Principal DESC
 END 
 
 GO

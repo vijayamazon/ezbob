@@ -639,6 +639,7 @@
 			private const string FldClientEmail = "ClientEmail";
 			private const string FldClientName = "ClientName";
 			private const string FldLoanTypeName = "LoanTypeName";
+			private const string FldEU = "EU";
 			private const string FldSetupFee = "SetupFee";
 			private const string FldLoanAmount = "LoanAmount";
 			private const string FldPeriod = "Period";
@@ -669,6 +670,7 @@
 				ms_oFieldNames[FldClientEmail] = "";
 				ms_oFieldNames[FldClientName] = "";
 				ms_oFieldNames[FldLoanTypeName] = "";
+				ms_oFieldNames[FldEU] = "";
 				ms_oFieldNames[FldSetupFee] = 0;
 				ms_oFieldNames[FldLoanAmount] = 0;
 				ms_oFieldNames[FldPeriod] = 0;
@@ -694,6 +696,7 @@
 				ms_oTotalIgnored[FldClientEmail] = 0;
 				ms_oTotalIgnored[FldClientName] = 0;
 				ms_oTotalIgnored[FldLoanTypeName] = 0;
+				ms_oTotalIgnored[FldEU] = 0;
 				ms_oTotalIgnored[FldDiscountPlan] = 0;
 				ms_oTotalIgnored[FldCustomerStatus] = 0;
 				ms_oTotalIgnored[FldRowLevel] = 0;
