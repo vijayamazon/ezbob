@@ -502,6 +502,7 @@
     <Content Include="Content\css\images\companies\tamebay.png" />
     <Content Include="Content\css\images\companies\techcrunch.png" />
     <Content Include="Content\css\images\companies\yahoo.png" />
+    <Content Include="Content\css\images\companycheck.png" />
     <Content Include="Content\css\images\current_arrow-m.png" />
     <Content Include="Content\css\images\current_arrow.png" />
     <Content Include="Content\css\images\eu.png" />

@@ -2136,3 +2136,16 @@ ul.alert-list {
 .add-property-margin {
     margin-top: 15px;
 }
+
+.companycheck {
+    background-image: url(images/companycheck.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 3px;
+    height: 34px;
+    width: 300px;
+}
+
+.companycheck:hover {
+    background-position: 0 3px;
+}

@@ -6,6 +6,9 @@
 			<div class="box-content">
 				<button class="btn btn-primary change-company">Change company</button>
 				<button class="btn btn-primary" id="RunCompanyCheckBtn">Run Company check</button>
+				<%if(companyScoreData && companyScoreData.DashboardModel && companyScoreData.DashboardModel.IsLimited) {%>
+				<a href="http://companycheck.co.uk/company/<%- companyScoreData.company_ref_num %>" target="_blank" class="btn btn-primary companycheck"></a>
+				<%}%>
 			</div>
 		</div>
 		<%}%>
