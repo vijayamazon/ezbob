@@ -89,7 +89,7 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
         if(@ui.datesDdl.val() == 'Custom')
             fromDate = moment(@ui.dateRange.data('daterangepicker').startDate).format("YYYY-MM-DD")
             toDate = moment(@ui.dateRange.data('daterangepicker').endDate).format("YYYY-MM-DD")
-            console.log('fromDate, toDate', fromDate, toDate)
+            
             xhr = $.post("#{window.gRootPath}Underwriter/Report/GetReportDates", 
                 reportId : @ui.reportsDdl.val()
                 from : fromDate
@@ -104,12 +104,15 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
                 customer: @ui.customer.val()
                 nonCash: @ui.nonCash.val()
             )
-
+        BlockUi()
         xhr.done (res) =>
             if res.report?
                 @ui.reportArea.html(res.report)
                 @ui.reportArea.children().addClass("row")
                 @formatTable(res.columns)
+
+        xhr.always () ->
+            UnBlockUi()
 
     formatTable: (columns)->
         $("#tableReportData").addClass "table table-bordered table-striped blue-header centered"

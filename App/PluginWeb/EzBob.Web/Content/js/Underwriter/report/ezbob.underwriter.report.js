@@ -128,7 +128,6 @@
       if (this.ui.datesDdl.val() === 'Custom') {
         fromDate = moment(this.ui.dateRange.data('daterangepicker').startDate).format("YYYY-MM-DD");
         toDate = moment(this.ui.dateRange.data('daterangepicker').endDate).format("YYYY-MM-DD");
-        console.log('fromDate, toDate', fromDate, toDate);
         xhr = $.post("" + window.gRootPath + "Underwriter/Report/GetReportDates", {
           reportId: this.ui.reportsDdl.val(),
           from: fromDate,
@@ -144,12 +143,16 @@
           nonCash: this.ui.nonCash.val()
         });
       }
-      return xhr.done(function(res) {
+      BlockUi();
+      xhr.done(function(res) {
         if (res.report != null) {
           _this.ui.reportArea.html(res.report);
           _this.ui.reportArea.children().addClass("row");
           return _this.formatTable(res.columns);
         }
+      });
+      return xhr.always(function() {
+        return UnBlockUi();
       });
     };
 
