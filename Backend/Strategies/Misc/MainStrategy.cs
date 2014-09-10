@@ -389,7 +389,14 @@
 		{
 			var customerAddressesHelper = new CustomerAddressHelper(customerId, DB, Log);
 			customerAddressesHelper.Execute();
-			strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.OwnedAddresses);
+			try
+			{
+				strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.OwnedAddresses);
+			}
+			catch (Exception e)
+			{
+				Log.Error("Error while getting land registry data: {0}", e);
+			}
 		}
 
 		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected)
