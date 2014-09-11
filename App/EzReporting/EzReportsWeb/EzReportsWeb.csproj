@@ -70,6 +70,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+    </None>
     <Content Include="css\admin.css" />
     <Content Include="css\combined.css" />
     <Content Include="css\images\dataTables\back_disabled.png" />
@@ -201,6 +204,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>copy $(SolutionDir)connection-strings.xml $(ProjectDir)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

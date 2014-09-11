@@ -27,7 +27,13 @@
 		#region method GetPersistent
 
 		public virtual ConnectionWrapper GetPersistent() {
-			return TakeFromPool(true).Open();
+			var pc = new PooledConnection {
+				Connection = CreateConnection()
+			};
+
+			Debug("A non-pooled connection has been created.");
+
+			return new ConnectionWrapper(pc).Open();
 		} // GetPersistent
 
 		#endregion method GetPersistent
@@ -148,7 +154,7 @@
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
 
-			Run(	
+			Run(
 				oConnectionToUse,
 				(oReader, bRowSetStart) => oAction(new SafeReader(oReader), bRowSetStart),
 				ExecMode.ForEachRow, nSpecies, sQuery, aryParams
@@ -687,8 +693,10 @@
 
 			bool bAllesInOrdnung = true;
 
+			bool bDropAfterUse = oConnectionToUse == null;
+
 			try {
-				oConnection = oConnectionToUse ?? TakeFromPool(nMode == ExecMode.Enumerable);
+				oConnection = oConnectionToUse ?? TakeFromPool();
 				command.Connection = oConnection.Connection;
 
 				if (oConnection.Transaction != null)
@@ -727,7 +735,7 @@
 				throw;
 			}
 			finally {
-				if (oConnection != null) {
+				if (bDropAfterUse && (oConnection != null) && (nMode != ExecMode.Enumerable)) {
 					if (bAllesInOrdnung)
 						ms_oPool.Take(oConnection.Pooled);
 					else
@@ -777,6 +785,9 @@
 			} // switch
 
 			PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, nPrevStopwatchValue, sMsg);
+
+			oReader.Close();
+
 			return dataTable;
 		} // RunReader
 
@@ -812,7 +823,7 @@
 
 		#region method TakeFromPool
 
-		private ConnectionWrapper TakeFromPool(bool bPersistent) {
+		private ConnectionWrapper TakeFromPool() {
 			PooledConnection pc = ms_oPool.Give();
 
 			if (pc == null)
@@ -823,7 +834,7 @@
 
 			Debug("Connection {1} is taken from the pool for the {0} time.", pc.OutOfPoolCount, pc.PoolItemID);
 
-			return new ConnectionWrapper(pc, bPersistent);
+			return new ConnectionWrapper(pc);
 		} // TakeFromPool
 
 		#endregion method TakeFromPool

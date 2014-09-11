@@ -11,7 +11,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		Id, InsertDate
+		Id,
+		InsertDate
 	FROM
 		MP_ServiceLog
 	WHERE

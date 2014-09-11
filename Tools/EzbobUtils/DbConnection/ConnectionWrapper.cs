@@ -6,7 +6,7 @@
 	public class ConnectionWrapper {
 		#region constructor
 
-		public ConnectionWrapper(PooledConnection oPooled, bool bIsPersistent) {
+		public ConnectionWrapper(PooledConnection oPooled) {
 			Connection = oPooled.Connection;
 			Pooled = oPooled;
 			IsOpen = false;

@@ -437,6 +437,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+    </None>
     <Content Include="Content\css\broker.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
@@ -2116,4 +2119,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>copy $(SolutionDir)connection-strings.xml $(ProjectDir)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -62,6 +62,7 @@
 		#region method Drop
 
 		public virtual void Drop(PooledConnection pc) {
+			Log.Debug("Connection {0} is dropped.", pc.PoolItemID);
 			pc.Connection.Close();
 			Forget(1);
 		} // Take

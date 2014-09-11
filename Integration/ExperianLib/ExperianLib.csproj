@@ -192,6 +192,10 @@
     <EmbeddedResource Include="Ebusiness\LimitedBusinessRequest.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web References\ExpAuth\expauth.disco" />
   </ItemGroup>
   <ItemGroup>

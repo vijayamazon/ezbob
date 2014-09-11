@@ -99,7 +99,6 @@ namespace ExperianLib.Tests.Integration
 			m_oDB.ExecuteNonQuery(con, "SaveExperianConsumerDataCais", CommandSpecies.StoredProcedure,
 			                      m_oDB.CreateTableParameter<ExperianConsumerDataCais>("Tbl", data.Cais));
 			con.Commit();
-
 		}
 
 		[Test]

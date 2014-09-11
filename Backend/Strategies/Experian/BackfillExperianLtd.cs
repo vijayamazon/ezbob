@@ -35,26 +35,30 @@
 			IEnumerable<SafeReader> lst = DB.ExecuteEnumerable("LoadServiceLogForLtdBackfill", CommandSpecies.StoredProcedure);
 
 			foreach (SafeReader sr in lst) {
-				long serviceLogId = sr["Id"];
-				var parser = new ParseExperianLtd(serviceLogId, DB, Log);
+				long nServiceLogID = sr["Id"];
+				DateTime oInsertDate = sr["InsertDate"];
+
+				var parser = new ParseExperianLtd(nServiceLogID, DB, Log);
 				parser.Execute();
 
 				try {
-					string companyRefNum = parser.Result.RegisteredNumber;
+					string sCompanyRefNum = parser.Result.RegisteredNumber;
 					int? score = parser.Result != null ? parser.Result.CommercialDelphiScore : null;
 					decimal? balance = Utils.GetLimitedCaisBalance(parser.Result);
-					var serviceLog = _serviceLogRepository.Get(serviceLogId);
-					serviceLog.CompanyRefNum = companyRefNum;
+
+					var serviceLog = _serviceLogRepository.Get(nServiceLogID);
+					serviceLog.CompanyRefNum = sCompanyRefNum;
+
 					_experianHistoryRepository.SaveOrUpdateLimitedHistory(
-						serviceLogId,
-						sr["InsertDate"],
-						companyRefNum,
+						nServiceLogID,
+						oInsertDate,
+						sCompanyRefNum,
 						score,
 						balance
 					);
 				}
 				catch (Exception ex) {
-					Log.Warn(ex, "Failed to save experian limited history servicelog {0}", sr["Id"]);
+					Log.Warn(ex, "Failed to save experian limited history for service log id {0}.", nServiceLogID);
 				} // try
 			} // for each
 		} // Execute
