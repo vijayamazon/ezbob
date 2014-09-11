@@ -292,6 +292,13 @@
 				amlResult.HighRiskRules = new HashedSet<AmlResultsHighRiskRules>(highRiskRules);
 			}
 
+			var prevActiveAmlResult = amlResultsRepository.GetAll().FirstOrDefault(x => x.LookupKey == key && x.IsActive);
+			if (prevActiveAmlResult != null)
+			{
+				prevActiveAmlResult.IsActive = false;
+				amlResultsRepository.SaveOrUpdate(prevActiveAmlResult);
+			}
+
 			amlResultsRepository.SaveOrUpdate(amlResult);
 		}
 
