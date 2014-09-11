@@ -188,10 +188,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				});
 
 				var oList = oDlg.find('.account-list').empty();
+			    var updatesNeeded = false;
 
 				var sDisplayName;
 
 				if (oResponse.has_hmrc) {
+				    updatesNeeded = true;
 					for (var i = 0; i < oResponse.linked_hmrc.length; i++) {
 						sDisplayName = oResponse.linked_hmrc[i];
 
@@ -206,13 +208,15 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 					} // for each linked hmrc
 				} // if
 
-				if (!oResponse.vat_return_is_up_to_date) {
+				if (oResponse.has_hmrc && !oResponse.vat_return_is_up_to_date) {
+				    updatesNeeded = true;
 					oList.append(that.createUpdateEntry(
 						'your VAT return data', 'vat-return-list-item', { type: 'vat-return', }
 					));
 				} // if
 
 				if (oResponse.has_ekm) {
+				    updatesNeeded = true;
 					for (sDisplayName in oResponse.ekms) {
 						var sErrorMsg = oResponse.ekms[sDisplayName];
 
@@ -229,21 +233,26 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				} // if has EKM
 
 				if (oResponse.has_yodlee) {
+				    updatesNeeded = true;
 					oList.append(that.createUpdateEntry(
 						'your bank account', 'yodlee-list-item', { type: 'bank', }
 					));
 				} // if has yodlee
 
-				that.$el.find('.refresh-account-help').colorbox({
-					href: '#refresh-accounts-dlg',
-					inline: true,
-					open: true,
-					onClosed: function() {
-						that.refreshAccount();
-					},
-				});
-
-				return;
+			    if (updatesNeeded) {
+			        that.$el.find('.refresh-account-help').colorbox({
+			            href: '#refresh-accounts-dlg',
+			            inline: true,
+			            open: true,
+			            onClosed: function() {
+			                that.refreshAccount();
+			            },
+			        });
+			    } else {
+			        that.directApplyForLoan();
+			    }
+			    
+			    return;
 			} // if
 
 			that.customer.set('state', 'wait');
@@ -277,7 +286,6 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 	refreshAccount: function() {
 		$.colorbox.remove();
-
 		if (!this.refreshAccountData)
 			return;
 
@@ -308,7 +316,6 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 	directApplyForLoan: function() {
 		var that = this;
-
 		BlockUi('on');
 
 		var oRequest = $.post(window.gRootPath + 'Customer/Profile/DirectApplyForLoan');
@@ -327,7 +334,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		});
 	}, // directApplyForLoan
 
-	refreshVatReturn: function() {
+	refreshVatReturn: function () {
 		this.uploadUi = new EzBob.HmrcUploadUi({
 			chartMonths: this.options.chartMonths,
 			formID: 'hmrcAccountUpload',
