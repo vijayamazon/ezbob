@@ -41,8 +41,9 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 			} // if
 		} // if
 
-		if (currentLoanId)
+		if (currentLoanId) {
 			this.model.set({ loan: this.loans.get(currentLoanId) });
+		}
 
 		this.bindTo(this.model, "change", this.render, this);
 
@@ -224,8 +225,7 @@ EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
 
 	loanChanged: function() {
 		var loanId = parseInt($("select:NOT(:disabled):visible").val(), 10);
-
-		if (loanId !== 0) {
+		if (loanId !== void 0 && !isNaN(loanId)) {
 			var loan = this.customerModel.get("Loans").get(loanId);
 			this.model.set({ loan: loan });
 		} // if

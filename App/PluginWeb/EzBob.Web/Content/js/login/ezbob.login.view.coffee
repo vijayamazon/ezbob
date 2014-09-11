@@ -46,8 +46,6 @@ class EzBob.CustomerLoginView extends Backbone.View
 
     data = @form.serialize()
 
-    console.log 'data is', data
-
     xhr = $.post @form.attr("action"), data
 
     xhr.done (result, status) =>
