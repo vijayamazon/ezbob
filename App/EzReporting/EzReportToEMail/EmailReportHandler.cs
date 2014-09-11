@@ -28,13 +28,26 @@ namespace EzReportToEMail {
 
 		#region method ExecuteReportHandler
 
-		public void ExecuteReportHandler(DateTime dToday) {
+		public void ExecuteReportHandler(DateTime dToday, ReportType? nReportTypeToExecute) {
 			SortedDictionary<string, Report> reportList = Report.GetScheduledReportsList(DB);
 
 			var sender = new ReportDispatcher(DB, this);
 			try {
 				Parallel.ForEach(reportList.Values, report => {
 					try {
+						bool bExecute =
+							(nReportTypeToExecute == null) ||
+							(report.Type == nReportTypeToExecute.Value);
+
+						if (!bExecute) {
+							Debug(
+								"Skipping {0} report: only {1} requested.",
+								report.Title,
+								nReportTypeToExecute.Value.ToString()
+							);
+							return;
+						} // if
+
 						Debug("Generating {0} report...", report.Title);
 
 						switch (report.Type) {

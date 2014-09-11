@@ -51,7 +51,7 @@ namespace Reports {
 					lre.LoanID = lse.IsLoanIssued ? lse.LoanID : (int?)null;
 					lre.ClientID = lse.CustomerID;
 					lre.ClientName = lse.CustomerName;
-					lre.DateFirstApproved = lse.FirstDecisionDate.Date;
+					lre.DateFirstApproved = lse.FirstDecisionDate;
 					lre.DateLastApproved = lse.LastDecisionDate.Date;
 					lre.NewOrOldClient = lse.IsNewClient ? "new" : "old";
 					lre.LoanOffered = lse.ApprovedSum;
