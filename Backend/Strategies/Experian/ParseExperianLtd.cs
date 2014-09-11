@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
+	using System.Text.RegularExpressions;
 	using System.Xml;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -70,7 +71,7 @@
 			XmlDocument oXml = new XmlDocument();
 
 			try {
-				oXml.LoadXml(sr["ResponseData"]);
+				oXml.LoadXml(CleanInvalidChars(sr["ResponseData"]));
 			}
 			catch (Exception e) {
 				Log.Alert(e, "Parsing Experian Ltd for service log entry {0} failed.", m_nServiceLogID);
@@ -145,6 +146,18 @@
 		} // Save
 
 		#endregion method Save
+
+		#region method CleanInvalidChars
+
+		// Source of this code: http://stackoverflow.com/questions/730133/invalid-characters-in-xml
+		private static string CleanInvalidChars(string sXml) {
+			// From XML spec valid chars: 
+			// #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+			// any Unicode character, excluding the surrogate blocks, FFFE, and FFFF.
+			return Regex.Replace(sXml ?? string.Empty, @"[^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]", string.Empty); 
+		} // CleanInvalidChars
+
+		#endregion method CleanInvalidChars
 
 		#endregion private
 	} // class ParseExperianLtd
