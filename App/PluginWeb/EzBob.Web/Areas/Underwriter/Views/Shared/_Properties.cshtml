@@ -89,7 +89,7 @@
 							</tr>
 							<tr>
 								<td><b>Property net worth</b></td>
-								<td><%- EzBob.formatPoundsAsInt(model.NetWorth) %></td>
+								<td class="<%-model.NetWorth < 0 ? 'red_cell' : '' %>"><%- EzBob.formatPoundsAsInt(model.NetWorth) %></td>
 							</tr>
 							<tr>
 								<td><b>Land Registry</b></td>

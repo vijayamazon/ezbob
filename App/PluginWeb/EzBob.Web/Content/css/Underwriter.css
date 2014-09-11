@@ -1770,10 +1770,6 @@ td a.edit-loan {
     margin-top: 2px;
 }
 
-.assets-legend-text {
-    color: black;
-}
-
 .ez-light-grey {
     color: #a7a7a7;
 }
@@ -1784,7 +1780,6 @@ td a.edit-loan {
 
 .ez-bigtext {
     font-size: 24px;
-    color: #282828;
     text-align: center;
 }
 

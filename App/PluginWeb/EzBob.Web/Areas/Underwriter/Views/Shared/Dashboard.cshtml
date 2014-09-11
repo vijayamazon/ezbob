@@ -61,7 +61,7 @@
                             <img class="assets-bubble-left-image" src='@Url.Content("~/Content/img/tab_L.png")'></img>
                             <img class="assets-bubble-right-image" src='@Url.Content("~/Content/img/tab_R.png")'></img>
                             <div class="networth-div">
-                                <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.NetWorth) %></span><br />
+                                <span class="ez-bigtext <%- properties.NetWorth < 0 ? 'red_cell' : ''%>"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.NetWorth) %></span><br />
                                 <span>(NW: <%- properties.NetWorthPercentages %>%)</span>
                             </div>
                         </div>
@@ -88,11 +88,11 @@
                         <div class="assets-legend">
                             <span class="pull-left">
                                 <i class="fa fa-square ez-light-grey" />
-                                <span class="assets-legend-text">Mortgage</span>
+                                <span>Mortgage</span>
                             </span>
                             <span class="pull-right">
                                 <i class="fa fa-square ez-green" />
-                                <span class="assets-legend-text">Net worth</span>
+                                <span>Net worth</span>
                             </span>
                         </div>
                     </div>
