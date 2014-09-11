@@ -361,7 +361,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 			bJQueryUI: false,
 
 			bAutoWidth: true,
-			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"f><"dataTables_top_left"i>>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">',
+			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"f><"dataTables_top_left"i>><"box-content"tr<"bottom row"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>>>>><"clear">',
 
 			bStateSave: true,
 
