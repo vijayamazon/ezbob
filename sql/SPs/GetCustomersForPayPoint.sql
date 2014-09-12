@@ -8,8 +8,11 @@ GO
 CREATE PROCEDURE [dbo].[GetCustomersForPayPoint]
 AS
 BEGIN
+	DECLARE @Now DATETIME
+	SET @Now = GETUTCDATE()
+	
 	SELECT 
-		ls.id,
+		ls.id AS LoanScheduleId,
 		ls.LoanId,
 		c.FirstName,
 		c.Fullname,
@@ -28,6 +31,7 @@ BEGIN
 			END
 			AS BIT
 			) AS LastInstallment
+	INTO #GetCustomersForPayPoint
 	FROM 
 		Customer c 
 		JOIN Loan l ON 
@@ -43,7 +47,7 @@ BEGIN
 				ls.Status = 'StillToPay' OR 
 				ls.Status = 'Late'
 			) AND 
-			convert(date, ls.Date) <= GETUTCDATE() 
+			convert(date, ls.Date) <= @Now
 	WHERE 
 		(
 			lo.AutoPayment IS NULL OR 
@@ -62,5 +66,20 @@ BEGIN
 					l1.Status = 'Late'
 				) 
 		)
+		
+	SELECT 
+		LoanScheduleId,
+		LoanId,
+		FirstName,
+		Fullname,
+		CustomerId,
+		Email,
+		ReductionFee,
+		RefNum,
+		LastInstallment
+	FROM 
+		#GetCustomersForPayPoint
+	WHERE 
+		LoanScheduleId NOT IN (SELECT LoanScheduleId FROM PaymentRollover WHERE ExpiryDate > @Now) 
 END
 GO
