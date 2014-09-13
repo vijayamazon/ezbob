@@ -245,9 +245,9 @@
 				{
 					var writelog = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
 
-					SaveAmlData(key, writelog.ServiceLog.Id, writelog.ServiceLog.InsertDate, result);
-
 					result.Parse(r);
+
+					SaveAmlData(key, writelog.ServiceLog.Id, writelog.ServiceLog.InsertDate, result);
 				}
 			}
 			catch (Exception e)
