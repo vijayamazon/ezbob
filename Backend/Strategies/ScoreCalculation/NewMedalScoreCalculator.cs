@@ -620,9 +620,9 @@
 				Results.NumOfLateRepaymentsWeight = 2.67m;
 				Results.NumOfEarlyRepaymentsWeight = 2;
 
-				Results.BusinessScoreWeight -= 6.3m;
-				Results.BusinessSeniorityWeight -= 1.7m;
-				Results.ConsumerScoreWeight -= 2.1m;
+				Results.BusinessScoreWeight -= 6.25m;
+				Results.BusinessSeniorityWeight -= 1.67m;
+				Results.ConsumerScoreWeight -= 2.08m;
 			}
 
 			if (!sumIs100)
@@ -661,8 +661,5 @@
 			var sr = new SafeReader(dt.Rows[0]);
 			return sr["Value"];
 		}
-
-		
-
 	}
 }
