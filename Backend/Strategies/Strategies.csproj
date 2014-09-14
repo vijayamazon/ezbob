@@ -122,6 +122,7 @@
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
     <Compile Include="Misc\SaveSourceRefHistory.cs" />
+    <Compile Include="ScoreCalculation\NewMedalScoreCalculator2.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />

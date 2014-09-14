@@ -122,10 +122,8 @@
 		public decimal TotalScore { get; set; }
 		public decimal TotalScoreNormalized { get; set; }
 		public MedalMultiplier Medal { get; set; }
+		public string Error { get; set; }
 
-		#endregion output 
-		
-		
-		
+		#endregion output
 	}
 }
