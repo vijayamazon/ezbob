@@ -1,6 +1,7 @@
 ﻿namespace PaymentServices.PayPoint
 {
 	using ConfigManager;
+	using EZBob.DatabaseLib;
 	using global::PayPoint;
 	using System;
 	using System.Globalization;
@@ -162,18 +163,21 @@
 				}
 				catch (PayPointException ex)
 				{
-					loan.Transactions.Add(new PaypointTransaction()
-						{
-							Amount = amount,
-							Description = ex.PaypointData.Message,
-							PostDate = now,
-							Status = LoanTransactionStatus.Error,
-							PaypointId = payPointTransactionId,
-							IP = "",
-							Balance = loan.Balance,
-							Principal = loan.Principal,
-							Loan = loan
-						});
+					loan.Transactions.Add(new PaypointTransaction {
+						Amount = amount,
+						Description = ex.PaypointData.Message,
+						PostDate = now,
+						Status = LoanTransactionStatus.Error,
+						PaypointId = payPointTransactionId,
+						IP = "",
+						Balance = loan.Balance,
+						Principal = loan.Principal,
+						Loan = loan,
+						LoanTransactionMethod = ObjectFactory
+							.GetInstance<DatabaseDataHelper>()
+							.LoanTransactionMethodRepository
+							.FindOrDefault("Auto"),
+					});
 					installments.CommitTransaction();
 					return ex.PaypointData;
 				}

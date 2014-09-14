@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Linq;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -15,6 +16,7 @@
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
+	using StructureMap;
 	using log4net;
 
 	public interface ILoanCreator
@@ -30,6 +32,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly LoanBuilder _loanBuilder;
 		private readonly ISession _session;
+		private readonly LoanTransactionMethodRepository m_oTranMethodRepo;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanCreator));
 
@@ -46,6 +49,7 @@
 			_context = context;
 			_loanBuilder = loanBuilder;
 			_session = session;
+			m_oTranMethodRepo = ObjectFactory.GetInstance<DatabaseDataHelper>().LoanTransactionMethodRepository;
 		} // constructor
 
 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now) {
@@ -59,7 +63,6 @@
 
 			var calculator = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
 			var fee = calculator.Calculate(loanAmount);
-
 
 			var transfered = loanAmount - fee;
 			PacnetReturnData ret;
@@ -100,7 +103,8 @@
 				Status = isFakeLoanCreate ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
 				TrackingNumber = ret.TrackingNumber,
 				PacnetStatus = ret.Status,
-				Fees = fee
+				Fees = fee,
+				LoanTransactionMethod = m_oTranMethodRepo.FindOrDefault("Pacnet"),
 			};
 
 			loan.AddTransaction(loanTransaction);

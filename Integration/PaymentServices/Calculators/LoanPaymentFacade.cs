@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 
 namespace PaymentServices.Calculators
 {
-    public class LoanPaymentFacade
+	using EZBob.DatabaseLib;
+	using StructureMap;
+
+	public class LoanPaymentFacade
     {
         private readonly ILoanHistoryRepository _historyRepository;
 
@@ -30,15 +32,16 @@ namespace PaymentServices.Calculators
         /// <param name="ip"></param>
         /// <param name="term"></param>
         /// <param name="description"></param>
+		/// <param name="interestOnly"></param>
+        /// <param name="sManualPaymentMethod"></param>
         /// <returns></returns>
-        public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer", bool interestOnly = false)
+        public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer", bool interestOnly = false, string sManualPaymentMethod = null)
         {
             var paymentTime = term ?? DateTime.UtcNow;
 
             var oldLoan = loan.Clone();
 
-            var transactionItem = new PaypointTransaction()
-            {
+            var transactionItem = new PaypointTransaction {
                 Amount = amount,
                 Description = description,
                 PostDate = paymentTime,
@@ -47,9 +50,14 @@ namespace PaymentServices.Calculators
                 IP = ip,
                 LoanRepayment = oldLoan.Principal - loan.Principal,
                 Interest = loan.InterestPaid - oldLoan.InterestPaid,
-                InterestOnly = interestOnly
+                InterestOnly = interestOnly,
             };
-            
+
+			transactionItem.SetTransactionMethod(
+				ObjectFactory.GetInstance<DatabaseDataHelper>().LoanTransactionMethodRepository,
+				sManualPaymentMethod
+			);
+
             loan.AddTransaction(transactionItem);
 
 	        List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
@@ -166,8 +174,9 @@ namespace PaymentServices.Calculators
         /// <param name="description"></param>
         /// <param name="paymentType">If payment type is null - ordinary payment(reduces principal), if nextInterest then it is
         /// for Interest Only loans, and reduces interest in the future.</param>
+        /// <param name="sManualPaymentMethod"></param>
         /// <returns></returns>
-        public PaymentResult MakePayment(string transId, decimal amount, string ip, string type, int loanId, Customer customer, DateTime? date = null, string description = "payment from customer", string paymentType = null)
+        public PaymentResult MakePayment(string transId, decimal amount, string ip, string type, int loanId, Customer customer, DateTime? date = null, string description = "payment from customer", string paymentType = null, string sManualPaymentMethod = null)
         {
             decimal oldInterest;
             decimal newInterest;
@@ -202,7 +211,7 @@ namespace PaymentServices.Calculators
             {
                 oldInterest = 0;
                 var loan = customer.GetLoan(loanId);
-                PayLoan(loan, transId, amount, ip, date, description, true);
+                PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod: sManualPaymentMethod);
                 newInterest = 0;
             }
             else
@@ -213,7 +222,7 @@ namespace PaymentServices.Calculators
                                 from r in s.Rollovers
                                 where r.Status == RolloverStatus.New
                                 select r).FirstOrDefault();
-                PayLoan(loan, transId, amount, ip, date, description);
+                PayLoan(loan, transId, amount, ip, date, description, sManualPaymentMethod: sManualPaymentMethod);
                 newInterest = loan.Interest;
 
                 rolloverWasPaid = rollover != null && rollover.Status == RolloverStatus.Paid;

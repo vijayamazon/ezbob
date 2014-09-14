@@ -16,8 +16,9 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         public virtual LoanTransactionStatus Status { get; set; }
         public virtual decimal Fees { get; set; }
         public virtual string RefNumber { get; set; }
+	    public virtual LoanTransactionMethod LoanTransactionMethod { get; set; }
 
-		private ISet<LoanScheduleTransaction> _scheduleTransactions = new HashedSet<LoanScheduleTransaction>();
+	    private ISet<LoanScheduleTransaction> _scheduleTransactions = new HashedSet<LoanScheduleTransaction>();
 		public virtual ISet<LoanScheduleTransaction> ScheduleTransactions {
 			get { return _scheduleTransactions; }
 			set { _scheduleTransactions = value; }
@@ -70,6 +71,9 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             Map(x => x.Status).CustomType<LoanTransactionStatusType>();
             Map(x => x.Fees);
             Map(x => x.RefNumber).Length(14);
+
+	        References(x => x.LoanTransactionMethod, "LoanTransactionMethodId");
+
 			HasMany(x => x.ScheduleTransactions)
                .AsSet()
                .KeyColumn("TransactionID")

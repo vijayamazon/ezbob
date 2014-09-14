@@ -195,7 +195,7 @@
 					throw new Exception("The date is more than now");
 				}
 
-				string payPointTransactionId = "--- manual ---";
+				string payPointTransactionId = PaypointTransaction.Manual;
 
 				if (model.ChargeClient)
 				{
@@ -208,7 +208,7 @@
 
 				_loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null,
 												 "other", model.LoanId, customer,
-												 date, description);
+												 date, description, null, model.PaymentMethod);
 
 				_loanRepaymentFacade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
 
