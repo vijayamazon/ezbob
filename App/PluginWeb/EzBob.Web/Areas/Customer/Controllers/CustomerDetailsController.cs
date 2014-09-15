@@ -948,12 +948,7 @@
 
 			customer.PersonalInfo = personalInfo;
 
-			if (!string.IsNullOrEmpty(personalInfo.MiddleInitial)) {
-				personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial).Trim();
-			}
-			else {
-				personalInfo.Fullname = string.Format("{0} {1}", personalInfo.FirstName, personalInfo.Surname).Trim();
-			}
+			customer.PersonalInfo.SetFullName();
 
 			UpdateAddresses(
 				customer, personalAddress, 

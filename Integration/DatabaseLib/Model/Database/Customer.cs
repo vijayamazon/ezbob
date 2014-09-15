@@ -224,6 +224,18 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual decimal? OverallTurnOver { get; set; }
 		public virtual decimal? WebSiteTurnOver { get; set; }
 		public virtual bool ConsentToSearch { get; set; }
+
+		public void SetFullName() {
+			const string Space = " ";
+
+			var oFullName = new List<string>(3) {
+				(FirstName ?? string.Empty).Trim(),
+				(MiddleInitial ?? string.Empty).Trim(),
+				(Surname ?? string.Empty).Trim(),
+			};
+
+			Fullname = string.Join(Space, oFullName.Where(x => !string.IsNullOrWhiteSpace(x)));
+		} // SetFullName
 	} // class PersonalInfo
 
 	#endregion class PersonalInfo
