@@ -1,10 +1,11 @@
 ﻿namespace EzBob.AmazonServiceLib.Common
 {
 	using System;
+	using System.Diagnostics;
 	using System.Net;
 	using CommonLib;
 	using MarketplaceWebService;
-	using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders;
+	using MarketplaceWebServiceOrders;
 	using MarketplaceWebServiceProducts;
 
 	class AmazonWaitBeforeRetryHelper
@@ -45,6 +46,7 @@
 					if (ex != null)
 					{
 						WriteLoggerHelper.Write(ex.Message, WriteLogType.Error, null, ex);
+						Debug.WriteLine(ex);
 					}
 
 					if ( ex is MarketplaceWebServiceProductsException )
@@ -60,8 +62,7 @@
 						{
 							return false;
 						}
-					}
-					else if ( ex is MarketplaceWebServiceOrdersException )
+					} else if (ex is MarketplaceWebServiceOrdersException)
 					{
 						var ordersEx = ex as MarketplaceWebServiceOrdersException;
 						if ( ordersEx.StatusCode == HttpStatusCode.InternalServerError ||

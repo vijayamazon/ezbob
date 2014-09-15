@@ -33,11 +33,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fizzler">
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler\Fizzler.dll</HintPath>
+    <Reference Include="Fizzler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4ebff4844e382110, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.dll</HintPath>
     </Reference>
-    <Reference Include="Fizzler.Systems.HtmlAgilityPack">
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
+    <Reference Include="Fizzler.Sandbox">
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Sandbox.dll</HintPath>
+    </Reference>
+    <Reference Include="Fizzler.Systems.HtmlAgilityPack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\..\Lib\3rdparty\HtmlAgilityPack4.5\HtmlAgilityPack\HtmlAgilityPack.dll</HintPath>
@@ -301,6 +306,10 @@
     <ProjectReference Include="..\MarketplaceWebServiceOrders\MarketplaceWebServiceOrders.csproj">
       <Project>{09CE7DF4-1B19-47A5-847E-FE7C72263D8D}</Project>
       <Name>MarketplaceWebServiceOrders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MWSClientCsRuntime\MWSClientCsRuntime.csproj">
+      <Project>{49df8166-2274-4e8a-b551-6a8ddccb4756}</Project>
+      <Name>MWSClientCsRuntime</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

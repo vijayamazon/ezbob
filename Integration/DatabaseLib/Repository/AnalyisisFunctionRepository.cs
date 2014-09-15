@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ApplicationMng.Repository;
 using NHibernate;
-using NHibernate.Linq;
 using NHibernate.SqlCommand;
 
 namespace EZBob.DatabaseLib.Model.Database.Repository
@@ -15,30 +14,12 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		{
 		}
 
-		public MP_AnalyisisFunction Get( Guid functionInternalId )
-		{
-			foreach ( var marketPlace in GetAll() )
-			{
-				if ( marketPlace.InternalId.Equals( functionInternalId ) )
-				{
-					return marketPlace;
-				}
-			}
-
-			return null;
+		public MP_AnalyisisFunction Get( Guid functionInternalId ) {
+			return GetAll().FirstOrDefault(x => x.InternalId == functionInternalId);
 		}
 
-		public bool Exists( Guid internalId )
-		{
-			foreach ( var marketPlace in GetAll() )
-			{
-				if ( marketPlace.InternalId.Equals( internalId ) )
-				{
-					return true;
-				}
-			}
-
-			return false;
+		public bool Exists( Guid internalId ) {
+			return GetAll().Any(x => x.InternalId == internalId);
 		}
 
 	    public IList<MP_AnalyisisFunction> GetAllFunctionsAndInit()

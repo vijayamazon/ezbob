@@ -8,22 +8,22 @@ namespace EzBob.AmazonLib
 	using AmazonDbLib;
 	using CommonLib.TimePeriodLogic;
 
-	internal class AmazonOrdersAgregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<AmazonOrderItem2>, AmazonOrderItem2, AmazonDatabaseFunctionType>
+	internal class AmazonOrdersAgregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<AmazonOrderItem>, AmazonOrderItem, AmazonDatabaseFunctionType>
 	{
-		public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<AmazonOrderItem2>, AmazonOrderItem2, AmazonDatabaseFunctionType> CreateDataAggregator( ReceivedDataListTimeDependentInfo<AmazonOrderItem2> data, ICurrencyConvertor currencyConverter )
+		public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<AmazonOrderItem>, AmazonOrderItem, AmazonDatabaseFunctionType> CreateDataAggregator( ReceivedDataListTimeDependentInfo<AmazonOrderItem> data, ICurrencyConvertor currencyConverter )
 		{
 			return new AmazonOrdersAgregator( data, currencyConverter );
 		}
 	}
 
-	internal class AmazonOrdersAgregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<AmazonOrderItem2>, AmazonOrderItem2, AmazonDatabaseFunctionType>
+	internal class AmazonOrdersAgregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<AmazonOrderItem>, AmazonOrderItem, AmazonDatabaseFunctionType>
 	{
-		public AmazonOrdersAgregator( ReceivedDataListTimeDependentInfo<AmazonOrderItem2> orders, ICurrencyConvertor currencyConvertor ) 
+		public AmazonOrdersAgregator( ReceivedDataListTimeDependentInfo<AmazonOrderItem> orders, ICurrencyConvertor currencyConvertor ) 
 			: base(orders, currencyConvertor)
 		{
 		}
 
-		private int GetAverageItemsPerOrder( IEnumerable<AmazonOrderItem2> orders )
+		private int GetAverageItemsPerOrder( IEnumerable<AmazonOrderItem> orders )
 		{
 			var countItems = GetTotalItemsOrdered( orders );
 			var countOrders = GetShipedOrdersCount( orders );
@@ -31,22 +31,22 @@ namespace EzBob.AmazonLib
 			return countOrders == 0 ? 0 : (int)Math.Round( countItems / (double)countOrders, MidpointRounding.AwayFromZero );
 		}
 
-		private int GetOrdersCount( IEnumerable<AmazonOrderItem2> orders )
+		private int GetOrdersCount( IEnumerable<AmazonOrderItem> orders )
 		{
 			return orders.Count();
 		}
 
-		private int GetShipedOrdersCount( IEnumerable<AmazonOrderItem2> orders )
+		private int GetShipedOrdersCount( IEnumerable<AmazonOrderItem> orders )
 		{
 			return orders.Count( o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped );
 		}
 
-		private int GetCancelledOrdersCount( IEnumerable<AmazonOrderItem2> orders )
+		private int GetCancelledOrdersCount( IEnumerable<AmazonOrderItem> orders )
 		{
 			return orders.Count( o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Canceled );
 		}
 
-		private double GetAverageSumOfOrder( IEnumerable<AmazonOrderItem2> orders )
+		private double GetAverageSumOfOrder( IEnumerable<AmazonOrderItem> orders )
 		{
 			var sum = GetTotalSumOfOrders(orders);
 			var count = GetShipedOrdersCount( orders );
@@ -54,7 +54,7 @@ namespace EzBob.AmazonLib
 			return count == 0? 0: sum / count;
 		}
 
-		private double GetOrdersCancellationRate( IEnumerable<AmazonOrderItem2> orders )
+		private double GetOrdersCancellationRate( IEnumerable<AmazonOrderItem> orders )
 		{
 			var canceled = GetCancelledOrdersCount( orders );
 			var other = GetOrdersCount( orders );
@@ -62,19 +62,19 @@ namespace EzBob.AmazonLib
 			return other == 0? 0: canceled / (double)other;
 		}
 
-		private int GetTotalItemsOrdered( IEnumerable<AmazonOrderItem2> orders )
+		private int GetTotalItemsOrdered( IEnumerable<AmazonOrderItem> orders )
 		{
 			return orders.Where( o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped && o.NumberOfItemsShipped != null ).Sum( o => o.NumberOfItemsShipped.Value );
 		}
 
-		private double GetTotalSumOfOrders(IEnumerable<AmazonOrderItem2> orders)
+		private double GetTotalSumOfOrders(IEnumerable<AmazonOrderItem> orders)
 		{
 			return orders.Where(o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped).Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value);
 		}
 
-		private double GetTotalSumOfOrdersAnnualized(IEnumerable<AmazonOrderItem2> orders)
+		private double GetTotalSumOfOrdersAnnualized(IEnumerable<AmazonOrderItem> orders)
 		{
-			var receivedDataListTimeDependentInfo = orders as ReceivedDataListTimeDependentInfo<AmazonOrderItem2>;
+			var receivedDataListTimeDependentInfo = orders as ReceivedDataListTimeDependentInfo<AmazonOrderItem>;
 			if (receivedDataListTimeDependentInfo == null)
 			{
 				return 0;
@@ -84,7 +84,7 @@ namespace EzBob.AmazonLib
 			return AnnualizeHelper.AnnualizeSum(receivedDataListTimeDependentInfo.TimePeriodType, receivedDataListTimeDependentInfo.SubmittedDate, totalSumOfOrders);
 		}
 
-		protected override object InternalCalculateAggregatorValue( AmazonDatabaseFunctionType functionType, IEnumerable<AmazonOrderItem2> orders )
+		protected override object InternalCalculateAggregatorValue( AmazonDatabaseFunctionType functionType, IEnumerable<AmazonOrderItem> orders )
 		{
 			switch (functionType)
 			{

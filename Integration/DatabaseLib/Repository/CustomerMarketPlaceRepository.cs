@@ -93,6 +93,20 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
             return mpCustomerMarketPlace.AmazonOrders.Max(o => o.Created);
         }
 
+		public DateTime? GetLastAmazonOrderDate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			var mpCustomerMarketPlace = GetMarketPlace(databaseCustomerMarketPlace);
+			if (mpCustomerMarketPlace == null || mpCustomerMarketPlace.AmazonOrders.Count == 0) {
+				return null;
+			}
+			var orderDates = mpCustomerMarketPlace
+				.AmazonOrders
+				.SelectMany(x => x.OrderItems)
+				.Select(x => x.LastUpdateDate)
+				.ToList();
+
+			return orderDates.Any() ? orderDates.Max() : (DateTime?)null;
+		}
+
 	    public TeraPeakDatabaseSellerData GetAllTeraPeakDataWithFullRange(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 	    {
 			var customerMarketPlace = GetMarketPlace(databaseCustomerMarketPlace);

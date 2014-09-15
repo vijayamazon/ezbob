@@ -1,36 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2AD52941-1F8A-3ED6-9F00-69F6F6AB2803}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MarketplaceWebServiceOrders</RootNamespace>
     <AssemblyName>MarketplaceWebServiceOrders</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <ProjectGuid>{2AD52941-1F8A-3ED6-9F00-69F6F6AB2803}</ProjectGuid>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,96 +28,72 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\MarketplaceWebServiceOrders.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\MarketplaceWebServiceOrders.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MarketplaceWebServiceOrders\*.cs" />
-    <Compile Include="MarketplaceWebServiceOrders\Model\*.cs" />
-    <Compile Include="MarketplaceWebServiceOrders\Mock\*.cs" />
-    <Compile Include="MarketplaceWebServiceOrders\Util\*.cs" />
+    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="MarketplaceWebServiceOrders\MarketplaceWebServiceOrders.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\MarketplaceWebServiceOrdersClient.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\MarketplaceWebServiceOrdersConfig.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\MarketplaceWebServiceOrdersException.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\MarketplaceWebServiceOrdersSample.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Mock\MarketplaceWebServiceOrdersMock.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\Address.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\GetOrderRequest.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\GetOrderResponse.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\GetOrderResult.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\GetServiceStatusRequest.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\GetServiceStatusResponse.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\GetServiceStatusResult.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\IMWSResponse.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\InvoiceData.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrderItemsByNextTokenRequest.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrderItemsByNextTokenResponse.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrderItemsByNextTokenResult.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrderItemsRequest.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrderItemsResponse.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrderItemsResult.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrdersByNextTokenRequest.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrdersByNextTokenResponse.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrdersByNextTokenResult.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrdersRequest.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrdersResponse.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ListOrdersResult.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\Message.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\Money.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\Order.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\OrderItem.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\PaymentExecutionDetailItem.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ResponseHeaderMetadata.cs" />
+    <Compile Include="MarketplaceWebServiceOrders\Model\ResponseMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceOrders\Mock\ListOrdersByNextTokenResponse.xml">
-      <LogicalName>ListOrdersByNextTokenResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceOrders\Mock\ListOrderItemsByNextTokenResponse.xml">
-      <LogicalName>ListOrderItemsByNextTokenResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceOrders\Mock\GetOrderResponse.xml">
-      <LogicalName>GetOrderResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceOrders\Mock\ListOrderItemsResponse.xml">
-      <LogicalName>ListOrderItemsResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceOrders\Mock\ListOrdersResponse.xml">
-      <LogicalName>ListOrdersResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceOrders\Mock\GetServiceStatusResponse.xml">
-      <LogicalName>GetServiceStatusResponse.xml</LogicalName>
-    </EmbeddedResource>
+    <Content Include="MarketplaceWebServiceOrders\Mock\MarketplaceWebServiceOrders.Model.GetOrderResponse.xml" />
+    <Content Include="MarketplaceWebServiceOrders\Mock\MarketplaceWebServiceOrders.Model.GetServiceStatusResponse.xml" />
+    <Content Include="MarketplaceWebServiceOrders\Mock\MarketplaceWebServiceOrders.Model.ListOrderItemsByNextTokenResponse.xml" />
+    <Content Include="MarketplaceWebServiceOrders\Mock\MarketplaceWebServiceOrders.Model.ListOrderItemsResponse.xml" />
+    <Content Include="MarketplaceWebServiceOrders\Mock\MarketplaceWebServiceOrders.Model.ListOrdersByNextTokenResponse.xml" />
+    <Content Include="MarketplaceWebServiceOrders\Mock\MarketplaceWebServiceOrders.Model.ListOrdersResponse.xml" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
+    <ProjectReference Include="..\MWSClientCsRuntime\MWSClientCsRuntime.csproj">
+      <Project>{49df8166-2274-4e8a-b551-6a8ddccb4756}</Project>
+      <Name>MWSClientCsRuntime</Name>
+    </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

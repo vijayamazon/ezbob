@@ -1,6 +1,7 @@
 ﻿namespace EZBob.DatabaseLib {
 	using System.Collections.Generic;
 	using DatabaseWrapper.Order;
+	using Model.Marketplaces.Amazon;
 	using Model.Marketplaces.FreeAgent;
 	using Model.Marketplaces.Sage;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
@@ -211,4 +212,21 @@
 		}
 	}
 	#endregion class YodleeOrderComparer
+
+	#region class AmazonOrderComparer
+
+	class AmazonOrderComparer : AOrderComparer<MP_AmazonOrderItem> {
+		public override bool AreEqual(MP_AmazonOrderItem a, MP_AmazonOrderItem b) {
+			if (string.IsNullOrEmpty(a.OrderId) && string.IsNullOrEmpty(b.OrderId)) {
+				return false;
+			}
+			return (a.OrderId == b.OrderId);
+		} // AreEqual
+
+		public override int HashCode(MP_AmazonOrderItem a) {
+			return a.OrderId.GetHashCode();
+		} // HashCode
+	} // class AmazonOrderComparer
+
+	#endregion class AmazonOrderComparer
 } // namespace EZBob.DatabaseLib

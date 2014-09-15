@@ -54,7 +54,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 
 			var dbFunctionValue = CreateWriteValues( databaseMarketPlaceBase, data );
 
-			Write( databaseCustomerMarketPlace, dbFunctionValue, historyRecord );			
+			Write( databaseCustomerMarketPlace, dbFunctionValue, historyRecord );
 		}
 
     	private IDatabaseAnalysisFunctionValues CreateWriteValues<TEnum>( DatabaseMarketplaceBase<TEnum> databaseMarketPlaceBase, 
@@ -67,7 +67,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 					funcFactory.Create( dataInfo.FunctionType ),
 					TimePeriodFactory.Create( dataInfo.TimePeriodType ),
 					dataInfo.Value,
-					dataInfo.UpdatedDate					
+					dataInfo.UpdatedDate
 				);
 		}
 

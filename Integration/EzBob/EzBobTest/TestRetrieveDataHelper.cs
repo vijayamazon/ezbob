@@ -2,6 +2,7 @@ namespace EzBobTest
 {
 	using System;
 	using System.Collections.Concurrent;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Threading;
@@ -9,13 +10,19 @@ namespace EzBobTest
 	using CompanyFiles;
 	using ConfigManager;
 	using EKM;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using EzBob.AmazonServiceLib.Common;
+	using EzBob.AmazonServiceLib.Config;
+	using EzBob.AmazonServiceLib.Orders.Model;
+	using EzBob.AmazonServiceLib.ServiceCalls;
 	using EzBob.Models;
 	using EzBob.eBayLib.Config;
 	using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.RegistryScanner;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Serialization;
 	using FreeAgent;
 	using Sage;
@@ -423,6 +430,16 @@ namespace EzBobTest
 			surname = regex.Replace(surname, String.Empty);
 			Assert.AreEqual("OHare", surname);
 		}
+
+		[Test]
+		public void TestAmazonOrders() {
+			var amazonTester = new AmazonTester();
+			var elapsedTimeInfo = new ElapsedTimeInfo();
+			var connectionInfo = ObjectFactory.GetInstance<AmazonMarketPlaceTypeConnection>();
+			var connection = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
+			var orders = amazonTester.GetOrders(18363, elapsedTimeInfo, connection, 7, false);
+			amazonTester.DisplayOrders(elapsedTimeInfo, orders);
+		}
     }
 
     internal class TestOrderItemData
@@ -439,6 +456,89 @@ namespace EzBobTest
         public string AmazonMarketplaceId { get; set; }
         public string MarketplaceName { get; set; }
     }
+	
+
+	public class AmazonTester {
+		public List<OrderItemTwo> GetOrders(int umi, ElapsedTimeInfo elapsedTimeInfo, AmazonServiceConnectionInfo _ConnectionInfo, int days, bool useReporting) {
+			var session = ObjectFactory.GetInstance<ISession>();
+
+			var marketplace = session.Get<MP_CustomerMarketPlace>(umi);
+
+			var securityInfo = Serialized.Deserialize<AmazonSecurityInfo>(marketplace.SecurityData);
+
+			var endDate = DateTime.UtcNow;
+			var startDate = endDate.AddDays(-days);
+
+			var errorRetryingInfo = new ErrorRetryingInfo((bool)CurrentValues.Instance.AmazonEnableRetrying, CurrentValues.Instance.AmazonMinorTimeoutInSeconds, CurrentValues.Instance.AmazonUseLastTimeOut);
+
+			errorRetryingInfo.Info = new ErrorRetryingItemInfo[2];
+			errorRetryingInfo.Info[0] = new ErrorRetryingItemInfo(CurrentValues.Instance.AmazonIterationSettings1Index, CurrentValues.Instance.AmazonIterationSettings1CountRequestsExpectError, CurrentValues.Instance.AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes);
+			errorRetryingInfo.Info[1] = new ErrorRetryingItemInfo(CurrentValues.Instance.AmazonIterationSettings2Index, CurrentValues.Instance.AmazonIterationSettings2CountRequestsExpectError, CurrentValues.Instance.AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes);
+
+			var amazonOrdersRequestInfo = new AmazonOrdersRequestInfo {
+				StartDate = startDate,
+				EndDate = endDate,
+				MarketplaceId = securityInfo.MarketplaceId,
+				MerchantId = securityInfo.MerchantId,
+				ErrorRetryingInfo = errorRetryingInfo
+			};
 
 
+			List<OrderItemTwo> orders;
+
+			if (useReporting) {
+				var configurator = AmazonServiceConfigurationFactory.CreateServiceReportsConfigurator(_ConnectionInfo);
+
+				orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo, umi,
+					ElapsedDataMemberType.RetrieveDataFromExternalService,
+					() => AmazonServiceReports.GetUserOrders(configurator, amazonOrdersRequestInfo, ActionAccessType.Full))
+					.Select(OrderItemTwo.FromOrderItem)
+					.ToList();
+			} else {
+				var counter = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo, umi,
+					ElapsedDataMemberType.RetrieveDataFromExternalService,
+					() => AmazonServiceHelper.GetListOrders(_ConnectionInfo, amazonOrdersRequestInfo, ActionAccessType.Full, null));
+				//todo make it work again
+				orders = new List<OrderItemTwo>();
+			}
+
+			return orders;
+		}
+
+		public void DisplayOrders(ElapsedTimeInfo elapsedTimeInfo, List<OrderItemTwo> orders) {
+			foreach (var order in orders) {
+				Console.WriteLine(order.ToString());
+			}
+
+			Console.WriteLine("RetrieveDataFromExternalService took {0} s", elapsedTimeInfo.GetValue(ElapsedDataMemberType.RetrieveDataFromExternalService));
+			Console.WriteLine("Number of orders: {0}", orders.Count);
+		}
+	}
+
+	public class OrderItemTwo {
+		public override string ToString() {
+
+			return string.Format("NumberOfItemsShipped: {0}, PurchaseDate: {1}, Total: {2}, OrderStatus: {3}, OrderId: {4}", NumberOfItemsShipped, PurchaseDate, Total, OrderStatus, OrderId);
+		}
+
+		public static OrderItemTwo FromOrderItem(AmazonOrderItem item) {
+			return new OrderItemTwo() {
+				OrderId = item.OrderId,
+				OrderStatus = item.OrderStatus,
+				Total = item.OrderTotal.Value,
+				PurchaseDate = item.PurchaseDate,
+				NumberOfItemsShipped = item.NumberOfItemsShipped
+			};
+		}
+
+		public int? NumberOfItemsShipped { get; set; }
+
+		public DateTime? PurchaseDate { get; set; }
+
+		public double Total { get; set; }
+
+		public AmazonOrdersList2ItemStatusType OrderStatus { get; set; }
+
+		public string OrderId { get; set; }
+	}
 }

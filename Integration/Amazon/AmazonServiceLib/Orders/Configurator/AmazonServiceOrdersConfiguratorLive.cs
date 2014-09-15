@@ -1,10 +1,11 @@
 using System.Diagnostics;
 using EzBob.AmazonServiceLib.Common;
 using EzBob.AmazonServiceLib.Common.Configuration;
-using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders;
 
 namespace EzBob.AmazonServiceLib.Orders.Configurator
 {
+	using MarketplaceWebServiceOrders;
+
 	internal class AmazonServiceOrdersConfiguratorLive : AmazonServiceConfiguratorLiveBase, IAmazonServiceOrdersConfigurator
 	{
 		public AmazonServiceOrdersConfiguratorLive(AmazonApiType apiType, AmazonServiceCountry serviceCountry, AmazonDeveloperAccessInfo accessInfo, AmazonApplicationInfo applicationInfo) 
@@ -13,9 +14,9 @@ namespace EzBob.AmazonServiceLib.Orders.Configurator
 			Debug.Assert( apiType == AmazonApiType.Orders );
 		}
 
-		private IMarketplaceWebServiceOrders _AmazonService;
+		private MarketplaceWebServiceOrders _AmazonService;
 
-		private IMarketplaceWebServiceOrders CreateService()
+		private MarketplaceWebServiceOrders CreateService()
 		{
 			/************************************************************************
 				 * Access Key ID and Secret Access Key ID
@@ -45,10 +46,10 @@ namespace EzBob.AmazonServiceLib.Orders.Configurator
 			/************************************************************************
             * Instantiate  Implementation of Marketplace Web Service Orders 
             ***********************************************************************/
-			return new MarketplaceWebServiceOrdersClient(applicationName, applicationVersion, accessKeyId, secretAccessKey, config );
+			return new MarketplaceWebServiceOrdersClient(accessKeyId, secretAccessKey, applicationName, applicationVersion, config);
 		}
 
-		public IMarketplaceWebServiceOrders AmazonService
+		public MarketplaceWebServiceOrders AmazonService
 		{
 			get { return _AmazonService ?? (_AmazonService = CreateService()); }
 		}

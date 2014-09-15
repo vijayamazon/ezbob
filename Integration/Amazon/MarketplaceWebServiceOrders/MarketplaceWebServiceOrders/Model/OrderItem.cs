@@ -1,998 +1,854 @@
-/******************************************************************************* 
- *  Copyright 2008-2009 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Orders CSharp Library
- *  API Version: 2011-01-01
- *  Generated: Fri Nov 04 00:50:29 GMT 2011 
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Order Item
+ * API Version: 2013-09-01
+ * Library Version: 2013-09-01
+ * Generated: Fri Jun 06 15:20:51 UTC 2014
  */
 
 
 using System;
-using System.Xml.Serialization;
-using System.Text;
+using System.Xml;
+using System.Collections.Generic;
+using MWSClientCsRuntime;
 
-namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders.Model
+namespace MarketplaceWebServiceOrders.Model
 {
-    [XmlTypeAttribute(Namespace = "https://mws.amazonservices.com/Orders/2011-01-01")]
-    [XmlRootAttribute(Namespace = "https://mws.amazonservices.com/Orders/2011-01-01", IsNullable = false)]
-    public class OrderItem
+    public class OrderItem : AbstractMwsObject
     {
-    
-        private String ASINField;
 
-        private String sellerSKUField;
-
-        private String orderItemIdField;
-
-        private String titleField;
-
-        private Decimal? quantityOrderedField;
-
-        private Decimal? quantityShippedField;
-
-        private  Money itemPriceField;
-        private  Money shippingPriceField;
-        private  Money giftWrapPriceField;
-        private  Money itemTaxField;
-        private  Money shippingTaxField;
-        private  Money giftWrapTaxField;
-        private  Money shippingDiscountField;
-        private  Money promotionDiscountField;
-        private  PromotionIdList promotionIdsField;
-        private  Money CODFeeField;
-        private  Money CODFeeDiscountField;
-        private String giftMessageTextField;
-
-        private String giftWrapLevelField;
-
+        private string _asin;
+        private string _sellerSKU;
+        private string _orderItemId;
+        private string _title;
+        private decimal _quantityOrdered;
+        private decimal? _quantityShipped;
+        private Money _itemPrice;
+        private Money _shippingPrice;
+        private Money _giftWrapPrice;
+        private Money _itemTax;
+        private Money _shippingTax;
+        private Money _giftWrapTax;
+        private Money _shippingDiscount;
+        private Money _promotionDiscount;
+        private List<string> _promotionIds;
+        private Money _codFee;
+        private Money _codFeeDiscount;
+        private string _giftMessageText;
+        private string _giftWrapLevel;
+        private InvoiceData _invoiceData;
+        private string _conditionNote;
+        private string _conditionId;
+        private string _conditionSubtypeId;
+        private string _scheduledDeliveryStartDate;
+        private string _scheduledDeliveryEndDate;
 
         /// <summary>
         /// Gets and sets the ASIN property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "ASIN")]
-        public String ASIN
+        public string ASIN
         {
-            get { return this.ASINField ; }
-            set { this.ASINField= value; }
+            get { return this._asin; }
+            set { this._asin = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the ASIN property
+        /// Sets the ASIN property.
         /// </summary>
-        /// <param name="ASIN">ASIN property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithASIN(String ASIN)
+        /// <param name="asin">ASIN property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithASIN(string asin)
         {
-            this.ASINField = ASIN;
+            this._asin = asin;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if ASIN property is set
+        /// Checks if ASIN property is set.
         /// </summary>
-        /// <returns>true if ASIN property is set</returns>
-        public Boolean IsSetASIN()
+        /// <returns>true if ASIN property is set.</returns>
+        public bool IsSetASIN()
         {
-            return  this.ASINField != null;
-
+            return this._asin != null;
         }
-
 
         /// <summary>
         /// Gets and sets the SellerSKU property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "SellerSKU")]
-        public String SellerSKU
+        public string SellerSKU
         {
-            get { return this.sellerSKUField ; }
-            set { this.sellerSKUField= value; }
+            get { return this._sellerSKU; }
+            set { this._sellerSKU = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the SellerSKU property
+        /// Sets the SellerSKU property.
         /// </summary>
-        /// <param name="sellerSKU">SellerSKU property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithSellerSKU(String sellerSKU)
+        /// <param name="sellerSKU">SellerSKU property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithSellerSKU(string sellerSKU)
         {
-            this.sellerSKUField = sellerSKU;
+            this._sellerSKU = sellerSKU;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if SellerSKU property is set
+        /// Checks if SellerSKU property is set.
         /// </summary>
-        /// <returns>true if SellerSKU property is set</returns>
-        public Boolean IsSetSellerSKU()
+        /// <returns>true if SellerSKU property is set.</returns>
+        public bool IsSetSellerSKU()
         {
-            return  this.sellerSKUField != null;
-
+            return this._sellerSKU != null;
         }
-
 
         /// <summary>
         /// Gets and sets the OrderItemId property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "OrderItemId")]
-        public String OrderItemId
+        public string OrderItemId
         {
-            get { return this.orderItemIdField ; }
-            set { this.orderItemIdField= value; }
+            get { return this._orderItemId; }
+            set { this._orderItemId = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the OrderItemId property
+        /// Sets the OrderItemId property.
         /// </summary>
-        /// <param name="orderItemId">OrderItemId property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithOrderItemId(String orderItemId)
+        /// <param name="orderItemId">OrderItemId property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithOrderItemId(string orderItemId)
         {
-            this.orderItemIdField = orderItemId;
+            this._orderItemId = orderItemId;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if OrderItemId property is set
+        /// Checks if OrderItemId property is set.
         /// </summary>
-        /// <returns>true if OrderItemId property is set</returns>
-        public Boolean IsSetOrderItemId()
+        /// <returns>true if OrderItemId property is set.</returns>
+        public bool IsSetOrderItemId()
         {
-            return  this.orderItemIdField != null;
-
+            return this._orderItemId != null;
         }
-
 
         /// <summary>
         /// Gets and sets the Title property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "Title")]
-        public String Title
+        public string Title
         {
-            get { return this.titleField ; }
-            set { this.titleField= value; }
+            get { return this._title; }
+            set { this._title = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the Title property
+        /// Sets the Title property.
         /// </summary>
-        /// <param name="title">Title property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithTitle(String title)
+        /// <param name="title">Title property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithTitle(string title)
         {
-            this.titleField = title;
+            this._title = title;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if Title property is set
+        /// Checks if Title property is set.
         /// </summary>
-        /// <returns>true if Title property is set</returns>
-        public Boolean IsSetTitle()
+        /// <returns>true if Title property is set.</returns>
+        public bool IsSetTitle()
         {
-            return  this.titleField != null;
-
+            return this._title != null;
         }
-
 
         /// <summary>
         /// Gets and sets the QuantityOrdered property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "QuantityOrdered")]
-        public Decimal QuantityOrdered
+        public decimal QuantityOrdered
         {
-            get { return this.quantityOrderedField.GetValueOrDefault() ; }
-            set { this.quantityOrderedField= value; }
+            get { return this._quantityOrdered; }
+            set { this._quantityOrdered = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the QuantityOrdered property
+        /// Sets the QuantityOrdered property.
         /// </summary>
-        /// <param name="quantityOrdered">QuantityOrdered property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithQuantityOrdered(Decimal quantityOrdered)
+        /// <param name="quantityOrdered">QuantityOrdered property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithQuantityOrdered(decimal quantityOrdered)
         {
-            this.quantityOrderedField = quantityOrdered;
+            this._quantityOrdered = quantityOrdered;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if QuantityOrdered property is set
+        /// Checks if QuantityOrdered property is set.
         /// </summary>
-        /// <returns>true if QuantityOrdered property is set</returns>
-        public Boolean IsSetQuantityOrdered()
+        /// <returns>true if QuantityOrdered property is set.</returns>
+        public bool IsSetQuantityOrdered()
         {
-            return  this.quantityOrderedField.HasValue;
-
+            return this._quantityOrdered != null;
         }
-
 
         /// <summary>
         /// Gets and sets the QuantityShipped property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "QuantityShipped")]
-        public Decimal QuantityShipped
+        public decimal QuantityShipped
         {
-            get { return this.quantityShippedField.GetValueOrDefault() ; }
-            set { this.quantityShippedField= value; }
+            get { return this._quantityShipped.GetValueOrDefault(); }
+            set { this._quantityShipped = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the QuantityShipped property
+        /// Sets the QuantityShipped property.
         /// </summary>
-        /// <param name="quantityShipped">QuantityShipped property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithQuantityShipped(Decimal quantityShipped)
+        /// <param name="quantityShipped">QuantityShipped property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithQuantityShipped(decimal quantityShipped)
         {
-            this.quantityShippedField = quantityShipped;
+            this._quantityShipped = quantityShipped;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if QuantityShipped property is set
+        /// Checks if QuantityShipped property is set.
         /// </summary>
-        /// <returns>true if QuantityShipped property is set</returns>
-        public Boolean IsSetQuantityShipped()
+        /// <returns>true if QuantityShipped property is set.</returns>
+        public bool IsSetQuantityShipped()
         {
-            return  this.quantityShippedField.HasValue;
-
+            return this._quantityShipped != null;
         }
-
 
         /// <summary>
         /// Gets and sets the ItemPrice property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "ItemPrice")]
         public Money ItemPrice
         {
-            get { return this.itemPriceField ; }
-            set { this.itemPriceField = value; }
+            get { return this._itemPrice; }
+            set { this._itemPrice = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the ItemPrice property
+        /// Sets the ItemPrice property.
         /// </summary>
-        /// <param name="itemPrice">ItemPrice property</param>
-        /// <returns>this instance</returns>
+        /// <param name="itemPrice">ItemPrice property.</param>
+        /// <returns>this instance.</returns>
         public OrderItem WithItemPrice(Money itemPrice)
         {
-            this.itemPriceField = itemPrice;
+            this._itemPrice = itemPrice;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if ItemPrice property is set
+        /// Checks if ItemPrice property is set.
         /// </summary>
-        /// <returns>true if ItemPrice property is set</returns>
-        public Boolean IsSetItemPrice()
+        /// <returns>true if ItemPrice property is set.</returns>
+        public bool IsSetItemPrice()
         {
-            return this.itemPriceField != null;
+            return this._itemPrice != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the ShippingPrice property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "ShippingPrice")]
         public Money ShippingPrice
         {
-            get { return this.shippingPriceField ; }
-            set { this.shippingPriceField = value; }
+            get { return this._shippingPrice; }
+            set { this._shippingPrice = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the ShippingPrice property
+        /// Sets the ShippingPrice property.
         /// </summary>
-        /// <param name="shippingPrice">ShippingPrice property</param>
-        /// <returns>this instance</returns>
+        /// <param name="shippingPrice">ShippingPrice property.</param>
+        /// <returns>this instance.</returns>
         public OrderItem WithShippingPrice(Money shippingPrice)
         {
-            this.shippingPriceField = shippingPrice;
+            this._shippingPrice = shippingPrice;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if ShippingPrice property is set
+        /// Checks if ShippingPrice property is set.
         /// </summary>
-        /// <returns>true if ShippingPrice property is set</returns>
-        public Boolean IsSetShippingPrice()
+        /// <returns>true if ShippingPrice property is set.</returns>
+        public bool IsSetShippingPrice()
         {
-            return this.shippingPriceField != null;
+            return this._shippingPrice != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the GiftWrapPrice property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "GiftWrapPrice")]
         public Money GiftWrapPrice
         {
-            get { return this.giftWrapPriceField ; }
-            set { this.giftWrapPriceField = value; }
+            get { return this._giftWrapPrice; }
+            set { this._giftWrapPrice = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the GiftWrapPrice property
+        /// Sets the GiftWrapPrice property.
         /// </summary>
-        /// <param name="giftWrapPrice">GiftWrapPrice property</param>
-        /// <returns>this instance</returns>
+        /// <param name="giftWrapPrice">GiftWrapPrice property.</param>
+        /// <returns>this instance.</returns>
         public OrderItem WithGiftWrapPrice(Money giftWrapPrice)
         {
-            this.giftWrapPriceField = giftWrapPrice;
+            this._giftWrapPrice = giftWrapPrice;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if GiftWrapPrice property is set
+        /// Checks if GiftWrapPrice property is set.
         /// </summary>
-        /// <returns>true if GiftWrapPrice property is set</returns>
-        public Boolean IsSetGiftWrapPrice()
+        /// <returns>true if GiftWrapPrice property is set.</returns>
+        public bool IsSetGiftWrapPrice()
         {
-            return this.giftWrapPriceField != null;
+            return this._giftWrapPrice != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the ItemTax property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "ItemTax")]
         public Money ItemTax
         {
-            get { return this.itemTaxField ; }
-            set { this.itemTaxField = value; }
+            get { return this._itemTax; }
+            set { this._itemTax = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the ItemTax property
+        /// Sets the ItemTax property.
         /// </summary>
-        /// <param name="itemTax">ItemTax property</param>
-        /// <returns>this instance</returns>
+        /// <param name="itemTax">ItemTax property.</param>
+        /// <returns>this instance.</returns>
         public OrderItem WithItemTax(Money itemTax)
         {
-            this.itemTaxField = itemTax;
+            this._itemTax = itemTax;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if ItemTax property is set
+        /// Checks if ItemTax property is set.
         /// </summary>
-        /// <returns>true if ItemTax property is set</returns>
-        public Boolean IsSetItemTax()
+        /// <returns>true if ItemTax property is set.</returns>
+        public bool IsSetItemTax()
         {
-            return this.itemTaxField != null;
+            return this._itemTax != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the ShippingTax property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "ShippingTax")]
         public Money ShippingTax
         {
-            get { return this.shippingTaxField ; }
-            set { this.shippingTaxField = value; }
+            get { return this._shippingTax; }
+            set { this._shippingTax = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the ShippingTax property
+        /// Sets the ShippingTax property.
         /// </summary>
-        /// <param name="shippingTax">ShippingTax property</param>
-        /// <returns>this instance</returns>
+        /// <param name="shippingTax">ShippingTax property.</param>
+        /// <returns>this instance.</returns>
         public OrderItem WithShippingTax(Money shippingTax)
         {
-            this.shippingTaxField = shippingTax;
+            this._shippingTax = shippingTax;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if ShippingTax property is set
+        /// Checks if ShippingTax property is set.
         /// </summary>
-        /// <returns>true if ShippingTax property is set</returns>
-        public Boolean IsSetShippingTax()
+        /// <returns>true if ShippingTax property is set.</returns>
+        public bool IsSetShippingTax()
         {
-            return this.shippingTaxField != null;
+            return this._shippingTax != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the GiftWrapTax property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "GiftWrapTax")]
         public Money GiftWrapTax
         {
-            get { return this.giftWrapTaxField ; }
-            set { this.giftWrapTaxField = value; }
+            get { return this._giftWrapTax; }
+            set { this._giftWrapTax = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the GiftWrapTax property
+        /// Sets the GiftWrapTax property.
         /// </summary>
-        /// <param name="giftWrapTax">GiftWrapTax property</param>
-        /// <returns>this instance</returns>
+        /// <param name="giftWrapTax">GiftWrapTax property.</param>
+        /// <returns>this instance.</returns>
         public OrderItem WithGiftWrapTax(Money giftWrapTax)
         {
-            this.giftWrapTaxField = giftWrapTax;
+            this._giftWrapTax = giftWrapTax;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if GiftWrapTax property is set
+        /// Checks if GiftWrapTax property is set.
         /// </summary>
-        /// <returns>true if GiftWrapTax property is set</returns>
-        public Boolean IsSetGiftWrapTax()
+        /// <returns>true if GiftWrapTax property is set.</returns>
+        public bool IsSetGiftWrapTax()
         {
-            return this.giftWrapTaxField != null;
+            return this._giftWrapTax != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the ShippingDiscount property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "ShippingDiscount")]
         public Money ShippingDiscount
         {
-            get { return this.shippingDiscountField ; }
-            set { this.shippingDiscountField = value; }
+            get { return this._shippingDiscount; }
+            set { this._shippingDiscount = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the ShippingDiscount property
+        /// Sets the ShippingDiscount property.
         /// </summary>
-        /// <param name="shippingDiscount">ShippingDiscount property</param>
-        /// <returns>this instance</returns>
+        /// <param name="shippingDiscount">ShippingDiscount property.</param>
+        /// <returns>this instance.</returns>
         public OrderItem WithShippingDiscount(Money shippingDiscount)
         {
-            this.shippingDiscountField = shippingDiscount;
+            this._shippingDiscount = shippingDiscount;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if ShippingDiscount property is set
+        /// Checks if ShippingDiscount property is set.
         /// </summary>
-        /// <returns>true if ShippingDiscount property is set</returns>
-        public Boolean IsSetShippingDiscount()
+        /// <returns>true if ShippingDiscount property is set.</returns>
+        public bool IsSetShippingDiscount()
         {
-            return this.shippingDiscountField != null;
+            return this._shippingDiscount != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the PromotionDiscount property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "PromotionDiscount")]
         public Money PromotionDiscount
         {
-            get { return this.promotionDiscountField ; }
-            set { this.promotionDiscountField = value; }
+            get { return this._promotionDiscount; }
+            set { this._promotionDiscount = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the PromotionDiscount property
+        /// Sets the PromotionDiscount property.
         /// </summary>
-        /// <param name="promotionDiscount">PromotionDiscount property</param>
-        /// <returns>this instance</returns>
+        /// <param name="promotionDiscount">PromotionDiscount property.</param>
+        /// <returns>this instance.</returns>
         public OrderItem WithPromotionDiscount(Money promotionDiscount)
         {
-            this.promotionDiscountField = promotionDiscount;
+            this._promotionDiscount = promotionDiscount;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if PromotionDiscount property is set
+        /// Checks if PromotionDiscount property is set.
         /// </summary>
-        /// <returns>true if PromotionDiscount property is set</returns>
-        public Boolean IsSetPromotionDiscount()
+        /// <returns>true if PromotionDiscount property is set.</returns>
+        public bool IsSetPromotionDiscount()
         {
-            return this.promotionDiscountField != null;
+            return this._promotionDiscount != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the PromotionIds property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "PromotionIds")]
-        public PromotionIdList PromotionIds
+        public List<string> PromotionIds
         {
-            get { return this.promotionIdsField ; }
-            set { this.promotionIdsField = value; }
+            get
+            {
+                if(this._promotionIds == null)
+                {
+                    this._promotionIds = new List<string>();
+                }
+                return this._promotionIds;
+            }
+            set { this._promotionIds = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the PromotionIds property
+        /// Sets the PromotionIds property.
         /// </summary>
-        /// <param name="promotionIds">PromotionIds property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithPromotionIds(PromotionIdList promotionIds)
+        /// <param name="promotionIds">PromotionIds property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithPromotionIds(string[] promotionIds)
         {
-            this.promotionIdsField = promotionIds;
+            this._promotionIds.AddRange(promotionIds);
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if PromotionIds property is set
+        /// Checks if PromotionIds property is set.
         /// </summary>
-        /// <returns>true if PromotionIds property is set</returns>
-        public Boolean IsSetPromotionIds()
+        /// <returns>true if PromotionIds property is set.</returns>
+        public bool IsSetPromotionIds()
         {
-            return this.promotionIdsField != null;
+            return this.PromotionIds.Count > 0;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the CODFee property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "CODFee")]
         public Money CODFee
         {
-            get { return this.CODFeeField ; }
-            set { this.CODFeeField = value; }
+            get { return this._codFee; }
+            set { this._codFee = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the CODFee property
+        /// Sets the CODFee property.
         /// </summary>
-        /// <param name="CODFee">CODFee property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithCODFee(Money CODFee)
+        /// <param name="codFee">CODFee property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithCODFee(Money codFee)
         {
-            this.CODFeeField = CODFee;
+            this._codFee = codFee;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if CODFee property is set
+        /// Checks if CODFee property is set.
         /// </summary>
-        /// <returns>true if CODFee property is set</returns>
-        public Boolean IsSetCODFee()
+        /// <returns>true if CODFee property is set.</returns>
+        public bool IsSetCODFee()
         {
-            return this.CODFeeField != null;
+            return this._codFee != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the CODFeeDiscount property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "CODFeeDiscount")]
         public Money CODFeeDiscount
         {
-            get { return this.CODFeeDiscountField ; }
-            set { this.CODFeeDiscountField = value; }
+            get { return this._codFeeDiscount; }
+            set { this._codFeeDiscount = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the CODFeeDiscount property
+        /// Sets the CODFeeDiscount property.
         /// </summary>
-        /// <param name="CODFeeDiscount">CODFeeDiscount property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithCODFeeDiscount(Money CODFeeDiscount)
+        /// <param name="codFeeDiscount">CODFeeDiscount property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithCODFeeDiscount(Money codFeeDiscount)
         {
-            this.CODFeeDiscountField = CODFeeDiscount;
+            this._codFeeDiscount = codFeeDiscount;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if CODFeeDiscount property is set
+        /// Checks if CODFeeDiscount property is set.
         /// </summary>
-        /// <returns>true if CODFeeDiscount property is set</returns>
-        public Boolean IsSetCODFeeDiscount()
+        /// <returns>true if CODFeeDiscount property is set.</returns>
+        public bool IsSetCODFeeDiscount()
         {
-            return this.CODFeeDiscountField != null;
+            return this._codFeeDiscount != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the GiftMessageText property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "GiftMessageText")]
-        public String GiftMessageText
+        public string GiftMessageText
         {
-            get { return this.giftMessageTextField ; }
-            set { this.giftMessageTextField= value; }
+            get { return this._giftMessageText; }
+            set { this._giftMessageText = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the GiftMessageText property
+        /// Sets the GiftMessageText property.
         /// </summary>
-        /// <param name="giftMessageText">GiftMessageText property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithGiftMessageText(String giftMessageText)
+        /// <param name="giftMessageText">GiftMessageText property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithGiftMessageText(string giftMessageText)
         {
-            this.giftMessageTextField = giftMessageText;
+            this._giftMessageText = giftMessageText;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if GiftMessageText property is set
+        /// Checks if GiftMessageText property is set.
         /// </summary>
-        /// <returns>true if GiftMessageText property is set</returns>
-        public Boolean IsSetGiftMessageText()
+        /// <returns>true if GiftMessageText property is set.</returns>
+        public bool IsSetGiftMessageText()
         {
-            return  this.giftMessageTextField != null;
-
+            return this._giftMessageText != null;
         }
-
 
         /// <summary>
         /// Gets and sets the GiftWrapLevel property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "GiftWrapLevel")]
-        public String GiftWrapLevel
+        public string GiftWrapLevel
         {
-            get { return this.giftWrapLevelField ; }
-            set { this.giftWrapLevelField= value; }
+            get { return this._giftWrapLevel; }
+            set { this._giftWrapLevel = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the GiftWrapLevel property
+        /// Sets the GiftWrapLevel property.
         /// </summary>
-        /// <param name="giftWrapLevel">GiftWrapLevel property</param>
-        /// <returns>this instance</returns>
-        public OrderItem WithGiftWrapLevel(String giftWrapLevel)
+        /// <param name="giftWrapLevel">GiftWrapLevel property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithGiftWrapLevel(string giftWrapLevel)
         {
-            this.giftWrapLevelField = giftWrapLevel;
+            this._giftWrapLevel = giftWrapLevel;
             return this;
         }
 
-
+        /// <summary>
+        /// Checks if GiftWrapLevel property is set.
+        /// </summary>
+        /// <returns>true if GiftWrapLevel property is set.</returns>
+        public bool IsSetGiftWrapLevel()
+        {
+            return this._giftWrapLevel != null;
+        }
 
         /// <summary>
-        /// Checks if GiftWrapLevel property is set
+        /// Gets and sets the InvoiceData property.
         /// </summary>
-        /// <returns>true if GiftWrapLevel property is set</returns>
-        public Boolean IsSetGiftWrapLevel()
+        public InvoiceData InvoiceData
         {
-            return  this.giftWrapLevelField != null;
-
+            get { return this._invoiceData; }
+            set { this._invoiceData = value; }
         }
-
-
-
 
         /// <summary>
-        /// XML fragment representation of this object
+        /// Sets the InvoiceData property.
         /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
-
-
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetASIN()) {
-                xml.Append("<ASIN>");
-                xml.Append(EscapeXML(this.ASIN));
-                xml.Append("</ASIN>");
-            }
-            if (IsSetSellerSKU()) {
-                xml.Append("<SellerSKU>");
-                xml.Append(EscapeXML(this.SellerSKU));
-                xml.Append("</SellerSKU>");
-            }
-            if (IsSetOrderItemId()) {
-                xml.Append("<OrderItemId>");
-                xml.Append(EscapeXML(this.OrderItemId));
-                xml.Append("</OrderItemId>");
-            }
-            if (IsSetTitle()) {
-                xml.Append("<Title>");
-                xml.Append(EscapeXML(this.Title));
-                xml.Append("</Title>");
-            }
-            if (IsSetQuantityOrdered()) {
-                xml.Append("<QuantityOrdered>");
-                xml.Append(this.QuantityOrdered);
-                xml.Append("</QuantityOrdered>");
-            }
-            if (IsSetQuantityShipped()) {
-                xml.Append("<QuantityShipped>");
-                xml.Append(this.QuantityShipped);
-                xml.Append("</QuantityShipped>");
-            }
-            if (IsSetItemPrice()) {
-                Money  itemPriceObj = this.ItemPrice;
-                xml.Append("<ItemPrice>");
-                xml.Append(itemPriceObj.ToXMLFragment());
-                xml.Append("</ItemPrice>");
-            } 
-            if (IsSetShippingPrice()) {
-                Money  shippingPriceObj = this.ShippingPrice;
-                xml.Append("<ShippingPrice>");
-                xml.Append(shippingPriceObj.ToXMLFragment());
-                xml.Append("</ShippingPrice>");
-            } 
-            if (IsSetGiftWrapPrice()) {
-                Money  giftWrapPriceObj = this.GiftWrapPrice;
-                xml.Append("<GiftWrapPrice>");
-                xml.Append(giftWrapPriceObj.ToXMLFragment());
-                xml.Append("</GiftWrapPrice>");
-            } 
-            if (IsSetItemTax()) {
-                Money  itemTaxObj = this.ItemTax;
-                xml.Append("<ItemTax>");
-                xml.Append(itemTaxObj.ToXMLFragment());
-                xml.Append("</ItemTax>");
-            } 
-            if (IsSetShippingTax()) {
-                Money  shippingTaxObj = this.ShippingTax;
-                xml.Append("<ShippingTax>");
-                xml.Append(shippingTaxObj.ToXMLFragment());
-                xml.Append("</ShippingTax>");
-            } 
-            if (IsSetGiftWrapTax()) {
-                Money  giftWrapTaxObj = this.GiftWrapTax;
-                xml.Append("<GiftWrapTax>");
-                xml.Append(giftWrapTaxObj.ToXMLFragment());
-                xml.Append("</GiftWrapTax>");
-            } 
-            if (IsSetShippingDiscount()) {
-                Money  shippingDiscountObj = this.ShippingDiscount;
-                xml.Append("<ShippingDiscount>");
-                xml.Append(shippingDiscountObj.ToXMLFragment());
-                xml.Append("</ShippingDiscount>");
-            } 
-            if (IsSetPromotionDiscount()) {
-                Money  promotionDiscountObj = this.PromotionDiscount;
-                xml.Append("<PromotionDiscount>");
-                xml.Append(promotionDiscountObj.ToXMLFragment());
-                xml.Append("</PromotionDiscount>");
-            } 
-            if (IsSetPromotionIds()) {
-                PromotionIdList  promotionIdsObj = this.PromotionIds;
-                xml.Append("<PromotionIds>");
-                xml.Append(promotionIdsObj.ToXMLFragment());
-                xml.Append("</PromotionIds>");
-            } 
-            if (IsSetCODFee()) {
-                Money  CODFeeObj = this.CODFee;
-                xml.Append("<CODFee>");
-                xml.Append(CODFeeObj.ToXMLFragment());
-                xml.Append("</CODFee>");
-            } 
-            if (IsSetCODFeeDiscount()) {
-                Money  CODFeeDiscountObj = this.CODFeeDiscount;
-                xml.Append("<CODFeeDiscount>");
-                xml.Append(CODFeeDiscountObj.ToXMLFragment());
-                xml.Append("</CODFeeDiscount>");
-            } 
-            if (IsSetGiftMessageText()) {
-                xml.Append("<GiftMessageText>");
-                xml.Append(EscapeXML(this.GiftMessageText));
-                xml.Append("</GiftMessageText>");
-            }
-            if (IsSetGiftWrapLevel()) {
-                xml.Append("<GiftWrapLevel>");
-                xml.Append(EscapeXML(this.GiftWrapLevel));
-                xml.Append("</GiftWrapLevel>");
-            }
-            return xml.ToString();
-        }
-
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
-        }
-
-        public override string ToString()
+        /// <param name="invoiceData">InvoiceData property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithInvoiceData(InvoiceData invoiceData)
         {
-            StringBuilder result = new StringBuilder();
-            if (IsSetTitle())
-            {
-                result.Append("Title: ");
-                result.AppendLine(Title);
-            }
-            if (IsSetASIN())
-            {
-                result.Append("ASIN: ");
-                result.AppendLine(ASIN);
-            }
-            if (IsSetSellerSKU())
-            {
-                result.Append("SKU: ");
-                result.AppendLine(SellerSKU);
-            } 
-            if (IsSetItemPrice())
-            {
-                result.Append("Price: ");
-                result.AppendLine(ItemPrice.ToString());
-            }
-            if (IsSetItemTax())
-            {
-                result.Append("Item Tax: ");
-                result.AppendLine(ItemTax.ToString());
-            }
-            if (IsSetPromotionDiscount())
-            {
-                result.Append("Promotions Discount: ");
-                result.AppendLine(PromotionDiscount.ToString());
-            }
-            if (IsSetPromotionIds())
-            {
-                if (PromotionIds.PromotionId != null)
-                {
-                    foreach (string promotionId in PromotionIds.PromotionId)
-                    {
-                        result.Append("\tPromotion Id: ");
-                        result.AppendLine(promotionId);
-                    }
-                }
-            }
-            if (IsSetShippingDiscount())
-            {
-                result.Append("Shipping Discount: ");
-                result.AppendLine(ShippingDiscount.ToString());
-            }
-            if (IsSetQuantityOrdered())
-            {
-                result.Append("Quantity: ");
-                result.AppendLine(QuantityOrdered.ToString());
-            }
-            if (IsSetQuantityShipped())
-            {
-                result.Append("Quantity Shipped: ");
-                result.AppendLine(QuantityShipped.ToString());
-            }
-            if (IsSetCODFee())
-            {
-                result.Append("COD Fee: ");
-                result.AppendLine(CODFee.ToString());
-            }
-            if (IsSetCODFeeDiscount())
-            {
-                result.Append("COD Fee Discount: ");
-                result.AppendLine(CODFeeDiscount.ToString());
-            }
-            if (IsSetGiftMessageText())
-            {
-                result.Append("Gift Message Text: ");
-                result.AppendLine(GiftMessageText);
-            }
-            if (IsSetGiftWrapPrice())
-            {
-                result.Append("Gift Wrap Price: ");
-                result.AppendLine(GiftWrapPrice.ToString());
-            }
-            if (IsSetGiftWrapLevel())
-            {
-                result.Append("Gift Wrap Level: ");
-                result.AppendLine(GiftWrapLevel.ToString());
-            }
-            return result.ToString();
+            this._invoiceData = invoiceData;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if InvoiceData property is set.
+        /// </summary>
+        /// <returns>true if InvoiceData property is set.</returns>
+        public bool IsSetInvoiceData()
+        {
+            return this._invoiceData != null;
+        }
+
+        /// <summary>
+        /// Gets and sets the ConditionNote property.
+        /// </summary>
+        public string ConditionNote
+        {
+            get { return this._conditionNote; }
+            set { this._conditionNote = value; }
+        }
+
+        /// <summary>
+        /// Sets the ConditionNote property.
+        /// </summary>
+        /// <param name="conditionNote">ConditionNote property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithConditionNote(string conditionNote)
+        {
+            this._conditionNote = conditionNote;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if ConditionNote property is set.
+        /// </summary>
+        /// <returns>true if ConditionNote property is set.</returns>
+        public bool IsSetConditionNote()
+        {
+            return this._conditionNote != null;
+        }
+
+        /// <summary>
+        /// Gets and sets the ConditionId property.
+        /// </summary>
+        public string ConditionId
+        {
+            get { return this._conditionId; }
+            set { this._conditionId = value; }
+        }
+
+        /// <summary>
+        /// Sets the ConditionId property.
+        /// </summary>
+        /// <param name="conditionId">ConditionId property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithConditionId(string conditionId)
+        {
+            this._conditionId = conditionId;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if ConditionId property is set.
+        /// </summary>
+        /// <returns>true if ConditionId property is set.</returns>
+        public bool IsSetConditionId()
+        {
+            return this._conditionId != null;
+        }
+
+        /// <summary>
+        /// Gets and sets the ConditionSubtypeId property.
+        /// </summary>
+        public string ConditionSubtypeId
+        {
+            get { return this._conditionSubtypeId; }
+            set { this._conditionSubtypeId = value; }
+        }
+
+        /// <summary>
+        /// Sets the ConditionSubtypeId property.
+        /// </summary>
+        /// <param name="conditionSubtypeId">ConditionSubtypeId property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithConditionSubtypeId(string conditionSubtypeId)
+        {
+            this._conditionSubtypeId = conditionSubtypeId;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if ConditionSubtypeId property is set.
+        /// </summary>
+        /// <returns>true if ConditionSubtypeId property is set.</returns>
+        public bool IsSetConditionSubtypeId()
+        {
+            return this._conditionSubtypeId != null;
+        }
+
+        /// <summary>
+        /// Gets and sets the ScheduledDeliveryStartDate property.
+        /// </summary>
+        public string ScheduledDeliveryStartDate
+        {
+            get { return this._scheduledDeliveryStartDate; }
+            set { this._scheduledDeliveryStartDate = value; }
+        }
+
+        /// <summary>
+        /// Sets the ScheduledDeliveryStartDate property.
+        /// </summary>
+        /// <param name="scheduledDeliveryStartDate">ScheduledDeliveryStartDate property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithScheduledDeliveryStartDate(string scheduledDeliveryStartDate)
+        {
+            this._scheduledDeliveryStartDate = scheduledDeliveryStartDate;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if ScheduledDeliveryStartDate property is set.
+        /// </summary>
+        /// <returns>true if ScheduledDeliveryStartDate property is set.</returns>
+        public bool IsSetScheduledDeliveryStartDate()
+        {
+            return this._scheduledDeliveryStartDate != null;
+        }
+
+        /// <summary>
+        /// Gets and sets the ScheduledDeliveryEndDate property.
+        /// </summary>
+        public string ScheduledDeliveryEndDate
+        {
+            get { return this._scheduledDeliveryEndDate; }
+            set { this._scheduledDeliveryEndDate = value; }
+        }
+
+        /// <summary>
+        /// Sets the ScheduledDeliveryEndDate property.
+        /// </summary>
+        /// <param name="scheduledDeliveryEndDate">ScheduledDeliveryEndDate property.</param>
+        /// <returns>this instance.</returns>
+        public OrderItem WithScheduledDeliveryEndDate(string scheduledDeliveryEndDate)
+        {
+            this._scheduledDeliveryEndDate = scheduledDeliveryEndDate;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if ScheduledDeliveryEndDate property is set.
+        /// </summary>
+        /// <returns>true if ScheduledDeliveryEndDate property is set.</returns>
+        public bool IsSetScheduledDeliveryEndDate()
+        {
+            return this._scheduledDeliveryEndDate != null;
         }
 
 
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _asin = reader.Read<string>("ASIN");
+            _sellerSKU = reader.Read<string>("SellerSKU");
+            _orderItemId = reader.Read<string>("OrderItemId");
+            _title = reader.Read<string>("Title");
+            _quantityOrdered = reader.Read<decimal>("QuantityOrdered");
+            _quantityShipped = reader.Read<decimal?>("QuantityShipped");
+            _itemPrice = reader.Read<Money>("ItemPrice");
+            _shippingPrice = reader.Read<Money>("ShippingPrice");
+            _giftWrapPrice = reader.Read<Money>("GiftWrapPrice");
+            _itemTax = reader.Read<Money>("ItemTax");
+            _shippingTax = reader.Read<Money>("ShippingTax");
+            _giftWrapTax = reader.Read<Money>("GiftWrapTax");
+            _shippingDiscount = reader.Read<Money>("ShippingDiscount");
+            _promotionDiscount = reader.Read<Money>("PromotionDiscount");
+            _promotionIds = reader.ReadList<string>("PromotionIds", "PromotionId");
+            _codFee = reader.Read<Money>("CODFee");
+            _codFeeDiscount = reader.Read<Money>("CODFeeDiscount");
+            _giftMessageText = reader.Read<string>("GiftMessageText");
+            _giftWrapLevel = reader.Read<string>("GiftWrapLevel");
+            _invoiceData = reader.Read<InvoiceData>("InvoiceData");
+            _conditionNote = reader.Read<string>("ConditionNote");
+            _conditionId = reader.Read<string>("ConditionId");
+            _conditionSubtypeId = reader.Read<string>("ConditionSubtypeId");
+            _scheduledDeliveryStartDate = reader.Read<string>("ScheduledDeliveryStartDate");
+            _scheduledDeliveryEndDate = reader.Read<string>("ScheduledDeliveryEndDate");
+        }
+
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("ASIN", _asin);
+            writer.Write("SellerSKU", _sellerSKU);
+            writer.Write("OrderItemId", _orderItemId);
+            writer.Write("Title", _title);
+            writer.Write("QuantityOrdered", _quantityOrdered);
+            writer.Write("QuantityShipped", _quantityShipped);
+            writer.Write("ItemPrice", _itemPrice);
+            writer.Write("ShippingPrice", _shippingPrice);
+            writer.Write("GiftWrapPrice", _giftWrapPrice);
+            writer.Write("ItemTax", _itemTax);
+            writer.Write("ShippingTax", _shippingTax);
+            writer.Write("GiftWrapTax", _giftWrapTax);
+            writer.Write("ShippingDiscount", _shippingDiscount);
+            writer.Write("PromotionDiscount", _promotionDiscount);
+            writer.WriteList("PromotionIds", "PromotionId", _promotionIds);
+            writer.Write("CODFee", _codFee);
+            writer.Write("CODFeeDiscount", _codFeeDiscount);
+            writer.Write("GiftMessageText", _giftMessageText);
+            writer.Write("GiftWrapLevel", _giftWrapLevel);
+            writer.Write("InvoiceData", _invoiceData);
+            writer.Write("ConditionNote", _conditionNote);
+            writer.Write("ConditionId", _conditionId);
+            writer.Write("ConditionSubtypeId", _conditionSubtypeId);
+            writer.Write("ScheduledDeliveryStartDate", _scheduledDeliveryStartDate);
+            writer.Write("ScheduledDeliveryEndDate", _scheduledDeliveryEndDate);
+        }
+
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("https://mws.amazonservices.com/Orders/2013-09-01", "OrderItem", this);
+        }
+
+        public OrderItem() : base()
+        {
+        }
     }
-
 }

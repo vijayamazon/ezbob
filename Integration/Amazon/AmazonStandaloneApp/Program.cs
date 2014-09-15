@@ -87,19 +87,22 @@
             {
                 var configurator = AmazonServiceConfigurationFactory.CreateServiceReportsConfigurator(_ConnectionInfo);
 
-                orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,umi,
-                                                                                                            ElapsedDataMemberType.RetrieveDataFromExternalService,
-                                                                                                            () => AmazonServiceReports.GetUserOrders(configurator, amazonOrdersRequestInfo, ActionAccessType.Full))
-                                                                                                            .Select(o => OrderItemTwo.FromOrderItem(o))
-                                                                                                            .ToList();
+	            orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+		            elapsedTimeInfo, umi,
+		            ElapsedDataMemberType.RetrieveDataFromExternalService,
+		            () => AmazonServiceReports.GetUserOrders(configurator, amazonOrdersRequestInfo, ActionAccessType.Full))
+	                        .Select(OrderItemTwo.FromOrderItem)
+	                        .ToList();
             }
             else
             {
-                orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,umi,
-                                                                                            ElapsedDataMemberType.RetrieveDataFromExternalService,
-                                                                                            () => AmazonServiceHelper.GetListOrders(_ConnectionInfo, amazonOrdersRequestInfo, ActionAccessType.Full))
-                                                                                            .Select(o => OrderItemTwo.FromOrderItem2(o))
-                                                                                            .ToList();
+
+                var ordersList = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,umi, 
+					ElapsedDataMemberType.RetrieveDataFromExternalService,
+                    () => AmazonServiceHelper.GetListOrders(_ConnectionInfo, amazonOrdersRequestInfo, ActionAccessType.Full, null));
+
+				//todo make it work again
+	            orders = new List<OrderItemTwo>();
             }
 
             return orders;

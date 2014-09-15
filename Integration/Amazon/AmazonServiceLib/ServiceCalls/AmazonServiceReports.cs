@@ -1,11 +1,11 @@
-﻿namespace EzBob.AmazonServiceLib.ServiceCalls
-{
+﻿namespace EzBob.AmazonServiceLib.ServiceCalls {
 	using System;
 	using System.Collections;
 	using System.Collections.Concurrent;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
+	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using Common;
 	using MarketWebService.Configurator;
@@ -15,8 +15,7 @@
 	using MarketplaceWebService;
 	using MarketplaceWebService.Model;
 
-    public class AmazonServiceReports
-	{
+	public class AmazonServiceReports {
 		private readonly IMarketplaceWebService _Service;
 		private static readonly ITrapForThrottling RequestGetReportTrapForThrottling;
 		private static readonly ITrapForThrottling ReportGetRequestListTrapForThrottling;
@@ -25,64 +24,55 @@
 
 		private static readonly ITrapForThrottling ReportGetRequestListNextTokenTrapForThrottling;
 
-		static AmazonServiceReports()
-		{
-			RequestGetReportTrapForThrottling = TrapForThrottlingController.Create( "Request Report", 15, 120 );
+		static AmazonServiceReports() {
+			RequestGetReportTrapForThrottling = TrapForThrottlingController.Create("Request Report", 15, 120);
 			//ReportGetRequestListTrapForThrottling = TrapForThrottlingController.CreateSimpleWait( "GetReportRequestList", 10 , RequestQuoteTimePeriodType.PerMinute);
-			ReportGetRequestListTrapForThrottling = TrapForThrottlingController.Create( "GetReportRequestList", 10, 45 );
-			ReportGetRequestListNextTokenTrapForThrottling = TrapForThrottlingController.Create( "GetReportRequestListByNextToken", 30, 2 );
-			ReportGetReportListTrapForThrottling = TrapForThrottlingController.Create( "GetReportList", 10 );
-			ReportGetReportTrapForThrottling = TrapForThrottlingController.Create( "GetReport", 15 );
+			ReportGetRequestListTrapForThrottling = TrapForThrottlingController.Create("GetReportRequestList", 10, 45);
+			ReportGetRequestListNextTokenTrapForThrottling = TrapForThrottlingController.Create("GetReportRequestListByNextToken", 30, 2);
+			ReportGetReportListTrapForThrottling = TrapForThrottlingController.Create("GetReportList", 10);
+			ReportGetReportTrapForThrottling = TrapForThrottlingController.Create("GetReport", 15);
 		}
 
-		private AmazonServiceReports( IMarketplaceWebService service )
-		{
+		private AmazonServiceReports(IMarketplaceWebService service) {
 			_Service = service;
 
 		}
 
-		public static AmazonOrdersList GetUserOrders( IAmazonServiceReportsConfigurator configurator, AmazonOrdersRequestInfo requestInfo, ActionAccessType access )
-		{
+		public static AmazonOrdersList GetUserOrders(IAmazonServiceReportsConfigurator configurator, AmazonOrdersRequestInfo requestInfo, ActionAccessType access) {
 			var service = configurator.AmazonService;
 
-			var data = new AmazonServiceReports( service );
+			var data = new AmazonServiceReports(service);
 
-			return data.GetUserOrders( requestInfo, access );
+			return data.GetUserOrders(requestInfo, access);
 		}
 
-		private AmazonOrdersList GetUserOrders( AmazonOrdersRequestInfo amazonRequestInfo, ActionAccessType access )
-		{
+		private AmazonOrdersList GetUserOrders(AmazonOrdersRequestInfo amazonRequestInfo, ActionAccessType access) {
 			const string getFlatFileOrdersDataRequestStr = "_GET_FLAT_FILE_ORDERS_DATA_";
 
-			var reportRequestList = new RequestsListInfo( amazonRequestInfo, "GetUserOrders", access /*timeout: 3 hours*/, amazonRequestInfo.ErrorRetryingInfo, 3 * 60);
-			reportRequestList.AddRequest( getFlatFileOrdersDataRequestStr );
+			var reportRequestList = new RequestsListInfo(amazonRequestInfo, "GetUserOrders", access /*timeout: 3 hours*/, amazonRequestInfo.ErrorRetryingInfo);
+			reportRequestList.AddRequest(getFlatFileOrdersDataRequestStr);
 
 			RequestAndWait(reportRequestList);
 
 			return ParseOrdersResult(getFlatFileOrdersDataRequestStr, reportRequestList);
 		}
 
-		private void RequestAndWait(RequestsListInfo reportRequestList)
-		{
+		private void RequestAndWait(RequestsListInfo reportRequestList) {
 			RequestReports(reportRequestList);
 			WaitRequestsDone(reportRequestList);
 		}
 
-		private AmazonOrdersList ParseOrdersResult(string getFlatFileOrdersDataRequestStr, RequestsListInfo reportRequestList)
-		{
+		private AmazonOrdersList ParseOrdersResult(string getFlatFileOrdersDataRequestStr, RequestsListInfo reportRequestList) {
 			var requestInfo = reportRequestList.GetRequestByName(getFlatFileOrdersDataRequestStr);
 
-            AmazonOrdersList data = new AmazonOrdersList(reportRequestList.StartDate.Value);
-			if (requestInfo != null && requestInfo.IsDone)
-			{
+			AmazonOrdersList data = new AmazonOrdersList(reportRequestList.StartDate.Value);
+			if (requestInfo != null && requestInfo.IsDone) {
 				var reportRequestInfo = requestInfo.ReportData;
-				if (reportRequestInfo != null)
-				{
+				if (reportRequestInfo != null) {
 					data = new AmazonOrdersList(reportRequestInfo.SubmittedDate);
 
-					using (var stream = new MemoryStream())
-					{
-						GetReportData( requestInfo, stream );
+					using (var stream = new MemoryStream()) {
+						GetReportData(requestInfo, stream);
 						ParseOrdersStream(data, stream);
 					}
 				}
@@ -90,24 +80,21 @@
 			return data;
 		}
 
-		private void WaitRequestsDone( RequestsListInfo requestsListInfo )
-		{
+		private void WaitRequestsDone(RequestsListInfo requestsListInfo) {
 			var actionName = requestsListInfo.ActionName;
 			var timeOutInMinutes = requestsListInfo.TimeOutInMinutes;
 			var access = requestsListInfo.Access;
 
 			var amazonIsdList = requestsListInfo.AmazonIds;
 
-			var getReportRequestListRequest = new GetReportRequestListRequest
-			{
+			var getReportRequestListRequest = new GetReportRequestListRequest {
 				Merchant = requestsListInfo.UserId,
 				ReportRequestIdList = amazonIsdList
 			};
 
-			var endDate = DateTime.Now.AddMinutes( timeOutInMinutes );
-			
-			while ( DateTime.Now <= endDate )
-			{
+			var endDate = DateTime.Now.AddMinutes(timeOutInMinutes);
+
+			while (DateTime.Now <= endDate) {
 
 				var reportRequestListResponse = AmazonWaitBeforeRetryHelper.DoServiceAction(
 									requestsListInfo.ErrorRetryingInfo,
@@ -115,54 +102,46 @@
 									actionName,
 									access,
 									requestsListInfo.RequestsCounter,
-									() => _Service.GetReportRequestList( getReportRequestListRequest ),
-									"GetReportRequestList" );
+									() => _Service.GetReportRequestList(getReportRequestListRequest),
+									"GetReportRequestList");
 
-				if ( reportRequestListResponse != null && reportRequestListResponse.IsSetGetReportRequestListResult() )
-				{
+				if (reportRequestListResponse != null && reportRequestListResponse.IsSetGetReportRequestListResult()) {
 					var getReportRequestListResult = reportRequestListResponse.GetReportRequestListResult;
 
-					requestsListInfo.UpdateAmazonReportRequestInfo( getReportRequestListResult == null ? null : getReportRequestListResult.ReportRequestInfo );					
+					requestsListInfo.UpdateAmazonReportRequestInfo(getReportRequestListResult == null ? null : getReportRequestListResult.ReportRequestInfo);
 				}
 
-				if(!requestsListInfo.HasAmazonResult)				
-				{
+				if (!requestsListInfo.HasAmazonResult) {
 					continue;
 				}
 
-				if ( requestsListInfo.IsDoneAll )
-				{
+				if (requestsListInfo.IsDoneAll) {
 					break;
 				}
-				
+
 			}
-			
+
 		}
 
-		private void RequestReports( RequestsListInfo reportRequestList )
-		{
+		private void RequestReports(RequestsListInfo reportRequestList) {
 			var marketplaceIdList = new IdList { Id = reportRequestList.MarketPlaceId };
 			var access = reportRequestList.Access;
 
-			foreach (var requestInfo in reportRequestList)
-			{
+			foreach (var requestInfo in reportRequestList) {
 				var reportType = requestInfo.Name;
 
-				var requestReportRequest = new RequestReportRequest
-				{
+				var requestReportRequest = new RequestReportRequest {
 					MarketplaceIdList = marketplaceIdList,
 					Merchant = reportRequestList.UserId,
 					ReportOptions = "ShowSalesChannel=true",
-					ReportType = reportType				
+					ReportType = reportType
 				};
 
-				if ( reportRequestList.StartDate.HasValue )
-				{
+				if (reportRequestList.StartDate.HasValue) {
 					requestReportRequest.StartDate = reportRequestList.StartDate.Value.ToUniversalTime();
 				}
 
-				if ( reportRequestList.EndDate.HasValue )
-				{
+				if (reportRequestList.EndDate.HasValue) {
 					requestReportRequest.EndDate = reportRequestList.EndDate.Value.ToUniversalTime();
 				}
 
@@ -175,20 +154,18 @@
 									reportType,
 									access,
 									reportRequestList.RequestsCounter,
-									() => _Service.RequestReport( requestReportRequest ) ,
-									"RequestReport" );
+									() => _Service.RequestReport(requestReportRequest),
+									"RequestReport");
 
-				if ( resp != null && resp.IsSetRequestReportResult() )
-				{
-					info.SetId( resp.RequestReportResult.ReportRequestInfo.ReportRequestId );
-				}				
+				if (resp != null && resp.IsSetRequestReportResult()) {
+					info.SetId(resp.RequestReportResult.ReportRequestInfo.ReportRequestId);
+				}
 			}
 
-			
+
 		}
 
-		private void GetReportData(RequestInfo requestInfo, Stream stream)
-		{
+		private void GetReportData(RequestInfo requestInfo, Stream stream) {
 			var requestReport = new GetReportRequest();
 			var requestsListInfo = requestInfo.Owner;
 			var merchant = requestsListInfo.UserId;
@@ -205,16 +182,14 @@
 									requestName,
 									access,
 									requestsListInfo.RequestsCounter,
-									() => _Service.GetReportList( requestReportList ),
-									"GetReportList" );
+									() => _Service.GetReportList(requestReportList),
+									"GetReportList");
 
-			if (respGetReportList != null && respGetReportList.IsSetGetReportListResult())
-			{
-				reportInfo = respGetReportList.GetReportListResult.ReportInfo.FirstOrDefault( r => r.ReportRequestId.Equals( requestInfo.Id ) );
+			if (respGetReportList != null && respGetReportList.IsSetGetReportListResult()) {
+				reportInfo = respGetReportList.GetReportListResult.ReportInfo.FirstOrDefault(r => r.ReportRequestId.Equals(requestInfo.Id));
 			}
 
-			if ( reportInfo != null )
-			{
+			if (reportInfo != null) {
 				requestReport.Merchant = merchant;
 				requestReport.ReportId = reportInfo.ReportId;
 
@@ -226,119 +201,85 @@
 									requestName,
 									access,
 									requestsListInfo.RequestsCounter,
-									() => _Service.GetReport( requestReport ),
-									"GetReport" );				
+									() => _Service.GetReport(requestReport),
+									"GetReport");
 			}
 		}
 
-		private void ParseOrdersStream( AmazonOrdersList orders, MemoryStream stream )
-		{
-			using ( var sr = new StreamReader( stream ) )
-			{
+		private void ParseOrdersStream(AmazonOrdersList orders, MemoryStream stream) {
+			using (var sr = new StreamReader(stream)) {
 				// заголовок
 				var h = sr.ReadLine();
 
-				while ( sr.Peek() >= 0 )
-				{
+				while (sr.Peek() >= 0) {
 					var item = new AmazonOrderItem();
 					var str = sr.ReadLine();
-					var list = str.Split( new[] { '\t' } );
+					var list = str.Split(new[] { '\t' });
 
-					item.OrderId = GetData( list, AmazonOrderDataEnum.OrderId );
-					item.OrderItemId = GetData( list, AmazonOrderDataEnum.OrderItemId );
-					item.PaymentsDate = ConvertToDate( GetData( list, AmazonOrderDataEnum.PaymentsDate ) );
-					item.ProductName = GetData( list, AmazonOrderDataEnum.ProductName );
-					item.PurchaseDate = ConvertToDate( GetData( list, AmazonOrderDataEnum.PurchaseDate ) );
-					item.QuantityPurchased = ConvertToInt( GetData( list, AmazonOrderDataEnum.QuantityPurchased ) );
-					item.RecipientName = GetData( list, AmazonOrderDataEnum.RecipientName );
-					item.SalesChennel = GetData( list, AmazonOrderDataEnum.SalesChannel);
-					item.Sku = GetData( list, AmazonOrderDataEnum.Sku );
+					item.OrderId = GetData(list, AmazonOrderDataEnum.OrderId);
+					item.LastUpdateDate = ConvertToDate(GetData(list, AmazonOrderDataEnum.PaymentsDate));
+					item.PurchaseDate = ConvertToDate(GetData(list, AmazonOrderDataEnum.PurchaseDate));
+					item.NumberOfItemsShipped = ConvertToInt(GetData(list, AmazonOrderDataEnum.QuantityPurchased));
 					
-					item.ShipStreet = GetData( list, AmazonOrderDataEnum.ShipAddress1);
-					item.ShipStreet1 = GetData( list, AmazonOrderDataEnum.ShipAddress2);
-					item.ShipStreet2  = GetData( list, AmazonOrderDataEnum.ShipAddress3);
-					item.ShipCityName = GetData( list, AmazonOrderDataEnum.ShipCity);
-					item.ShipStateOrProvince = GetData( list, AmazonOrderDataEnum.ShipState);
-					item.ShipCountryName  = GetData( list, AmazonOrderDataEnum.ShipCountry);
-					item.ShipPostalCode = GetData( list, AmazonOrderDataEnum.ShipPostalCode);
-					item.ShipPhone = GetData( list, AmazonOrderDataEnum.ShipPhoneNumber);
-					item.ShipRecipient = GetData( list, AmazonOrderDataEnum.RecipientName );
-					
-					item.BayerEmail = GetData( list, AmazonOrderDataEnum.BayerEmail);
-					item.BayerName = GetData( list, AmazonOrderDataEnum.BuyerName );
-					item.BayerPhone = GetData( list, AmazonOrderDataEnum.BuyerPhone );
-					item.Currency = GetData( list, AmazonOrderDataEnum.Currency );
-					item.ItemPrice = ConvertToDouble( GetData( list, AmazonOrderDataEnum.ItemPrice ) );
-					item.ItemTax = ConvertToDouble( GetData( list, AmazonOrderDataEnum.ItemTax ) );
-					item.ShipingPrice = ConvertToDouble( GetData( list, AmazonOrderDataEnum.ShipingPrice ) );
-					item.ShipingTax = ConvertToDouble( GetData( list, AmazonOrderDataEnum.ShipingTax ) );
-					item.ShipServiceLevel = GetData( list, AmazonOrderDataEnum.ShipServiceLevel );
+					item.OrderTotal = new AmountInfo {
+						Value = ConvertToDouble(GetData(list, AmazonOrderDataEnum.ItemPrice)),
+						CurrencyCode = GetData(list, AmazonOrderDataEnum.Currency)
+					};
 
-					item.DeliveryStartDate = ConvertToDate( GetData( list, AmazonOrderDataEnum.DeliveryStartDate ) );
-					item.DeliveryEndDate = ConvertToDate( GetData( list, AmazonOrderDataEnum.DeliveryEndDate ) );
-					item.DeliveryTimeZone = GetData( list, AmazonOrderDataEnum.DeliveryTimeZone );
-					item.DeliveryInstructions = GetData( list, AmazonOrderDataEnum.DeliveryTimeZone );
+					item.OrderStatus =AmazonOrdersList2ItemStatusType.Shipped;
 
-					orders.Add( item );
+					orders.Add(item);
 				}
 			}
 		}
 
-		private DateTime? ConvertToDate(string data)
-		{
-			if ( string.IsNullOrWhiteSpace( data ) )
-			{
+		private DateTime? ConvertToDate(string data) {
+			if (string.IsNullOrWhiteSpace(data)) {
 				return null;
 			}
 
 			DateTime val;
-			if ( DateTime.TryParse( data, out val ) )
-			{
+			if (DateTime.TryParse(data, out val)) {
 				return val.ToUniversalTime();
 			}
 
 			return null;
 		}
 
-		private int ConvertToInt(string data)
-		{
-			if ( string.IsNullOrWhiteSpace( data ) )
-			{
+		private int ConvertToInt(string data) {
+			if (string.IsNullOrWhiteSpace(data)) {
 				return 0;
 			}
 
 			int val;
 
-			int.TryParse( data, out val );
+			int.TryParse(data, out val);
 
 			return val;
 		}
 
-		private double ConvertToDouble( string data )
-		{
-			if ( string.IsNullOrWhiteSpace( data ) )
-			{
+		private double ConvertToDouble(string data) {
+			if (string.IsNullOrWhiteSpace(data)) {
 				return 0d;
 			}
 
 			double val;
 
-			double.TryParse( data, out val );
+			double.TryParse(data, out val);
 
 			return val;
 		}
 
-		private string GetData(string[] list, AmazonOrderDataEnum itemIndex)
-		{
+		private string GetData(string[] list, AmazonOrderDataEnum itemIndex) {
 			var indx = (int)itemIndex;
-		    if (indx >= list.Length) return "";
+			if (indx >= list.Length)
+				return "";
 			return list[indx];
 		}
-		
+
 	}
 
-	internal class RequestsListInfo : IEnumerable<RequestInfo>
-	{
+	internal class RequestsListInfo : IEnumerable<RequestInfo> {
 		private readonly ConcurrentBag<RequestInfo> _List = new ConcurrentBag<RequestInfo>();
 		private ICollection<ReportRequestInfo> _LastReportResults;
 
@@ -354,8 +295,7 @@
 
 
 
-		public RequestsListInfo(AmazonRequestInfoBase amazonRequestInfo, string actionName, ActionAccessType access, ErrorRetryingInfo errorRetryingInfo, int timeOutInMinutes = 10)
-		{
+		public RequestsListInfo(AmazonRequestInfoBase amazonRequestInfo, string actionName, ActionAccessType access, ErrorRetryingInfo errorRetryingInfo, int timeOutInMinutes = 10) {
 			UserId = amazonRequestInfo.MerchantId;
 			MarketPlaceId = amazonRequestInfo.MarketplaceId;
 			StartDate = amazonRequestInfo.StartDate;
@@ -368,96 +308,77 @@
 			RequestsCounter = new RequestsCounterData();
 		}
 
-		public void AddRequest( string requestName )
-		{
-			_List.Add( new RequestInfo( this, requestName ) );
+		public void AddRequest(string requestName) {
+			_List.Add(new RequestInfo(this, requestName));
 		}
 
-		public bool HasAmazonResult
-		{
+		public bool HasAmazonResult {
 			get { return _LastReportResults != null && _LastReportResults.Count > 0; }
 		}
 
-		public bool IsDoneAll
-		{
-			get { return _List.All( i => i.IsEnded ); }
+		public bool IsDoneAll {
+			get { return _List.All(i => i.IsEnded); }
 		}
-		public IdList AmazonIds
-		{
-			get
-			{
-				return new IdList
-					       {
-							   Id = _List.Select( i => i.Id ).ToList()
-					       };
+		public IdList AmazonIds {
+			get {
+				return new IdList {
+					Id = _List.Select(i => i.Id).ToList()
+				};
 			}
 		}
 
-		public void UpdateAmazonReportRequestInfo(ICollection<ReportRequestInfo> reportRequestInfos)
-		{
+		public void UpdateAmazonReportRequestInfo(ICollection<ReportRequestInfo> reportRequestInfos) {
 			_LastReportResults = reportRequestInfos;
 
 			UpdateRequestsItems();
 		}
 
-		private void UpdateRequestsItems()
-		{
-			if ( !HasAmazonResult )
-			{
-				_List.AsParallel().ForAll( i => i.ResetData() );
+		private void UpdateRequestsItems() {
+			if (!HasAmazonResult) {
+				_List.AsParallel().ForAll(i => i.ResetData());
 				return;
 			}
 
-			_LastReportResults.AsParallel().ForAll( r =>
-			{
-				var req = _List.FirstOrDefault( i => i.Id == r.ReportRequestId );
-				if ( req != null )
-				{
-					req.UpdateData( r );
+			_LastReportResults.AsParallel().ForAll(r => {
+				var req = _List.FirstOrDefault(i => i.Id == r.ReportRequestId);
+				if (req != null) {
+					req.UpdateData(r);
 				}
-			} );
+			});
 		}
 
-		public RequestInfo GetRequestByName( string requestName )
-		{
-			return _List.FirstOrDefault( i => string.Equals( i.Name, requestName, StringComparison.InvariantCultureIgnoreCase ) );
+		public RequestInfo GetRequestByName(string requestName) {
+			return _List.FirstOrDefault(i => string.Equals(i.Name, requestName, StringComparison.InvariantCultureIgnoreCase));
 		}
 
-		public IEnumerator<RequestInfo> GetEnumerator()
-		{
+		public IEnumerator<RequestInfo> GetEnumerator() {
 			return _List.GetEnumerator();
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
+		IEnumerator IEnumerable.GetEnumerator() {
 			return GetEnumerator();
 		}
 	}
 
-	internal class RequestInfo
-	{
+	internal class RequestInfo {
 		public string Id { get; private set; }
 		public RequestsListInfo Owner { get; private set; }
 		public string Name { get; private set; }
 		public ReportRequestInfo ReportData { get; private set; }
 		public RequestStatusType Status { get; private set; }
 
-		public RequestInfo( RequestsListInfo owner, string requestName )
-		{
+		public RequestInfo(RequestsListInfo owner, string requestName) {
 			Owner = owner;
 			Name = requestName;
 			ResetData();
 		}
 
-		public void SetId( string requestId )
-		{
+		public void SetId(string requestId) {
 			Id = requestId;
 		}
 
-		private void UpdateStatus( string status )
-		{
-			switch ( status )
-			{
+		private void UpdateStatus(string status) {
+			switch (status) {
 				case "_SUBMITTED_":
 					Status = RequestStatusType.Submited;
 					break;
@@ -484,34 +405,29 @@
 			}
 		}
 
-		public bool IsEnded
-		{
+		public bool IsEnded {
 			get { return IsDone || Status == RequestStatusType.Canceled || Status == RequestStatusType.NoData; }
 		}
 
-		public bool IsDone
-		{
+		public bool IsDone {
 			get { return Status == RequestStatusType.Done; }
-			
+
 		}
 
-		public void ResetData()
-		{
+		public void ResetData() {
 			Status = RequestStatusType.Unknown;
 		}
 
-		public void UpdateData(ReportRequestInfo reportRequestData)
-		{
+		public void UpdateData(ReportRequestInfo reportRequestData) {
 			ReportData = reportRequestData;
 
-			UpdateStatus( ReportData.ReportProcessingStatus );
+			UpdateStatus(ReportData.ReportProcessingStatus);
 		}
 
-		
+
 	}
 
-	internal enum RequestStatusType
-	{
+	internal enum RequestStatusType {
 		// Unknown
 		Unknown,
 		//_SUBMITTED_,
@@ -526,8 +442,7 @@
 		NoData
 	}
 
-	internal enum AmazonOrderDataEnum
-	{
+	internal enum AmazonOrderDataEnum {
 		OrderId = 0,
 		OrderItemId,
 		PurchaseDate,
@@ -557,28 +472,9 @@
 		DeliveryEndDate,
 		DeliveryTimeZone,
 		DeliveryInstructions,
-		SalesChannel
+		SalesChannel,
+		OrderChannel,
+		OrderChannelInstance,
+		ExternalOrderId
 	}
-
-	/*public class AmazonUserOrdersList : IEnumerable<AmazonOrderDataItem>
-	{
-		public AmazonOrdersData Items { get; set; }
-
-		public bool HasData
-		{
-			get { return Items != null && Items.Count > 0; }
-		}
-
-		public IEnumerator<AmazonOrderDataItem> GetEnumerator()
-		{
-			return Items.GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-	}*/
-
-	
 }

@@ -40,7 +40,7 @@ namespace EzBobTest
 		[Test]
 		public void UpdateCustomerMarketplace()
 		{
-			var s = new UpdateMarketplace(3055, 3040, false, m_oDB, m_oLog);
+			var s = new UpdateMarketplace(21400, 18364, false, m_oDB, m_oLog);
 			s.Execute();
 		}
 

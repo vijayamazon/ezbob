@@ -1,111 +1,110 @@
-/******************************************************************************* 
- *  Copyright 2008-2009 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Orders CSharp Library
- *  API Version: 2011-01-01
- *  Generated: Fri Nov 04 00:50:29 GMT 2011 
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * List Order Items By Next Token Request
+ * API Version: com.amazon.maws.coral
+ * Library Version: 2013-09-01
+ * Generated: Fri Jun 06 15:20:51 UTC 2014
  */
 
 
 using System;
-using System.Xml.Serialization;
+using System.Xml;
+using MWSClientCsRuntime;
 
-namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders.Model
+namespace MarketplaceWebServiceOrders.Model
 {
-    [XmlTypeAttribute(Namespace = "https://mws.amazonservices.com/Orders/2011-01-01")]
-    [XmlRootAttribute(Namespace = "https://mws.amazonservices.com/Orders/2011-01-01", IsNullable = false)]
-    public class ListOrderItemsByNextTokenRequest
+    public class ListOrderItemsByNextTokenRequest : AbstractMwsObject
     {
-    
-        private String sellerIdField;
 
-        private String nextTokenField;
-
+        private string _sellerId;
+        private string _nextToken;
 
         /// <summary>
         /// Gets and sets the SellerId property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "SellerId")]
-        public String SellerId
+        public string SellerId
         {
-            get { return this.sellerIdField ; }
-            set { this.sellerIdField= value; }
+            get { return this._sellerId; }
+            set { this._sellerId = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the SellerId property
+        /// Sets the SellerId property.
         /// </summary>
-        /// <param name="sellerId">SellerId property</param>
-        /// <returns>this instance</returns>
-        public ListOrderItemsByNextTokenRequest WithSellerId(String sellerId)
+        /// <param name="sellerId">SellerId property.</param>
+        /// <returns>this instance.</returns>
+        public ListOrderItemsByNextTokenRequest WithSellerId(string sellerId)
         {
-            this.sellerIdField = sellerId;
+            this._sellerId = sellerId;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if SellerId property is set
+        /// Checks if SellerId property is set.
         /// </summary>
-        /// <returns>true if SellerId property is set</returns>
-        public Boolean IsSetSellerId()
+        /// <returns>true if SellerId property is set.</returns>
+        public bool IsSetSellerId()
         {
-            return  this.sellerIdField != null;
-
+            return this._sellerId != null;
         }
-
 
         /// <summary>
         /// Gets and sets the NextToken property.
         /// </summary>
-        [XmlElementAttribute(ElementName = "NextToken")]
-        public String NextToken
+        public string NextToken
         {
-            get { return this.nextTokenField ; }
-            set { this.nextTokenField= value; }
+            get { return this._nextToken; }
+            set { this._nextToken = value; }
         }
 
-
-
         /// <summary>
-        /// Sets the NextToken property
+        /// Sets the NextToken property.
         /// </summary>
-        /// <param name="nextToken">NextToken property</param>
-        /// <returns>this instance</returns>
-        public ListOrderItemsByNextTokenRequest WithNextToken(String nextToken)
+        /// <param name="nextToken">NextToken property.</param>
+        /// <returns>this instance.</returns>
+        public ListOrderItemsByNextTokenRequest WithNextToken(string nextToken)
         {
-            this.nextTokenField = nextToken;
+            this._nextToken = nextToken;
             return this;
         }
 
-
-
         /// <summary>
-        /// Checks if NextToken property is set
+        /// Checks if NextToken property is set.
         /// </summary>
-        /// <returns>true if NextToken property is set</returns>
-        public Boolean IsSetNextToken()
+        /// <returns>true if NextToken property is set.</returns>
+        public bool IsSetNextToken()
         {
-            return  this.nextTokenField != null;
-
+            return this._nextToken != null;
         }
 
 
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _sellerId = reader.Read<string>("SellerId");
+            _nextToken = reader.Read<string>("NextToken");
+        }
 
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("SellerId", _sellerId);
+            writer.Write("NextToken", _nextToken);
+        }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://internal.amazon.com/coral/com.amazon.maws.coral/", "ListOrderItemsByNextTokenRequest", this);
+        }
 
+        public ListOrderItemsByNextTokenRequest() : base()
+        {
+        }
     }
-
 }

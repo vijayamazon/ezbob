@@ -76,6 +76,7 @@
     <Compile Include="DatabaseDataHelper\amazon.cs" />
     <Compile Include="DatabaseDataHelper\channelgrabber.cs" />
     <Compile Include="DatabaseDataHelper\ebay.cs" />
+    <Compile Include="DatabaseDataHelper\paypal.cs" />
     <Compile Include="DatabaseDataHelper\save_update_mp_in_db.cs" />
     <Compile Include="DatabaseDataHelper\yodlee.cs" />
     <Compile Include="DatabaseWrapper\Order\AInternalOrderItem.cs" />
@@ -297,7 +298,7 @@
     <Compile Include="DatabaseWrapper\FunctionValues\WriteDataInfo.cs" />
     <Compile Include="DatabaseWrapper\IDatabaseCustomerMarketPlace.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrderItemDetailsList.cs" />
-    <Compile Include="DatabaseWrapper\Order\AmazonOrdersList2.cs" />
+    <Compile Include="DatabaseWrapper\Order\AmazonOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\PayPointOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\PayPointOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EkmOrdersList.cs" />
@@ -405,7 +406,6 @@
     <Compile Include="DatabaseWrapper\UsersData\IDatabaseEbayUserData.cs" />
     <Compile Include="DatabaseWrapper\IDatabaseFunctionFactory.cs" />
     <Compile Include="DatabaseWrapper\Inventory\DatabaseInvetory.cs" />
-    <Compile Include="DatabaseWrapper\Order\AmazonOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EbayDatabaseOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\DatabaseShipingAddress.cs" />
     <Compile Include="DatabaseWrapper\Order\EbayDatabaseTransactionDataItem.cs" />

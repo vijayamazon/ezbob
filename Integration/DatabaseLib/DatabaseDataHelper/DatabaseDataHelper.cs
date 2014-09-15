@@ -8,21 +8,17 @@ namespace EZBob.DatabaseLib {
 	using System.Net;
 	using Model.Database.Mapping;
 	using Newtonsoft.Json;
-	using Common;
 	using Model.Database.Broker;
 	using Model.Database.Loans;
 	using DatabaseWrapper;
-	using DatabaseWrapper.AccountInfo;
 	using DatabaseWrapper.FunctionValues;
 	using DatabaseWrapper.Functions;
 	using DatabaseWrapper.Order;
-	using DatabaseWrapper.Transactions;
 	using Model;
 	using Model.Database;
 	using Model.Database.Repository;
 	using Model.Loans;
 	using EzBob.CommonLib;
-	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 	using EzBob.CommonLib.ReceivedDataListLogic;
 	using EzBob.CommonLib.TimePeriodLogic;
 	using NHibernate;
@@ -31,7 +27,6 @@ namespace EZBob.DatabaseLib {
 	using StructureMap;
 	using log4net;
 	using Iesi.Collections.Generic;
-	using Ezbob.Utils.Security;
 	using Model.Marketplaces.FreeAgent;
 	using Model.Marketplaces.Sage;
 	using Model.Marketplaces.Yodlee;
@@ -683,39 +678,7 @@ namespace EZBob.DatabaseLib {
 				_FreeAgentUsersRepository.SaveOrUpdate(user);
 			}
 		}
-
-		public void SaveOrUpdateAcctountInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalPersonalData data) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
-
-			if (customerMarketPlace.PersonalInfo == null) {
-				customerMarketPlace.PersonalInfo = new MP_PayPalPersonalInfo {
-					CustomerMarketPlace = customerMarketPlace,
-				};
-
-				_CustomerMarketplaceRepository.Save(customerMarketPlace);
-			}
-
-			MP_PayPalPersonalInfo info = customerMarketPlace.PersonalInfo;
-			info.Updated = data.SubmittedDate;
-			info.BusinessName = data.BusinessName;
-			info.City = data.AddressCity;
-			info.FirstName = data.FirstName;
-			info.Country = data.AddressCountry;
-			info.DateOfBirth = data.BirthDate;
-			info.Phone = data.Phone == "0" ? null : data.Phone;
-			info.EMail = data.Email;
-			info.LastName = data.LastName;
-			info.FullName = data.FullName;
-			info.PlayerId = data.PlayerId;
-			info.Postcode = data.AddressPostCode;
-			info.State = data.AddressState;
-			info.Street1 = data.AddressStreet1;
-			info.Street2 = data.AddressStreet2;
-
-			_CustomerMarketplaceRepository.SaveOrUpdate(customerMarketPlace);
-		}
-
-
+		
 		public void StoreToDatabaseAggregatedData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IEnumerable<IWriteDataInfo<TEnum>> dataInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			_FunctionValuesWriterHelper.SetRangeOfData(databaseCustomerMarketPlace, dataInfo, historyRecord);
 		}
@@ -724,83 +687,6 @@ namespace EZBob.DatabaseLib {
 			_FunctionValuesWriterHelper.SetData(databaseCustomerMarketPlace, data, historyRecord);
 		}
 
-		public MP_PayPalTransaction SavePayPalTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, List<PayPalTransactionItem> data, MP_CustomerMarketplaceUpdatingHistory historyRecord, MP_PayPalTransaction mpTransaction) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
-
-			//LogData("Transaction Data", customerMarketPlace, data);
-
-			if (data == null) {
-				return mpTransaction;
-			}
-
-			if (mpTransaction == null) {
-				mpTransaction = new MP_PayPalTransaction {
-					CustomerMarketPlace = customerMarketPlace,
-					Created = DateTime.UtcNow,
-					HistoryRecord = historyRecord
-				};
-			}
-
-			if (data.Count != 0) {
-				foreach (var dataItem in data) {
-					var mpTransactionItem = new MP_PayPalTransactionItem2 {
-						Transaction = mpTransaction,
-						Created = dataItem.Created,
-						Currency = _CurrencyRateRepository.GetCurrencyOrCreate("GBP"),
-						FeeAmount =
-							_CurrencyConvertor.ConvertToBaseCurrency(
-								dataItem.FeeAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
-						GrossAmount =
-							_CurrencyConvertor.ConvertToBaseCurrency(
-								dataItem.GrossAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
-						NetAmount =
-							_CurrencyConvertor.ConvertToBaseCurrency(
-								dataItem.NetAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
-						TimeZone = dataItem.Timezone,
-						Status = dataItem.Status,
-						Type = dataItem.Type,
-						PayPalTransactionId = dataItem.TransactionId
-					};
-
-					mpTransaction.TransactionItems.Add(mpTransactionItem);
-				}
-			}
-
-			customerMarketPlace.PayPalTransactions.Add(mpTransaction);
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-
-			return mpTransaction;
-		}
-
-		#region Last Request Dates
-		public DateTime? GetLastPayPalTransactionRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return _CustomerMarketplaceRepository.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace);
-		}
-
-		public DateTime? GetLastPayPalTransactionDate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return _CustomerMarketplaceRepository.GetLastPayPalTransactionDate(databaseCustomerMarketPlace);
-		}
-
-		#endregion
-
-		public void StoretoDatabaseTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TeraPeakDatabaseSellerData data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			if (data == null) {
-				WriteToLog("StoreTeraPeakUserData: invalid data to store", WriteLogType.Error);
-				return;
-			}
-
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
-
-			var helper = new TeraPeackHelper();
-			helper.StoretoDatabaseTeraPeakOrdersData(customerMarketPlace, data, historyRecord);
-
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		}
-
-		public bool ExistsTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
-			return customerMarketPlace.TeraPeakOrders.Count > 0;
-		}
 
 		public void CustomerMarketplaceUpdateAction(
 			CustomerMarketplaceUpdateActionType updateActionType,
@@ -907,36 +793,6 @@ namespace EZBob.DatabaseLib {
 
 		private void LogDataEnd(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			WriteToLog(string.Format("MP = {1} Action = {0} UMI = {2} ended!", updateActionType, databaseCustomerMarketPlace.Marketplace.DisplayName, databaseCustomerMarketPlace.Id));
-		}
-
-		public TeraPeakDatabaseSellerData GetAllTeraPeakDataWithFullRange(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return _CustomerMarketplaceRepository.GetAllTeraPeakDataWithFullRange(submittedDate, databaseCustomerMarketPlace);
-		}
-
-		public PayPalTransactionsList GetAllPayPalTransactions(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
-
-			var data = new PayPalTransactionsList(submittedDate);
-
-			customerMarketPlace.PayPalTransactions.ForEach(tr => tr.TransactionItems.ForEach(t => data.Add(new PayPalTransactionItem {
-				Created = t.Created,
-				Type = t.Type,
-				FeeAmount = t.Currency == null ? null : _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.FeeAmount, t.Created),
-				GrossAmount = t.Currency == null ? null : _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.GrossAmount, t.Created),
-				NetAmount = t.Currency == null ? null : _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.NetAmount, t.Created),
-				Status = t.Status,
-				Timezone = t.TimeZone,
-				TransactionId = t.PayPalTransactionId
-			})));
-
-			return data;
-
-		}
-
-		private void AddCategoryToCache(IMarketplaceType marketplace, MP_EbayAmazonCategory item) {
-			var cache = GetCache(marketplace);
-
-			cache.TryAdd(item.CategoryId, item);
 		}
 
 		public void WriteToLog(string message, WriteLogType messageType = WriteLogType.Info, Exception ex = null) {

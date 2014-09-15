@@ -1,11 +1,13 @@
 ﻿using System;
-using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders;
-using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders.Model;
+using MarketplaceWebServiceOrders;
 using NUnit.Framework;
 
 namespace EzBob.Tests.Amazon
 {
-    [TestFixture]
+	using System.Collections.Generic;
+	using MarketplaceWebServiceOrders.Model;
+
+	[TestFixture]
     public class ListOrdersFixture
     {
         private MarketplaceWebServiceOrdersClient _client;
@@ -15,10 +17,10 @@ namespace EzBob.Tests.Amazon
         {
             var config = new MarketplaceWebServiceOrdersConfig
             {
-                ServiceURL = "https://mws.amazonservices.co.uk/Orders/2011-01-01"
+				ServiceURL = "https://mws.amazonservices.co.uk/Orders/2013-09-01"
             };
 
-            _client = new MarketplaceWebServiceOrdersClient("C#", "4.0", "AKIAJXUDX6A3XIMZLWFA", "4yQzxltFZjlytmkKmlHhkAAcZTTZUbHpJekTOFj2", config);
+			_client = new MarketplaceWebServiceOrdersClient("AKIAJXUDX6A3XIMZLWFA", "4yQzxltFZjlytmkKmlHhkAAcZTTZUbHpJekTOFj2", "C#", "4.0", config);
         }
 
         [Test]
@@ -26,7 +28,7 @@ namespace EzBob.Tests.Amazon
         {
             ListOrdersResponse response;
             response = GetOrders("A1F83G8C2ARO7P", "A1OXZLJTRHTZJ3"); //real one
-            Assert.That(response.ListOrdersResult.Orders.Order.Count, Is.GreaterThan(0));
+            Assert.That(response.ListOrdersResult.Orders.Count, Is.GreaterThan(0));
         }
 
         [Test]
@@ -42,20 +44,19 @@ namespace EzBob.Tests.Amazon
         {
             ListOrdersResponse response;
             response = GetOrders("A1F83G8C2ARO7P", "A3A9KK6KZ6IZFN"); //fixed one
-            Assert.That(response.ListOrdersResult.Orders.Order.Count, Is.GreaterThan(0));
+            Assert.That(response.ListOrdersResult.Orders.Count, Is.GreaterThan(0));
         }
 
         private ListOrdersResponse GetOrders(string mpId, string sellerId)
         {
             var listOrdersRequest = new ListOrdersRequest();
 
-            var marketplaceIdList = new MarketplaceIdList();
-            marketplaceIdList.WithId(new [] {mpId});
+            var marketplaceIdList = new List<string>();
 
             listOrdersRequest
                 .WithSellerId(sellerId)
                 .WithCreatedAfter(new DateTime(2012, 6, 4))
-                .WithMarketplaceId(marketplaceIdList)
+                .WithMarketplaceId(marketplaceIdList.ToArray())
                 ;
 
             return _client.ListOrders(listOrdersRequest);

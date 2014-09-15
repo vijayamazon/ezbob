@@ -11,6 +11,7 @@
 	using DatabaseWrapper.EbayFeedbackData;
 	using DatabaseWrapper.Order;
 	using DatabaseWrapper.UsersData;
+	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 	using Ezbob.Utils;
 	using Model.Database;
 	using Model.Database.Repository;
@@ -32,7 +33,36 @@
 		private readonly ConcurrentDictionary<string, MP_EBayOrderItemDetail> _CacheEBayOrderItemInfo = new ConcurrentDictionary<string, MP_EBayOrderItemDetail>();
 		private readonly ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
 		private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
+
+
+		#region Terapeak
+		public void StoretoDatabaseTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TeraPeakDatabaseSellerData data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+			if (data == null) {
+				WriteToLog("StoreTeraPeakUserData: invalid data to store", WriteLogType.Error);
+				return;
+			}
+
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
+
+			var helper = new TeraPeackHelper();
+			helper.StoretoDatabaseTeraPeakOrdersData(customerMarketPlace, data, historyRecord);
+
+			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		}
+
+		public bool ExistsTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
+			return customerMarketPlace.TeraPeakOrders.Count > 0;
+		}
+
+		public TeraPeakDatabaseSellerData GetAllTeraPeakDataWithFullRange(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			return _CustomerMarketplaceRepository.GetAllTeraPeakDataWithFullRange(submittedDate, databaseCustomerMarketPlace);
+		}
+
+		#endregion
+
 		
+
 		public void AddEbayOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EbayDatabaseOrdersList data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -619,7 +649,15 @@
 		{
 			return _session.Query<MP_EbayFeedback>();
 		}
+
+		private void AddCategoryToCache(IMarketplaceType marketplace, MP_EbayAmazonCategory item) {
+			var cache = GetCache(marketplace);
+
+			cache.TryAdd(item.CategoryId, item);
+		}
 	} // class DatabaseDataHelper
+
+	
 
 	#region class eBayFindOrderItemInfoData
 

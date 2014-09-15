@@ -205,6 +205,10 @@
       <Project>{2AD52941-1F8A-3ED6-9F00-69F6F6AB2803}</Project>
       <Name>MarketplaceWebServiceOrders</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Amazon\MWSClientCsRuntime\MWSClientCsRuntime.csproj">
+      <Project>{49df8166-2274-4e8a-b551-6a8ddccb4756}</Project>
+      <Name>MWSClientCsRuntime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ChannelGrabberFrontend\ChannelGrabberFrontend.csproj">
       <Project>{EB0E1F2B-36AF-4EC4-B4CE-79BC52F8252B}</Project>
       <Name>ChannelGrabberFrontend</Name>

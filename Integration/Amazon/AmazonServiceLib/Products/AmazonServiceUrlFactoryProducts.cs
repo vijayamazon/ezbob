@@ -12,31 +12,32 @@ namespace EzBob.AmazonServiceLib.Products
 		public override Url Create( AmazonServiceCountry country )
 		{
 			string url;
+			const string apiVersion = "2011-10-01";
 
 			switch ( country )
 			{
 				case AmazonServiceCountry.US:
-					url = "https://mws.amazonservices.com/Products/2011-10-01";
+					url = "https://mws.amazonservices.com/Products/" + apiVersion;
 					break;
 				case AmazonServiceCountry.Canada:
-					url = "https://mws.amazonservices.ca/Products/2011-10-01";
+					url = "https://mws.amazonservices.ca/Products/" + apiVersion;
 					break;
 
 				case AmazonServiceCountry.Japan:
-					url = "https://mws.amazonservices.jp/Products/2011-10-01";
+					url = "https://mws.amazonservices.jp/Products/" + apiVersion;
 					break;
 
 				case AmazonServiceCountry.China:
-					url = "https://mws.amazonservices.com.cn/Products/2011-10-01";
+					url = "https://mws.amazonservices.com.cn/Products/" + apiVersion;
 					break;
 
 				case AmazonServiceCountry.UK:
-					url = "https://mws.amazonservices.co.uk/Products/2011-10-01";
+					url = "https://mws.amazonservices.co.uk/Products/" + apiVersion;
 					break;
 				case AmazonServiceCountry.Germany:
 				case AmazonServiceCountry.France:
 				case AmazonServiceCountry.Italy:
-					url = "https://mws-eu.amazonservices.com/Products/2011-10-01";
+					url = "https://mws-eu.amazonservices.com/Products/" + apiVersion;
 					break;
 
 				
