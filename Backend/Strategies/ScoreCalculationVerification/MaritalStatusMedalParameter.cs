@@ -1,0 +1,39 @@
+﻿namespace EzBob.Backend.Strategies.ScoreCalculationVerification
+{
+	using EZBob.DatabaseLib.Model.Database;
+
+	public class MaritalStatusMedalParameter : MedalParameter
+	{
+		public MaritalStatus MaritalStatus { get; private set; }
+
+		public MaritalStatusMedalParameter(MaritalStatus maritalStatus)
+		{
+			Weight = 5;
+			IsWeightFixed = false;
+			MinGrade = 0;
+			MaxGrade = 4;
+
+			MaritalStatus = maritalStatus;
+		}
+
+		public override void CalculateGrade()
+		{
+			if (MaritalStatus == MaritalStatus.Married || MaritalStatus == MaritalStatus.Widowed)
+			{
+				Grade = 4;
+			}
+			else if (MaritalStatus == MaritalStatus.Divorced)
+			{
+				Grade = 3;
+			}
+			else if (MaritalStatus == MaritalStatus.Single)
+			{
+				Grade = 2;
+			}
+			else // LivingTogether, Separated, Other
+			{
+				Grade = 0;
+			}
+		}
+	}
+}
