@@ -25,17 +25,8 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		        });
 		}
 
-		public bool Exists( Guid internalId )
-		{
-			foreach ( var marketPlace in GetAll() )
-			{
-				if ( marketPlace.InternalId.Equals( internalId ) )
-				{
-					return true;
-				}
-			}
-
-			return false;
+		public bool Exists( Guid internalId ) {
+			return GetAll().Any(x => x.InternalId == internalId);
 		}
 	}
 }

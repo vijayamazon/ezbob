@@ -18,6 +18,10 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 			return GetAll().FirstOrDefault(x => x.InternalId == functionInternalId);
 		}
 
+		public List<MP_AnalyisisFunction> GetAllForMp(MP_MarketplaceType marketPlaceType) {
+			return GetAll().Where(x => x.Marketplace == marketPlaceType).ToList();
+		}
+
 		public bool Exists( Guid internalId ) {
 			return GetAll().Any(x => x.InternalId == internalId);
 		}

@@ -57,7 +57,6 @@ namespace EZBob.DatabaseLib {
 
 		#region repositories
 
-		private readonly ValueTypeRepository _ValueTypeRepository;
 		private readonly CustomerRepository _CustomerRepository;
 		private readonly MarketPlaceRepository _MarketPlaceRepository;
 		private readonly CustomerMarketPlaceRepository _CustomerMarketplaceRepository;
@@ -69,15 +68,12 @@ namespace EZBob.DatabaseLib {
 		private readonly ICurrencyConvertor _CurrencyConvertor;
 
 		private readonly ILoanTypeRepository _LoanTypeRepository;
-		//private readonly CustomerLoyaltyProgramPointsRepository _CustomerLoyaltyPoints;
 		private readonly MP_FreeAgentCompanyRepository _FreeAgentCompanyRepository;
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
 		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
 		private readonly MP_SagePaymentStatusRepository _SagePaymentStatusRepository;
 		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
 		private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
-		private readonly BusinessRepository _businessRepository;
-		private readonly MP_VatReturnEntryNameRepositry _vatReturnEntryNameRepositry;
 		private readonly WizardStepSequenceRepository _wizardStepSequenceRepository;
 
 		private readonly WizardStepRepository _wizardStepRepository;
@@ -100,9 +96,13 @@ namespace EZBob.DatabaseLib {
 			_AnalyisisFunctionRepository = new AnalyisisFunctionRepository(session);
 			_AnalyisisFunctionValueRepository = new AnalyisisFunctionValueRepository(session);
 			_CustomerRepository = new CustomerRepository(session);
-			_ValueTypeRepository = new ValueTypeRepository(session);
 			_EbayUserAddressDataRepository = new EbayUserAddressDataRepository(session);
-			_FunctionValuesWriterHelper = new DatabaseFunctionValuesWriterHelper(this, _AnalyisisFunctionValueRepository, _CustomerMarketplaceRepository, _AnalysisFunctionTimePeriodRepository, _AnalyisisFunctionRepository);
+			_FunctionValuesWriterHelper = new DatabaseFunctionValuesWriterHelper(
+				_AnalyisisFunctionValueRepository, 
+				_CustomerMarketplaceRepository, 
+				_AnalysisFunctionTimePeriodRepository, 
+				_AnalyisisFunctionRepository);
+
 			_CurrencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			_CurrencyConvertor = new CurrencyConvertor(_CurrencyRateRepository);
 			_EBayOrderItemInfoRepository = new EBayOrderItemInfoRepository(session);
@@ -111,7 +111,6 @@ namespace EZBob.DatabaseLib {
 			_MP_EbayOrderRepository = new MP_EbayOrderRepository(session);
 			_MP_EbayTransactionsRepository = new MP_EbayTransactionsRepository(session);
 			_LoanTypeRepository = new LoanTypeRepository(session);
-			//_CustomerLoyaltyPoints = new CustomerLoyaltyProgramPointsRepository(session);
 			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
@@ -120,8 +119,6 @@ namespace EZBob.DatabaseLib {
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);
 			_loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
-			_businessRepository = new BusinessRepository(session);
-			_vatReturnEntryNameRepositry = new MP_VatReturnEntryNameRepositry(session);
 			_wizardStepSequenceRepository = new WizardStepSequenceRepository(session);
 
 			_yodleeBanksRepository = new YodleeBanksRepository(session);
@@ -222,10 +219,6 @@ namespace EZBob.DatabaseLib {
 
 		private MP_AnalysisFunctionTimePeriod GetTimePeriod(ITimePeriod databaseTimePeriod) {
 			return _AnalysisFunctionTimePeriodRepository.Get(databaseTimePeriod.InternalId);
-		}
-
-		internal MP_AnalyisisFunction GetFunction(IDatabaseFunction databaseFunction) {
-			return _AnalyisisFunctionRepository.Get(databaseFunction.InternalId);
 		}
 
 		public void InitFunctionTimePeriod() {
@@ -682,11 +675,6 @@ namespace EZBob.DatabaseLib {
 		public void StoreToDatabaseAggregatedData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IEnumerable<IWriteDataInfo<TEnum>> dataInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			_FunctionValuesWriterHelper.SetRangeOfData(databaseCustomerMarketPlace, dataInfo, historyRecord);
 		}
-
-		public void SetData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IWriteDataInfo<TEnum> data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			_FunctionValuesWriterHelper.SetData(databaseCustomerMarketPlace, data, historyRecord);
-		}
-
 
 		public void CustomerMarketplaceUpdateAction(
 			CustomerMarketplaceUpdateActionType updateActionType,
