@@ -129,8 +129,6 @@
 			                                                  _Settings.OrdersFromTeraPeakOnly
 				                                                  ? UpdateStrategyType.OnlyTeraPeak
 				                                                  : UpdateStrategyType.EbayGetOrdersAfterTeraPeak);
-
-			Helper.WriteToLog( string.Format( "Ebay Connection config data [RuName]: {0}", ebayConnectionInfo.RuName ) );
         }
 		#endregion
 
