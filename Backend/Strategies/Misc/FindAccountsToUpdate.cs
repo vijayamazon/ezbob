@@ -121,7 +121,10 @@
 			} // try
 
 			if ((oSecInfo.login == m_oCustomerData.Mail) && (oSecInfo.password == VendorInfo.TopSecret))
+			{
+				Result.HasUploadedHmrc = true;
 				return;
+			}
 
 			try {
 				var ctr = new Connector(oSecInfo.Fill(), Log, m_oCustomerData.Id, m_oCustomerData.Mail);

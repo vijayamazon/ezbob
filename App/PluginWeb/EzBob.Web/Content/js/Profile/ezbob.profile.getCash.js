@@ -191,7 +191,6 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			    var updatesNeeded = false;
 
 				var sDisplayName;
-
 				if (oResponse.has_hmrc) {
 				    updatesNeeded = true;
 					for (var i = 0; i < oResponse.linked_hmrc.length; i++) {
@@ -208,7 +207,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 					} // for each linked hmrc
 				} // if
 
-				if (oResponse.has_hmrc && !oResponse.vat_return_is_up_to_date) {
+				if (oResponse.HasUploadedHmrc && !oResponse.vat_return_is_up_to_date) {
 				    updatesNeeded = true;
 					oList.append(that.createUpdateEntry(
 						'your VAT return data', 'vat-return-list-item', { type: 'vat-return', }

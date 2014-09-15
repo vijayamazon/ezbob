@@ -22,5 +22,8 @@
 
 		[DataMember]
 		public bool IsVatReturnUpToDate { get; set; }
+
+		[DataMember]
+		public bool HasUploadedHmrc { get; set; }
 	} // class AccountsToUpdate
 } // namespace
