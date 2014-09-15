@@ -495,7 +495,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		var fullModel = new EzBob.Underwriter.CustomerFullModel({
 			customerId: id,
-			history: (EzBob.parseDate(history) ? history : null),
+			history: EzBob.parseDate(history),
 		});
 
 		var self = this;

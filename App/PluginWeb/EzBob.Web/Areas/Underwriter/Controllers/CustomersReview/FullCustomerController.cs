@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System.Globalization;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -99,7 +100,7 @@
 
 				using (tc.AddStep("MarketPlaces and Affordability Time taken")) {
 					DateTime historyDate;
-					bool bHasHistoryDate = DateTime.TryParse(history, out historyDate);
+					bool bHasHistoryDate = DateTime.TryParseExact(history, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out historyDate);
 
 					var ar = serviceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, bHasHistoryDate ? historyDate : (DateTime?)null);
 
