@@ -253,9 +253,14 @@
 			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			var errors = new StringBuilder();
 			
-			if (currAddr != null && !currAddr.Zoopla.Any())
+			if (currAddr != null && !currAddr.Zoopla.Any() && currAddr.IsOwnerAccordingToLandRegistry)
 			{
 				AppendLi(errors, "No zoopla for current address");
+			}
+
+			var otherProperties = customer.AddressInfo.OtherPropertiesAddresses.Where(x => x.IsOwnerAccordingToLandRegistry && !x.Zoopla.Any());
+			if (otherProperties.Any()) {
+				AppendLi(errors, "No zoopla for owned property");
 			}
 
 			if (customer.CustomerMarketPlaces.Any(x => !string.IsNullOrEmpty(x.UpdateError)))
