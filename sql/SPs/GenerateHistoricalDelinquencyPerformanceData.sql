@@ -47,7 +47,8 @@ BEGIN
 		@SumOfSpecialLateOver60Loans NUMERIC(18,0),
 		@OutstandingSpecialLateOver60Principal INT,
 		@StatusAfterLastTransaction NVARCHAR(50),
-		@Threshold NUMERIC(18,6)
+		@Threshold NUMERIC(18,6),
+		@CustomerStatus NVARCHAR(100)
 
 	SET @Threshold = 5 -- Hardcoded value. Used to avoid the entries in the LoanScheduleTransaction table that are there because of rounding mistakes
 
@@ -65,6 +66,8 @@ BEGIN
 			
 	CREATE TABLE #SpecialLate
 	(
+		CustomerId INT,
+		CustomerStatus NVARCHAR(100),
 		LoanId INT, 
 		Pct NUMERIC(18,6), 
 		ScheduleDate DATETIME, 
@@ -88,16 +91,19 @@ BEGIN
 			Loan.Date, 
 			Loan.LoanAmount, 
 			Loan.Status, 
-			Loan.Principal 
+			Loan.Principal,
+			CustomerStatuses.Name
 		FROM 
 			Loan, 
-			Customer 
+			Customer,
+			CustomerStatuses
 		WHERE 
 			Loan.Date < @CutoffDate AND 
 			Loan.CustomerId = Customer.Id AND 
-			Customer.IsTest = 0
+			Customer.IsTest = 0 AND
+			Customer.CollectionStatus = CustomerStatuses.Id
 	OPEN cur
-	FETCH NEXT FROM cur INTO @LoanId, @CustomerId, @LoanIssueDate, @LoanAmount, @LoanStatus, @Principal
+	FETCH NEXT FROM cur INTO @LoanId, @CustomerId, @LoanIssueDate, @LoanAmount, @LoanStatus, @Principal, @CustomerStatus
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
 		SELECT
@@ -175,7 +181,7 @@ BEGIN
 								
 					SELECT @LoanAmount = LoanAmount, @LoanDate = Date FROM Loan WHERE Id = @LoanId
 					
-					INSERT INTO #SpecialLate VALUES (@LoanId, @Pct, @ScheduleDate, @LastTransactionDate, @PayMentNum, @LateDays, @LoanAmount, @LoanDate, @Principal)
+					INSERT INTO #SpecialLate VALUES (@CustomerId, @CustomerStatus, @LoanId, @Pct, @ScheduleDate, @LastTransactionDate, @PayMentNum, @LateDays, @LoanAmount, @LoanDate, @Principal)
 					INSERT INTO #HandledLoans VALUES (@LoanId)
 					
 					SELECT @LastTransactionId = NULL, @LastTransactionDate = NULL, @LateDays = NULL, @LoanAmount = NULL, @LoanDate = NULL, @StatusAfterLastTransaction = NULL 				
@@ -190,7 +196,7 @@ BEGIN
 		DROP TABLE #t
 		DROP TABLE #s
 
-		FETCH NEXT FROM cur INTO @LoanId, @CustomerId, @LoanIssueDate, @LoanAmount, @LoanStatus, @Principal
+		FETCH NEXT FROM cur INTO @LoanId, @CustomerId, @LoanIssueDate, @LoanAmount, @LoanStatus, @Principal, @CustomerStatus
 	END
 	CLOSE cur
 	DEALLOCATE cur
@@ -221,7 +227,20 @@ BEGIN
 		@NumOfSpecialLate46_60Loans AS NumOfSpecialLate46_60Loans, @SumOfSpecialLate46_60Loans AS SumOfSpecialLate46_60Loans, @OutstandingSpecialLate46_60Principal AS OutstandingSpecialLate46_60Principal,
 		@NumOfSpecialLateOver60Loans AS NumOfSpecialLateOver60Loans, @SumOfSpecialLateOver60Loans AS SumOfSpecialLateOver60Loans, @OutstandingSpecialLateOver60Principal AS OutstandingSpecialLateOver60Principal
 
-	SELECT * FROM #SpecialLate
+	SELECT 
+		CustomerId,
+		CustomerStatus,
+		LoanId, 
+		Pct, 
+		ScheduleDate, 
+		FirstTransactionDate, 
+		PayMentNum, 
+		LateDays, 
+		LoanAmount, 
+		LoanDate,
+		Principal 
+	FROM
+		#SpecialLate
 
 	DROP TABLE #SpecialLate
 	DROP TABLE #HandledLoans
