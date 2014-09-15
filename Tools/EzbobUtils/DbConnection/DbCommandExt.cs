@@ -54,23 +54,38 @@
 
 		#region method ExecuteEnumerable
 
-		public static IEnumerable<SafeReader> ExecuteEnumerable(this DbCommand command, ConnectionWrapper cw, Action oLogExecution = null) {
-			cw.Open();
+		public static IEnumerable<SafeReader> ExecuteEnumerable(
+			this DbCommand command,
+			ConnectionWrapper cw,
+			AConnection oConnection,
+			Action oLogExecution = null
+		) {
+			bool bAllesInOrdnung = false;
 
-			DbDataReader oReader = command.ExecuteReader();
+			try {
+				cw.Open();
 
-			if (oLogExecution != null)
-				oLogExecution();
+				DbDataReader oReader = command.ExecuteReader();
 
-			do {
-				if (!oReader.HasRows)
-					continue;
+				if (oLogExecution != null)
+					oLogExecution();
 
-				while (oReader.Read())
-					yield return new SafeReader(oReader);
-			} while (oReader.NextResult());
+				do {
+					if (!oReader.HasRows)
+						continue;
 
-			oReader.Close();
+					while (oReader.Read())
+						yield return new SafeReader(oReader);
+				} while (oReader.NextResult());
+
+				oReader.Close();
+
+				bAllesInOrdnung = true;
+			}
+			finally {
+				if (oConnection != null)
+					oConnection.DisposeAfterOneUsage(bAllesInOrdnung, cw);
+			} // try
 		} // ExecuteEnumerable
 
 		#endregion method ExecuteEnumerable

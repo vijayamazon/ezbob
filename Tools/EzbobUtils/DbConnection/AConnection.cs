@@ -16,6 +16,17 @@
 	public abstract class AConnection : SafeLog {
 		#region public
 
+		#region method DisposeAfterOneUsage
+
+		public virtual void DisposeAfterOneUsage(bool bAllesInOrdnung, ConnectionWrapper oConnection) {
+			if (bAllesInOrdnung)
+				ms_oPool.Take(oConnection.Pooled);
+			else
+				ms_oPool.Drop(oConnection.Pooled);
+		} // DisposeAfterOneUsage
+
+		#endregion method InitEvents
+
 		#region method UpdateConnectionPoolMaxSize
 
 		public static void UpdateConnectionPoolMaxSize(int nMaxSize) {
@@ -724,7 +735,11 @@
 					return null;
 
 				case ExecMode.Enumerable:
-					return command.ExecuteEnumerable(oConnection, () => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw));
+					return command.ExecuteEnumerable(
+						oConnection,
+						bDropAfterUse ? this : null,
+						() => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw)
+					);
 
 				default:
 					throw new ArgumentOutOfRangeException("nMode");
@@ -735,12 +750,8 @@
 				throw;
 			}
 			finally {
-				if (bDropAfterUse && (oConnection != null) && (nMode != ExecMode.Enumerable)) {
-					if (bAllesInOrdnung)
-						ms_oPool.Take(oConnection.Pooled);
-					else
-						ms_oPool.Drop(oConnection.Pooled);
-				} // if
+				if (nMode != ExecMode.Enumerable)
+					DisposeAfterOneUsage(bAllesInOrdnung, oConnection);
 			} // try
 		} // RunOnce
 
