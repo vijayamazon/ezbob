@@ -174,7 +174,12 @@ BEGIN
 						SELECT @StatusAfterLastTransaction = StatusAfter FROM LoanScheduleTransaction WHERE ScheduleID = @ScheduleId AND TransactionID = @LastTransactionId
 					END
 					
-					IF @LastTransactionDate IS NOT NULL AND @StatusAfterLastTransaction = 'Paid'
+					IF @LastTransactionDate IS NOT NULL AND 
+						(
+							@StatusAfterLastTransaction = 'Paid' OR 
+							@StatusAfterLastTransaction = 'PaidOnTime' OR 
+							@StatusAfterLastTransaction = 'PaidEarly'
+						)
 						SELECT @LateDays = datediff(dd, @ScheduleDate, @LastTransactionDate)
 					ELSE
 						SELECT @LateDays = datediff(dd, @ScheduleDate, @CutoffDate)
