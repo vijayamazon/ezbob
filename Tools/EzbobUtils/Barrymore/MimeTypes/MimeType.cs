@@ -24,11 +24,7 @@
 				if (oLookIn.Contains(s))
 					return true;
 
-			return
-				(a.PrimaryMimeType == MimeTypeResolver.DefaultMimeType) ||
-				(a.PrimaryMimeType == MimeTypeResolver.TextMimeType) ||
-				(b.PrimaryMimeType == MimeTypeResolver.DefaultMimeType) ||
-				(b.PrimaryMimeType == MimeTypeResolver.TextMimeType);
+			return false;
 		} // operator *
 
 		#endregion operator *

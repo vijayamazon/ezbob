@@ -622,9 +622,10 @@
 
 			MimeType oMimeType;
 
-			ms_oFileExtMap.TryGetValue(sExtension.ToLowerInvariant(), out oMimeType);
+			if (ms_oFileExtMap.TryGetValue(sExtension.ToLowerInvariant(), out oMimeType))
+				return oMimeType;
 
-			return oMimeType;
+			return null;
 		} // Get
 
 		#endregion method Get

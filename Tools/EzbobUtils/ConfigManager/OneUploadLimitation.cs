@@ -115,7 +115,7 @@
 			MimeType oExtMimeType = mtr.Get(sFileName);
 
 			if (oExtMimeType != null) {
-				oLog.Debug("MIME type by file extension is {0}", oExtMimeType.PrimaryMimeType);
+				oLog.Debug("MIME type by file extension is {0}.", oExtMimeType.PrimaryMimeType);
 
 				if (!this.Contains(oExtMimeType.PrimaryMimeType)) {
 					oLog.Debug("MIME type by file extension {0} does not conform to this limitation {1}.", oExtMimeType.PrimaryMimeType, this);
@@ -153,10 +153,10 @@
 					oLog.Debug(
 						"MIME type by file ('{0}') differs from MIME type by extension ('{1}') but they are compatible so using the latter.",
 						oFileMimeType.PrimaryMimeType,
-						oExtMimeType.PrimaryMimeType
+						oExtMimeType == null ? "-- null --" : oExtMimeType.PrimaryMimeType
 					);
 
-					return oExtMimeType.PrimaryMimeType;
+					return oExtMimeType == null ? null : oExtMimeType.PrimaryMimeType;
 				} // if
 
 				oLog.Debug(
@@ -173,6 +173,7 @@
 				return oExtMimeType.PrimaryMimeType;
 			} // if
 
+			oLog.Debug("No MIME type detected, returning null.");
 			return null;
 		} // DetectFileMimeType
 
