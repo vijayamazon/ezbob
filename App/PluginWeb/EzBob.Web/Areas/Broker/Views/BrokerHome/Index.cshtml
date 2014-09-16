@@ -159,7 +159,7 @@
 								<div id="mobileCodeDiv" class="form_field_container hide">
 									<label class="attardi-input">
 										<span>Mobile phone authentication code</span>
-										<input type="number" class="phonenumbercode form_field_left_side form_field" name="MobileCode" id="MobileCode" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-mobile-code" maxlength="6" data-sent-to="" />
+										<input type="tel" class="phonenumbercode form_field_left_side form_field" name="MobileCode" id="MobileCode" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-mobile-code" maxlength="6" data-sent-to="" />
 										<img id="mobileCodeImage" class="field_status required" />
 										<input id="switchToCaptcha" class="button btn-green form_field_right_side_signup_phone" type="button" value="Did not receive code" ui-event-control-id="broker:switch-to-captcha" />
 									</label>
@@ -175,16 +175,16 @@
 
 								<div class="form_field_container">
 									<label class="attardi-input">
-										<span>Estimated number of applications per month</span>
-										<input type="number" name="EstimatedMonthlyAppCount" id="EstimatedMonthlyAppCount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" max-length="6" ui-event-control-id="broker:signup-esitmated-monthly-application-count" />
+										<span>Number of applications per month</span>
+										<input type="tel" name="EstimatedMonthlyAppCount" id="EstimatedMonthlyAppCount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" max-length="6" ui-event-control-id="broker:signup-esitmated-monthly-application-count" />
 										<img id="EstimatedMonthlyAppCountImage" class="field_status required" />
 									</label>
 								</div>
 
 								<div class="form_field_container">
 									<label class="attardi-input">
-										<span>Estimated value of credit per month (&pound;)</span>
-										<input type="text" name="EstimatedMonthlyClientAmount" id="EstimatedMonthlyClientAmount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-estimated-monthly-client-amount" />
+										<span>Value of credit per month (&pound;)</span>
+										<input type="tel" name="EstimatedMonthlyClientAmount" id="EstimatedMonthlyClientAmount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-estimated-monthly-client-amount" />
 										<img id="EstimatedMonthlyClientAmountImage" class="field_status required" />
 									</label>
 								</div>

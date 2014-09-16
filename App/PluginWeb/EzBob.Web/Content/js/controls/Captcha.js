@@ -25,7 +25,7 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 					$('<label />')
 						.addClass('attardi-input')
 						.append(
-							$('<span />').text('Please enter the characters shown above')
+							$('<span />').text('Enter characters shown above')
 						)
 						.append(
 							$('<input />')
