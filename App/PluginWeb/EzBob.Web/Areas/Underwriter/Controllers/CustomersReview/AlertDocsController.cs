@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
+	using Code;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -11,13 +12,14 @@
 	using Models;
 	using Infrastructure;
 	using StructureMap;
+	using log4net;
 
-    public class AlertDocsController : Controller
+	public class AlertDocsController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
-
-        //-----------------------------------------------------------------------------------
+		private static ILog Log = LogManager.GetLogger(typeof (AlertDocsController));
+			//-----------------------------------------------------------------------------------
         public AlertDocsController(IEzbobWorkplaceContext context, NHibernateRepositoryBase<MP_AlertDocument> docRepo)
         {
             _context = context;
@@ -76,16 +78,41 @@
         }
 
         //-----------------------------------------------------------------------------------
-        public FileResult File(int id)
+        public ActionResult File(int id)
         {
             var f = _docRepo.Get(id);
-            if(f != null)
-            {
-                FileResult fs = new FileContentResult(f.BinaryBody, MimeTypeResolver.DefaultMimeType);
-                fs.FileDownloadName = f.DocName;
-                return fs;
-            }
-            return null;
+
+			if (f != null) {
+				var document = f.BinaryBody;
+				var cd = new System.Net.Mime.ContentDisposition {
+					FileName = f.DocName,
+					Inline = true,
+				};
+
+				Response.AppendHeader("Content-Disposition", cd.ToString());
+				
+				var mtr = new MimeTypeResolver();
+				MimeType oExtMimeType = mtr.Get(f.DocName);
+
+				FileResult fs = new FileContentResult(f.BinaryBody, oExtMimeType.PrimaryMimeType);
+				Log.DebugFormat("fs {1} mime type {0}", oExtMimeType, f.DocName);
+
+				if (fs.ContentType.Contains("image") ||
+					fs.ContentType.Contains("pdf") ||
+					fs.ContentType.Contains("html") ||
+					fs.ContentType.Contains("text")) {
+						return fs;
+				}
+
+				var pdfDocument = AgreementRenderer.ConvertToPdf(document);
+
+				if (pdfDocument != null) {
+					return File(pdfDocument, "application/pdf");
+				}
+ 
+				return fs;
+			}
+			return null;
         }
     }
 }

@@ -2,7 +2,7 @@
 <script id="docs-template" type="text/template">
     <div class="row">
         <div class="col-md-12">
-            <table id="alertDocsTable" class="table centered box">
+            <table id="alertDocsTable" class="table box">
                 <thead class="box-title">
                     <tr class="">
                         <th>Uploaded document name</th>
@@ -15,7 +15,7 @@
                 <tbody class="box-content">
                     <% _.each(docs, function(doc){%>
                         <tr>
-                            <td><a href="@Url.Action("File", "AlertDocs", new { Area = "Underwriter" })/<%-doc.Id%>"><%= doc.DocName%></a></td>
+                            <td><a href="@Url.Action("File", "AlertDocs", new { Area = "Underwriter" })/<%-doc.Id%>" target="_blank"><%= doc.DocName%></a></td>
                             <td><%- EzBob.formatDate(doc.CreateDate)%></td>
                             <td><%- doc.EmployeeName%></td>
                             <td>

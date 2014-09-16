@@ -98,5 +98,9 @@
 		private readonly SortedSet<string> m_oSecondaryMimeTypes;
 
 		#endregion private
+
+		public override string ToString() {
+			return string.Format("FileExtrension {0} PrimaryMime {1} SecondoryMime {2}", FileExtension, PrimaryMimeType, SecondaryMimeTypes);
+		}
 	} // class MimeType
 } // namespace

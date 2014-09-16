@@ -43,13 +43,13 @@
             }            
         }
 
-		public static byte[] ConvertToPdf(byte[] file) {
+		public static byte[] ConvertToPdf(byte[] file, LoadFormat loadFormat = LoadFormat.Auto, SaveFormat saveFormat = SaveFormat.Pdf) {
 			try {
 				var stream = new MemoryStream(file);
-				var doc = new Document(stream, null, LoadFormat.Auto, null);
+				var doc = new Document(stream, null, loadFormat, null);
 
 				using (var streamForDoc = new MemoryStream()) {
-					doc.Save(streamForDoc, SaveFormat.Pdf);
+					doc.Save(streamForDoc, saveFormat);
 					return streamForDoc.ToArray();
 				}
 			}
