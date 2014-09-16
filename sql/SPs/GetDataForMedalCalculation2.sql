@@ -221,7 +221,7 @@ BEGIN
 	SELECT TOP 1 @ZooplaEstimate = Zoopla.ZooplaEstimate, @AverageSoldPrice1Year = Zoopla.AverageSoldPrice1Year FROM Zoopla, CustomerAddress WHERE CustomerId = @CustomerId AND CustomerAddress.addressId = Zoopla.CustomerAddressId AND CustomerAddress.addressType = 1 ORDER BY UpdateDate DESC 
 	
 	SELECT 
-		@LastServiceLogId = Id
+		TOP 1 @LastServiceLogId = Id
 	FROM
 		MP_ServiceLog
 	WHERE
