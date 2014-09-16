@@ -58,7 +58,7 @@
 		public int ConsumerScore { get; set; }
 		public decimal NetWorth { get; set; }
 		public MaritalStatus MaritalStatus { get; set; }
-		public DateTime EzbobSeniority { get; set; }
+		public DateTime? EzbobSeniority { get; set; }
 		public int NumOfLoans { get; set; }
 		public int NumOfLateRepayments { get; set; }
 		public int NumOfEarlyRepayments { get; set; }

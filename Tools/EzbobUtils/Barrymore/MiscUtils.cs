@@ -73,15 +73,22 @@
 
 		#region method GetFullYearsAndMonths
 
-		public static void GetFullYearsAndMonths(DateTime date, out int years, out int months) {
-			years = GetFullYears(date);
-			months = DateTime.UtcNow.Month - date.Month;
+		public static void GetFullYearsAndMonths(DateTime? date, out int years, out int months) {
+			if (!date.HasValue)
+			{
+				years = 0;
+				months = 0;
+				return;
+			}
+
+			years = GetFullYears(date.Value);
+			months = DateTime.UtcNow.Month - date.Value.Month;
 
 			if (months < 0)
-				months = 12 - date.Month + DateTime.UtcNow.Month;
-			else if (months > 0 && DateTime.UtcNow.Day < date.Day)
+				months = 12 - date.Value.Month + DateTime.UtcNow.Month;
+			else if (months > 0 && DateTime.UtcNow.Day < date.Value.Day)
 				months--;
-			else if (months == 0 && DateTime.UtcNow.Day < date.Day)
+			else if (months == 0 && DateTime.UtcNow.Day < date.Value.Day)
 				months = 11;
 		} // GetFullYearsAndMonths
 

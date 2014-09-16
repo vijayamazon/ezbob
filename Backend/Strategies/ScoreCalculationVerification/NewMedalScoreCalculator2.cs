@@ -251,9 +251,15 @@
 
 			decimal freeCashFlow = 0;
 			decimal tangibleEquity = 0;
+			decimal factoredLoanRepayments = actualLoanRepayments;
+			if (fcfFactor != 0)
+			{
+				factoredLoanRepayments /= fcfFactor;
+			}
+
 			if (annualTurnover != 0)
 			{
-				freeCashFlow = (ebida - (actualLoanRepayments / fcfFactor)) / annualTurnover;
+				freeCashFlow = (ebida - factoredLoanRepayments) / annualTurnover;
 				tangibleEquity = rawTangibleEquity / annualTurnover;
 			}
 
