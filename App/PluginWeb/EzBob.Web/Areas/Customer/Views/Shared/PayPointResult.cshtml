@@ -6,32 +6,31 @@
 		<div class="span8">
 			<h1>Confirmation</h1>
 
-			<% if (hasLateLoans) {
-				%><h2 style="margin-bottom: 35px">Thank You for Your Payment</h2><%
-			} else {
-				var paymentPrefix = !this.model ? "an Early" : "a";
-				%><h2 style="margin-bottom: 35px">Thank You for Making <%= paymentPrefix %> Payment</h2><%
-			}
+			<% if (hasLateLoans) { %>
+				<h2 style="margin-bottom: 35px">Thank You for Your Payment</h2>
+			<% } else { var paymentPrefix = (this.model && this.model.get('isEarly')) ? "an early" : "a"; %>
+				<h2 style="margin-bottom: 35px">Thank you for making <%= paymentPrefix %> payment</h2>
+			<% } %>
 
-			if (isRolloverPaid) {
-				%><h3>Your loan has been rolled over</h3><%
-			} %>
+			<% if (isRolloverPaid) { %>
+				<h3>Your loan has been rolled over</h3>
+			<% } %>
 
 			<p>
-				<div><strong>Payment Amount:</strong> <%- EzBob.formatPounds(amount) %></div>
-				<div><strong>Payment Date:</strong> <%- EzBob.currentDateFormatted() %></div>
-				<div><strong>Payment Ref:</strong> <%- transRefnums %></div>
-				<div><strong>Loan Ref. Number:</strong> <%- refnum %></div>
-				<div><strong>Payment made by:</strong> xxxx-<%- card_no %> Debit card</div>
+				<div><strong>Payment amount:</strong> <%- EzBob.formatPounds(amount) %></div>
+				<div><strong>Payment date:</strong> <%- EzBob.currentDateFormatted() %></div>
+				<div><strong>Payment ref:</strong> <%- transRefnums %></div>
+				<div><strong>Loan ref. number:</strong> <%- refnum %></div>
+				<div><strong>Payment made by:</strong> xxxx-<%- card_no %> debit card</div>
 			</p>
 
 			<p style="margin-top: 25px">A confirmation email is being sent to <%- email %></p>
 
-			<% if (savedPounds > 0 && !hasLateLoans && !this.model) {
-				%><p align="left" class="by-paying-early"><strong>By paying early you saved <%= EzBob.formatPounds(savedPounds) %></strong></p><%
-			} %>
+			<% if (savedPounds > 0 && !hasLateLoans && this.model && this.model.get('isEarly')) { %>
+				<p align="left" class="by-paying-early"><strong>By paying early you saved <%= EzBob.formatPounds(savedPounds) %></strong></p>
+			<% } %>
 
-			<a href="@Url.Action("Index", "Profile", new { Area = "Customer" })" ui-event-control-id="payment-info:back-to-profile" class="btn-continue button btn-green back-to-profile btn-wide" style="margin-left: 290px;">Go to My Account</a>
+			<a href="@Url.Action("Index", "Profile", new { Area = "Customer" })" ui-event-control-id="payment-info:back-to-profile" class="btn-continue button btn-green back-to-profile btn-wide pull-right" >Go to my account</a>
 		</div>
 	</div>
 </script>

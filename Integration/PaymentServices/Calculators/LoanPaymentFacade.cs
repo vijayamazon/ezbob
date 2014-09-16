@@ -9,10 +9,12 @@ namespace PaymentServices.Calculators
 {
 	using EZBob.DatabaseLib;
 	using StructureMap;
+	using log4net;
 
 	public class LoanPaymentFacade
     {
         private readonly ILoanHistoryRepository _historyRepository;
+		private static ILog Log = LogManager.GetLogger(typeof (LoanPaymentFacade));
 
         public LoanPaymentFacade()
         {
@@ -178,6 +180,9 @@ namespace PaymentServices.Calculators
         /// <returns></returns>
         public PaymentResult MakePayment(string transId, decimal amount, string ip, string type, int loanId, Customer customer, DateTime? date = null, string description = "payment from customer", string paymentType = null, string sManualPaymentMethod = null)
         {
+			Log.DebugFormat("MakePayment transId: {0}, amount: {1}, ip: {2}, type: {3}, loanId: {4}, customer: {5}, date: {6}, description: {7}, paymentType: {8}, manualPaymentMethod: {9}",
+				transId, amount, ip, type, loanId, customer.Id, date, description, paymentType, sManualPaymentMethod);
+
             decimal oldInterest;
             decimal newInterest;
             bool rolloverWasPaid = false;

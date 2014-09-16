@@ -979,7 +979,7 @@ table.dashboard_sources {
 #cboxOverlay {
     position: fixed;
     width: 100%;
-    height: 200%;
+    height: 10000px;
 }
 
 #cboxMiddleLeft, #cboxBottomLeft {
