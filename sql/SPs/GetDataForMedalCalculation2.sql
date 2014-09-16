@@ -33,11 +33,23 @@ BEGIN
 		@StatusAfterLastTransaction NVARCHAR(50),
 		@LateDays INT,
 		@ScheduleDate DATETIME,
-		@FreeCashFlow DECIMAL(18,6),
+		@Ebida DECIMAL(18,6),
 		@HmrcAnnualTurnover DECIMAL(18,6),
-		@BalanceOfMortgages INT
+		@BalanceOfMortgages INT,
+		@FcfFactor NVARCHAR(MAX),
+		@ActualLoanRepayments INT
 	
 	SET @Threshold = 2 -- Hardcoded value. Used to avoid the entries in the LoanScheduleTransaction table that are there because of rounding mistakes
+	
+	SELECT @FcfFactor = Value FROM ConfigurationVariables WHERE Name = 'FCFFactor'
+	
+	SELECT 
+		@ActualLoanRepayments = CurrentBalanceSum
+	FROM 
+		CustomerAnalyticsCompany 
+	WHERE
+		CustomerAnalyticsCompany.CustomerID = @CustomerId AND
+		CustomerAnalyticsCompany.IsActive = 1
 	
 	SELECT
 		@TypeOfBusiness = TypeOfBusiness,
@@ -168,7 +180,7 @@ BEGIN
 	
 	DROP TABLE #LateLoans
 	
-	SELECT @FreeCashFlow = FreeCashFlow, @HmrcAnnualTurnover = Revenues FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
+	SELECT @Ebida = SUM(Ebida), @HmrcAnnualTurnover = SUM(Revenues) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
 	
 	SELECT @YodleeTotalAggrgationFuncId = MP_AnalyisisFunction.Id FROM MP_AnalyisisFunction, MP_MarketplaceType WHERE MP_AnalyisisFunction.MarketPlaceId=MP_MarketplaceType.Id AND MP_MarketplaceType.Name = 'Yodlee' AND MP_AnalyisisFunction.Name='TotalIncomeAnnualized'
 	
@@ -242,13 +254,15 @@ BEGIN
 		@BusinessSeniority AS BusinessSeniority,		
 		@FirstRepaymentDate AS FirstRepaymentDate, 
 		@OnTimeLoans AS OnTimeLoans,
-		@FreeCashFlow AS FreeCashFlow, 
+		@Ebida AS Ebida, 
 		@HmrcAnnualTurnover AS HmrcAnnualTurnover,
 		@YodleeTurnover AS YodleeTurnover,		 
 		@NumOfLatePayments AS NumOfLatePayments, 
 		@NumOfEarlyPayments AS NumOfEarlyPayments,
 		@ZooplaEstimate AS ZooplaEstimate,
 		@AverageSoldPrice1Year AS AverageSoldPrice1Year,
-		@BalanceOfMortgages AS BalanceOfMortgages
+		@BalanceOfMortgages AS BalanceOfMortgages,
+		@ActualLoanRepayments AS ActualLoanRepayments,
+		@FcfFactor AS FcfFactor
 END
 GO

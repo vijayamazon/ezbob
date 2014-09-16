@@ -214,7 +214,7 @@
 			decimal rawTangibleEquity = sr["TangibleEquity"];
 			DateTime? businessSeniority = sr["BusinessSeniority"];
 			int consumerScore = sr["ConsumerScore"];
-			decimal rawFreeCashFlow = sr["FreeCashFlow"];
+			decimal ebida = sr["Ebida"];
 			decimal hmrcAnnualTurnover = sr["HmrcAnnualTurnover"];
 			string zooplaEstimateStr = sr["ZooplaEstimate"];
 			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
@@ -228,6 +228,8 @@
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
 			decimal yodleeAnnualTurnover = sr["YodleeTurnover"];
 			decimal mortgageBalance = sr["BalanceOfMortgages"];
+			decimal actualLoanRepayments = sr["ActualLoanRepayments"];
+			decimal fcfFactor = sr["FcfFactor"];
 
 			if (typeOfBusiness != "Limited" && typeOfBusiness != "LLP")
 			{
@@ -251,7 +253,7 @@
 			decimal tangibleEquity = 0;
 			if (annualTurnover != 0)
 			{
-				freeCashFlow = rawFreeCashFlow / annualTurnover;
+				freeCashFlow = (ebida - (actualLoanRepayments / fcfFactor)) / annualTurnover;
 				tangibleEquity = rawTangibleEquity / annualTurnover;
 			}
 

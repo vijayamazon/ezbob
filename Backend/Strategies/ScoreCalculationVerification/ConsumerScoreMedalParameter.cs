@@ -32,7 +32,7 @@
 
 			if (firstRepaymentDatePassed)
 			{
-				Weight -= 2.1m;
+				Weight -= 2.08m;
 			}
 		}
 

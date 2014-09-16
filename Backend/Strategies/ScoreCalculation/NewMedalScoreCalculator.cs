@@ -115,7 +115,7 @@
 			{
 				freeCashFlowDataAvailable = true;
 				inputData.AnnualTurnover = summaryData[0].Revenues ?? 0;
-				if (summaryData[0].FreeCashFlow.HasValue && Results.AnnualTurnover != 0)
+				if (summaryData[0].FreeCashFlow.HasValue && inputData.AnnualTurnover != 0)
 				{
 					inputData.FreeCashFlow = summaryData[0].FreeCashFlow.Value / inputData.AnnualTurnover;
 				}
