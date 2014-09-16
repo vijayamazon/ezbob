@@ -287,34 +287,6 @@
 						}
 						continue;
 					}
-
-					if ((cellLower.Contains("amount") || cellLower.Contains("value") || cellLower == "money") && !cellLower.Contains("balance")) {
-						if (headerColumns.Amount == null) {
-							headerColumns.Amount = col;
-						} else {
-							log.Debug("more then one amount columns found");
-						}
-						continue;
-					}
-
-					if (cellLower.Contains("balance")) {
-						if (headerColumns.Balance == null) {
-							headerColumns.Balance = col;
-						} else {
-							log.Debug("more then one balance columns found");
-						}
-						continue;
-					}
-
-					if (cellLower.Contains("description") || cellLower.Contains("text") || cellLower.Contains("narrative")) {
-						if (headerColumns.Description == null) {
-							headerColumns.Description = col;
-						} else {
-							log.Debug("more then one description columns found");
-						}
-						continue;
-					}
-
 					if (cellLower.Contains("credit") || cellLower.Contains(" in")) {
 						if (headerColumns.Credit == null) {
 							headerColumns.Credit = col;
@@ -329,6 +301,33 @@
 							headerColumns.Debit = col;
 						} else {
 							log.Debug("more then one credit columns found");
+						}
+						continue;
+					}
+
+					if (cellLower.Contains("balance")) {
+						if (headerColumns.Balance == null) {
+							headerColumns.Balance = col;
+						} else {
+							log.Debug("more then one balance columns found");
+						}
+						continue;
+					}
+
+					if ((cellLower.Contains("amount") || cellLower.Contains("value") || cellLower == "money") && !cellLower.Contains("balance") && !cellLower.Contains("debit") && !cellLower.Contains("credit")) {
+						if (headerColumns.Amount == null) {
+							headerColumns.Amount = col;
+						} else {
+							log.Debug("more then one amount columns found");
+						}
+						continue;
+					}
+
+					if (cellLower.Contains("description") || cellLower.Contains("text") || cellLower.Contains("narrative")) {
+						if (headerColumns.Description == null) {
+							headerColumns.Description = col;
+						} else {
+							log.Debug("more then one description columns found");
 						}
 						continue;
 					}
