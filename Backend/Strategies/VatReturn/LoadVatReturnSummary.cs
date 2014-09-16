@@ -55,7 +55,16 @@
 			if (Math.Abs(factor) > 0.0000001m) {
 				var getExperianAccountsCurrentBalance = new GetExperianAccountsCurrentBalance(m_nCustomerID, DB, Log);
 				getExperianAccountsCurrentBalance.Execute();
-				decimal newActualLoansRepayment = getExperianAccountsCurrentBalance.CurrentBalance / factor;
+				decimal newActualLoansRepayment = 0;
+				if (factor != 0)
+				{
+					newActualLoansRepayment = getExperianAccountsCurrentBalance.CurrentBalance / factor;
+				}
+
+				if (newActualLoansRepayment < 0)
+				{
+					newActualLoansRepayment = 0;
+				}
 
 				foreach (KeyValuePair<int, VatReturnSummary> pair in oResults) {
 					pair.Value.ActualLoanRepayment = newActualLoansRepayment;
