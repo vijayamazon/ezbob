@@ -11,7 +11,7 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	SELECT ExperianConsumerScore
+	SELECT ExperianConsumerScore AS ExperianScore
 	FROM Customer
 	WHERE Id=@CustomerId
 	
