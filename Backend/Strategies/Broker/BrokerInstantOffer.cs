@@ -52,7 +52,7 @@
 		private void CalculateInstantOffer() {
 			//TODO retrieve experian company data (cache/new)
 			int businessScore = 60; //todo
-			decimal tengibleEquaty = 20000M; //todo
+			decimal tangibleEquity = 20000M; //todo
 			DateTime businessSeniority = new DateTime(1990,1,1);
 
 			int consumerScore = 0;
@@ -74,7 +74,7 @@
 			}
 			var calculator = new NewMedalScoreCalculator(DB, Log);
 			var medalScore = calculator.CalculateMedalScore(new ScoreResult(businessScore, _request.AnnualProfit, _request.AnnualTurnover,
-			                                               tengibleEquaty, businessSeniority, consumerScore, netWorth));
+			                                               tangibleEquity, businessSeniority, consumerScore, netWorth), 0);
 			
 			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {

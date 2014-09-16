@@ -34,7 +34,8 @@ BEGIN
 		@LateDays INT,
 		@ScheduleDate DATETIME,
 		@FreeCashFlow DECIMAL(18,6),
-		@HmrcAnnualTurnover DECIMAL(18,6)
+		@HmrcAnnualTurnover DECIMAL(18,6),
+		@BalanceOfMortgages INT
 	
 	SET @Threshold = 2 -- Hardcoded value. Used to avoid the entries in the LoanScheduleTransaction table that are there because of rounding mistakes
 	
@@ -206,7 +207,30 @@ BEGIN
 		Loan.CustomerId = @CustomerId
 	
 	SELECT TOP 1 @ZooplaEstimate = Zoopla.ZooplaEstimate, @AverageSoldPrice1Year = Zoopla.AverageSoldPrice1Year FROM Zoopla, CustomerAddress WHERE CustomerId = @CustomerId AND CustomerAddress.addressId = Zoopla.CustomerAddressId AND CustomerAddress.addressType = 1 ORDER BY UpdateDate DESC 
-				
+	
+	SELECT 
+		@LastServiceLogId = Id
+	FROM
+		MP_ServiceLog
+	WHERE
+		CustomerId = @CustomerId
+		AND
+		ServiceType = 'Consumer Request'
+	ORDER BY
+		Id DESC
+
+	SELECT 
+		@BalanceOfMortgages = SUM(Balance) 
+	FROM
+		ExperianConsumerDataCais,
+		ExperianConsumerData
+	WHERE
+		ServiceLogId = @LastServiceLogId AND
+		AccountType IN ('03','16','25','30','31','32','33','34','35','69') AND -- Add '50' or change to name like '%mortgage%' 
+		MatchTo = 1 AND
+		AccountStatus <> 'S' AND
+		ExperianConsumerData.Id = ExperianConsumerDataId	
+	
 	SELECT
 		@NumOfHmrcMps AS NumOfHmrcMps,
 		@TypeOfBusiness AS TypeOfBusiness, 
@@ -224,6 +248,7 @@ BEGIN
 		@NumOfLatePayments AS NumOfLatePayments, 
 		@NumOfEarlyPayments AS NumOfEarlyPayments,
 		@ZooplaEstimate AS ZooplaEstimate,
-		@AverageSoldPrice1Year AS AverageSoldPrice1Year
+		@AverageSoldPrice1Year AS AverageSoldPrice1Year,
+		@BalanceOfMortgages AS BalanceOfMortgages
 END
 GO

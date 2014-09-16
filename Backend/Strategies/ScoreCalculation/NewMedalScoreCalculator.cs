@@ -26,29 +26,49 @@
 			this.db = db;
 		}
 
-		public ScoreResult CalculateMedalScore(ScoreResult inputData)
+		public ScoreResult CalculateMedalScore(ScoreResult inputData, int customerId)
 		{
 			Results = inputData;
-			CalculateWeights();
-			CalculateGrades();
+			try
+			{
+				CalculateWeights();
+				CalculateGrades();
 
-			CalculateCustomerScore();
-			decimal totalScoreMin = CalculateScoreMin();
-			decimal totalScoreMax = CalculateScoreMax();
-			Results.TotalScoreNormalized = (Results.TotalScore - totalScoreMin) / (totalScoreMax - totalScoreMin);
+				CalculateCustomerScore();
+				decimal totalScoreMin = CalculateScoreMin();
+				decimal totalScoreMax = CalculateScoreMax();
+				Results.TotalScoreNormalized = (Results.TotalScore - totalScoreMin) / (totalScoreMax - totalScoreMin);
 
-			CalculateMedal();
+				CalculateMedal();
+			}
+			catch (Exception e)
+			{
+				log.Error("Failed calculating medal for customer: {0} with error: {1}", customerId, e);
+				Results.Error = e.Message;
+			}
 
 			return Results;
 		}
 
 		public ScoreResult CalculateMedalScore(int customerId)
 		{
-			var inputData = GatherData(customerId);
-			return CalculateMedalScore(inputData);
+			ScoreResult scoreResultForError;
+			try
+			{
+				var inputData = GatherData(customerId);
+				return CalculateMedalScore(inputData, customerId);
+			}
+			catch (Exception e)
+			{
+				log.Error("Failed calculating medal for customer: {0} with error: {1}", customerId, e);
+				scoreResultForError = new ScoreResult {Error = e.Message};
+			}
+
+			return scoreResultForError;
 		}
 
-		private ScoreResult GatherData(int customerId) {
+		private ScoreResult GatherData(int customerId)
+		{
 			var inputData = new ScoreResult();
 			DataTable dt = db.ExecuteReader("GetDataForMedalCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 

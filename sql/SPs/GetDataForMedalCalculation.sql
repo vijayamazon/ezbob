@@ -22,8 +22,23 @@ BEGIN
 		@YodleeTotalAggrgationFuncId INT,
 		@YodleeTurnover DECIMAL(18,6),
 		@ZooplaEstimate NVARCHAR(30), 
-		@AverageSoldPrice1Year INT
-
+		@AverageSoldPrice1Year INT,
+		@Threshold DECIMAL(18,6),
+		@LoanScheduleId INT,
+		@ScheduleDate DATETIME,
+		@LoanId INT,
+		@LastTransactionId INT,
+		@LastTransactionDate DATETIME,
+		@StatusAfterLastTransaction NVARCHAR(50),
+		@LateDays INT
+		
+	SET @Threshold = 2
+	
+	CREATE TABLE #LateLoans
+	(
+		LoanId INT
+	)
+	
 	SELECT 
 		@BusinessScore = Score, 
 		@TangibleEquity = TangibleEquity, 
@@ -32,7 +47,6 @@ BEGIN
 		CustomerAnalyticsCompany 
 	WHERE 
 		CustomerID = @CustomerId
-
 	
 	SELECT @ConsumerScore = MIN(ExperianConsumerScore)
 	FROM
@@ -66,29 +80,77 @@ BEGIN
 
 	IF @FirstRepaymentDate IS NOT NULL AND @FirstRepaymentDate < GETUTCDATE()
 		SELECT @FirstRepaymentDatePassed = 1
-
+	
+	SELECT @OnTimeLoans = COUNT(1) FROM Loan WHERE CustomerId = @CustomerId
+	
+	DECLARE cur CURSOR FOR 
 	SELECT 
-		@OnTimeLoans = COUNT(Loan.Id) 
+		Id
 	FROM 
-		Loan,
-		LoanSchedule
-	WHERE
-		Loan.CustomerId = @CustomerId AND
-		Loan.Id = LoanSchedule.LoanId AND
-		(LoanSchedule.Status = 'PaidOnTime' OR LoanSchedule.Status = 'PaidEarly') AND 
-		LoanSchedule.Id = 
-		(
-			SELECT 
-				MAX(LoanSchedule.Id) 
-			FROM 
-				Customer,
-				LoanSchedule, 
-				Loan
-			WHERE 
-				Loan.CustomerId = Customer.Id AND
-				LoanSchedule.LoanId = Loan.Id AND
-				Customer.Id = Loan.CustomerId
-		)
+		Loan
+	WHERE 
+		CustomerId = @CustomerId
+		
+	OPEN cur
+	FETCH NEXT FROM cur INTO @LoanId
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		DECLARE cur2 CURSOR FOR 
+		SELECT 
+			Id,
+			Date
+		FROM 
+			LoanSchedule
+		WHERE 
+			LoanId = @LoanId
+		OPEN cur2
+		FETCH NEXT FROM cur2 INTO @LoanScheduleId, @ScheduleDate
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			IF NOT EXISTS (SELECT 1 FROM #LateLoans WHERE LoanId = @LoanId)
+			BEGIN
+				SELECT 
+					@LastTransactionId = Max(TransactionID) 
+				FROM 
+					LoanScheduleTransaction 
+				WHERE 
+					ScheduleID = @LoanScheduleId AND 
+					ABS(PrincipalDelta) + ABS(FeesDelta) + ABS(InterestDelta) > @Threshold
+
+				IF @LastTransactionId IS NOT NULL
+				BEGIN
+					SELECT @LastTransactionDate = PostDate FROM LoanTransaction WHERE Id = @LastTransactionId
+					SELECT @StatusAfterLastTransaction = StatusAfter FROM LoanScheduleTransaction WHERE ScheduleID = @LoanScheduleId AND TransactionID = @LastTransactionId
+				END
+
+				IF @LastTransactionDate IS NOT NULL AND 
+					(
+						@StatusAfterLastTransaction = 'Paid' OR 
+						@StatusAfterLastTransaction = 'PaidOnTime' OR 
+						@StatusAfterLastTransaction = 'PaidEarly'
+					)
+					SELECT @LateDays = datediff(dd, @ScheduleDate, @LastTransactionDate)
+				ELSE
+					SELECT @LateDays = datediff(dd, @ScheduleDate, GETUTCDATE())
+					
+				IF @LateDays >= 7 
+				BEGIN
+					SET @OnTimeLoans = @OnTimeLoans - 1
+					INSERT INTO #LateLoans VALUES (@LoanId)
+				END
+			END
+			
+			FETCH NEXT FROM cur2 INTO @LoanScheduleId, @ScheduleDate
+		END
+		CLOSE cur2
+		DEALLOCATE cur2
+
+		FETCH NEXT FROM cur INTO @LoanId
+	END
+	CLOSE cur
+	DEALLOCATE cur
+	
+	DROP TABLE #LateLoans
 
 	SELECT 
 		@NumOfLatePayments = COUNT(LoanCharges.Id) 

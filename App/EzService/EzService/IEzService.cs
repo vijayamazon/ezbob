@@ -573,6 +573,9 @@
 		ActionMetaData CalculateNewMedals();
 
 		[OperationContract]
+		ActionMetaData CalculateNewMedalsForComparison();
+
+		[OperationContract]
 		StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
 
 		[OperationContract]

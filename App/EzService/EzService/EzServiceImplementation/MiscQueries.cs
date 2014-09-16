@@ -239,6 +239,12 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
+		public ActionMetaData CalculateNewMedalsForComparison()
+		{
+			CalculateNewMedalsForComparison instance;
+			return ExecuteSync(out instance, 0, 0);
+		}
+
 		public StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId)
 		{
 			GetUnfetchedDataErrors instance;

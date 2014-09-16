@@ -227,6 +227,7 @@
 			string typeOfBusiness = sr["TypeOfBusiness"];
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
 			decimal yodleeAnnualTurnover = sr["YodleeTurnover"];
+			decimal mortgageBalance = sr["BalanceOfMortgages"];
 
 			if (typeOfBusiness != "Limited" && typeOfBusiness != "LLP")
 			{
@@ -267,7 +268,6 @@
 			int zooplaValue = intVal;
 
 			decimal netWorth;
-			decimal mortgageBalance = GetMortgages();
 			if (zooplaValue != 0)
 			{
 				netWorth = (zooplaValue - mortgageBalance) / zooplaValue;
@@ -289,14 +289,6 @@
 			onTimeLoansMedalParameter = new OnTimeLoansMedalParameter(numOfOnTimeLoans, firstRepaymentDatePassed);
 			lateRepaymentsMedalParameter = new LateRepaymentsMedalParameter(numOfLateRepayments, firstRepaymentDatePassed);
 			earlyRepaymentsMedalParameter = new EarlyRepaymentsMedalParameter(numOfEarlyRepayments, firstRepaymentDatePassed);
-		}
-
-		private decimal GetMortgages()
-		{
-			var instance = new LoadExperianConsumerMortgageData(customerId, db, log);
-			instance.Execute();
-
-			return instance.Result.MortgageBalance;
 		}
 	}
 }
