@@ -303,11 +303,9 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 				$('.grid-item-FirstName', oTR).empty().text('Total');
 
-				if (nCount > 0) {
-					$('.grid-item-LoanAmount', oTR).empty().text(EzBob.formatPoundsNoDecimals(nLoanSum));
-					$('.grid-item-SetupFee', oTR).empty().text(EzBob.formatPoundsNoDecimals(nSetupFeeSum));
-					$('.grid-item-LoanDate', oTR).empty().text(EzBob.formatIntWithCommas(nCount) + ' loan' + (nCount === 1 ? '' : 's'));
-				} // if
+				$('.grid-item-LoanAmount', oTR).empty().text(EzBob.formatPoundsNoDecimals(nLoanSum));
+				$('.grid-item-SetupFee', oTR).empty().text(EzBob.formatPoundsNoDecimals(nSetupFeeSum));
+				$('.grid-item-LoanDate', oTR).empty().text(EzBob.formatIntWithCommas(nCount) + ' loan' + (nCount === 1 ? '' : 's'));
 			}; // fnFooterCallback
 
 			self.theTable = self.$el.find('.customer-list').dataTable(theTableOpts);
