@@ -19,6 +19,8 @@ BEGIN
 	WHERE
 		l.CustomerId = @CustomerId
 		AND
+		l.DirectorId IS NULL
+		AND
 		l.ServiceType = 'Consumer Request'
 	ORDER BY
 		l.InsertDate DESC,
@@ -40,6 +42,8 @@ BEGIN
 		  
 		  WHERE
 		   c.Id=@CustomerId
+		   AND
+			l.DirectorId IS NULL
 		  ORDER BY
 		   l.InsertDate DESC,
 		   l.Id DESC
