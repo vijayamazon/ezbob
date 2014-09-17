@@ -291,7 +291,13 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		if (this.isOffline() && !this.isProfile())
 			this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
 
-		if (this.storeList.find('.marketplace-group.following .marketplace-button-full, .marketplace-button-full.marketplace-button-more').length)
+		var bShowMore = this.storeList.find(
+				'.marketplace-group.following .marketplace-button-full, .marketplace-button-full.marketplace-button-more'
+			).length || (
+				this.storeList.find('.btn-showmore').data('current') === 'less'
+			);
+
+		if (bShowMore)
 			this.showMoreAccounts();
 
 		this.storeList.appendTo(this.$el);
@@ -431,7 +437,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	toggleShowMoreAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		if (oBtn.attr('data-current') === 'more')
+		if (oBtn.data('current') === 'more')
 			this.showMoreAccounts();
 		else
 			this.showLessAccounts();
@@ -440,7 +446,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	showLessAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		oBtn.attr('data-current', 'more');
+		oBtn.data('current', 'more');
 		oBtn.find('.caption').text('Show more account types');
 		oBtn.find('.rotate90').html('&laquo;');
 		oBtn.find('.onhover-cell').text('Show more data source connectors');
@@ -453,7 +459,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	showMoreAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		oBtn.attr('data-current', 'less');
+		oBtn.data('current', 'less');
 		oBtn.find('.caption').text('Show less account types');
 		oBtn.find('.rotate90').html('&raquo;');
 		oBtn.find('.onhover-cell').text('Show less data source connectors');

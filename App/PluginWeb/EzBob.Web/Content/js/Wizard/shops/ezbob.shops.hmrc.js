@@ -17,7 +17,7 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 				doneBtn: 'hmrc:do_upload',
 			},
 			classes: {
-			    backBtn: 'button btn-grey back',
+				backBtn: 'button btn-grey back',
 				doneBtn: 'button btn-green',
 			},
 			clickBack: _.bind(this.uploadFilesBack, this),
@@ -87,6 +87,7 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 	doUploadFiles: function() {
 		this.trigger('completed');
 		this.trigger('back');
+
 		this.$el.find('#uploadFilesDiv').hide();
 		this.$el.find('#initialDiv').show();
 
