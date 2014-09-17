@@ -18,6 +18,7 @@
 		private bool freeCashFlowDataAvailable;
 		private bool firstRepaymentDatePassed;
 		private bool failedCalculatingFreeCashFlow;
+		private bool failedCalculatingTangibleEquity;
 
 		public ScoreResult Results { get; set; }
 
@@ -149,12 +150,15 @@
 				inputData.FreeCashFlow = 0;
 			}
 
+			failedCalculatingTangibleEquity = false;
+
 			if (inputData.AnnualTurnover != 0)
 			{
 				inputData.TangibleEquity = tangibleEquity / inputData.AnnualTurnover;
 			}
 			else
 			{
+				failedCalculatingTangibleEquity = true;
 				inputData.TangibleEquity = 0;
 			}
 
@@ -496,7 +500,7 @@
 
 		private void CalculateTangibleEquityGrade()
 		{
-			if (Results.TangibleEquity < -0.05m)
+			if (Results.TangibleEquity < -0.05m || failedCalculatingTangibleEquity) // When turnover is zero we can't calc tangible equity, we want the min grade
 			{
 				Results.TangibleEquityGrade = 0;
 			}

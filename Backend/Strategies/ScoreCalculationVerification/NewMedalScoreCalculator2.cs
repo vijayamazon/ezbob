@@ -287,7 +287,7 @@
 			}
 			
 			businessScoreMedalParameter = new BusinessScoreMedalParameter(businessScore, foundSummary, firstRepaymentDatePassed);
-			tangibleEquityMedalParameter = new TangibleEquityMedalParameter(tangibleEquity);
+			tangibleEquityMedalParameter = new TangibleEquityMedalParameter(tangibleEquity, annualTurnover != 0);
 			businessSeniorityMedalParameter = new BusinessSeniorityMedalParameter(businessSeniority, foundSummary, firstRepaymentDatePassed);
 			consumerScoreMedalParameter = new ConsumerScoreMedalParameter(consumerScore, foundSummary, firstRepaymentDatePassed);
 			maritalStatusMedalParameter = new MaritalStatusMedalParameter(maritalStatus);

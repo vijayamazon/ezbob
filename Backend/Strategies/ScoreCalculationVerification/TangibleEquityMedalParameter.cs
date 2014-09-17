@@ -2,9 +2,10 @@
 {
 	public class TangibleEquityMedalParameter : MedalParameter
 	{
+		private readonly bool hasNonZeroTurnover;
 		public decimal TangibleEquity { get; private set; }
 
-		public TangibleEquityMedalParameter(decimal tangibleEquity)
+		public TangibleEquityMedalParameter(decimal tangibleEquity, bool hasNonZeroTurnover)
 		{
 			Weight = 8;
 			IsWeightFixed = false;
@@ -12,11 +13,12 @@
 			MaxGrade = 4;
 
 			TangibleEquity = tangibleEquity;
+			this.hasNonZeroTurnover = hasNonZeroTurnover;
 		}
 
 		public override void CalculateGrade()
 		{
-			if (TangibleEquity < -0.05m)
+			if (TangibleEquity < -0.05m || !hasNonZeroTurnover) // When turnover is zero we can't calc tangible equity, we want to keep the weight and have the min grade
 			{
 				Grade = 0;
 			}
