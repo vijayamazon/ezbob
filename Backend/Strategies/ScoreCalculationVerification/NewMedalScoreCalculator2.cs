@@ -250,6 +250,10 @@
 			{
 				factoredLoanRepayments /= fcfFactor;
 			}
+			if (factoredLoanRepayments < 0)
+			{
+				factoredLoanRepayments = 0;
+			}
 
 			if (annualTurnover != 0)
 			{
