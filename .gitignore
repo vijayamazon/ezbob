@@ -47,3 +47,5 @@ drop-create*.bat
 ezTest/img/*
 obj/
 packages/
+App/EzReporting/EzReportsWeb/connection-strings.xml
+App/PluginWeb/EzBob.Web/connection-strings.xml
