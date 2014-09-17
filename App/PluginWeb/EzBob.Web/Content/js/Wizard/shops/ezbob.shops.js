@@ -310,7 +310,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.$el.find("img[rel]").setPopover("left");
 		this.$el.find("li[rel]").setPopover("left");
 
-		this.$el.find('.btn-showmore').hover(
+		this.$el.find('.btn-showmore').hoverIntent(
 			function() { $('.onhover', this).animate({ top: 0,      opacity: 1, }); },
 			function() { $('.onhover', this).animate({ top: '60px', opacity: 0, }); }
 		);
@@ -389,7 +389,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var isProfile = this.isProfile();
 
 		$(this.storeList).find('.back-store').remove();
-		this.storeList.find('.marketplace-button.show-more').show();
+		this.storeList.find('.marketplace-button.show-more').removeClass('hide').show();
 
 		if (isOffline) {
 			sShow = '.offline_entry_message';
@@ -443,6 +443,8 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			this.showLessAccounts();
 	}, // toggleShowMoreAccounts
 
+	tableToBlock: function() { return 'table-to-block-done'; }, // tableToBlock
+
 	showLessAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
@@ -453,7 +455,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		this.storeList.find('.AddMoreRuleBottom').addClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
-		this.storeList.find('.marketplace-button').not('.show-more, .marketplace-button-less').css('display', 'none');
+		this.storeList.find('.marketplace-button').not('.show-more, .marketplace-button-less').css('display', 'none').data(this.tableToBlock(), '');
 	}, // showLessAccounts
 
 	showMoreAccounts: function() {
@@ -466,7 +468,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
-		this.storeList.find('.marketplace-button').not('.show-more').css('display', 'table');
+		this.storeList.find('.marketplace-button').not('.show-more').css('display', 'table').data(this.tableToBlock(), '');
 	}, // showMoreAccounts
 
 	canContinue: function() {

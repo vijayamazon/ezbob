@@ -1565,6 +1565,8 @@ td.account-logo {
     margin-bottom: 17px;
     width: 31%;
     height: 60px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     border-radius: 5px;
     display: table;
@@ -1655,10 +1657,11 @@ td.account-logo {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
 }
-    .marketplace-button a div.onhover div.onhover-cell {
-        display: table-cell;
-        vertical-align: middle;
-    } 
+
+.marketplace-button a div.onhover div.onhover-cell {
+	display: table-cell;
+	vertical-align: middle;
+} 
 
 .hmrc-main-button a div.onhover {
     height: 103px;
