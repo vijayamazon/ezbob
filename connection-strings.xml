@@ -12,5 +12,6 @@
 	<add name="uat" connectionString="user id=sa;Password=Ezbobuatdb1;server=192.168.120.17;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="qa" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa01;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="qa-prod-test" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_test;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-prod-medal-test" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_medal_test;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 </connectionStrings>
 
