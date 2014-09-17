@@ -37,7 +37,8 @@ BEGIN
 		@HmrcAnnualTurnover DECIMAL(18,6),
 		@BalanceOfMortgages INT,
 		@FcfFactor NVARCHAR(MAX),
-		@ActualLoanRepayments INT
+		@ActualLoanRepayments INT,
+		@FoundSummary BIT
 	
 	SET @Threshold = 2 -- Hardcoded value. Used to avoid the entries in the LoanScheduleTransaction table that are there because of rounding mistakes
 	
@@ -182,6 +183,11 @@ BEGIN
 	
 	SELECT @Ebida = SUM(Ebida), @HmrcAnnualTurnover = SUM(Revenues) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
 	
+	IF @Ebida IS NULL
+		SELECT @FoundSummary = 0
+	ELSE
+		SELECT @FoundSummary = 1
+	
 	SELECT @YodleeTotalAggrgationFuncId = MP_AnalyisisFunction.Id FROM MP_AnalyisisFunction, MP_MarketplaceType WHERE MP_AnalyisisFunction.MarketPlaceId=MP_MarketplaceType.Id AND MP_MarketplaceType.Name = 'Yodlee' AND MP_AnalyisisFunction.Name='TotalIncomeAnnualized'
 	
 	SELECT TOP 1 
@@ -227,6 +233,8 @@ BEGIN
 	WHERE
 		CustomerId = @CustomerId
 		AND
+		DirectorId IS NULL
+		AND
 		ServiceType = 'Consumer Request'
 	ORDER BY
 		Id DESC
@@ -263,6 +271,7 @@ BEGIN
 		@AverageSoldPrice1Year AS AverageSoldPrice1Year,
 		@BalanceOfMortgages AS BalanceOfMortgages,
 		@ActualLoanRepayments AS ActualLoanRepayments,
-		@FcfFactor AS FcfFactor
+		@FcfFactor AS FcfFactor,
+		@FoundSummary AS FoundSummary
 END
 GO

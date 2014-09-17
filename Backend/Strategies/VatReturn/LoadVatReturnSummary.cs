@@ -69,6 +69,7 @@
 				foreach (KeyValuePair<int, VatReturnSummary> pair in oResults) {
 					pair.Value.ActualLoanRepayment = newActualLoansRepayment;
 					pair.Value.FreeCashFlow -= newActualLoansRepayment;
+					break;
 				} // for each summary
 			} // if
 

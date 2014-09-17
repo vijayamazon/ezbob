@@ -229,6 +229,7 @@
 			decimal mortgageBalance = sr["BalanceOfMortgages"];
 			decimal actualLoanRepayments = sr["ActualLoanRepayments"];
 			decimal fcfFactor = sr["FcfFactor"];
+			bool foundSummary = sr["FoundSummary"];
 
 			if (typeOfBusiness != "Limited" && typeOfBusiness != "LLP")
 			{
@@ -239,14 +240,8 @@
 			{
 				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", numOfHmrcMps));
 			}
-
-			bool hasHmrc = numOfHmrcMps != 0;
-
-			decimal annualTurnover = hmrcAnnualTurnover;
-			if (!hasHmrc)
-			{
-				annualTurnover = yodleeAnnualTurnover;
-			}
+			
+			decimal annualTurnover = !foundSummary ? yodleeAnnualTurnover : hmrcAnnualTurnover;
 
 			decimal freeCashFlow = 0;
 			decimal tangibleEquity = 0;
@@ -258,7 +253,10 @@
 
 			if (annualTurnover != 0)
 			{
-				freeCashFlow = (ebida - factoredLoanRepayments) / annualTurnover;
+				if (foundSummary)
+				{
+					freeCashFlow = (ebida - factoredLoanRepayments)/annualTurnover;
+				}
 				tangibleEquity = rawTangibleEquity / annualTurnover;
 			}
 
@@ -283,14 +281,14 @@
 			{
 				netWorth = 0;
 			}
-
-			businessScoreMedalParameter = new BusinessScoreMedalParameter(businessScore, hasHmrc, firstRepaymentDatePassed);
+			
+			businessScoreMedalParameter = new BusinessScoreMedalParameter(businessScore, foundSummary, firstRepaymentDatePassed);
 			tangibleEquityMedalParameter = new TangibleEquityMedalParameter(tangibleEquity);
-			businessSeniorityMedalParameter = new BusinessSeniorityMedalParameter(businessSeniority, hasHmrc, firstRepaymentDatePassed);
-			consumerScoreMedalParameter = new ConsumerScoreMedalParameter(consumerScore, hasHmrc, firstRepaymentDatePassed);
+			businessSeniorityMedalParameter = new BusinessSeniorityMedalParameter(businessSeniority, foundSummary, firstRepaymentDatePassed);
+			consumerScoreMedalParameter = new ConsumerScoreMedalParameter(consumerScore, foundSummary, firstRepaymentDatePassed);
 			maritalStatusMedalParameter = new MaritalStatusMedalParameter(maritalStatus);
-			freeCashFlowMedalParameter = new FreeCashFlowMedalParameter(freeCashFlow, hasHmrc);
-			annualTurnoverMedalParameter = new AnnualTurnoverMedalParameter(annualTurnover, hasHmrc);
+			freeCashFlowMedalParameter = new FreeCashFlowMedalParameter(freeCashFlow, foundSummary, annualTurnover != 0);
+			annualTurnoverMedalParameter = new AnnualTurnoverMedalParameter(annualTurnover, foundSummary);
 			netWorthMedalParameter = new NetWorthMedalParameter(netWorth);
 			ezbobSeniorityMedalParameter = new EzbobSeniorityMedalParameter(ezbobSeniority, firstRepaymentDatePassed);
 			onTimeLoansMedalParameter = new OnTimeLoansMedalParameter(numOfOnTimeLoans, firstRepaymentDatePassed);

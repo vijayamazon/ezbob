@@ -30,7 +30,8 @@ BEGIN
 		@LastTransactionId INT,
 		@LastTransactionDate DATETIME,
 		@StatusAfterLastTransaction NVARCHAR(50),
-		@LateDays INT
+		@LateDays INT,
+		@NumOfHmrcMps INT
 		
 	SET @Threshold = 2
 	
@@ -174,6 +175,16 @@ BEGIN
 		Loan.Id = LoanSchedule.LoanId AND
 		Loan.CustomerId = @CustomerId
 		
+	SELECT
+		@NumOfHmrcMps = COUNT(1)
+	FROM
+		MP_CustomerMarketPlace,
+		MP_MarketplaceType
+	WHERE
+		MP_MarketplaceType.Name = 'HMRC' AND
+		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
+		MP_CustomerMarketPlace.CustomerId = @CustomerId
+		
 	SELECT TOP 1
 		@HmrcId = MP_CustomerMarketplace.Id
 	FROM
@@ -217,6 +228,7 @@ BEGIN
 		@HmrcId AS HmrcId,
 		@YodleeTurnover AS YodleeTurnover,
 		@ZooplaEstimate AS ZooplaEstimate,
-		@AverageSoldPrice1Year AS AverageSoldPrice1Year
+		@AverageSoldPrice1Year AS AverageSoldPrice1Year,
+		@NumOfHmrcMps AS NumOfHmrcMps
 END
 GO

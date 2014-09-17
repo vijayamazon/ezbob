@@ -17,6 +17,7 @@
 		private readonly AConnection db;
 		private bool freeCashFlowDataAvailable;
 		private bool firstRepaymentDatePassed;
+		private bool failedCalculatingFreeCashFlow;
 
 		public ScoreResult Results { get; set; }
 
@@ -94,8 +95,12 @@
 			decimal yodleeTurnover = sr["YodleeTurnover"];
 			string zooplaEstimateStr = sr["ZooplaEstimate"];
 			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
+			int numOfHmrcMps = sr["NumOfHmrcMps"];
 
-			// TODO: logic assumes 1 hmrc - what should we do if we have more
+			if (numOfHmrcMps > 1)
+			{
+				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", numOfHmrcMps));
+			}
 
 			bool wasAbleToGetSummaryData = false;
 			VatReturnSummary[] summaryData = null;
@@ -111,16 +116,29 @@
 				}
 			}
 
+			failedCalculatingFreeCashFlow = false;
+
 			if (wasAbleToGetSummaryData)
 			{
 				freeCashFlowDataAvailable = true;
-				inputData.AnnualTurnover = summaryData[0].Revenues ?? 0;
-				if (summaryData[0].FreeCashFlow.HasValue && inputData.AnnualTurnover != 0)
+
+				decimal totalRevenuesInSummary = 0;
+				decimal totalFreeCashFlowInSummary = 0;
+
+				foreach (VatReturnSummary singleSummary in summaryData)
 				{
-					inputData.FreeCashFlow = summaryData[0].FreeCashFlow.Value / inputData.AnnualTurnover;
+					totalRevenuesInSummary += singleSummary.Revenues ?? 0;
+					totalFreeCashFlowInSummary += singleSummary.FreeCashFlow.HasValue ? singleSummary.FreeCashFlow.Value : 0;
+				}
+
+				inputData.AnnualTurnover = totalRevenuesInSummary;
+				if (inputData.AnnualTurnover != 0)
+				{
+					inputData.FreeCashFlow = totalFreeCashFlowInSummary / inputData.AnnualTurnover;
 				}
 				else
 				{
+					failedCalculatingFreeCashFlow = true;
 					inputData.FreeCashFlow = 0;
 				}
 			}
@@ -534,7 +552,7 @@
 
 		private void CalculateFreeCashFlowGrade()
 		{
-			if (Results.FreeCashFlow < -0.1m)
+			if (Results.FreeCashFlow < -0.1m || !freeCashFlowDataAvailable || failedCalculatingFreeCashFlow) // When turnover is zero we can't calc FCF, we want the min grade
 			{
 				Results.FreeCashFlowGrade = 0;
 			}

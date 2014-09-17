@@ -3,9 +3,10 @@
 	public class FreeCashFlowMedalParameter : MedalParameter
 	{
 		private readonly bool hasHmrc;
+		private readonly bool hasNonZeroTurnover;
 		public decimal FreeCashFlow { get; private set; }
 
-		public FreeCashFlowMedalParameter(decimal freeCashFlow, bool hasHmrc)
+		public FreeCashFlowMedalParameter(decimal freeCashFlow, bool hasHmrc, bool hasNonZeroTurnover)
 		{
 			Weight = 19;
 			IsWeightFixed = true;
@@ -14,6 +15,7 @@
 
 			FreeCashFlow = freeCashFlow;
 			this.hasHmrc = hasHmrc;
+			this.hasNonZeroTurnover = hasNonZeroTurnover;
 		}
 
 		public override void CalculateWeight()
@@ -26,7 +28,7 @@
 
 		public override void CalculateGrade()
 		{
-			if (FreeCashFlow < -0.1m)
+			if (FreeCashFlow < -0.1m || !hasHmrc || !hasNonZeroTurnover) // When turnover is zero we can't calc FCF, we want to keep the weight and have the min grade
 			{
 				Grade = 0;
 			}
