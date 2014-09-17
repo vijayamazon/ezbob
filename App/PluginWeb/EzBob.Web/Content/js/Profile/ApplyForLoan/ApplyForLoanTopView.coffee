@@ -57,7 +57,7 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
         
         @$el.find('#signedName').attr('maxlength', pi.Fullname.length + 10)
 
-        enabled = EzBob.Validation.checkForm EzBob.validateLoanLegalForm(form, [ pi.FirstName, pi.Surname ])
+        enabled = EzBob.Validation.checkForm EzBob.validateLoanLegalForm(form, [ pi.FirstName, pi.MiddleInitial, pi.Surname ])
 
         return unless enabled
 

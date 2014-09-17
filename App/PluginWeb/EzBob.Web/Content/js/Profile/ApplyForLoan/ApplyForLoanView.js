@@ -86,8 +86,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	}, // loanSelectionChanged
 
 	showSubmit: function() {
-		var enabled;
-		enabled = EzBob.Validation.checkForm(this.validator);
+		var enabled = EzBob.Validation.checkForm(this.validator);
+
 		this.model.set("agree", enabled);
 		this.ui.submit.toggleClass("disabled", !enabled);
 	}, // showSubmit
@@ -195,7 +195,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		this.$el.find('#signedName').attr('maxlength', pi.Fullname.length + 10);
 
-		this.validator = EzBob.validateLoanLegalForm(this.ui.form, [pi.FirstName, pi.Surname]);
+		this.validator = EzBob.validateLoanLegalForm(this.ui.form, [pi.FirstName, pi.MiddleInitial, pi.Surname]);
 
 		this.$el.find('form.LoanLegal').submit(function(evt) {
 			return self.submit(evt);

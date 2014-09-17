@@ -1455,40 +1455,105 @@ EzBob.validateCGShopForm = function (el, accountType) {
 };
 
 EzBob.escapeRegExp = function(str) {
-	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	return str ? str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : '';
 }; // EzBob.escapeRegExp
 
 $.validator.addMethod('validateSignerName', function (value, element, params) {
-	var sSignature = $.trim(value);
+	function innerLog() {
+		// console.log.apply(console, Array.prototype.slice.call(arguments));
+	} // innerLog
 
-	if (sSignature === '')
+	// ReSharper disable DuplicatingLocalDeclaration
+	function checkFL(sSignature, sFirstName, sLastName, sSeparator) {
+		innerLog('checkFL(', sSignature, ',', sFirstName, ',', sLastName, ',', sSeparator, ') started...');
+
+		var re = new RegExp('^' + sFirstName + sSeparator + sLastName + '$', 'i');
+
+		if (sSignature.match(re)) {
+			innerLog('checkFL(', sSignature, ',', sFirstName, ',', sLastName, ',', sSeparator, ') matches FL.');
+			return true;
+		} // if
+
+		re = new RegExp('^' + sLastName + sSeparator + sFirstName + '$', 'i');
+
+		if (sSignature.match(re)) {
+			innerLog('checkFL(', sSignature, ',', sFirstName, ',', sLastName, ',', sSeparator, ') matches LF.');
+			return true;
+		} // if
+
+		innerLog('checkFL(', sSignature, ',', sFirstName, ',', sLastName, ',', sSeparator, ') no match.');
+		return false;
+	} // checkFL
+
+	function checkFML(sSignature, sFirstName, sMiddleName, sLastName, sSeparator) {
+		function checkOneFML(sSignature, sFirstName, sMiddleName, sLastName, sSeparator) {
+			innerLog('checkOneFML(', sSignature, ',', sFirstName, ',', sMiddleName, ',', sLastName, ',', sSeparator, ') started...');
+
+			var re = new RegExp('^' + sFirstName + sSeparator + sMiddleName + sSeparator + sLastName + '$', 'i');
+
+			if (sSignature.match(re)) {
+				innerLog('checkOneFML(', sSignature, ',', sFirstName, ',', sMiddleName, ',', sLastName, ',', sSeparator, ') matches FML.');
+				return true;
+			} // if
+
+			re = new RegExp('^' + sMiddleName + sSeparator + sFirstName + sSeparator + sLastName + '$', 'i');
+
+			if (sSignature.match(re)) {
+				innerLog('checkOneFML(', sSignature, ',', sFirstName, ',', sMiddleName, ',', sLastName, ',', sSeparator, ') matches MFL.');
+				return true;
+			} // if
+
+			re = new RegExp('^' + sFirstName + sSeparator + sLastName + sMiddleName + sSeparator + '$', 'i');
+
+			if (sSignature.match(re)) {
+				innerLog('checkOneFML(', sSignature, ',', sFirstName, ',', sMiddleName, ',', sLastName, ',', sSeparator, ') matches FLM.');
+				return true;
+			} // if
+
+			innerLog('checkOneFML(', sSignature, ',', sFirstName, ',', sMiddleName, ',', sLastName, ',', sSeparator, ') no match.');
+			return false;
+		} // checkOneFML
+
+		innerLog('checkFML(', sSignature, ',', sFirstName, ',', sMiddleName, ',', sLastName, ',', sSeparator, ') started...');
+
+		if (checkOneFML(sSignature, sFirstName, sMiddleName, sLastName, sSeparator)) {
+			innerLog('checkFML(', sSignature, ',', sFirstName, ',', sMiddleName, ',', sLastName, ',', sSeparator, ') matches FL with M.');
+			return true;
+		} // if
+
+		if (checkOneFML(sSignature, sLastName, sMiddleName, sFirstName, sSeparator)) {
+			innerLog('checkFML(', sSignature, ',', sFirstName, ',', sMiddleName, ',', sLastName, ',', sSeparator, ') matches LF with M.');
+			return true;
+		} // if
+
+		return false;
+	} // checkFML
+	// ReSharper restore DuplicatingLocalDeclaration
+
+	var sSignature = $.trim(value);
+	var sNoSpaceSignature = sSignature.replace(/\s+/g, '');
+
+	if (sNoSpaceSignature === '')
 		return false;
 
 	var sFirstName = EzBob.escapeRegExp(params[0]);
-	var sLastName = EzBob.escapeRegExp(params[1]);
+	var sMiddleName = EzBob.escapeRegExp(params[1]);
+	var sLastName = EzBob.escapeRegExp(params[2]);
 
-	var re = new RegExp('^' + sFirstName + ' (.+ )?' + sLastName + '$', 'i');
+	var sNoSpaceFirstName = sFirstName.replace(/\s+/g, '');
+	var sNoSpaceLastName = sLastName.replace(/\s+/g, '');
+	var sNoSpaceMiddleName = sMiddleName.replace(/\s+/g, '');
 
-	if (sSignature.match(re))
+	if (checkFL(sSignature, sFirstName, sLastName, '\\s+'))
 		return true;
 
-	re = new RegExp('^' + sLastName + ' (.+ )?' + sFirstName + '$', 'i');
-    
-	if (sSignature.match(re))
-	    return true;
+	if (sNoSpaceMiddleName === '')
+		return checkFL(sNoSpaceSignature, sNoSpaceFirstName, sNoSpaceLastName, '');
 
-	sSignature = sSignature.replace(/\s+/g, '');
-	sFirstName = sFirstName.replace(/\s+/g, '');
-	sLastName = sLastName.replace(/\s+/g, '');
-    
-	re = new RegExp('^' + sFirstName + sLastName + '$', 'i');
+	if (checkFML(sSignature, sFirstName, sMiddleName, sLastName, '\\s+'))
+		return true;
 
-	if (sSignature.match(re))
-	    return true;
-
-	re = new RegExp('^' + sLastName + sFirstName + '$', 'i');
-
-	return sSignature.match(re) ? true : false;
+	return checkFML(sNoSpaceSignature, sNoSpaceFirstName, sNoSpaceMiddleName, sNoSpaceLastName, '');
 }, 'Please type your full name as it appears in the agreement.');
 
 EzBob.validateLoanLegalForm = function (el, aryCustomerName) {

@@ -32,8 +32,8 @@ echo iis app start
 start /MIN /D "C:\Program Files (x86)\IIS Express" iisexpress.exe /config:"%USERPROFILE%\Documents\IISExpress\config\applicationhost.config" /site:"EzBob.Web" /apppool:"Clr4IntegratedAppPool"
 
 rem Start iisexpress minimised - API site
-echo iis api start
-start /MIN /D "C:\Program Files (x86)\IIS Express" iisexpress.exe /config:"%USERPROFILE%\Documents\IISExpress\config\applicationhost.config" /site:"Demo" /apppool:"Clr4IntegratedAppPool"
+rem echo iis api start
+rem start /MIN /D "C:\Program Files (x86)\IIS Express" iisexpress.exe /config:"%USERPROFILE%\Documents\IISExpress\config\applicationhost.config" /site:"Demo" /apppool:"Clr4IntegratedAppPool"
 
 cd ../../../../.. 
 
