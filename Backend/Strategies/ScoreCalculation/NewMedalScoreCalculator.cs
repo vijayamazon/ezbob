@@ -97,6 +97,7 @@
 			string zooplaEstimateStr = sr["ZooplaEstimate"];
 			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
+			string propertyStatusDescription = sr["PropertyStatusDescription"];
 
 			if (numOfHmrcMps > 1)
 			{
@@ -172,7 +173,7 @@
 			int zooplaValue = intVal;
 
 			decimal mortgageBalance = GetMortgages(customerId);
-			if (zooplaValue != 0)
+			if (zooplaValue != 0 && (propertyStatusDescription == "I own only this property" || propertyStatusDescription == "I own this property and other properties" || propertyStatusDescription == "Home owner"))
 			{
 				inputData.NetWorth = (zooplaValue - mortgageBalance) / zooplaValue;
 			}

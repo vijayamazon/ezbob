@@ -38,9 +38,12 @@ BEGIN
 		@BalanceOfMortgages INT,
 		@FcfFactor NVARCHAR(MAX),
 		@ActualLoanRepayments INT,
-		@FoundSummary BIT
+		@FoundSummary BIT,
+		@PropertyStatusDescription NVARCHAR(50)
 	
 	SET @Threshold = 2 -- Hardcoded value. Used to avoid the entries in the LoanScheduleTransaction table that are there because of rounding mistakes
+	
+	SELECT @PropertyStatusDescription = Description FROM CustomerPropertyStatuses, Customer WHERE PropertyStatusId = CustomerPropertyStatuses.Id AND Customer.Id = @CustomerId
 	
 	SELECT @FcfFactor = Value FROM ConfigurationVariables WHERE Name = 'FCFFactor'
 	
@@ -272,6 +275,7 @@ BEGIN
 		@BalanceOfMortgages AS BalanceOfMortgages,
 		@ActualLoanRepayments AS ActualLoanRepayments,
 		@FcfFactor AS FcfFactor,
-		@FoundSummary AS FoundSummary
+		@FoundSummary AS FoundSummary,
+		@PropertyStatusDescription AS PropertyStatusDescription
 END
 GO

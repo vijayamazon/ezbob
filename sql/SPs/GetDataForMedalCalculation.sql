@@ -31,9 +31,12 @@ BEGIN
 		@LastTransactionDate DATETIME,
 		@StatusAfterLastTransaction NVARCHAR(50),
 		@LateDays INT,
-		@NumOfHmrcMps INT
+		@NumOfHmrcMps INT,
+		@PropertyStatusDescription NVARCHAR(50)
 		
 	SET @Threshold = 2
+	
+	SELECT @PropertyStatusDescription = Description FROM CustomerPropertyStatuses, Customer WHERE PropertyStatusId = CustomerPropertyStatuses.Id AND Customer.Id = @CustomerId
 	
 	CREATE TABLE #LateLoans
 	(
@@ -229,6 +232,7 @@ BEGIN
 		@YodleeTurnover AS YodleeTurnover,
 		@ZooplaEstimate AS ZooplaEstimate,
 		@AverageSoldPrice1Year AS AverageSoldPrice1Year,
-		@NumOfHmrcMps AS NumOfHmrcMps
+		@NumOfHmrcMps AS NumOfHmrcMps,
+		@PropertyStatusDescription AS PropertyStatusDescription
 END
 GO

@@ -230,6 +230,7 @@
 			decimal actualLoanRepayments = sr["ActualLoanRepayments"];
 			decimal fcfFactor = sr["FcfFactor"];
 			bool foundSummary = sr["FoundSummary"];
+			string propertyStatusDescription = sr["PropertyStatusDescription"];
 
 			if (typeOfBusiness != "Limited" && typeOfBusiness != "LLP")
 			{
@@ -277,7 +278,7 @@
 			int zooplaValue = intVal;
 
 			decimal netWorth;
-			if (zooplaValue != 0)
+			if (zooplaValue != 0 && (propertyStatusDescription == "I own only this property" || propertyStatusDescription == "I own this property and other properties" || propertyStatusDescription == "Home owner"))
 			{
 				netWorth = (zooplaValue - mortgageBalance) / zooplaValue;
 			}
