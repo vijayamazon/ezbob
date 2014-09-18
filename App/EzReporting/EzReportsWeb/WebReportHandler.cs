@@ -70,9 +70,7 @@ namespace EzReportsWeb
 					return BuildAccountingLoanBalanceReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
 				case ReportType.RPT_TRAFFIC_REPORT:
-					var trafficReport = new TrafficReport(DB, this);
-					KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
-					return BuildTrafficReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oData, oColumnTypes);
+					return BuildTrafficReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 				
 				case ReportType.RPT_MARKETING_CHANNELS_SUMMARY:
 					return BuildMarketingChannelsSummaryReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
@@ -100,7 +98,6 @@ namespace EzReportsWeb
 
 			switch (report.Type)
 			{
-
 				case ReportType.RPT_PLANNED_PAYTMENT:
 					return BuildPlainedPaymentXls(report, (DateTime)rptDef.DateStart, DateTime.UtcNow);
 
@@ -127,6 +124,9 @@ namespace EzReportsWeb
 
 				case ReportType.RPT_ACCOUNTING_LOAN_BALANCE:
 					return BuildAccountingLoanBalanceXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				case ReportType.RPT_TRAFFIC_REPORT:
+					return BuildTrafficReportXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 				case ReportType.RPT_MARKETING_CHANNELS_SUMMARY:
 					return BuildMarketingChannelsSummaryXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);

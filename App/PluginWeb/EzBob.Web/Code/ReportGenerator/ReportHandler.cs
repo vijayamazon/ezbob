@@ -50,9 +50,7 @@
 				return BuildAccountingLoanBalanceReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
 			case ReportType.RPT_TRAFFIC_REPORT:
-				var trafficReport = new TrafficReport(DB, this);
-				KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
-				return BuildTrafficReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oData, oColumnTypes);
+				return BuildTrafficReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
 			case ReportType.RPT_MARKETING_CHANNELS_SUMMARY:
 				return BuildMarketingChannelsSummaryReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);

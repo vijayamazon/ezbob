@@ -12,6 +12,7 @@
 	using OfficeOpenXml;
 
 	using Cci;
+	using TraficReport;
 
 	public partial class BaseReportHandler : SafeLog {
 		#region public
@@ -177,7 +178,10 @@
 
 		#region method BuildTraficReport
 
-		public ATag BuildTrafficReport(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData, List<string> oColumnTypes = null) {
+		public ATag BuildTrafficReport(Report report, DateTime from, DateTime to, List<string> oColumnTypes = null) {
+			var trafficReport = new TrafficReport(DB, this);
+			KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, from, to);
+
 			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
@@ -384,7 +388,10 @@
 
 		#region method BuildTraficXls
 
-		public ExcelPackage BuildTrafficReportXls(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData) {
+		public ExcelPackage BuildTrafficReportXls(Report report, DateTime from, DateTime to) {
+			var trafficReport = new TrafficReport(DB, this);
+			KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, from, to);
+
 			return AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
 		} // BuildTrafficReportXls
 
