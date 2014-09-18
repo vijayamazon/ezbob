@@ -29,7 +29,7 @@
 			this.customerId = customerId;
 			this.directorId = directorId.HasValue && directorId.Value == 0 ? null : directorId;
 			forceCheck = bForceCheck;
-
+			
 			personalData =
 				new GetPersonalInfoForConsumerCheck(customerId, directorId, DB, Log)
 					.FillFirst<GetPersonalInfoForConsumerCheck.ResultRow>();
@@ -39,22 +39,33 @@
 
 		public override void Execute() {
 			Log.Info("Starting consumer check with current address, parameters: {0} {1}.", personalData, addressLines);
+			bool bSuccess;
 
-			bool bSuccess = GetConsumerInfoAndSave(AddressCurrency.Current);
+			if (!string.IsNullOrEmpty(addressLines.Line1ForExperian))
+			{
+				bSuccess = GetConsumerInfoAndSave(AddressCurrency.ForExperian);
+			}
+			else
+			{
+				bSuccess = GetConsumerInfoAndSave(AddressCurrency.Current);
 
-			if (!bSuccess && CanUsePrevAddress()) {
-				Log.Info("Starting consumer check with previous address parameters: {0} {1}.", personalData, addressLines);
-				bSuccess = GetConsumerInfoAndSave(AddressCurrency.Previous);
+				if (!bSuccess && CanUsePrevAddress())
+				{
+					Log.Info("Starting consumer check with previous address parameters: {0} {1}.", personalData, addressLines);
+					bSuccess = GetConsumerInfoAndSave(AddressCurrency.Previous);
+				}
 			}
 
 			UpdateAnalytics();
 
-			if (!bSuccess) {
+			if (!bSuccess)
+			{
 				Log.Error("Consumer check failed with parameters: {0} {1}.", personalData, addressLines);
-			} else {
+			}
+			else
+			{
 				Log.Info("Consumer check succeded with parameters: {0} {1}.", personalData, addressLines);
 			}
-
 		}
 
 		private bool CanUsePrevAddress() {
@@ -218,13 +229,25 @@
 					};
 
 				case AddressCurrency.Previous:
-					return new InputLocationDetailsMultiLineLocation {
+					return new InputLocationDetailsMultiLineLocation
+					{
 						LocationLine1 = oAddr.Line1Prev,
 						LocationLine2 = oAddr.Line2Prev,
 						LocationLine3 = oAddr.Line3Prev,
 						LocationLine4 = oAddr.Line4Prev,
 						LocationLine5 = oAddr.Line5Prev,
 						LocationLine6 = oAddr.Line6Prev,
+					};
+
+				case AddressCurrency.ForExperian:
+					return new InputLocationDetailsMultiLineLocation
+					{
+						LocationLine1 = oAddr.Line1ForExperian,
+						LocationLine2 = oAddr.Line2ForExperian,
+						LocationLine3 = oAddr.Line3ForExperian,
+						LocationLine4 = oAddr.Line4ForExperian,
+						LocationLine5 = oAddr.Line5ForExperian,
+						LocationLine6 = oAddr.Line6ForExperian,
 					};
 
 				default:

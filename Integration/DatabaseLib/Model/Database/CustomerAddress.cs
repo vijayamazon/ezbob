@@ -41,6 +41,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string Mailsortcode { get; set; }
 		public virtual string Udprn { get; set; }
 		public virtual bool IsOwnerAccordingToLandRegistry { get; set; }
+		public virtual bool UseForConsumer { get; set; }
 
 		[Newtonsoft.Json.JsonIgnore]
 		[ScriptIgnore]
@@ -122,6 +123,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mappings
 			Map(x => x.Mailsortcode).Column("Mailsortcode").Length(200);
 			Map(x => x.Udprn).Column("Udprn").Length(200);
 			Map(x => x.IsOwnerAccordingToLandRegistry);
+			Map(x => x.UseForConsumer);
 			
 			References(x => x.Director, "DirectorId");
 			References(x => x.Customer, "CustomerId");
