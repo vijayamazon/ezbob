@@ -1778,6 +1778,10 @@ td a.edit-loan {
     color: #00ab5d;
 }
 
+.ez-green:hover {
+    color: #00ff5d;
+}
+
 .ez-bigtext {
     font-size: 24px;
     text-align: center;
