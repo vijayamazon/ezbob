@@ -83,7 +83,9 @@
 		/// Дата предидущего installment, или дата создания кредита, если instalmment первый.
 		/// </summary>
 		public virtual DateTime PrevInstallmentDate { get; set; }
-		
+
+		public virtual DateTime CustomInstallmentDate { get; set; }
+
 		public virtual bool LastNoticeSent { get; set; }
 
 		private decimal _interestRate;
@@ -218,6 +220,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.Fees);
 			Map(x => x.FeesPaid);
 			Map(x => x.LastNoticeSent);
+			Map(x => x.CustomInstallmentDate).CustomType<UtcDateTimeType>();
 			References(x => x.Loan, "LoanId");
 			HasMany(x => x.Rollovers)
 			   .AsSet()

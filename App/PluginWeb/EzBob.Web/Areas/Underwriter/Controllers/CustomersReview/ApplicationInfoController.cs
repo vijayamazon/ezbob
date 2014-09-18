@@ -641,7 +641,16 @@
 
 				DateTime oDate = DateTime.ParseExact(sDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-				lc.CreateLoan(oCustomer, nAmount, null, oDate);
+				Loan loan = lc.CreateLoan(oCustomer, nAmount, null, oDate);
+
+				foreach (LoanScheduleItem loanSchedule in loan.Schedule)
+				{
+					DateTime dayAfterScheduleDate = loanSchedule.Date.AddDays(1);
+					if (dayAfterScheduleDate < DateTime.UtcNow)
+					{
+						loanSchedule.CustomInstallmentDate = dayAfterScheduleDate.Date;
+					}
+				}
 
 				return Json(new { success = true, error = false, });
 			}
