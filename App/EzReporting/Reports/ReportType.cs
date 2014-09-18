@@ -16,6 +16,7 @@ namespace Reports {
 		RPT_TRAFFIC_REPORT,
 		RPT_UI_EXT_REPORT,
 		RPT_UI_REPORT,
+		RPT_MARKETING_CHANNELS_SUMMARY,
 	} // enum ReportType
 } // namespace Reports
 // ReSharper restore InconsistentNaming

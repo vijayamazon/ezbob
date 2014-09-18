@@ -12,13 +12,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Barrymore.dll">
-      <publishTime>09/11/2014 18:23:22</publishTime>
+      <publishTime>09/18/2014 15:15:38</publishTime>
+    </File>
+    <File Include="bin/connection-strings.xml">
+      <publishTime>09/17/2014 18:56:28</publishTime>
     </File>
     <File Include="bin/DbConnection.dll">
-      <publishTime>09/11/2014 18:23:22</publishTime>
+      <publishTime>09/18/2014 15:15:38</publishTime>
     </File>
     <File Include="bin/DbConstants.dll">
-      <publishTime>09/09/2014 14:58:48</publishTime>
+      <publishTime>09/18/2014 15:15:37</publishTime>
     </File>
     <File Include="bin/DropNet.dll">
       <publishTime>11/19/2013 22:08:37</publishTime>
@@ -27,25 +30,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/19/2013 22:08:37</publishTime>
     </File>
     <File Include="bin/Ezbob.Backend.ModelsWithDB.dll">
-      <publishTime>09/11/2014 18:23:23</publishTime>
+      <publishTime>09/18/2014 15:15:39</publishTime>
     </File>
     <File Include="bin/EzEnvironment.dll">
       <publishTime>11/19/2013 22:10:52</publishTime>
     </File>
     <File Include="bin/EzReportsWeb.dll">
-      <publishTime>09/11/2014 18:23:25</publishTime>
+      <publishTime>09/18/2014 17:03:56</publishTime>
     </File>
     <File Include="bin/log4net.dll">
       <publishTime>11/19/2013 22:10:51</publishTime>
     </File>
     <File Include="bin/Logger.dll">
-      <publishTime>09/11/2014 18:23:21</publishTime>
+      <publishTime>09/18/2014 15:15:37</publishTime>
     </File>
     <File Include="bin/Mailer.dll">
-      <publishTime>09/11/2014 18:23:22</publishTime>
+      <publishTime>09/18/2014 15:15:37</publishTime>
     </File>
     <File Include="bin/MiniResharper.dll">
-      <publishTime>09/09/2014 14:58:48</publishTime>
+      <publishTime>09/18/2014 15:15:36</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/22/2014 16:48:27</publishTime>
@@ -54,10 +57,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/19/2013 12:53:13</publishTime>
     </File>
     <File Include="bin/ReportAuthenticationLib.dll">
-      <publishTime>09/11/2014 18:23:23</publishTime>
+      <publishTime>09/18/2014 15:15:39</publishTime>
     </File>
     <File Include="bin/Reports.dll">
-      <publishTime>09/11/2014 18:23:24</publishTime>
+      <publishTime>09/18/2014 17:03:56</publishTime>
     </File>
     <File Include="bin/RestSharp.dll">
       <publishTime>11/19/2013 22:08:39</publishTime>
@@ -66,7 +69,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/25/2013 15:17:12</publishTime>
     </File>
     <File Include="bin/ValueIntervals.dll">
-      <publishTime>09/09/2014 14:58:48</publishTime>
+      <publishTime>09/18/2014 15:15:37</publishTime>
+    </File>
+    <File Include="connection-strings.xml">
+      <publishTime>09/17/2014 18:56:28</publishTime>
     </File>
     <File Include="css/admin.css">
       <publishTime>01/09/2014 18:31:14</publishTime>

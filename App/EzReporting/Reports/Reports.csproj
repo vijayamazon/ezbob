@@ -103,6 +103,8 @@
     <Compile Include="LoanStats\LoanStatsPaypalTotal.cs" />
     <Compile Include="LoanStats\LoanStatsReportEntry.cs" />
     <Compile Include="MainAppReferences\CustomerAddressType.cs" />
+    <Compile Include="MarketingChannelsSummary\MarketingChannelsSummary.cs" />
+    <Compile Include="MarketingChannelsSummary\McsRow.cs" />
     <Compile Include="ReportEmail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">

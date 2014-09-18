@@ -1,7 +1,5 @@
-﻿namespace Reports.TraficReport
-{
-	public enum Source
-	{
+﻿namespace Reports.TraficReport {
+	public enum Source {
 		Ezbob,
 		GooglePpc,
 		Adroll,
@@ -25,6 +23,7 @@
 		Seo,
 		Direct,
 		Other,
-		Total
-	}
-}
+		Total,
+		PpcPromotion,
+	} // enum Source
+} // namesapce

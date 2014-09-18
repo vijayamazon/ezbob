@@ -176,18 +176,27 @@
 		#endregion method TableReport
 
 		#region method BuildTraficReport
-		
+
 		public ATag BuildTrafficReport(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData, List<string> oColumnTypes = null) {
 			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildTrafficReport
 
-		public ExcelPackage BuildTrafficReportXls(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData) {
-			return AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
-		} // BuildTrafficReportXls
-
 		#endregion method BuildTraficReport
+
+		#region method BuildMarketingChannelsSummaryReport
+
+		public ATag BuildMarketingChannelsSummaryReport(Report report, DateTime from, DateTime to, List<string> oColumnTypes = null) {
+			var rpt = new MarketingChannelsSummary.MarketingChannelsSummary(DB, this);
+			KeyValuePair<ReportQuery, DataTable> oData = rpt.Run(report, from, to);
+
+			return new Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
+				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+		} // BuildMarketingChannelsSummaryReport
+
+		#endregion method BuildMarketingChannelsSummaryReport
 
 		#region method BuildLoanIntegrityReport
 
@@ -372,6 +381,25 @@
 		} // BuildAccountingLoanBalanceXls
 
 		#endregion method BuildAccountingLoanBalanceXls
+
+		#region method BuildTraficXls
+
+		public ExcelPackage BuildTrafficReportXls(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData) {
+			return AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
+		} // BuildTrafficReportXls
+
+		#endregion method BuildTraficXls
+
+		#region method BuildMarketingChannelsSummaryXls
+
+		public ExcelPackage BuildMarketingChannelsSummaryXls(Report report, DateTime from, DateTime to) {
+			var rpt = new MarketingChannelsSummary.MarketingChannelsSummary(DB, this);
+			KeyValuePair<ReportQuery, DataTable> oData = rpt.Run(report, from, to);
+
+			return AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
+		} // BuildMarketingChannelsSummarXls
+
+		#endregion method BuildMarketingChannelsSummaryXls
 
 		#endregion Excel generators
 

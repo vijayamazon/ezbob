@@ -62,7 +62,7 @@ namespace EzReportToEMail {
 							break;
 
 						case ReportType.RPT_TRAFFIC_REPORT:
-							var trafficReport = new TrafficReport(DB);
+							var trafficReport = new TrafficReport(DB, this);
 							DateTime dYesterday = dToday.AddDays(-1);
 
 							if (report.IsDaily) {
@@ -125,6 +125,10 @@ namespace EzReportToEMail {
 
 						case ReportType.RPT_ACCOUNTING_LOAN_BALANCE:
 							HandleGenericReport(report, dToday, sender, BuildAccountingLoanBalanceReport, BuildAccountingLoanBalanceXls);
+							break;
+
+						case ReportType.RPT_MARKETING_CHANNELS_SUMMARY:
+							HandleGenericReport(report, dToday, sender, BuildMarketingChannelsSummaryReport, BuildMarketingChannelsSummaryXls);
 							break;
 
 						default:
