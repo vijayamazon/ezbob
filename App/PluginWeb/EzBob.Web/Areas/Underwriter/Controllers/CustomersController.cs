@@ -409,7 +409,7 @@
 				bool bSendApprovedUser = !request.EmailSendingBanned;
 				_session.Flush();
 
-				int validForHours = (int)(request.OfferStart - request.OfferValidUntil).Value.TotalHours;
+				int validForHours = (int)(request.OfferValidUntil - request.OfferStart).Value.TotalHours;
 				if (bSendBrokerForceResetCustomerPassword && bSendApprovedUser) {
 					try {
 						m_oServiceClient.Instance.BrokerApproveAndResetCustomerPassword(user.Id, customer.Id, sum, validForHours, numOfPreviousApprovals == 0);
