@@ -23,6 +23,9 @@
 		ActionMetaData BackfillAml();
 
 		[OperationContract]
+		ActionMetaData BackfillZooplaValue();
+
+		[OperationContract]
 		ActionMetaData BackfillLandRegistry2PropertyLink();
 
 		[OperationContract]

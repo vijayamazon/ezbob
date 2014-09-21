@@ -113,6 +113,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScore" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScoreResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureau" />
   </wsdl:message>
@@ -562,6 +568,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillAml_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillAmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillZooplaValue_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillZooplaValue" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillZooplaValue_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillZooplaValueResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillLandRegistry2PropertyLink_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillLandRegistry2PropertyLink" />
@@ -1055,12 +1067,6 @@
   <wsdl:message name="IEzService_GetExperianConsumerScore_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetExperianConsumerScoreResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScore" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScoreResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1084,6 +1090,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="GetCompanyDataForCompanyScore">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" message="tns:IEzService_GetCompanyDataForCompanyScore_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse" message="tns:IEzService_GetCompanyDataForCompanyScore_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyDataForCreditBureau">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" message="tns:IEzService_GetCompanyDataForCreditBureau_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse" message="tns:IEzService_GetCompanyDataForCreditBureau_OutputMessage" />
@@ -1383,6 +1393,10 @@
     <wsdl:operation name="BackfillAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillAml" message="tns:IEzService_BackfillAml_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillAmlResponse" message="tns:IEzService_BackfillAml_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BackfillZooplaValue">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillZooplaValue" message="tns:IEzService_BackfillZooplaValue_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillZooplaValueResponse" message="tns:IEzService_BackfillZooplaValue_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackfillLandRegistry2PropertyLink">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLink" message="tns:IEzService_BackfillLandRegistry2PropertyLink_InputMessage" />
@@ -1712,10 +1726,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScore" message="tns:IEzService_GetExperianConsumerScore_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScoreResponse" message="tns:IEzService_GetExperianConsumerScore_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetCompanyDataForCompanyScore">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" message="tns:IEzService_GetCompanyDataForCompanyScore_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse" message="tns:IEzService_GetCompanyDataForCompanyScore_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1771,6 +1781,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetCompanyDataForCompanyScore">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyDataForCreditBureau">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" style="document" />
       <wsdl:input>
@@ -2439,6 +2458,15 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillAml">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillAml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillZooplaValue">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillZooplaValue" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3177,15 +3205,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetExperianConsumerScore">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerScore" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyDataForCompanyScore">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

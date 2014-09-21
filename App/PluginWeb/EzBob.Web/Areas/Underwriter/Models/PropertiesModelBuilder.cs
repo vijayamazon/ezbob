@@ -102,7 +102,7 @@
 			if (address != null) {
 				Zoopla zoopla = address.Zoopla.LastOrDefault();
 				if (zoopla != null) {
-					CrossCheckModel.GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
+					CrossCheckModel.GetZooplaData(customer, zoopla.ZooplaEstimateValue, zoopla.AverageSoldPrice1Year, out zooplaValue);
 				}
 
 				var propertyModel = new PropertyModel {

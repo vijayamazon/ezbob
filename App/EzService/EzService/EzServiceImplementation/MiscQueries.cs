@@ -227,6 +227,12 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
+		public ActionMetaData BackfillZooplaValue()
+		{
+			BackfillZooplaValue instance;
+			return ExecuteSync(out instance, 0, 0);
+		}
+
 		public ActionMetaData BackfillLandRegistry2PropertyLink()
 		{
 			BackfillLandRegistry2PropertyLink instance;

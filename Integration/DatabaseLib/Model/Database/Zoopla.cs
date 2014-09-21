@@ -25,10 +25,10 @@
 		public virtual string ValueTrendGraphUrl { get; set; }
 		public virtual string HomeValuesGraphUrl { get; set; }
 		public virtual string ZooplaEstimate { get; set; }
+		public virtual int ZooplaEstimateValue { get; set; }
 		public virtual DateTime? UpdateDate { get; set; }
 	}
 }
-
 
 namespace EZBob.DatabaseLib.Model.DataMapping
 {
@@ -59,6 +59,7 @@ namespace EZBob.DatabaseLib.Model.DataMapping
 			Map(x => x.ValueTrendGraphUrl).Length(100);
 			Map(x => x.HomeValuesGraphUrl).Length(100);
 			Map(x => x.ZooplaEstimate).Length(30);
+			Map(x => x.ZooplaEstimateValue);
 			Map(x => x.UpdateDate).CustomType<UtcDateTimeType>();
 		}
 	}

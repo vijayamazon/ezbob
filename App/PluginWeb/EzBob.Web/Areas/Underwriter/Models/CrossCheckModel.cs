@@ -8,7 +8,6 @@
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EzBob.Models;
-	using System.Text.RegularExpressions;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using LandRegistryLib;
@@ -64,16 +63,9 @@
 			serviceClient = new ServiceClient();
 		}
 
-		public static void GetZooplaData(Customer customer, string zooplaEstimateStr, int zoopla1YearAvg, out int zooplaValue)
+		public static void GetZooplaData(Customer customer, int zooplaEstimate, int zoopla1YearAvg, out int zooplaValue)
 		{
-			var regexObj = new Regex(@"[^\d]");
-			var stringVal = string.IsNullOrEmpty(zooplaEstimateStr) ? "" : regexObj.Replace(zooplaEstimateStr.Trim(), "");
-			int intVal;
-			if (!int.TryParse(stringVal, out intVal))
-			{
-				intVal = zoopla1YearAvg;
-			}
-			zooplaValue = intVal;
+			zooplaValue = zooplaEstimate != 0 ? zooplaEstimate : zoopla1YearAvg;
 		}
 
 		public static void GetMortgagesData(int userId, Customer customer, out int mortgageBalance, out int mortgageCount)
@@ -107,9 +99,10 @@
 			if (zoopla != null)
 			{
 				current.ZooplaEstimate = zoopla.ZooplaEstimate;
+				current.ZooplaEstimateValue = zoopla.ZooplaEstimateValue;
 
 				int zooplaValue, experianMortgage, experianMortgageCount;
-				GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
+				GetZooplaData(customer, zoopla.ZooplaEstimateValue, zoopla.AverageSoldPrice1Year, out zooplaValue);
 				GetMortgagesData(userId, customer, out experianMortgage, out experianMortgageCount);
 				current.ZooplaValue = zooplaValue;
 				ExperianMortgage = experianMortgage;

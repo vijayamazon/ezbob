@@ -52,6 +52,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual ISet<LandRegistry> LandRegistry { get; set; }
 
 		public virtual string ZooplaEstimate { get; set; }
+		public virtual int ZooplaEstimateValue { get; set; }
 		public virtual string ZooplaAverage { get; set; }
 		public virtual int ZooplaValue { get; set; }
 		public virtual DateTime? ZooplaUpdateDate { get; set; }

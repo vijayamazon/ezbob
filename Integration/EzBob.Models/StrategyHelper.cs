@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using System.Text.RegularExpressions;
 	using ApplicationMng.Repository;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
@@ -737,6 +738,13 @@
 							var areaValueGraphs = zooplaApi.GetAreaValueGraphs(address.Postcode);
 							var averageSoldPrices = zooplaApi.GetAverageSoldPrices(address.Postcode);
 							var zooplaEstimate = zooplaApi.GetZooplaEstimate(address.ZooplaAddress);
+							var regexObj = new Regex(@"[^\d]");
+							var stringVal = string.IsNullOrEmpty(zooplaEstimate) ? "" : regexObj.Replace(zooplaEstimate.Trim(), "");
+							int intVal;
+							if (!int.TryParse(stringVal, out intVal))
+							{
+								intVal = 0;
+							}
 							address.Zoopla.Add(new Zoopla
 							{
 								AreaName = averageSoldPrices.AreaName,
@@ -756,6 +764,7 @@
 								ValueTrendGraphUrl = areaValueGraphs.ValueTrendGraphUrl,
 								CustomerAddress = address,
 								ZooplaEstimate = zooplaEstimate,
+								ZooplaEstimateValue = intVal,
 								UpdateDate = DateTime.UtcNow
 							});
 

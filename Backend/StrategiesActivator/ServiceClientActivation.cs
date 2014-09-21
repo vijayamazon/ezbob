@@ -801,6 +801,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
+		private void BackfillZooplaValue()
+		{
+			if ((m_aryArgs.Length != 1))
+			{
+				m_oLog.Msg("Usage: BackfillZooplaValue");
+				return;
+			} // if
+
+			m_oServiceClient.BackfillZooplaValue();
+		}
+
+		[Activation]
 		private void BackfillLandRegistry2PropertyLink()
 		{
 			if ((m_aryArgs.Length != 1))

@@ -107,6 +107,7 @@
     <Compile Include="Experian\BackfillNonLimitedCompanies.cs" />
     <Compile Include="Misc\BackfillLandRegistry2PropertyLink.cs" />
     <Compile Include="Misc\CalculateNewMedalsForComparison.cs" />
+    <Compile Include="Misc\BackfillZooplaValue.cs" />
     <Compile Include="Misc\SendSms.cs" />
     <Compile Include="Misc\GetPropertyStatuses.cs" />
     <Compile Include="Misc\GetUnfetchedDataErrors.cs" />
