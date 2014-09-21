@@ -1,12 +1,9 @@
-﻿using System.Net.Mail;
-using Ezbob.Logger;
-using Html;
-using Html.Attributes;
-using Html.Tags;
-using OfficeOpenXml;
-
-namespace Reports {
-	#region class BaseReportSender
+﻿namespace Reports {
+	using System.Net.Mail;
+	using Ezbob.Logger;
+	using Html;
+	using Html.Tags;
+	using OfficeOpenXml;
 
 	class BaseReportSender : SafeLog {
 		#region public
@@ -20,7 +17,7 @@ namespace Reports {
 		#region method Send
 
 		public void Send(string subject, ATag mailBody, ExcelPackage wb, string toAddressStr, string period = "Daily") {
-			var email = new Html.Tags.Html();
+			var email = new Html();
 
 			email
 				.Append(new Head().Append(Report.GetStyle()))
@@ -63,6 +60,4 @@ namespace Reports {
 
 		#endregion private
 	} // class BaseReportSender
-
-	#endregion class BaseReportSender
 } // namespace Reports

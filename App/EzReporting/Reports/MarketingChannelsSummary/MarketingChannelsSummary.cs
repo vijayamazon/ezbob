@@ -22,7 +22,7 @@
 		#region method Run
 
 		public KeyValuePair<ReportQuery, DataTable> Run(Report report, DateTime from, DateTime to) {
-			m_oData = new SortedDictionary<Source, McsRow>();
+			SortedDictionary<Source, McsRow> oData = new SortedDictionary<Source, McsRow>();
 
 			IEnumerable<SafeReader> lst = m_oDB.ExecuteEnumerable(
 				"RptMarketingChannelsSummary",
@@ -98,14 +98,14 @@
 					? SourceRefMapper.GetSourceByAnalytics(sr["Source"])
 					: SourceRefMapper.GetSourceBySourceRef(sr["ReferenceSource"], sr["GoogleCookie"]);
 
-				if (m_oData.ContainsKey(nSource))
-					oAction(m_oData[nSource]);
+				if (oData.ContainsKey(nSource))
+					oAction(oData[nSource]);
 				else {
-					var oData = new McsRow {
+					var oDataRow = new McsRow {
 						Source = nSource,
 					};
-					oAction(oData);
-					m_oData[nSource] = oData;
+					oAction(oDataRow);
+					oData[nSource] = oDataRow;
 				} // if
 			} // for each
 
@@ -114,7 +114,7 @@
 				DateEnd = to
 			};
 
-			return new KeyValuePair<ReportQuery, DataTable>(reprortQuery, ToTable());
+			return new KeyValuePair<ReportQuery, DataTable>(reprortQuery, ToTable(oData));
 		} // Run
 
 		#endregion method Run
@@ -125,7 +125,6 @@
 
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
-		private SortedDictionary<Source, McsRow> m_oData;
 
 		#region enum InputRowTypes
 
@@ -146,7 +145,7 @@
 
 		#region method ToTable
 
-		private DataTable ToTable() {
+		private static DataTable ToTable(SortedDictionary<Source, McsRow> oData) {
 			McsRow oTotal = new McsRow {
 				Source = Source.Total,
 				Css = "total",
@@ -159,7 +158,7 @@
 				tbl.Columns.Add(oPropInfo.Name, oAttrList.Length > 0 ? typeof (string) : oPropInfo.PropertyType);
 			});
 
-			foreach (var pair in m_oData) {
+			foreach (var pair in oData) {
 				ToRow(tbl, pair.Value);
 				oTotal.Add(pair.Value);
 			} // for each
@@ -173,8 +172,8 @@
 
 		#region method ToRow
 
-		private void ToRow(DataTable tbl, McsRow oRow) {
-			List<object> lst = new List<object>();
+		private static void ToRow(DataTable tbl, McsRow oRow) {
+			var lst = new List<object>();
 
 			oRow.Traverse((ignored, oPropInfo) => {
 				object[] oAttrList = oPropInfo.GetCustomAttributes(typeof(ToStringAttribute), false);

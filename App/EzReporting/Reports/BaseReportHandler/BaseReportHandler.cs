@@ -205,13 +205,15 @@
 					from = from.AddDays(-1);
 					to = to.AddDays(-1);
 
+					oData = rpt.Run(report, from, to);
+
 					oBody
 						.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
 						.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 				} // for
 			} // if
 
-			return oBody ;
+			return oBody;
 		} // BuildMarketingChannelsSummaryReport
 
 		#endregion method BuildMarketingChannelsSummaryReport
@@ -423,6 +425,8 @@
 				for (int i = 1; i < 7; i++) {
 					from = from.AddDays(-1);
 					to = to.AddDays(-1);
+
+					oData = rpt.Run(report, from, to);
 
 					wb = AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), i + "day" + (i == 1 ? "" : "s") + " before", report.Title, wb: wb);
 				} // for
