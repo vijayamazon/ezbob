@@ -1,15 +1,12 @@
 ﻿namespace EzBob.Web.Code.ReportGenerator {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Html;
 	using Html.Tags;
 	using OfficeOpenXml;
 	using Reports;
-	using Reports.MarketingChannelsSummary;
-	using Reports.TraficReport;
 
 	public class ReportHandler : BaseReportHandler {
 		public ReportHandler(AConnection oDB, ASafeLog log = null) : base(oDB, log) {

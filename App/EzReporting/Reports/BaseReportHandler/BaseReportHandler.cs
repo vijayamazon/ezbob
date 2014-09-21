@@ -193,11 +193,25 @@
 
 		public ATag BuildMarketingChannelsSummaryReport(Report report, DateTime from, DateTime to, List<string> oColumnTypes = null) {
 			var rpt = new MarketingChannelsSummary.MarketingChannelsSummary(DB, this);
+
 			KeyValuePair<ReportQuery, DataTable> oData = rpt.Run(report, from, to);
 
-			return new Body().Add<Class>("Body")
+			ATag oBody = new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+
+			if (from.Date.AddDays(1) == to.Date) {
+				for (int i = 0; i < 6; i++) {
+					from = from.AddDays(-1);
+					to = to.AddDays(-1);
+
+					oBody
+						.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
+						.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+				} // for
+			} // if
+
+			return oBody ;
 		} // BuildMarketingChannelsSummaryReport
 
 		#endregion method BuildMarketingChannelsSummaryReport
@@ -403,7 +417,18 @@
 			var rpt = new MarketingChannelsSummary.MarketingChannelsSummary(DB, this);
 			KeyValuePair<ReportQuery, DataTable> oData = rpt.Run(report, from, to);
 
-			return AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
+			ExcelPackage wb = AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
+
+			if (from.Date.AddDays(1) == to.Date) {
+				for (int i = 1; i < 7; i++) {
+					from = from.AddDays(-1);
+					to = to.AddDays(-1);
+
+					wb = AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), i + "day" + (i == 1 ? "" : "s") + " before", report.Title, wb: wb);
+				} // for
+			} // if
+
+			return wb;
 		} // BuildMarketingChannelsSummarXls
 
 		#endregion method BuildMarketingChannelsSummaryXls
