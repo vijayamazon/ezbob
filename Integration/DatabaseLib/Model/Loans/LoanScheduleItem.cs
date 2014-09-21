@@ -84,7 +84,7 @@
 		/// </summary>
 		public virtual DateTime PrevInstallmentDate { get; set; }
 
-		public virtual DateTime CustomInstallmentDate { get; set; }
+		public virtual DateTime? CustomInstallmentDate { get; set; }
 
 		public virtual bool LastNoticeSent { get; set; }
 
@@ -220,7 +220,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.Fees);
 			Map(x => x.FeesPaid);
 			Map(x => x.LastNoticeSent);
-			Map(x => x.CustomInstallmentDate).CustomType<UtcDateTimeType>();
+			Map(x => x.CustomInstallmentDate).Nullable().CustomType<DateType>();
 			References(x => x.Loan, "LoanId");
 			HasMany(x => x.Rollovers)
 			   .AsSet()
