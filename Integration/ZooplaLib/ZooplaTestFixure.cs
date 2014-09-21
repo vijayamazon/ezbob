@@ -1,5 +1,6 @@
 ﻿namespace ZooplaLib
 {
+	using System;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -33,6 +34,12 @@
 			//var estimate = z.GetEstimate("16 Upperkirkgate, Aberdeen AB10 1BA");
 			var estimate = z.GetEstimate("Flat B 2 Upperkirkgate Aberdeen AB10 1BA");
 			Assert.NotNull(estimate);
+			estimate = z.GetEstimate("9 Whitebeam Park Huddersfield HD2 2GZ");
+			Console.WriteLine("estimate {0}", estimate);
+			Assert.NotNull(estimate);
+			estimate = z.GetEstimate("14 Weetwood Crescent Leeds West Yorkshire LS16 5NS");
+			Console.WriteLine("estimate {0}", estimate);
+			Assert.NotNull(estimate);
 		}
 
 		[Test]
@@ -40,8 +47,11 @@
 		public void test_get_zoopla_estimate_sorry()
 		{
 			var z = new ZooplaEstimate();
-			var estimate = z.GetEstimate("145 – 157 John Street, London EC1V 4PW");
-			Assert.NotNull(estimate);
+			var estimate = z.GetEstimate("145 – 157 John Street London EC1V 4PW");
+			Assert.AreEqual("Address not found", estimate);
+
+			estimate = z.GetEstimate("11 The Barrows Francis Street Brighton East Sussex BN1 4ZJ");
+			Assert.AreEqual("No Estimate", estimate);
 		}
 	}
 }
