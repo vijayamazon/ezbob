@@ -327,7 +327,7 @@ BEGIN
 	INSERT INTO #out(Caption, Number, Amount)
 	SELECT
 		'Total',
-		ISNULL(COUNT(DISTINCT CustomerID), 0),
+		ISNULL(SUM(RequestCount), 0),
 		ISNULL(SUM(MaxApprovedSum), 0)
 	FROM
 		#cr
@@ -337,7 +337,7 @@ BEGIN
 	INSERT INTO #out(Caption, Number, Amount)
 	SELECT
 		'New',
-		ISNULL(COUNT(DISTINCT CustomerID), 0),
+		ISNULL(SUM(RequestCount), 0),
 		ISNULL(SUM(MaxApprovedSum), 0)
 	FROM
 		#cr
@@ -349,7 +349,7 @@ BEGIN
 	INSERT INTO #out(Caption, Number, Amount)
 	SELECT
 		'Old',
-		ISNULL(COUNT(DISTINCT CustomerID), 0),
+		ISNULL(SUM(RequestCount), 0),
 		ISNULL(SUM(MaxApprovedSum), 0)
 	FROM
 		#cr
