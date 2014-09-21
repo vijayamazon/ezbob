@@ -94,10 +94,8 @@
 			inputData.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
 			int hmrcId = sr["HmrcId"];
 			decimal yodleeTurnover = sr["YodleeTurnover"];
-			string zooplaEstimateStr = sr["ZooplaEstimate"];
-			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
+			int totalZooplaValue = sr["TotalZooplaValue"];
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
-			string propertyStatusDescription = sr["PropertyStatusDescription"];
 
 			if (numOfHmrcMps > 1)
 			{
@@ -162,20 +160,11 @@
 				failedCalculatingTangibleEquity = true;
 				inputData.TangibleEquity = 0;
 			}
-
-			var regexObj = new Regex(@"[^\d]");
-			var stringVal = string.IsNullOrEmpty(zooplaEstimateStr) ? "" : regexObj.Replace(zooplaEstimateStr.Trim(), "");
-			int intVal;
-			if (!int.TryParse(stringVal, out intVal))
-			{
-				intVal = zoopla1YearAvg;
-			}
-			int zooplaValue = intVal;
-
+			
 			decimal mortgageBalance = GetMortgages(customerId);
-			if (zooplaValue != 0 && (propertyStatusDescription == "I own only this property" || propertyStatusDescription == "I own this property and other properties" || propertyStatusDescription == "Home owner"))
+			if (totalZooplaValue != 0)
 			{
-				inputData.NetWorth = (zooplaValue - mortgageBalance) / zooplaValue;
+				inputData.NetWorth = (totalZooplaValue - mortgageBalance) / totalZooplaValue;
 			}
 			else
 			{

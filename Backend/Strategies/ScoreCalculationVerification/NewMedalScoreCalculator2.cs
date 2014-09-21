@@ -215,8 +215,7 @@
 			int consumerScore = sr["ConsumerScore"];
 			decimal ebida = sr["Ebida"];
 			decimal hmrcAnnualTurnover = sr["HmrcAnnualTurnover"];
-			string zooplaEstimateStr = sr["ZooplaEstimate"];
-			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
+			int totalZooplaValue = sr["TotalZooplaValue"];
 			string maritalStatusString = sr["MaritalStatus"];
 			DateTime? ezbobSeniority = sr["EzbobSeniority"];
 			int numOfOnTimeLoans = sr["OnTimeLoans"];
@@ -230,7 +229,6 @@
 			decimal actualLoanRepayments = sr["ActualLoanRepayments"];
 			decimal fcfFactor = sr["FcfFactor"];
 			bool foundSummary = sr["FoundSummary"];
-			string propertyStatusDescription = sr["PropertyStatusDescription"];
 
 			if (typeOfBusiness != "Limited" && typeOfBusiness != "LLP")
 			{
@@ -267,20 +265,11 @@
 
 			var maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusString);
 			bool firstRepaymentDatePassed = firstRepaymentDate != null && firstRepaymentDate < DateTime.UtcNow;
-
-			var regexObj = new Regex(@"[^\d]");
-			var stringVal = string.IsNullOrEmpty(zooplaEstimateStr) ? "" : regexObj.Replace(zooplaEstimateStr.Trim(), "");
-			int intVal;
-			if (!int.TryParse(stringVal, out intVal))
-			{
-				intVal = zoopla1YearAvg;
-			}
-			int zooplaValue = intVal;
-
+			
 			decimal netWorth;
-			if (zooplaValue != 0 && (propertyStatusDescription == "I own only this property" || propertyStatusDescription == "I own this property and other properties" || propertyStatusDescription == "Home owner"))
+			if (totalZooplaValue != 0)
 			{
-				netWorth = (zooplaValue - mortgageBalance) / zooplaValue;
+				netWorth = (totalZooplaValue - mortgageBalance) / totalZooplaValue;
 			}
 			else
 			{

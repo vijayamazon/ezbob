@@ -21,8 +21,6 @@ BEGIN
 		@HmrcId INT,
 		@YodleeTotalAggrgationFuncId INT,
 		@YodleeTurnover DECIMAL(18,6),
-		@ZooplaEstimate NVARCHAR(30), 
-		@AverageSoldPrice1Year INT,
 		@Threshold DECIMAL(18,6),
 		@LoanScheduleId INT,
 		@ScheduleDate DATETIME,
@@ -32,11 +30,9 @@ BEGIN
 		@StatusAfterLastTransaction NVARCHAR(50),
 		@LateDays INT,
 		@NumOfHmrcMps INT,
-		@PropertyStatusDescription NVARCHAR(50)
+		@TotalZooplaValue INT
 		
 	SET @Threshold = 2
-	
-	SELECT @PropertyStatusDescription = Description FROM CustomerPropertyStatuses, Customer WHERE PropertyStatusId = CustomerPropertyStatuses.Id AND Customer.Id = @CustomerId
 	
 	CREATE TABLE #LateLoans
 	(
@@ -215,7 +211,15 @@ BEGIN
 	ORDER BY 
 		AnalysisFunctionTimePeriodId DESC
 	
-	SELECT TOP 1 @ZooplaEstimate = Zoopla.ZooplaEstimate, @AverageSoldPrice1Year = Zoopla.AverageSoldPrice1Year FROM Zoopla, CustomerAddress WHERE CustomerId = @CustomerId AND CustomerAddress.addressId = Zoopla.CustomerAddressId AND CustomerAddress.addressType = 1 ORDER BY UpdateDate DESC 
+	SELECT 
+		@TotalZooplaValue = SUM(CASE WHEN ZooplaEstimateValue != 0 THEN ZooplaEstimateValue ELSE AverageSoldPrice1Year END)
+	FROM 
+		Zoopla, 
+		CustomerAddress 
+	WHERE 
+		CustomerId = @CustomerId AND 
+		CustomerAddress.addressId = Zoopla.CustomerAddressId AND 
+		CustomerAddress.IsOwnerAccordingToLandRegistry = 1	
 				
 	SELECT
 		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
@@ -230,9 +234,7 @@ BEGIN
 		@MaritalStatus AS MaritalStatus,
 		@HmrcId AS HmrcId,
 		@YodleeTurnover AS YodleeTurnover,
-		@ZooplaEstimate AS ZooplaEstimate,
-		@AverageSoldPrice1Year AS AverageSoldPrice1Year,
 		@NumOfHmrcMps AS NumOfHmrcMps,
-		@PropertyStatusDescription AS PropertyStatusDescription
+		@TotalZooplaValue AS TotalZooplaValue
 END
 GO

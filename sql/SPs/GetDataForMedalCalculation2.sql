@@ -20,8 +20,6 @@ BEGIN
 		@MaritalStatus NVARCHAR(50),
 		@YodleeTotalAggrgationFuncId INT,
 		@YodleeTurnover DECIMAL(18,6),
-		@ZooplaEstimate NVARCHAR(30), 
-		@AverageSoldPrice1Year INT,
 		@TypeOfBusiness NVARCHAR(50),
 		@NumOfHmrcMps INT,
 		@LastServiceLogId BIGINT,
@@ -39,11 +37,9 @@ BEGIN
 		@FcfFactor NVARCHAR(MAX),
 		@ActualLoanRepayments INT,
 		@FoundSummary BIT,
-		@PropertyStatusDescription NVARCHAR(50)
+		@TotalZooplaValue INT
 	
 	SET @Threshold = 2 -- Hardcoded value. Used to avoid the entries in the LoanScheduleTransaction table that are there because of rounding mistakes
-	
-	SELECT @PropertyStatusDescription = Description FROM CustomerPropertyStatuses, Customer WHERE PropertyStatusId = CustomerPropertyStatuses.Id AND Customer.Id = @CustomerId
 	
 	SELECT @FcfFactor = Value FROM ConfigurationVariables WHERE Name = 'FCFFactor'
 	
@@ -227,7 +223,15 @@ BEGIN
 		Loan.Id = LoanSchedule.LoanId AND
 		Loan.CustomerId = @CustomerId
 	
-	SELECT TOP 1 @ZooplaEstimate = Zoopla.ZooplaEstimate, @AverageSoldPrice1Year = Zoopla.AverageSoldPrice1Year FROM Zoopla, CustomerAddress WHERE CustomerId = @CustomerId AND CustomerAddress.addressId = Zoopla.CustomerAddressId AND CustomerAddress.addressType = 1 ORDER BY UpdateDate DESC 
+	SELECT 
+		@TotalZooplaValue = SUM(CASE WHEN ZooplaEstimateValue != 0 THEN ZooplaEstimateValue ELSE AverageSoldPrice1Year END)
+	FROM 
+		Zoopla, 
+		CustomerAddress 
+	WHERE 
+		CustomerId = @CustomerId AND 
+		CustomerAddress.addressId = Zoopla.CustomerAddressId AND 
+		CustomerAddress.IsOwnerAccordingToLandRegistry = 1	
 	
 	SELECT 
 		TOP 1 @LastServiceLogId = Id
@@ -291,12 +295,10 @@ BEGIN
 		@YodleeTurnover AS YodleeTurnover,		 
 		@NumOfLatePayments AS NumOfLatePayments, 
 		@NumOfEarlyPayments AS NumOfEarlyPayments,
-		@ZooplaEstimate AS ZooplaEstimate,
-		@AverageSoldPrice1Year AS AverageSoldPrice1Year,
+		@TotalZooplaValue AS TotalZooplaValue,
 		@BalanceOfMortgages AS BalanceOfMortgages,
 		@ActualLoanRepayments AS ActualLoanRepayments,
 		@FcfFactor AS FcfFactor,
-		@FoundSummary AS FoundSummary,
-		@PropertyStatusDescription AS PropertyStatusDescription
+		@FoundSummary AS FoundSummary
 END
 GO
