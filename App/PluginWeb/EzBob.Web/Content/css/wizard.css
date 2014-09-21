@@ -79,10 +79,8 @@ body .SecurityStatement {
     border-top: 1px solid #EEE;
 }
 
-.AmazonForm, .AmazonForm label {
-    font-size: 14px;
-    font-weight: bold;
-    color: black;
+.AmazonForm{
+    padding-top: 20px;
 }
 
 body .bank-account legend {
