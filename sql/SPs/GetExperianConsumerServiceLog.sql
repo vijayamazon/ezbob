@@ -42,8 +42,6 @@ BEGIN
 		  
 		  WHERE
 		   c.Id=@CustomerId
-		   AND
-			l.DirectorId IS NULL
 		  ORDER BY
 		   l.InsertDate DESC,
 		   l.Id DESC
