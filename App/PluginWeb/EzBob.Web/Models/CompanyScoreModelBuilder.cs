@@ -260,7 +260,7 @@
 			} // for each
 
 			string date;
-			oModel.LateStatus = CreditBureauModelBuilder.GetAccountStatusString(worstStatusAll, out date);
+			oModel.LateStatus = CreditBureauModelBuilder.GetAccountStatusString(worstStatusAll, out date, true);
 
 			// Calc and add tangible equity and adjusted profit
 

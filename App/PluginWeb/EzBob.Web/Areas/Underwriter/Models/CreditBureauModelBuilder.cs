@@ -577,7 +577,7 @@
 
 		protected const int StatusHistoryMonths = 24;
 
-		public static string GetAccountStatusString(string status, out string dateType)
+		public static string GetAccountStatusString(string status, out string dateType, bool shouldAddDaysSuffix = false)
 		{
 			switch (status)
 			{
@@ -595,6 +595,11 @@
 					return SettledStatusName;
 				default:
 					dateType = UnknownDateType;
+					if (shouldAddDaysSuffix)
+					{
+						return status + " days";
+					}
+					
 					return status;
 			}
 		}
