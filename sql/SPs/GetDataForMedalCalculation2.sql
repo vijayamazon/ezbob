@@ -241,6 +241,29 @@ BEGIN
 		ServiceType = 'Consumer Request'
 	ORDER BY
 		Id DESC
+		
+	IF @LastServiceLogId IS NULL
+	BEGIN
+		SELECT TOP 1
+		   @LastServiceLogId = l.Id
+		FROM
+		 Customer c 
+		 INNER JOIN CustomerAddress a ON a.CustomerId = c.Id AND a.addressType=1
+		 INNER JOIN MP_ServiceLog l on
+		  l.Firstname = c.FirstName AND
+		  l.Surname = c.Surname AND 
+		  l.DateOfBirth = c.DateOfBirth AND
+		  l.Postcode = a.Postcode AND
+		  l.ServiceType = 'Consumer Request'
+		  
+		  WHERE
+		   c.Id=@CustomerId
+		   AND
+			l.DirectorId IS NULL
+		  ORDER BY
+		   l.InsertDate DESC,
+		   l.Id DESC
+	END
 
 	SELECT 
 		@BalanceOfMortgages = SUM(Balance) 
