@@ -282,7 +282,8 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.$el.find('.bar-sparkline').sparkline("html", {
         	type: 'bar',
         	barColor: '#cfcfcf',
-        	height: "50px"
+        	height: "50px",
+        	barWidth: 6
         });
     },
     drawGraphs: function() {
