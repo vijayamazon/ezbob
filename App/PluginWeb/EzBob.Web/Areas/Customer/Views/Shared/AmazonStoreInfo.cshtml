@@ -42,7 +42,7 @@
                     @using (Html.BeginForm("", "", new { }, FormMethod.Post, new { @class = "AmazonForm", @style = "padding-top:20px;" }))
                     {
                         <div class="clearfix">
-                            @EzForm.InputText("amazonMerchantId", "Merchant ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 30, uiEventControlID: "link-account:amazon_merchant_id")
+                            @EzForm.InputText("amazonMerchantId", "Seller ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 30, uiEventControlID: "link-account:amazon_merchant_id")
                             @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15, uiEventControlID: "link-account:amazon_marketplace_id")
                         </div>
                     }
