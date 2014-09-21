@@ -77,6 +77,7 @@
 					oAction = oRow => {
 						oRow.Approved += sr["NumOfApproved"];
 						oRow.Rejected += sr["NumOfRejected"];
+						oRow.Pending += sr["NumOfPending"];
 					};
 					break;
 

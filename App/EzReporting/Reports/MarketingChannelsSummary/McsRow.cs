@@ -18,6 +18,7 @@
 		public int CompleteApplication { get; set; }
 		public int Approved { get; set; }
 		public int Rejected { get; set; }
+		public int Pending { get; set; }
 		public decimal ApprovedAmount { get; set; }
 		public decimal LoansGiven { get; set; }
 		public string Css { get; set; }

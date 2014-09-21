@@ -12,14 +12,12 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @Steps IntList
-	
 	-----------------------------------------------------------
 	--
 	-- Calculate visitors
 	--
 	-----------------------------------------------------------
-	
+
 	SELECT
 		'Visitors' AS RowType,
 		sa.Source,
@@ -33,81 +31,84 @@ BEGIN
 		@DateStart <= sa.[Date] AND sa.[Date] < @DateEnd
 	GROUP BY
 		sa.Source
-	
-	-----------------------------------------------------------
-	--
-	-- Load all the wizard steps
-	--
-	-----------------------------------------------------------
-	
-	INSERT INTO @Steps(Value)
-	SELECT
-		WizardStepTypeID
-	FROM
-		WizardStepTypes
-	
+
 	-----------------------------------------------------------
 	--
 	-- Calculate start registration
 	--
 	-----------------------------------------------------------
-	
-	EXECUTE RptMarketingChannelsSummary_CountCustomersOnSteps 'StartRegistration', @DateStart, @DateEnd, @Steps
-	
-	-----------------------------------------------------------
-	
-	DELETE FROM @Steps WHERE Value IN (1, 3)
-	
+
+	SELECT
+		'StartRegistration' AS RowType,
+		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
+		c.GoogleCookie,
+		c.BrokerID,
+		COUNT(*) AS Counter
+	FROM
+		Customer c
+	WHERE
+		c.IsTest = 0
+		AND
+		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+	GROUP BY
+		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END,
+		c.GoogleCookie,
+		c.BrokerID
+
 	-----------------------------------------------------------
 	--
 	-- Calculate personal
 	--
 	-----------------------------------------------------------
-	
-	EXECUTE RptMarketingChannelsSummary_CountCustomersOnSteps 'Personal', @DateStart, @DateEnd, @Steps
-	
-	-----------------------------------------------------------
-	
-	DELETE FROM @Steps WHERE Value IN (5)
-	
+
+	EXECUTE RptMarketingChannelsSummary_CountCustomersOnSteps 'Personal', @DateStart, @DateEnd, 'personal-info:continue'
+
 	-----------------------------------------------------------
 	--
 	-- Calculate company
 	--
 	-----------------------------------------------------------
-	
-	EXECUTE RptMarketingChannelsSummary_CountCustomersOnSteps 'Company', @DateStart, @DateEnd, @Steps
-	
-	-----------------------------------------------------------
-	
-	DELETE FROM @Steps WHERE Value IN (6)
-	
+
+	EXECUTE RptMarketingChannelsSummary_CountCustomersOnSteps 'Company', @DateStart, @DateEnd, 'personal-info:company_continue'
+
 	-----------------------------------------------------------
 	--
 	-- Calculate datasource
 	--
 	-----------------------------------------------------------
-	
-	EXECUTE RptMarketingChannelsSummary_CountCustomersOnSteps 'DataSource', @DateStart, @DateEnd, @Steps
-	
-	-----------------------------------------------------------
-	
-	DELETE FROM @Steps WHERE Value IN (2)
-	
+
+	SELECT
+		'DataSource' AS RowType,
+		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
+		c.GoogleCookie,
+		c.BrokerID,
+		COUNT(DISTINCT c.Id) AS Counter
+	FROM
+		Customer c
+		INNER JOIN MP_CustomerMarketPlace m ON c.Id = m.CustomerId
+	WHERE
+		c.IsTest = 0
+		AND
+		@DateStart <= m.Created AND m.Created < @DateEnd
+	GROUP BY
+		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END,
+		c.GoogleCookie,
+		c.BrokerID
+
 	-----------------------------------------------------------
 	--
 	-- Calculate complete application
 	--
 	-----------------------------------------------------------
-	
-	EXECUTE RptMarketingChannelsSummary_CountCustomersOnSteps 'CompleteApplication', @DateStart, @DateEnd, @Steps
-	
+
+	EXECUTE RptMarketingChannelsSummary_CountCompleteWizard @DateStart, @DateEnd
+
 	-----------------------------------------------------------
 	--
 	-- Calculate requested amount
 	--
 	-----------------------------------------------------------
-	
+
 	SELECT
 		'RequestedAmount' AS RowType,
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
@@ -125,37 +126,49 @@ BEGIN
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END,
 		c.GoogleCookie,
 		c.BrokerID
-	
+
 	-----------------------------------------------------------
 	--
 	-- Calculate approved/rejected count.
 	--
 	-----------------------------------------------------------
-	
+
 	SELECT
 		'ApprovedRejected' AS RowType,
-		SUM(CASE WHEN c.NumApproves > 0 THEN 1 ELSE 0 END) AS NumOfApproved,
-		SUM(CASE WHEN c.NumRejects > 0 AND c.NumApproves = 0 THEN 1 ELSE 0 END) AS NumOfRejected,
+		SUM(CASE r.UnderwriterDecision
+			WHEN 'Approved' THEN 1
+			ELSE 0
+		END) AS NumOfApproved,
+		SUM(CASE r.UnderwriterDecision
+			WHEN 'Rejected' THEN 1
+			ELSE 0
+		END) AS NumOfRejected,
+		SUM(CASE r.UnderwriterDecision
+			WHEN 'Approved' THEN 0
+			WHEN 'Rejected' THEN 0
+			ELSE 1
+		END) AS NumOfPending,
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
 		c.GoogleCookie,
 		c.BrokerID
 	FROM
 		Customer c
+		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
 	WHERE
-		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+		@DateStart <= r.UnderwriterDecisionDate AND r.UnderwriterDecisionDate < @DateEnd
 		AND
 		c.IsTest = 0
 	GROUP BY
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END,
 		c.GoogleCookie,
 		c.BrokerID
-	
+
 	-----------------------------------------------------------
 	--
 	-- Calculate approved amount.
 	--
 	-----------------------------------------------------------
-	
+
 	SELECT
 		'ApprovedAmount' AS RowType,
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
@@ -166,8 +179,6 @@ BEGIN
 		Customer c
 		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
 	WHERE
-		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
-		AND
 		c.IsTest = 0
 		AND
 		@DateStart <= r.UnderwriterDecisionDate AND r.UnderwriterDecisionDate < @DateEnd
@@ -177,13 +188,13 @@ BEGIN
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END,
 		c.GoogleCookie,
 		c.BrokerID
-	
+
 	-----------------------------------------------------------
 	--
 	-- Calculate loans given.
 	--
 	-----------------------------------------------------------
-	
+
 	SELECT
 		'LoansGiven' AS RowType,
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
@@ -194,11 +205,11 @@ BEGIN
 		Customer c
 		INNER JOIN Loan l ON c.Id = l.CustomerId
 	WHERE
-		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
-		AND
 		c.IsTest = 0
 		AND
 		@DateStart <= l.[Date] AND l.[Date] < @DateEnd
+		AND
+		l.Position = 0
 	GROUP BY
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END,
 		c.GoogleCookie,
