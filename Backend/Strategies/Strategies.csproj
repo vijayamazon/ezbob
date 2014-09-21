@@ -98,9 +98,7 @@
     <Compile Include="Experian\ParseExperianLtd.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
-    <Compile Include="MailStrategies\Broker\BrokerApproveAndResetCustomerPassword.cs" />
     <Compile Include="MailStrategies\Broker\BrokerPasswordChanged.cs" />
-    <Compile Include="MailStrategies\Broker\GreetingForBrokerFilled.cs" />
     <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
@@ -217,7 +215,6 @@
     <Compile Include="MailStrategies\ABrokerMailToo.cs" />
     <Compile Include="MailStrategies\API\Addressee.cs" />
     <Compile Include="MailStrategies\API\MailMetaData.cs" />
-    <Compile Include="MailStrategies\Broker\BrokerFillForCustomerComplete.cs" />
     <Compile Include="MailStrategies\Broker\BrokerGreeting.cs" />
     <Compile Include="MailStrategies\MailRecipientData\BrokerData.cs" />
     <Compile Include="Misc\CaisUpdate.cs" />

@@ -421,7 +421,6 @@
 				}
 				else if (bSendApprovedUser) {
 					try {
-						
 						m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, sum, validForHours, numOfPreviousApprovals == 0);
 					}
 					catch (Exception e) {

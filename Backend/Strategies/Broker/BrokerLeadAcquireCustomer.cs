@@ -43,9 +43,7 @@
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
 
-			if (m_oSp.BrokerFillsForCustomer)
-				new GreetingForBrokerFilled(m_oSp.CustomerID, m_sFirstName, m_sEmailConfirmationLink, DB, Log).Execute();
-			else
+			if (!m_oSp.BrokerFillsForCustomer)
 				new Greeting(m_oSp.CustomerID, m_sEmailConfirmationLink, DB, Log).Execute();
 		} // Execute
 

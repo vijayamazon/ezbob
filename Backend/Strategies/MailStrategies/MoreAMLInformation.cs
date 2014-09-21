@@ -4,21 +4,10 @@
 	using Ezbob.Logger;
 
 	public class MoreAmlInformation : ABrokerMailToo {
-		public MoreAmlInformation(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public MoreAmlInformation(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
 		} // constructor
 
 		public override string Name { get { return "More AML Information"; } } // Name
-
-		#region method LoadRecipientData
-
-		protected override void LoadRecipientData() {
-			base.LoadRecipientData();
-
-			if (CustomerData.IsFilledByBroker)
-				SendToCustomer = false;
-		} // LoadRecipientData
-
-		#endregion method LoadRecipientData
 
 		#region method SetTemplateAndSubjectAndVariables
 

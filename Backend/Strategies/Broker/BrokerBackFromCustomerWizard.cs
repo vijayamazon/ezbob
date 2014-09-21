@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using MailStrategies;
 
 	public class BrokerBackFromCustomerWizard : AStrategy {
 		#region public
@@ -38,12 +37,6 @@
 
 		public override void Execute() {
 			m_oResultRow = m_oSp.FillFirst<BrokerLeadLoadBroker.ResultRow>();
-
-			if (m_oResultRow == null)
-				return;
-
-			if ((m_oResultRow.BrokerID > 0) && (m_oResultRow.CustomerID > 0) && m_oResultRow.IsAtLastWizardStep)
-				new BrokerFillForCustomerComplete(m_oResultRow.BrokerID, m_oResultRow.CustomerID, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute
