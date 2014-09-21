@@ -31,7 +31,6 @@ BEGIN
 		
 	IF @ServiceLogId IS NULL
 	BEGIN
-		PRINT 'select by name'
 		SELECT TOP 1
 		   @ServiceLogID=l.Id, @InsertDate = l.InsertDate
 		FROM

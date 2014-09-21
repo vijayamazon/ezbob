@@ -56,7 +56,7 @@ BEGIN
 
 	(
 	SELECT 
-		ISNULL(sum(lt.LoanRepayment), 0) AS PrincipalPaidAmount
+		ISNULL(sum(isnull(lt.LoanRepayment, 0)), 0) AS PrincipalPaidAmount
 	FROM 
 		Loan l
 		LEFT JOIN LoanTransaction lt ON lt.LoanId = l.Id
@@ -68,7 +68,7 @@ BEGIN
 
 	(
 	SELECT 
-		ISNULL(sum(l.LoanAmount), 0)
+		ISNULL(sum(isnull(l.LoanAmount, 0)), 0)
 	FROM 
 		Loan l
 	WHERE 

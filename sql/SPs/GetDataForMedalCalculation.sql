@@ -212,7 +212,7 @@ BEGIN
 		AnalysisFunctionTimePeriodId DESC
 	
 	SELECT 
-		@TotalZooplaValue = SUM(CASE WHEN ZooplaEstimateValue != 0 THEN ZooplaEstimateValue ELSE AverageSoldPrice1Year END)
+		@TotalZooplaValue = SUM(CASE WHEN ZooplaEstimateValue IS NOT NULL AND ZooplaEstimateValue != 0 THEN ZooplaEstimateValue ELSE ISNULL(AverageSoldPrice1Year, 0) END)
 	FROM 
 		Zoopla, 
 		CustomerAddress 
