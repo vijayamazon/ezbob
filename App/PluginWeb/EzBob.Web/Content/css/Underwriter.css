@@ -2148,3 +2148,7 @@ ul.alert-list {
 .companycheck:hover {
     background-position: 0 3px;
 }
+
+.box-no-padding {
+    padding: 0px !important;
+}

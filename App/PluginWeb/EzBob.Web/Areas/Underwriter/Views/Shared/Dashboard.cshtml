@@ -168,7 +168,7 @@
                     <h3>Customer & Directors <span class="applicant-name"><%-experian.Consumer.ApplicantFullName%></span></h3>
                     @BoxTools("CustomerAndDirectors", "#credit-bureau")
                 </div>
-                <div class="box-content">
+                <div class="box-content box-no-padding">
                     <div class="tabbable tabs-left">
                         <ul class="nav nav-tabs active">
                             <li class="active"><a href="#customerExperian" data-toggle="tab" data-applicantname="<%-experian.Consumer.ApplicantFullName%>"><span class="<%-tileColor%>" style="background-color: <%-experian.Consumer.ScoreColor%>;"><%-experian.Consumer.Score%></span>&nbsp;Applicant</a></li>
@@ -315,7 +315,7 @@
                     <h3>Company Credit Profile <span class="company-name"><%-company[0].CompanyName%> <%-company[0].CompanyRefNum%></span></h3>
                     @BoxTools("CompanyCreditProfile", "#company-score")
                 </div>
-                <div class="box-content">
+                <div class="box-content box-no-padding">
                     <%if(company[0].Error){%>
                         <h3><%-company[0].Error%></h3>
                     <%} else if(company[0].CompanyRefNum == 'NotFound'){%>
