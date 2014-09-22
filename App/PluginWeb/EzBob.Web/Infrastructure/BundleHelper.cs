@@ -339,8 +339,8 @@
 				//----
 				.Add("~/Content/js/Underwriter/editLoan/loanModel.coffee")
 				.Add("~/Content/js/Underwriter/editLoan/installmentEditor.coffee")
-				.Add("~/Content/js/Underwriter/editLoan/editFee.coffee")
-				.Add("~/Content/js/Underwriter/editLoan/editLoanView.coffee")
+				.Add("~/Content/js/Underwriter/editLoan/editFee.js")
+				.Add("~/Content/js/Underwriter/editLoan/editLoanView.js")
 				.Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.js")
 
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")

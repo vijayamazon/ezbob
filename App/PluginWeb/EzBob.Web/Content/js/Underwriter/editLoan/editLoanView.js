@@ -1,277 +1,277 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
+	template: '#loan_editor_template',
 
-  root.EzBob = root.EzBob || {};
+	scheduleTemplate: $('#loan_editor_schedule_template').length > 0 ? _.template($('#loan_editor_schedule_template').html()) : null,
 
-  EzBob.EditLoanView = (function(_super) {
+	initialize: function() {
+		this.bindTo(this.model, 'change sync', this.renderRegions, this);
+		this.editItemIndex = -1;
+	}, // initialize
 
-    __extends(EditLoanView, _super);
+	serializeData: function() {
+		var data = this.model.toJSON();
+		data.editItemIndex = this.editItemIndex;
+		return data;
+	}, // serializeData
 
-    function EditLoanView() {
-      return EditLoanView.__super__.constructor.apply(this, arguments);
-    }
+	ui: {
+		scheduleEl: '.editloan-schedule-region',
+		freezeEl: '.editloan-freeze-intervals-region',
+		ok: '.save',
+		buttons: '.buttons'
+	}, // ui
 
-    EditLoanView.prototype.template = "#loan_editor_template";
+	editors: {
+		'Installment': EzBob.InstallmentEditor,
+		'Fee': EzBob.FeeEditor,
+	}, // editors
 
-    EditLoanView.prototype.scheduleTemplate = $("#loan_editor_schedule_template").length > 0 ? _.template($("#loan_editor_schedule_template").html()) : null;
+	events: {
+		'click .edit-schedule-item': 'editScheduleItem',
+		'click .remove-schedule-item': 'removeScheduleItem',
+		'click .add-installment': 'addInstallment',
+		'click .add-fee': 'addFee',
+		'click .save': 'onOk',
+		'click .cancel': 'onCancel',
+		'click .add-freeze-interval': 'onAddFreezeInterval',
+		'click .remove-freeze-interval': 'onRemoveFreezeInterval'
+	}, // events
 
-    EditLoanView.prototype.initialize = function() {
-      this.bindTo(this.model, "change sync", this.renderRegions, this);
-      return this.editItemIndex = -1;
-    };
+	addInstallment: function() {
+		var date = new Date(moment(this.model.get('Items').last().get('Date')).utc());
+		date.setMonth(date.getMonth() + 1);
 
-    EditLoanView.prototype.serializeData = function() {
-      var data, e, stack;
-      data = this.model.toJSON();
-      e = new Error('dummy');
-      stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '').replace(/^\s+at\s+/gm, '').replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@').split('\n');
-      data.editItemIndex = this.editItemIndex;
-      return data;
-    };
+		var installment = new EzBob.Installment({
+			'Editable': true,
+			'Deletable': true,
+			'Editor': 'Installment',
+			'Principal': 0,
+			'Balance': 0,
+			'BalanceBeforeRepayment': 0,
+			'Interest': 0,
+			'InterestRate': this.model.get('InterestRate'),
+			'Fees': 0,
+			'Total': 0,
+			'Status': 'StillToPay',
+			'Type': 'Installment',
+			'IsAdding': true,
+			'Date': date
+		});
+		var editor = this.editors['Installment'];
 
-    EditLoanView.prototype.ui = {
-      scheduleEl: ".editloan-schedule-region",
-      freezeEl: ".editloan-freeze-intervals-region",
-      ok: ".save",
-      buttons: ".buttons"
-    };
+		var view = new editor({
+			model: installment,
+			loan: this.model,
+		});
 
-    EditLoanView.prototype.editors = {
-      "Installment": EzBob.InstallmentEditor,
-      "Fee": EzBob.FeeEditor
-    };
+		var add = function() {
+			this.model.addInstallment(installment);
+		};
 
-    EditLoanView.prototype.events = {
-      "click .edit-schedule-item": "editScheduleItem",
-      "click .remove-schedule-item": "removeScheduleItem",
-      "click .add-installment": "addInstallment",
-      "click .add-fee": "addFee",
-      "click .save": "onOk",
-      "click .cancel": "onCancel",
-      "click .add-freeze-interval": "onAddFreezeInterval",
-      "click .remove-freeze-interval": "onRemoveFreezeInterval"
-    };
+		view.on('apply', add, this);
+		this.showEditView(view);
+	}, // addInstallment
 
-    EditLoanView.prototype.addInstallment = function() {
-      var add, date, editor, installment, view;
-      date = new Date(moment(this.model.get("Items").last().get("Date")).utc());
-      date.setMonth(date.getMonth() + 1);
-      installment = new EzBob.Installment({
-        "Editable": true,
-        "Deletable": true,
-        "Editor": "Installment",
-        "Principal": 0,
-        "Balance": 0,
-        "BalanceBeforeRepayment": 0,
-        "Interest": 0,
-        "InterestRate": this.model.get("InterestRate"),
-        "Fees": 0,
-        "Total": 0,
-        "Status": "StillToPay",
-        "Type": "Installment",
-        "IsAdding": true,
-        "Date": date
-      });
-      editor = this.editors["Installment"];
-      view = new editor({
-        model: installment,
-        loan: this.model
-      });
-      add = function() {
-        return this.model.addInstallment(installment);
-      };
-      view.on("apply", add, this);
-      return this.showEditView(view);
-    };
+	addFee: function() {
+		var fee = new EzBob.Installment({
+			'Editable': true,
+			'Deletable': true,
+			'Editor': 'Fee',
+			'Principal': 0,
+			'Balance': 0,
+			'BalanceBeforeRepayment': 0,
+			'Interest': 0,
+			'InterestRate': this.model.get('InterestRate'),
+			'Fees': 0,
+			'Total': 0,
+			'Type': 'Fee',
+			'IsAdding': true,
+			'Date': this.model.get('Items').last().get('Date')
+		});
 
-    EditLoanView.prototype.addFee = function() {
-      var add, editor, fee, view;
-      fee = new EzBob.Installment({
-        "Editable": true,
-        "Deletable": true,
-        "Editor": "Fee",
-        "Principal": 0,
-        "Balance": 0,
-        "BalanceBeforeRepayment": 0,
-        "Interest": 0,
-        "InterestRate": this.model.get("InterestRate"),
-        "Fees": 0,
-        "Total": 0,
-        "Type": "Fee",
-        "IsAdding": true,
-        "Date": this.model.get("Items").last().get("Date")
-      });
-      editor = this.editors["Fee"];
-      view = new editor({
-        model: fee,
-        loan: this.model
-      });
-      add = function() {
-        return this.model.addFee(fee);
-      };
-      view.on("apply", add, this);
-      return this.showEditView(view);
-    };
+		var editor = this.editors['Fee'];
 
-    EditLoanView.prototype.showEditView = function(view) {
-      var _this = this;
-      view.on("close", function() {
-        return _this.ui.buttons.show();
-      });
-      this.editRegion.show(view);
-      return this.ui.buttons.hide();
-    };
+		var view = new editor({
+			model: fee,
+			loan: this.model,
+		});
 
-    EditLoanView.prototype.removeScheduleItem = function(e) {
-      var id, ok,
-        _this = this;
-      id = e.currentTarget.getAttribute("data-id");
-      ok = function() {
-        return _this.model.removeItem(id);
-      };
-      return EzBob.ShowMessage("Confirm deleting installment", "Delete installment", ok, "Ok", null, "Cancel");
-    };
+		var add = function() {
+			this.model.addFee(fee);
+		};
 
-    EditLoanView.prototype.editScheduleItem = function(e) {
-      var closed, editor, id, item, row, view;
-      id = e.currentTarget.getAttribute("data-id");
-      row = $(e.currentTarget).parents('tr');
-      row.addClass("editing");
-      item = this.model.get("Items").at(id);
-      this.editItemIndex = id;
-      editor = this.editors[item.get("Editor")];
-      view = new editor({
-        model: item,
-        loan: this.model
-      });
-      view.on("apply", this.recalculate, this);
-      closed = function() {
-        row.removeClass("editing");
-        this.editItemIndex = -1;
-        return this.renderSchedule(this.serializeData());
-      };
-      view.on("close", closed, this);
-      return this.showEditView(view);
-    };
+		view.on('apply', add, this);
+		this.showEditView(view);
+	}, // addFee
 
-    EditLoanView.prototype.recalculate = function() {
-      return this.model.recalculate();
-    };
+	showEditView: function(view) {
+		var self = this;
 
-    EditLoanView.prototype.onOk = function() {
-      var xhr,
-        _this = this;
-      if (this.ui.ok.hasClass('disabled')) {
-        return;
-      }
-      xhr = this.model.save();
-      return xhr.done(function() {
-        _this.trigger("item:saved");
-        return _this.close();
-      });
-    };
+		view.on('close', function() { self.ui.buttons.show(); });
 
-    EditLoanView.prototype.onCancel = function() {
-      return this.close();
-    };
+		this.editRegion.show(view);
+		this.ui.buttons.hide();
+	}, // showEditView
 
-    EditLoanView.prototype.onRender = function() {
-      this.editRegion = new Backbone.Marionette.Region({
-        el: this.$(".editloan-item-editor-region")
-      });
-      return this.renderRegions();
-    };
+	removeScheduleItem: function(e) {
+		var self = this;
+		var id = e.currentTarget.getAttribute('data-id');
 
-    EditLoanView.prototype.renderRegions = function() {
-      var data;
-      data = this.serializeData();
-      this.renderSchedule(data);
-      return this.renderFreeze(data);
-    };
+		var ok = function() { self.model.removeItem(id); };
 
-    EditLoanView.prototype.renderSchedule = function(data) {
-      this.ui.scheduleEl.html(this.scheduleTemplate(data));
-      return this.ui.ok.toggleClass("disabled", this.model.get("HasErrors"));
-    };
+		EzBob.ShowMessage('Confirm deleting installment', 'Delete installment', ok, 'Ok', null, 'Cancel');
+	}, // removeScheduleItem 
 
-    EditLoanView.prototype.renderFreeze = function(data) {
-      return this.ui.freezeEl.html(_.template($("#loan_editor_freeze_intervals_template").html())(data));
-    };
+	editScheduleItem: function(e) {
+		var id = e.currentTarget.getAttribute('data-id');
 
-    EditLoanView.prototype.onAddFreezeInterval = function() {
-      var nRate, sEnd, sStart;
-      sStart = this.$el.find(".new-freeze-interval-start").val();
-      sEnd = this.$el.find(".new-freeze-interval-end").val();
-      nRate = this.$el.find(".new-freeze-interval-rate").val() / 100.0;
-      this.$el.find('.new-freeze-interval-error').empty();
-      if (this.validateFreezeIntervals(sStart, sEnd)) {
-        return this.model.addFreezeInterval(sStart, sEnd, nRate);
-      } else {
-        return this.$el.find('.new-freeze-interval-error').text('New interval conflicts with one of existing intervals');
-      }
-    };
+		var row = $(e.currentTarget).parents('tr');
 
-    EditLoanView.prototype.onRemoveFreezeInterval = function(evt) {
-      return this.model.removeFreezeInterval(evt.currentTarget.getAttribute("data-id"));
-    };
+		row.addClass('editing');
 
-    EditLoanView.prototype.validateFreezeIntervals = function(sStartDate, sEndDate) {
-      var bConflict, oEnd, oStart, tmp,
-        _this = this;
-      oStart = moment.utc(sStartDate);
-      oEnd = moment.utc(sEndDate);
-      if (oStart !== null && oEnd !== null && oStart > oEnd) {
-        this.$el.find(".new-freeze-interval-start").val(sEndDate);
-        this.$el.find(".new-freeze-interval-end").val(sStartDate);
-        tmp = oEnd;
-        oEnd = oStart;
-        oStart = tmp;
-      }
-      bConflict = false;
-      _.each(this.model.get('InterestFreeze'), function(item, idx) {
-        var ary, bFirst, bSecond, oLeft, oRight;
-        if (bConflict) {
-          return;
-        }
-        ary = item.split('|');
-        if (ary[4] !== '') {
-          return;
-        }
-        oLeft = moment.utc(ary[0]);
-        oRight = moment.utc(ary[1]);
-        bFirst = _this.cmpDates(oStart, oRight);
-        bSecond = _this.cmpDates(oLeft, oEnd);
-        return bConflict = bFirst && bSecond;
-      });
-      return !bConflict;
-    };
+		var item = this.model.get('Items').at(id);
 
-    EditLoanView.prototype.cmpDates = function(a, b) {
-      if (a === null || b === null) {
-        return true;
-      }
-      return a <= b;
-    };
+		this.editItemIndex = id;
 
-    EditLoanView.prototype.onClose = function() {
-      return this.editRegion.close();
-    };
+		var editor = this.editors[item.get('Editor')];
 
-    EditLoanView.prototype.jqoptions = function() {
-      return {
-        width: '80%',
-        modal: true,
-        title: 'Edit Loan Details',
-        resizable: true
-      };
-    };
+		var view = new editor({
+			model: item,
+			loan: this.model,
+		});
 
-    return EditLoanView;
+		view.on('apply', this.recalculate, this);
 
-  })(Backbone.Marionette.ItemView);
+		var self = this;
 
-}).call(this);
+		var closed = function() {
+			row.removeClass('editing');
+			self.editItemIndex = -1;
+			self.renderSchedule(this.serializeData());
+		};
+
+		view.on('close', closed, this);
+		this.showEditView(view);
+	}, // editScheduleItem
+
+	recalculate: function() {
+		this.model.recalculate();
+	}, // recalculate
+
+	onOk: function() {
+		var self = this;
+
+		if (this.ui.ok.hasClass('disabled'))
+			return;
+
+		var xhr = this.model.save();
+
+		xhr.done(function() {
+			self.trigger('item:saved');
+			self.close();
+		});
+	}, // onOk
+
+	onCancel: function() {
+		this.close();
+	}, // onCancel
+
+	onRender: function() {
+		this.editRegion = new Backbone.Marionette.Region({
+			el: this.$('.editloan-item-editor-region')
+		});
+
+		this.renderRegions();
+	}, // onRender
+
+	renderRegions: function() {
+		var data = this.serializeData();
+		this.renderSchedule(data);
+		this.renderFreeze(data);
+	}, // renderRegions
+
+	renderSchedule: function(data) {
+		this.ui.scheduleEl.html(this.scheduleTemplate(data));
+		this.ui.ok.toggleClass('disabled', this.model.get('HasErrors'));
+	}, // renderSchedule
+
+	renderFreeze: function(data) {
+		this.ui.freezeEl.html(_.template($('#loan_editor_freeze_intervals_template').html())(data));
+	}, // renderFreeze
+
+	onAddFreezeInterval: function() {
+		var sStart = this.$el.find('.new-freeze-interval-start').val();
+		var sEnd = this.$el.find('.new-freeze-interval-end').val();
+		var nRate = this.$el.find('.new-freeze-interval-rate').val() / 100.0;
+
+		this.$el.find('.new-freeze-interval-error').empty();
+
+		if (this.validateFreezeIntervals(sStart, sEnd))
+			this.model.addFreezeInterval(sStart, sEnd, nRate);
+		else
+			this.$el.find('.new-freeze-interval-error').text('New interval conflicts with one of existing intervals');
+	}, // onAddFreezeInterval
+
+	onRemoveFreezeInterval: function(evt) {
+		this.model.removeFreezeInterval(evt.currentTarget.getAttribute('data-id'));
+	}, // onRemoveFreezeInterval
+
+	validateFreezeIntervals: function(sStartDate, sEndDate) {
+		var self = this;
+
+		var oStart = moment.utc(sStartDate);
+		var oEnd = moment.utc(sEndDate);
+
+		if (oStart !== null && oEnd !== null && oStart > oEnd) {
+			this.$el.find('.new-freeze-interval-start').val(sEndDate);
+			this.$el.find('.new-freeze-interval-end').val(sStartDate);
+
+			var tmp = oEnd;
+			oEnd = oStart;
+			oStart = tmp;
+		} // if
+
+		var bConflict = false;
+
+		_.each(this.model.get('InterestFreeze'), function(item) {
+			if (bConflict)
+				return;
+
+			var ary = item.split('|');
+			if (ary[4] !== '')
+				return;
+
+			var oLeft = moment.utc(ary[0]);
+			var oRight = moment.utc(ary[1]);
+
+			var bFirst = self.cmpDates(oStart, oRight);
+			var bSecond = self.cmpDates(oLeft, oEnd);
+
+			bConflict = bFirst && bSecond;
+		});
+
+		return !bConflict;
+	}, // validateFreezeIntervals
+
+	cmpDates: function(a, b) {
+		if (a === null || b === null)
+			return true;
+
+		return a <= b;
+	}, // cmpDates
+
+	onClose: function() {
+		return this.editRegion.close();
+	}, // onClose
+
+	jqoptions: function() {
+		return {
+			width: '80%',
+			modal: true,
+			title: 'Edit Loan Details',
+			resizable: true,
+		};
+	}, // jqoptions
+}); // EzBob.EditLoanView
