@@ -142,7 +142,7 @@
 				.Add("~/Content/js/lib/jquery.maskedinput-1.2.2.js")
 				.Add("~/Content/js/lib/notifications.js")
 				.Add("~/Content/js/lib/coin-slider.js")
-				.Add("~/Content/js/lib/log.coffee")
+				.Add("~/Content/js/lib/log.js")
 				.Add("~/Content/js/lib/jquery.placeholder.js")
 				.Add("~/Content/js/lib/attardi.labels.js")
 				.Add("~/Content/js/lib/amount-period-sliders.js")

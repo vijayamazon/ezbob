@@ -734,6 +734,7 @@
     <Content Include="Content\js\App\ezbob.GA.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
+    <Content Include="Content\js\lib\log.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1178,7 +1179,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\_CreditLineDialog.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Content\js\lib\log.coffee" />
     <Content Include="Areas\Underwriter\Views\Shared\Fraud\Fraud.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_FraudDetectionLog.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
