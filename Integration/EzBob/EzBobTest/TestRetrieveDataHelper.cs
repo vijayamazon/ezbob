@@ -1,12 +1,9 @@
 namespace EzBobTest
 {
 	using System;
-	using System.Collections.Concurrent;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text.RegularExpressions;
-	using System.Threading;
-	using System.Xml;
 	using CompanyFiles;
 	using ConfigManager;
 	using EKM;
@@ -16,9 +13,6 @@ namespace EzBobTest
 	using EzBob.AmazonServiceLib.Config;
 	using EzBob.AmazonServiceLib.Orders.Model;
 	using EzBob.AmazonServiceLib.ServiceCalls;
-	using EzBob.Models;
-	using EzBob.eBayLib.Config;
-	using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.RegistryScanner;
@@ -28,7 +22,6 @@ namespace EzBobTest
 	using Sage;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.AmazonLib;
 	using EzBob.AmazonServiceLib;
 	using EzBob.CommonLib;
@@ -42,14 +35,12 @@ namespace EzBobTest
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using log4net;
-	using log4net.Config;
     using PayPoint;
     using YodleeLib.connector;
 	using System.IO;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
 	using Integration.ChannelGrabberFrontend;
-	using RetrieveDataHelper = EzBob.RetrieveDataHelper;
 
 	[TestFixture]
     public class TestRetrieveDataHelper
@@ -116,35 +107,6 @@ namespace EzBobTest
 		} // TestHmrcPdfThrasher
 
         [Test]
-        public void GetAnalysisValuesByCustomerMarketPlace()
-        {
-			var data = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(16283);
-
-			var s = new StrategyHelper();
-	        var res = s.GetAnualTurnOverByCustomer(11164);
-	        var res2 = s.GetTotalSumOfOrdersForLoanOffer(11164);
-			Console.WriteLine("{0} {1} {2}",data.Data.Count, res, res2);
-        }
-
-        [Test]
-        public void UpdateCustomer()
-        {
-            var id = 35;
-            UpdateCustomer(id);
-
-        }
-
-		[Test]
-		public void UpdateCustomerMarketplace() {
-			var umis = new[] { 10166 };
-
-			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
-
-			foreach (var umi in umis)
-				UpdateCustomerMarketplace(umi);
-		}
-
-        [Test]
         public void UpdatePayPalAcctountInfo()
         {
             var umi = 1039;
@@ -154,81 +116,6 @@ namespace EzBobTest
         private void UpdatePayPalAcctountInfo(int umi)
         {
             PayPalRetriveDataHelper.UpdateAccountInfo(umi);
-        }
-
-        private void UpdateCustomer(int id)
-        {
-            var requestId = RetrieveDataHelper.UpdateCustomerData(id);
-
-            while (!RetrieveDataHelper.IsRequestDone(requestId))
-            {
-                Thread.Sleep(1000);
-            }
-            var requestState = RetrieveDataHelper.GetRequestState(requestId);
-            Assert.NotNull(requestState);
-            Assert.IsTrue(requestState.IsDone());
-            Assert.IsFalse(requestState.HasError());
-        }
-
-        private void UpdateCustomerMarketplace(int umi)
-        {
-            var requestId = RetrieveDataHelper.UpdateCustomerMarketplaceData(umi);
-
-            while (!RetrieveDataHelper.IsRequestDone(requestId))
-            {
-                Thread.Sleep(1000);
-            }
-            var requestState = RetrieveDataHelper.GetRequestState(requestId);
-            Assert.NotNull(requestState);
-            Assert.IsTrue(requestState.IsDone());
-            Assert.IsFalse(requestState.HasError());
-        }
-
-        [Test]
-        public void GetMarketplaceSecurityInfo()
-        {
-            var umis = new[] 
-			{
-				//285
-				//86
-				239
-			};
-
-            var infos = umis.AsParallel().Select(RetrieveDataHelper.RetrieveCustomerSecurityInfo).ToList();
-
-            Assert.IsTrue(infos.Count > 0);
-            Assert.AreEqual(infos.Count, umis.Length);
-        }
-
-        [Test]
-        public void GetAllCustomerMarketplaceSecurityData()
-        {
-            //var session = ObjectFactory.GetInstance<ISession>();
-            var rep = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
-
-            var amazon = new AmazonServiceInfo();
-            var all = rep.GetAll().Where(mp => mp.Marketplace.InternalId == amazon.InternalId).ToList();
-
-            var listData = new ConcurrentBag<CustomerSecurityInfo>();
-
-            all.AsParallel().ForAll(mpCustomerMarketPlace =>
-                {
-                    var sd = RetrieveDataHelper.RetrieveCustomerSecurityInfo(mpCustomerMarketPlace.Id) as AmazonSecurityInfo;
-
-                    var customerSecurityInfo = new CustomerSecurityInfo
-                    {
-                        AmazonMarketplaceId = sd.MarketplaceId.First(),
-                        MerchantId = sd.MerchantId,
-                        MarketplaceName = mpCustomerMarketPlace.DisplayName,
-                        MarketPlaceId = mpCustomerMarketPlace.Id
-                    };
-                    listData.Add(customerSecurityInfo);
-                });
-
-            var list = listData.ToArray();
-
-            Serialized.Serialize(@"d:\temp\umi\umiList.xml", list);
-
         }
 
         [Test]
