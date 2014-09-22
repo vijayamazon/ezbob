@@ -109,7 +109,6 @@
 		EzBob.Config.WhiteLabel = '@Model.WhiteLabel';
     	
     	$(function() {
-    		console.log("whitelabel", EzBob.Config.WhiteLabel);
             var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer));
             options.el = $('#wizard');
 

@@ -26,8 +26,7 @@ EzBob.CompanyFilesAccountInfoView = Backbone.Marionette.ItemView.extend({
 		uploadButton: '.connect-account'
 	}, // ui
 
-	render: function() {
-		EzBob.CompanyFilesAccountInfoView.__super__.render.call(this);
+	onRender: function() {
 	    EzBob.UiAction.registerView(this);
 		this.initDropzone();
 

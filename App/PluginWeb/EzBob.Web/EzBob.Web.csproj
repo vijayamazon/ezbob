@@ -1385,19 +1385,7 @@
       <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\ezbob.vipView.js" />
-    <Content Include="Content\js\Wizard\ezbob.wizard.shops.min.js">
-      <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js">
-      <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.min.js">
-      <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.js">
-      <DependentUpon>ezbob.shops.cg.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.charges.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.settings.charges.coffee</DependentUpon>
     </Content>
@@ -1411,20 +1399,8 @@
       <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.js" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js">
-      <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.min.js">
-      <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.js">
-      <DependentUpon>ezbob.shops.sage.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.js">
-      <DependentUpon>ezbob.shops.yodlee.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\wizardStepSequence.js" />
     <Content Include="Content\js\Wizard\ezbob.wizardStepsModel.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.companydetails.js" />
@@ -1517,15 +1493,6 @@
     </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.js">
       <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\ezbob.wizard.shops.js">
-      <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js">
-      <DependentUpon>ezbob.shops.ekm.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js">
-      <DependentUpon>ezbob.shops.paypoint.coffee</DependentUpon>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Content\img\header-gradient.png" />
@@ -2010,13 +1977,13 @@
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.coffee" />
-    <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js" />
+    <Content Include="Content\js\Wizard\ezbob.wizard.shops.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.js" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.charges.coffee" />
@@ -2024,13 +1991,10 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.general.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.js" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Experian.coffee" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.coffee" />
-    <Content Include="Content\js\Wizard\ezbob.wizard.shops.min.js.map">
-      <DependentUpon>ezbob.wizard.shops.js</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.coffee" />
     <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.coffee" />

@@ -196,7 +196,7 @@
 				} // if
 			}
 			catch (ConnectionFailException cge) {
-				if (CurrentValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
+				if (CurrentValues.Instance.ChannelGrabberRejectPolicy.ToString() == ChannelGrabberRejectPolicy.ConnectionFail.ToString()) {
 					ms_oLog.Error(cge, "Connection failure.");
 					oState.Error = CreateError(cge);
 				} // if
