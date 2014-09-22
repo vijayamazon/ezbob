@@ -15,23 +15,5 @@
     @ApplyForLoanTopTemplate()
 </script>
 
-
-@{Html.RenderPartial("_GetCashConfirmationModalTemplate");}
 @{Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");}
 @{Html.RenderPartial("ApplyForLoanTemplate"); }
-
-@helper ThankYouLoan()
-{
-    <h1>Apply for a loan</h1>
-    <h2>It’s so easy. Unbelievable!</h2>
-    <div class="thankyou-loan">
-        EZBOB will get back to you by mail in 24 hours.<br />
-        You can edit your personal and business<br />
-        information in your dashboard.<br />
-    </div>
-    <a href="#" class="btn-continue button btn-green offer">Go to My Account</a>
-}
-
-<script id="thankyouloan-template" type="text/template">
-    @ThankYouLoan()
-</script>
