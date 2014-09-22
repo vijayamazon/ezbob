@@ -9,9 +9,9 @@ namespace EzBob.Web.Controllers
         //
         // GET: /PaypointTemplate/
 
-        public ActionResult Index()
+        public ActionResult Index(string type = "Prod")
         {
-            return View(model: "Prod");
+            return View(model: type);
         }
 
         public ViewResult DownloadPage()
