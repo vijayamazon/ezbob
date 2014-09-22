@@ -136,10 +136,6 @@
       <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
       <Name>EKM</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Integration\EzBob\EzBob.csproj">
-      <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
-      <Name>EzBob</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
@@ -147,6 +143,10 @@
     <ProjectReference Include="..\..\..\Integration\PayPal\PayPalLib\PayPalLib.csproj">
       <Project>{231243d6-9b1a-43bc-ac7e-fc6ae5ddc006}</Project>
       <Name>PayPalLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
+      <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
+      <Name>PayPalServiceLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PayPoint\PayPoint.csproj">
       <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>

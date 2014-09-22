@@ -216,7 +216,9 @@
 				Log.Debug("Error fetching company seniority: {0}", e);
 			}
 
-			BuildLandRegistryAlerts(customer, summary);
+			bool bResult = BuildLandRegistryAlerts(customer, summary);
+			Log.DebugFormat("Just FYI: BuildLandRegistryAlerts() returned {0}", bResult ? "true" : "false");
+
 			BuildDataAlerts(customer, summary, context.UserId);
 
 			bool hasMortgage = false;
@@ -427,7 +429,7 @@
 
 			foreach (var mp in marketplaces)
 			{
-				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+				var analisysFunction = mp.GetRetrieveDataHelper().GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 				var av = analisysFunction.Data
 					.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 

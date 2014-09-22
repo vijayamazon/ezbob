@@ -80,7 +80,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				}
 				catch (Exception ex)
 				{
-					Log.WarnFormat("Build Yodlee Model Failed {0}", ex);
+					Log.Warn(ex, "Build Yodlee Model Failed.");
 				}
 
 			}
@@ -108,7 +108,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			_timeElapsed.Add(new System.Tuple<string, double>("GetAllYodleeOrdersData", sw.Elapsed.TotalMilliseconds));
 			if (yodleeData == null)
 			{
-				Log.DebugFormat("Yodlee model building complete for marketplace {0}: no data.", mp.Stringify());
+				Log.Debug("Yodlee model building complete for marketplace {0}: no data.", mp.Stringify());
 				return null;
 			} // if
 
@@ -123,11 +123,11 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			var banks = new List<YodleeBankModel>();
 
-			Log.DebugFormat("Yodlee model is being built for marketplace {0}...", mp.Stringify());
+			Log.Debug("Yodlee model is being built for marketplace {0}...", mp.Stringify());
 			sw.Restart();
 			foreach (var bank in yodleeData.Data.Keys)
 			{
-				Log.DebugFormat("Yodlee model is being built for marketplace {0}, bank {1}...", mp.Stringify(), bank.customName);
+				Log.Debug("Yodlee model is being built for marketplace {0}, bank {1}...", mp.Stringify(), bank.customName);
 
 				double? availableBalance = CurrencyXchg(bank.availableBalance, bank.asOfDate.date);
 				double? currentBalance = CurrencyXchg(bank.currentBalance, bank.asOfDate.date);
@@ -149,7 +149,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 				var transactions = new List<YodleeTransactionModel>();
 
-				Log.DebugFormat("Yodlee model is being built for marketplace {0}, bank {1}, going over transactions...", mp.Stringify(), bank.customName);
+				Log.Debug("Yodlee model is being built for marketplace {0}, bank {1}, going over transactions...", mp.Stringify(), bank.customName);
 
 				foreach (var transaction in yodleeData.Data[bank])
 				{
@@ -177,20 +177,20 @@ namespace EzBob.Models.Marketplaces.Builders
 					transactions.Add(yodleeTransactionModel);
 				} // for each transaction
 
-				Log.DebugFormat("Yodlee model is being built for marketplace {0}, bank {1}, done going over transactions.", mp.Stringify(), bank.customName);
+				Log.Debug("Yodlee model is being built for marketplace {0}, bank {1}, done going over transactions.", mp.Stringify(), bank.customName);
 
 				yodleeBankModel.transactions = transactions.OrderByDescending(t => t.transactionDate).ToList();
 
 				banks.Add(yodleeBankModel);
 
-				Log.DebugFormat("Yodlee model is being built for marketplace {0}, done with bank {1}.", mp.Stringify(), bank.customName);
+				Log.Debug("Yodlee model is being built for marketplace {0}, done with bank {1}.", mp.Stringify(), bank.customName);
 			} // for each bank
 
 			model.banks = banks;
 			sw.Stop();
 			_timeElapsed.Add(new System.Tuple<string, double>("YodleeTransactionsModel", sw.Elapsed.TotalMilliseconds));
 
-			Log.DebugFormat("Yodlee model is being built for marketplace {0}, done with banks.", mp.Stringify());
+			Log.Debug("Yodlee model is being built for marketplace {0}, done with banks.", mp.Stringify());
 
 			YodleeSearchWordsModel yodleeSearchWordsModel;
 
@@ -202,7 +202,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			sw.Stop();
 			_timeElapsed.Add(new System.Tuple<string, double>("YodleeCashFlowModel", sw.Elapsed.TotalMilliseconds));
 
-			Log.DebugFormat("Yodlee model is ready for marketplace {0}.", mp.Stringify());
+			Log.Debug("Yodlee model is ready for marketplace {0}.", mp.Stringify());
 			LogElapsedTimes(mp.Id, mp.Customer.Id);
 			return model;
 		}

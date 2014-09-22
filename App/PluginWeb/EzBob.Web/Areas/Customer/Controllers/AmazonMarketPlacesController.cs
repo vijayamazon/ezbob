@@ -63,13 +63,13 @@
 		public AskvilleStatus Askville(int? customerMarketPlaceId, string merchantId, string marketplaceId,
 		                               string askvilleGuid = "")
 		{
-			var marketplace = _customerMarketPlaceRepository.GetAll().FirstOrDefault(x => x.Id == customerMarketPlaceId);
+			MP_CustomerMarketPlace marketplace = _customerMarketPlaceRepository.GetAll().FirstOrDefault(x => x.Id == customerMarketPlaceId);
 			if (marketplace == null)
 			{
 				throw new Exception(string.Format("Marketplace {0} does not found", customerMarketPlaceId));
 			}
 
-			var securityInfo = (AmazonSecurityInfo) RetrieveDataHelper.RetrieveCustomerSecurityInfo(marketplace.Id);
+			var securityInfo = (AmazonSecurityInfo)marketplace.GetRetrieveDataHelper().RetrieveCustomerSecurityInfo(marketplace.Id);
 
 			merchantId = merchantId ?? securityInfo.MerchantId;
 			marketplaceId = marketplaceId ?? securityInfo.MarketplaceId[0];
@@ -126,7 +126,7 @@
 		[Authorize]
 		public string IsAmazonUserCorrect(string amazonMerchantId)
 		{
-			return RetrieveDataHelper.IsAmazonUserCorrect(new AmazonUserInfo { MerchantId = amazonMerchantId }) ? "true" : "false";
+			return AmazonRateInfo.IsUserCorrect(new AmazonUserInfo { MerchantId = amazonMerchantId }) ? "true" : "false";
 		}
 
 		//-------------------------------------------------------

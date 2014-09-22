@@ -369,10 +369,6 @@
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Integration\EzBob\EzBob.csproj">
-      <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
-      <Name>EzBob</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Integration\FraudChecker\FraudChecker.csproj">
       <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>
       <Name>FraudChecker</Name>

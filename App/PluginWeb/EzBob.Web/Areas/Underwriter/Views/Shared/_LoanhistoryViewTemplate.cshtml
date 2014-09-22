@@ -1,5 +1,4 @@
-﻿@using EZBob.DatabaseLib
-@using EzBob.CommonLib
+﻿@using EZBob.DatabaseLib.Model.Database.Loans
 @using StructureMap
 @model dynamic
 
@@ -169,8 +168,7 @@
 
 @helper ManualPayment()
 {
-    var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-    List<string> paymentMethods = oDBHelper.LoanTransactionMethodRepository
+    List<string> paymentMethods = ObjectFactory.GetInstance<LoanTransactionMethodRepository>()
         .GetAll()
         .Where(x => x.DisplaySort > 0)
         .OrderBy(x => x.DisplaySort)

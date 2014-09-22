@@ -9,16 +9,16 @@ namespace EzBob.Models.Marketplaces.Builders
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Backend.Models;
+	using Ezbob.Logger;
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib;
 	using StructureMap;
-	using log4net;
 
 	public class MarketplaceModelBuilder : IMarketplaceModelBuilder
 	{
 		protected readonly ISession _session;
-		protected static readonly ILog Log = LogManager.GetLogger(typeof(MarketplaceModelBuilder));
+		protected static readonly ASafeLog Log = new SafeILog(typeof(MarketplaceModelBuilder));
 
 		public MarketplaceModelBuilder(ISession session)
 		{
@@ -53,7 +53,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				NegativeFeedbacks = 0,
 				NeutralFeedbacks = 0,
 				RaitingPercent = "-",
-				SellerInfoStoreURL = GetUrl(mp, RetrieveDataHelper.RetrieveCustomerSecurityInfo(mp.Id)),
+				SellerInfoStoreURL = GetUrl(mp, mp.GetRetrieveDataHelper().RetrieveCustomerSecurityInfo(mp.Id)),
 				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
 				UWPriority = mp.Marketplace.UWPriority,
 				Disabled = mp.Disabled,
@@ -112,20 +112,18 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		protected static List<IAnalysisDataParameterInfo> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp, DateTime? history)
 		{
-			var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+			var analisysFunction = mp.GetRetrieveDataHelper().GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 
 			List<IAnalysisDataParameterInfo> av = null;
-			try
-			{
+			try {
 				av = history.HasValue
 						 ? analisysFunction.Data.FirstOrDefault(
 							 x => x.Key == analisysFunction.Data.Where(pair => pair.Key.Date <= history.Value.Date).DefaultIfEmpty().Max(pair => pair.Key))
 										   .Value
 						 : analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 			}
-			catch
-			{
-				// Silently ignore for now.
+			catch (Exception e) {
+				Log.Debug(e, "Something went wrong while executing GetAnalysisFunctionValues(mp.Id = {0}, history = {1}), ignoring the exception.", mp.Id, history == null ? "-- null --" : history.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
 			}
 			return av;
 		}

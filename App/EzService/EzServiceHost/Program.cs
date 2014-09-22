@@ -8,11 +8,16 @@
 	using CompanyFiles;
 	using ConfigManager;
 	using EKM;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.AmazonLib;
 	using EzBob.Backend.Strategies.Misc;
+	using EzBob.CommonLib;
 	using EzBob.PayPal;
+	using EzBob.PayPalServiceLib.Common;
 	using EzBob.eBayLib;
 	using EzService;
 	using EzServiceAccessor;
@@ -31,7 +36,6 @@
 	using StructureMap.Pipeline;
 	using YodleeLib.connector;
 	using ISession = NHibernate.ISession;
-	using EzBob.Configuration;
 	using EzServiceConfigurationLoader;
 	using ActionResult = Ezbob.Database.ActionResult;
 
@@ -140,9 +144,16 @@
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 				x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>();
-			});
 
-			ObjectFactory.Configure(x => x.AddRegistry<EzBobRegistry>());
+				x.For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());
+				x.For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
+				x.For<IBugRepository>().Use<BugRepository>();
+				x.For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
+				x.For<IApprovalsWithoutAMLRepository>().Use<ApprovalsWithoutAMLRepository>();
+				x.For<ILoanRepository>().Use<LoanRepository>();
+				x.For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
+				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
+			});
 		} // constructor
 
 		#endregion constructor

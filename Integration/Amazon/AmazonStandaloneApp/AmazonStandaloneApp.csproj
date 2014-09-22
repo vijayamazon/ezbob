@@ -91,10 +91,6 @@
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EzBob\EzBob.csproj">
-      <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
-      <Name>EzBob</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AmazonLib\AmazonLib.csproj">
       <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
       <Name>AmazonLib</Name>

@@ -95,10 +95,6 @@
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EzBob\EzBob.csproj">
-      <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
-      <Name>EzBob</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PaymentServices\PaymentServices.csproj">
       <Project>{544a1fd5-76d3-4b73-97dd-0c7aa32f66c2}</Project>
       <Name>PaymentServices</Name>

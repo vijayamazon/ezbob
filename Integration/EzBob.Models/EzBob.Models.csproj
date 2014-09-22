@@ -147,6 +147,10 @@
       <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
       <Name>ConfigManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>
@@ -202,10 +206,6 @@
     <ProjectReference Include="..\ExperianLib\ExperianLib.csproj">
       <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
       <Name>ExperianLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EzBob\EzBob.csproj">
-      <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
-      <Name>EzBob</Name>
     </ProjectReference>
     <ProjectReference Include="..\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>

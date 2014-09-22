@@ -1,6 +1,7 @@
 namespace EZBob.DatabaseLib.Model.Database
 {
 	using System.Linq;
+	using Common;
 	using DatabaseWrapper;
 	using Marketplaces.Amazon;
 	using Marketplaces.FreeAgent;
@@ -169,5 +170,11 @@ namespace EZBob.DatabaseLib.Model.Database
 
 			return string.Format("{1} ({0} of type {2})", mp.Id, mp.DisplayName, mp.Marketplace == null ? "unknown" : mp.Marketplace.Name);
 		} // Stringify
+
+		public static IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(this MP_CustomerMarketPlace mp) {
+			return ObjectFactory
+				.GetNamedInstance<IMarketplaceType>(mp.Marketplace.Name)
+				.GetRetrieveDataHelper(ObjectFactory.GetInstance<DatabaseDataHelper>());
+		} // GetRetrieveDataHelper
 	} // class MP_CustomerMarketPlaceExt
 }

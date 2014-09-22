@@ -1,6 +1,7 @@
 namespace EzBob.Web.Infrastructure
 {
 	using Code.Bank;
+	using CommonLib;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -106,6 +107,9 @@ namespace EzBob.Web.Infrastructure
 			For<ISuggestedAmountRepository>().Use<SuggestedAmountRepository>();
 			For<IEzServiceAccessor>().Use<EzServiceAccessorLong>();
 			For<IExperianHistoryRepository>().Use<ExperianHistoryRepository>();
+
+			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
+			For<IBugRepository>().Use<BugRepository>();
 		}
 	}
 }

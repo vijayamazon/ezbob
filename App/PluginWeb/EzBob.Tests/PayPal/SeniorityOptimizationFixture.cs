@@ -4,7 +4,6 @@
 	using System.Diagnostics;
 	using EZBob.DatabaseLib.Model.Database;
 	using AmazonLib;
-	using Configuration;
 	using EzBob.PayPal;
 	using eBayLib;
 	using FreeAgent;
@@ -53,7 +52,6 @@
             NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
             //Scanner.Register();
-            ObjectFactory.Configure(x => x.AddRegistry<EzBobRegistry>());
             ObjectFactory.Configure(x => x.AddRegistry<EzBob.PayPal.PluginRegistry>());
 
             base.PreInit();
