@@ -22,7 +22,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
     {
         public FraudDetectionMap()
         {
-            Id(x => x.Id).GeneratedBy.HiLo("100");
+            Id(x => x.Id).GeneratedBy.HiLo("10000");
             References(x => x.CurrentCustomer, "CurrentCustomerId");
             References(x => x.InternalCustomer, "InternalCustomerId");
             References(x => x.ExternalUser, "ExternalUserId");
