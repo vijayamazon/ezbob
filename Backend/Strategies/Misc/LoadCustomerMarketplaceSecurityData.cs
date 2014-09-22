@@ -58,6 +58,7 @@
 			public int CustomerMarketplaceID { get; set; }
 			public string DisplayName { get; set; }
 			public string MarketplaceType { get; set; }
+			public DateTime? UpdatingStart { get; set; }
 			public byte[] SecurityData { get; set; }
 			public Guid InternalID { get; set; }
 		} // ResultRow

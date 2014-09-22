@@ -122,7 +122,10 @@
 
 			if ((oSecInfo.login == m_oCustomerData.Mail) && (oSecInfo.password == VendorInfo.TopSecret))
 			{
-				Result.HasUploadedHmrc = true;
+				if (hmrc.UpdatingStart.HasValue && hmrc.UpdatingStart.Value.AddDays(1) < DateTime.UtcNow)
+				{
+					Result.HasUploadedHmrc = true;
+				}
 				return;
 			}
 

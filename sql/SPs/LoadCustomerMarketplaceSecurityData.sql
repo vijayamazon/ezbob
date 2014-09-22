@@ -16,6 +16,7 @@ BEGIN
 	SELECT
 		m.Id AS CustomerMarketplaceID,
 		m.DisplayName,
+		m.UpdatingStart,
 		m.SecurityData,
 		mt.Name AS MarketplaceType,
 		mt.InternalId AS InternalID
