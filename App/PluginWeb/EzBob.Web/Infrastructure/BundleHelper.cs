@@ -155,8 +155,8 @@
 
 				//controls
 				.Add("~/Content/js/controls/ezbob.modal.js")
-				.Add("~/Content/js/controls/ezbob.jqmodal.coffee")
-				.Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
+				.Add("~/Content/js/controls/ezbob.jqmodal.js")
+				.Add("~/Content/js/controls/ezbob.BoundItemView.js")
 				.Add("~/Content/js/controls/captcha.js")
 				
 

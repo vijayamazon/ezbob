@@ -1,57 +1,38 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.BoundItemView = Backbone.Marionette.ItemView.extend({
+	events: {},
 
-  root.EzBob = root.EzBob || {};
+	initialize: function() {
+		this.events['click .btn-primary'] = 'save';
+		this.modelBinder = new Backbone.ModelBinder();
+		BoundItemView.__super__.initialize.call(this);
+	}, // initialize
 
-  EzBob.BoundItemView = (function(_super) {
+	onRender: function() {
+		this.modelBinder.bind(this.model, this.el, this.bindings);
+	}, // onRender
 
-    __extends(BoundItemView, _super);
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: false,
+			title: 'Bug Reporter',
+			position: 'center',
+			draggable: false,
+			dialogClass: 'bugs-popup',
+			width: 700,
+		};
+	}, // jqoptions
 
-    function BoundItemView() {
-      return BoundItemView.__super__.constructor.apply(this, arguments);
-    }
+	save: function() {
+		this.trigger('save');
 
-    BoundItemView.prototype.events = {};
+		if (this.onSave != null)
+			this.onSave();
+	}, // save
 
-    BoundItemView.prototype.initialize = function() {
-      this.events['click .btn-primary'] = 'save';
-      this.modelBinder = new Backbone.ModelBinder();
-      return BoundItemView.__super__.initialize.call(this);
-    };
-
-    BoundItemView.prototype.onRender = function() {
-      return this.modelBinder.bind(this.model, this.el, this.bindings);
-    };
-
-    BoundItemView.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: false,
-        title: "Bug Reporter",
-        position: "center",
-        draggable: false,
-        dialogClass: "bugs-popup",
-        width: 500
-      };
-    };
-
-    BoundItemView.prototype.save = function() {
-      this.trigger('save');
-      if (this.onSave != null) {
-        return this.onSave();
-      }
-    };
-
-    BoundItemView.prototype.onClose = function() {
-      return this.modelBinder.unbind();
-    };
-
-    return BoundItemView;
-
-  })(Backbone.Marionette.ItemView);
-
-}).call(this);
+	onClose: function() {
+		this.modelBinder.unbind();
+	}, // onClose
+}); // EzBob.BoundItemView

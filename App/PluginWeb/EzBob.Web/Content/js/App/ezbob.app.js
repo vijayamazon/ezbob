@@ -4,14 +4,13 @@ EzBob.Application = Backbone.Marionette.Application.extend({});
 
 EzBob.App = new EzBob.Application();
 
-if (EzBob.GA) {
+if (EzBob.GA)
 	EzBob.App.GA = new EzBob.GA();
-} // if
 
-	EzBob.App.addRegions({
-		modal: EzBob.ModalRegion,
-		jqmodal: EzBob.JqModalRegion
-	});
+EzBob.App.addRegions({
+	modal: EzBob.ModalRegion,
+	jqmodal: EzBob.JqModalRegion
+});
 
 EzBob.Config = {
 	CaptchaMode: 'off',

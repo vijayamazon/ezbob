@@ -732,6 +732,8 @@
     <Content Include="Areas\Underwriter\Views\Broker\BrokerWhiteLabel.cshtml" />
     <Content Include="Content\js\App\ezbob.bindings.js" />
     <Content Include="Content\js\App\ezbob.GA.js" />
+    <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
+    <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1052,12 +1054,6 @@
     <Content Include="Content\js\Broker\broker.submit.view.js" />
     <Content Include="Content\js\Broker\broker.instantoffer.view.js" />
     <Content Include="Content\js\Broker\broker.changepassword.view.js" />
-    <Content Include="Content\js\controls\ezbob.BoundItemView.min.js">
-      <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\controls\ezbob.jqmodal.min.js">
-      <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\controls\ezbob.LoanScheduleView.js" />
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
     <Content Include="Content\js\ezbob.cgvendors.js" />
@@ -1073,12 +1069,6 @@
     <Content Include="Content\js\ezbob.view.js" />
     <Content Include="Content\js\lib\Backbone.EzBob.js" />
     <Content Include="Content\js\controls\Captcha.js" />
-    <Content Include="Content\js\controls\ezbob.BoundItemView.js">
-      <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\controls\ezbob.jqmodal.js">
-      <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\controls\ezbob.livechat.livechatrouter.js" />
     <Content Include="Content\js\controls\ezbob.simpleValueEditDlg.js" />
     <Content Include="Content\js\ezbob.csrf.js" />
@@ -1565,7 +1555,6 @@
     <Content Include="Content\js\ezbob.strengthPassword.js" />
     <Content Include="Views\Shared\_FBSDK.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_DocsTemplate.cshtml" />
-    <Content Include="Content\js\controls\ezbob.jqmodal.coffee" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\_loan_editor.cshtml" />
     <Content Include="Areas\Customer\Views\Paypoint\ErrorOfferDate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Profile\_PayPointCardSelectViewTemplate.cshtml" />
@@ -1586,7 +1575,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\_CustomersPopupTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\EKMAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Consent\Agreed.cshtml" />
-    <Content Include="Content\js\controls\ezbob.BoundItemView.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\GetCashConfirmationView.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\ThankyouLoanView.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.paypointSchedule.js" />
