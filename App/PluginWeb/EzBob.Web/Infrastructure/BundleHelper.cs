@@ -161,7 +161,7 @@
 				
 
 				//login
-				.Add("~/Content/js/login/ezbob.restorePassword.coffee")
+				.Add("~/Content/js/login/ezbob.restorePassword.js")
 
 				//App
 				.Add("~/Content/js/App/ezbob.GA.js")
@@ -480,7 +480,7 @@
 
 		public static MvcHtmlString RenderLoginJs() {
 			return Bundle.JavaScript()
-				.Add("~/Content/js/login/ezbob.login.view.coffee")
+				.Add("~/Content/js/login/ezbob.login.view.js")
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderLoginJs
 

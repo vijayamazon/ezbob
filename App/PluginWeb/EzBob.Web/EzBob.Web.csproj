@@ -735,6 +735,8 @@
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\log.js" />
+    <Content Include="Content\js\login\ezbob.login.view.js" />
+    <Content Include="Content\js\login\ezbob.restorePassword.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1183,18 +1185,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\_FraudDetectionLog.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
     <Content Include="Content\js\login\ezbob.create.password.view.js" />
-    <Content Include="Content\js\login\ezbob.login.view.js">
-      <DependentUpon>ezbob.login.view.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\login\ezbob.login.view.min.js">
-      <DependentUpon>ezbob.login.view.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\login\ezbob.restorePassword.js">
-      <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\login\ezbob.restorePassword.min.js">
-      <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanModel.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanTopView.js">
       <DependentUpon>ApplyForLoanTopView.coffee</DependentUpon>
@@ -1424,7 +1414,6 @@
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Content\js\login\ezbob.login.view.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
@@ -1474,7 +1463,6 @@
     <Content Include="Areas\Underwriter\Views\CrossCheck\Zoopla.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />
-    <Content Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
     </Content>
@@ -2000,9 +1988,6 @@
     <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.coffee" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
-    <Content Include="Content\js\login\ezbob.login.view.min.js.map">
-      <DependentUpon>ezbob.login.view.js</DependentUpon>
-    </Content>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />

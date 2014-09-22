@@ -1,110 +1,94 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.CustomerLoginView = Backbone.View.extend({
+	initialize: function() {
+		return this.template = _.template($('#customerlogin-template').html());
+	}, // initialize
 
-  root.EzBob = root.EzBob || {};
+	events: {
+		'click :submit': 'submit',
+		'keyup input': 'inputChanged',
+		'change input': 'inputChanged',
+		'click.checks #RememberMe': 'rememberMeChanged'
+	}, // events
 
-  EzBob.CustomerLoginView = (function(_super) {
+	render: function() {
+		this.$el.html(this.template());
 
-    __extends(CustomerLoginView, _super);
+		this.form = this.$el.find('.simple-login');
 
-    function CustomerLoginView() {
-      return CustomerLoginView.__super__.constructor.apply(this, arguments);
-    }
+		this.validator = EzBob.validateLoginForm(this.form);
 
-    CustomerLoginView.prototype.initialize = function() {
-      return this.template = _.template($("#customerlogin-template").html());
-    };
+		this.$el.find('img[rel]').setPopover('left');
+		this.$el.find('li[rel]').setPopover('left');
 
-    CustomerLoginView.prototype.events = {
-      "click :submit": "submit",
-      "keyup input": "inputChanged",
-      "change input": "inputChanged",
-      "click.checks #RememberMe": "rememberMeChanged"
-    };
+		var oFieldStatusIcons = this.$el.find('IMG.field_status');
+		oFieldStatusIcons.filter('.required').field_status({ required: true });
+		oFieldStatusIcons.not('.required').field_status({ required: false });
 
-    CustomerLoginView.prototype.render = function() {
-      var oFieldStatusIcons;
-      this.$el.html(this.template());
-      this.form = this.$el.find(".simple-login");
-      this.validator = EzBob.validateLoginForm(this.form);
-      this.$el.find("img[rel]").setPopover("left");
-      this.$el.find("li[rel]").setPopover("left");
-      oFieldStatusIcons = this.$el.find('IMG.field_status');
-      oFieldStatusIcons.filter('.required').field_status({
-        required: true
-      });
-      oFieldStatusIcons.not('.required').field_status({
-        required: false
-      });
-      $('#Password').focus();
-      $('#UserName').focus();
-      EzBob.UiAction.registerView(this);
-      return this;
-    };
+		$('#Password').focus();
+		$('#UserName').focus();
 
-    CustomerLoginView.prototype.rememberMeChanged = function() {
-      var rememberMe;
-      rememberMe = this.$el.find("#RememberMe");
-      return rememberMe.val(rememberMe.is(':checked'));
-    };
+		EzBob.UiAction.registerView(this);
+		return this;
+	}, // render
 
-    CustomerLoginView.prototype.inputChanged = function() {
-      var enabled;
-      enabled = EzBob.Validation.checkForm(this.validator);
-      return $("#loginSubmit").toggleClass('disabled', !enabled);
-    };
+	rememberMeChanged: function() {
+		var rememberMe = this.$el.find('#RememberMe');
+		return rememberMe.val(rememberMe.is(':checked'));
+	}, // rememberMeChanged
 
-    CustomerLoginView.prototype.submit = function() {
-      var data, xhr,
-        _this = this;
-      if (this.$el.find(":submit").hasClass("disabled")) {
-        return false;
-      }
-      if (!EzBob.Validation.checkForm(this.validator)) {
-        return false;
-      }
-      this.blockBtn(true);
-      if (!EzBob.Validation.checkForm(this.validator)) {
-        this.blockBtn(false);
-        return false;
-      }
-      data = this.form.serialize();
-      console.log('data is', data);
-      xhr = $.post(this.form.attr("action"), data);
-      xhr.done(function(result, status) {
-        EzBob.ServerLog.debug('login request completed with status', status);
-        if (status === "success") {
-          if (result.success) {
-            if (result.broker) {
-              return document.location.href = "" + window.gRootPath + "Broker#login";
-            } else {
-              return document.location.href = "" + window.gRootPath + "Customer/Profile";
-            }
-          } else {
-            EzBob.App.trigger("error", result.errorMessage);
-            return _this.blockBtn(false);
-          }
-        } else {
-          if (result.errorMessage) {
-            EzBob.App.trigger("error", result.errorMessage);
-          }
-          return _this.blockBtn(false);
-        }
-      });
-      return false;
-    };
+	inputChanged: function() {
+		var enabled = EzBob.Validation.checkForm(this.validator);
+		return $('#loginSubmit').toggleClass('disabled', !enabled);
+	}, // inputChanged
 
-    CustomerLoginView.prototype.blockBtn = function(isBlock) {
-      BlockUi((isBlock ? "on" : "off"));
-      return this.$el.find(":submit").toggleClass("disabled", isBlock);
-    };
+	submit: function() {
+		if (this.$el.find(':submit').hasClass('disabled'))
+			return false;
 
-    return CustomerLoginView;
+		if (!EzBob.Validation.checkForm(this.validator))
+			return false;
 
-  })(Backbone.View);
+		this.blockBtn(true);
 
-}).call(this);
+		if (!EzBob.Validation.checkForm(this.validator)) {
+			this.blockBtn(false);
+			return false;
+		} // if
+
+		var self = this;
+		var data = this.form.serialize();
+		var xhr = $.post(this.form.attr('action'), data);
+
+		xhr.done(function(result, status) {
+			EzBob.ServerLog.debug('login request completed with status', status);
+
+			if (status === 'success') {
+				if (result.success) {
+					if (result.broker)
+						document.location.href = '' + window.gRootPath + 'Broker#login';
+					else
+						document.location.href = '' + window.gRootPath + 'Customer/Profile';
+				}
+				else {
+					EzBob.App.trigger('error', result.errorMessage);
+					self.blockBtn(false);
+				}
+			}
+			else {
+				if (result.errorMessage)
+					EzBob.App.trigger('error', result.errorMessage);
+
+				self.blockBtn(false);
+			}
+		});
+
+		return false;
+	}, // submit
+
+	blockBtn: function(isBlock) {
+		BlockUi((isBlock ? 'on' : 'off'));
+		this.$el.find(':submit').toggleClass('disabled', isBlock);
+	}, // blockBtn
+}); // EzBob.CustomerLoginView
