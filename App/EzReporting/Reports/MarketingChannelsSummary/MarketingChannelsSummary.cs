@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Linq;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -158,9 +159,19 @@
 				tbl.Columns.Add(oPropInfo.Name, oAttrList.Length > 0 ? typeof (string) : oPropInfo.PropertyType);
 			});
 
-			foreach (var pair in oData) {
-				ToRow(tbl, pair.Value);
-				oTotal.Add(pair.Value);
+			Source[] aryAllSources = Enum.GetValues(typeof (Source)).Cast<Source>().ToArray();
+			
+			Array.Sort(aryAllSources,
+				(a, b) => string.Compare(a.ToString(), b.ToString(), System.StringComparison.InvariantCultureIgnoreCase)
+			);
+
+			for (int i = 0; i < aryAllSources.Length; i++) {
+				Source nSource = (Source)aryAllSources.GetValue(i);
+
+				McsRow oRow = oData.ContainsKey(nSource) ? oData[nSource] : new McsRow { Source = nSource, };
+
+				ToRow(tbl, oRow);
+				oTotal.Add(oRow);
 			} // for each
 
 			ToRow(tbl, oTotal);
