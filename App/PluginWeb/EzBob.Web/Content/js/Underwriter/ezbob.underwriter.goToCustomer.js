@@ -1,144 +1,136 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.RecentCustomersModel = Backbone.Model.extend({
+	url: window.gRootPath + 'Underwriter/Customers/GetRecentCustomers',
+}); // EzBob.Underwriter.RecentCustomersModel
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
+	initialize: function() {
+		var self = this;
 
-  EzBob.Underwriter.RecentCustomersModel = (function(_super) {
+		Mousetrap.bind('ctrl+g', function() {
+			self.render();
+			return false;
+		});
 
-    __extends(RecentCustomersModel, _super);
+		this.on('NotFound', this.notFound);
+	}, // initialize
 
-    function RecentCustomersModel() {
-      return RecentCustomersModel.__super__.constructor.apply(this, arguments);
-    }
+	template: function() {
+		var recentCustomers = JSON.parse(localStorage.getItem('RecentCustomers'));
 
-    RecentCustomersModel.prototype.url = window.gRootPath + "Underwriter/Customers/GetRecentCustomers";
+		var allOptions = '';
 
-    return RecentCustomersModel;
+		for (var _i = 0, _len = recentCustomers.length; _i < _len; _i++) {
+			var customer = recentCustomers[_i];
+			allOptions += '<option value="' + customer.Item1 + '">' + customer.Item2 + '</option>';
+		} // for
 
-  })(Backbone.Model);
+		var el = $("<div id='go-to-template'/>").html(
+			"<input type=text class='goto-customerId form-control' autocomplete='off'/><br/>" +
+			"<label>Recent customers:</label>" +
+				"<select id='recentCustomers'class='selectheight form-control'>" + allOptions + "</select><br/>" +
+				"<div class='error-place' style='color:red'></div>"
+	   );
 
-  EzBob.Underwriter.goToCustomerId = (function(_super) {
+		$('body').append(el);
+		return el;
+	}, // template
 
-    __extends(goToCustomerId, _super);
+	ui: {
+		'input': '.goto-customerId',
+		'select': '#recentCustomers',
+		'template': '#go-to-template',
+		'errorPlace': '.error-place'
+	}, // ui
 
-    function goToCustomerId() {
-      return goToCustomerId.__super__.constructor.apply(this, arguments);
-    }
+	onRender: function() {
+		var self = this;
 
-    goToCustomerId.prototype.initialize = function() {
-      var _this = this;
-      Mousetrap.bind("ctrl+g", function() {
-        _this.render();
-        return false;
-      });
-      return this.on("NotFound", this.notFound);
-    };
+		this.dialog = EzBob.ShowMessage(this.ui.template, 'Customer ID?', (function() {
+			return self.okTrigger();
+		}), 'OK', null, 'Cancel');
 
-    goToCustomerId.prototype.template = function() {
-      var allOptions, customer, el, recentCustomers, _i, _len;
-      recentCustomers = JSON.parse(localStorage.getItem('RecentCustomers'));
-      allOptions = '';
-      for (_i = 0, _len = recentCustomers.length; _i < _len; _i++) {
-        customer = recentCustomers[_i];
-        allOptions += '<option value="' + customer.Item1 + '">' + customer.Item2 + '</option>';
-      }
-      el = $("<div id='go-to-template'/>").html("            <input type='text' class='goto-customerId form-control' autocomplete='off'/>            <br/>            <label>Recent customers:</label>            <select id='recentCustomers'class='selectheight form-control'>" + allOptions + "</select>            <br/>            <div class='error-place' style='color:red'></div>");
-      $('body').append(el);
-      return el;
-    };
+		this.ui.input.on('keydown', function(e) {
+			return self.keydowned(e);
+		});
 
-    goToCustomerId.prototype.ui = {
-      "input": ".goto-customerId",
-      "select": "#recentCustomers",
-      "template": "#go-to-template",
-      "errorPlace": ".error-place"
-    };
+		this.okBtn = $('.ok-button');
 
-    goToCustomerId.prototype.onRender = function() {
-      var _this = this;
-      this.dialog = EzBob.ShowMessage(this.ui.template, "Customer ID?", (function() {
-        return _this.okTrigger();
-      }), "OK", null, "Cancel");
-      this.ui.input.on("keydown", function(e) {
-        return _this.keydowned(e);
-      });
-      this.okBtn = $(".ok-button");
-      return this.ui.input.autocomplete({
-        source: "" + gRootPath + "Underwriter/Customers/FindCustomer",
-        autoFocus: false,
-        minLength: 3,
-        delay: 500
-      });
-    };
+		this.ui.input.autocomplete({
+			source: '' + window.gRootPath + 'Underwriter/Customers/FindCustomer',
+			autoFocus: false,
+			minLength: 3,
+			delay: 500
+		});
+	}, // onRender
 
-    goToCustomerId.prototype.okTrigger = function() {
-      var selectVal, val;
-      val = this.ui.input.val();
-      if (!IsInt(val, true)) {
-        val = val.substring(0, val.indexOf(','));
-      }
-      if (!IsInt(val, true)) {
-        selectVal = this.ui.select.val();
-        if (!IsInt(selectVal, true)) {
-          this.addError("Incorrect input");
-          return false;
-        }
-        val = selectVal;
-      }
-      this.checkCustomer(val);
-      return false;
-    };
+	okTrigger: function() {
+		var val = this.ui.input.val();
 
-    goToCustomerId.prototype.keydowned = function(e) {
-      this.addError("");
-      if (this.okBtn.attr("disabled") === "disabled") {
-        return;
-      }
-      if ($('.ui-autocomplete:visible').length !== 0) {
-        return;
-      }
-      if (e.keyCode === 13) {
-        return this.okTrigger();
-      }
-    };
+		if (!IsInt(val, true))
+			val = val.substring(0, val.indexOf(','));
 
-    goToCustomerId.prototype.addError = function(val) {
-      return this.ui.errorPlace.text(val);
-    };
+		if (!IsInt(val, true)) {
+			var selectVal = this.ui.select.val();
 
-    goToCustomerId.prototype.checkCustomer = function(id) {
-      var xhr,
-        _this = this;
-      this.okBtn.attr("disabled", "disabled");
-      xhr = $.get("" + window.gRootPath + "Underwriter/Customers/CheckCustomer?customerId=" + id);
-      xhr.done(function(res) {
-        switch (res.State) {
-          case "NotFound":
-            _this.addError("Customer id. #" + id + " was not found");
-            break;
-          case "NotSuccesfullyRegistred":
-            _this.trigger("ok", id);
-            _this.dialog.dialog("close");
-            break;
-          case "Ok":
-            _this.trigger("ok", id);
-            _this.dialog.dialog("close");
-            break;
-        }
-      });
-      return xhr.complete(function() {
-        return _this.okBtn.removeAttr("disabled");
-      });
-    };
+			if (!IsInt(selectVal, true)) {
+				this.addError("Incorrect input");
+				return false;
+			} // if
+			val = selectVal;
+		} // if
 
-    return goToCustomerId;
+		this.checkCustomer(val);
+		return false;
+	}, // okTrigger
 
-  })(Backbone.Marionette.ItemView);
+	keydowned: function(e) {
+		this.addError('');
 
-}).call(this);
+		if (this.okBtn.attr('disabled') === 'disabled')
+			return;
+
+		if ($('.ui-autocomplete:visible').length !== 0)
+			return;
+
+		if (e.keyCode === 13)
+			this.okTrigger();
+	}, // keydowned
+
+	addError: function(val) {
+		this.ui.errorPlace.text(val);
+	}, // addError
+
+	checkCustomer: function(id) {
+		this.okBtn.attr('disabled', 'disabled');
+
+		var self = this;
+
+		var xhr = $.get('' + window.gRootPath + 'Underwriter/Customers/CheckCustomer?customerId=' + id);
+
+		xhr.done(function(res) {
+			switch (res.State) {
+				case 'NotFound':
+					self.addError('Customer id. #' + id + ' was not found');
+					break;
+
+				case 'NotSuccesfullyRegistred':
+					self.trigger('ok', id);
+					self.dialog.dialog('close');
+					break;
+
+				case 'Ok':
+					self.trigger('ok', id);
+					self.dialog.dialog('close');
+					break;
+			} // switch
+		});
+
+		xhr.complete(function() {
+			self.okBtn.removeAttr('disabled');
+		});
+	}, // checkCustomer
+}); // EzBob.Underwriter.goToCustomerId

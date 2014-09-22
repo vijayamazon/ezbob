@@ -737,6 +737,7 @@
     <Content Include="Content\js\lib\log.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1223,12 +1224,6 @@
       <DependentUpon>editLoanView.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\ezbob.underwriter.app.js" />
-    <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js">
-      <DependentUpon>ezbob.underwriter.goToCustomer.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.min.js">
-      <DependentUpon>ezbob.underwriter.goToCustomer.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js">
       <DependentUpon>ezbob.underwriter.fraud.coffee</DependentUpon>
     </Content>
@@ -1956,7 +1951,6 @@
     <Content Include="Content\js\Underwriter\editLoan\editFee.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.coffee" />
-    <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.coffee" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.coffee" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.coffee" />
