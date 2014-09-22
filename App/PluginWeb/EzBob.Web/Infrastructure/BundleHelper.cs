@@ -247,7 +247,7 @@
 
 				//Underwriter
 				.Add("~/Content/js/underwriter/ezbob.underwriter.app.js")
-				.Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
+				.Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.js")
 				.Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.js")
 
 				//Support

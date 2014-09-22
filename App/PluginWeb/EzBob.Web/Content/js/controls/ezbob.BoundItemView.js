@@ -6,7 +6,6 @@ EzBob.BoundItemView = Backbone.Marionette.ItemView.extend({
 	initialize: function() {
 		this.events['click .btn-primary'] = 'save';
 		this.modelBinder = new Backbone.ModelBinder();
-		BoundItemView.__super__.initialize.call(this);
 	}, // initialize
 
 	onRender: function() {

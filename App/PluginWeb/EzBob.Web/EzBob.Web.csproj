@@ -737,6 +737,7 @@
     <Content Include="Content\js\lib\log.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
+    <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
@@ -1206,9 +1207,6 @@
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js" />
     <Content Include="Content\js\Profile\PayEarly\MakeEarlyPaymentView.js" />
     <Content Include="Content\js\Underwriter\broker\ezbob.underwriter.broker.whitelabel.js" />
-    <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.js">
-      <DependentUpon>ezbob.underwriter.bugs.reporter.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.min.js">
       <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
     </Content>
@@ -1936,7 +1934,6 @@
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.payPalAccountDetails.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.coffee" />
-    <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.coffee" />
