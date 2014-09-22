@@ -416,7 +416,8 @@
 			}
 			else
 			{
-				Results.NetWorthGrade = 3;
+				// We know that we sometimes miss mortgages the customer has, so instead of grade=3 we give 1
+				Results.NetWorthGrade = 1;
 			}
 		}
 
