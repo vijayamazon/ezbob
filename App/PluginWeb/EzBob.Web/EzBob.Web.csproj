@@ -730,6 +730,8 @@
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\SendSms.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\InstantOffer.cshtml" />
     <Content Include="Areas\Underwriter\Views\Broker\BrokerWhiteLabel.cshtml" />
+    <Content Include="Content\js\App\ezbob.bindings.js" />
+    <Content Include="Content\js\App\ezbob.GA.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1034,16 +1036,7 @@
     <Content Include="Content\img\what-ezbob-overview.png" />
     <Content Include="Content\img\yahoonews.png" />
     <Content Include="Content\img\your-profile-picture.jpg" />
-    <Content Include="Content\js\App\ezbob.bindings.js">
-      <DependentUpon>ezbob.bindings.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\App\ezbob.clicktale.js" />
-    <Content Include="Content\js\App\ezbob.GA.js">
-      <DependentUpon>ezbob.GA.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\App\ezbob.GA.min.js">
-      <DependentUpon>ezbob.GA.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\App\ezbob.validation.js" />
     <Content Include="Content\js\Broker\broker.addcustomer.view.js" />
     <Content Include="Content\js\Broker\broker.base.view.js" />
@@ -1573,8 +1566,6 @@
     <Content Include="Views\Shared\_FBSDK.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_DocsTemplate.cshtml" />
     <Content Include="Content\js\controls\ezbob.jqmodal.coffee" />
-    <Content Include="Content\js\App\ezbob.GA.coffee" />
-    <Content Include="Content\js\App\ezbob.bindings.coffee" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\_loan_editor.cshtml" />
     <Content Include="Areas\Customer\Views\Paypoint\ErrorOfferDate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Profile\_PayPointCardSelectViewTemplate.cshtml" />

@@ -164,10 +164,10 @@
 				.Add("~/Content/js/login/ezbob.restorePassword.coffee")
 
 				//App
-				.Add("~/Content/js/App/ezbob.GA.coffee")
+				.Add("~/Content/js/App/ezbob.GA.js")
 				.Add("~/Content/js/App/ezbob.app.js")
 				.Add("~/Content/js/App/ezbob.clicktale.js")
-				.Add("~/Content/js/App/ezbob.bindings.coffee")
+				.Add("~/Content/js/App/ezbob.bindings.js")
 				.Add("~/Content/js/App/ezbob.validation.js")
 
 				.Add("~/Content/js/controls/ezbob.notifications.js")

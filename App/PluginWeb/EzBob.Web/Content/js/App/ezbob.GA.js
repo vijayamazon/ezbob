@@ -1,24 +1,18 @@
-(function() {
-  var root;
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.GA = (function() {
+	function GA() { }
 
-  root.EzBob = root.EzBob || {};
+	GA.prototype.trackPage = function(url) {
+		if ((typeof _gaq !== "undefined" && _gaq !== null))
+			_gaq.push(['_trackPageview', url]);
+		else if ((typeof ga !== "undefined" && ga !== null)) {
+			ga('create', 'UA-32583191-1', 'auto');
+			ga('send', 'pageview', url);
+		}
+		else
+			console.log('Track PageView: %s', url);
+	};
 
-  EzBob.GA = (function() {
-
-    function GA() {}
-
-    GA.prototype.trackPage = function(url) {
-      if ((typeof _gaq !== "undefined" && _gaq !== null)) {
-        return _gaq.push(['_trackPageview', url]);
-      } else {
-        return console.log('Track PageView: %s', url);
-      }
-    };
-
-    return GA;
-
-  })();
-
-}).call(this);
+	return GA;
+})();
