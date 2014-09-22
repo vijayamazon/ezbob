@@ -5,7 +5,7 @@
 		public static Source GetSourceBySourceRef(string sourceRef, string googleCookie = null) {
 			sourceRef = (sourceRef ?? string.Empty).ToLowerInvariant().Trim();
 			
-			if (sourceRef.StartsWith("bros-HS"))
+			if (sourceRef.StartsWith("bros-hs"))
 				return Source.PpcPromotion;
 
 			if (sourceRef.StartsWith("adroll"))
@@ -82,7 +82,7 @@
 		public static Source GetSourceByAnalytics(string analytics) {
 			analytics = analytics ?? string.Empty;
 
-			if (analytics.StartsWith("bros-HS"))
+			if (analytics.StartsWith("bros-hs"))
 				return Source.PpcPromotion;
 
 			if (analytics.Equals("(direct) / (none)"))
