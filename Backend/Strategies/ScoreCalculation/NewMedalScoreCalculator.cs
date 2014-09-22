@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.ScoreCalculation
 {
 	using System.Data;
-	using System.Text.RegularExpressions;
 	using Experian;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -245,7 +244,7 @@
 			int businessSeniorityMinGrade = 0;
 			int consumerScoreMinGrade = 0;
 			int netWorthMinGrade = 0;
-			int maritalStatusMinGrade = 0;
+			int maritalStatusMinGrade = 2;
 			int ezbobSeniorityMinGrade = 0;
 			int numOfLoansMinGrade = 1;
 			int numOfLateRepaymentsMinGrade = 0;
@@ -386,17 +385,13 @@
 			{
 				Results.MaritalStatusGrade = 4;
 			}
-			else if (Results.MaritalStatus == MaritalStatus.Divorced)
+			else if (Results.MaritalStatus == MaritalStatus.Divorced || Results.MaritalStatus == MaritalStatus.LivingTogether)
 			{
 				Results.MaritalStatusGrade = 3;
 			}
-			else if (Results.MaritalStatus == MaritalStatus.Single)
+			else // Single, Separated, Other
 			{
 				Results.MaritalStatusGrade = 2;
-			}
-			else
-			{
-				Results.MaritalStatusGrade = 0;
 			}
 		}
 

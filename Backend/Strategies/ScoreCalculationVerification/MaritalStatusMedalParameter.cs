@@ -10,7 +10,7 @@
 		{
 			Weight = 5;
 			IsWeightFixed = false;
-			MinGrade = 0;
+			MinGrade = 2;
 			MaxGrade = 4;
 
 			MaritalStatus = maritalStatus;
@@ -22,17 +22,13 @@
 			{
 				Grade = 4;
 			}
-			else if (MaritalStatus == MaritalStatus.Divorced)
+			else if (MaritalStatus == MaritalStatus.Divorced || MaritalStatus == MaritalStatus.LivingTogether)
 			{
 				Grade = 3;
 			}
-			else if (MaritalStatus == MaritalStatus.Single)
+			else // Single, Separated, Other
 			{
 				Grade = 2;
-			}
-			else // LivingTogether, Separated, Other
-			{
-				Grade = 0;
 			}
 		}
 	}
