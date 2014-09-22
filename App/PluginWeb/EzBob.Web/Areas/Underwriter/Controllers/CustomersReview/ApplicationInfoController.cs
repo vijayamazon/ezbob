@@ -43,6 +43,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
+		private readonly LoanScheduleRepository loanScheduleRepository;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ApplicationInfoController));
 
@@ -61,7 +62,8 @@
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
-			CustomerPhoneRepository customerPhoneRepository)
+			CustomerPhoneRepository customerPhoneRepository,
+			LoanScheduleRepository loanScheduleRepository)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -79,6 +81,7 @@
 			_suggestedAmountRepository = suggestedAmountRepository;
 			serviceClient = new ServiceClient();
 			this.customerPhoneRepository = customerPhoneRepository;
+			this.loanScheduleRepository = loanScheduleRepository;
 		}
 
 		[Ajax]
@@ -649,6 +652,7 @@
 					if (dayAfterScheduleDate < DateTime.UtcNow)
 					{
 						loanSchedule.CustomInstallmentDate = dayAfterScheduleDate.Date;
+						loanScheduleRepository.Save(loanSchedule);
 					}
 				}
 
