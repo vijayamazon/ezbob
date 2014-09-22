@@ -1,302 +1,259 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.CAIS = EzBob.Underwriter.CAIS || {};
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+EzBob.Underwriter.CAIS.ListOfFilesModel = Backbone.Model.extend({
+	url: gRootPath + 'Underwriter/CAIS/ListOfFiles',
 
-  EzBob.Underwriter.CAIS = EzBob.Underwriter.CAIS || {};
+	'default': {
+		cais: {}
+	}, // default
 
-  EzBob.Underwriter.CAIS.ListOfFilesModel = (function(_super) {
+	initialize: function() {
+		var self = this;
 
-    __extends(ListOfFilesModel, _super);
+		var interval = setInterval(function() { return self.fetch(); }, 2000);
 
-    function ListOfFilesModel() {
-      return ListOfFilesModel.__super__.constructor.apply(this, arguments);
-    }
+		this.set('interval', interval);
+	}, // initialize
 
-    ListOfFilesModel.prototype.url = "" + gRootPath + "Underwriter/CAIS/ListOfFiles";
+}); // EzBob.Underwriter.CAIS.ListOfFilesModel
 
-    ListOfFilesModel.prototype["default"] = {
-      cais: {}
-    };
+EzBob.Underwriter.CAIS.SelectedFile = Backbone.Model.extend({
+	'default': { id: '', },
+});  // EzBob.Underwriter.CAIS.SelectedFile
 
-    ListOfFilesModel.prototype.initialize = function() {
-      var interval,
-        _this = this;
-      interval = setInterval((function() {
-        return _this.fetch();
-      }), 2000);
-      return this.set("interval", interval);
-    };
+EzBob.Underwriter.CAIS.SelectedFiles = Backbone.Collection.extend({
+	model: EzBob.Underwriter.CAIS.SelectedFile,
 
-    return ListOfFilesModel;
+	getModelById: function(id) {
+		return this.filter(function(val) {
+			return val.get('id') === id;
+		});
+	}, // getModelById
+}); // EzBob.Underwriter.CAIS.SelectedFiles
 
-  })(Backbone.Model);
+EzBob.Underwriter.CAIS.CaisManageView = Backbone.Marionette.ItemView.extend({
+	template: _.template($('#cais-template').length > 0 ? $('#cais-template').html() : ''),
 
-  EzBob.Underwriter.CAIS.SelectedFile = (function(_super) {
+	initialize: function() {
+		this.model = new EzBob.Underwriter.CAIS.ListOfFilesModel();
+		this.bindTo(this.model, 'change reset', this.render, this);
 
-    __extends(SelectedFile, _super);
+		BlockUi('on');
 
-    function SelectedFile() {
-      return SelectedFile.__super__.constructor.apply(this, arguments);
-    }
+		this.model.fetch().done(function() {
+			return BlockUi('off');
+		});
 
-    SelectedFile.prototype["default"] = {
-      id: ""
-    };
+		this.checkedModel = new EzBob.Underwriter.CAIS.SelectedFiles();
 
-    return SelectedFile;
+		this.bindTo(this.checkedModel, 'add remove reset', this.checkedFileModelChanged, this);
+	}, // initialize
 
-  })(Backbone.Model);
+	ui: {
+		count: '.reports-count',
+		download: '.download',
+	}, // ui
 
-  EzBob.Underwriter.CAIS.SelectedFiles = (function(_super) {
+	onRender: function() {
+		this.checkedFileModelChanged();
+	}, // onRender
 
-    __extends(SelectedFiles, _super);
+	serializeData: function() {
+		return {
+			model: this.model.get('cais'),
+			checkedModel: this.checkedModel.toJSON(),
+		};
+	}, // serializeData
 
-    function SelectedFiles() {
-      return SelectedFiles.__super__.constructor.apply(this, arguments);
-    }
+	checkedFileModelChanged: function() {
+		if (this.checkedModel.length === 0)
+			this.ui.download.hide();
+		else {
+			this.ui.download.show();
+			this.ui.count.text(this.checkedModel.length);
+		} // if
+	}, // checkedFileModelChanged
 
-    SelectedFiles.prototype.model = EzBob.Underwriter.CAIS.SelectedFile;
+	events: {
+		'click .generate': 'generateClicked',
+		'click .download ': 'downloadFile',
+		'dblclick [data-id]': 'fileSelected',
+		'click [data-id]': 'fileChecked'
+	}, // events
 
-    SelectedFiles.prototype.getModelById = function(id) {
-      return this.filter(function(val) {
-        return val.get("id") === id;
-      });
-    };
+	downloadFile: function() {
+		_.each(this.checkedModel.toJSON(), function(val) {
+			window.open('' + window.gRootPath + 'Underwriter/CAIS/DownloadFile?Id=' + val.id, '_blank');
+		});
+	}, // downloadFile
 
-    return SelectedFiles;
+	fileViewChanged: function(e) {
+		var $el = $(e.currentTarget);
+		$('.save-change').removeClass('disabled');
+		$el.css('border', '1px solid lightgreen');
+	}, // fileViewChanged
 
-  })(Backbone.Collection);
+	resetFileView: function() {
+		$('textarea').css('border', '1px solid #cccccc');
+		$('.save-change').addClass('disabled');
+	}, // resetFileView
 
-  EzBob.Underwriter.CAIS.CaisManageView = (function(_super) {
+	fileChecked: function(e) {
+		if (_.keys($(e.target).data()).length > 0)
+			return;
 
-    __extends(CaisManageView, _super);
+		var $el = $(e.currentTarget);
+		var checked = $el.hasClass('checked');
+		var id = $el.data('id');
 
-    function CaisManageView() {
-      return CaisManageView.__super__.constructor.apply(this, arguments);
-    }
+		$el.toggleClass('checked', !checked);
 
-    CaisManageView.prototype.template = _.template($("#cais-template").length > 0 ? $("#cais-template").html() : "");
+		if (!checked)
+			this.checkedModel.add(new EzBob.Underwriter.CAIS.SelectedFile({ id: id }));
+		else
+			this.checkedModel.remove(this.checkedModel.getModelById(id));
+	}, // fileChecked
 
-    CaisManageView.prototype.initialize = function() {
-      var _this = this;
-      this.model = new EzBob.Underwriter.CAIS.ListOfFilesModel();
-      this.bindTo(this.model, "change reset", this.render, this);
-      BlockUi("on");
-      this.model.fetch().done(function() {
-        return BlockUi("off");
-      });
-      this.checkedModel = new EzBob.Underwriter.CAIS.SelectedFiles();
-      return this.bindTo(this.checkedModel, "add remove reset", this.checkedFileModelChanged, this);
-    };
+	generateClicked: function(e) {
+		var $el = $(e.currentTarget);
 
-    CaisManageView.prototype.ui = {
-      count: ".reports-count",
-      download: ".download"
-    };
+		if ($el.hasClass("disabled"))
+			return;
 
-    CaisManageView.prototype.onRender = function() {
-      return this.checkedFileModelChanged();
-    };
+		$el.addClass("disabled");
 
-    CaisManageView.prototype.serializeData = function() {
-      return {
-        model: this.model.get("cais"),
-        checkedModel: this.checkedModel.toJSON()
-      };
-    };
+		$.post(window.gRootPath + 'Underwriter/CAIS/Generate').done(function(response) {
+			if (response.error !== void 0) {
+				EzBob.ShowMessage('Something went wrong', 'Error occured');
+				return;
+			} // if
+			EzBob.ShowMessage('Generating current CAIS reports. Please wait few minutes.', 'Successful');
+		}).always(function() {
+			$el.removeClass('disabled');
+		});
+	}, // generateClicked
 
-    CaisManageView.prototype.checkedFileModelChanged = function() {
-      if (this.checkedModel.length === 0) {
-        return this.ui.download.hide();
-      } else {
-        this.ui.download.show();
-        return this.ui.count.text(this.checkedModel.length);
-      }
-    };
+	fileSelected: function(e) {
+		var self = this;
+		var $el = $(e.currentTarget);
+		var id = $el.data('id');
 
-    CaisManageView.prototype.events = {
-      "click .generate": "generateClicked",
-      "click .download ": "downloadFile",
-      "dblclick [data-id]": "fileSelected",
-      "click [data-id]": "fileChecked"
-    };
+		BlockUi('on');
 
-    CaisManageView.prototype.downloadFile = function() {
-      return _.each(this.checkedModel.toJSON(), function(val) {
-        return window.open("" + gRootPath + "Underwriter/CAIS/DownloadFile?Id=" + val.id, "_blank");
-      });
-    };
+		$.get('' + window.gRootPath + 'Underwriter/CAIS/GetOneFile', {
+			id: id
+		}).done(function(response) {
+			if (response.error) {
+				EzBob.ShowMessage(response.error, 'Error');
+				return;
+			} // if
 
-    CaisManageView.prototype.fileViewChanged = function(e) {
-      var $el;
-      $el = $(e.currentTarget);
-      ($(".save-change")).removeClass("disabled");
-      return $el.css("border", "1px solid lightgreen");
-    };
+			var dialog = $('<div/>').html("<textarea wrap='off' class='cais-file-view'>" + response + "</textarea>");
 
-    CaisManageView.prototype.resetFileView = function() {
-      ($("textarea")).css("border", "1px solid #cccccc");
-      return ($(".save-change")).addClass("disabled");
-    };
+			dialog.dialog({
+				title: id,
+				width: '75%',
+				height: 600,
+				modal: true,
+				draggable: false,
+				resizable: false,
+				buttons: [
+					{
+						text: 'Save file changes',
+						click: function(evt) { self.saveFileChange(evt); },
+						'class': 'btn btn-primary save-change disabled',
+						'data-id': id
+					}, {
+						html: "<i class='fa fa-refresh'></i>Set Status Uploaded",
+						click: function(evt) { self.fileUploaded(evt); },
+						'class': 'btn btn-primary save-change',
+						'data-id': id
+					}, {
+						text: 'Close',
+						click: function() { dialog.dialog('destroy'); },
+						'class': 'btn btn-primary'
+					}
+				]
+			});
 
-    CaisManageView.prototype.fileChecked = function(e) {
-      var $el, checked, id;
-      if (_.keys($(e.target).data()).length > 0) {
-        return;
-      }
-      $el = $(e.currentTarget);
-      checked = $el.hasClass("checked");
-      id = $el.data("id");
-      $el.toggleClass("checked", !checked);
-      if (!checked) {
-        return this.checkedModel.add(new EzBob.Underwriter.CAIS.SelectedFile({
-          id: id
-        }));
-      } else {
-        return this.checkedModel.remove(this.checkedModel.getModelById(id));
-      }
-    };
+			dialog.find('.cais-file-view').on('keypress keyup keydown', self.fileViewChanged);
+		}).always(function() {
+			BlockUi('off');
+		});
+	}, // fileSelected
 
-    CaisManageView.prototype.generateClicked = function(e) {
-      var $el;
-      $el = $(e.currentTarget);
-      if ($el.hasClass("disabled")) {
-        return;
-      }
-      $el.addClass("disabled");
-      return $.post(gRootPath + 'Underwriter/CAIS/Generate').done(function(response) {
-        if (response.error !== void 0) {
-          EzBob.ShowMessage("Something went wrong", "Error occured");
-          return;
-        }
-        return EzBob.ShowMessage("Generating current CAIS reports. Please wait few minutes.", "Successful");
-      }).always(function() {
-        return $el.removeClass("disabled");
-      });
-    };
+	fileUploaded: function(e) {
+		var self = this;
+		var $el = $(e.currentTarget);
+		var id = $el.data('id');
 
-    CaisManageView.prototype.fileSelected = function(e) {
-      var $el, id, self,
-        _this = this;
-      self = this;
-      $el = $(e.currentTarget);
-      id = $el.data("id");
-      BlockUi("on");
-      return ($.get("" + gRootPath + "Underwriter/CAIS/GetOneFile", {
-        id: id
-      })).done(function(response) {
-        var dialog;
-        if (response.error) {
-          EzBob.ShowMessage(response.error, "Error");
-          return;
-        }
-        dialog = $('<div/>').html("<textarea wrap='off' class='cais-file-view'>" + response + "</textarea>");
-        dialog.dialog({
-          title: id,
-          width: '75%',
-          height: 600,
-          modal: true,
-          draggable: false,
-          resizable: false,
-          buttons: [
-            {
-              text: "Save file changes",
-              click: function(e) {
-                return self.saveFileChange(e);
-              },
-              "class": 'btn btn-primary save-change disabled',
-              'data-id': id
-            }, {
-              html: "<i class='fa fa-refresh'></i>Set Status Uploaded",
-              click: function(e) {
-                return self.fileUploaded(e);
-              },
-              "class": 'btn btn-primary save-change',
-              'data-id': id
-            }, {
-              text: "Close",
-              click: function() {
-                return dialog.dialog('destroy');
-              },
-              "class": 'btn btn-primary'
-            }
-          ]
-        });
-        return (dialog.find(".cais-file-view")).on("keypress keyup keydown", _this.fileViewChanged);
-      }).always(function() {
-        return BlockUi("off");
-      });
-    };
+		BlockUi('on');
 
-    CaisManageView.prototype.fileUploaded = function(e) {
-      var $el, id, self, xhr;
-      self = this;
-      $el = $(e.currentTarget);
-      id = $el.data("id");
-      BlockUi("on");
-      xhr = $.post("" + gRootPath + "CAIS/UpdateStatus", {
-        id: id
-      });
-      xhr.done(function(response) {
-        if (response.error) {
-          EzBob.ShowMessage(response.error, "Something went wrong");
-          return false;
-        }
-        EzBob.ShowMessage("Status Updated ", "Successful");
-        return self.resetFileView();
-      });
-      xhr.fail(function() {
-        return EzBob.ShowMessage("Error occured", "Something went wrong");
-      });
-      return xhr.always(function() {
-        return BlockUi("off");
-      });
-    };
+		var xhr = $.post('' + window.gRootPath + 'CAIS/UpdateStatus', {
+			id: id
+		});
 
-    CaisManageView.prototype.saveFileChange = function(e) {
-      var $caisTextarea, $el, caisContent, id, saveFn, self;
-      self = this;
-      $el = $(e.currentTarget);
-      if ($el.hasClass("disabled")) {
-        return;
-      }
-      $caisTextarea = $("textarea:visible");
-      caisContent = $caisTextarea.val();
-      id = $el.data("id");
-      saveFn = function() {
-        var xhr;
-        BlockUi("on");
-        xhr = $.post("" + gRootPath + "CAIS/SaveFileChange", {
-          fileContent: caisContent,
-          id: id
-        });
-        xhr.done(function(response) {
-          if (response.error) {
-            EzBob.ShowMessage(response.error, "Something went wrong");
-            return false;
-          }
-          EzBob.ShowMessage("File #" + id + " successfully saved ", "Successful");
-          return self.resetFileView();
-        });
-        xhr.fail(function() {
-          return EzBob.ShowMessage("Error occured", "Something went wrong");
-        });
-        return xhr.always(function() {
-          return BlockUi("off");
-        });
-      };
-      return EzBob.ShowMessage("Are you sure you want to save the change?", "Confirmation", saveFn, "Save", null, "Cancel");
-    };
+		xhr.done(function(response) {
+			if (response.error) {
+				EzBob.ShowMessage(response.error, 'Something went wrong');
+				return;
+			} // if
 
-    return CaisManageView;
+			EzBob.ShowMessage('Status Updated ', 'Successful');
+			self.resetFileView();
+		});
 
-  })(Backbone.Marionette.ItemView);
+		xhr.fail(function() {
+			EzBob.ShowMessage('Error occured', 'Something went wrong');
+		});
 
-}).call(this);
+		xhr.always(function() {
+			BlockUi('off');
+		});
+	}, // fileUploaded
+
+	saveFileChange: function(e) {
+		var self = this;
+		var $el = $(e.currentTarget);
+
+		if ($el.hasClass("disabled"))
+			return;
+
+		var $caisTextarea = $("textarea:visible");
+		var caisContent = $caisTextarea.val();
+		var id = $el.data("id");
+
+		var saveFn = function() {
+			BlockUi('on');
+
+			var xhr = $.post('' + window.gRootPath + 'CAIS/SaveFileChange', {
+				fileContent: caisContent,
+				id: id,
+			});
+
+			xhr.done(function(response) {
+				if (response.error) {
+					EzBob.ShowMessage(response.error, 'Something went wrong');
+					return;
+				} // if
+
+				EzBob.ShowMessage('File #' + id + ' successfully saved ', 'Successful');
+				self.resetFileView();
+			});
+
+			xhr.fail(function() {
+				EzBob.ShowMessage('Error occurred', 'Something went wrong');
+			});
+
+			xhr.always(function() {
+				BlockUi('off');
+			});
+		}; // saveFn
+
+		EzBob.ShowMessage("Are you sure you want to save the change?", "Confirmation", saveFn, "Save", null, "Cancel");
+	}, // saveFileChange
+}); // EzBob.Underwriter.CAIS.CaisManageView

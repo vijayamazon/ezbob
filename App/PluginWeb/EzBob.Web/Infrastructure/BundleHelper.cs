@@ -341,7 +341,7 @@
 				.Add("~/Content/js/Underwriter/editLoan/installmentEditor.coffee")
 				.Add("~/Content/js/Underwriter/editLoan/editFee.coffee")
 				.Add("~/Content/js/Underwriter/editLoan/editLoanView.coffee")
-				.Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
+				.Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.js")
 
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
 				.Add("~/Content/js/controls/ezbob.LoanScheduleView.js")

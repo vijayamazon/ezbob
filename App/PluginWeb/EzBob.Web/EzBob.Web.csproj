@@ -738,6 +738,7 @@
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.js" />
+    <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
@@ -1198,15 +1199,9 @@
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js" />
     <Content Include="Content\js\Profile\PayEarly\MakeEarlyPaymentView.js" />
     <Content Include="Content\js\Underwriter\broker\ezbob.underwriter.broker.whitelabel.js" />
-    <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.min.js">
-      <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.index.js" />
     <Content Include="Content\js\Underwriter\editLoan\loanModel.min.js">
       <DependentUpon>loanModel.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.js">
-      <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.grids.js" />
     <Content Include="Content\js\Underwriter\editLoan\editLoanView.min.js">
@@ -1926,7 +1921,6 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.coffee" />
-    <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.coffee" />
     <Content Include="Content\js\Underwriter\editLoan\loanModel.coffee" />
     <Content Include="Content\js\Underwriter\editLoan\editLoanView.coffee" />
     <Content Include="Content\js\Underwriter\editLoan\installmentEditor.coffee" />
