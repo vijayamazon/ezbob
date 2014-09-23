@@ -276,23 +276,19 @@
 
 		private void BuildCompanyCaisAlerts(Customer customer, ProfileSummaryModel summary, int userId)
 		{
+			var errors = new StringBuilder();
 			CompanyCaisDataActionResult companyCaisData = serviceClient.Instance.GetCompanyCaisDataForAlerts(userId, customer.Id);
 
 			if (companyCaisData.NumOfCurrentDefaultAccounts > 0)
 			{
-				summary.Alerts.Errors.Add(new AlertModel
-				{
-					Abbreviation = "CompCAIS", // Get from Vitas
-					Alert = string.Format("Company has {0} default accounts", companyCaisData.NumOfCurrentDefaultAccounts),
-					AlertType = AlertType.Error.DescriptionAttr()
-				});
+				AppendLi(errors, string.Format("Company has {0} default accounts", companyCaisData.NumOfCurrentDefaultAccounts));
 			}
 
 			if (companyCaisData.NumOfSettledDefaultAccounts > 0)
 			{
 				summary.Alerts.Warnings.Add(new AlertModel
 				{
-					Abbreviation = "CompCAIS", // Get from Vitas
+					Abbreviation = "BUS",
 					Alert = string.Format("Company has {0} settled default accounts", companyCaisData.NumOfSettledDefaultAccounts),
 					AlertType = AlertType.Warning.DescriptionAttr()
 				});
@@ -313,23 +309,21 @@
 				}
 			}
 
-			var lateErrors = new StringBuilder();
-
 			if (hasLastAccounts)
 			{
-				AppendLi(lateErrors, string.Format("Company has late accounts in last {0} months", CurrentValues.Instance.CompanyCaisLateAlertShortMonths.Value));
+				AppendLi(errors, string.Format("Company has late accounts in last {0} months", CurrentValues.Instance.CompanyCaisLateAlertShortMonths.Value));
 			}
 
 			if (numOfLateAccounts > CurrentValues.Instance.CompanyCaisLateAlertShortPeriodThreshold)
 			{
-				AppendLi(lateErrors, string.Format("Company has {0} late accounts in last {1} months", numOfLateAccounts, CurrentValues.Instance.CompanyCaisLateAlertLongMonths.Value));
+				AppendLi(errors, string.Format("Company has {0} late accounts in last {1} months", numOfLateAccounts, CurrentValues.Instance.CompanyCaisLateAlertLongMonths.Value));
 			}
 
-			string errorStr = lateErrors.ToString();
+			string errorStr = errors.ToString();
 			if (!string.IsNullOrEmpty(errorStr))
 			{
 				summary.Alerts.Errors.Add(new AlertModel {
-					Abbreviation = "CompLate", // Get from Vitas
+					Abbreviation = "BUS",
 					Alert = string.Format("<ul class='alert-list'>{0}</ul>", errorStr),
 					AlertType = AlertType.Error.DescriptionAttr()
 				});
