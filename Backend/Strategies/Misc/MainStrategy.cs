@@ -922,9 +922,12 @@
 				var strat = new ExperianConsumerCheck(customerId, directorId, false, DB, Log);
 				strat.Execute();
 
-				foreach (var caisDetails in strat.Result.Cais)
+				if (strat.Result != null && strat.Result.Cais != null)
 				{
-					consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
+					foreach (var caisDetails in strat.Result.Cais)
+					{
+						consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
+					}
 				}
 
 				if (directorId == null)
@@ -946,9 +949,12 @@
 				var strat = new ExperianConsumerCheck(customerId, null, false, DB, Log);
 				strat.Execute();
 
-				foreach (var caisDetails in strat.Result.Cais)
+				if (strat.Result != null && strat.Result.Cais != null)
 				{
-					consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
+					foreach (var caisDetails in strat.Result.Cais)
+					{
+						consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
+					}
 				}
 
 				experianConsumerScore = GetCurrentExperianScore();
