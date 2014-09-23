@@ -1,92 +1,66 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.SummaryInfoView = Backbone.Marionette.ItemView.extend({
+	template: "#profile-summary-template",
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+	initialize: function() {
+		this.bindTo(this.model, "change sync", this.render, this);
+	},
 
-  EzBob.Underwriter.SummaryInfoView = (function(_super) {
+	events: {
+		"keydown #CommentArea": "CommentAreaChanged",
+		"click #commentSave": "saveComment"
+	},
 
-    __extends(SummaryInfoView, _super);
+	CommentAreaChanged: function() {
+		this.CommentSave.removeClass("disabled");
+		this.CommentArea.css("border", "1px solid yellow");
+	},
 
-    function SummaryInfoView() {
-      return SummaryInfoView.__super__.constructor.apply(this, arguments);
-    }
+	saveComment: function() {
+		var that = this;
 
-    SummaryInfoView.prototype.template = "#profile-summary-template";
+		$.post(window.gRootPath + "Underwriter/Profile/SaveComment", {
+			Id: this.model.get("Id"),
+			comment: this.CommentArea.val()
+		}).done(function() {
+			that.CommentArea.css("border", "1px solid #ccc");
+			that.CommentSave.addClass("disabled");
+		}).fail(function(data) {
+			that.CommentArea.css("border", "1px solid red");
+			console.error(data.responseText);
+		});
 
-    SummaryInfoView.prototype.initialize = function() {
-      return this.bindTo(this.model, "change sync", this.render, this);
-    };
+		return false;
+	},
 
-    SummaryInfoView.prototype.events = {
-      "keydown #CommentArea": "CommentAreaChanged",
-      "click #commentSave": "saveComment"
-    };
+	serializeData: function() {
+		return {
+			m: this.model.toJSON()
+		};
+	},
 
-    SummaryInfoView.prototype.CommentAreaChanged = function() {
-      this.CommentSave.removeClass("disabled");
-      return this.CommentArea.css("border", "1px solid yellow");
-    };
+	onRender: function() {
+		this.CommentSave = this.$el.find("#commentSave");
 
-    SummaryInfoView.prototype.saveComment = function() {
-      var that;
-      that = this;
-      $.post(window.gRootPath + "Underwriter/Profile/SaveComment", {
-        Id: this.model.get("Id"),
-        comment: this.CommentArea.val()
-      }).done(function() {
-        that.CommentArea.css("border", "1px solid #ccc");
-        return that.CommentSave.addClass("disabled");
-      }).fail(function(data) {
-        that.CommentArea.css("border", "1px solid red");
-        return console.error(data.responseText);
-      });
-      return false;
-    };
+		this.CommentArea = this.$el.find("#CommentArea");
 
-    SummaryInfoView.prototype.serializeData = function() {
-      return {
-        m: this.model.toJSON()
-      };
-    };
+		this.$el.find('a[data-bug-type]').tooltip({
+			title: 'Report bug'
+		});
 
-    SummaryInfoView.prototype.onRender = function() {
-      var isNew;
-      this.CommentSave = this.$el.find("#commentSave");
-      this.CommentArea = this.$el.find("#CommentArea");
-      this.$el.find('a[data-bug-type]').tooltip({
-        title: 'Report bug'
-      });
-      isNew = this.model.get("MarketPlaces") && this.model.get("MarketPlaces").IsNew;
-      $("#new-ribbon-marketplaces").toggle(Convert.toBool(isNew));
-      if (!this.model.get('IsOffline')) {
-        return this.$el.find('.offline').remove();
-      }
-    };
+		var isNew = this.model.get("MarketPlaces") && this.model.get("MarketPlaces").IsNew;
 
-    return SummaryInfoView;
+		$("#new-ribbon-marketplaces").toggle(Convert.toBool(isNew));
 
-  })(Backbone.Marionette.ItemView);
+		if (!this.model.get('IsOffline'))
+			this.$el.find('.offline').remove();
+	},
+});
 
-  EzBob.Underwriter.SummaryInfoModel = (function(_super) {
-
-    __extends(SummaryInfoModel, _super);
-
-    function SummaryInfoModel() {
-      return SummaryInfoModel.__super__.constructor.apply(this, arguments);
-    }
-
-    SummaryInfoModel.prototype.idAttribute = "Id";
-
-    SummaryInfoModel.prototype.urlRoot = window.gRootPath + "Underwriter/Profile/Index";
-
-    return SummaryInfoModel;
-
-  })(Backbone.Model);
-
-}).call(this);
+EzBob.Underwriter.SummaryInfoModel = Backbone.Model.extend({
+	idAttribute: "Id",
+	urlRoot: window.gRootPath + "Underwriter/Profile/Index",
+});

@@ -308,7 +308,7 @@
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.manualPayment.js")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.LoanOptions.js")
 
-				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.summaryInfo.coffee")
+				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.summaryInfo.js")
 				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.dashboard.js")
 
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaceDetails.js")
