@@ -271,7 +271,7 @@
 
 		#region method ExtractValue
 
-		private Tuple<decimal, bool> ExtractValue(Dictionary<string, string> oValues, string sKeyBase) {
+		private Tuple<decimal /*value*/, bool /*isAnnualized*/> ExtractValue(Dictionary<string, string> oValues, string sKeyBase, bool isAnnualized = false) {
 			if ((oValues == null) || (oValues.Count < 1))
 				return new Tuple<decimal, bool>(0, false);
 
@@ -289,7 +289,7 @@
 				if (sValue == "0")
 					continue;
 
-				nFactor = yp.Item2;
+				nFactor = isAnnualized ? 1 : yp.Item2;
 				break;
 			} // for each
 
@@ -301,7 +301,7 @@
 			if (!decimal.TryParse(sValue, out nValue))
 				return new Tuple<decimal, bool>(0, false);
 
-			return new Tuple<decimal, bool>(nValue * nFactor, nFactor != 1);
+			return new Tuple<decimal, bool>(nValue * nFactor, nFactor != 1 || isAnnualized);
 		} // ExtractValue
 
 		#endregion method ExtractValue
@@ -326,7 +326,7 @@
 				if (!string.IsNullOrWhiteSpace(mp.UpdateError))
 					oErrorMsgs.Add(mp.UpdateError.Trim());
 
-				Tuple<decimal, bool> res = ExtractValue(oModel.AnalysisDataInfo, CommonRevenuesAnnualized);
+				Tuple<decimal, bool> res = ExtractValue(oModel.AnalysisDataInfo, CommonRevenuesAnnualized, isAnnualized: true);
 
 				if (res.Item1 == 0)
 					res = ExtractValue(oModel.AnalysisDataInfo, CommonRevenues);
@@ -483,7 +483,7 @@
 		private const string CommonRevenues = "TotalSumofOrders";
 		private const string CommonRevenuesAnnualized = "TotalSumofOrdersAnnualized";
 
-		private static readonly List<Tuple<string, int>> ms_oYearParts = new List<Tuple<string, int>> {
+		private static readonly List<Tuple<string, int>> ms_oYearParts = new List<Tuple<string/*period*/, int/*factor*/>> {
 			new Tuple<string, int>("12M", 1),
 			new Tuple<string, int>("6M", 2),
 			new Tuple<string, int>("3M", 4),
