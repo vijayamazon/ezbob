@@ -2235,6 +2235,10 @@ namespace ConfigManager {
 			get { return this[Variables.PayPalMaxAllowedFailures]; }
 		}
 
+		public virtual VariableValue PayPalFirstTimeWait {
+			get { return this[Variables.PayPalFirstTimeWait]; }
+		}
+
 		public virtual VariableValue YodleeSoapServer
 		{
 			get { return this[Variables.YodleeSoapServer]; }

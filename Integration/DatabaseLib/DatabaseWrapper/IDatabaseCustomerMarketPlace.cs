@@ -2,6 +2,8 @@ using EZBob.DatabaseLib.Model.Database;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper
 {
+	using System;
+
 	public interface IDatabaseCustomerMarketPlace
 	{
 		int Id { get; }
@@ -11,5 +13,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 		Customer Customer {get; }
 		IMarketplaceType Marketplace { get; }
         bool Disabled { get; }
+		DateTime? Created { get; set; }
 	}
 }

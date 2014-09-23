@@ -1,5 +1,6 @@
 namespace EzBob.PayPal
 {
+	using System.Threading;
 	using ConfigManager;
 	using Ezbob.Utils;
 	using log4net;
@@ -41,6 +42,11 @@ namespace EzBob.PayPal
 
 		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
+			if (!databaseCustomerMarketPlace.Created.HasValue || (databaseCustomerMarketPlace.Created.Value.Date == DateTime.Today)) {
+				Log.DebugFormat("Paypal added today, waiting for {0} milliseconds", CurrentValues.Instance.PayPalFirstTimeWait.Value);
+				Thread.Sleep((int)CurrentValues.Instance.PayPalFirstTimeWait);
+			}
+
 			var securityInfo = RetrieveCustomerSecurityInfo<PayPalSecurityData>(databaseCustomerMarketPlace);
 			UpdateTransactionInfo(databaseCustomerMarketPlace, securityInfo, historyRecord);
 		}

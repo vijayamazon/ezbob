@@ -323,6 +323,7 @@ namespace ConfigManager {
 		PayPalServiceType,
 		PayPalNumberOfRetries,
 		PayPalMaxAllowedFailures,
+		PayPalFirstTimeWait,
 		YodleeSoapServer,
 		YodleeCobrandId,
 		YodleeApplicationId,
