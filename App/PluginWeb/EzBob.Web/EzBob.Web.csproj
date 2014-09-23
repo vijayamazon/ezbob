@@ -744,6 +744,7 @@
     <Content Include="Content\js\Underwriter\editLoan\installmentEditor.js" />
     <Content Include="Content\js\Underwriter\editLoan\loanModel.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
+    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1206,12 +1207,6 @@
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.index.js" />
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.grids.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.app.js" />
-    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js">
-      <DependentUpon>ezbob.underwriter.fraud.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.min.js">
-      <DependentUpon>ezbob.underwriter.fraud.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js">
       <DependentUpon>ezbob.underwriter.AlertDocsView.coffee</DependentUpon>
     </Content>
@@ -1374,9 +1369,6 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.employeeCount.js" />
     <Content Include="Areas\Customer\Views\Profile\PerksTemplate.cshtml" />
     <Content Include="Content\js\Profile\ezbob.profile.perks.js" />
-    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.min.js.map">
-      <DependentUpon>ezbob.underwriter.fraud.js</DependentUpon>
-    </Content>
     <Content Include="Areas\Customer\Views\Shared\Shops\HMRCAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\DirectorsConsentDeclaration.cshtml" />
     <Content Include="Areas\Broker\Views\Web.config" />
@@ -1912,7 +1904,6 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js" />
-    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.coffee" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.coffee" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />

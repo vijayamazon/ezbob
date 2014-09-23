@@ -255,7 +255,7 @@
 				.Add("~/Content/js/underwriter/support/ezbob.underwriter.funding.coffee")
 
 				//Fraud
-				.Add("~/Content/js/Underwriter/Fraud/ezbob.underwriter.fraud.coffee")
+				.Add("~/Content/js/Underwriter/Fraud/ezbob.underwriter.fraud.js")
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudDetectionLog.js")
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudStatus.coffee")
 

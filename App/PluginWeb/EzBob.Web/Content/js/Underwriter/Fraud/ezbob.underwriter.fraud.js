@@ -1,336 +1,242 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
-
-  root.EzBob = root.EzBob || {};
-
-  EzBob.Underwriter = EzBob.Underwriter || {};
-
-  EzBob.Underwriter.FraudModel = (function(_super) {
-
-    __extends(FraudModel, _super);
-
-    function FraudModel() {
-      return FraudModel.__super__.constructor.apply(this, arguments);
-    }
-
-    FraudModel.prototype.defaults = function() {
-      return {
-        FirstName: "",
-        LastName: "",
-        Addresses: [],
-        Phones: [],
-        Emails: [],
-        EmailDomains: [],
-        BankAccounts: [],
-        Companies: [],
-        Shops: []
-      };
-    };
-
-    FraudModel.prototype.sendToServer = function() {
-      var xhr,
-        _this = this;
-      xhr = Backbone.sync("create", this, {
-        url: "" + gRootPath + "Underwriter/Fraud/AddNewUser"
-      });
-      return xhr.complete(function() {
-        return _this.trigger("saved");
-      });
-    };
-
-    return FraudModel;
-
-  })(Backbone.Model);
-
-  EzBob.Underwriter.FraudModels = (function(_super) {
-
-    __extends(FraudModels, _super);
-
-    function FraudModels() {
-      return FraudModels.__super__.constructor.apply(this, arguments);
-    }
-
-    FraudModels.prototype.url = "" + gRootPath + "Underwriter/Fraud/GetAll";
-
-    FraudModels.prototype.model = EzBob.Underwriter.FraudModel;
-
-    return FraudModels;
-
-  })(Backbone.Collection);
-
-  EzBob.Underwriter.simpleValueAddView = (function(_super) {
-
-    __extends(simpleValueAddView, _super);
-
-    function simpleValueAddView() {
-      return simpleValueAddView.__super__.constructor.apply(this, arguments);
-    }
-
-    simpleValueAddView.prototype.initialize = function(options) {
-      this.template = options.template;
-      return this.type = options.type;
-    };
-
-    simpleValueAddView.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: false,
-        title: "Value Add",
-        position: "center",
-        draggable: false,
-        width: 530,
-        dialogClass: "value-add-popup"
-      };
-    };
-
-    simpleValueAddView.prototype.events = {
-      "click .ok": "okClicked"
-    };
-
-    simpleValueAddView.prototype.ui = {
-      form: "form"
-    };
-
-    simpleValueAddView.prototype.onRender = function() {
-      if (this.type !== "Addresses") {
-        this.ui.form.find("input, textarea").addClass('required');
-      }
-      this.validator = this.ui.form.validate({
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
-      });
-      return this;
-    };
-
-    simpleValueAddView.prototype.okClicked = function() {
-      var model;
-      if (!this.validator.form()) {
-        return;
-      }
-      model = new Backbone.Model(SerializeArrayToEasyObject(this.ui.form.serializeArray()));
-      this.trigger("added", {
-        model: model,
-        type: this.type
-      });
-      this.close();
-      return false;
-    };
-
-    return simpleValueAddView;
-
-  })(Backbone.Marionette.ItemView);
-
-  EzBob.Underwriter.SimpleValueView = (function(_super) {
-
-    __extends(SimpleValueView, _super);
-
-    function SimpleValueView() {
-      return SimpleValueView.__super__.constructor.apply(this, arguments);
-    }
-
-    SimpleValueView.prototype.initialize = function(options) {
-      return this.template = options.template;
-    };
-
-    SimpleValueView.prototype.serializeData = function() {
-      return {
-        models: this.model
-      };
-    };
-
-    return SimpleValueView;
-
-  })(Backbone.Marionette.ItemView);
-
-  EzBob.Underwriter.AddEditFraudView = (function(_super) {
-
-    __extends(AddEditFraudView, _super);
-
-    function AddEditFraudView() {
-      return AddEditFraudView.__super__.constructor.apply(this, arguments);
-    }
-
-    AddEditFraudView.prototype.template = "#fraud-add-edit-template";
-
-    AddEditFraudView.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: false,
-        title: "Fraud",
-        position: "center",
-        draggable: false,
-        dialogClass: "fraud-popup",
-        width: 600
-      };
-    };
-
-    AddEditFraudView.prototype.ui = {
-      form: "form"
-    };
-
-    AddEditFraudView.prototype.onRender = function() {
-      this.ui.form.find("input, textarea").addClass('required');
-      return this.validator = this.ui.form.validate({
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
-      });
-    };
-
-    AddEditFraudView.prototype.events = {
-      "click .save": "saveButtonClicked",
-      "click .add": "addClicked",
-      "click .remove": "removeClicked"
-    };
-
-    AddEditFraudView.prototype.removeClicked = function(e) {
-      var $el, index, type;
-      $el = $(e.currentTarget);
-      index = $el.data("index");
-      type = $el.data("type");
-      (this.model.get(type)).splice(index, 1);
-      this.reRenderArea(type);
-      return false;
-    };
-
-    AddEditFraudView.prototype.saveButtonClicked = function() {
-      var formData, isValid;
-      isValid = this.validator.form();
-      if (!isValid) {
-        this.ui.form.closest('.modal-body').animate({
-          scrollTop: 0
-        }, 500);
-        return;
-      }
-      formData = SerializeArrayToEasyObject(this.ui.form.serializeArray());
-      this.model.set({
-        FirstName: formData.FirstName,
-        LastName: formData.LastName
-      });
-      this.model.sendToServer();
-      return this.close();
-    };
-
-    AddEditFraudView.prototype.addClicked = function(e) {
-      var $el, template, type, view;
-      $el = $(e.currentTarget);
-      type = $el.data("type");
-      template = "#add-" + type + "-template";
-      view = new EzBob.Underwriter.simpleValueAddView({
-        template: template,
-        type: type
-      });
-      EzBob.App.jqmodal.show(view);
-      view.on("added", this.simpleValueAdded, this);
-      return false;
-    };
-
-    AddEditFraudView.prototype.simpleValueAdded = function(data) {
-      (this.model.get(data.type)).push(data.model.toJSON());
-      this.reRenderArea(data.type);
-      return false;
-    };
-
-    AddEditFraudView.prototype.reRenderArea = function(type) {
-      var $el;
-      $el = this.$el.find("." + type);
-      return (new EzBob.Underwriter.SimpleValueView({
-        template: "#" + type + "-template",
-        el: $el,
-        model: this.model.get(type)
-      })).render();
-    };
-
-    return AddEditFraudView;
-
-  })(Backbone.Marionette.ItemView);
-
-  EzBob.Underwriter.FraudView = (function(_super) {
-
-    __extends(FraudView, _super);
-
-    function FraudView() {
-      return FraudView.__super__.constructor.apply(this, arguments);
-    }
-
-    FraudView.prototype.template = "#fraud-template";
-
-    FraudView.prototype.initialize = function() {
-      this.model = new EzBob.Underwriter.FraudModels();
-      this.model.on("change reset", this.render, this);
-      return this.model.fetch();
-    };
-
-    FraudView.prototype.events = {
-      "click .add": "addButtonClicked",
-      "click .all": "allClicked"
-    };
-
-    FraudView.prototype.allClicked = function() {
-      var cid, xhr,
-        _this = this;
-      BlockUi("on");
-      cid = prompt("Customer Id");
-      if (!cid) {
-        return;
-      }
-      xhr = $.get("" + gRootPath + "Underwriter/Fraud/RunCheck", {
-        id: cid
-      });
-      return xhr.complete(function(data) {
-        _this.showData(data.responseText);
-        return BlockUi("off");
-      });
-    };
-
-    FraudView.prototype.showData = function(data) {
-      var dialog;
-      dialog = $('<div/>').html("<table class='table table-bordered'><tr><td>Check Type</td><td>Current Field</td><td>Compare Field</td><td>Value</td><td>Concurrence</td></tr>" + data + "</table>");
-      return dialog.dialog({
-        width: '75%',
-        height: 600
-      });
-    };
-
-    FraudView.prototype.serializeData = function() {
-      return {
-        data: this.model.toJSON()
-      };
-    };
-
-    FraudView.prototype.addButtonClicked = function() {
-      var model, view,
-        _this = this;
-      model = new EzBob.Underwriter.FraudModel();
-      view = new EzBob.Underwriter.AddEditFraudView({
-        model: model
-      });
-      view.modalOptions = {
-        show: true,
-        keyboard: false,
-        width: 600,
-        height: 600
-      };
-      EzBob.App.jqmodal.show(view);
-      model.on("saved", function() {
-        return _this.model.fetch();
-      });
-      return false;
-    };
-
-    FraudView.prototype.show = function() {
-      return this.$el.show();
-    };
-
-    FraudView.prototype.hide = function() {
-      return this.$el.hide();
-    };
-
-    return FraudView;
-
-  })(Backbone.Marionette.ItemView);
-
-}).call(this);
+var EzBob = EzBob || {};
+EzBob.Underwriter = EzBob.Underwriter || {};
+
+EzBob.Underwriter.FraudModel = Backbone.Model.extend({
+	defaults: function() {
+		return {
+			FirstName: '',
+			LastName: '',
+			Addresses: [],
+			Phones: [],
+			Emails: [],
+			EmailDomains: [],
+			BankAccounts: [],
+			Companies: [],
+			Shops: []
+		};
+	}, // defaults
+
+	sendToServer: function() {
+		var xhr = Backbone.sync('create', this, {
+			url: '' + window.gRootPath + 'Underwriter/Fraud/AddNewUser'
+		});
+
+		var self = this;
+
+		xhr.complete(function() {
+			self.trigger('saved');
+		});
+	}, // sendToServer
+}); // EzBob.Underwriter.FraudModel
+
+EzBob.Underwriter.FraudModels = Backbone.Collection.extend({
+	url: '' + gRootPath + 'Underwriter/Fraud/GetAll',
+	model: EzBob.Underwriter.FraudModel,
+}); // EzBob.Underwriter.FraudModels
+
+EzBob.Underwriter.simpleValueAddView = Backbone.Marionette.ItemView.extend({
+	initialize: function(options) {
+		this.template = options.template;
+		this.type = options.type;
+	}, // initialize
+
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: false,
+			title: 'Value Add',
+			position: 'center',
+			draggable: false,
+			width: 530,
+			dialogClass: 'value-add-popup'
+		};
+	}, // jqoptions
+
+	events: {
+		'click .ok': 'okClicked'
+	}, // events
+
+	ui: {
+		form: 'form'
+	}, // ui
+
+	onRender: function() {
+		if (this.type !== 'Addresses')
+			this.ui.form.find('input, textarea').addClass('required');
+
+		this.validator = this.ui.form.validate({
+			errorPlacement: EzBob.Validation.errorPlacement,
+			unhighlight: EzBob.Validation.unhighlight,
+		});
+
+		return this;
+	}, // onRender
+
+	okClicked: function() {
+		if (!this.validator.form())
+			return false;
+
+		var model = new Backbone.Model(SerializeArrayToEasyObject(this.ui.form.serializeArray()));
+
+		this.trigger('added', {
+			model: model,
+			type: this.type
+		});
+
+		this.close();
+		return false;
+	}, // okClicked
+}); // EzBob.Underwriter.simpleValueAddView
+
+EzBob.Underwriter.SimpleValueView = Backbone.Marionette.ItemView.extend({
+	initialize: function(options) {
+		this.template = options.template;
+	}, // initialize
+
+	serializeData: function() {
+		return { models: this.model };
+	}, // serializeData
+}); // EzBob.Underwriter.SimpleValueView
+
+EzBob.Underwriter.AddEditFraudView = Backbone.Marionette.ItemView.extend({
+	template: '#fraud-add-edit-template',
+
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: false,
+			title: 'Fraud',
+			position: 'center',
+			draggable: false,
+			dialogClass: 'fraud-popup',
+			width: 600
+		};
+	}, // jqoptions
+
+	ui: {
+		form: 'form'
+	}, // ui
+
+	onRender: function() {
+		this.ui.form.find('input, textarea').addClass('required');
+
+		this.validator = this.ui.form.validate({
+			errorPlacement: EzBob.Validation.errorPlacement,
+			unhighlight: EzBob.Validation.unhighlight,
+		});
+	}, // onRender
+
+	events: {
+		'click .save': 'saveButtonClicked',
+		'click .add': 'addClicked',
+		'click .remove': 'removeClicked'
+	}, // events
+
+	removeClicked: function(e) {
+		var $el = $(e.currentTarget);
+		var index = $el.data("index");
+		var type = $el.data("type");
+
+		this.model.get(type).splice(index, 1);
+
+		this.reRenderArea(type);
+		return false;
+	}, // removeClicked
+
+	saveButtonClicked: function() {
+		var isValid = this.validator.form();
+
+		if (!isValid) {
+			this.ui.form.closest('.modal-body').animate({ scrollTop: 0 }, 500);
+			return;
+		} // if
+
+		var formData = SerializeArrayToEasyObject(this.ui.form.serializeArray());
+
+		this.model.set({
+			FirstName: formData.FirstName,
+			LastName: formData.LastName,
+		});
+
+		this.model.sendToServer();
+		this.close();
+	}, // saveButtonClicked
+
+	addClicked: function(e) {
+		var $el = $(e.currentTarget);
+		var type = $el.data('type');
+		var template = '#add-' + type + '-template';
+
+		var view = new EzBob.Underwriter.simpleValueAddView({
+			template: template,
+			type: type,
+		});
+
+		EzBob.App.jqmodal.show(view);
+		view.on('added', this.simpleValueAdded, this);
+		return false;
+	}, // addClicked
+
+	simpleValueAdded: function(data) {
+		this.model.get(data.type).push(data.model.toJSON());
+		this.reRenderArea(data.type);
+		return false;
+	}, // simpleValueAdded
+
+	reRenderArea: function(type) {
+		var $el = this.$el.find('.' + type);
+
+		(new EzBob.Underwriter.SimpleValueView({
+			template: '#' + type + '-template',
+			el: $el,
+			model: this.model.get(type)
+		})).render();
+	}, // reRenderArea
+}); // EzBob.Underwriter.AddEditFraudView
+
+EzBob.Underwriter.FraudView = Backbone.Marionette.ItemView.extend({
+	template: '#fraud-template',
+
+	initialize: function() {
+		this.model = new EzBob.Underwriter.FraudModels();
+		this.model.on('change reset', this.render, this);
+		this.model.fetch();
+	}, // initialize
+
+	events: {
+		'click .add': 'addButtonClicked'
+	}, // events
+
+	serializeData: function() {
+		return {
+			data: this.model.toJSON(),
+		};
+	}, // serializeData
+
+	addButtonClicked: function() {
+		var model = new EzBob.Underwriter.FraudModel();
+		var view = new EzBob.Underwriter.AddEditFraudView({ model: model });
+
+		view.modalOptions = {
+			show: true,
+			keyboard: false,
+			width: 600,
+			height: 600,
+		};
+
+		EzBob.App.jqmodal.show(view);
+
+		var self = this;
+		model.on('saved', function() { self.model.fetch(); });
+
+		return false;
+	}, // addButtonClicked
+
+	show: function() {
+		this.$el.show();
+	}, // show
+
+	hide: function() {
+		this.$el.hide();
+	}, // hide
+}); // EzBob.Underwriter.FraudView
