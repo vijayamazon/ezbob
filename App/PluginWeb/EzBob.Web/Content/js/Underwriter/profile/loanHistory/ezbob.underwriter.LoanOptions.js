@@ -1,142 +1,103 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var EzBob = EzBob || {};
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter.LoanOptionsModel = Backbone.Model.extend({
+	urlRoot: function() {
+		return "" + window.gRootPath + "Underwriter/LoanOptions/Index?loanId=" + this.loanId;
+	}
+});
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.LoanOptionsView = Backbone.Marionette.ItemView.extend({
+	template: '#loan-options-template',
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: false,
+			title: "Loan Options",
+			position: "center",
+			draggable: false,
+			dialogClass: "loan-options-popup",
+			width: 950
+		};
+	},
 
-  EzBob.Underwriter.LoanOptionsModel = (function(_super) {
+	initialize: function() {
+		this.loanOptions = new Backbone.Model(this.model.get('Options'));
+		this.modelBinder = new Backbone.ModelBinder();
+		return this;
+	},
 
-    __extends(LoanOptionsModel, _super);
+	bindings: {
+		Id: {
+			selector: "input[name='Id']"
+		},
+		LoanId: {
+			selector: "input[name='LoanId']"
+		},
+		AutoPayment: {
+			selector: "input[name='AutoPayment']"
+		},
+		ReductionFee: {
+			selector: "input[name='ReductionFee']"
+		},
+		LatePaymentNotification: {
+			selector: "input[name='LatePaymentNotification']"
+		},
+		StopSendingEmails: {
+			selector: "input[name='StopSendingEmails']"
+		}
+	},
 
-    function LoanOptionsModel() {
-      return LoanOptionsModel.__super__.constructor.apply(this, arguments);
-    }
+	events: {
+		'change #cais-flags': 'changeFlags',
+		'change #CaisAccountStatus': 'changeAccountStatus',
+		"click .btnOk": "onSave"
+	},
 
-    LoanOptionsModel.prototype.urlRoot = function() {
-      return "" + window.gRootPath + "Underwriter/LoanOptions/Index?loanId=" + this.loanId;
-    };
+	changeFlags: function() {
+		this.loanOptions.set('ManulCaisFlag', this.$el.find("#cais-flags option:selected").val());
+		var index = this.$el.find("#cais-flags option:selected").attr('data-id');
+		var curentFlag = this.model.get('ManualCaisFlags')[index];
+		this.$el.find('.cais-comment').html('<h5>' + curentFlag.ValidForRecordType + '</h5>' + curentFlag.Comment);
+	},
 
-    return LoanOptionsModel;
+	changeAccountStatus: function() {
+		var tmp = $("#CaisAccountStatus option:selected").val();
 
-  })(Backbone.Model);
+		$("#defaultExplanation").toggle(tmp === '8');
 
-  EzBob.Underwriter.LoanOptionsView = (function(_super) {
+		this.loanOptions.set('CaisAccountStatus', $("#CaisAccountStatus option:selected").val());
+	},
 
-    __extends(LoanOptionsView, _super);
+	save: function() {
+		var postData = this.loanOptions.toJSON();
+		var action = "" + window.gRootPath + "Underwriter/LoanOptions/Save";
 
-    function LoanOptionsView() {
-      this.onSave = __bind(this.onSave, this);
+		$.post(action, postData);
 
-      this.onCancel = __bind(this.onCancel, this);
+		return false;
+	},
 
-      this.changeAccountStatus = __bind(this.changeAccountStatus, this);
-      return LoanOptionsView.__super__.constructor.apply(this, arguments);
-    }
+	onCancel: function() {
+		this.close();
+	},
 
-    LoanOptionsView.prototype.template = '#loan-options-template';
+	onSave: function() {
+		this.save();
+		this.close();
+	},
 
-    LoanOptionsView.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: false,
-        title: "Loan Options",
-        position: "center",
-        draggable: false,
-        width: "73%",
-        height: Math.max(window.innerHeight * 0.9, 600),
-        dialogClass: "loan-options-popup"
-      };
-    };
+	onRender: function() {
+		this.modalOptions = {
+			show: true,
+			keyboard: false,
+			width: 700
+		};
 
-    LoanOptionsView.prototype.initialize = function() {
-      this.loanOptions = new Backbone.Model(this.model.get('Options'));
-      this.modelBinder = new Backbone.ModelBinder();
-      return this;
-    };
-
-    LoanOptionsView.prototype.bindings = {
-      Id: {
-        selector: "input[name='Id']"
-      },
-      LoanId: {
-        selector: "input[name='LoanId']"
-      },
-      AutoPayment: {
-        selector: "input[name='AutoPayment']"
-      },
-      ReductionFee: {
-        selector: "input[name='ReductionFee']"
-      },
-      LatePaymentNotification: {
-        selector: "input[name='LatePaymentNotification']"
-      },
-      StopSendingEmails: {
-        selector: "input[name='StopSendingEmails']"
-      }
-    };
-
-    LoanOptionsView.prototype.events = {
-      'change #cais-flags': 'changeFlags',
-      'change #CaisAccountStatus': 'changeAccountStatus',
-      "click .btnOk": "onSave"
-    };
-
-    LoanOptionsView.prototype.changeFlags = function() {
-      var curentFlag, index;
-      this.loanOptions.set('ManulCaisFlag', this.$el.find("#cais-flags option:selected").val());
-      index = this.$el.find("#cais-flags option:selected").attr('data-id');
-      curentFlag = this.model.get('ManualCaisFlags')[index];
-      return this.$el.find('.cais-comment').html('<h5>' + curentFlag.ValidForRecordType + '</h5>' + curentFlag.Comment);
-    };
-
-    LoanOptionsView.prototype.changeAccountStatus = function() {
-      var tmp;
-      tmp = $("#CaisAccountStatus option:selected").val();
-      if (tmp === '8') {
-        $("#defaultExplanation").show();
-      } else {
-        $("#defaultExplanation").hide();
-      }
-      return this.loanOptions.set('CaisAccountStatus', $("#CaisAccountStatus option:selected").val());
-    };
-
-    LoanOptionsView.prototype.save = function() {
-      var action, postData, request;
-      postData = this.loanOptions.toJSON();
-      action = "" + window.gRootPath + "Underwriter/LoanOptions/Save";
-      request = $.post(action, postData);
-      return false;
-    };
-
-    LoanOptionsView.prototype.onCancel = function() {
-      return this.close();
-    };
-
-    LoanOptionsView.prototype.onSave = function() {
-      this.save();
-      return this.close();
-    };
-
-    LoanOptionsView.prototype.onRender = function() {
-      this.modalOptions = {
-        show: true,
-        keyboard: false,
-        width: 700
-      };
-      this.modelBinder.bind(this.loanOptions, this.el, this.bindings);
-      this.$el.find("#CaisAccountStatus option[value='" + (this.loanOptions.get('CaisAccountStatus')) + "']").attr('selected', 'selected');
-      this.$el.find("#cais-flags option[value='" + (this.loanOptions.get('ManulCaisFlag')) + "']").attr('selected', 'selected');
-      return this.changeFlags();
-    };
-
-    return LoanOptionsView;
-
-  })(Backbone.Marionette.ItemView);
-
-}).call(this);
+		this.modelBinder.bind(this.loanOptions, this.el, this.bindings);
+		this.$el.find("#CaisAccountStatus option[value='" + (this.loanOptions.get('CaisAccountStatus')) + "']").attr('selected', 'selected');
+		this.$el.find("#cais-flags option[value='" + (this.loanOptions.get('ManulCaisFlag')) + "']").attr('selected', 'selected');
+		this.changeFlags();
+	}
+});
