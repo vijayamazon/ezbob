@@ -41,19 +41,21 @@
 			if (ordersData.Count > 0) {
 				ordersData.ForEach(
 					dataItem => {
-						var mpOrderItem = new MP_AmazonOrderItem {
-							Order = amazonOrder,
-							OrderId = dataItem.OrderId,
-							OrderStatus = dataItem.OrderStatus.ToString(),
-							PurchaseDate = dataItem.PurchaseDate,
-							LastUpdateDate = dataItem.LastUpdateDate,
-							NumberOfItemsShipped = dataItem.NumberOfItemsShipped,
-							NumberOfItemsUnshipped = dataItem.NumberOfItemsUnshipped,
-							OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.OrderTotal, dataItem.PurchaseDate),
-							SellerOrderId = dataItem.SellerOrderId,
-						};
+						if (dataItem != null) {
+							var mpOrderItem = new MP_AmazonOrderItem {
+								Order = amazonOrder,
+								OrderId = dataItem.OrderId,
+								OrderStatus = dataItem.OrderStatus.ToString(),
+								PurchaseDate = dataItem.PurchaseDate,
+								LastUpdateDate = dataItem.LastUpdateDate,
+								NumberOfItemsShipped = dataItem.NumberOfItemsShipped,
+								NumberOfItemsUnshipped = dataItem.NumberOfItemsUnshipped,
+								OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.OrderTotal, dataItem.PurchaseDate),
+								SellerOrderId = dataItem.SellerOrderId,
+							};
 
-						amazonOrder.OrderItems.Add(mpOrderItem);
+							amazonOrder.OrderItems.Add(mpOrderItem);
+						}
 					});
 			}
 			customerMarketPlace.AmazonOrders.Add(amazonOrder);
