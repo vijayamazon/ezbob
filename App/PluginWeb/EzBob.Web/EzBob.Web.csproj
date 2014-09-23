@@ -1247,20 +1247,8 @@
     </Content>
     <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.pricingModelCalculations.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.js" />
-    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.js">
-      <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.min.js">
-      <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.js">
-      <DependentUpon>ezbob.underwriter.report.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.min.js">
-      <DependentUpon>ezbob.underwriter.report.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
@@ -1844,10 +1832,9 @@
     <Content Include="Content\js\controls\ezbob.modal.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanTopView.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.coffee" />
-    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.coffee" />
-    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.payPalAccountDetails.coffee" />
+    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.js" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.coffee" />
-    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.coffee" />
+    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js" />
@@ -1855,8 +1842,8 @@
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.coffee" />
-    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
-    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
+    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.js" />
+    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js" />
@@ -1877,7 +1864,7 @@
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.coffee" />
-    <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.coffee" />
+    <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
     <Content Include="packages.config" />

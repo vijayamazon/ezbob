@@ -22,7 +22,7 @@
 				<td><%- pp.TransactionId %></td>
 				<td><%- pp.CardNo %></td>
 				<td><%- EzBob.formatDateHumanFull(pp.ExpireDate) || 'Unknown'%></td>
-				<td><%
+				<td class="buttons_container"><%
 					if (!pp.IsDefault) {
 						%><button class="btn btn-mini btn-primary set-paypoint-default" data-transactionid="<%- pp.TransactionId %>">
 							<i class="fa fa-check"></i>Set Default

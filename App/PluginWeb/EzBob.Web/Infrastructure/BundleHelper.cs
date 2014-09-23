@@ -261,7 +261,7 @@
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudStatus.js")
 
 				//report
-				.Add("~/Content/js/Underwriter/report/ezbob.underwriter.report.coffee")
+				.Add("~/Content/js/Underwriter/report/ezbob.underwriter.report.js")
 
 				// Configuration Variables
 				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")
@@ -322,11 +322,13 @@
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.parseYodlee.js")
 				.Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.experianInfo.js")
 				.Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.idHubCustomAddress.js")
-				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.addPayPointCardView.coffee")
-				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.AddBankAccount.coffee")
-				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.payPalAccountDetails.coffee")
-				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.bankAccountDetails.coffee")
-				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.paymentAccounts.coffee")
+
+				//payment accounts
+				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.addPayPointCardView.js")
+				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.AddBankAccount.js")
+				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.bankAccountDetails.js")
+				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.paymentAccounts.js")
+
 				.Add("~/Content/js/Underwriter/profile/alerts/ezbob.underwriter.AlertDocsView.js")
 				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.medalCalculations.js")
 				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.pricingModelCalculations.js")

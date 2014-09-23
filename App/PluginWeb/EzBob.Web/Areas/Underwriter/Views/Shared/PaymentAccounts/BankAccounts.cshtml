@@ -26,7 +26,7 @@
 				<td><%- ba.SortCode %></td>
 				<td><%- ba.StatusInformation || "-" %></td>
 				<td><%- ba.Type %></td>
-				<td>
+				<td class="buttons_container">
 					<button class="btn btn-primary btn-mini checkeBankAccount">Check</button><%
 					if (!ba.isDefault) {
 						%><button class="btn btn-primary btn-mini setDefault">Set Default</button><%

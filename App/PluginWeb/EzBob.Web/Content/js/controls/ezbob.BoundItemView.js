@@ -4,12 +4,14 @@ EzBob.BoundItemView = Backbone.Marionette.ItemView.extend({
 	events: {},
 
 	initialize: function() {
-		this.events['click .btn-primary'] = 'save';
+		this.events['click .btn-primary:not(.not-save)'] = 'save';
 		this.modelBinder = new Backbone.ModelBinder();
+		return this;
 	}, // initialize
 
 	onRender: function() {
 		this.modelBinder.bind(this.model, this.el, this.bindings);
+		return this;
 	}, // onRender
 
 	jqoptions: function() {

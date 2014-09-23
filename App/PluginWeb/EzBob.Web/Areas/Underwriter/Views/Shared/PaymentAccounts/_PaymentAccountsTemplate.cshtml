@@ -7,7 +7,15 @@
 }
 
 <script id="payment-accounts-template" type="text/template">
-	@{ Html.RenderPartial("PaymentAccounts/BankAccounts"); }
-	<div style="height: 20px;"></div>
-	@{ Html.RenderPartial("PaymentAccounts/DebitCards"); }
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-content">
+					@{ Html.RenderPartial("PaymentAccounts/BankAccounts"); }
+					<div style="height: 20px;"></div>
+					@{ Html.RenderPartial("PaymentAccounts/DebitCards"); }
+				</div>
+			</div>
+		</div>
+	</div>
 </script>

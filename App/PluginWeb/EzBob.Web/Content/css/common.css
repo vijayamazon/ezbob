@@ -1427,7 +1427,9 @@ div.buttons_container {
 }
 
 div.form_buttons_container input, 
-div.buttons_container .button,
+.buttons_container .button,
+.buttons_container button,
+.buttons_container input,
 div.form_buttons_container .button {
     float: right;
     margin-left: 5px;
