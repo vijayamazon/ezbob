@@ -1,156 +1,117 @@
-﻿(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.FraudStatusModel = Backbone.Model.extend({
+	urlRoot: function() {
+		return '' + window.gRootPath + 'Underwriter/FraudStatus/Index?Id=' + (this.get('customerId'));
+	}, // urlRoot
+}); // EzBob.Underwriter.FraudStatusModel
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+EzBob.FraudStatusItemsView = Backbone.Marionette.ItemView.extend({
+	template: '#fraud-status-items-template'
+}); // EzBob.FraudStatusItemsView
 
-  EzBob.Underwriter.FraudStatusModel = (function(_super) {
+EzBob.Underwriter.FraudStatusLayout = Backbone.Marionette.Layout.extend({
+	template: '#fraud-status-layout-template',
 
-    __extends(FraudStatusModel, _super);
+	initialize: function() {
+		this.modelBinder = new Backbone.ModelBinder();
+	}, // initialize
 
-    function FraudStatusModel() {
-      return FraudStatusModel.__super__.constructor.apply(this, arguments);
-    }
+	bindings: {
+		currentStatus: { selector: "input[name='currentStatus']" },
+		customerId: { selector: "input[name='customerId']" }
+	}, // bindings
 
-    FraudStatusModel.prototype.urlRoot = function() {
-      return "" + window.gRootPath + "Underwriter/FraudStatus/Index?Id=" + (this.get('customerId'));
-    };
+	regions: {
+		list: '#list-fraud-items',
+		content: '#fraud-view'
+	}, // regions
 
-    return FraudStatusModel;
+	events: {
+		'change #fraud-status-items': 'changeStatus'
+	}, // events
 
-  })(Backbone.Model);
+	changeStatus: function() {
+		var currentStatusId = $('#fraud-status-items option:selected').val();
+		var currentStatus = $('#fraud-status-items option:selected').text();
 
-  EzBob.FraudStatusItemsView = (function(_super) {
+		this.model.set({
+			'currentStatus': parseInt(currentStatusId)
+		});
 
-    __extends(FraudStatusItemsView, _super);
+		this.model.set({
+			'currentStatusText': currentStatus
+		});
 
-    function FraudStatusItemsView() {
-      return FraudStatusItemsView.__super__.constructor.apply(this, arguments);
-    }
+		this.renderStatusValue();
 
-    FraudStatusItemsView.prototype.template = '#fraud-status-items-template';
+		return this;
+	}, // changeStatus
 
-    return FraudStatusItemsView;
+	renderStatusValue: function() {
+		var self = this;
 
-  })(Backbone.Marionette.ItemView);
+		this.model.fetch().done(function() {
+			self.$el.find('#fraud-view').show();
+		});
 
-  EzBob.Underwriter.FraudStatusLayout = (function(_super) {
+		return false;
+	},
 
-    __extends(FraudStatusLayout, _super);
+	save: function() {
+		BlockUi("on");
 
-    function FraudStatusLayout() {
-      this.onSave = __bind(this.onSave, this);
+		var form = this.$el.find('form');
+		var postData = form.serialize();
+		var action = '' + window.gRootPath + 'Underwriter/FraudStatus/Save/';
 
-      this.onCancel = __bind(this.onCancel, this);
+		var self = this;
 
-      this.save = __bind(this.save, this);
+		$.post(action, postData).done(function() {
+			self.trigger('saved');
+			self.close();
+		}).complete(function() {
+			BlockUi('off');
+		});
 
-      this.renderStatusValue = __bind(this.renderStatusValue, this);
-      return FraudStatusLayout.__super__.constructor.apply(this, arguments);
-    }
+		return false;
+	}, // save
 
-    FraudStatusLayout.prototype.template = '#fraud-status-layout-template';
+	onRender: function() {
+		this.modelBinder.bind(this.model, this.el, this.bindings);
 
-    FraudStatusLayout.prototype.initialize = function() {
-      return this.modelBinder = new Backbone.ModelBinder();
-    };
+		var common = new EzBob.FraudStatusItemsView;
 
-    FraudStatusLayout.prototype.bindings = {
-      currentStatus: {
-        selector: "input[name='currentStatus']"
-      },
-      customerId: {
-        selector: "input[name='customerId']"
-      }
-    };
+		this.list.show(common);
 
-    FraudStatusLayout.prototype.regions = {
-      list: '#list-fraud-items',
-      content: '#fraud-view'
-    };
+		this.$el.find("#fraud-status-items [value='" + (this.model.get('CurrentStatusId')) + "']").attr("selected", "selected");
 
-    FraudStatusLayout.prototype.events = {
-      'change #fraud-status-items': 'changeStatus'
-    };
+		this.renderStatusValue();
 
-    FraudStatusLayout.prototype.changeStatus = function() {
-      var currentStatus, currentStatusId;
-      currentStatusId = $("#fraud-status-items option:selected").val();
-      currentStatus = $("#fraud-status-items option:selected").text();
-      this.model.set({
-        "currentStatus": parseInt(currentStatusId)
-      });
-      this.model.set({
-        "currentStatusText": currentStatus
-      });
-      this.renderStatusValue();
-      return this;
-    };
+		return this;
+	}, // onRender
 
-    FraudStatusLayout.prototype.renderStatusValue = function() {
-      var _this = this;
-      this.model.fetch().done(function() {
-        return _this.$el.find('#fraud-view').show();
-      });
-      return false;
-    };
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: false,
+			title: 'Fraud Status',
+			draggable: true,
+			width: '400',
+			buttons: {
+				'OK': this.onSave,
+				'Cancel': this.onCancel
+			},
+		};
+	}, // jqoptions
 
-    FraudStatusLayout.prototype.save = function() {
-      var action, form, postData,
-        _this = this;
-      BlockUi("on");
-      form = this.$el.find('form');
-      postData = form.serialize();
-      action = "" + window.gRootPath + "Underwriter/FraudStatus/Save/";
-      $.post(action, postData).done(function() {
-        _this.trigger('saved');
-        return _this.close();
-      }).complete(function() {
-        return BlockUi("off");
-      });
-      return false;
-    };
+	onCancel: function() {
+		this.close();
+	}, // onCancel
 
-    FraudStatusLayout.prototype.onRender = function() {
-      var common;
-      this.modelBinder.bind(this.model, this.el, this.bindings);
-      common = new EzBob.FraudStatusItemsView;
-      this.list.show(common);
-      this.$el.find("#fraud-status-items [value='" + (this.model.get('CurrentStatusId')) + "']").attr("selected", "selected");
-      this.renderStatusValue();
-      return this;
-    };
-
-    FraudStatusLayout.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: false,
-        title: 'Fraud Status',
-        draggable: true,
-        width: "400",
-        buttons: {
-          "OK": this.onSave,
-          "Cancel": this.onCancel
-        }
-      };
-    };
-
-    FraudStatusLayout.prototype.onCancel = function() {
-      return this.close();
-    };
-
-    FraudStatusLayout.prototype.onSave = function() {
-      return this.save();
-    };
-
-    return FraudStatusLayout;
-
-  })(Backbone.Marionette.Layout);
-
-}).call(this);
+	onSave: function() {
+		this.save();
+	}, // onSave
+}); // EzBob.Underwriter.FraudStatusLayout

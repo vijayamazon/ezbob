@@ -746,6 +746,7 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
+    <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1222,9 +1223,6 @@
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.properties.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.signature.monitor.js" />
-    <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js">
-      <DependentUpon>ezbob.underwriter.fraudStatus.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.js" />
@@ -1901,7 +1899,6 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js" />
-    <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.coffee" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee" />
