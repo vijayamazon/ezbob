@@ -745,6 +745,7 @@
     <Content Include="Content\js\Underwriter\editLoan\loanModel.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
+    <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1207,9 +1208,6 @@
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.index.js" />
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.grids.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.app.js" />
-    <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js">
-      <DependentUpon>ezbob.underwriter.AlertDocsView.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.landregistry.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.zoopla.js" />
@@ -1890,7 +1888,6 @@
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanTopView.js" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.rollover.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.LoanOptions.coffee" />
-    <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.coffee" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.payPalAccountDetails.coffee" />
