@@ -27,6 +27,16 @@ BEGIN
 		cr.IdCustomer = @CustomerId AND
 		cr.IdUnderwriter IS NOT NULL AND
 		cr.UnderwriterDecision = 'Rejected'
+	
+	IF @ManualDecisionDate IS NULL
+	BEGIN
+		SELECT 
+			0 AS NewCustomer_ReReject, 
+			0 AS OldCustomer_ReReject,
+			0 AS PrincipalPaidAmount,
+			0 AS LoanAmountTaken
+		RETURN
+	END
 
 	------------------------------------------------------------------------------
 
