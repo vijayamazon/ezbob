@@ -1227,21 +1227,6 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.profileHead.js" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js">
-      <DependentUpon>ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.min.js">
-      <DependentUpon>ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.js">
-      <DependentUpon>ezbob.underwriter.ApproveLoanWithoutAML.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.min.js">
-      <DependentUpon>ezbob.underwriter.ApproveLoanWithoutAML.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.js">
-      <DependentUpon>ezbob.underwriter.controlButtons.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.js">
       <DependentUpon>ezbob.underwriter.collectionStatus.coffee</DependentUpon>
@@ -1429,9 +1414,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudDetectionLog.js" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js">
-      <DependentUpon>ezbob.underwriter.functionsDialog.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.js">
       <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
     </Content>
@@ -1896,12 +1878,12 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.coffee" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.coffee" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.coffee" />
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.js" />
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.coffee" />
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee" />
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />

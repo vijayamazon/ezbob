@@ -226,7 +226,8 @@
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasOverlay.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.pointLabels.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.donutRenderer.js")
-				
+				.Add("~/Content/js/lib/date.interval.js")
+
 				//Flaty
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
 				.Add("~/Content/js/lib/date.js")
@@ -286,15 +287,19 @@
 				//profile
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.customerFullModel.coffee")
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.profile.js")
+
+				//leftAndBottomBar
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.profileHead.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.js")
-				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.coffee")
+				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineDialog.js")
-				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.ApproveLoanWithoutAML.coffee")
-				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee")
-				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.controlButtons.coffee")
+				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.ApproveLoanWithoutAML.js")
+				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js")
+				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.controlButtons.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineEditDialog.js")
+
+				//loanHistory
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.collectionStatus.coffee")
 				.Add("~/Content/js/underwriter/profile/loanHistory/ezbob.underwriter.loanInfo.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistorys.coffee")
@@ -302,12 +307,15 @@
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.rollover.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.manualPayment.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.LoanOptions.coffee")
+
 				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.summaryInfo.coffee")
 				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.dashboard.js")
+
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaceDetails.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.coffee")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplacesHistory.coffee")
-				.Add("~/Content/js/lib/date.interval.js")
+
+				
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.uploadHmrc.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.enterHmrc.js")
