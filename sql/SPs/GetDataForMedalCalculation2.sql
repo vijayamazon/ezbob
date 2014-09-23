@@ -85,7 +85,7 @@ BEGIN
 		(
 			SELECT ExperianConsumerScore
 			FROM Customer
-			WHERE Id = @CustomerId
+			WHERE Id = @CustomerId AND ExperianConsumerScore IS NOT NULL
 			
 			UNION
 			

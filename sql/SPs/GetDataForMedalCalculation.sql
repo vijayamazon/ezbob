@@ -53,11 +53,11 @@ BEGIN
 	(
 		SELECT ExperianConsumerScore
 		FROM Customer
-		WHERE Id=@CustomerId
+		WHERE Id = @CustomerId AND ExperianConsumerScore IS NOT NULL
 		UNION
 		SELECT ExperianConsumerScore
 		FROM Director
-		WHERE CustomerId=@CustomerId AND ExperianConsumerScore IS NOT NULL
+		WHERE CustomerId = @CustomerId AND ExperianConsumerScore IS NOT NULL
 	) AS X
 			
 	SELECT 
