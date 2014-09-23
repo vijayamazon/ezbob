@@ -285,7 +285,7 @@
 				.Add("~/Content/js/underwriter/broker/ezbob.underwriter.broker.whitelabel.js")
 
 				//profile
-				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.customerFullModel.coffee")
+				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.customerFullModel.js")
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.profile.js")
 
 				//leftAndBottomBar

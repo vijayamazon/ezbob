@@ -746,6 +746,7 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
+    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.js" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.js" />
@@ -1227,9 +1228,6 @@
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsEntry.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.customerRelations.js" />
     <Content Include="Content\js\Underwriter\broker\ezbob.underwriter.broker.profile.js" />
-    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js">
-      <DependentUpon>ezbob.underwriter.customerFullModel.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.properties.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.signature.monitor.js" />
@@ -1828,7 +1826,6 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.js" />
-    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.js" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.js" />
