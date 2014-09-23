@@ -299,11 +299,11 @@
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.controlButtons.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineEditDialog.js")
 
+				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.collectionStatus.js")
 				//loanHistory
-				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.collectionStatus.coffee")
 				.Add("~/Content/js/underwriter/profile/loanHistory/ezbob.underwriter.loanInfo.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistorys.coffee")
-				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistoryDetail.coffee")
+				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistoryDetail.js")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.rollover.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.manualPayment.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.LoanOptions.coffee")

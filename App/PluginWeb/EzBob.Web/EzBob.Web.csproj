@@ -747,6 +747,8 @@
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js" />
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.js" />
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1228,12 +1230,6 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.profileHead.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js" />
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.js">
-      <DependentUpon>ezbob.underwriter.collectionStatus.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.js">
-      <DependentUpon>ezbob.underwriter.loanHistoryDetail.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.js">
       <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
     </Content>
@@ -1875,9 +1871,7 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.coffee" />
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.coffee" />
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js" />
