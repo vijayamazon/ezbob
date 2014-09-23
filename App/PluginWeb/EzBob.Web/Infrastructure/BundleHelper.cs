@@ -301,8 +301,8 @@
 
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.collectionStatus.js")
 				//loanHistory
-				.Add("~/Content/js/underwriter/profile/loanHistory/ezbob.underwriter.loanInfo.coffee")
-				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistorys.coffee")
+				.Add("~/Content/js/underwriter/profile/loanHistory/ezbob.underwriter.loanInfo.js")
+				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistorys.js")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistoryDetail.js")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.rollover.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.manualPayment.coffee")

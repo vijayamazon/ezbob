@@ -749,6 +749,8 @@
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.js" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.js" />
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.js" />
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1230,9 +1232,6 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.profileHead.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js" />
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.js">
-      <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.LoanOptions.js">
       <DependentUpon>ezbob.underwriter.LoanOptions.coffee</DependentUpon>
     </Content>
@@ -1410,9 +1409,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudDetectionLog.js" />
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.js">
-      <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
-    </Content>
     <Content Include="favicon.ico" />
     <Content Include="Content\img\header-gradient.png" />
     <Content Include="Content\img\header-light.png" />
@@ -1867,9 +1863,7 @@
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.payPalAccountDetails.coffee" />
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.coffee" />
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.controlButtons.js" />

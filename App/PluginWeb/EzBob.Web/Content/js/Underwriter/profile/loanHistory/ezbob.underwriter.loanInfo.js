@@ -1,664 +1,681 @@
+var EzBob = EzBob || {};
+EzBob.Underwriter = EzBob.Underwriter || {};
+
 (function() {
-  var ModelUpdater, root,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+	var ModelUpdater = (function() {
+		function ModelUpdater(model, property) {
+			this.model = model;
+			this.property = property;
+			this.start = _.bind(this.start, this);
+		}
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+		ModelUpdater.prototype.start = function() {
+			var self = this;
 
-  root.EzBob = root.EzBob || {};
+			var xhr = this.model.fetch();
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+			xhr.done(function() {
+				self.check();
+			});
+		};
 
-  EzBob.Underwriter.LoanInfoView = (function(_super) {
+		ModelUpdater.prototype.check = function() {
+			if (Convert.toBool(this.model.get(this.property))) {
+				BlockUi('off');
 
-    __extends(LoanInfoView, _super);
+				if (this.model.get('CreditResult') !== "WaitingForDecision") {
+					EzBob.App.vent.trigger('newCreditLine:pass');
+					return;
+				} // if
 
-    function LoanInfoView() {
-      this.LoanTypeSelectionAllowedChanged = __bind(this.LoanTypeSelectionAllowedChanged, this);
-      return LoanInfoView.__super__.constructor.apply(this, arguments);
-    }
+				if (this.model.get('StrategyError') !== null)
+					EzBob.App.vent.trigger('newCreditLine:error', this.model.get('StrategyError'));
+				else
+					EzBob.App.vent.trigger('newCreditLine:done');
+			} else
+				setTimeout(this.start, 1000);
+		};
 
-    LoanInfoView.prototype.template = "#profile-loan-info-template";
+		return ModelUpdater;
+	})();
 
-    LoanInfoView.prototype.initialize = function(options) {
-      this.bindTo(this.model, "change reset sync", this.render, this);
-      this.personalInfo = options.personalInfo;
-      this.bindTo(this.personalInfo, "change", this.UpdateNewCreditLineState, this);
-      this.bindTo(this.personalInfo, "change:CreditResult", this.changeCreditResult, this);
-      EzBob.App.vent.on('newCreditLine:done', this.showCreditLineDialog, this);
-      EzBob.App.vent.on('newCreditLine:error', this.showErrorDialog, this);
-      EzBob.App.vent.on('newCreditLine:pass', this.showNothing, this);
-      return this.parentView = options.parentView;
-    };
+	EzBob.Underwriter.LoanInfoView = Backbone.Marionette.ItemView.extend({
+		template: "#profile-loan-info-template",
 
-    LoanInfoView.prototype.events = {
-      "click [name='startingDateChangeButton']": "editStartingDate",
-      "click [name='offerValidUntilDateChangeButton']": "editOfferValidUntilDate",
-      "click [name='repaymentPeriodChangeButton']": "editRepaymentPeriod",
-      "click [name='interestRateChangeButton']": "editInterestRate",
-      "click [name='openCreditLineChangeButton']": "editOfferedCreditLine",
-      "click [name='editDetails']": "editDetails",
-      "click [name='manualSetupFeeEditAmountButton']": "editManualSetupFeeAmount",
-      "click [name='manualSetupFeeEditPercentButton']": "editManualSetupFeePercent",
-      "click [name='newCreditLineBtn']": "runNewCreditLine",
-      'click [name="loanType"]': 'loanType',
-      'click [name="isLoanTypeSelectionAllowed"]': 'isLoanTypeSelectionAllowed',
-      'click [name="discountPlan"]': 'discountPlan',
-      'click [name="loanSource"]': 'loanSource',
-      'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
-      'click #create-loan-hidden-btn': 'createLoanHidden'
-    };
+		initialize: function(options) {
+			this.bindTo(this.model, "change reset sync", this.render, this);
+			this.personalInfo = options.personalInfo;
+			this.bindTo(this.personalInfo, "change", this.UpdateNewCreditLineState, this);
+			this.bindTo(this.personalInfo, "change:CreditResult", this.changeCreditResult, this);
+			EzBob.App.vent.on('newCreditLine:done', this.showCreditLineDialog, this);
+			EzBob.App.vent.on('newCreditLine:error', this.showErrorDialog, this);
+			EzBob.App.vent.on('newCreditLine:pass', this.showNothing, this);
+			return this.parentView = options.parentView;
+		},
 
-    LoanInfoView.prototype.toggleCreateLoanHidden = function(event) {
-      if (!event.ctrlKey) {
-        return;
-      }
-      return this.$el.find('#create-loan-hidden').toggleClass('hide');
-    };
+		events: {
+			"click [name='startingDateChangeButton']": "editStartingDate",
+			"click [name='offerValidUntilDateChangeButton']": "editOfferValidUntilDate",
+			"click [name='repaymentPeriodChangeButton']": "editRepaymentPeriod",
+			"click [name='interestRateChangeButton']": "editInterestRate",
+			"click [name='openCreditLineChangeButton']": "editOfferedCreditLine",
+			"click [name='editDetails']": "editDetails",
+			"click [name='manualSetupFeeEditAmountButton']": "editManualSetupFeeAmount",
+			"click [name='manualSetupFeeEditPercentButton']": "editManualSetupFeePercent",
+			"click [name='newCreditLineBtn']": "runNewCreditLine",
+			'click [name="loanType"]': 'loanType',
+			'click [name="isLoanTypeSelectionAllowed"]': 'isLoanTypeSelectionAllowed',
+			'click [name="discountPlan"]': 'discountPlan',
+			'click [name="loanSource"]': 'loanSource',
+			'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
+			'click #create-loan-hidden-btn': 'createLoanHidden'
+		},
 
-    LoanInfoView.prototype.createLoanHidden = function() {
-      var nAmount, nCustomerID, oXhr, sDate,
-        _this = this;
-      nCustomerID = this.model.get('CustomerId');
-      nAmount = parseInt(this.$el.find('#create-loan-hidden-amount').val(), 10) || 0;
-      sDate = this.$el.find('#create-loan-hidden-date').val();
-      if (nAmount <= 0) {
-        EzBob.ShowMessageTimeout('Amount not specified.', 'Cannot create loan', 2);
-        return;
-      }
-      if (!/^\d\d\d\d-\d\d-\d\d$/.test(sDate)) {
-        EzBob.ShowMessageTimeout('Date not specified.', 'Cannot create loan', 2);
-        return;
-      }
-      oXhr = $.post(window.gRootPath + 'Underwriter/ApplicationInfo/CreateLoanHidden', {
-        nCustomerID: nCustomerID,
-        nAmount: nAmount,
-        sDate: sDate
-      });
-      oXhr.done(function(res) {
-        if (res.success) {
-          _this.$el.find('#create-loan-hidden-amount').val('');
-          _this.$el.find('#create-loan-hidden-date').val('');
-          _this.$el.find('#create-loan-hidden').addClass('hide');
-        }
-        if (res.error) {
-          return EzBob.ShowMessage(res.error, 'Cannot create loan');
-        } else {
-          return EzBob.ShowMessage('Loan created successfully', 'Loan created successfully');
-        }
-      });
-      return oXhr.fail(function() {
-        return EzBob.ShowMessage('Failed to create loan.', 'Cannot create loan');
-      });
-    };
+		toggleCreateLoanHidden: function(event) {
+			if (!event.ctrlKey)
+				return;
 
-    LoanInfoView.prototype.editOfferValidUntilDate = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.DateEdit({
-        model: this.model,
-        propertyName: "OfferValidateUntil",
-        title: "Offer valid until edit",
-        width: 370,
-        postValueName: "date",
-        url: "Underwriter/ApplicationInfo/ChangeOferValid",
-        data: {
-          id: this.model.get("CustomerId")
-        }
-      });
-      d.render();
-      d.on("done", function() {
-        return _this.model.fetch();
-      });
-    };
+			this.$el.find('#create-loan-hidden').toggleClass('hide');
+		},
 
-    LoanInfoView.prototype.editStartingDate = function() {
-      var d, that;
-      that = this;
-      d = new EzBob.Dialogs.DateEdit({
-        model: this.model,
-        propertyName: "StartingFromDate",
-        title: "Starting date edit",
-        width: 400,
-        postValueName: "date",
-        url: "Underwriter/ApplicationInfo/ChangeStartingDate",
-        data: {
-          id: this.model.get("CustomerId")
-        }
-      });
-      d.render();
-      d.on("done", function() {
-        return that.model.fetch();
-      });
-    };
+		createLoanHidden: function() {
+			var nCustomerID = this.model.get('CustomerId');
+			var nAmount = parseInt(this.$el.find('#create-loan-hidden-amount').val(), 10) || 0;
+			var sDate = this.$el.find('#create-loan-hidden-date').val();
 
-    LoanInfoView.prototype.editRepaymentPeriod = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.IntegerEdit({
-        model: this.model,
-        propertyName: "RepaymentPerion",
-        title: "Repayment period edit",
-        width: 400,
-        postValueName: "period",
-        url: "Underwriter/ApplicationInfo/ChangeCashRequestRepaymentPeriod",
-        data: {
-          id: this.model.get("CashRequestId")
-        },
-        required: true
-      });
-      d.render();
-      d.on("done", function() {
-        return _this.model.fetch();
-      });
-    };
+			if (nAmount <= 0) {
+				EzBob.ShowMessageTimeout('Amount not specified.', 'Cannot create loan', 2);
+				return;
+			}
 
-    LoanInfoView.prototype.editOfferedCreditLine = function() {
-      var that, view;
-      that = this;
-      this.model.set('amount', this.model.get('OfferedCreditLine'));
-      view = new EzBob.Underwriter.CreditLineEditDialog({
-        model: this.model
-      });
-      EzBob.App.jqmodal.show(view);
-      view.on("showed", function() {
-        return view.$el.find("input").focus();
-      });
-      view.on("done", function() {
-        return that.model.fetch();
-      });
-    };
+			if (!/^\d\d\d\d-\d\d-\d\d$/.test(sDate)) {
+				EzBob.ShowMessageTimeout('Date not specified.', 'Cannot create loan', 2);
+				return;
+			}
 
-    LoanInfoView.prototype.editInterestRate = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.PercentsEdit({
-        model: this.model,
-        propertyName: "InterestRate",
-        title: "Interest rate edit",
-        width: 400,
-        postValueName: "interestRate",
-        url: "Underwriter/ApplicationInfo/ChangeCashRequestInterestRate",
-        data: {
-          id: this.model.get("CashRequestId")
-        },
-        required: true
-      });
-      d.render();
-      d.on("done", function() {
-        return _this.model.fetch();
-      });
-    };
+			var oXhr = $.post(window.gRootPath + 'Underwriter/ApplicationInfo/CreateLoanHidden', {
+				nCustomerID: nCustomerID,
+				nAmount: nAmount,
+				sDate: sDate
+			});
 
-    LoanInfoView.prototype.editDetails = function() {
-      var d;
-      d = new EzBob.Dialogs.TextEdit({
-        model: this.model,
-        propertyName: "Details",
-        title: "Details edit",
-        width: 400,
-        postValueName: "details",
-        url: "Underwriter/ApplicationInfo/SaveDetails",
-        data: {
-          id: this.model.get("CustomerId")
-        }
-      });
-      d.render();
-    };
+			var self = this;
 
-    LoanInfoView.prototype.editManualSetupFeeAmount = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.PoundsNoDecimalsEdit({
-        model: this.model,
-        propertyName: "ManualSetupFeeAmount",
-        title: "Manual setup fee amount edit",
-        width: 400,
-        postValueName: "manualAmount",
-        url: "Underwriter/ApplicationInfo/ChangeManualSetupFeeAmount",
-        data: {
-          id: this.model.get("CashRequestId")
-        },
-        required: false
-      });
-      d.render();
-      d.on("done", function() {
-        return _this.model.fetch();
-      });
-    };
+			oXhr.done(function(res) {
+				if (res.success) {
+					self.$el.find('#create-loan-hidden-amount').val('');
+					self.$el.find('#create-loan-hidden-date').val('');
+					self.$el.find('#create-loan-hidden').addClass('hide');
+				}
 
-    LoanInfoView.prototype.editManualSetupFeePercent = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.PercentsEdit({
-        model: this.model,
-        propertyName: "ManualSetupFeePercent",
-        title: "Manual setup fee percent edit",
-        width: 400,
-        postValueName: "manualPercent",
-        url: "Underwriter/ApplicationInfo/ChangeManualSetupFeePercent",
-        data: {
-          id: this.model.get("CashRequestId")
-        },
-        required: false
-      });
-      d.render();
-      d.on("done", function() {
-        return _this.model.fetch();
-      });
-    };
+				if (res.error)
+					EzBob.ShowMessage(res.error, 'Cannot create loan');
+				else
+					EzBob.ShowMessage('Loan created successfully', 'Loan created successfully');
+			});
 
-    LoanInfoView.prototype.runNewCreditLine = function(e) {
-      var el,
-        _this = this;
-      if ($(e.currentTarget).hasClass("disabled")) {
-        return false;
-      }
-      el = ($("<select/>")).css("height", "30px").css("width", "270px").append("<option value='1'>Skip everything, go to manual decision</option>").append("<option value='2'>Update everything except of MP's and go to manual decisions</option>").append("<option value='3'>Update everything and apply auto rules</option>").append("<option value='4'>Update everything and go to manual decision</option>");
-      EzBob.ShowMessage(el, "New Credit Line Option", (function() {
-        return _this.RunCustomerCheck(el.val());
-      }), "OK", null, "Cancel");
-      return false;
-    };
+			oXhr.fail(function() {
+				EzBob.ShowMessage('Failed to create loan.', 'Cannot create loan');
+			});
+		},
 
-    LoanInfoView.prototype.RunCustomerCheck = function(newCreditLineOption) {
-      var that,
-        _this = this;
-      that = this;
-      BlockUi("on");
-      return $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLine", {
-        Id: this.model.get("CustomerId"),
-        NewCreditLineOption: newCreditLineOption
-      }).done(function(response) {
-        var updater;
-        if (response.Message === "Go to new mode") {
-          return $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode1", {
-            Id: that.model.get("CustomerId"),
-            NewCreditLineOption: newCreditLineOption
-          }).done(function(innerResponse) {
-            return $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode2", {
-              Id: that.model.get("CustomerId"),
-              NewCreditLineOption: newCreditLineOption
-            }).done(function(innerResponse2) {
-              return that.personalInfo.fetch().done(function() {
-                BlockUi('off');
-                if (that.personalInfo.get('CreditResult') !== "WaitingForDecision") {
-                  EzBob.App.vent.trigger('newCreditLine:pass');
-                  return;
-                }
-                if (that.personalInfo.get('StrategyError') !== null && that.personalInfo.get('StrategyError') !== '') {
-                  return EzBob.App.vent.trigger('newCreditLine:error', that.personalInfo.get('StrategyError'));
-                } else {
-                  return EzBob.App.vent.trigger('newCreditLine:done');
-                }
-              });
-            });
-          });
-        } else {
-          updater = new ModelUpdater(_this.personalInfo, 'IsMainStratFinished');
-          return updater.start();
-        }
-      }).fail(function(data) {
-        return console.error(data.responseText);
-      });
-    };
+		editOfferValidUntilDate: function() {
+			var d = new EzBob.Dialogs.DateEdit({
+				model: this.model,
+				propertyName: "OfferValidateUntil",
+				title: "Offer valid until edit",
+				width: 370,
+				postValueName: "date",
+				url: "Underwriter/ApplicationInfo/ChangeOferValid",
+				data: {
+					id: this.model.get("CustomerId")
+				}
+			});
 
-    LoanInfoView.prototype.isLoanTypeSelectionAllowed = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.ComboEdit({
-        model: this.model,
-        propertyName: "IsLoanTypeSelectionAllowed",
-        title: "Customer selection",
-        width: 400,
-        postValueName: "loanTypeSelection",
-        comboValues: [
-          {
-            value: 0,
-            text: 'Disabled'
-          }, {
-            value: 1,
-            text: 'Enabled'
-          }
-        ],
-        url: "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed",
-        data: {
-          id: this.model.get("CashRequestId")
-        }
-      });
-      d.render();
-      d.on('done', function() {
-        return _this.LoanTypeSelectionAllowedChanged();
-      });
-    };
+			d.render();
 
-    LoanInfoView.prototype.LoanTypeSelectionAllowedChanged = function() {
-      var isCustomerRepaymentPeriodSelectionAllowed, loanSource, _ref;
-      loanSource = this.model.get('LoanSource') || {};
-      isCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed;
-      if (!isCustomerRepaymentPeriodSelectionAllowed || ((_ref = this.model.get('IsLoanTypeSelectionAllowed')) === 1 || _ref === '1')) {
-        this.$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
-        if (this.model.get('LoanTypeId') !== 1) {
-          return this.model.set('LoanTypeId', 1);
-        }
-      } else {
-        return this.$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').removeAttr('disabled');
-      }
-    };
+			var self = this;
 
-    LoanInfoView.prototype.loanType = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.ComboEdit({
-        model: this.model,
-        propertyName: "LoanTypeId",
-        title: "Loan type",
-        width: 400,
-        comboValues: this.model.get('LoanTypes'),
-        postValueName: "LoanType",
-        url: "Underwriter/ApplicationInfo/LoanType",
-        data: {
-          id: this.model.get("CashRequestId")
-        }
-      });
-      d.render();
-      d.on("done", function() {
-        return _this.model.fetch();
-      });
-    };
+			d.on("done", function() {
+				self.model.fetch();
+			});
+		},
 
-    LoanInfoView.prototype.loanSource = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.ComboEdit({
-        model: this.model,
-        propertyName: "LoanSource.LoanSourceID",
-        title: "Loan source",
-        width: 400,
-        comboValues: _.map(this.model.get('AllLoanSources'), function(ls) {
-          return {
-            value: ls.Id,
-            text: ls.Name
-          };
-        }),
-        postValueName: "LoanSourceID",
-        url: "Underwriter/ApplicationInfo/LoanSource",
-        data: {
-          id: this.model.get("CashRequestId")
-        }
-      });
-      d.render();
-      d.on("done", function() {
-        return _this.model.fetch();
-      });
-    };
+		editStartingDate: function() {
+			var that = this;
 
-    LoanInfoView.prototype.validateLoanSourceRelated = function() {
-      var loanSourceModel, nAnnualTurnover, nCustomerReasonType, nEmployeeCount;
-      loanSourceModel = this.model.get('LoanSource') || {};
-      this.validateInterestVsSource(loanSourceModel.MaxInterest);
-      if (loanSourceModel.DefaultRepaymentPeriod === -1) {
-        this.$el.find('button[name=repaymentPeriodChangeButton]').removeAttr('disabled');
-      } else {
-        this.$el.find('button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
-      }
-      this.parentView.clearDecisionNotes();
-      if (loanSourceModel.MaxEmployeeCount !== -1) {
-        nEmployeeCount = this.model.get('EmployeeCount');
-        if (nEmployeeCount >= 0 && nEmployeeCount > loanSourceModel.MaxEmployeeCount) {
-          this.parentView.appendDecisionNote('<div class=red>Employee count (' + nEmployeeCount + ') is greater than max employee count (' + loanSourceModel.MaxEmployeeCount + ') for this loan source.</div>');
-        }
-      }
-      if (loanSourceModel.MaxAnnualTurnover !== -1) {
-        nAnnualTurnover = this.model.get('AnnualTurnover');
-        if (nAnnualTurnover >= 0 && nAnnualTurnover > loanSourceModel.MaxAnnualTurnover) {
-          this.parentView.appendDecisionNote('<div class=red>Annual turnover (' + EzBob.formatPoundsNoDecimals(nAnnualTurnover) + ') is greater than max annual turnover (' + EzBob.formatPoundsNoDecimals(loanSourceModel.MaxAnnualTurnover) + ') for this loan source.</div>');
-        }
-      }
-      if (loanSourceModel.AlertOnCustomerReasonType !== -1) {
-        nCustomerReasonType = this.model.get('CustomerReasonType');
-        if (loanSourceModel.AlertOnCustomerReasonType === nCustomerReasonType) {
-          return this.parentView.appendDecisionNote('<div class=red>Please note customer reason: "' + this.model.get('CustomerReason') + '".</div>');
-        }
-      }
-    };
+			var d = new EzBob.Dialogs.DateEdit({
+				model: this.model,
+				propertyName: "StartingFromDate",
+				title: "Starting date edit",
+				width: 400,
+				postValueName: "date",
+				url: "Underwriter/ApplicationInfo/ChangeStartingDate",
+				data: {
+					id: this.model.get("CustomerId")
+				}
+			});
 
-    LoanInfoView.prototype.validateInterestVsSource = function(nMaxInterest) {
-      var aryPercentList, nBaseRate, nChange, nPct, nRate, pct, sPercentList, _i, _len, _results;
-      if (nMaxInterest === -1) {
-        return;
-      }
-      this.$el.find('.interest-exceeds-max-by-loan-source').toggleClass('hide', this.model.get('InterestRate') <= nMaxInterest);
-      this.$el.find('.discount-exceeds-max-by-loan-source').addClass('hide');
-      sPercentList = this.model.get('DiscountPlanPercents');
-      if (!(sPercentList != null)) {
-        return;
-      }
-      nBaseRate = this.model.get('InterestRate');
-      aryPercentList = sPercentList.split(',');
-      _results = [];
-      for (_i = 0, _len = aryPercentList.length; _i < _len; _i++) {
-        pct = aryPercentList[_i];
-        if (pct[0] === '(') {
-          pct = pct.substr(1);
-        }
-        nPct = parseFloat(pct);
-        nChange = 100.0 + nPct;
-        nRate = nBaseRate * nChange / 100.0;
-        if (nRate > nMaxInterest) {
-          this.$el.find('.discount-exceeds-max-by-loan-source').removeClass('hide');
-          break;
-        } else {
-          _results.push(void 0);
-        }
-      }
-      return _results;
-    };
+			d.render();
 
-    LoanInfoView.prototype.discountPlan = function() {
-      var d,
-        _this = this;
-      d = new EzBob.Dialogs.ComboEdit({
-        model: this.model,
-        propertyName: "DiscountPlanId",
-        title: "Discount Plan",
-        width: 400,
-        comboValues: _.map(this.model.get('DiscountPlans'), function(v) {
-          return {
-            value: v.Id,
-            text: v.Name
-          };
-        }),
-        postValueName: "DiscountPlanId",
-        url: "Underwriter/ApplicationInfo/DiscountPlan",
-        data: {
-          id: this.model.get("CashRequestId")
-        }
-      });
-      d.render();
-      d.on("done", function() {
-        return _this.model.fetch();
-      });
-    };
+			d.on("done", function() {
+				that.model.fetch();
+			});
+		},
 
-    LoanInfoView.prototype.UpdateNewCreditLineState = function() {
-      var disabled, waiting;
-      waiting = this.personalInfo.get("CreditResult") === "WaitingForDecision";
-      disabled = waiting || !this.personalInfo.get("IsCustomerInEnabledStatus");
-      $("input[name='newCreditLineBtn']").toggleClass("disabled", disabled);
-      return $("#newCreditLineLnkId").toggleClass("disabled", disabled);
-    };
+		editRepaymentPeriod: function() {
+			var d = new EzBob.Dialogs.IntegerEdit({
+				model: this.model,
+				propertyName: "RepaymentPerion",
+				title: "Repayment period edit",
+				width: 400,
+				postValueName: "period",
+				url: "Underwriter/ApplicationInfo/ChangeCashRequestRepaymentPeriod",
+				data: {
+					id: this.model.get("CashRequestId")
+				},
+				required: true
+			});
 
-    LoanInfoView.prototype.statuses = {};
+			d.render();
 
-    LoanInfoView.prototype.serializeData = function() {
-      return {
-        m: this.model.toJSON()
-      };
-    };
+			var self = this;
 
-    LoanInfoView.prototype.onRender = function() {
-      var _ref;
-      this.$el.find(".tltp").tooltip();
-      this.$el.find(".tltp-left").tooltip({
-        placement: "left"
-      });
-      this.UpdateNewCreditLineState();
-      this.LoanTypeSelectionAllowedChanged();
-      this.initSwitch(".brokerCommisionSwitch", 'UseBrokerSetupFee', this.toggleValue, 'ChangeBrokerSetupFee');
-      this.initSwitch(".setupFeeSwitch", 'UseSetupFee', this.toggleValue, 'ChangeSetupFee');
-      this.initSwitch(".sendEmailsSwitch", 'AllowSendingEmail', this.toggleValue, 'AllowSendingEmails');
-      if ((_ref = this.model.get('IsLoanTypeSelectionAllowed')) === 2 || _ref === '2') {
-        this.$el.find('button[name=isLoanTypeSelectionAllowed]').attr('disabled', 'disabled');
-      } else {
-        this.$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled');
-      }
-      this.validateLoanSourceRelated();
-      return EzBob.handleUserLayoutSetting();
-    };
+			d.on("done", function() {
+				self.model.fetch();
+			});
+		},
 
-    LoanInfoView.prototype.initSwitch = function(elemClass, param, func, method) {
-      var state, that;
-      that = this;
-      state = this.model.get(param);
-      this.$el.find(elemClass).bootstrapSwitch();
-      this.$el.find(elemClass).bootstrapSwitch('setState', state);
-      return this.$el.find(elemClass).on('switch-change', function(event, state) {
-        return func.call(that, event, state, method, param);
-      });
-    };
+		editOfferedCreditLine: function() {
+			var that = this;
 
-    LoanInfoView.prototype.toggleValue = function(event, state, method, param) {
-      var id,
-        _this = this;
-      id = this.model.get('CashRequestId');
-      BlockUi();
-      return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/' + method, {
-        id: id,
-        enabled: state.value
-      }).done(function(result) {
-        if (result.error) {
-          return EzBob.App.trigger('error', result.error);
-        } else {
-          return _this.model.fetch();
-        }
-      }).always(function() {
-        return UnBlockUi();
-      });
-    };
+			this.model.set('amount', this.model.get('OfferedCreditLine'));
 
-    LoanInfoView.prototype.changeCreditResult = function() {
-      this.model.fetch();
-      return this.personalInfo.fetch();
-    };
+			var view = new EzBob.Underwriter.CreditLineEditDialog({
+				model: this.model
+			});
 
-    LoanInfoView.prototype.showCreditLineDialog = function() {
-      var xhr,
-        _this = this;
-      xhr = this.model.fetch();
-      return xhr.done(function() {
-        var dialog;
-        dialog = new EzBob.Underwriter.CreditLineDialog({
-          model: _this.model
-        });
-        return EzBob.App.jqmodal.show(dialog);
-      });
-    };
+			EzBob.App.jqmodal.show(view);
 
-    LoanInfoView.prototype.showErrorDialog = function(errorMsg) {
-      return EzBob.ShowMessage(errorMsg, "Something went wrong");
-    };
+			view.on("showed", function() {
+				view.$el.find("input").focus();
+			});
 
-    LoanInfoView.prototype.showNothing = function(errorMsg) {
-      return this;
-    };
+			view.on("done", function() {
+				that.model.fetch();
+			});
+		},
 
-    return LoanInfoView;
+		editInterestRate: function() {
+			var d = new EzBob.Dialogs.PercentsEdit({
+				model: this.model,
+				propertyName: "InterestRate",
+				title: "Interest rate edit",
+				width: 400,
+				postValueName: "interestRate",
+				url: "Underwriter/ApplicationInfo/ChangeCashRequestInterestRate",
+				data: {
+					id: this.model.get("CashRequestId")
+				},
+				required: true
+			});
 
-  })(Backbone.Marionette.ItemView);
+			d.render();
 
-  ModelUpdater = (function() {
+			var self = this;
 
-    function ModelUpdater(model, property) {
-      this.model = model;
-      this.property = property;
-      this.start = __bind(this.start, this);
+			d.on("done", function() {
+				self.model.fetch();
+			});
+		},
 
-    }
+		editDetails: function() {
+			var d = new EzBob.Dialogs.TextEdit({
+				model: this.model,
+				propertyName: "Details",
+				title: "Details edit",
+				width: 400,
+				postValueName: "details",
+				url: "Underwriter/ApplicationInfo/SaveDetails",
+				data: {
+					id: this.model.get("CustomerId")
+				}
+			});
+			d.render();
+		},
 
-    ModelUpdater.prototype.start = function() {
-      var xhr,
-        _this = this;
-      xhr = this.model.fetch();
-      return xhr.done(function() {
-        return _this.check();
-      });
-    };
+		editManualSetupFeeAmount: function() {
+			var d = new EzBob.Dialogs.PoundsNoDecimalsEdit({
+				model: this.model,
+				propertyName: "ManualSetupFeeAmount",
+				title: "Manual setup fee amount edit",
+				width: 400,
+				postValueName: "manualAmount",
+				url: "Underwriter/ApplicationInfo/ChangeManualSetupFeeAmount",
+				data: {
+					id: this.model.get("CashRequestId")
+				},
+				required: false
+			});
 
-    ModelUpdater.prototype.check = function() {
-      if (Convert.toBool(this.model.get(this.property))) {
-        BlockUi('off');
-        if (this.model.get('CreditResult') !== "WaitingForDecision") {
-          EzBob.App.vent.trigger('newCreditLine:pass');
-          return;
-        }
-        if (this.model.get('StrategyError') !== null) {
-          EzBob.App.vent.trigger('newCreditLine:error', this.model.get('StrategyError'));
-        } else {
-          EzBob.App.vent.trigger('newCreditLine:done');
-        }
-        return;
-      } else {
-        setTimeout(this.start, 1000);
-      }
-      return this;
-    };
+			d.render();
 
-    return ModelUpdater;
+			var self = this;
 
-  })();
+			d.on("done", function() {
+				self.model.fetch();
+			});
+		},
 
-  EzBob.Underwriter.LoanInfoModel = (function(_super) {
+		editManualSetupFeePercent: function() {
+			var d = new EzBob.Dialogs.PercentsEdit({
+				model: this.model,
+				propertyName: "ManualSetupFeePercent",
+				title: "Manual setup fee percent edit",
+				width: 400,
+				postValueName: "manualPercent",
+				url: "Underwriter/ApplicationInfo/ChangeManualSetupFeePercent",
+				data: {
+					id: this.model.get("CashRequestId")
+				},
+				required: false
+			});
 
-    __extends(LoanInfoModel, _super);
+			d.render();
 
-    function LoanInfoModel() {
-      return LoanInfoModel.__super__.constructor.apply(this, arguments);
-    }
+			var self = this;
 
-    LoanInfoModel.prototype.idAttribute = "Id";
+			d.on("done", function() {
+				self.model.fetch();
+			});
+		},
 
-    LoanInfoModel.prototype.urlRoot = "" + window.gRootPath + "Underwriter/ApplicationInfo/Index";
+		runNewCreditLine: function(e) {
+			if ($(e.currentTarget).hasClass("disabled"))
+				return false;
 
-    LoanInfoModel.prototype.initialize = function() {
-      this.on("change:OfferValidateUntil", this.offerChanged, this);
-      return this.on("change:LoanTypeId", this.loanTypeChanged, this);
-    };
+			var el = ($("<select/>")).css("height", "30px").css("width", "270px").append("<option value='1'>Skip everything, go to manual decision</option>").append("<option value='2'>Update everything except of MP's and go to manual decisions</option>").append("<option value='3'>Update everything and apply auto rules</option>").append("<option value='4'>Update everything and go to manual decision</option>");
 
-    LoanInfoModel.prototype.offerChanged = function() {
-      var now, until_;
-      until_ = moment(this.get("OfferValidateUntil"), "DD/MM/YYYY");
-      now = moment();
-      return this.set({
-        OfferExpired: until_ < now
-      });
-    };
+			var self = this;
 
-    LoanInfoModel.prototype.loanTypeChanged = function() {
-      var id, type, types;
-      types = this.get('LoanTypes');
-      id = parseInt(this.get('LoanTypeId'), 10);
-      type = _.find(types, function(t) {
-        return t.value === id;
-      });
-      if (type) {
-        return this.set("LoanType", type.text);
-      }
-    };
+			EzBob.ShowMessage(el, "New Credit Line Option", (function() {
+				self.RunCustomerCheck(el.val());
+			}), "OK", null, "Cancel");
+			return false;
+		},
 
-    return LoanInfoModel;
+		RunCustomerCheck: function(newCreditLineOption) {
+			var that = this;
 
-  })(Backbone.Model);
+			BlockUi("on");
 
-}).call(this);
+			$.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLine", {
+				Id: this.model.get("CustomerId"),
+				NewCreditLineOption: newCreditLineOption
+			}).done(function(response) {
+				if (response.Message === "Go to new mode") {
+					$.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode1", {
+						Id: that.model.get("CustomerId"),
+						NewCreditLineOption: newCreditLineOption
+					}).done(function(innerResponse) {
+						$.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode2", {
+							Id: that.model.get("CustomerId"),
+							NewCreditLineOption: newCreditLineOption
+						}).done(function(innerResponse2) {
+							that.personalInfo.fetch().done(function() {
+								BlockUi('off');
+
+								if (that.personalInfo.get('CreditResult') !== "WaitingForDecision") {
+									EzBob.App.vent.trigger('newCreditLine:pass');
+									return;
+								}
+
+								if (that.personalInfo.get('StrategyError') !== null && that.personalInfo.get('StrategyError') !== '') {
+									EzBob.App.vent.trigger('newCreditLine:error', that.personalInfo.get('StrategyError'));
+								} else {
+									EzBob.App.vent.trigger('newCreditLine:done');
+								}
+							});
+						});
+					});
+				} else {
+					var updater = new ModelUpdater(self.personalInfo, 'IsMainStratFinished');
+					updater.start();
+				}
+			}).fail(function(data) {
+				console.error(data.responseText);
+			});
+		},
+
+		isLoanTypeSelectionAllowed: function() {
+			var d = new EzBob.Dialogs.ComboEdit({
+				model: this.model,
+				propertyName: "IsLoanTypeSelectionAllowed",
+				title: "Customer selection",
+				width: 400,
+				postValueName: "loanTypeSelection",
+				comboValues: [
+				  {
+				  	value: 0,
+				  	text: 'Disabled'
+				  }, {
+				  	value: 1,
+				  	text: 'Enabled'
+				  }
+				],
+				url: "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed",
+				data: {
+					id: this.model.get("CashRequestId")
+				}
+			});
+
+			d.render();
+
+			var self = this;
+
+			d.on('done', function() {
+				self.LoanTypeSelectionAllowedChanged();
+			});
+		},
+
+		LoanTypeSelectionAllowedChanged: function() {
+			var _ref;
+
+			var loanSource = this.model.get('LoanSource') || {};
+
+			var isCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed;
+
+			var isLoanTypeSelectionAllowed = this.model.get('IsLoanTypeSelectionAllowed');
+
+			if (!isCustomerRepaymentPeriodSelectionAllowed || (isLoanTypeSelectionAllowed === 1 || isLoanTypeSelectionAllowed === '1')) {
+				this.$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
+
+				if (this.model.get('LoanTypeId') !== 1)
+					this.model.set('LoanTypeId', 1);
+			}
+			else
+				this.$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').removeAttr('disabled');
+		},
+
+		loanType: function() {
+			var d = new EzBob.Dialogs.ComboEdit({
+				model: this.model,
+				propertyName: "LoanTypeId",
+				title: "Loan type",
+				width: 400,
+				comboValues: this.model.get('LoanTypes'),
+				postValueName: "LoanType",
+				url: "Underwriter/ApplicationInfo/LoanType",
+				data: {
+					id: this.model.get("CashRequestId")
+				}
+			});
+
+			d.render();
+
+			var self = this;
+
+			d.on("done", function() {
+				self.model.fetch();
+			});
+		},
+
+		loanSource: function() {
+			var d = new EzBob.Dialogs.ComboEdit({
+				model: this.model,
+				propertyName: "LoanSource.LoanSourceID",
+				title: "Loan source",
+				width: 400,
+				comboValues: _.map(this.model.get('AllLoanSources'), function(ls) {
+					return {
+						value: ls.Id,
+						text: ls.Name
+					};
+				}),
+				postValueName: "LoanSourceID",
+				url: "Underwriter/ApplicationInfo/LoanSource",
+				data: {
+					id: this.model.get("CashRequestId")
+				}
+			});
+
+			d.render();
+
+			var self = this;
+
+			d.on("done", function() {
+				self.model.fetch();
+			});
+		},
+
+		validateLoanSourceRelated: function() {
+			var loanSourceModel = this.model.get('LoanSource') || {};
+
+			this.validateInterestVsSource(loanSourceModel.MaxInterest);
+
+			if (loanSourceModel.DefaultRepaymentPeriod === -1)
+				this.$el.find('button[name=repaymentPeriodChangeButton]').removeAttr('disabled');
+			else
+				this.$el.find('button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
+
+			this.parentView.clearDecisionNotes();
+
+			if (loanSourceModel.MaxEmployeeCount !== -1) {
+				var nEmployeeCount = this.model.get('EmployeeCount');
+
+				if (nEmployeeCount >= 0 && nEmployeeCount > loanSourceModel.MaxEmployeeCount)
+					this.parentView.appendDecisionNote('<div class=red>Employee count (' + nEmployeeCount + ') is greater than max employee count (' + loanSourceModel.MaxEmployeeCount + ') for this loan source.</div>');
+			}
+
+			if (loanSourceModel.MaxAnnualTurnover !== -1) {
+				var nAnnualTurnover = this.model.get('AnnualTurnover');
+
+				if (nAnnualTurnover >= 0 && nAnnualTurnover > loanSourceModel.MaxAnnualTurnover)
+					this.parentView.appendDecisionNote('<div class=red>Annual turnover (' + EzBob.formatPoundsNoDecimals(nAnnualTurnover) + ') is greater than max annual turnover (' + EzBob.formatPoundsNoDecimals(loanSourceModel.MaxAnnualTurnover) + ') for this loan source.</div>');
+			}
+
+			if (loanSourceModel.AlertOnCustomerReasonType !== -1) {
+				var nCustomerReasonType = this.model.get('CustomerReasonType');
+
+				if (loanSourceModel.AlertOnCustomerReasonType === nCustomerReasonType)
+					this.parentView.appendDecisionNote('<div class=red>Please note customer reason: "' + this.model.get('CustomerReason') + '".</div>');
+			}
+		},
+
+		validateInterestVsSource: function(nMaxInterest) {
+			if (nMaxInterest === -1)
+				return [];
+
+			this.$el.find('.interest-exceeds-max-by-loan-source').toggleClass('hide', this.model.get('InterestRate') <= nMaxInterest);
+
+			this.$el.find('.discount-exceeds-max-by-loan-source').addClass('hide');
+
+			var sPercentList = this.model.get('DiscountPlanPercents');
+
+			if (!sPercentList)
+				return [];
+
+			var nBaseRate = this.model.get('InterestRate');
+
+			var aryPercentList = sPercentList.split(',');
+			var _len = aryPercentList.length;
+
+			var _results = [];
+
+			for (var _i = 0; _i < _len; _i++) {
+				var pct = aryPercentList[_i];
+
+				if (pct[0] === '(')
+					pct = pct.substr(1);
+
+				var nPct = parseFloat(pct);
+				var nChange = 100.0 + nPct;
+				var nRate = nBaseRate * nChange / 100.0;
+
+				if (nRate > nMaxInterest) {
+					this.$el.find('.discount-exceeds-max-by-loan-source').removeClass('hide');
+					break;
+				}
+				else
+					_results.push(void 0);
+			}
+
+			return _results;
+		},
+
+		discountPlan: function() {
+			var d = new EzBob.Dialogs.ComboEdit({
+				model: this.model,
+				propertyName: "DiscountPlanId",
+				title: "Discount Plan",
+				width: 400,
+				comboValues: _.map(this.model.get('DiscountPlans'), function(v) {
+					return {
+						value: v.Id,
+						text: v.Name
+					};
+				}),
+				postValueName: "DiscountPlanId",
+				url: "Underwriter/ApplicationInfo/DiscountPlan",
+				data: {
+					id: this.model.get("CashRequestId")
+				}
+			});
+
+			d.render();
+
+			var self = this;
+
+			d.on("done", function() {
+				self.model.fetch();
+			});
+		},
+
+		UpdateNewCreditLineState: function() {
+			var waiting = this.personalInfo.get("CreditResult") === "WaitingForDecision";
+			var disabled = waiting || !this.personalInfo.get("IsCustomerInEnabledStatus");
+			$("input[name='newCreditLineBtn']").toggleClass("disabled", disabled);
+			$("#newCreditLineLnkId").toggleClass("disabled", disabled);
+		},
+
+		statuses: {},
+
+		serializeData: function() {
+			return {
+				m: this.model.toJSON()
+			};
+		},
+
+		onRender: function() {
+			this.$el.find(".tltp").tooltip();
+			this.$el.find(".tltp-left").tooltip({
+				placement: "left"
+			});
+
+			this.UpdateNewCreditLineState();
+			this.LoanTypeSelectionAllowedChanged();
+
+			this.initSwitch(".brokerCommisionSwitch", 'UseBrokerSetupFee', this.toggleValue, 'ChangeBrokerSetupFee');
+			this.initSwitch(".setupFeeSwitch", 'UseSetupFee', this.toggleValue, 'ChangeSetupFee');
+			this.initSwitch(".sendEmailsSwitch", 'AllowSendingEmail', this.toggleValue, 'AllowSendingEmails');
+
+			var isLoanTypeSelectionAllowed = this.model.get('IsLoanTypeSelectionAllowed');
+
+			if (isLoanTypeSelectionAllowed === 2 || isLoanTypeSelectionAllowed === '2')
+				this.$el.find('button[name=isLoanTypeSelectionAllowed]').attr('disabled', 'disabled');
+			else
+				this.$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled');
+
+			this.validateLoanSourceRelated();
+			EzBob.handleUserLayoutSetting();
+		},
+
+		initSwitch: function(elemClass, param, func, method) {
+			var that = this;
+			var state = this.model.get(param);
+
+			this.$el.find(elemClass).bootstrapSwitch();
+			this.$el.find(elemClass).bootstrapSwitch('setState', state);
+
+			this.$el.find(elemClass).on('switch-change', function(event, state) {
+				func.call(that, event, state, method, param);
+			});
+		},
+
+		toggleValue: function(event, state, method, param) {
+			var id = this.model.get('CashRequestId');
+
+			BlockUi();
+
+			var self = this;
+
+			$.post(window.gRootPath + 'Underwriter/ApplicationInfo/' + method, {
+				id: id,
+				enabled: state.value
+			}).done(function(result) {
+				if (result.error)
+					EzBob.App.trigger('error', result.error);
+				else
+					self.model.fetch();
+			}).always(function() {
+				UnBlockUi();
+			});
+		},
+
+		changeCreditResult: function() {
+			this.model.fetch();
+			this.personalInfo.fetch();
+		},
+
+		showCreditLineDialog: function() {
+			var xhr,
+			  _this = this;
+			xhr = this.model.fetch();
+			return xhr.done(function() {
+				var dialog;
+				dialog = new EzBob.Underwriter.CreditLineDialog({
+					model: _this.model
+				});
+				return EzBob.App.jqmodal.show(dialog);
+			});
+		},
+
+		showErrorDialog: function(errorMsg) {
+			EzBob.ShowMessage(errorMsg, "Something went wrong");
+		},
+
+		showNothing: function(errorMsg) { }
+	});
+
+	EzBob.Underwriter.LoanInfoModel = Backbone.Model.extend({
+		idAttribute: "Id",
+
+		urlRoot: "" + window.gRootPath + "Underwriter/ApplicationInfo/Index",
+
+		initialize: function() {
+			this.on("change:OfferValidateUntil", this.offerChanged, this);
+			this.on("change:LoanTypeId", this.loanTypeChanged, this);
+		},
+
+		offerChanged: function() {
+			var until_ = moment(this.get("OfferValidateUntil"), "DD/MM/YYYY");
+			var now = moment();
+
+			this.set({
+				OfferExpired: until_ < now
+			});
+		},
+
+		loanTypeChanged: function() {
+			var types = this.get('LoanTypes');
+			var id = parseInt(this.get('LoanTypeId'), 10);
+
+			var type = _.find(types, function(t) {
+				return t.value === id;
+			});
+
+			if (type)
+				this.set("LoanType", type.text);
+		}
+	});
+})();
