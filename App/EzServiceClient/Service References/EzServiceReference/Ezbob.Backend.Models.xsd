@@ -550,6 +550,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PropertyStatusModel" nillable="true" type="tns:PropertyStatusModel" />
+  <xs:complexType name="ArrayOfCompanyCaisAccount">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyCaisAccount" nillable="true" type="tns:CompanyCaisAccount" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyCaisAccount" nillable="true" type="tns:ArrayOfCompanyCaisAccount" />
+  <xs:complexType name="CompanyCaisAccount">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LastUpdateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Statuses" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompanyCaisAccount" nillable="true" type="tns:CompanyCaisAccount" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />

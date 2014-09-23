@@ -223,5 +223,20 @@
 				}
 			};
 		}
+
+		public CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId)
+		{
+			GetCompanyCaisDataForAlerts strategyInstance;
+
+			var result = ExecuteSync(out strategyInstance, customerId, underwriterId, customerId);
+
+			return new CompanyCaisDataActionResult
+			{
+				MetaData = result,
+				Accounts = strategyInstance.Accounts,
+				NumOfCurrentDefaultAccounts = strategyInstance.NumOfCurrentDefaultAccounts,
+				NumOfSettledDefaultAccounts = strategyInstance.NumOfSettledDefaultAccounts
+			};
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

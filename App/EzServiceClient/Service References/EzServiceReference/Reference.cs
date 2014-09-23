@@ -204,6 +204,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomerDetailsActionResult))]
@@ -925,6 +926,61 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.GroupsField, value) != true)) {
                     this.GroupsField = value;
                     this.RaisePropertyChanged("Groups");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CompanyCaisDataActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CompanyCaisDataActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.CompanyCaisAccount[] AccountsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NumOfCurrentDefaultAccountsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NumOfSettledDefaultAccountsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.CompanyCaisAccount[] Accounts {
+            get {
+                return this.AccountsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountsField, value) != true)) {
+                    this.AccountsField = value;
+                    this.RaisePropertyChanged("Accounts");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NumOfCurrentDefaultAccounts {
+            get {
+                return this.NumOfCurrentDefaultAccountsField;
+            }
+            set {
+                if ((this.NumOfCurrentDefaultAccountsField.Equals(value) != true)) {
+                    this.NumOfCurrentDefaultAccountsField = value;
+                    this.RaisePropertyChanged("NumOfCurrentDefaultAccounts");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NumOfSettledDefaultAccounts {
+            get {
+                return this.NumOfSettledDefaultAccountsField;
+            }
+            set {
+                if ((this.NumOfSettledDefaultAccountsField.Equals(value) != true)) {
+                    this.NumOfSettledDefaultAccountsField = value;
+                    this.RaisePropertyChanged("NumOfSettledDefaultAccounts");
                 }
             }
         }
@@ -2792,6 +2848,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPropertyStatuses", ReplyAction="http://tempuri.org/IEzService/GetPropertyStatusesResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult> GetPropertyStatusesAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts", ReplyAction="http://tempuri.org/IEzService/GetCompanyCaisDataForAlertsResponse")]
+        ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts", ReplyAction="http://tempuri.org/IEzService/GetCompanyCaisDataForAlertsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult> GetCompanyCaisDataForAlertsAsync(int underwriterId, int customerId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
         
@@ -3920,6 +3982,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult> GetPropertyStatusesAsync() {
             return base.Channel.GetPropertyStatusesAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId) {
+            return base.Channel.GetCompanyCaisDataForAlerts(underwriterId, customerId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult> GetCompanyCaisDataForAlertsAsync(int underwriterId, int customerId) {
+            return base.Channel.GetCompanyCaisDataForAlertsAsync(underwriterId, customerId);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2) {

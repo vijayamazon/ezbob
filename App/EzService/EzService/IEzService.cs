@@ -583,6 +583,9 @@
 
 		[OperationContract]
 		PropertyStatusesActionResult GetPropertyStatuses();
+
+		[OperationContract]
+		CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId);
 	} // interface IEzService
 } // namespace EzService
 

@@ -7,17 +7,20 @@
 	using System.Text;
 	using Backend.Models;
 	using CommonLib.TimePeriodLogic;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Areas.Underwriter.Models;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
 	using Infrastructure;
 	using MoreLinq;
 	using NHibernate;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using log4net;
 
@@ -49,7 +52,6 @@
 			BuildAlerts(summary, customer);
 			return summary;
 		}
-
 
 		public ProfileSummaryModel CreateProfile(Customer customer)
 		{
@@ -220,6 +222,7 @@
 			Log.DebugFormat("Just FYI: BuildLandRegistryAlerts() returned {0}", bResult ? "true" : "false");
 
 			BuildDataAlerts(customer, summary, context.UserId);
+			BuildCompanyCaisAlerts(customer, summary, context.UserId);
 
 			bool hasMortgage = false;
 			bool isHomeOwner = customer.PropertyStatus != null && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties);
@@ -247,6 +250,90 @@
 			sb.AppendLine("<li>");
 			sb.Append(error);
 			sb.Append("</li>");
+		}
+
+		private bool GetIsAccountLateInLastXMonths(CompanyCaisAccount account, int numberOfMonths)
+		{
+			DateTime tmp = account.LastUpdateDate.AddMonths(numberOfMonths);
+			int numOfMonthsBackWeHaveDataFor = 0;
+			while (tmp > DateTime.UtcNow)
+			{
+				numOfMonthsBackWeHaveDataFor++;
+				tmp = tmp.AddMonths(-1);
+			}
+
+			if (numOfMonthsBackWeHaveDataFor > 0)
+			{
+				string effectiveLateStatuses = account.Statuses.Substring(0, numOfMonthsBackWeHaveDataFor).Replace("0", string.Empty);
+				if (effectiveLateStatuses.Length > 0)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private void BuildCompanyCaisAlerts(Customer customer, ProfileSummaryModel summary, int userId)
+		{
+			CompanyCaisDataActionResult companyCaisData = serviceClient.Instance.GetCompanyCaisDataForAlerts(userId, customer.Id);
+
+			if (companyCaisData.NumOfCurrentDefaultAccounts > 0)
+			{
+				summary.Alerts.Errors.Add(new AlertModel
+				{
+					Abbreviation = "CompCAIS", // Get from Vitas
+					Alert = string.Format("Company has {0} default accounts", companyCaisData.NumOfCurrentDefaultAccounts),
+					AlertType = AlertType.Error.DescriptionAttr()
+				});
+			}
+
+			if (companyCaisData.NumOfSettledDefaultAccounts > 0)
+			{
+				summary.Alerts.Warnings.Add(new AlertModel
+				{
+					Abbreviation = "CompCAIS", // Get from Vitas
+					Alert = string.Format("Company has {0} settled default accounts", companyCaisData.NumOfSettledDefaultAccounts),
+					AlertType = AlertType.Warning.DescriptionAttr()
+				});
+			}
+
+			bool hasLastAccounts = false;
+			int numOfLateAccounts = 0;
+			foreach (CompanyCaisAccount account in companyCaisData.Accounts)
+			{
+				if (GetIsAccountLateInLastXMonths(account, CurrentValues.Instance.CompanyCaisLateAlertLongMonths))
+				{
+					numOfLateAccounts++;
+				}
+
+				if (!hasLastAccounts)
+				{
+					hasLastAccounts = GetIsAccountLateInLastXMonths(account, CurrentValues.Instance.CompanyCaisLateAlertShortMonths);
+				}
+			}
+
+			var lateErrors = new StringBuilder();
+
+			if (hasLastAccounts)
+			{
+				AppendLi(lateErrors, string.Format("Company has late accounts in last {0} months", CurrentValues.Instance.CompanyCaisLateAlertShortMonths.Value));
+			}
+
+			if (numOfLateAccounts > CurrentValues.Instance.CompanyCaisLateAlertShortPeriodThreshold)
+			{
+				AppendLi(lateErrors, string.Format("Company has {0} late accounts in last {1} months", numOfLateAccounts, CurrentValues.Instance.CompanyCaisLateAlertLongMonths.Value));
+			}
+
+			string errorStr = lateErrors.ToString();
+			if (!string.IsNullOrEmpty(errorStr))
+			{
+				summary.Alerts.Errors.Add(new AlertModel {
+					Abbreviation = "CompLate", // Get from Vitas
+					Alert = string.Format("<ul class='alert-list'>{0}</ul>", errorStr),
+					AlertType = AlertType.Error.DescriptionAttr()
+				});
+			}
 		}
 
 		private void BuildDataAlerts(Customer customer, ProfileSummaryModel summary, int userId)

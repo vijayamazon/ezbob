@@ -557,6 +557,12 @@
   <wsdl:message name="IEzService_GetPropertyStatuses_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPropertyStatusesResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyCaisDataForAlerts_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyCaisDataForAlerts" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyCaisDataForAlerts_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyCaisDataForAlertsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
@@ -1385,6 +1391,10 @@
     <wsdl:operation name="GetPropertyStatuses">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatuses" message="tns:IEzService_GetPropertyStatuses_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatusesResponse" message="tns:IEzService_GetPropertyStatuses_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyCaisDataForAlerts">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts" message="tns:IEzService_GetCompanyCaisDataForAlerts_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlertsResponse" message="tns:IEzService_GetCompanyCaisDataForAlerts_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
@@ -2440,6 +2450,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPropertyStatuses">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetPropertyStatuses" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyCaisDataForAlerts">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

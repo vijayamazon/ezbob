@@ -59,6 +59,7 @@
     <Compile Include="CompanyDataForCreditBureau.cs" />
     <Compile Include="ConfigTable.cs" />
     <Compile Include="CompanyData.cs" />
+    <Compile Include="CompanyCaisAccount.cs" />
     <Compile Include="PropertyStatusModel.cs" />
     <Compile Include="CustomerDetailsModel.cs" />
     <Compile Include="CrmStatusGroup.cs" />

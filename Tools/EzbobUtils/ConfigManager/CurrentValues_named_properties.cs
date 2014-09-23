@@ -2444,5 +2444,20 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.Reject_Defaults_CompanyAmount]; }
 		}
+
+		public virtual VariableValue CompanyCaisLateAlertLongMonths
+		{
+			get { return this[Variables.CompanyCaisLateAlertLongMonths]; }
+		}
+
+		public virtual VariableValue CompanyCaisLateAlertShortMonths
+		{
+			get { return this[Variables.CompanyCaisLateAlertShortMonths]; }
+		}
+
+		public virtual VariableValue CompanyCaisLateAlertShortPeriodThreshold
+		{
+			get { return this[Variables.CompanyCaisLateAlertShortPeriodThreshold]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

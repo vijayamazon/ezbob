@@ -364,6 +364,9 @@ namespace ConfigManager {
 		Reject_Defaults_CompanyScore,
 		Reject_Defaults_CompanyAccountsNum,
 		Reject_Defaults_CompanyMonthsNum,
-		Reject_Defaults_CompanyAmount
+		Reject_Defaults_CompanyAmount,
+		CompanyCaisLateAlertLongMonths,
+		CompanyCaisLateAlertShortMonths,
+		CompanyCaisLateAlertShortPeriodThreshold
 	} // enum Variables
 } // namespace ConfigManager

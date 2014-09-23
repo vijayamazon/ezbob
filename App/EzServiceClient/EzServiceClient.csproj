@@ -137,6 +137,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
