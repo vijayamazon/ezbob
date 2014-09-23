@@ -337,8 +337,8 @@
 				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.signature.monitor.js")
 
 				//----
-				.Add("~/Content/js/Underwriter/editLoan/loanModel.coffee")
-				.Add("~/Content/js/Underwriter/editLoan/installmentEditor.coffee")
+				.Add("~/Content/js/Underwriter/editLoan/loanModel.js")
+				.Add("~/Content/js/Underwriter/editLoan/installmentEditor.js")
 				.Add("~/Content/js/Underwriter/editLoan/editFee.js")
 				.Add("~/Content/js/Underwriter/editLoan/editLoanView.js")
 				.Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.js")

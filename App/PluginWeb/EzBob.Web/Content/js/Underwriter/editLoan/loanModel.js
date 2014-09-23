@@ -1,293 +1,253 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __slice = [].slice;
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Installment = Backbone.Model.extend({
+	defaults: {
+		IsAdding: false,
+		skipRecalculations: false,
+	}, // defaults
 
-  root.EzBob = root.EzBob || {};
+	initialize: function() {
+		this.on('change:Balance', this.balanceChanged, this);
+		this.on('change:Principal', this.principalChanged, this);
+		this.on('change:Total', this.totalChanged, this);
+		this.on('change:Date', this.dateChanged, this);
+	}, // initialize
 
-  EzBob.Installment = (function(_super) {
+	balanceChanged: function() {
+		this.safeRecalculate(function() {
+			if (this.get('Balance') === this.previous('Balance'))
+				return;
 
-    __extends(Installment, _super);
+			var principal = this.round(this.get('BalanceBeforeRepayment') - this.get('Balance'));
+			this.set('Principal', principal);
+			this.recalculate();
+		});
+	}, // balanceChanged
 
-    function Installment() {
-      return Installment.__super__.constructor.apply(this, arguments);
-    }
+	totalChanged: function() {
+		this.safeRecalculate(function() {
+			var diff = this.get('Total') - this.previous('Total');
+			if (diff === 0)
+				return;
 
-    Installment.prototype.defaults = {
-      IsAdding: false,
-      skipRecalculations: false
-    };
+			this.set('Balance', this.get('Balance') - diff);
+			this.set('Principal', this.get('Principal') + diff);
+		});
+	}, // totalChanged
 
-    Installment.prototype.initialize = function() {
-      this.on("change:Balance", this.balanceChanged, this);
-      this.on("change:Principal", this.principalChanged, this);
-      this.on("change:Total", this.totalChanged, this);
-      return this.on("change:Date", this.dateChanged, this);
-    };
+	principalChanged: function() {
+		this.safeRecalculate(function() {
+			var diff = this.get('Principal') - this.previous('Principal');
+			if (diff === 0)
+				return;
 
-    Installment.prototype.balanceChanged = function() {
-      return this.safeRecalculate(function() {
-        var principal;
-        if (this.get('Balance') === this.previous('Balance')) {
-          return;
-        }
-        principal = this.round(this.get('BalanceBeforeRepayment') - this.get('Balance'));
-        this.set('Principal', principal);
-        return this.recalculate();
-      });
-    };
+			this.set('Balance', this.get('Balance') - diff);
+			this.recalculate();
+		});
+	}, // principalChanged
 
-    Installment.prototype.totalChanged = function() {
-      return this.safeRecalculate(function() {
-        var diff;
-        diff = this.get("Total") - this.previous("Total");
-        if (diff === 0) {
-          return;
-        }
-        this.set('Balance', this.get("Balance") - diff);
-        return this.set('Principal', this.get("Principal") + diff);
-      });
-    };
+	safeRecalculate: function() {
+		var func = arguments[0];
+		var params = 2 <= arguments.length ? [].slice.call(arguments, 1) : [];
 
-    Installment.prototype.principalChanged = function() {
-      return this.safeRecalculate(function() {
-        var diff;
-        diff = this.get("Principal") - this.previous("Principal");
-        if (diff === 0) {
-          return;
-        }
-        this.set('Balance', this.get("Balance") - diff);
-        return this.recalculate();
-      });
-    };
+		if (this.skipRecalculations)
+			return;
 
-    Installment.prototype.safeRecalculate = function() {
-      var func, params;
-      func = arguments[0], params = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      if (this.skipRecalculations) {
-        return;
-      }
-      this.skipRecalculations = true;
-      func.call(this, params);
-      return this.skipRecalculations = false;
-    };
+		this.skipRecalculations = true;
+		func.call(this, params);
+		this.skipRecalculations = false;
+	}, // safeRecalculate
 
-    Installment.prototype.recalculate = function() {
-      return this.set({
-        'Total': this.get('Principal') + this.get('Interest') + this.get('Fees')
-      });
-    };
+	recalculate: function() {
+		this.set({
+			'Total': this.get('Principal') + this.get('Interest') + this.get('Fees')
+		});
+	}, // recalculate
 
-    Installment.prototype.dateChanged = function() {
-      return this.set("Date", new Date(moment.utc(this.get("Date"))));
-    };
+	dateChanged: function() {
+		this.set('Date', new Date(moment.utc(this.get('Date'))));
+	}, // dateChanged
 
-    Installment.prototype.round = function(number) {
-      number = Math.round(number * 100);
-      return number = number / 100;
-    };
+	round: function(number) {
+		number = Math.round(number * 100);
+		return number = number / 100;
+	}, // round
+}); // EzBob.Installment
 
-    return Installment;
+EzBob.Installments = Backbone.Collection.extend({
+	model: EzBob.Installment,
 
-  })(Backbone.Model);
+	comparator: function(m1, m2) {
+		var r;
 
-  EzBob.Installments = (function(_super) {
+		var d1 = moment.utc(m1.get('Date')).startOf('day');
+		var d2 = moment.utc(m2.get('Date')).startOf('day');
+		var d = d1.diff(d2, 'days');
 
-    __extends(Installments, _super);
+		if (d < 0)
+			r = -1;
+		else if (d === 0)
+			r = 0;
+		else
+			r = 1;
 
-    function Installments() {
-      return Installments.__super__.constructor.apply(this, arguments);
-    }
+		if (r === 0 && m1.get('Type') !== m2.get('Type')) {
+			if (m1.get('Type') === 'Installment')
+				r = 1;
+			else
+				r = -1;
+		} // if
 
-    Installments.prototype.model = EzBob.Installment;
+		return r;
+	}, // comparator
+}); // EzBob.Installments
 
-    Installments.prototype.comparator = function(m1, m2) {
-      var d, d1, d2, r;
-      d1 = moment.utc(m1.get('Date')).startOf('day');
-      d2 = moment.utc(m2.get('Date')).startOf('day');
-      d = d1.diff(d2, "days");
-      if (d < 0) {
-        r = -1;
-      } else if (d === 0) {
-        r = 0;
-      } else {
-        r = 1;
-      }
-      if (r === 0 && m1.get("Type") !== m2.get("Type")) {
-        if (m1.get("Type") === "Installment") {
-          r = 1;
-        } else {
-          r = -1;
-        }
-      }
-      return r;
-    };
+EzBob.LoanModel = Backbone.Model.extend({
+	url: function() {
+		return '' + window.gRootPath + 'Underwriter/LoanEditor/Loan/' + (this.get('Id'));
+	}, // url
 
-    return Installments;
+	initialize: function() {
+		var items = new EzBob.Installments();
+		items.on('change', this.itemsChanged, this);
+		this.set('Items', items);
+	}, // initialize
 
-  })(Backbone.Collection);
+	itemsChanged: function() {
+		return this.trigger('change');
+	}, // itemsChanged
 
-  EzBob.LoanModel = (function(_super) {
+	shiftDate: function(installment, newDate, oldDate) {
+		var diff = moment.utc(newDate) - moment.utc(oldDate);
 
-    __extends(LoanModel, _super);
+		var index = this.get('Items').indexOf(installment);
 
-    function LoanModel() {
-      return LoanModel.__super__.constructor.apply(this, arguments);
-    }
+		var oItems = this.get('Items').models;
+		var nItemCount = oItems.length;
 
-    LoanModel.prototype.url = function() {
-      return "" + window.gRootPath + "Underwriter/LoanEditor/Loan/" + (this.get('Id'));
-    };
+		for (var i = 0; i < nItemCount; i++) {
+			var item = oItems[i];
 
-    LoanModel.prototype.initialize = function() {
-      var items;
-      items = new EzBob.Installments();
-      items.on("change", this.itemsChanged, this);
-      return this.set("Items", items);
-    };
+			if (i <= index)
+				continue;
 
-    LoanModel.prototype.itemsChanged = function() {
-      return this.trigger("change");
-    };
+			item.set('Date', moment.utc(item.get('Date')).add(diff).toDate());
+		} // for
 
-    LoanModel.prototype.shiftDate = function(installment, newDate, oldDate) {
-      var d1, d2, diff, i, index, item, _i, _len, _ref;
-      newDate = moment.utc(newDate);
-      oldDate = moment.utc(oldDate);
-      diff = newDate - oldDate;
-      index = this.get("Items").indexOf(installment);
-      _ref = this.get("Items").models;
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        item = _ref[i];
-        if (!(i > index)) {
-          continue;
-        }
-        d1 = moment.utc(item.get("Date"));
-        d2 = moment.utc(item.get("Date")).add(diff);
-        item.set("Date", moment.utc(item.get("Date")).add(diff).toDate());
-      }
-      return false;
-    };
+		return false;
+	}, // shiftDate
 
-    LoanModel.prototype.shiftInterestRate = function(installment, rate) {
-      var i, index, item, _i, _len, _ref;
-      index = this.get("Items").indexOf(installment);
-      _ref = this.get("Items").models;
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        item = _ref[i];
-        if (i > index) {
-          item.set("InterestRate", rate);
-        }
-      }
-      return false;
-    };
+	shiftInterestRate: function(installment, rate) {
+		var index = this.get('Items').indexOf(installment);
 
-    LoanModel.prototype.parse = function(r, o) {
-      _.each(r.Items, function(item) {
-        return item.Date = new Date(moment.utc(item.Date));
-      });
-      this.get("Items").reset(r.Items);
-      delete r.Items;
-      r.Date = new Date(moment.utc(r.Date));
-      return r;
-    };
+		var oItems = this.get('Items').models;
+		var nItemCount = oItems.length;
 
-    LoanModel.prototype.toJSON = function() {
-      var r;
-      r = LoanModel.__super__.toJSON.call(this);
-      r.Items = r.Items.toJSON();
-      return r;
-    };
+		for (var i = 0; i < nItemCount; i++) {
+			var item = oItems[i];
 
-    LoanModel.prototype.removeItem = function(index) {
-      var items;
-      items = this.get("Items");
-      items.remove(items.at(index));
-      return this.recalculate();
-    };
+			if (i > index)
+				item.set('InterestRate', rate);
+		} // for
 
-    LoanModel.prototype.addInstallment = function(installment) {
-      this.get("Items").add(installment);
-      return this.recalculate();
-    };
+		return false;
+	}, // shiftInterestRate
 
-    LoanModel.prototype.addFee = function(fee) {
-      this.get("Items").add(fee);
-      this.recalculate();
-    };
+	parse: function(r) {
+		_.each(r.Items, function(item) {
+			item.Date = new Date(moment.utc(item.Date));
+		});
 
-    LoanModel.prototype.recalculate = function() {
-      return this.save({}, {
-        url: "" + window.gRootPath + "Underwriter/LoanEditor/Recalculate/" + (this.get('Id'))
-      });
-    };
+		this.get('Items').reset(r.Items);
 
-    LoanModel.prototype.addFreezeInterval = function(sStartDate, sEndDate, nRate) {
-      return this.save({}, {
-        url: "" + window.gRootPath + "Underwriter/LoanEditor/AddFreezeInterval/" + (this.get('Id')) + "?startdate=" + sStartDate + "&enddate=" + sEndDate + "&rate=" + nRate
-      });
-    };
+		delete r.Items;
 
-    LoanModel.prototype.removeFreezeInterval = function(intervalId) {
-      return this.save({}, {
-        url: "" + window.gRootPath + "Underwriter/LoanEditor/RemoveFreezeInterval/" + (this.get('Id')) + "?intervalid=" + intervalId
-      });
-    };
+		r.Date = new Date(moment.utc(r.Date));
 
-    LoanModel.prototype.getInstallmentBefore = function(date) {
-      var installment, item, _i, _len, _ref;
-      date = moment.utc(date).toDate();
-      installment = null;
-      _ref = this.get("Items").models;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        item = _ref[_i];
-        if (item.get("Type") === "Installment" && moment.utc(item.get("Date")).toDate() < date) {
-          installment = item;
-        }
-      }
-      return installment;
-    };
+		return r;
+	}, // parse
 
-    LoanModel.prototype.getInstallmentAfter = function(date) {
-      var item, _i, _len, _ref;
-      date = moment.utc(date).toDate();
-      _ref = this.get("Items").models;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        item = _ref[_i];
-        if (item.get("Type") === "Installment" && moment.utc(item.get("Date")).toDate() > date) {
-          return item;
-        }
-      }
-      return null;
-    };
+	toJSON: function() {
+		var r = EzBob.LoanModel.__super__.toJSON.call(this);
+		r.Items = r.Items.toJSON();
+		return r;
+	}, // toJSON
 
-    return LoanModel;
+	removeItem: function(index) {
+		var items = this.get('Items');
+		items.remove(items.at(index));
+		this.recalculate();
+	}, // removeItem
 
-  })(Backbone.Model);
+	addInstallment: function(installment) {
+		this.get('Items').add(installment);
+		this.recalculate();
+	}, // addInstallment
 
-  EzBob.LoanModelTemplate = (function(_super) {
+	addFee: function(fee) {
+		this.get('Items').add(fee);
+		this.recalculate();
+	}, // addFee
 
-    __extends(LoanModelTemplate, _super);
+	recalculate: function() {
+		this.save({}, {
+			url: '' + window.gRootPath + 'Underwriter/LoanEditor/Recalculate/' + (this.get('Id'))
+		});
+	}, // recalculate
 
-    function LoanModelTemplate() {
-      return LoanModelTemplate.__super__.constructor.apply(this, arguments);
-    }
+	addFreezeInterval: function(sStartDate, sEndDate, nRate) {
+		this.save({}, {
+			url: '' + window.gRootPath + 'Underwriter/LoanEditor/AddFreezeInterval/' + (this.get('Id')) + '?startdate=' + sStartDate + '&enddate=' + sEndDate + '&rate=' + nRate
+		});
+	}, // addFreezeInterval
 
-    LoanModelTemplate.prototype.url = function() {
-      return "" + window.gRootPath + "Underwriter/LoanEditor/LoanCR/" + (this.get('CashRequestId'));
-    };
+	removeFreezeInterval: function(intervalId) {
+		this.save({}, {
+			url: '' + window.gRootPath + 'Underwriter/LoanEditor/RemoveFreezeInterval/' + (this.get('Id')) + '?intervalid=' + intervalId
+		});
+	}, // removeFreezeInterval
 
-    LoanModelTemplate.prototype.recalculate = function() {
-      return this.save({}, {
-        url: "" + window.gRootPath + "Underwriter/LoanEditor/RecalculateCR"
-      });
-    };
+	getInstallmentBefore: function(date) {
+		date = moment.utc(date).toDate();
 
-    return LoanModelTemplate;
+		var installment = null;
 
-  })(EzBob.LoanModel);
+		var oItems = this.get('Items').models;
+		var nItemCount = oItems.length;
 
-}).call(this);
+		for (var i = 0; i < nItemCount; i++) {
+			var item = oItems[i];
+
+			if (item.get('Type') === 'Installment' && moment.utc(item.get('Date')).toDate() < date)
+				installment = item;
+		} // for
+
+		return installment;
+	}, // getInstallmentBefore
+
+	getInstallmentAfter: function(date) {
+		date = moment.utc(date).toDate();
+
+		var oItems = this.get("Items").models;
+		var nItemCount = oItems.length;
+
+		for (var i = 0; i < nItemCount; i++) {
+			var item = oItems[i];
+
+			if (item.get('Type') === 'Installment' && moment.utc(item.get('Date')).toDate() > date)
+				return item;
+		} // for
+
+		return null;
+	}, // getInstallmentAfter
+}); // EzBob.LoanModel
+
+EzBob.LoanModelTemplate = EzBob.LoanModel.extend({
+	url: function() {
+		return '' + window.gRootPath + 'Underwriter/LoanEditor/LoanCR/' + (this.get('CashRequestId'));
+	}, // url
+
+	recalculate: function() {
+		this.save({}, { url: '' + window.gRootPath + 'Underwriter/LoanEditor/RecalculateCR' });
+	}, // recalculate
+}); // EzBob.LoanModelTemplate
