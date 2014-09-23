@@ -45,6 +45,8 @@ EzBob.Underwriter.AddBankAccount = EzBob.BoundItemView.extend({
 	},
 	
 	onRender: function () {
+		EzBob.Underwriter.AddBankAccount.__super__.onRender.apply(this, arguments);
+
 		this.validator = this.$el.find('form').validate({
 			rules: {
 				number: {

@@ -10,6 +10,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         'change #Action': 'determinePhoneNumbersState',
         'change input[name="Type"]': 'determinePhoneNumbersState'
     }, // events
+
     jqoptions: function () {
         return {
             modal: true,
@@ -29,10 +30,12 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         this.url = options.url;
 	    this.isBroker = options.isBroker;
 
-        EzBob.Underwriter.AddCustomerRelationsEntry.__super__.initialize.call(this);
+        EzBob.Underwriter.AddCustomerRelationsEntry.__super__.initialize.apply(this, arguments);
     }, // initialize
 
     onRender: function () {
+        EzBob.Underwriter.AddCustomerRelationsEntry.__super__.onRender.apply(this, arguments);
+
         this.ui.Action.prop('selectedIndex', 1);
         var rank = this.model.get('CurrentRank');
         if (rank) {

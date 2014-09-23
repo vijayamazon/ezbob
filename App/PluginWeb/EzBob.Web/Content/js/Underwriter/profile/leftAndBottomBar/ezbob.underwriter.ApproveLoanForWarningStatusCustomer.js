@@ -8,7 +8,8 @@ EzBob.Underwriter.ApproveLoanForWarningStatusCustomer = EzBob.BoundItemView.exte
 	initialize: function (options) {
 		this.model = options.model;
 		this.parent = options.parent;
-		return this;
+
+		EzBob.Underwriter.ApproveLoanForWarningStatusCustomer.__super__.initialize(this, arguments);
 	},
 	
 	jqoptions: function () {

@@ -28,10 +28,12 @@ EzBob.Underwriter.AddCustomerRelationsFollowUp = EzBob.BoundItemView.extend({
         this.url = window.gRootPath + 'Underwriter/CustomerRelations/SaveFollowUp/';
 	    this.isBroker = options.isBroker;
 
-        EzBob.Underwriter.AddCustomerRelationsFollowUp.__super__.initialize.call(this);
+        EzBob.Underwriter.AddCustomerRelationsFollowUp.__super__.initialize.apply(this, arguments);
     }, // initialize
 
     onRender: function () {
+        EzBob.Underwriter.AddCustomerRelationsFollowUp.__super__.onRender.apply(this, arguments);
+
         var that = this;
         this.ui.FollowUpDate.datepicker({ format: 'dd/mm/yyyy', autoclose: true, keyboardNavigation: true });
         this.ui.FollowUpDate.on('changeDate', function () {
