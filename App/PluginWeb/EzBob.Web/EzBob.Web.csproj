@@ -758,6 +758,8 @@
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js" />
+    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js" />
+    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1274,15 +1276,6 @@
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.automation.rejection.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js">
-      <DependentUpon>ezbob.underwriter.funding.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js">
-      <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.min.js">
-      <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\ezbob.vipView.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js" />
@@ -1845,12 +1838,10 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.js" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Experian.coffee" />
-    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.coffee" />
     <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.js" />
-    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />

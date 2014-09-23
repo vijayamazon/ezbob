@@ -1,165 +1,152 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.SupportView = Backbone.Marionette.ItemView.extend({
+	initialize: function() {
+		this.model = new EzBob.Underwriter.SupportModel();
+		this.model.on("change reset", this.render, this);
+		this.model.fetch();
+		this.preHeight = 20;
+	},
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+	template: "#support-template",
 
-  EzBob.Underwriter.SupportView = (function(_super) {
+	events: {
+		"click pre": "preClicked",
+		"click .reCheckMP": "recheckClicked",
+		'click [data-sort-type]': 'sortClicked'
+	},
 
-    __extends(SupportView, _super);
+	onRender: function() {
+		this.$el.find("[data-sort-type]").css('cursor', 'pointer');
 
-    function SupportView() {
-      return SupportView.__super__.constructor.apply(this, arguments);
-    }
+		this.$el.find("pre").tooltip({
+			title: 'Click to see detail info'
+		}).tooltip('fixTitle');
 
-    SupportView.prototype.initialize = function() {
-      this.model = new EzBob.Underwriter.SupportModel();
-      this.model.on("change reset", this.render, this);
-      this.model.fetch();
-      return this.preHeight = 20;
-    };
+		this.$el.find("pre").height(this.preHeight).css("overflow", "hidden").css('cursor', 'pointer');
 
-    SupportView.prototype.template = "#support-template";
+		this.$el.find('.arrow').hide();
 
-    SupportView.prototype.events = {
-      "click pre": "preClicked",
-      "click .reCheckMP": "recheckClicked",
-      'click [data-sort-type]': 'sortClicked'
-    };
+		var arrow = this.$el.find("[data-sort-type=" + (this.model.get('sortField')) + "] .arrow");
 
-    SupportView.prototype.onRender = function() {
-      var arrow;
-      this.$el.find("[data-sort-type]").css('cursor', 'pointer');
-      this.$el.find("pre").tooltip({
-        title: 'Click to see detail info'
-      }).tooltip('fixTitle');
-      this.$el.find("pre").height(this.preHeight).css("overflow", "hidden").css('cursor', 'pointer');
-      (this.$el.find('.arrow')).hide();
-      arrow = this.$el.find("[data-sort-type=" + (this.model.get('sortField')) + "] .arrow");
-      arrow.show();
-      arrow.removeClass().addClass(this.model.get('sortType') === 'asc' ? 'arrow icon-arrow-up' : 'arrow icon-arrow-down');
-      BlockUi("off");
-      return EzBob.handleUserLayoutSetting();
-    };
+		arrow.show();
+		arrow.removeClass().addClass(this.model.get('sortType') === 'asc' ? 'arrow icon-arrow-up' : 'arrow icon-arrow-down');
 
-    SupportView.prototype.sortClicked = function(e) {
-      var $el, currentField, currentSortType, field;
-      BlockUi("on");
-      $el = $(e.currentTarget);
-      field = $el.data('sort-type');
-      currentField = this.model.get('sortField');
-      currentSortType = this.model.get('sortType');
-      this.model.set({
-        'sortField': field,
-        'sortType': field !== currentField || currentSortType === 'desc' ? 'asc' : 'desc'
-      }, {
-        silent: true
-      });
-      return this.model.fetch();
-    };
+		BlockUi("off");
 
-    SupportView.prototype.recheckClicked = function(e) {
-      var $el, customerId, mpType, okFn, umi,
-        _this = this;
-      $el = $(e.currentTarget);
-      if ($el.hasClass('disabled')) {
-        return false;
-      }
-      umi = $el.attr("umi");
-      mpType = $el.attr("marketplaceType");
-      customerId = this.model.customerId;
-      okFn = function() {
-        var xhr;
-        $el.addClass('disabled');
-        xhr = $.get("" + window.gRootPath + "Underwriter/MarketPlaces/ReCheckMarketplaces", {
-          customerId: customerId,
-          umi: umi,
-          marketplaceType: mpType
-        });
-        xhr.done(function(response) {
-          if (response && response.error !== void 0) {
-            EzBob.ShowMessage(response.error, "Error occured");
-          } else {
-            EzBob.ShowMessage("Wait a few minutes", "The marketplace recheck is running. ", null, "OK");
-          }
-          return _this.trigger("rechecked", {
-            umi: umi,
-            el: $el
-          });
-        });
-        return xhr.fail(function(data) {
-          return console.error(data.responseText);
-        });
-      };
-      EzBob.ShowMessage("", "Are you sure?", okFn, "Yes", null, "No");
-      return false;
-    };
+		EzBob.handleUserLayoutSetting();
+	},
 
-    SupportView.prototype.preClicked = function(e) {
-      var $el, elHeight;
-      $el = $(e.currentTarget);
-      elHeight = $el.height();
-      $el.height(elHeight !== this.preHeight ? this.preHeight : "auto");
-      $el.tooltip('destroy');
-      $el.tooltip({
-        title: elHeight !== this.preHeight ? 'Click to see detail info' : 'Click to hide detail info'
-      });
-      return $el.tooltip("enable").tooltip('fixTitle');
-    };
+	sortClicked: function(e) {
+		BlockUi("on");
 
-    SupportView.prototype.hide = function() {
-      this.$el.hide();
-      clearInterval(this.modelUpdater);
-      return BlockUi('off');
-    };
+		var $el = $(e.currentTarget);
+		var field = $el.data('sort-type');
+		var currentField = this.model.get('sortField');
+		var currentSortType = this.model.get('sortType');
 
-    SupportView.prototype.show = function() {
-      var _this = this;
-      this.$el.show();
-      return this.modelUpdater = setInterval(function() {
-        return _this.model.fetch();
-      }, 2000);
-    };
+		this.model.set({
+			'sortField': field,
+			'sortType': field !== currentField || currentSortType === 'desc' ? 'asc' : 'desc'
+		}, {
+			silent: true
+		});
 
-    SupportView.prototype.serializeData = function() {
-      return {
-        model: this.model.get('models')
-      };
-    };
+		this.model.fetch();
+	},
 
-    return SupportView;
+	recheckClicked: function(e) {
+		var $el = $(e.currentTarget);
 
-  })(Backbone.Marionette.ItemView);
+		if ($el.hasClass('disabled'))
+			return false;
 
-  EzBob.Underwriter.SupportModel = (function(_super) {
+		var self = this;
+		var umi = $el.attr("umi");
+		var mpType = $el.attr("marketplaceType");
+		var customerId = this.model.customerId;
 
-    __extends(SupportModel, _super);
+		var okFn = function() {
+			$el.addClass('disabled');
 
-    function SupportModel() {
-      return SupportModel.__super__.constructor.apply(this, arguments);
-    }
+			var xhr = $.get("" + window.gRootPath + "Underwriter/MarketPlaces/ReCheckMarketplaces", {
+				customerId: customerId,
+				umi: umi,
+				marketplaceType: mpType
+			});
 
-    SupportModel.prototype.initialize = function() {
-      return this.set({
-        sortField: 4,
-        sortType: 'desc',
-        models: []
-      }, {
-        silent: true
-      });
-    };
+			xhr.done(function(response) {
+				if (response && response.error !== void 0)
+					EzBob.ShowMessage(response.error, "Error occured");
+				else
+					EzBob.ShowMessage("Wait a few minutes", "The marketplace recheck is running. ", null, "OK");
 
-    SupportModel.prototype.urlRoot = function() {
-      return "" + gRootPath + "Underwriter/Support/Index?sortField=" + (this.get('sortField')) + "&sortType=" + (this.get('sortType'));
-    };
+				self.trigger("rechecked", {
+					umi: umi,
+					el: $el
+				});
+			});
 
-    return SupportModel;
+			xhr.fail(function(data) {
+				console.error(data.responseText);
+			});
+		};
 
-  })(Backbone.Model);
+		EzBob.ShowMessage("", "Are you sure?", okFn, "Yes", null, "No");
+		return false;
+	},
 
-}).call(this);
+	preClicked: function(e) {
+		var $el = $(e.currentTarget);
+		var elHeight = $el.height();
+
+		$el.height(elHeight !== this.preHeight ? this.preHeight : "auto");
+
+		$el.tooltip('destroy');
+
+		$el.tooltip({
+			title: elHeight !== this.preHeight ? 'Click to see detail info' : 'Click to hide detail info'
+		});
+
+		$el.tooltip("enable").tooltip('fixTitle');
+	},
+
+	hide: function() {
+		this.$el.hide();
+		clearInterval(this.modelUpdater);
+		BlockUi('off');
+	},
+
+	show: function() {
+		var self = this;
+		this.$el.show();
+
+		this.modelUpdater = setInterval(function() {
+			self.model.fetch();
+		}, 2000);
+	},
+
+	serializeData: function() {
+		return {
+			model: this.model.get('models')
+		};
+	}
+});
+
+EzBob.Underwriter.SupportModel = Backbone.Model.extend({
+	initialize: function() {
+		this.set({
+			sortField: 4,
+			sortType: 'desc',
+			models: []
+		}, {
+			silent: true
+		});
+	},
+
+	urlRoot: function() {
+		return "" + window.gRootPath + "Underwriter/Support/Index?sortField=" + (this.get('sortField')) + "&sortType=" + (this.get('sortType'));
+	},
+});
