@@ -754,6 +754,8 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.LoanOptions.js" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.js" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.rollover.js" />
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js" />
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
@@ -1236,15 +1238,6 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.profileHead.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.parseYodlee.js" />
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
-      <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js">
-      <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.min.js">
-      <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.pricingModelCalculations.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.js" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
@@ -1831,7 +1824,6 @@
     <None Include="Content\files\consent_letter.pdf" />
     <Content Include="Content\js\controls\ezbob.modal.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanTopView.js" />
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.js" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.js" />
@@ -1841,7 +1833,6 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js" />
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.js" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js" />

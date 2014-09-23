@@ -1,109 +1,70 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter.MarketPlacesHistoryModel = Backbone.Model.extend({ idAttribute: "Id" });
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.MarketPlacesHistory = Backbone.Collection.extend({
+	model: EzBob.Underwriter.MarketPlacesHistoryModel,
+	url: function() {
+		return "" + window.gRootPath + "Underwriter/MarketPlaces/GetCustomerMarketplacesHistory/?customerId=" + this.customerId;
+	}
+});
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+EzBob.Underwriter.MarketPlacesHistoryView = Backbone.Marionette.ItemView.extend({
+	template: "#marketplace-history-template",
 
-  EzBob.Underwriter.MarketPlacesHistoryModel = (function(_super) {
+	initialize: function() {
+		this.model.on("reset change sync", this.render, this);
+		this.loadMarketPlacesHistory();
+	},
 
-    __extends(MarketPlacesHistoryModel, _super);
+	loadMarketPlacesHistory: function() {
+		var that = this;
 
-    function MarketPlacesHistoryModel() {
-      return MarketPlacesHistoryModel.__super__.constructor.apply(this, arguments);
-    }
+		this.model.fetch().done(function() {
+			if (that.model.length > 0)
+				that.render();
+		});
+	},
 
-    MarketPlacesHistoryModel.prototype.idAttribute = "Id";
+	events: {
+		"click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked",
+		"click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked",
+		"click .parseYodleeMp": "parseYodleeClicked",
+		"click .uploadHmrcMp": "uploadHmrcClicked",
+		"click .enterHmrcMp": "enterHmrcClicked"
+	},
 
-    return MarketPlacesHistoryModel;
+	serializeData: function() {
+		return {
+			MarketPlacesHistory: this.model
+		};
+	},
 
-  })(Backbone.Model);
+	showHistoryMarketPlacesClicked: function() {
+		var date = this.$el.find("#mpHistoryDdl :selected").val();
+		EzBob.App.vent.trigger('ct:marketplaces.history', date);
+	},
 
-  EzBob.Underwriter.MarketPlacesHistory = (function(_super) {
+	showCurrentMarketPlacesClicked: function() {
+		EzBob.App.vent.trigger('ct:marketplaces.history', null);
+	},
 
-    __extends(MarketPlacesHistory, _super);
+	parseYodleeClicked: function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		EzBob.App.vent.trigger('ct:marketplaces.parseYodlee');
+	},
 
-    function MarketPlacesHistory() {
-      return MarketPlacesHistory.__super__.constructor.apply(this, arguments);
-    }
+	uploadHmrcClicked: function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		EzBob.App.vent.trigger('ct:marketplaces.uploadHmrc');
+	},
 
-    MarketPlacesHistory.prototype.model = EzBob.Underwriter.MarketPlacesHistoryModel;
-
-    MarketPlacesHistory.prototype.url = function() {
-      return "" + window.gRootPath + "Underwriter/MarketPlaces/GetCustomerMarketplacesHistory/?customerId=" + this.customerId;
-    };
-
-    return MarketPlacesHistory;
-
-  })(Backbone.Collection);
-
-  EzBob.Underwriter.MarketPlacesHistoryView = (function(_super) {
-
-    __extends(MarketPlacesHistoryView, _super);
-
-    function MarketPlacesHistoryView() {
-      return MarketPlacesHistoryView.__super__.constructor.apply(this, arguments);
-    }
-
-    MarketPlacesHistoryView.prototype.template = "#marketplace-history-template";
-
-    MarketPlacesHistoryView.prototype.initialize = function(options) {
-      this.model.on("reset change sync", this.render, this);
-      return this.loadMarketPlacesHistory();
-    };
-
-    MarketPlacesHistoryView.prototype.loadMarketPlacesHistory = function() {
-      var that,
-        _this = this;
-      that = this;
-      return this.model.fetch().done(function() {
-        if (that.model.length > 0) {
-          return that.render();
-        }
-      });
-    };
-
-    MarketPlacesHistoryView.prototype.events = {
-      "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked",
-      "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked",
-      "click .uploadHmrcMp": "uploadHmrcClicked",
-      "click .enterHmrcMp": "enterHmrcClicked"
-    };
-
-    MarketPlacesHistoryView.prototype.serializeData = function() {
-      return {
-        MarketPlacesHistory: this.model
-      };
-    };
-
-    MarketPlacesHistoryView.prototype.showHistoryMarketPlacesClicked = function() {
-      var date;
-      date = this.$el.find("#mpHistoryDdl :selected").val();
-      return EzBob.App.vent.trigger('ct:marketplaces.history', date);
-    };
-
-    MarketPlacesHistoryView.prototype.showCurrentMarketPlacesClicked = function() {
-      return EzBob.App.vent.trigger('ct:marketplaces.history', null);
-    };
-
-    MarketPlacesHistoryView.prototype.uploadHmrcClicked = function(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      return EzBob.App.vent.trigger('ct:marketplaces.uploadHmrc');
-    };
-
-    MarketPlacesHistoryView.prototype.enterHmrcClicked = function(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      return EzBob.App.vent.trigger('ct:marketplaces.enterHmrc');
-    };
-
-    return MarketPlacesHistoryView;
-
-  })(Backbone.Marionette.ItemView);
-
-}).call(this);
+	enterHmrcClicked: function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		EzBob.App.vent.trigger('ct:marketplaces.enterHmrc');
+	}
+});
