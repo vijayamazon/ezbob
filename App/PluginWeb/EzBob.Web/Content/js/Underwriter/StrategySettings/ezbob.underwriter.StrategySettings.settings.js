@@ -38,16 +38,34 @@ EzBob.Underwriter.StrategySettingsView = Backbone.View.extend({
       el: campaign,
       model: this.campaignModel
     });
-    this.basicInterestRateModel = new EzBob.Underwriter.Settings.BasicInterestRateModel();
-    this.basicInterestRateView = new EzBob.Underwriter.Settings.BasicInterestRateView({
+
+
+    this.basicInterestRateModel = new EzBob.Underwriter.Settings.RangeModel({ type: "BasicInterestRate", typeName: "Basic interest rate" });
+    this.basicInterestRateView = new EzBob.Underwriter.Settings.RangeView({
       el: basicInterestRates,
       model: this.basicInterestRateModel
     });
-    this.loanOfferMultiplierModel = new EzBob.Underwriter.Settings.LoanOfferMultiplierModel();
-    this.loanOfferMultiplierView = new EzBob.Underwriter.Settings.LoanOfferMultiplierView({
+    this.loanOfferMultiplierModel = new EzBob.Underwriter.Settings.RangeModel({ type: "LoanOfferMultiplier", typeName: "Loan offer multiplier" });
+    this.loanOfferMultiplierView = new EzBob.Underwriter.Settings.RangeView({
       el: loanOfferMultipliers,
       model: this.loanOfferMultiplierModel
     });
+    this.euLoanMonthlyInterestModel = new EzBob.Underwriter.Settings.RangeModel({ type: "EuLoanMonthlyInterest", typeName: "EU loan monthly interest" });
+    this.euLoanMonthlyInterestView = new EzBob.Underwriter.Settings.RangeView({
+    	el: euLoanMonthlyInterest,
+    	model: this.euLoanMonthlyInterestModel
+    });
+    this.defaultRateCompanyModel = new EzBob.Underwriter.Settings.RangeModel({ type: "DefaultRateCompany", typeName: "Default rate company" });
+    this.defaultRateCompanyView = new EzBob.Underwriter.Settings.RangeView({
+    	el: defaultRateCompany,
+    	model: this.defaultRateCompanyModel
+    });
+    this.defaultRateCustomerModel = new EzBob.Underwriter.Settings.RangeModel({ type: "DefaultRateCustomer", typeName: "Default rate customer" });
+    this.defaultRateCustomerView = new EzBob.Underwriter.Settings.RangeView({
+    	el: defaultRateCustomer,
+    	model: this.defaultRateCustomerModel
+    });
+
     this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
     this.pricingModelModel = new EzBob.Underwriter.SettingsPricingModelModel();
     this.pricingModelView = new EzBob.Underwriter.SettingsPricingModelView({
@@ -55,21 +73,7 @@ EzBob.Underwriter.StrategySettingsView = Backbone.View.extend({
       model: this.pricingModelModel,
       scenarios: this.pricingModelScenarios
     });
-    this.euLoanMonthlyInterestModel = new EzBob.Underwriter.Settings.EuLoanMonthlyInterestModel();
-    this.euLoanMonthlyInterestView = new EzBob.Underwriter.Settings.EuLoanMonthlyInterestView({
-      el: euLoanMonthlyInterest,
-      model: this.euLoanMonthlyInterestModel
-    });
-    this.defaultRateCompanyModel = new EzBob.Underwriter.Settings.DefaultRateCompanyModel();
-    this.defaultRateCompanyView = new EzBob.Underwriter.Settings.DefaultRateCompanyView({
-      el: defaultRateCompany,
-      model: this.defaultRateCompanyModel
-    });
-    this.defaultRateCustomerModel = new EzBob.Underwriter.Settings.DefaultRateCustomerModel();
-    this.defaultRateCustomerView = new EzBob.Underwriter.Settings.DefaultRateCustomerView({
-      el: defaultRateCustomer,
-      model: this.defaultRateCustomerModel
-    });
+    
     return EzBob.handleUserLayoutSetting();
   },
   show: function(type) {
