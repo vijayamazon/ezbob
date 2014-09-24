@@ -25,13 +25,7 @@ BEGIN
 		@Line3Prev VARCHAR(255),
 		@Line4Prev VARCHAR(255),
 		@Line5Prev VARCHAR(255),
-		@Line6Prev VARCHAR(255),
-		@Line1ForExperian VARCHAR(255), 
-		@Line2ForExperian VARCHAR(255),
-		@Line3ForExperian VARCHAR(255),
-		@Line4ForExperian VARCHAR(255),
-		@Line5ForExperian VARCHAR(255),
-		@Line6ForExperian VARCHAR(255)
+		@Line6Prev VARCHAR(255)
 		
 	IF @DirectorId IS NULL
 	BEGIN
@@ -65,24 +59,7 @@ BEGIN
 			AND
 			ca.CustomerId = @CustomerId
 			AND
-			ca.Line1 IS NOT NULL
-	
-		SELECT
-			@Line1ForExperian = ca.Line1,
-			@Line2ForExperian = ca.Line2, 
-			@Line3ForExperian = ca.Line3,
-			@Line4ForExperian = ca.Town, 
-			@Line5ForExperian = ca.County,
-			@Line6ForExperian = ca.Postcode
-		FROM
-			CustomerAddress ca
-		WHERE 
-			ca.UseForConsumer = 1
-			AND
-			ca.CustomerId = @CustomerId
-			AND
-			ca.Line1 IS NOT NULL
-			
+			ca.Line1 IS NOT NULL			
 	END
 	ELSE
 	BEGIN
@@ -117,22 +94,6 @@ BEGIN
 			ca.DirectorId = @DirectorId
 			AND
 			ca.Line1 IS NOT NULL
-	
-		SELECT
-			@Line1ForExperian = ca.Line1,
-			@Line2ForExperian = ca.Line2, 
-			@Line3ForExperian = ca.Line3,
-			@Line4ForExperian = ca.Town, 
-			@Line5ForExperian = ca.County,
-			@Line6ForExperian = ca.Postcode
-		FROM
-			CustomerAddress ca
-		WHERE 
-			ca.UseForConsumer = 1
-			AND
-			ca.DirectorId = @DirectorId
-			AND
-			ca.Line1 IS NOT NULL
 	END
 	
 	
@@ -148,13 +109,7 @@ BEGIN
 		@Line3Prev AS Line3Prev,
 		@Line4Prev AS Line4Prev,
 		@Line5Prev AS Line5Prev,
-		@Line6Prev AS Line6Prev,
-		@Line1ForExperian AS Line1ForExperian, 
-		@Line2ForExperian AS Line2ForExperian,
-		@Line3ForExperian AS Line3ForExperian,
-		@Line4ForExperian AS Line4ForExperian,
-		@Line5ForExperian AS Line5ForExperian,
-		@Line6ForExperian AS Line6ForExperian      
+		@Line6Prev AS Line6Prev    
 END
 
 GO

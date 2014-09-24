@@ -39,21 +39,12 @@
 
 		public override void Execute() {
 			Log.Info("Starting consumer check with current address, parameters: {0} {1}.", personalData, addressLines);
-			bool bSuccess;
+			bool bSuccess = GetConsumerInfoAndSave(AddressCurrency.Current);
 
-			if (!string.IsNullOrEmpty(addressLines.Line1ForExperian))
+			if (!bSuccess && CanUsePrevAddress())
 			{
-				bSuccess = GetConsumerInfoAndSave(AddressCurrency.ForExperian);
-			}
-			else
-			{
-				bSuccess = GetConsumerInfoAndSave(AddressCurrency.Current);
-
-				if (!bSuccess && CanUsePrevAddress())
-				{
-					Log.Info("Starting consumer check with previous address parameters: {0} {1}.", personalData, addressLines);
-					bSuccess = GetConsumerInfoAndSave(AddressCurrency.Previous);
-				}
+				Log.Info("Starting consumer check with previous address parameters: {0} {1}.", personalData, addressLines);
+				bSuccess = GetConsumerInfoAndSave(AddressCurrency.Previous);
 			}
 
 			UpdateAnalytics();
@@ -237,17 +228,6 @@
 						LocationLine4 = oAddr.Line4Prev,
 						LocationLine5 = oAddr.Line5Prev,
 						LocationLine6 = oAddr.Line6Prev,
-					};
-
-				case AddressCurrency.ForExperian:
-					return new InputLocationDetailsMultiLineLocation
-					{
-						LocationLine1 = oAddr.Line1ForExperian,
-						LocationLine2 = oAddr.Line2ForExperian,
-						LocationLine3 = oAddr.Line3ForExperian,
-						LocationLine4 = oAddr.Line4ForExperian,
-						LocationLine5 = oAddr.Line5ForExperian,
-						LocationLine6 = oAddr.Line6ForExperian,
 					};
 
 				default:

@@ -5,8 +5,7 @@
 
 	public enum AddressCurrency {
 		Current,
-		Previous,
-		ForExperian
+		Previous
 	} // enum AddressCurrency
 
 	public class GetCustomerAddresses : AStoredProcedure {
@@ -26,7 +25,6 @@
 			public ResultRow() {
 				m_aryCurrent = new string[7];
 				m_aryPrev = new string[7];
-				m_aryForExperian = new string[7];
 			} // constructor
 
 			public string Line1 { get { return m_aryCurrent[1]; } set { m_aryCurrent[1] = value; } } // Line1
@@ -43,13 +41,6 @@
 			public string Line5Prev { get { return m_aryPrev[5]; } set { m_aryPrev[5] = value; } } // Line5Prev
 			public string Line6Prev { get { return m_aryPrev[6]; } set { m_aryPrev[6] = value; } } // Line6Prev
 
-			public string Line1ForExperian { get { return m_aryForExperian[1]; } set { m_aryForExperian[1] = value; } } // Line1ForExperian
-			public string Line2ForExperian { get { return m_aryForExperian[2]; } set { m_aryForExperian[2] = value; } } // Line2ForExperian
-			public string Line3ForExperian { get { return m_aryForExperian[3]; } set { m_aryForExperian[3] = value; } } // Line3ForExperian
-			public string Line4ForExperian { get { return m_aryForExperian[4]; } set { m_aryForExperian[4] = value; } } // Line4ForExperian
-			public string Line5ForExperian { get { return m_aryForExperian[5]; } set { m_aryForExperian[5] = value; } } // Line5ForExperian
-			public string Line6ForExperian { get { return m_aryForExperian[6]; } set { m_aryForExperian[6] = value; } } // Line6ForExperian
-
 			public string this[int nIdx, AddressCurrency oCurrency] {
 				get {
 					if ((nIdx < 1) || (nIdx > 6))
@@ -62,9 +53,6 @@
 					case AddressCurrency.Previous:
 							return m_aryPrev[nIdx];
 
-					case AddressCurrency.ForExperian:
-							return m_aryForExperian[nIdx];
-
 					default:
 						throw new ArgumentOutOfRangeException("oCurrency", "Unsupported value: " + oCurrency.ToString());
 					} // switch
@@ -74,17 +62,14 @@
 			public override string ToString() {
 				return string.Format(
 					"Line1='{0}' Line2='{1}' Line3='{2}' Line4='{3}' Line5='{4}' Line6='{5}' " +
-					"PrevLine1='{6}' PrevLine2='{7}' PrevLine3='{8}' PrevLine4='{9}' PrevLine5='{10}' PrevLine6='{11}'" +
-					"ForExperianLine1='{12}' ForExperianLine2='{13}' ForExperianLine3='{14}' ForExperianLine4='{15}' ForExperianLine5='{16}' ForExperianLine6='{17}'",
+					"PrevLine1='{6}' PrevLine2='{7}' PrevLine3='{8}' PrevLine4='{9}' PrevLine5='{10}' PrevLine6='{11}'",
 					Line1, Line2, Line3, Line4, Line5, Line6,
-					Line1Prev, Line2Prev, Line3Prev, Line4Prev, Line5Prev, Line6Prev,
-					Line1ForExperian, Line2ForExperian, Line3ForExperian, Line4ForExperian, Line5ForExperian, Line6ForExperian
+					Line1Prev, Line2Prev, Line3Prev, Line4Prev, Line5Prev, Line6Prev
 				);
 			} // ToString
 
 			private readonly string[] m_aryCurrent;
 			private readonly string[] m_aryPrev;
-			private readonly string[] m_aryForExperian;
 		} // class ResultRow
 	} // class GetCustomerAddresses
 } // namespace
