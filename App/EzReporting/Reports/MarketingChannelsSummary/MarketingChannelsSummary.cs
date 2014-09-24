@@ -82,6 +82,10 @@
 					};
 					break;
 
+				case InputRowTypes.ApprovedDidntTake:
+					oAction = oRow => oRow.ApprovedDidntTake += sr["Counter"];
+					break;
+
 				case InputRowTypes.ApprovedAmount:
 					oAction = oRow => oRow.ApprovedAmount += sr["Amount"];
 					break;
@@ -138,6 +142,7 @@
 			CompleteApplication,
 			RequestedAmount,
 			ApprovedRejected,
+			ApprovedDidntTake,
 			ApprovedAmount,
 			LoansGiven,
 		} // enum InputRowTypes
@@ -185,6 +190,8 @@
 
 		private static void ToRow(DataTable tbl, McsRow oRow) {
 			var lst = new List<object>();
+
+			oRow.DoMath();
 
 			oRow.Traverse((ignored, oPropInfo) => {
 				object[] oAttrList = oPropInfo.GetCustomAttributes(typeof(ToStringAttribute), false);

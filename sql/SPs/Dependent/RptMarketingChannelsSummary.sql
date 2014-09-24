@@ -21,7 +21,7 @@ BEGIN
 	SELECT
 		'Visitors' AS RowType,
 		sa.Source,
-		SUM(sa.SiteAnalyticsValue) AS 'Visitors'
+		ISNULL(SUM(ISNULL(sa.SiteAnalyticsValue, 0)), 0) AS 'Visitors'
 	FROM
 		SiteAnalytics sa
 		INNER JOIN SiteAnalyticsCodes c
@@ -129,7 +129,7 @@ BEGIN
 
 	-----------------------------------------------------------
 	--
-	-- Calculate approved/rejected count.
+	-- Calculate approved/rejected/pending count.
 	--
 	-----------------------------------------------------------
 
@@ -158,6 +158,37 @@ BEGIN
 		@DateStart <= r.UnderwriterDecisionDate AND r.UnderwriterDecisionDate < @DateEnd
 		AND
 		c.IsTest = 0
+	GROUP BY
+		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END,
+		c.GoogleCookie,
+		c.BrokerID
+
+	-----------------------------------------------------------
+	--
+	-- Calculate approved didn't take.
+	--
+	-----------------------------------------------------------
+
+	SELECT
+		'ApprovedDidntTake' AS RowType,
+		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
+		c.GoogleCookie,
+		c.BrokerID,
+		COUNT(*) AS Counter
+	FROM
+		Customer c
+		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
+		LEFT JOIN Loan l
+			ON c.Id = l.CustomerId
+			AND @DateStart <= l.[Date]
+	WHERE
+		@DateStart <= r.UnderwriterDecisionDate AND r.UnderwriterDecisionDate < @DateEnd
+		AND
+		c.IsTest = 0
+		AND
+		r.UnderwriterDecision = 'Approved'
+		AND
+		l.Id IS NULL
 	GROUP BY
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END,
 		c.GoogleCookie,

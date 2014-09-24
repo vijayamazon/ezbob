@@ -428,7 +428,7 @@
 
 					oData = rpt.Run(report, from, to);
 
-					wb = AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), i + "day" + (i == 1 ? "" : "s") + " before", report.Title, wb: wb);
+					wb = AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), i + " day" + (i == 1 ? "" : "s") + " before", report.Title, wb: wb);
 				} // for
 			} // if
 

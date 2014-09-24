@@ -36,6 +36,8 @@ BEGIN
 		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
 	WHERE
 		c.IsTest = 0
+		AND
+		r.CreationDate IS NOT NULL
 	GROUP BY
 		c.Id
 	
