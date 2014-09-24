@@ -138,7 +138,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         this.model.set('BrokerSetupFeePounds', brokerSetupFeePounds);
         
         var totalSetupFeePounds = setupFeePounds + brokerSetupFeePounds;
-        var totalSetupFeePercents = (this.model.get('SetupFeePercents') + this.model.get('BrokerSetupFeePercents')) * 100;
+        var totalSetupFeePercents = Math.round((this.model.get('SetupFeePercents') + this.model.get('BrokerSetupFeePercents')) * 10000) / 100;
         this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
     },
 
@@ -189,7 +189,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         }
         this.model.set('SetupFeePercents', setupFeePercents);
 
-        var totalSetupFeePercents = (this.model.get('BrokerSetupFeePercents') + setupFeePercents) * 100;
+        var totalSetupFeePercents = Math.round((this.model.get('BrokerSetupFeePercents') + setupFeePercents) * 10000) / 100;
         var totalSetupFeePounds = parseFloat(this.model.get('SetupFeePounds')) + parseFloat(this.model.get('BrokerSetupFeePounds'));
         this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
     },
@@ -198,7 +198,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         var setupFeePounds = this.model.get('SetupFeePercents') * this.model.get('LoanAmount');
         this.model.set('SetupFeePounds', setupFeePounds);
 
-        var totalSetupFeePercents = (this.model.get('BrokerSetupFeePercents') + this.model.get('SetupFeePercents')) * 100;
+        var totalSetupFeePercents = Math.round((this.model.get('BrokerSetupFeePercents') + this.model.get('SetupFeePercents')) * 10000) / 100;
         var totalSetupFeePounds = setupFeePounds + this.model.get('BrokerSetupFeePounds');
         this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
     },
@@ -211,7 +211,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         }
         this.model.set('BrokerSetupFeePercents', brokerSetupFeePercents);
         
-        var totalSetupFeePercents = (this.model.get('SetupFeePercents') + brokerSetupFeePercents) * 100;
+        var totalSetupFeePercents = Math.round((this.model.get('SetupFeePercents') + brokerSetupFeePercents) * 10000) / 100;
         var totalSetupFeePounds = parseFloat(this.model.get('SetupFeePounds')) + parseFloat(this.model.get('BrokerSetupFeePounds'));
         this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
     },
@@ -220,7 +220,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         var brokerSetupFeePounds = this.model.get('BrokerSetupFeePercents') * this.model.get('LoanAmount');
         this.model.set('BrokerSetupFeePounds', brokerSetupFeePounds);
 
-        var totalSetupFeePercents = (this.model.get('BrokerSetupFeePercents') + this.model.get('SetupFeePercents')) * 100;
+        var totalSetupFeePercents = Math.round((this.model.get('BrokerSetupFeePercents') + this.model.get('SetupFeePercents')) * 10000) / 100;
         var totalSetupFeePounds = brokerSetupFeePounds + this.model.get('SetupFeePounds');
         this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
     },
