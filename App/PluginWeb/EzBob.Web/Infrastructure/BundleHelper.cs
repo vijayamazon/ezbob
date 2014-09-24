@@ -263,18 +263,18 @@
 				//report
 				.Add("~/Content/js/Underwriter/report/ezbob.underwriter.report.js")
 
-				// Configuration Variables
-				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.charges.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Experian.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.general.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.approval.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.general.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.rejection.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Campaign.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.ConfigTables.coffee")
-				.Add("~/Content/js/underwriter/StrategySettings/Ezbob.underwriter.Settings.PricingModel.coffee")
+				// Strategy Settings
+				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.js")
+				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.js")
+				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.charges.js")
+				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Experian.js")
+				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.general.js")
+				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.approval.js")
+				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.general.js")
+				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.rejection.js")
+				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Campaign.js")
+				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.ConfigTables.js")
+				.Add("~/Content/js/underwriter/StrategySettings/Ezbob.underwriter.Settings.PricingModel.js")
 
 				//Customer grid
 				.Add("~/Content/js/EzBob.DataTables.Helper.js")
