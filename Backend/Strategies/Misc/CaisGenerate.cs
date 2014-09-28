@@ -136,8 +136,9 @@
 				{
 					caisFlag = manualCaisFlag;
 				}
-				
-				if (companyType == "Entrepreneur") {
+
+				if (companyType == "Entrepreneur")
+				{
 					var file = CaisFileManager.GetCaisFileData();
 					var h = file.Header;
 					h.SourceCodeNumber = 402;
@@ -163,6 +164,22 @@
 					var target = service.TargetCache(customerId, experianRefNum);
 					if (target != null)
 					{
+						switch (companyType)
+						{
+							case "LLP":
+							case "Limited":
+								{
+									companyTypeCode = "L";
+								}
+								break;
+							case "PShip":
+							case "SoleTrader":
+							case "PShip3P":
+								{
+									companyTypeCode = "N";
+								}
+								break;
+						}
 						fullName = target.BusName;
 						line1 = target.AddrLine1;
 						line23 = target.AddrLine2;
@@ -379,7 +396,7 @@
 				ProprietorPartnerDirectorNumber = 0,
 				LimitedNonlimitedAndOtherFlag = companyTypeCode,
 				AddressType = string.Empty,
-				NameChange = "N",
+				NameChange = "N", // Tim Adkins complained about this field in a mail from 22-Sep-2014 (We assume that he is mistaken and didn't change anything)
 				CompanyRegisteredNumberBusinessNumber = experianRefNum,
 				SICCode = 0,
 				VATNumber = string.Empty,
