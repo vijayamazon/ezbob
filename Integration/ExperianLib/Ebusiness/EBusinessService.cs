@@ -122,11 +122,10 @@
 		public CompanyInfo TargetCache(int customerId, string refNumber) {
 			return m_oRetryer.Retry(() => {
 				var repo = ObjectFactory.GetInstance<ServiceLogRepository>();
+				IQueryable<MP_ServiceLog> oCachedValues = repo.GetAll().Where(c => c.Customer != null && c.Customer.Id == customerId && c.ServiceType == "ESeriesTargeting");
 
-				IQueryable<MP_ServiceLog> oCachedValues =
-					repo.GetAll().Where(c => c.ServiceType == "ESeriesTargeting" && c.Customer.Id == customerId);
-
-				foreach (var oVal in oCachedValues) {
+				foreach (var oVal in oCachedValues)
+				{
 					var targets = new TargetResults(oVal.ResponseData);
 
 					foreach (var target in targets.Targets)
