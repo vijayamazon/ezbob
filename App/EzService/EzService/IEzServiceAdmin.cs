@@ -8,7 +8,13 @@ namespace EzService {
 		ActionMetaData Shutdown();
 
 		[OperationContract]
-		ActionMetaData Nop(int nLengthInSeconds);
+		ActionMetaData Nop(int nLengthInSeconds, string sMsg);
+
+		[OperationContract]
+		ActionMetaData StressTestAction(int nLengthInSeconds, string sMsg);
+
+		[OperationContract]
+		ActionMetaData StressTestSync(int nLengthInSeconds, string sMsg);
 
 		[OperationContract]
 		ActionMetaData Terminate(Guid sActionID);

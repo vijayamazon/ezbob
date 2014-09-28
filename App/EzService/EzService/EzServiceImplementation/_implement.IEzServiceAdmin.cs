@@ -106,37 +106,39 @@
 
 		#region method Nop
 
-		public ActionMetaData Nop(int nLengthInSeconds) {
+		public ActionMetaData Nop(int nLengthInSeconds, string sMsg) {
 			try {
-				Log.Msg("Nop({0}) method started...", nLengthInSeconds);
+				sMsg = (sMsg ?? string.Empty).Trim();
 
-				ActionMetaData amd = NewAsync("Admin.Nop", comment: nLengthInSeconds + " seconds");
+				Log.Msg("Nop({0}, {1}) method started...", nLengthInSeconds, sMsg);
+
+				ActionMetaData amd = NewAsync("Admin.Nop", comment: nLengthInSeconds + " seconds, " + sMsg);
 
 				if (nLengthInSeconds < 1)
 					throw new Warning(Log, "Nop length is less than 1 second.");
 
-				Log.Msg("Nop({0}) method: creating a sleeper...", nLengthInSeconds);
+				Log.Msg("Nop({0}, {1}) method: creating a sleeper...", nLengthInSeconds, sMsg);
 
 				amd.UnderlyingThread = new Thread(() => {
 					for (int i = 1; i <= nLengthInSeconds; i++) {
-						Log.Msg("Nop({0}) method asleeper: {1}...", nLengthInSeconds, i);
+						Log.Msg("Nop({0}, {2}) method asleeper: {1}...", nLengthInSeconds, i, sMsg);
 						Thread.Sleep(1000);
 					} // for
 
 					SaveActionStatus(amd, ActionStatus.Done);
 
-					Log.Msg("Nop({0}) method asleeper: completed: {1}.", nLengthInSeconds, amd);
+					Log.Msg("Nop({0}, {2}) method asleeper: completed: {1}.", nLengthInSeconds, amd, sMsg);
 				});
 
-				Log.Msg("Nop({0}) method: starting asleeper...", nLengthInSeconds);
+				Log.Msg("Nop({0}, {1}) method: starting asleeper...", nLengthInSeconds, sMsg);
 
 				SaveActionStatus(amd, ActionStatus.Launched);
 
 				amd.UnderlyingThread.Start();
 
-				Log.Msg("Nop({0}) method: asleeper started: {1}.", nLengthInSeconds, amd);
+				Log.Msg("Nop({0}, {2}) method: asleeper started: {1}.", nLengthInSeconds, amd, sMsg);
 
-				Log.Msg("Nop({0}) method complete.", nLengthInSeconds);
+				Log.Msg("Nop({0}, {1}) method complete.", nLengthInSeconds, sMsg);
 
 				return amd;
 			}
@@ -150,6 +152,103 @@
 
 		#endregion method Nop
 
+		#region method StressTestAction
+
+		public ActionMetaData StressTestAction(int nLengthInSeconds, string sMsg) {
+			try {
+				int nActiveCount = 0;
+
+				lock (ms_oLockActiveActions) {
+					nActiveCount = ms_oActiveActions.Count;
+				} // lock
+
+				sMsg = (sMsg ?? string.Empty).Trim();
+
+				Log.Msg("StressTestAction({0}, {1}) method started, {2} currently active actions...", nLengthInSeconds, sMsg, nActiveCount);
+
+				ActionMetaData amd = NewAsync("Admin.StressTestAction", comment: nLengthInSeconds + " seconds, " + sMsg);
+
+				if (nLengthInSeconds < 1)
+					throw new Warning(Log, "StressTestAction length is less than 1 second.");
+
+				Log.Msg("StressTestAction({0}, {1}) method: creating a sleeper...", nLengthInSeconds, sMsg);
+
+				amd.UnderlyingThread = new Thread(() => {
+					for (int i = 1; i <= nLengthInSeconds; i++) {
+						Log.Msg("StressTestAction({0}, {2}) method asleeper: {1}...", nLengthInSeconds, i, sMsg);
+						Thread.Sleep(1000);
+					} // for
+
+					SaveActionStatus(amd, ActionStatus.Done);
+
+					Log.Msg("StressTestAction({0}, {2}) method asleeper: completed: {1}.", nLengthInSeconds, amd, sMsg);
+				});
+
+				Log.Msg("StressTestAction({0}, {1}) method: starting asleeper...", nLengthInSeconds, sMsg);
+
+				SaveActionStatus(amd, ActionStatus.Launched);
+
+				amd.UnderlyingThread.Start();
+
+				Log.Msg("StressTestAction({0}, {2}) method: asleeper started: {1}.", nLengthInSeconds, amd, sMsg);
+
+				Log.Msg("StressTestAction({0}, {1}) method complete.", nLengthInSeconds, sMsg);
+
+				return amd;
+			}
+			catch (Exception e) {
+				if (!(e is AException))
+					Log.Alert(e, "Exception during StressTestAction() method.");
+
+				throw new FaultException(e.Message);
+			} // try
+		} // StressTestAction
+
+		#endregion method StressTestAction
+
+		#region method StressTestSync
+
+		public ActionMetaData StressTestSync(int nLengthInSeconds, string sMsg) {
+			try {
+				int nActiveCount = 0;
+
+				lock (ms_oLockActiveActions) {
+					nActiveCount = ms_oActiveActions.Count;
+				} // lock
+
+				sMsg = (sMsg ?? string.Empty).Trim();
+
+				Log.Msg("StressTestSync({0}, {1}) method started, {2} currently active actions...", nLengthInSeconds, sMsg, nActiveCount);
+
+				ActionMetaData amd = NewSync("Admin.StressTestSync", comment: nLengthInSeconds + " seconds, " + sMsg);
+
+				if (nLengthInSeconds < 1)
+					throw new Warning(Log, "StressTestSync length is less than 1 second.");
+
+				Log.Msg("StressTestSync({0}, {2}) method: asleeper started: {1}.", nLengthInSeconds, amd, sMsg);
+
+				for (int i = 1; i <= nLengthInSeconds; i++) {
+					Log.Msg("StressTestSync({0}, {2}) method asleeper: {1}...", nLengthInSeconds, i, sMsg);
+					Thread.Sleep(1000);
+				} // for
+
+				Log.Msg("StressTestSync({0}, {2}) method asleeper: completed: {1}.", nLengthInSeconds, amd, sMsg);
+
+				Log.Msg("StressTestSync({0}, {1}) method complete.", nLengthInSeconds, sMsg);
+
+				SaveActionStatus(amd, ActionStatus.Done);
+
+				return amd;
+			}
+			catch (Exception e) {
+				if (!(e is AException))
+					Log.Alert(e, "Exception during StressTestSync() method.");
+
+				throw new FaultException(e.Message);
+			} // try
+		} // StressTestSync
+
+		#endregion method StressTestSync
 		#region method ListActiveActions
 
 		public StringListActionResult ListActiveActions() {

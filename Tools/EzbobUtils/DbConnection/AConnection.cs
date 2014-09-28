@@ -19,6 +19,9 @@
 		#region method DisposeAfterOneUsage
 
 		public virtual void DisposeAfterOneUsage(bool bAllesInOrdnung, ConnectionWrapper oConnection) {
+			if (oConnection == null)
+				return;
+
 			if (bAllesInOrdnung)
 				ms_oPool.Take(oConnection.Pooled);
 			else
@@ -708,6 +711,10 @@
 
 			try {
 				oConnection = oConnectionToUse ?? TakeFromPool();
+
+				if (oConnection == null)
+					throw new NullReferenceException("There is no available connection to execute the query.");
+
 				command.Connection = oConnection.Connection;
 
 				if (oConnection.Transaction != null)

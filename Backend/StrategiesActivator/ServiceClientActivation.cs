@@ -5,6 +5,7 @@
 	using System.Reflection;
 	using System.ServiceModel;
 	using System.Text;
+	using System.Threading;
 	using ConfigManager;
 	using EzServiceAccessor;
 	using EzServiceConfigurationLoader;
@@ -1180,6 +1181,67 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			m_oLog.Msg("Result:\n{0}", res.Value);
 		} // LoadExperianLtd
+
+		[Activation]
+		private void StressTest() {
+			int nLength;
+			int nCount;
+
+			var oUsage = new Action(() => {
+				m_oLog.Msg("Usage: StressTest <count> <length>");
+				m_oLog.Msg("Where");
+				m_oLog.Msg("\tcount - how many requests to execute");
+				m_oLog.Msg("\tlength - length in seconds of each request (1..100 seconds).");
+			});
+
+			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out nCount) || !int.TryParse(m_aryArgs[2], out nLength)) {
+				oUsage();
+				return;
+			} // if
+
+			if (nCount < 1) {
+				oUsage();
+				return;
+			} // if
+
+			if ((nLength < 1) || (nLength > 100)) {
+				oUsage();
+				return;
+			} // if
+
+			m_oLog.Debug("Stress test with {0} requests of {1} seconds each...", nCount, nLength);
+
+			for (int i = 0; i < nCount; i++)
+				m_oAdminClient.StressTestAction(nLength, i.ToString());
+
+			m_oLog.Debug("Stress test with {0} requests of {1} seconds each is complete.", nCount, nLength);
+		} // StressTest
+
+		[Activation]
+		private void StressTestSync() {
+			int nLength;
+
+			var oUsage = new Action(() => {
+				m_oLog.Msg("Usage: StressTestSync <length> <message>");
+				m_oLog.Msg("Where");
+				m_oLog.Msg("\tcount - how many requests to execute");
+				m_oLog.Msg("\tlength - length in seconds of each request (1..100 seconds).");
+			});
+
+			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out nLength)) {
+				oUsage();
+				return;
+			} // if
+
+			string sMsg = m_aryArgs[2];
+
+			if ((nLength < 1) || (nLength > 100)) {
+				oUsage();
+				return;
+			} // if
+
+			m_oAdminClient.StressTestSync(nLength, sMsg);
+		} // StressTestSync
 
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
