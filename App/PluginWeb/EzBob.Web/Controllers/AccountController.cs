@@ -502,17 +502,16 @@ namespace EzBob.Web.Controllers {
 				break;
 			} // switch
 
-			var result = new TargetResults(null);
 			try {
 				var service = new EBusinessService(m_oDB);
 
-				result = service.TargetBusiness(companyName, postcode, m_oContext.UserId, nFilter, refNum);
+				TargetResults result = service.TargetBusiness(companyName, postcode, m_oContext.UserId, nFilter, refNum);
 				return Json(result.Targets, JsonRequestBehavior.AllowGet);
 			}
 			catch (WebException we) {
 				ms_oLog.Debug(we, "WebException caught while executing company targeting.");
-				result.Targets.Add(new CompanyInfo { BusName = "", BusRefNum = "exception" });
-				return Json(result.Targets, JsonRequestBehavior.AllowGet);
+				var res = new List<CompanyInfo> {new CompanyInfo {BusName = "", BusRefNum = "exception"}};
+				return Json(res, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e) {
 				if (companyName.ToLower() == "asd" && postcode.ToLower() == "ab10 1ba")
