@@ -30,7 +30,8 @@
 			ICustomerInviteFriendRepository customerInviteFriendRepository,
 			PerksRepository perksRepository,
 			DatabaseDataHelper oDbHelper, 
-			WhiteLabelProviderRepository whiteLabelProviderRepository) {
+			WhiteLabelProviderRepository whiteLabelProviderRepository
+		) {
 			m_oQuestions = questions;
 			m_oCustomerRepository = customerRepository;
 			m_oUsers = users;
@@ -147,7 +148,14 @@
 				customerModel.IsEarly = nextPayment.Date > DateTime.UtcNow && (nextPayment.Date.Year != DateTime.UtcNow.Year || nextPayment.Date.Month != DateTime.UtcNow.Month || nextPayment.Date.Day != DateTime.UtcNow.Day);
 			} // if
 
-			customerModel.TotalPayEarlySavings = new LoanPaymentFacade().CalculateSavings(customer, DateTime.UtcNow);
+			try {
+				customerModel.TotalPayEarlySavings = new LoanPaymentFacade().CalculateSavings(customer, DateTime.UtcNow);
+			}
+			// ReSharper disable EmptyGeneralCatchClause
+			catch (Exception) {
+				// Silently ignore for now.
+			} // try
+			// ReSharper restore EmptyGeneralCatchClause
 
 			var account = new AccountSettingsModel {
 				SecurityQuestions = m_oQuestions.GetQuestions(),
