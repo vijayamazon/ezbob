@@ -16,11 +16,15 @@
         private readonly IEzbobWorkplaceContext _context;
         private readonly ILoanAgreementRepository _agreements;
         private readonly AgreementRenderer _agreementRenderer;
-
-        public AgreementsController(IEzbobWorkplaceContext context, ILoanAgreementRepository agreements, AgreementRenderer agreementRenderer)
+		private readonly ILoanAgreementTemplateRepository _loanAgreementTemplateRepository;
+        public AgreementsController(IEzbobWorkplaceContext context,
+			ILoanAgreementRepository agreements, 
+			AgreementRenderer agreementRenderer, 
+			ILoanAgreementTemplateRepository loanAgreementTemplateRepository)
         {
             _agreementRenderer = agreementRenderer;
-            _context = context;
+	        _loanAgreementTemplateRepository = loanAgreementTemplateRepository;
+	        _context = context;
             _agreements = agreements;
         }
 
@@ -38,7 +42,26 @@
                 //if customer is not found, assume that it is underwriter
             }
 
-            var pdf = _agreementRenderer.RenderAgreementToPdf(agreement.TemplateRef.Template, JsonConvert.DeserializeObject<AgreementModel>(agreement.Loan.AgreementModel));
+	        var agreementModel = JsonConvert.DeserializeObject<AgreementModel>(agreement.Loan.AgreementModel);
+	        string template = agreement.TemplateRef.Template;
+
+			if (string.IsNullOrEmpty(agreementModel.FullName)) {
+				var customer = agreement.Loan.Customer;
+				agreementModel.FullName = customer.PersonalInfo.Fullname;
+				var company = customer.Company;
+				if (company != null) {
+					agreementModel.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
+					agreementModel.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
+					try {
+						agreementModel.CompanyAdress = company.CompanyAddress.First().FormattedAddress;
+					}catch {}
+
+				}
+
+				template = _loanAgreementTemplateRepository.GetUpdateTemplate(agreement.TemplateRef.TemplateType) ?? template;
+			}
+
+            var pdf = _agreementRenderer.RenderAgreementToPdf(template, agreementModel);
             return File(pdf, "application/pdf", GenerateFileName(agreement));
         }
 
