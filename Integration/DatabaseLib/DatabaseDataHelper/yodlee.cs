@@ -317,11 +317,8 @@
 			_session.Flush();
 		}
 
-		private List<MP_YodleeOrderItemBankTransaction> GetTransactions(IDatabaseCustomerMarketPlace dmp, string sourceId, out MP_CustomerMarketPlace mp,
-									 out List<string> directors)
+		private List<MP_YodleeOrderItemBankTransaction> GetTransactions(MP_CustomerMarketPlace mp, string sourceId, out List<string> directors)
 		{
-			mp = GetCustomerMarketPlace(dmp.Id);
-
 			if (mp == null)
 			{
 				directors = new List<string>();
@@ -329,6 +326,19 @@
 			}
 
 			directors = GetExperianDirectors(mp.Customer);
+
+			if (mp.DisplayName == "ParsedBank") {
+				var order = mp.YodleeOrders.OrderByDescending(x => x.Created).FirstOrDefault();
+				if (order != null) {
+					return order.OrderItems
+								 .SelectMany(oi => oi.OrderItemBankTransactions)
+								 .Where(t => t.isSeidMod.HasValue && t.isSeidMod.Value == 0)
+								 .Distinct(new YodleeTransactionComparer())
+								 .OrderByDescending(x => (x.postDate ?? x.transactionDate).Value)
+								 .ToList();
+				}
+				return null;
+			}
 
 			var transactions = mp.YodleeOrders
 								 .SelectMany(yo => yo.OrderItems)
@@ -351,11 +361,11 @@
 		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime, out List<string> directors)
 		{
 			directors = new List<string>();
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
+			MP_CustomerMarketPlace mp = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new YodleeOrderDictionary { Data = new Dictionary<BankData, List<BankTransactionData>>() };
 
-			var mpYodleeOrder = customerMarketPlace.YodleeOrders.LastOrDefault(y => y.Created.Date <= history);
+			var mpYodleeOrder = mp.YodleeOrders.OrderByDescending(x => x.Created).FirstOrDefault(y => y.Created.Date <= history);
 
 			#region yodlee data retrieve
 
@@ -384,9 +394,8 @@
 						secondaryAccountHolderName = item.secondaryAccountHolderName,
 					};
 
-					MP_CustomerMarketPlace mp;
 					var directorsList = new List<string>();
-					List<MP_YodleeOrderItemBankTransaction> transactions = GetTransactions(databaseCustomerMarketPlace, item.srcElementId, out mp, out directorsList);
+					List<MP_YodleeOrderItemBankTransaction> transactions = GetTransactions(mp, item.srcElementId, out directorsList);
 					directors = directorsList;
 					if (!isFirstTime)
 					{

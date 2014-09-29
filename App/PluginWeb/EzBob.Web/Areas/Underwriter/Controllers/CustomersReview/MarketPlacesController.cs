@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Web;
 	using System.Web.Mvc;
+	using BankTransactionsParser;
 	using Code;
 	using CompanyFiles;
 	using ConfigManager;
@@ -359,7 +360,21 @@
 		}
 
 		[Ajax]
-		public JsonResult ParseYodlee(int customerId, int fileId) {
+		public JsonResult ParseYodlee(int customerId, int fileId)
+		{
+			var file = m_oServiceClient.Instance.GetCompanyFile(_context.UserId, fileId);
+			var fileMetaData = _companyFiles.Get(fileId);
+			var parser = new TransactionsParser();
+			var parsed = parser.ParseFile(fileMetaData.FileName, file);
+
+			if (!string.IsNullOrEmpty(parsed.Error)) {
+				return Json(new { error = parsed.Error });
+			}
+
+			if (parsed.NumOfTransactions == 0) {
+				return Json(new { error = "File contains 0 transactions" });
+			}
+			
 			var customer = _customers.Get(customerId);
 			var yodlee = new YodleeServiceInfo();
 			var yodleeMp = customer.CustomerMarketPlaces.FirstOrDefault(mp => mp.Marketplace.InternalId == yodlee.InternalId && mp.DisplayName == "ParsedBank");

@@ -31,7 +31,11 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 		var fileId = this.$el.find("[name='YodleeBankFile']:checked").val();
 		if (fileId) {
 			var xhr = $.post(window.gRootPath + "Underwriter/MarketPlaces/ParseYodlee", { fileId: fileId, customerId: this.customerId });
-			xhr.done(function() {
+			xhr.done(function (res) {
+			    if (res.error) {
+			        EzBob.ShowMessage("Parsing of file failed: " + res.error, "Parsing failed");
+			        return;
+			    }
 				EzBob.ShowMessageTimeout("Parsing of file began, refresh in a while", "Parsing began", 3);
 			});
 		}

@@ -11,7 +11,7 @@
 		public decimal? Balance { get; set; }
 		public int NumOfTransactions { get; set; }
 		public List<ParsedBankTransaction> Transactions { get; set; }
-
+        public string Error { get; set; }
 		public override string ToString() {
 
 			var numCredit = Transactions!= null ? Transactions.Count(t => t.IsCredit) : 0;

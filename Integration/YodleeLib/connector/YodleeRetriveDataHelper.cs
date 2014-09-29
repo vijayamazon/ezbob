@@ -43,6 +43,9 @@
 				var parsedData = parser.ParseFile(fileInfo.FilePath);
 				
 				if(parsedData == null) throw new Exception(string.Format("failed to parse the file {0}", fileInfo.FileName));
+				if (!string.IsNullOrEmpty(parsedData.Error)) {
+					throw new Exception(string.Format("failed to parse the file {0} \n {1}", fileInfo.FileName, parsedData.Error));
+				}
 
 				ordersList = ConvertData(parsedData, fileInfo.FileName, securityInfo.ItemId, lastTransactionId);
 			}

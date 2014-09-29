@@ -1518,6 +1518,10 @@
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\BankTransactionsParser\BankTransactionsParser.csproj">
+      <Project>{56d43f8f-f0c7-4b46-b902-0dd3978966e4}</Project>
+      <Name>BankTransactionsParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
       <Project>{189d7477-dee3-4f7b-b703-d24c92352c0c}</Project>
       <Name>ChannelGrabberAPI</Name>
