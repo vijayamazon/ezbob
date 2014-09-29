@@ -5,7 +5,6 @@
 	using System.Reflection;
 	using System.ServiceModel;
 	using System.Text;
-	using System.Threading;
 	using ConfigManager;
 	using EzServiceAccessor;
 	using EzServiceConfigurationLoader;
