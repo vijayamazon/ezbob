@@ -271,7 +271,7 @@
 		private byte[] GetCsvByteArray(List<List<string>> records)
 		{
 			var commaDelimited = new List<string>(records.Count);
-			records.ForEach(r => commaDelimited.Add(r.ToDelimitedString()));
+			records.ForEach(r => commaDelimited.Add(r.ToDelimitedString() + Environment.NewLine));
 			return commaDelimited.SelectMany(s => System.Text.Encoding.UTF8.GetBytes(s)).ToArray();
 		}
 
