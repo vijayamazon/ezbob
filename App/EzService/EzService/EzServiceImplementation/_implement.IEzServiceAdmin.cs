@@ -249,6 +249,7 @@
 		} // StressTestSync
 
 		#endregion method StressTestSync
+
 		#region method ListActiveActions
 
 		public StringListActionResult ListActiveActions() {
