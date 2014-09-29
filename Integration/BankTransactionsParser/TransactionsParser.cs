@@ -9,13 +9,13 @@
 	using System.Text;
 	using System.Text.RegularExpressions;
 	using ExcelLibrary.SpreadSheet;
-	using Ezbob.Logger;
 	using Microsoft.VisualBasic.FileIO;
 	using OfficeOpenXml;
+	using log4net;
 
 	public class TransactionsParser
 	{
-		private static readonly ConsoleLog log = new ConsoleLog();
+		private static readonly ILog Log = LogManager.GetLogger(typeof(TransactionsParser));
 
 		public ParsedBankAccount ParseFile(string fileName, byte[] context)
 		{
@@ -48,7 +48,7 @@
 			}
 			catch (Exception ex)
 			{
-				log.Warn(ex, "Failed to parse the file {0}", fileName);
+				Log.WarnFormat("Failed to parse the file {0} \n {1}", fileName, ex);
 				return new ParsedBankAccount { Error = "Failed to parse the file " + fileName };
 			}
 		}
@@ -77,7 +77,7 @@
 			}
 			catch (Exception ex)
 			{
-				log.Warn(ex, "Failed to parse the file {0}", filePath);
+				Log.WarnFormat("Failed to parse the file {0} \n {1}", filePath, ex);
 				return null;
 			}
 		}
@@ -282,7 +282,7 @@
 
 		public ParsedBankAccount ParseCsv(byte[] content, string fileName)
 		{
-			log.Debug("parsing {0}", fileName);
+			Log.DebugFormat("parsing {0}", fileName);
 			Stream stream = new MemoryStream(content);
 			var csvData = new DataTable();
 
@@ -306,7 +306,7 @@
 
 				if (csvReader.EndOfData)
 				{
-					log.Warn("Header not found");
+					Log.Warn("Header not found");
 					return new ParsedBankAccount { Error = "Header not found" };
 				}
 
@@ -335,7 +335,7 @@
 				return BuildBankAccount(csvData, headerColumns, fileName);
 			}
 
-			log.Warn("Minimum columns not found");
+			Log.Warn("Minimum columns not found");
 			return new ParsedBankAccount { Error = "Minimum columns not found" + Environment.NewLine + headerColumns };
 			//PrintDataTable(csvData);
 		}
@@ -385,7 +385,7 @@
 				}
 				catch (Exception ex)
 				{
-					log.Warn("failed to parse row \n {0}", ex);
+					Log.Warn("failed to parse row \n {0}", ex);
 				}
 			}
 
@@ -396,7 +396,7 @@
 				bankAccount.DateTo = bankAccount.Transactions.Max(x => x.Date);
 				bankAccount.Balance = bankAccount.Transactions.OrderByDescending(x => x.Date).First().Balance;
 			}
-			log.Debug(bankAccount);
+			Log.Debug(bankAccount);
 			return bankAccount;
 		}
 
@@ -477,7 +477,7 @@
 						}
 						else
 						{
-							log.Debug("more then one date columns found");
+							Log.Debug("more then one date columns found");
 						}
 						continue;
 					}
@@ -489,7 +489,7 @@
 						}
 						else
 						{
-							log.Debug("more then one credit columns found");
+							Log.Debug("more then one credit columns found");
 						}
 						continue;
 					}
@@ -502,7 +502,7 @@
 						}
 						else
 						{
-							log.Debug("more then one credit columns found");
+							Log.Debug("more then one credit columns found");
 						}
 						continue;
 					}
@@ -515,7 +515,7 @@
 						}
 						else
 						{
-							log.Debug("more then one balance columns found");
+							Log.Debug("more then one balance columns found");
 						}
 						continue;
 					}
@@ -528,7 +528,7 @@
 						}
 						else
 						{
-							log.Debug("more then one amount columns found");
+							Log.Debug("more then one amount columns found");
 						}
 						continue;
 					}
@@ -541,7 +541,7 @@
 						}
 						else
 						{
-							log.Debug("more then one description columns found");
+							Log.Debug("more then one description columns found");
 						}
 						continue;
 					}
@@ -583,7 +583,7 @@
 				{
 					sb.Append(row[col]);
 				}
-				log.Debug(sb.ToString());
+				Log.Debug(sb.ToString());
 			}
 		}
 	}
