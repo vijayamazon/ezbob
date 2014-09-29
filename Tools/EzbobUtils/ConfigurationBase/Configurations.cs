@@ -2,7 +2,6 @@
 using Ezbob.Database;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Reflection;
 
 namespace ConfigurationBase {
@@ -67,10 +66,11 @@ namespace ConfigurationBase {
 
 			try {
 				var oDB = new SqlConnection();
-				DataTable dt = oDB.ExecuteReader(spName);
 
-				foreach (DataRow row in dt.Rows)
+				oDB.ForEachRow((row, bRowsetStart) => {
 					AddSingleConfiguration(row[KeyFieldName].ToString(), row[ValueFieldName].ToString());
+					return ActionResult.Continue;
+				}, spName);
 			}
 			catch (Exception e) {
 				throw new ConfigurationBaseException("Error reading configurations.", e);
@@ -82,10 +82,11 @@ namespace ConfigurationBase {
 
 			try {
 				var oDB = new SqlConnection();
-				DataTable dt = oDB.ExecuteReader(spName);
 
-				foreach (DataRow row in dt.Rows)
+				oDB.ForEachRow((row, bRowsetStart) => {
 					RefreshSingleConfiguration(row[KeyFieldName].ToString(), row[ValueFieldName].ToString());
+					return ActionResult.Continue;
+				}, spName);
 			}
 			catch (Exception e) {
 				Error("Error reading configurations: {0}", e);

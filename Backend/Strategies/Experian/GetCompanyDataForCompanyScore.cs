@@ -1,20 +1,13 @@
-﻿namespace EzBob.Backend.Strategies.Experian
-{
+﻿namespace EzBob.Backend.Strategies.Experian {
 	using System.Collections.Generic;
-	using System.Data;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class GetCompanyDataForCompanyScore : AStrategy
-	{
-		private readonly string refNumber;
-
+	public class GetCompanyDataForCompanyScore : AStrategy {
 		#region constructor
 
-		public GetCompanyDataForCompanyScore(AConnection oDb, ASafeLog oLog, string refNumber)
-			: base(oDb, oLog)
-		{
+		public GetCompanyDataForCompanyScore(AConnection oDb, ASafeLog oLog, string refNumber) : base(oDb, oLog) {
 			this.refNumber = refNumber;
 		} // constructor
 
@@ -22,8 +15,7 @@
 
 		#region property Name
 
-		public override string Name
-		{
+		public override string Name {
 			get { return "GetCompanyDataForCompanyScore"; }
 		} // Name
 
@@ -33,276 +25,328 @@
 
 		#region property Execute
 
-		public override void Execute()
-		{
+		public override void Execute() {
 			Data = new CompanyData { IsLimited = true };
 
-			DataTable dt = DB.ExecuteReader(
+			SafeReader sr = DB.GetFirst(
 				"GetCompanyIsLimited",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("RefNumber", refNumber));
+				new QueryParameter("RefNumber", refNumber)
+			);
 
-			if (dt.Rows.Count == 1)
-			{
-				var sr = new SafeReader(dt.Rows[0]);
+			if (!sr.IsEmpty)
 				Data.IsLimited = sr["IsLimited"];
-			}
 
 			if (refNumber == "NotFound")
-			{
 				return;
-			}
 
-			if (!Data.IsLimited)
-			{
-				DataTable nonLimitedDataTable = DB.ExecuteReader(
-					"GetNonLimitedDataForCompanyScore",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("RefNumber", refNumber));
+			if (Data.IsLimited)
+				return;
 
-				if (nonLimitedDataTable.Rows.Count == 1)
-				{
-					var nonLimitedSafeReader = new SafeReader(nonLimitedDataTable.Rows[0]);
+			SafeReader nonLimitedSafeReader = DB.GetFirst(
+				"GetNonLimitedDataForCompanyScore",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("RefNumber", refNumber)
+			);
 
-					Data.BusinessName = nonLimitedSafeReader["BusinessName"].ToNullString();
-					Data.Address1 = nonLimitedSafeReader["Address1"].ToNullString();
-					Data.Address2 = nonLimitedSafeReader["Address2"].ToNullString();
-					Data.Address3 = nonLimitedSafeReader["Address3"].ToNullString();
-					Data.Address4 = nonLimitedSafeReader["Address4"].ToNullString();
-					Data.Address5 = nonLimitedSafeReader["Address5"].ToNullString();
-					Data.Postcode = nonLimitedSafeReader["Postcode"].ToNullString();
-					Data.TelephoneNumber = nonLimitedSafeReader["TelephoneNumber"].ToNullString();
-					Data.PrincipalActivities = nonLimitedSafeReader["PrincipalActivities"].ToNullString();
-					Data.EarliestKnownDate = nonLimitedSafeReader["EarliestKnownDate"];
-					Data.DateOwnershipCommenced = nonLimitedSafeReader["DateOwnershipCommenced"];
-					Data.IncorporationDate = nonLimitedSafeReader["IncorporationDate"];
-					Data.DateOwnershipCeased = nonLimitedSafeReader["DateOwnershipCeased"];
-					Data.LastUpdateDate = nonLimitedSafeReader["LastUpdateDate"];
-					Data.BankruptcyCountDuringOwnership = nonLimitedSafeReader["BankruptcyCountDuringOwnership"];
-					Data.AgeOfMostRecentBankruptcyDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentBankruptcyDuringOwnershipMonths"];
-					Data.AssociatedBankruptcyCountDuringOwnership = nonLimitedSafeReader["AssociatedBankruptcyCountDuringOwnership"];
-					Data.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths"];
-					Data.AgeOfMostRecentJudgmentDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentJudgmentDuringOwnershipMonths"];
-					Data.TotalJudgmentCountLast12Months = nonLimitedSafeReader["TotalJudgmentCountLast12Months"];
-					Data.TotalJudgmentValueLast12Months = nonLimitedSafeReader["TotalJudgmentValueLast12Months"];
-					Data.TotalJudgmentCountLast13To24Months = nonLimitedSafeReader["TotalJudgmentCountLast13To24Months"];
-					Data.TotalJudgmentValueLast13To24Months = nonLimitedSafeReader["TotalJudgmentValueLast13To24Months"];
-					Data.ValueOfMostRecentAssociatedJudgmentDuringOwnership = nonLimitedSafeReader["ValueOfMostRecentAssociatedJudgmentDuringOwnership"];
-					Data.TotalAssociatedJudgmentCountLast12Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast12Months"];
-					Data.TotalAssociatedJudgmentValueLast12Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast12Months"];
-					Data.TotalAssociatedJudgmentCountLast13To24Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast13To24Months"];
-					Data.TotalAssociatedJudgmentValueLast13To24Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast13To24Months"];
-					Data.TotalJudgmentCountLast24Months = nonLimitedSafeReader["TotalJudgmentCountLast24Months"];
-					Data.TotalAssociatedJudgmentCountLast24Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast24Months"];
-					Data.TotalJudgmentValueLast24Months = nonLimitedSafeReader["TotalJudgmentValueLast24Months"];
-					Data.TotalAssociatedJudgmentValueLast24Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast24Months"];
-					Data.SupplierName = nonLimitedSafeReader["SupplierName"].ToNullString();
-					Data.FraudCategory = nonLimitedSafeReader["FraudCategory"].ToNullString();
-					Data.FraudCategoryDesc = nonLimitedSafeReader["FraudCategoryDesc"].ToNullString();
-					Data.NumberOfAccountsPlacedForCollection = nonLimitedSafeReader["NumberOfAccountsPlacedForCollection"];
-					Data.ValueOfAccountsPlacedForCollection = nonLimitedSafeReader["ValueOfAccountsPlacedForCollection"];
-					Data.NumberOfAccountsPlacedForCollectionLast2Years = nonLimitedSafeReader["NumberOfAccountsPlacedForCollectionLast2Years"];
-					Data.AverageDaysBeyondTermsFor0To100 = nonLimitedSafeReader["AverageDaysBeyondTermsFor0To100"];
-					Data.AverageDaysBeyondTermsFor101To1000 = nonLimitedSafeReader["AverageDaysBeyondTermsFor101To1000"];
-					Data.AverageDaysBeyondTermsFor1001To10000 = nonLimitedSafeReader["AverageDaysBeyondTermsFor1001To10000"];
-					Data.AverageDaysBeyondTermsForOver10000 = nonLimitedSafeReader["AverageDaysBeyondTermsForOver10000"];
-					Data.AverageDaysBeyondTermsForLast3MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast3MonthsOfDataReturned"];
-					Data.AverageDaysBeyondTermsForLast6MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast6MonthsOfDataReturned"];
-					Data.AverageDaysBeyondTermsForLast12MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast12MonthsOfDataReturned"];
-					Data.CurrentAverageDebt = nonLimitedSafeReader["CurrentAverageDebt"];
-					Data.AverageDebtLast3Months = nonLimitedSafeReader["AverageDebtLast3Months"];
-					Data.AverageDebtLast12Months = nonLimitedSafeReader["AverageDebtLast12Months"];
-					Data.TelephoneNumberDN36 = nonLimitedSafeReader["TelephoneNumberDN36"].ToNullString();
-					Data.RiskScore = nonLimitedSafeReader["RiskScore"];
-					Data.SearchType = nonLimitedSafeReader["SearchType"].ToNullString();
-					Data.SearchTypeDesc = nonLimitedSafeReader["SearchTypeDesc"].ToNullString();
-					Data.CommercialDelphiScore = nonLimitedSafeReader["CommercialDelphiScore"];
-					Data.CreditRating = nonLimitedSafeReader["CreditRating"].ToNullString();
-					Data.CreditLimit = nonLimitedSafeReader["CreditLimit"].ToNullString();
-					Data.ProbabilityOfDefaultScore = nonLimitedSafeReader["ProbabilityOfDefaultScore"];
-					Data.StabilityOdds = nonLimitedSafeReader["StabilityOdds"].ToNullString();
-					Data.RiskBand = nonLimitedSafeReader["RiskBand"].ToNullString();
-					Data.NumberOfProprietorsSearched = nonLimitedSafeReader["NumberOfProprietorsSearched"];
-					Data.NumberOfProprietorsFound = nonLimitedSafeReader["NumberOfProprietorsFound"];
-					Data.Errors = nonLimitedSafeReader["Errors"].ToNullString();
-					int experianNonLimitedResultId = nonLimitedSafeReader["Id"];
+			if (!nonLimitedSafeReader.IsEmpty) {
+				FillBasicData(nonLimitedSafeReader);
 
-					DataTable sicCodesDataTable = DB.ExecuteReader(
-						"GetNonLimitedSicCodes",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
+				int experianNonLimitedResultId = nonLimitedSafeReader["Id"];
 
-					if (sicCodesDataTable.Rows.Count > 0)
-					{
-						Data.SicCodes = new List<string>();
-						Data.SicDescs = new List<string>();
-						foreach (DataRow row in sicCodesDataTable.Rows)
-						{
-							var sicCodesSafeReader = new SafeReader(row);
+				FillSicCodes(experianNonLimitedResultId);
 
-							string sicCode = sicCodesSafeReader["Code"].ToNullString();
-							string sicDesc = sicCodesSafeReader["Description"].ToNullString();
-							Data.SicCodes.Add(sicCode);
-							Data.SicDescs.Add(sicDesc);
-						}
-					}
+				FillBankruptcy(experianNonLimitedResultId);
 
-					DataTable bakruptcyDetailsDataTable = DB.ExecuteReader(
-						"GetNonLimitedBankruptcyDetails",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
+				FillCcj(experianNonLimitedResultId);
 
-					if (bakruptcyDetailsDataTable.Rows.Count > 0)
-					{
-						Data.BankruptcyDetails = new List<BankruptcyDetail>();
-						foreach (DataRow row in bakruptcyDetailsDataTable.Rows)
-						{
-							var bakruptcyDetailsSafeReader = new SafeReader(row);
+				if (Data.CcjDetails != null) {
+					FillPreviousSearches(experianNonLimitedResultId);
+					FillPaymentPerformanceDetails(experianNonLimitedResultId);
+				} // if has CCJ details
+			} // if has non limited company data
 
-							var bankruptcyDetail = new BankruptcyDetail();
-							bankruptcyDetail.BankruptcyName = bakruptcyDetailsSafeReader["BankruptcyName"].ToNullString();
-							bankruptcyDetail.BankruptcyAddr1 = bakruptcyDetailsSafeReader["BankruptcyAddr1"].ToNullString();
-							bankruptcyDetail.BankruptcyAddr2 = bakruptcyDetailsSafeReader["BankruptcyAddr2"].ToNullString();
-							bankruptcyDetail.BankruptcyAddr3 = bakruptcyDetailsSafeReader["BankruptcyAddr3"].ToNullString();
-							bankruptcyDetail.BankruptcyAddr4 = bakruptcyDetailsSafeReader["BankruptcyAddr4"].ToNullString();
-							bankruptcyDetail.BankruptcyAddr5 = bakruptcyDetailsSafeReader["BankruptcyAddr5"].ToNullString();
-							bankruptcyDetail.PostCode = bakruptcyDetailsSafeReader["PostCode"].ToNullString();
-							bankruptcyDetail.GazetteDate = bakruptcyDetailsSafeReader["GazetteDate"];
-							bankruptcyDetail.BankruptcyType = bakruptcyDetailsSafeReader["BankruptcyType"].ToNullString();
-							bankruptcyDetail.BankruptcyTypeDesc = bakruptcyDetailsSafeReader["BankruptcyTypeDesc"].ToNullString();
-
-							Data.BankruptcyDetails.Add(bankruptcyDetail);
-						}
-					}
-
-					DataTable ccjDetailsDataTable = DB.ExecuteReader(
-						"GetNonLimitedCcjDetails",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
-
-					if (ccjDetailsDataTable.Rows.Count > 0)
-					{
-						Data.CcjDetails = new List<CcjDetail>();
-						foreach (DataRow row in ccjDetailsDataTable.Rows)
-						{
-							var ccjDetailsSafeReader = new SafeReader(row);
-
-							var ccjDetail = new CcjDetail();
-							ccjDetail.RecordType = ccjDetailsSafeReader["RecordType"].ToNullString();
-							ccjDetail.RecordTypeFullName = ccjDetailsSafeReader["RecordTypeFullName"].ToNullString();
-							ccjDetail.JudgementDate = ccjDetailsSafeReader["JudgementDate"];
-							ccjDetail.SatisfactionFlag = ccjDetailsSafeReader["SatisfactionFlag"].ToNullString();
-							ccjDetail.SatisfactionFlagDesc = ccjDetailsSafeReader["SatisfactionFlagDesc"].ToNullString();
-							ccjDetail.SatisfactionDate = ccjDetailsSafeReader["SatisfactionDate"];
-							ccjDetail.JudgmentType = ccjDetailsSafeReader["JudgmentType"].ToNullString();
-							ccjDetail.JudgmentTypeDesc = ccjDetailsSafeReader["JudgmentTypeDesc"].ToNullString();
-							ccjDetail.JudgmentAmount = ccjDetailsSafeReader["JudgmentAmount"];
-							ccjDetail.Court = ccjDetailsSafeReader["Court"].ToNullString();
-							ccjDetail.CaseNumber = ccjDetailsSafeReader["CaseNumber"].ToNullString();
-							ccjDetail.NumberOfJudgmentNames = ccjDetailsSafeReader["NumberOfJudgmentNames"].ToNullString();
-							ccjDetail.NumberOfTradingNames = ccjDetailsSafeReader["NumberOfTradingNames"].ToNullString();
-							ccjDetail.LengthOfJudgmentName = ccjDetailsSafeReader["LengthOfJudgmentName"].ToNullString();
-							ccjDetail.LengthOfTradingName = ccjDetailsSafeReader["LengthOfTradingName"].ToNullString();
-							ccjDetail.LengthOfJudgmentAddress = ccjDetailsSafeReader["LengthOfJudgmentAddress"].ToNullString();
-							ccjDetail.JudgementAddr1 = ccjDetailsSafeReader["JudgementAddr1"].ToNullString();
-							ccjDetail.JudgementAddr2 = ccjDetailsSafeReader["JudgementAddr2"].ToNullString();
-							ccjDetail.JudgementAddr3 = ccjDetailsSafeReader["JudgementAddr3"].ToNullString();
-							ccjDetail.JudgementAddr4 = ccjDetailsSafeReader["JudgementAddr4"].ToNullString();
-							ccjDetail.JudgementAddr5 = ccjDetailsSafeReader["JudgementAddr5"].ToNullString();
-							ccjDetail.PostCode = ccjDetailsSafeReader["PostCode"].ToNullString();
-							int ccjDetailId = ccjDetailsSafeReader["Id"];
-
-							DataTable ccjDetailRegisteredAgainstDataTable = DB.ExecuteReader(
-								"GetNonLimitedCcjDetailRegisteredAgainst",
-								CommandSpecies.StoredProcedure,
-								new QueryParameter("ExperianNonLimitedResultCcjDetailsId", ccjDetailId));
-
-							if (ccjDetailRegisteredAgainstDataTable.Rows.Count > 0)
-							{
-								ccjDetail.RegisteredAgainst = new List<string>();
-								foreach (DataRow registeredAgainstRow in ccjDetailRegisteredAgainstDataTable.Rows)
-								{
-									var registeredAgainstSafeReader = new SafeReader(registeredAgainstRow);
-									string registeredAgainst = registeredAgainstSafeReader["Name"].ToNullString();
-									ccjDetail.RegisteredAgainst.Add(registeredAgainst);
-								}
-							}
-
-							DataTable ccjDetailTradingNamesDataTable = DB.ExecuteReader(
-								"GetNonLimitedCcjDetailTradingNames",
-								CommandSpecies.StoredProcedure,
-								new QueryParameter("ExperianNonLimitedResultCcjDetailsId", ccjDetailId));
-
-							if (ccjDetailTradingNamesDataTable.Rows.Count > 0)
-							{
-								ccjDetail.TradingNames = new List<TradingName>();
-								foreach (DataRow tradingNamesRow in ccjDetailTradingNamesDataTable.Rows)
-								{
-									var tradingNamesSafeReader = new SafeReader(tradingNamesRow);
-									var tradingName = new TradingName();
-									tradingName.Name = tradingNamesSafeReader["Name"].ToNullString();
-									tradingName.TradingIndicator = tradingNamesSafeReader["TradingIndicator"].ToNullString();
-									tradingName.TradingIndicatorDesc = tradingNamesSafeReader["TradingIndicatorDesc"].ToNullString();
-									ccjDetail.TradingNames.Add(tradingName);
-								}
-							}
-
-							Data.CcjDetails.Add(ccjDetail);
-						}
-
-						DataTable previousSearchesDataTable = DB.ExecuteReader(
-							"GetNonLimitedPreviousSearches",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
-
-						if (previousSearchesDataTable.Rows.Count > 0)
-						{
-							Data.PreviousSearches = new List<PreviousSearch>();
-							foreach (DataRow row in previousSearchesDataTable.Rows)
-							{
-								var previousSearchesSafeReader = new SafeReader(row);
-
-								var previousSearch = new PreviousSearch();
-								previousSearch.PreviousSearchDate = previousSearchesSafeReader["PreviousSearchDate"];
-								previousSearch.EnquiryType = previousSearchesSafeReader["EnquiryType"].ToNullString();
-								previousSearch.EnquiryTypeDesc = previousSearchesSafeReader["EnquiryTypeDesc"].ToNullString();
-								previousSearch.CreditRequired = previousSearchesSafeReader["CreditRequired"].ToNullString();
-
-								Data.PreviousSearches.Add(previousSearch);
-							}
-						}
-
-						DataTable paymentPerformanceDetailsDataTable = DB.ExecuteReader(
-							"GetNonLimitedPaymentPerformanceDetails",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
-
-						if (paymentPerformanceDetailsDataTable.Rows.Count > 0)
-						{
-							Data.PaymentPerformanceDetails = new List<PaymentPerformanceDetail>();
-							foreach (DataRow row in paymentPerformanceDetailsDataTable.Rows)
-							{
-								var paymentPerformanceDetailsSafeReader = new SafeReader(row);
-
-								var paymentPerformanceDetail = new PaymentPerformanceDetail();
-								paymentPerformanceDetail.Code = paymentPerformanceDetailsSafeReader["Code"];
-								paymentPerformanceDetail.DaysBeyondTerms = paymentPerformanceDetailsSafeReader["DaysBeyondTerms"];
-
-								Data.PaymentPerformanceDetails.Add(paymentPerformanceDetail);
-							}
-						}
-					}
-				}
-
-				var scoreHistory = DB.Fill<ScoreAtDate>(
-					"GetCompanyHistory",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("RefNumber", refNumber));
-
-				Data.ScoreHistory = scoreHistory;
-			}
+			FillScoreHistory();
 		} // Execute
 
 		#endregion property Execute
+
+		#region private
+
+		#region method FillBasicData
+
+		private void FillBasicData(SafeReader nonLimitedSafeReader) {
+			Data.BusinessName = nonLimitedSafeReader["BusinessName"].ToNullString();
+			Data.Address1 = nonLimitedSafeReader["Address1"].ToNullString();
+			Data.Address2 = nonLimitedSafeReader["Address2"].ToNullString();
+			Data.Address3 = nonLimitedSafeReader["Address3"].ToNullString();
+			Data.Address4 = nonLimitedSafeReader["Address4"].ToNullString();
+			Data.Address5 = nonLimitedSafeReader["Address5"].ToNullString();
+			Data.Postcode = nonLimitedSafeReader["Postcode"].ToNullString();
+			Data.TelephoneNumber = nonLimitedSafeReader["TelephoneNumber"].ToNullString();
+			Data.PrincipalActivities = nonLimitedSafeReader["PrincipalActivities"].ToNullString();
+			Data.EarliestKnownDate = nonLimitedSafeReader["EarliestKnownDate"];
+			Data.DateOwnershipCommenced = nonLimitedSafeReader["DateOwnershipCommenced"];
+			Data.IncorporationDate = nonLimitedSafeReader["IncorporationDate"];
+			Data.DateOwnershipCeased = nonLimitedSafeReader["DateOwnershipCeased"];
+			Data.LastUpdateDate = nonLimitedSafeReader["LastUpdateDate"];
+			Data.BankruptcyCountDuringOwnership = nonLimitedSafeReader["BankruptcyCountDuringOwnership"];
+			Data.AgeOfMostRecentBankruptcyDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentBankruptcyDuringOwnershipMonths"];
+			Data.AssociatedBankruptcyCountDuringOwnership = nonLimitedSafeReader["AssociatedBankruptcyCountDuringOwnership"];
+			Data.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths"];
+			Data.AgeOfMostRecentJudgmentDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentJudgmentDuringOwnershipMonths"];
+			Data.TotalJudgmentCountLast12Months = nonLimitedSafeReader["TotalJudgmentCountLast12Months"];
+			Data.TotalJudgmentValueLast12Months = nonLimitedSafeReader["TotalJudgmentValueLast12Months"];
+			Data.TotalJudgmentCountLast13To24Months = nonLimitedSafeReader["TotalJudgmentCountLast13To24Months"];
+			Data.TotalJudgmentValueLast13To24Months = nonLimitedSafeReader["TotalJudgmentValueLast13To24Months"];
+			Data.ValueOfMostRecentAssociatedJudgmentDuringOwnership = nonLimitedSafeReader["ValueOfMostRecentAssociatedJudgmentDuringOwnership"];
+			Data.TotalAssociatedJudgmentCountLast12Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast12Months"];
+			Data.TotalAssociatedJudgmentValueLast12Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast12Months"];
+			Data.TotalAssociatedJudgmentCountLast13To24Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast13To24Months"];
+			Data.TotalAssociatedJudgmentValueLast13To24Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast13To24Months"];
+			Data.TotalJudgmentCountLast24Months = nonLimitedSafeReader["TotalJudgmentCountLast24Months"];
+			Data.TotalAssociatedJudgmentCountLast24Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast24Months"];
+			Data.TotalJudgmentValueLast24Months = nonLimitedSafeReader["TotalJudgmentValueLast24Months"];
+			Data.TotalAssociatedJudgmentValueLast24Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast24Months"];
+			Data.SupplierName = nonLimitedSafeReader["SupplierName"].ToNullString();
+			Data.FraudCategory = nonLimitedSafeReader["FraudCategory"].ToNullString();
+			Data.FraudCategoryDesc = nonLimitedSafeReader["FraudCategoryDesc"].ToNullString();
+			Data.NumberOfAccountsPlacedForCollection = nonLimitedSafeReader["NumberOfAccountsPlacedForCollection"];
+			Data.ValueOfAccountsPlacedForCollection = nonLimitedSafeReader["ValueOfAccountsPlacedForCollection"];
+			Data.NumberOfAccountsPlacedForCollectionLast2Years = nonLimitedSafeReader["NumberOfAccountsPlacedForCollectionLast2Years"];
+			Data.AverageDaysBeyondTermsFor0To100 = nonLimitedSafeReader["AverageDaysBeyondTermsFor0To100"];
+			Data.AverageDaysBeyondTermsFor101To1000 = nonLimitedSafeReader["AverageDaysBeyondTermsFor101To1000"];
+			Data.AverageDaysBeyondTermsFor1001To10000 = nonLimitedSafeReader["AverageDaysBeyondTermsFor1001To10000"];
+			Data.AverageDaysBeyondTermsForOver10000 = nonLimitedSafeReader["AverageDaysBeyondTermsForOver10000"];
+			Data.AverageDaysBeyondTermsForLast3MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast3MonthsOfDataReturned"];
+			Data.AverageDaysBeyondTermsForLast6MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast6MonthsOfDataReturned"];
+			Data.AverageDaysBeyondTermsForLast12MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast12MonthsOfDataReturned"];
+			Data.CurrentAverageDebt = nonLimitedSafeReader["CurrentAverageDebt"];
+			Data.AverageDebtLast3Months = nonLimitedSafeReader["AverageDebtLast3Months"];
+			Data.AverageDebtLast12Months = nonLimitedSafeReader["AverageDebtLast12Months"];
+			Data.TelephoneNumberDN36 = nonLimitedSafeReader["TelephoneNumberDN36"].ToNullString();
+			Data.RiskScore = nonLimitedSafeReader["RiskScore"];
+			Data.SearchType = nonLimitedSafeReader["SearchType"].ToNullString();
+			Data.SearchTypeDesc = nonLimitedSafeReader["SearchTypeDesc"].ToNullString();
+			Data.CommercialDelphiScore = nonLimitedSafeReader["CommercialDelphiScore"];
+			Data.CreditRating = nonLimitedSafeReader["CreditRating"].ToNullString();
+			Data.CreditLimit = nonLimitedSafeReader["CreditLimit"].ToNullString();
+			Data.ProbabilityOfDefaultScore = nonLimitedSafeReader["ProbabilityOfDefaultScore"];
+			Data.StabilityOdds = nonLimitedSafeReader["StabilityOdds"].ToNullString();
+			Data.RiskBand = nonLimitedSafeReader["RiskBand"].ToNullString();
+			Data.NumberOfProprietorsSearched = nonLimitedSafeReader["NumberOfProprietorsSearched"];
+			Data.NumberOfProprietorsFound = nonLimitedSafeReader["NumberOfProprietorsFound"];
+			Data.Errors = nonLimitedSafeReader["Errors"].ToNullString();
+		} // FillBasicData
+
+		#endregion method FillBasicData
+
+		#region method FillSicCodes
+
+		private void FillSicCodes(int experianNonLimitedResultId) {
+			DB.ForEachRowSafe(
+				(sicCodesSafeReader, bRowsetStart) => {
+					if (Data.SicCodes == null)
+						Data.SicCodes = new List<string>();
+
+					if (Data.SicDescs == null)
+						Data.SicDescs = new List<string>();
+
+					string sicCode = sicCodesSafeReader["Code"].ToNullString();
+					string sicDesc = sicCodesSafeReader["Description"].ToNullString();
+					Data.SicCodes.Add(sicCode);
+					Data.SicDescs.Add(sicDesc);
+
+					return ActionResult.Continue;
+				},
+				"GetNonLimitedSicCodes",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId)
+			);
+		} // FillSicCodes
+
+		#endregion method FillSicCodes
+
+		#region method FillBankruptcy
+
+		private void FillBankruptcy(int experianNonLimitedResultId) {
+			DB.ForEachRowSafe(
+				(bakruptcyDetailsSafeReader, bRowsetStart) => {
+					if (Data.BankruptcyDetails == null)
+						Data.BankruptcyDetails = new List<BankruptcyDetail>();
+
+					var bankruptcyDetail = new BankruptcyDetail {
+						BankruptcyName = bakruptcyDetailsSafeReader["BankruptcyName"].ToNullString(),
+						BankruptcyAddr1 = bakruptcyDetailsSafeReader["BankruptcyAddr1"].ToNullString(),
+						BankruptcyAddr2 = bakruptcyDetailsSafeReader["BankruptcyAddr2"].ToNullString(),
+						BankruptcyAddr3 = bakruptcyDetailsSafeReader["BankruptcyAddr3"].ToNullString(),
+						BankruptcyAddr4 = bakruptcyDetailsSafeReader["BankruptcyAddr4"].ToNullString(),
+						BankruptcyAddr5 = bakruptcyDetailsSafeReader["BankruptcyAddr5"].ToNullString(),
+						PostCode = bakruptcyDetailsSafeReader["PostCode"].ToNullString(),
+						GazetteDate = bakruptcyDetailsSafeReader["GazetteDate"],
+						BankruptcyType = bakruptcyDetailsSafeReader["BankruptcyType"].ToNullString(),
+						BankruptcyTypeDesc = bakruptcyDetailsSafeReader["BankruptcyTypeDesc"].ToNullString(),
+					};
+
+					Data.BankruptcyDetails.Add(bankruptcyDetail);
+
+					return ActionResult.Continue;
+				},
+				"GetNonLimitedBankruptcyDetails",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId)
+			);
+		} // FillBankruptcy
+
+		#endregion method FillBankruptcy
+
+		#region method FillCcj
+
+		private void FillCcj(int experianNonLimitedResultId) {
+			DB.ForEachRowSafe(
+				(ccjDetailsSafeReader, bRowsetStart) => {
+					if (Data.CcjDetails == null)
+						Data.CcjDetails = new List<CcjDetail>();
+
+					var ccjDetail = new CcjDetail {
+						RecordType = ccjDetailsSafeReader["RecordType"].ToNullString(),
+						RecordTypeFullName = ccjDetailsSafeReader["RecordTypeFullName"].ToNullString(),
+						JudgementDate = ccjDetailsSafeReader["JudgementDate"],
+						SatisfactionFlag = ccjDetailsSafeReader["SatisfactionFlag"].ToNullString(),
+						SatisfactionFlagDesc = ccjDetailsSafeReader["SatisfactionFlagDesc"].ToNullString(),
+						SatisfactionDate = ccjDetailsSafeReader["SatisfactionDate"],
+						JudgmentType = ccjDetailsSafeReader["JudgmentType"].ToNullString(),
+						JudgmentTypeDesc = ccjDetailsSafeReader["JudgmentTypeDesc"].ToNullString(),
+						JudgmentAmount = ccjDetailsSafeReader["JudgmentAmount"],
+						Court = ccjDetailsSafeReader["Court"].ToNullString(),
+						CaseNumber = ccjDetailsSafeReader["CaseNumber"].ToNullString(),
+						NumberOfJudgmentNames = ccjDetailsSafeReader["NumberOfJudgmentNames"].ToNullString(),
+						NumberOfTradingNames = ccjDetailsSafeReader["NumberOfTradingNames"].ToNullString(),
+						LengthOfJudgmentName = ccjDetailsSafeReader["LengthOfJudgmentName"].ToNullString(),
+						LengthOfTradingName = ccjDetailsSafeReader["LengthOfTradingName"].ToNullString(),
+						LengthOfJudgmentAddress = ccjDetailsSafeReader["LengthOfJudgmentAddress"].ToNullString(),
+						JudgementAddr1 = ccjDetailsSafeReader["JudgementAddr1"].ToNullString(),
+						JudgementAddr2 = ccjDetailsSafeReader["JudgementAddr2"].ToNullString(),
+						JudgementAddr3 = ccjDetailsSafeReader["JudgementAddr3"].ToNullString(),
+						JudgementAddr4 = ccjDetailsSafeReader["JudgementAddr4"].ToNullString(),
+						JudgementAddr5 = ccjDetailsSafeReader["JudgementAddr5"].ToNullString(),
+						PostCode = ccjDetailsSafeReader["PostCode"].ToNullString(),
+					};
+
+					int ccjDetailId = ccjDetailsSafeReader["Id"];
+
+					DB.ForEachRowSafe(
+						(registeredAgainstSafeReader, browsetStart) => {
+							if (ccjDetail.RegisteredAgainst == null)
+								ccjDetail.RegisteredAgainst = new List<string>();
+
+							string registeredAgainst = registeredAgainstSafeReader["Name"].ToNullString();
+							ccjDetail.RegisteredAgainst.Add(registeredAgainst);
+
+							return ActionResult.Continue;
+						},
+						"GetNonLimitedCcjDetailRegisteredAgainst",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("ExperianNonLimitedResultCcjDetailsId", ccjDetailId)
+					);
+
+					DB.ForEachRowSafe(
+						(tradingNamesSafeReader, bRowsetstart) => {
+							if (ccjDetail.TradingNames == null)
+								ccjDetail.TradingNames = new List<TradingName>();
+
+							var tradingName = new TradingName {
+								Name = tradingNamesSafeReader["Name"].ToNullString(),
+								TradingIndicator = tradingNamesSafeReader["TradingIndicator"].ToNullString(),
+								TradingIndicatorDesc = tradingNamesSafeReader["TradingIndicatorDesc"].ToNullString(),
+							};
+							ccjDetail.TradingNames.Add(tradingName);
+
+							return ActionResult.Continue;
+						},
+						"GetNonLimitedCcjDetailTradingNames",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("ExperianNonLimitedResultCcjDetailsId", ccjDetailId)
+					);
+
+					Data.CcjDetails.Add(ccjDetail);
+
+					return ActionResult.Continue;
+				},
+				"GetNonLimitedCcjDetails",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId)
+			);
+		} // FillCcj
+
+		#endregion method FillCcj
+
+		#region method FillPaymentPerformanceDetails
+
+		private void FillPaymentPerformanceDetails(int experianNonLimitedResultId) {
+			DB.ForEachRowSafe(
+				(paymentPerformanceDetailsSafeReader, bRowsetStart) => {
+					if (Data.PaymentPerformanceDetails == null)
+						Data.PaymentPerformanceDetails = new List<PaymentPerformanceDetail>();
+
+					var paymentPerformanceDetail = new PaymentPerformanceDetail {
+						Code = paymentPerformanceDetailsSafeReader["Code"],
+						DaysBeyondTerms = paymentPerformanceDetailsSafeReader["DaysBeyondTerms"],
+					};
+
+					Data.PaymentPerformanceDetails.Add(paymentPerformanceDetail);
+					return ActionResult.Continue;
+				},
+				"GetNonLimitedPaymentPerformanceDetails",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId)
+			);
+		} // FillPaymentPerformanceDetails
+
+		#endregion method FillPaymentPerformanceDetails
+
+		#region method FillPreviousSearches
+
+		private void FillPreviousSearches(int experianNonLimitedResultId) {
+			DB.ForEachRowSafe(
+				(previousSearchesSafeReader, bRowsetStart) => {
+					if (Data.PreviousSearches == null)
+						Data.PreviousSearches = new List<PreviousSearch>();
+
+					var previousSearch = new PreviousSearch {
+						PreviousSearchDate = previousSearchesSafeReader["PreviousSearchDate"],
+						EnquiryType = previousSearchesSafeReader["EnquiryType"].ToNullString(),
+						EnquiryTypeDesc = previousSearchesSafeReader["EnquiryTypeDesc"].ToNullString(),
+						CreditRequired = previousSearchesSafeReader["CreditRequired"].ToNullString(),
+					};
+
+					Data.PreviousSearches.Add(previousSearch);
+					return ActionResult.Continue;
+				},
+				"GetNonLimitedPreviousSearches",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId)
+			);
+		} // FillPreviousSearches
+
+		#endregion method FillPreviousSearches
+
+		#region method FillScoreHistory
+
+		private void FillScoreHistory() {
+			var scoreHistory = DB.Fill<ScoreAtDate>(
+				"GetCompanyHistory",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("RefNumber", refNumber)
+			);
+
+			Data.ScoreHistory = scoreHistory;
+		} // FillScoreHistory
+
+		#endregion method FillScoreHistory
+
+		private readonly string refNumber;
+
+		#endregion private
 	} // class GetCompanyDataForCompanyScore
 } // namespace

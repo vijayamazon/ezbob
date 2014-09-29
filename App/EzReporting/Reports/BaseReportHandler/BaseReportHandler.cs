@@ -19,7 +19,8 @@
 
 		#region constructor
 
-		public BaseReportHandler(AConnection oDB, ASafeLog log = null) : base(log) {
+		public BaseReportHandler(AConnection oDB, ASafeLog log = null)
+			: base(log) {
 			DB = oDB;
 		} // constructor
 
@@ -37,16 +38,6 @@
 			int lineCounter = 0;
 			var tbl = new Table().Add<Class>("Report");
 			Tbody oTbody;
-
-			DataTable dt = oReportData;
-
-			try {
-				dt = dt ?? rptDef.Execute(DB);
-			}
-			catch (Exception e) {
-				Alert(e, "Failed to fetch data from DB.");
-				return tbl;
-			} // try
 
 			try {
 				if (!isSharones)
@@ -87,78 +78,31 @@
 				return tbl;
 			} // try
 
-			try {
-				foreach (DataRow row in dt.Rows) {
-					var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Odd" : "Even");
-					oTbody.Append(oTr);
-
-					var oClassesToApply = new List<string>();
-
-					for (int columnIndex = 0; columnIndex < rptDef.Columns.Length; columnIndex++) {
-						ColumnInfo col = rptDef.Columns[columnIndex];
-						var oValue = row[col.FieldName];
-
-						if (col.IsVisible) {
-							var oTd = new Td();
-							oTr.Append(oTd);
-
-							if (IsNumber(oValue)) {
-								ATag oInnerTag = new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2)));
-
-								if (col.ValueType == ValueType.UserID || col.ValueType == ValueType.BrokerID) {
-									var oLink = new A();
-
-									oLink.Append(oInnerTag);
-									oLink.Target.Append("_blank");
-
-									var titleText = "Open this customer in underwriter.";
-									if (col.ValueType == ValueType.UserID) {
-										oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers?customerid=" + oValue);
-									} else {
-										oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers#broker/" + oValue);
-										titleText = "Open this broker in underwriter.";
-									}
-
-									oLink.Alt.Append(titleText);
-									oLink.Title.Append(titleText);
-
-									oInnerTag = oLink;
-
-									if (oColumnTypes != null)
-										oColumnTypes[columnIndex] = "user-id";
-								}
-								else {
-									if (oColumnTypes != null)
-										oColumnTypes[columnIndex] = "formatted-num";
-								} // if user id
-
-								oTd.Add<Class>("R").Append(oInnerTag);
-							}
-							else {
-								oTd.Add<Class>("L").Append(new Text(oValue.ToString()));
-
-								if ((oColumnTypes != null) && (oValue is DateTime))
-									oColumnTypes[columnIndex] = "date";
-							} // if
-						}
-						else {
-							if (col.ValueType == ValueType.CssClass)
-								oClassesToApply.Add(oValue.ToString());
-						} // if
-					} // for each column
-
-					if (oClassesToApply.Count > 0)
-						oTr.ApplyToChildren<Class>(string.Join(" ", oClassesToApply.ToArray()));
-
-					lineCounter++;
-				} // for each data row
-
-				AddSheetToExcel(dt, rptDef.StoredProcedure, sRptTitle);
+			if (oReportData == null) {
+				try {
+					rptDef.Execute(DB, (sr, bRowsetStart) => {
+						ProcessTableReportRow(rptDef, sr, oTbody, lineCounter, oColumnTypes);
+						lineCounter++;
+						return ActionResult.Continue;
+					}); // for each data row
+				}
+				catch (Exception e) {
+					Alert(e, "Failed to fetch data from DB or create report table body.");
+					return tbl;
+				} // try
 			}
-			catch (Exception e) {
-				Alert(e, "Failed to create report table body.");
-				return tbl;
-			} // try
+			else {
+				try {
+					foreach (DataRow row in oReportData.Rows) {
+						ProcessTableReportRow(rptDef, new SafeReader(row), oTbody, lineCounter, oColumnTypes);
+						lineCounter++;
+					} // for each data row
+				}
+				catch (Exception e) {
+					Alert(e, "Failed to create report table body.");
+					return tbl;
+				} // try
+			} // if
 
 			try {
 				if (oColumnTypes != null) {
@@ -311,7 +255,6 @@
 
 		public ExcelPackage BuildPlainedPaymentXls(Report report, DateTime today, DateTime ignored) {
 			var title = report.GetTitle(today);
-			var wb = new ExcelPackage();
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptPaymentReport",
@@ -319,13 +262,12 @@
 					new QueryParameter("@DateEnd", DB.DateToString(DateTime.Today.AddDays(3)))
 				);
 
-				wb = AddSheetToExcel(dt, title, "RptPaymentReport");
+				return AddSheetToExcel(dt, title, "RptPaymentReport");
 			}
 			catch (Exception e) {
 				Error(e.ToString());
+				return new ExcelPackage();
 			} // try
-
-			return wb;
 		} // BuildPlainedPaymentXls
 
 		#endregion method BuildPlainedPaymentXls
@@ -509,7 +451,7 @@
 		private KeyValuePair<ReportQuery, DataTable> CreateLoanIntegrityReport(Report report) {
 			var loanIntegrity = new LoanIntegrity(DB, this);
 			SortedDictionary<int, decimal> diffs = loanIntegrity.Run();
-			
+
 			var oRows = new List<LoanIntegrityRow>();
 
 			foreach (int loanId in diffs.Keys) {
@@ -546,7 +488,7 @@
 
 			#region constructor
 
-			public LoansIssuedRow(DataRow row) {
+			public LoansIssuedRow(SafeReader row) {
 				m_oData = new SortedDictionary<string, dynamic>();
 
 				if (row == null) {
@@ -564,7 +506,7 @@
 					m_bIsTotal = false;
 
 					foreach (KeyValuePair<string, dynamic> pair in ms_oFieldNames)
-						m_oData[pair.Key] = row[pair.Key];
+						m_oData[pair.Key] = row.ColumnOrDefault(pair.Key);
 				} // if
 			} // constructor
 
@@ -584,14 +526,14 @@
 
 				m_oData[FldTotalInterest] = (decimal)m_oData[FldExpectedInterest] + (decimal)m_oData[FldEarnedInterest];
 
-				foreach (string sIdx in new string[] { FldAccruedInterest, FldExpectedInterest, FldTotalInterest}) {
+				foreach (string sIdx in new string[] { FldAccruedInterest, FldExpectedInterest, FldTotalInterest }) {
 					decimal x = m_oData[sIdx];
 
 					if (Math.Abs(x) < 0.01M)
 						m_oData[sIdx] = 0M;
 				} // for each
 			} // SetInterests
- 
+
 			#endregion method SetInterests
 
 			#region method AccumulateTotals
@@ -679,7 +621,7 @@
 			private readonly SortedDictionary<string, dynamic> m_oData;
 			private readonly bool m_bIsTotal;
 
-			private SortedDictionary<int, int> m_oClients;
+			private readonly SortedDictionary<int, int> m_oClients;
 
 			#region property ClientID
 
@@ -769,7 +711,7 @@
 			#endregion static constructor
 
 			#region method FieldType
-			
+
 			private static Type FieldType(string sFldName) {
 				var oFldType = typeof(decimal);
 
@@ -777,15 +719,15 @@
 					switch (sFldName) {
 					case FldLoanID:
 					case FldClientID:
-						oFldType = typeof (int);
+						oFldType = typeof(int);
 						break;
 
 					case FldDate:
-						oFldType = typeof (DateTime);
+						oFldType = typeof(DateTime);
 						break;
 
 					default:
-						oFldType = typeof (string);
+						oFldType = typeof(string);
 						break;
 					} // switch
 				} // if
@@ -795,8 +737,8 @@
 
 			#endregion method FieldType
 
-			private static readonly SortedDictionary<string, int> ms_oTotalIgnored; 
-			private static readonly SortedDictionary<string, dynamic> ms_oFieldNames; 
+			private static readonly SortedDictionary<string, int> ms_oTotalIgnored;
+			private static readonly SortedDictionary<string, dynamic> ms_oFieldNames;
 
 			#endregion private static
 
@@ -813,8 +755,6 @@
 				DateEnd = tomorrow
 			};
 
-			DataTable tbl = rpt.Execute(DB);
-
 			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ByIssuedLoans, false, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
@@ -822,15 +762,19 @@
 
 			var oTotal = new LoansIssuedRow(null);
 
-			foreach (DataRow row in tbl.Rows) {
-				var lir = new LoansIssuedRow(row);
+			DataTable tbl = rpt.Execute(DB);
+
+			rpt.Execute(DB, (sr, bRowsetStart) => {
+				var lir = new LoansIssuedRow(sr);
 				oRows.Add(lir);
 
 				lir.SetInterests(earned);
 
 				oTotal.AddClient(lir);
 				oTotal.AccumulateTotals(lir);
-			} // for each row
+
+				return ActionResult.Continue;
+			});
 
 			oTotal.SetLoanCount(tbl.Rows.Count);
 
@@ -851,11 +795,6 @@
 			Table tbl = new Table();
 
 			try {
-				DataTable dt = DB.ExecuteReader("RptPaymentReport",
-					new QueryParameter("@DateStart", DB.DateToString(today)),
-					new QueryParameter("@DateEnd", DB.DateToString(DateTime.Today.AddDays(3)))
-				);
-
 				ATag oTr = new Tr().Add<Class>("HR")
 					.Append(new Th().Append(new Text("Id")))
 					.Append(new Th().Append(new Text("Name")))
@@ -865,21 +804,28 @@
 
 				oTr.ApplyToChildren<Class>("H");
 
-				tbl.Add<ID>("tableReportData").Add<Class>("Report").Append( new Thead().Append(oTr) );
+				tbl.Add<ID>("tableReportData").Add<Class>("Report").Append(new Thead().Append(oTr));
 
 				var tbody = new Tbody();
 				tbl.Append(tbody);
 
-				foreach (DataRow row in dt.Rows) {
-					oTr = new Tr()
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Id"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Firstname"] + " " + row["SurName"])))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Name"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["DATE"].ToString())))
-						.Append(new Td().Add<Class>("R").Append(new Text(row["AmountDue"].ToString())));
+				DB.ForEachRowSafe(
+					(sr, bRowsetStart) => {
+						oTr = new Tr()
+							.Append(new Td().Add<Class>("L").Append(new Text(sr["Id"])))
+							.Append(new Td().Add<Class>("L").Append(new Text(sr["Firstname"] + " " + sr["SurName"])))
+							.Append(new Td().Add<Class>("L").Append(new Text(sr["Name"])))
+							.Append(new Td().Add<Class>("L").Append(new Text(sr["DATE"])))
+							.Append(new Td().Add<Class>("R").Append(new Text(sr["AmountDue"])));
 
-					tbody.Append(oTr);
-				} // foreach data row
+						tbody.Append(oTr);
+
+						return ActionResult.Continue;
+					},
+					"RptPaymentReport",
+					new QueryParameter("@DateStart", DB.DateToString(today)),
+					new QueryParameter("@DateEnd", DB.DateToString(DateTime.Today.AddDays(3)))
+				);
 			}
 			catch (Exception e) {
 				Error(e.ToString());
@@ -924,7 +870,7 @@
 			DataTable oOutput = UiReportItem.CreateTable();
 
 			foreach (UiReportItem oItem in oItems)
-				 oItem.ToRow(oOutput);
+				oItem.ToRow(oOutput);
 
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
 		} // CreateUiReport
@@ -982,28 +928,38 @@
 
 			#region fields
 
-			[UsedImplicitly] public DateTime IssueDate;
-			[UsedImplicitly] public int ClientID;
-			[UsedImplicitly] public int LoanID;
-			[UsedImplicitly] public string ClientName;
-			[UsedImplicitly] public string ClientEmail;
-			[UsedImplicitly] public decimal IssuedAmount;
-			[UsedImplicitly] public decimal SetupFee;
-			[UsedImplicitly] public string LoanStatus;
-			[UsedImplicitly] public decimal EarnedInterest;
-			[UsedImplicitly] public decimal EarnedFees;
-			[UsedImplicitly] public decimal CashPaid;
-			[UsedImplicitly] public string CustomerStatus;
+			[UsedImplicitly]
+			public DateTime IssueDate;
+			[UsedImplicitly]
+			public int ClientID;
+			[UsedImplicitly]
+			public int LoanID;
+			[UsedImplicitly]
+			public string ClientName;
+			[UsedImplicitly]
+			public string ClientEmail;
+			[UsedImplicitly]
+			public decimal IssuedAmount;
+			[UsedImplicitly]
+			public decimal SetupFee;
+			[UsedImplicitly]
+			public string LoanStatus;
+			[UsedImplicitly]
+			public decimal EarnedInterest;
+			[UsedImplicitly]
+			public decimal EarnedFees;
+			[UsedImplicitly]
+			public decimal CashPaid;
+			[UsedImplicitly]
+			public string CustomerStatus;
 
 			#endregion fields
 
 			#region constructor
 
-			public AccountingLoanBalanceRow(DataRow oRow, decimal nEarnedInterest) {
+			public AccountingLoanBalanceRow(SafeReader sr, decimal nEarnedInterest) {
 				Transactions = new SortedSet<int>();
 				LoanCharges = new SortedSet<int>();
-
-				var sr = new SafeReader(oRow);
 
 				AccountingLoanBalanceRawData raw = sr.Fill<AccountingLoanBalanceRawData>();
 
@@ -1023,25 +979,20 @@
 				if (SetupFee > 0)
 					IssuedAmount -= SetupFee;
 
-				Update(raw.TransactionID, raw.LoanTranMethod, raw.TotalRepaid, raw.RolloverRepaid, raw.FeesEarnedID, raw.FeesRepaid);
+				Update(raw.TransactionID, raw.LoanTranMethod, raw.TotalRepaid, raw.RolloverRepaid, raw.FeesEarnedID);
 			} // constructor
 
 			#endregion constructor
 
 			#region method Update
 
-			public void Update(DataRow oRow) {
-				Update(new SafeReader(oRow));
+			public void Update(SafeReader sr) {
+				Update(sr["TransactionID"], sr["LoanTranMethod"], sr["TotalRepaid"], sr["RolloverRepaid"], sr["FeesEarnedID"]);
 			} // Update
 
-			private void Update(SafeReader sr) {
-				Update(sr["TransactionID"], sr["LoanTranMethod"], sr["TotalRepaid"], sr["RolloverRepaid"], sr["FeesEarnedID"], sr["FeesRepaid"]);
-			} // Update
-
-			private void Update(int nTransactionID, string sMethod, decimal nAmount, decimal nRolloverRepaid, int nFeesEarnedID, decimal nFeesRepaid) {
-				if (!LoanCharges.Contains(nFeesEarnedID)) {
+			private void Update(int nTransactionID, string sMethod, decimal nAmount, decimal nRolloverRepaid, int nFeesEarnedID) {
+				if (!LoanCharges.Contains(nFeesEarnedID))
 					LoanCharges.Add(nFeesEarnedID);
-				} // if
 
 				if (!Transactions.Contains(nTransactionID)) {
 					Transactions.Add(nTransactionID);
@@ -1132,20 +1083,20 @@
 				DateEnd = tomorrow
 			};
 
-			DataTable oData = rpt.Execute(DB);
-
 			var oRows = new SortedDictionary<int, AccountingLoanBalanceRow>();
 
-			foreach (DataRow row in oData.Rows) {
-				int nLoanID = Convert.ToInt32(row["LoanID"]);
+			rpt.Execute(DB, (sr, bRowsetStart) => {
+				int nLoanID = sr["LoanID"];
 
 				decimal nEarnedInterest = earned.ContainsKey(nLoanID) ? earned[nLoanID] : 0;
 
 				if (oRows.ContainsKey(nLoanID))
-					oRows[nLoanID].Update(row);
+					oRows[nLoanID].Update(sr);
 				else
-					oRows[nLoanID] = new AccountingLoanBalanceRow(row, nEarnedInterest);
-			} // for each earned interest
+					oRows[nLoanID] = new AccountingLoanBalanceRow(sr, nEarnedInterest);
+
+				return ActionResult.Continue;
+			});
 
 			DataTable oOutput = AccountingLoanBalanceRow.ToTable();
 
@@ -1160,6 +1111,74 @@
 		#endregion Accounting Loan Balance
 
 		#endregion report generators
+
+		#region method ProcessTableReportRow
+
+		private void ProcessTableReportRow(ReportQuery rptDef, SafeReader sr, Tbody oTbody, int lineCounter, List<string> oColumnTypes) {
+			var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Odd" : "Even");
+			oTbody.Append(oTr);
+
+			var oClassesToApply = new List<string>();
+
+			for (int columnIndex = 0; columnIndex < rptDef.Columns.Length; columnIndex++) {
+				ColumnInfo col = rptDef.Columns[columnIndex];
+				var oValue = sr.ColumnOrDefault(col.FieldName);
+
+				if (col.IsVisible) {
+					var oTd = new Td();
+					oTr.Append(oTd);
+
+					if (IsNumber(oValue)) {
+						ATag oInnerTag = new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2)));
+
+						if (col.ValueType == ValueType.UserID || col.ValueType == ValueType.BrokerID) {
+							var oLink = new A();
+
+							oLink.Append(oInnerTag);
+							oLink.Target.Append("_blank");
+
+							var titleText = "Open this customer in underwriter.";
+							if (col.ValueType == ValueType.UserID) {
+								oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers?customerid=" + oValue);
+							}
+							else {
+								oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers#broker/" + oValue);
+								titleText = "Open this broker in underwriter.";
+							}
+
+							oLink.Alt.Append(titleText);
+							oLink.Title.Append(titleText);
+
+							oInnerTag = oLink;
+
+							if (oColumnTypes != null)
+								oColumnTypes[columnIndex] = "user-id";
+						}
+						else {
+							if (oColumnTypes != null)
+								oColumnTypes[columnIndex] = "formatted-num";
+						} // if user id
+
+						oTd.Add<Class>("R").Append(oInnerTag);
+					}
+					else {
+						oTd.Add<Class>("L").Append(new Text(oValue.ToString()));
+
+						if ((oColumnTypes != null) && (oValue is DateTime))
+							oColumnTypes[columnIndex] = "date";
+					} // if
+				}
+				else {
+					if (col.ValueType == ValueType.CssClass)
+						oClassesToApply.Add(oValue.ToString());
+				} // if
+			} // for each column
+
+			if (oClassesToApply.Count > 0)
+				oTr.ApplyToChildren<Class>(string.Join(" ", oClassesToApply.ToArray()));
+		} // ProcessTableReportRow
+
+		#endregion method ProcessTableReportRow
 
 		#region private static
 
@@ -1199,17 +1218,28 @@
 		#region method NumStr
 
 		private static string NumStr(object oNumber, string sFormat) {
-			if (oNumber is sbyte  ) return ((sbyte  )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is byte   ) return ((byte   )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is short  ) return ((short  )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is ushort ) return ((ushort )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is int    ) return ((int    )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is uint   ) return ((uint   )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is long   ) return ((long   )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is ulong  ) return ((ulong  )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is float  ) return ((float  )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is double ) return ((double )oNumber).ToString(sFormat, ms_oFormatInfo);
-			if (oNumber is decimal) return ((decimal)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is sbyte)
+				return ((sbyte)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is byte)
+				return ((byte)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is short)
+				return ((short)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is ushort)
+				return ((ushort)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is int)
+				return ((int)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is uint)
+				return ((uint)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is long)
+				return ((long)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is ulong)
+				return ((ulong)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is float)
+				return ((float)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is double)
+				return ((double)oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is decimal)
+				return ((decimal)oNumber).ToString(sFormat, ms_oFormatInfo);
 
 			throw new Exception(string.Format("Unsupported type: {0}", oNumber.GetType()));
 		} // NumStr
@@ -1266,10 +1296,9 @@
 					else
 						oCell.Style.Numberformat.Format = "@";
 
-					if (oCell.Style.Numberformat.Format == "@")
-						oCell.Value = oValue.ToString().Replace("&nbsp;", " ");
-					else
-						oCell.Value = oValue;
+					oCell.Value = oCell.Style.Numberformat.Format == "@"
+						? oValue.ToString().Replace("&nbsp;", " ")
+						: oValue;
 				} // for each column
 			} // for each row
 

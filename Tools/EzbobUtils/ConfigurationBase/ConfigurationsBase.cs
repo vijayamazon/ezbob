@@ -61,10 +61,11 @@ namespace ConfigurationBase {
 
 			try {
 				var oDB = new SqlConnection();
-				DataTable dt = oDB.ExecuteReader(spName);
 
-				foreach (DataRow row in dt.Rows)
+				oDB.ForEachRow((row, bRowsetStart) => {
 					AddSingleConfiguration(row["CfgKey"].ToString(), row["CfgValue"].ToString());
+					return ActionResult.Continue;
+				}, spName);
 
 				if (readConfigurationsCounter != propertyInfos.Length) {
 					Logger.Error("Couldn't fill all properties");
@@ -82,10 +83,11 @@ namespace ConfigurationBase {
 
 			try {
 				var oDB = new SqlConnection();
-				DataTable dt = oDB.ExecuteReader(spName);
 
-				foreach (DataRow row in dt.Rows)
+				oDB.ForEachRow((row, bRowsetStart) => {
 					RefreshSingleConfiguration(row["CfgKey"].ToString(), row["CfgValue"].ToString());
+					return ActionResult.Continue;
+				}, spName);
 			}
 			catch (Exception e) {
 				Logger.Error("Error reading configurations:{0}", e);

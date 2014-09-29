@@ -132,8 +132,7 @@
 				instance.Execute();
 				decimal availableFunds = instance.AvailableFunds;
 
-				DataTable dt = DB.ExecuteReader("GetCustomerDetailsForStateCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-				var sr = new SafeReader(dt.Rows[0]);
+				SafeReader sr = DB.GetFirst("GetCustomerDetailsForStateCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
 				int minLoanAmount = sr["MinLoanAmount"];
 				string creditResult = sr["CreditResult"];

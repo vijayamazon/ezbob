@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
-	using System.Data;
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.EBusiness;
@@ -26,28 +25,21 @@
 		} // Name
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetServiceLogNonLimitedEntries", CommandSpecies.StoredProcedure);
-			Log.Info("Fetched {0} entries", dt.Rows.Count);
-			foreach (DataRow row in dt.Rows)
-			{
-				var sr = new SafeReader(row);
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				int serviceLogId = sr["Id"];
 				int customerId = sr["CustomerId"];
 				string refNumber = sr["ExperianRefNum"];
 				DateTime insertDate = sr["InsertDate"];
 
-				try
-				{
+				try {
 					string response = null;
-					DataTable xmlDataTable = DB.ExecuteReader("GetServiceLogNonLimitedEntry", CommandSpecies.StoredProcedure, new QueryParameter("ServiceLogId", serviceLogId));
-					if (xmlDataTable.Rows.Count == 1)
-					{
-						var xmlSafeReader = new SafeReader(xmlDataTable.Rows[0]);
+
+					var xmlSafeReader = DB.GetFirst("GetServiceLogNonLimitedEntry", CommandSpecies.StoredProcedure, new QueryParameter("ServiceLogId", serviceLogId));
+
+					if (!xmlSafeReader.IsEmpty)
 						response = xmlSafeReader["ResponseData"];
-					}
 
 					parser.ParseAndStore(response, refNumber, serviceLogId, insertDate);
-
 
 					var serviceLog = _serviceLogRepository.GetById(serviceLogId);
 					serviceLog.CompanyRefNum = refNumber;
@@ -59,7 +51,9 @@
 				{
 					Log.Error("Exception while processing response. ServiceLogId:{0} CustomerId:{1}. The exception:{2}", serviceLogId, customerId, e);
 				}
-			}
+
+				return ActionResult.Continue;
+			}, "GetServiceLogNonLimitedEntries", CommandSpecies.StoredProcedure);
 		} // Execute
 	} // class BackfillNonLimitedCompanies
 } // namespace

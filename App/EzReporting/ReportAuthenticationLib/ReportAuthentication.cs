@@ -19,13 +19,13 @@ namespace ReportAuthenticationLib {
 		#region method IsValidPassword
 
 		public bool IsValidPassword(string userName, string inputPassword) {
-			DataTable dt = m_oDB.ExecuteReader(string.Format("select * from ReportUsers WHERE UserName = '{0}'", userName));
+			SafeReader sr = m_oDB.GetFirst(string.Format("select * from ReportUsers WHERE UserName = '{0}'", userName));
 
-			if (dt.Rows.Count != 1)
+			if (sr["Id"] == string.Empty)
 				return false;
 
-			byte[] key = (byte[])dt.Rows[0]["Password"];
-			byte[] salt = (byte[])dt.Rows[0]["Salt"];
+			byte[] key = sr["Password"];
+			byte[] salt = sr["Salt"];
 
 			using (var deriveBytes = new Rfc2898DeriveBytes(inputPassword, salt)) {
 				byte[] newKey = deriveBytes.GetBytes(20);  // derive a 20-byte key

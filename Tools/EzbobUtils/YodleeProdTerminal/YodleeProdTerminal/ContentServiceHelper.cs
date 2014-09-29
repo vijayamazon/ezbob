@@ -169,41 +169,38 @@ namespace com.yodlee.sampleapps
 			var log = new LegacyLog();
 			var conn = new SqlConnection(log);
 
-			DataTable dt = conn.ExecuteReader("GetYodleeBanks");
-			if (dt.Rows.Count == 0)
-			{
-				throw new Exception(string.Format("System Banks not found"));
-			}
 			var banks = new Dictionary<long, string>();
 
-			Console.WriteLine("Found {0} banks", dt.Rows.Count);
-			foreach (DataRow row in dt.Rows)
-			{
-				var csid = long.Parse(row[0].ToString());
-				var name = row[1].ToString();
+			conn.ForEachRowSafe((row, bRowsetStart) => {
+				long csid = row[0];
+				string name = row[1];
+
 				banks.Add(csid, name);
 
-				try
-				{
+				try {
 					ContentServiceInfo csi = cst.getContentServiceInfo(getCobrandContext(), csid, true);
-					if (csi.contentServiceDisplayName.Split(' ').First().ToLowerInvariant() != name.Split(' ').First().ToLowerInvariant())
-					{
+					if (csi.contentServiceDisplayName.Split(' ').First().ToLowerInvariant() != name.Split(' ').First().ToLowerInvariant()) {
 						Console.WriteLine("{2} Name difference system:{1} yodlee:{0}", csi.contentServiceDisplayName, name, csid);
 					}
-					if (csi.containerInfo.containerName != "bank")
-					{
+					if (csi.containerInfo.containerName != "bank") {
 						Console.WriteLine("{0} not a bank {1}", csid, csi.containerInfo.containerName);
 					}
 				}
-				catch (Exception ex)
-				{
+				catch (Exception ex) {
 					Console.WriteLine("Error in retrieving data for {0} {1}", csid, name);
 				}
-			}
+
+				return ActionResult.Continue;
+			}, "GetYodleeBanks");
+
+			if (banks.Count > 0)
+				Console.WriteLine("Found {0} banks", banks.Count);
+			else
+				throw new Exception(string.Format("System Banks not found"));
 
 			return banks;
 		}
-        
+
 		public void findMissingBanks(Dictionary<long, string> system, Dictionary<long, string> yodlee)
 		{
 			foreach (var key in yodlee.Keys)

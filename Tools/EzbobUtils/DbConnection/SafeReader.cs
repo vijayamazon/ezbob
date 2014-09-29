@@ -127,6 +127,54 @@
 
 		#endregion indexer
 
+		#region method ColumnOrDefault
+
+		public object ColumnOrDefault(string sIdx, object oDefault = null) {
+			if (!ReferenceEquals(m_oRow, null))
+				return m_oRow.Table.Columns.Contains(sIdx) ? m_oRow[sIdx] : oDefault;
+
+			if (!ReferenceEquals(m_oReader, null)) {
+				try {
+					return m_oReader[sIdx];
+				}
+				catch (Exception) {
+					return oDefault;
+				} // try
+			} // try
+
+			if (!ReferenceEquals(m_oCache, null))
+				return m_oCache[sIdx, oDefault];
+
+			if (m_bAllowNoSource)
+				return oDefault;
+
+			throw new NullReferenceException("Neither row nor DB reader specified.");
+		} // ColumnOrDefault
+
+		public object ColumnOrDefault(int nIdx, object oDefault = null) {
+			if (!ReferenceEquals(m_oRow, null))
+				return ((0 <= nIdx) && (nIdx < m_oRow.Table.Columns.Count)) ? m_oRow[nIdx] : oDefault;
+
+			if (!ReferenceEquals(m_oReader, null)) {
+				try {
+					return m_oReader[nIdx];
+				}
+				catch (Exception) {
+					return oDefault;
+				} // try
+			} // try
+
+			if (!ReferenceEquals(m_oCache, null))
+				return m_oCache[nIdx, oDefault];
+
+			if (m_bAllowNoSource)
+				return oDefault;
+
+			throw new NullReferenceException("Neither row nor DB reader specified.");
+		} // ColumnOrDefault
+
+		#endregion method ColumnOrDefault
+
 		#region method ContainsField
 
 		public bool ContainsField(string sIdx) {
@@ -286,54 +334,6 @@
 		} // FillProperty
 
 		#endregion method FillProperty
-
-		#region method ColumnOrDefault
-
-		private object ColumnOrDefault(string sIdx, object oDefault) {
-			if (!ReferenceEquals(m_oRow, null))
-				return m_oRow.Table.Columns.Contains(sIdx) ? m_oRow[sIdx] : oDefault;
-
-			if (!ReferenceEquals(m_oReader, null)) {
-				try {
-					return m_oReader[sIdx];
-				}
-				catch (Exception) {
-					return oDefault;
-				} // try
-			} // try
-
-			if (!ReferenceEquals(m_oCache, null))
-				return m_oCache[sIdx, oDefault];
-
-			if (m_bAllowNoSource)
-				return oDefault;
-
-			throw new NullReferenceException("Neither row nor DB reader specified.");
-		} // ColumnOrDefault
-
-		private object ColumnOrDefault(int nIdx, object oDefault) {
-			if (!ReferenceEquals(m_oRow, null))
-				return ((0 <= nIdx) && (nIdx < m_oRow.Table.Columns.Count)) ? m_oRow[nIdx] : oDefault;
-
-			if (!ReferenceEquals(m_oReader, null)) {
-				try {
-					return m_oReader[nIdx];
-				}
-				catch (Exception) {
-					return oDefault;
-				} // try
-			} // try
-
-			if (!ReferenceEquals(m_oCache, null))
-				return m_oCache[nIdx, oDefault];
-
-			if (m_bAllowNoSource)
-				return oDefault;
-
-			throw new NullReferenceException("Neither row nor DB reader specified.");
-		} // ColumnOrDefault
-
-		#endregion method ColumnOrDefault
 
 		#region properties
 

@@ -28,31 +28,29 @@
 		public override void Execute()
 		{
 			Accounts = new List<CompanyCaisAccount>();
-			DataTable accountsTable = DB.ExecuteReader(
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					DateTime lastUpdate = sr["CAISLastUpdatedDate"];
+					string statuses = sr["AccountStatusLast12AccountStatuses"];
+
+					Accounts.Add(new CompanyCaisAccount { LastUpdateDate = lastUpdate, Statuses = statuses });
+					return ActionResult.Continue;
+				},
 				"GetCompanyCaisAccountsDataForAlerts",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId));
+				new QueryParameter("CustomerId", customerId)
+			);
 
-			foreach (DataRow row in accountsTable.Rows)
-			{
-				var sr = new SafeReader(row);
-
-				DateTime lastUpdate = sr["CAISLastUpdatedDate"];
-				string statuses = sr["AccountStatusLast12AccountStatuses"];
-
-				Accounts.Add(new CompanyCaisAccount { LastUpdateDate = lastUpdate, Statuses = statuses });
-			}
-
-			DataTable defaultsTable = DB.ExecuteReader(
+			SafeReader defaultsReader = DB.GetFirst(
 				"GetCompanyCaisDefaultDataForAlerts",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId));
+				new QueryParameter("CustomerId", customerId)
+			);
 
-			if (defaultsTable.Rows.Count == 1)
-			{
-				var sr = new SafeReader(defaultsTable.Rows[0]);
-				NumOfCurrentDefaultAccounts = sr["NumOfCurrentDefaults"];
-				NumOfSettledDefaultAccounts = sr["NumOfSettledDefaults"];
+			if (!defaultsReader.IsEmpty) {
+				NumOfCurrentDefaultAccounts = defaultsReader["NumOfCurrentDefaults"];
+				NumOfSettledDefaultAccounts = defaultsReader["NumOfSettledDefaults"];
 			}
 		}
 	}

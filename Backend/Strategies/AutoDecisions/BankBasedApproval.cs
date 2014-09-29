@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Models.Marketplaces.Yodlee;
@@ -87,13 +86,12 @@
 
 			GetYodleeSums();
 
-			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval",
+			SafeReader sr = db.GetFirst("GetPersonalInfoForBankBasedApproval",
 				CommandSpecies.StoredProcedure, 
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("NumOfMonthsToLookForDefaults", numOfMonthsToLookForDefaults),
 				new QueryParameter("StartTimeForVatCheck", startTimeForVatCheck), 
 				new QueryParameter("Now", DateTime.UtcNow));
-			var sr = new SafeReader(dt.Rows[0]);
 
 			hasDefaultAccountsInPeriod = sr["HasDefaultAccounts"];
 			isCustomerViaBroker = sr["IsCustomerViaBroker"];
@@ -123,60 +121,64 @@
 			CheckIfIsDirector(firstName, surame);
 		}
 
-		private void CheckIfIsDirector(string firstName, string surame)
-		{
-			DataTable directorsDataTable = db.ExecuteReader("GetExperianDirectorsNamesForCustomer",
-			                                                CommandSpecies.StoredProcedure,
-			                                                new QueryParameter("CustomerId", customerId));
-
+		private void CheckIfIsDirector(string firstName, string surame) {
 			string comparableFirstName = firstName.Trim().ToLower();
 			string comparableLastName = surame.Trim().ToLower();
 			isDirectorInExperian = false;
 
-			foreach (DataRow row in directorsDataTable.Rows)
-			{
-				var directorsSafeReader = new SafeReader(row);
-				string directorFirstName = directorsSafeReader["FirstName"];
-				string directorLastName = directorsSafeReader["LastName"];
-				if (directorFirstName.Trim().ToLower() == comparableFirstName &&
-				    directorLastName.Trim().ToLower() == comparableLastName)
-				{
-					isDirectorInExperian = true;
-					break;
-				}
-			}
+			db.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					string directorFirstName = sr["FirstName"];
+					string directorLastName = sr["LastName"];
+
+					if (
+						directorFirstName.Trim().ToLower() == comparableFirstName &&
+						directorLastName.Trim().ToLower() == comparableLastName
+					) {
+						isDirectorInExperian = true;
+						return ActionResult.SkipAll;
+					} // if
+
+					return ActionResult.Continue;
+				},
+				"GetExperianDirectorsNamesForCustomer",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
 		}
 
 		private void GetYodleeSums()
 		{
-			DataTable dt = db.ExecuteReader(
+			db.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int mpId = sr["Id"];
+					YodleeModel yodleeModel = new YodleeMarketplaceModelBuilder().BuildYodlee(mpId);
+
+					if (
+						yodleeModel != null &&
+						yodleeModel.CashFlowReportModel != null &&
+						yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict != null
+					) {
+						if (
+							yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict.ContainsKey("5aLoan Repayments") &&
+							yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"].ContainsKey(YodleeCashFlowReportModelBuilder.TotalColumn)
+						) {
+							sumOfLoanTransactions += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][YodleeCashFlowReportModelBuilder.TotalColumn];
+						} // if
+					} // if
+
+					return ActionResult.Continue;
+				},
 				"GetCustomerMarketplaces",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
-				);
-
-			foreach (DataRow row in dt.Rows)
-			{
-				var sr = new SafeReader(row);
-				int mpId = sr["Id"];
-				YodleeModel yodleeModel = new YodleeMarketplaceModelBuilder().BuildYodlee(mpId);
-				if (yodleeModel != null && yodleeModel.CashFlowReportModel != null && yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict != null)
-				{
-					if (yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict.ContainsKey("5aLoan Repayments") &&
-					    yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"].ContainsKey(YodleeCashFlowReportModelBuilder.TotalColumn))
-					{
-						sumOfLoanTransactions += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][YodleeCashFlowReportModelBuilder.TotalColumn];
-					}
-				}
-			}
+			);
 		}
 
-		private void GetYodleePayersData()
-		{
-			DataTable dt = db.ExecuteReader("GetYodleePayersInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			foreach (DataRow row in dt.Rows)
-			{
-				var sr = new SafeReader(row);
+		private void GetYodleePayersData() {
+			numberOfPayers = 0;
+
+			db.ForEachRowSafe((sr, bRowsetStart) => {
 				string description = sr["Description"];
 
 				string parsedName = string.Empty; // Parse name - logic for this wasn't defined yet
@@ -186,22 +188,21 @@
 					payerNames.Add(parsedName);
 					numberOfPayers++;
 				}
-			}
+
+				return ActionResult.Continue;
+			},"GetYodleePayersInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 		}
 
 		private void GetSpecialPayers()
 		{
-			DataTable dt = db.ExecuteReader("GetSpecialPayers", CommandSpecies.StoredProcedure);
-			foreach (DataRow row in dt.Rows)
-			{
-				var sr = new SafeReader(row);
+			db.ForEachRowSafe((sr, bRowsetStart) => {
 				string name = sr["Name"];
 
 				if (!string.IsNullOrEmpty(name) && !specialPayers.ContainsKey(name))
-				{
 					specialPayers.Add(name, true);
-				}
-			}
+
+				return ActionResult.Continue;
+			}, "GetSpecialPayers", CommandSpecies.StoredProcedure);
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -315,9 +316,8 @@
 		private void ReadConfigurations()
 		{
 			log.Info("Getting configurations");
-			DataTable dt = db.ExecuteReader("GetBankBasedApprovalConfigs", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-			var sr = new SafeReader(results);
+
+			SafeReader sr = db.GetFirst("GetBankBasedApprovalConfigs", CommandSpecies.StoredProcedure);
 
 			personalScoreThresholdWhenNoCompanyScore = sr["BankBasedApprovalPersonalScoreThresholdWhenNoCompanyScore"];
 			personalScoreThreshold = sr["BankBasedApprovalPersonalScoreThreshold"];

@@ -22,7 +22,7 @@
 		[Ignore]
 		public void testSendEmail()
 		{
-			Mailer.Mailer.SendMail(m_oConf.LoginAddress, m_oConf.LoginPassword, "PacNet Balance Report Error", (new Exception("Test Exception")).ToString(), "stasd@ezbob.com");
+			Mailer.Mailer.SendMail(m_oConf.LoginAddress, m_oConf.LoginPassword, "PacNet Balance Report Error", (new Exception("Test Exception")).ToString(), "alexbo@ezbob.com");
 		}
 	}
 }

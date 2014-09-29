@@ -4,7 +4,6 @@
 	using EzBob.Models;
 	using Ezbob.Database;
 	using System;
-	using System.Data;
 	using Ezbob.Logger;
 	using Misc;
 
@@ -34,8 +33,7 @@
 		{
 			try
 			{
-				DataTable configsDataTable = db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
-				var configSafeReader = new SafeReader(configsDataTable.Rows[0]);
+				var configSafeReader = db.GetFirst("GetApprovalConfigs", CommandSpecies.StoredProcedure);
 
 				bool autoApproveIsSilent = configSafeReader["AutoApproveIsSilent"];
 				string autoApproveSilentTemplateName = configSafeReader["AutoApproveSilentTemplateName"];
@@ -65,14 +63,13 @@
 							}
 							else
 							{
-								DataTable dt = db.ExecuteReader(
+								SafeReader sr = db.GetFirst(
 									"GetLastOfferDataForApproval",
 									CommandSpecies.StoredProcedure,
 									new QueryParameter("CustomerId", customerId),
 									new QueryParameter("Now", DateTime.UtcNow)
-									);
+								);
 
-								var sr = new SafeReader(dt.Rows[0]);
 								bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
 								DateTime loanOfferOfferStart = sr["OfferStart"];
 								DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];

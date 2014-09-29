@@ -35,22 +35,18 @@
 		{
 			try
 			{
-				DataTable configDataTable = Db.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure);
-				var configSafeReader = new SafeReader(configDataTable.Rows[0]);
+				var configSafeReader = Db.GetFirst("GetReApprovalConfigs", CommandSpecies.StoredProcedure);
 				int autoReApproveMaxNumOfOutstandingLoans = configSafeReader["AutoReApproveMaxNumOfOutstandingLoans"];
 
-				DataTable dt = Db.ExecuteReader(
+				var sr = Db.GetFirst(
 					"GetLastOfferDataForReApproval",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId)
-					);
+				);
 
-				if (dt.Rows.Count == 0) // Cant reapprove without previous approvals
-				{
+				if (sr.IsEmpty) // Cant reapprove without previous approvals
 					return false;
-				}
 
-				var sr = new SafeReader(dt.Rows[0]);
 				bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
 				DateTime loanOfferOfferStart = sr["OfferStart"];
 				DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];

@@ -79,8 +79,7 @@
 					appliedLateCharge = papi.ApplyLateCharge(feeAmount, loanId, feeType);
 				} // if
 
-				DataTable dt = DB.ExecuteReader("ShouldStopSendingLateMails", new QueryParameter("LoanId", loanId));
-				var safeReader = new SafeReader(dt.Rows[0]);
+				var safeReader = DB.GetFirst("ShouldStopSendingLateMails", new QueryParameter("LoanId", loanId));
 				bool stopSendingEmails = safeReader["StopSendingEmails"];
 				string templateName = null;
 

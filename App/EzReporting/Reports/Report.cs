@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using Ezbob.Database;
-using Html;
+﻿namespace Reports {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.IO;
+	using System.Linq;
+	using System.Reflection;
+	using System.Text;
+	using System.Text.RegularExpressions;
+	using Ezbob.Database;
+	using Html;
+	using JetBrains.Annotations;
 
-namespace Reports {
 	public class Report {
 		#region public const
 
@@ -25,13 +25,10 @@ namespace Reports {
 		#region method GetScheduledReportsList
 
 		public static SortedDictionary<string, Report> GetScheduledReportsList(AConnection oDB) {
-			var oTbl = oDB.ExecuteReader(
+			return FillReportArgs(oDB, 
 				ReportListStoredProc,
-				CommandSpecies.StoredProcedure,
 				new QueryParameter("@RptType", "")
 			);
-
-			return FillReportArgs(oDB, oTbl);
 		} // GetScheduledReportsList
 
 		#endregion method GetScheduledReportsList
@@ -46,9 +43,7 @@ namespace Reports {
 			if (userName != string.Empty)
 				users.Add(new QueryParameter("@UserName", userName));
 
-			DataTable dt = oDB.ExecuteReader("RptGetUserReports", users.ToArray());
-
-			return FillReportArgs(oDB, dt);
+			return FillReportArgs(oDB, "RptGetUserReports", users.ToArray());
 		} // GetUserReportsList
 
 		#endregion method GetUserReportList
@@ -61,60 +56,59 @@ namespace Reports {
 			Arguments = new SortedDictionary<string, string>();
 		} // construtor
 
-		public Report(DataRow row) : this() {
+		public Report(SafeReader row) : this() {
 			Init(row);
 		} // constructor
 
 		public Report(AConnection oDB, string sReportTypeName) : this() {
-			var oTbl = oDB.ExecuteReader(
+			bool bFound = false;
+
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					if (sr["Type"] == sReportTypeName) {
+						Init(sr);
+						bFound = true;
+					} // if
+
+					return bFound
+						? ActionResult.SkipAll
+						: ActionResult.Continue;
+				},
 				ReportListStoredProc,
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@RptType", sReportTypeName)
 			);
 
-			if ((oTbl == null) || (oTbl.Rows.Count == 0))
-				throw new Exception(string.Format("Failed to load report list from DB while looking for {0}", sReportTypeName));
-
-			bool bFound = false;
-
-			foreach (DataRow row in oTbl.Rows) {
-				if (row["Type"].ToString() == sReportTypeName) {
-					Init(row);
-					bFound = true;
-					break;
-				} // if
-			} // foreach
-
 			if (!bFound)
 				throw new Exception(string.Format("Report cannot be found by name {0}", sReportTypeName));
 
-			DataTable args = LoadReportArgs(oDB, sReportTypeName);
+			List<ReportArg> args = LoadReportArgs(oDB, sReportTypeName);
 
-			foreach (DataRow row in args.Rows)
-				AddArgument(row["ArgumentName"].ToString());
+			foreach (ReportArg row in args)
+				AddArgument(row.ArgumentName);
 		} // constructor
 
 		#endregion constructor
 
 		#region method Init
 
-		private void Init(DataRow row) {
+		private void Init(SafeReader row) {
 			ReportType type;
 
-			TypeName = row["Type"].ToString();
+			TypeName = row["Type"];
 
 			if (!Enum.TryParse<ReportType>(TypeName, out type))
 				type = ReportType.RPT_GENERIC;
 
 			Type = type;
-			Title = row["Title"].ToString();
-			StoredProcedure = row["StoredProcedure"].ToString();
-			IsDaily = (bool)row["IsDaily"];
-			IsWeekly = (bool)row["IsWeekly"];
-			IsMonthly = (bool)row["IsMonthly"];
-			Columns = Report.ParseHeaderAndFields(row["Header"].ToString(), row["Fields"].ToString());
-			ToEmail = (row["ToEmail"] ?? "").ToString().Trim();
-			IsMonthToDate = (bool)row["IsMonthToDate"];
+			Title = row["Title"];
+			StoredProcedure = row["StoredProcedure"];
+			IsDaily = row["IsDaily"];
+			IsWeekly = row["IsWeekly"];
+			IsMonthly = row["IsMonthly"];
+			Columns = Report.ParseHeaderAndFields(row["Header"], row["Fields"]);
+			ToEmail = ((string)row["ToEmail"] ?? string.Empty).Trim();
+			IsMonthToDate = row["IsMonthToDate"];
 		} // Init
 
 		#endregion method Init
@@ -268,17 +262,35 @@ namespace Reports {
 
 		#endregion private const
 
+		#region class ReportArg
+
+		private class ReportArg {
+			[UsedImplicitly]
+			public int ReportID { get; set; }
+
+			[UsedImplicitly]
+			public string ReportType { get; set; }
+
+			[UsedImplicitly]
+			public int ArgumentID { get; set; }
+
+			[UsedImplicitly]
+			public string ArgumentName { get; set; }
+		} // ReportArg
+
+		#endregion class ReportArg
+
 		#region private static
 
 		#region method LoadReportArgs
 
-		private static DataTable LoadReportArgs(AConnection oDB, string sReportTypeName = null) {
+		private static List<ReportArg> LoadReportArgs(AConnection oDB, string sReportTypeName = null) {
 			var oParams = new List<QueryParameter>();
 
 			if (!string.IsNullOrWhiteSpace(sReportTypeName))
 				oParams.Add(new QueryParameter("@RptType", sReportTypeName));
 
-			return oDB.ExecuteReader(
+			return oDB.Fill<ReportArg>(
 				ReportArgsStoredProc,
 				CommandSpecies.StoredProcedure,
 				oParams.ToArray()
@@ -289,35 +301,34 @@ namespace Reports {
 
 		#region method FillReportArgs
 
-		private static SortedDictionary<string, Report> FillReportArgs(AConnection oDB, DataTable tblRetrievedReports) {
+		private static SortedDictionary<string, Report> FillReportArgs(AConnection oDB, string sSpName, params QueryParameter[] arySpArgs) {
 			var reportList = new SortedDictionary<string, Report>();
 
-			if (tblRetrievedReports != null) {
-				foreach (DataRow row in tblRetrievedReports.Rows) {
-					var rpt = new Report(row);
+			oDB.ForEachRowSafe((sr, bRowsetStart) => {
+				var rpt = new Report(sr);
 
-					reportList[rpt.TypeName] = rpt;
-				} // for each
+				reportList[rpt.TypeName] = rpt;
 
-				DataTable args = LoadReportArgs(oDB);
+				return ActionResult.Continue;
+			}, sSpName, CommandSpecies.StoredProcedure, arySpArgs);
+
+			if (reportList.Count > 0) {
+				List<ReportArg> args = LoadReportArgs(oDB);
 
 				Report oLastReport = null;
 				string sLastType = null;
 
-				foreach (DataRow row in args.Rows) {
-					string sTypeName = row["ReportType"].ToString();
-					string sArgName = row["ArgumentName"].ToString();
-
-					if (sLastType != sTypeName) {
-						if (reportList.ContainsKey(sTypeName)) {
-							sLastType = sTypeName;
+				foreach (ReportArg row in args) {
+					if (sLastType != row.ReportType) {
+						if (reportList.ContainsKey(row.ReportType)) {
+							sLastType = row.ReportType;
 							oLastReport = reportList[sLastType];
 						}
 						else
 							continue;
 					} // if
 
-					oLastReport.AddArgument(sArgName);
+					oLastReport.AddArgument(row.ArgumentName);
 				} // for each
 			} // if report list is not null
 

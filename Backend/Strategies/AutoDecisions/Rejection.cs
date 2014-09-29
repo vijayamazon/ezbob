@@ -8,7 +8,6 @@
 	using Experian;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using System.Data;
 	using Ezbob.Logger;
 	
 	public class Rejection
@@ -183,7 +182,7 @@
 			int rejectDefaultsCompanyMonths = CurrentValues.Instance.Reject_Defaults_CompanyMonthsNum;
 			int rejectDefaultsCompanyAmount = CurrentValues.Instance.Reject_Defaults_CompanyAmount;
 
-			DataTable dt = _db.ExecuteReader(
+			SafeReader sr = _db.GetFirst(
 				"GetCustomerRejectionData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", _customerId),
@@ -192,8 +191,6 @@
 				new QueryParameter("Reject_Defaults_CompanyMonths", rejectDefaultsCompanyMonths),
 				new QueryParameter("Reject_Defaults_CompanyAmount", rejectDefaultsCompanyAmount)
 			);
-
-			var sr = new SafeReader(dt.Rows[0]);
 
 			_errorMPsNum = sr["ErrorMPsNum"];
 			_loanOfferApprovalNum = sr["ApprovalNum"];
@@ -204,9 +201,9 @@
 
 			if (_isOffline)
 			{
-				dt = _db.ExecuteReader("GetHmrcAggregations", CommandSpecies.StoredProcedure,
+				sr = _db.GetFirst("GetHmrcAggregations", CommandSpecies.StoredProcedure,
 										new QueryParameter("CustomerId", _customerId));
-				sr = new SafeReader(dt.Rows[0]);
+
 				_hasHmrc = sr["AnnualRevenues"] != -1 || sr["QuarterRevenues"] != -1;
 				_hmrcAnnualRevenues = sr["AnnualRevenues"];
 				_hmrcQuarterRevenues = sr["QuarterRevenues"];
@@ -214,13 +211,11 @@
 
 			_hasYodlee = _yodlee1YForRejection >= 0 || _yodlee3MForRejection >= 0;
 
-			dt = _db.ExecuteReader(
+			sr = _db.GetFirst(
 				"GetPayPalAggregations",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", _customerId)
 				);
-
-			sr = new SafeReader(dt.Rows[0]);
 
 			_payPalNumberOfStores = sr["PayPal_NumberOfStores"];
 			_payPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];

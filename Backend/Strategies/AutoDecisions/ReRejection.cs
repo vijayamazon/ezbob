@@ -2,7 +2,6 @@
 {
 	using System;
 	using Ezbob.Database;
-	using System.Data;
 	using Ezbob.Logger;
 
 	public class ReRejection
@@ -24,11 +23,11 @@
 		{
 			try
 			{
-				DataTable dt = Db.ExecuteReader("GetCustomerDataForReRejection", 
+				SafeReader sr = Db.GetFirst("GetCustomerDataForReRejection", 
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),
 					new QueryParameter("Now", DateTime.UtcNow));
-				var sr = new SafeReader(dt.Rows[0]);
+
 				int newCustomerReReject = sr["NewCustomer_ReReject"];
 				int oldCustomerReReject = sr["OldCustomer_ReReject"];
 				decimal principalPaidAmount = sr["PrincipalPaidAmount"];

@@ -316,16 +316,18 @@ namespace com.yodlee.sampleapps
 				var log = new LegacyLog();
 				var conn = new SqlConnection(log);
 
-				DataTable dt = conn.ExecuteReader("GetYodleeAccount", new QueryParameter("@IsCustomerId", isCustomerId),
+				SafeReader sr = conn.GetFirst("GetYodleeAccount", new QueryParameter("@IsCustomerId", isCustomerId),
 				                                  new QueryParameter("@Id", id));
-				if (dt.Rows.Count == 0)
+
+				string userName = sr[0];
+
+				if (userName == "")
 				{
 					throw new Exception(string.Format("Account was not found {0}", id));
 				}
 
-				string userName = dt.Rows[0][0].ToString();
 				//	byte[] passwordBytes = (byte[])dt.Rows[0][1];
-				string pS = dt.Rows[0][1].ToString();
+				string pS = sr[1];
 				String password = Encryptor.Decrypt(pS);
 
 				LoginUser loginUser = new LoginUser();

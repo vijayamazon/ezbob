@@ -1,6 +1,5 @@
 ﻿namespace EzServiceConfigurationLoader {
 	using System;
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -25,25 +24,22 @@
 		protected override void LoadFromDB() {
 			m_oLog.Debug("Loading service configuration from DB for service instance {0}...", RequestedInstanceName);
 
-			DataTable oTbl = m_oDB.ExecuteReader(
+			SafeReader sr = m_oDB.GetFirst(
 				SpName,
 				CommandSpecies.StoredProcedure,
 				new QueryParameter(ArgName, RequestedInstanceName)
 			);
 
-			if (oTbl.Rows.Count != 1)
+			InstanceID = sr["InstanceID"];
+
+			if (InstanceID < 1)
 				throw new Exception(string.Format("Failed to load service configuration for service instance {0} from DB.", RequestedInstanceName));
 
-			DataRow oRow = oTbl.Rows[0];
-
-			InstanceID = Convert.ToInt32(oRow["InstanceID"]);
-			SleepTimeout = Convert.ToInt32(oRow["SleepTimeout"]);
-			AdminPort = Convert.ToInt32(oRow["AdminPort"]);
-			ClientPort = Convert.ToInt32(oRow["ClientPort"]);
-			HostName = oRow["HostName"].ToString();
-			ClientTimeoutSeconds = Convert.ToInt32(oRow["ClientTimeoutSeconds"]);
-
-			oTbl.Dispose();
+			SleepTimeout = sr["SleepTimeout"];
+			AdminPort = sr["AdminPort"];
+			ClientPort = sr["ClientPort"];
+			HostName = sr["HostName"];
+			ClientTimeoutSeconds = sr["ClientTimeoutSeconds"];
 
 			m_oLog.Debug("Loading service configuration from DB for service instance {0} complete.", RequestedInstanceName);
 		} // LoadFromDB
