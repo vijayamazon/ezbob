@@ -20,7 +20,7 @@
 			{
 				EzbobSeniority = ezbobSeniority;
 				int ezbobSeniorityMonthsOnly, ezbobSeniorityYearsOnly;
-				MiscUtils.GetFullYearsAndMonths(ezbobSeniority.Value, out ezbobSeniorityMonthsOnly, out ezbobSeniorityYearsOnly);
+				MiscUtils.GetFullYearsAndMonths(ezbobSeniority.Value, out ezbobSeniorityYearsOnly, out ezbobSeniorityMonthsOnly);
 				EzbobSeniorityMonths = ezbobSeniorityMonthsOnly + 12 * ezbobSeniorityYearsOnly;
 			}
 			this.firstRepaymentDatePassed = firstRepaymentDatePassed;

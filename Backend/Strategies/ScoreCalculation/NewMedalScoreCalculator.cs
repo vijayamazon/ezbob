@@ -126,7 +126,7 @@
 				}
 
 				inputData.AnnualTurnover = totalRevenuesInSummary;
-				if (inputData.AnnualTurnover != 0)
+				if (inputData.AnnualTurnover > 0)
 				{
 					inputData.FreeCashFlow = totalFreeCashFlowInSummary / inputData.AnnualTurnover;
 				}
@@ -145,7 +145,7 @@
 
 			failedCalculatingTangibleEquity = false;
 
-			if (inputData.AnnualTurnover != 0)
+			if (inputData.AnnualTurnover > 0)
 			{
 				inputData.TangibleEquity = tangibleEquity / inputData.AnnualTurnover;
 			}
@@ -354,7 +354,7 @@
 		private void CalculateEzbobSeniorityGrade()
 		{
 			int ezbobSeniorityMonthsOnly, ezbobSeniorityYearsOnly;
-			MiscUtils.GetFullYearsAndMonths(Results.EzbobSeniority, out ezbobSeniorityMonthsOnly, out ezbobSeniorityYearsOnly);
+			MiscUtils.GetFullYearsAndMonths(Results.EzbobSeniority, out ezbobSeniorityYearsOnly, out ezbobSeniorityMonthsOnly);
 			decimal ezbobSeniorityMonths = ezbobSeniorityMonthsOnly + 12 * ezbobSeniorityYearsOnly;
 			if (ezbobSeniorityMonths > 17)
 			{

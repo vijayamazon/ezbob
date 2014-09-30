@@ -249,7 +249,11 @@
 				factoredLoanRepayments = 0;
 			}
 
-			if (annualTurnover != 0)
+			if (annualTurnover < 0)
+			{
+				annualTurnover = 0;
+			}
+			else if (annualTurnover != 0)
 			{
 				if (foundSummary)
 				{
