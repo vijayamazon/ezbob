@@ -47,6 +47,7 @@ BEGIN
 		@SumOfSpecialLateOver60Loans NUMERIC(18,0),
 		@OutstandingSpecialLateOver60Principal INT,
 		@StatusAfterLastTransaction NVARCHAR(50),
+		@StatusAfterLastTransactionFromLoanSchedule NVARCHAR(50),
 		@Threshold NUMERIC(18,6),
 		@CustomerStatus NVARCHAR(100)
 
@@ -158,7 +159,7 @@ BEGIN
 			BEGIN
 				SET @PayMentNum = @PayMentNum + 1			
 				
-				IF @Pct < @MinPct
+				IF @Pct < @MinPct AND @OrigSum > 0
 				BEGIN				
 					SELECT 
 						@LastTransactionId = Max(TransactionID) 
@@ -174,11 +175,20 @@ BEGIN
 						SELECT @StatusAfterLastTransaction = StatusAfter FROM LoanScheduleTransaction WHERE ScheduleID = @ScheduleId AND TransactionID = @LastTransactionId
 					END
 					
-					IF @LastTransactionDate IS NOT NULL AND 
+					SELECT @StatusAfterLastTransactionFromLoanSchedule = Status FROM LoanSchedule WHERE Id = @ScheduleId
+					
+					IF @LastTransactionDate IS NOT NULL 
+						AND 
 						(
 							@StatusAfterLastTransaction = 'Paid' OR 
 							@StatusAfterLastTransaction = 'PaidOnTime' OR 
 							@StatusAfterLastTransaction = 'PaidEarly'
+						)
+						AND 
+						(
+							@StatusAfterLastTransactionFromLoanSchedule = 'Paid' OR 
+							@StatusAfterLastTransactionFromLoanSchedule = 'PaidOnTime' OR 
+							@StatusAfterLastTransactionFromLoanSchedule = 'PaidEarly'
 						)
 						SELECT @LateDays = datediff(dd, @ScheduleDate, @LastTransactionDate)
 					ELSE
