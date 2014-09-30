@@ -528,20 +528,14 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional]
-		public JsonResult SettingsConfigTable(string tableName)
-		{
-			var entriesList = serviceClient.Instance.GetSpResultTable(_context.UserId, "GetConfigTable", new[] { "TableName", tableName });
-			var deserializedArray = JsonConvert.DeserializeObject<ConfigTable[]>(entriesList.SerializedDataTable);
-			var configTableEntries = deserializedArray == null ? null : deserializedArray.ToList();
-			if (configTableEntries != null)
-			{
-				foreach (ConfigTable entry in configTableEntries)
-				{
-					entry.Value *= 100; // Convert to percent
-				}
-			}
+		public JsonResult SettingsConfigTable(string tableName) {
+			ConfigTable[] deserializedArray = serviceClient.Instance.GetConfigTable(_context.UserId, tableName).Table;
 
-			return Json(new { configTableEntries = configTableEntries }, JsonRequestBehavior.AllowGet);
+			if (deserializedArray != null)
+				foreach (ConfigTable entry in deserializedArray)
+					entry.Value *= 100; // Convert to percent
+
+			return Json(new { configTableEntries = deserializedArray }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]

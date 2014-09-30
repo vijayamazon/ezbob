@@ -634,23 +634,6 @@
 		}
 
 		[Activation]
-		private void GetSpResultTable() {
-			if (m_aryArgs.Length < 2 || m_aryArgs.Length % 2 != 0) {
-				m_oLog.Msg("Usage: GetSpResultTable <spName> <parameters - should come in couples>");
-				return;
-			}
-
-			string spName = m_aryArgs[1];
-			var parameterList = new List<string>();
-			for (int i = 2; i < m_aryArgs.Length; i++) {
-				parameterList.Add(m_aryArgs[i]);
-			}
-			string[] parameterArgs = parameterList.ToArray();
-
-			m_oServiceClient.GetSpResultTable(1,spName, parameterArgs);
-		}
-
-		[Activation]
 		private void CreateUnderwriter() {
 			if (m_aryArgs.Length != 4) {
 				m_oLog.Msg("Usage: CreateUnderwriter <Name> <Password> <RoleName>");

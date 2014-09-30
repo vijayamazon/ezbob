@@ -77,15 +77,6 @@
 
 		#endregion method ExecuteScalar
 
-		#region method ExecuteReader
-
-		[Obsolete]
-		public virtual DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			return (DataTable)Run(null, ExecMode.Reader, nSpecies, sQuery, aryParams);
-		} // ExecuteReader
-
-		#endregion method ExecuteReader
-
 		#region method ExecuteNonQuery
 
 		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {

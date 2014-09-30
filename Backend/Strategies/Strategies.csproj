@@ -109,6 +109,7 @@
     <Compile Include="Misc\BackfillLandRegistry2PropertyLink.cs" />
     <Compile Include="Misc\CalculateNewMedalsForComparison.cs" />
     <Compile Include="Misc\BackfillZooplaValue.cs" />
+    <Compile Include="Misc\GetConfigTable.cs" />
     <Compile Include="Misc\SendSms.cs" />
     <Compile Include="Misc\GetPropertyStatuses.cs" />
     <Compile Include="Misc\GetUnfetchedDataErrors.cs" />
@@ -208,7 +209,6 @@
     <Compile Include="Broker\BrokerDownloadCustomerFile.cs" />
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />
     <Compile Include="Misc\ExecuteQuery.cs" />
-    <Compile Include="Misc\GetSpResultTable.cs" />
     <Compile Include="Misc\CrmLoadLookups.cs" />
     <Compile Include="Misc\LandRegistry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />

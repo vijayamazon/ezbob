@@ -28,12 +28,12 @@
     <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="9cb6ef38-d008-4b12-ab0c-e9330599d2ad" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="76e20d46-44a0-44e3-8f23-9839e37976e0" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.xsd" MetadataType="Schema" ID="d4852497-ecb9-437f-acac-bd8a141aa35b" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="8833b6cd-14e5-4d79-a987-4e61d0e4ac95" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="bf72188a-48d4-4486-862b-913622cd13f7" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="5a55e74b-f770-42f7-bc19-b6352fbb1f80" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="62102531-0cb5-424e-8419-15aef6b68c94" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Utils.xsd" MetadataType="Schema" ID="08c2e82a-5577-493c-9cb8-1dffe995071f" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.xsd" MetadataType="Schema" ID="e7f123fa-7bf3-4d87-8474-42142112abd9" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="8833b6cd-14e5-4d79-a987-4e61d0e4ac95" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EchoSignLib.xsd" MetadataType="Schema" ID="088f898c-a232-4690-9eb3-4ced92ac3df1" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="5430656e-8359-4f58-afaa-d4330d83c30b" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
   </Metadata>

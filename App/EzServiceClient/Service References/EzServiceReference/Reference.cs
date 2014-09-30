@@ -188,6 +188,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CrmLookupsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ConfigTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MarketplacesActionResult))]
@@ -219,7 +220,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianLtdActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerInstantOfferResponseActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -382,6 +382,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
                     this.StatusesField = value;
                     this.RaisePropertyChanged("Statuses");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ConfigTableActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class ConfigTableActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private EzBob.Backend.Models.ConfigTable[] TableField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public EzBob.Backend.Models.ConfigTable[] Table {
+            get {
+                return this.TableField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TableField, value) != true)) {
+                    this.TableField = value;
+                    this.RaisePropertyChanged("Table");
                 }
             }
         }
@@ -1550,29 +1573,6 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="SerializedDataTableActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
-    [System.SerializableAttribute()]
-    public partial class SerializedDataTableActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string SerializedDataTableField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string SerializedDataTable {
-            get {
-                return this.SerializedDataTableField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.SerializedDataTableField, value) != true)) {
-                    this.SerializedDataTableField = value;
-                    this.RaisePropertyChanged("SerializedDataTable");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BrokerInstantOfferResponseActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
     [System.SerializableAttribute()]
     public partial class BrokerInstantOfferResponseActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -2552,11 +2552,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CrmLookupsActionResult> CrmLoadLookupsAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetSpResultTable", ReplyAction="http://tempuri.org/IEzService/GetSpResultTableResponse")]
-        ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult GetSpResultTable(int userId, string spName, string[] parameters);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetConfigTable", ReplyAction="http://tempuri.org/IEzService/GetConfigTableResponse")]
+        ServiceClientProxy.EzServiceReference.ConfigTableActionResult GetConfigTable(int nUnderwriterID, string sTableName);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetSpResultTable", ReplyAction="http://tempuri.org/IEzService/GetSpResultTableResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult> GetSpResultTableAsync(int userId, string spName, string[] parameters);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetConfigTable", ReplyAction="http://tempuri.org/IEzService/GetConfigTableResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ConfigTableActionResult> GetConfigTableAsync(int nUnderwriterID, string sTableName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveConfigTable", ReplyAction="http://tempuri.org/IEzService/SaveConfigTableResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult SaveConfigTable(EzBob.Backend.Models.ConfigTable[] configTableEntries, Ezbob.Backend.Models.ConfigTableType configTableType);
@@ -3586,12 +3586,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CrmLoadLookupsAsync();
         }
         
-        public ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult GetSpResultTable(int userId, string spName, string[] parameters) {
-            return base.Channel.GetSpResultTable(userId, spName, parameters);
+        public ServiceClientProxy.EzServiceReference.ConfigTableActionResult GetConfigTable(int nUnderwriterID, string sTableName) {
+            return base.Channel.GetConfigTable(nUnderwriterID, sTableName);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult> GetSpResultTableAsync(int userId, string spName, string[] parameters) {
-            return base.Channel.GetSpResultTableAsync(userId, spName, parameters);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ConfigTableActionResult> GetConfigTableAsync(int nUnderwriterID, string sTableName) {
+            return base.Channel.GetConfigTableAsync(nUnderwriterID, sTableName);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult SaveConfigTable(EzBob.Backend.Models.ConfigTable[] configTableEntries, Ezbob.Backend.Models.ConfigTableType configTableType) {

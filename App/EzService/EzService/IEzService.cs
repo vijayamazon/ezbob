@@ -389,8 +389,8 @@
 		CrmLookupsActionResult CrmLoadLookups();
 
 		[OperationContract]
-		SerializedDataTableActionResult GetSpResultTable(int userId, string spName, params string[] parameters);
-		
+		ConfigTableActionResult GetConfigTable(int nUnderwriterID, string sTableName);
+
 		[OperationContract]
 		BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType);
 

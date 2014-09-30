@@ -1,27 +1,23 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
-	using ActionResults;
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
 
 	partial class EzServiceImplementation {
-		public SerializedDataTableActionResult GetSpResultTable(int userId, string spName, params string[] parameters) {
-			GetSpResultTable strategyInstance;
-			var result = ExecuteSync(out strategyInstance, null, userId, spName, parameters);
+		public ConfigTableActionResult GetConfigTable(int nUnderwriterID, string sTableName) {
+			GetConfigTable strategyInstance;
 
-			string serializedDataTable = JsonConvert.SerializeObject(strategyInstance.Result, new DataTableConverter());
-			return new SerializedDataTableActionResult {
-				MetaData = result,
-				SerializedDataTable = serializedDataTable
+			ActionMetaData oMetaData = ExecuteSync(out strategyInstance, null, nUnderwriterID, sTableName);
+
+			return new ConfigTableActionResult {
+				MetaData = oMetaData,
+				Table = strategyInstance.Result,
 			};
-		} // GetSpResultTable
+		} // GetConfigTable
 
 		private bool IsValidConfigTableInput(List<ConfigTable> configTableEntries, out SortedDictionary<int, ConfigTable> sortedEntries)
 		{

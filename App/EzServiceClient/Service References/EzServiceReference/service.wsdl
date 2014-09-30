@@ -73,12 +73,12 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
     </xsd:schema>
@@ -245,11 +245,11 @@
   <wsdl:message name="IEzService_CrmLoadLookups_OutputMessage">
     <wsdl:part name="parameters" element="tns:CrmLoadLookupsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetSpResultTable_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetSpResultTable" />
+  <wsdl:message name="IEzService_GetConfigTable_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfigTable" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetSpResultTable_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetSpResultTableResponse" />
+  <wsdl:message name="IEzService_GetConfigTable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfigTableResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveConfigTable_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveConfigTable" />
@@ -1202,9 +1202,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookups" message="tns:IEzService_CrmLoadLookups_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookupsResponse" message="tns:IEzService_CrmLoadLookups_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetSpResultTable">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSpResultTable" message="tns:IEzService_GetSpResultTable_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSpResultTableResponse" message="tns:IEzService_GetSpResultTable_OutputMessage" />
+    <wsdl:operation name="GetConfigTable">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetConfigTable" message="tns:IEzService_GetConfigTable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetConfigTableResponse" message="tns:IEzService_GetConfigTable_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveConfigTable">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveConfigTable" message="tns:IEzService_SaveConfigTable_InputMessage" />
@@ -2019,8 +2019,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetSpResultTable">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSpResultTable" style="document" />
+    <wsdl:operation name="GetConfigTable">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetConfigTable" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

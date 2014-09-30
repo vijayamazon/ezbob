@@ -80,6 +80,7 @@
     <Compile Include="ActionResults\CompanyDataForCompanyScoreActionResult.cs" />
     <Compile Include="ActionResults\CompanyDataForCreditBureauActionResult.cs" />
     <Compile Include="ActionResults\CompanyCaisDataActionResult.cs" />
+    <Compile Include="ActionResults\ConfigTableActionResult.cs" />
     <Compile Include="ActionResults\EmailConfirmationTokenActionResult.cs" />
     <Compile Include="ActionResults\PropertyStatusesActionResult.cs" />
     <Compile Include="ActionResults\CustomerDetailsActionResult.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="ActionResults\DateTimeActionResult.cs" />
     <Compile Include="ActionResults\BrokerStaticDataActionResult.cs" />
     <Compile Include="ActionResults\IntActionResult.cs" />
-    <Compile Include="ActionResults\SerializedDataTableActionResult.cs" />
     <Compile Include="ActionResults\StringActionResult.cs" />
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />
