@@ -363,30 +363,22 @@
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-		public JsonResult ToggleCciMark(int id)
-		{
+		public JsonResult ToggleCciMark(int id) {
 			Customer oCustomer = _customerRepository.Get(id);
 
-			if (oCustomer == null)
-			{
+			if (oCustomer == null) {
 				Log.DebugFormat("Customer({0}) not found", id);
 				return Json(new { error = "Customer not found.", id = id });
 			} // if
 
 			oCustomer.CciMark = !oCustomer.CciMark;
-			serviceClient.Instance.GetSpResultTable(_context.UserId, 
-				"AddCciHistory", new[] {
-					"Username", User.Identity.Name, 
-					"CustomerId", id.ToString(CultureInfo.InvariantCulture), 
-					"CciMark", oCustomer.CciMark.ToString()
-				});
+
+			serviceClient.Instance.AddCciHistory(id, _context.UserId, oCustomer.CciMark);
 
 			Log.DebugFormat("Customer({0}).CciMark set to {1}", id, oCustomer.CciMark);
 
 			return Json(new { error = (string)null, id = id, mark = oCustomer.CciMark });
 		} // ToggleCciMark
-
-
 
 		[HttpPost]
 		[Transactional]

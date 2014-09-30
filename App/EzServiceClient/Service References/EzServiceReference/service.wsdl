@@ -455,6 +455,12 @@
   <wsdl:message name="IEzService_EmailConfirmationConfirmUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:EmailConfirmationConfirmUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_AddCciHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddCciHistory" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddCciHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddCciHistoryResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_CalculateVatReturnSummary_InputMessage">
     <wsdl:part name="parameters" element="tns:CalculateVatReturnSummary" />
   </wsdl:message>
@@ -1335,6 +1341,10 @@
     <wsdl:operation name="EmailConfirmationConfirmUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationConfirmUser" message="tns:IEzService_EmailConfirmationConfirmUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationConfirmUserResponse" message="tns:IEzService_EmailConfirmationConfirmUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddCciHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CalculateVatReturnSummary">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummary" message="tns:IEzService_CalculateVatReturnSummary_InputMessage" />
@@ -2317,6 +2327,15 @@
     </wsdl:operation>
     <wsdl:operation name="EmailConfirmationConfirmUser">
       <soap12:operation soapAction="http://tempuri.org/IEzService/EmailConfirmationConfirmUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddCciHistory">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

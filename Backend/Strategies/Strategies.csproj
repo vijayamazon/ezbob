@@ -138,6 +138,7 @@
     <Compile Include="ScoreCalculationVerification\MedalParameter.cs" />
     <Compile Include="ScoreCalculationVerification\NewMedalScoreCalculator2.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
+    <Compile Include="UserManagement\AddCciHistory.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationGenerate.cs" />

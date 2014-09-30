@@ -2762,6 +2762,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationConfirmUser", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationConfirmUserResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationConfirmUserAsync(int nUserID, int nUnderwriterID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddCciHistoryAsync(int nCustomerID, int nUnderwriterID, bool bCciMark);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateVatReturnSummary", ReplyAction="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
         
@@ -3858,6 +3864,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationConfirmUserAsync(int nUserID, int nUnderwriterID) {
             return base.Channel.EmailConfirmationConfirmUserAsync(nUserID, nUnderwriterID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
+            return base.Channel.AddCciHistory(nCustomerID, nUnderwriterID, bCciMark);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> AddCciHistoryAsync(int nCustomerID, int nUnderwriterID, bool bCciMark) {
+            return base.Channel.AddCciHistoryAsync(nCustomerID, nUnderwriterID, bCciMark);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID) {

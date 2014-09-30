@@ -228,5 +228,13 @@
 		} // EmailConfirmationConfirmUser
 
 		#endregion method EmailConfirmationConfirmUser
+
+		#region method AddCciHistory
+
+		public ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
+			return Execute<AddCciHistory>(nCustomerID, nUnderwriterID, nCustomerID, nUnderwriterID, bCciMark);
+		} // AddCciHistory
+
+		#endregion method AddCciHistory
 	} // class EzServiceImplementation
 } // namespace EzService

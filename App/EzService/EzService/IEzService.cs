@@ -511,6 +511,9 @@
 		[OperationContract]
 		ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID);
 
+		[OperationContract]
+		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
+
 		#endregion User Management
 
 		#region VAT
