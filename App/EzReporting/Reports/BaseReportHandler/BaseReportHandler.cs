@@ -189,16 +189,6 @@
 
 		#endregion method BuildLoansIssuedReport
 
-		#region method BuildPlainedPaymentReport
-
-		public ATag BuildPlainedPaymentReport(Report report, DateTime today, DateTime ignored, List<string> ignoredAgain = null) {
-			return new Body().Add<Class>("Body")
-				.Append(new H1().Append(new Text(report.GetTitle(today))))
-				.Append(PaymentReport(today));
-		} // BuildPlainedPaymentReport
-
-		#endregion method BuildPlainedPaymentReport
-
 		#region method BuildCciReport
 
 		public ATag BuildCciReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
@@ -251,28 +241,6 @@
 
 		#region Excel generators
 
-		#region method BuildPlainedPaymentXls
-
-		public ExcelPackage BuildPlainedPaymentXls(Report report, DateTime today, DateTime ignored) {
-			var title = report.GetTitle(today);
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptPaymentReport",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@DateStart", DB.DateToString(today)),
-					new QueryParameter("@DateEnd", DB.DateToString(DateTime.Today.AddDays(3)))
-				);
-
-				return AddSheetToExcel(dt, title, "RptPaymentReport");
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-				return new ExcelPackage();
-			} // try
-		} // BuildPlainedPaymentXls
-
-		#endregion method BuildPlainedPaymentXls
-
 		#region method BuildLoansIssuedXls
 
 		public ExcelPackage BuildLoansIssuedXls(Report report, DateTime today, DateTime tomorrow) {
@@ -287,7 +255,7 @@
 
 		public ExcelPackage XlsReport(ReportQuery rptDef, string sRptTitle = "") {
 			try {
-				return AddSheetToExcel(rptDef.Execute(DB), sRptTitle, rptDef.StoredProcedure, String.Empty);
+				return AddSheetToExcel(rptDef, sRptTitle);
 			}
 			catch (Exception e) {
 				Alert(e, "Failed to generate Excel report.");
@@ -763,9 +731,11 @@
 
 			var oTotal = new LoansIssuedRow(null);
 
-			DataTable tbl = rpt.Execute(DB);
+			int nRowCount = 0;
 
 			rpt.Execute(DB, (sr, bRowsetStart) => {
+				nRowCount++;
+
 				var lir = new LoansIssuedRow(sr);
 				oRows.Add(lir);
 
@@ -777,7 +747,7 @@
 				return ActionResult.Continue;
 			});
 
-			oTotal.SetLoanCount(tbl.Rows.Count);
+			oTotal.SetLoanCount(nRowCount);
 
 			DataTable oOutput = oTotal.ToTable();
 
@@ -789,53 +759,6 @@
 		#endregion method CreateLoansIssuedReport
 
 		#endregion Loans Issued
-
-		#region method PaymentReport
-
-		private ATag PaymentReport(DateTime today) {
-			Table tbl = new Table();
-
-			try {
-				ATag oTr = new Tr().Add<Class>("HR")
-					.Append(new Th().Append(new Text("Id")))
-					.Append(new Th().Append(new Text("Name")))
-					.Append(new Th().Append(new Text("Email")))
-					.Append(new Th().Append(new Text("Date")))
-					.Append(new Th().Append(new Text("Amount")));
-
-				oTr.ApplyToChildren<Class>("H");
-
-				tbl.Add<ID>("tableReportData").Add<Class>("Report").Append(new Thead().Append(oTr));
-
-				var tbody = new Tbody();
-				tbl.Append(tbody);
-
-				DB.ForEachRowSafe(
-					(sr, bRowsetStart) => {
-						oTr = new Tr()
-							.Append(new Td().Add<Class>("L").Append(new Text(sr["Id"])))
-							.Append(new Td().Add<Class>("L").Append(new Text(sr["Firstname"] + " " + sr["SurName"])))
-							.Append(new Td().Add<Class>("L").Append(new Text(sr["Name"])))
-							.Append(new Td().Add<Class>("L").Append(new Text(sr["DATE"])))
-							.Append(new Td().Add<Class>("R").Append(new Text(sr["AmountDue"])));
-
-						tbody.Append(oTr);
-
-						return ActionResult.Continue;
-					},
-					"RptPaymentReport",
-					new QueryParameter("@DateStart", DB.DateToString(today)),
-					new QueryParameter("@DateEnd", DB.DateToString(DateTime.Today.AddDays(3)))
-				);
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			}
-
-			return tbl;
-		} // PaymentReport
-
-		#endregion method PaymentReport
 
 		#region method CreateCciReport
 
@@ -1314,6 +1237,66 @@
 
 		#endregion method AddSheetToExcel
 
+		#region method AddSheetToExcel
+
+		private ExcelPackage AddSheetToExcel(ReportQuery rptDef, string title, ExcelPackage wb = null) {
+			if (wb == null) // first initialization, if we will use it multiple times.
+				wb = new ExcelPackage();
+
+			var sheet = wb.Workbook.Worksheets.Add(rptDef.StoredProcedure);
+
+			const int nTitleRow = 1; // first row for title
+			const int nFirstColumn = 1; // first column
+
+			int nHeaderRow = nTitleRow + 1;
+
+			int nFirstDataRow = nHeaderRow + 1;
+
+			ExcelRange oTitle = sheet.Cells[nTitleRow, nFirstColumn];
+			oTitle.Value = title.Replace("<h1>", "").Replace("</h1>", "");
+			oTitle.Style.Font.Bold = true;
+			oTitle.Style.Font.Size = 16;
+
+			int nDataRowIdx = 0;
+
+			rptDef.Execute(DB, (sr, bRowsetStart) => {
+				for (int j = 0; j < sr.Count; j++) {
+					if (nDataRowIdx == 0) {
+						sheet.Cells[nHeaderRow, nFirstColumn + j].Value = sr.GetName(j);
+
+						if (sr.Count > 1)
+							sheet.Cells[nTitleRow, nFirstColumn, nTitleRow, nFirstColumn + sr.Count - 1].Merge = true;
+					} // if
+
+					ExcelRange oCell = sheet.Cells[nFirstDataRow + nDataRowIdx, nFirstColumn + j];
+
+					object oValue = sr.ColumnOrDefault(j);
+
+					if (IsInt(oValue))
+						oCell.Style.Numberformat.Format = "#,##0";
+					else if (IsFloat(oValue))
+						oCell.Style.Numberformat.Format = "#,##0.00";
+					else if (oValue is DateTime)
+						oCell.Style.Numberformat.Format = "dd-mmm-yyyy hh:mm:ss";
+					else
+						oCell.Style.Numberformat.Format = "@";
+
+					oCell.Value = oCell.Style.Numberformat.Format == "@"
+						? oValue.ToString().Replace("&nbsp;", " ")
+						: oValue;
+				} // for each column
+
+				nDataRowIdx++;
+				return ActionResult.Continue;
+			});
+
+			sheet.Cells.AutoFitColumns();
+			sheet.Row(nHeaderRow).Style.Font.Bold = true;
+
+			return wb;
+		} // AddSheetToExcel
+
+		#endregion method AddSheetToExcel
 		private static readonly CultureInfo ms_oFormatInfo = new CultureInfo("en-GB");
 
 		#endregion private static

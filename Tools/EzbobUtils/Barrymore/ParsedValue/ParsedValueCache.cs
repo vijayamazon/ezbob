@@ -10,6 +10,7 @@
 		public ParsedValueCache() {
 			m_oData = new List<ParsedValue>();
 			m_oMap = new SortedDictionary<string, ParsedValue>();
+			m_oNames = new List<string>();
 		} // constructor
 
 		#endregion constructor
@@ -20,11 +21,11 @@
 			if (pv == null)
 				return;
 
-			m_oData.Add(pv);
-
 			if (string.IsNullOrWhiteSpace(sKey))
 				sKey = "Column" + m_oData.Count.ToString(CultureInfo.InvariantCulture);
 
+			m_oData.Add(pv);
+			m_oNames.Add(sKey);
 			m_oMap[sKey] = pv;
 		} // Add
 
@@ -50,6 +51,14 @@
 
 		#endregion method Contains
 
+		#region method GetName
+
+		public string GetName(int nIdx) {
+			return Contains(nIdx) ? m_oNames[nIdx] : null;
+		} // GetName
+
+		#endregion method GetName
+
 		#region indexer
 
 		public ParsedValue this[int nIdx, object oDefault = null] {
@@ -67,6 +76,7 @@
 		#region private
 
 		private readonly List<ParsedValue> m_oData;
+		private readonly List<string> m_oNames;
 		private readonly SortedDictionary<string, ParsedValue> m_oMap;
 
 		#endregion private

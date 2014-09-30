@@ -1,33 +1,35 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPaymentReport]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptPaymentReport]
+IF OBJECT_ID('RptPaymentReport') IS NULL
+	EXECUTE('CREATE PROCEDURE RptPaymentReport AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[RptPaymentReport] 
-	(@DateStart DATETIME,
-@DateEnd DATETIME)
+
+ALTER PROCEDURE RptPaymentReport
+@DateStart DATETIME,
+@DateEnd DATETIME
 AS
 BEGIN
 	SELECT
-		LoanSchedule.Id,
-		Customer.FirstName,
-		Customer.Surname,
-		Customer.Name,
-		LoanSchedule.[Date],
+		ls.Id,
+		c.FirstName + ' ' + c.Surname AS Name,
+		c.Name AS Email,
+		ls.[Date],
 		AmountDue
 	FROM
-		LoanSchedule
-		INNER JOIN Loan ON Loan.Id = LoanSchedule.LoanId
-		INNER JOIN Customer ON Customer.Id = Loan.CustomerId
+		LoanSchedule ls
+		INNER JOIN Loan l ON l.Id = ls.LoanId
+		INNER JOIN Customer c ON c.Id = l.CustomerId
 	WHERE
-		LoanSchedule.Status = 'StillToPay'
+		ls.Status = 'StillToPay'
 		AND
-		Customer.IsTest = 0
+		c.IsTest = 0
 		AND
-		CONVERT(DATE, @DateStart) <= LoanSchedule.[Date] AND LoanSchedule.[Date] < CONVERT(DATE, @DateEnd)
+		@DateStart <= ls.[Date] AND ls.[Date] < @DateEnd
 	ORDER BY
-		LoanSchedule.DATE
+		ls.[Date]
 END
 GO

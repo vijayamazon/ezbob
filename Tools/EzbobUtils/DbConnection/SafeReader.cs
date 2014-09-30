@@ -230,6 +230,26 @@
 
 		#endregion method ContainsField
 
+		#region method GetName
+
+		public string GetName(int nIdx) {
+			if (!ContainsField(nIdx))
+				return null;
+
+			if (!ReferenceEquals(m_oRow, null))
+				return m_oRow.Table.Columns[nIdx].Caption;
+
+			if (!ReferenceEquals(m_oReader, null))
+				return m_oReader.GetName(nIdx);
+
+			if (!ReferenceEquals(m_oCache, null))
+				return m_oCache.GetName(nIdx);
+
+			return null;
+		} // GetName
+
+		#endregion method GetName
+
 		#region method Fill
 
 		public T Fill<T>() where T: new() {

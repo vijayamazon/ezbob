@@ -10,6 +10,7 @@
 		private readonly string spName;
 		private readonly string[] parameters;
 		public DataTable Result { get; private set; }
+
 		#region constructor
 
 		public GetSpResultTable(AConnection oDb, ASafeLog oLog, string spName, params string[] parameters)

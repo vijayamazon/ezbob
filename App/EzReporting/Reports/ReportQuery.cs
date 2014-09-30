@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using Ezbob.Database;
+﻿namespace Reports {
+	using System;
+	using System.Collections.Generic;
+	using Ezbob.Database;
 
-namespace Reports {
 	public class ReportQuery {
 		public ReportQuery() : this(null) {}
 
@@ -85,10 +84,6 @@ namespace Reports {
 			get { return this[DateEndArg]; }
 			set { this[DateEndArg] = value; }
 		} // DateEnd
-
-		public DataTable Execute(AConnection oDB) {
-			return oDB.ExecuteReader(StoredProcedure, CommandSpecies.StoredProcedure, CreateParameters());
-		} // Execute
 
 		public void Execute(AConnection oDB, Func<SafeReader, bool, ActionResult> oFunc) {
 			oDB.ForEachRowSafe(oFunc, StoredProcedure, CreateParameters());

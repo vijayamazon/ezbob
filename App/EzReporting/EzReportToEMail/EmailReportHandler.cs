@@ -62,34 +62,8 @@ namespace EzReportToEMail {
 							break;
 
 						case ReportType.RPT_TRAFFIC_REPORT:
-							var trafficReport = new TrafficReport(DB, this);
 							DateTime dYesterday = dToday.AddDays(-1);
-
-							if (report.IsDaily) {
-								sender.Dispatch(
-									report.Title,
-									dYesterday,
-									BuildTrafficReport(report, dYesterday, dToday),
-									BuildTrafficReportXls(report, dYesterday, dToday),
-									report.ToEmail
-								);
-							}
-
-							if (report.IsMonthToDate) {
-								var dFirstOfMonth = new DateTime(dToday.Year, dToday.Month, 1);
-
-								sender.Dispatch(
-									report.Title,
-									dYesterday,
-									BuildTrafficReport(report, dFirstOfMonth, dToday),
-									BuildTrafficReportXls(report, dFirstOfMonth, dToday),
-									report.ToEmail
-								);
-							}
-							break;
-
-						case ReportType.RPT_PLANNED_PAYTMENT:
-							HandleGenericReport(report, dToday, sender, BuildPlainedPaymentReport, BuildPlainedPaymentXls);
+							HandleGenericReport(report, dYesterday, sender, BuildTrafficReport, BuildTrafficReportXls, dToday);
 							break;
 
 						case ReportType.RPT_EARNED_INTEREST:
@@ -185,7 +159,8 @@ namespace EzReportToEMail {
 			DateTime dToday,
 			ReportDispatcher sender,
 			Func<Report, DateTime, DateTime, List<string>, ATag> oBuildHtml,
-			Func<Report, DateTime, DateTime, ExcelPackage> oBuildXls
+			Func<Report, DateTime, DateTime, ExcelPackage> oBuildXls,
+			DateTime? dTodayForMonthStart = null
 		) {
 			if (report.IsDaily)
 				BuildReport(report, dToday, dToday.AddDays(1), DailyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
@@ -197,7 +172,8 @@ namespace EzReportToEMail {
 				BuildReport(report, dToday.AddMonths(-1), dToday, MonthlyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
 
 			if (report.IsMonthToDate) {
-				var monthStart = new DateTime(dToday.Year, dToday.Month, 1);
+				DateTime d = dTodayForMonthStart.HasValue ? dTodayForMonthStart.Value : dToday;
+				var monthStart = new DateTime(d.Year, d.Month, 1);
 				BuildReport(report, monthStart, dToday.AddDays(1), MonthToDatePerdiod, sender, dToday, oBuildHtml, oBuildXls);
 			} // if month to date
 		} // HandleGenericReport

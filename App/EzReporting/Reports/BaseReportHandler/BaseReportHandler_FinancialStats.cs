@@ -50,7 +50,16 @@
 			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ForPeriod, false, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
-			DataTable oOutput = rpt.Execute(DB);
+			DataTable oOutput = new DataTable();
+
+			oOutput.Columns.Add("SortOrder", typeof (int));
+			oOutput.Columns.Add("Caption", typeof (string));
+			oOutput.Columns.Add("Value", typeof (decimal));
+
+			rpt.Execute(DB, (sr, bRowsetStart) => {
+				oOutput.Rows.Add((int)sr[0], (string)sr[1], (decimal)sr[2]);
+				return ActionResult.Continue;
+			});
 
 			oOutput.Rows.Add(0, "Earned interest", earned.Sum(pair => pair.Value));
 
