@@ -200,6 +200,18 @@ BEGIN
 	--
 	-----------------------------------------------------------
 
+	;WITH FirstCR (CustomerID, CashRequestID) AS (
+		SELECT
+			r.IdCustomer AS CustomerID,
+			MIN(r.Id) AS CashRequestID
+		FROM
+			CashRequests r
+			INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
+		WHERE
+			r.UnderwriterDecision = 'Approved'
+		GROUP BY
+			r.IdCustomer
+	)
 	SELECT
 		'ApprovedAmount' AS RowType,
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
@@ -209,6 +221,7 @@ BEGIN
 	FROM
 		Customer c
 		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
+		INNER JOIN FirstCR f ON r.Id = f.CashRequestID
 	WHERE
 		c.IsTest = 0
 		AND
