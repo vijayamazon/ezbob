@@ -1,14 +1,11 @@
-﻿using Ezbob.Database;
-using EZBob.DatabaseLib.Model.Database;
-using Ezbob.Logger;
-using Ezbob.Utils;
-using OfficeOpenXml;
-using System;
-using System.Collections.Generic;
-using System.Data;
-
-namespace Reports {
-	using System.IO;
+﻿namespace Reports {
+	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils;
+	using OfficeOpenXml;
+	using System;
+	using System.Collections.Generic;
 
 	public class LoanStats : SafeLog {
 		#region public
@@ -418,31 +415,35 @@ namespace Reports {
 
 			CustomerRegions = new SortedDictionary<int, string>();
 
-			DataTable tbl = m_oDB.ExecuteReader("RptLoanStats_CustomerPostcodes", CommandSpecies.StoredProcedure);
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nCustomerID = sr["CustomerID"];
+					string sRawpostcode = sr["Rawpostcode"].ToString().Trim().ToUpper();
 
-			foreach (DataRow dataRow in tbl.Rows) {
-				int nCustomerID = Convert.ToInt32(dataRow["CustomerID"]);
-				string sRawpostcode = dataRow["Rawpostcode"].ToString().Trim().ToUpper();
+					if (string.IsNullOrWhiteSpace(sRawpostcode))
+						return ActionResult.Continue;
+					
+						string sPostcode = "";
 
-				if (string.IsNullOrWhiteSpace(sRawpostcode))
-					continue;
-				
-					string sPostcode = "";
+						for (int i = 0; i < sRawpostcode.Length; ++i) {
+							char c = sRawpostcode[i];
 
-					for (int i = 0; i < sRawpostcode.Length; ++i) {
-						char c = sRawpostcode[i];
+							if (('A' <= c) && (c <= 'Z'))
+								sPostcode += c;
+							else
+								break;
+						} // for
 
-						if (('A' <= c) && (c <= 'Z'))
-							sPostcode += c;
-						else
-							break;
-					} // for
+						string sRegion = ptr[sPostcode];
 
-					string sRegion = ptr[sPostcode];
+						if (sRegion != string.Empty)
+							CustomerRegions[nCustomerID] = sRegion;
 
-					if (sRegion != string.Empty)
-						CustomerRegions[nCustomerID] = sRegion;
-			} // for each row
+					return ActionResult.Continue;
+				},
+				"RptLoanStats_CustomerPostcodes",
+				CommandSpecies.StoredProcedure
+			);
 
 			Msg("Loan Stats: loading customer regions complete.");
 		} // LoadCustomerRegions
@@ -454,21 +455,21 @@ namespace Reports {
 		private void LoadCustomerMarketplaces() {
 			Msg("Loans stats: loading customer marketplaces...");
 
-			DataTable dataTable = m_oDB.ExecuteReader("RptLoanStats_Marketplaces", CommandSpecies.StoredProcedure);
-
 			CustomerMarketplaces = new SortedDictionary<int, LoanStatsMarketplaces>();
 
-			foreach (DataRow dataRow in (InternalDataCollectionBase)dataTable.Rows) {
-				int nCustomerID = Convert.ToInt32(dataRow["CustomerID"]);
-				int nMarketplaceTypeID = Convert.ToInt32(dataRow["MarketplaceTypeID"]);
-				string sMarketplaceTypeName = dataRow["MarketplaceType"].ToString();
-				DateTime oCreated = Convert.ToDateTime(dataRow["Created"]);
+			m_oDB.ForEachRowSafe((sr, bRowsetStart) => {
+				int nCustomerID = sr["CustomerID"];
+				int nMarketplaceTypeID = sr["MarketplaceTypeID"];
+				string sMarketplaceTypeName = sr["MarketplaceType"];
+				DateTime oCreated = sr["Created"];
 
 				if (CustomerMarketplaces.ContainsKey(nCustomerID))
 					CustomerMarketplaces[nCustomerID].Add(nMarketplaceTypeID, sMarketplaceTypeName, oCreated);
 				else
 					CustomerMarketplaces[nCustomerID] = new LoanStatsMarketplaces(nMarketplaceTypeID, sMarketplaceTypeName, oCreated);
-			} // for each row
+
+				return ActionResult.Continue;
+			}, "RptLoanStats_Marketplaces", CommandSpecies.StoredProcedure);
 
 			Msg("Loans stats: loading customer marketplaces complete.");
 		} // LoadCustomerMarketplaces
@@ -480,21 +481,25 @@ namespace Reports {
 		private void LoadPaypalTotals() {
 			Msg("Loans stats: loading customer PayPal totals...");
 
-			DataTable dataTable = m_oDB.ExecuteReader("RptLoanStats_PaypalTotalIn", CommandSpecies.StoredProcedure);
-
 			CustomerPaypalTotals = new SortedDictionary<int, LoanStatsPaypalTotal>();
 
-			foreach (DataRow dataRow in dataTable.Rows) {
-				int nCustomerID = Convert.ToInt32(dataRow["CustomerID"]);
-				int nMarketplaceID = Convert.ToInt32(dataRow["CustomerMarketplaceId"]);
-				DateTime oUpdated = Convert.ToDateTime(dataRow["Updated"]);
-				decimal nTotal = Convert.ToDecimal(dataRow["ValueFloat"]);
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nCustomerID = sr["CustomerID"];
+					int nMarketplaceID = sr["CustomerMarketplaceId"];
+					DateTime oUpdated = sr["Updated"];
+					decimal nTotal = sr["ValueFloat"];
 
-				if (CustomerPaypalTotals.ContainsKey(nCustomerID))
-					CustomerPaypalTotals[nCustomerID].Add(nMarketplaceID, oUpdated, nTotal);
-				else
-					CustomerPaypalTotals[nCustomerID] = new LoanStatsPaypalTotal(nMarketplaceID, oUpdated, nTotal);
-			} // for each row
+					if (CustomerPaypalTotals.ContainsKey(nCustomerID))
+						CustomerPaypalTotals[nCustomerID].Add(nMarketplaceID, oUpdated, nTotal);
+					else
+						CustomerPaypalTotals[nCustomerID] = new LoanStatsPaypalTotal(nMarketplaceID, oUpdated, nTotal);
+
+					return ActionResult.Continue;
+				},
+				"RptLoanStats_PaypalTotalIn",
+				CommandSpecies.StoredProcedure
+			);
 
 			Msg("Loans stats: loading customer PayPal totals complete.");
 		} // LoadPaypalTotals

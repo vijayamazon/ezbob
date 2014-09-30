@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc
 {
 	using System;
-	using System.Data;
 	using ExperianLib.IdIdentityHub;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -181,8 +180,7 @@
 
 		private void GetPersonalInfo()
 		{
-			DataTable dt = DB.ExecuteReader("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var results = new SafeReader(dt.Rows[0]);
+			var results = DB.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
 			firstName = results["FirstName"];
 			surname = results["Surname"];

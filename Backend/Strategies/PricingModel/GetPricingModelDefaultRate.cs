@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.PricingModel
 {
-	using System.Data;
 	using Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -45,15 +44,13 @@
 
 		private decimal GetDefaultRateCompany(int key)
 		{
-			DataTable dt = DB.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "DefaultRateCompany"), new QueryParameter("Key", key));
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "DefaultRateCompany"), new QueryParameter("Key", key));
 			return sr["Value"];
 		}
 
 		private decimal GetDefaultRateCustomer(int key)
 		{
-			DataTable dt = DB.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "DefaultRateCustomer"), new QueryParameter("Key", key));
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "DefaultRateCustomer"), new QueryParameter("Key", key));
 			return sr["Value"];
 		}
 	}

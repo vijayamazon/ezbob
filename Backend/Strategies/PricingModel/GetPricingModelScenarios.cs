@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.PricingModel
 {
 	using System.Collections.Generic;
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -21,12 +20,10 @@
 		
 		public override void Execute()
 		{
-			DataTable dt = DB.ExecuteReader("GetPricingModelScenarios", CommandSpecies.StoredProcedure);
-			foreach (DataRow row in dt.Rows)
-			{
-				var sr = new SafeReader(row);
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				Scenarios.Add(sr["ScenarioName"]);
-			}
+				return ActionResult.Continue;
+			}, "GetPricingModelScenarios", CommandSpecies.StoredProcedure);
 		}
 	}
 }

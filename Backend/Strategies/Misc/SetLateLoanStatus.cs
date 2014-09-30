@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -16,8 +15,7 @@
 		public SetLateLoanStatus(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
 
-			DataTable configsDataTable = DB.ExecuteReader("SetLateLoanStatusGetConfigs", CommandSpecies.StoredProcedure);
-			var sr = new SafeReader(configsDataTable.Rows[0]);
+			SafeReader sr = DB.GetFirst("SetLateLoanStatusGetConfigs", CommandSpecies.StoredProcedure);
 
 			collectionPeriod1 = sr["CollectionPeriod1"];
 			collectionPeriod2 = sr["CollectionPeriod2"];
@@ -48,10 +46,7 @@
 		public override void Execute() {
 			MarkLoansAsLate();
 
-			DataTable lateForCollectionDataTable = DB.ExecuteReader("GetLateForCollection", CommandSpecies.StoredProcedure);
-
-			foreach (DataRow row in lateForCollectionDataTable.Rows) {
-				var sr = new SafeReader(row);
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				DateTime date = sr["Date"];
 				decimal amountDue = sr["AmountDue"];
 				int loanId = sr["LoanId"];
@@ -145,7 +140,9 @@
 				);
 				
 				loanIdPrev = loanId;
-			} // foreach
+
+				return ActionResult.Continue;
+			}, "GetLateForCollection", CommandSpecies.StoredProcedure); // foreach
 		} // Execute
 
 		#endregion method Execute
@@ -221,10 +218,7 @@
 		#region method MarkLoansAsLate
 
 		private void MarkLoansAsLate() {
-			DataTable loansToCollectDataTable = DB.ExecuteReader("GetLoansToCollect", CommandSpecies.StoredProcedure);
-
-			foreach (DataRow row in loansToCollectDataTable.Rows) {
-				var sr = new SafeReader(row);
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				int id = sr["id"];
 				int loanId = sr["LoanId"];
 				bool isLastInstallment = sr["LastInstallment"];
@@ -242,7 +236,7 @@
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("Id", id)
 						);
-						continue;
+						return ActionResult.Continue;
 					}
 				} // if
 
@@ -260,7 +254,9 @@
 					new QueryParameter("Id", id),
 					new QueryParameter("Status", "Late")
 				);
-			} // foreach
+
+				return ActionResult.Continue;
+			}, "GetLoansToCollect", CommandSpecies.StoredProcedure);
 		} // MarkLoansAsLate
 
 		#endregion method MarkLoansAsLate

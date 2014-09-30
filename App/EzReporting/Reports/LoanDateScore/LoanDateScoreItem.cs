@@ -1,6 +1,5 @@
 ﻿namespace Reports {
 	using System;
-	using System.Data;
 	using System.Globalization;
 	using System.IO;
 	using System.Xml;
@@ -195,14 +194,13 @@
 
 		private void AddCompanyData(AConnection oDB)
 		{
-			DataTable nonLimitedDataTable = oDB.ExecuteReader("GetNonLimitedDataForLoanDateScoreReport",
-			                 CommandSpecies.StoredProcedure,
-							 new QueryParameter("RefNumber", m_sCompanyRefNum));
+			SafeReader sr = oDB.GetFirst(
+				"GetNonLimitedDataForLoanDateScoreReport",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("RefNumber", m_sCompanyRefNum)
+			);
 
-
-			if (nonLimitedDataTable.Rows.Count == 1)
-			{
-				var sr = new SafeReader(nonLimitedDataTable.Rows[0]);
+			if (!sr.IsEmpty) {
 				m_sNonLimDelphiScore = sr["CommercialDelphiScore"];
 				m_sNonLimDefaultChance = sr["ProbabilityOfDefaultScore"];
 				m_sNonLimDelphiScore = sr["StabilityOdds"];

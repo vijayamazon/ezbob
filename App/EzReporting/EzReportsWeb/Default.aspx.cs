@@ -370,22 +370,21 @@
 
 		private void InitAdminArea(AConnection oDB, bool bIsPostBack = false) {
 			if (!bIsPostBack) {
-				DataTable oDbUsers = oDB.ExecuteReader("SELECT Id, Name FROM ReportUsers ORDER BY Name", CommandSpecies.Text);
-
 				var oUsers = new SortedDictionary<string, int>();
 
-				foreach (DataRow row in oDbUsers.Rows) {
-					int nUserID = Convert.ToInt32(row["Id"]);
-					string sUserName = row["Name"].ToString();
+				oDB.ForEachRowSafe((sr, bRowsetStart) => {
+					int nUserID = sr["Id"];
+					string sUserName = sr["Name"];
 
 					oUsers[sUserName] = nUserID;
-				} // for each user row
+
+					return ActionResult.Continue;
+				}, "SELECT Id, Name FROM ReportUsers ORDER BY Name", CommandSpecies.Text);
 
 				SetReportUserMap(oDB, oUsers);
 
-
 				FillUserDropDowns(oUsers);
-			}
+			} // if
 		} // InitAdminArea
 
 		private void FillUserDropDowns(SortedDictionary<string, int> oUsers) {

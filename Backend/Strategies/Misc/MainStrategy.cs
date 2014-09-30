@@ -8,7 +8,6 @@
 	using ScoreCalculation;
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using System.Linq;
 	using System.Threading;
@@ -429,15 +428,14 @@
 			offeredCreditLine = modelLoanOffer;
 
 			bool isHomeOwnerAccordingToLandRegistry = false;
-			DataTable dt = DB.ExecuteReader(
+			SafeReader sr = DB.GetFirst(
 				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			if (dt.Rows.Count == 1)
+			if (!sr.IsEmpty)
 			{
-				var sr = new SafeReader(dt.Rows[0]);
 				isHomeOwnerAccordingToLandRegistry = sr["IsOwner"];
 			}
 
@@ -676,16 +674,15 @@
 
 		private void GetLastCashRequestData()
 		{
-			DataTable lastOfferDataTable = DB.ExecuteReader(
+			var lastOfferResults = DB.GetFirst(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("Now", DateTime.UtcNow)
 			);
 
-			if (lastOfferDataTable.Rows.Count == 1)
+			if (!lastOfferResults.IsEmpty)
 			{
-				var lastOfferResults = new SafeReader(lastOfferDataTable.Rows[0]);
 				loanOfferReApprovalFullAmount = lastOfferResults["ReApprovalFullAmountNew"];
 				loanOfferReApprovalRemainingAmount = lastOfferResults["ReApprovalRemainingAmount"];
 				loanOfferReApprovalFullAmountOld = lastOfferResults["ReApprovalFullAmountOld"];
@@ -709,14 +706,13 @@
 		{
 			Log.Info("Starting to calculate score and medal");
 
-			DataTable scoreCardDataTable = DB.ExecuteReader(
+			var scoreCardResults = DB.GetFirst(
 				"GetScoreCardData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("Today", DateTime.Today)
 			);
 
-			var scoreCardResults = new SafeReader(scoreCardDataTable.Rows[0]);
 			string maritalStatusStr = scoreCardResults["MaritalStatus"];
 			MaritalStatus maritalStatus;
 
@@ -877,40 +873,30 @@
 		private void PerformExperianConsumerCheckForDirectors()
 		{
 			if (companyType == "Entrepreneur")
-			{
 				return;
-			}
 
-			DataTable dt = DB.ExecuteReader(
-				"GetCustomerDirectorsForConsumerCheck",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-
-			foreach (DataRow row in dt.Rows)
-			{
-				var sr = new SafeReader(row);
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				int appDirId = sr["DirId"];
 				string appDirName = sr["DirName"];
 				string appDirSurname = sr["DirSurname"];
 
 				if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
-				{
-					continue;
-				}
+					return ActionResult.Continue;
 
 				PerformConsumerExperianCheck(appDirId);
 
 				if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
-				{
 					minExperianScore = experianConsumerScore;
-				}
 
 				if (experianConsumerScore > 0 && experianConsumerScore > maxExperianScore)
-				{
 					maxExperianScore = experianConsumerScore;
-				}
-			}
+
+				return ActionResult.Continue;
+			},
+				"GetCustomerDirectorsForConsumerCheck",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
 		}
 
 		private void PerformConsumerExperianCheck(int? directorId = null)
@@ -1065,9 +1051,7 @@
 		private void ReadConfigurations()
 		{
 			Log.Info("Getting configurations");
-			DataTable dt = DB.ExecuteReader("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-			var sr = new SafeReader(results);
+			SafeReader sr = DB.GetFirst("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
 			rejectDefaultsCreditScore = sr["Reject_Defaults_CreditScore"];
 			rejectDefaultsAccountsNum = sr["Reject_Defaults_AccountsNum"];
 			rejectMinimalSeniority = sr["Reject_Minimal_Seniority"];
@@ -1095,8 +1079,7 @@
 		private void GetPersonalInfo()
 		{
 			Log.Info("Getting personal info for customer:{0}", customerId);
-			DataTable dt = DB.ExecuteReader("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var results = new SafeReader(dt.Rows[0]);
+			SafeReader results = DB.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
 			customerStatusIsEnabled = results["CustomerStatusIsEnabled"];
 			customerStatusIsWarning = results["CustomerStatusIsWarning"];

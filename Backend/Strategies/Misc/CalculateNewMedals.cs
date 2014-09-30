@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc 
 {
 	using System;
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using ScoreCalculation;
@@ -21,17 +20,11 @@
 
 		public override void Execute()
 		{
-			DataTable dt = DB.ExecuteReader(
-				"GetAllConsumersForNewMedals",
-				CommandSpecies.StoredProcedure
-				);
-
 			int customerId = 0;
-			foreach (DataRow row in dt.Rows)
-			{
+
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				try
 				{
-					var sr = new SafeReader(row);
 					customerId = sr["CustomerId"];
 					ScoreResult result = calculator.CalculateMedalScore(customerId);
 					DB.ExecuteNonQuery("StoreNewMedal", CommandSpecies.StoredProcedure,
@@ -92,7 +85,12 @@
 				{
 					Log.Error("Medal calculation for customer:{0} failed with exception:{1}", customerId, ex);
 				}
-			}
+
+				return ActionResult.Continue;
+			}, 
+				"GetAllConsumersForNewMedals",
+				CommandSpecies.StoredProcedure
+			);
 		}
 	}
 }

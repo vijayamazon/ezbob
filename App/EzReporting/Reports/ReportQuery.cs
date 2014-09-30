@@ -87,7 +87,7 @@ namespace Reports {
 		} // DateEnd
 
 		public DataTable Execute(AConnection oDB) {
-			return oDB.ExecuteReader(StoredProcedure, CreateParameters());
+			return oDB.ExecuteReader(StoredProcedure, CommandSpecies.StoredProcedure, CreateParameters());
 		} // Execute
 
 		public void Execute(AConnection oDB, Func<SafeReader, bool, ActionResult> oFunc) {

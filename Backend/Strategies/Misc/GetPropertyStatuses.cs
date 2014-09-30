@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc 
 {
 	using System.Collections.Generic;
-	using System.Data;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -21,13 +20,9 @@
 
 		public override void Execute()
 		{
-			DataTable dt = DB.ExecuteReader("GetActivePropertyStatuses", CommandSpecies.StoredProcedure);
-
 			var groups = new Dictionary<string, PropertyStatusGroupModel>();
-			foreach (DataRow row in dt.Rows)
-			{
-				var sr = new SafeReader(row);
 
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				string title = sr["Title"];
 				if (!groups.ContainsKey(title))
 				{
@@ -39,7 +34,9 @@
 				bool isOwnerOfOtherProperties = sr["IsOwnerOfOtherProperties"];
 				int id = sr["Id"];
 				groups[title].Statuses.Add(new PropertyStatusModel { Description = description, IsOwnerOfMainAddress = isOwnerOfMainAddress, IsOwnerOfOtherProperties = isOwnerOfOtherProperties, Id = id });
-			}
+
+				return ActionResult.Continue;
+			}, "GetActivePropertyStatuses", CommandSpecies.StoredProcedure);
 
 			Groups = new List<PropertyStatusGroupModel>();
 			foreach (string key in groups.Keys)

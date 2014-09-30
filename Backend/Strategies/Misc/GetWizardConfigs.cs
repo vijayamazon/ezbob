@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -27,8 +26,7 @@
 		#region property Execute
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetWizardConfigs", CommandSpecies.StoredProcedure);
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = DB.GetFirst("GetWizardConfigs", CommandSpecies.StoredProcedure);
 
 			IsSmsValidationActive = sr["IsSmsValidationActive"];
 			NumberOfMobileCodeAttempts = sr["NumberOfMobileCodeAttempts"];

@@ -2,7 +2,6 @@
 	using EzBob.Backend.Strategies.MailStrategies.API;
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -28,12 +27,7 @@
 		#region property Execute
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetCustomersFiveDaysDue", 
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("Now", DateTime.UtcNow));
-
-			foreach (DataRow row in dt.Rows) {
-				var sr = new SafeReader(row);
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				int loanScheduleId = sr["id"];
 				decimal amountDue = sr["AmountDue"];
 				string firstName = sr["FirstName"];
@@ -55,12 +49,15 @@
 					new QueryParameter("Id", loanScheduleId),
 					new QueryParameter("UpdateFiveDaysDueMailSent", true)
 				);
-			} // for each
 
-			dt = DB.ExecuteReader("GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
+				return ActionResult.Continue;
+			}, // for each
+				"GetCustomersFiveDaysDue", 
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
 
-			foreach (DataRow row in dt.Rows) {
-				var sr = new SafeReader(row);
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				int loanScheduleId = sr["id"];
 				decimal amountDue = sr["AmountDue"];
 				string firstName = sr["FirstName"];
@@ -82,7 +79,9 @@
 					new QueryParameter("Id", loanScheduleId),
 					new QueryParameter("UpdateTwoDaysDueMailSent", true)
 				);
-			} // for each
+
+				return ActionResult.Continue;
+			}, "GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
 		} // Execute
 
 		#endregion property Execute

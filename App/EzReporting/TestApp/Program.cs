@@ -3,7 +3,6 @@
 namespace TestApp {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Data.Common;
 	using EzBob.Backend.Models;
 	using Ezbob.Database;
@@ -321,22 +320,18 @@ namespace TestApp {
 		#region method TestParsedValues
 
 		private static void TestParsedValues(AConnection oDB, ASafeLog oLog) {
-			DataTable tbl = oDB.ExecuteReader("SELECT Id, Name, IsOffline, GreetingMailSentDate FROM Customer ORDER BY Id", CommandSpecies.Text);
-
 			oLog.Info("Using row - begin");
 
-			foreach (DataRow row in tbl.Rows) {
-				var sr = new SafeReader(row);
-
+			oDB.ForEachRowSafe((sr, bRowsetStart) => {
 				int nCustomerID = sr["Id"];
 				string sName = sr["Name"];
 				bool bIsOffline = sr[2];
 				DateTime dt = sr["GreetingMailSentDate", new DateTime(2014, 12, 12)];
 
 				oLog.Info("{0}: {1} - {2} {3}", nCustomerID, sName, bIsOffline, dt);
-			} // foreach
 
-			tbl.Dispose();
+				return ActionResult.Continue;
+			}, "SELECT Id, Name, IsOffline, GreetingMailSentDate FROM Customer ORDER BY Id", CommandSpecies.Text);
 
 			oLog.Info("Using row - end");
 
@@ -428,26 +423,30 @@ namespace TestApp {
 		#region method TestInterestFreeze
 
 		private static void TestInterestFreeze(AConnection oDB, ASafeLog log) {
-			DataTable tbl = oDB.ExecuteReader("RptEarnedInterest_Freeze", CommandSpecies.StoredProcedure);
-			
 			var oPeriods = new SortedDictionary<int, InterestFreezePeriods>();
 
-			foreach (DataRow row in tbl.Rows) {
-				int nLoanID = Convert.ToInt32(row["LoanId"]);
-				DateTime? oStart = row["StartDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["StartDate"]);
-				DateTime? oEnd = row["EndDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["EndDate"]);
-				decimal nRate = Convert.ToDecimal(row["InterestRate"]);
-				DateTime? oDeactivation = row["DeactivationDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["DeactivationDate"]);
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nLoanID = sr["LoanId"];
+					DateTime? oStart = sr["StartDate"];
+					DateTime? oEnd = sr["EndDate"];
+					decimal nRate = sr["InterestRate"];
+					DateTime? oDeactivation = sr["DeactivationDate"];
 
-				DateTime? oTo = oDeactivation.HasValue
-					? (oEnd.HasValue ? DateInterval.Min(oEnd.Value, oDeactivation.Value) : oDeactivation)
-					: oEnd;
+					DateTime? oTo = oDeactivation.HasValue
+						? (oEnd.HasValue ? DateInterval.Min(oEnd.Value, oDeactivation.Value) : oDeactivation)
+						: oEnd;
 
-				if (!oPeriods.ContainsKey(nLoanID))
-					oPeriods[nLoanID] = new InterestFreezePeriods();
+					if (!oPeriods.ContainsKey(nLoanID))
+						oPeriods[nLoanID] = new InterestFreezePeriods();
 
-				oPeriods[nLoanID].Add(oStart, oTo, nRate);
-			} // for each
+					oPeriods[nLoanID].Add(oStart, oTo, nRate);
+
+					return ActionResult.Continue;
+				},
+				"RptEarnedInterest_Freeze",
+				CommandSpecies.StoredProcedure
+			);
 
 			foreach (var pair in oPeriods)
 				log.Msg("LoanID: {0} Freeze Periods: {1}", pair.Key, pair.Value);

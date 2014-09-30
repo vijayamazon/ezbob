@@ -1,13 +1,12 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using DropNet;
-using DropNet.Exceptions;
-using DropNet.Models;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace Reports {
+	using System;
+	using System.Globalization;
+	using DropNet;
+	using DropNet.Exceptions;
+	using DropNet.Models;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace Reports {
 	#region class DropboxReportSaver
 
 	class DropboxReportSaver : SafeLog {
@@ -24,53 +23,54 @@ namespace Reports {
 		#region method Init
 
 		public virtual bool Init() {
-			Info("Loading Dropbox configration...");
+			Info("Loading Dropbox configuration...");
 
-			DataTable tbl = DB.ExecuteReader(
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					string sName = sr["Name"];
+					string sValue = sr["Value"];
+
+					ConfigurationVariables cv = ConfigurationVariables.ZeroIsIgnored;
+
+					if (ConfigurationVariables.TryParse(sName, out cv)) {
+						switch (cv) {
+						case ConfigurationVariables.ZeroIsIgnored:
+							break;
+
+						case ConfigurationVariables.ReportDaemonDropboxCredentials:
+							string[] ary = sValue.Trim().Split(';');
+
+							if ((ary == null) || (ary.Length != 4))
+								throw new Exception("Dropbox credentials not specified.");
+
+							m_sAppKey     = ary[0];
+							m_sAppSecret  = ary[1];
+							m_sUserKey    = ary[2];
+							m_sUserSecret = ary[3];
+
+							break;
+
+						case ConfigurationVariables.ReportDaemonDropboxRootPath:
+							m_sRootPath = sValue.Trim();
+
+							while (m_sRootPath.EndsWith("/") )
+								m_sRootPath = m_sRootPath.Remove(m_sRootPath.Length - 1);
+
+							if (string.IsNullOrWhiteSpace(m_sRootPath))
+								throw new Exception("Dropbox root path not specified.");
+
+							break;
+
+						default:
+							throw new ArgumentOutOfRangeException("Unimplemented configuration parameter: " + cv.ToString());
+						} // switch
+					} // if
+
+					return ActionResult.Continue;
+				},
 				"SELECT Name, Value FROM ConfigurationVariables WHERE Name LIKE 'ReportDaemonDropbox%'",
 				CommandSpecies.Text
 			);
-
-			foreach (DataRow row in tbl.Rows) {
-				string sName = row["Name"].ToString();
-				string sValue = row["Value"].ToString();
-
-				ConfigurationVariables cv = ConfigurationVariables.ZeroIsIgnored;
-
-				if (ConfigurationVariables.TryParse(sName, out cv)) {
-					switch (cv) {
-					case ConfigurationVariables.ZeroIsIgnored:
-						break;
-
-					case ConfigurationVariables.ReportDaemonDropboxCredentials:
-						string[] ary = sValue.Trim().Split(';');
-
-						if ((ary == null) || (ary.Length != 4))
-							throw new Exception("Dropbox credentials not specified.");
-
-						m_sAppKey     = ary[0];
-						m_sAppSecret  = ary[1];
-						m_sUserKey    = ary[2];
-						m_sUserSecret = ary[3];
-
-						break;
-
-					case ConfigurationVariables.ReportDaemonDropboxRootPath:
-						m_sRootPath = sValue.Trim();
-
-						while (m_sRootPath.EndsWith("/") )
-							m_sRootPath = m_sRootPath.Remove(m_sRootPath.Length - 1);
-
-						if (string.IsNullOrWhiteSpace(m_sRootPath))
-							throw new Exception("Dropbox root path not specified.");
-
-						break;
-
-					default:
-						throw new ArgumentOutOfRangeException("Unimplemented configuration parameter: " + cv.ToString());
-					} // switch
-				} // if
-			} // for each row
 
 			Debug("*********************************************************");
 			Debug("***");

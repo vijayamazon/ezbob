@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.ScoreCalculation
 {
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
@@ -92,15 +91,13 @@
 
 		public decimal GetBasicInterestRate(int experianScore)
 		{
-			DataTable dt = db.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "BasicInterestRate"), new QueryParameter("Key", experianScore));
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = db.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "BasicInterestRate"), new QueryParameter("Key", experianScore));
 			return sr["Value"];
 		}
 
 		public decimal GetLoanOfferMultiplier(int experianScore)
 		{
-			DataTable dt = db.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "LoanOfferMultiplier"), new QueryParameter("Key", experianScore));
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = db.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "LoanOfferMultiplier"), new QueryParameter("Key", experianScore));
 			return sr["Value"];
 		}
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -175,11 +174,22 @@ namespace PayPointBalance {
 		private List<string> LoadColumns(AConnection oDB) {
 			Debug("PayPointBalance.LoadColumns started...");
 
-			DataTable tbl = oDB.ExecuteReader(LoadColumnsStoredProc.Name, CommandSpecies.StoredProcedure);
+			// List<string> oRes = (from DataRow row in tbl.Rows select row[0].ToString()).ToList();
 
-			List<string> oRes = (from DataRow row in tbl.Rows select row[0].ToString()).ToList();
+			/*
+			var oRes = new List<string>();
 
-			tbl.Dispose();
+			oDB.ForEachRowSafe((sr, bRowsetStart) => {
+				oRes.Add(sr[0]);
+				return ActionResult.Continue;
+			}, LoadColumnsStoredProc.Name, CommandSpecies.StoredProcedure);
+			*/
+
+			List<string> oRes = (
+				from SafeReader sr
+					in oDB.ExecuteEnumerable(LoadColumnsStoredProc.Name, CommandSpecies.StoredProcedure)
+				select (string)sr[0]
+			).ToList();
 
 			Info("{0} columns found.", oRes.Count);
 

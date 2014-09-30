@@ -2,7 +2,6 @@
 	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using System.Data;
 	using System.IO;
 	using System.Text;
 
@@ -17,8 +16,7 @@
 		} // Name
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure, new QueryParameter("CaisId", caisId));
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = DB.GetFirst("GetCaisFileData", CommandSpecies.StoredProcedure, new QueryParameter("CaisId", caisId));
 			string fileName = sr["FileName"];
 			string dirName = sr["DirName"];
 

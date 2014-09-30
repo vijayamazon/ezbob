@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Experian
 {
 	using System;
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -34,17 +33,14 @@
 
 		#region property Execute
 
-		public override void Execute()
-		{
-			DataTable nonLimitedDataTable = DB.ExecuteReader(
+		public override void Execute() {
+			SafeReader sr = DB.GetFirst(
 				"GetNonLimitedDataForCreditBureau",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("RefNumber", refNumber));
+				new QueryParameter("RefNumber", refNumber)
+			);
 
-			if (nonLimitedDataTable.Rows.Count == 1)
-			{
-				var sr = new SafeReader(nonLimitedDataTable.Rows[0]);
-
+			if (!sr.IsEmpty) {
 				LastUpdate = sr["Created"];
 				Score = sr["RiskScore"];
 				Errors = sr["Errors"];

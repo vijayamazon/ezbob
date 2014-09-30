@@ -1,8 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.ScoreCalculationVerification
 {
 	using System.Collections.Generic;
-	using System.Data;
-	using System.Text.RegularExpressions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
@@ -202,13 +200,10 @@
 
 		private void GatherData()
 		{
-			DataTable dt = db.ExecuteReader("GetDataForMedalCalculation2", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			if (dt.Rows.Count != 1)
-			{
+			SafeReader sr = db.GetFirst("GetDataForMedalCalculation2", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			if (sr.IsEmpty)
 				throw new Exception("Failed gathering data from DB");
-			}
 			
-			var sr = new SafeReader(dt.Rows[0]);
 			int businessScore = sr["BusinessScore"];
 			decimal rawTangibleEquity = sr["TangibleEquity"];
 			DateTime? businessSeniority = sr["BusinessSeniority"];

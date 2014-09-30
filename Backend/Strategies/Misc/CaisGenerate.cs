@@ -4,7 +4,6 @@
 	using Ezbob.Logger;
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using System.IO;
 	using ExperianLib.CaisFile;
@@ -15,8 +14,7 @@
 			: base(oDb, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
 
-			DataTable dt = DB.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = DB.GetFirst("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
 			caisPath = sr["CaisPath"];
 			caisPath2 = sr["CaisPath2"];
 			this.underwriterId = underwriterId;
@@ -50,9 +48,8 @@
 			Directory.CreateDirectory(dirPath);
 			Directory.CreateDirectory(dirPath2);
 			var service = new ExperianLib.Ebusiness.EBusinessService(DB);
-			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
-			foreach (DataRow row in dt.Rows) {
-				var sr = new SafeReader(row);
+
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				int loanId = sr["loanID"];
 				DateTime startDate = sr["StartDate"];
 				DateTime dateClose = sr["DateClose"];
@@ -270,7 +267,9 @@
 					new QueryParameter("LoanId", loanId),
 					new QueryParameter("CAISStatus", accountStatus)
 				);
-			}
+
+				return ActionResult.Continue;
+			}, "GetCaisData", CommandSpecies.StoredProcedure);
 
 			mailer.Send("Mandrill - CAIS report", new Dictionary<string, string> {
 				{"CurrDate", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)},

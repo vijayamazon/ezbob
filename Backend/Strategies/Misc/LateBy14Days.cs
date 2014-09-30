@@ -15,14 +15,11 @@
 		public override string Name { get { return "Late by 14 days"; } } // Name
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetLateBy14DaysAndUpdate", CommandSpecies.StoredProcedure);
-
-			foreach (DataRow row in dt.Rows) {
-				var sr = new SafeReader(row);
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				bool is14DaysLate = sr["Is14DaysLate"];
 
 				if (is14DaysLate)
-					continue;
+					return ActionResult.Continue;
 
 				int loanId = sr["LoanId"];
 				string signDate = sr["SignDate"];
@@ -47,7 +44,9 @@
 				mailer.Send("Mandrill - 14 days notification email", variables, new Addressee(mail));
 
 				DB.ExecuteNonQuery("SetLateBy14Days", CommandSpecies.StoredProcedure, new QueryParameter("LoanId", loanId));
-			} // for
+
+				return ActionResult.Continue;
+			}, "GetLateBy14DaysAndUpdate", CommandSpecies.StoredProcedure);
 		} // Execute
 
 		private readonly StrategiesMailer mailer;

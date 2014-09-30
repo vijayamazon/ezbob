@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.ScoreCalculation
 {
-	using System.Data;
 	using Experian;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -71,14 +70,10 @@
 		private ScoreResult GatherData(int customerId)
 		{
 			var inputData = new ScoreResult();
-			DataTable dt = db.ExecuteReader("GetDataForMedalCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			SafeReader sr = db.GetFirst("GetDataForMedalCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
-			if (dt.Rows.Count != 1)
-			{
+			if (sr.IsEmpty)
 				throw new Exception("Couldn't gather required data for the medal calculation");
-			}
-
-			var sr = new SafeReader(dt.Rows[0]);
 
 			inputData.BusinessScore = sr["BusinessScore"];
 			decimal tangibleEquity = sr["TangibleEquity"];
@@ -679,14 +674,12 @@
 		}
 
 		public decimal GetBasicInterestRate(int experianScore) {
-			DataTable dt = db.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "BasicInterestRate"), new QueryParameter("Key", experianScore));
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = db.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "BasicInterestRate"), new QueryParameter("Key", experianScore));
 			return sr["Value"];
 		}
 
 		private decimal GetLoanOfferMultiplier(int experianScore) {
-			DataTable dt = db.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "LoanOfferMultiplier"), new QueryParameter("Key", experianScore));
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = db.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "LoanOfferMultiplier"), new QueryParameter("Key", experianScore));
 			return sr["Value"];
 		}
 	}

@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using System.Xml;
 	using Ezbob.Database;
@@ -150,7 +149,7 @@
 
 		private void SaveToDb(string refNumber, long serviceLogId, DateTime? insertDate = null)
 		{
-			DataTable dt = db.ExecuteReader(
+			int newId = db.ExecuteScalar<int>(
 				"InsertNonLimitedResult",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("RefNumber", refNumber),
@@ -219,11 +218,6 @@
 				new QueryParameter("Errors", errors)
 			);
 
-			if (dt.Rows.Count == 1)
-			{
-				var sr = new SafeReader(dt.Rows[0]);
-				int newId = sr["NewId"];
-
 				foreach (Tuple<DateTime?, int?> historyData in scoreHistory)
 				{
 					db.ExecuteNonQuery(
@@ -272,7 +266,7 @@
 
 				foreach (DN13 dn13 in ccjDetails)
 				{
-					DataTable ccjDetailsIdDataTable = db.ExecuteReader(
+					int ccjDetailsNewId = db.ExecuteScalar<int>(
 						"InsertNonLimitedResultCcjDetails",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("ExperianNonLimitedResultId", newId),
@@ -300,10 +294,6 @@
 						new QueryParameter("PostCode", dn13.PostCode)
 					);
 
-					if (ccjDetailsIdDataTable.Rows.Count == 1)
-					{
-						var ccjDetailesSafeReader = new SafeReader(ccjDetailsIdDataTable.Rows[0]);
-						int ccjDetailsNewId = ccjDetailesSafeReader["NewId"];
 						foreach (string name in dn13.JudgmentRegisteredAgainst)
 						{
 							db.ExecuteNonQuery(
@@ -325,7 +315,6 @@
 								new QueryParameter("TradingIndicatorDesc", tradingName.TradingIndicatorDesc)
 							);
 						}
-					}
 				}
 
 				foreach (DN17 dn17 in previousSearches)
@@ -351,7 +340,6 @@
 						new QueryParameter("DaysBeyondTerms", commonTerm.DaysBeyondTerms)
 					);
 				}
-			}
 		}
 
 		public int? GetScore()

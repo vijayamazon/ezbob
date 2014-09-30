@@ -3,7 +3,6 @@
 	using MailStrategies.API;
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -28,8 +27,7 @@
 		{
 			mailer = new StrategiesMailer(DB, Log);
 
-			DataTable configsDataTable = DB.ExecuteReader("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
-			var sr = new SafeReader(configsDataTable.Rows[0]);
+			SafeReader sr = DB.GetFirst("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
 			amountToChargeFrom = sr["AmountToChargeFrom"];
 		}
 
@@ -178,13 +176,11 @@
 
 		private void SendLoanStatusMail(int loanId, string firstName, string refNum, string customerMail)
 		{
-			DataTable dt = DB.ExecuteReader(
+			SafeReader sr = DB.GetFirst(
 				"GetLoanStatus",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("LoanId", loanId)
-				);
-
-			var sr = new SafeReader(dt.Rows[0]);
+			);
 
 			string loanStatus = sr["Status"];
 

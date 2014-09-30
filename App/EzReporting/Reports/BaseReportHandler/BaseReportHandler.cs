@@ -258,6 +258,7 @@
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptPaymentReport",
+					CommandSpecies.StoredProcedure,
 					new QueryParameter("@DateStart", DB.DateToString(today)),
 					new QueryParameter("@DateEnd", DB.DateToString(DateTime.Today.AddDays(3)))
 				);

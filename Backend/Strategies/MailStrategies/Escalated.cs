@@ -1,11 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
+	using System.Globalization;
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	using Exceptions;
 
 	public class Escalated : AMailStrategyBase {
@@ -24,16 +22,14 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - User was escalated";
 
-			DataTable dt = DB.ExecuteReader(
+			SafeReader sr = DB.GetFirst(
 				"GetEscalationData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId)
 			);
 
-			if (dt.Rows.Count < 1)
+			if (sr.IsEmpty)
 				throw new StrategyWarning(this, "failed to load escalation data from customer " + CustomerData);
-
-			var sr = new SafeReader(dt.Rows[0]);
 
 			string escalationReason = sr["EscalationReason"];
 			string underwriterName = sr["UnderwriterName"];

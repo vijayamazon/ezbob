@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc 
 {
 	using System;
-	using System.Data;
 	using ExperianLib.IdIdentityHub;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -21,26 +20,20 @@
 
 		public override void Execute()
 		{
-			DataTable entriesDataTable = DB.ExecuteReader("GetEntriesForAmlBackfill", CommandSpecies.StoredProcedure);
-			
-			foreach (DataRow row in entriesDataTable.Rows)
-			{
-				var entriesSafeReader = new SafeReader(row);
+			DB.ForEachRowSafe((entriesSafeReader, bRowsetStart) => {
 				int customerId = entriesSafeReader["CustomerId"];
 				long serviceLogId = entriesSafeReader["Id"];
 
 				try
 				{
-					DataTable DataDataTable = DB.ExecuteReader("GetDataForAmlBackfill", 
+					SafeReader dataSafeReader = DB.GetFirst("GetDataForAmlBackfill", 
 															   CommandSpecies.StoredProcedure,
 					                                           new QueryParameter("CustomerId", customerId),
 					                                           new QueryParameter("ServiceLogId", serviceLogId));
 
-					if (DataDataTable.Rows.Count == 1)
+					if (!dataSafeReader.IsEmpty)
 					{
 						Log.Debug("Backfilling aml for service log: {0} customer {1}", serviceLogId, customerId);
-
-						var dataSafeReader = new SafeReader(DataDataTable.Rows[0]);
 						
 						DateTime insertDate = dataSafeReader["InsertDate"];
 						string xml = dataSafeReader["ResponseData"];
@@ -81,7 +74,9 @@
 				{
 					Log.Error("The backfill for customer:{0} failed with exception:{1}", customerId, ex);
 				}
-			}
+
+				return ActionResult.Continue;
+			}, "GetEntriesForAmlBackfill", CommandSpecies.StoredProcedure);
 		}
 	}
 }

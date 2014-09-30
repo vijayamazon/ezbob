@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -258,8 +257,7 @@
 
 		private decimal GetEuLoanMonthlyInterest(int key)
 		{
-			DataTable dt = DB.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "EuLoanMonthlyInterest"), new QueryParameter("Key", key));
-			var sr = new SafeReader(dt.Rows[0]);
+			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "EuLoanMonthlyInterest"), new QueryParameter("Key", key));
 			return sr["Value"];
 		}
 	}

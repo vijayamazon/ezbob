@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.PricingModel
 {
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -29,14 +28,13 @@
 
 		private void ReadConfigurations(string scenarioName)
 		{
-			DataTable dt = DB.ExecuteReader(
+			SafeReader sr = DB.GetFirst(
 				   "GetPricingModelConfigsForScenario",
 				   CommandSpecies.StoredProcedure,
 				   new QueryParameter("ScenarioName", scenarioName)
 			   );
-			if (dt.Rows.Count == 1)
+			if (!sr.IsEmpty)
 			{
-				var sr = new SafeReader(dt.Rows[0]);
 				tenurePercents = sr["TenurePercents"];
 				setupFee = sr["SetupFee"];
 				profitMarkupPercentsOfRevenue = sr["ProfitMarkupPercentsOfRevenue"];
@@ -94,15 +92,14 @@
 		{
 			loanAmount = 0;
 			loanTerm = 12;
-			DataTable dt = DB.ExecuteReader(
+			SafeReader sr = DB.GetFirst(
 				"GetLastCashRequestForPricingModel",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			if (dt.Rows.Count == 1)
+			if (!sr.IsEmpty)
 			{
-				var sr = new SafeReader(dt.Rows[0]);
 				loanAmount = sr["ApprovedAmount"];
 				loanTerm = sr["RepaymentPeriod"];
 			}
