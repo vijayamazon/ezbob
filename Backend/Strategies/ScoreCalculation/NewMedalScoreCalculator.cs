@@ -153,6 +153,7 @@
 			{
 				failedCalculatingTangibleEquity = true;
 				inputData.TangibleEquity = 0;
+				inputData.AnnualTurnover = 0;
 			}
 			
 			decimal mortgageBalance = GetMortgages(customerId);
