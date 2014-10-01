@@ -156,12 +156,17 @@
 			{
 				throw new Exception("bank account should be added in order to send money");
 			}
+			Log.DebugFormat("SendMoney customerId: {0}, amount: {1}, sortcode: {2}, account number: {3}, name: {4}, {5} {6} {7} ",
+				cus.Id, transfered, cus.BankAccount.SortCode, cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
 
-			var ret = _pacnetService.SendMoney(cus.Id, transfered, cus.BankAccount.SortCode,
+			var sendResponse = _pacnetService.SendMoney(cus.Id, transfered, cus.BankAccount.SortCode,
 											   cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
-			_pacnetService.CloseFile(cus.Id, "ezbob");
+			var closeResponse = _pacnetService.CloseFile(cus.Id, "ezbob");
 
-			return ret;
+			Log.DebugFormat("SendMoney response: tracking: {0}, status {1} {2} ", sendResponse.TrackingNumber, sendResponse.Status, sendResponse.HasError ? ",Error: " + sendResponse.Error : "");
+			Log.DebugFormat("CloseFile response: tracking: {0}, status {1} {2} ", closeResponse.TrackingNumber, closeResponse.Status, closeResponse.HasError ? ",Error: " + closeResponse.Error : "");
+
+			return sendResponse;
 		}
 
 		public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period)
