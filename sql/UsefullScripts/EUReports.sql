@@ -1,10 +1,51 @@
-DECLARE @DateStart DATETIME = '2013-09-01'
-DECLARE @DateEnd DATETIME = '2014-04-01'
+DECLARE @DateStart DATETIME = '2014-04-01'
+DECLARE @DateEnd DATETIME = '2014-10-01'
 
 
 --TODO use SicNaceCodeMap table to retrieve Nace code when the sic code is parsed and stored
+IF OBJECT_ID('tempdb..#tmp_sic') IS NOT NULL DROP TABLE #tmp_sic
+
+SELECT * 
+INTO #tmp_sic
+FROM 	  
+(SELECT DISTINCT x.Id, x.NaceCode FROM
+	(
+	SELECT c.Id, m.NaceCode FROM Customer c 
+	INNER JOIN Loan l ON c.Id=l.CustomerId
+	INNER JOIN LoanSource ls ON ls.LoanSourceID = l.LoanSourceID 
+	LEFT JOIN Company co ON co.Id = c.CompanyId
+	LEFT JOIN ExperianNonLimitedResults nl ON nl.RefNumber = co.ExperianRefNum
+	LEFT JOIN ExperianNonLimitedResultSicCodes nls ON nl.Id = nls.ExperianNonLimitedResultId
+	LEFT JOIN SicNaceCodeMap m ON substring(nls.Code,1,2) = m.SicFirstTwoDigits
+	WHERE ls.LoanSourceName='EU' 
+	AND c.IsTest=0 
+	AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
+	) x 
+	WHERE x.NaceCode IS NOT NULL
+
+UNION
+
+	SELECT DISTINCT x.Id, x.NaceCode FROM
+	(
+	SELECT c.Id, m.NaceCode FROM Customer c 
+	INNER JOIN Loan l ON c.Id=l.CustomerId
+	INNER JOIN LoanSource ls ON ls.LoanSourceID = l.LoanSourceID 
+	LEFT JOIN Company co ON co.Id = c.CompanyId
+	LEFT JOIN ExperianLtd el ON el.RegisteredNumber = co.ExperianRefNum
+	LEFT JOIN SicNaceCodeMap m ON substring(el.First1992SICCode,1,2) = m.SicFirstTwoDigits
+	WHERE ls.LoanSourceName='EU' 
+	AND c.IsTest=0 
+	AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
+	) x 
+	WHERE x.NaceCode IS NOT NULL
+) y
+		  
+
+
 ------------------A1_Borrowers---------------------------------------------------
-SELECT DISTINCT c.RefNumber AS 'Borrower ID', CASE 
+SELECT DISTINCT 
+	c.RefNumber AS 'Borrower ID', 
+	CASE 
 	--Midland east
 	WHEN a.Postcode LIKE 'AL%' THEN 'UKF' 
 	WHEN a.Postcode LIKE 'CB%' THEN 'UKF' 
@@ -149,7 +190,15 @@ SELECT DISTINCT c.RefNumber AS 'Borrower ID', CASE
 	--Ireland
 	WHEN a.Postcode LIKE 'BT%' THEN 'UKN' 
 		
-	ELSE 'n/i' END AS 'Region', 'GB' AS Country,  CONVERT(VARCHAR(10),ca.IncorporationDate, 103) AS 'Date of establishment', 'n/i' AS 'Sector (NACE code)', CASE WHEN ca.IncorporationDate IS NULL THEN 5 ELSE 1 END AS 'Employment status', coc.EmployeeCount AS 'Current number of employees', c.OverallTurnOver AS 'Annual turn-over', 1 AS 'Total Assets', c.IndustryType AS 'Comments'
+	ELSE 'n/i' END AS 'Region',
+	'GB' AS Country,
+	CONVERT(VARCHAR(10),ca.IncorporationDate, 103) AS 'Date of establishment', 
+	sic.NaceCode AS 'Sector (NACE code)',
+	CASE WHEN ca.IncorporationDate IS NULL THEN 5 ELSE 1 END AS 'Employment status',
+	coc.EmployeeCount AS 'Current number of employees', 
+	c.OverallTurnOver AS 'Annual turn-over',
+	1 AS 'Total Assets',
+	c.IndustryType AS 'Comments'
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
@@ -157,13 +206,21 @@ JOIN CustomerAddress a ON a.CustomerId = c.Id
 LEFT JOIN Company co ON c.CompanyId = co.Id
 LEFT JOIN CompanyEmployeeCount coc ON coc.CompanyId = co.Id
 LEFT JOIN CustomerAnalytics ca ON c.Id = ca.CustomerID
+LEFT JOIN #tmp_sic sic ON sic.Id = c.Id
 WHERE s.LoanSourceName='EU'
 AND a.addressType=1
 AND c.IsTest=0
 AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
 
 -----------------A2_Loans--------------------------------------------------------------
-SELECT DISTINCT c.RefNumber AS 'Borrower ID', l.RefNum AS 'Loan reference' , 'GBP' AS Currency,  l.LoanAmount AS 'Loan amount', 12 AS 'Loan maturity (months)', CONVERT(VARCHAR(10), l.[Date], 103) AS 'Loan signature date', CONVERT(VARCHAR(10),dateadd(month, 1, l.[Date]), 103) AS 'First disbursement date'
+SELECT DISTINCT 
+	c.RefNumber AS 'Borrower ID',
+	l.RefNum AS 'Loan reference' , 
+	'GBP' AS Currency,  
+	l.LoanAmount AS 'Loan amount',
+	12 AS 'Loan maturity (months)',
+	CONVERT(VARCHAR(10), l.[Date], 103) AS 'Loan signature date', 
+CONVERT(VARCHAR(10),dateadd(month, 1, l.[Date]), 103) AS 'First disbursement date'
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
@@ -188,7 +245,15 @@ AND cr.CreationDate<@DateEnd
 AND cr.UnderwriterDecision='Rejected'
 
 ----------------Part B - List of included operations-------------------------------------------------------------------------
-SELECT c.RefNumber AS 'Borrower ID', l.RefNum AS 'Loan reference' , 'GBP' AS Currency,  l.LoanAmount AS 'Nominal loan amount', (l.LoanAmount - l.Principal) AS 'Total repayment of loan amount', l.Principal AS 'Outstanding - loan amount', 0 'Remaining loan amount to be disbursed', CASE WHEN l.DateClosed IS NULL THEN 'No' ELSE 'Yes' END AS 'End of disbursement period'
+SELECT 
+	c.RefNumber AS 'Borrower ID', 
+	l.RefNum AS 'Loan reference' , 
+	'GBP' AS Currency,  
+	l.LoanAmount AS 'Nominal loan amount', 
+	(l.LoanAmount - l.Principal) AS 'Total repayment of loan amount', 
+	l.Principal AS 'Outstanding - loan amount', 
+	0 'Remaining loan amount to be disbursed', 
+	CASE WHEN l.DateClosed IS NULL THEN 'No' ELSE 'Yes' END AS 'End of disbursement period'
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
@@ -210,3 +275,4 @@ AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
 --What is it?
 
 
+DROP TABLE #tmp_sic
