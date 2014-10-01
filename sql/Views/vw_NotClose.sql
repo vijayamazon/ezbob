@@ -58,8 +58,8 @@ LEFT OUTER JOIN CustomerStatusHistory AS csh ON csh.CustomerId = c.Id
 LEFT OUTER JOIN Company AS co ON c.CompanyId = co.Id
 WHERE c.IsTest <> 1 and 
  (
- ((c.TypeOfBusiness = 'PShip3P' OR c.TypeOfBusiness = 'SoleTrader') AND ca.addressType = 5) OR 
- ((c.TypeOfBusiness = 'Limited' OR c.TypeOfBusiness = 'PShip' OR c.TypeOfBusiness = 'LLP')and  (ca.addressType = 3)) OR 
+ ((c.TypeOfBusiness = 'PShip3P' OR c.TypeOfBusiness = 'SoleTrader' OR c.TypeOfBusiness = 'PShip') AND ca.addressType = 5) OR 
+ ((c.TypeOfBusiness = 'Limited' OR c.TypeOfBusiness = 'LLP')and  (ca.addressType = 3)) OR 
   (c.TypeOfBusiness = 'Entrepreneur' and  (ca.addressType = 1))
  )
  GROUP BY l.Id, l.CustomerId, l.[Date], l.DateClosed, l.MaxDelinquencyDays, l.RepaymentsNum, l.Balance, c.Gender, c.FirstName, c.MiddleInitial, c.Surname, c.RefNumber, ca.Line1, ca.Line2, ca.Line3, ca.Town, ca.County
