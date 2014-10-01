@@ -102,6 +102,10 @@ namespace EzReportToEMail {
 							HandleGenericReport(report, dToday, sender, BuildMarketingChannelsSummaryReport, BuildMarketingChannelsSummaryXls);
 							break;
 
+						case ReportType.RPT_STRATEGY_RUNNING_TIME:
+							HandleGenericReport(report, dToday, sender, BuildStrategyRunningTimeReport, BuildStrategyRunningTimeXls);
+							break;
+
 						default:
 							HandleGenericReport(report, dToday, sender, null, null);
 							break;

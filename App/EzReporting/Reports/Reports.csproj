@@ -80,6 +80,7 @@
     <Compile Include="BaseReportHandler\BaseReportHandler_dispatch.cs" />
     <Compile Include="BaseReportHandler\BaseReportHandler_EarnedInterest.cs" />
     <Compile Include="BaseReportHandler\BaseReportHandler_FinancialStats.cs" />
+    <Compile Include="BaseReportHandler\BaseReportHandler_StrategyRunningTime.cs" />
     <Compile Include="BaseReportSender.cs" />
     <Compile Include="Cci\CciReport.cs" />
     <Compile Include="Cci\CciReportItem.cs" />
@@ -115,6 +116,10 @@
     <Compile Include="ReportDispatcher.cs" />
     <Compile Include="ReportQuery.cs" />
     <Compile Include="ReportType.cs" />
+    <Compile Include="StrategyRunningTime\ActionData.cs" />
+    <Compile Include="StrategyRunningTime\Stat.cs" />
+    <Compile Include="StrategyRunningTime\StrategyData.cs" />
+    <Compile Include="StrategyRunningTime\StrategyRunningTime.cs" />
     <Compile Include="tags.cs" />
     <Compile Include="TraficReport\AnalyticsData.cs" />
     <Compile Include="TraficReport\CustomersData.cs" />

@@ -42,6 +42,9 @@
 			case ReportType.RPT_MARKETING_CHANNELS_SUMMARY:
 				return BuildMarketingChannelsSummaryReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
+			case ReportType.RPT_STRATEGY_RUNNING_TIME:
+				return BuildStrategyRunningTimeReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
+
 			default:
 				string sReportTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);
 
@@ -82,6 +85,9 @@
 
 			case ReportType.RPT_MARKETING_CHANNELS_SUMMARY:
 				return BuildMarketingChannelsSummaryXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+			case ReportType.RPT_STRATEGY_RUNNING_TIME:
+				return BuildStrategyRunningTimeXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			default:
 				var xlsTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);

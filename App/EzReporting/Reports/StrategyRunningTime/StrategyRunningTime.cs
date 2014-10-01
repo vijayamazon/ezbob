@@ -1,0 +1,134 @@
+﻿namespace Reports.StrategyRunningTime {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Linq;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+
+	public class StrategyRunningTime {
+		#region public
+
+		#region constructor
+
+		public StrategyRunningTime(AConnection oDB, ASafeLog oLog) {
+			m_oDB = oDB;
+			m_oLog = oLog ?? new SafeLog();
+		} // constructor
+
+		#endregion constructor
+
+		#region method Run
+
+		public KeyValuePair<ReportQuery, DataTable> Run(Report report, DateTime from, DateTime to) {
+			m_oAsyncData = new SortedDictionary<int, StrategyData>();
+			m_oSyncData = new SortedDictionary<int, StrategyData>();
+
+			m_oDB.ForEachRowSafe(
+				ProcessRow,
+				"RptStrategyRunningTime",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("DateStart", from),
+				new QueryParameter("DateEnd", to)
+			);
+
+			foreach (var pair in m_oAsyncData)
+				pair.Value.CalculateTimes();
+
+			foreach (var pair in m_oSyncData)
+				pair.Value.CalculateTimes();
+
+			var reprortQuery = new ReportQuery(report) {
+				DateStart = from,
+				DateEnd = to
+			};
+
+			return new KeyValuePair<ReportQuery, DataTable>(reprortQuery, ToTable());
+		} // Run
+
+		#endregion method Run
+
+		#endregion public
+
+		#region private
+
+		private readonly AConnection m_oDB;
+		private readonly ASafeLog m_oLog;
+
+		private SortedDictionary<int, StrategyData> m_oSyncData;
+		private SortedDictionary<int, StrategyData> m_oAsyncData;
+
+		#region method ProcessRow
+
+		private ActionResult ProcessRow(SafeReader sr, bool bRowsetStart) {
+			SortedDictionary<int, StrategyData> oTarget = sr["IsSync"] ? m_oSyncData : m_oAsyncData;
+
+			int nActionID = sr["ActionNameID"];
+
+			if (oTarget.ContainsKey(nActionID))
+				oTarget[nActionID].AddAction(sr);
+			else
+				oTarget[nActionID] = new StrategyData(nActionID, sr);
+
+			return ActionResult.Continue;
+		} // ProcessRow
+
+		#endregion method ProcessRow
+
+		#region method ToTable
+
+		private DataTable ToTable() {
+			var tbl = new DataTable();
+
+			tbl.Columns.Add("StrategyName", typeof (string));
+			AddColumns(tbl, "SyncSuccess");
+			AddColumns(tbl, "SyncFail");
+			AddColumns(tbl, "SyncTotal");
+			tbl.Columns.Add("SyncUnkCount", typeof (int));
+			AddColumns(tbl, "AsyncSuccess");
+			AddColumns(tbl, "AsyncFail");
+			AddColumns(tbl, "AsyncTotal");
+			tbl.Columns.Add("AsyncUnkCount", typeof (int));
+
+			var oNames = new SortedSet<int>();
+
+			oNames.UnionWith(m_oAsyncData.Select(p => p.Key));
+			oNames.UnionWith(m_oSyncData.Select(p => p.Key));
+
+			var oEmpty = new StrategyData(0, null);
+
+			foreach (var nActionNameID in oNames) {
+				StrategyData async = m_oAsyncData.ContainsKey(nActionNameID) ? m_oAsyncData[nActionNameID] : null;
+				StrategyData sync = m_oSyncData.ContainsKey(nActionNameID) ? m_oSyncData[nActionNameID] : null;
+
+				var row = new List<object> {
+					sync == null ? async.Name : sync.Name
+				};
+
+				(sync ?? oEmpty).ToRow(row);
+				(async ?? oEmpty).ToRow(row);
+
+				tbl.Rows.Add(row.ToArray());
+			} // for each
+
+			return tbl;
+		} // ToTable
+
+		#endregion method ToTable
+
+		private static void AddColumns(DataTable tbl, string sPrefix) {
+			tbl.Columns.Add(sPrefix + "Count", typeof (int));
+
+			tbl.Columns.Add(sPrefix + "Min", typeof (double));
+			tbl.Columns.Add(sPrefix + "MinTime", typeof (DateTime));
+
+			tbl.Columns.Add(sPrefix + "Avg", typeof (double));
+			tbl.Columns.Add(sPrefix + "Med", typeof (double));
+
+			tbl.Columns.Add(sPrefix + "Max", typeof (double));
+			tbl.Columns.Add(sPrefix + "MaxTime", typeof (DateTime));
+		} // AddColumns
+
+		#endregion private
+	} // class StrategyRunningTime
+} // namespace

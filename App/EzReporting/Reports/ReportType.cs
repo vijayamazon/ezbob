@@ -11,11 +11,12 @@ namespace Reports {
 		RPT_LOAN_INTEGRITY,
 		RPT_LOAN_STATS,
 		RPT_LOANS_GIVEN,
+		RPT_MARKETING_CHANNELS_SUMMARY,
 		RPT_NEW_CLIENT,
+		RPT_STRATEGY_RUNNING_TIME,
 		RPT_TRAFFIC_REPORT,
 		RPT_UI_EXT_REPORT,
 		RPT_UI_REPORT,
-		RPT_MARKETING_CHANNELS_SUMMARY,
 	} // enum ReportType
 } // namespace Reports
 // ReSharper restore InconsistentNaming
