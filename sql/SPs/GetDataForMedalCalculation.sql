@@ -49,7 +49,11 @@ BEGIN
 	FROM 
 		CustomerAnalyticsCompany 
 	WHERE 
-		CustomerID = @CustomerId
+		CustomerID = @CustomerId AND
+		IsActive = 1
+		
+	IF @BusinessSeniority IS NULL
+		SET @BusinessSeniority = GETUTCDATE()
 	
 	SELECT @ConsumerScore = MIN(ExperianConsumerScore)
 	FROM

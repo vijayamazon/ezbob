@@ -45,15 +45,7 @@ BEGIN
 	SET @Threshold = 2 -- Hardcoded value. Used to avoid the entries in the LoanScheduleTransaction table that are there because of rounding mistakes
 	
 	SELECT @FcfFactor = Value FROM ConfigurationVariables WHERE Name = 'FCFFactor'
-	
-	SELECT 
-		@ActualLoanRepayments = CurrentBalanceSum
-	FROM 
-		CustomerAnalyticsCompany 
-	WHERE
-		CustomerAnalyticsCompany.CustomerID = @CustomerId AND
-		CustomerAnalyticsCompany.IsActive = 1
-	
+		
 	SELECT
 		@TypeOfBusiness = TypeOfBusiness,
 		@EzbobSeniority = GreetingMailSentDate, 
@@ -76,11 +68,16 @@ BEGIN
 	SELECT 
 		@BusinessScore = Score, 
 		@TangibleEquity = TangibleEquity, 
-		@BusinessSeniority = IncorporationDate 
+		@BusinessSeniority = IncorporationDate,		
+		@ActualLoanRepayments = CurrentBalanceSum
 	FROM 
 		CustomerAnalyticsCompany 
 	WHERE 
-		CustomerID = @CustomerId
+		CustomerID = @CustomerId AND
+		IsActive = 1
+		
+	IF @BusinessSeniority IS NULL
+		SET @BusinessSeniority = GETUTCDATE()
 
 	SELECT 
 		@ConsumerScore = MIN(ExperianConsumerScore)
