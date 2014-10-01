@@ -33,7 +33,7 @@
 		#region method UnderwriterSignup
 
 		public ActionMetaData UnderwriterSignup(string name, Password password, string roleName) {
-			return ExecuteSync<UserSignup>(null, null, name, password, roleName);
+			return ExecuteSync<UserSignup>(null, null, name, password.Primary, roleName);
 		} // UnderwriterSignup
 
 		#endregion method UnderwriterSignup

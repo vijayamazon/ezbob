@@ -44,7 +44,9 @@
 
 		// Create a user for Underwriter
 		public UserSignup(string sEmail, string sPassword, string sRoleName, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_oResult = null;
+            b_isUW = true;
+            
+            m_oResult = null;
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
@@ -77,7 +79,7 @@
 			m_oResult = MembershipCreateStatus.ProviderError;
 
 			try {
-				m_oData.ValidateEmail();
+				m_oData.ValidateEmail(b_isUW);
 				m_oData.ValidateNewPassword();
 
 				int nUserID = 0;
@@ -139,7 +141,7 @@
 		private MembershipCreateStatus? m_oResult;
 		private readonly UserSecurityData m_oData;
 		private readonly CreateWebUser m_oSp;
-
+        private bool b_isUW;
 		#region class CreateWebUser
 
 		private class CreateWebUser : AStoredProcedure {
