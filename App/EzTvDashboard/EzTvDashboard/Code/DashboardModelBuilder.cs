@@ -26,41 +26,44 @@
 		}
 
 		public bool SomethingChanged() {
-			var changed = Db.ExecuteReader("EzTvIsChanged");
 			bool isCustomerChanged = false;
 			bool isCashRequestChanged = false;
 			bool isLoanChanged = false;
 			bool isLoanTransactionChanged = false;
 			bool isBrokerChanged = false;
 
-			foreach (DataRow row in changed.Rows) {
+			var changed = Db.ExecuteEnumerable("EzTvIsChanged");
+
+			foreach (SafeReader row in changed) {
 				int val;
-				if (row["Table"].ToString() == "Security_User") {
-					val = int.Parse(row["Val"].ToString());
+				string sTableName = row["Table"];
+
+				if (sTableName == "Security_User") {
+					val = row["Val"];
 					isCustomerChanged = val > CustomerId;
 					CustomerId = val;
 					continue;
 				}
-				if (row["Table"].ToString() == "CashRequests") {
-					val = int.Parse(row["Val"].ToString());
+				if (sTableName == "CashRequests") {
+					val = row["Val"];
 					isCashRequestChanged = val > CashRequestsId;
 					CashRequestsId = val;
 					continue;
 				}
-				if (row["Table"].ToString() == "Loan") {
-					val = int.Parse(row["Val"].ToString());
+				if (sTableName == "Loan") {
+					val = row["Val"];
 					isLoanChanged = val > LoanId;
 					LoanId = val;
 					continue;
 				}
-				if (row["Table"].ToString() == "LoanTransaction") {
-					val = int.Parse(row["Val"].ToString());
+				if (sTableName == "LoanTransaction") {
+					val = row["Val"];
 					isLoanTransactionChanged = val > LoanTransactionId;
 					LoanTransactionId = val;
 					continue;
 				}
-				if (row["Table"].ToString() == "Broker") {
-					val = int.Parse(row["Val"].ToString());
+				if (sTableName == "Broker") {
+					val = row["Val"];
 					isBrokerChanged = val > BrokerId;
 					BrokerId = val;
 					continue;
