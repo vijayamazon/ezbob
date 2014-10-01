@@ -216,7 +216,7 @@ BEGIN
 			MP_AnalyisisFunctionValues.CustomerMarketPlaceId = @MpId AND
 			AnalyisisFunctionId = @YodleeTotalAggrgationFuncId 
 	
-		SELECT 
+		SELECT TOP 1
 			@CurrentMpTurnoverValue = ValueFloat
 		FROM 
 			MP_AnalyisisFunctionValues
