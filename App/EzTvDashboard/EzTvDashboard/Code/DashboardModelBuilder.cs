@@ -32,7 +32,7 @@
 			bool isLoanTransactionChanged = false;
 			bool isBrokerChanged = false;
 
-			var changed = Db.ExecuteEnumerable("EzTvIsChanged");
+			var changed = Db.ExecuteEnumerable("EzTvIsChanged", CommandSpecies.StoredProcedure);
 
 			foreach (SafeReader row in changed) {
 				int val;
