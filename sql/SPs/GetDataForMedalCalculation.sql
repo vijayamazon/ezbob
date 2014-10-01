@@ -30,7 +30,10 @@ BEGIN
 		@StatusAfterLastTransaction NVARCHAR(50),
 		@LateDays INT,
 		@NumOfHmrcMps INT,
-		@TotalZooplaValue INT
+		@TotalZooplaValue INT,
+		@MpId INT,
+		@LastUpdateTime DATETIME,
+		@CurrentMpTurnoverValue FLOAT
 		
 	SET @Threshold = 2
 	
@@ -198,18 +201,49 @@ BEGIN
 		SELECT @HmrcId = 0
 		
 	SELECT @YodleeTotalAggrgationFuncId = MP_AnalyisisFunction.Id FROM MP_AnalyisisFunction, MP_MarketplaceType WHERE MP_AnalyisisFunction.MarketPlaceId=MP_MarketplaceType.Id AND MP_MarketplaceType.Name = 'Yodlee' AND MP_AnalyisisFunction.Name='TotalIncomeAnnualized'
+	SET @YodleeTurnover = 0
 	
-	SELECT TOP 1 
-		@YodleeTurnover = ValueFloat 
+	DECLARE cur3 CURSOR FOR 
+	SELECT 
+		DISTINCT MP_CustomerMarketPlace.Id
 	FROM 
 		MP_AnalyisisFunctionValues, 
 		MP_CustomerMarketPlace 
 	WHERE 
 		MP_AnalyisisFunctionValues.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND 
 		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
-		AnalyisisFunctionId = @YodleeTotalAggrgationFuncId 
-	ORDER BY 
-		AnalysisFunctionTimePeriodId DESC
+		AnalyisisFunctionId = @YodleeTotalAggrgationFuncId
+		
+	OPEN cur3
+	FETCH NEXT FROM cur3 INTO @MpId
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		SELECT 
+			@LastUpdateTime = MAX(Updated)
+		FROM 
+			MP_AnalyisisFunctionValues
+		WHERE 
+			MP_AnalyisisFunctionValues.CustomerMarketPlaceId = @MpId AND
+			AnalyisisFunctionId = @YodleeTotalAggrgationFuncId 
+	
+		SELECT TOP 1
+			@CurrentMpTurnoverValue = ValueFloat
+		FROM 
+			MP_AnalyisisFunctionValues
+		WHERE 
+			MP_AnalyisisFunctionValues.CustomerMarketPlaceId = @MpId AND 
+			Updated = @LastUpdateTime AND 
+			AnalyisisFunctionId = @YodleeTotalAggrgationFuncId AND
+			AnalysisFunctionTimePeriodId < 5
+		ORDER BY 
+			AnalysisFunctionTimePeriodId DESC
+	
+		SET @YodleeTurnover = @YodleeTurnover + @CurrentMpTurnoverValue
+
+		FETCH NEXT FROM cur3 INTO @MpId
+	END
+	CLOSE cur3
+	DEALLOCATE cur3
 	
 	SELECT 
 		@TotalZooplaValue = SUM(CASE WHEN ZooplaEstimateValue IS NOT NULL AND ZooplaEstimateValue != 0 THEN ZooplaEstimateValue ELSE ISNULL(AverageSoldPrice1Year, 0) END)
