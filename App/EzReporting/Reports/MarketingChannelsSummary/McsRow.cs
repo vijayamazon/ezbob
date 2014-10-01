@@ -37,6 +37,9 @@
 		[Cumulative]
 		public int CompleteApplication { get; set; }
 
+		[Cumulative]
+		public decimal RequestedAmountForComplete { get; set; }
+
 		public decimal AppComPct { get; set; }
 
 		[Cumulative]

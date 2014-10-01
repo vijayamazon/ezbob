@@ -67,7 +67,10 @@
 					break;
 
 				case InputRowTypes.CompleteApplication:
-					oAction = oRow => oRow.CompleteApplication += sr["Counter"];
+					oAction = oRow => {
+						oRow.CompleteApplication += sr["Counter"];
+						oRow.RequestedAmountForComplete += sr["Amount"];
+					};
 					break;
 
 				case InputRowTypes.RequestedAmount:

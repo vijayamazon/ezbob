@@ -52,10 +52,12 @@ BEGIN
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
 		c.GoogleCookie,
 		c.BrokerID,
-		COUNT(*) AS Counter
+		COUNT(*) AS Counter,
+		SUM(ISNULL(crl.Amount, 0)) AS Amount
 	FROM
 		Customer c
 		INNER JOIN #Cr r ON c.Id = r.CustomerID
+		INNER JOIN CustomerRequestedLoan crl ON c.Id = crl.CustomerId
 	WHERE
 		@DateStart <= r.CrDate AND r.CrDate < @DateEnd
 	GROUP BY
