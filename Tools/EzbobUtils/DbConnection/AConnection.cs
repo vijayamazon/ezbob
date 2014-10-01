@@ -520,7 +520,6 @@
 
 		protected enum ExecMode {
 			Scalar,
-			Reader,
 			NonQuery,
 			ForEachRow,
 			Enumerable,
@@ -716,10 +715,6 @@
 					oConnection.Open();
 					return RunScalar(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
 
-				case ExecMode.Reader:
-					oConnection.Open();
-					return RunReader(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
-
 				case ExecMode.NonQuery:
 					oConnection.Open();
 					return RunNonQuery(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
@@ -761,43 +756,6 @@
 		} // RunScalar
 
 		#endregion method RunScalar
-
-		#region method RunReader
-
-		protected virtual DataTable RunReader(DbCommand command, LogVerbosityLevel nLogVerbosityLevel, string spName, string sArgsForLog, Guid guid, Stopwatch sw) {
-			var oReader = command.ExecuteReader();
-
-			long nPrevStopwatchValue = sw.ElapsedMilliseconds;
-
-			if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
-				PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
-
-			var dataTable = new DataTable();
-			dataTable.Load(oReader);
-
-			string sMsg;
-
-			switch (nLogVerbosityLevel) {
-			case LogVerbosityLevel.Compact:
-				sMsg = "completed and data loaded";
-				break;
-
-			case LogVerbosityLevel.Verbose:
-				sMsg = "data loaded";
-				break;
-
-			default:
-				throw new ArgumentOutOfRangeException();
-			} // switch
-
-			PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, nPrevStopwatchValue, sMsg);
-
-			oReader.Close();
-
-			return dataTable;
-		} // RunReader
-
-		#endregion method RunReader
 
 		#region method RunNonQuery
 
