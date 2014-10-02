@@ -43,39 +43,26 @@ a[data-bug-type],
 .set-paypoint-default,
 #recheck-askville,
 #SuspendBtn,
-.disable-shop
+#ReturnBtn,
+.disable-shop,
+.permission-HideBrokerClientDetails .broker-client-detail
 {
     display: none;
     visibility: hidden; /* JQuery hide/show function use display:none. So we need to property visibility */
 }
 
-/* Other function for Roles, which not existing in Permission Table but needed */
-.role-manager .rollover,
-.role-Underwriter .rollover,
+/*Loan editing options, rollover,manual payment etc*/
+.permission-Rollover .rollover,
+.permission-MakePayment .make-payment,
+.permission-LoanOptions #btn-options,
 
-.role-manager .make-payment,
-.role-Underwriter .make-payment,
+.permission-AvoidAutomaticDecision [name="avoidAutomaticDecisionButton"],
 
-.role-manager #btn-options,
-.role-Underwriter #btn-options,
+.permission-SuspendBtn #SuspendBtn, /*status change to pending*/
+.permission-ReturnBtn #ReturnBtn, /*status change to waiting for decision*/
 
-.role-Underwriter [name="avoidAutomaticDecisionButton"],
-.role-manager [name="avoidAutomaticDecisionButton"],
-
-.role-manager #SuspendBtn,
-.role-Underwriter #SuspendBtn,
-.role-JuniorUnderwriter #SuspendBtn,
-
-.role-manager [name="discountPlan"],
-.role-Underwriter [name="discountPlan"],
-
-.role-manager .disable-shop,
-.role-Underwriter .disable-shop
-
-/*
-.role-manager
-.role-Underwriter
-*/
+.permission-DiscountPlan [name="discountPlan"],
+.permission-DisableShop .disable-shop
 {
      display: inline-block;
      visibility: visible;

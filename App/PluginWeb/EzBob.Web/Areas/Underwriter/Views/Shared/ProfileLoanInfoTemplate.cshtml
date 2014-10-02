@@ -150,7 +150,7 @@
             @RowCell("# Shareholders", "<%- data.NumOfShareholders %>")
         </tbody>
     </table>
-    <table class="table squeezed rright">
+    <table class="table squeezed rright <%- data.BrokerName ? 'broker-client-detail' : '' %>" >
         <thead class="box">
             <tr class="box-title">
                 <th class="left-pane-header">Contact Details

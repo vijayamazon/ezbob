@@ -638,19 +638,16 @@
 			if (m_aryArgs.Length != 4) {
 				m_oLog.Msg("Usage: CreateUnderwriter <Name> <Password> <RoleName>");
 				m_oLog.Msg(@"Available roles (underwriter is usually one of the last three):
-Admin:         Administrator - Manage users
-SuperUser:     SuperUser - Have rights to all applications
-Nova:          Nova
-Inspector:     Inspector - Web working place
-CreditAnalyst: Credit Analyst - Manage strategies and workflow, uses Maven and Patron
-Maven:         Maven - Creates workflow for strategies
-Patron:        Patron - Manage nodes and strategies
-Auditor:       Auditor - Monitoring system
-FormsDesigner: FormsDesigner - Develop node interface
-Web:           Web
-Underwriter:   Underwriter
-manager:       Manager
-crm:           CRM");
+						Admin:             Administrator - Manage users
+						SuperUser:         SuperUser - Have rights to all applications
+						Underwriter:       Underwriter
+						manager:           Manager
+						crm:               CRM
+						Collector:         Collector - Allow change only Loans
+						Sales:             Sales person
+						BrokerSales:       Broker Sales person
+						JuniorUnderwriter: Junior Underwriter
+					");
 
 				return;
 			}
