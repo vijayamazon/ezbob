@@ -20,6 +20,14 @@ EzBob.Underwriter.UploadHmrcView = Backbone.Marionette.ItemView.extend({
 			},
 			clickBack: function() { EzBob.App.vent.trigger('ct:marketplaces.uploadHmrcBack'); },
 			clickDone: function() { EzBob.App.vent.trigger('ct:marketplaces.history', null); },
+			uploadAppError: function(oFile, oResponse) {
+				console.error('upload app error', arguments);
+				alertify.error('Could not upload' + oFile.name + ': ' + oResponse.error);
+			},
+			uploadSysError: function(oFile, sErrMsg) {
+				console.error('upload sys error', arguments);
+				alertify.error('Could not upload' + oFile.name + ': ' + sErrMsg);
+			},
 		});
 	}, // initialize
 

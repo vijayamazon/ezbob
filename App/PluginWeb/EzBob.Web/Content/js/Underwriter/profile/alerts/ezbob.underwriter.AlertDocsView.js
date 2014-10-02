@@ -73,8 +73,17 @@ EzBob.Underwriter.UploadDocView = Backbone.Marionette.ItemView.extend({
 
 		this.$el.find('#fileForm').ajaxSubmit({
 			cache: false,
-			success: function() {
-				self.trigger('upload:ok');
+			success: function(oResponse) {
+				var bSuccess = !oResponse || oResponse.success;
+
+				var sError = null;
+
+				if (!bSuccess)
+					sError = (oResponse && oResponse.error) ? oResponse.error : 'Failed to upload.';
+
+				if (!sError)
+					self.trigger('upload:ok');
+
 				self.close();
 			},
 			error: function() {

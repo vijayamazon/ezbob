@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
@@ -8,17 +9,17 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Ezbob.Logger;
 	using Ezbob.Utils.MimeTypes;
 	using Models;
 	using Infrastructure;
 	using StructureMap;
-	using log4net;
 
 	public class AlertDocsController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
-		private static ILog Log = LogManager.GetLogger(typeof (AlertDocsController));
+		private static readonly ASafeLog Log = new SafeILog(typeof (AlertDocsController));
 			//-----------------------------------------------------------------------------------
         public AlertDocsController(IEzbobWorkplaceContext context, NHibernateRepositoryBase<MP_AlertDocument> docRepo)
         {
@@ -45,22 +46,35 @@
         public void UploadDoc(string description, int customerId) {
             var files = Request.Files;
 
-            if (files.Count == 0)
-				return;
+	        if (files.Count == 0) {
+		        string sError = string.Format("No files received for customer {0}.", customerId);
+		        Log.Debug("{0}", sError);
+		        throw new Exception(sError);
+	        } // if
 
-			OneUploadLimitation oLimitations = CurrentValues.Instance.GetUploadLimitations("AlertDocsController", "UploadDoc");
+	        OneUploadLimitation oLimitations = CurrentValues.Instance.GetUploadLimitations("AlertDocsController", "UploadDoc");
+
+	        var oErrors = new List<string>();
 
 	        for (int i = 0; i < files.Count; i++) {
 		        var file = Request.Files[i];
 
-		        if (file == null)
-					continue;
+		        if (file == null) {
+					string sError = string.Format("File #{0} for customer {1} is null.", i, customerId);
+			        Log.Debug("{0}", sError);
+			        oErrors.Add(sError);
+			        continue;
+		        } // if
 
 		        var body = new byte[file.InputStream.Length];
 		        file.InputStream.Read(body, 0, file.ContentLength);
 
-				if (string.IsNullOrWhiteSpace(oLimitations.DetectFileMimeType(body, file.FileName)))
-					continue;
+		        if (string.IsNullOrWhiteSpace(oLimitations.DetectFileMimeType(body, file.FileName))) {
+					string sError = string.Format("File #{0} for customer {1} cannot be accepted due to its MIME type.", i, customerId);
+			        Log.Debug("{0}", sError);
+			        oErrors.Add(sError);
+			        continue;
+		        } // if
 
 		        var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 		        var customer = customerRepo.Get(customerId);
@@ -75,6 +89,9 @@
 
 		        _docRepo.SaveOrUpdate(doc);
 	        }
+
+	        if (oErrors.Count > 0)
+		        throw new Exception(string.Join(" ", oErrors));
         }
 
         //-----------------------------------------------------------------------------------
@@ -95,7 +112,7 @@
 				MimeType oExtMimeType = mtr.Get(f.DocName);
 
 				FileResult fs = new FileContentResult(f.BinaryBody, oExtMimeType.PrimaryMimeType);
-				Log.DebugFormat("fs {1} mime type {0}", oExtMimeType, f.DocName);
+				Log.Debug("fs {1} mime type {0}", oExtMimeType, f.DocName);
 
 				if (fs.ContentType.Contains("image") ||
 					fs.ContentType.Contains("pdf") ||

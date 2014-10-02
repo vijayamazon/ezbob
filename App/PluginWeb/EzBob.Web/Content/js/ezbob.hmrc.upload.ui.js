@@ -143,13 +143,12 @@
 						);
 
 						if (oXhr && (oXhr.status === 404)) {
-							EzBob.App.trigger('error',
+							sErrorMsg =
 								'Error uploading ' + oFile.name + ': file is too large. ' +
-								'Please contact customercare@ezbob.com'
-							);
-						}
-						else
-							EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
+								'Please contact customercare@ezbob.com';
+						} // if
+
+						EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
 
 						self.trigger(self.evtUploadSysError(), oFile, sErrorMsg, oXhr);
 					}); // always
