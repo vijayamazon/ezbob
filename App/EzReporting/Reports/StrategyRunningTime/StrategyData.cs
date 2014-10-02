@@ -88,9 +88,17 @@
 			m_oFailStat.SetAverage();
 			m_oTotalStat.SetAverage();
 
-			m_oSuccessStat.Median = GetMedian(oSuccess, m_oSuccessStat.Count);
-			m_oFailStat.Median = GetMedian(oFail, m_oFailStat.Count);
-			m_oTotalStat.Median = GetMedian(oTotal, m_oTotalStat.Count);
+			m_oSuccessStat.Median = GetPercentile(oSuccess, m_oSuccessStat.Count, 50);
+			m_oFailStat.Median = GetPercentile(oFail, m_oFailStat.Count, 50);
+			m_oTotalStat.Median = GetPercentile(oTotal, m_oTotalStat.Count, 50);
+
+			m_oSuccessStat.Pct75 = GetPercentile(oSuccess, m_oSuccessStat.Count, 75);
+			m_oFailStat.Pct75 = GetPercentile(oFail, m_oFailStat.Count, 75);
+			m_oTotalStat.Pct75 = GetPercentile(oTotal, m_oTotalStat.Count, 75);
+
+			m_oSuccessStat.Pct90 = GetPercentile(oSuccess, m_oSuccessStat.Count, 90);
+			m_oFailStat.Pct90 = GetPercentile(oFail, m_oFailStat.Count, 90);
+			m_oTotalStat.Pct90 = GetPercentile(oTotal, m_oTotalStat.Count, 90);
 		} // CalculateTimes
 
 		#endregion method CalculateTimes
@@ -101,7 +109,11 @@
 			m_oSuccessStat.ToRow(row);
 			m_oFailStat.ToRow(row);
 			m_oTotalStat.ToRow(row);
-			row.Add(UnknownCount);
+
+			if (UnknownCount > 0)
+				row.Add(UnknownCount);
+			else
+				row.Add(DBNull.Value);
 		} // ToRow
 
 		#endregion method ToRow
@@ -115,12 +127,12 @@
 		private readonly Stat m_oFailStat;
 		private readonly Stat m_oTotalStat;
 
-		#region method GetMedian
+		#region method GetPercentile
 
-		private static double GetMedian(SortedDictionary<double, int> oInstances, int nTotalCount) {
+		private static double GetPercentile(SortedDictionary<double, int> oInstances, int nTotalCount, int nPercentile) {
 			double nMedian = 0;
 
-			int nReachCount = nTotalCount / 2;
+			int nReachCount = (int)((double)nTotalCount * (double)nPercentile / 100.0);
 
 			int nCurCount = 0;
 
@@ -134,9 +146,9 @@
 			} // for each
 
 			return nMedian;
-		} // GetMedian
+		} // GetPercentile
 
-		#endregion method GetMedian
+		#endregion method GetPercentile
 
 		#endregion private
 	} // class StrategyData

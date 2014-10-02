@@ -80,15 +80,15 @@
 		private DataTable ToTable() {
 			var tbl = new DataTable();
 
-			tbl.Columns.Add("StrategyName", typeof (string));
-			AddColumns(tbl, "SyncSuccess");
-			AddColumns(tbl, "SyncFail");
-			AddColumns(tbl, "SyncTotal");
-			tbl.Columns.Add("SyncUnkCount", typeof (int));
-			AddColumns(tbl, "AsyncSuccess");
-			AddColumns(tbl, "AsyncFail");
-			AddColumns(tbl, "AsyncTotal");
-			tbl.Columns.Add("AsyncUnkCount", typeof (int));
+			tbl.Columns.Add("Strategy", typeof (string));
+			AddColumns(tbl, "SS"); // sync success
+			AddColumns(tbl, "SF"); // sync fail
+			AddColumns(tbl, "ST"); // sync total
+			tbl.Columns.Add("SUnkCount", typeof (int)); // sync unknown count
+			AddColumns(tbl, "AS"); // async success
+			AddColumns(tbl, "AF"); // async fail
+			AddColumns(tbl, "AT"); // async total
+			tbl.Columns.Add("AUnkCount", typeof (int)); // async unknown count
 
 			var oNames = new SortedSet<int>();
 
@@ -124,6 +124,8 @@
 
 			tbl.Columns.Add(sPrefix + "Avg", typeof (double));
 			tbl.Columns.Add(sPrefix + "Med", typeof (double));
+			tbl.Columns.Add(sPrefix + "Pct75", typeof (double));
+			tbl.Columns.Add(sPrefix + "Pct90", typeof (double));
 
 			tbl.Columns.Add(sPrefix + "Max", typeof (double));
 			tbl.Columns.Add(sPrefix + "MaxTime", typeof (DateTime));

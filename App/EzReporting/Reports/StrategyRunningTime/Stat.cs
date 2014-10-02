@@ -22,6 +22,8 @@
 		public double Max { get; private set; }
 		public double Average { get; private set; }
 		public double Median { get; set; }
+		public double Pct75 { get; set; }
+		public double Pct90 { get; set; }
 
 		public DateTime MinTime { get; private set; }
 		public DateTime MaxTime { get; private set; }
@@ -48,25 +50,28 @@
 		} // SetAverage
 
 		public void ToRow(List<object> row) {
-			row.Add(Count);
-
-			row.Add(Min);
-
-			if (Count > 0)
+			if (Count > 0) {
+				row.Add(Count);
+				row.Add(Min);
 				row.Add(MinTime);
-			else
-				row.Add(null);
-
-			row.Add(Average);
-
-			row.Add(Median);
-
-			row.Add(Max);
-
-			if (Count > 0)
+				row.Add(Average);
+				row.Add(Median);
+				row.Add(Pct75);
+				row.Add(Pct90);
+				row.Add(Max);
 				row.Add(MaxTime);
-			else
-				row.Add(null);
+			}
+			else {
+				row.Add(DBNull.Value);
+				row.Add(DBNull.Value);
+				row.Add(DBNull.Value);
+				row.Add(DBNull.Value);
+				row.Add(DBNull.Value);
+				row.Add(DBNull.Value);
+				row.Add(DBNull.Value);
+				row.Add(DBNull.Value);
+				row.Add(DBNull.Value);
+			} // if
 		} // ToRow
 
 		#endregion public
