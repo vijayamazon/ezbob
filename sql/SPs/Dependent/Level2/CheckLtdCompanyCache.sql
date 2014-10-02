@@ -23,6 +23,7 @@ BEGIN
 		@InsertDate = InsertDate
 	FROM
 		MP_ServiceLog l
+		INNER JOIN ExperianLtd e ON l.Id = ServiceLogID
 	WHERE
 		l.CompanyRefNum = @CompanyRefNum
 		AND
