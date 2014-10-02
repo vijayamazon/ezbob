@@ -33,7 +33,8 @@ BEGIN
 		@TotalZooplaValue INT,
 		@MpId INT,
 		@LastUpdateTime DATETIME,
-		@CurrentMpTurnoverValue FLOAT
+		@CurrentMpTurnoverValue FLOAT,
+		@LoanStatus NVARCHAR(50)
 		
 	SET @Threshold = 2
 	
@@ -88,18 +89,19 @@ BEGIN
 	IF @FirstRepaymentDate IS NOT NULL AND @FirstRepaymentDate < GETUTCDATE()
 		SELECT @FirstRepaymentDatePassed = 1
 	
-	SELECT @OnTimeLoans = COUNT(1) FROM Loan WHERE CustomerId = @CustomerId
+	SELECT @OnTimeLoans = COUNT(1) FROM Loan WHERE CustomerId = @CustomerId AND Status = 'PaidOff'
 	
 	DECLARE cur CURSOR FOR 
 	SELECT 
-		Id
+		Id,
+		Status
 	FROM 
 		Loan
 	WHERE 
 		CustomerId = @CustomerId
 		
 	OPEN cur
-	FETCH NEXT FROM cur INTO @LoanId
+	FETCH NEXT FROM cur INTO @LoanId, @LoanStatus
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
 		DECLARE cur2 CURSOR FOR 
@@ -142,7 +144,9 @@ BEGIN
 					
 				IF @LateDays >= 7 
 				BEGIN
-					SET @OnTimeLoans = @OnTimeLoans - 1
+					IF @LoanStatus = 'PaidOff'
+						SET @OnTimeLoans = @OnTimeLoans - 1
+						
 					INSERT INTO #LateLoans VALUES (@LoanId)
 				END
 			END
@@ -152,7 +156,7 @@ BEGIN
 		CLOSE cur2
 		DEALLOCATE cur2
 
-		FETCH NEXT FROM cur INTO @LoanId
+		FETCH NEXT FROM cur INTO @LoanId, @LoanStatus
 	END
 	CLOSE cur
 	DEALLOCATE cur
