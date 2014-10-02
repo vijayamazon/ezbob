@@ -14,7 +14,8 @@ BEGIN
 		@CustomerStatusIsWarning BIT,
 		@NumOfMps INT,
 		@NumOfLoans INT,
-		@CustomerStatusName NVARCHAR(100)
+		@CustomerStatusName NVARCHAR(100),
+		@NumOfHmrcMps INT
 		
 	SELECT 
 		@CustomerStatusIsEnabled = IsEnabled, 
@@ -40,6 +41,16 @@ BEGIN
 		Loan
 	WHERE
 		CustomerId = @CustomerId
+		
+	SELECT 
+		@NumOfHmrcMps = COUNT(1) 
+	FROM 
+		MP_CustomerMarketPlace, 
+		MP_MarketplaceType 
+	WHERE 
+		CustomerId = @CustomerId AND 
+		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND 
+		MP_MarketplaceType.Name = 'HMRC'
 	
 	SELECT
 		@CustomerStatusIsEnabled AS CustomerStatusIsEnabled,
@@ -65,7 +76,8 @@ BEGIN
 		GreetingMailSentDate AS RegistrationDate,
 		BankAccountType,
 		@NumOfLoans AS NumOfLoans,
-		Customer.TypeOfBusiness
+		Customer.TypeOfBusiness,
+		@NumOfHmrcMps AS NumOfHmrcMps
 	FROM
 		CustomerPropertyStatuses,
 		Customer
