@@ -479,8 +479,8 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 						new List<AExperianLtdDataRow> {this},
 						TypeUtils.GetConvertorToObjectArray(this.GetType()),
 						GetDBColumnTypes()
-						)
-					);
+					)
+				);
 
 				return true;
 			}

@@ -110,7 +110,7 @@
 				} // if
 
 				m_nCurrentlyOut++;
-				Log.Debug("The pool {0} gives a {1} object with id {2}.", this.StringifyStatus(), sMsg, obj.PoolItemID);
+				Log.Debug("The pool {0} gives a {1} object with {3}({2}).", this.StringifyStatus(), sMsg, obj.PoolItemID, obj.Name);
 
 				return obj;
 			} // lock
@@ -128,19 +128,19 @@
 
 			lock (m_oLock) {
 				if (m_oPool.Count >= m_nMaxSize) {
-					Log.Debug("The pool {0} is full, object {1} has not been taken.", this.StringifyStatus(), obj.PoolItemID);
+					Log.Debug("The pool {0} is full, object {2}({1}) has not been taken.", this.StringifyStatus(), obj.PoolItemID, obj.Name);
 					return false;
 				} // if
 
 				if (m_nCurrentlyOut < 1) {
-					Log.Debug("Currently out count is 0 for {0}, object {1} has not been taken.", this.StringifyStatus(), obj.PoolItemID);
+					Log.Debug("Currently out count is 0 for {0}, object {2}({1}) has not been taken.", this.StringifyStatus(), obj.PoolItemID, obj.Name);
 					return false;
 				} // if
 
 				m_nCurrentlyOut--;
 				m_oPool.Enqueue(obj);
 
-				Log.Debug("An object {1} has been stored to {0}.", this.StringifyStatus(), obj.PoolItemID);
+				Log.Debug("An object {2}({1}) has been stored to {0}.", this.StringifyStatus(), obj.PoolItemID, obj.Name);
 				return true;
 			} // lock
 		} // Take

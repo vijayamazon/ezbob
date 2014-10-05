@@ -42,10 +42,14 @@
 
 		public virtual ConnectionWrapper GetPersistent() {
 			var pc = new PooledConnection {
+				IsPooled = false,
 				Connection = CreateConnection()
 			};
 
-			Debug("A non-pooled connection has been created.");
+			lock (ms_oFreeConnectionLock)
+				pc.PoolItemID = ++ms_nFreeConnectionGenerator;
+
+			Debug("A non-pooled connection {0} has been created.", pc.Name);
 
 			return new ConnectionWrapper(pc).Open();
 		} // GetPersistent
@@ -604,6 +608,7 @@
 		#region method PublishRunningTime
 
 		protected void PublishRunningTime(
+			string sPooledConnectionID,
 			LogVerbosityLevel nLogVerbosityLevel,
 			string sSpName,
 			string sArgsForLog,
@@ -628,11 +633,11 @@
 				else
 					sTime = nPrevStopwatchValue + "ms / " + (nCurStopwatchValue - nPrevStopwatchValue) + "ms";
 
-				Debug("Query {0} in {1}{2}. Request: {3}{4}", sMsg, sTime, sAuxMsg, sSpName, sArgsForLog);
+				Debug("Query {0} in {1}{2} on connection {5}. Request: {3}{4}", sMsg, sTime, sAuxMsg, sSpName, sArgsForLog, sPooledConnectionID);
 				break;
 
 			case LogVerbosityLevel.Verbose:
-				Debug("Query {1} {2} in {0}ms{3} since query start.", nCurStopwatchValue, guid, sMsg, sAuxMsg);
+				Debug("Query {1} {2} in {0}ms{3} since query start on connection {4}.", nCurStopwatchValue, guid, sMsg, sAuxMsg, sPooledConnectionID);
 				break;
 
 			default:
@@ -707,28 +712,35 @@
 				if (oConnection.Transaction != null)
 					command.Transaction = oConnection.Transaction;
 
+				string sPooledConID = oConnection.Pooled.Name;
+
 				var sw = new Stopwatch();
 				sw.Start();
 
 				switch (nMode) {
 				case ExecMode.Scalar:
 					oConnection.Open();
-					return RunScalar(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+					object value = command.ExecuteScalar();
+					PublishRunningTime(sPooledConID, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+					return value;
 
 				case ExecMode.NonQuery:
 					oConnection.Open();
-					return RunNonQuery(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+					int nResult = command.ExecuteNonQuery();
+					string sResult = ((nResult == 0) || (nResult == -1)) ? "no" : nResult.ToString(CultureInfo.InvariantCulture);
+					PublishRunningTime(sPooledConID, nLogVerbosityLevel, spName, sArgsForLog, guid, sw, sAuxMsg: string.Format("- {0} row{1} changed", sResult, nResult == 1 ? "" : "s"));
+					return nResult;
 
 				case ExecMode.ForEachRow:
 					oConnection.Open();
-					command.ForEachRow(oAction, () => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw));
+					command.ForEachRow(oAction, () => PublishRunningTime(sPooledConID, nLogVerbosityLevel, spName, sArgsForLog, guid, sw));
 					return null;
 
 				case ExecMode.Enumerable:
 					return command.ExecuteEnumerable(
 						oConnection,
 						bDropAfterUse ? this : null,
-						() => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw)
+						() => PublishRunningTime(sPooledConID, nLogVerbosityLevel, spName, sArgsForLog, guid, sw)
 					);
 
 				default:
@@ -740,33 +752,12 @@
 				throw;
 			}
 			finally {
-				if (nMode != ExecMode.Enumerable)
+				if (bDropAfterUse && (nMode != ExecMode.Enumerable))
 					DisposeAfterOneUsage(bAllesInOrdnung, oConnection);
 			} // try
 		} // RunOnce
 
 		#endregion method RunOnce
-
-		#region method RunScalar
-
-		protected virtual object RunScalar(DbCommand command, LogVerbosityLevel nLogVerbosityLevel, string spName, string sArgsForLog, Guid guid, Stopwatch sw) {
-			object value = command.ExecuteScalar();
-			PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
-			return value;
-		} // RunScalar
-
-		#endregion method RunScalar
-
-		#region method RunNonQuery
-
-		protected virtual int RunNonQuery(DbCommand command, LogVerbosityLevel nLogVerbosityLevel, string spName, string sArgsForLog, Guid guid, Stopwatch sw) {
-			int nResult = command.ExecuteNonQuery();
-			string sResult = ((nResult == 0) || (nResult == -1)) ? "no" : nResult.ToString(CultureInfo.InvariantCulture);
-			PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, sAuxMsg: string.Format("- {0} row{1} changed", sResult, nResult == 1 ? "" : "s"));
-			return nResult;
-		} // RunNonQuery
-
-		#endregion method RunNonQuery
 
 		#endregion protected
 
@@ -796,7 +787,28 @@
 			if (pc.Connection == null)
 				pc.Connection = CreateConnection();
 
-			Debug("Connection {1} is taken from the pool for the {0} time.", pc.OutOfPoolCount, pc.PoolItemID);
+			uint nReminder = pc.OutOfPoolCount % 10;
+
+			string sSuffix = "th";
+
+			switch (nReminder) {
+			case 1:
+				sSuffix = "st";
+				break;
+			case 2:
+				sSuffix = "nd";
+				break;
+			case 3:
+				sSuffix = "rd";
+				break;
+			} // switch
+
+			Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
+				pc.OutOfPoolCount,
+				sSuffix,
+				pc.PoolItemID,
+				pc.Name
+			);
 
 			return new ConnectionWrapper(pc);
 		} // TakeFromPool
@@ -804,6 +816,9 @@
 		#endregion method TakeFromPool
 
 		private static readonly DbConnectionPool ms_oPool = new DbConnectionPool();
+
+		private static ulong ms_nFreeConnectionGenerator = 0;
+		private static readonly object ms_oFreeConnectionLock = new object();
 
 		#endregion private
 	} // AConnection
