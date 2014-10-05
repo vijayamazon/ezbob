@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
+	using System.Linq;
 	using System.Text;
 	using AutomationCalculator;
 	using Ezbob.Database;
@@ -277,28 +278,23 @@
 		{
 			var db = new DbHelper(Log);
 			var decisionsTable = db.GetAutoDecisions(from, to);
-			var decisionsDict = new Dictionary<int, AutoDecision>();
-			foreach (DataRow row in decisionsTable.Rows)
-			{
-				decisionsDict.Add(int.Parse(row["CashRequestId"].ToString()), new AutoDecision
-					{
-						CashRequestId = int.Parse(row["CashRequestId"].ToString()),
-						CustomerId = int.Parse(row["CustomerId"].ToString()),
-						SystemDecision = (Decision)Enum.Parse(typeof(Decision), row["SystemDecision"].ToString()),
-						SystemDecisionDate = DateTime.Parse(row["SystemDecisionDate"].ToString()),
-						SystemCalculatedSum = int.Parse(row["SystemCalculatedSum"].ToString()),
-						SystemApprovedSum = (row["ManagerApprovedSum"] == null || string.IsNullOrEmpty(row["ManagerApprovedSum"].ToString())) ? 0 : int.Parse(row["ManagerApprovedSum"].ToString()),
-						MedalType = (Medal)Enum.Parse(typeof(Medal), row["MedalType"].ToString()),
-						RepaymentPeriod = int.Parse(row["RepaymentPeriod"].ToString()),
-						ScorePoints = double.Parse(row["ScorePoints"].ToString()),
-						ExpirianRating = int.Parse(row["ExpirianRating"].ToString()),
-						AnualTurnover = int.Parse(row["AnualTurnover"].ToString()),
-						InterestRate = double.Parse(row["InterestRate"].ToString()),
-						HasLoans = Boolean.Parse(row["HasLoans"].ToString()),
-						Comment = row["Comment"].ToString(),
-					});
-			}
-			return decisionsDict;
+			return decisionsTable.ToDictionary<SafeReader, int, AutoDecision>(row => row["CashRequestId"],
+				row => new AutoDecision {
+					CashRequestId = row["CashRequestId"], 
+					CustomerId = row["CustomerId"], 
+					SystemDecision = (Decision) Enum.Parse(typeof (Decision), row["SystemDecision"].ToString()), 
+					SystemDecisionDate = row["SystemDecisionDate"], 
+					SystemCalculatedSum = row["SystemCalculatedSum"], 
+					SystemApprovedSum = (row["ManagerApprovedSum"] == null || string.IsNullOrEmpty(row["ManagerApprovedSum"].ToString())) ? 0 : row["ManagerApprovedSum"], 
+					MedalType = (Medal) Enum.Parse(typeof (Medal), row["MedalType"].ToString()), 
+					RepaymentPeriod = row["RepaymentPeriod"], 
+					ScorePoints = row["ScorePoints"], 
+					ExpirianRating = row["ExpirianRating"], 
+					AnualTurnover = row["AnualTurnover"], 
+					InterestRate = row["InterestRate"], 
+					HasLoans = row["HasLoans"], 
+					Comment = row["Comment"],
+			});
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿namespace AutomationCalculator
 {
-	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Logger;
 
@@ -11,117 +10,150 @@
 		public AutoRejectionCalculator(ASafeLog log, RejectionConstants constants)
 		{
 			_log = log;
-			if (constants == null)
-			{
-				constants = new RejectionConstants
-					{
-						DefaultMinAmount = Constants.DefaultMinAmount,
-						DefaultMinMonths = Constants.DefaultMinMonths,
-						DefaultScoreBelow = Constants.DefaultScoreBelow,
-						MinAnnualTurnover = Constants.MinAnnualTurnover,
-						MinCreditScore = Constants.MinCreditScore,
-						MinMarketPlaceSeniorityDays = Constants.MinMarketPlaceSeniorityDays,
-						MinThreeMonthTurnover = Constants.MinThreeMonthTurnover,
-						NoRejectIfCreditScoreAbove = Constants.NoRejectIfCreditScoreAbove,
-						NoRejectIfTotalAnnualTurnoverAbove = Constants.NoRejectIfTotalAnnualTurnoverAbove
-					};
-
-			}
-
 			_const = constants;
 		}
 
 		public bool IsAutoRejected(int customerId, out string reason)
 		{
 			var dbHelper = new DbHelper(_log);
-			var experianScore = dbHelper.GetExperianScore(customerId);
+
+			var data = dbHelper.GetRejectionData(customerId);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
 			var paymentMps = dbHelper.GetCustomerPaymentMarketPlaces(customerId);
 			var anualTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year, _log);
-			var wasApproved = dbHelper.WasApprovedForLoan(customerId);
-			var hasDefaultAccounts = dbHelper.HasDefaultAccounts(customerId, _const.DefaultMinAmount, _const.DefaultMinMonths);
+			var threeMonthTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
+			var seniority = MarketPlacesHelper.GetMarketPlacesSeniority(mps);
 
-			return IsAutoRejectedCalculator(experianScore, mps, paymentMps, anualTurnover, wasApproved, hasDefaultAccounts, out reason);
+			data.AnualTurnover = anualTurnover;
+			data.ThreeMonthTurnover = threeMonthTurnover;
+			data.MpsSeniority = seniority;
+
+			return IsAutoRejectedCalculator(data, out reason);
 		}
 
-		private bool IsAutoRejectedCalculator(int experianScore, List<MarketPlace> mps, List<string> paymentMps,  double anualTurnover, bool wasApproved, bool hasDefaultAccounts, out string reason)
+		private bool IsAutoRejectedCalculator(RejectionData data, out string reason)
 		{
 			
 			//0 Exceptions to the rejection rules:
-			//Do not apply to clients that have been approved at least once before (even if the latest decision was rejection)
-			if (wasApproved)
+			//1. Do not apply to clients that have been approved at least once before (even if the latest decision was rejection)
+			if (data.WasApproved)
 			{
 				reason = "Not Rejected. Was approved for loan";
 				return false;
 			}
-			//Do not apply to clients with total annual turnover above £250,000
-			if (anualTurnover >= _const.NoRejectIfTotalAnnualTurnoverAbove)
+			//2. Do not apply to clients with total annual turnover above £250,000
+			if (data.AnualTurnover >= _const.NoRejectIfTotalAnnualTurnoverAbove)
 			{
-				reason = string.Format("Not Rejected. Total Annual Turnover Above {0} ({1})", _const.NoRejectIfTotalAnnualTurnoverAbove, anualTurnover);
+				reason = string.Format("Not Rejected. Total Annual Turnover Above {0} ({1})", _const.NoRejectIfTotalAnnualTurnoverAbove, data.AnualTurnover);
 				return false;
 			}
-			//Do not apply to clients with credit score above 900.
-			if (experianScore >= _const.NoRejectIfCreditScoreAbove)
+			//3. Do not apply to clients with credit score above 900.
+			if (data.ExperianScore >= _const.NoRejectIfCreditScoreAbove)
 			{
-				reason = string.Format("Not Rejected. Credit Score Above {0} ({1})", _const.NoRejectIfCreditScoreAbove, experianScore);
+				reason = string.Format("Not Rejected. Credit Score Above {0} ({1})", _const.NoRejectIfCreditScoreAbove, data.ExperianScore);
 				return false;
 			}
-			//Do not apply to clients with 2 directors, of which at least 1 has a score above 800 ???(on hold)
-			//TODO or not TODO
 
-			//1  Low credit score: less than 550 (Consumer credit score<550)
-
-			if (experianScore < _const.MinCreditScore)
+			//4. Do not autoreject if company score is above 40
+			if (data.CompanyScore >= _const.NoRejectIfCompanyCreditScoreAbove)
 			{
-				reason = string.Format("Rejected. Credit Score Below {0} ({1})", _const.MinCreditScore, experianScore);
+				reason = string.Format("Not Rejected. Company Credit Score Above {0} ({1})", _const.NoRejectIfCompanyCreditScoreAbove, data.CompanyScore);
+				return false;
+			}
+
+			//Marketplace with error exists for this customer AND consumer score is above 500 or business score is above 10
+			if (data.HasErrorMp && (data.ExperianScore > _const.AutoRejectIfErrorInAtLeastOneMPMinScore || data.CompanyScore > _const.AutoRejectIfErrorInAtLeastOneMPMinCompanyScore))
+			{
+				reason = string.Format("Not Rejected. Marketplace with error exists for this customer AND consumer score is above {0} or business score is above {1} ({2},{3})",
+					_const.NoRejectIfCreditScoreAbove, _const.NoRejectIfCompanyCreditScoreAbove, data.ExperianScore, data.CompanyScore);
+				return false;
+			}
+
+			//1.1  Low credit score: less than 500
+			if (data.ExperianScore < _const.MinCreditScore && data.ExperianScore > 0)
+			{
+				reason = string.Format("Rejected. Credit Score Below {0} ({1})", _const.MinCreditScore, data.ExperianScore);
 				return true;
 			}
 
-			
+			//1.2  Low company credit score: less than 500
+			if (data.CompanyScore < _const.MinCompanyCreditScore)
+			{
+				reason = string.Format("Rejected. Company Credit Score Below {0} ({1})", _const.MinCompanyCreditScore, data.CompanyScore);
+				return true;
+			}
+
+			//TODO understand from Vitas exact rules for turnover calculation!!!
+
+			//2. Low turnover, one of the following :
+
 			//has payment mps
 			bool hasSpecialMps = false;
-			if (paymentMps.Any())
+			if (data.HasCompanyFiles)
 			{
 				hasSpecialMps = true;
 			}
 			else
 			{
-				//2  Low turnover, one of the following :
 				//a Total annual turnover is less than 10,000 GBP
-
-				if (anualTurnover < _const.MinAnnualTurnover)
+				if (data.AnualTurnover < _const.MinAnnualTurnover)
 				{
-					reason = string.Format("Rejected. Annual Turnover Below {0} ({1})", _const.MinAnnualTurnover, anualTurnover);
+					reason = string.Format("Rejected. Annual Turnover Below {0} ({1})", _const.MinAnnualTurnover, data.AnualTurnover);
 					return true;
 				}
+				
 				//b Total 3-month turnover is less than 2.000 GBP
-				var threeMonthTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
-				if (threeMonthTurnover < _const.MinThreeMonthTurnover)
+				
+				if (data.ThreeMonthTurnover < _const.MinThreeMonthTurnover)
 				{
 					reason = string.Format("Rejected. 3 Month Turnover Below {0} ({1})", _const.MinThreeMonthTurnover,
-					                       threeMonthTurnover);
+					                       data.ThreeMonthTurnover);
 					return true;
 				}
 			}
+
 			//3 Defaults:
 			//a for clients with credit score below 800: at least 1 default in amount of 300+ GBP on any of the financial accounts in the last 24 months
-			if (experianScore < _const.DefaultScoreBelow && hasDefaultAccounts)
+			if (data.ExperianScore < _const.DefaultScoreBelow && data.DefaultAccountAmount >= _const.DefaultMinAccountsNum && data.DefaultAccountAmount > _const.DefaultMinAmount)
 			{
-				reason = string.Format("Rejected. Has Default Account And credit score below {0} ({1})",_const.DefaultScoreBelow, experianScore);
+				reason = string.Format("Rejected. Has Default {4} Account{2} of {3} GBP And credit score below {0} ({1})",_const.DefaultScoreBelow, data.ExperianScore, data.DefaultAccountsNum > 1 ? "s" : "", data.DefaultAccountAmount, data.DefaultAccountsNum);
 				return true;
 			}
-			//b for clients with credit score between 600 - 800: at least 1 default in amount of 300+ GBP on any of the financial accounts in the last 12 months. ???(no need)
-			//TODO or not TODO
+
+			//b for clients with business credit score below 20: at least 1 default in amount of 1,000+ GBP on any of the financial accounts in the last 24 months,
+			//TODO 
+			if (data.CompanyScore < _const.DefaultCompanyScoreBelow &&
+			    data.DefaultCompanyAccountsNum >= _const.DefaultCompanyMinAccountsNum &&
+			    data.DefaultCompanyAccountAmount > _const.DefaultCompanyMinAmount) {
+				reason = string.Format("Rejected. Has Company Default {4} Account{2} of {3} GBP And company credit score below {0} ({1})", _const.DefaultScoreBelow, data.ExperianScore, data.DefaultCompanyAccountsNum > 1 ? "s" : "", data.DefaultCompanyAccountAmount, data.DefaultCompanyAccountsNum);
+				return true;
+			}
+
+			//c for clients who are late over 30 days in at least 2 different accounts in the last 3 months
+			//TODO
+			if (data.NumLateAccounts >= _const.LateAccountMinNumber) {
+				reason = string.Format("Rejected. Late in {0} account{1} over {2} days in the last {3} months", data.NumLateAccounts, data.NumLateAccounts > 1 ? "s" : "", _const.LateAccountMinDays, _const.LateAccountLastMonth);
+				return true;
+			}
 
 			//4 Seniority: Marketplace seniority less than 11 months (currently 300 days)
-			int seniority = MarketPlacesHelper.GetMarketPlacesSeniority(mps);
-			if (seniority < _const.MinMarketPlaceSeniorityDays)
+			if (data.MpsSeniority < _const.MinMarketPlaceSeniorityDays)
 			{
-				reason = string.Format("Rejected. MP Seniority below {0} ({1})", _const.MinMarketPlaceSeniorityDays, seniority);
+				reason = string.Format("Rejected. MP Seniority below {0} ({1})", _const.MinMarketPlaceSeniorityDays, data.MpsSeniority);
 				return true;
 			}
 
-			reason = string.Format("Not Rejected. None of the auto rejection rules match. {0}", (hasSpecialMps ? "(Has payment mps:)" + string.Join(",",paymentMps) : ""));
+			//5 Tangible Equity (TE) value in the last year is negative and there is a decrease of the TE over the last 2 years)
+			//todo or not todo?
+
+			//6 For clients with a customer status which is not: 1. enabled, 2. Fraud suspect
+			if (data.CustomerStatus != "Enabled" || data.CustomerStatus != "Fraud Suspect")
+			{
+				reason = string.Format("Rejected. Customer Status is not 1. enabled, 2. Fraud suspect ({0})", data.CustomerStatus);
+				return true;
+			}
+
+			reason = string.Format("Not Rejected. None of the auto rejection rules match. {0}", hasSpecialMps ? "(Has company files)" : "");
 			return false;
 		}
     }

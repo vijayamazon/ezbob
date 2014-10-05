@@ -14,11 +14,15 @@
 			Gender gender,
 			int numberOfStores,
 			bool firstRepaymentDatePassed,
-			decimal ezbobSeniority,
+			decimal ezbobSeniorityMonths,
 			int ezbobNumOfLoans,
 			int ezbobNumOfLateRepayments,
 			int ezbobNumOfEarlyReayments)
 		{
+			Console.WriteLine(
+				"CalculateMedalScore input params: annualTurnover: {0}, experianScore: {1}, mpSeniorityYears: {2}, positiveFeedbackCount: {3}, maritalStatus: {4}, gender: {5}, numberOfStores(eBay\\Amazon\\PayPal): {6}, firstRepaymentDatePassed: {7}, ezbobSeniorityMonths: {8}, ezbobNumOfLoans: {9}, ezbobNumOfLateRepayments: {10}, ezbobNumOfEarlyReayments: {11}",
+				annualTurnover, experianScore, mpSeniorityYears, positiveFeedbackCount, maritalStatus, gender, numberOfStores,
+				firstRepaymentDatePassed, ezbobSeniorityMonths, ezbobNumOfLoans, ezbobNumOfLateRepayments, ezbobNumOfEarlyReayments);
 
 			var dict = new Dictionary<Parameter, Weight>
 				{
@@ -29,7 +33,7 @@
 					{Parameter.Other,                    GetOtherWeight(gender, firstRepaymentDatePassed)},
 					{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(annualTurnover, firstRepaymentDatePassed)},
 					{Parameter.NumOfStores,              GetNumOfStoresWeight(numberOfStores, firstRepaymentDatePassed)},
-					{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(ezbobSeniority, firstRepaymentDatePassed)},
+				{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(ezbobSeniorityMonths, firstRepaymentDatePassed)},
 					{Parameter.EzbobNumOfLoans,          GetEzbobNumOfLoansWeight(ezbobNumOfLoans, firstRepaymentDatePassed)},
 					{Parameter.EzbobNumOfLateRepayments, GetEzbobNumOfLateRepaymentsWeight(ezbobNumOfLateRepayments, firstRepaymentDatePassed)},
 					{Parameter.EzbobNumOfEarlyRepayments,GetEzbobNumOfEarlyRepaymentsWeight(ezbobNumOfEarlyReayments, firstRepaymentDatePassed)}
@@ -228,8 +232,14 @@
 				case MaritalStatus.Other:
 					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Single;
 					break;
-				case MaritalStatus.Widower:
-					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Widower;
+				case MaritalStatus.Widowed:
+					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Widowed;
+					break;
+				case MaritalStatus.LivingTogether:
+					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_LivingTogether;
+					break;
+				case MaritalStatus.Separated:
+					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Separated;
 					break;
 			}
 			
@@ -240,7 +250,7 @@
 		{
 			var mpSeniorityWeight = new Weight
 				{
-					FinalWeightFixedWeightParameter = Constants.MpSeniorityBaseWeight,
+					FinalWeightFixedWeightParameter = firstRepaymentDatePassed ? Constants.MpSeniorityBaseWeight - Constants.MpSenorityWeightDeduction : Constants.MpSeniorityBaseWeight,
 					StandardWeightFixedWeightParameter = firstRepaymentDatePassed ? Constants.MpSeniorityBaseWeight - Constants.MpSenorityWeightDeduction : Constants.MpSeniorityBaseWeight,
 					StandardWeightAdjustableWeightParameter = 0,
 					DeltaForAdjustableWeightParameter = 0,
@@ -266,7 +276,7 @@
 		{
 			var experianWeight = new Weight
 				{
-					FinalWeightFixedWeightParameter = Constants.ExperianScoreBaseWeight,
+					FinalWeightFixedWeightParameter = firstRepaymentDatePassed ? Constants.ExperianScoreBaseWeight - Constants.ExperianScoreWeightDeduction : Constants.ExperianScoreBaseWeight,
 					StandardWeightFixedWeightParameter = firstRepaymentDatePassed ? Constants.ExperianScoreBaseWeight - Constants.ExperianScoreWeightDeduction : Constants.ExperianScoreBaseWeight,
 					StandardWeightAdjustableWeightParameter = 0,
 					DeltaForAdjustableWeightParameter = 0,
@@ -353,10 +363,10 @@
 					ToPercent(weight.Value.FinalWeight),
 					ToPercent(weight.Value.MinimumScore/100),
 					ToPercent(weight.Value.MaximumScore/100),
-					weight.Value.MinimumGrade,
-					weight.Value.MaximumGrade,
-					weight.Value.Grade,
-					String.Format("{0}", weight.Value.Score).PadRight(50));
+					ToShort(weight.Value.MinimumGrade),
+					ToShort(weight.Value.MaximumGrade),
+					ToShort(weight.Value.Grade),
+					ToShort(weight.Value.Score).PadRight(50));
 				s1 += weight.Value.FinalWeightFixedWeightParameter;
 				s2 += weight.Value.StandardWeightFixedWeightParameter;
 				s3 += weight.Value.StandardWeightAdjustableWeightParameter;
@@ -379,6 +389,11 @@
 		private string ToPercent(decimal val)
 		{
 			return String.Format("{0:F2}", val * 100).PadRight(6);
+		}
+
+		private string ToShort(decimal val)
+		{
+			return String.Format("{0:F2}", val).PadRight(6);
 		}
 	}
 

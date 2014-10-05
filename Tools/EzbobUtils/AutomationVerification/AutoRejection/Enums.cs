@@ -11,7 +11,9 @@
 		Married,
 		Single,
 		Divorced,
-		Widower,
+		Widowed,
+		LivingTogether,
+		Separated,
 		Other
 	} // enum MaritalStatus
 

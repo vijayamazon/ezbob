@@ -20,7 +20,7 @@
 			var anualTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year, _log);
 			var quarterTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
 			var lastTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month, _log);
-			var hasDefaultAccounts = dbHelper.HasDefaultAccounts(customerId, 0, 12);
+			var hasDefaultAccounts = dbHelper.HasDefaultAccounts(customerId, 0);
 			var seniorityMonth = MarketPlacesHelper.GetMarketPlacesSeniority(mps) / 12;
 			var birthDate = dbHelper.GetCustomerBirthDate(customerId);
 			var medalRate = dbHelper.GetMedalRate(customerId);

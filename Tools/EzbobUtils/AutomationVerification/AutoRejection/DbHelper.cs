@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -20,45 +19,76 @@
 		{
 
 			var conn = new SqlConnection(_log);
-			var dt = conn.ExecuteReader("AV_RejectionConstants");
-			if (dt.Rows.Count == 0)
-			{
-				return null;
-			}
+			var sr = conn.ExecuteEnumerable("AV_RejectionConstants", CommandSpecies.StoredProcedure);
+			
 			var consts = new RejectionConstants();
-			foreach (DataRow row in dt.Rows)
+			foreach (SafeReader row in sr)
 			{
 				switch (row["Name"].ToString())
 				{
 					case "LowCreditScore":
-						consts.MinCreditScore = int.Parse(row["Value"].ToString());
+						consts.MinCreditScore = row["Value"];
 						break;
 					case "TotalAnnualTurnover":
-						consts.MinAnnualTurnover = int.Parse(row["Value"].ToString());
+						consts.MinAnnualTurnover = row["Value"];
 						break;
 					case "TotalThreeMonthTurnover":
-						consts.MinThreeMonthTurnover = int.Parse(row["Value"].ToString());
+						consts.MinThreeMonthTurnover = row["Value"];
 						break;
 					case "Reject_Defaults_CreditScore":
-						consts.DefaultScoreBelow = int.Parse(row["Value"].ToString());
+						consts.DefaultScoreBelow = row["Value"];
 						break;
 					case "Reject_Defaults_AccountsNum":
 						break;
 					case "Reject_Defaults_Amount":
-						consts.DefaultMinAmount = int.Parse(row["Value"].ToString());
-						break;
-					case "Reject_Defaults_MonthsNum":
-						consts.DefaultMinMonths = int.Parse(row["Value"].ToString());
+						consts.DefaultMinAmount = row["Value"];
 						break;
 					case "Reject_Minimal_Seniority":
-						consts.MinMarketPlaceSeniorityDays = int.Parse(row["Value"].ToString());
+						consts.MinMarketPlaceSeniorityDays = row["Value"];
 						break;
 					case "AutoRejectionException_CreditScore":
-						consts.NoRejectIfCreditScoreAbove = int.Parse(row["Value"].ToString());
+						consts.NoRejectIfCreditScoreAbove = row["Value"];
 						break;
 					case "AutoRejectionException_AnualTurnover":
-						consts.NoRejectIfTotalAnnualTurnoverAbove = int.Parse(row["Value"].ToString());
+						consts.NoRejectIfTotalAnnualTurnoverAbove = row["Value"];
 						break;
+
+					case "RejectionExceptionMaxCompanyScore":
+						consts.NoRejectIfCompanyCreditScoreAbove = row["Value"];
+						break;
+					case "RejectionExceptionMaxCompanyScoreForMpError":
+						consts.AutoRejectIfErrorInAtLeastOneMPMinCompanyScore = row["Value"];
+						break;
+					case "RejectionExceptionMaxConsumerScoreForMpError":
+						consts.AutoRejectIfErrorInAtLeastOneMPMinScore = row["Value"];
+						break;
+					case "RejectionCompanyScore":
+						consts.MinCompanyCreditScore = row["Value"];
+						break;
+					case "Reject_LowOfflineAnnualRevenue":
+						consts.LowOfflineAnnualRevenue = row["Value"];
+						break;
+					case "Reject_LowOfflineQuarterRevenue":
+						consts.LowOfflineQuarterRevenue = row["Value"];
+						break;
+					case "Reject_LateLastMonthsNum":
+						consts.LateAccountLastMonth = row["Value"];
+						break;
+					case "Reject_NumOfLateAccounts":
+						consts.LateAccountMinNumber = row["Value"];
+						break;
+					case "RejectionLastValidLate":
+						consts.LateAccountMinDays = row["Value"];
+						break;
+					case "Reject_Defaults_CompanyScore":
+						consts.DefaultCompanyScoreBelow = row["Value"];
+						break;
+					case "Reject_Defaults_CompanyAccountsNum":
+						consts.DefaultCompanyMinAccountsNum = row["Value"];
+						break;
+					case "Reject_Defaults_CompanyAmoun":
+						consts.DefaultCompanyMinAmount = row["Value"];
+						break;	
 					default:
 						break;
 				}
@@ -69,12 +99,7 @@
 		public DateTime? GetCustomerBirthDate(int customerId)
 		{
 			var conn = new SqlConnection(_log);
-			var dt = conn.ExecuteReader("AV_GetCustomerBirthDate", new QueryParameter("@CustomerId", customerId));
-			if (dt.Rows.Count == 0)
-			{
-				return null;
-			}
-			return DateTime.Parse(dt.Rows[0]["DateOfBirth"].ToString());
+			return conn.ExecuteScalar<DateTime?>("AV_GetCustomerBirthDate", new QueryParameter("@CustomerId", customerId));
 		}
 
 		/// <summary>
@@ -86,15 +111,14 @@
 		{
 
 			var conn = new SqlConnection(_log);
-			var dt = conn.ExecuteReader("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
+			var srList = conn.ExecuteEnumerable("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
 
 			var mps = new List<MarketPlace>();
-			foreach (DataRow row in dt.Rows)
+			foreach (SafeReader row in srList)
 			{
 				AddMpToList(mps, row);
 			}
 
-			dt.Dispose();
 			return mps;
 
 		}
@@ -108,29 +132,28 @@
 		{
 
 			var conn = new SqlConnection(_log);
-			var dt = conn.ExecuteReader("AV_GetCustomerPaymentMarketPlaces", new QueryParameter("@CustomerId", customerId));
+			var srList = conn.ExecuteEnumerable("AV_GetCustomerPaymentMarketPlaces", new QueryParameter("@CustomerId", customerId));
 
-			var mps = (from DataRow row in dt.Rows 
+			var mps = (from SafeReader row in srList
 					   select row[0].ToString()).ToList();
 
-			dt.Dispose();
 			return mps;
 
 		}
 
-		private void AddMpToList(List<MarketPlace> mps, DataRow row)
+		private void AddMpToList(List<MarketPlace> mps, SafeReader row)
 		{
 			DateTime? originationDate = null;
-			string odStr = row["OriginationDate"].ToString();
+			string odStr = row["OriginationDate"];
 			if (!string.IsNullOrEmpty(odStr))
 			{
 				originationDate = DateTime.Parse(odStr);
 			}
 			mps.Add(new MarketPlace
 				{
-					Id = int.Parse(row["mpId"].ToString()),
-					Name = row["Name"].ToString(),
-					Type = row["Type"].ToString(),
+					Id = row["mpId"],
+					Name = row["Name"],
+					Type = row["Type"],
 					OriginationDate = originationDate
 				});
 		}
@@ -143,24 +166,24 @@
 		public List<AnalysisFunction> GetAnalysisFunctions(int mpId)
 		{
 			var conn = new SqlConnection(_log);
-			var dt = conn.ExecuteReader("AV_GetAnalysisFunctions", new QueryParameter("@CustomerMarketPlaceId", mpId));
+			var srList = conn.ExecuteEnumerable("AV_GetAnalysisFunctions", new QueryParameter("@CustomerMarketPlaceId", mpId));
 
 			var afvs = new List<AnalysisFunction>();
-			foreach (DataRow row in dt.Rows)
+			foreach (SafeReader row in srList)
 			{
 				AddAnalysisFunctionToList(afvs, row);
 			}
 			return afvs;
 		}
 
-		private void AddAnalysisFunctionToList(List<AnalysisFunction> afvs, DataRow row)
+		private void AddAnalysisFunctionToList(List<AnalysisFunction> afvs, SafeReader row)
 		{
-			afvs.Add(new AnalysisFunction()
+			afvs.Add(new AnalysisFunction
 				{
-					Updated = DateTime.Parse(row["Updated"].ToString()),
-					MarketPlaceName = row["MarketPlaceName"].ToString(),
-					Value = double.Parse(row["Value"].ToString()),
-					Function = row["FunctionName"].ToString(),
+					Updated = row["Updated"],
+					MarketPlaceName = row["MarketPlaceName"],
+					Value = row["Value"],
+					Function = row["FunctionName"],
 					TimePeriod = (TimePeriodEnum)(int.Parse(row["TimePeriod"].ToString())),
 				});
 		}
@@ -168,14 +191,13 @@
 		public int GetExperianScore(int customerId)
 		{
 			var conn = new SqlConnection(_log);
-			var dt = conn.ExecuteReader("AV_GetExperianScore", new QueryParameter("@CustomerId", customerId));
-			if (dt.Rows.Count == 0)
+			var sr = conn.GetFirst("AV_GetExperianScore", new QueryParameter("@CustomerId", customerId));
+			if (sr.Count == 0)
 			{
 				return 0;
 			}
 			//todo retrieve defaults 
-			//var experianJson = dt.Rows[0]["JsonPacket"].ToString();
-			return int.Parse(dt.Rows[0]["ExperianScore"].ToString());
+			return sr["ExperianScore"];
 		}
 
 		public bool WasApprovedForLoan(int customerId)
@@ -184,31 +206,39 @@
 			return bool.Parse(conn.ExecuteScalar<string>("AV_WasLoanApproved", new QueryParameter("@CustomerId", customerId)));
 		}
 
-		public bool HasDefaultAccounts(int customerId, int minDefBalance, int months)
+		//todo retrieve defaults accounts num, amount, lates
+		public bool HasDefaultAccounts(int customerId, int minDefBalance)
 		{
 			var conn = new SqlConnection(_log);
-			return bool.Parse(conn.ExecuteScalar<string>("AV_HasDefaultAccounts", new QueryParameter("@CustomerId", customerId), new QueryParameter("@MinDefBalance", minDefBalance), new QueryParameter("@Months", months)));
+			return bool.Parse(conn.ExecuteScalar<string>("AV_HasDefaultAccounts", new QueryParameter("@CustomerId", customerId), new QueryParameter("@MinDefBalance", minDefBalance)));
 		}
 
-		public DataTable GetAutoDecisions(DateTime from, DateTime to)
+		public IEnumerable<SafeReader> GetAutoDecisions(DateTime from, DateTime to)
 		{
 			var conn = new SqlConnection(_log);
-			return conn.ExecuteReader("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
+			return conn.ExecuteEnumerable("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
 		}
 
+		public RejectionData GetRejectionData(int customerId) {
+			var conn = new SqlConnection(_log);
+			return conn.FillFirst<RejectionData>("AV_GetRejectionData", CommandSpecies.StoredProcedure,
+			                              new QueryParameter("@CustomerId", customerId));
+		}
 		public ReRejectionData GetReRejectionData(int customerId, int cashRequestId)
 		{
 			var conn = new SqlConnection(_log);
-			var sqlData = conn.ExecuteReader("AV_ReRejectionData", new QueryParameter("@CustomerId", customerId), new QueryParameter("@CashRequestId", cashRequestId));
+			var sqlData = conn.GetFirst("AV_ReRejectionData",
+				new QueryParameter("@CustomerId", customerId), 
+				new QueryParameter("@CashRequestId", cashRequestId));
 
 			var data = new ReRejectionData
 				{
-					ManualRejectDate = string.IsNullOrEmpty(sqlData.Rows[0]["ManualRejectDate"].ToString()) ? (DateTime?)null : DateTime.Parse(sqlData.Rows[0]["ManualRejectDate"].ToString()),
-					IsNewClient = bool.Parse(sqlData.Rows[0]["IsNewClient"].ToString()),
-					NewDataSourceAdded = bool.Parse(sqlData.Rows[0]["NewDataSourceAdded"].ToString()),
-					LoanAmount = int.Parse(sqlData.Rows[0]["LoanAmount"].ToString()),
-					RepaidAmount = decimal.Parse(sqlData.Rows[0]["RepaidAmount"].ToString()),
-					AutomaticDecisionDate = string.IsNullOrEmpty(sqlData.Rows[0]["AutomaticDecisionDate"].ToString()) ? DateTime.UtcNow : DateTime.Parse(sqlData.Rows[0]["AutomaticDecisionDate"].ToString())
+					ManualRejectDate = string.IsNullOrEmpty(sqlData["ManualRejectDate"].ToString()) ? (DateTime?)null : DateTime.Parse(sqlData["ManualRejectDate"].ToString()),
+					IsNewClient = bool.Parse(sqlData["IsNewClient"].ToString()),
+					NewDataSourceAdded = bool.Parse(sqlData["NewDataSourceAdded"].ToString()),
+					LoanAmount = int.Parse(sqlData["LoanAmount"].ToString()),
+					RepaidAmount = decimal.Parse(sqlData["RepaidAmount"].ToString()),
+					AutomaticDecisionDate = string.IsNullOrEmpty(sqlData["AutomaticDecisionDate"].ToString()) ? DateTime.UtcNow : DateTime.Parse(sqlData["AutomaticDecisionDate"].ToString())
 				};
 			return data;
 		}
@@ -216,20 +246,20 @@
 		public ReApprovalData GetReApprovalData(int customerId, int cashRequestId)
 		{
 			var conn = new SqlConnection(_log);
-			var sqlData = conn.ExecuteReader("AV_ReApprovalData", 
+			var sqlData = conn.GetFirst("AV_ReApprovalData", 
 				new QueryParameter("@CustomerId", customerId), 
 				new QueryParameter("@CashRequestId", cashRequestId));
 
 			var data = new ReApprovalData
 			{
-				ManualApproveDate = string.IsNullOrEmpty(sqlData.Rows[0]["ManualApproveDate"].ToString()) ? (DateTime?)null : DateTime.Parse(sqlData.Rows[0]["ManualApproveDate"].ToString()),
-				IsNewClient = bool.Parse(sqlData.Rows[0]["IsNewClient"].ToString()),
-				NewDataSourceAdded = bool.Parse(sqlData.Rows[0]["NewDataSourceAdded"].ToString()),
-				OfferedAmount = string.IsNullOrEmpty(sqlData.Rows[0]["OfferedAmount"].ToString()) ? 0 : int.Parse(sqlData.Rows[0]["OfferedAmount"].ToString()),
-				PrincipalRepaymentsSinceOffer = string.IsNullOrEmpty(sqlData.Rows[0]["PrincipalRepaymentsSinceOffer"].ToString()) ? 0 : decimal.Parse(sqlData.Rows[0]["PrincipalRepaymentsSinceOffer"].ToString()),
-				TookAmountLastRequest = string.IsNullOrEmpty(sqlData.Rows[0]["TookAmountLastRequest"].ToString()) ? 0 : int.Parse(sqlData.Rows[0]["TookAmountLastRequest"].ToString()),
-				TookLoanLastRequest = bool.Parse(sqlData.Rows[0]["TookLoanLastRequest"].ToString()),
-				WasLate = bool.Parse(sqlData.Rows[0]["WasLate"].ToString()),
+				ManualApproveDate = string.IsNullOrEmpty(sqlData["ManualApproveDate"].ToString()) ? (DateTime?)null : DateTime.Parse(sqlData["ManualApproveDate"].ToString()),
+				IsNewClient = bool.Parse(sqlData["IsNewClient"].ToString()),
+				NewDataSourceAdded = bool.Parse(sqlData["NewDataSourceAdded"].ToString()),
+				OfferedAmount = string.IsNullOrEmpty(sqlData["OfferedAmount"].ToString()) ? 0 : int.Parse(sqlData["OfferedAmount"].ToString()),
+				PrincipalRepaymentsSinceOffer = string.IsNullOrEmpty(sqlData["PrincipalRepaymentsSinceOffer"].ToString()) ? 0 : decimal.Parse(sqlData["PrincipalRepaymentsSinceOffer"].ToString()),
+				TookAmountLastRequest = string.IsNullOrEmpty(sqlData["TookAmountLastRequest"].ToString()) ? 0 : int.Parse(sqlData["TookAmountLastRequest"].ToString()),
+				TookLoanLastRequest = bool.Parse(sqlData["TookLoanLastRequest"].ToString()),
+				WasLate = bool.Parse(sqlData["WasLate"].ToString()),
 			};
 			return data;
 		}
@@ -243,12 +273,11 @@
 		public bool IsOffline(int customerId)
 		{
 			var conn = new SqlConnection(_log);
-			var dt = conn.ExecuteReader("AV_IsCustomerOffline", new QueryParameter("@CustomerId", customerId));
-			if (dt.Rows.Count == 0)
-			{
-				return false;
-			}
-			return bool.Parse(dt.Rows[0]["IsOffline"].ToString());
+			return conn.ExecuteScalar<bool>("AV_IsCustomerOffline", new QueryParameter("@CustomerId", customerId));
+		}
+
+		public int GetExperianCompanyScore(int customerId) {
+			throw new NotImplementedException();
 		}
 	}
 }

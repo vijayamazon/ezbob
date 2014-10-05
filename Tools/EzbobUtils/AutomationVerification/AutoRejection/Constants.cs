@@ -4,29 +4,6 @@
 
 	public static class Constants
 	{
-		#region AutoRejection
-
-		public static readonly int MinCreditScore = 550;
-
-		public static readonly int MinAnnualTurnover = 10000;
-
-		public static readonly int MinThreeMonthTurnover = 2000;
-
-		public static readonly int DefaultScoreBelow = 800;
-		public static readonly int DefaultMinAmount = 300;
-		public static readonly int DefaultMinMonths = 12;
-
-		public static readonly int MinMarketPlaceSeniorityDays = 300;
-		public static readonly bool AutoRejectIfErrorInAtLeastOneMarketPlace = false;
-
-		public static readonly bool AutoRejectIfWasApprovedOnce = false;
-
-		public static readonly int NoRejectIfTotalAnnualTurnoverAbove = 250000;
-
-		public static readonly int NoRejectIfCreditScoreAbove = 900;
-
-		#endregion AutoRejection
-
 		#region AutoReRejection
 		
 		#region New Client Rules
@@ -53,13 +30,13 @@
 		public static readonly int NewMinReApproveAmount = 1000;
 		public static readonly int MissedPaymentCalendarDays = 5;//no need?
 		public static readonly int NewReApprovePeriodDays = 30;
+
 		#endregion
 
 		#region Old Client
 
 		public static readonly int OldReApprovePeriodDays = 28;
 		public static readonly int OldMinReApproveAmount = 500;
-
 
 		#endregion
 
@@ -257,7 +234,9 @@
 		public static readonly int MaritalStatusGrade_Married = 4;
 		public static readonly int MaritalStatusGrade_Divorced = 3;
 		public static readonly int MaritalStatusGrade_Single = 2;
-		public static readonly int MaritalStatusGrade_Widower = 4;
+		public static readonly int MaritalStatusGrade_Widowed = 4;
+		public static readonly int MaritalStatusGrade_LivingTogether = 4;
+		public static readonly int MaritalStatusGrade_Separated = 3;
 
 		#endregion Grade Ranges
 
