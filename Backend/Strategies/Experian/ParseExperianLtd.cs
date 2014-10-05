@@ -99,7 +99,10 @@
 
 			Log.Info("Parsing Experian company data...");
 
-			ExperianLtd oMainTable = new ExperianLtd(Log);
+			ExperianLtd oMainTable = new ExperianLtd(Log) {
+				ServiceLogID = m_nServiceLogID,
+			};
+
 			oMainTable.LoadFromXml(oDoc.Item1.DocumentElement);
 
 			if (!oMainTable.ShouldBeSaved()) {
@@ -110,8 +113,6 @@
 
 				return null;
 			} // if
-
-			oMainTable.ServiceLogID = m_nServiceLogID;
 
 			Log.Info("Parsing Experian company data complete.");
 

@@ -424,6 +424,19 @@
 
 		#endregion method GetCommercialDelphiCreditLimit
 
+		#region method LoadFromXml
+
+		public override void LoadFromXml(XmlNode oRoot) {
+			base.LoadFromXml(oRoot);
+
+			if (!CommercialDelphiScore.HasValue) {
+				Log.Warn("No RISKSCORE found in Experian response with MP_ServiceLog.Id = {0}, defaulting it to 0.", ServiceLogID);
+				CommercialDelphiScore = 0;
+			} // if
+		} // LoadFromXml
+
+		#endregion method LoadFromXml
+
 		#endregion public
 
 		#region protected
