@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.ScoreCalculation
+﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
 {
 	using Experian;
 	using Ezbob.Backend.Models;
@@ -7,9 +7,10 @@
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Utils;
+	using ScoreCalculation;
 	using VatReturn;
 
-	public class NewMedalScoreCalculator
+	public class NewMedalScoreCalculator1
 	{
 		private readonly ASafeLog log;
 		private readonly AConnection db;
@@ -20,7 +21,7 @@
 
 		public ScoreResult Results { get; set; }
 
-		public NewMedalScoreCalculator(AConnection db, ASafeLog log)
+		public NewMedalScoreCalculator1(AConnection db, ASafeLog log)
 		{
 			this.log = log;
 			this.db = db;

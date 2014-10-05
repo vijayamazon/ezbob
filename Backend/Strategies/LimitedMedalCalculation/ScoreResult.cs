@@ -1,7 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.ScoreCalculation
+﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
 {
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
+	using ScoreCalculation;
 
 	public class ScoreResult
 	{

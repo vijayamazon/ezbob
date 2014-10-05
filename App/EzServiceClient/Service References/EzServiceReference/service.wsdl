@@ -125,6 +125,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianConsumerScore_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianConsumerScore" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianConsumerScore_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianConsumerScoreResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScore" />
   </wsdl:message>
@@ -592,6 +598,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillAml_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillAmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillAndRemoveLimitedMedal_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillAndRemoveLimitedMedal" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillAndRemoveLimitedMedal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillAndRemoveLimitedMedalResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillZooplaValue_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillZooplaValue" />
@@ -1085,12 +1097,6 @@
   <wsdl:message name="IEzService_LoadExperianConsumerMortgageData_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortgageDataResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianConsumerScore_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianConsumerScore" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianConsumerScore_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianConsumerScoreResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1122,6 +1128,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="GetExperianConsumerScore">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScore" message="tns:IEzService_GetExperianConsumerScore_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScoreResponse" message="tns:IEzService_GetExperianConsumerScore_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyDataForCompanyScore">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" message="tns:IEzService_GetCompanyDataForCompanyScore_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse" message="tns:IEzService_GetCompanyDataForCompanyScore_OutputMessage" />
@@ -1433,6 +1443,10 @@
     <wsdl:operation name="BackfillAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillAml" message="tns:IEzService_BackfillAml_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillAmlResponse" message="tns:IEzService_BackfillAml_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BackfillAndRemoveLimitedMedal">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedal" message="tns:IEzService_BackfillAndRemoveLimitedMedal_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedalResponse" message="tns:IEzService_BackfillAndRemoveLimitedMedal_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackfillZooplaValue">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillZooplaValue" message="tns:IEzService_BackfillZooplaValue_InputMessage" />
@@ -1762,10 +1776,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" message="tns:IEzService_LoadExperianConsumerMortgageData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageDataResponse" message="tns:IEzService_LoadExperianConsumerMortgageData_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetExperianConsumerScore">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScore" message="tns:IEzService_GetExperianConsumerScore_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScoreResponse" message="tns:IEzService_GetExperianConsumerScore_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1839,6 +1849,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetExperianConsumerScore">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerScore" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyDataForCompanyScore">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" style="document" />
       <wsdl:input>
@@ -2534,6 +2553,15 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillAml">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillAml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillAndRemoveLimitedMedal">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedal" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3279,32 +3307,23 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetExperianConsumerScore">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerScore" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

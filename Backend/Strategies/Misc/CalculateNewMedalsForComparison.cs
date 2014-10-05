@@ -3,18 +3,18 @@
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using LimitedMedalCalculation;
 	using ScoreCalculation;
-	using ScoreCalculationVerification;
 
 	public class CalculateNewMedalsForComparison : AStrategy
 	{
-		private readonly NewMedalScoreCalculator calculator1;
+		private readonly NewMedalScoreCalculator1 calculator1;
 		private readonly NewMedalScoreCalculator2 calculator2;
 
 		public CalculateNewMedalsForComparison(AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
-			calculator1 = new NewMedalScoreCalculator(oDb, oLog);
+			calculator1 = new NewMedalScoreCalculator1(oDb, oLog);
 			calculator2 = new NewMedalScoreCalculator2(oDb, oLog);
 		}
 

@@ -89,6 +89,16 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ActionResult" nillable="true" type="tns:ActionResult" />
+  <xs:complexType name="IntActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
   <xs:complexType name="CompanyDataForCompanyScoreActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -225,16 +235,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="CustomerDetailsActionResult" nillable="true" type="tns:CustomerDetailsActionResult" />
-  <xs:complexType name="IntActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
   <xs:complexType name="EmailConfirmationTokenActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

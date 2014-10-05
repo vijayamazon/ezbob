@@ -228,6 +228,12 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
+		public ActionMetaData BackfillAndRemoveLimitedMedal()
+		{
+			BackfillAndRemoveLimitedMedal instance;
+			return ExecuteSync(out instance, 0, 0);
+		}
+
 		public ActionMetaData BackfillLandRegistry2PropertyLink()
 		{
 			BackfillLandRegistry2PropertyLink instance;

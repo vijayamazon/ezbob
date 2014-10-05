@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.ScoreCalculationVerification
+﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
 {
 	public class TangibleEquityMedalParameter : MedalParameter
 	{

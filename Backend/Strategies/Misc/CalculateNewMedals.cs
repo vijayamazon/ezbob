@@ -3,15 +3,15 @@
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using ScoreCalculation;
+	using LimitedMedalCalculation;
 
 	public class CalculateNewMedals : AStrategy
 	{
-		private readonly NewMedalScoreCalculator calculator;
+		private readonly NewMedalScoreCalculator1 calculator;
 		public CalculateNewMedals(AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
-			calculator = new NewMedalScoreCalculator(oDb, oLog);
+			calculator = new NewMedalScoreCalculator1(oDb, oLog);
 		}
 
 		public override string Name {

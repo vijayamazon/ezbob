@@ -23,6 +23,9 @@
 		ActionMetaData BackfillAml();
 
 		[OperationContract]
+		ActionMetaData BackfillAndRemoveLimitedMedal();
+
+		[OperationContract]
 		ActionMetaData BackfillZooplaValue();
 
 		[OperationContract]
