@@ -8,23 +8,16 @@
 			if ((a == null) || (b == null))
 				return false;
 
-			SortedSet<string> oLookIn;
-			SortedSet<string> oTraverse;
+			bool aIsCommon = a.IsCommon;
+			bool bIsCommon = b.IsCommon;
 
-			if (a.m_oSecondaryMimeTypes.Count < b.m_oSecondaryMimeTypes.Count) {
-				oLookIn = a.m_oSecondaryMimeTypes;
-				oTraverse = b.m_oSecondaryMimeTypes;
-			}
-			else {
-				oLookIn = b.m_oSecondaryMimeTypes;
-				oTraverse = a.m_oSecondaryMimeTypes;
-			} // if
+			if (aIsCommon && bIsCommon)
+				return false;
 
-			foreach (var s in oTraverse)
-				if (oLookIn.Contains(s))
-					return true;
+			if (aIsCommon || bIsCommon)
+				return a.IsText == b.IsText;
 
-			return false;
+			return a.m_oSecondaryMimeTypes.Overlaps(b.m_oSecondaryMimeTypes);
 		} // operator *
 
 		#endregion operator *
@@ -44,6 +37,12 @@
 		public string FileExtension { get; set; }
 
 		#endregion property FileExtension
+
+		#region property IsText
+
+		public bool IsText { get; set; }
+
+		#endregion property IsText
 
 		#region property PrimaryMimeType
 
@@ -85,11 +84,32 @@
 		public MimeType CloneSecondary() {
 			return new MimeType {
 				PrimaryMimeType = this.PrimaryMimeType,
+				IsText = this.IsText,
 				SecondaryMimeTypes = this.SecondaryMimeTypes,
 			};
 		} // CloneSecondary
 
 		#endregion method CloneSecondary
+
+		#region property IsCommon
+
+		public bool IsCommon {
+			get {
+				return
+					(PrimaryMimeType == MimeTypeResolver.DefaultMimeType) ||
+					(PrimaryMimeType == MimeTypeResolver.TextMimeType);
+			} // get
+		} // IsCommon
+
+		#endregion property IsCommon
+
+		#region method ToString
+
+		public override string ToString() {
+			return string.Format("{3} FileExtension {0} PrimaryMime {1} SecondoryMime {2}", FileExtension, PrimaryMimeType, SecondaryMimeTypes, IsText ? "Text" : "Binary");
+		} // ToString
+
+		#endregion method ToString
 
 		#endregion public
 
@@ -98,9 +118,5 @@
 		private readonly SortedSet<string> m_oSecondaryMimeTypes;
 
 		#endregion private
-
-		public override string ToString() {
-			return string.Format("FileExtrension {0} PrimaryMime {1} SecondoryMime {2}", FileExtension, PrimaryMimeType, SecondaryMimeTypes);
-		}
 	} // class MimeType
 } // namespace

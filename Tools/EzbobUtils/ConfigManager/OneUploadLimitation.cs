@@ -137,11 +137,7 @@
 
 				MimeType oFileMimeType = mtr.Find(sFileMimeType);
 
-				if (
-					((oFileMimeType.PrimaryMimeType == MimeTypeResolver.DefaultMimeType) ||
-					(oFileMimeType.PrimaryMimeType == MimeTypeResolver.TextMimeType)) &&
-					(oExtMimeType == null)
-				) {
+				if ((oExtMimeType == null) && oFileMimeType.IsCommon) {
 					oLog.Debug(
 						"MIME type by file ('{0}') is a common one and MIME type by extension cannot be detected - file should be dropped.",
 						oFileMimeType.PrimaryMimeType
