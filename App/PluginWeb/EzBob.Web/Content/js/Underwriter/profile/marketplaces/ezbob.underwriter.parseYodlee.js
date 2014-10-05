@@ -72,13 +72,14 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 					);
 
 					if (oResponse.success) {
-						EzBob.App.trigger('info', 'Upload successful: ' + oFile.name);
+					    alertify.success('Upload successful: ' + oFile.name);
+					    return;
 					}
 					else if (oResponse.error) {
-						EzBob.App.trigger('error', oResponse.error);
+					    alertify.error(oResponse.error);
 					}
 					else {
-						EzBob.App.trigger('error', 'Failed to upload ' + oFile.name);
+					    alertify.error('Failed to upload ' + oFile.name);
 					} // if
 				}); // on success
 
@@ -92,12 +93,11 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 					);
 
 					if (oXhr && (oXhr.status === 404)) {
-						EzBob.App.trigger('error',
-							'Error uploading ' + oFile.name + ': file is too large. ' +
+					    alertify.error('Error uploading ' + oFile.name + ': file is too large. ' +
 								'Please contact customercare@ezbob.com'
 						);
 					} else {
-						EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
+					    alertify.error('Error uploading ' + oFile.name + ': ' + sErrorMsg);
 					}
 				}); // always
 

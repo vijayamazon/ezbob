@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Text;
 	using System.Web;
 	using System.Web.Mvc;
 	using BankTransactionsParser;
@@ -14,6 +15,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
+	using Ezbob.Logger;
 	using Ezbob.Utils.Serialization;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -430,9 +432,10 @@
 				}).Execute();
 			} catch (Exception ex) {
 				Log.Error(ex);
+				return Json(new {error = ex.Message});
 			}
 
-
+			var error = new StringBuilder();
 			for (int i = 0; i < Request.Files.Count; ++i) {
 				HttpPostedFileBase file = Request.Files[i];
 
@@ -443,20 +446,24 @@
 
 					if (nRead != file.ContentLength) {
 						Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
+						error.AppendLine("File ").Append(file.FileName).Append(" failed to read entire file contents, ignoring.");
 						continue;
 					} // if
 
-					string sMimeType = oLimitations.DetectFileMimeType(content, file.FileName);
+					string sMimeType = oLimitations.DetectFileMimeType(content, file.FileName, oLog: new SafeILog(Log));
 
 					if (string.IsNullOrWhiteSpace(sMimeType)) {
 						Log.WarnFormat("Not saving file #" + (i + 1) + ": " + file.FileName + " because it has unsupported MIME type.");
+						error.AppendLine("Not saving file ").Append(file.FileName).Append(" because it has unsupported MIME type.");
 						continue;
 					} // if
 
 					m_oServiceClient.Instance.CompanyFilesUpload(customerId, file.FileName, content, file.ContentType);
 				}
 			}
-			return Json(new { });
+
+			return error.Length > 0 ? Json(new {error = error.ToString()}) : Json(new {success = true});
+
 		} // UploadedFiles
 	}
 }
