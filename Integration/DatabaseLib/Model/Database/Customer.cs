@@ -319,6 +319,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual int CustomerId { get; set; }
 		public virtual string Medal { get; set; }
 		public virtual decimal TotalScoreNormalized { get; set; }
+		public virtual string Error { get; set; }
 	}
 
 	#region class CollectionStatus

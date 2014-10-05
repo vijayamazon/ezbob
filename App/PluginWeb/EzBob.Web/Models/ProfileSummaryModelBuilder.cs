@@ -243,6 +243,37 @@
 			{
 				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Has mortgages but not a home owner", AlertType = AlertType.Warning.DescriptionAttr() });
 			}
+
+			OfflineScoring offlineScoringRecord = customer.OfflineScoring.FirstOrDefault(x => x.IsActive);
+
+			if ((customer.Company.TypeOfBusiness == TypeOfBusiness.LLP || customer.Company.TypeOfBusiness == TypeOfBusiness.Limited) && customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") < 2)
+			{
+				// The customer should have medal
+				if (offlineScoringRecord == null)
+				{
+					summary.Alerts.Errors.Add(new AlertModel
+						{
+							Abbreviation = "MDL",
+							Alert = "New medal was not calculated",
+							AlertType = AlertType.Error.DescriptionAttr()
+						});
+				}
+				else if (!string.IsNullOrEmpty(offlineScoringRecord.Error))
+				{
+					summary.Alerts.Errors.Add(new AlertModel
+						{
+							Abbreviation = "MDL",
+							Alert = string.Format("Error while calculating new medal: {0}", offlineScoringRecord.Error),
+							AlertType = AlertType.Error.DescriptionAttr()
+						});
+				}
+			}
+			else if ((customer.Company.TypeOfBusiness != TypeOfBusiness.LLP &&
+			     customer.Company.TypeOfBusiness != TypeOfBusiness.Limited) ||
+			    customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") > 1)
+			{
+				summary.Alerts.Infos.Add(new AlertModel { Abbreviation = "MDL", Alert = "This customer shouldn't have new medal", AlertType = AlertType.Info.DescriptionAttr() });
+			}
 		}
 
 		private void AppendLi(StringBuilder sb, string error)

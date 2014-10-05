@@ -54,7 +54,8 @@ ALTER PROCEDURE StoreNewMedal
 	,@NumOfEarlyRepaymentsScore DECIMAL(18,6)
 	,@TotalScore DECIMAL(18,6)
 	,@TotalScoreNormalized DECIMAL(18,6)
-	,@Medal NVARCHAR(50))
+	,@Medal NVARCHAR(50)
+	,@Error NVARCHAR(500))
 AS
 BEGIN
 	UPDATE OfflineScoring SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
@@ -112,7 +113,8 @@ BEGIN
 	,NumOfEarlyRepaymentsScore
 	,TotalScore
 	,TotalScoreNormalized
-	,Medal)
+	,Medal
+	,Error)
 	VALUES (
 	 @CustomerId
 	,1
@@ -166,6 +168,7 @@ BEGIN
 	,@NumOfEarlyRepaymentsScore
 	,@TotalScore
 	,@TotalScoreNormalized
-	,@Medal)
+	,@Medal
+	,@Error)
 END
 GO

@@ -870,7 +870,8 @@
 					                   new QueryParameter("NumOfEarlyRepaymentsScore", result.NumOfEarlyRepaymentsScore),
 					                   new QueryParameter("TotalScore", result.TotalScore),
 					                   new QueryParameter("TotalScoreNormalized", result.TotalScoreNormalized),
-					                   new QueryParameter("Medal", result.Medal.ToString()));
+					                   new QueryParameter("Medal", result.Medal.ToString()),
+									   new QueryParameter("Error", result.Error));
 				}
 				else
 				{

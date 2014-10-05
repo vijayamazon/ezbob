@@ -11,7 +11,8 @@
 			Map(x => x.IsActive);
 			Map(x => x.CustomerId);
             Map(x => x.Medal);
-            Map(x => x.TotalScoreNormalized);
+			Map(x => x.TotalScoreNormalized);
+			Map(x => x.Error).Length(500);
         }
     }
 }
