@@ -58,7 +58,9 @@
 
 			string sAddress = string.Format("{0}/emailchanged/{1}", CustomerSite, m_oSpUpdate.RequestID);
 
-			new EmailChanged(m_oSpUpdate.UserID, sAddress, DB, Log).Execute();
+			new System.Threading.Thread(() =>
+				new EmailChanged(m_oSpUpdate.UserID, sAddress, DB, Log).Execute()
+			).Start();
 
 			Log.Debug("User '{0}': request to change email to {1} fully processed.", m_oSpUpdate.UserID, m_oData.Email);
 		} // Execute
