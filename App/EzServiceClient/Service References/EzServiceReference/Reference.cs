@@ -2864,12 +2864,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds", ReplyAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyEnoughAvailableFundsAsync(int underwriterId, decimal deductAmount);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateNewMedals", ReplyAction="http://tempuri.org/IEzService/CalculateNewMedalsResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateNewMedals();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateNewMedals", ReplyAction="http://tempuri.org/IEzService/CalculateNewMedalsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateNewMedalsAsync();
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateNewMedalsForComparison", ReplyAction="http://tempuri.org/IEzService/CalculateNewMedalsForComparisonResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CalculateNewMedalsForComparison();
         
@@ -4006,14 +4000,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyEnoughAvailableFundsAsync(int underwriterId, decimal deductAmount) {
             return base.Channel.VerifyEnoughAvailableFundsAsync(underwriterId, deductAmount);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateNewMedals() {
-            return base.Channel.CalculateNewMedals();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateNewMedalsAsync() {
-            return base.Channel.CalculateNewMedalsAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateNewMedalsForComparison() {

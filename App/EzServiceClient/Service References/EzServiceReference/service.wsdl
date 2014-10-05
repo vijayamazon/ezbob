@@ -557,12 +557,6 @@
   <wsdl:message name="IEzService_VerifyEnoughAvailableFunds_OutputMessage">
     <wsdl:part name="parameters" element="tns:VerifyEnoughAvailableFundsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CalculateNewMedals_InputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateNewMedals" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CalculateNewMedals_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateNewMedalsResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_CalculateNewMedalsForComparison_InputMessage">
     <wsdl:part name="parameters" element="tns:CalculateNewMedalsForComparison" />
   </wsdl:message>
@@ -1415,10 +1409,6 @@
     <wsdl:operation name="VerifyEnoughAvailableFunds">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" message="tns:IEzService_VerifyEnoughAvailableFunds_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse" message="tns:IEzService_VerifyEnoughAvailableFunds_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CalculateNewMedals">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateNewMedals" message="tns:IEzService_CalculateNewMedals_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateNewMedalsResponse" message="tns:IEzService_CalculateNewMedals_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CalculateNewMedalsForComparison">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateNewMedalsForComparison" message="tns:IEzService_CalculateNewMedalsForComparison_InputMessage" />
@@ -2490,15 +2480,6 @@
     </wsdl:operation>
     <wsdl:operation name="VerifyEnoughAvailableFunds">
       <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CalculateNewMedals">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateNewMedals" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

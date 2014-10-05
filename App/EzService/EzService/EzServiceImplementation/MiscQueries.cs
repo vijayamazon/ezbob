@@ -240,12 +240,6 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData CalculateNewMedals()
-		{
-			CalculateNewMedals instance;
-			return ExecuteSync(out instance, 0, 0);
-		}
-
 		public ActionMetaData CalculateNewMedalsForComparison()
 		{
 			CalculateNewMedalsForComparison instance;

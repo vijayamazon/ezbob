@@ -577,10 +577,7 @@
 
 		[OperationContract]
 		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
-
-		[OperationContract]
-		ActionMetaData CalculateNewMedals();
-
+		
 		[OperationContract]
 		ActionMetaData CalculateNewMedalsForComparison();
 

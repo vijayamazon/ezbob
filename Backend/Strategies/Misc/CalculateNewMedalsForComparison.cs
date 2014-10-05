@@ -4,7 +4,6 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using LimitedMedalCalculation;
-	using ScoreCalculation;
 
 	public class CalculateNewMedalsForComparison : AStrategy
 	{

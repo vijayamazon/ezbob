@@ -119,7 +119,6 @@
     <Compile Include="Experian\GetCompanyDataForCompanyScore.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
     <Compile Include="Misc\Agreement.cs" />
-    <Compile Include="Misc\CalculateNewMedals.cs" />
     <Compile Include="Misc\CustomerAddressHelper.cs" />
     <Compile Include="Misc\DisplayMarketplaceSecurityData.cs" />
     <Compile Include="Esign\EsignProcessPending.cs" />

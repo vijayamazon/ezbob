@@ -829,16 +829,6 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
-		private void CalculateNewMedals() {
-			if ((m_aryArgs.Length != 1)) {
-				m_oLog.Msg("Usage: CalculateNewMedals");
-				return;
-			} // if
-
-			m_oServiceClient.CalculateNewMedals();
-		}
-
-		[Activation]
 		private void CalculateNewMedalsForComparison()
 		{
 			if ((m_aryArgs.Length != 1)) {
