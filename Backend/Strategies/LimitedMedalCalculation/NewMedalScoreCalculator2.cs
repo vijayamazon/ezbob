@@ -32,14 +32,14 @@
 			this.db = db;
 		}
 
-		public ScoreResult CalculateMedalScore(int inputCustomerId)
+		public ScoreResult CalculateMedalScore(int inputCustomerId, DateTime calculationTime)
 		{
 			customerId = inputCustomerId;
 
 			var scoreResult = new ScoreResult();
 			try
 			{
-				GatherData();
+				GatherData(calculationTime);
 
 				var list = new List<MedalParameter>
 					{
@@ -98,7 +98,7 @@
 				scoreResult.ConsumerScoreGrade = consumerScoreMedalParameter.Grade;
 				scoreResult.ConsumerScoreScore = consumerScoreMedalParameter.Score;
 
-				scoreResult.EzbobSeniority = ezbobSeniorityMedalParameter.EzbobSeniority.HasValue ? ezbobSeniorityMedalParameter.EzbobSeniority.Value : DateTime.UtcNow;
+				scoreResult.EzbobSeniority = ezbobSeniorityMedalParameter.EzbobSeniority;
 				scoreResult.EzbobSeniorityWeight = ezbobSeniorityMedalParameter.Weight;
 				scoreResult.EzbobSeniorityGrade = ezbobSeniorityMedalParameter.Grade;
 				scoreResult.EzbobSeniorityScore = ezbobSeniorityMedalParameter.Score;
@@ -198,9 +198,11 @@
 			}
 		}
 
-		private void GatherData()
+		private void GatherData(DateTime calculationTime)
 		{
-			SafeReader sr = db.GetFirst("GetDataForMedalCalculation2", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			SafeReader sr = db.GetFirst("GetDataForMedalCalculation2", CommandSpecies.StoredProcedure,
+			                            new QueryParameter("CustomerId", customerId),
+			                            new QueryParameter("CalculationTime", calculationTime));
 			if (sr.IsEmpty)
 				throw new Exception("Failed gathering data from DB");
 			
@@ -263,7 +265,7 @@
 			}
 
 			var maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusString);
-			bool firstRepaymentDatePassed = firstRepaymentDate != null && firstRepaymentDate < DateTime.UtcNow;
+			bool firstRepaymentDatePassed = firstRepaymentDate != null && firstRepaymentDate < calculationTime;
 			
 			decimal netWorth;
 			if (totalZooplaValue != 0)

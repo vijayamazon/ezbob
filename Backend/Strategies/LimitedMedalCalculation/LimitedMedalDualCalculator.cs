@@ -26,8 +26,9 @@
 			ScoreResult result1 = null;
 			try
 			{
-				result1 = limitedMedalCalculator1.CalculateMedalScore(customerId);
-				ScoreResult result2 = limitedMedalCalculator2.CalculateMedalScore(customerId);
+				DateTime calculationTime = DateTime.UtcNow;
+				result1 = limitedMedalCalculator1.CalculateMedalScore(customerId, calculationTime);
+				ScoreResult result2 = limitedMedalCalculator2.CalculateMedalScore(customerId, calculationTime);
 
 				if (CheckResultsForMatching(result1, result2))
 				{

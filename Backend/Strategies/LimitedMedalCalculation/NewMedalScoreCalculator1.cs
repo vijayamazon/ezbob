@@ -18,6 +18,7 @@
 		private bool firstRepaymentDatePassed;
 		private bool failedCalculatingFreeCashFlow;
 		private bool failedCalculatingTangibleEquity;
+		private DateTime calculationTime;
 
 		public ScoreResult Results { get; set; }
 
@@ -27,8 +28,9 @@
 			this.db = db;
 		}
 
-		public ScoreResult CalculateMedalScore(ScoreResult inputData, int customerId)
+		public ScoreResult CalculateMedalScore(ScoreResult inputData, int customerId, DateTime calculationTime)
 		{
+			this.calculationTime = calculationTime;
 			Results = inputData;
 			try
 			{
@@ -51,13 +53,14 @@
 			return Results;
 		}
 
-		public ScoreResult CalculateMedalScore(int customerId)
+		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime)
 		{
+			this.calculationTime = calculationTime;
 			ScoreResult scoreResultForError;
 			try
 			{
 				var inputData = GatherData(customerId);
-				return CalculateMedalScore(inputData, customerId);
+				return CalculateMedalScore(inputData, customerId, calculationTime);
 			}
 			catch (Exception e)
 			{
@@ -71,10 +74,14 @@
 		private ScoreResult GatherData(int customerId)
 		{
 			var inputData = new ScoreResult();
-			SafeReader sr = db.GetFirst("GetDataForMedalCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			SafeReader sr = db.GetFirst("GetDataForMedalCalculation", CommandSpecies.StoredProcedure,
+			                            new QueryParameter("CustomerId", customerId),
+			                            new QueryParameter("CalculationTime", calculationTime));
 
 			if (sr.IsEmpty)
+			{
 				throw new Exception("Couldn't gather required data for the medal calculation");
+			}
 
 			inputData.BusinessScore = sr["BusinessScore"];
 			decimal tangibleEquity = sr["TangibleEquity"];
@@ -459,19 +466,19 @@
 			{
 				Results.BusinessSeniorityGrade = 0;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(1) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.Value.AddYears(1) > calculationTime)
 			{
 				Results.BusinessSeniorityGrade = 0;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(3) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.Value.AddYears(3) > calculationTime)
 			{
 				Results.BusinessSeniorityGrade = 1;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(5) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.Value.AddYears(5) > calculationTime)
 			{
 				Results.BusinessSeniorityGrade = 2;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(10) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.Value.AddYears(10) > calculationTime)
 			{
 				Results.BusinessSeniorityGrade = 3;
 			}

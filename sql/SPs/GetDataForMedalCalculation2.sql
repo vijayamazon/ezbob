@@ -3,7 +3,8 @@ IF OBJECT_ID('GetDataForMedalCalculation2') IS NULL
 GO
 
 ALTER PROCEDURE GetDataForMedalCalculation2
-@CustomerId INT
+	(@CustomerId INT,
+	 @CalculationTime DATETIME)
 AS
 BEGIN
 	DECLARE 
@@ -78,7 +79,7 @@ BEGIN
 		IsActive = 1
 		
 	IF @BusinessSeniority IS NULL
-		SET @BusinessSeniority = GETUTCDATE()
+		SET @BusinessSeniority = @CalculationTime
 
 	SELECT 
 		@ConsumerScore = MIN(ExperianConsumerScore)
@@ -161,7 +162,7 @@ BEGIN
 					)
 					SELECT @LateDays = datediff(dd, @ScheduleDate, @LastTransactionDate)
 				ELSE
-					SELECT @LateDays = datediff(dd, @ScheduleDate, GETUTCDATE())
+					SELECT @LateDays = datediff(dd, @ScheduleDate, @CalculationTime)
 					
 				IF @LateDays >= 7 
 				BEGIN

@@ -29,8 +29,9 @@
 				try
 				{
 					customerId = sr["CustomerId"];
-					ScoreResult result1 = calculator1.CalculateMedalScore(customerId);
-					ScoreResult result2 = calculator2.CalculateMedalScore(customerId);
+					DateTime calculationTime = DateTime.UtcNow;
+					ScoreResult result1 = calculator1.CalculateMedalScore(customerId, calculationTime);
+					ScoreResult result2 = calculator2.CalculateMedalScore(customerId, calculationTime);
 
 					DB.ExecuteNonQuery("StoreNewMedalForComparison1", CommandSpecies.StoredProcedure,
 									   new QueryParameter("CustomerId", customerId),

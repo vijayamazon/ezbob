@@ -3,7 +3,8 @@ IF OBJECT_ID('GetDataForMedalCalculation') IS NULL
 GO
 
 ALTER PROCEDURE GetDataForMedalCalculation
-@CustomerId INT
+	(@CustomerId INT,
+	 @CalculationTime DATETIME)
 AS
 BEGIN
 	DECLARE 
@@ -54,7 +55,7 @@ BEGIN
 		IsActive = 1
 		
 	IF @BusinessSeniority IS NULL
-		SET @BusinessSeniority = GETUTCDATE()
+		SET @BusinessSeniority = @CalculationTime
 	
 	SELECT @ConsumerScore = MIN(ExperianConsumerScore)
 	FROM
@@ -86,7 +87,7 @@ BEGIN
 		Loan.Id = LoanSchedule.LoanId AND 
 		Loan.CustomerId = @CustomerId
 
-	IF @FirstRepaymentDate IS NOT NULL AND @FirstRepaymentDate < GETUTCDATE()
+	IF @FirstRepaymentDate IS NOT NULL AND @FirstRepaymentDate < @CalculationTime
 		SELECT @FirstRepaymentDatePassed = 1
 	
 	SELECT @OnTimeLoans = COUNT(1) FROM Loan WHERE CustomerId = @CustomerId AND Status = 'PaidOff'
@@ -140,7 +141,7 @@ BEGIN
 					)
 					SELECT @LateDays = datediff(dd, @ScheduleDate, @LastTransactionDate)
 				ELSE
-					SELECT @LateDays = datediff(dd, @ScheduleDate, GETUTCDATE())
+					SELECT @LateDays = datediff(dd, @ScheduleDate, @CalculationTime)
 					
 				IF @LateDays >= 7 
 				BEGIN
