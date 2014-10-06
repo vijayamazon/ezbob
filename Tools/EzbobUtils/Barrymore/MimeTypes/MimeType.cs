@@ -22,6 +22,24 @@
 
 		#endregion operator *
 
+		#region const "Text" and "Binary"
+
+		public static readonly MimeType Text = new MimeType {
+			FileExtension = string.Empty,
+			IsText = true,
+			PrimaryMimeType = MimeTypeResolver.TextMimeTypeName,
+			SecondaryMimeTypes = string.Empty,
+		};
+
+		public static readonly MimeType Binary = new MimeType {
+			FileExtension = string.Empty,
+			IsText = false,
+			PrimaryMimeType = MimeTypeResolver.BinaryMimeTypeName,
+			SecondaryMimeTypes = string.Empty,
+		};
+
+		#endregion const "Text" and "Binary"
+
 		#region public
 
 		#region constructor
@@ -96,8 +114,8 @@
 		public bool IsCommon {
 			get {
 				return
-					(PrimaryMimeType == MimeTypeResolver.DefaultMimeType) ||
-					(PrimaryMimeType == MimeTypeResolver.TextMimeType);
+					(PrimaryMimeType == MimeTypeResolver.BinaryMimeTypeName) ||
+					(PrimaryMimeType == MimeTypeResolver.TextMimeTypeName);
 			} // get
 		} // IsCommon
 

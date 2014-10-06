@@ -135,7 +135,14 @@
 					return sFileMimeType;
 				} // if
 
+				oLog.Debug("MIME type by content {0} does not conform to this limitation {1}.", sFileMimeType, this);
+
 				MimeType oFileMimeType = mtr.Find(sFileMimeType);
+
+				if (oFileMimeType == null) {
+					oFileMimeType = MimeType.Binary;
+					oLog.Debug("Could not find MIME type by its name '{0}', using default MIME type '{1}'.", sFileMimeType, oFileMimeType.PrimaryMimeType);
+				} // if
 
 				if ((oExtMimeType == null) && oFileMimeType.IsCommon) {
 					oLog.Debug(
@@ -150,7 +157,7 @@
 						"MIME type by file ('{0}') differs from MIME type by extension ('{1}') but they are compatible so using the latter.",
 						oFileMimeType.PrimaryMimeType,
 						oExtMimeType == null ? "-- null --" : oExtMimeType.PrimaryMimeType
-					);
+						);
 
 					return oExtMimeType == null ? null : oExtMimeType.PrimaryMimeType;
 				} // if
