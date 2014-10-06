@@ -74,7 +74,7 @@
 			}
 			var calculator = new NewMedalScoreCalculator1(DB, Log);
 			var medalScore = calculator.CalculateMedalScore(new ScoreResult(businessScore, _request.AnnualProfit, _request.AnnualTurnover,
-			                                               tangibleEquity, businessSeniority, consumerScore, netWorth), 0);
+			                                               tangibleEquity, businessSeniority, consumerScore, netWorth), 0, DateTime.UtcNow);
 			
 			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {
