@@ -59,7 +59,8 @@ EzBob.Underwriter.CAIS.CaisManageView = Backbone.Marionette.ItemView.extend({
 	}, // ui
 
 	onRender: function() {
-		this.checkedFileModelChanged();
+	    this.checkedFileModelChanged();
+	    EzBob.handleUserLayoutSetting();
 	}, // onRender
 
 	serializeData: function() {

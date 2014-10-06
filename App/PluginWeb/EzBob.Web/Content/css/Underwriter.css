@@ -1399,7 +1399,7 @@ td a.edit-loan {
 .sidebar-light .nav-list > li .submenu > li > span, 
 .sidebar-light .nav-list > li .submenu > li > ul > li > a, 
 .sidebar-light #nav-horizontal.nav-xs > li a,
- .sidebar-light #sidebar-collapse > [class*="fa-"], 
+.sidebar-light #sidebar-collapse > [class*="fa-"], 
 .sidebar-light .sidebar-collapsed .nav-list > li.open:hover > a {
     background-color: #ffffff;
     color: #323232;
@@ -1449,6 +1449,10 @@ td a.edit-loan {
 
 .sidebar-collapsed .nav-list > li > ul.submenu span {
     display: none;
+}
+
+.sidebar-collapsed .nav-list > li .submenu > li > ul > li > a {
+    padding: 7px 0 8px 0;
 }
 
 .table > tbody + tbody {
@@ -1613,9 +1617,6 @@ td a.edit-loan {
 .remaining-funds-color {
     color: lightgray;
 }
-.sidebar-collapsed .nav-list {
-    width: 42px;
-}
 
 .sidebar-collapsed .nav > li > a.customers-link {
     display: block;
@@ -1623,7 +1624,6 @@ td a.edit-loan {
 
 .sidebar-collapsed .nav > li > a.more-options-link {
     display: block;
-    float: none;
     /*position: inherit;*/
 }
 
@@ -1633,7 +1633,6 @@ td a.edit-loan {
 
 .nav > li > a.more-options-link {
     display: inline-block;
-    float: right;
     /*position: absolute;
     right: 0;*/
 }
@@ -1731,6 +1730,11 @@ td a.edit-loan {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
     }
+
+.nav-list > li > a.more-options-link:hover,
+.nav-list > li > a.customers-link:hover {
+    margin-left: 0;
+}
 
 #sidebar-collapse > [class*="fa-"] {
     background-color: #ebebeb !important;
