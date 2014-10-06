@@ -248,7 +248,12 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult GridRejected(bool includeTestCustomers) {
-			return LoadGrid("UwGridRejected", includeTestCustomers, () => new GridRejectedRow());
+			return LoadGrid(
+				"UwGridRejected",
+				includeTestCustomers,
+				() => new GridRejectedRow(),
+				oMoreSpArgs: new [] { new QueryParameter("@Now", DateTime.UtcNow), }
+			);
 		} // GridRejected
 
 		#endregion method GridRejected
@@ -270,7 +275,13 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult GridRegistered(bool includeTestCustomers, bool includeAllCustomers) {
-			return LoadGrid("UwGridRegistered", includeTestCustomers, includeAllCustomers, () => new GridRegisteredRow());
+			return LoadGrid(
+				"UwGridRegistered",
+				includeTestCustomers,
+				includeAllCustomers,
+				() => new GridRegisteredRow(),
+				oMoreSpArgs: new [] { new QueryParameter("@Now", DateTime.UtcNow), }
+			);
 		} // GridRegistered
 
 		#endregion method GridRegistered

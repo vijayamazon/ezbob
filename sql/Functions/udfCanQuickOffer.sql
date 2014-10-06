@@ -2,7 +2,7 @@ IF OBJECT_ID ('dbo.udfCanQuickOffer') IS NOT NULL
 	DROP FUNCTION dbo.udfCanQuickOffer
 GO
 
-CREATE FUNCTION dbo.udfCanQuickOffer()
+CREATE FUNCTION dbo.udfCanQuickOffer(@Now DATETIME)
 RETURNS @out TABLE (
 	Enabled INT NOT NULL,
 	FundsAvailable DECIMAL(18, 4) NULL,
@@ -62,7 +62,7 @@ BEGIN
 			INNER JOIN CashRequests r
 				ON l.RequestCashId = r.Id
 				AND r.QuickOfferID IS NOT NULL
-				AND CONVERT(DATE, l.Date) = CONVERT(DATE, GETUTCDATE())
+				AND CONVERT(DATE, l.Date) = CONVERT(DATE, @Now)
 
 		SET @LoanCount = ISNULL(@LoanCount, 0)
 		SET @IssuedAmount = ISNULL(@IssuedAmount, 0)
@@ -96,7 +96,7 @@ BEGIN
 		WHERE
 			Enabled = 1
 			AND
-			CONVERT(DATE, Date) = CONVERT(DATE, GETUTCDATE())
+			CONVERT(DATE, Date) = CONVERT(DATE, @Now)
 
 		SET @FundsAvailable = ISNULL(@PacnetBalance, 0) + ISNULL(@ManualBalance, 0)
 
@@ -134,7 +134,7 @@ BEGIN
 				(r.UnderwriterDecision IS NULL AND r.SystemDecision = 'Approve' AND r.UnderwriterComment = 'Automatic Re-Approve')
 			)
 			AND
-			r.OfferStart <= GETUTCDATE() AND GETUTCDATE() <= r.OfferValidUntil
+			r.OfferStart <= @Now AND @Now <= r.OfferValidUntil
 
 		SET @OpenCashRequests = ISNULL(@OpenCashRequests, 0)
 

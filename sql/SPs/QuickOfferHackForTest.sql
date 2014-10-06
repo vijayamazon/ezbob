@@ -10,7 +10,8 @@ GO
 
 ALTER PROCEDURE QuickOfferHackForTest
 @CustomerID INT,
-@BusinessScore INT
+@BusinessScore INT,
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -33,7 +34,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@IncorpDate = CONVERT(NVARCHAR, DATEADD(month, - qoc.CompanySeniorityMonths - 6, GETUTCDATE()), 112),
+		@IncorpDate = CONVERT(NVARCHAR, DATEADD(month, - qoc.CompanySeniorityMonths - 6, @Now), 112),
 		@AmlMin = AmlMin,
 		@ConsumerScoreMin = PersonalScoreMin
 	FROM
@@ -65,8 +66,8 @@ BEGIN
 	)
 	SELECT
 		c.FirstName, c.Surname, 'AB101BA',
-		DATEADD(year, - qoc.ApplicantMinAgeYears - 6, GETUTCDATE()),
-		DATEADD(hour, 8, GETUTCDATE()),
+		DATEADD(year, - qoc.ApplicantMinAgeYears - 6, @Now),
+		DATEADD(hour, 8, @Now),
 		'{"Output":{"FullConsumerData":{"ConsumerData":{"CAIS":[{"CAISDetails":[{}]}]}}}}',
 		'{"Request":"Quick Offer Hack for Test"}',
 		NULL,
@@ -93,7 +94,7 @@ BEGIN
 	INSERT INTO MP_ServiceLog (ServiceType, InsertDate, RequestData, ResponseData, CustomerId, DirectorId)
 	VALUES (
 		'AML A check',
-		DATEADD(hour, 8, GETUTCDATE()),
+		DATEADD(hour, 8, @Now),
 		'<request>Quick Offer Hack for Test</request>',
 
 		'<?xml version="1.0" encoding="utf-16"?><ProcessConfigResponseType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><ProcessConfigResultsBlock xmlns="http://schema.uk.experian.com/eih/2011/03"><EIAResultBlock><AuthenticationIndex>'
@@ -114,7 +115,7 @@ BEGIN
 		CompanyRefNumber, CustomerId, DirectorId
 	)
 	SELECT
-		null, null, null, null, DATEADD(hour, 8, GETUTCDATE()),
+		null, null, null, null, DATEADD(hour, 8, @Now),
 		'<?xml version="1.0" standalone="yes" ?><GEODS><REQUEST><DL72><DIRFORENAME>' +
 		c.FirstName +
 		'</DIRFORENAME><DIRSURNAME>' +

@@ -1,12 +1,16 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[QuickOfferSave]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[QuickOfferSave]
+IF OBJECT_ID('QuickOfferSave') IS NULL
+	EXECUTE('CREATE PROCEDURE QuickOfferSave AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[QuickOfferSave] 
-	(@CustomerID INT,
+
+ALTER PROCEDURE QuickOfferSave
+@Now DATETIME,
+@CustomerID INT,
 @Amount DECIMAL(18, 2),
 @Aml INT,
 @BusinessScore INT,
@@ -20,16 +24,18 @@ CREATE PROCEDURE [dbo].[QuickOfferSave]
 @PotentialTerm INT,
 @PotentialInterestRate DECIMAL(18, 6),
 @PotentialSetupFee DECIMAL(18, 6),
-@QuickOfferID INT OUTPUT)
+@QuickOfferID INT OUTPUT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	INSERT INTO QuickOffer(
 		Amount, CreationDate, ExpirationDate, Aml, BusinessScore,
 		IncorporationDate, TangibleEquity, TotalCurrentAssets,
 		ImmediateTerm, ImmediateInterestRate, ImmediateSetupFee,
 		PotentialAmount, PotentialTerm, PotentialInterestRate,PotentialSetupFee
 	) VALUES (
-		@Amount, GETUTCDATE(), DATEADD(hour, dbo.udfQuickOfferDuration(), GETUTCDATE()), @Aml, @BusinessScore,
+		@Amount, @Now, DATEADD(hour, dbo.udfQuickOfferDuration(), @Now), @Aml, @BusinessScore,
 		@IncorporationDate, @TangibleEquity, @TotalCurrentAssets,
 		@ImmediateTerm, @ImmediateInterestRate, @ImmediateSetupFee,
 		@PotentialAmount, @PotentialTerm, @PotentialInterestRate, @PotentialSetupFee

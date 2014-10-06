@@ -92,7 +92,8 @@
 					},
 					"QuickOfferDataLoad",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@CustomerID", m_nCustomerID)
+					new QueryParameter("@CustomerID", m_nCustomerID),
+					new QueryParameter("@Now", DateTime.UtcNow)
 				);
 			}
 			catch (Exception e) {
@@ -169,7 +170,8 @@
 					"QuickOfferHackForTest",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@CustomerID", m_nCustomerID),
-					new QueryParameter("@BusinessScore", nTargetBusinessScore)
+					new QueryParameter("@BusinessScore", nTargetBusinessScore),
+					new QueryParameter("@Now", DateTime.UtcNow)
 				);
 			}
 			catch (Exception e) {

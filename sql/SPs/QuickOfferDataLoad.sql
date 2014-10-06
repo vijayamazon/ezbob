@@ -9,7 +9,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE QuickOfferDataLoad
-@CustomerID INT
+@CustomerID INT,
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -54,7 +55,7 @@ BEGIN
 		@ConsumerScoreMin = ConsumerScoreMin,
 		@ApplicantMinAgeYears = ApplicantMinAgeYears
 	FROM
-		dbo.udfCanQuickOffer()
+		dbo.udfCanQuickOffer(@Now)
 
 	---------------------------------------------------------------------------
 
@@ -120,7 +121,7 @@ BEGIN
 		AND
 		(cu.ReferenceSource IS NULL OR cu.ReferenceSource != 'liqcen')
 		AND
-		DATEDIFF(day, cu.DateOfBirth, GETDATE()) >= 365 * @ApplicantMinAgeYears
+		DATEDIFF(day, cu.DateOfBirth, @Now) >= 365 * @ApplicantMinAgeYears
 
 	---------------------------------------------------------------------------
 
@@ -163,7 +164,7 @@ BEGIN
 	WHERE
 		eda.CustomerId = @CustomerID
 		AND (
-			DATEDIFF(month, eda.Date, GETDATE()) < qoc.NoDefaultsInLastMonths -- default in last X months
+			DATEDIFF(month, eda.Date, @Now) < qoc.NoDefaultsInLastMonths -- default in last X months
 			OR
 			eda.Balance > 0 -- unsettled default
 		)

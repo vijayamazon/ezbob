@@ -117,6 +117,7 @@
 					oDB.ExecuteNonQuery(
 						"QuickOfferSave",
 						CommandSpecies.StoredProcedure,
+						new QueryParameter("@Now", DateTime.UtcNow),
 						new QueryParameter("@CustomerID", CustomerID),
 						new QueryParameter("@Amount", oOffer.Amount),
 						new QueryParameter("@Aml", oOffer.Aml),
