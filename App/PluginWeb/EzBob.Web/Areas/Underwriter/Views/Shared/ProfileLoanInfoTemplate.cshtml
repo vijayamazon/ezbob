@@ -106,7 +106,7 @@
 			<tr>
 				<td>
 					<span class="customer-details-title">Name</span>
-					<span class="pull-right" style="width:200px"><%- data.Name %></span>
+					<span class="pull-right" style="max-width:200px"><%- data.Name %></span>
 				</td>
 			</tr>
             <tr>
@@ -332,6 +332,9 @@
             </tr>
         </tfoot>
     </table>
+     <div class="lightDarkThemeSwitch make-switch switch-mini" data-on="info" data-off="default" data-animated="true" data-off-label="dark" data-on-label="light" style="width: 100%">
+        <input type="checkbox" checked/>
+    </div>
 </script>
 
 <script id="profile-loan-info-template" type="text/template">

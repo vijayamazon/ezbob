@@ -21,6 +21,8 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		this.initSwitch(".testUserSwitch", this.model.get('IsTestInAlertMode'), this.toggleIsTest);
 
 		this.initSwitch(".manualDecisionSwitch", this.model.get('IsAvoid'), this.toggleManualDecision);
+	    
+		this.initSwitch(".lightDarkThemeSwitch", $.cookie('sidebar-color') == 'light', this.toggleTheme);
 
 		if (this.model.get('BrokerName') !== '')
 			this.$el.find('#brokerDetailsBtn').removeClass('hide');
@@ -99,6 +101,15 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		});
 	}, // toggleManualDecision
 
+	toggleTheme: function (event, state) {
+	    console.log('toggle', event, state);
+	    $("#main-container").toggleClass("sidebar-light", state.value);
+	    if (state.value) {
+	        $.cookie('sidebar-color', 'light');
+	    } else {
+	        $.cookie('sidebar-color', 'dark');
+	    }
+	},
 	setAlertStatus: function(isAlert, td) {
 		this.$el.find(td).toggleClass('red_cell', isAlert);
 	}, // setAlertStatus

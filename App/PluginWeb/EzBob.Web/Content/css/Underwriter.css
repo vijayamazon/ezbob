@@ -1387,6 +1387,45 @@ td a.edit-loan {
         min-width: inherit;
     }
 
+.sidebar-light #sidebar.bg:before, 
+.sidebar-light #sidebar.bg,
+.sidebar-light #sidebar-dashboard:before,
+.sidebar-light #sidebar-dashboard,
+.sidebar-light #sidebar .nav-list > li > a,
+.sidebar-light #sidebar .nav-list > li > label,
+.sidebar-light .nav-list > li .submenu,
+.sidebar-light .sidebar-collapsed .nav-list > li > a > span {
+    background-color: #ffffff;
+    color: #323232;
+}
+
+.sidebar-light #sidebar-dashboard .box .box-title {
+    background: linear-gradient(to bottom, #d8d8d8, #bebebe);
+}
+
+.sidebar-light #sidebar-dashboard .box .box-title * {
+    color: #323232;
+}
+
+.sidebar-light #sidebar-dashboard .table > thead > tr > th,
+.sidebar-light #sidebar-dashboard .table > tbody > tr > th,
+.sidebar-light #sidebar-dashboard .table > tfoot > tr > th,
+.sidebar-light #sidebar-dashboard .table > thead > tr > td,
+.sidebar-light #sidebar-dashboard .table > tbody > tr > td,
+.sidebar-light #sidebar-dashboard .table > tfoot > tr > td,
+.sidebar-light #sidebar .nav.nav-list li {
+    border-bottom: #c4c4c4 1px solid;
+    box-shadow: 0px 2px 1px -1px #ebebeb;
+}
+
+.sidebar-light .customer-details-title {
+    color: #8f8f8f;
+}
+
+.sidebar-light .has-switch label {
+    background: linear-gradient(to bottom, #cfcfcf, #cfcfcf);
+}
+
 .sidebar-collapsed .nav-list > li > ul.submenu {
     position: relative;
     z-index: 120;
