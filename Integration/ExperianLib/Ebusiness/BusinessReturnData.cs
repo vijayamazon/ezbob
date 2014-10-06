@@ -8,13 +8,41 @@
 			get { return !string.IsNullOrEmpty(Error); }
 		} // IsError
 
-		public virtual string Error { get; protected set; }
-		public virtual DateTime? LastCheckDate { get; protected set; }
+		#region property Error
+
+		public virtual string Error {
+			get { return m_sError; }
+			protected set { m_sError = value; }
+		} // Error
+
+		private string m_sError;
+
+		#endregion property Error
+
+		#region property LastCheckDate
+
+		public virtual DateTime? LastCheckDate {
+			get { return m_oLastCheckDate; }
+			protected set { m_oLastCheckDate = value; }
+		} // LastCheckDate
+
+		private DateTime? m_oLastCheckDate;
+
+		#endregion property LastCheckDate
+
 		public virtual bool IsDataExpired { get; set; }
-		public virtual string OutputXml { get; private set; }
 		public virtual long ServiceLogID { get; private set; }
 
-		public virtual decimal BureauScore { get; protected set; }
+		#region property BureauScore
+
+		public virtual decimal BureauScore {
+			get { return m_nBureauScore; }
+			protected set { m_nBureauScore = value; }
+		} // BureauScore
+
+		private decimal m_nBureauScore;
+
+		#endregion property BureauScore
 
 		public virtual decimal MaxBureauScore { get; set; }
 		public virtual decimal CreditLimit { get; set; }
@@ -28,7 +56,17 @@
 		public virtual string PostCode { get; set; }
 
 		public virtual DateTime? IncorporationDate { get; set; }
-		public virtual bool CacheHit { get; set; }
+
+		#region property CacheHit
+
+		public virtual bool CacheHit {
+			get { return m_bCacheHit; }
+			set { m_bCacheHit = value; }
+		} // CacheHit
+
+		private bool m_bCacheHit;
+
+		#endregion property CacheHit
 
 		public abstract bool IsLimited { get; }
 
@@ -37,18 +75,20 @@
 		#region protected
 
 		protected BusinessReturnData(string sError, decimal nBureauScore) {
-			LastCheckDate = DateTime.UtcNow;
-			Error = sError;
-			BureauScore = nBureauScore;
+			m_oLastCheckDate = DateTime.UtcNow;
+			m_sError = sError;
+			m_nBureauScore = nBureauScore;
 		} // constructor
 
 		protected BusinessReturnData(Exception ex) {
-			Error = ex.Message;
+			m_sError = ex.Message;
 		} // constructor
 
-		protected BusinessReturnData(long nServiceLogID, DateTime lastCheckDate) { 
-			LastCheckDate = lastCheckDate;
+		protected BusinessReturnData(long nServiceLogID, DateTime lastCheckDate, bool bCacheHit) {
+			m_sError = string.Empty;
 			ServiceLogID = nServiceLogID;
+			m_oLastCheckDate = lastCheckDate;
+			m_bCacheHit = bCacheHit;
 		} // constructor
 
 		#endregion constructors

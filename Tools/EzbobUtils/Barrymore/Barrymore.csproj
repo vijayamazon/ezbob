@@ -59,12 +59,15 @@
     <Compile Include="Exceptions\Alert.cs" />
     <Compile Include="Exceptions\Warning.cs" />
     <Compile Include="Extensions\EnumExt.cs" />
+    <Compile Include="Lingvo\English.cs" />
     <Compile Include="IParametrisable.cs" />
     <Compile Include="Exceptions\NullSeldenException.cs" />
     <Compile Include="Extensions\IntExt.cs" />
     <Compile Include="Extensions\DecimalExt.cs" />
     <Compile Include="Gravatar.cs" />
     <Compile Include="JsonUtils\JsonExtensions.cs" />
+    <Compile Include="Lingvo\Grammar.cs" />
+    <Compile Include="Lingvo\ILanguage.cs" />
     <Compile Include="MimeTypes\MimeType.cs" />
     <Compile Include="MimeTypes\MimeTypeResolver.cs" />
     <Compile Include="ObjectPool\IPoolable.cs" />

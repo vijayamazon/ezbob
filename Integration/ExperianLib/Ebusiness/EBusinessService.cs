@@ -14,6 +14,7 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Lingvo;
 	using StructureMap;
 
 	public class EBusinessService {
@@ -340,7 +341,9 @@
 		#region method MakeRequest
 
 		private string MakeRequest(string post) {
-			ms_oLog.Debug("Request URL: {0} with data: {1}", eSeriesUrl, post);
+			string sRequestID = Guid.NewGuid().ToString("N");
+
+			ms_oLog.Debug("Request {2} to URL: {0} with data: {1}", eSeriesUrl, post, sRequestID);
 
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(eSeriesUrl);
 			request.Method = "POST";
@@ -352,13 +355,24 @@
 			stOut.Write(post);
 			stOut.Close();
 
-			var resp = request.GetResponse();
+			using (WebResponse resp = request.GetResponse()) {
+				Stream oStream = resp.GetResponseStream();
 
-			var sr = new StreamReader(resp.GetResponseStream());
+				if (oStream == null) {
+					ms_oLog.Warn("Request {0}: result is empty because could not read from web response.", sRequestID);
+					return string.Empty;
+				} // if
 
-			var respStr = sr.ReadToEnd();
+				using (var sr = new StreamReader(oStream)) {
+					string sResponse = sr.ReadToEnd();
 
-			return respStr;
+					int nLen = Encoding.ASCII.GetByteCount(sResponse);
+
+					ms_oLog.Warn("Request {0}: result is {1} long.", sRequestID, Grammar.Number(nLen, "byte"));
+
+					return sResponse;
+				} // using reader
+			} // using response
 		} // MakeRequest
 
 		#endregion method MakeRequest

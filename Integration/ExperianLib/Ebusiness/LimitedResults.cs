@@ -16,14 +16,9 @@
 
 		#region constructors
 
-		public LimitedResults(ExperianLtd oExperianLtd, bool bCacheHit) : base(oExperianLtd.ServiceLogID, oExperianLtd.ReceivedTime) {
-			Error = string.Empty;
-
+		public LimitedResults(ExperianLtd oExperianLtd, bool bCacheHit) : base(oExperianLtd.ServiceLogID, oExperianLtd.ReceivedTime, bCacheHit) {
 			Owners = new SortedSet<string>();
-
-			CacheHit = bCacheHit;
 			RawExperianLtd = oExperianLtd;
-
 			Parse();
 		} // constructor
 
@@ -51,13 +46,10 @@
 
 		#region private
 
-		#region method Parse
-
 		private void Parse() {
-			if (!RawExperianLtd.CommercialDelphiScore.HasValue)
-				Error = "There is no RISKSCORE in the experian response! ";
-			else
-				BureauScore = RawExperianLtd.CommercialDelphiScore.Value;
+			BureauScore = RawExperianLtd.CommercialDelphiScore.HasValue
+				? RawExperianLtd.CommercialDelphiScore.Value
+				: 0;
 
 			if (RawExperianLtd.CommercialDelphiCreditLimit.HasValue)
 				CreditLimit = RawExperianLtd.CommercialDelphiCreditLimit.Value;
@@ -109,8 +101,6 @@
 			IsDataExpired = LastCheckDate.HasValue &&
 				(DateTime.UtcNow - LastCheckDate.Value).TotalDays >= CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 		} // Parse
-
-		#endregion method Parse
 
 		#endregion private
 	} // class LimitedResults
