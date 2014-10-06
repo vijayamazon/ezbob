@@ -246,7 +246,7 @@
 
 			OfflineScoring offlineScoringRecord = customer.OfflineScoring.FirstOrDefault(x => x.IsActive);
 
-			if ((customer.Company.TypeOfBusiness == TypeOfBusiness.LLP || customer.Company.TypeOfBusiness == TypeOfBusiness.Limited) && customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") < 2)
+			if (customer.Company != null && (customer.Company.TypeOfBusiness == TypeOfBusiness.LLP || customer.Company.TypeOfBusiness == TypeOfBusiness.Limited) && customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") < 2)
 			{
 				// The customer should have medal
 				if (offlineScoringRecord == null)
@@ -268,7 +268,7 @@
 						});
 				}
 			}
-			else if ((customer.Company.TypeOfBusiness != TypeOfBusiness.LLP &&
+			else if (customer.Company != null && (customer.Company.TypeOfBusiness != TypeOfBusiness.LLP &&
 			     customer.Company.TypeOfBusiness != TypeOfBusiness.Limited) ||
 			    customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") > 1)
 			{
