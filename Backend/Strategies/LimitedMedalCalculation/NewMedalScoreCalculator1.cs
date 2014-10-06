@@ -87,7 +87,7 @@
 			}
 
 			inputData.BusinessScore = sr["BusinessScore"];
-			decimal tangibleEquity = sr["TangibleEquity"];
+			decimal tangibleEquityValue = sr["TangibleEquity"];
 			inputData.BusinessSeniority = sr["BusinessSeniority"];
 			inputData.ConsumerScore = sr["ConsumerScore"];
 			string maritalStatusStr = sr["MaritalStatus"];
@@ -124,6 +124,8 @@
 			
 			if (wasAbleToGetSummaryData)
 			{
+				inputData.BasedOnHmrcValues = true;
+				inputData.TangibleEquityValue = tangibleEquityValue;
 				freeCashFlowDataAvailable = true;
 
 				decimal totalRevenuesInSummary = 0;
@@ -143,6 +145,7 @@
 			}
 			else
 			{
+				inputData.BasedOnHmrcValues = false;
 				var yodleeMps = new List<int>();
 
 				db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>
@@ -185,7 +188,7 @@
 
 			if (inputData.AnnualTurnover > 0)
 			{
-				inputData.TangibleEquity = tangibleEquity / inputData.AnnualTurnover;
+				inputData.TangibleEquity = inputData.TangibleEquityValue / inputData.AnnualTurnover;
 				inputData.FreeCashFlow = inputData.FreeCashFlowValue / inputData.AnnualTurnover;
 			}
 			else

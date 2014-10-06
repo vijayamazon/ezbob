@@ -55,7 +55,11 @@ ALTER PROCEDURE StoreNewMedalForComparison1
 	,@TotalScore DECIMAL(18,6)
 	,@TotalScoreNormalized DECIMAL(18,6)
 	,@Medal NVARCHAR(50)
-	,@Error NVARCHAR(500))
+	,@Error NVARCHAR(500)
+	,@FreeCashFlowValue DECIMAL(18,6)
+	,@TangibleEquityValue DECIMAL(18,6)
+	,@ValueAdded DECIMAL(18,6)
+	,@BasedOnHmrcValues BIT)
 AS
 BEGIN
 	INSERT INTO NewMedalComparison1 (
@@ -111,7 +115,11 @@ BEGIN
 	,TotalScore
 	,TotalScoreNormalized
 	,Medal
-	,Error)
+	,Error
+	,FreeCashFlowValue
+	,TangibleEquityValue
+	,ValueAdded
+	,BasedOnHmrcValues)
 	VALUES (
 	 @CustomerId
 	,@BusinessScore
@@ -165,6 +173,10 @@ BEGIN
 	,@TotalScore
 	,@TotalScoreNormalized
 	,@Medal
-	,@Error)
+	,@Error
+	,@FreeCashFlowValue
+	,@TangibleEquityValue
+	,@ValueAdded
+	,@BasedOnHmrcValues)
 END
 GO

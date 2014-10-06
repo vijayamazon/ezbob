@@ -162,8 +162,12 @@
 			                   new QueryParameter("NumOfEarlyRepaymentsScore", result.NumOfEarlyRepaymentsScore),
 			                   new QueryParameter("TotalScore", result.TotalScore),
 			                   new QueryParameter("TotalScoreNormalized", result.TotalScoreNormalized),
-			                   new QueryParameter("Medal", result.Medal.ToString()),
-			                   new QueryParameter("Error", result.Error));
+							   new QueryParameter("Medal", result.Medal.ToString()),
+							   new QueryParameter("Error", result.Error),
+							   new QueryParameter("FreeCashFlowValue", result.FreeCashFlowValue),
+							   new QueryParameter("TangibleEquityValue", result.TangibleEquityValue),
+							   new QueryParameter("ValueAdded", result.ValueAdded),
+							   new QueryParameter("BasedOnHmrcValues", result.BasedOnHmrcValues));
 		}
 	}
 }

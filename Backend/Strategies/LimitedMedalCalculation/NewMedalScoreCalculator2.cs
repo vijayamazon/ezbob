@@ -1,6 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
 {
 	using System.Collections.Generic;
+	using EzBob.Models.Marketplaces.Builders;
+	using EzBob.Models.Marketplaces.Yodlee;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
@@ -12,6 +14,10 @@
 		private readonly ASafeLog log;
 		private readonly AConnection db;
 		private int customerId;
+		private decimal freeCashFlowValue;
+		private decimal valueAdded;
+		private decimal tangibleEquityValue;
+		private bool basedOnHmrc;
 
 		private BusinessScoreMedalParameter businessScoreMedalParameter;
 		private TangibleEquityMedalParameter tangibleEquityMedalParameter;
@@ -141,6 +147,11 @@
 				scoreResult.TotalScore = totalScore;
 				scoreResult.TotalScoreNormalized = normalizedTotalScore;
 
+				scoreResult.FreeCashFlowValue = freeCashFlowValue;
+				scoreResult.TangibleEquityValue = tangibleEquityValue;
+				scoreResult.BasedOnHmrcValues = basedOnHmrc;
+				scoreResult.ValueAdded = valueAdded;
+
 				scoreResult.Medal = CalculateMedal(normalizedTotalScore);
 			}
 			catch (Exception e)
@@ -204,14 +215,17 @@
 			                            new QueryParameter("CustomerId", customerId),
 			                            new QueryParameter("CalculationTime", calculationTime));
 			if (sr.IsEmpty)
+			{
 				throw new Exception("Failed gathering data from DB");
-			
+			}
+
 			int businessScore = sr["BusinessScore"];
 			decimal rawTangibleEquity = sr["TangibleEquity"];
 			DateTime? businessSeniority = sr["BusinessSeniority"];
 			int consumerScore = sr["ConsumerScore"];
 			decimal ebida = sr["Ebida"];
 			decimal hmrcAnnualTurnover = sr["HmrcAnnualTurnover"];
+			decimal hmrcValueAdded = sr["HmrcValueAdded"];
 			int totalZooplaValue = sr["TotalZooplaValue"];
 			string maritalStatusString = sr["MaritalStatus"];
 			DateTime? ezbobSeniority = sr["EzbobSeniority"];
@@ -221,7 +235,6 @@
 			DateTime? firstRepaymentDate = sr["FirstRepaymentDate"];
 			string typeOfBusiness = sr["TypeOfBusiness"];
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
-			decimal yodleeAnnualTurnover = sr["YodleeTurnover"];
 			decimal mortgageBalance = sr["BalanceOfMortgages"];
 			decimal actualLoanRepayments = sr["ActualLoanRepayments"];
 			decimal fcfFactor = sr["FcfFactor"];
@@ -236,32 +249,86 @@
 			{
 				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", numOfHmrcMps));
 			}
-			
-			decimal annualTurnover = !foundSummary ? yodleeAnnualTurnover : hmrcAnnualTurnover;
 
+			decimal annualTurnover;
 			decimal freeCashFlow = 0;
 			decimal tangibleEquity = 0;
-			decimal factoredLoanRepayments = actualLoanRepayments;
-			if (fcfFactor != 0)
+			if (foundSummary)
 			{
-				factoredLoanRepayments /= fcfFactor;
-			}
-			if (factoredLoanRepayments < 0)
-			{
-				factoredLoanRepayments = 0;
-			}
+				annualTurnover = hmrcAnnualTurnover;
+				tangibleEquityValue = rawTangibleEquity;
+				basedOnHmrc = true;
 
-			if (annualTurnover < 0)
-			{
-				annualTurnover = 0;
-			}
-			else if (annualTurnover != 0)
-			{
-				if (foundSummary)
+				decimal factoredLoanRepayments = actualLoanRepayments;
+				if (fcfFactor != 0)
 				{
-					freeCashFlow = (ebida - factoredLoanRepayments)/annualTurnover;
+					factoredLoanRepayments /= fcfFactor;
 				}
-				tangibleEquity = rawTangibleEquity / annualTurnover;
+				if (factoredLoanRepayments < 0)
+				{
+					factoredLoanRepayments = 0;
+				}
+
+				freeCashFlowValue = ebida - factoredLoanRepayments;
+				if (annualTurnover < 0)
+				{
+					annualTurnover = 0;
+				}
+				else if (annualTurnover != 0)
+				{
+					freeCashFlow = freeCashFlowValue / annualTurnover;
+					tangibleEquity = rawTangibleEquity / annualTurnover;
+				}
+
+				valueAdded = hmrcValueAdded;
+			}
+			else
+			{
+				var yodleeMps = new List<int>();
+				tangibleEquityValue = 0;
+				basedOnHmrc = false;
+
+				db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>
+					{
+						int mpId = yodleeSafeReader["Id"];
+						yodleeMps.Add(mpId);
+						return ActionResult.Continue;
+					}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+
+				if (yodleeMps.Count == 0)
+				{
+					freeCashFlowValue = 0;
+					valueAdded = 0;
+					annualTurnover = 0;
+				}
+				else
+				{
+					decimal totalFreeCashFlowValue = 0;
+					decimal totalValueAdded = 0;
+					decimal totalAnnualTurnover = 0;
+
+					foreach (int mpId in yodleeMps)
+					{
+						var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
+						YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
+
+						totalFreeCashFlowValue += (decimal)yodleeModel.BankStatementAnnualizedModel.FreeCashFlow;
+						totalValueAdded += (decimal)yodleeModel.BankStatementAnnualizedModel.TotalValueAdded;
+						totalAnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
+					}
+
+					freeCashFlowValue = totalFreeCashFlowValue;
+					valueAdded = totalValueAdded;
+					annualTurnover = totalAnnualTurnover;
+					if (annualTurnover < 0)
+					{
+						annualTurnover = 0;
+					}
+					else if (annualTurnover != 0)
+					{
+						freeCashFlow = freeCashFlowValue/annualTurnover;
+					}
+				}
 			}
 
 			var maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusString);

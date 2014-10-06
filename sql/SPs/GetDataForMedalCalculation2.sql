@@ -34,6 +34,7 @@ BEGIN
 		@ScheduleDate DATETIME,
 		@Ebida DECIMAL(18,6),
 		@HmrcAnnualTurnover DECIMAL(18,6),
+		@HmrcValueAdded DECIMAL(18,6),
 		@BalanceOfMortgages INT,
 		@FcfFactor NVARCHAR(MAX),
 		@ActualLoanRepayments INT,
@@ -185,7 +186,7 @@ BEGIN
 	
 	DROP TABLE #LateLoans
 	
-	SELECT @Ebida = SUM(Ebida), @HmrcAnnualTurnover = SUM(Revenues) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
+	SELECT @Ebida = SUM(Ebida), @HmrcAnnualTurnover = SUM(Revenues), @HmrcValueAdded = SUM(TotalValueAdded) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
 	
 	IF @Ebida IS NULL
 		SELECT @FoundSummary = 0
@@ -328,6 +329,7 @@ BEGIN
 		@OnTimeLoans AS OnTimeLoans,
 		@Ebida AS Ebida, 
 		@HmrcAnnualTurnover AS HmrcAnnualTurnover,
+		@HmrcValueAdded AS HmrcValueAdded,
 		@YodleeTurnover AS YodleeTurnover,		 
 		@NumOfLatePayments AS NumOfLatePayments, 
 		@NumOfEarlyPayments AS NumOfEarlyPayments,
