@@ -1394,7 +1394,13 @@ td a.edit-loan {
 .sidebar-light #sidebar .nav-list > li > a,
 .sidebar-light #sidebar .nav-list > li > label,
 .sidebar-light .nav-list > li .submenu,
-.sidebar-light .sidebar-collapsed .nav-list > li > a > span {
+.sidebar-light .sidebar-collapsed .nav-list > li > a > span,
+.sidebar-light .nav-list > li .submenu > li > a,
+.sidebar-light .nav-list > li .submenu > li > span, 
+.sidebar-light .nav-list > li .submenu > li > ul > li > a, 
+.sidebar-light #nav-horizontal.nav-xs > li a,
+ .sidebar-light #sidebar-collapse > [class*="fa-"], 
+.sidebar-light .sidebar-collapsed .nav-list > li.open:hover > a {
     background-color: #ffffff;
     color: #323232;
 }
@@ -1607,6 +1613,9 @@ td a.edit-loan {
 .remaining-funds-color {
     color: lightgray;
 }
+.sidebar-collapsed .nav-list {
+    width: 42px;
+}
 
 .sidebar-collapsed .nav > li > a.customers-link {
     display: block;
@@ -1614,6 +1623,7 @@ td a.edit-loan {
 
 .sidebar-collapsed .nav > li > a.more-options-link {
     display: block;
+    float: none;
     /*position: inherit;*/
 }
 
@@ -1623,6 +1633,7 @@ td a.edit-loan {
 
 .nav > li > a.more-options-link {
     display: inline-block;
+    float: right;
     /*position: absolute;
     right: 0;*/
 }
