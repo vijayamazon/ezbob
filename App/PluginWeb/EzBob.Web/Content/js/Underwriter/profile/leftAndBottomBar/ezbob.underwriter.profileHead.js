@@ -251,22 +251,26 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
     },
 
     changeDecisionButtonsState: function (isHideAll) {
-        var creditResult, disabled, userStatus;
-        disabled = !this.personalModel.get("IsCustomerInEnabledStatus");
-        creditResult = this.personalModel.get("CreditResult");
-        this.$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass("disabled", disabled);
-        if (isHideAll) {
-            this.$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").hide();
-        }
+        var creditResult = this.personalModel.get("CreditResult");
+
+        this.$el.find(
+	        "#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn"
+        ).toggleClass("disabled", !this.personalModel.get("IsCustomerInEnabledStatus"));
+
+        if (isHideAll)
+            this.$el.find("#SuspendBtn, #SignatureBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").hide();
+
         switch (creditResult) {
             case "WaitingForDecision":
                 this.$el.find("#ReturnBtn").hide();
                 this.$el.find("#RejectBtn").show();
                 this.$el.find("#ApproveBtn").show();
                 this.$el.find("#SuspendBtn").show();
+                this.$el.find("#SignatureBtn").show();
                 this.$el.find("#newCreditLineButtonId").addClass("disabled");
                 //if (!escalatedFlag) {this.$el.find("#EscalateBtn").show();}
                 break;
+
             case "Rejected":
             case "Approved":
             case "Late":
@@ -274,31 +278,38 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 this.$el.find("#RejectBtn").hide();
                 this.$el.find("#ApproveBtn").hide();
                 this.$el.find("#SuspendBtn").hide();
+                this.$el.find("#SignatureBtn").hide();
                 this.$el.find("#EscalateBtn").hide();
                 this.$el.find("#newCreditLineButtonId").removeClass("disabled");
                 break;
+
             case "Escalated":
                 this.$el.find("#ReturnBtn").hide();
                 this.$el.find("#RejectBtn").show();
                 this.$el.find("#ApproveBtn").show();
                 this.$el.find("#SuspendBtn").show();
+                this.$el.find("#SignatureBtn").show();
                 this.$el.find("#EscalateBtn").hide();
                 this.$el.find("#newCreditLineButtonId").addClass("disabled");
                 break;
+
             case "ApprovedPending":
                 this.$el.find("#ReturnBtn").show();
                 this.$el.find("#RejectBtn").hide();
                 this.$el.find("#ApproveBtn").hide();
                 this.$el.find("#SuspendBtn").hide();
+                this.$el.find("#SignatureBtn").hide();
                 this.$el.find("#EscalateBtn").hide();
                 this.$el.find("#newCreditLineButtonId").addClass("disabled");
-        }
-        userStatus = this.personalModel.get("UserStatus");
-        if (userStatus === 'Registered') {
+	            break;
+        } // switch
+
+        if (this.personalModel.get("UserStatus")=== 'Registered') {
             this.$el.find("#ReturnBtn").hide();
             this.$el.find("#RejectBtn").hide();
             this.$el.find("#ApproveBtn").hide();
             this.$el.find("#SuspendBtn").hide();
+            this.$el.find("#SignatureBtn").hide();
             this.$el.find("#EscalateBtn").hide();
         }
     },

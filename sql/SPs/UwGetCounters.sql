@@ -35,6 +35,8 @@ BEGIN
 			OR
 			c.CreditResult IN ('Escalated', 'WaitingForDecision', 'ApprovedPending')
 		)
+		AND
+		ISNULL(c.IsWaitingForSignature, 0) = 0
 	GROUP BY
 		CASE
 			WHEN c.CreditResult IS NULL THEN 'Registered'

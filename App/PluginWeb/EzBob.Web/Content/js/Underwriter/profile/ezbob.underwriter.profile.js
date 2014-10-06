@@ -255,6 +255,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		'click #EscalateBtn': 'EscalateBtnClick',
 		'click #SuspendBtn': 'SuspendBtnClick',
 		'click #ReturnBtn': 'ReturnBtnClick',
+		'click #SignatureBtn': 'SignatureBtnClick',
 		'click .add-director': 'addDirectorClicked'
 	}, // events
 
@@ -476,6 +477,17 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		return false;
 	}, // ReturnBtnClick
+
+	SignatureBtnClick: function(e) {
+		if ($(e.currentTarget).hasClass('disabled'))
+			return false;
+
+		var functionPopupView = new EzBob.Underwriter.Signature({ model: this.loanInfoModel });
+		functionPopupView.render();
+		functionPopupView.on('changedSystemDecision', this.changedSystemDecision, this);
+
+		return false;
+	}, // SignatureBtnClick
 
 	changedSystemDecision: function() {
 		this.summaryInfoModel.fetch();

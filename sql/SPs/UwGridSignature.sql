@@ -1,5 +1,5 @@
-IF OBJECT_ID('UwGridPending') IS NULL
-	EXECUTE('CREATE PROCEDURE UwGridPending AS SELECT 1')
+IF OBJECT_ID('UwGridSignature') IS NULL
+	EXECUTE('CREATE PROCEDURE UwGridSignature AS SELECT 1')
 GO
 
 SET ANSI_NULLS ON
@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE UwGridPending
+ALTER PROCEDURE UwGridSignature
 @WithTest BIT
 AS
 BEGIN
@@ -83,9 +83,7 @@ BEGIN
 			@WithTest = 1 OR c.IsTest = 0
 		)
 		AND
-		c.CreditResult = 'ApprovedPending'
-		AND
-		ISNULL(c.IsWaitingForSignature, 0) = 0
+		ISNULL(c.IsWaitingForSignature, 0) = 1
 	ORDER BY
 		c.Id DESC,
 		t.Id

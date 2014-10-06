@@ -176,6 +176,17 @@
 
 		#endregion method GridPending
 
+		#region method GridSignature
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		public JsonResult GridSignature(bool includeTestCustomers) {
+			return LoadGrid("UwGridSignature", includeTestCustomers, () => new GridPendingRow());
+		} // GridSignature
+
+		#endregion method GridWaitingForSignature
+
 		#region method GridApproved
 
 		[ValidateJsonAntiForgeryToken]
@@ -288,15 +299,15 @@
 
 		#region method LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory) {
-			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, null);
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, IEnumerable<QueryParameter> oMoreSpArgs = null) {
+			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, null, oMoreSpArgs: oMoreSpArgs);
 		} // LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, bool bIncludeAllCustomers, Func<AGridRow> oFactory) {
-			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers);
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, bool bIncludeAllCustomers, Func<AGridRow> oFactory, IEnumerable<QueryParameter> oMoreSpArgs = null) {
+			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers, oMoreSpArgs: oMoreSpArgs);
 		} // LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, bool? bIncludeAllCustomers, DateTime? now = null) {
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, bool? bIncludeAllCustomers, DateTime? now = null, IEnumerable<QueryParameter> oMoreSpArgs = null) {
 			var oRes = new SortedDictionary<long, AGridRow>();
 
 			var args = new List<QueryParameter> {
@@ -308,6 +319,9 @@
 
 			if (now.HasValue)
 				args.Add(new QueryParameter("@Now", now.Value));
+
+			if (oMoreSpArgs != null)
+				args.AddRange(oMoreSpArgs);
 
 			m_oDB.ForEachRowSafe(
 				(sr, bRowSetStarts) => {
@@ -367,6 +381,9 @@
 			string sWarning = string.Empty;
 			int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
 
+			if (model.status != CreditResultStatus.ApprovedPending)
+				customer.IsWaitingForSignature = false;
+
 			switch (model.status) {
 				case CreditResultStatus.Approved:
 				if (!customer.WizardStep.TheLastOne) {
@@ -400,8 +417,6 @@
 				
 
 				if (customer.FilledByBroker) {
-					
-
 					if (numOfPreviousApprovals == 0)
 						bSendBrokerForceResetCustomerPassword = true;
 				} // if
@@ -484,10 +499,10 @@
 				break;
 
 			case CreditResultStatus.ApprovedPending:
+				customer.IsWaitingForSignature = model.signature == 1;
 				customer.CreditResult = CreditResultStatus.ApprovedPending;
 				customer.PendingStatus = PendingStatus.Manual;
 				_historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
-
 				break;
 
 			case CreditResultStatus.WaitingForDecision:

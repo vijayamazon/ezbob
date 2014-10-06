@@ -10,5 +10,6 @@
 		public CreditResultStatus status{ get; set; }
 		public string reason{ get; set; }
 		public int[] rejectionReasons { get; set; }
+		public int signature { get; set; }
 	}
 }

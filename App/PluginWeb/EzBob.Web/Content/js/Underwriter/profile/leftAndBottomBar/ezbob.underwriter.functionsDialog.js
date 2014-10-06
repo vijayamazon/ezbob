@@ -13,18 +13,23 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 		return null;
 	},
 	render: function (id) {
-		var buttonName;
 		this.$el.html(this.template(this.model));
-		buttonName = this.getButtonName();
-		this.$el.find(".button-ok").val(buttonName);
+
+		this.$el.find(".button-ok").val(this.getButtonName());
+
 		this.ReasonField = this.$el.find(".reason");
+
 		this.YodleeReasonField = this.$el.find(".yodleeReason");
+
 		this.RejectionReason = this.$el.find(".rejectReason");
+
 		if (!this.showReasonField()) {
 			this.ReasonField.css("display", "none");
 			this.$el.find("h3").css("display", "none");
 		}
+
 		this.ReasonField.val(this.model.get("Reason"));
+
 		this.$el.dialog({
 			autoOpen: true,
 			position: ["top", 60],
@@ -37,6 +42,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 			dialogClass: "functionsPopup",
 			open: _.bind(this.onShow, this)
 		});
+
 		return this;
 	},
 	getButtonName: function () {
@@ -44,6 +50,9 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 	},
 	showReasonField: function () {
 		return true;
+	},
+	getIsSignature: function() {
+		return 0;
 	},
 	onShow: function () { },
 	events: {
@@ -93,7 +102,8 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 		$(e.currentTarget).addClass("disabled");
 		data = {
 			id: this.model.get("CustomerId"),
-			status: this.type
+			status: this.type,
+			signature: this.getIsSignature(),
 		};
 		if (this.showReasonField()) {
 			data.reason = this.ReasonField.val();
@@ -168,6 +178,23 @@ EzBob.Underwriter.Suspended = EzBob.Underwriter.FunctionsDialogView.extend({
 	},
 	showReasonField: function () {
 		return false;
+	},
+	dlgHeight: 120,
+	dlgWidth: 300
+});
+
+EzBob.Underwriter.Signature = EzBob.Underwriter.FunctionsDialogView.extend({
+	getType: function () {
+		return "ApprovedPending";
+	},
+	getIsSignature: function() {
+		return 1;
+	},
+	showReasonField: function () {
+		return false;
+	},
+	getButtonName: function () {
+		return "Waiting for signature";
 	},
 	dlgHeight: 120,
 	dlgWidth: 300

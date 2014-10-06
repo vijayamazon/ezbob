@@ -13,6 +13,7 @@
 [name="interestRateChangeButton"],
 [name="setupFeeEditButton"],
 [name="brokerSetupFeeEditButton"],
+#SignatureBtn,
 #ApproveBtn,
 #RejectBtn,
 #EscalateBtn,
@@ -58,7 +59,8 @@ a[data-bug-type],
 
 .permission-AvoidAutomaticDecision [name="avoidAutomaticDecisionButton"],
 
-.permission-SuspendBtn #SuspendBtn, /*status change to pending*/
+.permission-SuspendBtn #SuspendBtn, /*status change to pending, not waiting for signature*/
+.permission-SuspendBtn #SignatureBtn, /*status change to pending, waiting for signature*/
 .permission-ReturnBtn #ReturnBtn, /*status change to waiting for decision*/
 
 .permission-DiscountPlan [name="discountPlan"],

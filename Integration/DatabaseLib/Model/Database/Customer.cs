@@ -723,6 +723,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string FirstVisitTime { get; set; }
 
 		public virtual int? ExperianConsumerScore { get; set; }
+
+		public virtual bool? IsWaitingForSignature { get; set; }
 	} // class Customer
 
 	#endregion class Customer

@@ -80,6 +80,11 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				action: 'GridPending',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,Pending,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale',
 			}), // pending
+			signature: new GridProperties({
+				icon: 'pencil-square-o',
+				action: 'GridSignature',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,Pending,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale',
+			}), // signature
 			approved: new GridProperties({
 				icon: 'thumbs-o-up',
 				action: 'GridApproved',

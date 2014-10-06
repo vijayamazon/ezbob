@@ -237,6 +237,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.FirstVisitTime).Length(64);
 			Map(x => x.ExperianConsumerScore);
 			References(x => x.PropertyStatus, "PropertyStatusId").Cascade.All();
+
+			Map(x => x.IsWaitingForSignature);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database
