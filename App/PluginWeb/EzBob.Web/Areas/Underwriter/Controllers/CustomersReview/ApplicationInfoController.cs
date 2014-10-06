@@ -84,6 +84,8 @@
 			this.loanScheduleRepository = loanScheduleRepository;
 		}
 
+
+		// Here we get VA\FCF\Turnover
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]

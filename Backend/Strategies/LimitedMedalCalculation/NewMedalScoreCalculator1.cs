@@ -1,6 +1,9 @@
 ﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
 {
+	using System.Collections.Generic;
 	using Experian;
+	using EzBob.Models.Marketplaces.Builders;
+	using EzBob.Models.Marketplaces.Yodlee;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -74,7 +77,7 @@
 		private ScoreResult GatherData(int customerId)
 		{
 			var inputData = new ScoreResult();
-			SafeReader sr = db.GetFirst("GetDataForMedalCalculation", CommandSpecies.StoredProcedure,
+			SafeReader sr = db.GetFirst("GetDataForMedalCalculation1", CommandSpecies.StoredProcedure,
 			                            new QueryParameter("CustomerId", customerId),
 			                            new QueryParameter("CalculationTime", calculationTime));
 
@@ -95,7 +98,6 @@
 			inputData.NumOfLateRepayments = sr["NumOfLatePayments"];
 			inputData.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
 			int hmrcId = sr["HmrcId"];
-			decimal yodleeTurnover = sr["YodleeTurnover"];
 			int totalZooplaValue = sr["TotalZooplaValue"];
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
 
@@ -119,36 +121,64 @@
 			}
 
 			failedCalculatingFreeCashFlow = false;
-
+			
 			if (wasAbleToGetSummaryData)
 			{
 				freeCashFlowDataAvailable = true;
 
 				decimal totalRevenuesInSummary = 0;
 				decimal totalFreeCashFlowInSummary = 0;
+				decimal totalValueAddedInSummary = 0;
 
 				foreach (VatReturnSummary singleSummary in summaryData)
 				{
-					totalRevenuesInSummary += singleSummary.Revenues ?? 0;
+					totalRevenuesInSummary += singleSummary.Revenues.HasValue ? singleSummary.Revenues.Value : 0;
 					totalFreeCashFlowInSummary += singleSummary.FreeCashFlow.HasValue ? singleSummary.FreeCashFlow.Value : 0;
+					totalValueAddedInSummary += singleSummary.TotalValueAdded.HasValue ? singleSummary.TotalValueAdded.Value : 0;
 				}
 
 				inputData.AnnualTurnover = totalRevenuesInSummary;
-				if (inputData.AnnualTurnover > 0)
-				{
-					inputData.FreeCashFlow = totalFreeCashFlowInSummary / inputData.AnnualTurnover;
-				}
-				else
-				{
-					failedCalculatingFreeCashFlow = true;
-					inputData.FreeCashFlow = 0;
-				}
+				inputData.FreeCashFlowValue = totalFreeCashFlowInSummary;
+				inputData.ValueAdded = totalValueAddedInSummary;
 			}
 			else
 			{
-				freeCashFlowDataAvailable = false;
-				inputData.AnnualTurnover = yodleeTurnover;
-				inputData.FreeCashFlow = 0;
+				var yodleeMps = new List<int>();
+
+				db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>
+					{
+						int mpId = yodleeSafeReader["Id"];
+						yodleeMps.Add(mpId);
+						return ActionResult.Continue;
+					}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+
+				if (yodleeMps.Count == 0)
+				{
+					freeCashFlowDataAvailable = false;
+					inputData.FreeCashFlowValue = 0;
+					inputData.ValueAdded = 0;
+					inputData.AnnualTurnover = 0;
+				}
+				else
+				{
+					decimal totalFreeCashFlowValue = 0;
+					decimal totalValueAdded = 0;
+					decimal totalAnnualTurnover = 0;
+
+					foreach (int mpId in yodleeMps)
+					{
+						var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
+						YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
+
+						totalFreeCashFlowValue += (decimal)yodleeModel.BankStatementAnnualizedModel.FreeCashFlow;
+						totalValueAdded += (decimal)yodleeModel.BankStatementAnnualizedModel.TotalValueAdded;
+						totalAnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
+					}
+
+					inputData.FreeCashFlowValue = totalFreeCashFlowValue;
+					inputData.ValueAdded = totalValueAdded;
+					inputData.AnnualTurnover = totalAnnualTurnover;
+				}
 			}
 
 			failedCalculatingTangibleEquity = false;
@@ -156,12 +186,15 @@
 			if (inputData.AnnualTurnover > 0)
 			{
 				inputData.TangibleEquity = tangibleEquity / inputData.AnnualTurnover;
+				inputData.FreeCashFlow = inputData.FreeCashFlowValue / inputData.AnnualTurnover;
 			}
 			else
 			{
+				failedCalculatingFreeCashFlow = true;
 				failedCalculatingTangibleEquity = true;
 				inputData.TangibleEquity = 0;
 				inputData.AnnualTurnover = 0;
+				inputData.FreeCashFlow = 0;
 			}
 			
 			decimal mortgageBalance = GetMortgages(customerId);

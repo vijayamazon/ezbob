@@ -64,7 +64,14 @@
 		public int NumOfLateRepayments { get; set; }
 		public int NumOfEarlyRepayments { get; set; }
 
-		#endregion input 
+		#endregion input
+
+		// fill in both flows + add to db and store it
+		public decimal FreeCashFlowValue { get; set; }
+		public decimal ValueAdded { get; set; }
+
+
+		public bool BasedOnHmrcValues { get; set; } // If false then it is based on Yodlee values
 
 		#region constants / internal
 

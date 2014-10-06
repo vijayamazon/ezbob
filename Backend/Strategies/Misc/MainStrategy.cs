@@ -205,14 +205,18 @@
 
 			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
 
-			CalcAndCapOffer();
-
 			if (numOfHmrcMps < 2 && (typeOfBusiness == "LLP" || typeOfBusiness == "Limited"))
 			{
 				var instance = new CalculateLimitedMedal(DB, Log, customerId);
 				instance.Execute();
+
+				// CalcAndCapOffer(offerAccordingToThisMedal);
 			}
-			
+			//else
+			{
+				CalcAndCapOffer(modelLoanOffer);
+			}
+
 			ProcessApprovals(autoDecisionRejectionResponse);
 
 			autoDecisionMaker.LogDecision(customerId, autoDecisionRejectionResponse, autoDecisionResponse);
@@ -405,7 +409,7 @@
 			return this;
 		}
 
-		private void CalcAndCapOffer()
+		private void CalcAndCapOffer(int loanAmount)
 		{
 			Log.Info("Finalizing and capping offer");
 
@@ -426,7 +430,7 @@
 				loanOfferReApprovalRemainingAmountOld
 			}.Max();
 
-			offeredCreditLine = modelLoanOffer;
+			offeredCreditLine = loanAmount;
 
 			bool isHomeOwnerAccordingToLandRegistry = false;
 			SafeReader sr = DB.GetFirst(

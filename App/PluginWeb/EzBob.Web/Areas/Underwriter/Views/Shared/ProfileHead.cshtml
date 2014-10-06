@@ -59,7 +59,7 @@
                             <%-medal.OfflineMedal%> <%-EzBob.formatPercents(medal.OfflineResult)%>
                         <% } %>
                     </h3>
-                    <button class="btn btn-mini btn-dashboard" id="RecalculateMedalBtn">Recalculate</button>
+                    <button class="btn btn-mini btn-dashboard <% medal.OfflineResult == -1 ? "disabled" : "" %>" id="RecalculateMedalBtn">Recalculate</button>
                     @BoxTools("Medal", "#calculator")
                 </div>
                 <div class="box-content">

@@ -1,8 +1,8 @@
-IF OBJECT_ID('GetDataForMedalCalculation') IS NULL
-	EXECUTE('CREATE PROCEDURE GetDataForMedalCalculation AS SELECT 1')
+IF OBJECT_ID('GetDataForMedalCalculation1') IS NULL
+	EXECUTE('CREATE PROCEDURE GetDataForMedalCalculation1 AS SELECT 1')
 GO
 
-ALTER PROCEDURE GetDataForMedalCalculation
+ALTER PROCEDURE GetDataForMedalCalculation1
 	(@CustomerId INT,
 	 @CalculationTime DATETIME)
 AS
@@ -20,8 +20,6 @@ BEGIN
 		@EzbobSeniority DATETIME,
 		@MaritalStatus NVARCHAR(50),
 		@HmrcId INT,
-		@YodleeTotalAggrgationFuncId INT,
-		@YodleeTurnover DECIMAL(18,6),
 		@Threshold DECIMAL(18,6),
 		@LoanScheduleId INT,
 		@ScheduleDate DATETIME,
@@ -208,51 +206,6 @@ BEGIN
 		
 	IF @HmrcId IS NULL
 		SELECT @HmrcId = 0
-		
-	SELECT @YodleeTotalAggrgationFuncId = MP_AnalyisisFunction.Id FROM MP_AnalyisisFunction, MP_MarketplaceType WHERE MP_AnalyisisFunction.MarketPlaceId=MP_MarketplaceType.Id AND MP_MarketplaceType.Name = 'Yodlee' AND MP_AnalyisisFunction.Name='TotalIncomeAnnualized'
-	SET @YodleeTurnover = 0
-	
-	DECLARE cur3 CURSOR FOR 
-	SELECT 
-		DISTINCT MP_CustomerMarketPlace.Id
-	FROM 
-		MP_AnalyisisFunctionValues, 
-		MP_CustomerMarketPlace 
-	WHERE 
-		MP_AnalyisisFunctionValues.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND 
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
-		AnalyisisFunctionId = @YodleeTotalAggrgationFuncId
-		
-	OPEN cur3
-	FETCH NEXT FROM cur3 INTO @MpId
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SELECT 
-			@LastUpdateTime = MAX(Updated)
-		FROM 
-			MP_AnalyisisFunctionValues
-		WHERE 
-			MP_AnalyisisFunctionValues.CustomerMarketPlaceId = @MpId AND
-			AnalyisisFunctionId = @YodleeTotalAggrgationFuncId 
-	
-		SELECT TOP 1
-			@CurrentMpTurnoverValue = ValueFloat
-		FROM 
-			MP_AnalyisisFunctionValues
-		WHERE 
-			MP_AnalyisisFunctionValues.CustomerMarketPlaceId = @MpId AND 
-			Updated = @LastUpdateTime AND 
-			AnalyisisFunctionId = @YodleeTotalAggrgationFuncId AND
-			AnalysisFunctionTimePeriodId < 5
-		ORDER BY 
-			AnalysisFunctionTimePeriodId DESC
-	
-		SET @YodleeTurnover = @YodleeTurnover + @CurrentMpTurnoverValue
-
-		FETCH NEXT FROM cur3 INTO @MpId
-	END
-	CLOSE cur3
-	DEALLOCATE cur3
 	
 	SELECT 
 		@TotalZooplaValue = SUM(CASE WHEN ZooplaEstimateValue IS NOT NULL AND ZooplaEstimateValue != 0 THEN ZooplaEstimateValue ELSE ISNULL(AverageSoldPrice1Year, 0) END)
@@ -276,7 +229,6 @@ BEGIN
 		@EzbobSeniority AS EzbobSeniority,
 		@MaritalStatus AS MaritalStatus,
 		@HmrcId AS HmrcId,
-		@YodleeTurnover AS YodleeTurnover,
 		@NumOfHmrcMps AS NumOfHmrcMps,
 		@TotalZooplaValue AS TotalZooplaValue
 END
