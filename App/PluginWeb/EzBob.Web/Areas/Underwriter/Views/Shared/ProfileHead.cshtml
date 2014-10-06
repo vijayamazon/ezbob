@@ -52,7 +52,13 @@
             <div class="box">
                 <div class="box-title">
                     <h3>Medal</h3>
-                    <h3 class="box-title-collapse" style="display: none;"><%-medal.Medal%> <%-EzBob.formatPercents(medal.Result)%></h3>
+                    <h3 class="box-title-collapse" style="display: none;">
+                        <% if (medal.OfflineResult == -1) { %>
+                            <%-medal.Medal%> <%-EzBob.formatPercents(medal.Result)%>
+                        <% } else { %>
+                            <%-medal.OfflineMedal%> <%-EzBob.formatPercents(medal.OfflineResult)%>
+                        <% } %>
+                    </h3>
                     <button class="btn btn-mini btn-dashboard" id="RecalculateMedalBtn">Recalculate</button>
                     @BoxTools("Medal", "#calculator")
                 </div>
@@ -62,11 +68,20 @@
                     <div style="position: absolute; right: 10px; top: 30%;">
                         <div style="position: relative;">
                             <div class="medal-div">
-                                <div><%-medal.Medal%></div>
-                                <div><%-EzBob.formatPercents(medal.Result)%></div>
+                                <% if (medal.OfflineResult == -1) { %>
+                                    <div><%-medal.Medal%></div>
+                                    <div><%-EzBob.formatPercents(medal.Result)%></div>
+                                <% } else { %>
+                                    <div><%-medal.OfflineMedal%></div>
+                                    <div><%-EzBob.formatPercents(medal.OfflineResult)%></div>
+                                <% } %>
                             </div>
                             <canvas id="medalCanvas" width="100" height="100"></canvas>
-                            <div class="offline-medal-text">Offline: <%-medal.OfflineMedal%> <%- medal.OfflineResult != -1 ? EzBob.formatPercents(medal.OfflineResult) : '' %></div>
+                            <% if (medal.OfflineResult == -1) { %>
+                                <div class="offline-medal-text">Offline: <%-medal.OfflineMedal%></div>
+                            <% } else { %>
+                                <div class="offline-medal-text">Online: <%-medal.Medal%> <%- EzBob.formatPercents(medal.Result) %></div>
+                            <% } %>
                         </div>
                     </div>
                 </div>
