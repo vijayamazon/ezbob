@@ -2870,6 +2870,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateNewMedalsForComparison", ReplyAction="http://tempuri.org/IEzService/CalculateNewMedalsForComparisonResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateNewMedalsForComparisonAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateLimitedMedal", ReplyAction="http://tempuri.org/IEzService/CalculateLimitedMedalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateLimitedMedal(int underwriterId, int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateLimitedMedal", ReplyAction="http://tempuri.org/IEzService/CalculateLimitedMedalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateLimitedMedalAsync(int underwriterId, int customerId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
         ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
         
@@ -4008,6 +4014,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateNewMedalsForComparisonAsync() {
             return base.Channel.CalculateNewMedalsForComparisonAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateLimitedMedal(int underwriterId, int customerId) {
+            return base.Channel.CalculateLimitedMedal(underwriterId, customerId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateLimitedMedalAsync(int underwriterId, int customerId) {
+            return base.Channel.CalculateLimitedMedalAsync(underwriterId, customerId);
         }
         
         public ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId) {

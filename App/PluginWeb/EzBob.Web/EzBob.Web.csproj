@@ -343,7 +343,7 @@
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CrossCheckController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CustomerInfoController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\LoanHistoryController.cs" />
-    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\MedalCalculationsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\MedalController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\MessagesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PaymentAccountsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersController.cs" />

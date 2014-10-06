@@ -35,7 +35,7 @@
 				}
 				else
 				{
-					log.Error("Mismatch found in the 2 medal calculations");
+					log.Error("Mismatch found in the 2 medal calculations of customer: {0}", customerId);
 				}
 			}
 			catch (Exception e)

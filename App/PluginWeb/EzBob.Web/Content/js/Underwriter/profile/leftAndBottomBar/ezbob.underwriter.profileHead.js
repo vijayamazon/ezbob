@@ -10,7 +10,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         this.parentView = options.parentView;
         this.bindTo(this.model, "change sync", this.render, this);
         this.bindTo(this.loanModel, "change sync", this.render, this);
-        this.bindTo(this.medalModel, "change sync", this.render, this);
+        this.bindTo(this.medalModel, "change fetch sync", this.render, this);
         this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
     },
     serializeData: function () {
@@ -22,10 +22,24 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
     },
     events: {
         'click a.collapseall': "collapseAll",
-        'click #OfferEditBtn': 'editOfferClick'
+        'click #OfferEditBtn': 'editOfferClick',
+        'click #RecalculateMedalBtn': 'recalculateMedalClick'
     },
     ui: {
         editOfferDiv: '.editOfferDiv'
+    },
+
+    recalculateMedalClick: function () {
+        var that = this;
+        BlockUi();
+
+        $.post(window.gRootPath + 'Underwriter/Medal/RecalculateMedal', {
+            customerId: this.model.id
+        }).always(function () {
+            that.medalModel.fetch().always(function () {
+                UnBlockUi();
+            });
+        });
     },
 
     editOfferClick: function () {

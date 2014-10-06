@@ -577,9 +577,12 @@
 
 		[OperationContract]
 		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
-		
+
 		[OperationContract]
 		ActionMetaData CalculateNewMedalsForComparison();
+
+		[OperationContract]
+		ActionMetaData CalculateLimitedMedal(int underwriterId, int customerId);
 
 		[OperationContract]
 		StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);

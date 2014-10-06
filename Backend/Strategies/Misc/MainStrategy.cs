@@ -4,7 +4,6 @@
 	using Experian;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
-	using LimitedMedalCalculation;
 	using MailStrategies.API;
 	using ScoreCalculation;
 	using System;
@@ -23,7 +22,6 @@
 		private readonly StrategiesMailer mailer;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly MedalScoreCalculator medalScoreCalculator;
-		private readonly LimitedMedalDualCalculator limitedMedalDualCalculator;
 		private readonly AutoDecisionMaker autoDecisionMaker;
 
 		// Inputs
@@ -147,7 +145,6 @@
 			: base(oDb, oLog)
 		{
 			medalScoreCalculator = new MedalScoreCalculator(DB, Log);
-			limitedMedalDualCalculator = new LimitedMedalDualCalculator(oDb, oLog);
 
 			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
@@ -212,7 +209,8 @@
 
 			if (numOfHmrcMps < 2 && (typeOfBusiness == "LLP" || typeOfBusiness == "Limited"))
 			{
-				limitedMedalDualCalculator.CalculateMedalScore(customerId);
+				var instance = new CalculateLimitedMedal(DB, Log, customerId);
+				instance.Execute();
 			}
 			
 			ProcessApprovals(autoDecisionRejectionResponse);

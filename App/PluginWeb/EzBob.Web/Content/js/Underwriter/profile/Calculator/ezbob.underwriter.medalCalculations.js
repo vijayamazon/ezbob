@@ -3,7 +3,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.MedalCalculationModel = Backbone.Model.extend({
     idAttribute: "Id",
-    urlRoot: window.gRootPath + "Underwriter/MedalCalculations/Index/"
+    urlRoot: window.gRootPath + "Underwriter/Medal/Index/"
 });
 
 EzBob.Underwriter.MedalCalculationView = Backbone.View.extend({
@@ -17,7 +17,7 @@ EzBob.Underwriter.MedalCalculationView = Backbone.View.extend({
     },
 
     exportExcel: function () {
-        location.href = window.gRootPath + 'Underwriter/MedalCalculations/ExportToExel?id=' + this.model.get('Id');
+        location.href = window.gRootPath + 'Underwriter/Medal/ExportToExel?id=' + this.model.get('Id');
     }, 
     render: function () {
         this.$el.html(this.template({ medals: this.model.toJSON() }));

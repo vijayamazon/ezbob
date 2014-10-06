@@ -2,17 +2,23 @@
 {
 	using Code;
 	using System.Web.Mvc;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using ServiceClientProxy;
 
-	public class MedalCalculationsController : Controller
+	public class MedalController : Controller
 	{
 		private readonly CustomerRepository _customerRepository;
+		private readonly ServiceClient serviceClient;
+		private readonly IWorkplaceContext context;
 
-		public MedalCalculationsController(CustomerRepository customersRepository)
+		public MedalController(CustomerRepository customersRepository, IWorkplaceContext context)
 		{
 			_customerRepository = customersRepository;
+			serviceClient = new ServiceClient();
+			this.context = context;
 		}
 
 		[Ajax]
@@ -30,6 +36,13 @@
 		{
 			var customer = _customerRepository.Get(id);
 			return new MedalExcelReportResult(customer);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public void RecalculateMedal(int customerId)
+		{
+			serviceClient.Instance.CalculateLimitedMedal(context.UserId, customerId);
 		}
 	}
 }

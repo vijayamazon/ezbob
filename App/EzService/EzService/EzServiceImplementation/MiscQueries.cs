@@ -246,6 +246,12 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
+		public ActionMetaData CalculateLimitedMedal(int underwriterId, int customerId)
+		{
+			CalculateLimitedMedal instance;
+			return ExecuteSync(out instance, customerId, underwriterId, customerId);
+		}
+		
 		public StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId)
 		{
 			GetUnfetchedDataErrors instance;
