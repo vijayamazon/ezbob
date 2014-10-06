@@ -59,20 +59,25 @@
 				MarketPlaceModel oYodlee = null;
 
 				foreach (LocalMp mm in m_oMundMs) {
-					if (mm.Marketplace.Marketplace.InternalId == ms_oCompanyFilesID)
+					if (mm.Marketplace.Disabled) {
 						continue;
+					}
+
+					if (mm.Marketplace.Marketplace.InternalId == ms_oCompanyFilesID) {
+						continue;
+					}
 
 					if (mm.Marketplace.Marketplace.InternalId == ms_oYodleeID) {
-						if (oYodlee == null)
+						if (oYodlee == null) {
 							oYodlee = mm.Model;
-
+						}
 						continue;
 					} // if
 
 					if (mm.Marketplace.Marketplace.InternalId == ms_oHmrcID) {
-						if (oHmrc == null)
+						if (oHmrc == null) {
 							oHmrc = mm.Model;
-
+						}
 						continue;
 					} // if
 
@@ -81,30 +86,37 @@
 						continue;
 					} // if
 
-					if (mm.Marketplace.Marketplace.IsPaymentAccount)
+					if (mm.Marketplace.Marketplace.IsPaymentAccount) {
 						oAccounting.Add(mm);
-					else
+					}
+					else {
 						oEcomm.Add(mm);
+					}
 				} // for each marketplace
 
 				if (oHmrc != null) {
-					using(m_oTimeCounter.AddStep("HMRC affordability build time"))
+					using (m_oTimeCounter.AddStep("HMRC affordability build time")) {
 						HmrcBank(oHmrc);
+					}
 				} // if
 
 				if (oYodlee != null && oYodlee.Yodlee != null) {
-					using (m_oTimeCounter.AddStep("Yodlee affordability build time"))
+					using (m_oTimeCounter.AddStep("Yodlee affordability build time")) {
 						SaveBankStatement(oYodlee.Yodlee.BankStatementAnnualizedModel);
+					}
 				} // if
 
-				using (m_oTimeCounter.AddStep("PayPal affordability build time"))
+				using (m_oTimeCounter.AddStep("PayPal affordability build time")) {
 					Psp(oPaypal);
+				}
 
-				using (m_oTimeCounter.AddStep("Ecomm affordability build time"))
+				using (m_oTimeCounter.AddStep("Ecomm affordability build time")) {
 					EcommAccounting(oEcomm, AffordabilityType.Ecomm);
+				}
 
-				using (m_oTimeCounter.AddStep("Accounting affordability build time"))
+				using (m_oTimeCounter.AddStep("Accounting affordability build time")) {
 					EcommAccounting(oAccounting, AffordabilityType.Accounting);
+				}
 
 				using (m_oTimeCounter.AddStep("Logging affordability time")) {
 					Log.Debug("**************************************************************************");
@@ -113,9 +125,9 @@
 					Log.Debug("*");
 					Log.Debug("**************************************************************************");
 
-					foreach (var a in Affordability)
+					foreach (var a in Affordability) {
 						Log.Debug(a);
-
+					}
 					Log.Debug("**************************************************************************");
 					Log.Debug("*");
 					Log.Debug("* Affordability data for customer {0} - end.", m_nCustomerID);
@@ -405,26 +417,27 @@
 				MarketPlaceModel model;
 
 				try {
-					var builder = GetMpModelBuilder(mp);
+					if (mp.Disabled) {
+						model = GetDefaultModel(mp);
+					}
+					else {
+						var builder = GetMpModelBuilder(mp);
 
-					using (m_oTimeCounter.AddStep("Model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName, mp.Marketplace.Name))
-						model = builder.Create(mp, m_oHistory);
+						using (
+							m_oTimeCounter.AddStep("Model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName, mp.Marketplace.Name)
+							)
+							model = builder.Create(mp, m_oHistory);
 
-					using (m_oTimeCounter.AddStep("Payment model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName, mp.Marketplace.Name))
-						model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, m_oHistory);
+						using (
+							m_oTimeCounter.AddStep("Payment model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName,
+							                       mp.Marketplace.Name))
+							model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, m_oHistory);
+					}
 				}
 				catch (Exception e) {
 					Log.Warn(e, "Something went wrong while building marketplace model for marketplace id {0} of type {1}.", mp.Id, mp.Marketplace.Name);
 
-					model = new MarketPlaceModel {
-						Id = mp.Id,
-						Type = mp.DisplayName,
-						Name = mp.Marketplace.Name,
-						IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
-						PaymentAccountBasic = new PaymentAccountsModel {
-							displayName = mp.DisplayName,
-						},
-					};
+					model = GetDefaultModel(mp);
 				} // try
 
 				m_oMundMs.Add(new LocalMp(model, mp));
@@ -446,6 +459,21 @@
 				Log.Warn(ex, "Failed to build bank statement for hmrc");
 			}
 		} // GetAllModels
+
+		private MarketPlaceModel GetDefaultModel(MP_CustomerMarketPlace mp) {
+			return new MarketPlaceModel
+			{
+				Id = mp.Id,
+				Type = mp.DisplayName,
+				Name = mp.Marketplace.Name,
+				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
+				PaymentAccountBasic = new PaymentAccountsModel
+				{
+					displayName = mp.DisplayName,
+				},
+				Disabled = mp.Disabled
+			};
+		}
 
 		#endregion method GetAllModels
 

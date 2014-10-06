@@ -51,7 +51,7 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 
 		this.Dropzone = new Dropzone(this.$el.find('#bankFilesUploadZone')[0], {
 			url: window.gRootPath + "Underwriter/MarketPlaces/UploadFile",
-			parallelUploads: 1,
+			parallelUploads: 10,
 			uploadMultiple: true,
 			maxFilesize: EzBob.Config.CompanyFilesMaxFileSize,
 			acceptedFiles: EzBob.Config.CompanyFilesAcceptedFiles,
