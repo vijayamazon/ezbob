@@ -1403,7 +1403,8 @@ td a.edit-loan {
     background: linear-gradient(to bottom, #d8d8d8, #bebebe);
 }
 
-.sidebar-light #sidebar-dashboard .box .box-title * {
+.sidebar-light #sidebar-dashboard .box .box-title *,
+.sidebar-light .profile-person-info .left-pane-button {
     color: #323232;
 }
 
