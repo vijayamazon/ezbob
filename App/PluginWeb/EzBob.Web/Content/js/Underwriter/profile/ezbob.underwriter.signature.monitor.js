@@ -297,9 +297,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 						oPackage[2].ExperianDirectors.push(oSigner.DirectorID);
 					else
 						oPackage[2].Directors.push(oSigner.DirectorID);
-				}
-				else
-					oPackage[2].SendToCustomer = true;
+				} // if
 			} // if
 		});
 
@@ -453,7 +451,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		if (!oData.IsDirector)
 			oRow.find('.grid-item-Source .IsDirector').css('visibility', 'hidden');
 
-		if (!oData.IsShareholder)
+		if (!oData.IsShareholder || (oData.Type === 'customer'))
 			oRow.find('.grid-item-Source .IsShareholder').css('visibility', 'hidden');
 
 		var oSelected = $('<input type=checkbox class="initially-checked selected-signer">').data({
