@@ -39,10 +39,8 @@
 		} // ToString
 
 		public Director FromModel() {
-			Director director = null;
-
 			try {
-				director = new Director {
+				return new Director {
 					Id = Id,
 					Name = Name.Trim(),
 					Surname = Surname.Trim(),
@@ -60,9 +58,8 @@
 			}
 			catch (Exception e) {
 				_log.Error("Failed to convert DirectorModel to Director", e);
+				return null;
 			} // try
-
-			return director;
 		} // FromModel
 
 		public static DirectorModel FromDirector(Director director, List<Director> directors) {

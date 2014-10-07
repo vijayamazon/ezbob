@@ -981,10 +981,10 @@
 
 		#endregion method SaveCustomerToDB
 
-		private void SavePhones(int customerId, string mobilePhone, string daytimePhone)
-		{
-			var customerMobilePhoneEntry = new CustomerPhone
-			{
+		#region method SavePhones
+
+		private void SavePhones(int customerId, string mobilePhone, string daytimePhone) {
+			var customerMobilePhoneEntry = new CustomerPhone {
 				CustomerId = customerId,
 				PhoneType = "Mobile",
 				Phone = mobilePhone,
@@ -992,15 +992,16 @@
 			};
 			customerPhoneRepository.SaveOrUpdate(customerMobilePhoneEntry);
 
-			var customerDaytimePhoneEntry = new CustomerPhone
-			{
+			var customerDaytimePhoneEntry = new CustomerPhone {
 				CustomerId = customerId,
 				PhoneType = "Daytime",
 				Phone = daytimePhone,
 				IsCurrent = true
 			};
 			customerPhoneRepository.SaveOrUpdate(customerDaytimePhoneEntry);
-		}
+		} // SavePhones
+
+		#endregion method SavePhones
 
 		#region method MakeAddress
 
@@ -1114,22 +1115,30 @@
 		#region method DetailsToKey
 
 		private static string DetailsToKey(Director oDir) {
+			CustomerAddress addr = oDir.DirectorAddressInfo.AllAddresses.FirstOrDefault();
+
+			string sRawpostcode = addr == null ? string.Empty : addr.Rawpostcode;
+
 			return DetailsToKey(
 				oDir.Name,
 				oDir.Surname,
 				oDir.DateOfBirth,
 				oDir.Gender,
-				oDir.DirectorAddressInfo.AllAddresses.First().Rawpostcode
+				sRawpostcode
 			);
 		} // DetailsToKey
 
 		private static string DetailsToKey(Customer customer) {
+			CustomerAddress addr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+
+			string sRawpostcode = addr == null ? string.Empty : addr.Rawpostcode;
+
 			return DetailsToKey(
 				customer.PersonalInfo.FirstName,
 				customer.PersonalInfo.Surname,
 				customer.PersonalInfo.DateOfBirth,
 				customer.PersonalInfo.Gender,
-				customer.AddressInfo.PersonalAddress.First().Rawpostcode
+				sRawpostcode
 			);
 		} // DetailsToKey
 

@@ -18,7 +18,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT TOP 1
-		cr.ManagerApprovedSum
+		@ApprovedSum = cr.ManagerApprovedSum
 	FROM
 		CashRequests cr
 	WHERE
@@ -33,6 +33,6 @@ BEGIN
 	
 	------------------------------------------------------------------------------
 
-	SELECT @ApprovedSum AS ApprovedSum
+	SELECT ISNULL(@ApprovedSum, 0) AS ApprovedSum
 END
 GO
