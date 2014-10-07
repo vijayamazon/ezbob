@@ -264,6 +264,9 @@
 		#region Experian
 
 		[OperationContract]
+		ActionMetaData BackfillCustomerAnalyticsCompany();
+
+		[OperationContract]
 		ActionMetaData BackfillExperianDirectors(int? nCustomerID);
 
 		[OperationContract]

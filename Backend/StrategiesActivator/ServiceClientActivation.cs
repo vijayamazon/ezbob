@@ -564,7 +564,7 @@
 			int customerId;
 
 			if (m_aryArgs.Length == 2 && int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oServiceClient.CheckAml(customerId,1);
+				m_oServiceClient.CheckAml(customerId, 1);
 				return;
 			}
 
@@ -609,14 +609,12 @@
 			var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(CurrentValues.Instance.FinishWizardForApproved);
 
 			oArgs.CustomerID = customerId;
-			
-			if (m_aryArgs.Length >= 4)
-			{
+
+			if (m_aryArgs.Length >= 4) {
 				oArgs.DoSendEmail = bool.Parse(m_aryArgs[3]);
 			}
 
-			if (m_aryArgs.Length >= 5)
-			{
+			if (m_aryArgs.Length >= 5) {
 				oArgs.AvoidAutoDecision = int.Parse(m_aryArgs[4]);
 			}
 
@@ -769,10 +767,13 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // GeneratePassword
 
 		[Activation]
-		private void BackfillAml()
-		{
-			if ((m_aryArgs.Length != 1))
-			{
+		private void BackfillCustomerAnalyticsCompany() {
+			m_oServiceClient.BackfillCustomerAnalyticsCompany();
+		} // BackfillCustomerAnalyticsCompany
+
+		[Activation]
+		private void BackfillAml() {
+			if ((m_aryArgs.Length != 1)) {
 				m_oLog.Msg("Usage: BackfillAml");
 				return;
 			} // if
@@ -781,10 +782,8 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
-		private void BackfillAndRemoveLimitedMedal()
-		{
-			if ((m_aryArgs.Length != 1))
-			{
+		private void BackfillAndRemoveLimitedMedal() {
+			if ((m_aryArgs.Length != 1)) {
 				m_oLog.Msg("Usage: BackfillAndRemoveLimitedMedal");
 				return;
 			}
@@ -793,10 +792,8 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
-		private void BackfillZooplaValue()
-		{
-			if ((m_aryArgs.Length != 1))
-			{
+		private void BackfillZooplaValue() {
+			if ((m_aryArgs.Length != 1)) {
 				m_oLog.Msg("Usage: BackfillZooplaValue");
 				return;
 			} // if
@@ -805,22 +802,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
-		private void BackfillLandRegistry2PropertyLink()
-		{
-			if ((m_aryArgs.Length != 1))
-			{
+		private void BackfillLandRegistry2PropertyLink() {
+			if ((m_aryArgs.Length != 1)) {
 				m_oLog.Msg("Usage: BackfillLandRegistry2PropertyLink");
 				return;
 			} // if
 
 			m_oServiceClient.BackfillLandRegistry2PropertyLink();
 		}
-		
+
 		[Activation]
-		private void BackfillNonLimitedCompanies()
-		{
-			if ((m_aryArgs.Length != 1))
-			{
+		private void BackfillNonLimitedCompanies() {
+			if ((m_aryArgs.Length != 1)) {
 				m_oLog.Msg("Usage: BackfillNonLimitedCompanies");
 				return;
 			} // if
@@ -829,8 +822,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
-		private void CalculateNewMedalsForComparison()
-		{
+		private void CalculateNewMedalsForComparison() {
 			if ((m_aryArgs.Length != 1)) {
 				m_oLog.Msg("Usage: CalculateNewMedalsForComparison");
 				return;
@@ -1112,8 +1104,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // BackfillExperianLtd
 
 		[Activation]
-		private void BackfillExperianConsumer()
-		{
+		private void BackfillExperianConsumer() {
 			m_oServiceClient.BackfillExperianConsumer();
 		} // BackfillExperianConsumer
 
@@ -1132,12 +1123,10 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // LoadExperianLtd
 
 		[Activation]
-		private void LoadExperianConsumer()
-		{
+		private void LoadExperianConsumer() {
 			long nServiceLogID;
 
-			if ((m_aryArgs.Length != 2) || !long.TryParse(m_aryArgs[1], out nServiceLogID))
-			{
+			if ((m_aryArgs.Length != 2) || !long.TryParse(m_aryArgs[1], out nServiceLogID)) {
 				m_oLog.Msg("Usage: LoadExperianLtd <MP_ServiceLog entry ID>");
 				return;
 			} // if
@@ -1148,12 +1137,10 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // LoadExperianLtd
 
 		[Activation]
-		private void ParseExperianConsumer()
-		{
+		private void ParseExperianConsumer() {
 			long nServiceLogID;
 
-			if ((m_aryArgs.Length != 2) || !long.TryParse(m_aryArgs[1], out nServiceLogID))
-			{
+			if ((m_aryArgs.Length != 2) || !long.TryParse(m_aryArgs[1], out nServiceLogID)) {
 				m_oLog.Msg("Usage: LoadExperianConsumer <MP_ServiceLog entry ID>");
 				return;
 			} // if

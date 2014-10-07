@@ -72,6 +72,7 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
@@ -80,7 +81,6 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IEzServiceAdmin_Shutdown_InputMessage">
@@ -124,6 +124,12 @@
   </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianConsumerMortgageData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortgageData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianConsumerMortgageData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortgageDataResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetExperianConsumerScore_InputMessage">
     <wsdl:part name="parameters" element="tns:GetExperianConsumerScore" />
@@ -1001,6 +1007,12 @@
   <wsdl:message name="IEzService_EsignSend_OutputMessage">
     <wsdl:part name="parameters" element="tns:EsignSendResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BackfillCustomerAnalyticsCompany_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillCustomerAnalyticsCompany" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillCustomerAnalyticsCompany_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillCustomerAnalyticsCompanyResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_BackfillExperianDirectors_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillExperianDirectors" />
   </wsdl:message>
@@ -1091,12 +1103,6 @@
   <wsdl:message name="IEzService_LoadExperianConsumer_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadExperianConsumerResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoadExperianConsumerMortgageData_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortgageData" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoadExperianConsumerMortgageData_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortgageDataResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1128,6 +1134,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="LoadExperianConsumerMortgageData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" message="tns:IEzService_LoadExperianConsumerMortgageData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageDataResponse" message="tns:IEzService_LoadExperianConsumerMortgageData_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetExperianConsumerScore">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScore" message="tns:IEzService_GetExperianConsumerScore_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScoreResponse" message="tns:IEzService_GetExperianConsumerScore_OutputMessage" />
@@ -1712,6 +1722,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EsignSend" message="tns:IEzService_EsignSend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EsignSendResponse" message="tns:IEzService_EsignSend_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BackfillCustomerAnalyticsCompany">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompany" message="tns:IEzService_BackfillCustomerAnalyticsCompany_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompanyResponse" message="tns:IEzService_BackfillCustomerAnalyticsCompany_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="BackfillExperianDirectors">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianDirectors" message="tns:IEzService_BackfillExperianDirectors_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianDirectorsResponse" message="tns:IEzService_BackfillExperianDirectors_OutputMessage" />
@@ -1771,10 +1785,6 @@
     <wsdl:operation name="LoadExperianConsumer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumer" message="tns:IEzService_LoadExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerResponse" message="tns:IEzService_LoadExperianConsumer_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LoadExperianConsumerMortgageData">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" message="tns:IEzService_LoadExperianConsumerMortgageData_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageDataResponse" message="tns:IEzService_LoadExperianConsumerMortgageData_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1849,6 +1859,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="LoadExperianConsumerMortgageData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetExperianConsumerScore">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerScore" style="document" />
       <wsdl:input>
@@ -3163,6 +3182,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BackfillCustomerAnalyticsCompany">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompany" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="BackfillExperianDirectors">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianDirectors" style="document" />
       <wsdl:input>
@@ -3298,32 +3326,23 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="LoadExperianConsumerMortgageData">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

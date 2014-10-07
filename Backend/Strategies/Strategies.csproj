@@ -84,6 +84,7 @@
     <Compile Include="Esign\LoadCustomerEsignatures.cs" />
     <Compile Include="Esign\LoadEsignatureFile.cs" />
     <Compile Include="Esign\LoadEsignatures.cs" />
+    <Compile Include="Experian\BackfillCustomerAnalyticsCompany.cs" />
     <Compile Include="Experian\BackfillExperianDirectors.cs" />
     <Compile Include="Experian\BackfillExperianLtd.cs" />
     <Compile Include="Experian\BackfillExperianConsumer.cs" />

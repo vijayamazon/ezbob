@@ -102,7 +102,7 @@
 			} // if
 
 			if (oExperianData.IsLimited)
-				UpdateAnalyticsForLimited(MaxScore, (LimitedResults)oExperianData);
+				UpdateAnalyticsForLimited(MaxScore, (LimitedResults)oExperianData, customerId, DB, Log);
 			else {
 				DB.ExecuteNonQuery(
 					"CustomerAnalyticsUpdateNonLimitedCompany",
@@ -132,10 +132,10 @@
 			// ReSharper restore RedundantCast
 		}
 
-		private void UpdateAnalyticsForLimited(decimal nMaxScore, LimitedResults oExperianData) {
+		public static void UpdateAnalyticsForLimited(decimal nMaxScore, LimitedResults oExperianData, int nCustomerID, AConnection oDB, ASafeLog oLog) {
 			ExperianLtd oExperianLtd = oExperianData.RawExperianLtd;
 
-			Log.Debug("Updating limited customer analytics for customer {0} and company '{1}'...", customerId, oExperianLtd.RegisteredNumber);
+			oLog.Debug("Updating limited customer analytics for customer {0} and company '{1}'...", nCustomerID, oExperianLtd.RegisteredNumber);
 
 			decimal tangibleEquity = 0;
 			decimal adjustedProfit = 0;
@@ -164,12 +164,12 @@
 				}
 			}
 
-			Log.Info("Inserting to analytics Experian Score: {0} MaxScore: {1}.", oExperianLtd.GetCommercialDelphiScore(), nMaxScore);
+			oLog.Info("Inserting to analytics Experian Score: {0} MaxScore: {1}.", oExperianLtd.GetCommercialDelphiScore(), nMaxScore);
 
-			DB.ExecuteNonQuery(
+			oDB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateCompany",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerId),
+				new QueryParameter("CustomerID", nCustomerID),
 				new QueryParameter("Score", oExperianLtd.GetCommercialDelphiScore()),
 				new QueryParameter("MaxScore", (int)nMaxScore),
 				new QueryParameter("SuggestedAmount", oExperianLtd.GetCommercialDelphiCreditLimit()),
@@ -186,7 +186,7 @@
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
 			);
 
-			Log.Debug("Updating limited customer analytics for customer {0} and company '{1}' complete.", customerId, oExperianLtd.RegisteredNumber);
-		}
+			oLog.Debug("Updating limited customer analytics for customer {0} and company '{1}' complete.", nCustomerID, oExperianLtd.RegisteredNumber);
+		} // UpdateAnalyticsDataForLimited
 	}
 }

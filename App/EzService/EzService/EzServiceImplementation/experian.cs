@@ -4,8 +4,15 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 
-	partial class EzServiceImplementation
-	{
+	partial class EzServiceImplementation {
+		#region method BackfillCustomerAnalyticsCompany
+
+		public ActionMetaData BackfillCustomerAnalyticsCompany() {
+			return Execute<BackfillCustomerAnalyticsCompany>(null, null);
+		} // BackfillCustomerAnalyticsCompany
+
+		#endregion method BackfillCustomerAnalyticsCompany
+
 		#region method BackfillExperianDirectors
 
 		public ActionMetaData BackfillExperianDirectors(int? nCustomerID) {
