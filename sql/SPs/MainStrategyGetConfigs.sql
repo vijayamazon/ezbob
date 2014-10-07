@@ -30,6 +30,7 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalTimeToWaitForExperianConsumerCheck') AS TotalTimeToWaitForExperianConsumerCheck,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'IntervalWaitForExperianConsumerCheck') AS IntervalWaitForExperianConsumerCheck,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalTimeToWaitForAmlCheck') AS TotalTimeToWaitForAmlCheck,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'IntervalWaitForAmlCheck') AS IntervalWaitForAmlCheck
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'IntervalWaitForAmlCheck') AS IntervalWaitForAmlCheck,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'LimitedMedalMinOffer') AS LimitedMedalMinOffer
 END
 GO

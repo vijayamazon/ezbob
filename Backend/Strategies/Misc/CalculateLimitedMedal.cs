@@ -20,9 +20,11 @@
 			get { return "CalculateLimitedMedal"; }
 		}
 
+		public ScoreResult Result { get; private set; }
+
 		public override void Execute()
 		{
-			limitedMedalDualCalculator.CalculateMedalScore(customerId);
+			Result = limitedMedalDualCalculator.CalculateMedalScore(customerId);
 		}
 	}
 }

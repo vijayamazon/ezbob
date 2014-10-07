@@ -60,6 +60,7 @@
 		private int intervalWaitForExperianConsumerCheck;
 		private int totalTimeToWaitForAmlCheck;
 		private int intervalWaitForAmlCheck;
+		private int limitedMedalMinOffer;
 
 		// Loaded from DB per customer
 		private bool customerStatusIsEnabled;
@@ -210,9 +211,54 @@
 				var instance = new CalculateLimitedMedal(DB, Log, customerId);
 				instance.Execute();
 
-				// CalcAndCapOffer(offerAccordingToThisMedal);
+				int offerAccordingToThisMedal = 0;
+				if (instance.Result != null && string.IsNullOrEmpty(instance.Result.Error))
+				{
+					SafeReader sr = DB.GetFirst(
+						"GetMedalCoefficients",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("MedalFlow", "Limited"),
+						new QueryParameter("Medal", instance.Result.Medal.ToString())
+					);
+
+					if (!sr.IsEmpty)
+					{
+						decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
+						decimal valueAddedMedalFactor = sr["ValueAdded"];
+						decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
+
+						decimal offerAccordingToFreeCashFlow = instance.Result.FreeCashFlowValue * freeCashFlowMedalFactor;
+						decimal offerAccordingToValueAdded = instance.Result.ValueAdded * valueAddedMedalFactor;
+						decimal offerAccordingToAnnualTurnover = instance.Result.AnnualTurnover * annualTurnoverMedalFactor;
+
+						// Get min that is over threshold
+						if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded || offerAccordingToValueAdded <= limitedMedalMinOffer) &&
+						    (offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover || offerAccordingToAnnualTurnover <= limitedMedalMinOffer) &&
+						    offerAccordingToFreeCashFlow >= limitedMedalMinOffer)
+						{
+							offerAccordingToThisMedal = (int)offerAccordingToFreeCashFlow;
+							Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId, offerAccordingToFreeCashFlow);
+						}
+						else if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow || offerAccordingToFreeCashFlow <= limitedMedalMinOffer) &&
+							(offerAccordingToValueAdded <= offerAccordingToAnnualTurnover || offerAccordingToAnnualTurnover <= limitedMedalMinOffer ) &&
+							offerAccordingToValueAdded >= limitedMedalMinOffer)
+						{
+							offerAccordingToThisMedal = (int)offerAccordingToValueAdded;
+							Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId, offerAccordingToValueAdded);
+						}
+						else if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow || offerAccordingToFreeCashFlow <= limitedMedalMinOffer) &&
+							(offerAccordingToAnnualTurnover <= offerAccordingToValueAdded || offerAccordingToValueAdded <= limitedMedalMinOffer) &&
+							offerAccordingToAnnualTurnover >= limitedMedalMinOffer)
+						{
+							offerAccordingToThisMedal = (int)offerAccordingToAnnualTurnover;
+							Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
+						}
+					}
+				}
+
+				CalcAndCapOffer(offerAccordingToThisMedal);
 			}
-			//else
+			else
 			{
 				CalcAndCapOffer(modelLoanOffer);
 			}
@@ -1014,6 +1060,7 @@
 			intervalWaitForExperianConsumerCheck = sr["IntervalWaitForExperianConsumerCheck"];
 			totalTimeToWaitForAmlCheck = sr["TotalTimeToWaitForAmlCheck"];
 			intervalWaitForAmlCheck = sr["IntervalWaitForAmlCheck"];
+			limitedMedalMinOffer = sr["LimitedMedalMinOffer"];
 		}
 
 		private void GetPersonalInfo()

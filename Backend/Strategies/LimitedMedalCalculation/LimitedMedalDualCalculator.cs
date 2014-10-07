@@ -23,28 +23,27 @@
 
 		public ScoreResult CalculateMedalScore(int customerId)
 		{
-			ScoreResult result1 = null;
 			try
 			{
 				DateTime calculationTime = DateTime.UtcNow;
-				result1 = limitedMedalCalculator1.CalculateMedalScore(customerId, calculationTime);
+				ScoreResult result1 = limitedMedalCalculator1.CalculateMedalScore(customerId, calculationTime);
 				ScoreResult result2 = limitedMedalCalculator2.CalculateMedalScore(customerId, calculationTime);
 
 				if (CheckResultsForMatching(result1, result2))
 				{
 					Save(result1, customerId);
+					return result1;
 				}
-				else
-				{
-					log.Error("Mismatch found in the 2 medal calculations of customer: {0}", customerId);
-				}
+
+				log.Error("Mismatch found in the 2 medal calculations of customer: {0}", customerId);
+				return null;
 			}
 			catch (Exception e)
 			{
 				log.Warn("Offline medal calculation for customer {0} failed with exception:{1}", customerId, e);
 			}
 
-			return result1;
+			return null;
 		}
 
 		private bool CheckResultsForMatching(ScoreResult result1, ScoreResult result2)
