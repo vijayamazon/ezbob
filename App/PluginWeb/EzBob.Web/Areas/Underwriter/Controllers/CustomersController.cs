@@ -591,12 +591,15 @@
 			int nPending = 0;
 			int nRegistered = 0;
 			int nEscalated = 0;
+			int nSignature = 0;
 
 			m_oDB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					string sCustomerType = sr["CustomerType"];
 
-					if (sCustomerType == "Registered")
+					if (sCustomerType == "Signature")
+						nSignature = sr["CustomerCount"];
+					else if (sCustomerType == "Registered")
 						nRegistered = sr["CustomerCount"];
 					else if (sCustomerType == CreditResultStatus.Escalated.ToString())
 						nEscalated = sr["CustomerCount"];
@@ -617,6 +620,7 @@
 				new CustomersCountersModel { Count = nPending,    Name = "pending" },
 				new CustomersCountersModel { Count = nRegistered, Name = "RegisteredCustomers" },
 				new CustomersCountersModel { Count = nEscalated,  Name = "escalated" },
+				new CustomersCountersModel { Count = nSignature,  Name = "signature" },
 			}, JsonRequestBehavior.AllowGet);
 		} // GetCounters
 

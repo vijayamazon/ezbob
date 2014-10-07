@@ -1,12 +1,15 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UwGetCounters]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[UwGetCounters]
+IF OBJECT_ID('UwGetCounters') IS NULL
+	EXECUTE('CREATE PROCEDURE UwGetCounters AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[UwGetCounters] 
-	(@isTest BIT)
+
+ALTER PROCEDURE UwGetCounters
+@isTest BIT
 AS
 BEGIN
 	WITH wiz AS (
@@ -21,6 +24,7 @@ BEGIN
 	SELECT
 		COUNT(DISTINCT c.Id) AS CustomerCount,
 		CASE
+			WHEN c.IsWaitingForSignature = 1 THEN 'Signature'
 			WHEN c.CreditResult IS NULL THEN 'Registered'
 			ELSE c.CreditResult
 		END AS CustomerType
@@ -35,10 +39,9 @@ BEGIN
 			OR
 			c.CreditResult IN ('Escalated', 'WaitingForDecision', 'ApprovedPending')
 		)
-		AND
-		ISNULL(c.IsWaitingForSignature, 0) = 0
 	GROUP BY
 		CASE
+			WHEN c.IsWaitingForSignature = 1 THEN 'Signature'
 			WHEN c.CreditResult IS NULL THEN 'Registered'
 			ELSE c.CreditResult
 		END
