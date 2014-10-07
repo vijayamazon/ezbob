@@ -42,7 +42,7 @@
 			Director director = null;
 
 			try {
-				return director = new Director {
+				director = new Director {
 					Id = Id,
 					Name = Name.Trim(),
 					Surname = Surname.Trim(),

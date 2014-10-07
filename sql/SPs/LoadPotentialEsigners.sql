@@ -46,7 +46,7 @@ BEGIN
 		d.Email AS Email,
 		s.StatusID,
 		s.StatusName AS Status,
-		CONVERT(BIT, 1) AS IsDirector,
+		ISNULL(d.IsDirector, 0) AS IsDirector,
 		ISNULL(d.IsShareholder, 0) AS IsShareholder,
 		d.Phone AS MobilePhone,
 		a.Line1,
