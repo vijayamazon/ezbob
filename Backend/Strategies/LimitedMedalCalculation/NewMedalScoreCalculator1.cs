@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
 {
 	using System.Collections.Generic;
+	using ConfigManager;
 	using Experian;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Models.Marketplaces.Yodlee;
@@ -31,9 +32,9 @@
 			this.db = db;
 		}
 
-		public ScoreResult CalculateMedalScore(ScoreResult inputData, int customerId, DateTime calculationTime)
+		public ScoreResult CalculateMedalScore(ScoreResult inputData, int customerId, DateTime calculationTimeInput)
 		{
-			this.calculationTime = calculationTime;
+			calculationTime = calculationTimeInput;
 			Results = inputData;
 			try
 			{
@@ -56,9 +57,9 @@
 			return Results;
 		}
 
-		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime)
+		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTimeInput)
 		{
-			this.calculationTime = calculationTime;
+			calculationTime = calculationTimeInput;
 			ScoreResult scoreResultForError;
 			try
 			{
@@ -100,6 +101,8 @@
 			int hmrcId = sr["HmrcId"];
 			int totalZooplaValue = sr["TotalZooplaValue"];
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
+			DateTime? earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
+			DateTime? earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
 
 			if (numOfHmrcMps > 1)
 			{
@@ -124,6 +127,12 @@
 			
 			if (wasAbleToGetSummaryData)
 			{
+				if (earliestHmrcLastUpdateDate.HasValue &&
+					earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < calculationTime)
+				{
+					throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy));
+				}
+
 				inputData.BasedOnHmrcValues = true;
 				inputData.TangibleEquityValue = tangibleEquityValue;
 				freeCashFlowDataAvailable = true;
@@ -145,6 +154,12 @@
 			}
 			else
 			{
+				if (earliestYodleeLastUpdateDate.HasValue &&
+					earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < calculationTime)
+				{
+					throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy));
+				}
+
 				inputData.BasedOnHmrcValues = false;
 				var yodleeMps = new List<int>();
 

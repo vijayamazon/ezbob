@@ -33,7 +33,9 @@ BEGIN
 		@MpId INT,
 		@LastUpdateTime DATETIME,
 		@CurrentMpTurnoverValue FLOAT,
-		@LoanStatus NVARCHAR(50)
+		@LoanStatus NVARCHAR(50),
+		@EarliestHmrcLastUpdateDate DATETIME,
+		@EarliestYodleeLastUpdateDate DATETIME
 		
 	SET @Threshold = 2
 	
@@ -185,7 +187,8 @@ BEGIN
 		Loan.CustomerId = @CustomerId
 		
 	SELECT
-		@NumOfHmrcMps = COUNT(1)
+		@NumOfHmrcMps = COUNT(1),
+		@EarliestHmrcLastUpdateDate = MIN(UpdatingEnd)
 	FROM
 		MP_CustomerMarketPlace,
 		MP_MarketplaceType
@@ -194,6 +197,16 @@ BEGIN
 		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
 		MP_CustomerMarketPlace.CustomerId = @CustomerId
 		
+	SELECT
+		@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
+	FROM
+		MP_CustomerMarketPlace,
+		MP_MarketplaceType
+	WHERE
+		MP_MarketplaceType.Name = 'Yodlee' AND
+		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
+		MP_CustomerMarketPlace.CustomerId = @CustomerId	
+	
 	SELECT TOP 1
 		@HmrcId = MP_CustomerMarketplace.Id
 	FROM
@@ -230,6 +243,8 @@ BEGIN
 		@MaritalStatus AS MaritalStatus,
 		@HmrcId AS HmrcId,
 		@NumOfHmrcMps AS NumOfHmrcMps,
-		@TotalZooplaValue AS TotalZooplaValue
+		@TotalZooplaValue AS TotalZooplaValue,
+		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
+		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate
 END
 GO

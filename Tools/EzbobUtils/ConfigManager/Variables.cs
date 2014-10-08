@@ -368,6 +368,7 @@ namespace ConfigManager {
 		Reject_Defaults_CompanyAmount,
 		CompanyCaisLateAlertLongMonths,
 		CompanyCaisLateAlertShortMonths,
-		CompanyCaisLateAlertShortPeriodThreshold
+		CompanyCaisLateAlertShortPeriodThreshold,
+		LimitedMedalDaysOfMpRelevancy
 	} // enum Variables
 } // namespace ConfigManager

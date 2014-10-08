@@ -43,7 +43,9 @@ BEGIN
 		@MpId INT,
 		@LastUpdateTime DATETIME,
 		@CurrentMpTurnoverValue FLOAT,
-		@LoanStatus NVARCHAR(50)
+		@LoanStatus NVARCHAR(50),
+		@EarliestHmrcLastUpdateDate DATETIME,
+		@EarliestYodleeLastUpdateDate DATETIME
 	
 	SET @Threshold = 2 -- Hardcoded value. Used to avoid the entries in the LoanScheduleTransaction table that are there because of rounding mistakes
 	
@@ -59,7 +61,8 @@ BEGIN
 		Customer.Id = @CustomerId
 	
 	SELECT
-		@NumOfHmrcMps = COUNT(1)
+		@NumOfHmrcMps = COUNT(1),		
+		@EarliestHmrcLastUpdateDate = MIN(UpdatingEnd)
 	FROM
 		MP_CustomerMarketPlace,
 		MP_MarketplaceType
@@ -67,7 +70,17 @@ BEGIN
 		MP_MarketplaceType.Name = 'HMRC' AND
 		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
 		MP_CustomerMarketPlace.CustomerId = @CustomerId
-
+		
+	SELECT
+		@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
+	FROM
+		MP_CustomerMarketPlace,
+		MP_MarketplaceType
+	WHERE
+		MP_MarketplaceType.Name = 'Yodlee' AND
+		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
+		MP_CustomerMarketPlace.CustomerId = @CustomerId	
+		
 	SELECT 
 		@BusinessScore = Score, 
 		@TangibleEquity = TangibleEquity, 
@@ -186,8 +199,9 @@ BEGIN
 	
 	DROP TABLE #LateLoans
 	
+	-- TODO: (After EZ-2690) Should be changed to load annualized values
 	SELECT @Ebida = SUM(Ebida), @HmrcAnnualTurnover = SUM(Revenues), @HmrcValueAdded = SUM(TotalValueAdded) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
-	
+	-- TODO: (After EZ-2690) Should be changed to detect finding of annualized values
 	IF @Ebida IS NULL
 		SELECT @FoundSummary = 0
 	ELSE
@@ -337,6 +351,8 @@ BEGIN
 		@BalanceOfMortgages AS BalanceOfMortgages,
 		@ActualLoanRepayments AS ActualLoanRepayments,
 		@FcfFactor AS FcfFactor,
-		@FoundSummary AS FoundSummary
+		@FoundSummary AS FoundSummary,
+		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
+		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate
 END
 GO

@@ -2463,5 +2463,10 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.CompanyCaisLateAlertShortPeriodThreshold]; }
 		}
+
+		public virtual VariableValue LimitedMedalDaysOfMpRelevancy
+		{
+			get { return this[Variables.LimitedMedalDaysOfMpRelevancy]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

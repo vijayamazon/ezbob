@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
 {
 	using System.Collections.Generic;
+	using ConfigManager;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Models.Marketplaces.Yodlee;
 	using Ezbob.Database;
@@ -239,6 +240,8 @@
 			decimal actualLoanRepayments = sr["ActualLoanRepayments"];
 			decimal fcfFactor = sr["FcfFactor"];
 			bool foundSummary = sr["FoundSummary"];
+			DateTime? earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
+			DateTime? earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
 
 			if (typeOfBusiness != "Limited" && typeOfBusiness != "LLP")
 			{
@@ -255,6 +258,12 @@
 			decimal tangibleEquity = 0;
 			if (foundSummary)
 			{
+				if (earliestHmrcLastUpdateDate.HasValue &&
+					earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < calculationTime)
+				{
+					throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy));
+				}
+
 				annualTurnover = hmrcAnnualTurnover;
 				tangibleEquityValue = rawTangibleEquity;
 				basedOnHmrc = true;
@@ -284,6 +293,12 @@
 			}
 			else
 			{
+				if (earliestYodleeLastUpdateDate.HasValue &&
+					earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < calculationTime)
+				{
+					throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy));
+				}
+
 				var yodleeMps = new List<int>();
 				tangibleEquityValue = 0;
 				basedOnHmrc = false;
