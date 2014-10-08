@@ -21,11 +21,10 @@
 			limitedMedalCalculator2 = new NewMedalScoreCalculator2(db, log);
 		}
 
-		public ScoreResult CalculateMedalScore(int customerId)
+		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime)
 		{
 			try
 			{
-				DateTime calculationTime = DateTime.UtcNow;
 				ScoreResult result1 = limitedMedalCalculator1.CalculateMedalScore(customerId, calculationTime);
 				ScoreResult result2 = limitedMedalCalculator2.CalculateMedalScore(customerId, calculationTime);
 

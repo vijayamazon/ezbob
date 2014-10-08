@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc 
 {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -27,6 +28,7 @@
 				string typeOfBusiness = sr["TypeOfBusiness"];
 				int numOfHmrcMps = sr["NumOfHmrcMps"];
 				int numOfEntriesInOfflineScoringTable = sr["NumOfEntriesInOfflineScoringTable"];
+				DateTime? calculationTime = sr["CalculationTime"];
 				bool isLimited = typeOfBusiness == "LLP" || typeOfBusiness == "Limited";
 
 				if (numOfEntriesInOfflineScoringTable > 0 && (!isLimited || numOfHmrcMps > 1))
@@ -35,7 +37,7 @@
 				}
 				else if (numOfEntriesInOfflineScoringTable == 0 && isLimited && numOfHmrcMps < 2)
 				{
-					limitedMedalDualCalculator.CalculateMedalScore(customerId);
+					limitedMedalDualCalculator.CalculateMedalScore(customerId, calculationTime.HasValue ? calculationTime.Value : DateTime.UtcNow);
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc 
 {
+	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using LimitedMedalCalculation;
@@ -24,7 +25,7 @@
 
 		public override void Execute()
 		{
-			Result = limitedMedalDualCalculator.CalculateMedalScore(customerId);
+			Result = limitedMedalDualCalculator.CalculateMedalScore(customerId, DateTime.UtcNow);
 		}
 	}
 }

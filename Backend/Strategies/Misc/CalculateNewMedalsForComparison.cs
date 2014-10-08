@@ -30,7 +30,7 @@
 					try
 					{
 						customerId = sr["CustomerId"];
-						DateTime calculationTime = DateTime.UtcNow;
+						DateTime calculationTime = sr["CalculationTime"];
 						ScoreResult result1 = calculator1.CalculateMedalScore(customerId, calculationTime);
 						ScoreResult result2 = calculator2.CalculateMedalScore(customerId, calculationTime);
 

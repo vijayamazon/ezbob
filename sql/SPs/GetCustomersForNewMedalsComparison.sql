@@ -6,13 +6,16 @@ ALTER PROCEDURE GetCustomersForNewMedalsComparison
 AS
 BEGIN
 	SELECT 
-		Customer.Id AS CustomerId
+		Customer.Id AS CustomerId, MAX(UpdatingEnd) AS CalculationTime
 	FROM 
 		Customer, 
-		WizardStepTypes
+		WizardStepTypes,
+		MP_CustomerMarketPlace
 	WHERE 
 		WizardStep = WizardStepTypeID AND 
 		TheLastOne = 1 AND 
-		(TypeOfBusiness = 'Limited' OR TypeOfBusiness = 'LLP')
+		(TypeOfBusiness = 'Limited' OR TypeOfBusiness = 'LLP') AND
+		MP_CustomerMarketPlace.CustomerId = Customer.Id
+	GROUP BY Customer.Id
 END
 GO

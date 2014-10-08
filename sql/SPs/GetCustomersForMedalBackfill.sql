@@ -16,13 +16,15 @@ BEGIN
 	DECLARE 
 		@CustomerId INT,
 		@NumOfEntriesInOfflineScoringTable INT,
-		@NumOfHmrcMps INT
+		@NumOfHmrcMps INT,
+		@CalculationTime DATETIME
 	
 	SELECT
 		Id AS CustomerId,
 		TypeOfBusiness,
 		0 AS NumOfHmrcMps,
-		0 AS NumOfEntriesInOfflineScoringTable
+		0 AS NumOfEntriesInOfflineScoringTable,
+		CAST (NULL AS DATETIME) AS CalculationTime
 	INTO
 		#GetCustomersForMedalBackfillTemp
 	FROM
@@ -58,12 +60,20 @@ BEGIN
 			OfflineScoring 
 		WHERE 
 			CustomerId = @CustomerId
+			
+		SELECT 
+			@CalculationTime = MAX(UpdatingEnd)
+		FROM 
+			MP_CustomerMarketPlace
+		WHERE
+			MP_CustomerMarketPlace.CustomerId = @CustomerId
 		
 		UPDATE 
 			#GetCustomersForMedalBackfillTemp
 		SET 
 			NumOfHmrcMps = @NumOfHmrcMps,
-			NumOfEntriesInOfflineScoringTable = @NumOfEntriesInOfflineScoringTable
+			NumOfEntriesInOfflineScoringTable = @NumOfEntriesInOfflineScoringTable,
+			CalculationTime = @CalculationTime
 		WHERE 
 			CustomerId = @CustomerId
 		
@@ -72,7 +82,7 @@ BEGIN
 	CLOSE cur
 	DEALLOCATE cur
 	
-	SELECT CustomerId, TypeOfBusiness, NumOfHmrcMps, NumOfEntriesInOfflineScoringTable FROM #GetCustomersForMedalBackfillTemp
+	SELECT CustomerId, TypeOfBusiness, NumOfHmrcMps, NumOfEntriesInOfflineScoringTable, CalculationTime FROM #GetCustomersForMedalBackfillTemp
 	DROP TABLE #GetCustomersForMedalBackfillTemp
 END
 GO
