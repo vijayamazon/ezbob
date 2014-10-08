@@ -104,6 +104,10 @@
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\EzServiceCrontab\EzServiceCrontab.csproj">
+      <Project>{8b71e3b3-abee-4516-8b4e-9f96f920b682}</Project>
+      <Name>EzServiceCrontab</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>

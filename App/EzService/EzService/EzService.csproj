@@ -104,6 +104,7 @@
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />
     <Compile Include="ActionResults\DecimalActionResult.cs" />
+    <Compile Include="ActionStatus.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
     <Compile Include="EzServiceImplementation\esign.cs" />

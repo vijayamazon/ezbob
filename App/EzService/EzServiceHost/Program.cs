@@ -21,6 +21,7 @@
 	using EzBob.eBayLib;
 	using EzService;
 	using EzServiceAccessor;
+	using EzServiceCrontab;
 	using EzServiceShortcut;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
@@ -232,6 +233,8 @@
 			oOnTimer();
 			CurrentValues.OnReloadByTimer += oOnTimer;
 
+			m_oCrontab = new Daemon(m_oDB, m_oLog);
+
 			return true;
 		} // Init
 
@@ -245,6 +248,8 @@
 
 				m_oLog.Info("EzService host has been opened.");
 
+				new Thread(m_oCrontab.Execute).Start();
+
 				m_oLog.Info("Entering the main loop.");
 
 				bool bStop = false;
@@ -256,6 +261,8 @@
 						bStop = ms_bStop;
 					} // lock
 				} while (!bStop);
+
+				m_oCrontab.Shutdown();
 
 				m_oLog.Info("Main loop has completed.");
 
@@ -309,6 +316,8 @@
 		private readonly Ezbob.Context.Environment m_oEnv;
 		private readonly ASafeLog m_oLog;
 		private AConnection m_oDB;
+
+		private Daemon m_oCrontab;
 
 		#endregion properties
 
