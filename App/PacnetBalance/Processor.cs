@@ -1,12 +1,10 @@
-﻿using System;
-using System.Threading;
-using Ezbob.Logger;
-using MailBee;
-using MailBee.ImapMail;
-using MailBee.Mime;
-
-namespace PacnetBalance {
-	#region class Processor
+﻿namespace PacnetBalance {
+	using System;
+	using System.Threading;
+	using Ezbob.Logger;
+	using MailBee;
+	using MailBee.ImapMail;
+	using MailBee.Mime;
 
 	public class Processor : SafeLog {
 		#region public
@@ -152,9 +150,6 @@ namespace PacnetBalance {
 
 		#endregion public
 
-		#region protected
-		#endregion protected
-
 		#region private
 
 		private readonly TimeSpan m_oTotalWaitingTime;
@@ -162,6 +157,4 @@ namespace PacnetBalance {
 
 		#endregion private
 	} // class Processor
-
-	#endregion class Processor
 } // namespace PacnetBalance

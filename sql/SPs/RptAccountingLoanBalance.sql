@@ -2,11 +2,16 @@ IF OBJECT_ID('RptAccountingLoanBalance') IS NULL
 	EXECUTE('CREATE PROCEDURE RptAccountingLoanBalance AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE RptAccountingLoanBalance
 @DateStart DATETIME,
 @DateEnd DATETIME
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT
 		l.Date AS IssueDate,
 		c.Id AS ClientID,
@@ -26,8 +31,11 @@ BEGIN
 		cs.Name AS CustomerStatus
 	FROM
 		Loan l
-		INNER JOIN Customer c ON l.CustomerID = c.Id AND c.IsTest = 0
-		LEFT JOIN CustomerStatuses cs ON cs.Id = c.CollectionStatus
+		INNER JOIN Customer c
+			ON l.CustomerID = c.Id
+			AND c.IsTest = 0
+		LEFT JOIN CustomerStatuses cs
+			ON cs.Id = c.CollectionStatus
 		INNER JOIN LoanTransaction la
 			ON l.Id = la.LoanId
 			AND la.Type = 'PacnetTransaction'

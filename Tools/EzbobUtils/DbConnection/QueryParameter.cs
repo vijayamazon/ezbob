@@ -58,6 +58,9 @@
 				if (Value == null)
 					return "-- NULL --";
 
+				if (Value is DBNull)
+					return "-- DB NULL --";
+
 				if (TypeUtils.IsSimpleType(Value.GetType()))
 					return Value.ToString();
 
@@ -89,7 +92,7 @@
 					);
 				} // if
 
-				return "something else (neither DataTable nor simple type)";
+				return "something else (neither DataTable nor simple type) of type " + Value.GetType();
 			} // get
 		} // ValueStr
 

@@ -13,8 +13,47 @@
 	using Pool;
 	using Utils;
 
-	public abstract class AConnection : SafeLog {
+	public abstract partial class AConnection : SafeLog {
 		#region public
+
+		#region method TakeFromPool
+
+		public ConnectionWrapper TakeFromPool() {
+			PooledConnection pc = ms_oPool.Give();
+
+			if (pc == null)
+				throw new NullReferenceException("Cannot create a DB connection.");
+
+			if (pc.Connection == null)
+				pc.Connection = CreateConnection();
+
+			uint nReminder = pc.OutOfPoolCount % 10;
+
+			string sSuffix = "th";
+
+			switch (nReminder) {
+			case 1:
+				sSuffix = "st";
+				break;
+			case 2:
+				sSuffix = "nd";
+				break;
+			case 3:
+				sSuffix = "rd";
+				break;
+			} // switch
+
+			Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
+				pc.OutOfPoolCount,
+				sSuffix,
+				pc.PoolItemID,
+				pc.Name
+			);
+
+			return new ConnectionWrapper(pc);
+		} // TakeFromPool
+
+		#endregion method TakeFromPool
 
 		#region method DisposeAfterOneUsage
 
@@ -100,113 +139,6 @@
 		} // ExecuteNonQuery
 
 		#endregion method ExecuteNonQuery
-
-		#region method ForEachRow
-
-		public virtual void ForEachRow(ConnectionWrapper oConnectionToUse, Func<DbDataReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
-
-			ForEachRow(oConnectionToUse, oAction, sQuery, CommandSpecies.Auto, aryParams);
-		} // ForEachRow
-
-		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
-
-			ForEachRow(null, oAction, sQuery, CommandSpecies.Auto, aryParams);
-		} // ForEachRow
-
-		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
-
-			ForEachRow(null, oAction, sQuery, nSpecies, aryParams);
-		} // ForEachRow
-
-		public virtual void ForEachRow(ConnectionWrapper oConnectionToUse, Func<DbDataReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
-
-			Run(oConnectionToUse, oAction, ExecMode.ForEachRow, nSpecies, sQuery, aryParams);
-		} // ForEachRow
-
-		#endregion method ForEachRow
-
-		#region method ForEachRowSafe
-
-		public virtual void ForEachRowSafe(ConnectionWrapper oConnectionToUse, Func<SafeReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
-
-			ForEachRowSafe(oConnectionToUse, oAction, sQuery, CommandSpecies.Auto, aryParams);
-		} // ForEachRowSafe
-
-		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
-
-			ForEachRowSafe(null, oAction, sQuery, CommandSpecies.Auto, aryParams);
-		} // ForEachRowSafe
-
-		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
-
-			ForEachRowSafe(null, oAction, sQuery, nSpecies, aryParams);
-		} // ForEachRowSafe
-
-		public virtual void ForEachRowSafe(ConnectionWrapper oConnectionToUse, Func<SafeReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
-
-			Run(
-				oConnectionToUse,
-				(oReader, bRowSetStart) => oAction(new SafeReader(oReader), bRowSetStart),
-				ExecMode.ForEachRow, nSpecies, sQuery, aryParams
-			);
-		} // ForEachRowSafe
-
-		#endregion method ForEachRowSafe
-
-		#region method ForEachResult
-
-		public virtual void ForEachResult<T>(ConnectionWrapper oConnectionToUse, Func<T, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) where T : IResultRow, new() {
-			ForEachResult<T>(oConnectionToUse, oAction, sQuery, CommandSpecies.Auto, aryParams);
-		} // ForEachResult
-
-		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) where T : IResultRow, new() {
-			ForEachResult<T>(null, oAction, sQuery, CommandSpecies.Auto, aryParams);
-		} // ForEachResult
-
-		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : IResultRow, new() {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachResult' call.");
-
-			ForEachResult(null, oAction, sQuery, nSpecies, aryParams);
-		} // ForEachResult
-
-		public virtual void ForEachResult<T>(ConnectionWrapper oConnectionToUse, Func<T, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : IResultRow, new() {
-			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachResult' call.");
-
-			ForEachRowSafe(
-				oConnectionToUse,
-				(sr, bRowsetStart) => {
-					var oResult = new T();
-					oResult.SetIsFirst(bRowsetStart);
-
-					sr.Fill(oResult);
-
-					return oAction(oResult);
-				},
-				sQuery,
-				nSpecies,
-				aryParams
-			);
-		} // ForEachResult
-
-		#endregion method ForEachResult
 
 		#region method ExecuteEnumerable
 
@@ -820,45 +752,6 @@
 		} // AddColumn
 
 		#endregion method AddColumn
-
-		#region method TakeFromPool
-
-		private ConnectionWrapper TakeFromPool() {
-			PooledConnection pc = ms_oPool.Give();
-
-			if (pc == null)
-				throw new NullReferenceException("Cannot create a DB connection.");
-
-			if (pc.Connection == null)
-				pc.Connection = CreateConnection();
-
-			uint nReminder = pc.OutOfPoolCount % 10;
-
-			string sSuffix = "th";
-
-			switch (nReminder) {
-			case 1:
-				sSuffix = "st";
-				break;
-			case 2:
-				sSuffix = "nd";
-				break;
-			case 3:
-				sSuffix = "rd";
-				break;
-			} // switch
-
-			Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
-				pc.OutOfPoolCount,
-				sSuffix,
-				pc.PoolItemID,
-				pc.Name
-			);
-
-			return new ConnectionWrapper(pc);
-		} // TakeFromPool
-
-		#endregion method TakeFromPool
 
 		private static readonly DbConnectionPool ms_oPool = new DbConnectionPool();
 

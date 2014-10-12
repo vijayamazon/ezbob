@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AConnection\AConnection_ForEachRow.cs" />
+    <Compile Include="AConnection\AConnection_ForEachRowSafe.cs" />
+    <Compile Include="AConnection\AConnection_ForEachResult.cs" />
     <Compile Include="AResultRow.cs" />
     <Compile Include="AStoredProcedure.cs" />
     <Compile Include="ConnectionWrapper.cs" />
@@ -59,7 +62,7 @@
     <Compile Include="SafeReader.cs" />
     <Compile Include="DbException.cs" />
     <Compile Include="enums.cs" />
-    <Compile Include="AConnection.cs" />
+    <Compile Include="AConnection\AConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>

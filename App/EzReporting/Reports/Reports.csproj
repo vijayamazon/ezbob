@@ -76,11 +76,12 @@
     <Compile Include="AAttribute.cs" />
     <Compile Include="ATag.cs" />
     <Compile Include="attributes.cs" />
-    <Compile Include="BaseReportHandler\BaseReportHandler.cs" />
-    <Compile Include="BaseReportHandler\BaseReportHandler_dispatch.cs" />
-    <Compile Include="BaseReportHandler\BaseReportHandler_EarnedInterest.cs" />
-    <Compile Include="BaseReportHandler\BaseReportHandler_FinancialStats.cs" />
-    <Compile Include="BaseReportHandler\BaseReportHandler_StrategyRunningTime.cs" />
+    <Compile Include="BaseReportHandler\brh.cs" />
+    <Compile Include="BaseReportHandler\brh_AccountingLoanBalance.cs" />
+    <Compile Include="BaseReportHandler\brh_dispatch.cs" />
+    <Compile Include="BaseReportHandler\brh_EarnedInterest.cs" />
+    <Compile Include="BaseReportHandler\brh_FinancialStats.cs" />
+    <Compile Include="BaseReportHandler\brh_StrategyRunningTime.cs" />
     <Compile Include="BaseReportSender.cs" />
     <Compile Include="Cci\CciReport.cs" />
     <Compile Include="Cci\CciReportItem.cs" />

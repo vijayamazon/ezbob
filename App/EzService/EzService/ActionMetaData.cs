@@ -202,8 +202,8 @@
 						new QueryParameter("@CurrentThreadID", Thread.CurrentThread.ManagedThreadId),
 						new QueryParameter("@UnderlyingThreadID", UnderlyingThread.ManagedThreadId),
 						new QueryParameter("@Comment", Comment),
-						new QueryParameter("@UserID", UserID.HasValue ? UserID.Value : (int?)null),
-						new QueryParameter("@CustomerID", CustomerID.HasValue ? CustomerID.Value : (int?)null)
+						new QueryParameter("@UserID", UserID),
+						new QueryParameter("@CustomerID", CustomerID)
 					);
 				}
 				catch (Exception e) {

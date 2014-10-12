@@ -157,12 +157,12 @@
 
 			if (!ReferenceEquals(m_oReader, null)) {
 				try {
-					return m_oReader[nIdx];
+					return ((0 <= nIdx) && (nIdx < m_oReader.FieldCount)) ? m_oReader[nIdx] : oDefault;
 				}
 				catch (Exception) {
 					return oDefault;
 				} // try
-			} // try
+			} // if
 
 			if (!ReferenceEquals(m_oCache, null))
 				return m_oCache[nIdx, oDefault];
@@ -294,13 +294,8 @@
 			if (ReferenceEquals(m_oRow, null) && ReferenceEquals(m_oReader, null))
 				return sr;
 
-			for (int i = 0; i < Count; i++) {
-				string sName = !ReferenceEquals(m_oRow, null)
-					? m_oRow.Table.Columns[i].ColumnName
-					: m_oReader.GetName(i);
-
-				sr.m_oCache.Add(sName, this[i]);
-			} // for
+			for (int i = 0; i < Count; i++)
+				sr.m_oCache.Add(GetName(i), this[i]);
 
 			return sr;
 		} // ToCache

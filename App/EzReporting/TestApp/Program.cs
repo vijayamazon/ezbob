@@ -3,7 +3,10 @@
 namespace TestApp {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Data.Common;
+	using System.Data.SqlClient;
+	using System.Diagnostics;
 	using EzBob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -69,7 +72,7 @@ namespace TestApp {
 
 			// TestLoansIssuedReport(oDB, log);
 
-			TestEarnedInterest(oDB, log);
+			// TestEarnedInterest(oDB, log);
 
 			// TestLoanIntegrity(oDB, log);
 
@@ -78,6 +81,8 @@ namespace TestApp {
 			// TestIntervalsOperations();
 
 			// TestInterestFreeze(oDB, log);
+
+			TestSpeed(oDB, log);
 		} // Main
 
 		#endregion method Main
@@ -544,6 +549,83 @@ namespace TestApp {
 		} // TestLoanIntegrity
 
 		#endregion method TestLoanIntegrity
+
+		#region method TestSpeed
+
+		private static void TestSpeed(AConnection oDB, ASafeLog oLog) {
+			const int nCount = 100;
+
+			const string sUserName = "alexbo+broker@ezbob.com";
+			const string sPassword = "9843d8f274996c952b7ad5f4f3553604d94197d10b73566d756b5df6e2af8ea1424294eb8b9cab2170edd0f7f0e9b2617863ef0b4800749eec898aa2d03f3bba";
+
+			var swi = Stopwatch.StartNew();
+
+			for (int i = 0; i < nCount; i++) {
+				ConnectionWrapper cw = oDB.TakeFromPool();
+
+				cw.Open();
+
+				var cmd = ((System.Data.SqlClient.SqlConnection)cw.Connection).CreateCommand();
+				cmd.CommandText = "BrokerLogin";
+				cmd.CommandType = CommandType.StoredProcedure;
+
+				var u = cmd.CreateParameter();
+				u.DbType = DbType.String;
+				u.ParameterName = "@Email";
+				u.Value = sUserName;
+				u.Direction = ParameterDirection.Input;
+				cmd.Parameters.Add(u);
+
+				var p = cmd.CreateParameter();
+				p.DbType = DbType.String;
+				p.ParameterName = "@Password";
+				p.Value = sPassword;
+				p.Direction = ParameterDirection.Input;
+				cmd.Parameters.Add(p);
+
+				var tbl = new DataTable();
+
+				SqlDataReader oReader = cmd.ExecuteReader();
+
+				tbl.Load(oReader);
+
+				if (tbl.Rows.Count > 0) {
+					var sr = new SafeReader(tbl.Rows[0]);
+				}
+				else
+					oLog.Debug("No first row.");
+
+				tbl.Dispose();
+				oReader.Close();
+				cmd.Dispose();
+
+				oDB.DisposeAfterOneUsage(true, cw);
+			} // for
+
+			swi.Stop();
+
+			oLog.Info("{0} times using ExecuteReader: {1} ms.", nCount, swi.ElapsedMilliseconds);
+
+			var sw = Stopwatch.StartNew();
+
+			for (int i = 0; i < nCount; i++) {
+				SafeReader sr = oDB.GetFirst(
+					"BrokerLogin",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@Email", sUserName),
+					new QueryParameter("@Password", sPassword)
+				);
+
+				if (sr.IsEmpty)
+					oLog.Debug("No first row.");
+			} // for
+
+			sw.Stop();
+
+			oLog.Info("{0} times using GetFirst: {1} ms.", nCount, sw.ElapsedMilliseconds);
+		} // TestSpeed
+
+		#endregion method TestSpeed
 	} // class Program
 } // namespace
 
