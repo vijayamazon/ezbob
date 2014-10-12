@@ -776,7 +776,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 			}
 
 			m_oServiceClient.ChangeBrokerEmail(m_aryArgs[1], m_aryArgs[2], m_aryArgs[3]);
-		}-
+		}
 
 		[Activation]
 		private void BackfillCustomerAnalyticsCompany() {
