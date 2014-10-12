@@ -8,6 +8,7 @@ namespace TestApp {
 	using System.Data.SqlClient;
 	using System.Diagnostics;
 	using EzBob.Backend.Models;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -553,7 +554,7 @@ namespace TestApp {
 		#region method TestSpeed
 
 		private static void TestSpeed(AConnection oDB, ASafeLog oLog) {
-			const int nCount = 100;
+			const int nCount = 1000;
 
 			const string sUserName = "alexbo+broker@ezbob.com";
 			const string sPassword = "9843d8f274996c952b7ad5f4f3553604d94197d10b73566d756b5df6e2af8ea1424294eb8b9cab2170edd0f7f0e9b2617863ef0b4800749eec898aa2d03f3bba";
@@ -561,45 +562,35 @@ namespace TestApp {
 			var swi = Stopwatch.StartNew();
 
 			for (int i = 0; i < nCount; i++) {
-				ConnectionWrapper cw = oDB.TakeFromPool();
-
-				cw.Open();
-
-				var cmd = ((System.Data.SqlClient.SqlConnection)cw.Connection).CreateCommand();
-				cmd.CommandText = "BrokerLogin";
-				cmd.CommandType = CommandType.StoredProcedure;
-
-				var u = cmd.CreateParameter();
-				u.DbType = DbType.String;
-				u.ParameterName = "@Email";
-				u.Value = sUserName;
-				u.Direction = ParameterDirection.Input;
-				cmd.Parameters.Add(u);
-
-				var p = cmd.CreateParameter();
-				p.DbType = DbType.String;
-				p.ParameterName = "@Password";
-				p.Value = sPassword;
-				p.Direction = ParameterDirection.Input;
-				cmd.Parameters.Add(p);
-
-				var tbl = new DataTable();
-
-				SqlDataReader oReader = cmd.ExecuteReader();
-
-				tbl.Load(oReader);
+				DataTable tbl = oDB.ExecuteReader(
+					"BrokerLogin",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@Email", sUserName),
+					new QueryParameter("@Password", sPassword)
+				);
 
 				if (tbl.Rows.Count > 0) {
-					var sr = new SafeReader(tbl.Rows[0]);
+					SafeReader sr = new SafeReader(tbl.Rows[0]);
+
+					BrokerProperties properties = new BrokerProperties {
+						BrokerID = sr["BrokerID"],
+						BrokerName = sr["BrokerName"],
+						BrokerRegNum = sr["BrokerRegNum"],
+						ContactName = sr["ContactName"],
+						ContactEmail = sr["ContactEmail"],
+						ContactMobile = sr["ContactMobile"],
+						ContactOtherPhone = sr["ContactOtherPhone"],
+						SourceRef = sr["SourceRef"],
+						BrokerWebSiteUrl = sr["BrokerWebSiteUrl"],
+						SignedTermsID = sr["SignedTermsID"],
+						SignedTextID = sr["SignedTextID"],
+						CurrentTermsID = sr["CurrentTermsID"],
+						CurrentTextID = sr["CurrentTextID"],
+						CurrentTerms = sr["CurrentTerms"]
+					};
 				}
 				else
 					oLog.Debug("No first row.");
-
-				tbl.Dispose();
-				oReader.Close();
-				cmd.Dispose();
-
-				oDB.DisposeAfterOneUsage(true, cw);
 			} // for
 
 			swi.Stop();
@@ -618,6 +609,24 @@ namespace TestApp {
 
 				if (sr.IsEmpty)
 					oLog.Debug("No first row.");
+				else {
+					BrokerProperties properties = new BrokerProperties {
+						BrokerID = sr["BrokerID"],
+						BrokerName = sr["BrokerName"],
+						BrokerRegNum = sr["BrokerRegNum"],
+						ContactName = sr["ContactName"],
+						ContactEmail = sr["ContactEmail"],
+						ContactMobile = sr["ContactMobile"],
+						ContactOtherPhone = sr["ContactOtherPhone"],
+						SourceRef = sr["SourceRef"],
+						BrokerWebSiteUrl = sr["BrokerWebSiteUrl"],
+						SignedTermsID = sr["SignedTermsID"],
+						SignedTextID = sr["SignedTextID"],
+						CurrentTermsID = sr["CurrentTermsID"],
+						CurrentTextID = sr["CurrentTextID"],
+						CurrentTerms = sr["CurrentTerms"]
+					};
+				}
 			} // for
 
 			sw.Stop();
