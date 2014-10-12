@@ -595,6 +595,9 @@
 
 		[OperationContract]
 		CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId);
+
+		[OperationContract]
+		ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword);
 	} // interface IEzService
 } // namespace EzService
 

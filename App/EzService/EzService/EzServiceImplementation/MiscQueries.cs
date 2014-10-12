@@ -265,7 +265,6 @@
 			};
 		}
 
-
 		public PropertyStatusesActionResult GetPropertyStatuses()
 		{
 			GetPropertyStatuses instance;
@@ -277,6 +276,12 @@
 				MetaData = result,
 				Groups = instance.Groups
 			};
+		}
+
+		public ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword)
+		{
+			ChangeBrokerEmail instance;
+			return ExecuteSync(out instance, 0, 0, oldEmail, newEmail, newPassword);
 		}
 	} // class EzServiceImplementation
 } // namespace EzService

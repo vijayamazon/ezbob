@@ -767,6 +767,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // GeneratePassword
 
 		[Activation]
+		private void ChangeBrokerEmail()
+		{
+			if ((m_aryArgs.Length != 4))
+			{
+				m_oLog.Msg("Usage: ChangeBrokerEmail <OldEmail> <NewEmail> <NewPassword>");
+				return;
+			}
+
+			m_oServiceClient.ChangeBrokerEmail(m_aryArgs[1], m_aryArgs[2], m_aryArgs[3]);
+		}-
+
+		[Activation]
 		private void BackfillCustomerAnalyticsCompany() {
 			m_oServiceClient.BackfillCustomerAnalyticsCompany();
 		} // BackfillCustomerAnalyticsCompany
