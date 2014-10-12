@@ -43,7 +43,10 @@ BEGIN
 		s.Ebida,
 		s.PctOfAnnual,
 		s.ActualLoanRepayment,
-		s.FreeCashFlow
+		s.FreeCashFlow,
+		s.AnnualizedTurnover,
+		s.AnnualizedValueAdded,
+		s.AnnualizedFreeCashFlow
 	FROM
 		MP_VatReturnSummary s
 		INNER JOIN Business b ON s.BusinessID = b.Id

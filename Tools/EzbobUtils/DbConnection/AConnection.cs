@@ -558,7 +558,7 @@
 
 			LogVerbosityLevel nLogVerbosityLevel = LogVerbosityLevel;
 
-			foreach (var prm in aryParams)
+			foreach (QueryParameter prm in aryParams)
 				oArgsForLog.Append(oArgsForLog.Length > 0 ? ", " : string.Empty).Append(prm);
 
 			string sArgsForLog = "(" + oArgsForLog + ")";

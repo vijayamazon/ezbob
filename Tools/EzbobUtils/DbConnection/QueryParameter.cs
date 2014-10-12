@@ -1,7 +1,10 @@
 ﻿namespace Ezbob.Database {
 	using System;
+	using System.Collections;
+	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
+	using Utils;
 
 	#region class QueryParameter
 
@@ -51,7 +54,43 @@
 		} // ToString
 
 		private string ValueStr {
-			get { return Value == null ? "-- NULL --" : Value.ToString(); }
+			get {
+				if (Value == null)
+					return "-- NULL --";
+
+				if (TypeUtils.IsSimpleType(Value.GetType()))
+					return Value.ToString();
+
+				if (Value is DataTable) {
+					var tbl = Value as DataTable;
+
+					var os = new List<string>();
+
+					var oNames = new List<string>();
+
+					for (int i = 0; i < tbl.Columns.Count; i++)
+						oNames.Add(tbl.Columns[i].ColumnName + ": ");
+
+					foreach (DataRow oRow in tbl.Rows) {
+						var osRow = new List<string>();
+
+						for (int i = 0; i < tbl.Columns.Count; i++) {
+							object v = oRow[i];
+							osRow.Add(oNames[i] + (v == null ? "-- null --" : v.ToString()));
+						} // for each cell
+
+						os.Add("{" + string.Join(", ", osRow) + "}");
+					} // for each row
+
+					return string.Format(
+						"[{0}]: {{ {1} }}",
+						os.Count,
+						string.Join(" ; ", os)
+					);
+				} // if
+
+				return "something else (neither DataTable nor simple type)";
+			} // get
 		} // ValueStr
 
 		public object ReturnedValue {
