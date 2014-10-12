@@ -248,7 +248,7 @@
 
 				m_oLog.Info("EzService host has been opened.");
 
-				new Thread(m_oCrontab.Execute).Start();
+				// TODO: restore once EZ-2674 is not off hold: new Thread(m_oCrontab.Execute).Start();
 
 				m_oLog.Info("Entering the main loop.");
 
