@@ -524,6 +524,7 @@
 
 		protected enum ExecMode {
 			Scalar,
+			Reader,
 			NonQuery,
 			ForEachRow,
 			Enumerable,
@@ -724,6 +725,11 @@
 					PublishRunningTime(sPooledConID, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
 					return value;
 
+
+				case ExecMode.Reader:
+					oConnection.Open();
+					return RunReader(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+
 				case ExecMode.NonQuery:
 					oConnection.Open();
 					int nResult = command.ExecuteNonQuery();
@@ -758,6 +764,45 @@
 		} // RunOnce
 
 		#endregion method RunOnce
+		public virtual DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams)
+		{
+			return (DataTable)Run(null, ExecMode.Reader, nSpecies, sQuery, aryParams);
+		}
+		private const string poolid = "poolid";
+		protected virtual DataTable RunReader(DbCommand command, LogVerbosityLevel nLogVerbosityLevel, string spName, string sArgsForLog, Guid guid, Stopwatch sw)
+		{
+			var oReader = command.ExecuteReader();
+
+			//long nPrevStopwatchValue = sw.ElapsedMilliseconds;
+
+			//if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
+			//	PublishRunningTime(poolid, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+
+			var dataTable = new DataTable();
+			dataTable.Load(oReader);
+
+			//string sMsg;
+
+			//switch (nLogVerbosityLevel)
+			//{
+			//	case LogVerbosityLevel.Compact:
+			//		sMsg = "completed and data loaded";
+			//		break;
+
+			//	case LogVerbosityLevel.Verbose:
+			//		sMsg = "data loaded";
+			//		break;
+
+			//	default:
+			//		throw new ArgumentOutOfRangeException();
+			//} // switch
+
+			//PublishRunningTime(poolid, nLogVerbosityLevel, spName, sArgsForLog, guid, sw, nPrevStopwatchValue, sMsg);
+
+			oReader.Close();
+
+			return dataTable;
+		} // RunReader
 
 		#endregion protected
 
