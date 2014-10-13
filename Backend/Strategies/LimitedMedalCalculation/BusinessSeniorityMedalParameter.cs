@@ -6,10 +6,10 @@
 	{
 		private readonly bool hasHmrc;
 		private readonly bool firstRepaymentDatePassed;
-		private readonly int businessSeniorityMonths;
+		private readonly int businessSeniorityYears;
 		public DateTime? IncorporationDate { get; private set; }
 
-		public BusinessSeniorityMedalParameter(DateTime? businessSeniority, bool hasHmrc, bool firstRepaymentDatePassed)
+		public BusinessSeniorityMedalParameter(DateTime? businessSeniority, bool hasHmrc, bool firstRepaymentDatePassed, DateTime calculationTime)
 		{
 			Weight = 8;
 			IsWeightFixed = true;
@@ -17,30 +17,29 @@
 			MaxGrade = 4;
 
 			IncorporationDate = businessSeniority;
-			businessSeniorityMonths = CalculateBusinessSeniorityInFullYears(businessSeniority);
+			businessSeniorityYears = CalculateBusinessSeniorityInFullYears(businessSeniority, calculationTime);
 			this.hasHmrc = hasHmrc;
 			this.firstRepaymentDatePassed = firstRepaymentDatePassed;
 		}
 
-		private int CalculateBusinessSeniorityInFullYears(DateTime? businessSeniority)
+		private int CalculateBusinessSeniorityInFullYears(DateTime? businessSeniority, DateTime calculationTime)
 		{
-			int numOfMonths = 0;
+			int numOfYears = 0;
 			if (businessSeniority.HasValue)
 			{
-				DateTime now = DateTime.UtcNow;
-				numOfMonths = now.Year - businessSeniority.Value.Year;
-				if (now.Month < businessSeniority.Value.Month ||
-					(now.Month == businessSeniority.Value.Month && now.Day < businessSeniority.Value.Day))
+				numOfYears = calculationTime.Year - businessSeniority.Value.Year;
+				if (calculationTime.Month < businessSeniority.Value.Month ||
+					(calculationTime.Month == businessSeniority.Value.Month && calculationTime.Day < businessSeniority.Value.Day))
 				{
-					numOfMonths--;
+					numOfYears--;
 				}
-				if (businessSeniorityMonths < 0)
+				if (businessSeniorityYears < 0)
 				{
-					numOfMonths = 0;
+					numOfYears = 0;
 				}
 			}
 
-			return numOfMonths;
+			return numOfYears;
 		}
 
 		public override void CalculateWeight()
@@ -58,19 +57,19 @@
 
 		public override void CalculateGrade()
 		{
-			if (businessSeniorityMonths < 1)
+			if (businessSeniorityYears < 1)
 			{
 				Grade = 0;
 			}
-			else if (businessSeniorityMonths < 3)
+			else if (businessSeniorityYears < 3)
 			{
 				Grade = 1;
 			}
-			else if (businessSeniorityMonths < 5)
+			else if (businessSeniorityYears < 5)
 			{
 				Grade = 2;
 			}
-			else if (businessSeniorityMonths < 10)
+			else if (businessSeniorityYears < 10)
 			{
 				Grade = 3;
 			}
