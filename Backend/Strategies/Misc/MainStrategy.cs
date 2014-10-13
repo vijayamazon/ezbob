@@ -223,34 +223,48 @@
 
 					if (!sr.IsEmpty)
 					{
-						decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
-						decimal valueAddedMedalFactor = sr["ValueAdded"];
 						decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
-
-						decimal offerAccordingToFreeCashFlow = instance.Result.FreeCashFlowValue * freeCashFlowMedalFactor;
-						decimal offerAccordingToValueAdded = instance.Result.ValueAdded * valueAddedMedalFactor;
 						decimal offerAccordingToAnnualTurnover = instance.Result.AnnualTurnover * annualTurnoverMedalFactor;
 
-						// Get min that is over threshold
-						if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded || offerAccordingToValueAdded <= limitedMedalMinOffer) &&
-						    (offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover || offerAccordingToAnnualTurnover <= limitedMedalMinOffer) &&
-						    offerAccordingToFreeCashFlow >= limitedMedalMinOffer)
+						if (instance.Result.BasedOnHmrcValues)
 						{
-							offerAccordingToThisMedal = (int)offerAccordingToFreeCashFlow;
-							Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId, offerAccordingToFreeCashFlow);
+							decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
+							decimal valueAddedMedalFactor = sr["ValueAdded"];
+							decimal offerAccordingToFreeCashFlow = instance.Result.FreeCashFlowValue * freeCashFlowMedalFactor;
+							decimal offerAccordingToValueAdded = instance.Result.ValueAdded * valueAddedMedalFactor;
+
+							// Get min that is over threshold
+							if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded ||
+							     offerAccordingToValueAdded <= limitedMedalMinOffer) &&
+							    (offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
+							     offerAccordingToAnnualTurnover <= limitedMedalMinOffer) &&
+							    offerAccordingToFreeCashFlow >= limitedMedalMinOffer)
+							{
+								offerAccordingToThisMedal = (int) offerAccordingToFreeCashFlow;
+								Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId, offerAccordingToFreeCashFlow);
+							}
+							else if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow ||
+							          offerAccordingToFreeCashFlow <= limitedMedalMinOffer) &&
+							         (offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
+							          offerAccordingToAnnualTurnover <= limitedMedalMinOffer) &&
+							         offerAccordingToValueAdded >= limitedMedalMinOffer)
+							{
+								offerAccordingToThisMedal = (int) offerAccordingToValueAdded;
+								Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId, offerAccordingToValueAdded);
+							}
+							else if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow ||
+							          offerAccordingToFreeCashFlow <= limitedMedalMinOffer) &&
+							         (offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
+							          offerAccordingToValueAdded <= limitedMedalMinOffer) &&
+							         offerAccordingToAnnualTurnover >= limitedMedalMinOffer)
+							{
+								offerAccordingToThisMedal = (int) offerAccordingToAnnualTurnover;
+								Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
+							}
 						}
-						else if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow || offerAccordingToFreeCashFlow <= limitedMedalMinOffer) &&
-							(offerAccordingToValueAdded <= offerAccordingToAnnualTurnover || offerAccordingToAnnualTurnover <= limitedMedalMinOffer ) &&
-							offerAccordingToValueAdded >= limitedMedalMinOffer)
+						else if (offerAccordingToAnnualTurnover >= limitedMedalMinOffer)
 						{
-							offerAccordingToThisMedal = (int)offerAccordingToValueAdded;
-							Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId, offerAccordingToValueAdded);
-						}
-						else if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow || offerAccordingToFreeCashFlow <= limitedMedalMinOffer) &&
-							(offerAccordingToAnnualTurnover <= offerAccordingToValueAdded || offerAccordingToValueAdded <= limitedMedalMinOffer) &&
-							offerAccordingToAnnualTurnover >= limitedMedalMinOffer)
-						{
-							offerAccordingToThisMedal = (int)offerAccordingToAnnualTurnover;
+							offerAccordingToThisMedal = (int) offerAccordingToAnnualTurnover;
 							Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
 						}
 					}
