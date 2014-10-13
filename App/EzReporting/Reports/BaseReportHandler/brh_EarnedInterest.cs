@@ -76,7 +76,8 @@
 			public decimal LoanAmount;
 			public decimal TotalRepaid;
 			public decimal PrincipalRepaid;
-			public string CustomerStatus;
+			private CustomerStatus LastInPeriodStatus;
+			private CustomerStatus CurrentStatus;
 
 			#endregion fields
 
@@ -92,7 +93,7 @@
 
 			#region constructor
 
-			public EarnedInterestRow(bool bBIsTotal) {
+			public EarnedInterestRow(bool bBIsTotal, CustomerStatus nLastInPeriodStatus, CustomerStatus nCurrentStatus) {
 				m_bIsTotal = bBIsTotal;
 				IssueDate = ms_oLongAgo;
 				ClientID = 0;
@@ -103,9 +104,10 @@
 				LoanAmount = 0;
 				TotalRepaid = 0;
 				PrincipalRepaid = 0;
-				CustomerStatus = "";
 				m_oClientCount = new SortedDictionary<int, int>();
 				m_oLoanCount = new SortedDictionary<int, int>();
+				LastInPeriodStatus = nLastInPeriodStatus;
+				CurrentStatus = nCurrentStatus;
 			} // constructor
 
 			#endregion constructor
@@ -141,8 +143,10 @@
 
 				tbl.Rows.Add(
 					(IssueDate == ms_oLongAgo ? (DateTime?)null : IssueDate), ClientID, LoanID, ClientName, ClientEmail,
-					EarnedInterest, LoanAmount, TotalRepaid, PrincipalRepaid,CustomerStatus,
-					(m_bIsTotal ? "total" : "")
+					EarnedInterest, LoanAmount, TotalRepaid, PrincipalRepaid,
+					(m_bIsTotal ? "total" : ""),
+					(m_bIsTotal ? string.Empty : LastInPeriodStatus.ToString()),
+					(m_bIsTotal ? string.Empty : CurrentStatus.ToString())
 				);
 			} // ToRow
 
@@ -162,8 +166,9 @@
 				oOutput.Columns.Add("LoanAmount", typeof(double));
 				oOutput.Columns.Add("TotalRepaid", typeof(double));
 				oOutput.Columns.Add("PrincipalRepaid", typeof(double));
-				oOutput.Columns.Add("CustomerStatus", typeof(string));
 				oOutput.Columns.Add("RowLevel", typeof(string));
+				oOutput.Columns.Add("LastInPeriodStatus", typeof(string));
+				oOutput.Columns.Add("CurrentStatus", typeof(string));
 
 				ToRow(oOutput);
 
@@ -189,8 +194,8 @@
 
 		#region method CreateEarnedInterestReport
 
-		private KeyValuePair<ReportQuery, DataTable> CreateEarnedInterestReport(Report report, bool bIgnoreCustomerStatus, DateTime today, DateTime tomorrow) {
-			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ForPeriod, bIgnoreCustomerStatus, today, tomorrow, this);
+		private KeyValuePair<ReportQuery, DataTable> CreateEarnedInterestReport(Report report, bool bAccountingMode, DateTime today, DateTime tomorrow) {
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ForPeriod, bAccountingMode, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			var rpt = new ReportQuery(report) {
@@ -198,7 +203,7 @@
 				DateEnd = tomorrow
 			};
 
-			var oTotal = new EarnedInterestRow(true);
+			var oTotal = new EarnedInterestRow(true, CustomerStatus.Enabled, CustomerStatus.Enabled);
 
 			var oRows = new List<EarnedInterestRow>();
 
@@ -208,9 +213,11 @@
 				if (!earned.ContainsKey(nLoanID))
 					return ActionResult.Continue;
 
-				var oNewRow = new EarnedInterestRow(false) {
+				int nClientID = sr["ClientID"];
+
+				var oNewRow = new EarnedInterestRow(false, ea.CustomerStatusHistory.Data.GetLast(nClientID).NewStatus, ea.CustomerStatusHistory.GetCurrent(nClientID).NewStatus) {
 					IssueDate = sr["IssueDate"],
-					ClientID = sr["ClientID"],
+					ClientID = nClientID,
 					LoanID = nLoanID,
 					ClientName = sr["ClientName"],
 					ClientEmail = sr["ClientEmail"],
@@ -218,7 +225,6 @@
 					LoanAmount = sr["LoanAmount"],
 					TotalRepaid = sr["TotalRepaid"],
 					PrincipalRepaid = sr["PrincipalRepaid"],
-					CustomerStatus = sr["CustomerStatus"],
 				};
 
 				oTotal.Update(oNewRow);

@@ -52,7 +52,7 @@
 		public EarnedInterest(
 			AConnection oDB,
 			WorkingMode nMode,
-			bool bIgnoreCustomerStatus,
+			bool bAccountingMode,
 			DateTime oDateOne,
 			DateTime oDateTwo,
 			ASafeLog oLog = null
@@ -76,7 +76,7 @@
 
 			m_nMode = nMode;
 
-			m_bIgnoreCustomerStatus = bIgnoreCustomerStatus;
+			m_bAccountingMode = bAccountingMode;
 		} // constructor
 
 		#endregion constructor
@@ -119,6 +119,8 @@
 
 		#endregion property VerboseLogging
 
+		public CustomerStatusHistory CustomerStatusHistory { get; private set; }
+
 		#endregion public
 
 		#region private
@@ -155,23 +157,17 @@
 		#region method FillCustomerStatuses
 
 		private void FillCustomerStatuses() {
-			if (m_bIgnoreCustomerStatus) {
-				Debug("Not loading customer statuses: ignore customer status flag is set.");
-				return;
-			} // if
+			CustomerStatusHistory = new CustomerStatusHistory(null, m_oDateEnd, m_oDB);
 
-			m_oDB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
+			foreach (KeyValuePair<int, List<CustomerStatusChange>> pair in CustomerStatusHistory.FullData.Data) {
+				int nCustomerID = pair.Key;
+
+				foreach (CustomerStatusChange csc in pair.Value) {
 					try {
-						int nCustomerID = sr["CustomerID"];
-						DateTime oChangeDate = sr["ChangeDate"];
-						CustomerStatus nOldStatus = ((string)sr["OldStatus"]).ParseCustomerStatus();
-						CustomerStatus nNewStatus = ((string)sr["NewStatus"]).ParseCustomerStatus();
-
 						bool bAlreadyHas = m_oBadPeriods.ContainsKey(nCustomerID);
 						bool bLastKnown = !bAlreadyHas || m_oBadPeriods[nCustomerID].IsLastKnownGood;
-						bool bIsOldGood = !BadPeriods.IsBad(nOldStatus);
-						bool bIsNewGood = !BadPeriods.IsBad(nNewStatus);
+						bool bIsOldGood = !BadPeriods.IsBad(csc.OldStatus);
+						bool bIsNewGood = !BadPeriods.IsBad(csc.NewStatus);
 
 						if (bLastKnown != bIsOldGood) {
 							Alert(
@@ -179,27 +175,23 @@
 								(bLastKnown ? "good" : "bad"),
 								(bIsOldGood ? "good" : "bad"),
 								nCustomerID,
-								oChangeDate.ToString("MMM dd yyyy", CultureInfo.InvariantCulture)
+								csc.ChangeDate.ToString("MMM dd yyyy", CultureInfo.InvariantCulture)
 							);
 						} // if
 
 						if (bLastKnown != bIsNewGood) {
 							if (bAlreadyHas)
-								m_oBadPeriods[nCustomerID].Add(oChangeDate, !bIsNewGood);
+								m_oBadPeriods[nCustomerID].Add(csc.ChangeDate, !bIsNewGood);
 							else
-								m_oBadPeriods[nCustomerID] = new BadPeriods(oChangeDate);
+								m_oBadPeriods[nCustomerID] = new BadPeriods(csc.ChangeDate);
 						} // if
 
 					}
 					catch (Exception e) {
 						Alert(e, "Failed to process customer status history entry.");
 					} // try
-
-					return ActionResult.Continue;
-				},
-				"RptEarnedInterest_CustomerStatusHistory",
-				CommandSpecies.StoredProcedure
-			);
+				} // for each status change
+			} // for each customer
 		} // FillCustomerStatuses
 
 		#endregion method FillCustomerStatuses
@@ -245,9 +237,25 @@
 
 			foreach (KeyValuePair<int, LoanData> pair in m_oLoans) {
 				InterestFreezePeriods ifp = m_oFreezePeriods.ContainsKey(pair.Key) ? m_oFreezePeriods[pair.Key] : null;
-				BadPeriods bp = m_oBadPeriods.ContainsKey(pair.Value.CustomerID) ? m_oBadPeriods[pair.Value.CustomerID] : null;
 
-				decimal nInterest = pair.Value.Calculate(m_oDateStart, m_oDateEnd, ifp, VerboseLogging, m_nMode, bp);
+				BadPeriods bp = null;
+				DateTime? oWriteOffDate = null;
+
+				if (m_bAccountingMode)
+					oWriteOffDate = CustomerStatusHistory.FullData.GetWriteOffDate(pair.Value.CustomerID);
+				else
+					bp = m_oBadPeriods.ContainsKey(pair.Value.CustomerID) ? m_oBadPeriods[pair.Value.CustomerID] : null;
+
+				decimal nInterest = pair.Value.Calculate(
+					m_oDateStart,
+					m_oDateEnd,
+					ifp,
+					VerboseLogging,
+					m_nMode,
+					m_bAccountingMode,
+					bp,
+					oWriteOffDate
+				);
 
 				if (nInterest > 0)
 					oRes[pair.Key] = nInterest;
@@ -335,7 +343,7 @@
 
 		private readonly WorkingMode m_nMode;
 
-		private readonly bool m_bIgnoreCustomerStatus;
+		private readonly bool m_bAccountingMode;
 
 		#endregion fields
 

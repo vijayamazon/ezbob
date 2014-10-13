@@ -33,7 +33,7 @@
 
 	#region class CustomerStatusChange
 
-	internal class CustomerStatusChange {
+	public class CustomerStatusChange {
 		public CustomerStatus OldStatus { get; set; }
 		public CustomerStatus NewStatus { get; set; }
 		public DateTime ChangeDate { get; set; }
@@ -43,14 +43,77 @@
 
 	#region class CustomerStatusHistory
 
-	internal class CustomerStatusHistory {
+	public class CustomerStatusHistory {
+		#region public
+
+		#region class HistoryData
+
+		public class HistoryData {
+			#region constructor
+
+			public HistoryData(CustomerStatusHistory oFullHistory) {
+				Data = new SortedDictionary<int, List<CustomerStatusChange>>();
+				WriteOffDate = new SortedDictionary<int, DateTime>();
+
+				m_oFullHistory = oFullHistory;
+			} // constructor
+
+			#endregion constructor
+
+			#region method GetLast
+
+			public CustomerStatusChange GetLast(int nCustomerID) {
+				return Data.ContainsKey(nCustomerID) ? Data[nCustomerID].Last() : m_oFullHistory.GetCurrent(nCustomerID);
+			} // GetLast
+
+			#endregion method GetLast
+
+			#region method GetWriteOffDate
+
+			public DateTime? GetWriteOffDate(int nCustomerID) {
+				return WriteOffDate.ContainsKey(nCustomerID) ? WriteOffDate[nCustomerID] : (DateTime?)null;
+			} // GetWriteOffDate
+
+			#endregion method GetWriteOffDate
+
+			#region method Add
+
+			internal void Add(int nCustomerID, CustomerStatusChange csc) {
+				if (Data.ContainsKey(nCustomerID))
+					Data[nCustomerID].Add(csc);
+				else
+					Data[nCustomerID] = new List<CustomerStatusChange> { csc };
+
+				if ((csc.NewStatus == CustomerStatus.WriteOff) && !WriteOffDate.ContainsKey(nCustomerID))
+					WriteOffDate[nCustomerID] = csc.ChangeDate;
+			} // Add
+
+			#endregion method Add
+
+			public SortedDictionary<int, List<CustomerStatusChange>> Data { get; set; }
+
+			#region private
+
+			private SortedDictionary<int, DateTime> WriteOffDate { get; set;}
+			private readonly CustomerStatusHistory m_oFullHistory;
+
+			#endregion private
+		} // class HistoryData
+
+		#endregion class HistoryData
+
+		#region constructor
+
 		public CustomerStatusHistory(int? nCustomerID, DateTime? oDateEnd, AConnection oDB) {
 			if (oDB == null)
 				throw new NullReferenceException("No DB connection specified for loading CustomerStatusHistory.");
 
-			m_oData = new SortedDictionary<int, List<CustomerStatusChange>>();
+			Data = new HistoryData(this);
+			FullData = new HistoryData(this);
+
 			m_oCurrent = new SortedDictionary<int, CustomerStatusChange>();
-			m_oWriteOffDate = new SortedDictionary<int, DateTime>();
+
+			m_oDateEnd = oDateEnd;
 
 			oDB.ForEachRowSafe(
 				LoadCurrent,
@@ -64,23 +127,28 @@
 				"LoadCustomerStatusHistory",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", nCustomerID),
-				new QueryParameter("DateEnd", oDateEnd)
+				new QueryParameter("DateEnd")
 			);
 		} // constructor
 
-		public CustomerStatusChange GetLast(int nCustomerID) {
-			return m_oData.ContainsKey(nCustomerID)
-				? m_oData[nCustomerID].Last()
-				: GetCurrent(nCustomerID);
-		} // GetLast
+		#endregion constructor
+
+		#region method GetCurrent
 
 		public CustomerStatusChange GetCurrent(int nCustomerID) {
 			return m_oCurrent[nCustomerID];
 		} // GetLast
 
-		public DateTime? GetWriteOffDate(int nCustomerID) {
-			return m_oWriteOffDate.ContainsKey(nCustomerID) ? m_oWriteOffDate[nCustomerID] : (DateTime?)null;
-		} // GetWriteOffDate
+		#endregion method GetCurrent
+
+		public HistoryData Data { get; private set; }
+		public HistoryData FullData { get; private set; }
+
+		#endregion public
+
+		#region private
+
+		#region method LoadCurrent
 
 		private void LoadCurrent(SafeReader sr) {
 			m_oCurrent[sr["CustomerID"]] = new CustomerStatusChange {
@@ -89,6 +157,10 @@
 				NewStatus = ((string)sr["Status"]).ParseCustomerStatus(),
 			};
 		} // LoadCurrent
+
+		#endregion method LoadCurrent
+
+		#region method LoadHistoryItem
 
 		private void LoadHistoryItem(SafeReader sr) {
 			int nCustomerID = sr["CustomerID"];
@@ -99,18 +171,18 @@
 				NewStatus = ((string)sr["NewStatus"]).ParseCustomerStatus(),
 			};
 
-			if (m_oData.ContainsKey(nCustomerID))
-				m_oData[nCustomerID].Add(csc);
-			else
-				m_oData[nCustomerID] = new List<CustomerStatusChange> { csc };
+			if (m_oDateEnd.HasValue && (csc.ChangeDate < m_oDateEnd.Value))
+				Data.Add(nCustomerID, csc);
 
-			if ((csc.NewStatus == CustomerStatus.WriteOff) && !m_oWriteOffDate.ContainsKey(nCustomerID))
-				m_oWriteOffDate[nCustomerID] = csc.ChangeDate;
+			FullData.Add(nCustomerID, csc);
 		} // LoadHistoryItem
 
-		private readonly SortedDictionary<int, List<CustomerStatusChange>> m_oData;
+		#endregion method LoadHistoryItem
+
 		private readonly SortedDictionary<int, CustomerStatusChange> m_oCurrent;
-		private readonly SortedDictionary<int, DateTime> m_oWriteOffDate;
+		private readonly DateTime? m_oDateEnd;
+
+		#endregion private
 	} // class CustomerStatusHistory
 
 	#endregion class CustomerStatusHistory

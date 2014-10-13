@@ -42,16 +42,10 @@
 
 			Debug("Creating accounting loan balance report: loading earned interest...");
 
-			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance, false, today, tomorrow, this);
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance, true, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			Debug("Creating accounting loan balance report: loading earned interest complete.");
-
-			Debug("Creating accounting loan balance report: loading customer status history...");
-
-			var csh = new CustomerStatusHistory(null, tomorrow, DB);
-
-			Debug("Creating accounting loan balance report: loading customer status history complete.");
 
 			var rpt = new ReportQuery(report) {
 				DateStart = today,
@@ -74,9 +68,9 @@
 					oRows[nLoanID] = new AccountingLoanBalanceRow(
 						sr,
 						nEarnedInterest,
-						csh.GetLast(nClientID),
-						csh.GetCurrent(nClientID),
-						csh.GetWriteOffDate(nClientID) ?? tomorrow
+						ea.CustomerStatusHistory.Data.GetLast(nClientID),
+						ea.CustomerStatusHistory.GetCurrent(nClientID),
+						ea.CustomerStatusHistory.Data.GetWriteOffDate(nClientID) ?? tomorrow
 					);
 				} // if
 

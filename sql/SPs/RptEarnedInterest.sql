@@ -1,7 +1,5 @@
 IF OBJECT_ID('RptEarnedInterest') IS NULL
-BEGIN
 	EXECUTE('CREATE PROCEDURE RptEarnedInterest AS SELECT 1')
-END
 GO
 
 SET ANSI_NULLS ON
@@ -15,6 +13,8 @@ ALTER PROCEDURE RptEarnedInterest
 @DateEnd DATETIME
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT
 		l.Date AS IssueDate,
 		c.Id AS ClientID,
@@ -23,12 +23,10 @@ BEGIN
 		c.Name AS ClientEmail,
 		la.Amount AS LoanAmount,
 		ISNULL(SUM(t.Amount), 0) AS TotalRepaid,
-		ISNULL(SUM(t.LoanRepayment), 0) AS PrincipalRepaid,
-		cs.Name AS CustomerStatus
+		ISNULL(SUM(t.LoanRepayment), 0) AS PrincipalRepaid
 	FROM
 		Loan l
 		INNER JOIN Customer c ON l.CustomerID = c.Id
-		LEFT JOIN CustomerStatuses cs ON cs.Id = c.CollectionStatus
 		INNER JOIN LoanTransaction la
 			ON l.Id = la.LoanId
 			AND la.Type = 'PacnetTransaction'
@@ -43,8 +41,6 @@ BEGIN
 		l.ID,
 		c.Fullname,
 		c.Name,
-		la.Amount,
-		cs.Name
+		la.Amount
 END
-
 GO

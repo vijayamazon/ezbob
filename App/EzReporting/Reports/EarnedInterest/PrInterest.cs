@@ -23,15 +23,25 @@
 			);
 		} // ToString
 
-		public bool Update(InterestData oDelta, InterestFreezePeriods ifp, BadPeriods bp) {
-			if (bp == null) {
-				if (ifp == null)
-					Interest = oDelta.Interest;
+		public bool Update(
+			InterestData oDelta,
+			InterestFreezePeriods ifp,
+			BadPeriods bp,
+			bool bAccountingMode,
+			DateTime? oWriteOffDate
+		) {
+			if (bAccountingMode) {
+				if (oWriteOffDate.HasValue)
+					Interest = (Date < oWriteOffDate.Value) ? GetIfpInterest(ifp, oDelta) : 0;
 				else
-					Interest = ifp.GetInterest(Date) ?? oDelta.Interest;
+					Interest = GetIfpInterest(ifp, oDelta);
 			}
-			else
-				Interest = bp.Contains(Date) ? 0 : oDelta.Interest;
+			else { // i.e. normal mode
+				if (bp == null)
+					Interest = GetIfpInterest(ifp, oDelta);
+				else
+					Interest = bp.Contains(Date) ? 0 : GetIfpInterest(ifp, oDelta);
+			} // if
 
 			return Date == oDelta.Date;
 		} // Update
@@ -40,6 +50,13 @@
 			if (Date > oDelta.Date)
 				Principal -= oDelta.Repayment;
 		} // Update
+
+		private decimal GetIfpInterest(InterestFreezePeriods ifp, InterestData oDelta) {
+			if (ifp == null)
+				return oDelta.Interest;
+
+			return ifp.GetInterest(Date) ?? oDelta.Interest;
+		} // GetIfpInterest
 
 		private static readonly CultureInfo ms_oCulture = new CultureInfo("en-GB", false);
 	} // class PrInterest

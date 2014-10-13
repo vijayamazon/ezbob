@@ -1,6 +1,7 @@
 ﻿namespace Reports.EarnedInterest {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Text;
 	using Ezbob.Logger;
@@ -36,6 +37,9 @@
 		/// <param name="ifp">Interest rate freeze periods.</param>
 		/// <param name="bVerboseLogging">Log verbosity level.</param>
 		/// <param name="nMode">Interest calculation mode.</param>
+		/// <param name="bAccountingMode">How bad statuses and Write Off are treated.</param>
+		/// <param name="oWriteOffDate">Date of the first customer's WriteOff status.</param>
+		/// <param name="bp">List of customer's bad periods (i.e. when customer was in one of the bad statuses).</param>
 		/// <returns>Earned interest for the period.</returns>
 		public decimal Calculate(
 			DateTime oDateStart,
@@ -43,7 +47,9 @@
 			InterestFreezePeriods ifp,
 			bool bVerboseLogging,
 			Reports.EarnedInterest.EarnedInterest.WorkingMode nMode,
-			BadPeriods bp
+			bool bAccountingMode,
+			BadPeriods bp,
+			DateTime? oWriteOffDate
 		) {
 			DateTime oFirstIncomeDay = IssueDate.AddDays(1);
 
@@ -79,13 +85,31 @@
 			PrInterest[] days = oDaysList.Where(pri => pri.Principal > 0).ToArray();
 
 			if (days.Length == 0) {
-				LogAllDetails(0, "no dates found when the loan produced interest during report period", days, ifp, bp, bVerboseLogging);
+				LogAllDetails(
+					0,
+					"no dates found when the loan produced interest during report period",
+					days,
+					ifp,
+					bp,
+					bVerboseLogging,
+					bAccountingMode,
+					oWriteOffDate
+				);
 				return 0;
 			} // if
 
 			if (nMode == Reports.EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance) {
 				if (days[days.Length - 1].Date < oDateStart) {
-					LogAllDetails(0, "the loan has been completed before the report period", days, ifp, bp, bVerboseLogging);
+					LogAllDetails(
+						0,
+						"the loan has been completed before the report period",
+						days,
+						ifp,
+						bp,
+						bVerboseLogging,
+						bAccountingMode,
+						oWriteOffDate
+					);
 					return 0;
 				} // if loan got repaid before report period
 			} // if ForAudit mode
@@ -96,7 +120,7 @@
 			InterestData oCurDayData = aryDates[nDayDataPtr];
 			
 			foreach (PrInterest pri in days) {
-				if (pri.Update(oCurDayData, ifp, bp)) {
+				if (pri.Update(oCurDayData, ifp, bp, bAccountingMode, oWriteOffDate)) {
 					nDayDataPtr++;
 
 					if (nDayDataPtr < aryDates.Length)
@@ -106,7 +130,16 @@
 
 			decimal nEarnedInterest = days.Sum(pri => pri.Principal * pri.Interest);
 
-			LogAllDetails(nEarnedInterest, "full details are below", days, ifp, bp, bVerboseLogging);
+			LogAllDetails(
+				nEarnedInterest,
+				"full details are below",
+				days,
+				ifp,
+				bp,
+				bVerboseLogging,
+				bAccountingMode,
+				oWriteOffDate
+			);
 
 			return nEarnedInterest;
 		} // Calculate
@@ -135,7 +168,16 @@
 
 		#region method LogAllDetails
 
-		private void LogAllDetails(decimal nEarnedInterest, string sMsg, IEnumerable<PrInterest> days, InterestFreezePeriods ifp, BadPeriods bp, bool bVerboseLogging) {
+		private void LogAllDetails(
+			decimal nEarnedInterest,
+			string sMsg,
+			IEnumerable<PrInterest> days,
+			InterestFreezePeriods ifp,
+			BadPeriods bp,
+			bool bVerboseLogging,
+			bool bAccountingMode,
+			DateTime? oWriteOffDate
+		) {
 			if (!bVerboseLogging)
 				return;
 
@@ -148,6 +190,8 @@
 
 			m_oLog.Debug(
 				"\n\nLoanID: {0} for customer {14}, {1} issued on {2} earned interest is {6}{11}.\n" +
+				"Working mode: {15}\n" +
+				"Write off date: {16}\n" +
 				"Schedule ({7}):\n" +
 				"\t{3}\n" +
 				"Bad periods ({12}):\n" +
@@ -170,7 +214,11 @@
 				sMsg,
 				bp == null ? 0 : bp.Count,
 				bp == null ? "none" : bp.ToString(),
-				CustomerID
+				CustomerID,
+				bAccountingMode
+					? "accounting mode (no interest earned after the first Write Off, other bad statuses are ignored)"
+					: "normal mode (no interest earned during bad periods, Write Off is considered as just another bad status)",
+				oWriteOffDate.HasValue ? oWriteOffDate.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : "none"
 			);
 		} // LogAllDetails
 
