@@ -19,6 +19,7 @@
 		public string LastStatus { get; set; }
 		public CustomerRelationFollowUp LastFollowUp { get; set; }
 		public List<CrmPhoneNumber> PhoneNumbers { get; set; }
+		public string CreditResult { get; set; }
 	}
 
 	public class CrmPhoneNumber

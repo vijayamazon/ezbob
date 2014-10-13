@@ -22,13 +22,16 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
             followUps: this.model.get("FollowUps"),
             lastFollowUp: this.model.get("LastFollowUp"),
             lastStatus: this.model.get("LastStatus"),
-            isPhoneVerified: this.model.get("IsPhoneVerified")
+            isPhoneVerified: this.model.get("IsPhoneVerified"),
+            creditResult: this.model.get("CreditResult")
         };
     },
 
     events: {
         "click .addNewCustomerRelationsEntry": "addNewCustomerRelationsEntry",
         "click .addFollowUp": "addFollowUp",
+        "click .markAsPending": "markAsPending",
+        "click .markAsWaiting": "markAsWaiting",
         "click .toggleSystemCrm": "toggleSystmeCrm",
         "change #Rank": "changeRank",
         "click #closeFollowUp": "closeLastFollowUp",
@@ -70,6 +73,25 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         });
         EzBob.App.jqmodal.show(view);
         return false;
+    },
+
+    markAsPending: function () {
+        var view = new EzBob.Underwriter.MarkAsPending({
+            model: this.model,
+            isBroker: this.isBroker, // TODO: do we need the models - probably not
+        });
+        EzBob.App.jqmodal.show(view);
+        return false;
+    },
+
+    markAsWaiting: function () {
+        BlockUi();
+        var xhr = $.post(window.gRootPath + 'CustomerRelations/MarkAsWaiting', { customerId: this.model.customerId });
+        xhr.always(function () {
+            // make other button visible and this invisible - if i return success
+            // or refresh model?
+            return UnBlockUi();
+        });
     },
 
     toggleSystmeCrm: function () {

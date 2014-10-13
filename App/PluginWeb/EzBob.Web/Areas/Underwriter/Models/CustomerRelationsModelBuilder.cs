@@ -81,6 +81,9 @@
 					crmModel.IsPhoneVerified = true;
 				}
 			}
+
+			crmModel.CreditResult = customer != null && customer.CreditResult.HasValue ? customer.CreditResult.Value.ToString() : "";
+
 			return crmModel;
 		} // Create
 

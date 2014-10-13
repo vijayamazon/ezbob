@@ -1,6 +1,7 @@
 ﻿@{
     Html.RenderPartial("CustomerRelations/AddCustomerRelationsEntry");
     Html.RenderPartial("CustomerRelations/AddCustomerRelationsFollowUp");
+    Html.RenderPartial("CustomerRelations/MarkAsPending");
     Html.RenderPartial("CustomerRelations/SendSms");
 }
 
@@ -9,9 +10,14 @@
         <div class="col-md-12">
             <div class="box-content">
                 <div class="box crm-head">
-                    <div class="col-md-3 right-seperator">
+                    <div class="col-md-4 right-seperator">
                         <button class="btn btn-primary addNewCustomerRelationsEntry">Add New Entry</button>
                         <button class="btn btn-primary addFollowUp">Add Follow up</button>
+                        <% debugger; if (creditResult == 'WaitingForDecision') { %>
+                            <button class="btn btn-primary markAsPending">Mark as pending</button>
+                        <% } else if (creditResult == 'ApprovedPending') { %>
+                            <button class="btn btn-primary markAsWaiting">Mark as waiting</button>
+                        <% } %>
                     </div>
                     <div class="col-md-3 right-seperator">
                         <span>Potential rank:</span>

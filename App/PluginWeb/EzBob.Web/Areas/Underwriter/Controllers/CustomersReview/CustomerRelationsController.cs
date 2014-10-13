@@ -3,7 +3,9 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Models;
@@ -26,7 +28,9 @@
 			CRMStatusesRepository crmStatusesRepository,
 			CRMActionsRepository crmActionsRepository,
 			CustomerRelationFollowUpRepository customerRelationFollowUpRepository,
-			CustomerRelationStateRepository customerRelationStateRepository, IWorkplaceContext context) {
+			CustomerRelationStateRepository customerRelationStateRepository, 
+			CustomerRepository customerRepository,
+			IWorkplaceContext context) {
 			_customerRelationsRepository = customerRelationsRepository;
 			_loanRepository = loanRepository;
 			_session = session;
@@ -35,6 +39,7 @@
 			_crmActionsRepository = crmActionsRepository;
 			_customerRelationFollowUpRepository = customerRelationFollowUpRepository;
 			_customerRelationStateRepository = customerRelationStateRepository;
+			this.customerRepository = customerRepository;
 			_context = context;
 			_serviceClient = new ServiceClient();
 		} // constructor
@@ -234,6 +239,24 @@
 		} // CloseFollowUp
 		#endregion action SendSms
 
+		[Ajax]
+		[HttpPost]
+		public void MarkAsWaiting(int customerId)
+		{
+			Customer customer = customerRepository.Get(customerId);
+			customer.CreditResult = CreditResultStatus.WaitingForDecision;
+			customerRepository.SaveOrUpdate(customer);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public void MarkAsPending(int customerId)
+		{
+			Customer customer = customerRepository.Get(customerId);
+			customer.CreditResult = CreditResultStatus.ApprovedPending;
+			customerRepository.SaveOrUpdate(customer);
+		}
+
 		#endregion public
 
 		#region private
@@ -245,6 +268,7 @@
 		private readonly CustomerRelationFollowUpRepository _customerRelationFollowUpRepository;
 		private readonly CustomerRelationStateRepository _customerRelationStateRepository;
 		private readonly LoanRepository _loanRepository;
+		private readonly CustomerRepository customerRepository;
 		private readonly ISession _session;
 		private readonly ServiceClient _serviceClient;
 		private readonly IWorkplaceContext _context;
