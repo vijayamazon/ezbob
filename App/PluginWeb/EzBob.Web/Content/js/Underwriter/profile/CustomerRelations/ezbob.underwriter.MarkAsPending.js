@@ -21,12 +21,7 @@ EzBob.Underwriter.MarkAsPending = EzBob.BoundItemView.extend({
         };
     },
 
-    initialize: function (options) {
-        this.onsave = options.onsave;
-        this.onbeforesave = options.onbeforesave;
-        this.customerId = this.model.customerId;
-        this.url = window.gRootPath + 'Underwriter/CustomerRelations/MarkAsPending/';
-	    this.isBroker = options.isBroker;
+    initialize: function () {
 
 	    EzBob.Underwriter.MarkAsPending.__super__.initialize.apply(this, arguments);
     },

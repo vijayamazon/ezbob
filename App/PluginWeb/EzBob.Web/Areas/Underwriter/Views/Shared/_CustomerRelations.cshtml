@@ -19,7 +19,7 @@
                             <button class="btn btn-primary markAsWaiting">Mark as waiting</button>
                         <% } %>
                     </div>
-                    <div class="col-md-3 right-seperator">
+                    <div class="col-md-4 right-seperator">
                         <span>Potential rank:</span>
                         <select class="selectheight" id="Rank" name="Rank">
                             <option></option>
@@ -36,13 +36,13 @@
                     <%}%>
 
                     <%if(lastFollowUp && !lastFollowUp.IsClosed) {%>
-                    <div class="col-md-3 right-seperator">
+                    <div class="col-md-2 right-seperator">
                         <label class="red followUp" title="<%-lastFollowUp.Comment%> <%-EzBob.formatDate2(lastFollowUp.FollowUpDate)%>" data-toggle="tooltip">Followed up</label>
                         <button id="closeFollowUp" class="btn btn-primary">Close last</button>
                     </div>
                     <%}%>
     
-                    <div class="col-md-3 right-seperator">
+                    <div class="col-md-2 right-seperator">
                         <span>phone <%-isPhoneVerified ? '' : 'not ' %>verified</span>
                         <button id="sendSms" class="btn btn-primary">Send SMS</button>
                     </div>
