@@ -124,7 +124,8 @@
 			}
 
 			failedCalculatingFreeCashFlow = false;
-			
+			freeCashFlowDataAvailable = false;
+
 			if (wasAbleToGetSummaryData)
 			{
 				if (earliestHmrcLastUpdateDate.HasValue &&
@@ -172,7 +173,6 @@
 
 				if (yodleeMps.Count == 0)
 				{
-					freeCashFlowDataAvailable = false;
 					inputData.FreeCashFlowValue = 0;
 					inputData.ValueAdded = 0;
 					inputData.AnnualTurnover = 0;
@@ -182,6 +182,7 @@
 					decimal totalFreeCashFlowValue = 0;
 					decimal totalValueAdded = 0;
 					decimal totalAnnualTurnover = 0;
+					freeCashFlowDataAvailable = true;
 
 					foreach (int mpId in yodleeMps)
 					{
