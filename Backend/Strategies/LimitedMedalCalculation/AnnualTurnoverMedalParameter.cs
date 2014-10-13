@@ -2,10 +2,10 @@
 {
 	public class AnnualTurnoverMedalParameter : MedalParameter
 	{
-		private readonly bool hasHmrc;
+		private readonly bool hasFreeCashFlowData;
 		public decimal AnnualTurnover { get; private set; }
 
-		public AnnualTurnoverMedalParameter(decimal annualTurnover, bool hasHmrc)
+		public AnnualTurnoverMedalParameter(decimal annualTurnover, bool hasFreeCashFlowData)
 		{
 			Weight = 10;
 			IsWeightFixed = true;
@@ -13,12 +13,12 @@
 			MaxGrade = 6;
 
 			AnnualTurnover = annualTurnover;
-			this.hasHmrc = hasHmrc;
+			this.hasFreeCashFlowData = hasFreeCashFlowData;
 		}
 
 		public override void CalculateWeight()
 		{
-			if (!hasHmrc)
+			if (!hasFreeCashFlowData)
 			{
 				Weight += 7;
 			}

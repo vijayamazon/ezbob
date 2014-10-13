@@ -4,12 +4,12 @@
 
 	public class BusinessSeniorityMedalParameter : MedalParameter
 	{
-		private readonly bool hasHmrc;
+		private readonly bool hasFreeCashFlowData;
 		private readonly bool firstRepaymentDatePassed;
 		private readonly int businessSeniorityYears;
 		public DateTime? IncorporationDate { get; private set; }
 
-		public BusinessSeniorityMedalParameter(DateTime? businessSeniority, bool hasHmrc, bool firstRepaymentDatePassed, DateTime calculationTime)
+		public BusinessSeniorityMedalParameter(DateTime? businessSeniority, bool hasFreeCashFlowData, bool firstRepaymentDatePassed, DateTime calculationTime)
 		{
 			Weight = 8;
 			IsWeightFixed = true;
@@ -18,7 +18,7 @@
 
 			IncorporationDate = businessSeniority;
 			businessSeniorityYears = CalculateBusinessSeniorityInFullYears(businessSeniority, calculationTime);
-			this.hasHmrc = hasHmrc;
+			this.hasFreeCashFlowData = hasFreeCashFlowData;
 			this.firstRepaymentDatePassed = firstRepaymentDatePassed;
 		}
 
@@ -44,7 +44,7 @@
 
 		public override void CalculateWeight()
 		{
-			if (!hasHmrc)
+			if (!hasFreeCashFlowData)
 			{
 				Weight += 4;
 			}

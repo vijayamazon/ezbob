@@ -2,11 +2,11 @@
 {
 	public class ConsumerScoreMedalParameter : MedalParameter
 	{
-		private readonly bool hasHmrc;
+		private readonly bool hasFreeCashFlowData;
 		private readonly bool firstRepaymentDatePassed;
 		public int ConsumerScore { get; private set; }
 
-		public ConsumerScoreMedalParameter(int consumerScore, bool hasHmrc, bool firstRepaymentDatePassed)
+		public ConsumerScoreMedalParameter(int consumerScore, bool hasFreeCashFlowData, bool firstRepaymentDatePassed)
 		{
 			Weight = 10;
 			IsWeightFixed = true;
@@ -14,7 +14,7 @@
 			MaxGrade = 8;
 
 			ConsumerScore = consumerScore;
-			this.hasHmrc = hasHmrc;
+			this.hasFreeCashFlowData = hasFreeCashFlowData;
 			this.firstRepaymentDatePassed = firstRepaymentDatePassed;
 		}
 
@@ -25,7 +25,7 @@
 				Weight = 13.75m;
 			}
 
-			if (!hasHmrc)
+			if (!hasFreeCashFlowData)
 			{
 				Weight += 3;
 			}

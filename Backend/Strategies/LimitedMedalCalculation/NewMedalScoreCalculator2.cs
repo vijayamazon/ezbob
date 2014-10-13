@@ -256,6 +256,7 @@
 			decimal annualTurnover;
 			decimal freeCashFlow = 0;
 			decimal tangibleEquity = 0;
+			bool hasFreeCashFlowData = false;
 			if (foundSummary)
 			{
 				if (earliestHmrcLastUpdateDate.HasValue &&
@@ -279,6 +280,8 @@
 				}
 
 				freeCashFlowValue = ebida - factoredLoanRepayments;
+				hasFreeCashFlowData = true;
+
 				if (annualTurnover < 0)
 				{
 					annualTurnover = 0;
@@ -333,6 +336,7 @@
 					}
 
 					freeCashFlowValue = totalFreeCashFlowValue;
+					hasFreeCashFlowData = true;
 					valueAdded = totalValueAdded;
 					annualTurnover = totalAnnualTurnover;
 					if (annualTurnover < 0)
@@ -358,14 +362,14 @@
 			{
 				netWorth = 0;
 			}
-			
-			businessScoreMedalParameter = new BusinessScoreMedalParameter(businessScore, foundSummary, firstRepaymentDatePassed);
+
+			businessScoreMedalParameter = new BusinessScoreMedalParameter(businessScore, hasFreeCashFlowData, firstRepaymentDatePassed);
 			tangibleEquityMedalParameter = new TangibleEquityMedalParameter(tangibleEquity, annualTurnover != 0);
-			businessSeniorityMedalParameter = new BusinessSeniorityMedalParameter(businessSeniority, foundSummary, firstRepaymentDatePassed, calculationTime);
-			consumerScoreMedalParameter = new ConsumerScoreMedalParameter(consumerScore, foundSummary, firstRepaymentDatePassed);
+			businessSeniorityMedalParameter = new BusinessSeniorityMedalParameter(businessSeniority, hasFreeCashFlowData, firstRepaymentDatePassed, calculationTime);
+			consumerScoreMedalParameter = new ConsumerScoreMedalParameter(consumerScore, hasFreeCashFlowData, firstRepaymentDatePassed);
 			maritalStatusMedalParameter = new MaritalStatusMedalParameter(maritalStatus);
-			freeCashFlowMedalParameter = new FreeCashFlowMedalParameter(freeCashFlow, foundSummary, annualTurnover != 0);
-			annualTurnoverMedalParameter = new AnnualTurnoverMedalParameter(annualTurnover, foundSummary);
+			freeCashFlowMedalParameter = new FreeCashFlowMedalParameter(freeCashFlow, hasFreeCashFlowData, annualTurnover != 0);
+			annualTurnoverMedalParameter = new AnnualTurnoverMedalParameter(annualTurnover, hasFreeCashFlowData);
 			netWorthMedalParameter = new NetWorthMedalParameter(netWorth);
 			ezbobSeniorityMedalParameter = new EzbobSeniorityMedalParameter(ezbobSeniority, firstRepaymentDatePassed);
 			onTimeLoansMedalParameter = new OnTimeLoansMedalParameter(numOfOnTimeLoans, firstRepaymentDatePassed);
