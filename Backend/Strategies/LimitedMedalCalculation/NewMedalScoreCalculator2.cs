@@ -253,7 +253,7 @@
 				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", numOfHmrcMps));
 			}
 
-			decimal annualTurnover;
+			decimal annualTurnover = 0;
 			decimal freeCashFlow = 0;
 			decimal tangibleEquity = 0;
 			bool hasFreeCashFlowData = false;
@@ -282,16 +282,6 @@
 				freeCashFlowValue = ebida - factoredLoanRepayments;
 				hasFreeCashFlowData = true;
 
-				if (annualTurnover < 0)
-				{
-					annualTurnover = 0;
-				}
-				else if (annualTurnover != 0)
-				{
-					freeCashFlow = freeCashFlowValue / annualTurnover;
-					tangibleEquity = rawTangibleEquity / annualTurnover;
-				}
-
 				valueAdded = hmrcValueAdded;
 			}
 			else
@@ -313,41 +303,23 @@
 						return ActionResult.Continue;
 					}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
-				if (yodleeMps.Count == 0)
+				foreach (int mpId in yodleeMps)
 				{
-					freeCashFlowValue = 0;
-					valueAdded = 0;
-					annualTurnover = 0;
+					var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
+					YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
+
+					annualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
 				}
-				else
-				{
-					decimal totalFreeCashFlowValue = 0;
-					decimal totalValueAdded = 0;
-					decimal totalAnnualTurnover = 0;
+			}
 
-					foreach (int mpId in yodleeMps)
-					{
-						var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
-						YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
-
-						totalFreeCashFlowValue += (decimal)yodleeModel.BankStatementAnnualizedModel.FreeCashFlow;
-						totalValueAdded += (decimal)yodleeModel.BankStatementAnnualizedModel.TotalValueAdded;
-						totalAnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
-					}
-
-					freeCashFlowValue = totalFreeCashFlowValue;
-					hasFreeCashFlowData = true;
-					valueAdded = totalValueAdded;
-					annualTurnover = totalAnnualTurnover;
-					if (annualTurnover < 0)
-					{
-						annualTurnover = 0;
-					}
-					else if (annualTurnover != 0)
-					{
-						freeCashFlow = freeCashFlowValue/annualTurnover;
-					}
-				}
+			if (annualTurnover < 0)
+			{
+				annualTurnover = 0;
+			}
+			else if (annualTurnover != 0)
+			{
+				freeCashFlow = freeCashFlowValue / annualTurnover;
+				tangibleEquity = rawTangibleEquity / annualTurnover;
 			}
 
 			var maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusString);

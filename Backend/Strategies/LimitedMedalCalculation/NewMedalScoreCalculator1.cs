@@ -137,21 +137,13 @@
 				inputData.BasedOnHmrcValues = true;
 				inputData.TangibleEquityValue = tangibleEquityValue;
 				freeCashFlowDataAvailable = true;
-
-				decimal totalRevenuesInSummary = 0;
-				decimal totalFreeCashFlowInSummary = 0;
-				decimal totalValueAddedInSummary = 0;
-
+				
 				foreach (VatReturnSummary singleSummary in summaryData)
 				{
-					totalRevenuesInSummary += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
-					totalFreeCashFlowInSummary += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
-					totalValueAddedInSummary += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
+					inputData.AnnualTurnover += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
+					inputData.FreeCashFlowValue += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
+					inputData.ValueAdded += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
 				}
-
-				inputData.AnnualTurnover = totalRevenuesInSummary;
-				inputData.FreeCashFlowValue = totalFreeCashFlowInSummary;
-				inputData.ValueAdded = totalValueAddedInSummary;
 			}
 			else
 			{
@@ -171,32 +163,12 @@
 						return ActionResult.Continue;
 					}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
-				if (yodleeMps.Count == 0)
+				foreach (int mpId in yodleeMps)
 				{
-					inputData.FreeCashFlowValue = 0;
-					inputData.ValueAdded = 0;
-					inputData.AnnualTurnover = 0;
-				}
-				else
-				{
-					decimal totalFreeCashFlowValue = 0;
-					decimal totalValueAdded = 0;
-					decimal totalAnnualTurnover = 0;
-					freeCashFlowDataAvailable = true;
+					var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
+					YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
 
-					foreach (int mpId in yodleeMps)
-					{
-						var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
-						YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
-
-						totalFreeCashFlowValue += (decimal)yodleeModel.BankStatementAnnualizedModel.FreeCashFlow;
-						totalValueAdded += (decimal)yodleeModel.BankStatementAnnualizedModel.TotalValueAdded;
-						totalAnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
-					}
-
-					inputData.FreeCashFlowValue = totalFreeCashFlowValue;
-					inputData.ValueAdded = totalValueAdded;
-					inputData.AnnualTurnover = totalAnnualTurnover;
+					inputData.AnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
 				}
 			}
 
