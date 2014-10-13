@@ -50,6 +50,7 @@
 
 			m_oData = new SortedDictionary<int, List<CustomerStatusChange>>();
 			m_oCurrent = new SortedDictionary<int, CustomerStatusChange>();
+			m_oWriteOffDate = new SortedDictionary<int, DateTime>();
 
 			oDB.ForEachRowSafe(
 				LoadCurrent,
@@ -77,6 +78,10 @@
 			return m_oCurrent[nCustomerID];
 		} // GetLast
 
+		public DateTime? GetWriteOffDate(int nCustomerID) {
+			return m_oWriteOffDate.ContainsKey(nCustomerID) ? m_oWriteOffDate[nCustomerID] : (DateTime?)null;
+		} // GetWriteOffDate
+
 		private void LoadCurrent(SafeReader sr) {
 			m_oCurrent[sr["CustomerID"]] = new CustomerStatusChange {
 				ChangeDate = sr["SetDate"],
@@ -98,10 +103,14 @@
 				m_oData[nCustomerID].Add(csc);
 			else
 				m_oData[nCustomerID] = new List<CustomerStatusChange> { csc };
+
+			if ((csc.NewStatus == CustomerStatus.WriteOff) && !m_oWriteOffDate.ContainsKey(nCustomerID))
+				m_oWriteOffDate[nCustomerID] = csc.ChangeDate;
 		} // LoadHistoryItem
 
 		private readonly SortedDictionary<int, List<CustomerStatusChange>> m_oData;
 		private readonly SortedDictionary<int, CustomerStatusChange> m_oCurrent;
+		private readonly SortedDictionary<int, DateTime> m_oWriteOffDate;
 	} // class CustomerStatusHistory
 
 	#endregion class CustomerStatusHistory

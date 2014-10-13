@@ -14,20 +14,22 @@ BEGIN
 
 	SELECT
 		l.Date AS IssueDate,
-		c.Id AS ClientID,
 		l.Id AS LoanID,
+		l.Status AS LoanStatus,
+		c.Id AS ClientID,
 		c.Fullname AS ClientName,
 		c.Name AS ClientEmail,
 		la.Amount AS IssuedAmount,
 		la.Fees AS SetupFee,
-		ISNULL(lc.Amount, 0) AS FeesEarned,
-		l.Status AS LoanStatus,
 		lm.Name AS LoanTranMethod,
 		ISNULL(t.Amount, 0) AS TotalRepaid,
 		ISNULL(t.Fees, 0) AS FeesRepaid,
 		ISNULL(t.Rollover, 0) AS RolloverRepaid,
+		t.PostDate AS TransactionDate,
+		t.Id AS TransactionID,
+		ISNULL(lc.Amount, 0) AS FeesEarned,
 		lc.Id AS FeesEarnedID,
-		t.Id AS TransactionID
+		lc.Date AS LoanChargeDate
 	FROM
 		Loan l
 		INNER JOIN Customer c
