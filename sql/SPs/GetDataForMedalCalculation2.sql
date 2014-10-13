@@ -199,9 +199,8 @@ BEGIN
 	
 	DROP TABLE #LateLoans
 	
-	-- TODO: (After EZ-2690) Should be changed to load annualized values
-	SELECT @Ebida = SUM(Ebida), @HmrcAnnualTurnover = SUM(Revenues), @HmrcValueAdded = SUM(TotalValueAdded) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
-	-- TODO: (After EZ-2690) Should be changed to detect finding of annualized values
+		SELECT @Ebida = SUM(AnnualizedFreeCashFlow), @HmrcAnnualTurnover = SUM(AnnualizedTurnover), @HmrcValueAdded = SUM(AnnualizedValueAdded) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
+		
 	IF @Ebida IS NULL
 		SELECT @FoundSummary = 0
 	ELSE

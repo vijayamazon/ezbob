@@ -143,9 +143,9 @@
 
 				foreach (VatReturnSummary singleSummary in summaryData)
 				{
-					totalRevenuesInSummary += singleSummary.Revenues.HasValue ? singleSummary.Revenues.Value : 0;
-					totalFreeCashFlowInSummary += singleSummary.FreeCashFlow.HasValue ? singleSummary.FreeCashFlow.Value : 0;
-					totalValueAddedInSummary += singleSummary.TotalValueAdded.HasValue ? singleSummary.TotalValueAdded.Value : 0;
+					totalRevenuesInSummary += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
+					totalFreeCashFlowInSummary += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
+					totalValueAddedInSummary += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
 				}
 
 				inputData.AnnualTurnover = totalRevenuesInSummary;

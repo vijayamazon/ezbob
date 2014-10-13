@@ -30,6 +30,15 @@
 		public virtual decimal? SalariesMultiplier { get; set; }
 
 		[DataMember]
+		public decimal? AnnualizedTurnover { get; set; }
+
+		[DataMember]
+		public decimal? AnnualizedValueAdded { get; set; }
+
+		[DataMember]
+		public decimal? AnnualizedFreeCashFlow { get; set; }
+
+		[DataMember]
 		[NonTraversable]
 		public List<VatReturnQuarter> Quarters { get; set; }
 
