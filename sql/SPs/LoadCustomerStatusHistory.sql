@@ -1,11 +1,13 @@
-IF OBJECT_ID('RptEarnedInterest_CustomerStatusHistory') IS NULL
-	EXECUTE('CREATE PROCEDURE RptEarnedInterest_CustomerStatusHistory AS SELECT 1')
+IF OBJECT_ID('LoadCustomerStatusHistory') IS NULL
+	EXECUTE('CREATE PROCEDURE LoadCustomerStatusHistory AS SELECT 1')
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE RptEarnedInterest_CustomerStatusHistory
+ALTER PROCEDURE LoadCustomerStatusHistory
+@CustomerID INT,
+@DateEnd DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -19,6 +21,10 @@ BEGIN
 		CustomerStatusHistory h
 		INNER JOIN CustomerStatuses p ON h.PreviousStatus = p.Id
 		INNER JOIN CustomerStatuses n ON h.NewStatus = n.Id
+	WHERE
+		(@CustomerID IS NULL OR h.CustomerId = @CustomerID)
+		AND
+		(@DateEnd IS NULL OR h.TimeStamp < @DateEnd)
 	ORDER BY
 		h.CustomerId,
 		h.TimeStamp
