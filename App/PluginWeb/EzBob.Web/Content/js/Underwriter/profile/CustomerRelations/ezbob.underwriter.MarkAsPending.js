@@ -21,9 +21,15 @@ EzBob.Underwriter.MarkAsPending = EzBob.BoundItemView.extend({
         };
     },
 
-    initialize: function () {
-
+    initialize: function (options) {
+        this.actionItems = options.actionItems;
 	    EzBob.Underwriter.MarkAsPending.__super__.initialize.apply(this, arguments);
+    },
+
+    serializeData: function () {
+        return {
+            actionItems: this.actionItems
+        };
     },
 
     onRender: function () {

@@ -77,8 +77,7 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
 
     markAsPending: function () {
         var view = new EzBob.Underwriter.MarkAsPending({
-            model: this.model,
-            isBroker: this.isBroker, // TODO: do we need the models - probably not
+            actionItems: this.model.get("ActionItems")
         });
         EzBob.App.jqmodal.show(view);
         return false;

@@ -17,6 +17,7 @@
 			_customerRepository = new CustomerRepository(session);
 			_brokerRepository = new BrokerRepository(session);
 			customerPhoneRepository = new CustomerPhoneRepository(session);
+			frequentActionItemsRepository = new FrequentActionItemsRepository(session);
 		} // constructor
 
 		public CrmModel Create(int customerId) {
@@ -83,6 +84,7 @@
 			}
 
 			crmModel.CreditResult = customer != null && customer.CreditResult.HasValue ? customer.CreditResult.Value.ToString() : "";
+			crmModel.ActionItems = frequentActionItemsRepository.GetAll().Where(x => x.IsActive).Select(x => x.Item).ToList();
 
 			return crmModel;
 		} // Create
@@ -94,5 +96,6 @@
 		private readonly CustomerRepository _customerRepository;
 		private readonly BrokerRepository _brokerRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
+		private readonly FrequentActionItemsRepository frequentActionItemsRepository;
 	} // class CustomerRelationsModelBuilder
 } // namespace

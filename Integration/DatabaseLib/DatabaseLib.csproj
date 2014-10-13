@@ -82,6 +82,7 @@
     <Compile Include="DatabaseWrapper\Order\AInternalOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\RtiTaxMonthEntry.cs" />
     <Compile Include="DatabaseWrapper\Order\VatReturnEntry.cs" />
+    <Compile Include="Model\CustomerRelations\FrequentActionItems.cs" />
     <Compile Include="Model\CustomerRelations\CustomerRelationState.cs" />
     <Compile Include="Model\CustomerRelations\CustomerRelationFollowUp.cs" />
     <Compile Include="Model\CustomerRelations\CRMRanks.cs" />
