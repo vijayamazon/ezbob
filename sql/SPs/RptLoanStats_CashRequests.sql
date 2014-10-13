@@ -9,6 +9,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE RptLoanStats_CashRequests
+@CustomerID INT = NULL
 AS
 BEGIN
 	SELECT
@@ -74,6 +75,10 @@ BEGIN
 					AND mt.Description NOT LIKE 'Non-cash.%'
 		) lmt ON r.Id = lmt.RequestCashId
 	WHERE
+		(
+			@CustomerID IS NULL OR r.IdCustomer = @CustomerID
+		)
+		AND
 		(
 			(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Approved')
 			OR
