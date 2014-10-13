@@ -199,7 +199,7 @@ BEGIN
 	
 	DROP TABLE #LateLoans
 	
-		SELECT @Ebida = SUM(AnnualizedFreeCashFlow), @HmrcAnnualTurnover = SUM(AnnualizedTurnover), @HmrcValueAdded = SUM(AnnualizedValueAdded) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
+	SELECT @Ebida = SUM(AnnualizedFreeCashFlow), @HmrcAnnualTurnover = SUM(AnnualizedTurnover), @HmrcValueAdded = SUM(AnnualizedValueAdded) FROM MP_VatReturnSummary WHERE CustomerId = @CustomerId AND IsActive = 1
 		
 	IF @Ebida IS NULL
 		SELECT @FoundSummary = 0

@@ -240,6 +240,7 @@
 			decimal actualLoanRepayments = sr["ActualLoanRepayments"];
 			decimal fcfFactor = sr["FcfFactor"];
 			bool foundSummary = sr["FoundSummary"];
+			decimal yodleeAnnualTurnover = sr["YodleeTurnover"];
 			DateTime? earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
 			DateTime? earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
 
@@ -292,24 +293,9 @@
 					throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy));
 				}
 
-				var yodleeMps = new List<int>();
+				annualTurnover = yodleeAnnualTurnover;
 				tangibleEquityValue = 0;
 				basedOnHmrc = false;
-
-				db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>
-					{
-						int mpId = yodleeSafeReader["Id"];
-						yodleeMps.Add(mpId);
-						return ActionResult.Continue;
-					}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-
-				foreach (int mpId in yodleeMps)
-				{
-					var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
-					YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
-
-					annualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
-				}
 			}
 
 			if (annualTurnover < 0)
