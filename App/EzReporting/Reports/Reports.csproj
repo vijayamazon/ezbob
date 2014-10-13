@@ -88,7 +88,7 @@
     <Compile Include="ColumnInfo.cs" />
     <Compile Include="DropboxReportSaver.cs" />
     <Compile Include="EarnedInterest\BadPeriods.cs" />
-    <Compile Include="EarnedInterest\CustomerStatus.cs" />
+    <Compile Include="CustomerStatus.cs" />
     <Compile Include="EarnedInterest\InterestFreezePeriods.cs" />
     <Compile Include="ExperianLimitedCompanyData\ExperianLimitedCompanyData.cs" />
     <Compile Include="ExperianLimitedCompanyData\ExperianLimitedCompanyReportItem.cs" />

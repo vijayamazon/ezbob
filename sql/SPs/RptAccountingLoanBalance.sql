@@ -27,15 +27,12 @@ BEGIN
 		ISNULL(t.Fees, 0) AS FeesRepaid,
 		ISNULL(t.Rollover, 0) AS RolloverRepaid,
 		lc.Id AS FeesEarnedID,
-		t.Id AS TransactionID,
-		cs.Name AS CustomerStatus
+		t.Id AS TransactionID
 	FROM
 		Loan l
 		INNER JOIN Customer c
 			ON l.CustomerID = c.Id
 			AND c.IsTest = 0
-		LEFT JOIN CustomerStatuses cs
-			ON cs.Id = c.CollectionStatus
 		INNER JOIN LoanTransaction la
 			ON l.Id = la.LoanId
 			AND la.Type = 'PacnetTransaction'

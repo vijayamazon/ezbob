@@ -5,6 +5,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.ValueIntervals;
+	using Reports;
 
 	public class EarnedInterest : SafeLog {
 		#region public
@@ -164,8 +165,8 @@
 					try {
 						int nCustomerID = sr["CustomerID"];
 						DateTime oChangeDate = sr["ChangeDate"];
-						CustomerStatus nOldStatus = BadPeriods.ToStatus(sr["OldStatus"]);
-						CustomerStatus nNewStatus = BadPeriods.ToStatus(sr["NewStatus"]);
+						CustomerStatus nOldStatus = ((string)sr["OldStatus"]).ParseCustomerStatus();
+						CustomerStatus nNewStatus = ((string)sr["NewStatus"]).ParseCustomerStatus();
 
 						bool bAlreadyHas = m_oBadPeriods.ContainsKey(nCustomerID);
 						bool bLastKnown = !bAlreadyHas || m_oBadPeriods[nCustomerID].IsLastKnownGood;

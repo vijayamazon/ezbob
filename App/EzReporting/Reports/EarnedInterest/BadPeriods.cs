@@ -9,14 +9,6 @@
 	public class BadPeriods {
 		#region public
 
-		#region method ToStatus
-
-		public static CustomerStatus ToStatus(string sStatus) {
-			return (CustomerStatus)Enum.Parse(typeof(CustomerStatus), (sStatus ?? string.Empty).Replace(" ", ""));
-		} // ToStatus
-
-		#endregion method ToStatus
-
 		#region method IsBad
 
 		public static bool IsBad(CustomerStatus nStatus) {

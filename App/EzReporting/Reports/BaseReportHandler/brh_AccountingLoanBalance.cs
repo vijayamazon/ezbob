@@ -11,6 +11,8 @@
 	using OfficeOpenXml;
 
 	public partial class BaseReportHandler : SafeLog {
+		#region report generators
+
 		#region method BuildAccountingLoanBalanceReport
 
 		public ATag BuildAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
@@ -33,25 +35,123 @@
 
 		#endregion method BuildAccountingLoanBalanceXls
 
+		#region method CreateAccountingLoanBalanceReport
+
+		private KeyValuePair<ReportQuery, DataTable> CreateAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow) {
+			Debug("Creating accounting loan balance report...");
+
+			Debug("Creating accounting loan balance report: loading earned interest...");
+
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance, false, today, tomorrow, this);
+			SortedDictionary<int, decimal> earned = ea.Run();
+
+			Debug("Creating accounting loan balance report: loading earned interest complete.");
+
+			Debug("Creating accounting loan balance report: loading customer status history...");
+
+			var csh = new CustomerStatusHistory(null, tomorrow, DB);
+
+			Debug("Creating accounting loan balance report: loading customer status history complete.");
+
+			var rpt = new ReportQuery(report) {
+				DateStart = today,
+				DateEnd = tomorrow
+			};
+
+			var oRows = new SortedDictionary<int, AccountingLoanBalanceRow>();
+
+			Debug("Creating accounting loan balance report: loading report data...");
+
+			rpt.Execute(DB, (sr, bRowsetStart) => {
+				int nLoanID = sr["LoanID"];
+
+				decimal nEarnedInterest = earned.ContainsKey(nLoanID) ? earned[nLoanID] : 0;
+
+				if (oRows.ContainsKey(nLoanID))
+					oRows[nLoanID].Update(sr);
+				else {
+					int nClientID = sr["ClientID"];
+					oRows[nLoanID] = new AccountingLoanBalanceRow(sr, nEarnedInterest, csh.GetLast(nClientID), csh.GetCurrent(nClientID));
+				} // if
+
+				return ActionResult.Continue;
+			});
+
+			Debug("Creating accounting loan balance report: loading report data complete.");
+
+			Debug("Creating accounting loan balance report: creating an output...");
+
+			DataTable oOutput = AccountingLoanBalanceRow.ToTable();
+
+			Debug("Creating accounting loan balance report: table is ready, filling it...");
+
+			foreach (KeyValuePair<int, AccountingLoanBalanceRow> pair in oRows)
+				pair.Value.ToRow(oOutput);
+
+			Debug("Creating accounting loan balance report complete.");
+
+			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
+		} // CreateAccountingLoanBalanceReport
+
+		#endregion method CreateAccountingLoanBalanceReport
+
+		#endregion report generators
+
+		#region helper classes
+
+		#region class AccountingLoanBalanceRawUpdate
+
+		private class AccountingLoanBalanceRawUpdate {
+			[UsedImplicitly]
+			public string LoanTranMethod { get; set; }
+
+			[UsedImplicitly]
+			public decimal TotalRepaid { get; set; }
+
+			[UsedImplicitly]
+			public decimal RolloverRepaid { get; set; }
+
+			[UsedImplicitly]
+			public int FeesEarnedID { get; set; }
+
+			[UsedImplicitly]
+			public int TransactionID { get; set; }
+		} // AccountingLoanBalanceRawUpdate
+
+		#endregion class AccountingLoanBalanceRawUpdate
+
 		#region class AccountingLoanBalanceRawData
 
-		public class AccountingLoanBalanceRawData {
+		private class AccountingLoanBalanceRawData : AccountingLoanBalanceRawUpdate {
+			[UsedImplicitly]
 			public DateTime IssueDate { get; set; }
+
+			[UsedImplicitly]
 			public int ClientID { get; set; }
+
+			[UsedImplicitly]
 			public int LoanID { get; set; }
+
+			[UsedImplicitly]
 			public string ClientName { get; set; }
+
+			[UsedImplicitly]
 			public string ClientEmail { get; set; }
+
+			[UsedImplicitly]
 			public decimal IssuedAmount { get; set; }
+
+			[UsedImplicitly]
 			public decimal SetupFee { get; set; }
+
+			[UsedImplicitly]
 			public decimal FeesEarned { get; set; }
+
+			[UsedImplicitly]
 			public string LoanStatus { get; set; }
-			public string LoanTranMethod { get; set; }
-			public decimal TotalRepaid { get; set; }
+
+			[UsedImplicitly]
 			public decimal FeesRepaid { get; set; }
-			public decimal RolloverRepaid { get; set; }
-			public int FeesEarnedID { get; set; }
-			public int TransactionID { get; set; }
-			public string CustomerStatus { get; set; }
 		} // AccountingLoanBalanceRawData
 
 		#endregion class AccountingLoanBalanceRawData
@@ -61,38 +161,9 @@
 		private class AccountingLoanBalanceRow {
 			#region public
 
-			#region fields
-
-			[UsedImplicitly]
-			public DateTime IssueDate;
-			[UsedImplicitly]
-			public int ClientID;
-			[UsedImplicitly]
-			public int LoanID;
-			[UsedImplicitly]
-			public string ClientName;
-			[UsedImplicitly]
-			public string ClientEmail;
-			[UsedImplicitly]
-			public decimal IssuedAmount;
-			[UsedImplicitly]
-			public decimal SetupFee;
-			[UsedImplicitly]
-			public string LoanStatus;
-			[UsedImplicitly]
-			public decimal EarnedInterest;
-			[UsedImplicitly]
-			public decimal EarnedFees;
-			[UsedImplicitly]
-			public decimal CashPaid;
-			[UsedImplicitly]
-			public string CustomerStatus;
-
-			#endregion fields
-
 			#region constructor
 
-			public AccountingLoanBalanceRow(SafeReader sr, decimal nEarnedInterest) {
+			public AccountingLoanBalanceRow(SafeReader sr, decimal nEarnedInterest, CustomerStatusChange oLastChange, CustomerStatusChange oCurrent) {
 				Transactions = new SortedSet<int>();
 				LoanCharges = new SortedSet<int>();
 
@@ -107,14 +178,18 @@
 				SetupFee = raw.SetupFee;
 				EarnedFees = raw.FeesEarned;
 				LoanStatus = raw.LoanStatus;
-				CustomerStatus = raw.CustomerStatus;
+				CurrentCustomerStatus = oCurrent.NewStatus;
 				EarnedInterest = nEarnedInterest;
 				CashPaid = 0;
+				NonCashPaid = 0;
 
 				if (SetupFee > 0)
 					IssuedAmount -= SetupFee;
 
-				Update(raw.TransactionID, raw.LoanTranMethod, raw.TotalRepaid, raw.RolloverRepaid, raw.FeesEarnedID);
+				LastInPeriodCustomerStatus = oLastChange.NewStatus;
+				LastStatusChangeDate = oLastChange.ChangeDate;
+
+				Update(raw);
 			} // constructor
 
 			#endregion constructor
@@ -122,37 +197,28 @@
 			#region method Update
 
 			public void Update(SafeReader sr) {
-				Update(sr["TransactionID"], sr["LoanTranMethod"], sr["TotalRepaid"], sr["RolloverRepaid"], sr["FeesEarnedID"]);
+				Update(sr.Fill<AccountingLoanBalanceRawUpdate>());
 			} // Update
 
-			private void Update(int nTransactionID, string sMethod, decimal nAmount, decimal nRolloverRepaid, int nFeesEarnedID) {
-				if (!LoanCharges.Contains(nFeesEarnedID))
-					LoanCharges.Add(nFeesEarnedID);
+			private void Update(AccountingLoanBalanceRawUpdate upd) {
+				if (!LoanCharges.Contains(upd.FeesEarnedID))
+					LoanCharges.Add(upd.FeesEarnedID);
 
-				if (!Transactions.Contains(nTransactionID)) {
-					Transactions.Add(nTransactionID);
+				if (!Transactions.Contains(upd.TransactionID)) {
+					Transactions.Add(upd.TransactionID);
 
-					sMethod = sMethod ?? string.Empty;
-					if (!sMethod.ToLower().StartsWith("non-cash"))
-						CashPaid += nAmount;
+					string sMethod = upd.LoanTranMethod ?? string.Empty;
 
-					EarnedFees += nRolloverRepaid;
+					if (sMethod.ToLower().StartsWith("non-cash"))
+						NonCashPaid += upd.TotalRepaid;
+					else
+						CashPaid += upd.TotalRepaid;
+
+					EarnedFees += upd.RolloverRepaid;
 				} // if
 			} // Update
 
 			#endregion method Update
-
-			#region method ToRow
-
-			public void ToRow(DataTable tbl) {
-				tbl.Rows.Add(
-					IssueDate, ClientID, LoanID, ClientName, ClientEmail, LoanStatus,
-					IssuedAmount, SetupFee, EarnedInterest, EarnedFees,
-					CashPaid, Balance, CustomerStatus
-				);
-			} // ToRow
-
-			#endregion method ToRow
 
 			#region method ToTable
 
@@ -170,77 +236,74 @@
 				oOutput.Columns.Add("EarnedInterest", typeof(decimal));
 				oOutput.Columns.Add("EarnedFees", typeof(decimal));
 				oOutput.Columns.Add("CashPaid", typeof(decimal));
+				oOutput.Columns.Add("NonCashPaid", typeof(decimal));
+				oOutput.Columns.Add("WriteOffBalance", typeof(decimal));
 				oOutput.Columns.Add("Balance", typeof(decimal));
-				oOutput.Columns.Add("CustomerStatus", typeof(string));
+				oOutput.Columns.Add("LastInPeriodCustomerStatus", typeof(string));
+				oOutput.Columns.Add("LastStatusChangeDate", typeof(DateTime));
+				oOutput.Columns.Add("CurrentCustomerStatus", typeof(string));
 
 				return oOutput;
 			} // ToTable
 
 			#endregion method ToTable
 
+			#region method ToRow
+
+			public void ToRow(DataTable tbl) {
+				tbl.Rows.Add(
+					IssueDate, ClientID, LoanID, ClientName, ClientEmail, LoanStatus,
+					IssuedAmount, SetupFee, EarnedInterest, EarnedFees,
+					CashPaid, NonCashPaid, WriteOffBalance, Balance, LastInPeriodCustomerStatus.ToString(), LastStatusChangeDate,
+					CurrentCustomerStatus.ToString()
+				);
+			} // ToRow
+
+			#endregion method ToRow
+
 			#endregion public
 
 			#region private
 
+			#region property WriteOffBalance
+
+			private decimal WriteOffBalance {
+				get { return IssuedAmount + SetupFee + EarnedInterest + EarnedFees - CashPaid; } // get
+			} // WriteOffBalance
+
+			#endregion property WriteOffBalance
+
 			#region property Balance
 
 			private decimal Balance {
-				get { return IssuedAmount + SetupFee + EarnedInterest + EarnedFees - CashPaid; } // get
+				get { return LastInPeriodCustomerStatus == CustomerStatus.WriteOff ? 0 : WriteOffBalance; } // get
 			} // Balance
 
-			#endregion property Balance
-
-			#region property Transactions
+			#endregion property WriteOffBalance
 
 			private SortedSet<int> Transactions { get; set; }
-
-			#endregion property Transactions
-
-			#region property LoanCharges
-
 			private SortedSet<int> LoanCharges { get; set; }
-
-			#endregion property LoanCharges
+			private DateTime IssueDate { get; set; }
+			private int ClientID { get; set; }
+			private int LoanID { get; set; }
+			private string ClientName { get; set; }
+			private string ClientEmail { get; set; }
+			private decimal IssuedAmount { get; set; }
+			private decimal SetupFee { get; set; }
+			private string LoanStatus { get; set; }
+			private decimal EarnedInterest { get; set; }
+			private decimal EarnedFees { get; set; }
+			private decimal CashPaid { get; set; }
+			private decimal NonCashPaid { get; set; }
+			private CustomerStatus CurrentCustomerStatus { get; set; }
+			private CustomerStatus LastInPeriodCustomerStatus { get; set; }
+			private DateTime LastStatusChangeDate { get; set; }
 
 			#endregion private
 		} // class AccountingLoanBalanceRow
 
 		#endregion class AccountingLoanBalanceRow
 
-		#region method CreateAccountingLoanBalanceReport
-
-		private KeyValuePair<ReportQuery, DataTable> CreateAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow) {
-			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance, false, today, tomorrow, this);
-			SortedDictionary<int, decimal> earned = ea.Run();
-
-			var rpt = new ReportQuery(report) {
-				DateStart = today,
-				DateEnd = tomorrow
-			};
-
-			var oRows = new SortedDictionary<int, AccountingLoanBalanceRow>();
-
-			rpt.Execute(DB, (sr, bRowsetStart) => {
-				int nLoanID = sr["LoanID"];
-
-				decimal nEarnedInterest = earned.ContainsKey(nLoanID) ? earned[nLoanID] : 0;
-
-				if (oRows.ContainsKey(nLoanID))
-					oRows[nLoanID].Update(sr);
-				else
-					oRows[nLoanID] = new AccountingLoanBalanceRow(sr, nEarnedInterest);
-
-				return ActionResult.Continue;
-			});
-
-			DataTable oOutput = AccountingLoanBalanceRow.ToTable();
-
-			foreach (KeyValuePair<int, AccountingLoanBalanceRow> pair in oRows)
-				pair.Value.ToRow(oOutput);
-
-			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
-		} // CreateAccountingLoanBalanceReport
-
-		#endregion method CreateAccountingLoanBalanceReport
+		#endregion helper classes
 	} // class BaseReportHandler
 } // namespace
