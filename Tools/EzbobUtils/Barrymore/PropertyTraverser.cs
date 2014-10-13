@@ -30,14 +30,14 @@
 				throw new ArgumentNullException("oType", "Type to traverse not specified.");
 
 			if (oCallback == null)
-				throw new ArgumentNullException("oCallback", "Property callback not specified.");
+				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + oType + ".");
 
 			Traverse(null, oType, oCallback);
 		} // Traverse
 
 		public static void Traverse<T>(Action<object, PropertyInfo> oCallback) {
 			if (oCallback == null)
-				throw new ArgumentNullException("oCallback", "Property callback not specified.");
+				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + typeof(T) + ".");
 
 			Traverse(null, typeof(T), oCallback);
 		} // Traverse
@@ -47,7 +47,7 @@
 				throw new ArgumentNullException("oInstance", "Object to traverse not specified.");
 
 			if (oCallback == null)
-				throw new ArgumentNullException("oCallback", "Property callback not specified.");
+				throw new ArgumentNullException("oCallback", "Traversing callback not specified for type " + oInstance.GetType() + ".");
 
 			Traverse(oInstance, oInstance.GetType(), oCallback);
 		} // Traverse

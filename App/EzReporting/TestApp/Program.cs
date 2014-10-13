@@ -15,6 +15,7 @@ namespace TestApp {
 	using Ezbob.Utils.Security;
 	using Ezbob.ValueIntervals;
 	using Html;
+	using JetBrains.Annotations;
 	using Reports;
 	using Reports.EarnedInterest;
 	using SqlConnection = Ezbob.Database.SqlConnection;
@@ -588,6 +589,8 @@ namespace TestApp {
 						CurrentTextID = sr["CurrentTextID"],
 						CurrentTerms = sr["CurrentTerms"]
 					};
+
+					properties.BrokerID++;
 				}
 				else
 					oLog.Debug("No first row.");
@@ -600,39 +603,60 @@ namespace TestApp {
 			var sw = Stopwatch.StartNew();
 
 			for (int i = 0; i < nCount; i++) {
-				SafeReader sr = oDB.GetFirst(
-					"BrokerLogin",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@Email", sUserName),
-					new QueryParameter("@Password", sPassword)
-				);
+				BrokerProperties properties = new BrokerProperties(); 
 
-				if (sr.IsEmpty)
-					oLog.Debug("No first row.");
-				else {
-					BrokerProperties properties = new BrokerProperties {
-						BrokerID = sr["BrokerID"],
-						BrokerName = sr["BrokerName"],
-						BrokerRegNum = sr["BrokerRegNum"],
-						ContactName = sr["ContactName"],
-						ContactEmail = sr["ContactEmail"],
-						ContactMobile = sr["ContactMobile"],
-						ContactOtherPhone = sr["ContactOtherPhone"],
-						SourceRef = sr["SourceRef"],
-						BrokerWebSiteUrl = sr["BrokerWebSiteUrl"],
-						SignedTermsID = sr["SignedTermsID"],
-						SignedTextID = sr["SignedTextID"],
-						CurrentTermsID = sr["CurrentTermsID"],
-						CurrentTextID = sr["CurrentTextID"],
-						CurrentTerms = sr["CurrentTerms"]
-					};
-				}
+				var sp = new SpBrokerLogin(oDB, oLog) {
+					Email = sUserName,
+					Password = sPassword,
+				};
+
+				sp.FillFirst(properties);
+
+				properties.BrokerID++;
 			} // for
 
 			sw.Stop();
 
 			oLog.Info("{0} times using GetFirst: {1} ms.", nCount, sw.ElapsedMilliseconds);
 		} // TestSpeed
+
+		private class SpBrokerLogin : AStoredProc {
+			#region constructor
+
+			public SpBrokerLogin(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
+
+			#endregion constructor
+
+			#region method HasValidParameters
+
+			public override bool HasValidParameters() {
+				Email = MiscUtils.ValidateStringArg(Email, "Email");
+				Password = MiscUtils.ValidateStringArg(m_sPassword, "Password");
+
+				return true;
+			} // HasValidParameters
+
+			#endregion method HasValidParameters
+
+			#region property Email
+
+			[UsedImplicitly]
+			public string Email { get; set; }
+
+			#endregion property Email
+
+			#region property Password
+
+			public string Password {
+				[UsedImplicitly]
+				get { return SecurityUtils.HashPassword(Email, m_sPassword); }
+				set { m_sPassword = value; }
+			} // Password
+
+			private string m_sPassword;
+
+			#endregion property Password
+		} // class SpBrokerLogin
 
 		#endregion method TestSpeed
 	} // class Program

@@ -172,6 +172,16 @@
 		} // FillFirst
 
 		public virtual void FillFirst<T>(ConnectionWrapper oConnectionToUse, T oInstance) {
+			if (!typeof (T).IsValueType) {
+				// Plain comparison "oInstance == null" fires warning "possible compare of value type with null".
+				// Assignment to temp variable is a workaround to suppress the warning.
+				// And if we are already here then T is not a value type so it can be null.
+				object obj = oInstance;
+				
+				if (obj == null)
+					throw new NullReferenceException("Cannot FillFirst of type " + typeof (T) + ": no instance specified.");
+			} // if
+
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 

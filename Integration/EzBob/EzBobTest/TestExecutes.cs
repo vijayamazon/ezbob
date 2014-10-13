@@ -23,23 +23,8 @@
 		}
 
 		[Test]
-		public void TestException1()
-		{
-			try
-			{
-				BrokerProperties properties = null; // Not initialized
-				var sp = new SpBrokerLogin(m_oDB, m_oLog)
-				{
-					Email = "testchange5@t.t",
-					Password = pwd.Primary,
-				};
-
-				sp.FillFirst(properties);
-			}
-			catch (Exception e)
-			{
-				m_oLog.Fatal("Can you figure it out: {0}", e); //Object to traverse not specified. Parameter name: oInstance
-			}
+		public void TestException1() {
+			TestExceptionOnTraverse();
 
 			try
 			{
@@ -69,6 +54,25 @@
 			catch (Exception e)
 			{
 				m_oLog.Fatal("Now it is obvious: {0}", e); // We even get a warning from the resharper
+			}
+		}
+
+		[Test]
+		public void TestExceptionOnTraverse() {
+			const string sUserName = "alexbo+broker@ezbob.com";
+			const string sPassword = "9843d8f274996c952b7ad5f4f3553604d94197d10b73566d756b5df6e2af8ea1424294eb8b9cab2170edd0f7f0e9b2617863ef0b4800749eec898aa2d03f3bba";
+
+			try {
+				BrokerProperties properties = null; // Not initialized
+
+				// var sp = new SpBrokerLogin(m_oDB, m_oLog) { Email = "testchange5@t.t", Password = pwd.Primary, };
+
+				var sp = new SpBrokerLogin(m_oDB, m_oLog) { Email = sUserName, Password = sPassword, };
+
+				sp.FillFirst(properties);
+			}
+			catch (Exception e) {
+				m_oLog.Fatal(e, "Can you figure it out."); //Object to traverse not specified. Parameter name: oInstance
 			}
 		}
 
