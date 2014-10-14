@@ -3,7 +3,7 @@ BEGIN
 	INSERT INTO ReportScheduler
 		(Type, Title, StoredProcedure, IsDaily, IsWeekly, IsMonthly, Header, Fields, ToEmail, IsMonthToDate)
 	VALUES
-		('RPT_BROKER_LATE_CLIENTS', 'Late broker customers', 'RptBrokerLateClients', 0, 0, 0, 'Id,Name,FirstName,Surname,PrincipalOwed', 'Id,Name,FirstName,Surname,PrincipalOwed', '', 0)
+		('RPT_BROKER_LATE_CLIENTS', 'Late broker customers', 'RptBrokerLateClients', 0, 0, 0, 'Id,FirmName,Name,FirstName,Surname,PrincipalOwed', 'Id,FirmName,Name,FirstName,Surname,PrincipalOwed', '', 0)
 		
 	DECLARE @UserId INT, @ReportId INT, @ReportArgumentNameId INT
 	SELECT @UserId = Id FROM ReportUsers WHERE UserName = 'emanuellea'
