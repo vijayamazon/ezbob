@@ -20,7 +20,14 @@
 		public CustomerRelationFollowUp LastFollowUp { get; set; }
 		public List<CrmPhoneNumber> PhoneNumbers { get; set; }
 		public string CreditResult { get; set; }
-		public List<string> ActionItems { get; set; }
+		public List<FrequentActionItem> ActionItems { get; set; }
+	}
+
+	public class FrequentActionItem
+	{
+		public int Id { get; set; }
+		public bool IsChecked { get; set; }
+		public string Text { get; set; }
 	}
 
 	public class CrmPhoneNumber

@@ -2,18 +2,14 @@
 
 <script type="text/template" id="mark-as-pending-template">
     <div>
-        <div>
-            <label class="checkbox-inline">
-                <input type="checkbox" class="checkbox" id="testai1">
-                Test action item 1
-            </label>
-        </div>
-        <div>
-            <label class="checkbox-inline">
-                <input type="checkbox" class="checkbox" id="testai2">
-                Test action item 2
-            </label>
-        </div>
+        <% _.each(actionItems, function(actionItem) { %>
+            <div>
+                <label class="checkbox-inline">
+                    <input type="checkbox" class="checkbox" id="frequentActionItem_<%- actionItem.id %>" <%- actionItem.IsChecked ? 'checked="checked"' : '' %>>
+                    <%- actionItem.Text %>
+                </label>
+            </div>
+        <%});%>
     </div>
     <div class="pull-right">
         <button class="btn btn-primary">OK</button>

@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
@@ -18,6 +19,7 @@
 			_brokerRepository = new BrokerRepository(session);
 			customerPhoneRepository = new CustomerPhoneRepository(session);
 			frequentActionItemsRepository = new FrequentActionItemsRepository(session);
+			frequentActionItemsForCustomerRepository = new FrequentActionItemsForCustomerRepository(session);
 		} // constructor
 
 		public CrmModel Create(int customerId) {
@@ -84,10 +86,47 @@
 			}
 
 			crmModel.CreditResult = customer != null && customer.CreditResult.HasValue ? customer.CreditResult.Value.ToString() : "";
-			crmModel.ActionItems = frequentActionItemsRepository.GetAll().Where(x => x.IsActive).Select(x => x.Item).ToList();
+			crmModel.ActionItems = CreateCustomerActionItemList(customerId);
 
 			return crmModel;
 		} // Create
+
+		private List<FrequentActionItem> CreateCustomerActionItemList(int customerId)
+		{
+			var list = new List<FrequentActionItem>();
+			var actionItemsForCustomerItemsIds = new List<int>();
+			IQueryable<FrequentActionItemsForCustomer> actionItemsForCustomer = frequentActionItemsForCustomerRepository.GetAll().Where(x => x.CustomerId == customerId && x.UnmarkedDate == null);
+			foreach (FrequentActionItemsForCustomer frequentActionItemsForCustomer in actionItemsForCustomer)
+			{
+				actionItemsForCustomerItemsIds.Add(frequentActionItemsForCustomer.ItemId);
+				var checkedActionItem = new FrequentActionItem
+				{
+					Id = frequentActionItemsForCustomer.ItemId,
+					IsChecked = true
+				};
+				FrequentActionItems matchingItem = frequentActionItemsRepository.GetAll().FirstOrDefault(x => x.Id == frequentActionItemsForCustomer.ItemId);
+				if (matchingItem == null)
+				{
+					throw new Exception("Item id in FrequentActionItemsForCustomer: {0} is not in FrequentActionItems");
+				}
+				checkedActionItem.Text = matchingItem.Item;
+				list.Add(checkedActionItem);
+			}
+
+			IQueryable<FrequentActionItems> otherActionItems = frequentActionItemsRepository.GetAll().Where(x => x.IsActive && !actionItemsForCustomerItemsIds.Contains(x.Id));
+			foreach (FrequentActionItems frequentActionItem in otherActionItems)
+			{
+				var uncheckedActionItem = new FrequentActionItem
+				{
+					Id = frequentActionItem.Id,
+					IsChecked = false,
+					Text = frequentActionItem.Item
+				};
+				list.Add(uncheckedActionItem);
+			}
+
+			return list;
+		}
 
 		private readonly LoanRepository _loanRepository;
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
@@ -97,5 +136,6 @@
 		private readonly BrokerRepository _brokerRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
 		private readonly FrequentActionItemsRepository frequentActionItemsRepository;
+		private readonly FrequentActionItemsForCustomerRepository frequentActionItemsForCustomerRepository;
 	} // class CustomerRelationsModelBuilder
 } // namespace
