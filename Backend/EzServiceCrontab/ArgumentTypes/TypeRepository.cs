@@ -36,19 +36,44 @@
 
 		#endregion constructor
 
-		#region method CreateValue
+		#region method Find
 
-		public bool CreateValue(string sName, bool bIsNullable, string sValue, string sHint, out object oResult) {
+		public IType Find(string sName, bool bIsNullable, string sHint) {
 			try {
 				foreach (IType t in m_oTypes) {
 					if ((t.CanBeNull == bIsNullable) && (t.Name == sName)) {
-						if (t is Enumeration)
-							t.Hint = sHint;
+						IType oResult = t.Clone();
+						if (oResult is Enumeration)
+							oResult.Hint = sHint;
 
-						oResult = t.CreateInstance(sValue);
-						return true;
+						return oResult;
 					} // if
 				} // for each
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to find an argument type from name '{0}', is nullable {1}, hint '{2}'.", sName, bIsNullable, sHint);
+				return null;
+			} // try
+
+			m_oLog.Alert("Could not to find an argument type from name '{0}', is nullable {1}, hint '{2}'.", sName, bIsNullable, sHint);
+			return null;
+		} // Find
+
+		#endregion method Find
+
+		#region method CreateValue
+
+		public bool CreateValue(string sName, bool bIsNullable, string sValue, string sHint, out object oResult) {
+			IType oType = Find(sName, bIsNullable, sHint);
+
+			if (oType == null) {
+				oResult = null;
+				return false;
+			} // if
+
+			try {
+				oResult = oType.CreateInstance(sValue);
+				return true;
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to create a value from name '{0}', is nullable {1}, hint '{2}', data '{3}'.", sName, bIsNullable, sHint, sValue);

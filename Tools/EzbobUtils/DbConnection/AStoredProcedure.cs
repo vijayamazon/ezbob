@@ -79,8 +79,22 @@
 
 		#region method ForEachRowSafe
 
+		public virtual void ForEachRowSafe(Action<SafeReader> oAction) {
+			ForEachRowSafe((sr, bRowsetStart) => {
+				oAction(sr);
+				return ActionResult.Continue;
+			});
+		} // ForEachRowSafe
+
 		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction) {
 			ForEachRowSafe(null, oAction);
+		} // ForEachRowSafe
+
+		public virtual void ForEachRowSafe(ConnectionWrapper oConnectionToUse, Action<SafeReader> oAction) {
+			ForEachRowSafe(oConnectionToUse, (sr, bRowsetStart) => {
+				oAction(sr);
+				return ActionResult.Continue;
+			});
 		} // ForEachRowSafe
 
 		public virtual void ForEachRowSafe(ConnectionWrapper oConnectionToUse, Func<SafeReader, bool, ActionResult> oAction) {
