@@ -22,8 +22,11 @@ BEGIN
 		c.Fullname AS ClientName,
 		c.Name AS ClientEmail,
 		la.Amount AS LoanAmount,
-		ISNULL(SUM(t.Amount), 0) AS TotalRepaid,
-		ISNULL(SUM(t.LoanRepayment), 0) AS PrincipalRepaid
+		ISNULL(SUM(ISNULL(t.Amount, 0)), 0) AS TotalRepaid,
+		ISNULL(SUM(ISNULL(t.LoanRepayment, 0)), 0) AS PrincipalRepaid,
+		ISNULL(SUM(ISNULL(la.Fees, 0)), 0) AS SetupFees,
+		ISNULL(SUM(ISNULL(t.Fees, 0)), 0) AS OtherFees,
+		ISNULL(SUM(ISNULL(t.Rollover, 0)), 0) AS Rollover
 	FROM
 		Loan l
 		INNER JOIN Customer c ON l.CustomerID = c.Id
