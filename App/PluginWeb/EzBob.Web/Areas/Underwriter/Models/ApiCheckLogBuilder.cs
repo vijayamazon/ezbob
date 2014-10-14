@@ -50,7 +50,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 ApiType = val.marketplaceType,
                 DateTime = val.history.UpdatingStart,
                 ErrorMessage = val.history.Error,
-                Status = val.history.Error == null ? "Successful" : "Failed",
+                Status = string.IsNullOrEmpty(val.history.Error) ? "Successful" : "Failed",
                 Marketplace = val.displayName
             }));
 
