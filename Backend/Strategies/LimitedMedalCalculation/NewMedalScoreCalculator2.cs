@@ -221,7 +221,7 @@
 			}
 
 			int businessScore = sr["BusinessScore"];
-			decimal rawTangibleEquity = sr["TangibleEquity"];
+			tangibleEquityValue = sr["TangibleEquity"];
 			DateTime? businessSeniority = sr["BusinessSeniority"];
 			int consumerScore = sr["ConsumerScore"];
 			decimal ebida = sr["Ebida"];
@@ -256,7 +256,6 @@
 
 			decimal annualTurnover;
 			decimal freeCashFlow = 0;
-			decimal tangibleEquity = 0;
 			bool hasFreeCashFlowData = false;
 			if (foundSummary)
 			{
@@ -267,7 +266,6 @@
 				}
 
 				annualTurnover = hmrcAnnualTurnover;
-				tangibleEquityValue = rawTangibleEquity;
 				basedOnHmrc = true;
 
 				decimal factoredLoanRepayments = actualLoanRepayments;
@@ -293,7 +291,10 @@
 					throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy));
 				}
 
-				annualTurnover = yodleeAnnualTurnover;
+				// Alternative turnover calculation - not the same as existing one. Bug EZ-2694
+				// annualTurnover = yodleeAnnualTurnover;
+
+				annualTurnover = 0;
 
 				var yodleeMps = new List<int>();
 
@@ -312,12 +313,12 @@
 					annualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
 				}
 
-				tangibleEquityValue = 0;
 				basedOnHmrc = false;
 				freeCashFlowValue = 0;
 				valueAdded = 0;
 			}
 
+			decimal tangibleEquity = 0;
 			if (annualTurnover < 0)
 			{
 				annualTurnover = 0;
@@ -325,7 +326,7 @@
 			else if (annualTurnover != 0)
 			{
 				freeCashFlow = freeCashFlowValue / annualTurnover;
-				tangibleEquity = rawTangibleEquity / annualTurnover;
+				tangibleEquity = tangibleEquityValue / annualTurnover;
 			}
 
 			var maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusString);

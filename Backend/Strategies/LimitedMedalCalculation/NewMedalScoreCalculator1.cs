@@ -88,7 +88,7 @@
 			}
 
 			inputData.BusinessScore = sr["BusinessScore"];
-			decimal tangibleEquityValue = sr["TangibleEquity"];
+			inputData.TangibleEquityValue = sr["TangibleEquity"];
 			inputData.BusinessSeniority = sr["BusinessSeniority"];
 			inputData.ConsumerScore = sr["ConsumerScore"];
 			string maritalStatusStr = sr["MaritalStatus"];
@@ -135,7 +135,6 @@
 				}
 
 				inputData.BasedOnHmrcValues = true;
-				inputData.TangibleEquityValue = tangibleEquityValue;
 				freeCashFlowDataAvailable = true;
 				
 				foreach (VatReturnSummary singleSummary in summaryData)
