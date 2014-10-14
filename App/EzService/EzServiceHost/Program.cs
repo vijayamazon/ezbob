@@ -1,4 +1,6 @@
 ﻿namespace EzServiceHost {
+	#region using
+
 	using System;
 	using System.Diagnostics;
 	using System.IO;
@@ -39,6 +41,8 @@
 	using ISession = NHibernate.ISession;
 	using EzServiceConfigurationLoader;
 	using ActionResult = Ezbob.Database.ActionResult;
+
+	#endregion using
 
 	public class Program : IHost {
 		#region public
@@ -233,7 +237,7 @@
 			oOnTimer();
 			CurrentValues.OnReloadByTimer += oOnTimer;
 
-			m_oCrontab = new Daemon(m_oDB, m_oLog);
+			m_oCrontabDaemon = new Daemon(m_oDB, m_oLog);
 
 			return true;
 		} // Init
@@ -248,7 +252,7 @@
 
 				m_oLog.Info("EzService host has been opened.");
 
-				// TODO: restore once EZ-2674 is not off hold: new Thread(m_oCrontab.Execute).Start();
+				new Thread(m_oCrontabDaemon.Execute).Start();
 
 				m_oLog.Info("Entering the main loop.");
 
@@ -262,7 +266,7 @@
 					} // lock
 				} while (!bStop);
 
-				m_oCrontab.Shutdown();
+				m_oCrontabDaemon.Shutdown();
 
 				m_oLog.Info("Main loop has completed.");
 
@@ -306,7 +310,7 @@
 
 		#endregion method NotifyStartStop
 
-		#region properties
+		#region fields
 
 		private readonly string[] m_aryArgs;
 		private string m_sInstanceName;
@@ -317,16 +321,16 @@
 		private readonly ASafeLog m_oLog;
 		private AConnection m_oDB;
 
-		private Daemon m_oCrontab;
+		private Daemon m_oCrontabDaemon;
 
-		#endregion properties
+		#endregion fields
 
-		#region static properties
+		#region static fields
 
 		private static bool ms_bStop = false;
 		private static readonly object ms_oLock = new object();
 
-		#endregion static properties
+		#endregion static fields
 
 		#endregion private
 	} // class Program

@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 
-	public class TypeUtils {
+	public static class TypeUtils {
 		#region static constructor
 
 		static TypeUtils() {
@@ -53,6 +53,20 @@
 
 		#endregion method IsEnumerable
 
+		#region method CanBeNull
+
+		public static bool CanBeNull(Type oType) {
+			if (oType == null)
+				return false;
+
+			if (oType.IsClass)
+				return true;
+
+			return IsNullable(oType);
+		} // CanBeNull
+
+		#endregion method CanBeNull
+
 		#region method IsNullable
 
 		public static bool IsNullable(Type oType) {
@@ -92,6 +106,10 @@
 		#endregion method IsParametrisable
 
 		#region method IsInterfaceImplemented
+
+		public static bool HasInterface(this Type oType, Type oInterfaceType) {
+			return IsInterfaceImplemented(oType, oInterfaceType);
+		} // HasInterface
 
 		public static bool IsInterfaceImplemented(Type oType, Type oInterfaceType) {
 			return

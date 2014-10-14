@@ -1,8 +1,10 @@
 ﻿namespace EzServiceCrontab {
 	using System;
 	using System.Threading;
+	using ArgumentTypes;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using DateTime = System.DateTime;
 
 	public class Daemon {
 		#region public
@@ -20,6 +22,8 @@
 
 			m_oDB = oDB;
 			m_oLog = oLog ?? new SafeLog();
+
+			m_oTypeRepo = new TypeRepository(m_oLog);
 		} // constructor
 
 		#endregion constructor
@@ -39,7 +43,12 @@
 				if (StopFlag)
 					break;
 
-				Thread.Sleep(1000);
+				int nSleepTime = Math.Abs(1000 - DateTime.UtcNow.Millisecond);
+
+				if (nSleepTime < 200)
+					nSleepTime += 1000;
+
+				Thread.Sleep(nSleepTime);
 
 				if (StopFlag)
 					break;
@@ -63,8 +72,13 @@
 		#region method Reinit
 
 		private void Reinit() {
-			// TODO
-			m_oLog.Debug("Crontab.Reinit");
+			try {
+				// TODO
+				m_oLog.Debug("Crontab.Reinit");
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Exception caught during crontab daemon reinitialisation.");
+			} // try
 		} // Reinit
 
 		#endregion method Reinit
@@ -119,14 +133,20 @@
 		#region method StartAll
 
 		private void StartAll() {
-			// TODO
-			m_oLog.Debug("Crontab.StartAll");
+			try {
+				// TODO
+				m_oLog.Debug("Crontab.StartAll");
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Exception caught during starting a task via crontab daemon.");
+			} // try
 		} // StartAll
 
 		#endregion method StartAll
 
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
+		private readonly TypeRepository m_oTypeRepo;
 
 		#endregion private
 	} // class Daemon
