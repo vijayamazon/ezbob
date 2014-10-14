@@ -98,7 +98,11 @@
 				result1.TotalScore != result2.TotalScore ||
 				result1.TotalScoreNormalized != result2.TotalScoreNormalized ||
 				result1.Medal != result2.Medal ||
-				result1.Error != result2.Error)
+				result1.Error != result2.Error ||
+				result1.FreeCashFlowValue != result2.FreeCashFlowValue ||
+				result1.TangibleEquityValue != result2.TangibleEquityValue ||
+				result1.ValueAdded != result2.ValueAdded ||
+				result1.BasedOnHmrcValues != result2.BasedOnHmrcValues)
 			{
 				return false;
 			}

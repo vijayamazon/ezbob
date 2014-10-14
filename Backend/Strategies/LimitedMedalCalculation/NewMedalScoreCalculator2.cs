@@ -254,7 +254,7 @@
 				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", numOfHmrcMps));
 			}
 
-			decimal annualTurnover = 0;
+			decimal annualTurnover;
 			decimal freeCashFlow = 0;
 			decimal tangibleEquity = 0;
 			bool hasFreeCashFlowData = false;
@@ -294,8 +294,28 @@
 				}
 
 				annualTurnover = yodleeAnnualTurnover;
+
+				var yodleeMps = new List<int>();
+
+				db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>
+				{
+					int mpId = yodleeSafeReader["Id"];
+					yodleeMps.Add(mpId);
+					return ActionResult.Continue;
+				}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+
+				foreach (int mpId in yodleeMps)
+				{
+					var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
+					YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
+
+					annualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
+				}
+
 				tangibleEquityValue = 0;
 				basedOnHmrc = false;
+				freeCashFlowValue = 0;
+				valueAdded = 0;
 			}
 
 			if (annualTurnover < 0)
