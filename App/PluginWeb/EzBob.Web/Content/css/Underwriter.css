@@ -2207,3 +2207,7 @@ ul.alert-list {
 .box-no-padding {
     padding: 0px !important;
 }
+
+.action-item-margin {
+    margin-top: 1px !important;
+}
