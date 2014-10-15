@@ -13,5 +13,7 @@ BEGIN
 		Name
 	FROM
 		CRMActions
+	ORDER BY
+		Id ASC
 END
 GO
