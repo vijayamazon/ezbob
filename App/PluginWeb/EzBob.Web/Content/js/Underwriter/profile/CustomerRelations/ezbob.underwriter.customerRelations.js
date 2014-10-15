@@ -93,8 +93,8 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         return false;
     },
     
-    actionItemsSavedCallback: function(numOfCheckedActionItems) {
-        $('.markAsPending')[0].firstChild.data = "Action Items (" + numOfCheckedActionItems + ")";
+    actionItemsSavedCallback: function () {
+        this.model.fetch();
     },
 
     toggleSystmeCrm: function () {

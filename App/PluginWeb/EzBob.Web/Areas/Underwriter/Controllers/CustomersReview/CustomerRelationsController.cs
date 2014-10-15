@@ -247,6 +247,7 @@
 		{
 			DateTime now = DateTime.UtcNow;
 			List<int> checkedIds = GetCheckedActionItemIds(actionItems);
+			bool changed = false;
 
 			// "Close" action items
 			var openActionItemsInDb = frequentActionItemsForCustomerRepository.GetAll().Where(x => x.CustomerId == customerId && x.UnmarkedDate == null);
@@ -254,6 +255,7 @@
 			{
 				if (!checkedIds.Contains(openActionItem.ItemId))
 				{
+					changed = true;
 					openActionItem.UnmarkedDate = now;
 					frequentActionItemsForCustomerRepository.SaveOrUpdate(openActionItem);
 				}
@@ -264,24 +266,43 @@
 			{
 				if (!openActionItemsInDb.Any(x => x.ItemId == checkedId))
 				{
+					changed = true;
 					var newCheckedItem = new FrequentActionItemsForCustomer { CustomerId = customerId, ItemId = checkedId, MarkedDate = now };
 					frequentActionItemsForCustomerRepository.SaveOrUpdate(newCheckedItem);
 				}
 			}
 
-			if (checkedIds.Count == 0)
+			if (changed)
 			{
-				// Mark as waiting for decision
-				Customer customer = customerRepository.Get(customerId);
-				customer.CreditResult = CreditResultStatus.WaitingForDecision;
-				customerRepository.SaveOrUpdate(customer);
-			}
-			else
-			{
-				// Mark as pending
-				Customer customer = customerRepository.Get(customerId);
-				customer.CreditResult = CreditResultStatus.ApprovedPending;
-				customerRepository.SaveOrUpdate(customer);
+				var entry = new CustomerRelations
+					{
+						Action = _crmActionsRepository.GetAll().FirstOrDefault(x => x.Name == "Action items change"),
+						CustomerId = customerId,
+						IsBroker = false,
+						Rank = _crmRanksRepository.GetAll().FirstOrDefault(x => x.Name == "High"),
+						Status = _crmStatusesRepository.GetAll().FirstOrDefault(x => x.Name == "Pending"),
+						Timestamp = DateTime.UtcNow,
+						Type = "Internal",
+						UserName = User.Identity.Name
+					};
+				_customerRelationsRepository.SaveOrUpdate(entry);
+
+				if (checkedIds.Count == 0)
+				{
+					// Mark as waiting for decision
+					Customer customer = customerRepository.Get(customerId);
+					customer.CreditResult = CreditResultStatus.WaitingForDecision;
+					customerRepository.SaveOrUpdate(customer);
+				}
+				else
+				{
+					// Mark as pending
+					Customer customer = customerRepository.Get(customerId);
+					customer.CreditResult = CreditResultStatus.ApprovedPending;
+					customerRepository.SaveOrUpdate(customer);
+
+					// TODO: Send mail to customer here
+				}
 			}
 		}
 

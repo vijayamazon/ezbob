@@ -55,18 +55,16 @@ EzBob.Underwriter.MarkAsPending = EzBob.BoundItemView.extend({
         BlockUi();
         
         var actionItemsAsString = '';
-        this.checkedActionItemsCounter = 0;
         var actionItems = this.model.get('ActionItems');
         for (var i = 0; i < actionItems.length; i++) {
             var ai = actionItems[i];
             if (ai.IsChecked) {
                 actionItemsAsString += ',' + ai.Id;
-                this.checkedActionItemsCounter++;
             }
         }
         var xhr = $.post(window.gRootPath + 'CustomerRelations/MarkAsPending', { customerId: this.model.customerId, actionItems: actionItemsAsString });
         xhr.always(function () {
-            self.actionItemsSavedCallback(self.checkedActionItemsCounter);
+            self.actionItemsSavedCallback();
             return UnBlockUi();
         });
 
