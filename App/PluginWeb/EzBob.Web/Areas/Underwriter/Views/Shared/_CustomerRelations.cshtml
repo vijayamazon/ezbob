@@ -13,11 +13,7 @@
                     <div class="col-md-4 right-seperator">
                         <button class="btn btn-primary addNewCustomerRelationsEntry">Add New Entry</button>
                         <button class="btn btn-primary addFollowUp">Add Follow up</button>
-                        <% if (creditResult == 'WaitingForDecision') { %>
-                            <button class="btn btn-primary markAsPending">Mark as pending</button>
-                        <% } else if (creditResult == 'ApprovedPending') { %>
-                            <button class="btn btn-primary markAsWaiting">Mark as waiting</button>
-                        <% } %>
+                        <button id=actionItemsButton" class="btn btn-primary markAsPending">Action Items (<%- checkedActionItemsCounter %>)</button>
                     </div>
                     <div class="col-md-4 right-seperator">
                         <span>Potential rank:</span>

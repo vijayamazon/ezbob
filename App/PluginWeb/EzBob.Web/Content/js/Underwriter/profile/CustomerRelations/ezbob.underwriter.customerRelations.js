@@ -16,6 +16,15 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
     },
 
     serializeData: function () {
+        var actionItems = this.model.get("ActionItems");
+        var checkedActionItemsCounter = 0;
+        for (var i = 0; i < actionItems.length; i++) {
+            var ai = actionItems[i];
+            if (ai.IsChecked) {
+                checkedActionItemsCounter++;
+            }
+        }
+        
         return {
             vals: this.model.get("CustomerRelations"),
             ranks: EzBob.CrmRanks,
@@ -23,7 +32,8 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
             lastFollowUp: this.model.get("LastFollowUp"),
             lastStatus: this.model.get("LastStatus"),
             isPhoneVerified: this.model.get("IsPhoneVerified"),
-            creditResult: this.model.get("CreditResult")
+            creditResult: this.model.get("CreditResult"),
+            checkedActionItemsCounter: checkedActionItemsCounter
         };
     },
 
@@ -31,7 +41,6 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         "click .addNewCustomerRelationsEntry": "addNewCustomerRelationsEntry",
         "click .addFollowUp": "addFollowUp",
         "click .markAsPending": "markAsPending",
-        "click .markAsWaiting": "markAsWaiting",
         "click .toggleSystemCrm": "toggleSystmeCrm",
         "change #Rank": "changeRank",
         "click #closeFollowUp": "closeLastFollowUp",
@@ -77,20 +86,15 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
 
     markAsPending: function () {
         var view = new EzBob.Underwriter.MarkAsPending({
-            model: this.model
+            model: this.model,
+            actionItemsSavedCallback: this.actionItemsSavedCallback
         });
         EzBob.App.jqmodal.show(view);
         return false;
     },
-
-    markAsWaiting: function () {
-        BlockUi();
-        var xhr = $.post(window.gRootPath + 'CustomerRelations/MarkAsWaiting', { customerId: this.model.customerId });
-        xhr.always(function () {
-            // make other button visible and this invisible - if i return success
-            // or refresh model?
-            return UnBlockUi();
-        });
+    
+    actionItemsSavedCallback: function(numOfCheckedActionItems) {
+        $('.markAsPending')[0].firstChild.data = "Action Items (" + numOfCheckedActionItems + ")";
     },
 
     toggleSystmeCrm: function () {

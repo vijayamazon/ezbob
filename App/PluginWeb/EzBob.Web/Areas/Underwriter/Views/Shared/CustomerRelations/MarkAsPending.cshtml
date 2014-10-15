@@ -5,7 +5,7 @@
         <% _.each(actionItems, function(actionItem) { %>
             <div>
                 <label class="checkbox-inline">
-                    <input type="checkbox" class="checkbox" id="frequentActionItem_<%- actionItem.id %>" <%- actionItem.IsChecked ? 'checked="checked"' : '' %>>
+                    <input type="checkbox" class="checkbox" id="frequentActionItem_<%- actionItem.Id %>" <%- actionItem.IsChecked ? 'checked=checked' : '' %>>
                     <%- actionItem.Text %>
                 </label>
             </div>

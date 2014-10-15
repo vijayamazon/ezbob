@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
@@ -40,6 +41,7 @@
 			_customerRelationFollowUpRepository = customerRelationFollowUpRepository;
 			_customerRelationStateRepository = customerRelationStateRepository;
 			this.customerRepository = customerRepository;
+			frequentActionItemsForCustomerRepository = new FrequentActionItemsForCustomerRepository(session);
 			_context = context;
 			_serviceClient = new ServiceClient();
 		} // constructor
@@ -241,20 +243,63 @@
 
 		[Ajax]
 		[HttpPost]
-		public void MarkAsWaiting(int customerId)
+		public void MarkAsPending(int customerId, string actionItems)
 		{
-			Customer customer = customerRepository.Get(customerId);
-			customer.CreditResult = CreditResultStatus.WaitingForDecision;
-			customerRepository.SaveOrUpdate(customer);
+			DateTime now = DateTime.UtcNow;
+			List<int> checkedIds = GetCheckedActionItemIds(actionItems);
+
+			// "Close" action items
+			var openActionItemsInDb = frequentActionItemsForCustomerRepository.GetAll().Where(x => x.CustomerId == customerId && x.UnmarkedDate == null);
+			foreach (var openActionItem in openActionItemsInDb)
+			{
+				if (!checkedIds.Contains(openActionItem.ItemId))
+				{
+					openActionItem.UnmarkedDate = now;
+					frequentActionItemsForCustomerRepository.SaveOrUpdate(openActionItem);
+				}
+			}
+
+			// Insert new action items
+			foreach (int checkedId in checkedIds)
+			{
+				if (!openActionItemsInDb.Any(x => x.ItemId == checkedId))
+				{
+					var newCheckedItem = new FrequentActionItemsForCustomer { CustomerId = customerId, ItemId = checkedId, MarkedDate = now };
+					frequentActionItemsForCustomerRepository.SaveOrUpdate(newCheckedItem);
+				}
+			}
+
+			if (checkedIds.Count == 0)
+			{
+				// Mark as waiting for decision
+				Customer customer = customerRepository.Get(customerId);
+				customer.CreditResult = CreditResultStatus.WaitingForDecision;
+				customerRepository.SaveOrUpdate(customer);
+			}
+			else
+			{
+				// Mark as pending
+				Customer customer = customerRepository.Get(customerId);
+				customer.CreditResult = CreditResultStatus.ApprovedPending;
+				customerRepository.SaveOrUpdate(customer);
+			}
 		}
 
-		[Ajax]
-		[HttpPost]
-		public void MarkAsPending(int customerId)
+		// TODO: improve the way this is done - pass list or model or use binding
+		private List<int> GetCheckedActionItemIds(string actionItemsIds)
 		{
-			Customer customer = customerRepository.Get(customerId);
-			customer.CreditResult = CreditResultStatus.ApprovedPending;
-			customerRepository.SaveOrUpdate(customer);
+			string[] idsStr = actionItemsIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+			var checkedIds = new List<int>();
+			foreach (string idStr in idsStr)
+			{
+				int idInt;
+				if (int.TryParse(idStr, out idInt))
+				{
+					checkedIds.Add(idInt);
+				}
+			}
+
+			return checkedIds;
 		}
 
 		#endregion public
@@ -269,6 +314,7 @@
 		private readonly CustomerRelationStateRepository _customerRelationStateRepository;
 		private readonly LoanRepository _loanRepository;
 		private readonly CustomerRepository customerRepository;
+		private readonly FrequentActionItemsForCustomerRepository frequentActionItemsForCustomerRepository;
 		private readonly ISession _session;
 		private readonly ServiceClient _serviceClient;
 		private readonly IWorkplaceContext _context;

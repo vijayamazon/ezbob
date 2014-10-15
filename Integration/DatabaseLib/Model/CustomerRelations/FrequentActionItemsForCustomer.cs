@@ -11,8 +11,8 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 		public virtual int Id { get; set; }
 		public virtual int CustomerId { get; set; }
 		public virtual int ItemId { get; set; }
-		public virtual DateTime MarkedDate { get; set; }
-		public virtual DateTime UnmarkedDate { get; set; }
+		public virtual DateTime? MarkedDate { get; set; }
+		public virtual DateTime? UnmarkedDate { get; set; }
 	}
 
 	public class FrequentActionItemsForCustomerMap : ClassMap<FrequentActionItemsForCustomer>
