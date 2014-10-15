@@ -2211,3 +2211,7 @@ ul.alert-list {
 .action-item-margin {
     margin-top: 1px !important;
 }
+
+.potential-rank-font {
+    font-size: 14px;
+}

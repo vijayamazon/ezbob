@@ -17,10 +17,10 @@
                     </div>
                     <div class="col-md-4 right-seperator">
                         <span>Potential rank:</span>
-                        <select class="selectheight" id="Rank" name="Rank">
+                        <select class="selectheight potential-rank-font" id="Rank" name="Rank">
                             <option></option>
                             <% _.each(ranks, function(rank) { %>
-                        <option value="<%- rank.Id %>"><%- rank.Name %></option>
+                                <option value="<%- rank.Id %>"><%- rank.Name %></option>
                             <%});%>
                         </select>
                     </div>
