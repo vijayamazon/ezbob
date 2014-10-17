@@ -1,4 +1,5 @@
 ﻿namespace MailApi {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Net;
@@ -57,21 +58,37 @@
 		}
 
 		private string SendRequest(string path, object model) {
-			var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
-			request.AddBody(model);
-			var response = _client.Post(request);
-			Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
+			try
+			{
+				Log.InfoFormat("Starting SendRequest. Path: {0} Model: {1}", path, model);
+				var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
+				Log.InfoFormat("Created RestRequest object");
+				request.AddBody(model);
+				Log.InfoFormat("Added model to RestRequest's body");
+				var response = _client.Post(request);
+				Log.InfoFormat("Posted RestRequest");
+				Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
 
-			if (response.StatusCode == HttpStatusCode.InternalServerError) {
-				var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
-				throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}; response: {1}", path, response.Content));
+				if (response.StatusCode == HttpStatusCode.InternalServerError)
+				{
+					Log.InfoFormat("InternalServerError status code in RestRequest's response");
+					var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
+					throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}; response: {1}", path, response.Content));
+				}
+
+				if (response.StatusCode != HttpStatusCode.OK)
+				{
+					Log.InfoFormat("Other than ok status code in RestRequest's response :{0}", response.StatusCode);
+					throw response.ErrorException;
+				}
+
+				return response.Content;
 			}
-
-			if (response.StatusCode != HttpStatusCode.OK) {
-				throw response.ErrorException;
+			catch (Exception e)
+			{
+				Log.ErrorFormat("Error occur during SendRequest: {0}", e);
+				throw;
 			}
-
-			return response.Content;
 		}
 
 		private string Send(EmailModel email, string path) {
