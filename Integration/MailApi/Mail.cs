@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Net;
 	using System.Text.RegularExpressions;
+	using System.Threading;
 	using ConfigManager;
 	using Model;
 	using Newtonsoft.Json;
@@ -57,38 +58,55 @@
 			return spaces.Replace(to, string.Empty).Split(';').Select(x => new EmailAddressModel { email = x });
 		}
 
-		private string SendRequest(string path, object model) {
-			try
+		private string SendRequest(string path, object model)
+		{
+			int counter = 1;
+			Exception ex = null;
+			while (counter < 25)
 			{
-				Log.InfoFormat("Starting SendRequest. Path: {0} Model: {1}", path, model);
-				var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
-				Log.InfoFormat("Created RestRequest object");
-				request.AddBody(model);
-				Log.InfoFormat("Added model to RestRequest's body");
-				var response = _client.Post(request);
-				Log.InfoFormat("Posted RestRequest");
-				Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
-
-				if (response.StatusCode == HttpStatusCode.InternalServerError)
+				try
 				{
-					Log.InfoFormat("InternalServerError status code in RestRequest's response");
-					var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
-					throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}; response: {1}", path, response.Content));
-				}
+					Log.InfoFormat("Starting SendRequest. Attempt number:{0} Path: {1} Model: {2}", counter, path, model);
+					var request = new RestRequest(path, Method.POST) {RequestFormat = DataFormat.Json};
+					Log.InfoFormat("Created RestRequest object");
+					request.AddBody(model);
+					Log.InfoFormat("Added model to RestRequest's body");
+					var response = _client.Post(request);
+					Log.InfoFormat("Posted RestRequest");
+					Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
 
-				if (response.StatusCode != HttpStatusCode.OK)
+					if (response.StatusCode == HttpStatusCode.InternalServerError)
+					{
+						Log.InfoFormat("InternalServerError status code in RestRequest's response");
+						var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
+						throw new MandrillException(error,
+						                            string.Format("InternalServerError. Post failed {0}; response: {1}", path,
+						                                          response.Content));
+					}
+
+					if (response.StatusCode != HttpStatusCode.OK)
+					{
+						Log.InfoFormat("Other than ok status code in RestRequest's response :{0}", response.StatusCode);
+						throw response.ErrorException;
+					}
+
+					if (counter > 1)
+					{
+						Log.InfoFormat("Success in attempt #{0} - retry works", counter);
+					}
+
+					return response.Content;
+				}
+				catch (Exception e)
 				{
-					Log.InfoFormat("Other than ok status code in RestRequest's response :{0}", response.StatusCode);
-					throw response.ErrorException;
+					Log.ErrorFormat("Error occur during SendRequest: {0}", e);
+					ex = e;
+					Thread.Sleep(1000);
 				}
+				counter++;
+			}
 
-				return response.Content;
-			}
-			catch (Exception e)
-			{
-				Log.ErrorFormat("Error occur during SendRequest: {0}", e);
-				throw;
-			}
+			throw ex ?? new Exception("Throwing empty exception from SendRequest");
 		}
 
 		private string Send(EmailModel email, string path) {
