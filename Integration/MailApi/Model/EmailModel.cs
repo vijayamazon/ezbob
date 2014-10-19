@@ -1,78 +1,87 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
 
 // ReSharper disable InconsistentNaming
 
-namespace MailApi.Model
-{
-    public class merge_var
-    {
-        public string name;
-        public string content;
-    }
+namespace MailApi.Model {
+	using System.Linq;
 
-    public class template_content
-    {
-        public string name;
-        public string content;
-    }
+	public class merge_var {
+		public string name;
+		public string content;
+	} // class merge_var
 
-    public class attachment
-    {
-        public string type;
-        public string name;
-        public string content;
-    }
+	public class template_content {
+		public string name;
+		public string content;
 
-    public class image
-    {
-        public string type;
-        public string name;
-        public string content;
-    }
+		public override string ToString() {
+			return string.Format("{{ name: '{0}', content: '{1}' }}", name ?? "-- null --", content ?? "-- null --");
+		} // ToString
+	} // class template_content
 
-    public class EmailModel
-    {
-        public EmailModel()
-        {
-            template_content = new[]{new template_content{name = ""}};
-        }
+	public class attachment {
+		public string type;
+		public string name;
+		public string content;
+	} // class attachment
 
-        public string key { get; set; }
-        public string template_name { get; set; }
-        public IEnumerable<template_content> template_content { get; set; }
-        public EmailMessageModel message { get; set; }
-		
-        public void AddGlobalVariable(string name, string content)
-        {
-            if (message.global_merge_vars == null)
-            {
-                message.global_merge_vars = new List<merge_var>();
-            }
+	public class image {
+		public string type;
+		public string name;
+		public string content;
+	} // class image
 
-            var mv = new merge_var
-                {
-                    name = name,
-                    content = content
-                };
-            message.global_merge_vars.Add(mv);
-        }
+	public class EmailModel {
+		public EmailModel() {
+			template_content = new[] { new template_content { name = "" } };
+		} // constructor
 
-		public void AddAttachment(string mimeType, string fileName, string content)
-		{
+		public string key { get; set; }
+		public string template_name { get; set; }
+		public IEnumerable<template_content> template_content { get; set; }
+		public EmailMessageModel message { get; set; }
+
+		public void AddGlobalVariable(string name, string content) {
+			if (message.global_merge_vars == null)
+				message.global_merge_vars = new List<merge_var>();
+
+			var mv = new merge_var {
+				name = name,
+				content = content,
+			};
+
+			message.global_merge_vars.Add(mv);
+		} // AddGlobalVariable
+
+		public void AddAttachment(string mimeType, string fileName, string content) {
 			if (message.attachments == null)
-			{
 				message.attachments = new List<attachment>();
-			}
 
-			message.attachments.Add(new attachment
-				{
-					type = mimeType,
-					name = fileName,
-					content = content
-				});
-		}
-    }
-}
+			message.attachments.Add(new attachment {
+				type = mimeType,
+				name = fileName,
+				content = content
+			});
+		} // AddAttachment
+
+		public override string ToString() {
+			List<string> oTemplateContent = template_content == null
+				? new List<string>()
+				: template_content.Select(tc => tc.ToString()).ToList();
+
+			string sTemplateContent = oTemplateContent.Count < 1
+				? "empty template content"
+				: string.Format("[{0}] {{ {1} }}", oTemplateContent.Count, string.Join(", ", oTemplateContent));
+
+			return string.Format(
+				"Key: {0}, Template name: '{1}', Template content: {2}, Message: {3}",
+				key,
+				template_name,
+				sTemplateContent,
+				message
+			);
+		} // ToString
+	} // class EmailModel
+} // namespace
 
 // ReSharper restore InconsistentNaming
