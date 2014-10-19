@@ -1,6 +1,7 @@
 ﻿namespace EzServiceCrontab.ArgumentTypes {
 	using System;
 	using System.ComponentModel;
+	using Ezbob.Utils;
 
 	internal class Enumeration : AType<System.Enum> {
 		#region constructor
@@ -45,7 +46,7 @@
 			if (string.IsNullOrWhiteSpace(Hint))
 				throw new InvalidEnumArgumentException("Enum name not specified for enum type.");
 
-			m_oUnderlyingType = FindType(Hint);
+			m_oUnderlyingType = TypeUtils.FindType(Hint);
 
 			if (m_oUnderlyingType == null)
 				throw new InvalidEnumArgumentException("Enum name was not found from '" + Hint + "'.");

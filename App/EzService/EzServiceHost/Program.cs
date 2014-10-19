@@ -228,13 +228,15 @@
 
 			m_oCfg.Init();
 
-			m_oHost = new EzServiceHost(m_oCfg, new EzServiceInstanceRuntimeData {
+			var oRuntimeData = new EzServiceInstanceRuntimeData {
 				Host = this,
 				Log = m_oLog,
 				DB = m_oDB,
 				InstanceName = m_sInstanceName,
-				InstanceID = m_oCfg.InstanceID
-			});
+				InstanceID = m_oCfg.InstanceID,
+			};
+
+			m_oHost = new EzServiceHost(m_oCfg, oRuntimeData);
 
 			CurrentValues.ReloadOnTimer oOnTimer = () => {
 				DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
@@ -246,7 +248,7 @@
 			oOnTimer();
 			CurrentValues.OnReloadByTimer += oOnTimer;
 
-			m_oCrontabDaemon = new Daemon(m_oDB, m_oLog);
+			m_oCrontabDaemon = new Daemon(oRuntimeData, m_oDB, m_oLog);
 
 			return true;
 		} // Init

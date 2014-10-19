@@ -7,11 +7,11 @@
 
 	class EzServiceInstanceCreator : IInstanceProvider {
 		public EzServiceInstanceCreator(EzServiceInstanceRuntimeData oData) {
-			m_oDataHolder = oData;
+			m_oData = oData;
 		} // constructor
 
 		public object GetInstance(InstanceContext instanceContext, Message message) {
-			return new EzServiceImplementation(m_oDataHolder);
+			return new EzServiceImplementation(m_oData);
 		} // GetInstance
 
 		public object GetInstance(InstanceContext instanceContext) {
@@ -21,6 +21,6 @@
 		public void ReleaseInstance(InstanceContext instanceContext, object instance) {
 		} // ReleaseInstance
 
-		private readonly EzServiceInstanceRuntimeData m_oDataHolder;
+		private readonly EzServiceInstanceRuntimeData m_oData;
 	} // class EzServiceInstanceCreator
 } // namespace EzServiceHost

@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
 
 	public static class TypeUtils {
 		#region static constructor
@@ -44,6 +45,59 @@
 		} // static constructor
 
 		#endregion static constructor
+
+		#region FindType
+
+		public static Type FindType(string sName) {
+			if (string.IsNullOrWhiteSpace(sName))
+				return null;
+
+			sName = sName.Trim();
+
+			bool bHasDot = sName.IndexOf('.') > 0;
+
+			foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies()) {
+				Type t = PureFindType(sName, a, bHasDot);
+
+				if (t != null)
+					return t;
+			} // for each Assembly
+
+			return null;
+		} // FindType
+
+		public static Type FindType(string sName, Assembly asm) {
+			if (string.IsNullOrWhiteSpace(sName))
+				return null;
+
+			sName = sName.Trim();
+
+			bool bHasDot = sName.IndexOf('.') > 0;
+
+			if (asm != null)
+				return PureFindType(sName, asm, bHasDot);
+
+			return
+				PureFindType(sName, Assembly.GetCallingAssembly(), bHasDot) ??
+				PureFindType(sName, Assembly.GetExecutingAssembly(), bHasDot);
+		} // FindType
+
+		private static Type PureFindType(string sName, Assembly asm, bool bHasDot) {
+			foreach (Type t in asm.GetTypes()) {
+				if (bHasDot) {
+					if ((t.AssemblyQualifiedName ?? string.Empty).StartsWith(sName))
+						return t;
+				}
+				else {
+					if (t.Name.EndsWith(sName))
+						return t;
+				} // if
+			} // for each type
+
+			return null;
+		} // PureFindType
+
+		#endregion FindType
 
 		#region method IsEnumerable
 

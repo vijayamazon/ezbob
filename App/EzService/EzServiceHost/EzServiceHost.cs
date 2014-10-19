@@ -8,7 +8,7 @@
 	using EzServiceConfigurationLoader;
 	using EzService.EzServiceImplementation;
 
-	class EzServiceHost : ServiceHost {
+	public class EzServiceHost : ServiceHost {
 		public EzServiceHost(Configuration oCfg, EzServiceInstanceRuntimeData oData) : base(
 			typeof(EzServiceImplementation),
 			new Uri(oCfg.AdminEndpointAddress),
@@ -45,15 +45,11 @@
 
 		#region protected
 
-		#region method OnOpening
-
 		protected override void OnOpening() {
 			Description.Behaviors.Add(new EzInstanceProviderBehaviour(m_oData));
 			Expose();
 			base.OnOpening();
 		} // OnOpening
-
-		#endregion method OnOpening
 
 		#endregion protected
 

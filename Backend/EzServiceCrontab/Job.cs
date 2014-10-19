@@ -2,9 +2,13 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.ServiceModel;
 	using ArgumentTypes;
 	using EzService;
+	using EzService.EzServiceImplementation;
 	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
 
 	internal class Job {
@@ -130,13 +134,11 @@
 					string sTime;
 
 					if (RepetitionTime.Hour > 0) {
-						int nMinutes = RepetitionTime.Hour * 60 + RepetitionTime.Minute;
-
 						sTime = string.Format(
 							"{0} {1} (i.e. {2})",
 							Grammar.Number(RepetitionTime.Hour, "hour"),
 							Grammar.Number(RepetitionTime.Minute, "minute"),
-							Grammar.Number(nMinutes, "minute")
+							Grammar.Number(RepetitionMinutes, "minute")
 						);
 					}
 					else
@@ -210,6 +212,8 @@
 
 		#endregion method Differs
 
+		#region method IsTimeToStart
+
 		public bool IsTimeToStart(DateTime oNow) {
 			switch (RepetitionType) {
 			case RepetitionType.Monthly:
@@ -222,18 +226,94 @@
 				if (LastEndTime == null)
 					return true;
 
-				break;
+				if ((oNow - LastEndTime.Value).TotalMinutes >= RepetitionMinutes)
+					return true;
+
+				return false;
 
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
-
-			return false;
 		} // IsTimeToStart
+
+		#endregion method IsTimeToStart
+
+		#region method Start
+
+		public void Start(EzServiceInstanceRuntimeData oRuntimeData) {
+			SaveStarting(oRuntimeData.DB, oRuntimeData.Log);
+
+			string sErrorMsg = null;
+
+			try {
+				sErrorMsg = Invoke(oRuntimeData);
+			}
+			catch (Exception e) {
+				oRuntimeData.Log.Alert(e, "Job.Start: failed to start the job {0}.", this);
+			} // try
+
+			// TODO save "background" time
+
+			if (!string.IsNullOrWhiteSpace(sErrorMsg))
+				oRuntimeData.Log.Alert("Job.Start: could not start the job {0}: {1}.", this, sErrorMsg);
+		} // Start
+
+		#endregion method Start
 
 		#region private
 
 		private readonly List<JobArgument> m_oArguments;
+
+		#region property RepetitionMinutes
+
+		private int RepetitionMinutes {
+			get { return RepetitionTime.Hour * 60 + RepetitionTime.Minute; }
+		} // RepetitionMinutes
+
+		#endregion property RepetitionMinutes
+
+		#region method Invoke
+
+		private string Invoke(EzServiceInstanceRuntimeData oService) {
+			Type oStrategyType = TypeUtils.FindType(ActionName);
+
+			if (oStrategyType == null)
+				return "strategy not found by name '" + ActionName + "'";
+
+			var args = new List<object>();
+
+			foreach (var oArg in m_oArguments)
+				args.Add(oArg.UnderlyingType.CreateInstance(oArg.Value));
+
+			try {
+				// TODO: save job completion time in crontab log
+
+				new EzServiceImplementation(oService).Execute(
+					oStrategyType,
+					null,
+					null,
+					null,
+					null,
+					args.ToArray()
+				);
+
+				return null;
+			}
+			catch (FaultException e) {
+				// No logging needed: it is done inside Execute call
+				return e.Message;
+			} // try
+		} // Invoke
+
+		#endregion method Invoke
+
+		#region method SaveStarting
+
+		private void SaveStarting(AConnection oDB, ASafeLog oLog) {
+			// TODO
+		} // SaveStarting
+
+		#endregion method SaveStarting
 
 		#endregion private
 	} // class Job

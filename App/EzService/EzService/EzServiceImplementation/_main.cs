@@ -51,45 +51,63 @@
 
 		#endregion method IDisposable.Dispose
 
-		#endregion public
+		#region property Log
 
-		#region private
-
-		#region property NewInstancesAllowed
-
-		private bool NewInstancesAllowed {
+		public ASafeLog Log {
 			get {
-				bool b;
+				if (ReferenceEquals(m_oTheLog, null))
+					m_oTheLog = ((m_oData != null) && (m_oData.Log != null)) ? m_oData.Log : new SafeLog();
 
-				lock (ms_oLockNewInstancesAllowed) {
-					b = ms_bNewInstancesAllowed;
-				} // lock
-
-				return b;
+				return m_oTheLog;
 			} // get
-			set {
-				lock (ms_oLockNewInstancesAllowed) {
-					ms_bNewInstancesAllowed = value;
-				} // lock
-			} // set
-		} // NewInstancesAllowed
+		} // Log
 
-		#endregion property NewInstancesAllowed
+		private ASafeLog m_oTheLog;
+
+		#endregion property Log
+
+		#region property DB
+
+		public AConnection DB {
+			get { return ReferenceEquals(m_oData, null) ? null : m_oData.DB; } // get
+		} // DB
+
+		#endregion property DB
 
 		#region method Execute
 
-		private ActionMetaData Execute<TStrategy>(int? nCustomerID, int? nUserID, params object[] args) where TStrategy : AStrategy {
-			return Execute<TStrategy>(nCustomerID, nUserID, (Action<TStrategy>)null, (Action<ActionMetaData>)null, args);
+		public ActionMetaData Execute<TStrategy>(int? nCustomerID, int? nUserID, params object[] args) where TStrategy : AStrategy {
+			return Execute<TStrategy>(nCustomerID, nUserID, (Action<AStrategy>)null, (Action<ActionMetaData>)null, args);
 		} // Execute
 
-		private ActionMetaData Execute<TStrategy>(
+		public ActionMetaData Execute<TStrategy>(
 			int? nCustomerID,
 			int? nUserID,
 			Action<TStrategy> oInitAction,
 			Action<ActionMetaData> oOnException,
 			params object[] args
 		) where TStrategy : AStrategy {
-			Type oStrategyType = typeof (TStrategy);
+			return Execute(
+				typeof(TStrategy),
+				nCustomerID,
+				nUserID,
+				stra => {
+					if (oInitAction != null)
+						oInitAction((TStrategy)stra);
+				},
+				oOnException,
+				args
+			);
+		} // Execute
+
+		public ActionMetaData Execute(
+			Type oStrategyType,
+			int? nCustomerID,
+			int? nUserID,
+			Action<AStrategy> oInitAction,
+			Action<ActionMetaData> oOnException,
+			params object[] args
+		) {
 			ActionMetaData amd = null;
 
 			try {
@@ -108,7 +126,7 @@
 
 				amd.UnderlyingThread = new Thread(() => {
 					try {
-						TStrategy oInstance = (TStrategy)oCreator.Invoke(oParams.ToArray());
+						AStrategy oInstance = (AStrategy)oCreator.Invoke(oParams.ToArray());
 
 						if (oInitAction != null) {
 							Log.Debug(oInstance.Name + " instance created, invoking an initialisation action...");
@@ -165,6 +183,10 @@
 		} // Execute
 
 		#endregion method Execute
+
+		#endregion public
+
+		#region private
 
 		#region method ExecuteSync
 
@@ -254,6 +276,27 @@
 
 		#endregion method ExecuteSync
 
+		#region property NewInstancesAllowed
+
+		private bool NewInstancesAllowed {
+			get {
+				bool b;
+
+				lock (ms_oLockNewInstancesAllowed) {
+					b = ms_bNewInstancesAllowed;
+				} // lock
+
+				return b;
+			} // get
+			set {
+				lock (ms_oLockNewInstancesAllowed) {
+					ms_bNewInstancesAllowed = value;
+				} // lock
+			} // set
+		} // NewInstancesAllowed
+
+		#endregion property NewInstancesAllowed
+
 		#region method SaveActionStatus
 
 		private void SaveActionStatus(ActionMetaData amd, ActionStatus nNewStatus) {
@@ -307,28 +350,6 @@
 		#region properties and fields
 
 		private readonly EzServiceInstanceRuntimeData m_oData;
-
-		#region property Log
-
-		private ASafeLog Log {
-			get {
-				if (ReferenceEquals(m_oTheLog, null))
-					m_oTheLog = ((m_oData != null) && (m_oData.Log != null)) ? m_oData.Log : new SafeLog();
-
-				return m_oTheLog;
-			} // get
-		} // Log
-		private ASafeLog m_oTheLog;
-
-		#endregion property Log
-
-		#region property DB
-
-		private AConnection DB {
-			get { return ReferenceEquals(m_oData, null) ? null : m_oData.DB; } // get
-		} // DB
-
-		#endregion property DB
 
 		#region property InstanceName
 

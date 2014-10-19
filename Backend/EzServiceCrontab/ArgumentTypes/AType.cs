@@ -1,6 +1,5 @@
 ﻿namespace EzServiceCrontab.ArgumentTypes {
 	using System;
-	using System.Reflection;
 	using Ezbob.Utils;
 
 	internal abstract class AType<T> : IType {
@@ -101,46 +100,6 @@
 		} // constructor
 
 		#endregion constructor
-
-		#region FindType
-
-		protected static Type FindType(string sName) {
-			sName = (sName ?? string.Empty).Trim();
-
-			bool bHasDot = sName.IndexOf('.') > 0;
-
-			foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies()) {
-				Type t = PureFindType(sName, a, bHasDot);
-
-				if (t != null)
-					return t;
-			} // for each Assembly
-
-			return null;
-		} // FindType
-
-		protected static Type FindType(string sName, Assembly asm) {
-			sName = (sName ?? string.Empty).Trim();
-
-			return PureFindType(sName, asm ?? Assembly.GetExecutingAssembly(), sName.IndexOf('.') > 0);
-		} // FindType
-
-		private static Type PureFindType(string sName, Assembly asm, bool bHasDot) {
-			foreach (Type t in asm.GetTypes()) {
-				if (bHasDot) {
-					if ((t.AssemblyQualifiedName ?? string.Empty).StartsWith(sName))
-						return t;
-				}
-				else {
-					if (t.Name.EndsWith(sName))
-						return t;
-				} // if
-			} // for each type
-
-			return null;
-		} // PureFindType
-
-		#endregion FindType
 
 		#region method OnHintUpdated
 

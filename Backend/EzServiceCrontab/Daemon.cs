@@ -2,6 +2,7 @@
 	using System;
 	using System.Threading;
 	using ArgumentTypes;
+	using EzService;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
@@ -11,9 +12,12 @@
 
 		#region constructor
 
-		public Daemon(AConnection oDB, ASafeLog oLog) {
+		public Daemon(EzServiceInstanceRuntimeData oData, AConnection oDB, ASafeLog oLog) {
 			if (oDB == null)
 				throw new NullReferenceException("Database connection not specified.");
+
+			if (oData == null)
+				throw new NullReferenceException("Service instance runtime data not specified.");
 
 			m_oLastCheckedMinute = null;
 
@@ -23,8 +27,9 @@
 			m_oDB = oDB;
 			m_oLog = oLog ?? new SafeLog();
 
-			m_oTypeRepo = new TypeRepository(m_oLog);
+			m_oData = oData;
 
+			m_oTypeRepo = new TypeRepository(m_oLog);
 		} // constructor
 
 		#endregion constructor
@@ -195,6 +200,8 @@
 					return;
 				} // if
 
+				if (oJob.IsTimeToStart(oNow))
+					oJob.Start(m_oData);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Crontab.StartOne({0}): failed to start the job.", oJob);
@@ -206,6 +213,7 @@
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 		private readonly TypeRepository m_oTypeRepo;
+		private readonly EzServiceInstanceRuntimeData m_oData;
 
 		private JobSet m_oJobs;
 
