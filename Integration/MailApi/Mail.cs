@@ -13,7 +13,7 @@
 	using log4net;
 
 	public class Mail {
-		private RestClient _client;
+		private readonly RestClient _client;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Mail));
 		private readonly string key;
 
@@ -25,11 +25,6 @@
 		public Mail(string key = null) {
 			this.key = key ?? CurrentValues.Instance.MandrillKey;
 
-			InitRestClient();
-		}
-
-		private void InitRestClient()
-		{
 			_client = new RestClient(BaseSecureUrl);
 			_client.AddHandler("application/json", new JsonDeserializer());
 		}
@@ -65,57 +60,43 @@
 
 		private string SendRequest(string path, object model)
 		{
-			int counter = 1;
 			Exception ex = null;
-			while (counter < 6)
+			try
 			{
-				try
+				Log.InfoFormat("Starting SendRequest. Path: {0} Model: {1}", path, model);
+
+				var request = new RestRequest(path, Method.POST) {RequestFormat = DataFormat.Json};
+				Log.InfoFormat("Created RestRequest object");
+				request.AddBody(model);
+				Log.InfoFormat("Added model to RestRequest's body");
+				var response = _client.Post(request);
+				Log.InfoFormat("Posted RestRequest");
+				Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
+
+				if (response.StatusCode == HttpStatusCode.InternalServerError)
 				{
-					Log.InfoFormat("Starting SendRequest. Attempt number:{0} Path: {1} Model: {2}", counter, path, model);
-
-					if (counter > 1)
-					{
-						Log.Info("Re-initializing the rest client from SendRequest");
-						InitRestClient();
-					}
-
-					var request = new RestRequest(path, Method.POST) {RequestFormat = DataFormat.Json};
-					Log.InfoFormat("Created RestRequest object");
-					request.AddBody(model);
-					Log.InfoFormat("Added model to RestRequest's body");
-					var response = _client.Post(request);
-					Log.InfoFormat("Posted RestRequest");
-					Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
-
-					if (response.StatusCode == HttpStatusCode.InternalServerError)
-					{
-						Log.InfoFormat("InternalServerError status code in RestRequest's response");
-						var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
-						throw new MandrillException(error,
-						                            string.Format("InternalServerError. Post failed {0}; response: {1}", path,
-						                                          response.Content));
-					}
-
-					if (response.StatusCode != HttpStatusCode.OK)
-					{
-						Log.InfoFormat("Other than ok status code in RestRequest's response :{0}", response.StatusCode);
-						throw response.ErrorException;
-					}
-
-					if (counter > 1)
-					{
-						Log.InfoFormat("Success in attempt #{0} - retry works", counter);
-					}
-
-					return response.Content;
+					Log.InfoFormat("InternalServerError status code in RestRequest's response");
+					var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
+					throw new MandrillException(error,
+						                        string.Format("InternalServerError. Post failed {0}; response: {1}", path,
+						                                        response.Content));
 				}
-				catch (Exception e)
+
+				if (response.StatusCode != HttpStatusCode.OK)
 				{
-					Log.ErrorFormat("Error occur during SendRequest: {0}", e);
-					ex = e;
-					Thread.Sleep(1000);
+					Log.InfoFormat("Other than ok status code in RestRequest's response :{0}", response.StatusCode);
+					throw response.ErrorException;
 				}
-				counter++;
+
+				Log.Info("Success in SendRequest");
+
+				return response.Content;
+			}
+			catch (Exception e)
+			{
+				Log.ErrorFormat("Error occur during SendRequest: {0}", e);
+				ex = e;
+				Thread.Sleep(1000);
 			}
 
 			Log.ErrorFormat("Exception should have been throen from SendRequest but was blocked to avoid interfering with business logic: {0}", ex);
