@@ -33,12 +33,14 @@
 
 		public void Execute() {
 			for ( ; ; ) {
+				DateTime oNow = DateTime.UtcNow;
+
 				if (IsNewMinute) {
 					if (!StopFlag)
 						Reinit();
 
 					if (!StopFlag)
-						StartAll();
+						StartAll(oNow);
 				} // if
 
 				if (StopFlag)
@@ -166,9 +168,11 @@
 
 		#region method StartAll
 
-		private void StartAll() {
+		private void StartAll(DateTime oNow) {
 			try {
 				m_oLog.Debug("Crontab.StartAll started with {0} in the crontab.", Grammar.Number(m_oJobs.Count, "job"));
+
+				m_oJobs.Iterate((nJobID, oJob) => StartOne(oJob, oNow));
 
 				m_oLog.Debug("Crontab.StartAll complete.");
 			}
@@ -178,6 +182,26 @@
 		} // StartAll
 
 		#endregion method StartAll
+
+		#region method StartOne
+
+		private void StartOne(Job oJob, DateTime oNow) {
+			try {
+				if (oJob == null)
+					return;
+
+				if (oJob.IsInProgress) {
+					m_oLog.Debug("Crontab.StartOne({0}): skipping, already running.", oJob);
+					return;
+				} // if
+
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Crontab.StartOne({0}): failed to start the job.", oJob);
+			} // try
+		} // StartOne
+
+		#endregion method StartOne
 
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;

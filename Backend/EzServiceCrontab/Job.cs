@@ -210,6 +210,27 @@
 
 		#endregion method Differs
 
+		public bool IsTimeToStart(DateTime oNow) {
+			switch (RepetitionType) {
+			case RepetitionType.Monthly:
+				return (oNow.Day == RepetitionTime.Day) && (oNow.Hour == RepetitionTime.Hour) && (oNow.Minute == RepetitionTime.Minute);
+
+			case RepetitionType.Daily:
+				return (oNow.Hour == RepetitionTime.Hour) && (oNow.Minute == RepetitionTime.Minute);
+
+			case RepetitionType.EveryXMinutes:
+				if (LastEndTime == null)
+					return true;
+
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+
+			return false;
+		} // IsTimeToStart
+
 		#region private
 
 		private readonly List<JobArgument> m_oArguments;
