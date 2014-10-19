@@ -118,7 +118,9 @@
 				counter++;
 			}
 
-			throw ex ?? new Exception("Throwing empty exception from SendRequest");
+			Log.ErrorFormat("Exception should have been throen from SendRequest but was blocked to avoid interfering with business logic: {0}", ex);
+			return null;
+			//throw ex ?? new Exception("Throwing empty exception from SendRequest");
 		}
 
 		private string Send(EmailModel email, string path) {
