@@ -67,7 +67,7 @@
 		{
 			int counter = 1;
 			Exception ex = null;
-			while (counter < 25)
+			while (counter < 6)
 			{
 				try
 				{
