@@ -13,9 +13,9 @@
 	using log4net;
 
 	public class Mail {
-		private readonly RestClient _client;
+		private RestClient _client;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Mail));
-		private string key;
+		private readonly string key;
 
 		//Api pathes
 		private const string BaseSecureUrl = "https://mandrillapp.com/api/1.0/";
@@ -25,6 +25,11 @@
 		public Mail(string key = null) {
 			this.key = key ?? CurrentValues.Instance.MandrillKey;
 
+			InitRestClient();
+		}
+
+		private void InitRestClient()
+		{
 			_client = new RestClient(BaseSecureUrl);
 			_client.AddHandler("application/json", new JsonDeserializer());
 		}
@@ -67,6 +72,13 @@
 				try
 				{
 					Log.InfoFormat("Starting SendRequest. Attempt number:{0} Path: {1} Model: {2}", counter, path, model);
+
+					if (counter > 1)
+					{
+						Log.Info("Re-initializing the rest client from SendRequest");
+						InitRestClient();
+					}
+
 					var request = new RestRequest(path, Method.POST) {RequestFormat = DataFormat.Json};
 					Log.InfoFormat("Created RestRequest object");
 					request.AddBody(model);
