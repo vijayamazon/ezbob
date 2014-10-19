@@ -1,12 +1,10 @@
 ﻿namespace EzServiceCrontab {
 	using System;
-	using System.Collections.Generic;
 	using System.Threading;
 	using ArgumentTypes;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
-	using DateTime = System.DateTime;
 
 	public class Daemon {
 		#region public
@@ -78,7 +76,7 @@
 			try {
 				m_oLog.Debug("Updating crontab job list...");
 
-				var oAllJobs = new SortedDictionary<long, Job>();
+				var oAllJobs = new JobSet();
 
 				var oSp = new LoadEzServiceCrontab(m_oDB, m_oLog) { IncludeRunning = true, };
 
@@ -86,7 +84,7 @@
 					try {
 						long nJobID = sr["JobID"];
 
-						if (oAllJobs.ContainsKey(nJobID))
+						if (oAllJobs.Contains(nJobID))
 							oAllJobs[nJobID].AddArgument(sr, m_oTypeRepo);
 						else
 							oAllJobs[nJobID] = new Job(sr, m_oTypeRepo);
@@ -96,20 +94,19 @@
 					} // try
 				}); // for each row
 
-				// TODO: if there was no change in crontab do not update m_oJobs and print to log only "no change in crontab".
+				if (oAllJobs.HasChanged(m_oJobs)) {
+					if (oAllJobs.Count == 0)
+						m_oLog.Debug("No jobs loaded from DB.");
+					else {
+						m_oLog.Debug("{0} loaded from DB:", Grammar.Number(oAllJobs.Count, "crontab job"));
+
+						oAllJobs.Iterate((nJobID, oJob) => m_oLog.Debug("Job: {0}", oJob));
+
+						m_oLog.Debug("End of crontab job list.");
+					} // if
+				} // if
 
 				m_oJobs = oAllJobs;
-
-				if (m_oJobs.Count == 0)
-					m_oLog.Debug("No crontab jobs loaded from DB.");
-				else {
-					m_oLog.Debug("{0} loaded from DB:", Grammar.Number(m_oJobs.Count, "crontab job"));
-
-					foreach (var oJob in oAllJobs)
-						m_oLog.Debug("Job: {0}", oJob.Value);
-
-					m_oLog.Debug("End of crontab job list.");
-				} // if
 
 				m_oLog.Debug("Updating crontab job list complete.");
 			}
@@ -171,8 +168,9 @@
 
 		private void StartAll() {
 			try {
-				// TODO
-				m_oLog.Debug("Crontab.StartAll");
+				m_oLog.Debug("Crontab.StartAll started with {0} in the crontab.", Grammar.Number(m_oJobs.Count, "job"));
+
+				m_oLog.Debug("Crontab.StartAll complete.");
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Exception caught during starting a task via crontab daemon.");
@@ -185,7 +183,7 @@
 		private readonly ASafeLog m_oLog;
 		private readonly TypeRepository m_oTypeRepo;
 
-		private SortedDictionary<long, Job> m_oJobs;
+		private JobSet m_oJobs;
 
 		#endregion private
 	} // class Daemon

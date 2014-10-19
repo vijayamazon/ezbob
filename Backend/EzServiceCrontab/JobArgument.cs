@@ -37,5 +37,22 @@
 				Value
 			);
 		} // ToString
+
+		#region method Differs
+
+		public bool Differs(JobArgument oPrevious) {
+			if (this.ID != oPrevious.ID)
+				return true;
+
+			if (this.Value != oPrevious.Value)
+				return true;
+
+			if (this.UnderlyingType.Differs(oPrevious.UnderlyingType))
+				return true;
+
+			return false;
+		} // Differs
+
+		#endregion method Differs
 	} // class JobArgument
 } // namespace

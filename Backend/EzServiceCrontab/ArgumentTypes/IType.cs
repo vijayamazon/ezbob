@@ -9,5 +9,6 @@
 		string Hint { get; set; }
 		IType Clone();
 		object CreateInstance(string sValue);
+		bool Differs(IType oPrevious);
 	} // interface IType
 } // namespace

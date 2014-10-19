@@ -73,6 +73,23 @@
 
 		#endregion method CreateInstance
 
+		#region method Differs
+
+		public virtual bool Differs(IType oPrevious) {
+			if (oPrevious == null)
+				return true;
+
+			if (this.GetType() != oPrevious.GetType())
+				return true;
+
+			if (this.UnderlyingType != oPrevious.UnderlyingType)
+				return true;
+
+			return false;
+		} // Differs
+
+		#endregion method Differs
+
 		#endregion public
 
 		#region protected

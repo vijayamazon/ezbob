@@ -35,10 +35,10 @@
 
 		#region from DB
 
-		// JobID property must be declared before RepetitionTypeID because properties are filled from DB in order of declaration.
-
+		// ID property must be declared before RepetitionTypeID because properties are filled from DB in order of declaration.
 		[FieldName("JobID")]
 		public long ID { get; set; }
+
 		public string ActionName { get; set; }
 		public int ActionNameID { get; set; }
 
@@ -182,6 +182,33 @@
 		} // ToString
 
 		#endregion method ToString
+
+		#region method Differs
+
+		public bool Differs(Job oPrevious) {
+			if (oPrevious == null)
+				return true;
+
+			if (this.ActionNameID != oPrevious.ActionNameID)
+				return true;
+
+			if (this.RepetitionType != oPrevious.RepetitionType)
+				return true;
+
+			if (this.RepetitionStr != oPrevious.RepetitionStr)
+				return true;
+
+			if (this.m_oArguments.Count != oPrevious.m_oArguments.Count)
+				return true;
+
+			for (int i = 0; i < m_oArguments.Count; i++)
+				if (this.m_oArguments[i].Differs(oPrevious.m_oArguments[i]))
+					return true;
+
+			return false;
+		} // Differs
+
+		#endregion method Differs
 
 		#region private
 

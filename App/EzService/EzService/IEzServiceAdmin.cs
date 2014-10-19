@@ -11,6 +11,9 @@ namespace EzService {
 		ActionMetaData Nop(int nLengthInSeconds, string sMsg);
 
 		[OperationContract]
+		ActionMetaData Noop();
+
+		[OperationContract]
 		ActionMetaData StressTestAction(int nLengthInSeconds, string sMsg);
 
 		[OperationContract]

@@ -95,6 +95,12 @@
   <wsdl:message name="IEzServiceAdmin_Nop_OutputMessage">
     <wsdl:part name="parameters" element="tns:NopResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_Noop_InputMessage">
+    <wsdl:part name="parameters" element="tns:Noop" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_Noop_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NoopResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_StressTestAction_InputMessage">
     <wsdl:part name="parameters" element="tns:StressTestAction" />
   </wsdl:message>
@@ -1118,6 +1124,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Nop" message="tns:IEzServiceAdmin_Nop_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/NopResponse" message="tns:IEzServiceAdmin_Nop_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="Noop">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Noop" message="tns:IEzServiceAdmin_Noop_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/NoopResponse" message="tns:IEzServiceAdmin_Noop_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="StressTestAction">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/StressTestAction" message="tns:IEzServiceAdmin_StressTestAction_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/StressTestActionResponse" message="tns:IEzServiceAdmin_StressTestAction_OutputMessage" />
@@ -1812,6 +1822,15 @@
     </wsdl:operation>
     <wsdl:operation name="Nop">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceAdmin/Nop" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Noop">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceAdmin/Noop" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3348,20 +3367,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

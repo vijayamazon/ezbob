@@ -1202,10 +1202,9 @@ GeneratePassword broker-contact-email@example.com password-itself
 			int nLength;
 
 			var oUsage = new Action(() => {
-				m_oLog.Msg("Usage: StressTestSync <length> <message>");
+				m_oLog.Msg("Usage: StressTestSync <count> <message>");
 				m_oLog.Msg("Where");
 				m_oLog.Msg("\tcount - how many requests to execute");
-				m_oLog.Msg("\tlength - length in seconds of each request (1..100 seconds).");
 			});
 
 			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out nLength)) {
@@ -1222,6 +1221,37 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			m_oAdminClient.StressTestSync(nLength, sMsg);
 		} // StressTestSync
+
+		[Activation]
+		private void Nop() {
+			int nLength;
+
+			var oUsage = new Action(() => {
+				m_oLog.Msg("Usage: NOP <length> <message>");
+				m_oLog.Msg("Where");
+				m_oLog.Msg("\tlength - for how many seconds continue executing");
+				m_oLog.Msg("\tmessage - some message to print to log file");
+			});
+
+			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out nLength)) {
+				oUsage();
+				return;
+			} // if
+
+			string sMsg = m_aryArgs[2];
+
+			if (nLength < 1) {
+				oUsage();
+				return;
+			} // if
+
+			m_oAdminClient.Nop(nLength, sMsg);
+		} // Nop
+
+		[Activation]
+		private void Noop() {
+			m_oAdminClient.Noop();
+		} // Noop
 
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators

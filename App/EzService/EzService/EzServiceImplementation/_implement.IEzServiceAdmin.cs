@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.ServiceModel;
 	using System.Threading;
+	using EzBob.Backend.Strategies.Admin;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
 
@@ -107,50 +108,18 @@
 		#region method Nop
 
 		public ActionMetaData Nop(int nLengthInSeconds, string sMsg) {
-			try {
-				sMsg = (sMsg ?? string.Empty).Trim();
-
-				Log.Msg("Nop({0}, {1}) method started...", nLengthInSeconds, sMsg);
-
-				ActionMetaData amd = NewAsync("Admin.Nop", comment: nLengthInSeconds + " seconds, " + sMsg);
-
-				if (nLengthInSeconds < 1)
-					throw new Warning(Log, "Nop length is less than 1 second.");
-
-				Log.Msg("Nop({0}, {1}) method: creating a sleeper...", nLengthInSeconds, sMsg);
-
-				amd.UnderlyingThread = new Thread(() => {
-					for (int i = 1; i <= nLengthInSeconds; i++) {
-						Log.Msg("Nop({0}, {2}) method asleeper: {1}...", nLengthInSeconds, i, sMsg);
-						Thread.Sleep(1000);
-					} // for
-
-					SaveActionStatus(amd, ActionStatus.Done);
-
-					Log.Msg("Nop({0}, {2}) method asleeper: completed: {1}.", nLengthInSeconds, amd, sMsg);
-				});
-
-				Log.Msg("Nop({0}, {1}) method: starting asleeper...", nLengthInSeconds, sMsg);
-
-				SaveActionStatus(amd, ActionStatus.Launched);
-
-				amd.UnderlyingThread.Start();
-
-				Log.Msg("Nop({0}, {2}) method: asleeper started: {1}.", nLengthInSeconds, amd, sMsg);
-
-				Log.Msg("Nop({0}, {1}) method complete.", nLengthInSeconds, sMsg);
-
-				return amd;
-			}
-			catch (Exception e) {
-				if (!(e is AException))
-					Log.Alert(e, "Exception during Nop() method.");
-
-				throw new FaultException(e.Message);
-			} // try
+			return Execute<Nop>(null, null, nLengthInSeconds, sMsg);
 		} // Nop
 
 		#endregion method Nop
+
+		#region method Noop
+
+		public ActionMetaData Noop() {
+			return Execute<Noop>(null, null);
+		} // Noop
+
+		#endregion method Noop
 
 		#region method StressTestAction
 

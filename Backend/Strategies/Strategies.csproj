@@ -74,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\Nop.cs" />
     <Compile Include="AutoDecisions\AutoDecisionCondition.cs" />
     <Compile Include="AutoDecisions\AutoDecisionRejectionResponse.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
