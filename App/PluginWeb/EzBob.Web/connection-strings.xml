@@ -1,0 +1,19 @@
+<connectionStrings>
+	<add name="dev-yulys" connectionString="user id=sa;password=Or@nge123;server=localhost\SQLEXPRESS;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-alexbo" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-stasd" connectionString="Server=localhost;Database=ezbob;User Id=stas;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+  <add name="dev-yarons" connectionString="Server=localhost;Database=ezbob;User Id=sa;Password=123456;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+  
+	<add name="production-alexbo" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="production-stasd" connectionString="user id=sa;password=Or@nge123;server=192.168.120.10;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+	<add name="production-auto_exec" connectionString="user id=sa;password=Or@nge123;server=192.168.120.10;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="production" connectionString="user id=sa;password=Or@nge123;server=192.168.120.10;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+	<add name="uat" connectionString="user id=sa;Password=Ezbobuatdb1;server=192.168.120.17;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa01;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-prod-test" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_test;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-prod-medal-test" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_medal_test;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+</connectionStrings>
+

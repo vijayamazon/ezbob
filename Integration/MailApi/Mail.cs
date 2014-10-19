@@ -63,6 +63,8 @@
 			Exception ex = null;
 			try
 			{
+				Log.DebugFormat("ServicePointManager.SecurityProtocol = {0}.", ServicePointManager.SecurityProtocol);
+
 				Log.InfoFormat("Starting SendRequest. Path: {0} Model: {1}", path, model);
 
 				var request = new RestRequest(path, Method.POST) {RequestFormat = DataFormat.Json};
@@ -94,12 +96,11 @@
 			}
 			catch (Exception e)
 			{
-				Log.ErrorFormat("Error occur during SendRequest: {0}", e);
+				Log.ErrorFormat("Error occurred during SendRequest: {0}", e);
 				ex = e;
-				Thread.Sleep(1000);
 			}
 
-			Log.ErrorFormat("Exception should have been throen from SendRequest but was blocked to avoid interfering with business logic: {0}", ex);
+			Log.ErrorFormat("Exception should have been thrown from SendRequest but was blocked to avoid interfering with business logic: {0}", ex);
 			return null;
 			//throw ex ?? new Exception("Throwing empty exception from SendRequest");
 		}

@@ -38,7 +38,6 @@
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior(_userName, _password));
 				ServicePointManager.Expect100Continue = true;
-				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
 
 				var address = new LREnquiryServiceNS.Q1AddressType();
 				if (!string.IsNullOrWhiteSpace(buildingName))

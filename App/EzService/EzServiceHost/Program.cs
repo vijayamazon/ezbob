@@ -104,6 +104,12 @@
 		#region constructor
 
 		private Program(string[] args) {
+			ServicePointManager.SecurityProtocol =
+				SecurityProtocolType.Tls12 |
+				SecurityProtocolType.Tls11 |
+				SecurityProtocolType.Tls |
+				SecurityProtocolType.Ssl3;
+
 			m_aryArgs = args;
 			m_oEnv = null;
 
@@ -122,6 +128,8 @@
 
 			m_oLog.Debug("Current environment: {0}", m_oEnv.Context);
 			m_oLog.Debug("Error emails will be sent to: {0}", oLog4NetCfg.ErrorMailRecipient);
+
+			m_oLog.Debug("ServicePointManager.SecurityProtocol = {0}.", ServicePointManager.SecurityProtocol);
 
 			NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
