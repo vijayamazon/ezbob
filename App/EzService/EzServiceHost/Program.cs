@@ -2,6 +2,7 @@
 	using System;
 	using System.Diagnostics;
 	using System.IO;
+	using System.Net;
 	using System.Reflection;
 	using System.Text;
 	using System.Threading;
@@ -55,7 +56,9 @@
 
 		#region method Main
 
-		private static void Main(string[] args) {
+		private static void Main(string[] args)
+		{
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
 			var app = new Program(args);
 
 			try {

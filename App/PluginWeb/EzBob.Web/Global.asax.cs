@@ -50,6 +50,7 @@
 		} // CurrentSession
 
 		public MvcApplication() {
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
 			EndRequest += (sender, args) => {
 				var session = HttpContext.Current.Items["current.session"] as ISession;
 

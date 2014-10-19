@@ -1,5 +1,6 @@
 ﻿namespace StrategiesActivator {
 	using System;
+	using System.Net;
 	using EzServiceAccessor;
 	using NHibernate;
 	using NHibernateWrapper.NHibernate;
@@ -10,6 +11,7 @@
 
 	public class Program {
 		public static void Main(string[] args) {
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
 			log4net.Config.XmlConfigurator.Configure();
 
 			if (args.Length < 1) {
