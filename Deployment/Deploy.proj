@@ -18,8 +18,10 @@
 	<Target Name="ContiniousScenario">
 		<ItemGroup>
 			<ProjectToBuild Include="$(Src)\ezbob.sln"/>
+			<!--
 			<ProjectToBuild Include="$(Src)\App\EzAutoResponder\EzAutoResponder.sln"/>
 			<ProjectToBuild Include="$(Src)\App\EzTvDashboard\EzTvDashboard.sln"/>
+			-->
 		</ItemGroup>		
 		
 		<DynamicExecute TaskAction="Run" Outputs="string result" UsingNamespaces="System.Text.RegularExpressions" Code='Match match = Regex.Match("$(CCNetLabel)", "[\\d]+\\.[\\d]+\\.[\\d]+\\.[\\d]+"); if (match.Success) result = match.Value; else result="$(CCNetLabel)";'>
