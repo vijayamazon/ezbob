@@ -60,7 +60,10 @@
 		private string SendRequest(string path, object model) {
 			try
 			{
+				Log.DebugFormat("ServicePointManager.SecurityProtocol = {0}", ServicePointManager.SecurityProtocol);
+
 				Log.InfoFormat("Starting SendRequest. Path: {0} Model: {1}", path, model);
+
 				var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
 				Log.InfoFormat("Created RestRequest object");
 				request.AddBody(model);

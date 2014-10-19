@@ -17,7 +17,7 @@
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
 				ServicePointManager.Expect100Continue = true;
-				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+
 				Random r = new Random();
 				var a = r.Next(100);
 				LREnquiryServiceTestNS.Q1AddressType q1AddressType;

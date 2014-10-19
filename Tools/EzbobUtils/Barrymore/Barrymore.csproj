@@ -85,6 +85,7 @@
     <Compile Include="Security\SimplePassword.cs" />
     <Compile Include="Exceptions\SeldenException.cs" />
     <Compile Include="Serialization\Serialized.cs" />
+    <Compile Include="SimpleRetryer.cs" />
     <Compile Include="SortedTable.cs" />
     <Compile Include="MiscUtils.cs" />
     <Compile Include="NameList.cs" />

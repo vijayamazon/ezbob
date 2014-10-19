@@ -8,7 +8,6 @@
 	using MailApi.Model;
 	using Newtonsoft.Json;
 	using RestSharp;
-	using RestSharp.Deserializers;
 
 	class MandrillFacade {
 		#region public
@@ -19,7 +18,6 @@
 			m_oLog = oLog ?? new SafeLog();
 
 			m_oClient = new RestClient(BaseSecureUrl);
-			m_oClient.AddHandler("application/json", new JsonDeserializer());
 		} // constructor
 
 		#endregion constructor
@@ -53,7 +51,7 @@
 
 				m_oLog.Info("Added model to RestRequest's body");
 
-				var response = m_oClient.Post(request);
+				IRestResponse response = m_oClient.Execute(request);
 
 				m_oLog.Info("Mandrill service call complete, response length: {0}", response.Content.Length);
 
