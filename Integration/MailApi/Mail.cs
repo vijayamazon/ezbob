@@ -57,7 +57,8 @@
 			return spaces.Replace(to, string.Empty).Split(';').Select(x => new EmailAddressModel { email = x });
 		}
 
-		private string SendRequest(string path, object model) {
+		private string SendRequest(string path, object model)
+		{
 			try
 			{
 				Log.DebugFormat("ServicePointManager.SecurityProtocol = {0}", ServicePointManager.SecurityProtocol);
@@ -90,7 +91,9 @@
 			catch (Exception e)
 			{
 				Log.ErrorFormat("Error occur during SendRequest: {0}", e);
-				throw;
+				Log.ErrorFormat("Exception should have been thrown from SendRequest but was blocked to avoid interfering with business logic: {0}", e);
+				//throw; // Hides mail exceptions from strategies
+				return null;
 			}
 		}
 
