@@ -3,6 +3,9 @@ DECLARE @JobID BIGINT
 
 IF 1 < 0
 BEGIN
+	IF NOT EXISTS (SELECT * FROM EzServiceActionName WHERE ActionName LIKE 'EzBob.Backend.Strategies.Esign.EsignProcessPending')
+		INSERT INTO EzServiceActionName (ActionName) VALUES ('EzBob.Backend.Strategies.Esign.EsignProcessPending')
+
 	SELECT
 		@ActionNameID = ActionNameID
 	FROM
