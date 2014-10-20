@@ -115,6 +115,7 @@
     <Compile Include="Misc\BackfillAndRemoveLimitedMedal.cs" />
     <Compile Include="Misc\CalculateLimitedMedal.cs" />
     <Compile Include="Misc\ChangeBrokerEmail.cs" />
+    <Compile Include="MailStrategies\SendPendingMail.cs" />
     <Compile Include="Misc\GetConfigTable.cs" />
     <Compile Include="Misc\SendSms.cs" />
     <Compile Include="Misc\GetPropertyStatuses.cs" />

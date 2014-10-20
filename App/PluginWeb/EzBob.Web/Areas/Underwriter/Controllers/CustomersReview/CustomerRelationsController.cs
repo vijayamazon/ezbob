@@ -301,7 +301,8 @@
 					customer.CreditResult = CreditResultStatus.ApprovedPending;
 					customerRepository.SaveOrUpdate(customer);
 
-					// TODO: Send mail to customer here
+					// Send mail
+					_serviceClient.Instance.SendPendingMail(_context.UserId, customerId);
 				}
 			}
 		}

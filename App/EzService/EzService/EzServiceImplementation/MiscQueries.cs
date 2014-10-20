@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies.Experian;
+	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -282,6 +283,12 @@
 		{
 			ChangeBrokerEmail instance;
 			return ExecuteSync(out instance, 0, 0, oldEmail, newEmail, newPassword);
+		}
+
+		public ActionMetaData SendPendingMail(int underwriterId, int customerId)
+		{
+			SendPendingMail instance;
+			return ExecuteSync(out instance, 0, 0, customerId);
 		}
 	} // class EzServiceImplementation
 } // namespace EzService

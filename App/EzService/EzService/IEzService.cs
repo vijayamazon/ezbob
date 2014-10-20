@@ -598,6 +598,9 @@
 
 		[OperationContract]
 		ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword);
+
+		[OperationContract]
+		ActionMetaData SendPendingMail(int underwriterId, int customerId);
 	} // interface IEzService
 } // namespace EzService
 
