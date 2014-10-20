@@ -1253,6 +1253,29 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oAdminClient.Noop();
 		} // Noop
 
+		[Activation]
+		private void BrokerApproveAndResetCustomerPassword() {
+			int nUnderwriterID;
+			int nCustomerID;
+			decimal nLoanAmount;
+			int nValidHours;
+			bool isFirst;
+
+			if (
+				m_aryArgs.Length != 6 ||
+				!int.TryParse(m_aryArgs[1], out nUnderwriterID) ||
+				!int.TryParse(m_aryArgs[2], out nCustomerID) ||
+				!decimal.TryParse(m_aryArgs[3], out nLoanAmount) ||
+				!int.TryParse(m_aryArgs[4], out nValidHours) ||
+				!bool.TryParse(m_aryArgs[5], out isFirst)
+			) {
+				m_oLog.Msg("Usage: BrokerApproveAndResetCustomerPassword <underwriter id> <customer id> <loan amount> <valid hours> <is first approval>");
+				return;
+			} // if
+
+			m_oServiceClient.BrokerApproveAndResetCustomerPassword(nUnderwriterID, nCustomerID, nLoanAmount, nValidHours, isFirst);
+		} // BrokerApproveAndResetCustomerPassword
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 
