@@ -884,13 +884,7 @@
 					return ActionResult.Continue;
 
 				PerformConsumerExperianCheck(appDirId);
-
-				if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
-					minExperianScore = experianConsumerScore;
-
-				if (experianConsumerScore > 0 && experianConsumerScore > maxExperianScore)
-					maxExperianScore = experianConsumerScore;
-
+				
 				return ActionResult.Continue;
 			},
 				"GetCustomerDirectorsForConsumerCheck",
@@ -919,6 +913,14 @@
 				if (directorId == null)
 				{
 					experianConsumerScore = strat.Score;
+				}
+				else
+				{
+					if (experianConsumerScore > 0 && strat.Score < minExperianScore)
+						minExperianScore = strat.Score;
+
+					if (experianConsumerScore > 0 && strat.Score > maxExperianScore)
+						maxExperianScore = strat.Score;
 				}
 
 				return;
