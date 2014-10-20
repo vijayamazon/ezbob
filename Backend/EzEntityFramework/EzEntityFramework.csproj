@@ -1,0 +1,1786 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0072355C-9D7C-4BDC-AA29-2D235F2D7D94}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzEntityFramework</RootNamespace>
+    <AssemblyName>EzEntityFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AllowedEmail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AmlResult.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AmlResultsHighRiskRule.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApprovalsWithoutAML.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AutoDecisionHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AutoDecisionHistoryCondition.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AutoDecisionType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AutoresponderLog.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AV_GetAnalysisFunctions_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AV_GetAutomaticDecisions_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AV_GetCustomerMarketPlaces_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AV_GetRejectionData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AV_ReApprovalData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AV_RejectionConstants_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AV_ReRejectionData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BasicInterestRate.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Broker.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerAddCustomerLead_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerDownloadCustomerFile_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerInstantOfferRequest.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerInstantOfferResponse.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLead.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLeadAddMode.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLeadCanFillWizard_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLeadCheckToken_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLeadDeletedReason.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLeadLoadBroker_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLeadLoadDataForEmail_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLeadToken.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadContactData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadCurrentTerms_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadCustomerCRM_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadCustomerDetails_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadCustomerFiles_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadCustomerList_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadLeadList_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadMarketingFiles_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadOwnProperties_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadSignedTerms_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerLoadSmsCount_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerMarketingFile.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerSetupFeeMap.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerSignUp_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrokerTerm.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BrowserVersion.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Bug.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Business.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CaisFlag.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CaisReportsHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Campaign.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CampaignClient.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CampaignMail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CampaignType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CardInfo.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CashRequest.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CciHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CheckLtdCompanyCache_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzEntityFrameworkDemo.cs" />
+    <Compile Include="Company.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CompanyEmployeeCount.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationVariable.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CreatePasswordToken.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRMAction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CrmLoadActions_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CrmLoadRanks_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CrmLoadStatuses_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRMRank.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRMStatus.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRMStatusGroup.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Customer.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAddress.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAnalytic.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAnalyticsCompany.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAnalyticsDirector.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAnalyticsLocalData.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAnalyticsPersonal.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerBrokerHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerCompanyHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerInviteFriend.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerLoyaltyProgram.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerLoyaltyProgramPoint.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerPhone.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerPropertyStatus.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerPropertyStatusGroup.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerReason.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerRelation.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerRelationFollowUp.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerRelationState.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerRequestedLoan.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerScoringResult.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerSession.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerSourceOfRepayment.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerStatus.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerStatusHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DbString.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DecisionHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DecisionHistoryRejectReason.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultRateCompany.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultRateCustomer.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Director.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DiscountPlan.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailConfirmationRequest.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailConfirmationState.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EsignAgreementEventType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EsignAgreementStatu.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Esignature.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EsignatureHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Esigner.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EsignTemplate.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EsignTemplateType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EsignUserAgreementStatu.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EuLoanMonthlyInterest.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianAccountStatus.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianAccountType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsentAgreement.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsumerData.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsumerDataApplicant.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsumerDataCai.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsumerDataCaisBalance.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsumerDataCaisCardHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsumerDataLocation.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsumerDataNoc.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianConsumerDataResidency.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianDefaultAccount.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianDirector.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtd.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdCaisMonthly.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdCreditSummary.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDL48.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDL52.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDL65.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDL68.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDL72.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDL97.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDL99.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDLA2.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdDLB5.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdError.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdLenderDetail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdPrevCompanyName.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianLtdShareholder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResult.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultBankruptcyDetail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultCcjDetail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultCcjRegisteredAgainst.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultCcjTradingName.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultPaymentPerformanceDetail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultPreviousSearch.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultScoreHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultSicCode.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExperianNonLimitedResultsScoreHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Export_Results.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzbobMailNodeAttachRelation.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzbobModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EzbobModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzbobModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzbobModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EzbobModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceActionHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceActionName.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceActionStatu.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceCronjobArgument.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceCronjobArgumentType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceCronjobLog.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceCronjobLogArgument.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceCronjobRepetitionType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceCrontab.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceDefaultInstance.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceGetDefaultInstance_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceInstance.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzServiceLoadConfiguration_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzTvGetStats_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EzTvIsChanged_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudAddress.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudBankAccount.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudCompany.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudDetection.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudEmail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudEmailDomain.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudPhone.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudRequest.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudShop.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FraudUser.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FrequentActionItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FrequentActionItemsForCustomer.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetActivePropertyStatuses_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetAllConfigurationVariables_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetAllLastMarketplaceStatuses_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetApprovalConfigs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetApprovalData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetAvailableFunds_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetBankBasedApprovalConfigs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetBasicCustomerData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetBasicCustomerOrBrokerData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCaisData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCaisFileData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCaisFoldersPaths_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCompanyCaisAccountsDataForAlerts_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCompanyCaisDefaultDataForAlerts_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCompanyData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCompanyHistory_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCurrentMobileCodeCount_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomerAddresses_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomerDataForReRejection_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomerDetailsForStateCalculation_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomerDirectorsForConsumerCheck_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomerMpsErrors_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomerOwnedAddresses_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomerRejectionData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomersFiveDaysDue_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomersForNewMedalsComparison_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomersTwoDaysDue_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetDailyReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetDataForAmlBackfill_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetDataForAvailableFundsCheck_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetEntriesForAmlBackfill_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetEscalationData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetExperianDirectorsNamesForCustomer_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetExposurePerMedalReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetExposurePerUnderwriterReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetFunctionAnalysisValuesByCustomerMarketPlace_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetHmrcAggregations_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLandRegistryDataForBackfill_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLastCashRequestForPricingModel_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLastOfferDataForApproval_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLastOfferDataForReApproval_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLastOfferForAutomatedDecision_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLateForCollection_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLoansToCollect_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetMails_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetMarketplaceDetailsForUpdate_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetMedalCoefficients_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetMedalStatisticReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedBankruptcyDetails_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedCcjDetails_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedCcjDetailTradingNames_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedCompanyBasicDetails_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedCompanyScoreHistory_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedDataForCompanyScore_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedDataForCreditBureau_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedDataForLoanDateScoreReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedPaymentPerformanceDetails_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedPreviousSearches_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNonLimitedSicCodes_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPacnetAgentConfigs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPacnetTransactions_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPayPalAggregations_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPerformencePerMedalReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPerformencePerUnderwriterReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPersonalDataForMortgages_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPersonalInfoForBankBasedApproval_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPersonalInfoForConsumerCheck_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetPersonalInfo_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetScoreCardData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetServiceLogNonLimitedEntries_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetTwilioConfigs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetUserManagementConfiguration_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWizardConfigs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetYodleeAccounts_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetYodleeAccount_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetYodleeBanks_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetZooplaStrEstimates_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LandRegistry.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LandRegistryOwner.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadAllVatReturnPeriods_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadBusinessesForVatReturnSummary_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadConfigurationVariable_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadCustomerByCreatePasswordToken_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadCustomerEsignatures_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadCustomerInfo_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadCustomerMarketplaceSecurityData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadDataForBackfillCustomerAnalyticsCompany_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadDataForVatReturnSummary_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadEmailConfirmationState_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadEsignAgreementStatuses_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadEsignatureFile_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerDataApplicant_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerDataCaisBalance_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerDataCaisCardHistory_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerDataCais_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerDataLocation_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerDataNoc_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerDataResidency_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerForCustomer_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerForDirector_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianConsumerMortgagesData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianDataForDirectorsBackfill_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdCaisMonthly_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdCreditSummary_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDL48_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDL52_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDL65_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDL68_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDL72_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDL97_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDL99_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDLA2_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdDLB5_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdErrors_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdLenderDetails_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdPrevCompanyNames_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtdShareholders_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadExperianLtd_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadEzServiceCrontab_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadFullExperianConsumer_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadFullExperianLtd_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadManualVatReturnPeriods_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadMarketplaceSecurityData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadPendingEsignatures_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadPotentialEsigners_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadServiceLogEntry_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadServiceLogForLtdBackfill_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadUploadLimitations_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Loan.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanAgreement.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanAgreementTemplate.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanChangesHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanCharge.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanInterestFreeze.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanLegal.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanLien.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanOfferMultiplier.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanOption.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanSchedule.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanScheduleTransaction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanScheduleTransactionBackFilled.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanSource.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanTransaction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanTransactionMethod.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoanType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Logbook.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LogbookEntryType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LogbookEntryTypeList_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoyaltyProgramAction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoyaltyProgramActionType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MainStrategyGetConfigs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MC_CampaignClicks.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Medal.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MedalCoefficient.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MobileCode.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AlertDocument.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AmazonFeedback.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AmazonFeedbackItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AmazonMarketplaceType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AmazonOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AmazonOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AmazonOrderItemDetail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AmazonOrderItemDetailCatgory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AmazonOrderItemPayment.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AnalyisisFunction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AnalyisisFunctionValues.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_AnalysisFunctionTimePeriod.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ChannelGrabberOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ChannelGrabberOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CompanyFilesMetaData.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_Currency.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CurrencyRateHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CustomerMarketPlace.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CustomerMarketplaceUpdatingActionLog.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CustomerMarketplaceUpdatingCounter.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_CustomerMarketPlaceUpdatingHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayAmazonCategory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayExternalTransaction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayFeedback.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayFeedbackItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EBayOrderItemDetail.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayRaitingItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayTransaction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayUserAccountData.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayUserAdditionalAccountData.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayUserAddressData.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EbayUserData.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EkmOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_EkmOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ExperianBankCache.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ExperianDataCache.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ExperianHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ExperianParentCompanyMap.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_FreeAgentCompany.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_FreeAgentExpense.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_FreeAgentExpenseCategory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_FreeAgentInvoice.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_FreeAgentInvoiceItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_FreeAgentRequest.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_FreeAgentUsers.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_MarketplaceGroup.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_MarketplaceType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PayPalAggregationFormula.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PayPalPersonalInfo.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PayPalTransaction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PayPalTransactionItem2.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PayPointOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PayPointOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PlayOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_PlayOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_RtiTaxMonthEntries.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_RtiTaxMonthRecords.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SageExpenditure.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SageIncome.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SagePaymentStatus.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SagePurchaseInvoice.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SagePurchaseInvoiceItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SageRequest.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SageSalesInvoice.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_SageSalesInvoiceItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ServiceLog.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_TeraPeakCategory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_TeraPeakCategoryStatistics.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_TeraPeakOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_TeraPeakOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_ValueType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VatReturnEntries.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VatReturnEntryNames.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VatReturnRecordDeleteHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VatReturnRecordDeleteReason.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VatReturnRecords.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VatReturnSummary.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VatReturnSummaryPeriods.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VolusionOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_VolusionOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_WhiteList.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_YodleeGroup.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_YodleeGroupRuleMap.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_YodleeOrder.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_YodleeOrderItem.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_YodleeOrderItemBankTransaction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_YodleeRule.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_YodleeSearchWords.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MP_YodleeTransactionCategories.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NewMedalComparison1.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NewMedalComparison2.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OfflineScoring.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PacnetAgentConfig.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PacNetBalance.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PacNetManualBalance.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PacnetPaypointServiceLog.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentRollover.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayPointBalance.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayPointCard.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Perk.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonalInfoHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PostcodeServiceLog.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickOffer.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuickOfferConfiguration.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuickOfferLoadConfiguration_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RejectReason.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportArgument.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportArgumentName.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportScheduler.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportsUsersMap.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportUser.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptAccountingLoanBalance_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptArrearsLetter_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptAutomationVerification_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptBrokerClients_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptBrokerInvoice_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptBroker_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptBugs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptCollectionPayments_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptCrmFollowUp_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptCurrentLiens_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptCustomerReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptCustomerStatus_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptDebitExpiry_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptDefaultLetter_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptEarnedInterest_CciCustomers_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptEarnedInterest_CustomerStatusHistory_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptEarnedInterest_ForPeriod_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptEarnedInterest_Freeze_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptEarnedInterest_IssuedLoans_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptEarnedInterest_LoanDates_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptEarnedInterest_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGetCampaignClickStats_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGetUserReports_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLeadsAll_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLeads_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoanDateScoreNDSPCII_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoanDateScore_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoansCompany_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoansGiven_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoansOverall_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoanStats_CashRequests_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoanStats_CustomerPostcodes_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoanStats_Marketplaces_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLoanStats_PaypalTotalIn_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptMarketingChannelsSummary_CountCustomersOnSteps_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptMarketingChannelsSummary_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptNewLateClients_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptNewLoans_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptNewPayers_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptNoPersonalInfoCustomers_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptOpenPayments_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptOverallStats_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptPaymentReport_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptPaymentToLiensLoans_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptReferenceSources_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptScheduler_GetHeaderAndFields_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptScheduler_GetReportArgs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptScheduler_GetReportList_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptSiteAnalytics_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptStatusChanged_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptStepOneCustomers_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptStrategyRunningTime_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptTraficReport_Analytics_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptTstRpt_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptUiReportData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptUiReportExtData_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Security_Permission.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Security_Question.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Security_Role.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Security_RolePermissionRel.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Security_Session.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Security_User.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Security_vUser.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SetLateLoanStatusGetConfigs_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SicNaceCodeMap.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SiteAnalytic.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SiteAnalyticsCode.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SmsMessage.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SourceRefHistory.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SpecialPayer.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SuggestedAmount.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TargetingResult.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestCustomer.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrustPilotStatu.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UiAction.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UiControl.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UiControlGroup.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UiControlGroupRelevance.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UiEvent.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UnderwriterRecentCustomer.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UploadLimitation.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserDataForLogin_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGetCounters_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridAll_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridApproved_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridBrokers_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridCollection_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridEscalated_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridLate_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridLoans_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridLogbook_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridPending_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridRegistered_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridRejected_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridSales_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridSignature_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UwGridWaiting_Result.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VatReturnRecordSource.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VipRequest.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_NotClose.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WhatsNew.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WhatsNewCustomerMap.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WhiteLabelProvider.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WizardStepSequence.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WizardStepType.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="YodleeAccount.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="YodleeBank.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Zoopla.cs">
+      <DependentUpon>EzbobModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="EzbobModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EzbobModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="EzbobModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EzbobModel.edmx</DependentUpon>
+      <LastGenOutput>EzbobModel.Context.cs</LastGenOutput>
+    </None>
+    <None Include="EzbobModel.edmx.diagram">
+      <DependentUpon>EzbobModel.edmx</DependentUpon>
+    </None>
+    <None Include="EzbobModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EzbobModel.edmx</DependentUpon>
+      <LastGenOutput>EzbobModel.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

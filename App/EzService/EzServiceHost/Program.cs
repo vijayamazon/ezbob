@@ -2,8 +2,10 @@
 	#region using
 
 	using System;
+	using System.Data.Objects;
 	using System.Diagnostics;
 	using System.IO;
+	using System.Linq;
 	using System.Net;
 	using System.Reflection;
 	using System.Text;
@@ -22,6 +24,7 @@
 	using EzBob.PayPal;
 	using EzBob.PayPalServiceLib.Common;
 	using EzBob.eBayLib;
+	using EzEntityFramework;
 	using EzService;
 	using EzServiceAccessor;
 	using EzServiceCrontab;
@@ -42,6 +45,7 @@
 	using ISession = NHibernate.ISession;
 	using EzServiceConfigurationLoader;
 	using ActionResult = Ezbob.Database.ActionResult;
+	using Customer = EZBob.DatabaseLib.Model.Database.Customer;
 
 	#endregion using
 
@@ -66,7 +70,37 @@
 
 		#region method Main
 
-		private static void Main(string[] args) {
+		private static void Main(string[] args)
+		{
+			// Example of EF usage
+			var instance = new EzEntityFrameworkDemo();
+			string connectionString = instance.GetConnectionString(new Ezbob.Context.Environment());
+
+			// Use object
+			using (var efObject = new ezbobEntities(connectionString))
+			{
+				var newAllowedEmail = new AllowedEmail();
+				newAllowedEmail.AllowedEmail1 = "new test 1";
+				efObject.AllowedEmails.Add(newAllowedEmail);
+
+				var customer = efObject.Customers.FirstOrDefault(x => x.Id == 12709);
+				if (customer != null)
+				{
+					customer.PromoCode = "newporomocode 1";
+				}
+
+				ObjectResult<GetActivePropertyStatuses_Result> activePropertyStatuses = efObject.GetActivePropertyStatuses();
+				foreach (var activePropertyStatus in activePropertyStatuses)
+				{
+					if (activePropertyStatus.IsOwnerOfMainAddress.HasValue && activePropertyStatus.IsOwnerOfMainAddress.Value)
+					{
+						// Active status of main address owner
+					}
+				}
+
+				efObject.SaveChanges(); // Commit is done here!
+			}
+
 			var app = new Program(args);
 
 			try {

@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="55c39dc11409427284038c21e16e9b72" Name="Diagram1" ZoomLevel="77">
+        <EntityTypeShape EntityType="ezbobModel.AllowedEmail" Width="1.5" PointX="7.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.AmlResult" Width="1.5" PointX="5.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.AmlResultsHighRiskRule" Width="1.5" PointX="15.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ApprovalsWithoutAML" Width="1.5" PointX="5.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.AutoDecisionHistory" Width="1.5" PointX="15.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.AutoDecisionHistoryCondition" Width="1.5" PointX="12.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.AutoDecisionType" Width="1.5" PointX="7.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.AutoresponderLog" Width="1.5" PointX="14.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BasicInterestRate" Width="1.5" PointX="16.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Broker" Width="1.5" PointX="3" PointY="143.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerInstantOfferRequest" Width="1.5" PointX="5.25" PointY="145.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerInstantOfferResponse" Width="1.5" PointX="7.5" PointY="145.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerLeadAddMode" Width="1.5" PointX="3" PointY="129.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerLeadDeletedReason" Width="1.5" PointX="3" PointY="132.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerLead" Width="1.5" PointX="5.25" PointY="139.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerLeadToken" Width="1.5" PointX="7.5" PointY="140.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerMarketingFile" Width="1.5" PointX="17.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerSetupFeeMap" Width="1.5" PointX="17.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrokerTerm" Width="1.5" PointX="0.75" PointY="140.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.BrowserVersion" Width="1.5" PointX="8.75" PointY="85.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Bug" Width="1.5" PointX="5.75" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Business" Width="1.5" PointX="19.25" PointY="134" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CaisFlag" Width="1.5" PointX="18.75" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CaisReportsHistory" Width="1.5" PointX="12.75" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Campaign" Width="1.5" PointX="13.25" PointY="163.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CampaignClient" Width="1.5" PointX="15.5" PointY="146.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CampaignMail" Width="1.5" PointX="18.75" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CampaignType" Width="1.5" PointX="11" PointY="164.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CardInfo" Width="1.5" PointX="8" PointY="134.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CashRequest" Width="1.5" PointX="13.25" PointY="106.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CciHistory" Width="1.5" PointX="14.75" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Company" Width="1.5" PointX="13.25" PointY="120.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CompanyEmployeeCount" Width="1.5" PointX="15.5" PointY="141.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ConfigurationVariable" Width="1.5" PointX="16.75" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CreatePasswordToken" Width="1.5" PointX="3" PointY="140.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CRMAction" Width="1.5" PointX="10.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CRMRank" Width="1.5" PointX="10.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CRMStatus" Width="1.5" PointX="10.75" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CRMStatusGroup" Width="1.5" PointX="8.5" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Customer" Width="1.5" PointX="10.25" PointY="134" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerAddress" Width="1.5" PointX="15.5" PointY="120" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerAnalyticsCompany" Width="1.5" PointX="12.5" PointY="132.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerAnalyticsDirector" Width="1.5" PointX="12.5" PointY="138.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerAnalyticsLocalData" Width="1.5" PointX="12.5" PointY="141.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerAnalyticsPersonal" Width="1.5" PointX="12.5" PointY="146.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerBrokerHistory" Width="1.5" PointX="15.5" PointY="149.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerCompanyHistory" Width="1.5" PointX="12.5" PointY="151" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerInviteFriend" Width="1.5" PointX="12.5" PointY="157.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerLoyaltyProgram" Width="1.5" PointX="18.5" PointY="145.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerPhone" Width="1.5" PointX="18.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerPropertyStatus" Width="1.5" PointX="19.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerPropertyStatusGroup" Width="1.5" PointX="19.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerReason" Width="1.5" PointX="16.25" PointY="131" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerRelationFollowUp" Width="1.5" PointX="10.75" PointY="81.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerRelation" Width="1.5" PointX="13" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerRelationState" Width="1.5" PointX="13" PointY="81.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerRequestedLoan" Width="1.5" PointX="18.5" PointY="141.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerScoringResult" Width="1.5" PointX="7.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerSession" Width="1.5" PointX="20.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerSourceOfRepayment" Width="1.5" PointX="16.25" PointY="128.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerStatus" Width="1.5" PointX="8" PointY="149.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerStatusHistory" Width="1.5" PointX="0.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.DbString" Width="1.5" PointX="2.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.DecisionHistory" Width="1.5" PointX="10.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.DecisionHistoryRejectReason" Width="1.5" PointX="13" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.DefaultRateCompany" Width="1.5" PointX="20.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.DefaultRateCustomer" Width="1.5" PointX="20.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Director" Width="1.5" PointX="15.5" PointY="103.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.DiscountPlan" Width="1.5" PointX="11" PointY="110" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EmailConfirmationRequest" Width="1.5" PointX="20.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EmailConfirmationState" Width="1.5" PointX="1.5" PointY="162.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EsignAgreementEventType" Width="1.5" PointX="18.5" PointY="155.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EsignAgreementStatu" Width="1.5" PointX="16.25" PointY="163.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EsignatureHistory" Width="1.5" PointX="20.75" PointY="153" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Esignature" Width="1.5" PointX="18.5" PointY="150.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Esigner" Width="1.5" PointX="20.75" PointY="163.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EsignTemplate" Width="1.5" PointX="16.25" PointY="167.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EsignTemplateType" Width="1.5" PointX="14" PointY="167.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EsignUserAgreementStatu" Width="1.5" PointX="18.5" PointY="164.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EuLoanMonthlyInterest" Width="1.5" PointX="20.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianAccountStatus" Width="1.5" PointX="21.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianAccountType" Width="1.5" PointX="12.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsentAgreement" Width="1.5" PointX="12.5" PointY="172.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsumerData" Width="1.5" PointX="15.5" PointY="92.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsumerDataApplicant" Width="1.5" PointX="17.75" PointY="86.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsumerDataCai" Width="1.5" PointX="17.75" PointY="90" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsumerDataCaisBalance" Width="1.5" PointX="20" PointY="90.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsumerDataCaisCardHistory" Width="1.5" PointX="20" PointY="92.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsumerDataLocation" Width="1.5" PointX="17.75" PointY="99.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsumerDataNoc" Width="1.5" PointX="17.75" PointY="96.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianConsumerDataResidency" Width="1.5" PointX="17.75" PointY="105.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianDefaultAccount" Width="1.5" PointX="15.5" PointY="108.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianDirector" Width="1.5" PointX="12.5" PointY="175" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtd" Width="1.5" PointX="15.5" PointY="214.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdCaisMonthly" Width="1.5" PointX="17.75" PointY="192.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdCreditSummary" Width="1.5" PointX="17.75" PointY="195.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDL48" Width="1.5" PointX="17.75" PointY="198.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDL52" Width="1.5" PointX="17.75" PointY="201" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDL65" Width="1.5" PointX="17.75" PointY="204" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDL68" Width="1.5" PointX="17.75" PointY="210.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDL72" Width="1.5" PointX="17.75" PointY="213.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDL97" Width="1.5" PointX="17.75" PointY="220.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDL99" Width="1.5" PointX="17.75" PointY="228.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDLA2" Width="1.5" PointX="17.75" PointY="225.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdDLB5" Width="1.5" PointX="17.75" PointY="237.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdError" Width="1.5" PointX="17.75" PointY="235" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdLenderDetail" Width="1.5" PointX="20" PointY="205.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdPrevCompanyName" Width="1.5" PointX="17.75" PointY="246" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianLtdShareholder" Width="1.5" PointX="17.75" PointY="249.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultBankruptcyDetail" Width="1.5" PointX="14.75" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultCcjDetail" Width="1.5" PointX="16.75" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultCcjRegisteredAgainst" Width="1.5" PointX="21.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultCcjTradingName" Width="1.5" PointX="22.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultPaymentPerformanceDetail" Width="1.5" PointX="9.75" PointY="24.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultPreviousSearch" Width="1.5" PointX="22.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResult" Width="1.5" PointX="11.75" PointY="24.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultScoreHistory" Width="1.5" PointX="22.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultSicCode" Width="1.5" PointX="22.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ExperianNonLimitedResultsScoreHistory" Width="1.5" PointX="18.75" PointY="24.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Export_Results" Width="1.5" PointX="22.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzbobMailNodeAttachRelation" Width="1.5" PointX="0.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceActionHistory" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceActionName" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceActionStatu" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceCronjobArgument" Width="1.5" PointX="5.25" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceCronjobArgumentType" Width="1.5" PointX="3" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceCronjobLog" Width="1.5" PointX="6" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceCronjobLogArgument" Width="1.5" PointX="8.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceCronjobRepetitionType" Width="1.5" PointX="0.75" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceCrontab" Width="1.5" PointX="3" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceDefaultInstance" Width="1.5" PointX="3" PointY="19" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.EzServiceInstance" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudAddress" Width="1.5" PointX="14.75" PointY="175.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudBankAccount" Width="1.5" PointX="14.75" PointY="178.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudCompany" Width="1.5" PointX="14.75" PointY="181.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudDetection" Width="1.5" PointX="14.75" PointY="158.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudEmail" Width="1.5" PointX="14.75" PointY="184.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudEmailDomain" Width="1.5" PointX="14.75" PointY="191.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudPhone" Width="1.5" PointX="14.75" PointY="194.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudRequest" Width="1.5" PointX="12.5" PointY="185.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudShop" Width="1.5" PointX="14.75" PointY="196.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FraudUser" Width="1.5" PointX="12.5" PointY="181" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FrequentActionItem" Width="1.5" PointX="2.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.FrequentActionItemsForCustomer" Width="1.5" PointX="23.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LandRegistry" Width="1.5" PointX="12.5" PointY="188" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LandRegistryOwner" Width="1.5" PointX="14.75" PointY="188.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Loan" Width="1.5" PointX="7.5" PointY="163.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanAgreement" Width="1.5" PointX="18" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanAgreementTemplate" Width="1.5" PointX="15.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanChangesHistory" Width="1.5" PointX="4.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanCharge" Width="1.5" PointX="23.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanHistory" Width="1.5" PointX="6.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanInterestFreeze" Width="1.5" PointX="9.75" PointY="167.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanLegal" Width="1.5" PointX="15.5" PointY="112.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanLien" Width="1.5" PointX="5.25" PointY="168.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanOfferMultiplier" Width="1.5" PointX="20.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanOption" Width="1.5" PointX="9.75" PointY="170.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanSchedule" Width="1.5" PointX="12.5" PointY="195.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanScheduleTransaction" Width="1.5" PointX="14.75" PointY="170.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanScheduleTransactionBackFilled" Width="1.5" PointX="22.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanSource" Width="1.5" PointX="5.25" PointY="150.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanTransaction" Width="1.5" PointX="12.5" PointY="201.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanTransactionMethod" Width="1.5" PointX="10.25" PointY="203.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoanType" Width="1.5" PointX="5.25" PointY="155" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Logbook" Width="1.5" PointX="4" PointY="162.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LogbookEntryType" Width="1.5" PointX="1.75" PointY="180.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoyaltyProgramAction" Width="1.5" PointX="16.25" PointY="116.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.LoyaltyProgramActionType" Width="1.5" PointX="14" PointY="117.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MC_CampaignClicks" Width="1.5" PointX="24.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MedalCoefficient" Width="1.5" PointX="24.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Medal" Width="1.5" PointX="24.75" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MobileCode" Width="1.5" PointX="24.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AlertDocument" Width="1.5" PointX="24.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AmazonFeedback" Width="1.5" PointX="23.75" PointY="91.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AmazonFeedbackItem" Width="1.5" PointX="26" PointY="91.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AmazonMarketplaceType" Width="1.5" PointX="19.25" PointY="130.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AmazonOrder" Width="1.5" PointX="23.75" PointY="98.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AmazonOrderItem" Width="1.5" PointX="26" PointY="97.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AmazonOrderItemDetail" Width="1.5" PointX="28.25" PointY="94.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AmazonOrderItemDetailCatgory" Width="1.5" PointX="30.5" PointY="97.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AmazonOrderItemPayment" Width="1.5" PointX="28.25" PointY="102.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AnalyisisFunction" Width="1.5" PointX="21.5" PointY="126.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AnalyisisFunctionValues" Width="1.5" PointX="23.75" PointY="142" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_AnalysisFunctionTimePeriod" Width="1.5" PointX="23.75" PointY="87.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_ChannelGrabberOrder" Width="1.5" PointX="23.75" PointY="110.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_ChannelGrabberOrderItem" Width="1.5" PointX="26" PointY="110.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_CompanyFilesMetaData" Width="1.5" PointX="12.5" PointY="192.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_Currency" Width="1.5" PointX="26.75" PointY="119.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_CurrencyRateHistory" Width="1.5" PointX="29" PointY="125.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_CustomerMarketPlace" Width="1.5" PointX="21.5" PointY="142.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_CustomerMarketplaceUpdatingActionLog" Width="1.5" PointX="26" PointY="113.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_CustomerMarketplaceUpdatingCounter" Width="1.5" PointX="28.25" PointY="114.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_CustomerMarketPlaceUpdatingHistory" Width="1.5" PointX="23.75" PointY="114.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayAmazonCategory" Width="1.5" PointX="28.25" PointY="89.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayExternalTransaction" Width="1.5" PointX="31.25" PointY="119.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayFeedback" Width="1.5" PointX="26.75" PointY="74.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayFeedbackItem" Width="1.5" PointX="29" PointY="85.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayOrder" Width="1.5" PointX="23.75" PointY="118.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayOrderItem" Width="1.5" PointX="29" PointY="117.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EBayOrderItemDetail" Width="1.5" PointX="32" PointY="115.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayRaitingItem" Width="1.5" PointX="31" PointY="88.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayTransaction" Width="1.5" PointX="34.25" PointY="118.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayUserAccountData" Width="1.5" PointX="23.75" PointY="121.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayUserAdditionalAccountData" Width="1.5" PointX="26" PointY="122.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayUserAddressData" Width="1.5" PointX="26.75" PointY="79.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EbayUserData" Width="1.5" PointX="28.75" PointY="143.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EkmOrder" Width="1.5" PointX="23.75" PointY="127.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_EkmOrderItem" Width="1.5" PointX="26" PointY="127" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_ExperianBankCache" Width="1.5" PointX="24.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_ExperianDataCache" Width="1.5" PointX="25.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_ExperianHistory" Width="1.5" PointX="15.5" PointY="137.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_ExperianParentCompanyMap" Width="1.5" PointX="8.75" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_FreeAgentCompany" Width="1.5" PointX="26" PointY="141.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_FreeAgentExpense" Width="1.5" PointX="31" PointY="145.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_FreeAgentExpenseCategory" Width="1.5" PointX="28.75" PointY="136.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_FreeAgentInvoice" Width="1.5" PointX="26" PointY="153" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_FreeAgentInvoiceItem" Width="1.5" PointX="28.25" PointY="153.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_FreeAgentRequest" Width="1.5" PointX="23.75" PointY="147.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_FreeAgentUsers" Width="1.5" PointX="26" PointY="158.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_MarketplaceGroup" Width="1.5" PointX="17" PointY="158.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_MarketplaceType" Width="1.5" PointX="19.25" PointY="158.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_PayPalAggregationFormula" Width="1.5" PointX="26.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_PayPalPersonalInfo" Width="1.5" PointX="23.75" PointY="154" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_PayPalTransaction" Width="1.5" PointX="23.75" PointY="159.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_PayPalTransactionItem2" Width="1.5" PointX="29" PointY="158.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_PayPointOrder" Width="1.5" PointX="23.75" PointY="165.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_PayPointOrderItem" Width="1.5" PointX="26" PointY="163.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_PlayOrder" Width="1.5" PointX="23.75" PointY="171.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_PlayOrderItem" Width="1.5" PointX="26" PointY="171" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_RtiTaxMonthEntries" Width="1.5" PointX="31" PointY="135.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_RtiTaxMonthRecords" Width="1.5" PointX="28.75" PointY="139.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_SageExpenditure" Width="1.5" PointX="26" PointY="176.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_SageIncome" Width="1.5" PointX="26" PointY="182.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_SagePaymentStatus" Width="1.5" PointX="0.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_SagePurchaseInvoice" Width="1.5" PointX="26" PointY="187.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_SagePurchaseInvoiceItem" Width="1.5" PointX="28.25" PointY="188.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_SageRequest" Width="1.5" PointX="23.75" PointY="187" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_SageSalesInvoice" Width="1.5" PointX="26" PointY="193.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_SageSalesInvoiceItem" Width="1.5" PointX="28.25" PointY="194.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_ServiceLog" Width="1.5" PointX="13.25" PointY="126.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_TeraPeakCategory" Width="1.5" PointX="13.75" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_TeraPeakCategoryStatistics" Width="1.5" PointX="16" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_TeraPeakOrder" Width="1.5" PointX="26" PointY="131.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_TeraPeakOrderItem" Width="1.5" PointX="28.25" PointY="131.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_ValueType" Width="1.5" PointX="19.25" PointY="127.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VatReturnEntries" Width="1.5" PointX="2.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VatReturnEntryNames" Width="1.5" PointX="26.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VatReturnRecordDeleteHistory" Width="1.5" PointX="34" PointY="140.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VatReturnRecordDeleteReason" Width="1.5" PointX="31.75" PointY="133.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VatReturnRecords" Width="1.5" PointX="31.75" PointY="139.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VatReturnSummary" Width="1.5" PointX="21.5" PointY="135" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VatReturnSummaryPeriods" Width="1.5" PointX="23.75" PointY="135.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VolusionOrder" Width="1.5" PointX="23.75" PointY="206.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_VolusionOrderItem" Width="1.5" PointX="26" PointY="205.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_WhiteList" Width="1.5" PointX="26.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_YodleeGroup" Width="1.5" PointX="26" PointY="225.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_YodleeGroupRuleMap" Width="1.5" PointX="28.25" PointY="227.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_YodleeOrder" Width="1.5" PointX="23.75" PointY="215.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_YodleeOrderItem" Width="1.5" PointX="26" PointY="209.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_YodleeOrderItemBankTransaction" Width="1.5" PointX="28.25" PointY="207.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_YodleeRule" Width="1.5" PointX="26" PointY="231.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_YodleeSearchWords" Width="1.5" PointX="13.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.MP_YodleeTransactionCategories" Width="1.5" PointX="26" PointY="228.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.NewMedalComparison1" Width="1.5" PointX="26.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.NewMedalComparison2" Width="1.5" PointX="18.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.OfflineScoring" Width="1.5" PointX="20.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PacnetAgentConfig" Width="1.5" PointX="27.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PacNetBalance" Width="1.5" PointX="27.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PacNetManualBalance" Width="1.5" PointX="22.75" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PacnetPaypointServiceLog" Width="1.5" PointX="28.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PaymentRollover" Width="1.5" PointX="4.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PayPointBalance" Width="1.5" PointX="6.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PayPointCard" Width="1.5" PointX="8.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Perk" Width="1.5" PointX="28.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PersonalInfoHistory" Width="1.5" PointX="28.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.PostcodeServiceLog" Width="1.5" PointX="3" PointY="151.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.QuickOffer" Width="1.5" PointX="8" PointY="152.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.QuickOfferConfiguration" Width="1.5" PointX="15.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.RejectReason" Width="1.5" PointX="10.75" PointY="21.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ReportArgumentName" Width="1.5" PointX="3" PointY="184" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ReportArgument" Width="1.5" PointX="5.25" PointY="176.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ReportScheduler" Width="1.5" PointX="3" PointY="176" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ReportsUsersMap" Width="1.5" PointX="5.25" PointY="158.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.ReportUser" Width="1.5" PointX="3" PointY="155.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Security_Permission" Width="1.5" PointX="28.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Security_Question" Width="1.5" PointX="28.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Security_Role" Width="1.5" PointX="1.5" PointY="165.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Security_RolePermissionRel" Width="1.5" PointX="28.75" PointY="24.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Security_Session" Width="1.5" PointX="3" PointY="158.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Security_User" Width="1.5" PointX="0.75" PointY="150.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.SicNaceCodeMap" Width="1.5" PointX="24.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.SiteAnalytic" Width="1.5" PointX="3" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.SiteAnalyticsCode" Width="1.5" PointX="0.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.SmsMessage" Width="1.5" PointX="3" PointY="168" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.SourceRefHistory" Width="1.5" PointX="3" PointY="173.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.SpecialPayer" Width="1.5" PointX="28.75" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.SuggestedAmount" Width="1.5" PointX="15.5" PointY="153.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.TargetingResult" Width="1.5" PointX="26.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.TestCustomer" Width="1.5" PointX="28.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.TrustPilotStatu" Width="1.5" PointX="8" PointY="157.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.UiAction" Width="1.5" PointX="8.75" PointY="87.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.UiControlGroupRelevance" Width="1.5" PointX="11" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.UiControlGroup" Width="1.5" PointX="8.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.UiControl" Width="1.5" PointX="8.75" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.UiEvent" Width="1.5" PointX="11" PointY="85.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.UnderwriterRecentCustomer" Width="1.5" PointX="0.75" PointY="31.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.UploadLimitation" Width="1.5" PointX="29.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.VatReturnRecordSource" Width="1.5" PointX="26.5" PointY="139.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.VipRequest" Width="1.5" PointX="12.5" PointY="322.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.WhatsNew" Width="1.5" PointX="10.25" PointY="161" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.WhatsNewCustomerMap" Width="1.5" PointX="12.5" PointY="153.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.WhiteLabelProvider" Width="1.5" PointX="0.75" PointY="145" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.WizardStepSequence" Width="1.5" PointX="10.25" PointY="174.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.WizardStepType" Width="1.5" PointX="8" PointY="160.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.YodleeAccount" Width="1.5" PointX="18.5" PointY="137.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.YodleeBank" Width="1.5" PointX="16.25" PointY="133.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Zoopla" Width="1.5" PointX="17.75" PointY="120.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerAnalytic" Width="1.5" PointX="30.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.CustomerLoyaltyProgramPoint" Width="1.5" PointX="30.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.Security_vUser" Width="1.5" PointX="30.75" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ezbobModel.vw_NotClose" Width="1.5" PointX="30.75" PointY="17.375" IsExpanded="true" />
+        <AssociationConnector Association="ezbobModel.FK_Broker_Terms" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Broker_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Broker_WhiteLabelProvider" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerInstantOfferRequest_BrokerId" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerLeads_Broker" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Customer_Broker" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerBrokerHistory_FromBroker" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerBrokerHistory_ToBroker" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerInstantOfferResponse_BrokerInstantOfferRequestId" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerInstantOfferResponse_LoanSourceId" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerInstantOfferResponse_LoanTypeId" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerLead_AddMode" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerLead_Error" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerLead_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerLeadTokens_Lead" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_BrokerTerms_Text" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_UiEvents_BrowserVersion" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturn_Business" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturnSummary_Business" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Campaign_CampaignType" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CampaignClients_Campaign" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CampaignClients_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CardInfo_CardInfo" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Customer_CardInfo" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CashRequest_SourceID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CashRequests_DiscountPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CashRequests_QuickOffer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoanLegal_CashRequests" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_SuggestedAmount_CashRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CompanyEmployeeCount_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerAddress_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Director_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_PK_CustomerCompanyHistory_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CompanyEmployeeCount_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CreatePasswordTokens_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRelations_CRMActions" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRelations_CRMRanks" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRelationState_CRMRanks" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CRMStatuses_CRMStatusGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRelations_CRMStatuses" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRelationState_CRMStatuses" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Customer_CustomerStatuses" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Customer_QuickOffer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Customer_TrustPilotStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Customer_WhiteLabelProvider" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Customer_WizardStepType" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerAnalyticsCompany_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerAnalyticsDirector_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerAnalyticsLocalData_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerAnalyticsPersonal_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerBrokerHistory_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerInviteFriend_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerLoyaltyProgram" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerMarketPlace_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRequestedLoan_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Esignature_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsentAgreement_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianDirector_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudDetection_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudDetection_Customer1" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudRequest_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LandRegistry_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_CompanyFilesMetaData_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_ExperianHistory_CustomerId" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_PK_CustomerCompanyHistory_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_SuggestedAmount_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturnSummary_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VipRequest_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_WhatsNewCustomerMap_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_YodleeAccounts_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Zoopla_CustomerAddress" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerBrokerHistory_Underwriter" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerLoyaltyProgramAction" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerLoyaltyProgramMP" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRequestedLoan_CustomerReason" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRelationFollowUp_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRelationState_CustomerRelationFollowUp" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRelationState_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerRequestedLoan_CustomerSourceOfRepayment" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_DecisionHistoryRejectReason_DecisionHistory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_DecisionHistoryRejectReason_RejectReason" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Security_User_EmailState" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EsignatureHistory_EventType" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Esignature_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EsignatureHistory_Signature" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Esignature_Template" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Esigner_Signature" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Esigner_ExperianDirector" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Esigner_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EsignTemplates_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsumerData_ServiceLog" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsumerDataApplicant_ExperianConsumerData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsumerDataCais_ExperianConsumerData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsumerDataLocation_ExperianConsumerData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsumerDataNoc_ExperianConsumerData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsumerDataResidency_ExperianConsumerData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsumerDataCaisBalance_ExperianConsumerDataCais" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianConsumerDataCaisCardHistory_ExperianConsumerDataCais" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianDefaultAccount_MP_ServiceLog" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtd_ServiceLogID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdCaisMonthly_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdCreditSummary_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDL48_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDL52_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDL65_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDL68_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDL72_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDL97_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDL99_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDLA2_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdDLB5_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdErrors_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdPrevCompanyNames_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdShareholders_ExperianLtdID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ExperianLtdLenderDetails_DL65ID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceActionHistory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceActionHistory_Instance" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceActionHistory_Name" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCronjobLog_Name" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCrontab_Name" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCronjobLog_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCrontab_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCronjobArguments_Task" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCronjobArguments_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCronjobLogArguments_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCronjobLogArguments_Entry" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.PK_EzServiceCronjobLog_Schedule" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceCrontab_Repetition" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_EzServiceDefaultInstance" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudAddress_FraudUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudBankAccount_FraudUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudCompany_FraudUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudDetection_FraudUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.K_FraudDetection_FraudRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudEmail_FraudUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudEmailDomain_FraudUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudPhone_FraudPhone" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_FraudShop_FraudUser" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LandRegistryOwner_LandRegistry" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Loan_LoanLien" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Loan_SourceID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoanInterestFreeze" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoanOptions_Loan" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoanST_Loan" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoanAgreement_LoanAgreementTemplate" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoanST_Schedule" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoanST_Transaction" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoanTransaction_MethodId" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Logbook_Entry" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Logbook_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_LoyaltyProgramActionType" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AmazonFeedback_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AmazonFeedbackItem_MP_AmazonFeedback" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AmazonFeedbackItem_MP_AnalysisFunctionTimePeriod" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_CustomerMarketPlace_MP_AmazonMarketplaceType" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_AmazonOrder_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AmazonOrderItem2_MP_AmazonOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AmazonOrderItem2Payment_MP_AmazonOrderItem2" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AmazonOrderItemDetail_MP_AmazonOrderItem2" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AmazonOrderItemDetailCatgory_MP_AmazonOrderItemDetail" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AmazonOrderItemDetailCatgory_MP_EbayAmazonCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_AnalyisisFunction_MarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_AnalyisisFunction_ValueType" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_AnalyisisFunctionValues_AnalyisisFunction" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_AnalyisisFunctionValues_AnalysisFunctionTimePeriod" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_AnalyisisFunctionValues_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayFeedbackItem_MP_AnalysisFunctionTimePeriod" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayRaitingItem_MP_AnalysisFunctionTimePeriod" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_ChannelGrabberOrder_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_ChannelGrabberOrderItem_MP_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_CurrencyRateHistory_MP_Currency" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_TransactionItem2_MP_Currency" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_CustomerMarketPlace_MarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_CustomerMarketPlaceUpdatingHistory_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayUserAccountData_MP_EbayUserAccountData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayUserData_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EkmOrder_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_FreeAgentRequest_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_Order_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_PayPointOrder_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_PersonalInfoItem_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_PlayOrder_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_SageRequest_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_Transaction_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_VolusionOrder_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_YodleeOrder_MP_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_RtiTaxMonthRecord_MP" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_TeraPeakOrder_CustomerMarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturn_MarketPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_CustomerMarketplaceUpdatingActionLog_MP_CustomerMarketPlaceUpdatingHistory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_CustomerMarketplaceUpdatingCounter_MP_CustomerMarketplaceUpdatingActionLog" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_TeraPeakOrder_MP_CustomerMarketPlaceUpdatingHistory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayAmazonCategory_MP_EbayAmazonCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayAmazonCategory_MP_MarketplaceType" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EBayOrderItemDetail_MP_EbayAmazonCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EBayOrderItemInfo_MP_EbayCategory_FreeAddedCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EBayOrderItemInfo_MP_EbayCategory_Primary" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EBayOrderItemInfo_MP_EbayCategory_Secondary" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayExternalTransaction_MP_EbayOrderItem" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayFeedbackItem_MP_EbayFeedback" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayRaitingItem_MP_EbayFeedback" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_OrderItem_MP_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayTransaction_MP_OrderItem" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_OrderItem_MP_EbayUserAddressData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayTransaction_MP_EBayOrderItemInfo" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayUserAdditionalAccountData_MP_EbayUserAccountData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayUserData_MP_EbayUserAddressData" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EbayUserData_MP_EbayUserAddressData1" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_EkmOrderItem_MP_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_ExperianHistory_MP_ServiceLog" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_FreeAgentCompany_MP_FreeAgentRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_FreeAgentExpense_MP_FreeAgentExpenseCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_FreeAgentExpense_MP_FreeAgentRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_FreeAgentInvoice_MP_FreeAgentRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_FreeAgentInvoiceItem_MP_FreeAgentInvoice" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_FreeAgentUsers_MP_FreeAgentRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_MarketplaceType_MP_MarketplaceGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_TransactionItem2_MP_Transaction" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_PayPointOrderItem_MP_PayPointOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_PlayOrderItem_MP_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_RtiTaxMonthEntries_Record" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_RtiTaxMonthRecords_Source" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_SageExpenditure_MP_SageRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_SageIncome_MP_SageRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_SagePurchaseInvoice_MP_SageRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_SagePurchaseInvoiceItem_MP_SagePurchaseInvoice" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_SageSalesInvoice_MP_SageRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_SageSalesInvoiceItem_MP_SageInvoice" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_SageSalesInvoiceItem_MP_SageSalesInvoice" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_TeraPeakCategoryStatistics_MP_TeraPeakCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_TeraPeakOrderItem_MP_TeraPeakOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturnRecordDeleteHistory_DeletedRec" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturnRecordDeleteHistory_Reason" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturnRecordDeleteHistory_ReasonRec" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturnRecord_Source" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_VatReturnSummaryPeriods" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_VolusionOrderItem_MP_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_YodleeGroup_MP_YodleeOrderItemBankTransaction" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_YodleeGroupRuleMap_MP_YodleeGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_YodleeGroupRuleMap_MP_YodleeRule" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_YodleeOrderItem_MP_YodleeOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_PostcodeServiceLog_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ReportArgument_Name" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ReportArgument_Report" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ReportScheduler_ReportID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ReportUsers_UserID" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_ReportUsers_Security_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Security_Session_Security_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Security_User_Security_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_Security_User_Security_User1" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_SmsMessage_Underwriter" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_SmsMessage_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_SourceRefHistory_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_SuggestedAmount_Underwriter" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_UiEvents_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_PK_SiteAnalyticsCodesId" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_UiEvents_Action" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_UiControlGroupRelevance_Ctrl" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_UiControlGroupRelevance_Grp" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_UiEvents_Control" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_WhatsNewCustomerMap_WhatsNew" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_WizStepSeq_WizardStepType" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.FK_YodleeAccounts_YodleeBanks" ManuallyRouted="false" />
+        <AssociationConnector Association="ezbobModel.Security_UserRoleRelation" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
