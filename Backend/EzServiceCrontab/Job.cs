@@ -2,8 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.ServiceModel;
 	using ArgumentTypes;
+	using EzBob.Backend.Strategies;
 	using EzService;
 	using EzService.EzServiceImplementation;
 	using Ezbob.Database;
@@ -14,7 +14,11 @@
 	internal class Job {
 		#region constructor
 
-		public Job(SafeReader sr, TypeRepository oTypeRepo) {
+		public Job(EzServiceInstanceRuntimeData oRuntimeData, SafeReader sr, TypeRepository oTypeRepo) {
+			WhyNotStarting = "never checked whether it is time to start";
+
+			m_oRuntimeData = oRuntimeData;
+
 			m_oArguments = new List<JobArgument>();
 
 			sr.Fill(this);
@@ -105,53 +109,19 @@
 
 		public string RepetitionStr {
 			get {
-				string sResult;
-
 				switch (RepetitionType) {
 				case RepetitionType.Monthly:
-					string sSuffix = "th";
-
-					switch (RepetitionTime.Day % 10) {
-					case 1:
-						sSuffix = "st";
-						break;
-					case 2:
-						sSuffix = "nd";
-						break;
-					case 3:
-						sSuffix = "rd";
-						break;
-					} // switch
-
-					sResult = string.Format("monthly on {0}{1} at {2}", RepetitionTime.Day, sSuffix, RepetitionTime.ToString("H:mm", CultureInfo.InvariantCulture));
-					break;
+					return GetMonthlyRepetitionTimeStr(RepetitionTime, true);
 
 				case RepetitionType.Daily:
-					sResult = string.Format("daily at {0}", RepetitionTime.ToString("H:mm", CultureInfo.InvariantCulture));
-					break;
+					return GetDailyRepetitionTimeStr(RepetitionTime, true);
 
 				case RepetitionType.EveryXMinutes:
-					string sTime;
-
-					if (RepetitionTime.Hour > 0) {
-						sTime = string.Format(
-							"{0} {1} (i.e. {2})",
-							Grammar.Number(RepetitionTime.Hour, "hour"),
-							Grammar.Number(RepetitionTime.Minute, "minute"),
-							Grammar.Number(RepetitionMinutes, "minute")
-						);
-					}
-					else
-						sTime = Grammar.Number(RepetitionTime.Minute, "minute");
-
-					sResult = string.Format("every {0}", sTime);
-					break;
+					return GetXMinutesRepetitionTimeStr(RepetitionTime.Hour, RepetitionTime.Minute, RepetitionMinutes, true);
 
 				default:
 					throw new ArgumentOutOfRangeException();
 				} // switch
-
-				return sResult;
 			} // get
 		} // RepetitionStr
 
@@ -215,19 +185,44 @@
 		#region method IsTimeToStart
 
 		public bool IsTimeToStart(DateTime oNow) {
+			bool bStart;
+
 			switch (RepetitionType) {
 			case RepetitionType.Monthly:
-				return (oNow.Day == RepetitionTime.Day) && (oNow.Hour == RepetitionTime.Hour) && (oNow.Minute == RepetitionTime.Minute);
+				bStart = (oNow.Day == RepetitionTime.Day) && (oNow.Hour == RepetitionTime.Hour) && (oNow.Minute == RepetitionTime.Minute);
+
+				WhyNotStarting = bStart
+					? Starting
+					: string.Format("the task should run {0} while now is {1}", RepetitionStr, GetMonthlyRepetitionTimeStr(oNow, false));
+
+				return bStart;
 
 			case RepetitionType.Daily:
-				return (oNow.Hour == RepetitionTime.Hour) && (oNow.Minute == RepetitionTime.Minute);
+				bStart = (oNow.Hour == RepetitionTime.Hour) && (oNow.Minute == RepetitionTime.Minute);
+
+				WhyNotStarting = bStart
+					? Starting
+					: string.Format("the task should run {0} while now is {1}", RepetitionStr, GetDailyRepetitionTimeStr(oNow, false));
+
+				return bStart;
 
 			case RepetitionType.EveryXMinutes:
-				if (LastEndTime == null)
+				if (LastEndTime == null) {
+					WhyNotStarting = Starting;
 					return true;
+				} // if
 
-				if ((oNow - LastEndTime.Value).TotalMinutes >= RepetitionMinutes)
+				TimeSpan oDelta = oNow - LastEndTime.Value;
+
+				if (oDelta.TotalMinutes >= RepetitionMinutes) {
+					WhyNotStarting = Starting;
 					return true;
+				} // if
+
+				WhyNotStarting = string.Format("the task should run {0} while it has completed {1} ago",
+					RepetitionStr,
+					GetXMinutesRepetitionTimeStr(oDelta.Hours, oDelta.Minutes, (int)oDelta.TotalMinutes, false)
+				);
 
 				return false;
 
@@ -238,29 +233,62 @@
 
 		#endregion method IsTimeToStart
 
+		#region property WhyNotStarting
+
+		public string WhyNotStarting { get; private set; }
+
+		#endregion property WhyNotStarting
+
 		#region method Start
 
-		public void Start(EzServiceInstanceRuntimeData oRuntimeData) {
-			SaveStarting(oRuntimeData.DB, oRuntimeData.Log);
-
-			string sErrorMsg = null;
-
+		public void Start() {
 			try {
-				sErrorMsg = Invoke(oRuntimeData);
+				Type oStrategyType = TypeUtils.FindType(ActionName);
+
+				if (oStrategyType == null)
+					Log.Alert("Job.Start: could not start the job {0}: strategy not found by name '{1}'.", this, ActionName);
+				else {
+					var oArgs = new ExecuteArguments {
+						StrategyType = oStrategyType,
+						OnInit = OnInit,
+						OnException = OnException,
+						OnLaunch = OnLaunch,
+						OnSuccess = OnSuccess,
+						OnFail = OnFail,
+					};
+
+					foreach (var oArg in m_oArguments)
+						oArgs.StrategyArguments.Add(oArg.UnderlyingType.CreateInstance(oArg.Value));
+
+					new EzServiceImplementation(m_oRuntimeData).Execute(oArgs);
+				} // if
 			}
 			catch (Exception e) {
-				oRuntimeData.Log.Alert(e, "Job.Start: failed to start the job {0}.", this);
+				Log.Alert(e, "Job.Start: failed to start the job {0}.", this);
 			} // try
-
-			// TODO save "background" time
-
-			if (!string.IsNullOrWhiteSpace(sErrorMsg))
-				oRuntimeData.Log.Alert("Job.Start: could not start the job {0}: {1}.", this, sErrorMsg);
 		} // Start
 
 		#endregion method Start
 
 		#region private
+
+		#region property DB
+
+		private AConnection DB {
+			get { return m_oRuntimeData.DB; }
+		} // DB
+
+		#endregion property DB
+
+		#region property Log
+
+		private ASafeLog Log {
+			get { return m_oRuntimeData.Log; }
+		} // Log
+
+		#endregion property Log
+
+		private readonly EzServiceInstanceRuntimeData m_oRuntimeData;
 
 		private readonly List<JobArgument> m_oArguments;
 
@@ -272,48 +300,143 @@
 
 		#endregion property RepetitionMinutes
 
-		#region method Invoke
+		#region method OnInit
 
-		private string Invoke(EzServiceInstanceRuntimeData oService) {
-			Type oStrategyType = TypeUtils.FindType(ActionName);
+		private void OnInit(AStrategy oInstance, ActionMetaData oMetaData) {
+			DB.ExecuteNonQuery(
+				"UpdateCronjobStarted",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("JobID", ID),
+				new QueryParameter("ActionStatusID", (int)ActionStatus.InProgress),
+				new QueryParameter("ActionID", oMetaData.ActionID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+		} // OnInit
 
-			if (oStrategyType == null)
-				return "strategy not found by name '" + ActionName + "'";
+		#endregion method OnInit
 
-			var args = new List<object>();
+		#region method OnSuccess
 
-			foreach (var oArg in m_oArguments)
-				args.Add(oArg.UnderlyingType.CreateInstance(oArg.Value));
+		private void OnSuccess(AStrategy oInstance, ActionMetaData oMetaData) {
+			DB.ExecuteNonQuery(
+				"UpdateCronjobEnded",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("JobID", ID),
+				new QueryParameter("ActionStatusID", (int)ActionStatus.Done),
+				new QueryParameter("ActionID", oMetaData.ActionID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+		} // OnSuccess
 
-			try {
-				// TODO: save job completion time in crontab log
+		#endregion method OnSuccess
 
-				new EzServiceImplementation(oService).Execute(
-					oStrategyType,
-					null,
-					null,
-					null,
-					null,
-					args.ToArray()
+		#region method OnException
+
+		private void OnException(ActionMetaData oMetaData) {
+			DB.ExecuteNonQuery(
+				"UpdateCronjobEnded",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("JobID", ID),
+				new QueryParameter("ActionStatusID", (int)ActionStatus.Finished),
+				new QueryParameter("ActionID", oMetaData.ActionID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+		} // OnException
+
+		#endregion method OnException
+
+		#region method OnFail
+
+		private void OnFail(ActionMetaData oMetaData) {
+			DB.ExecuteNonQuery(
+				"UpdateCronjobEnded",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("JobID", ID),
+				new QueryParameter("ActionStatusID", (int)ActionStatus.Failed),
+				new QueryParameter("ActionID", oMetaData.ActionID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+		} // OnFail
+
+		#endregion method OnFail
+
+		#region method OnLaunch
+
+		private void OnLaunch(ActionMetaData oMetaData) {
+			DB.ExecuteNonQuery(
+				"UpdateCronjobStatus",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("JobID", ID),
+				new QueryParameter("ActionStatusID", (int)ActionStatus.Launched),
+				new QueryParameter("ActionID", oMetaData.ActionID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+		} // OnLaunch
+
+		#endregion method OnLaunch
+
+		#region method GetMonthlyRepetitionTimeStr
+
+		private static string GetMonthlyRepetitionTimeStr(DateTime oTime, bool bAddRepetition) {
+			string sSuffix = "th";
+
+			switch (oTime.Day % 10) {
+			case 1:
+				sSuffix = "st";
+				break;
+			case 2:
+				sSuffix = "nd";
+				break;
+			case 3:
+				sSuffix = "rd";
+				break;
+			} // switch
+
+			return string.Format(
+				"{3}{0}{1} at {2}",
+				oTime.Day,
+				sSuffix,
+				oTime.ToString("H:mm", CultureInfo.InvariantCulture),
+				bAddRepetition ? "monthly on " : string.Empty
+			);
+		} // GetMonthlyRepetitionTimeStr
+
+		#endregion method GetMonthlyRepetitionTimeStr
+
+		#region method GetDailyRepetitionTimeStr
+
+		private static string GetDailyRepetitionTimeStr(DateTime oTime, bool bAddRepetition) {
+			return string.Format(
+				"{1}{0}",
+				oTime.ToString("H:mm", CultureInfo.InvariantCulture),
+				bAddRepetition ? "daily at " : string.Empty
+			);
+		} // GetDailyRepetitionTimeStr
+
+		#endregion method GetDailyRepetitionTimeStr
+
+		#region method GetXMinutesRepetitionTimeStr
+
+		private static string GetXMinutesRepetitionTimeStr(int nHour, int nMinute, int nTotalMinutes, bool bAddRepetition) {
+			string sTime;
+
+			if (nHour > 0) {
+				sTime = string.Format(
+					"{0} {1} (i.e. {2})",
+					Grammar.Number(nHour, "hour"),
+					Grammar.Number(nMinute, "minute"),
+					Grammar.Number(nTotalMinutes, "minute")
 				);
-
-				return null;
 			}
-			catch (FaultException e) {
-				// No logging needed: it is done inside Execute call
-				return e.Message;
-			} // try
-		} // Invoke
+			else
+				sTime = Grammar.Number(nMinute, "minute");
 
-		#endregion method Invoke
+			return string.Format("{1}{0}", sTime, bAddRepetition ? "every " : string.Empty);
+		} // GetXMinutesRepetitionTimeStr
 
-		#region method SaveStarting
+		#endregion method GetXMinutesRepetitionTimeStr
 
-		private void SaveStarting(AConnection oDB, ASafeLog oLog) {
-			// TODO
-		} // SaveStarting
-
-		#endregion method SaveStarting
+		private const string Starting = "starting";
 
 		#endregion private
 	} // class Job

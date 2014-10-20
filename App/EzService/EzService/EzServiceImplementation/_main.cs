@@ -77,61 +77,55 @@
 		#region method Execute
 
 		public ActionMetaData Execute<TStrategy>(int? nCustomerID, int? nUserID, params object[] args) where TStrategy : AStrategy {
-			return Execute<TStrategy>(nCustomerID, nUserID, (Action<AStrategy>)null, (Action<ActionMetaData>)null, args);
+			try {
+				return Execute(new ExecuteArguments(args) {
+					StrategyType = typeof (TStrategy),
+					CustomerID = nCustomerID,
+					UserID = nUserID,
+				});
+			}
+			catch (FaultException) {
+				throw;
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Failed to create ExecuteArguments.");
+				throw new FaultException("Failed to create ExecuteArguments: " + e.Message);
+			} // try
 		} // Execute
 
-		public ActionMetaData Execute<TStrategy>(
-			int? nCustomerID,
-			int? nUserID,
-			Action<TStrategy> oInitAction,
-			Action<ActionMetaData> oOnException,
-			params object[] args
-		) where TStrategy : AStrategy {
-			return Execute(
-				typeof(TStrategy),
-				nCustomerID,
-				nUserID,
-				stra => {
-					if (oInitAction != null)
-						oInitAction((TStrategy)stra);
-				},
-				oOnException,
-				args
-			);
-		} // Execute
-
-		public ActionMetaData Execute(
-			Type oStrategyType,
-			int? nCustomerID,
-			int? nUserID,
-			Action<AStrategy> oInitAction,
-			Action<ActionMetaData> oOnException,
-			params object[] args
-		) {
+		public ActionMetaData Execute(ExecuteArguments oArgs) {
 			ActionMetaData amd = null;
 
 			try {
-				Log.Debug("Executing " + oStrategyType + " started...");
+				if (oArgs == null)
+					throw new Alert(Log, "No ExecuteArguments specified.");
 
-				amd = NewAsync(oStrategyType.ToString(), comment: string.Join("; ", args), nCustomerID: nCustomerID, nUserID: nUserID);
+				Log.Debug("Executing " + oArgs.StrategyType + " started...");
 
-				var oParams = new List<object>(args) {DB, Log};
+				amd = NewAsync(
+					oArgs.StrategyType.ToString(),
+					comment: oArgs.StrategyArgumentsStr,
+					nCustomerID: oArgs.CustomerID,
+					nUserID: oArgs.UserID
+				);
 
-				ConstructorInfo oCreator = oStrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
+				var oParams = new List<object>(oArgs.StrategyArguments) { DB, Log };
+
+				ConstructorInfo oCreator = oArgs.StrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
 
 				if (oCreator == null)
-					throw new Alert(Log, "Failed to find a constructor for " + oStrategyType + " with " + oParams.Count + " arguments.");
+					throw new Alert(Log, "Failed to find a constructor for " + oArgs.StrategyType + " with " + oParams.Count + " arguments.");
 
-				Log.Debug(oStrategyType + " constructor found, invoking...");
+				Log.Debug(oArgs.StrategyType + " constructor found, invoking...");
 
 				amd.UnderlyingThread = new Thread(() => {
 					try {
 						AStrategy oInstance = (AStrategy)oCreator.Invoke(oParams.ToArray());
 
-						if (oInitAction != null) {
+						if (oArgs.OnInit != null) {
 							Log.Debug(oInstance.Name + " instance created, invoking an initialisation action...");
 
-							oInitAction(oInstance);
+							oArgs.OnInit(oInstance, amd);
 
 							Log.Debug(oInstance.Name + " initialisation action complete.");
 						} // if
@@ -140,23 +134,55 @@
 
 						oInstance.Execute();
 
-						Log.Debug("Executing " + oStrategyType + " complete.");
+						Log.Debug("Executing " + oArgs.StrategyType + " complete.");
 
 						SaveActionStatus(amd, ActionStatus.Done);
+
+						if (oArgs.OnSuccess != null) {
+							Log.Debug(oInstance.Name + " instance running complete, invoking an OnSuccess action...");
+
+							oArgs.OnSuccess(oInstance, amd);
+
+							Log.Debug(oInstance.Name + " OnSuccess action complete.");
+						} // if
 					}
 					catch (Exception e) {
-						Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
+						Log.Alert(e, "Exception during executing " + oArgs.StrategyType + " strategy.");
 
 						amd.Comment = e.Message;
 						SaveActionStatus(amd, ActionStatus.Failed);
+
+						if (oArgs.OnFail != null) {
+							Log.Debug(oArgs.StrategyType + " instance running failed, invoking an OnFail action...");
+
+							try {
+								oArgs.OnFail(amd);
+								Log.Debug(oArgs.StrategyType + " OnFail action complete.");
+							}
+							catch (Exception ie) {
+								Log.Alert(ie, "Exception during executing of OnFail handler of " + oArgs.StrategyType + " strategy.");
+							} // try
+						} // if
 					} // try
 				});
 
 				SaveActionStatus(amd, ActionStatus.Launched);
 
+				if (oArgs.OnLaunch != null) {
+					Log.Debug(oArgs.StrategyType + " instance is to be launched, invoking an OnLaunch action...");
+
+					try {
+						oArgs.OnLaunch(amd);
+						Log.Debug(oArgs.StrategyType + " OnLaunch action complete.");
+					}
+					catch (Exception ie) {
+						Log.Alert(ie, "Exception during executing of OnLaunch handler of " + oArgs.StrategyType + " strategy.");
+					} // try
+				} // if
+
 				amd.UnderlyingThread.Start();
 
-				Log.Debug("Executing {0} started on another thread [{1}].", oStrategyType, amd.UnderlyingThread.ManagedThreadId);
+				Log.Debug("Executing {0} started on another thread [{1}].", oArgs.StrategyType, amd.UnderlyingThread.ManagedThreadId);
 
 				return amd;
 			}
@@ -166,15 +192,17 @@
 					SaveActionStatus(amd, ActionStatus.Failed);
 				} // if
 
-				if (!(e is AException))
-					Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
+				if (!(e is AException)) {
+					string sStrategyType = oArgs == null ? "UNKNOWN" : oArgs.StrategyType.ToString();
+					Log.Alert(e, "Exception during executing " + sStrategyType + " strategy.");
+				} // if
 
-				if (oOnException != null) {
+				if ((oArgs != null) && (oArgs.OnException != null)) {
 					try {
-						oOnException(amd);
+						oArgs.OnException(amd);
 					}
 					catch (Exception ie) {
-						Log.Alert(ie, "Exception during executing of OnException handler of " + oStrategyType + " strategy.");
+						Log.Alert(ie, "Exception during executing of OnException handler of " + oArgs.StrategyType + " strategy.");
 					} // try
 				} // if
 

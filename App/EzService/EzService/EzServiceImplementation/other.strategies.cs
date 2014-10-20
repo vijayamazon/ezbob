@@ -29,11 +29,11 @@
 		} // SetLateLoanStatus
 
 		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, int userId) {
-			return Execute<UpdateMarketplace>(
-				customerId,
-				userId,
-				null,
-				amd =>
+			return Execute(new ExecuteArguments(customerId, marketplaceId, doUpdateWizardStep) {
+				StrategyType = typeof(UpdateMarketplace),
+				CustomerID = customerId,
+				UserID = userId,
+				OnException = amd =>
 					DB.ExecuteNonQuery(
 						"RecordMpUpdateFailure",
 						CommandSpecies.StoredProcedure,
@@ -41,10 +41,7 @@
 						new QueryParameter("Error", "Status: " + amd.Status + " " + amd.Comment),
 						new QueryParameter("Now", DateTime.UtcNow)
 					),
-				customerId,
-				marketplaceId,
-				doUpdateWizardStep
-			);
+			});
 		} // UpdateMarketplace
 
 		public ActionMetaData UpdateTransactionStatus() {

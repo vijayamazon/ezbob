@@ -47,16 +47,12 @@
 		#region method BrokerApproveAndResetCustomerPassword
 
 		public ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst) {
-			return Execute<ApprovedUser>(
-				nCustomerID,
-				nUnderwriterID,
-				stra => { stra.SendToCustomer = false; },
-				null,
-				nCustomerID,
-				nLoanAmount,
-				nValidHours, 
-				isFirst
-			);
+			return Execute(new ExecuteArguments(nCustomerID, nLoanAmount, nValidHours, isFirst) {
+				StrategyType = typeof(ApprovedUser),
+				CustomerID = nCustomerID,
+				UserID = nUnderwriterID,
+				OnInit = (stra, amd) => { ((ApprovedUser)stra).SendToCustomer = false; },
+			});
 		} // BrokerApproveAndResetCustomerPassword
 
 		#endregion method BrokerApproveAndResetCustomerPassword

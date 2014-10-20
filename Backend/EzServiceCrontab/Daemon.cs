@@ -94,7 +94,7 @@
 						if (oAllJobs.Contains(nJobID))
 							oAllJobs[nJobID].AddArgument(sr, m_oTypeRepo);
 						else
-							oAllJobs[nJobID] = new Job(sr, m_oTypeRepo);
+							oAllJobs[nJobID] = new Job(m_oData, sr, m_oTypeRepo);
 					}
 					catch (Exception e) {
 						m_oLog.Alert(e, "Failed to load a crontab job or its argument from DB.");
@@ -196,12 +196,16 @@
 					return;
 
 				if (oJob.IsInProgress) {
-					m_oLog.Debug("Crontab.StartOne({0}): skipping, already running.", oJob);
+					m_oLog.Debug("Crontab.StartOne(JobID: {0}): skipping, already running.", oJob.ID);
 					return;
 				} // if
 
-				if (oJob.IsTimeToStart(oNow))
-					oJob.Start(m_oData);
+				if (oJob.IsTimeToStart(oNow)) {
+					oJob.Start();
+					m_oLog.Debug("Crontab.StartOne(JobID: {0}): starting.", oJob.ID);
+				}
+				else
+					m_oLog.Debug("Crontab.StartOne(JobID: {0}): not starting because {1}.", oJob.ID, oJob.WhyNotStarting);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Crontab.StartOne({0}): failed to start the job.", oJob);
