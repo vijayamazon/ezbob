@@ -103,7 +103,7 @@
 
 			int counter = 0;
 
-			while (counter <= 3)
+			while (counter <= 4)
 			{
 				PayPointReturnData payPointReturnData;
 
@@ -119,7 +119,7 @@
 
 						counter++;
 
-						if (counter > 3)
+						if (counter > 4)
 						{
 							result.PaymentFailed = true;
 							return result;
@@ -139,6 +139,11 @@
 						{
 							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.25), 2);
 							Log.Info("Trying to charge 25% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
+						}
+						else if (counter == 4)
+						{
+							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.1), 2);
+							Log.Info("Trying to charge 10% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
 						}
 					}
 					else if (IsCollectionSuccessful(payPointReturnData))
