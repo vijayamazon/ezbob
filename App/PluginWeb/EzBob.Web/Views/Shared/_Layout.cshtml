@@ -4,6 +4,8 @@
 @using EzBob.Web.Infrastructure
 @using Integration.ChannelGrabberConfig
 @using Newtonsoft.Json
+@using ServiceClientProxy
+@using ServiceClientProxy.EzServiceReference
 @using StructureMap
 @{
     var controller = (string)ViewContext.RouteData.Values["controller"];
@@ -13,6 +15,8 @@
 	{
 		ViewBag.Phone = "0800-011-4787";
 	}
+
+	StringStringMapActionResult clfnar = new ServiceClient().Instance.LoadCustomerLeadFieldNames();
 }
 <!DOCTYPE html>
 <html>
@@ -92,11 +96,13 @@
             <div style="display: none;" class="hide" id="customer-name"></div>
             <div class="push"></div>
         }
+		<div style="display: none;" class="hide" id="customer-lead-field-names">@JsonConvert.SerializeObject(clfnar.Map)</div>
     </div>
     
     <footer>
         @{ Html.RenderPartial("_Copyright"); }
     </footer>
+
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
     </script>
@@ -116,6 +122,8 @@
     @RenderSection("Js", false)
 
     <script type="text/javascript">
+        var EzBob = EzBob || {};
+
         function ShowHideSignLogOnOff() {
             var sEmail = $('body').attr('data-user-name');
             if (sEmail) {
@@ -141,6 +149,8 @@
             ShowHideSignLogOnOff();
 
 			EzBob_CgVendors_init();
+
+			EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
         });
 
         function EzBob_CgVendors_init() {

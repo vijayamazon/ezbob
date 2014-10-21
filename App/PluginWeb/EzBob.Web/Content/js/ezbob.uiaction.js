@@ -173,20 +173,39 @@ var EzBob = EzBob || {};
 		attach: function (sEventName, oDomElement, bSaveValue) {
 			var jqElement = $(oDomElement);
 
+			var sUiAttrVal = this.uiAttrVal(jqElement);
+
 			if (jqElement.data(this.evtListenerAttr())) {
-				this.internalDebug('attach:', this.uiAttrVal(jqElement), 'already listens to', sEventName);
+				this.internalDebug('attach:', sUiAttrVal, 'already listens to', sEventName);
 				return;
 			} // if
 
-			if (sEventName === this.evtChange())
+			if (sEventName === this.evtChange()) {
 				sEventName += ' ' + this.evtFocusIn() + ' ' + this.evtFocusOut();
+				this.setValueFromLead(jqElement, sUiAttrVal);
+			} // if
 
 			jqElement
 				.on(sEventName, { saveValue: bSaveValue || false }, $.proxy(this.save, this))
 				.data(this.evtListenerAttr(), true);
 
-			this.internalDebug('attach:', this.uiAttrVal(jqElement), 'now listens to', sEventName);
+			this.internalDebug('attach:', sUiAttrVal, 'now listens to', sEventName);
 		}, // attach
+
+		setValueFromLead: function(jqElement, sUiAttrVal) {
+			if (!EzBob || !EzBob.CustomerLeadFieldNames)
+				return;
+
+			var sFieldName = EzBob.CustomerLeadFieldNames[sUiAttrVal];
+
+			if (!sFieldName)
+				return;
+
+			var sValue = $.cookie('lead-datum-' + sFieldName);
+
+			if (sValue && !jqElement.val())
+				jqElement.val(sValue);
+		}, // setValueFromLead
 
 		writeDown: function (bSync) {
 			var self = this;

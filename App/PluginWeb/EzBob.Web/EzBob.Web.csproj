@@ -1107,7 +1107,6 @@
     <Content Include="Content\js\lib\Backbone.ModelBinder.js" />
     <Content Include="Content\js\lib\bootstrap-modal.js" />
     <Content Include="Content\js\lib\bootstrap-modalmanager.js" />
-    <Content Include="Content\js\lib\cookies.js" />
     <Content Include="Content\js\lib\date.js" />
     <Content Include="Content\js\lib\daterangepicker.js" />
     <Content Include="Content\js\lib\dropzone.js" />

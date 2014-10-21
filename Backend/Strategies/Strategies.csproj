@@ -117,6 +117,7 @@
     <Compile Include="Misc\ChangeBrokerEmail.cs" />
     <Compile Include="MailStrategies\SendPendingMail.cs" />
     <Compile Include="Misc\GetConfigTable.cs" />
+    <Compile Include="Misc\LoadCustomerLeadFieldNames.cs" />
     <Compile Include="Misc\SendSms.cs" />
     <Compile Include="Misc\GetPropertyStatuses.cs" />
     <Compile Include="Misc\GetUnfetchedDataErrors.cs" />

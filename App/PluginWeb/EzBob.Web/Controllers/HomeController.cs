@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Controllers {
 	using System;
-	using System.Collections.Generic;
 	using System.Web;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
@@ -176,6 +175,34 @@
 			sLeadData = sLeadData ?? string.Empty;
 
 			ms_oLog.Debug("Raw lead data is: '{0}'.", sLeadData);
+
+			string[] aryPairs = sLeadData.Split(';');
+
+			foreach (string sPair in aryPairs) {
+				if (string.IsNullOrWhiteSpace(sPair))
+					continue;
+
+				int nPos = sPair.IndexOf(':');
+
+				if (nPos < 0)
+					continue;
+
+				string sDatumName = sPair.Substring(0, nPos);
+
+				if (string.IsNullOrWhiteSpace(sDatumName))
+					continue;
+
+				string sDatumValue = sPair.Substring(nPos + 1);
+
+				Response.Cookies.Add(new HttpCookie("lead-datum-" + sDatumName, Url.Encode(sDatumValue)) {
+					Expires = DateTime.Now.AddMonths(3),
+					HttpOnly = false,
+					Secure = true,
+				});
+
+				ms_oLog.Debug("Lead datum set: {0} = '{1}'.", sDatumName, sDatumValue);
+			} // for each pair
+
 		} // ParseLeadData
 
 		#endregion method ParseLeadData

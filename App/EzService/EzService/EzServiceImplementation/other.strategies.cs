@@ -183,5 +183,20 @@
 		} // SaveSourceRefHistory
 
 		#endregion method SaveSourceRefHistory
+
+		#region method LoadCustomerLeadFieldNames
+
+		public StringStringMapActionResult LoadCustomerLeadFieldNames() {
+			LoadCustomerLeadFieldNames oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+			return new StringStringMapActionResult {
+				MetaData = oMetaData,
+				Map = oInstance.Result,
+			};
+		} // LoadCustomerLeadFieldNames
+
+		#endregion method LoadCustomerLeadFieldNames
 	} // class EzServiceImplementation
 } // namespace EzService
