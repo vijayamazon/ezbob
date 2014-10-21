@@ -26,7 +26,15 @@ GO
 --
 -------------------------------------------------------------------------------
 
-CREATE TABLE #rt (ID INT, Name NVARCHAR(32))
+SELECT
+	RepetitionTypeID AS ID,
+	RepetitionType AS Name
+INTO
+	#rt
+FROM
+	EzServiceCronjobRepetitionTypes
+WHERE
+	1 = 0
 
 INSERT INTO #rt (ID, Name) VALUES
 	(1, 'Monthly'),
@@ -96,11 +104,16 @@ GO
 --
 -------------------------------------------------------------------------------
 
-CREATE TABLE #at (
-	ID INT,
-	Name NVARCHAR(32),
-	IsNullable BIT
-)
+SELECT
+	TypeID AS ID,
+	TypeName AS Name,
+	IsNullable
+INTO
+	#at
+FROM
+	EzServiceCronjobArgumentTypes
+WHERE
+	1 = 0
 
 INSERT INTO #at (ID, Name, IsNullable) VALUES
 	( 1, 'int', 0),
