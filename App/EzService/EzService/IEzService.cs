@@ -437,6 +437,9 @@
 		[OperationContract]
 		ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, CampaignSourceRef campaignSourceRef);
 
+		[OperationContract]
+		StringStringMapActionResult LoadCustomerLeadFieldNames();
+
 		#endregion other strategies
 
 		#region pricing model

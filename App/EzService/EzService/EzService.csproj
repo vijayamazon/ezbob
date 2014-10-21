@@ -93,6 +93,7 @@
     <Compile Include="ActionResults\EsignatureListActionResult.cs" />
     <Compile Include="ActionResults\MarketplacesActionResult.cs" />
     <Compile Include="ActionResults\ElapsedTimeInfoActionResult.cs" />
+    <Compile Include="ActionResults\StringStringMapActionResult.cs" />
     <Compile Include="ActionResults\VatReturnDataActionResult.cs" />
     <Compile Include="ActionResults\VatReturnPeriodsActionResult.cs" />
     <Compile Include="ActionResults\UserLoginActionResult.cs" />
