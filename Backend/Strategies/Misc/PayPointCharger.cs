@@ -127,15 +127,18 @@
 
 						if (counter == 1)
 						{
-							actualAmountCharged = Math.Round((initialAmountDue*(decimal) 0.75), 2);
+							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.75), 2);
+							Log.Info("Trying to charge 75% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
 						}
 						else if (counter == 2)
 						{
-							actualAmountCharged = Math.Round((initialAmountDue*(decimal) 0.5), 2);
+							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.5), 2);
+							Log.Info("Trying to charge 50% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
 						}
 						else if (counter == 3)
 						{
-							actualAmountCharged = Math.Round((initialAmountDue*(decimal) 0.25), 2);
+							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.25), 2);
+							Log.Info("Trying to charge 25% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
 						}
 					}
 					else if (IsCollectionSuccessful(payPointReturnData))
@@ -245,7 +248,7 @@
 
 		private static bool IsNotEnoughMoney(PayPointReturnData payPointReturnData)
 		{
-			return payPointReturnData.Code == "P:A";
+			return payPointReturnData.Code == "N" && payPointReturnData.Message == "INSUFF FUNDS";
 		}
 	}
 }
