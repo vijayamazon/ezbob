@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Controllers {
 	using System;
+	using System.Collections.Generic;
 	using System.Web;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
@@ -32,7 +33,8 @@
 			string ezbobab = "",
 			string invite = "",
 			string bloken = "",
-			string sourceref_time = ""
+			string sourceref_time = "",
+			string lead_data = ""
 		) {
 			ms_oLog.Debug("HomeController.Index(sourceref = {0}, sourceref_time = {1})", sourceref, sourceref_time);
 
@@ -61,6 +63,8 @@
 				var cookie = new HttpCookie("firstvisit", sourceref_time) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
 			} // if
+
+			ParseLeadData(lead_data);
 
 			if (oCreatePassword != null) {
 				return RedirectToAction("LeadCreatePassword", "Account", new {
@@ -165,6 +169,16 @@
 
 		private readonly AskvilleRepository m_oAskvilleRepository;
 		private readonly ASafeLog ms_oLog = new SafeILog(typeof(HomeController));
+
+		#region method ParseLeadData
+
+		private void ParseLeadData(string sLeadData) {
+			sLeadData = sLeadData ?? string.Empty;
+
+			ms_oLog.Debug("Raw lead data is: '{0}'.", sLeadData);
+		} // ParseLeadData
+
+		#endregion method ParseLeadData
 
 		#endregion private
 	} // class HomeController
