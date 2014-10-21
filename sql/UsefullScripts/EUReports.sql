@@ -112,6 +112,7 @@ SELECT DISTINCT
 	WHEN a.Postcode LIKE 'WA%' THEN 'UKD' 
 	WHEN a.Postcode LIKE 'WN%' THEN 'UKD' 
 	WHEN a.Postcode LIKE 'CH%' THEN 'UKD' 
+	WHEN a.Postcode LIKE 'IM%' THEN 'UKD' 
 	
 	--London
 	WHEN a.Postcode LIKE 'E[0-9]%' THEN 'UKI' 
@@ -192,13 +193,29 @@ SELECT DISTINCT
 		
 	ELSE 'n/i' END AS 'Region',
 	'GB' AS Country,
-	CONVERT(VARCHAR(10),ca.IncorporationDate, 103) AS 'Date of establishment', 
-	sic.NaceCode AS 'Sector (NACE code)',
+	CASE WHEN ca.IncorporationDate IS NOT NULL THEN CONVERT(VARCHAR(10),ca.IncorporationDate, 103)
+	ELSE CONVERT(VARCHAR(10), dateadd(year, -1, c.GreetingMailSentDate), 103) END AS 'Date of establishment', 
+	CASE 
+		WHEN sic.NaceCode IS NOT NULL THEN sic.NaceCode 
+		ELSE CASE 
+			WHEN c.IndustryType = 'Wholesale' THEN 'G46'
+			WHEN c.IndustryType = 'Transportation' THEN 'H49'
+			WHEN c.IndustryType = 'Retail' THEN 'G47'
+			WHEN c.IndustryType = 'Online' THEN 'G47'
+			WHEN c.IndustryType = 'Food' THEN 'I55'
+			WHEN c.IndustryType = 'Education' THEN 'P85'
+			WHEN c.IndustryType = 'Construction' THEN 'F41'
+			WHEN c.IndustryType = 'Automotive' THEN 'G45'
+			WHEN c.IndustryType = 'Education' THEN 'P85'
+			ELSE 'N82' 
+		END
+	END AS 'Sector (NACE code)',
 	CASE WHEN ca.IncorporationDate IS NULL THEN 5 ELSE 1 END AS 'Employment status',
 	coc.EmployeeCount AS 'Current number of employees', 
 	c.OverallTurnOver AS 'Annual turn-over',
 	1 AS 'Total Assets',
-	c.IndustryType AS 'Comments'
+	c.IndustryType AS 'Comments',
+	c.Id AS 'CustomeId' -- internal
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
@@ -211,6 +228,7 @@ WHERE s.LoanSourceName='EU'
 AND a.addressType=1
 AND c.IsTest=0
 AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
+--AND l.DateClosed IS NULL -- TODO REMOVE -- USED FOR REMOVAL OF CLOSED LOANS
 
 -----------------A2_Loans--------------------------------------------------------------
 SELECT DISTINCT 
@@ -220,7 +238,9 @@ SELECT DISTINCT
 	l.LoanAmount AS 'Loan amount',
 	12 AS 'Loan maturity (months)',
 	CONVERT(VARCHAR(10), l.[Date], 103) AS 'Loan signature date', 
-CONVERT(VARCHAR(10),dateadd(month, 1, l.[Date]), 103) AS 'First disbursement date'
+	CONVERT(VARCHAR(10),l.[Date], 103) AS 'First disbursement date',
+	c.Id AS CustomerId, --internal 
+	l.Id AS LoanId -- internal
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
@@ -229,6 +249,7 @@ LEFT JOIN CompanyEmployeeCount coc ON coc.CompanyId = co.Id
 WHERE s.LoanSourceName='EU'
 AND c.IsTest=0
 AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
+--AND l.DateClosed IS NULL -- TODO REMOVE -- USED FOR REMOVAL OF CLOSED LOANS
 
 -----------------A.4. Number of MC requests/rejections----------------------------------------------------------------------
 SELECT COUNT(DISTINCT cr.IdCustomer) AS 'A.4.1 Total Number of formal micro-credit requests'
@@ -253,13 +274,15 @@ SELECT
 	(l.LoanAmount - l.Principal) AS 'Total repayment of loan amount', 
 	l.Principal AS 'Outstanding - loan amount', 
 	0 'Remaining loan amount to be disbursed', 
-	CASE WHEN l.DateClosed IS NULL THEN 'No' ELSE 'Yes' END AS 'End of disbursement period'
+	CASE WHEN l.DateClosed IS NULL THEN 'No' ELSE 'Yes' END AS 'End of disbursement period',
+	c.Id AS CustomerId,
+	l.Id AS LoanId
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
 WHERE s.LoanSourceName='EU'
 AND c.IsTest=0
-AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
+AND l.[Date]<@DateEnd
 
 ----------------------Part D - Expired Loans------------------------------------------------------------------------
 --What is it?
@@ -273,6 +296,10 @@ AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
 -- 3. Change of loan ID
 -- 4. Change Loan amount
 --What is it?
+
+
+-- Not reported loan ids for reference:
+--2177,2284,2345,2366,2413,2432,2440,2548,2586,2608,2624,2632,2649,2661,2788,2789,2837,2857,2894,2995
 
 
 DROP TABLE #tmp_sic
