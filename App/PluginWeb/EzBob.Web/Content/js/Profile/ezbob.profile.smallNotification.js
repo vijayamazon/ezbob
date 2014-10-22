@@ -43,7 +43,7 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
         }
 
         var wasSetAccordingToApplyState = false;
-        if (save && hasLoans && (state == 'get' || state == 'wait' || state == 'apply')) {
+        if (save && save > 0 && hasLoans && (state == 'get' || state == 'wait' || state == 'apply')) {
             if (state == 'apply') {
                 wasSetAccordingToApplyState = true;
             }
