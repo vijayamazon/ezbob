@@ -3,13 +3,19 @@
 <script type="text/template" id="mark-as-pending-template">
     <div>
         <% _.each(actionItems, function(actionItem) { %>
-            <div>
-                <label class="checkbox-inline">
-                    <input type="checkbox" class="checkbox action-item-margin" id="frequentActionItem_<%- actionItem.Id %>" <%- actionItem.IsChecked ? 'checked=checked' : '' %>>
-                    <%- actionItem.Text %>
-                </label>
-            </div>
+                <div>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" class="checkbox action-item-margin" id="frequentActionItem_<%- actionItem.Id %>" <%- actionItem.IsChecked ? 'checked=checked' : '' %>>
+                        <%- actionItem.Text %>
+                    </label>
+                </div>
         <%});%>
+        <div>
+            <label class="checkbox-inline costume-action-item-width">
+                <input type="checkbox" class="checkbox action-item-margin" id="costumeActionItemCheckboxId" <%- costumeActionItem.IsChecked ? 'checked=checked' : '' %>>
+                <textarea id="costumeActionItemTextareaId" maxlength="1000" class="costume-action-item-width costume-action-item-height"><%- costumeActionItem.Text %></textarea>
+            </label>
+        </div>
     </div>
     <div class="pull-right">
         <button class="btn btn-primary">OK</button>
