@@ -103,6 +103,7 @@
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="LimitedMedalCalculation\LimitedMedalDualCalculator.cs" />
     <Compile Include="MailStrategies\Broker\BrokerPasswordChanged.cs" />
+    <Compile Include="MailStrategies\SendInternalPendingMail.cs" />
     <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Misc\CalculateLimitedMedal.cs" />
     <Compile Include="Misc\ChangeBrokerEmail.cs" />
     <Compile Include="MailStrategies\SendPendingMail.cs" />
+    <Compile Include="Misc\SendPendingMails.cs" />
     <Compile Include="Misc\GetConfigTable.cs" />
     <Compile Include="Misc\SendSms.cs" />
     <Compile Include="Misc\GetPropertyStatuses.cs" />

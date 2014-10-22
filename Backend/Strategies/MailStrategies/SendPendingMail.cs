@@ -6,9 +6,12 @@
 
 	public class SendPendingMail : AMailStrategyBase
 	{
-		public SendPendingMail(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(customerId,true, oDb, oLog)
+		private readonly List<string> actionItems;
+
+		public SendPendingMail(int customerId, List<string> actionItems, AConnection oDb, ASafeLog oLog)
+			: base(customerId, false, oDb, oLog) // TODO: EZ-2712: change the false to true once template is ready
 		{
+			this.actionItems = actionItems;
 		}
 
 		public override string Name {
@@ -17,12 +20,17 @@
 
 		protected override void SetTemplateAndVariables()
 		{
-			// TODO: change to actual mail
-			TemplateName = "Greeting";
+			string actionItemsString = string.Empty;
+
+			foreach (string actionItem in actionItems)
+			{
+				actionItemsString += actionItem + "<br/>";
+			}
+
+			TemplateName = "Mandrill - Action items";
 
 			Variables = new Dictionary<string, string> {
-				{"Email", CustomerData.Mail},
-				{"ConfirmEmailAddress", "bla"}
+				{"ActionItems", actionItemsString}
 			};
 		}
 	}
