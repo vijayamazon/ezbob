@@ -1299,7 +1299,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SendPendingMail">
+  <xs:element name="SendPendingMails">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
@@ -1307,10 +1307,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SendPendingMailResponse">
+  <xs:element name="SendPendingMailsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q113="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SendPendingMailResult" nillable="true" type="q113:ActionMetaData" />
+        <xs:element xmlns:q113="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SendPendingMailsResult" nillable="true" type="q113:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
