@@ -814,21 +814,23 @@ namespace EzBob.Web.Controllers {
 				customer.GoogleCookie = GetAndRemoveCookie("__utmz");
 				customer.ReferenceSource = GetAndRemoveCookie("sourceref");
 
-				campaignSourceRef = new CampaignSourceRef();
-				campaignSourceRef.FContent = GetAndRemoveCookie("fcontent");
-				campaignSourceRef.FMedium = GetAndRemoveCookie("fmedium");
-				campaignSourceRef.FName = GetAndRemoveCookie("fname");
-				campaignSourceRef.FSource = GetAndRemoveCookie("fsource");
-				campaignSourceRef.FTerm = GetAndRemoveCookie("fterm");
-				campaignSourceRef.FUrl = GetAndRemoveCookie("furl");
-				campaignSourceRef.FDate = ToDate(GetAndRemoveCookie("fdate"));
-				campaignSourceRef.RContent = GetAndRemoveCookie("rcontent");
-				campaignSourceRef.RMedium = GetAndRemoveCookie("rmedium");
-				campaignSourceRef.RName = GetAndRemoveCookie("rname");
-				campaignSourceRef.RSource = GetAndRemoveCookie("rsource");
-				campaignSourceRef.RTerm = GetAndRemoveCookie("rterm");
-				campaignSourceRef.RUrl = GetAndRemoveCookie("rurl");
-				campaignSourceRef.RDate = ToDate(GetAndRemoveCookie("rdate"));
+				campaignSourceRef = new CampaignSourceRef {
+					FContent = HttpUtility.UrlDecode(GetAndRemoveCookie("fcontent")),
+					FMedium = HttpUtility.UrlDecode(GetAndRemoveCookie("fmedium")),
+					FName = HttpUtility.UrlDecode(GetAndRemoveCookie("fname")),
+					FSource = HttpUtility.UrlDecode(GetAndRemoveCookie("fsource")),
+					FTerm = HttpUtility.UrlDecode(GetAndRemoveCookie("fterm")),
+					FUrl = HttpUtility.UrlDecode(GetAndRemoveCookie("furl")),
+					FDate = ToDate(HttpUtility.UrlDecode(GetAndRemoveCookie("fdate"))),
+
+					RContent = HttpUtility.UrlDecode(GetAndRemoveCookie("rcontent")),
+					RMedium = HttpUtility.UrlDecode(GetAndRemoveCookie("rmedium")),
+					RName = HttpUtility.UrlDecode(GetAndRemoveCookie("rname")),
+					RSource = HttpUtility.UrlDecode(GetAndRemoveCookie("rsource")),
+					RTerm = HttpUtility.UrlDecode(GetAndRemoveCookie("rterm")),
+					RUrl = HttpUtility.UrlDecode(GetAndRemoveCookie("rurl")),
+					RDate = ToDate(HttpUtility.UrlDecode(GetAndRemoveCookie("rdate")))
+				};
 			}
 
 			var customerInviteFriend = new CustomerInviteFriend(customer) { InvitedByFriendSource = GetAndRemoveCookie("invite") };
