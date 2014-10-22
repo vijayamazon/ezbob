@@ -435,7 +435,7 @@
 		MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory);
 
 		[OperationContract]
-		ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList);
+		ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, CampaignSourceRef campaignSourceRef);
 
 		#endregion other strategies
 

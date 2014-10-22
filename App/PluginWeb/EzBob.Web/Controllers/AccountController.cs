@@ -24,6 +24,7 @@ namespace EzBob.Web.Controllers {
 	using ExperianLib.Ebusiness;
 	using Code;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Infrastructure;
@@ -803,52 +804,39 @@ namespace EzBob.Web.Controllers {
 			};
 
 			ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
-
-			var sourceref = Request.Cookies["sourceref"];
-			var googleCookie = Request.Cookies["__utmz"];
+			CampaignSourceRef campaignSourceRef = null;
 
 			if (brokerFillsForCustomer) {
 				customer.ReferenceSource = "Broker";
 				customer.GoogleCookie = string.Empty;
 			}
 			else {
-				if (googleCookie != null) {
-					var cookie = new HttpCookie("__utmz", "") {Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true};
-					Response.Cookies.Add(cookie);
-					customer.GoogleCookie = googleCookie.Value;
-				} // if
+				customer.GoogleCookie = GetAndRemoveCookie("__utmz");
+				customer.ReferenceSource = GetAndRemoveCookie("sourceref");
 
-				if (sourceref != null) {
-					var cookie = new HttpCookie("sourceref", "") {Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true};
-					Response.Cookies.Add(cookie);
-					customer.ReferenceSource = sourceref.Value;
-				} // if
+				campaignSourceRef = new CampaignSourceRef();
+				campaignSourceRef.FContent = GetAndRemoveCookie("fcontent");
+				campaignSourceRef.FMedium = GetAndRemoveCookie("fmedium");
+				campaignSourceRef.FName = GetAndRemoveCookie("fname");
+				campaignSourceRef.FSource = GetAndRemoveCookie("fsource");
+				campaignSourceRef.FTerm = GetAndRemoveCookie("fterm");
+				campaignSourceRef.FUlr = GetAndRemoveCookie("fulr");
+				campaignSourceRef.FDate = ToDate(GetAndRemoveCookie("fdate"));
+				campaignSourceRef.RContent = GetAndRemoveCookie("rcontent");
+				campaignSourceRef.RMedium = GetAndRemoveCookie("rmedium");
+				campaignSourceRef.RName = GetAndRemoveCookie("rname");
+				campaignSourceRef.RSource = GetAndRemoveCookie("rsource");
+				campaignSourceRef.RTerm = GetAndRemoveCookie("rterm");
+				campaignSourceRef.RUlr = GetAndRemoveCookie("rulr");
+				campaignSourceRef.RDate = ToDate(GetAndRemoveCookie("rdate"));
 			}
 
-			var customerInviteFriend = new CustomerInviteFriend(customer);
-			var inviteFriend = Request.Cookies["invite"];
-			if (inviteFriend != null) {
-				var cookie = new HttpCookie("inviteFriend", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-				customerInviteFriend.InvitedByFriendSource = inviteFriend.Value;
-			} // if
-
+			var customerInviteFriend = new CustomerInviteFriend(customer) { InvitedByFriendSource = GetAndRemoveCookie("invite") };
 			customer.CustomerInviteFriend.Add(customerInviteFriend);
 
-			var ezbobab = Request.Cookies["ezbobab"];
-			if (ezbobab != null) {
-				var cookie = new HttpCookie("ezbobab", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-				customer.ABTesting = ezbobab.Value;
-			} // if
-
-			var firstvisit = Request.Cookies["firstvisit"];
-			if (firstvisit != null) {
-				var cookie = new HttpCookie("firstvisit", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-				customer.FirstVisitTime = firstvisit.Value;
-			} // if
-
+			customer.ABTesting = GetAndRemoveCookie("ezbobab");
+			customer.FirstVisitTime = GetAndRemoveCookie("firstvisit");
+			
 			if (Request.Cookies["istest"] != null)
 				customer.IsTest = true;
 
@@ -868,17 +856,44 @@ namespace EzBob.Web.Controllers {
 				ErrorMessage = "Registration"
 			});
 
-			if (!string.IsNullOrWhiteSpace(customer.ReferenceSource)) {
-				try {
-					m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, customer.ReferenceSource, firstvisit == null ? null : firstvisit.Value);
-				}
-				catch (Exception e) {
-					ms_oLog.Warn(e, "Failed to save sourceref history.");
-				} // try
-			} // if
+			try {
+				m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, customer.ReferenceSource, customer.FirstVisitTime, campaignSourceRef);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to save sourceref history.");
+			} // try
+			
 
 			return customer;
-		} // CreateCustomer
+		}
+
+		[NonAction]
+		private DateTime? ToDate(string dateStr) {
+			if (string.IsNullOrEmpty(dateStr)) {
+				return null;
+			}
+			DateTime date;
+			if (DateTime.TryParseExact(dateStr, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
+			                           DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out date)) {
+				return date;
+			}
+			return null;
+
+		}
+
+		private string GetAndRemoveCookie(string cookieName) {
+			var reqCookie = Request.Cookies["__utmz"];
+			if (reqCookie != null)
+			{
+				var cookie = new HttpCookie(cookieName, "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
+				Response.Cookies.Add(cookie);
+				return reqCookie.Value;
+			} // if
+
+			return null;
+		}
+
+// CreateCustomer
 
 		#endregion method CreateCustomer
 

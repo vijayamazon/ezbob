@@ -5,6 +5,7 @@
 	using EzBob.Backend.Strategies.Postcode;
 	using EzBob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
@@ -178,8 +179,8 @@
 
 		#region method SaveSourceRefHistory
 
-		public ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList) {
-			return Execute<SaveSourceRefHistory>(nUserID, null, nUserID, sSourceRefList, sVisitTimeList);
+		public ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, CampaignSourceRef campaignSourceRef) {
+			return Execute<SaveSourceRefHistory>(nUserID, null, nUserID, sSourceRefList, sVisitTimeList, campaignSourceRef);
 		} // SaveSourceRefHistory
 
 		#endregion method SaveSourceRefHistory
