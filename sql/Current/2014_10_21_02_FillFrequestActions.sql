@@ -52,14 +52,20 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS (SELECT 1 FROM FrequentActionItems WHERE Item = 'Please send proof of transfer of shares and/or appoitnment as director.' AND IsActive = 1)
+IF NOT EXISTS (SELECT 1 FROM FrequentActionItems WHERE Item = 'Please send proof of transfer of shares and/or appointment as director.' AND IsActive = 1)
 BEGIN
-	INSERT INTO FrequentActionItems VALUES ('Please send proof of transfer of shares and/or appoitnment as director.', 1)
+	INSERT INTO FrequentActionItems VALUES ('Please send proof of transfer of shares and/or appointment as director.', 1)
 END
 GO
 
 IF NOT EXISTS (SELECT 1 FROM FrequentActionItems WHERE Item = 'What is the purpose of the loan?' AND IsActive = 1)
 BEGIN
 	INSERT INTO FrequentActionItems VALUES ('What is the purpose of the loan?', 1)
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM FrequentActionItems WHERE Item = 'Please explain recent changes in the directorship' AND IsActive = 1)
+BEGIN
+	INSERT INTO FrequentActionItems VALUES ('Please explain recent changes in the directorship', 1)
 END
 GO

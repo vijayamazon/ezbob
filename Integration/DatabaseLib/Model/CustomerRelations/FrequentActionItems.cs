@@ -9,6 +9,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 		public virtual int Id { get; set; }
 		public virtual string Item { get; set; }
 		public virtual bool IsActive { get; set; }
+		public virtual bool MailToCustomer { get; set; }
 	}
 
 	public class FrequentActionItemsMap : ClassMap<FrequentActionItems>
@@ -19,6 +20,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 			Id(x => x.Id);
 			Map(x => x.Item).Length(1000);
 			Map(x => x.IsActive);
+			Map(x => x.MailToCustomer);
 		}
 	}
 
