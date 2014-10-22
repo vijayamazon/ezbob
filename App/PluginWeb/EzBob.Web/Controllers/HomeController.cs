@@ -33,9 +33,28 @@
 			string invite = "",
 			string bloken = "",
 			string sourceref_time = "",
-			string lead_data = ""
+			string lead_data = "",
+			string fulr = "",
+			string fsource = "",
+			string fmedium = "",
+			string fterm = "",
+			string fcontent = "",
+			string fname = "",
+			string fdate = "",
+			
+			string rulr = "",
+			string rsource = "",
+			string rmedium = "",
+			string rterm = "",
+			string rcontent = "",
+			string rname = "",
+			string rdate = ""
 		) {
 			ms_oLog.Debug("HomeController.Index(sourceref = {0}, sourceref_time = {1})", sourceref, sourceref_time);
+
+			ms_oLog.Debug("fulr = {0},fsource = {1},fmedium = {2},fterm = {3},fcontent = {4},fname = {5},fdate = {6},", fulr,fsource,fmedium,fterm,fcontent,fname,fdate);
+			ms_oLog.Debug("rulr = {0},rsource = {1},rmedium = {2},rterm = {3},rcontent = {4},rname = {5},rdate = {6},", rulr, rsource, rmedium, rterm, rcontent, rname, rdate);
+
 
 			Session["Shop"] = shop;
 			CreatePasswordModel oCreatePassword = null;
@@ -43,26 +62,29 @@
 			if (!string.IsNullOrWhiteSpace(bloken))
 				oCreatePassword = SetBrokerLeadData(bloken);
 
-			if (!string.IsNullOrEmpty(sourceref)) {
-				var cookie = new HttpCookie("sourceref", sourceref) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-			} // if
+			AddCookie(sourceref, "sourceref", 3);
+			AddCookie(invite, "invite", 3);
+			AddCookie(ezbobab, "ezbobab", 3);
+			AddCookie(sourceref_time, "firstvisit", 3);
 
-			if (!string.IsNullOrEmpty(invite)) {
-				var cookie = new HttpCookie("invite", invite) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-			} // if
+			AddCookie(fulr, "fulr", 6);
+			AddCookie(fsource, "fsource", 6);
+			AddCookie(fmedium, "fmedium", 6);
+			AddCookie(fterm, "fterm", 6);
+			AddCookie(fcontent, "fcontent", 6);
+			AddCookie(fname, "fname", 6);
+			AddCookie(fdate, "fdate", 6);
 
-			if (!string.IsNullOrEmpty(ezbobab)) {
-				var cookie = new HttpCookie("ezbobab", ezbobab) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-			} // if
-
-			if (!string.IsNullOrEmpty(sourceref_time)) {
-				var cookie = new HttpCookie("firstvisit", sourceref_time) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-			} // if
-
+			const int week = 7;
+			AddCookie(rulr, "rulr", days: week, isDay: true);
+			AddCookie(rsource, "rsource", days: week, isDay: true);
+			AddCookie(rmedium, "rmedium", days: week, isDay: true);
+			AddCookie(rmedium, "rmedium", days: week, isDay: true);
+			AddCookie(rterm, "rterm", days: week, isDay: true);
+			AddCookie(rcontent, "rcontent", days: week, isDay: true);
+			AddCookie(rname, "rname", days: week, isDay: true);
+			AddCookie(rdate, "rdate", days: week, isDay: true);
+			
 			ParseLeadData(lead_data);
 
 			if (oCreatePassword != null) {
@@ -75,7 +97,17 @@
 			} // if
 
 			return RedirectToActionPermanent("Index", User.Identity.IsAuthenticated ? "Profile" : "Wizard", new { Area = "Customer" });
-		} // Index
+		}
+
+		private void AddCookie(string value, string key, int months = 0, int days = 0, bool isDay = false) {
+			if (!string.IsNullOrEmpty(value))
+			{
+				var cookie = new HttpCookie(key, value) { Expires = isDay ?  DateTime.Now.AddDays(days) : DateTime.Now.AddMonths(months), HttpOnly = true, Secure = true };
+				Response.Cookies.Add(cookie);
+			} // if
+		}
+
+// Index
 
 		#endregion action Index
 

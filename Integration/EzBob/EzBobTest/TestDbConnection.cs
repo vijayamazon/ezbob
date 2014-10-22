@@ -106,5 +106,30 @@
 			m_oDB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure,
 								   m_oDB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
 		}
+
+		[Test]
+		public void TestSaveCampaignSourceRef() {
+			m_oDB.ExecuteNonQuery(
+					"SaveCampaignSourceRef",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", 25),
+					m_oDB.CreateTableParameter<CampaignSourceRef>("Tbl", new List<CampaignSourceRef>() { new CampaignSourceRef {
+						FContent = "fc",
+						FDate = DateTime.UtcNow.AddDays(-1),
+						FMedium = "fm",
+						FName = "fn",
+						FSource = "fs",
+						FTerm = "ft",
+						FUlr = "fu",
+						RContent = "rc",
+						RDate = DateTime.UtcNow,
+						RMedium = "rm",
+						RName = "rn",
+						RSource = "rs",
+						RTerm = "rt",
+						RUlr = "ru",
+					} })
+				);
+		}
 	} // class TestDbConnection
 } // namespace

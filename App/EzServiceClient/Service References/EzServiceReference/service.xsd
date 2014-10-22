@@ -4,10 +4,10 @@
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.UserManagement" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
   <xs:element name="Shutdown">
@@ -614,13 +614,14 @@
         <xs:element minOccurs="0" name="nUserID" type="xs:int" />
         <xs:element minOccurs="0" name="sSourceRefList" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sVisitTimeList" nillable="true" type="xs:string" />
+        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="campaignSourceRef" nillable="true" type="q47:CampaignSourceRef" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveSourceRefHistoryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveSourceRefHistoryResult" nillable="true" type="q47:ActionMetaData" />
+        <xs:element xmlns:q48="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveSourceRefHistoryResult" nillable="true" type="q48:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

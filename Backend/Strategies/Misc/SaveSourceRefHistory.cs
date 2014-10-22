@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Web;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -15,13 +16,14 @@
 			int nUserID,
 			string sSourceRefList,
 			string sVisitTimeList,
+			CampaignSourceRef campaignSourceRef,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
 			m_nUserID = nUserID;
 			m_sSourceRefList = (sSourceRefList ?? string.Empty).Trim();
 			m_sVisitTimeList = (sVisitTimeList ?? string.Empty).Trim();
-
+			m_CampaignSourceRef = campaignSourceRef;
 			Log.Debug(
 				"Will save sourceref history for user {0} from sourceref list '{1}' and visit time list '{2}'.",
 				m_nUserID, m_sSourceRefList, m_sVisitTimeList
@@ -91,6 +93,15 @@
 			else
 				Log.Msg("No sourceref history to save for user {0}.", m_nUserID);
 
+
+			if (m_CampaignSourceRef != null) {
+				DB.ExecuteNonQuery(
+					"SaveCampaignSourceRef",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", m_nUserID),
+					DB.CreateTableParameter<CampaignSourceRef>("Lst", new List<CampaignSourceRef>() { m_CampaignSourceRef })
+				);
+			}
 			Log.Debug("Saving sourceref history for user {0} complete.", m_nUserID);
 		} // Execute
 
@@ -103,6 +114,7 @@
 		private readonly int m_nUserID;
 		private readonly string m_sSourceRefList;
 		private readonly string m_sVisitTimeList;
+		private readonly CampaignSourceRef m_CampaignSourceRef;
 
 		#region class SourceRefEntry
 

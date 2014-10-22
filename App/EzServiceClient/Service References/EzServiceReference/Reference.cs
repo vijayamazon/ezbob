@@ -2669,10 +2669,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MarketplacesActionResult> CalculateModelsAndAffordabilityAsync(int userId, int nCustomerID, System.Nullable<System.DateTime> oHistory);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveSourceRefHistory", ReplyAction="http://tempuri.org/IEzService/SaveSourceRefHistoryResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList);
+        ServiceClientProxy.EzServiceReference.ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, Ezbob.Backend.ModelsWithDB.CampaignSourceRef campaignSourceRef);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveSourceRefHistory", ReplyAction="http://tempuri.org/IEzService/SaveSourceRefHistoryResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveSourceRefHistoryAsync(int nUserID, string sSourceRefList, string sVisitTimeList);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveSourceRefHistoryAsync(int nUserID, string sSourceRefList, string sVisitTimeList, Ezbob.Backend.ModelsWithDB.CampaignSourceRef campaignSourceRef);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadCustomerLeadFieldNames", ReplyAction="http://tempuri.org/IEzService/LoadCustomerLeadFieldNamesResponse")]
         ServiceClientProxy.EzServiceReference.StringStringMapActionResult LoadCustomerLeadFieldNames();
@@ -3758,12 +3758,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateModelsAndAffordabilityAsync(userId, nCustomerID, oHistory);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList) {
-            return base.Channel.SaveSourceRefHistory(nUserID, sSourceRefList, sVisitTimeList);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, Ezbob.Backend.ModelsWithDB.CampaignSourceRef campaignSourceRef) {
+            return base.Channel.SaveSourceRefHistory(nUserID, sSourceRefList, sVisitTimeList, campaignSourceRef);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveSourceRefHistoryAsync(int nUserID, string sSourceRefList, string sVisitTimeList) {
-            return base.Channel.SaveSourceRefHistoryAsync(nUserID, sSourceRefList, sVisitTimeList);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveSourceRefHistoryAsync(int nUserID, string sSourceRefList, string sVisitTimeList, Ezbob.Backend.ModelsWithDB.CampaignSourceRef campaignSourceRef) {
+            return base.Channel.SaveSourceRefHistoryAsync(nUserID, sSourceRefList, sVisitTimeList, campaignSourceRef);
         }
         
         public ServiceClientProxy.EzServiceReference.StringStringMapActionResult LoadCustomerLeadFieldNames() {

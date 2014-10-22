@@ -11,11 +11,8 @@
 		[Test]
 		public void TestClassToDbTableCreate()
 		{
-			Console.WriteLine(CodeToSql.GetCreateTable<BrokerInstantOfferRequest>());
-			Console.WriteLine(CodeToSql.GetCreateSp<BrokerInstantOfferRequest>());
-			Console.WriteLine(CodeToSql.GetCreateTable<BrokerInstantOfferResponse>());
-			Console.WriteLine(CodeToSql.GetCreateSp<BrokerInstantOfferResponse>());
-			
+			Console.WriteLine(CodeToSql.GetCreateTable<CampaignSourceRef>());
+			Console.WriteLine(CodeToSql.GetCreateSp<CampaignSourceRef>());
 		}
 	}
 
