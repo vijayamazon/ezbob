@@ -87,6 +87,12 @@
 
 			crmModel.CreditResult = customer != null && customer.CreditResult.HasValue ? customer.CreditResult.Value.ToString() : "";
 			crmModel.ActionItems = CreateCustomerActionItemList(customerId);
+			crmModel.CostumeActionItem = new ActionItem();
+			if (customer != null && !string.IsNullOrEmpty(customer.CostumeActionItem))
+			{
+				crmModel.CostumeActionItem.IsChecked = true;
+				crmModel.CostumeActionItem.Text = customer.CostumeActionItem;
+			}
 
 			return crmModel;
 		} // Create

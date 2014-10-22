@@ -239,6 +239,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			References(x => x.PropertyStatus, "PropertyStatusId").Cascade.All();
 
 			Map(x => x.IsWaitingForSignature);
+
+			Map(x => x.CostumeActionItem).Length(1000);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

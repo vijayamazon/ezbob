@@ -21,13 +21,18 @@
 		public List<CrmPhoneNumber> PhoneNumbers { get; set; }
 		public string CreditResult { get; set; }
 		public List<FrequentActionItem> ActionItems { get; set; }
+		public ActionItem CostumeActionItem { get; set; }
 	}
 
-	public class FrequentActionItem
+	public class ActionItem
 	{
-		public int Id { get; set; }
 		public bool IsChecked { get; set; }
 		public string Text { get; set; }
+	}
+
+	public class FrequentActionItem : ActionItem
+	{
+		public int Id { get; set; }
 	}
 
 	public class CrmPhoneNumber

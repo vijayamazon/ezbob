@@ -23,13 +23,15 @@ EzBob.Underwriter.MarkAsPending = EzBob.BoundItemView.extend({
 
     initialize: function (options) {
         this.actionItems = options.model.get('ActionItems');
+        this.costumeActionItem = options.model.get('CostumeActionItem');
         this.actionItemsSavedCallback = options.actionItemsSavedCallback;
 	    EzBob.Underwriter.MarkAsPending.__super__.initialize.apply(this, arguments);
     },
 
     serializeData: function () {
         return {
-            actionItems: this.actionItems
+            actionItems: this.actionItems,
+            costumeActionItem: this.costumeActionItem,
         };
     },
 
@@ -52,6 +54,13 @@ EzBob.Underwriter.MarkAsPending = EzBob.BoundItemView.extend({
     onSave: function () {
         var self = this;
 
+        var costumeActionItemValueToSave = '';
+        var isCostumeActionItemChecked = document.getElementById("costumeActionItemCheckboxId").checked;
+        if (isCostumeActionItemChecked) {
+            costumeActionItemValueToSave = document.getElementById("costumeActionItemTextareaId").value;
+            this.model.get('CostumeActionItem').Text = costumeActionItemValueToSave;
+        }
+
         BlockUi();
         
         var actionItemsAsString = '';
@@ -62,7 +71,7 @@ EzBob.Underwriter.MarkAsPending = EzBob.BoundItemView.extend({
                 actionItemsAsString += ',' + ai.Id;
             }
         }
-        var xhr = $.post(window.gRootPath + 'CustomerRelations/MarkAsPending', { customerId: this.model.customerId, actionItems: actionItemsAsString });
+        var xhr = $.post(window.gRootPath + 'CustomerRelations/MarkAsPending', { customerId: this.model.customerId, actionItems: actionItemsAsString, costumeActionItemValue: costumeActionItemValueToSave });
         xhr.always(function () {
             self.actionItemsSavedCallback();
             return UnBlockUi();

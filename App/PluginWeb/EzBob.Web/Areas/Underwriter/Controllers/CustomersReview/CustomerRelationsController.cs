@@ -243,7 +243,7 @@
 
 		[Ajax]
 		[HttpPost]
-		public void MarkAsPending(int customerId, string actionItems)
+		public void MarkAsPending(int customerId, string actionItems, string costumeActionItemValue)
 		{
 			DateTime now = DateTime.UtcNow;
 			List<int> checkedIds = GetCheckedActionItemIds(actionItems);
@@ -272,6 +272,14 @@
 				}
 			}
 
+			// Update costume action item
+			Customer customer = customerRepository.Get(customerId);
+			if (customer.CostumeActionItem != costumeActionItemValue)
+			{
+				changed = true;
+				customer.CostumeActionItem = costumeActionItemValue;
+			}
+
 			if (changed)
 			{
 				var entry = new CustomerRelations
@@ -287,17 +295,15 @@
 					};
 				_customerRelationsRepository.SaveOrUpdate(entry);
 
-				if (checkedIds.Count == 0)
+				if (checkedIds.Count == 0 && string.IsNullOrEmpty(customer.CostumeActionItem))
 				{
 					// Mark as waiting for decision
-					Customer customer = customerRepository.Get(customerId);
 					customer.CreditResult = CreditResultStatus.WaitingForDecision;
 					customerRepository.SaveOrUpdate(customer);
 				}
 				else
 				{
 					// Mark as pending
-					Customer customer = customerRepository.Get(customerId);
 					customer.CreditResult = CreditResultStatus.ApprovedPending;
 					customerRepository.SaveOrUpdate(customer);
 

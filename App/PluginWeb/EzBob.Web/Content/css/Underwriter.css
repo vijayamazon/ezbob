@@ -2215,3 +2215,11 @@ ul.alert-list {
 .potential-rank-font {
     font-size: 14px;
 }
+
+.costume-action-item-width {
+    width: 100%;
+}
+
+.costume-action-item-height {
+    height: 100px;
+}
