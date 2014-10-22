@@ -95,11 +95,13 @@
 
 
 			if (m_CampaignSourceRef != null) {
+				m_CampaignSourceRef.RSource = m_CampaignSourceRef.RSource ?? "Direct";
+				m_CampaignSourceRef.RDate = m_CampaignSourceRef.RDate ?? DateTime.UtcNow;
 				DB.ExecuteNonQuery(
 					"SaveCampaignSourceRef",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", m_nUserID),
-					DB.CreateTableParameter<CampaignSourceRef>("Lst", new List<CampaignSourceRef>() { m_CampaignSourceRef })
+					DB.CreateTableParameter<CampaignSourceRef>("Tbl", new List<CampaignSourceRef>() { m_CampaignSourceRef })
 				);
 			}
 			Log.Debug("Saving sourceref history for user {0} complete.", m_nUserID);

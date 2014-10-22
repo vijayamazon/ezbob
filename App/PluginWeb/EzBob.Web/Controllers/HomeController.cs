@@ -34,7 +34,7 @@
 			string bloken = "",
 			string sourceref_time = "",
 			string lead_data = "",
-			string fulr = "",
+			string furl = "",
 			string fsource = "",
 			string fmedium = "",
 			string fterm = "",
@@ -42,7 +42,7 @@
 			string fname = "",
 			string fdate = "",
 			
-			string rulr = "",
+			string rurl = "",
 			string rsource = "",
 			string rmedium = "",
 			string rterm = "",
@@ -52,8 +52,8 @@
 		) {
 			ms_oLog.Debug("HomeController.Index(sourceref = {0}, sourceref_time = {1})", sourceref, sourceref_time);
 
-			ms_oLog.Debug("fulr = {0},fsource = {1},fmedium = {2},fterm = {3},fcontent = {4},fname = {5},fdate = {6},", fulr,fsource,fmedium,fterm,fcontent,fname,fdate);
-			ms_oLog.Debug("rulr = {0},rsource = {1},rmedium = {2},rterm = {3},rcontent = {4},rname = {5},rdate = {6},", rulr, rsource, rmedium, rterm, rcontent, rname, rdate);
+			ms_oLog.Debug("fulr = {0},fsource = {1},fmedium = {2},fterm = {3},fcontent = {4},fname = {5},fdate = {6},", furl,fsource,fmedium,fterm,fcontent,fname,fdate);
+			ms_oLog.Debug("rulr = {0},rsource = {1},rmedium = {2},rterm = {3},rcontent = {4},rname = {5},rdate = {6},", rurl, rsource, rmedium, rterm, rcontent, rname, rdate);
 
 
 			Session["Shop"] = shop;
@@ -67,7 +67,7 @@
 			AddCookie(ezbobab, "ezbobab", 3);
 			AddCookie(sourceref_time, "firstvisit", 3);
 
-			AddCookie(fulr, "fulr", 6);
+			AddCookie(furl, "furl", 6);
 			AddCookie(fsource, "fsource", 6);
 			AddCookie(fmedium, "fmedium", 6);
 			AddCookie(fterm, "fterm", 6);
@@ -76,7 +76,7 @@
 			AddCookie(fdate, "fdate", 6);
 
 			const int week = 7;
-			AddCookie(rulr, "rulr", days: week, isDay: true);
+			AddCookie(rurl, "rurl", days: week, isDay: true);
 			AddCookie(rsource, "rsource", days: week, isDay: true);
 			AddCookie(rmedium, "rmedium", days: week, isDay: true);
 			AddCookie(rmedium, "rmedium", days: week, isDay: true);

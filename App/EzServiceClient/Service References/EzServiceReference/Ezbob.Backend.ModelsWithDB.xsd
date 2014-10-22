@@ -9,14 +9,14 @@
       <xs:element minOccurs="0" name="FName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FSource" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FTerm" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="FUlr" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FUrl" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RContent" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="RMedium" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RSource" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RTerm" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RUlr" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RUrl" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CampaignSourceRef" nillable="true" type="tns:CampaignSourceRef" />

@@ -17,7 +17,7 @@
 		public int CustomerId { get; set; }
 
 		[DataMember]
-		public string FUlr { get; set; }
+		public string FUrl { get; set; }
 		[DataMember]
 		public string FSource { get; set; }
 		[DataMember]
@@ -31,7 +31,7 @@
 		[DataMember]
 		public DateTime? FDate { get; set; }
 		[DataMember]
-		public string RUlr { get; set; }
+		public string RUrl { get; set; }
 		[DataMember]
 		public string RSource { get; set; }
 		[DataMember]

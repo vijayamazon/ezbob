@@ -820,14 +820,14 @@ namespace EzBob.Web.Controllers {
 				campaignSourceRef.FName = GetAndRemoveCookie("fname");
 				campaignSourceRef.FSource = GetAndRemoveCookie("fsource");
 				campaignSourceRef.FTerm = GetAndRemoveCookie("fterm");
-				campaignSourceRef.FUlr = GetAndRemoveCookie("fulr");
+				campaignSourceRef.FUrl = GetAndRemoveCookie("furl");
 				campaignSourceRef.FDate = ToDate(GetAndRemoveCookie("fdate"));
 				campaignSourceRef.RContent = GetAndRemoveCookie("rcontent");
 				campaignSourceRef.RMedium = GetAndRemoveCookie("rmedium");
 				campaignSourceRef.RName = GetAndRemoveCookie("rname");
 				campaignSourceRef.RSource = GetAndRemoveCookie("rsource");
 				campaignSourceRef.RTerm = GetAndRemoveCookie("rterm");
-				campaignSourceRef.RUlr = GetAndRemoveCookie("rulr");
+				campaignSourceRef.RUrl = GetAndRemoveCookie("rurl");
 				campaignSourceRef.RDate = ToDate(GetAndRemoveCookie("rdate"));
 			}
 
@@ -882,7 +882,7 @@ namespace EzBob.Web.Controllers {
 		}
 
 		private string GetAndRemoveCookie(string cookieName) {
-			var reqCookie = Request.Cookies["__utmz"];
+			var reqCookie = Request.Cookies[cookieName];
 			if (reqCookie != null)
 			{
 				var cookie = new HttpCookie(cookieName, "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
