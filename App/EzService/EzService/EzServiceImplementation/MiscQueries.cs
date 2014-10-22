@@ -285,9 +285,9 @@
 			return ExecuteSync(out instance, 0, 0, oldEmail, newEmail, newPassword);
 		}
 
-		public ActionMetaData SendPendingMail(int underwriterId, int customerId)
+		public ActionMetaData SendPendingMails(int underwriterId, int customerId)
 		{
-			SendPendingMail instance;
+			SendPendingMails instance;
 			return ExecuteSync(out instance, 0, 0, customerId);
 		}
 	} // class EzServiceImplementation

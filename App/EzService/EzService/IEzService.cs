@@ -603,7 +603,7 @@
 		ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword);
 
 		[OperationContract]
-		ActionMetaData SendPendingMail(int underwriterId, int customerId);
+		ActionMetaData SendPendingMails(int underwriterId, int customerId);
 	} // interface IEzService
 } // namespace EzService
 

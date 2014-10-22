@@ -302,7 +302,7 @@
 					customerRepository.SaveOrUpdate(customer);
 
 					// Send mail
-					_serviceClient.Instance.SendPendingMail(_context.UserId, customerId);
+					_serviceClient.Instance.SendPendingMails(_context.UserId, customerId);
 				}
 			}
 		}
