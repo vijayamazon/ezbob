@@ -10,14 +10,14 @@ IF TYPE_ID('CampaignSourceRefList') IS NOT NULL
 GO
 
 CREATE TYPE CampaignSourceRefList AS TABLE (
-	FUlr NVARCHAR(255) NULL,
+	FUrl NVARCHAR(255) NULL,
 	FSource NVARCHAR(255) NULL,
 	FMedium NVARCHAR(255) NULL,
 	FTerm NVARCHAR(255) NULL,
 	FContent NVARCHAR(255) NULL,
 	FName NVARCHAR(255) NULL,
 	FDate DATETIME NULL,
-	RUlr NVARCHAR(255) NULL,
+	RUrl NVARCHAR(255) NULL,
 	RSource NVARCHAR(255) NULL,
 	RMedium NVARCHAR(255) NULL,
 	RTerm NVARCHAR(255) NULL,
@@ -36,14 +36,14 @@ BEGIN
 
 	INSERT INTO CampaignSourceRef (
 		CustomerId,
-		FUlr,
+		FUrl,
 		FSource,
 		FMedium,
 		FTerm,
 		FContent,
 		FName,
 		FDate,
-		RUlr,
+		RUrl,
 		RSource,
 		RMedium,
 		RTerm,
@@ -52,14 +52,14 @@ BEGIN
 		RDate
 	) SELECT
 		@CustomerId,
-		FUlr,
+		FUrl,
 		FSource,
 		FMedium,
 		FTerm,
 		FContent,
 		FName,
 		FDate,
-		RUlr,
+		RUrl,
 		RSource,
 		RMedium,
 		RTerm,

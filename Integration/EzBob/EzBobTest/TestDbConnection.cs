@@ -120,14 +120,14 @@
 						FName = "fn",
 						FSource = "fs",
 						FTerm = "ft",
-						FUlr = "fu",
+						FUrl = "fu",
 						RContent = "rc",
 						RDate = DateTime.UtcNow,
 						RMedium = "rm",
 						RName = "rn",
 						RSource = "rs",
 						RTerm = "rt",
-						RUlr = "ru",
+						RUrl = "ru",
 					} })
 				);
 		}
