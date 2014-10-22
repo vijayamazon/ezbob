@@ -1,3 +1,4 @@
+
 IF OBJECT_ID('RptSalesFollowup1') IS NULL
 	EXECUTE ('CREATE PROCEDURE RptSalesFollowup1 AS SELECT 1')
 GO
@@ -13,9 +14,12 @@ AS
 	FROM Customer c
 	LEFT JOIN CustomerPropertyStatuses s ON c.PropertyStatusId = s.Id
 	LEFT JOIN CustomerAnalyticsCompany a ON a.CustomerID = c.Id
-	WHERE WizardStep = 6 
-	AND c.Id NOT IN (SELECT CustomerId FROM CustomerRelations)
+	LEFT JOIN CustomerRelations crm ON crm.CustomerId = c.Id
+	WHERE c.WizardStep = 6 
 	AND c.GreetingMailSentDate >= @DateStart 
 	AND c.GreetingMailSentDate < @DateEnd 
-	AND c.IsTest = 0 ORDER BY c.OverallTurnOver DESC
+	AND c.IsTest = 0 
+	GROUP BY c.Id,c.FullName, s.Description,c.TypeOfBusiness,c.DaytimePhone,c.MobilePhone,c.OverallTurnOver,c.Name,c.GreetingMailSentDate, c.ExperianConsumerScore, a.Score
+	HAVING count(crm.Id) <= 3
+	ORDER BY c.OverallTurnOver DESC
 GO
