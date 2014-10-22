@@ -16,25 +16,3 @@ BEGIN
 	)
 END
 GO
-
-CREATE TABLE #t (
-	UiControlName NVARCHAR(255),
-	LeadDatumFieldName NVARCHAR(255)
-)
-
-INSERT INTO #t (UiControlName, LeadDatumFieldName) VALUES
-	('signup:email', 'email'),
-	('signup:mobile-phone', 'mobile-phone')
-
-INSERT INTO CustomerLeadFieldNames (UiControlName, LeadDatumFieldName)
-SELECT
-	#t.UiControlName,
-	#t.LeadDatumFieldName
-FROM
-	#t
-	LEFT JOIN CustomerLeadFieldNames l ON #t.UiControlName = l.UiControlName
-WHERE
-	l.LinkID IS NULL
-
-DROP TABLE #t
-GO
