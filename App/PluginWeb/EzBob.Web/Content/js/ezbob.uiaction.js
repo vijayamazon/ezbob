@@ -204,7 +204,7 @@ var EzBob = EzBob || {};
 			var sValue = $.cookie('lead-datum-' + sFieldName);
 
 			if (sValue && !jqElement.val())
-				jqElement.val(sValue);
+				jqElement.val(sValue).change().blur();
 		}, // setValueFromLead
 
 		writeDown: function (bSync) {
