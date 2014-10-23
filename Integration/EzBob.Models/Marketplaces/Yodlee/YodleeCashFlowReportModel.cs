@@ -310,28 +310,31 @@
 
 		public BankStatementDataModel GetAnualizedBankStatementDataModel(BankStatementDataModel model)
 		{
-			var bankStatementDataModel = new BankStatementDataModel() {
+			var annualModel = new BankStatementDataModel {
 				DateFrom = model.DateFrom,
 				DateTo = model.DateTo,
 				Period = model.Period,
 				PeriodMonthsNum = model.PeriodMonthsNum
 			};
 
-			if (bankStatementDataModel.DateFrom.HasValue && bankStatementDataModel.DateTo.HasValue && (bankStatementDataModel.DateTo.Value - bankStatementDataModel.DateFrom.Value).TotalDays > 0)
-			{
-				double annualMult = 365.0/(bankStatementDataModel.DateTo.Value - bankStatementDataModel.DateFrom.Value).TotalDays;
-				bankStatementDataModel.Revenues = model.Revenues*annualMult;
-				bankStatementDataModel.Opex = model.Opex*annualMult;
-				bankStatementDataModel.Salaries = model.Salaries*annualMult;
-				bankStatementDataModel.Tax = model.Tax*annualMult;
-				bankStatementDataModel.ActualLoansRepayment = model.ActualLoansRepayment*annualMult;
-				bankStatementDataModel.TotalValueAdded = bankStatementDataModel.Revenues - Math.Abs(bankStatementDataModel.Opex);
-				bankStatementDataModel.Ebida = bankStatementDataModel.TotalValueAdded - Math.Abs(bankStatementDataModel.Salaries) -
-				                               Math.Abs(bankStatementDataModel.Tax);
-				bankStatementDataModel.FreeCashFlow = bankStatementDataModel.Ebida -
-				                                      Math.Abs(bankStatementDataModel.ActualLoansRepayment);
+			if (annualModel.DateFrom.HasValue && annualModel.DateTo.HasValue) {
+				var days = (annualModel.DateTo.Value - annualModel.DateFrom.Value).TotalDays;
+				
+				if (days > 60 && days < 90) {
+					days = 90; // we get usually 90 of data
+				}
+
+				double annualMult = Math.Abs(days) < 1 ? 1 : 365.0/days;
+				annualModel.Revenues = model.Revenues*annualMult;
+				annualModel.Opex = model.Opex*annualMult;
+				annualModel.Salaries = model.Salaries*annualMult;
+				annualModel.Tax = model.Tax*annualMult;
+				annualModel.ActualLoansRepayment = model.ActualLoansRepayment*annualMult;
+				annualModel.TotalValueAdded = annualModel.Revenues - Math.Abs(annualModel.Opex);
+				annualModel.Ebida = annualModel.TotalValueAdded - Math.Abs(annualModel.Salaries) - Math.Abs(annualModel.Tax);
+				annualModel.FreeCashFlow = annualModel.Ebida - Math.Abs(annualModel.ActualLoansRepayment);
 			}
-			return bankStatementDataModel;
+			return annualModel;
 		}
 	}
 }
