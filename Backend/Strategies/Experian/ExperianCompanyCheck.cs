@@ -62,18 +62,30 @@
 			else {
 				Log.Info("ExperianCompanyCheck strategy will make sure we have experian data");
 
-				oExperianData = GetBusinessDataFromExperian();
+				var service = new EBusinessService(DB);
 
-				Log.Info("Fetched BureauScore {0} & MaxBureauScore {1} for customer {2}.", oExperianData.BureauScore,
-						 oExperianData.MaxBureauScore, customerId);
+				// ReSharper disable RedundantCast
+				oExperianData = isLimited
+					? (BusinessReturnData)service.GetLimitedBusinessData(experianRefNum, customerId, false, forceCheck)
+					: (BusinessReturnData)service.GetNotLimitedBusinessData(experianRefNum, customerId, false, forceCheck);
+				// ReSharper restore RedundantCast
 
-				if (!oExperianData.IsError) {
-					MaxScore = oExperianData.MaxBureauScore;
-					Score = oExperianData.BureauScore;
-					Log.Info("Filled Score & MaxScore of the strategy");
-				}
-				else
-					experianError = oExperianData.Error;
+				if (oExperianData != null) {
+					Log.Info(
+						"Fetched BureauScore {0} & MaxBureauScore {1} for customer {2}.",
+						oExperianData.BureauScore,
+						oExperianData.MaxBureauScore,
+						customerId
+						);
+
+					if (!oExperianData.IsError) {
+						MaxScore = oExperianData.MaxBureauScore;
+						Score = oExperianData.BureauScore;
+						Log.Info("Filled Score & MaxScore of the strategy");
+					}
+					else
+						experianError = oExperianData.Error;
+				} // if
 			} // if
 
 			if (!string.IsNullOrEmpty(experianError))
@@ -120,16 +132,6 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
-		}
-
-		private BusinessReturnData GetBusinessDataFromExperian() {
-			var service = new EBusinessService(DB);
-
-			// ReSharper disable RedundantCast
-			return isLimited
-				? (BusinessReturnData)service.GetLimitedBusinessData(experianRefNum, customerId, false, forceCheck)
-				: (BusinessReturnData)service.GetNotLimitedBusinessData(experianRefNum, customerId, false, forceCheck);
-			// ReSharper restore RedundantCast
 		}
 
 		public static void UpdateAnalyticsForLimited(decimal nMaxScore, LimitedResults oExperianData, int nCustomerID, AConnection oDB, ASafeLog oLog) {

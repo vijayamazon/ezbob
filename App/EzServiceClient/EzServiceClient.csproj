@@ -91,7 +91,7 @@
     <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzService.xsd">
+    <None Include="Service References\EzServiceReference\EzService1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\service.wsdl" />

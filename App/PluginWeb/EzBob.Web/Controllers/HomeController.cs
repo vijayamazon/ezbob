@@ -56,7 +56,6 @@
 			ms_oLog.Debug("fulr = {0},fsource = {1},fmedium = {2},fterm = {3},fcontent = {4},fname = {5},fdate = {6},", furl,fsource,fmedium,fterm,fcontent,fname,fdate);
 			ms_oLog.Debug("rulr = {0},rsource = {1},rmedium = {2},rterm = {3},rcontent = {4},rname = {5},rdate = {6},", rurl, rsource, rmedium, rterm, rcontent, rname, rdate);
 
-
 			Session["Shop"] = shop;
 			CreatePasswordModel oCreatePassword = null;
 
@@ -98,17 +97,20 @@
 			} // if
 
 			return RedirectToActionPermanent("Index", User.Identity.IsAuthenticated ? "Profile" : "Wizard", new { Area = "Customer" });
-		}
+		} // Index
 
 		private void AddCookie(string value, string key, int months = 0, int days = 0, bool isDay = false) {
 			if (!string.IsNullOrEmpty(value))
 			{
-				var cookie = new HttpCookie(key, value) { Expires = isDay ?  DateTime.Now.AddDays(days) : DateTime.Now.AddMonths(months), HttpOnly = true, Secure = true };
+				var cookie = new HttpCookie(key, value) {
+					Expires = isDay ?  DateTime.Now.AddDays(days) : DateTime.Now.AddMonths(months),
+					HttpOnly = true,
+					Secure = true
+				};
 				Response.Cookies.Add(cookie);
 			} // if
 		}
 
-// Index
 
 		#endregion action Index
 
