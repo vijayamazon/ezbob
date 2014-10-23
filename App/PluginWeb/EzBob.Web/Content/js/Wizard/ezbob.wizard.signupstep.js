@@ -3,7 +3,7 @@
 EzBob.QuickSignUpStepView = Backbone.View.extend({
 	initialize: function() {
 		this.template = _.template($('#signup-template').html());
-        
+
 		// This post is for Nir's A\B testing
 		//$.post("http://www.ezbob.com/thank-page/", { action: "sptAjaxRecordConversion", sptID: 5765 });
 
@@ -58,7 +58,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		'focus #amount': 'amountFocused',
 
-		'keyup #mobilePhone': 'mobilePhoneChanged'
+		'keyup #mobilePhone': 'mobilePhoneChanged',
+		'change #mobilePhone': 'mobilePhoneChanged',
 	},
 
 	render: function() {
@@ -196,16 +197,14 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 	mobilePhoneChanged: function() {
 		var isValidPhone = this.validator.check(this.$el.find('.phonenumber'));
-		var generateCodeButton = $('#generateMobileCode');
+
+		var generateCodeButton = this.$el.find('#generateMobileCode');
+
 		if (isValidPhone) {
-			if (generateCodeButton.hasClass('disabled')) {
-				generateCodeButton.removeClass('disabled');
-			}
+			generateCodeButton.removeClass('disabled');
 		}
 		else {
-			if (!generateCodeButton.hasClass('disabled')) {
-				generateCodeButton.addClass('disabled');
-			}
+			generateCodeButton.addClass('disabled');
 			this.$el.find('#mobileCodeDiv').hide();
 			this.$el.find('#generateMobileCode').val('Send activation code');
 			var codeSentObject = this.$el.find('#codeSentLabel');
