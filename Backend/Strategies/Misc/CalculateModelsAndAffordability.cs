@@ -56,7 +56,8 @@
 				var oAccounting = new List<LocalMp>();
 
 				MarketPlaceModel oHmrc = null;
-				MarketPlaceModel oYodlee = null;
+
+				var oYodlee = new List<LocalMp>();
 
 				foreach (LocalMp mm in m_oMundMs) {
 					if (mm.Marketplace.Disabled) {
@@ -68,9 +69,7 @@
 					}
 
 					if (mm.Marketplace.Marketplace.InternalId == ms_oYodleeID) {
-						if (oYodlee == null) {
-							oYodlee = mm.Model;
-						}
+						oYodlee.Add(mm);
 						continue;
 					} // if
 
@@ -100,9 +99,9 @@
 					}
 				} // if
 
-				if (oYodlee != null && oYodlee.Yodlee != null) {
+				if (oYodlee.Any()) {
 					using (m_oTimeCounter.AddStep("Yodlee affordability build time")) {
-						SaveBankStatement(oYodlee.Yodlee.BankStatementAnnualizedModel);
+						SaveBankStatement(oYodlee);
 					}
 				} // if
 
@@ -378,20 +377,40 @@
 
 		#region method SaveBankStatement
 
-		private void SaveBankStatement(BankStatementDataModel oBank) {
-			Affordability.Add(new AffordabilityData {
+		private void SaveBankStatement(List<LocalMp> yodlees) {
+			var affordability = new AffordabilityData {
 				Type = AffordabilityType.Bank,
-				DateFrom = oBank.DateFrom,
-				DateTo = oBank.DateTo,
-				Ebitda = (decimal)oBank.Ebida,
-				FreeCashFlow = (decimal)oBank.FreeCashFlow,
-				LoanRepayment = (decimal)oBank.ActualLoansRepayment,
-				Opex = Math.Abs((decimal)oBank.Opex),
-				Revenues = (decimal)oBank.Revenues,
-				Salaries = Math.Abs((decimal)oBank.Salaries),
-				Tax = (decimal)oBank.Tax,
-				ValueAdded = (decimal)oBank.TotalValueAdded,
-			});
+				Ebitda = 0,
+				FreeCashFlow = 0,
+				LoanRepayment = 0,
+				Opex = 0,
+				Revenues = 0,
+				Salaries = 0,
+				Tax = 0,
+				ValueAdded = 0,
+			};
+
+			foreach (var yodlee in yodlees) {
+				if (yodlee.Model != null && yodlee.Model.Yodlee != null && yodlee.Model.Yodlee.BankStatementAnnualizedModel != null) {
+					affordability.DateFrom = affordability.DateFrom ?? yodlee.Model.Yodlee.BankStatementAnnualizedModel.DateFrom;
+					affordability.DateTo = affordability.DateTo ?? yodlee.Model.Yodlee.BankStatementAnnualizedModel.DateTo;
+					affordability.Ebitda += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Ebida;
+					affordability.FreeCashFlow += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.FreeCashFlow;
+					affordability.IsAnnualized = true;
+					affordability.LoanRepayment += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.ActualLoansRepayment;
+					affordability.Opex = (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Opex;
+					affordability.Revenues += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Revenues;
+					affordability.Salaries += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Salaries;
+					affordability.Tax += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Tax;
+					affordability.ValueAdded += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.TotalValueAdded;
+				}
+			}
+			
+			if (yodlees.Count() > 1) {
+				affordability.ErrorMsgs = "More than one bank data";
+			}
+
+			Affordability.Add(affordability);
 		} // SaveBankStatement
 
 		#endregion method SaveBankStatement
