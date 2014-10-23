@@ -189,6 +189,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			loanModel: this.loanInfoModel,
 			medalModel: this.medalCalculationModel,
 			parentView: this,
+		    summaryInfoModel: this.summaryInfoModel
 		});
 
 		this.showed = true;
