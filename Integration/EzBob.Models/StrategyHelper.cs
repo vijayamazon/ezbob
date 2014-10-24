@@ -1001,13 +1001,24 @@
 
 		private bool IsOwner(Customer customer, string response, string titleNumber)
 		{
+			if (customer == null) {
+				log.Warn("IsOwner: returning false because customer is null.");
+				return false;
+			} // if
+
+			if ((customer.PersonalInfo == null) || string.IsNullOrWhiteSpace(customer.PersonalInfo.Fullname)) {
+				log.WarnFormat("IsOwner: returning false for customer {0} because full name is null or empty.", customer.Id);
+				return false;
+			} // if
+
 			var b = new LandRegistryModelBuilder();
 			var lrData = b.BuildResModel(response, titleNumber);
-			foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties)
-			{
-				if (customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
-					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname))
-				{
+
+			foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties) {
+				if (
+					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
+					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname)
+				) {
 					// Customer is owner
 					return true;
 				}
