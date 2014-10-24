@@ -318,22 +318,26 @@
 
 				oSignature.SetHistoryAndStatus(oResult.events, oResult.participants);
 
-				var sp = new SpSaveSignedDocument(m_oDB, m_oLog) {
-					EsignatureID = oSignature.ID,
-					StatusID = (int)oResult.status.Value,
-					DoSaveDoc = doc.HasValue,
-					MimeType = doc.MimeType,
-					DocumentContent = doc.Content,
-					SignerStatuses = oSignature.SignerStatuses,
-					HistoryEvents = oSignature.HistoryEvents,
-				};
+				if (doc.HasValue) {
+					var sp = new SpSaveSignedDocument(m_oDB, m_oLog) {
+						EsignatureID = oSignature.ID,
+						StatusID = (int)oResult.status.Value,
+						DoSaveDoc = doc.HasValue,
+						MimeType = doc.MimeType,
+						DocumentContent = doc.Content,
+						SignerStatuses = oSignature.SignerStatuses,
+						HistoryEvents = oSignature.HistoryEvents,
+					};
 
-				try {
-					sp.ExecuteNonQuery();
+					try {
+						sp.ExecuteNonQuery();
+					}
+					catch (Exception e) {
+						m_oLog.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
+					} // try
 				}
-				catch (Exception e) {
-					m_oLog.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
-				} // try
+				else
+					m_oLog.Debug("Nothing to save for the key '{0}': no documents received from EchoSign.", oSignature.DocumentKey);
 			} // if
 
 			m_oLog.Msg("Loading document info for the key '{0}' complete.", oSignature.DocumentKey);

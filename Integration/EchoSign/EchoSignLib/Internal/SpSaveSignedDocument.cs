@@ -14,11 +14,23 @@
 		#endregion constructor
 
 		public override bool HasValidParameters() {
-			return
-				(EsignatureID > 0) &&
-				!string.IsNullOrWhiteSpace(MimeType) &&
-				(DocumentContent != null) &&
-				(DocumentContent.Length > 0);
+			var oErrors = new List<string>();
+
+			if (EsignatureID <= 0)
+				oErrors.Add("Invalid EsignatureID.");
+
+			if (string.IsNullOrWhiteSpace(MimeType))
+				oErrors.Add("No MIME type was specified.");
+
+			if (DocumentContent == null)
+				oErrors.Add("No document content was specified.");
+			else if (DocumentContent.Length <= 0)
+				oErrors.Add("Document content is empty.");
+
+			if (oErrors.Count > 0)
+				Log.Warn("Cannot save signed document: {0}", string.Join(" ", oErrors));
+
+			return oErrors.Count < 1;
 		} // HasValidParameters
 
 		public int EsignatureID { get; set; }
