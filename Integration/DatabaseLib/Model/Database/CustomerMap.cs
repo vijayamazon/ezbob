@@ -241,6 +241,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.IsWaitingForSignature);
 
 			Map(x => x.CostumeActionItem).Length(1000);
+
+			Map(x => x.IsAlibaba);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

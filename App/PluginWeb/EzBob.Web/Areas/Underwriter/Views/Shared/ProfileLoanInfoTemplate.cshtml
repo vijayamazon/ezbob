@@ -119,6 +119,11 @@
                 </td>
             </tr>
             @RowCell("Property Status", "<%- data.PropertyStatus.Description %>")
+            <%if (data.IsAlibaba) {%>
+            <tr>
+                <td class="customer-personal-status-alignment"><span class="pull-right red_cell">Alibaba Customer</span></td>
+            </tr>
+            <%}%>
             <tr>
                 <td class="customer-personal-status-alignment"><a href="#" class="reset-password-123456">Reset password to 123456</a></td>
             </tr>

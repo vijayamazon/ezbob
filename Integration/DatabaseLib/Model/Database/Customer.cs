@@ -727,6 +727,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool? IsWaitingForSignature { get; set; }
 
 		public virtual string CostumeActionItem { get; set; }
+
+		public virtual bool IsAlibaba { get; set; }
 	} // class Customer
 
 	#endregion class Customer
