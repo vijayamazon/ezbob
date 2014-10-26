@@ -16,7 +16,7 @@
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
-			TemplateName = "Mandrill - Application completed under review";
+			TemplateName = CustomerData.IsAlibaba ? "Mandrill - Alibaba application completed under review" : "Mandrill - Application completed under review";
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName}
