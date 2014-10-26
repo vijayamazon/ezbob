@@ -77,7 +77,8 @@ BEGIN
 		BankAccountType,
 		@NumOfLoans AS NumOfLoans,
 		Customer.TypeOfBusiness,
-		@NumOfHmrcMps AS NumOfHmrcMps
+		@NumOfHmrcMps AS NumOfHmrcMps,
+		Customer.IsAlibaba
 	FROM
 		CustomerPropertyStatuses,
 		Customer
