@@ -73,6 +73,7 @@
 		public virtual bool IsCampaign { get; protected set; }
 		public virtual int BrokerID { get; protected set; }
 		public virtual bool IsFilledByBroker { get; protected set; }
+		public virtual bool IsAlibaba { get; protected set; }
 
 		#endregion properties
 
@@ -111,6 +112,7 @@
 			IsCampaign = sr["IsCampaign"];
 			BrokerID = sr["BrokerID"];
 			IsFilledByBroker = sr["IsFilledByBroker"];
+			IsAlibaba = sr["IsAlibaba"];
 		} // Load
 
 		#endregion private

@@ -31,7 +31,8 @@ BEGIN
 			CONVERT(BIT, 0) AS IsWhiteLabel,
 			CONVERT(BIT, 0) AS IsCampaign,
 			CONVERT(BIT, 0) AS BrokerID,
-			CONVERT(BIT, 0) AS IsFilledByBroker
+			CONVERT(BIT, 0) AS IsFilledByBroker,
+			CONVERT(BIT, 0) AS IsAlibaba
 		FROM
 			Broker b
 		WHERE

@@ -617,7 +617,7 @@
 					{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 				};
 
-				mailer.Send("Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(appEmail));
+				mailer.Send(isAlibaba ? "Mandrill - Alibaba - Approval (not 1st time)" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(appEmail));
 			}
 		}
 

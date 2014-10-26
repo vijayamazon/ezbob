@@ -64,7 +64,8 @@ BEGIN
 		END AS IsWhiteLabel,
 		@IsCampaign AS IsCampaign,
 		ISNULL(c.BrokerID, 0) AS BrokerID,
-		c.FilledByBroker AS IsFilledByBroker
+		c.FilledByBroker AS IsFilledByBroker,
+		c.IsAlibaba
 	FROM
 		Customer c
 		LEFT JOIN CustomerAddress a

@@ -27,8 +27,21 @@
 				{ "ValidFor", m_nValidHours.ToString(CultureInfo.InvariantCulture) }
 			};
 
-			TemplateName = m_bIsFirst ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)";
-			TemplateName = (m_bIsFirst && CustomerData.IsCampaign) ? "Mandrill - Approval Campaign (1st time)" : TemplateName;
+			if (m_bIsFirst)
+			{
+				if (CustomerData.IsCampaign)
+				{
+					TemplateName = "Mandrill - Approval Campaign (1st time)";
+				}
+				else
+				{
+					TemplateName = CustomerData.IsAlibaba ? "Mandrill - Alibaba - Approval (1st time)" : "Mandrill - Approval (1st time)";
+				}
+			}
+			else
+			{
+				TemplateName = CustomerData.IsAlibaba ? "Mandrill - Alibaba - Approval (not 1st time)" : "Mandrill - Approval (not 1st time)";
+			}
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables

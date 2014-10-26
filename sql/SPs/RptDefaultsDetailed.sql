@@ -318,7 +318,7 @@ SET @MinPct = 0.2
 		@NumOfSpecialLateOver60Loans AS NumOfSpecialLateOver60Loans, @SumOfSpecialLateOver60Loans AS SumOfSpecialLateOver60Loans, @OutstandingSpecialLateOver60Principal AS OutstandingSpecialLateOver60Principal
 
 --------- TEMP TABLE TO ADD ADDITIONAL COLUMNS TO FINAL TABLE -------------
-	
+/*	
 	SELECT L.Id AS LoanId,
 		   C.Id AS CustomerId,
 		   CASE 
@@ -338,13 +338,38 @@ SET @MinPct = 0.2
 	FROM Loan L
 	JOIN Customer C ON C.Id = L.CustomerId
 	ORDER BY 2,6
+*/
+
+    DECLARE @tmp_sp1 TABLE 
+     				   (CustomerId INT,
+     				   LoanID INT,
+     				   LoanDate DATETIME,
+     				   IssueMonth DATETIME,
+     				   LoanAmount NUMERIC (18, 0),
+     				   InterestRate DECIMAL (18, 4),
+     				   RepaymentPeriod INT,
+     				   OutstandingPrincipal DECIMAL (18, 2),
+     				   ManualSetupFeeAmount INT,
+     				   SetupFee NUMERIC (37, 4),
+     				   LoanNumber BIGINT,
+     				   CustomerRequestedAmount DECIMAL (18, 0),
+     				   ReferenceSource NVARCHAR (1000),
+     				   SourceRefGroup VARCHAR (16),
+     				   IsOffline BIT,
+     				   Loan_Type VARCHAR (8),
+     				   BrokerOrNot VARCHAR (12),
+     				   Quarter VARCHAR (7),
+     				   NewOldLoan VARCHAR (3)
+     				   );
+    INSERT INTO @tmp_sp1 
+    EXECUTE RptAllLoansIssued;
 	
 ----------------------- TEMP TABLE --------------------	
 	SELECT 	S.CustomerId,
 			S.CustomerStatus,
-			T1.OfflineOrOnline,
-			T1.IsBrokerClient,
-			T1.IsEuLoan,
+			T1.IsOffline,
+			T1.BrokerOrNot,
+			T1.Loan_Type,
 			T1.LoanNumber,
 			S.LoanId, 
 			S.Pct, 
@@ -364,17 +389,24 @@ SET @MinPct = 0.2
 			WHEN S.LateDays >= 91 THEN '90+ days missed'
 			ELSE 'No Group'
 			END AS MissedPaymentDays,
-			concat((CASE 
-					WHEN datepart(m, S.LoanDate) BETWEEN 1 AND 3 THEN 'Q1'
-					WHEN datepart(m, S.LoanDate) BETWEEN 4 AND 6 THEN 'Q2'
-					WHEN datepart(m, S.LoanDate) BETWEEN 7 AND 9 THEN 'Q3'
-					WHEN datepart(m, S.LoanDate) BETWEEN 10 AND 12 THEN 'Q4'
-					ELSE 'No Q-' END), '-', CAST(datepart(yyyy, S.LoanDate) AS NVARCHAR(4))) AS Quarter,
-
-			dateadd(month,S.PayMentNum,S.LoanDate) AS DefaultDate
+			CASE 
+			WHEN S.LoanDate BETWEEN '2012-07-01' AND '2013-01-01' THEN 'Q4-2012'
+			WHEN S.LoanDate BETWEEN '2013-01-01' AND '2013-04-01' THEN 'Q1-2013'
+			WHEN S.LoanDate BETWEEN '2013-04-01' AND '2013-07-01' THEN 'Q2-2013'
+			WHEN S.LoanDate BETWEEN '2013-07-01' AND '2013-10-01' THEN 'Q3-2013'
+			WHEN S.LoanDate BETWEEN '2013-10-01' AND '2014-01-01' THEN 'Q4-2013'
+			WHEN S.LoanDate BETWEEN '2014-01-01' AND '2014-04-01' THEN 'Q1-2014'
+			WHEN S.LoanDate BETWEEN '2014-04-01' AND '2014-07-01' THEN 'Q2-2014'
+			WHEN S.LoanDate BETWEEN '2014-07-01' AND '2014-10-01' THEN 'Q3-2014'
+			WHEN S.LoanDate BETWEEN '2014-10-01' AND '2015-01-01' THEN 'Q4-2014'
+			ELSE 'No Q'
+			END AS Quarter,
+			dateadd(month,S.PayMentNum,S.LoanDate) AS DefaultDate,
+			T1.NewOldLoan,
+			T1.IssueMonth
 	INTO #temp2
 	FROM #SpecialLate S
-	JOIN #temp1 T1 ON T1.LoanId = S.LoanId
+	JOIN @tmp_sp1 T1 ON T1.LoanId = S.LoanId
 		
 ----------- COLLECTION PAYMENTS AFTER THE DEFAULT DATE -------------
 	
@@ -390,19 +422,22 @@ SET @MinPct = 0.2
 		  AND T.Type = 'PaypointTransaction'
 		  AND T.Status = 'Done'	
 	GROUP BY T.LoanId
+
 		
 ------------------------ FINAL TABLE -----------------------
 	SELECT T.CustomerId,
 		   T.CustomerStatus,
-		   T.OfflineOrOnline,
-		   T.IsBrokerClient,
-		   T.IsEuLoan,
-		   T.IsEuLoan,
+		   T.IsOffline AS OfflineOrOnline,
+		   T.BrokerOrNot AS IsBrokerClient,
+		   T.Loan_Type AS IsEuLoan,
 		   T.LoanNumber,
 		   T.LoanId,
 		   T.ScheduleDate,
 		   T.FirstTransactionDate,
-		   T.PayMentNum,
+		   CASE
+		   WHEN T.PayMentNum > 12 THEN '12'
+		   ELSE T.PayMentNum
+		   END AS PaymentNum,
 		   T.LateDays,
 		   T.LoanAmount,
 		   T.LoanDate,
@@ -412,30 +447,38 @@ SET @MinPct = 0.2
 		   T.DefaultDate,
 		   C.PrincipalPaid,
 		   C.Interest,
-		   C.Fees
-		   
+		   C.Fees,
+		   T.NewOldLoan,
+		   T.IssueMonth
 			
 	FROM #temp2 T
 	LEFT JOIN #CollectionPayments C ON C.LoanId = T.LoanId
+	
 
 -------------- COLLECTION PAYMENTS FINAL TABLE -------------
 
-	SELECT T2.LoanId,
-		   T2.LoanDate,	
+	SELECT T2.CustomerId,
+		   T2.CustomerStatus,
+		   T2.OfflineOrOnline,
+		   T2.IsBrokerClient,
+		   T2.IsEuLoan,
+		   T2.LoanId,
+		   T2.LoanDate,
 		   DATEADD(MONTH,DATEDIFF(MONTH, 0,T.PostDate), 0) AS PaidMonth,
 		   T.LoanRepayment AS PrincipalPaid,
 		   T.Interest AS InterestPaid,
 		   T.Fees AS FeesPaid
 	FROM #temp2 T2
 	LEFT JOIN LoanTransaction T ON T.LoanId = T2.LoanId
+	
 	WHERE T.PostDate >= T2.DefaultDate
 		  AND T.Type = 'PaypointTransaction'
 		  AND T.Status = 'Done'	
 	
 
+	
 DROP TABLE #SpecialLate
 DROP TABLE #HandledLoans
-DROP TABLE #temp1
 DROP TABLE #temp2
 DROP TABLE #CollectionPayments
 
