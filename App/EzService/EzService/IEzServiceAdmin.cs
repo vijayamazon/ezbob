@@ -1,7 +1,7 @@
-﻿using System;
-using System.ServiceModel;
+﻿namespace EzService {
+	using System;
+	using System.ServiceModel;
 
-namespace EzService {
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceAdmin {
 		[OperationContract]
