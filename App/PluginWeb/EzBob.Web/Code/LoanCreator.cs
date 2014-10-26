@@ -68,12 +68,11 @@
 			PacnetReturnData ret;
 			if (PacnetSafeGuard(cus, transfered))
 			{
-				if (!isFakeLoanCreate) {
+				if (!isFakeLoanCreate && !cus.IsAlibaba) {
 					ret = SendMoney(cus, transfered);
 					VerifyAvailableFunds(transfered);
-				}
-				else {
-					ret = new PacnetReturnData() {
+				} else {
+					ret = new PacnetReturnData {
 						Status = "Done",
 						TrackingNumber = "fake"
 					};
@@ -96,18 +95,35 @@
 
 			loan.GenerateRefNumber(cus.RefNumber, cus.Loans.Count);
 
-			var loanTransaction = new PacnetTransaction {
-				Amount = loan.LoanAmount,
-				Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
-				PostDate = now,
-				Status = isFakeLoanCreate ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
-				TrackingNumber = ret.TrackingNumber,
-				PacnetStatus = ret.Status,
-				Fees = fee,
-				LoanTransactionMethod = m_oTranMethodRepo.FindOrDefault("Pacnet"),
-			};
+			PacnetTransaction loanTransaction;
+			if (!cus.IsAlibaba) {
+				loanTransaction = new PacnetTransaction {
+					Amount = loan.LoanAmount,
+					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
+					PostDate = now,
+					Status = isFakeLoanCreate ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
+					TrackingNumber = ret.TrackingNumber,
+					PacnetStatus = ret.Status,
+					Fees = fee,
+					LoanTransactionMethod = m_oTranMethodRepo.FindOrDefault("Pacnet"),
+				};
+			}
+			else {
+				loanTransaction = new PacnetTransaction
+				{
+					Amount = loan.LoanAmount,
+					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
+					PostDate = now,
+					Status = LoanTransactionStatus.Done,
+					TrackingNumber = "alibaba", //TODO save who got the money
+					PacnetStatus = ret.Status,
+					Fees = fee,
+					LoanTransactionMethod = m_oTranMethodRepo.FindOrDefault("Manual"),
+				};
+			}
 
 			loan.AddTransaction(loanTransaction);
+			
 
 			var aprCalc = new APRCalculator();
 			loan.APR = (decimal)aprCalc.Calculate(loanAmount, loan.Schedule, fee, now);
