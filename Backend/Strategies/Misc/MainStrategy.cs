@@ -67,6 +67,7 @@
 		private bool customerStatusIsWarning;
 		private string customerStatusName;
 		private bool isOffline;
+		private bool isAlibaba;
 		private bool isBrokerCustomer;
 		private string appEmail;
 		private string companyType;
@@ -1036,6 +1037,11 @@
 				enableAutomaticRejection = false;
 			}
 
+			if (isAlibaba)
+			{
+				enableAutomaticRejection = false;
+			}
+
 			if (
 				newCreditLineOption == NewCreditLineOption.SkipEverything ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
@@ -1109,6 +1115,7 @@
 			isFirstLoan = numOfLoans == 0;
 			typeOfBusiness = results["TypeOfBusiness"];
 			numOfHmrcMps = results["NumOfHmrcMps"];
+			isAlibaba = results["IsAlibaba"];
 
 			GetCompanySeniorityDays();
 		}
