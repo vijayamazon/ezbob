@@ -30,8 +30,8 @@
 
 		#region method BrokerCheckCustomerRelevance
 
-		public ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink) {
-			return Execute<BrokerCheckCustomerRelevance>(nCustomerID, nCustomerID, nCustomerID, sCustomerEmail, sSourceRef, sConfirmEmailLink);
+		public ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, bool isAlibaba, string sSourceRef, string sConfirmEmailLink) {
+			return Execute<BrokerCheckCustomerRelevance>(nCustomerID, nCustomerID, nCustomerID, sCustomerEmail, isAlibaba, sSourceRef, sConfirmEmailLink);
 		} // BrokerCheckCustomerRelevance
 
 		#endregion method BrokerCheckCustomerRelevance

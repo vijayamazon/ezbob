@@ -122,7 +122,7 @@
 		BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken);
 
 		[OperationContract]
-		ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink);
+		ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, bool isAlibaba, string sSourceRef, string sConfirmEmailLink);
 
 		[OperationContract]
 		BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);

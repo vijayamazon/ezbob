@@ -103,6 +103,7 @@
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="LimitedMedalCalculation\LimitedMedalDualCalculator.cs" />
     <Compile Include="MailStrategies\Broker\BrokerPasswordChanged.cs" />
+    <Compile Include="MailStrategies\AlibabaGreeting.cs" />
     <Compile Include="MailStrategies\SendInternalPendingMail.cs" />
     <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />

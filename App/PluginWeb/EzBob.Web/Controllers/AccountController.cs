@@ -393,7 +393,7 @@ namespace EzBob.Web.Controllers {
 				if (blm.IsSet)
 					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.FirstName, blm.BrokerFillsForCustomer, link);
 				else
-					m_oServiceClient.Instance.BrokerCheckCustomerRelevance(customer.Id, customer.Name, customer.ReferenceSource, link);
+					m_oServiceClient.Instance.BrokerCheckCustomerRelevance(customer.Id, customer.Name, customer.IsAlibaba, customer.ReferenceSource, link); // Add is Alibaba, or do after saving it to DB
 
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
