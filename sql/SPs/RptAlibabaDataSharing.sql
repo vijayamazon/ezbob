@@ -6,9 +6,38 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE RptAlibabaDataSharing
+@IncludeTest BIT = 0
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	SET @IncludeTest = ISNULL(@IncludeTest, 0)
+
+	------------------------------------------------------------------------------
+
+	SELECT DISTINCT
+		RowType = 'IsLate',
+		lst.LoanID
+	FROM
+		Loan l
+		INNER JOIN Customer c
+			ON l.CustomerId = c.Id
+		INNER JOIN LoanScheduleTransaction lst
+			ON l.Id = lst.LoanId
+			AND (
+				lst.StatusBefore IN ('Late', 'Paid')
+				OR
+				lst.StatusAfter IN ('Late', 'Paid')
+				OR
+				l.Status = 'Late'
+			)
+	WHERE
+		c.IsAlibaba = 1
+		AND (
+			@IncludeTest = 1
+			OR
+			c.IsTest = 0
+		)
 
 	------------------------------------------------------------------------------
 
@@ -151,8 +180,8 @@ BEGIN
 		END,
 		--
 		--
-		ContactDetails_MobilePhone  = c.MobilePhone,
-		ContactDetails_DaytimePhone = c.DaytimePhone,
+		PersonalContactDetails_MobilePhone  = c.MobilePhone,
+		PersonalContactDetails_DaytimePhone = c.DaytimePhone,
 		--
 		--
 		CompanyDetails_TypeOfBusiness            = b.TypeOfBusiness,
@@ -171,54 +200,54 @@ BEGIN
 		VatAccount_Uploaded = CASE WHEN ISNULL(hmrc_uploaded.Counter, 0) > 0 THEN 'yes' ELSE 'no' END,
 		--
 		--
-		ApprovalPhase_Verify_BuyerID       = c.ReferenceSource,
-		ApprovalPhase_Verify_EzbobMemberID = c.RefNumber,
-		ApprovalPhase_Verify_Email         = c.Name,
-		ApprovalPhase_Verify_BusinessName  = b.CompanyName,
+		ApprovalPhaseVerify_BuyerID       = c.ReferenceSource,
+		ApprovalPhaseVerify_EzbobMemberID = c.RefNumber,
+		ApprovalPhaseVerify_Email         = c.Name,
+		ApprovalPhaseVerify_BusinessName  = b.CompanyName,
 		--
-		ApprovalPhase_Verify_BusinessAddress_Organisation = ba.Organisation,
-		ApprovalPhase_Verify_BusinessAddress_Line1        = ba.Line1,
-		ApprovalPhase_Verify_BusinessAddress_Line2        = ba.Line2,
-		ApprovalPhase_Verify_BusinessAddress_Line3        = ba.Line3,
-		ApprovalPhase_Verify_BusinessAddress_Town         = ba.Town,
-		ApprovalPhase_Verify_BusinessAddress_County       = ba.County,
-		ApprovalPhase_Verify_BusinessAddress_Postcode     = ba.Postcode,
-		ApprovalPhase_Verify_BusinessAddress_Country      = ba.Country,
-		ApprovalPhase_Verify_BusinessAddress_Pobox        = ba.Pobox,
+		ApprovalPhaseVerify_BusinessAddress_Organisation = ba.Organisation,
+		ApprovalPhaseVerify_BusinessAddress_Line1        = ba.Line1,
+		ApprovalPhaseVerify_BusinessAddress_Line2        = ba.Line2,
+		ApprovalPhaseVerify_BusinessAddress_Line3        = ba.Line3,
+		ApprovalPhaseVerify_BusinessAddress_Town         = ba.Town,
+		ApprovalPhaseVerify_BusinessAddress_County       = ba.County,
+		ApprovalPhaseVerify_BusinessAddress_Postcode     = ba.Postcode,
+		ApprovalPhaseVerify_BusinessAddress_Country      = ba.Country,
+		ApprovalPhaseVerify_BusinessAddress_Pobox        = ba.Pobox,
 		--
-		ApprovalPhase_Verify_UnderCurrentOwnership = CASE b.TimeAtAddress
+		ApprovalPhaseVerify_UnderCurrentOwnership = CASE b.TimeAtAddress
 			WHEN 1 THEN '1 year'
 			WHEN 2 THEN '2 years'
 			WHEN 3 THEN '3 years or more'
 			ELSE NULL
 		END,
-		ApprovalPhase_Verify_BusinessPhoneNumber   = b.BusinessPhone,
-		ApprovalPhase_Verify_NumberOfEmployees     = cec_data.EmployeeCount,
-		ApprovalPhase_Verify_MainIndustry          = cac.Sic1992Desc1,
-		ApprovalPhase_Verify_Turnover              = c.OverallTurnOver,
+		ApprovalPhaseVerify_BusinessPhoneNumber   = b.BusinessPhone,
+		ApprovalPhaseVerify_NumberOfEmployees     = cec_data.EmployeeCount,
+		ApprovalPhaseVerify_MainIndustry          = cac.Sic1992Desc1,
+		ApprovalPhaseVerify_Turnover              = c.OverallTurnOver,
 		--
 		--
-		ApprovalPhase_Feedback_IsApproved     = CASE c.CreditResult
+		ApprovalPhaseFeedback_IsApproved     = CASE c.CreditResult
 			WHEN 'Approved' THEN 'yes'
 			WHEN 'Late' THEN 'yes'
 			ELSE 'no'
 		END,
-		ApprovalPhase_Feedback_ApprovedAmount = CASE c.CreditResult
+		ApprovalPhaseFeedback_ApprovedAmount = CASE c.CreditResult
 			WHEN 'Approved' THEN c.CreditSum
 			WHEN 'Late' THEN c.CreditSum
 			ELSE NULL
 		END,
-		ApprovalPhase_Feedback_ApprovalDate   = CASE c.CreditResult
+		ApprovalPhaseFeedback_ApprovalDate   = CASE c.CreditResult
 			WHEN 'Approved' THEN c.DateApproved
 			WHEN 'Late' THEN c.DateApproved
 			ELSE NULL
 		END,
-		ApprovalPhase_Feedback_Remarks        = CASE
+		ApprovalPhaseFeedback_Remarks        = CASE
 			WHEN c.CreditResult IN ('ApprovedPending', 'Escalated', 'WaitingForDecision') THEN 'Pending approval'
 			WHEN c.CreditResult IS NULL THEN 'Did not finish application process'
 			ELSE NULL
 		END,
-		ApprovalPhase_Feedback_RejectReason   = CASE c.CreditResult
+		ApprovalPhaseFeedback_RejectReason   = CASE c.CreditResult
 			WHEN 'Rejected' THEN c.RejectedReason
 			ELSE NULL
 		END
@@ -254,7 +283,12 @@ BEGIN
 			ON c.Id = cac.CustomerID
 			AND cac.IsActive = 1
 	WHERE
-		c.Name LIKE 'alexbo%' -- TODO: put sourceref condition here
+		c.IsAlibaba = 1
+		AND (
+			@IncludeTest = 1
+			OR
+			c.IsTest = 0
+		)
 	
 	------------------------------------------------------------------------------
 
@@ -266,10 +300,32 @@ BEGIN
 		LoanAgreementPhase_OrderNo                = l.RefNum,
 		LoanAgreementPhase_SingleFinancingAmount  = l.LoanAmount,
 		LoanAgreementPhase_InterestRate           = l.InterestRate,
-		LoanAgreementPhase_SingleFinancingTime    = l.CustomerSelectedTerm,
+		LoanAgreementPhase_SingleFinancingTime    = l.CustomerSelectedTerm
 		--
 		--
-		LoanServicing_BuyerRepayDate = l.DateClosed,
+	FROM
+		Loan l
+		INNER JOIN Customer c
+			ON l.CustomerId = c.Id
+	WHERE
+		c.IsAlibaba = 1
+		AND (
+			@IncludeTest = 1
+			OR
+			c.IsTest = 0
+		)
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		RowType    = 'Repayment',
+		CustomerID = c.Id,
+		--
+		--
+		LoanID = l.Id,
+		LoanRefNum = l.RefNum,
+		l.LoanAmount,
+		l.DateClosed,
 		t.Amount,
 		t.Interest,
 		l.RequestCashId,
@@ -287,25 +343,13 @@ BEGIN
 			AND t.Type = 'PaypointTransaction'
 			ANd t.Status = 'Done'
 	WHERE
-		c.Name LIKE 'alexbo%' -- TODO: put sourceref condition here
+		c.IsAlibaba = 1
+		AND (
+			@IncludeTest = 1
+			OR
+			c.IsTest = 0
+		)
 
 	------------------------------------------------------------------------------
-
-	SELECT DISTINCT
-		RowType = 'IsLate',
-		lst.LoanID
-	FROM
-		Loan l
-		INNER JOIN Customer c
-			ON l.CustomerId = c.Id
-		INNER JOIN LoanScheduleTransaction lst
-			ON l.Id = lst.LoanId
-			AND (
-				lst.StatusBefore IN ('Late', 'Paid')
-				OR
-				lst.StatusAfter IN ('Late', 'Paid')
-			)
-	WHERE
-		c.Name LIKE 'alexbo%' -- TODO: put sourceref condition here
 END
 GO

@@ -68,6 +68,12 @@
 
 		#endregion constructor
 
+		#region property Raw
+
+		public object Raw { get { return m_oValue ?? m_oDefault; } } // Raw
+
+		#endregion property Raw
+
 		#region interface IConvertible and type cast operators
 
 		#region GetTypeCode
