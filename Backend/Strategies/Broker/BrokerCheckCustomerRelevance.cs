@@ -11,6 +11,7 @@
 		public BrokerCheckCustomerRelevance(
 			int nCustomerID,
 			string sCustomerEmail,
+			bool isAlibaba,
 			string sSourceRef,
 			string sConfirmEmailLink,
 			AConnection oDB,
@@ -22,7 +23,14 @@
 				SourceRef = sSourceRef,
 			};
 
-			m_oGreetingStrat = new Greeting(nCustomerID, sConfirmEmailLink, DB, Log);
+			if (isAlibaba)
+			{
+				m_oGreetingStrat = new AlibabaGreeting(nCustomerID, DB, Log);
+			}
+			else
+			{
+				m_oGreetingStrat = new Greeting(nCustomerID, sConfirmEmailLink, DB, Log);
+			}
 		} // constructor
 
 		#endregion constructor
@@ -48,7 +56,7 @@
 
 		#region private
 
-		private readonly Greeting m_oGreetingStrat;
+		private readonly ABrokerMailToo m_oGreetingStrat;
 		private readonly SpBrokerCheckCustomerRelevance m_oSp;
 
 		#region class SpBrokerCheckCustomerRelevance

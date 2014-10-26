@@ -1778,6 +1778,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
         <xs:element minOccurs="0" name="sCustomerEmail" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isAlibaba" type="xs:boolean" />
         <xs:element minOccurs="0" name="sSourceRef" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sConfirmEmailLink" nillable="true" type="xs:string" />
       </xs:sequence>
