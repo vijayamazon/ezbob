@@ -19,10 +19,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="https://secure.echosign.com/services/EchoSignDocumentService18?wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://secure.echosign.com/services/EchoSignDocumentService19?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="EchoSignDocumentService18.wsdl" MetadataType="Wsdl" ID="1c184180-a270-4bd4-92f2-2a025533c1b2" SourceId="1" SourceUrl="https://secure.echosign.com/services/EchoSignDocumentService18?wsdl" />
+    <MetadataFile FileName="EchoSignDocumentService19.wsdl" MetadataType="Wsdl" ID="a3f6bbac-7361-4d87-93ee-2d3fe5e0611d" SourceId="1" SourceUrl="https://secure.echosign.com/services/EchoSignDocumentService19?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

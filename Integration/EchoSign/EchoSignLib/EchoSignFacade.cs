@@ -11,7 +11,7 @@
 	using Ezbob.Utils.Exceptions;
 	using Ezbob.Utils.Serialization;
 
-	using EchoSignClient = EchoSignLib.EchoSignService.EchoSignDocumentService18PortTypeClient;
+	using EchoSignClient = EchoSignLib.EchoSignService.EchoSignDocumentService19PortTypeClient;
 	using FileInfo = EchoSignService.FileInfo;
 
 	#region class EchoSignFacadeExt

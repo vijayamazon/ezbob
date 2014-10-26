@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="8XSgymgaX7SKLnqzn5L3Ft3rCmI=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="3JeP+4waQhVmHEPkW6SEcmbv1Ik=">
   <bindingConfigurations>
-    <bindingConfiguration bindingType="basicHttpBinding" name="EchoSignDocumentService18HttpBinding">
+    <bindingConfiguration bindingType="basicHttpBinding" name="EchoSignDocumentService19HttpBinding">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>EchoSignDocumentService18HttpBinding</serializedValue>
+          <serializedValue>EchoSignDocumentService19HttpBinding</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -110,10 +110,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="basicHttpBinding" name="EchoSignDocumentService18HttpBinding1">
+    <bindingConfiguration bindingType="basicHttpBinding" name="EchoSignDocumentService19HttpBinding1">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>EchoSignDocumentService18HttpBinding1</serializedValue>
+          <serializedValue>EchoSignDocumentService19HttpBinding1</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -221,10 +221,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="EchoSignDocumentService18HttpPort" contract="EchoSignService.EchoSignDocumentService18PortType" bindingType="basicHttpBinding" address="https://secure.echosign.com/services/EchoSignDocumentService18" bindingConfiguration="EchoSignDocumentService18HttpBinding">
+    <endpoint name="EchoSignDocumentService19HttpPort" contract="EchoSignService.EchoSignDocumentService19PortType" bindingType="basicHttpBinding" address="https://secure.echosign.com/services/EchoSignDocumentService19" bindingConfiguration="EchoSignDocumentService19HttpBinding">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>https://secure.echosign.com/services/EchoSignDocumentService18</serializedValue>
+          <serializedValue>https://secure.echosign.com/services/EchoSignDocumentService19</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -233,10 +233,10 @@
           <serializedValue>basicHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>EchoSignDocumentService18HttpBinding</serializedValue>
+          <serializedValue>EchoSignDocumentService19HttpBinding</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>EchoSignService.EchoSignDocumentService18PortType</serializedValue>
+          <serializedValue>EchoSignService.EchoSignDocumentService19PortType</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -296,7 +296,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>EchoSignDocumentService18HttpPort</serializedValue>
+          <serializedValue>EchoSignDocumentService19HttpPort</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

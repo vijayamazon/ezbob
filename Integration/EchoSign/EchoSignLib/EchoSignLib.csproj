@@ -71,7 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Service References\EchoSignService\EchoSignDocumentService18.wsdl" />
+    <None Include="Service References\EchoSignService\EchoSignDocumentService19.wsdl" />
     <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.AuditTrailResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -129,6 +129,9 @@
     <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetDocumentImageUrlsResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetDocumentPagesInfoResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetDocumentsForUserResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -136,6 +139,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetDocumentUrlsResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetEmbeddedViewResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetFormDataResult.datasource">
@@ -148,6 +154,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetMegaSignDocumentResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetSignerFormFieldsResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EchoSignService\EchoSignLib.EchoSignService.GetSupportingDocumentsResult.datasource">

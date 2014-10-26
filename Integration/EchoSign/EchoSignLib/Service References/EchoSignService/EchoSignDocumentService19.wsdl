@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:ns10="http://dto10.api.echosign" xmlns:tns="http://api.echosign" xmlns:ns12="http://dto12.api.echosign" xmlns:ns15="http://dto15.api.echosign" xmlns:ns6="http://dto.api.echosign" xmlns:ns17="http://dto17.api.echosign" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:ns7="http://dto7.api.echosign" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns14="http://dto14.api.echosign" xmlns:ns9="http://dto9.api.echosign" xmlns:ns11="http://dto11.api.echosign" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns13="http://dto13.api.echosign" xmlns:ns16="http://dto16.api.echosign" xmlns:ns18="http://dto18.api.echosign" xmlns:ns8="http://dto8.api.echosign" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://api.echosign" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:ns10="http://dto10.api.echosign" xmlns:tns="http://api.echosign" xmlns:ns12="http://dto12.api.echosign" xmlns:ns15="http://dto15.api.echosign" xmlns:ns6="http://dto.api.echosign" xmlns:ns17="http://dto17.api.echosign" xmlns:ns19="http://dto19.api.echosign" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:ns7="http://dto7.api.echosign" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns14="http://dto14.api.echosign" xmlns:ns9="http://dto9.api.echosign" xmlns:ns11="http://dto11.api.echosign" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns13="http://dto13.api.echosign" xmlns:ns16="http://dto16.api.echosign" xmlns:ns18="http://dto18.api.echosign" xmlns:ns8="http://dto8.api.echosign" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://api.echosign" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://api.echosign">
       <xsd:element name="cancelDocument">
@@ -330,7 +330,7 @@
       <xsd:element name="getDocumentInfoResponse">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element minOccurs="1" maxOccurs="1" name="documentInfo" nillable="true" type="ns18:DocumentInfo" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="documentInfo" nillable="true" type="ns19:DocumentInfo" />
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
@@ -347,7 +347,22 @@
       <xsd:element name="getDocumentInfosByExternalIdResponse">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element minOccurs="1" maxOccurs="1" name="documentInfoList" nillable="true" type="ns18:DocumentInfoList" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="documentInfoList" nillable="true" type="ns19:DocumentInfoList" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getDocumentPagesInfo">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="apiKey" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="documentKey" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getDocumentPagesInfoResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="getDocumentPagesInfoResult" nillable="true" type="ns19:GetDocumentPagesInfoResult" />
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
@@ -410,6 +425,22 @@
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element minOccurs="1" maxOccurs="1" name="getDocumentsResult" nillable="true" type="ns16:GetDocumentsResult" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getEmbeddedView">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="accessToken" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="onBehalfOfUser" nillable="true" type="ns19:OnBehalfOfUser" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="embeddedViewOptions" nillable="true" type="ns19:EmbeddedViewOptions" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getEmbeddedViewResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="getEmbeddedViewResult" nillable="true" type="ns19:GetEmbeddedViewResult" />
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
@@ -571,6 +602,22 @@
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element minOccurs="1" maxOccurs="1" name="getMyWidgetsResult" nillable="true" type="ns16:GetWidgetsForUserResult" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getSignerFormFields">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="apiKey" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="documentKey" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="options" nillable="true" type="ns19:GetSignerFormFieldsOptions" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getSignerFormFieldsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="getSignerFormFieldsResult" nillable="true" type="ns19:GetSignerFormFieldsResult" />
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
@@ -1329,6 +1376,7 @@
       <xsd:complexType name="WidgetCreationInfo">
         <xsd:sequence>
           <xsd:element minOccurs="0" name="callbackInfo" nillable="true" type="ns6:CallbackInfo" />
+          <xsd:element minOccurs="0" name="counterSigners" nillable="true" type="ns14:ArrayOfRecipientInfo" />
           <xsd:element minOccurs="0" name="fileInfos" nillable="true" type="ns6:ArrayOfFileInfo" />
           <xsd:element minOccurs="0" name="formFieldLayerTemplates" nillable="true" type="ns6:ArrayOfFileInfo" />
           <xsd:element minOccurs="0" name="locale" nillable="true" type="xsd:string" />
@@ -1339,6 +1387,7 @@
           <xsd:element minOccurs="0" name="vaultingInfo" nillable="true" type="ns6:VaultingInfo" />
           <xsd:element minOccurs="0" name="widgetAuthFailureInfo" nillable="true" type="ns8:WidgetCompletionInfo" />
           <xsd:element minOccurs="0" name="widgetCompletionInfo" nillable="true" type="ns8:WidgetCompletionInfo" />
+          <xsd:element minOccurs="0" name="widgetSignerSecurityOptions" nillable="true" type="ns18:RecipientSecurityOption" />
         </xsd:sequence>
       </xsd:complexType>
       <xsd:complexType name="WidgetPersonalizationInfo">
@@ -1520,11 +1569,6 @@
       </xsd:simpleType>
     </xsd:schema>
     <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://dto13.api.echosign">
-      <xsd:complexType name="ArrayOfParticipantSecurityOption">
-        <xsd:sequence>
-          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ParticipantSecurityOption" nillable="true" type="ns13:ParticipantSecurityOption" />
-        </xsd:sequence>
-      </xsd:complexType>
       <xsd:complexType name="ArrayOfSecurityOption">
         <xsd:sequence>
           <xsd:element minOccurs="0" maxOccurs="unbounded" name="SecurityOption" nillable="true" type="ns13:SecurityOption" />
@@ -1547,14 +1591,6 @@
           <xsd:enumeration value="EXCEPTION" />
         </xsd:restriction>
       </xsd:simpleType>
-      <xsd:simpleType name="ParticipantSecurityOption">
-        <xsd:restriction base="xsd:string">
-          <xsd:enumeration value="PASSWORD" />
-          <xsd:enumeration value="WEB_IDENTITY" />
-          <xsd:enumeration value="KBA" />
-          <xsd:enumeration value="OTHER" />
-        </xsd:restriction>
-      </xsd:simpleType>
       <xsd:simpleType name="SecurityOption">
         <xsd:restriction base="xsd:string">
           <xsd:enumeration value="OPEN_PROTECTED" />
@@ -1571,11 +1607,6 @@
       <xsd:complexType name="ArrayOfDocumentUrl">
         <xsd:sequence>
           <xsd:element minOccurs="0" maxOccurs="unbounded" name="DocumentUrl" nillable="true" type="ns14:DocumentUrl" />
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:complexType name="ArrayOfParticipantRole">
-        <xsd:sequence>
-          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ParticipantRole" nillable="true" type="ns14:ParticipantRole" />
         </xsd:sequence>
       </xsd:complexType>
       <xsd:complexType name="ArrayOfRecipientInfo">
@@ -1714,17 +1745,6 @@
           <xsd:enumeration value="ALL" />
           <xsd:enumeration value="FIXED_WIDTH" />
           <xsd:enumeration value="PERCENT_ZOOM" />
-        </xsd:restriction>
-      </xsd:simpleType>
-      <xsd:simpleType name="ParticipantRole">
-        <xsd:restriction base="xsd:string">
-          <xsd:enumeration value="SENDER" />
-          <xsd:enumeration value="SIGNER" />
-          <xsd:enumeration value="APPROVER" />
-          <xsd:enumeration value="CC" />
-          <xsd:enumeration value="DELEGATE" />
-          <xsd:enumeration value="SHARE" />
-          <xsd:enumeration value="OTHER" />
         </xsd:restriction>
       </xsd:simpleType>
       <xsd:complexType name="RecipientInfo">
@@ -2212,11 +2232,6 @@
           <xsd:element minOccurs="0" maxOccurs="unbounded" name="LibraryTemplateType" nillable="true" type="ns17:LibraryTemplateType" />
         </xsd:sequence>
       </xsd:complexType>
-      <xsd:complexType name="ArrayOfParticipantInfo">
-        <xsd:sequence>
-          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ParticipantInfo" nillable="true" type="ns17:ParticipantInfo" />
-        </xsd:sequence>
-      </xsd:complexType>
       <xsd:complexType name="ComposeDocumentInfo">
         <xsd:sequence>
           <xsd:element minOccurs="0" name="composeDocumentType" nillable="true" type="ns17:ComposeDocumentType" />
@@ -2385,18 +2400,6 @@
           <xsd:enumeration value="EXCEPTION" />
         </xsd:restriction>
       </xsd:simpleType>
-      <xsd:complexType name="ParticipantInfo">
-        <xsd:sequence>
-          <xsd:element minOccurs="0" name="alternateParticipants" nillable="true" type="ns17:ArrayOfParticipantInfo" />
-          <xsd:element minOccurs="0" name="status" nillable="true" type="ns17:UserAgreementStatus" />
-          <xsd:element minOccurs="0" name="roles" nillable="true" type="ns14:ArrayOfParticipantRole" />
-          <xsd:element minOccurs="0" name="securityOptions" nillable="true" type="ns13:ArrayOfParticipantSecurityOption" />
-          <xsd:element minOccurs="0" name="company" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="email" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="title" nillable="true" type="xsd:string" />
-        </xsd:sequence>
-      </xsd:complexType>
       <xsd:complexType name="RejectDocumentOptions">
         <xsd:sequence>
           <xsd:element minOccurs="0" name="comment" nillable="true" type="xsd:string" />
@@ -2544,11 +2547,6 @@
           <xsd:element minOccurs="0" maxOccurs="unbounded" name="DocumentHistoryEvent" nillable="true" type="ns18:DocumentHistoryEvent" />
         </xsd:sequence>
       </xsd:complexType>
-      <xsd:complexType name="ArrayOfDocumentInfo">
-        <xsd:sequence>
-          <xsd:element minOccurs="0" maxOccurs="unbounded" name="DocumentInfo" nillable="true" type="ns18:DocumentInfo" />
-        </xsd:sequence>
-      </xsd:complexType>
       <xsd:complexType name="ArrayOfRecipientSecurityOption">
         <xsd:sequence>
           <xsd:element minOccurs="0" maxOccurs="unbounded" name="RecipientSecurityOption" nillable="true" type="ns18:RecipientSecurityOption" />
@@ -2571,6 +2569,7 @@
           <xsd:enumeration value="PASSWORD" />
           <xsd:enumeration value="WEB_IDENTITY" />
           <xsd:enumeration value="KBA" />
+          <xsd:enumeration value="PHONE" />
         </xsd:restriction>
       </xsd:simpleType>
       <xsd:complexType name="DocumentEventForUser">
@@ -2600,29 +2599,6 @@
           <xsd:element minOccurs="0" name="participantEmail" nillable="true" type="xsd:string" />
           <xsd:element minOccurs="0" name="date" type="xsd:dateTime" />
           <xsd:element minOccurs="0" name="description" nillable="true" type="xsd:string" />
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:complexType name="DocumentInfo">
-        <xsd:sequence>
-          <xsd:element minOccurs="0" name="events" nillable="true" type="ns18:ArrayOfDocumentHistoryEvent" />
-          <xsd:element minOccurs="0" name="participants" nillable="true" type="ns17:ArrayOfParticipantInfo" />
-          <xsd:element minOccurs="0" name="status" nillable="true" type="ns17:AgreementStatus" />
-          <xsd:element minOccurs="0" name="documentKey" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="latestDocumentKey" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="expiration" type="xsd:dateTime" />
-          <xsd:element minOccurs="0" name="locale" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="message" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="nextParticipantInfos" nillable="true" type="ns9:ArrayOfNextParticipantInfo" />
-          <xsd:element minOccurs="0" name="securityOptions" nillable="true" type="ns13:ArrayOfSecurityOption" />
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:complexType name="DocumentInfoList">
-        <xsd:sequence>
-          <xsd:element minOccurs="0" name="documentInfos" nillable="true" type="ns18:ArrayOfDocumentInfo" />
-          <xsd:element minOccurs="0" name="errorCode" nillable="true" type="ns11:DocumentInfoListErrorCode" />
-          <xsd:element minOccurs="0" name="errorMessage" nillable="true" type="xsd:string" />
-          <xsd:element minOccurs="0" name="success" type="xsd:boolean" />
         </xsd:sequence>
       </xsd:complexType>
       <xsd:complexType name="GetDocumentEventsForUserResult">
@@ -2671,6 +2647,7 @@
         <xsd:sequence>
           <xsd:element minOccurs="0" name="authenticationMethod" nillable="true" type="ns18:AuthenticationMethod" />
           <xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="phoneInfos" nillable="true" type="ns19:ArrayOfPhoneInfo" />
         </xsd:sequence>
       </xsd:complexType>
       <xsd:complexType name="SearchUserDocumentsOptions">
@@ -2713,6 +2690,384 @@
           <xsd:enumeration value="GROUP_ADMIN" />
           <xsd:enumeration value="ACCOUNT_ADMIN" />
           <xsd:enumeration value="OTHER" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://dto19.api.echosign">
+      <xsd:simpleType name="AnyAll">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="ANY" />
+          <xsd:enumeration value="ALL" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="ArrayOfDocumentInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="DocumentInfo" nillable="true" type="ns19:DocumentInfo" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfDocumentPageInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="DocumentPageInfo" nillable="true" type="ns19:DocumentPageInfo" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfFormValue">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="FormValue" nillable="true" type="ns19:FormValue" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfParticipantInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ParticipantInfo" nillable="true" type="ns19:ParticipantInfo" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfParticipantRole">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ParticipantRole" nillable="true" type="ns19:ParticipantRole" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfParticipantSecurityOption">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ParticipantSecurityOption" nillable="true" type="ns19:ParticipantSecurityOption" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfPhoneInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="PhoneInfo" nillable="true" type="ns19:PhoneInfo" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfSignerFormField">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="SignerFormField" nillable="true" type="ns19:SignerFormField" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfSignerFormFieldCondition">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="SignerFormFieldCondition" nillable="true" type="ns19:SignerFormFieldCondition" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfSignerFormFieldLocation">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="SignerFormFieldLocation" nillable="true" type="ns19:SignerFormFieldLocation" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="BorderStyle">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="SOLID" />
+          <xsd:enumeration value="DASHED" />
+          <xsd:enumeration value="BEVELED" />
+          <xsd:enumeration value="INSET" />
+          <xsd:enumeration value="UNDERLINE" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="ContentType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="DATA" />
+          <xsd:enumeration value="SIGNATURE_BLOCK" />
+          <xsd:enumeration value="SIGNATURE" />
+          <xsd:enumeration value="SIGNER_NAME" />
+          <xsd:enumeration value="SIGNER_FIRST_NAME" />
+          <xsd:enumeration value="SIGNER_LAST_NAME" />
+          <xsd:enumeration value="SIGNER_INITIALS" />
+          <xsd:enumeration value="SIGNER_EMAIL" />
+          <xsd:enumeration value="SIGNER_TITLE" />
+          <xsd:enumeration value="SIGNER_COMPANY" />
+          <xsd:enumeration value="SIGNATURE_DATE" />
+          <xsd:enumeration value="AGREEMENT_NAME" />
+          <xsd:enumeration value="AGREEMENT_MESSAGE" />
+          <xsd:enumeration value="TRANSACTION_ID" />
+          <xsd:enumeration value="SIGNATURE_STAMP" />
+          <xsd:enumeration value="CALC" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="DisplayFormatType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="DEFAULT" />
+          <xsd:enumeration value="DATE" />
+          <xsd:enumeration value="NUMBER" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="DocumentInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="participants" nillable="true" type="ns19:ArrayOfParticipantInfo" />
+          <xsd:element minOccurs="0" name="events" nillable="true" type="ns18:ArrayOfDocumentHistoryEvent" />
+          <xsd:element minOccurs="0" name="status" nillable="true" type="ns17:AgreementStatus" />
+          <xsd:element minOccurs="0" name="documentKey" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="latestDocumentKey" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="expiration" type="xsd:dateTime" />
+          <xsd:element minOccurs="0" name="locale" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="message" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="nextParticipantInfos" nillable="true" type="ns9:ArrayOfNextParticipantInfo" />
+          <xsd:element minOccurs="0" name="securityOptions" nillable="true" type="ns13:ArrayOfSecurityOption" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="DocumentInfoList">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="documentInfos" nillable="true" type="ns19:ArrayOfDocumentInfo" />
+          <xsd:element minOccurs="0" name="errorCode" nillable="true" type="ns11:DocumentInfoListErrorCode" />
+          <xsd:element minOccurs="0" name="errorMessage" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="success" type="xsd:boolean" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="DocumentPageInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="height" type="xsd:double" />
+          <xsd:element minOccurs="0" name="pageNumber" type="xsd:int" />
+          <xsd:element minOccurs="0" name="rotation" type="xsd:int" />
+          <xsd:element minOccurs="0" name="width" type="xsd:double" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="EmbeddedViewOptions">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="embeddedViewObject" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="embeddedViewTarget" nillable="true" type="ns19:EmbeddedViewTarget" />
+          <xsd:element minOccurs="0" name="noChrome" type="xsd:boolean" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="EmbeddedViewTarget">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="AGREEMENT" />
+          <xsd:enumeration value="AGREEMENT_LIST" />
+          <xsd:enumeration value="USER_PROFILE" />
+          <xsd:enumeration value="ACCOUNT_SETTINGS" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="FormValue">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="fieldInputType" nillable="true" type="ns19:InputType" />
+          <xsd:element minOccurs="0" name="fieldName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldValue" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetDocumentPagesInfoResult">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="documentPagesInfo" nillable="true" type="ns19:ArrayOfDocumentPageInfo" />
+          <xsd:element minOccurs="0" name="errorCode" nillable="true" type="ns19:GetDocumentPagesInfoResultErrorCode" />
+          <xsd:element minOccurs="0" name="errorMessage" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="success" type="xsd:boolean" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="GetDocumentPagesInfoResultErrorCode">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="OK" />
+          <xsd:enumeration value="INVALID_API_KEY" />
+          <xsd:enumeration value="INVALID_DOCUMENT_KEY" />
+          <xsd:enumeration value="DOCUMENT_HAS_BEEN_DELETED" />
+          <xsd:enumeration value="EXCEPTION" />
+          <xsd:enumeration value="MISC_ERROR" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="GetEmbeddedViewResult">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="errorCode" nillable="true" type="ns19:GetEmbeddedViewResultCode" />
+          <xsd:element minOccurs="0" name="errorMessage" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="success" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="url" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="GetEmbeddedViewResultCode">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="OK" />
+          <xsd:enumeration value="INVALID_ACCESS_TOKEN" />
+          <xsd:enumeration value="INVALID_ON_BEHALF_OF_USER" />
+          <xsd:enumeration value="INVALID_TARGET" />
+          <xsd:enumeration value="INVALID_TARGET_OBJECT" />
+          <xsd:enumeration value="EXCEPTION" />
+          <xsd:enumeration value="MISC_ERROR" />
+          <xsd:enumeration value="PERMISSION_DENIED" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="GetSignerFormFieldsOptions">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="signerEmail" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetSignerFormFieldsResult">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="errorCode" nillable="true" type="ns19:GetSignerFormFieldsResultErrorCode" />
+          <xsd:element minOccurs="0" name="errorMessage" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="formValuesForConditionalsAndCalculations" nillable="true" type="ns19:ArrayOfFormValue" />
+          <xsd:element minOccurs="0" name="locale" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="orderedCalculatedFieldNames" nillable="true" type="tns:ArrayOfString" />
+          <xsd:element minOccurs="0" name="orderedConditionalFieldNames" nillable="true" type="tns:ArrayOfString" />
+          <xsd:element minOccurs="0" name="signer" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="signerFormFields" nillable="true" type="ns19:ArrayOfSignerFormField" />
+          <xsd:element minOccurs="0" name="success" type="xsd:boolean" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="GetSignerFormFieldsResultErrorCode">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="OK" />
+          <xsd:enumeration value="INVALID_API_KEY" />
+          <xsd:enumeration value="INVALID_DOCUMENT_KEY" />
+          <xsd:enumeration value="DOCUMENT_HAS_BEEN_DELETED" />
+          <xsd:enumeration value="DOCUMENT_ALREADY_SIGNED" />
+          <xsd:enumeration value="DOCUMENT_NOT_SIGNABLE" />
+          <xsd:enumeration value="INVALID_SIGNER_EMAIL" />
+          <xsd:enumeration value="ALREADY_CANCELLED" />
+          <xsd:enumeration value="ALREADY_SIGNED" />
+          <xsd:enumeration value="EXCEPTION" />
+          <xsd:enumeration value="MISC_ERROR" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="InputType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="TEXT_FIELD" />
+          <xsd:enumeration value="MULTILINE" />
+          <xsd:enumeration value="PASSWORD" />
+          <xsd:enumeration value="RADIO" />
+          <xsd:enumeration value="CHECKBOX" />
+          <xsd:enumeration value="DROP_DOWN" />
+          <xsd:enumeration value="LISTBOX" />
+          <xsd:enumeration value="SIGNATURE" />
+          <xsd:enumeration value="PDF_SIGNATURE" />
+          <xsd:enumeration value="BUTTON" />
+          <xsd:enumeration value="BLOCK" />
+          <xsd:enumeration value="FILE_CHOOSER" />
+          <xsd:enumeration value="COMB" />
+          <xsd:enumeration value="UNSUPPORTED" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="OnBehalfOfUser">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="email" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="userKey" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="Operator">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="EQUALS" />
+          <xsd:enumeration value="NOT_EQUALS" />
+          <xsd:enumeration value="LESS_THAN" />
+          <xsd:enumeration value="LESS_THAN_EQUALS" />
+          <xsd:enumeration value="GREATER_THAN" />
+          <xsd:enumeration value="GREATER_THAN_EQUALS" />
+          <xsd:enumeration value="IN" />
+          <xsd:enumeration value="NOT_IN" />
+          <xsd:enumeration value="CONTAINS" />
+          <xsd:enumeration value="NOT_CONTAINS" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="ParticipantInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="alternateParticipants" nillable="true" type="ns19:ArrayOfParticipantInfo" />
+          <xsd:element minOccurs="0" name="roles" nillable="true" type="ns19:ArrayOfParticipantRole" />
+          <xsd:element minOccurs="0" name="securityOptions" nillable="true" type="ns19:ArrayOfParticipantSecurityOption" />
+          <xsd:element minOccurs="0" name="status" nillable="true" type="ns17:UserAgreementStatus" />
+          <xsd:element minOccurs="0" name="company" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="email" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="title" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="ParticipantRole">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="SENDER" />
+          <xsd:enumeration value="SIGNER" />
+          <xsd:enumeration value="APPROVER" />
+          <xsd:enumeration value="CC" />
+          <xsd:enumeration value="DELEGATE" />
+          <xsd:enumeration value="SHARE" />
+          <xsd:enumeration value="WIDGET_SIGNER" />
+          <xsd:enumeration value="OTHER" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="ParticipantSecurityOption">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="PASSWORD" />
+          <xsd:enumeration value="WEB_IDENTITY" />
+          <xsd:enumeration value="KBA" />
+          <xsd:enumeration value="PHONE" />
+          <xsd:enumeration value="OTHER" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="PhoneInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="countryCode" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="phone" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="RadioCheckType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="CIRCLE" />
+          <xsd:enumeration value="CHECK" />
+          <xsd:enumeration value="CROSS" />
+          <xsd:enumeration value="DIAMOND" />
+          <xsd:enumeration value="SQUARE" />
+          <xsd:enumeration value="STAR" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="ShowHide">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="SHOW" />
+          <xsd:enumeration value="HIDE" />
+          <xsd:enumeration value="DISABLE" />
+          <xsd:enumeration value="ENABLE" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="SignerFormField">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="alignment" nillable="true" type="ns19:TextAlignment" />
+          <xsd:element minOccurs="0" name="anyOrAll" nillable="true" type="ns19:AnyAll" />
+          <xsd:element minOccurs="0" name="backgroundColor" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="borderColor" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="borderStyle" nillable="true" type="ns19:BorderStyle" />
+          <xsd:element minOccurs="0" name="borderWidth" type="xsd:float" />
+          <xsd:element minOccurs="0" name="calculatedExpression" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="conditions" nillable="true" type="ns19:ArrayOfSignerFormFieldCondition" />
+          <xsd:element minOccurs="0" name="contentType" nillable="true" type="ns19:ContentType" />
+          <xsd:element minOccurs="0" name="defaultValue" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="displayFormat" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="displayFormatType" nillable="true" type="ns19:DisplayFormatType" />
+          <xsd:element minOccurs="0" name="displayLabel" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fontColor" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fontName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fontSize" type="xsd:float" />
+          <xsd:element minOccurs="0" name="hidden" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="hiddenOptions" nillable="true" type="tns:ArrayOfString" />
+          <xsd:element minOccurs="0" name="inputType" nillable="true" type="ns19:InputType" />
+          <xsd:element minOccurs="0" name="locations" nillable="true" type="ns19:ArrayOfSignerFormFieldLocation" />
+          <xsd:element minOccurs="0" name="masked" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="maxLength" type="xsd:int" />
+          <xsd:element minOccurs="0" name="maxNumberValue" type="xsd:double" />
+          <xsd:element minOccurs="0" name="minLength" type="xsd:int" />
+          <xsd:element minOccurs="0" name="minNumberValue" type="xsd:double" />
+          <xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="radioCheckType" nillable="true" type="ns19:RadioCheckType" />
+          <xsd:element minOccurs="0" name="readOnly" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="regularExpression" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="required" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="showOrHide" nillable="true" type="ns19:ShowHide" />
+          <xsd:element minOccurs="0" name="specialErrMsg" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="specialFormula" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="tooltip" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="validationRule" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="visibleOptions" nillable="true" type="tns:ArrayOfString" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SignerFormFieldCondition">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="fieldName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="operator" nillable="true" type="ns19:Operator" />
+          <xsd:element minOccurs="0" name="value" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="whenFieldLocationIndex" type="xsd:int" />
+          <xsd:element minOccurs="0" name="whenFieldName" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SignerFormFieldLocation">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="height" type="xsd:double" />
+          <xsd:element minOccurs="0" name="left" type="xsd:double" />
+          <xsd:element minOccurs="0" name="pageNumber" type="xsd:int" />
+          <xsd:element minOccurs="0" name="top" type="xsd:double" />
+          <xsd:element minOccurs="0" name="width" type="xsd:double" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="TextAlignment">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="LEFT" />
+          <xsd:enumeration value="RIGHT" />
+          <xsd:enumeration value="CENTER" />
         </xsd:restriction>
       </xsd:simpleType>
     </xsd:schema>
@@ -2849,6 +3204,12 @@
   <wsdl:message name="getDocumentInfosByExternalIdResponse">
     <wsdl:part name="parameters" element="tns:getDocumentInfosByExternalIdResponse" />
   </wsdl:message>
+  <wsdl:message name="getDocumentPagesInfoRequest">
+    <wsdl:part name="parameters" element="tns:getDocumentPagesInfo" />
+  </wsdl:message>
+  <wsdl:message name="getDocumentPagesInfoResponse">
+    <wsdl:part name="parameters" element="tns:getDocumentPagesInfoResponse" />
+  </wsdl:message>
   <wsdl:message name="getDocumentUrlByVersionRequest">
     <wsdl:part name="parameters" element="tns:getDocumentUrlByVersion" />
   </wsdl:message>
@@ -2872,6 +3233,12 @@
   </wsdl:message>
   <wsdl:message name="getDocumentsResponse">
     <wsdl:part name="parameters" element="tns:getDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getEmbeddedViewRequest">
+    <wsdl:part name="parameters" element="tns:getEmbeddedView" />
+  </wsdl:message>
+  <wsdl:message name="getEmbeddedViewResponse">
+    <wsdl:part name="parameters" element="tns:getEmbeddedViewResponse" />
   </wsdl:message>
   <wsdl:message name="getFormDataRequest">
     <wsdl:part name="parameters" element="tns:getFormData" />
@@ -2938,6 +3305,12 @@
   </wsdl:message>
   <wsdl:message name="getMyWidgetsResponse">
     <wsdl:part name="parameters" element="tns:getMyWidgetsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getSignerFormFieldsRequest">
+    <wsdl:part name="parameters" element="tns:getSignerFormFields" />
+  </wsdl:message>
+  <wsdl:message name="getSignerFormFieldsResponse">
+    <wsdl:part name="parameters" element="tns:getSignerFormFieldsResponse" />
   </wsdl:message>
   <wsdl:message name="getSigningUrlRequest">
     <wsdl:part name="parameters" element="tns:getSigningUrl" />
@@ -3083,7 +3456,7 @@
   <wsdl:message name="verifyUserResponse">
     <wsdl:part name="parameters" element="tns:verifyUserResponse" />
   </wsdl:message>
-  <wsdl:portType name="EchoSignDocumentService18PortType">
+  <wsdl:portType name="EchoSignDocumentService19PortType">
     <wsdl:operation name="cancelDocument">
       <wsdl:input name="cancelDocumentRequest" message="tns:cancelDocumentRequest" />
       <wsdl:output name="cancelDocumentResponse" message="tns:cancelDocumentResponse" />
@@ -3172,6 +3545,10 @@
       <wsdl:input name="getDocumentInfosByExternalIdRequest" message="tns:getDocumentInfosByExternalIdRequest" />
       <wsdl:output name="getDocumentInfosByExternalIdResponse" message="tns:getDocumentInfosByExternalIdResponse" />
     </wsdl:operation>
+    <wsdl:operation name="getDocumentPagesInfo">
+      <wsdl:input name="getDocumentPagesInfoRequest" message="tns:getDocumentPagesInfoRequest" />
+      <wsdl:output name="getDocumentPagesInfoResponse" message="tns:getDocumentPagesInfoResponse" />
+    </wsdl:operation>
     <wsdl:operation name="getDocumentUrlByVersion">
       <wsdl:input name="getDocumentUrlByVersionRequest" message="tns:getDocumentUrlByVersionRequest" />
       <wsdl:output name="getDocumentUrlByVersionResponse" message="tns:getDocumentUrlByVersionResponse" />
@@ -3187,6 +3564,10 @@
     <wsdl:operation name="getDocumentsForUser">
       <wsdl:input name="getDocumentsForUserRequest" message="tns:getDocumentsForUserRequest" />
       <wsdl:output name="getDocumentsForUserResponse" message="tns:getDocumentsForUserResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getEmbeddedView">
+      <wsdl:input name="getEmbeddedViewRequest" message="tns:getEmbeddedViewRequest" />
+      <wsdl:output name="getEmbeddedViewResponse" message="tns:getEmbeddedViewResponse" />
     </wsdl:operation>
     <wsdl:operation name="getFormData">
       <wsdl:input name="getFormDataRequest" message="tns:getFormDataRequest" />
@@ -3231,6 +3612,10 @@
     <wsdl:operation name="getMyWidgets">
       <wsdl:input name="getMyWidgetsRequest" message="tns:getMyWidgetsRequest" />
       <wsdl:output name="getMyWidgetsResponse" message="tns:getMyWidgetsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getSignerFormFields">
+      <wsdl:input name="getSignerFormFieldsRequest" message="tns:getSignerFormFieldsRequest" />
+      <wsdl:output name="getSignerFormFieldsResponse" message="tns:getSignerFormFieldsResponse" />
     </wsdl:operation>
     <wsdl:operation name="getSigningUrl">
       <wsdl:input name="getSigningUrlRequest" message="tns:getSigningUrlRequest" />
@@ -3329,7 +3714,7 @@
       <wsdl:output name="verifyUserResponse" message="tns:verifyUserResponse" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="EchoSignDocumentService18HttpBinding" type="tns:EchoSignDocumentService18PortType">
+  <wsdl:binding name="EchoSignDocumentService19HttpBinding" type="tns:EchoSignDocumentService19PortType">
     <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="cancelDocument">
       <wsdlsoap:operation soapAction="" />
@@ -3529,6 +3914,15 @@
         <wsdlsoap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getDocumentPagesInfo">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getDocumentPagesInfoRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getDocumentPagesInfoResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getDocumentUrlByVersion">
       <wsdlsoap:operation soapAction="" />
       <wsdl:input name="getDocumentUrlByVersionRequest">
@@ -3562,6 +3956,15 @@
         <wsdlsoap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getDocumentsForUserResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEmbeddedView">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getEmbeddedViewRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getEmbeddedViewResponse">
         <wsdlsoap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
@@ -3661,6 +4064,15 @@
         <wsdlsoap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getMyWidgetsResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSignerFormFields">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getSignerFormFieldsRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getSignerFormFieldsResponse">
         <wsdlsoap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
@@ -3881,9 +4293,9 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="EchoSignDocumentService18">
-    <wsdl:port name="EchoSignDocumentService18HttpPort" binding="tns:EchoSignDocumentService18HttpBinding">
-      <wsdlsoap:address location="https://secure.echosign.com/services/EchoSignDocumentService18" />
+  <wsdl:service name="EchoSignDocumentService19">
+    <wsdl:port name="EchoSignDocumentService19HttpPort" binding="tns:EchoSignDocumentService19HttpBinding">
+      <wsdlsoap:address location="https://secure.echosign.com/services/EchoSignDocumentService19" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
