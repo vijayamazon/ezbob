@@ -37,6 +37,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		this.model.on("change:neededCash", this.neededCashChanged, this);
 		this.isLoanSourceEU = options.model.get("isLoanSourceEU");
+
+	    this.isAlibaba = this.customer.get("IsAlibaba");
 	}, // initialize
 
 	events: {
@@ -151,40 +153,44 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		if (this.fixed)
 			this.$(".cash-question").hide();
 
-		if (!this.isLoanTypeSelectionAllowed in [ 1, '1'] || this.isLoanSourceEU)
+		if (!this.isLoanTypeSelectionAllowed in [ 1, '1'] || this.isLoanSourceEU || this.isAlibaba)
 			this.$('.duration-select-allowed').hide();
 
 		if (!this.isLoanSourceEU)
 			this.$('.eu-agreement-section').hide();
 
+        if (this.isAlibaba) {
+            this.$('.loan-amount-header-start').text('Review loan schedule');
+        }
 		var self = this;
 
 		if (this.model.get('isCurrentCashRequestFromQuickOffer'))
 			this.$('.loan-amount-header-start').text('Confirm loan amount');
 		else {
 			this.$('.quick-offer-section').remove();
-
-			InitAmountPeriodSliders({
-				container: this.$('#loan-sliders'),
-				amount: {
-					min: this.model.get('minCash'),
-					max: this.model.get('maxCash'),
-					start: this.model.get('maxCash'),
-					step: 100,
-				},
-				period: {
-					min: 3,
-					max: 12,
-					start: this.model.get('repaymentPeriod'),
-					step: 1,
-					hide: !this.isLoanTypeSelectionAllowed in [ 1, '1' ] || this.isLoanSourceEU,
-				},
-				callback: function(ignored, sEvent) {
-					if (sEvent === 'change')
-						self.loanSelectionChanged();
-				} // callback
-			});
-		} // if
+		    if (!this.isAlibaba) {
+		        InitAmountPeriodSliders({
+		            container: this.$('#loan-sliders'),
+		            amount: {
+		                min: this.model.get('minCash'),
+		                max: this.model.get('maxCash'),
+		                start: this.model.get('maxCash'),
+		                step: 100,
+		            },
+		            period: {
+		                min: 3,
+		                max: 12,
+		                start: this.model.get('repaymentPeriod'),
+		                step: 1,
+		                hide: !this.isLoanTypeSelectionAllowed in [1, '1'] || this.isLoanSourceEU,
+		            },
+		            callback: function(ignored, sEvent) {
+		                if (sEvent === 'change')
+		                    self.loanSelectionChanged();
+		            } // callback
+		        });
+		    }
+		} // else
 
 		this.neededCashChanged();
 

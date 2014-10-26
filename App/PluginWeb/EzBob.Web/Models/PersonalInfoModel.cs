@@ -80,6 +80,7 @@
 		public DirectorModel[] Directors { get; set; }
 		public bool IsWizardComplete { get; set; }
 		public List<string> ExperianDirectors { get; set; }
+		public bool IsAlibaba { get; set; }
 
 		public PersonalInfoModel() {
 			IndustryFields = new List<string>();
@@ -97,7 +98,7 @@
 			Id = customer.Id;
 			SegmentType = customer.SegmentType();
 			IsAvoid = customer.IsAvoid;
-
+			IsAlibaba = customer.IsAlibaba;
 			FraudCheckStatus = customer.FraudStatus.Description();
 			FraudCheckStatusId = (int)customer.FraudStatus;
 

@@ -109,6 +109,11 @@
 				summary.Alerts.Infos.Add(new AlertModel{ Abbreviation = "Test", Alert = "Is test", AlertType = AlertType.Info.DescriptionAttr() });
 			}
 
+			if (customer.IsAlibaba)
+			{
+				summary.Alerts.Infos.Add(new AlertModel { Abbreviation = "Ali", Alert = "Is alibaba customer", AlertType = AlertType.Info.DescriptionAttr() });
+			}
+
 			if (customer.CciMark)
 			{
 				summary.Alerts.Errors.Add(new AlertModel {Abbreviation = "CCI", Alert = "CCI Mark", AlertType = AlertType.Error.DescriptionAttr() });

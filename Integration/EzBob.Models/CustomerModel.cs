@@ -128,6 +128,8 @@ namespace EzBob.Models {
 
 		public bool IsWhiteLabel { get; set; }
 		public int WhiteLabelId { get; set; }
+
+		public bool IsAlibaba { get; set; }
 	} // class CustomerModel
 
 	#endregion class CustomerModel

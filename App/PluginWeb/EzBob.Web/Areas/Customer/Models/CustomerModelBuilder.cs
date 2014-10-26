@@ -88,6 +88,8 @@
 
 			customerModel.CustomerPersonalInfo = customer.PersonalInfo;
 
+			customerModel.IsAlibaba = customer.IsAlibaba;
+
 			if (customer.PropertyStatus != null)
 			{
 				customerModel.PropertyStatus = new PropertyStatusModel
