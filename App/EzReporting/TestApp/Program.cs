@@ -7,6 +7,7 @@ namespace TestApp {
 	using System.Data.Common;
 	using System.Data.SqlClient;
 	using System.Diagnostics;
+	using System.IO;
 	using EzBob.Backend.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -17,6 +18,7 @@ namespace TestApp {
 	using Html;
 	using JetBrains.Annotations;
 	using Reports;
+	using Reports.Alibaba.DataSharing;
 	using Reports.EarnedInterest;
 	using SqlConnection = Ezbob.Database.SqlConnection;
 
@@ -84,7 +86,9 @@ namespace TestApp {
 
 			// TestInterestFreeze(oDB, log);
 
-			TestSpeed(oDB, log);
+			// TestSpeed(oDB, log);
+
+			TestDataSharing(oDB, log);
 		} // Main
 
 		#endregion method Main
@@ -659,6 +663,17 @@ namespace TestApp {
 		} // class SpBrokerLogin
 
 		#endregion method TestSpeed
+
+		#region method TestDataSharing
+
+		private static void TestDataSharing(AConnection oDB, ASafeLog oLog) {
+			DataSharing ds = new DataSharing(true, oDB, oLog);
+			ds.Generate();
+
+			ds.Report.SaveAs(new FileInfo(@"c:\temp\data_sharing_test.xlsx"));
+		} // TestDataSharing
+
+		#endregion method TestDataSharing
 	} // class Program
 } // namespace
 
