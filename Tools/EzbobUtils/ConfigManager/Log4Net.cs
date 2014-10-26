@@ -18,12 +18,17 @@
 			} // if
 
 			Environment = oEnv;
+			ErrorMailHashtag = string.Empty;
 
 			string sErrMailRec = string.Empty;
 
 			switch (oEnv.Name) {
 			case Name.Dev:
 				sErrMailRec = oEnv.UserName;
+
+				if (oEnv.UserName.StartsWith("alexb"))
+					ErrorMailHashtag = "#devalexboerror";
+
 				break;
 
 			case Name.Qa:
@@ -37,18 +42,21 @@
 
 			case Name.Production:
 				sErrMailRec = "ProdLogs";
+				ErrorMailHashtag = "#proderror";
 				break;
 
 			default:
 				throw new ArgumentOutOfRangeException("Unsupported environment name: " + oEnv.Name, (Exception)null);
 			} // switch
 
-			ErrorMailRecipient = sErrMailRec + "@ezbob.com";
+			ErrorMailRecipient = sErrMailRec + "@ezbob.com" + (
+				string.IsNullOrWhiteSpace(ErrorMailHashtag) ? string.Empty : ",trigger@recipe.ifttt.com"
+			);
 
 			string ipStr = string.Empty;
 
 			foreach (var address in Dns.GetHostEntry(Dns.GetHostName()).AddressList) {
-				string addressStr = address.ToString();
+			string addressStr = address.ToString();
 
 				if (addressStr.StartsWith("192")) {
 					ipStr = addressStr;
@@ -63,6 +71,8 @@
 
 		public virtual string ErrorMailRecipient { get; private set; } // ErrorMailRecipient
 
+		public string ErrorMailHashtag { get; private set; } // ErrorMailHashtag
+
 		public virtual string MailSubject { get; private set; } // MailSubject
 
 		public virtual Ezbob.Context.Environment Environment { get; private set; } // Environment
@@ -70,6 +80,7 @@
 		public virtual Log4Net Init() {
 			GlobalContext.Properties["MailSubject"] = MailSubject;
 			GlobalContext.Properties["ErrorEmailRecipient"] = ErrorMailRecipient;
+			GlobalContext.Properties["ErrorEmailHashtag"] = ErrorMailHashtag;
 
 			log4net.Config.XmlConfigurator.Configure();
 

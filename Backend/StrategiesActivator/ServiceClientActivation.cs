@@ -1276,6 +1276,17 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oServiceClient.BrokerApproveAndResetCustomerPassword(nUnderwriterID, nCustomerID, nLoanAmount, nValidHours, isFirst);
 		} // BrokerApproveAndResetCustomerPassword
 
+		[Activation]
+		private void WriteToLog() {
+			if (m_aryArgs.Length < 3) {
+				m_oLog.Msg("Usage: WriteToLog <severity> <arg1> <arg2> ... <argN>");
+				m_oLog.Msg("All the args are merged into a message which is written to service log with requested severity.");
+				return;
+			} // if
+
+			m_oAdminClient.WriteToLog(m_aryArgs[1], string.Join(" ", m_aryArgs.Skip(2)));
+		} // Noop
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 
