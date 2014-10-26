@@ -131,7 +131,7 @@
 				if (earliestHmrcLastUpdateDate.HasValue &&
 					earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < calculationTime)
 				{
-					throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy));
+					throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
 				}
 
 				inputData.BasedOnHmrcValues = true;
@@ -149,7 +149,7 @@
 				if (earliestYodleeLastUpdateDate.HasValue &&
 					earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < calculationTime)
 				{
-					throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy));
+					throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
 				}
 
 				inputData.BasedOnHmrcValues = false;
