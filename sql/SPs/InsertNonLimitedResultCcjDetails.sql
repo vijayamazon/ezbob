@@ -79,6 +79,6 @@ BEGIN
 		 @JudgementAddr5,
 		 @PostCode)
 		
-	SELECT @@IDENTITY AS NewId
+	SELECT CAST(@@IDENTITY AS INT) AS NewId
 END
 GO
