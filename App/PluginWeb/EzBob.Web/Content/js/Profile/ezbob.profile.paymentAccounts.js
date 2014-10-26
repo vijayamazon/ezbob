@@ -24,7 +24,7 @@ EzBob.Profile.PaymentAccountsView = Backbone.View.extend({
     },
     render: function () {
         var accounts = new EzBob.PaymentAccounts();
-        if (this.model.get('BankAccountNumber')) {
+        if (this.model.get('BankAccountNumber') && !this.model.get('IsAlibaba')) {
             accounts.add({ displayName: this.model.get('BankAccountNumber'), type: "Bank" });
         }
         
