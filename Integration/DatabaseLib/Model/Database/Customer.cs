@@ -729,6 +729,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string CostumeActionItem { get; set; }
 
 		public virtual bool IsAlibaba { get; set; }
+
+		public virtual string AlibabaId { get; set; }
 	} // class Customer
 
 	#endregion class Customer

@@ -12,9 +12,13 @@
 
 <div class="row-fluid inner loan-taken">
 	<div id="profile-content">
-		<div id="header-container"></div>
-		<h1>Congratulations</h1>
-		<h2 style="font-size: 22px; margin-bottom: 20px;">Funds are being transferred to your account.</h2>
+	    <div id="header-container"></div>
+        
+	    <h1>Congratulations</h1>
+	    
+        @if (!(bool) ViewData["IsAlibaba"]) {
+            <h2 style="font-size: 22px; margin-bottom: 20px;">Funds are being transferred to your account.</h2>
+        }
 
 		<h2 style="margin-bottom: 15px;">Loan Summary:</h2>
 
@@ -32,18 +36,22 @@
 
 			<dt>Loan Amount:</dt>
 			<dd>£ @ViewData["Amount"]
-				@if (!String.IsNullOrEmpty((string)ViewData["SetupFee"])) {
+				@if (!String.IsNullOrEmpty((string)ViewData["SetupFee"]))
+    {
 					<span style="color: #b7b7b7; font-size: 11px;">An origination fee of £ @ViewData["SetupFee"] was deducted from the transfer</span>
-				}
+    }
 			</dd>
 
 			<dt>Total Repayments:
 				<span style="font-size: 11px;">(inc. interest and fees)</span>
 			</dt>
 			<dd style="height: 40px;">£ @ViewData["Total"]</dd>
-
-			<dt>Bank Account:</dt>
-			<dd>@ViewData["bankNumber"]</dd>
+            
+            @if (!(bool)ViewData["IsAlibaba"])
+            {
+                <dt>Bank Account:</dt>
+                <dd>@ViewData["bankNumber"]</dd>
+            }
 		</dl>
 
 		<div class="row-fluid">
@@ -67,14 +75,15 @@
 	        </div>
 	    </div>
 	</div>
-	@if (Request.Cookies["tt"] != null && ttPixelEnabled) {
-		string srcStr = string.Format(
-			"{0}?campaignID={1}&productID={2}&conversionType={3}&https={4}&transactionID={5}&transactionAmount={6}&email={7}&descrMerchant={8}&descrAffiliate={9}&currency={10}",
-			Url.Action("TradeTrackerConversion", "PacnetStatus", new { Area = "Customer" }),
-			"12996", "19438", "sales", "1", @ViewData["loanNo"], @ViewData["Amount"], ViewData["email"], "Ezbob", "Loan", "GBP"
-		);
+	@if (Request.Cookies["tt"] != null && ttPixelEnabled)
+ {
+     string srcStr = string.Format(
+         "{0}?campaignID={1}&productID={2}&conversionType={3}&https={4}&transactionID={5}&transactionAmount={6}&email={7}&descrMerchant={8}&descrAffiliate={9}&currency={10}",
+         Url.Action("TradeTrackerConversion", "PacnetStatus", new { Area = "Customer" }),
+         "12996", "19438", "sales", "1", @ViewData["loanNo"], @ViewData["Amount"], ViewData["email"], "Ezbob", "Loan", "GBP"
+     );
 		<img src="@srcStr" width="1" height="1" border="0" alt="" />
-	}
+ }
 </div>
 
 <script id="paypoint-schedule-template" type="text/template">
