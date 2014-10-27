@@ -693,21 +693,18 @@
 								Balance = loan.Principal,
 								LoanAmount = loan.LoanAmount,
 								LoanAmountPercent =
-									loan.CashRequest.ManagerApprovedSum.HasValue
-										? loan.LoanAmount/(decimal) loan.CashRequest.ManagerApprovedSum.Value
-										: 0,
+									loan.CashRequest.ManagerApprovedSum.HasValue && loan.CashRequest.ManagerApprovedSum.Value > 0
+										? loan.LoanAmount/(decimal) loan.CashRequest.ManagerApprovedSum.Value : 0,
 								LoanDate = loan.Date,
 								InterestRate = loan.InterestRate,
 								IsLate = loan.Status == LoanStatus.Late,
 								IsEU = loan.LoanSource.Name == "EU",
-								BalanceWidthPercent = loan.CashRequest.ManagerApprovedSum.HasValue
-										? loan.Principal / (decimal)loan.CashRequest.ManagerApprovedSum.Value
-										: 0,
-								BalancePercent = loan.Principal / loan.LoanAmount,
+								BalanceWidthPercent = loan.CashRequest.ManagerApprovedSum.HasValue && loan.CashRequest.ManagerApprovedSum.Value > 0
+										? loan.Principal / (decimal)loan.CashRequest.ManagerApprovedSum.Value : 0,
+								BalancePercent = loan.LoanAmount > 0 ? loan.Principal / loan.LoanAmount : 0,
 								Term = agreement.Term,
 								TermApproved = loan.CashRequest.ApprovedRepaymentPeriod.HasValue 
-									? loan.CashRequest.ApprovedRepaymentPeriod.Value 
-									: loan.CashRequest.RepaymentPeriod,
+									? loan.CashRequest.ApprovedRepaymentPeriod.Value : loan.CashRequest.RepaymentPeriod,
 								TotalFee = loan.SetupFee,
 								LoanNumber = i,
 								Comment = loan.CashRequest.UnderwriterComment
