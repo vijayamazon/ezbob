@@ -2473,6 +2473,10 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.LimitedMedalMinOffer]; }
 		}
-		
+
+		public virtual VariableValue AlibabaRejectionMailTo
+		{
+			get { return this[Variables.AlibabaRejectionMailTo]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

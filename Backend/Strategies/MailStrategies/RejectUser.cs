@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
+	using API;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -17,14 +18,20 @@
 
 		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndVariables() {
-			if (ConfigManager.CurrentValues.Instance.RejectionPartnersCities.Value.Contains("all") ||
-				ConfigManager.CurrentValues.Instance.RejectionPartnersCities.Value.Contains(CustomerData.City)) {
+		protected override void SetTemplateAndVariables()
+		{
+			if (CustomerData.IsAlibaba)
+			{
+				TemplateName = "Mandrill - Rejection email";
+			}
+			else if (CurrentValues.Instance.RejectionPartnersCities.Value.Contains("all") ||
+				CurrentValues.Instance.RejectionPartnersCities.Value.Contains(CustomerData.City))
+			{
 				TemplateName = "Mandrill - Rejection partners email";
 			}
-			else {
+			else
+			{
 				TemplateName = "Mandrill - Rejection email";
-				SendToCustomer = false;
 			} // if
 
 			Variables = new Dictionary<string, string> {
@@ -34,5 +41,15 @@
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables
+
+		protected override void ActionAtEnd()
+		{
+			if (CustomerData.IsAlibaba)
+			{
+				var address = new Addressee(CurrentValues.Instance.AlibabaRejectionMailTo);
+				Log.Info("Sending Alibaba rejection mail");
+				SendCostumeMail("Mandrill - Alibaba - Internal rejection email", Variables, new[] { address });
+			}
+		}
 	} // class RejectUser
 } // namespace
