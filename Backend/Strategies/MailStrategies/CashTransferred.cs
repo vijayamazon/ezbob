@@ -2,6 +2,7 @@
 	using System;
 	using System.Globalization;
 	using System.Collections.Generic;
+	using API;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -53,6 +54,16 @@
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables
+
+		protected override void ActionAtEnd()
+		{
+			if (CustomerData.IsAlibaba)
+			{
+				var address = new Addressee(CurrentValues.Instance.AlibabaMailTo, CurrentValues.Instance.AlibabaMailCc);
+				Log.Info("Sending Alibaba internal took loan mail");
+				SendCostumeMail("Mandrill - Alibaba - Internal Took Loan", Variables, new[] { address });
+			}
+		}
 
 		private double CalculateLoanAmountInUsd()
 		{
