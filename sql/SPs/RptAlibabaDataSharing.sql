@@ -200,7 +200,7 @@ BEGIN
 		VatAccount_Uploaded = CASE WHEN ISNULL(hmrc_uploaded.Counter, 0) > 0 THEN 'yes' ELSE 'no' END,
 		--
 		--
-		ApprovalPhaseVerify_BuyerID       = c.ReferenceSource,
+		ApprovalPhaseVerify_BuyerID       = c.AlibabaId,
 		ApprovalPhaseVerify_EzbobMemberID = c.RefNumber,
 		ApprovalPhaseVerify_Email         = c.Name,
 		ApprovalPhaseVerify_BusinessName  = b.CompanyName,

@@ -197,9 +197,9 @@
 			try {
 				string sNow = DateTime.UtcNow.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
-				string sAlibabaID = GetCookie("alibabaid");
+				string sAlibabaID = GetCookie("alibaba_id");
 
-				string sAlibabaArg = string.IsNullOrWhiteSpace(sAlibabaID) ? string.Empty : "alibabaid:" + sAlibabaID + ";";
+				string sAlibabaArg = string.IsNullOrWhiteSpace(sAlibabaID) ? string.Empty : "alibaba_id:" + sAlibabaID + ";";
 
 				var oPageLoadEvent = new UiActionEventModel {
 					actionName = UiActionNames.PageLoad.ToDBName(),

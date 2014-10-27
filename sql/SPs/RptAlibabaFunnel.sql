@@ -54,7 +54,7 @@ BEGIN
 	WHERE
 		e.ControlHtmlID = 'Customer/Wizard'
 		AND
-		e.EventArguments LIKE 'alibaba%'
+		e.EventArguments LIKE 'alibaba_id:%'
 		AND
 		e.EventTime < @DateEnd
 	GROUP BY
