@@ -4,6 +4,7 @@ namespace EzBobTest
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.MainStrategy;
 	using EzBob.Backend.Strategies.Misc;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
@@ -12,7 +13,6 @@ namespace EzBobTest
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using NUnit.Framework;
-	using Newtonsoft.Json;
 	using StructureMap;
 
 	[TestFixture]

@@ -2,7 +2,8 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EzBob.Backend.Strategies.MailStrategies;
+	using MailStrategies;
+	using MainStrategy;
 
 	public class FinishWizard : AStrategy {
 		public FinishWizard(FinishWizardArgs oArgs, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {

@@ -108,6 +108,7 @@
     <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
+    <Compile Include="MainStrategy\MainStrategyStaller.cs" />
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
     <Compile Include="Misc\BackfillAml.cs" />
     <Compile Include="Experian\BackfillNonLimitedCompanies.cs" />
@@ -302,7 +303,7 @@
     <Compile Include="MailStrategies\Greeting.cs" />
     <Compile Include="MailStrategies\MailRecipientData\CustomerData.cs" />
     <Compile Include="MailStrategies\AMailStrategyBase.cs" />
-    <Compile Include="Misc\MainStrategy.cs" />
+    <Compile Include="MainStrategy\MainStrategy.cs" />
     <Compile Include="ScoreCalculation\Constants.cs" />
     <Compile Include="ScoreCalculation\Enums.cs" />
     <Compile Include="ScoreCalculation\MedalScoreCalculator.cs" />

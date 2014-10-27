@@ -1,16 +1,16 @@
-﻿namespace EzBob.Backend.Strategies.Misc
+﻿namespace EzBob.Backend.Strategies.MainStrategy
 {
 	using AutoDecisions;
 	using Experian;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using MailStrategies.API;
+	using Misc;
 	using ScoreCalculation;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using System.Threading;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -20,6 +20,7 @@
 	{
 		// Helpers
 		private readonly StrategiesMailer mailer;
+		private readonly MainStrategyStaller mainStrategyStaller;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly MedalScoreCalculator medalScoreCalculator;
 		private readonly AutoDecisionMaker autoDecisionMaker;
@@ -52,26 +53,17 @@
 		private int lowTotalAnnualTurnover;
 		private int lowTotalThreeMonthTurnover;
 		private int defaultFeedbackValue;
-		private int totalTimeToWaitForMarketplacesUpdate;
-		private int intervalWaitForMarketplacesUpdate;
-		private int totalTimeToWaitForExperianCompanyCheck;
-		private int intervalWaitForExperianCompanyCheck;
-		private int totalTimeToWaitForExperianConsumerCheck;
-		private int intervalWaitForExperianConsumerCheck;
-		private int totalTimeToWaitForAmlCheck;
-		private int intervalWaitForAmlCheck;
 		private int limitedMedalMinOffer;
+		private bool wasMainStrategyExecutedBefore;
 
 		// Loaded from DB per customer
 		private bool customerStatusIsEnabled;
 		private bool customerStatusIsWarning;
 		private string customerStatusName;
 		private bool isOffline;
-		private bool isAlibaba;
 		private bool isBrokerCustomer;
 		private string appEmail;
 		private string companyType;
-		private string experianRefNum;
 		private string appFirstName;
 		private string appSurname;
 		private string appGender;
@@ -81,7 +73,6 @@
 		private string appSortCode;
 		private DateTime appRegistrationDate;
 		private string appBankAccountType;
-		private bool wasMainStrategyExecutedBefore;
 		private string typeOfBusiness;
 		private int numOfHmrcMps;
 
@@ -155,13 +146,15 @@
 			underwriterCheck = isUnderwriterForced;
 			overrideApprovedRejected = true;
 			autoDecisionMaker = new AutoDecisionMaker(DB, Log);
+			mainStrategyStaller = new MainStrategyStaller(customerId, newCreditLineOption, mailer, DB, Log);
 		}
 
 		public override void Execute()
 		{
-			ReadConfigurations();
+			// Wait for data to be filled by other strategies
+			mainStrategyStaller.Stall();
 
-			MakeSureMpDataIsSufficient();
+			ReadConfigurations();
 
 			GetPersonalInfo();
 
@@ -617,7 +610,7 @@
 					{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 				};
 
-				mailer.Send(isAlibaba ? "Mandrill - Alibaba - Approval (not 1st time)" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(appEmail));
+				mailer.Send("Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(appEmail));
 			}
 		}
 
@@ -927,12 +920,6 @@
 				return;
 			}
 
-			if (!WaitForExperianConsumerCheckToFinishUpdates(directorId))
-			{
-				Log.Info("No data exist from experian consumer check for customer {0}{1}.", customerId, directorId == null ? "" : "director " + directorId);
-				return;
-			}
-
 			if (directorId == null)
 			{
 				var strat = new ExperianConsumerCheck(customerId, null, false, DB, Log);
@@ -985,34 +972,9 @@
 
 				maxCompanyScore = Math.Max((int)experianCompanyChecker.MaxScore, (int)experianCompanyChecker.Score);
 			}
-			else if (!WaitForExperianCompanyCheckToFinishUpdates())
-			{
-				Log.Info("No data exist from experian company check for customer:{0}.", customerId);
-			}
 			else
 			{
 				GetMaxCompanyExperianScore();
-			}
-		}
-
-		private void MakeSureMpDataIsSufficient()
-		{
-			bool shouldExpectMpData =
-				newCreditLineOption != NewCreditLineOption.SkipEverything &&
-				newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
-
-			if (shouldExpectMpData)
-			{
-				if (!WaitForMarketplacesToFinishUpdates())
-				{
-					Log.Info("Waiting for marketplace data ended with error");
-
-					mailer.Send("Mandrill - No Information about shops", new Dictionary<string, string> {
-						{"UserEmail", appEmail},
-						{"CustomerID", customerId.ToString(CultureInfo.InvariantCulture)},
-						{"ApplicationID", appEmail}
-					});
-				}
 			}
 		}
 
@@ -1034,11 +996,6 @@
 			if (isBrokerCustomer)
 			{
 				enableAutomaticApproval = false;
-				enableAutomaticRejection = false;
-			}
-
-			if (isAlibaba)
-			{
 				enableAutomaticRejection = false;
 			}
 
@@ -1074,14 +1031,6 @@
 			lowTotalAnnualTurnover = sr["LowTotalAnnualTurnover"];
 			lowTotalThreeMonthTurnover = sr["LowTotalThreeMonthTurnover"];
 			defaultFeedbackValue = sr["DefaultFeedbackValue"];
-			totalTimeToWaitForMarketplacesUpdate = sr["TotalTimeToWaitForMarketplacesUpdate"];
-			intervalWaitForMarketplacesUpdate = sr["IntervalWaitForMarketplacesUpdate"];
-			totalTimeToWaitForExperianCompanyCheck = sr["TotalTimeToWaitForExperianCompanyCheck"];
-			intervalWaitForExperianCompanyCheck = sr["IntervalWaitForExperianCompanyCheck"];
-			totalTimeToWaitForExperianConsumerCheck = sr["TotalTimeToWaitForExperianConsumerCheck"];
-			intervalWaitForExperianConsumerCheck = sr["IntervalWaitForExperianConsumerCheck"];
-			totalTimeToWaitForAmlCheck = sr["TotalTimeToWaitForAmlCheck"];
-			intervalWaitForAmlCheck = sr["IntervalWaitForAmlCheck"];
 			limitedMedalMinOffer = sr["LimitedMedalMinOffer"];
 		}
 
@@ -1097,7 +1046,7 @@
 			isBrokerCustomer = results["IsBrokerCustomer"];
 			appEmail = results["CustomerEmail"];
 			companyType = results["CompanyType"];
-			experianRefNum = results["ExperianRefNum"];
+			//experianRefNum = results["ExperianRefNum"];
 			wasMainStrategyExecutedBefore = results["MainStrategyExecutedBefore"];
 			appFirstName = results["FirstName"];
 			appSurname = results["Surname"];
@@ -1115,7 +1064,6 @@
 			isFirstLoan = numOfLoans == 0;
 			typeOfBusiness = results["TypeOfBusiness"];
 			numOfHmrcMps = results["NumOfHmrcMps"];
-			isAlibaba = results["IsAlibaba"];
 
 			GetCompanySeniorityDays();
 		}
@@ -1190,119 +1138,12 @@
 				Log.Info("Getting AML for customer: {0}", customerId);
 				var amlChecker = new AmlChecker(customerId, DB, Log);
 				amlChecker.Execute();
-			}
-			else if (!WaitForAmlToFinishUpdates())
-			{
-				Log.Info("No AML data exist for customer:{0}.", customerId);
-			}
+			} 
 		}
 
 		private bool ShouldRunBwa()
 		{
 			return appBankAccountType == "Personal" && bwaBusinessCheck == "1" && appSortCode != null && appAccountNumber != null;
-		}
-
-		private bool WaitForMarketplacesToFinishUpdates()
-		{
-			Log.Info("Waiting for marketplace data");
-			return WaitForUpdateToFinish(GetIsMarketPlacesUpdated, totalTimeToWaitForMarketplacesUpdate, intervalWaitForMarketplacesUpdate);
-		}
-
-		private bool WaitForExperianCompanyCheckToFinishUpdates()
-		{
-			Log.Info("Waiting for experian company check");
-
-			if (string.IsNullOrEmpty(experianRefNum))
-			{
-				return true;
-			}
-
-			return WaitForUpdateToFinish(GetIsExperianCompanyUpdated, totalTimeToWaitForExperianCompanyCheck, intervalWaitForExperianCompanyCheck);
-		}
-
-		private bool WaitForExperianConsumerCheckToFinishUpdates(int? directorId = null)
-		{
-			Log.Info("Waiting for experian consumer check");
-			return WaitForUpdateToFinish(() => GetIsExperianConsumerUpdated(directorId), totalTimeToWaitForExperianConsumerCheck, intervalWaitForExperianConsumerCheck);
-		}
-
-		private bool WaitForAmlToFinishUpdates()
-		{
-			Log.Info("Waiting for AML check");
-			return WaitForUpdateToFinish(GetIsAmlUpdated, totalTimeToWaitForAmlCheck, intervalWaitForAmlCheck);
-		}
-
-		private bool WaitForUpdateToFinish(Func<bool> function, int totalSecondsToWait, int intervalBetweenCheck)
-		{
-			DateTime startWaitingTime = DateTime.UtcNow;
-
-			for (; ; )
-			{
-				if (function())
-				{
-					return true;
-				}
-
-				if ((DateTime.UtcNow - startWaitingTime).TotalSeconds > totalSecondsToWait)
-				{
-					return false;
-				}
-
-				Thread.Sleep(intervalBetweenCheck);
-			}
-		}
-
-		private bool GetIsExperianConsumerUpdated(int? directorId)
-		{
-			return DB.ExecuteScalar<bool>(
-				"GetIsConsumerDataUpdated",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("DirectorId", directorId),
-				new QueryParameter("Today", DateTime.Today)
-			);
-		}
-
-		private bool GetIsAmlUpdated()
-		{
-			return DB.ExecuteScalar<bool>("GetIsAmlUpdated",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId));
-		}
-
-		private bool GetIsExperianCompanyUpdated()
-		{
-			return DB.ExecuteScalar<bool>(
-				"GetIsCompanyDataUpdated",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Today", DateTime.Today)
-			);
-		}
-
-		private bool GetIsMarketPlacesUpdated()
-		{
-			bool result = true;
-
-			DB.ForEachRowSafe(
-				(sr, rowsetStart) =>
-				{
-					string lastStatus = sr["CurrentStatus"];
-
-					if (lastStatus != "Done" && lastStatus != "Never Started" && lastStatus != "Finished" && lastStatus != "Failed" && lastStatus != "Terminated")
-					{
-						result = false;
-						return ActionResult.SkipAll;
-					}
-
-					return ActionResult.Continue;
-				},
-				"GetAllLastMarketplaceStatuses",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-
-			return result;
 		}
 
 		private void GetZooplaData()
