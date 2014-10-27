@@ -121,6 +121,11 @@
 
 		#endregion method LoadRecipientData
 
+		protected void SendCostumeMail(string templateName, Dictionary<string, string> variables, Addressee[] addresses)
+		{
+			m_oMailer.Send(templateName, variables, addresses);
+		}
+
 		#region properties
 
 		protected virtual string TemplateName { get; set; }
