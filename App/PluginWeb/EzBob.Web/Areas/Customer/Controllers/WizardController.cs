@@ -197,10 +197,31 @@
 			try {
 				string sNow = DateTime.UtcNow.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
+				string sAlibabaID = GetCookie("alibabaid");
+
+				string sAlibabaArg = string.IsNullOrWhiteSpace(sAlibabaID) ? string.Empty : "alibabaid:" + sAlibabaID + ";";
+
 				var oPageLoadEvent = new UiActionEventModel {
 					actionName = UiActionNames.PageLoad.ToDBName(),
 					controlName = UiActionEventModel.NoControl,
-					eventArgs = "alibaba:" + GetCookie("alibabaid") + ";sourceref:" + GetCookie("sourceref"),
+
+					// #    #                            #
+					// #   #  ###### ###### #####       # #   #      # #####    ##   #####    ##
+					// #  #   #      #      #    #     #   #  #      # #    #  #  #  #    #  #  #
+					// ###    #####  #####  #    #    #     # #      # #####  #    # #####  #    #
+					// #  #   #      #      #####     ####### #      # #    # ###### #    # ######
+					// #   #  #      #      #         #     # #      # #    # #    # #    # #    #
+					// #    # ###### ###### #         #     # ###### # #####  #    # #####  #    #
+
+					//                                                     ###
+					// ##### #    # ######    ###### # #####   ####  ##### ###
+					//   #   #    # #         #      # #    # #        #   ###
+					//   #   ###### #####     #####  # #    #  ####    #    #
+					//   #   #    # #         #      # #####       #   #
+					//   #   #    # #         #      # #   #  #    #   #   ###
+					//   #   #    # ######    #      # #    #  ####    #   ###
+
+					eventArgs = sAlibabaArg + "sourceref:" + GetCookie("sourceref"),
 					eventID = "0" + sNow,
 					eventTime = sNow,
 					htmlID = "Customer/Wizard",
