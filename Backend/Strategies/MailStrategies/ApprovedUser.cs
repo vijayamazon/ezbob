@@ -17,6 +17,11 @@
 			m_nValidHours = nValidHours;
 			m_bIsFirst = isFirst;
 			amountInUsd = CalculateLoanAmountInUsd();
+
+			if (CustomerData.IsFilledByBroker)
+			{
+				SendToCustomer = false;
+			}
 		} // constructor
 
 		#endregion constructor

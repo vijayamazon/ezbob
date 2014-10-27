@@ -6,7 +6,13 @@
 	public class EmailUnderReview : ABrokerMailToo {
 		#region constructor
 
-		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog)
+			: base(customerId, true, oDb, oLog)
+		{
+			if (CustomerData.IsFilledByBroker)
+			{
+				SendToCustomer = false;
+			}
 		} // constructor
 
 		#endregion constructor
