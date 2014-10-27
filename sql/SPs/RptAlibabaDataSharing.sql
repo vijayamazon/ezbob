@@ -151,10 +151,10 @@ BEGIN
 			t.AddressType
 	)
 	SELECT
-		RowType  = 'MetaData',
+		RowType    = 'MetaData',
+		CustomerID = c.Id,
 		--
 		--
-		CreditAccount_CustomerID          = c.Id,
 		CreditAccount_Email               = c.Name,
 		CreditAccount_SecurityQuestion    = q.name,
 		CreditAccount_SecurityAnswer      = u.SecurityAnswer1,

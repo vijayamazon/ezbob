@@ -19,6 +19,7 @@ namespace TestApp {
 	using JetBrains.Annotations;
 	using Reports;
 	using Reports.Alibaba.DataSharing;
+	using Reports.Alibaba.Funnel;
 	using Reports.EarnedInterest;
 	using SqlConnection = Ezbob.Database.SqlConnection;
 
@@ -671,6 +672,11 @@ namespace TestApp {
 			ds.Generate();
 
 			ds.Report.SaveAs(new FileInfo(@"c:\temp\data_sharing_test.xlsx"));
+
+			Funnel f = new Funnel(null, oDB, oLog);
+			f.Generate();
+
+			f.Report.SaveAs(new FileInfo(@"c:\temp\funnel_test.xlsx"));
 		} // TestDataSharing
 
 		#endregion method TestDataSharing
