@@ -52,6 +52,7 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 
 			oRequest.fail(function() {
 				// In case of error:
+				that.isRequestInProgress = false;
 
 				// 1. stop refreshing
 				if (that.refreshInterval) {
