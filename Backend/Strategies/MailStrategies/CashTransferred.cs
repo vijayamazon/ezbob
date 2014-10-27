@@ -37,13 +37,17 @@
 
 			if (isFirst)
 			{
-				if (CustomerData.IsCampaign)
+				if (CustomerData.IsAlibaba)
+				{
+					TemplateName = "Mandrill - Alibaba - Took Loan (1st loan)";
+				}
+				else if (CustomerData.IsCampaign)
 				{
 					TemplateName = "Mandrill - Took Loan Campaign (1st loan)";
 				}
 				else
 				{
-					TemplateName = CustomerData.IsAlibaba ? "Mandrill - Alibaba - Took Loan (1st loan)" : "Mandrill - Took Loan (1st loan)";
+					TemplateName = "Mandrill - Took Loan (1st loan)";
 				}
 			}
 			else
