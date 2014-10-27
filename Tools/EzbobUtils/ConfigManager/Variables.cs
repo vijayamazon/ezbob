@@ -369,6 +369,7 @@ namespace ConfigManager {
 		CompanyCaisLateAlertLongMonths,
 		CompanyCaisLateAlertShortMonths,
 		CompanyCaisLateAlertShortPeriodThreshold,
-		LimitedMedalDaysOfMpRelevancy
+		LimitedMedalDaysOfMpRelevancy,
+		LimitedMedalMinOffer
 	} // enum Variables
 } // namespace ConfigManager

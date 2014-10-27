@@ -20,7 +20,8 @@
 	{
 		// Helpers
 		private readonly StrategiesMailer mailer;
-		private readonly MainStrategyStaller mainStrategyStaller;
+		private readonly Staller staller;
+		private readonly DataGatherer dataGatherer;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly MedalScoreCalculator medalScoreCalculator;
 		private readonly AutoDecisionMaker autoDecisionMaker;
@@ -37,51 +38,15 @@
 		/// then customer's status should not change.
 		/// </summary>
 		private bool overrideApprovedRejected;
-
-		// Configs
-		private int rejectDefaultsCreditScore;
-		private int rejectDefaultsAccountsNum;
-		private int rejectMinimalSeniority;
-		private string bwaBusinessCheck;
-		private bool enableAutomaticReRejection;
-		private bool enableAutomaticReApproval;
-		private bool enableAutomaticApproval;
-		private bool enableAutomaticRejection;
-		private int maxCapHomeOwner;
-		private int maxCapNotHomeOwner;
-		private int lowCreditScore;
-		private int lowTotalAnnualTurnover;
-		private int lowTotalThreeMonthTurnover;
-		private int defaultFeedbackValue;
-		private int limitedMedalMinOffer;
-		private bool wasMainStrategyExecutedBefore;
-
-		// Loaded from DB per customer
-		private bool customerStatusIsEnabled;
-		private bool customerStatusIsWarning;
-		private string customerStatusName;
-		private bool isOffline;
-		private bool isBrokerCustomer;
-		private string appEmail;
-		private string companyType;
-		private string appFirstName;
-		private string appSurname;
-		private string appGender;
+		
+		// Calculated based on raw data
 		private bool isHomeOwner;
-		private string propertyStatusDescription;
-		private string appAccountNumber;
-		private string appSortCode;
-		private DateTime appRegistrationDate;
-		private string appBankAccountType;
-		private string typeOfBusiness;
-		private int numOfHmrcMps;
+
 
 		private int minExperianScore;
 		private int maxExperianScore;
 		private int maxCompanyScore;
-		private int companySeniorityDays;
 		private int experianConsumerScore;
-		private int allMPsNum;
 		private AutoDecisionResponse autoDecisionResponse;
 		private MedalMultiplier medalType;
 		private decimal loanOfferApr;
@@ -146,17 +111,21 @@
 			underwriterCheck = isUnderwriterForced;
 			overrideApprovedRejected = true;
 			autoDecisionMaker = new AutoDecisionMaker(DB, Log);
-			mainStrategyStaller = new MainStrategyStaller(customerId, newCreditLineOption, mailer, DB, Log);
+			staller = new Staller(customerId, newCreditLineOption, mailer, DB, Log);
+			dataGatherer = new DataGatherer(customerId, DB, Log);
 		}
 
 		public override void Execute()
 		{
 			// Wait for data to be filled by other strategies
-			mainStrategyStaller.Stall();
+			staller.Stall();
 
-			ReadConfigurations();
+			// Gather Raw Data
+			dataGatherer.Gather();
 
-			GetPersonalInfo();
+			// Processing logic
+			isHomeOwner = dataGatherer.IsOwnerOfMainAddress || dataGatherer.IsOwnerOfOtherProperties;
+			isFirstLoan = dataGatherer.NumOfLoans == 0;
 
 			SetAutoDecisionAvailability();
 
@@ -180,8 +149,8 @@
 			{
 				modelLoanOffer = 0;
 
-				if ((autoDecisionRejectionResponse.IsReRejected && !enableAutomaticReRejection) ||
-					(!autoDecisionRejectionResponse.IsReRejected && !enableAutomaticRejection))
+				if ((autoDecisionRejectionResponse.IsReRejected && !dataGatherer.EnableAutomaticReRejection) ||
+					(!autoDecisionRejectionResponse.IsReRejected && !dataGatherer.EnableAutomaticRejection))
 				{
 					SendRejectionExplanationMail(autoDecisionRejectionResponse.IsReRejected
 													 ? "Mandrill - User supposed to be re-rejected by the strategy"
@@ -200,7 +169,7 @@
 
 			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
 
-			if (numOfHmrcMps < 2 && (typeOfBusiness == "LLP" || typeOfBusiness == "Limited"))
+			if (dataGatherer.NumOfHmrcMps < 2 && (dataGatherer.TypeOfBusiness == "LLP" || dataGatherer.TypeOfBusiness == "Limited"))
 			{
 				var instance = new CalculateLimitedMedal(DB, Log, customerId);
 				instance.Execute();
@@ -229,34 +198,34 @@
 
 							// Get min that is over threshold
 							if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded ||
-							     offerAccordingToValueAdded <= limitedMedalMinOffer) &&
+								 offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
 							    (offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
-							     offerAccordingToAnnualTurnover <= limitedMedalMinOffer) &&
-							    offerAccordingToFreeCashFlow >= limitedMedalMinOffer)
+								 offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
+								offerAccordingToFreeCashFlow >= dataGatherer.LimitedMedalMinOffer)
 							{
 								offerAccordingToThisMedal = (int) offerAccordingToFreeCashFlow;
 								Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId, offerAccordingToFreeCashFlow);
 							}
 							else if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow ||
-							          offerAccordingToFreeCashFlow <= limitedMedalMinOffer) &&
+									  offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
 							         (offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
-							          offerAccordingToAnnualTurnover <= limitedMedalMinOffer) &&
-							         offerAccordingToValueAdded >= limitedMedalMinOffer)
+									  offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
+									 offerAccordingToValueAdded >= dataGatherer.LimitedMedalMinOffer)
 							{
 								offerAccordingToThisMedal = (int) offerAccordingToValueAdded;
 								Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId, offerAccordingToValueAdded);
 							}
 							else if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow ||
-							          offerAccordingToFreeCashFlow <= limitedMedalMinOffer) &&
+									  offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
 							         (offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
-							          offerAccordingToValueAdded <= limitedMedalMinOffer) &&
-							         offerAccordingToAnnualTurnover >= limitedMedalMinOffer)
+									  offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
+									 offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
 							{
 								offerAccordingToThisMedal = (int) offerAccordingToAnnualTurnover;
 								Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
 							}
 						}
-						else if (offerAccordingToAnnualTurnover >= limitedMedalMinOffer)
+						else if (offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
 						{
 							offerAccordingToThisMedal = (int) offerAccordingToAnnualTurnover;
 							Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
@@ -328,7 +297,7 @@
 						UpdateReApprovalData();
 						SendReApprovalMails();
 
-						if (enableAutomaticReApproval)
+						if (dataGatherer.EnableAutomaticReApproval)
 						{
 							strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
 						}
@@ -358,21 +327,21 @@
 					yodlee3MForRejection,
 					offeredCreditLine,
 					marketplaceSeniorityDays,
-					enableAutomaticReRejection,
-					enableAutomaticRejection,
-					enableAutomaticReApproval,
-					enableAutomaticApproval,
+					dataGatherer.EnableAutomaticReRejection,
+					dataGatherer.EnableAutomaticRejection,
+					dataGatherer.EnableAutomaticReApproval,
+					dataGatherer.EnableAutomaticApproval,
 					loanOfferReApprovalFullAmountOld,
 					loanOfferReApprovalFullAmount,
 					loanOfferReApprovalRemainingAmount,
 					loanOfferReApprovalRemainingAmountOld,
-					customerStatusIsEnabled,
-					customerStatusIsWarning,
-					isBrokerCustomer,
-					typeOfBusiness == "Limited" || typeOfBusiness == "LLP",
-					companySeniorityDays,
-					isOffline,
-					customerStatusName,
+					dataGatherer.CustomerStatusIsEnabled,
+					dataGatherer.CustomerStatusIsWarning,
+					dataGatherer.IsBrokerCustomer,
+					dataGatherer.TypeOfBusiness == "Limited" || dataGatherer.TypeOfBusiness == "LLP",
+					dataGatherer.CompanySeniorityDays,
+					dataGatherer.IsOffline,
+					dataGatherer.CustomerStatusName,
 					consumerCaisDetailWorstStatuses,
 					DB,
 					Log
@@ -384,12 +353,12 @@
 		{
 			if (autoDecisionRejectionResponse.CreditResult != "Rejected" && !autoDecisionRejectionResponse.DecidedToReject && isHomeOwner)
 			{
-				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, propertyStatusDescription);
+				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, dataGatherer.PropertyStatusDescription);
 				GetLandRegistry();
 			}
 			else
 			{
-				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, propertyStatusDescription);
+				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, dataGatherer.PropertyStatusDescription);
 			}
 		}
 
@@ -404,15 +373,15 @@
 				yodlee1YForRejection,
 				yodlee3MForRejection,
 				marketplaceSeniorityDays,
-				enableAutomaticReRejection,
-				enableAutomaticRejection,
-				customerStatusIsEnabled,
-				customerStatusIsWarning,
-				isBrokerCustomer,
-				typeOfBusiness == "Limited" || typeOfBusiness == "LLP",
-				companySeniorityDays,
-				isOffline,
-				customerStatusName
+				dataGatherer.EnableAutomaticReRejection,
+				dataGatherer.EnableAutomaticRejection,
+				dataGatherer.CustomerStatusIsEnabled,
+				dataGatherer.CustomerStatusIsWarning,
+				dataGatherer.IsBrokerCustomer,
+				dataGatherer.TypeOfBusiness == "Limited" || dataGatherer.TypeOfBusiness == "LLP",
+				dataGatherer.CompanySeniorityDays,
+				dataGatherer.IsOffline,
+				dataGatherer.CustomerStatusName
 				);
 			return autoDecisionRejectionResponse;
 		}
@@ -498,24 +467,24 @@
 				isHomeOwnerAccordingToLandRegistry = sr["IsOwner"];
 			}
 
-			if (isHomeOwnerAccordingToLandRegistry && maxCapHomeOwner < loanOfferReApprovalSum)
+			if (isHomeOwnerAccordingToLandRegistry && dataGatherer.MaxCapHomeOwner < loanOfferReApprovalSum)
 			{
-				loanOfferReApprovalSum = maxCapHomeOwner;
+				loanOfferReApprovalSum = dataGatherer.MaxCapHomeOwner;
 			}
 
-			if (!isHomeOwnerAccordingToLandRegistry && maxCapNotHomeOwner < loanOfferReApprovalSum)
+			if (!isHomeOwnerAccordingToLandRegistry && dataGatherer.MaxCapNotHomeOwner < loanOfferReApprovalSum)
 			{
-				loanOfferReApprovalSum = maxCapNotHomeOwner;
+				loanOfferReApprovalSum = dataGatherer.MaxCapNotHomeOwner;
 			}
 
-			if (isHomeOwnerAccordingToLandRegistry && maxCapHomeOwner < offeredCreditLine)
+			if (isHomeOwnerAccordingToLandRegistry && dataGatherer.MaxCapHomeOwner < offeredCreditLine)
 			{
-				offeredCreditLine = maxCapHomeOwner;
+				offeredCreditLine = dataGatherer.MaxCapHomeOwner;
 			}
 
-			if (!isHomeOwnerAccordingToLandRegistry && maxCapNotHomeOwner < offeredCreditLine)
+			if (!isHomeOwnerAccordingToLandRegistry && dataGatherer.MaxCapNotHomeOwner < offeredCreditLine)
 			{
-				offeredCreditLine = maxCapNotHomeOwner;
+				offeredCreditLine = dataGatherer.MaxCapNotHomeOwner;
 			}
 		}
 		
@@ -569,12 +538,12 @@
 		private void SendWaitingForDecisionMail()
 		{
 			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
-				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", appEmail},
-				{"FirstName", appFirstName},
-				{"Surname", appSurname},
-				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+				{"Name", dataGatherer.AppEmail},
+				{"FirstName", dataGatherer.AppFirstName},
+				{"Surname", dataGatherer.AppSurname},
+				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", "WaitingForDecision"}
 			});
@@ -584,12 +553,12 @@
 		{
 			mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Re-Approved"},
-				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", appEmail},
-				{"FirstName", appFirstName},
-				{"Surname", appSurname},
-				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+				{"Name", dataGatherer.AppEmail},
+				{"FirstName", dataGatherer.AppFirstName},
+				{"Surname", dataGatherer.AppSurname},
+				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
@@ -602,15 +571,15 @@
 				}
 			});
 
-			if (enableAutomaticReApproval)
+			if (dataGatherer.EnableAutomaticReApproval)
 			{
 				var customerMailVariables = new Dictionary<string, string> {
-					{"FirstName", appFirstName},
+					{"FirstName", dataGatherer.AppFirstName},
 					{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 					{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 				};
 
-				mailer.Send("Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(appEmail));
+				mailer.Send("Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 			}
 		}
 
@@ -643,12 +612,12 @@
 		{
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
-				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", appEmail},
-				{"FirstName", appFirstName},
-				{"Surname", appSurname},
-				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+				{"Name", dataGatherer.AppEmail},
+				{"FirstName", dataGatherer.AppFirstName},
+				{"Surname", dataGatherer.AppSurname},
+				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
@@ -662,12 +631,12 @@
 			});
 
 			var customerMailVariables = new Dictionary<string, string> {
-				{"FirstName", appFirstName},
+				{"FirstName", dataGatherer.AppFirstName},
 				{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 			};
 
-			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(appEmail));
+			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
 
 		private void UpdateApprovalData()
@@ -684,12 +653,12 @@
 		{
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
-				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", appEmail},
-				{"FirstName", appFirstName},
-				{"Surname", appSurname},
-				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+				{"Name", dataGatherer.AppEmail},
+				{"FirstName", dataGatherer.AppFirstName},
+				{"Surname", dataGatherer.AppSurname},
+				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
@@ -703,12 +672,12 @@
 			});
 
 			var customerMailVariables = new Dictionary<string, string> {
-				{"FirstName", appFirstName},
+				{"FirstName", dataGatherer.AppFirstName},
 				{"LoanAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 			};
 
-			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(appEmail));
+			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
 
 		private void UpdateBankBasedApprovalData()
@@ -781,7 +750,7 @@
 				maritalStatus = MaritalStatus.Other;
 			}
 
-			int modelMaxFeedback = scoreCardResults["MaxFeedback", defaultFeedbackValue];
+			int modelMaxFeedback = scoreCardResults["MaxFeedback", dataGatherer.DefaultFeedbackValue];
 
 			int modelMPsNumber = scoreCardResults["MPsNumber"];
 			int modelEzbobSeniority = scoreCardResults["EZBOBSeniority"];
@@ -819,7 +788,7 @@
 				marketplaceSeniorityYears,
 				modelMaxFeedback,
 				maritalStatus,
-				appGender == "M" ? Gender.M : Gender.F,
+				dataGatherer.AppGender == "M" ? Gender.M : Gender.F,
 				modelMPsNumber,
 				firstRepaymentDatePassed,
 				ezbobSeniorityMonths,
@@ -866,7 +835,7 @@
 
 		private void PerformExperianConsumerCheckForDirectors()
 		{
-			if (companyType == "Entrepreneur")
+			if (dataGatherer.CompanyType == "Entrepreneur")
 				return;
 
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
@@ -889,7 +858,7 @@
 
 		private void PerformConsumerExperianCheck(int? directorId = null)
 		{
-			if (wasMainStrategyExecutedBefore)
+			if (dataGatherer.WasMainStrategyExecutedBefore)
 			{
 				Log.Info("Performing experian consumer check");
 
@@ -953,18 +922,9 @@
 			);
 		}
 
-		private void GetCompanySeniorityDays()
-		{
-			var seniority = new GetCompanySeniority(customerId, typeOfBusiness == "Limited" || typeOfBusiness == "LLP", DB, Log);
-			seniority.Execute();
-			companySeniorityDays = seniority.CompanyIncorporationDate.HasValue
-				                   ? (DateTime.UtcNow - seniority.CompanyIncorporationDate.Value).Days
-				                   : 0;
-		}
-
 		private void PerformCompanyExperianCheck()
 		{
-			if (wasMainStrategyExecutedBefore)
+			if (dataGatherer.WasMainStrategyExecutedBefore)
 			{
 				Log.Info("Performing experian company check");
 				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, DB, Log);
@@ -982,21 +942,21 @@
 		{
 			Log.Info("Setting auto decision availability");
 
-			if (!customerStatusIsEnabled || customerStatusIsWarning)
+			if (!dataGatherer.CustomerStatusIsEnabled || dataGatherer.CustomerStatusIsWarning)
 			{
-				enableAutomaticReApproval = false;
-				enableAutomaticApproval = false;
+				dataGatherer.EnableAutomaticReApproval = false;
+				dataGatherer.EnableAutomaticApproval = false;
 			}
 
-			if (isOffline)
+			if (dataGatherer.IsOffline)
 			{
-				enableAutomaticApproval = false;
+				dataGatherer.EnableAutomaticApproval = false;
 			}
 
-			if (isBrokerCustomer)
+			if (dataGatherer.IsBrokerCustomer)
 			{
-				enableAutomaticApproval = false;
-				enableAutomaticRejection = false;
+				dataGatherer.EnableAutomaticApproval = false;
+				dataGatherer.EnableAutomaticRejection = false;
 			}
 
 			if (
@@ -1006,68 +966,13 @@
 				avoidAutomaticDecision == 1
 			)
 			{
-				enableAutomaticApproval = false;
-				enableAutomaticReApproval = false;
-				enableAutomaticRejection = false;
-				enableAutomaticReRejection = false;
+				dataGatherer.EnableAutomaticApproval = false;
+				dataGatherer.EnableAutomaticReApproval = false;
+				dataGatherer.EnableAutomaticRejection = false;
+				dataGatherer.EnableAutomaticReRejection = false;
 			}
 		}
-
-		private void ReadConfigurations()
-		{
-			Log.Info("Getting configurations");
-			SafeReader sr = DB.GetFirst("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
-			rejectDefaultsCreditScore = sr["Reject_Defaults_CreditScore"];
-			rejectDefaultsAccountsNum = sr["Reject_Defaults_AccountsNum"];
-			rejectMinimalSeniority = sr["Reject_Minimal_Seniority"];
-			bwaBusinessCheck = sr["BWABusinessCheck"];
-			enableAutomaticApproval = sr["EnableAutomaticApproval"];
-			enableAutomaticReApproval = sr["EnableAutomaticReApproval"];
-			enableAutomaticRejection = sr["EnableAutomaticRejection"];
-			enableAutomaticReRejection = sr["EnableAutomaticReRejection"];
-			maxCapHomeOwner = sr["MaxCapHomeOwner"];
-			maxCapNotHomeOwner = sr["MaxCapNotHomeOwner"];
-			lowCreditScore = sr["LowCreditScore"];
-			lowTotalAnnualTurnover = sr["LowTotalAnnualTurnover"];
-			lowTotalThreeMonthTurnover = sr["LowTotalThreeMonthTurnover"];
-			defaultFeedbackValue = sr["DefaultFeedbackValue"];
-			limitedMedalMinOffer = sr["LimitedMedalMinOffer"];
-		}
-
-		private void GetPersonalInfo()
-		{
-			Log.Info("Getting personal info for customer:{0}", customerId);
-			SafeReader results = DB.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-
-			customerStatusIsEnabled = results["CustomerStatusIsEnabled"];
-			customerStatusIsWarning = results["CustomerStatusIsWarning"];
-			customerStatusName = results["CustomerStatusName"];
-			isOffline = results["IsOffline"];
-			isBrokerCustomer = results["IsBrokerCustomer"];
-			appEmail = results["CustomerEmail"];
-			companyType = results["CompanyType"];
-			//experianRefNum = results["ExperianRefNum"];
-			wasMainStrategyExecutedBefore = results["MainStrategyExecutedBefore"];
-			appFirstName = results["FirstName"];
-			appSurname = results["Surname"];
-			appGender = results["Gender"];
-			bool isOwnerOfMainAddress = results["IsOwnerOfMainAddress"];
-			bool isOwnerOfOtherProperties = results["IsOwnerOfOtherProperties"];
-			isHomeOwner = isOwnerOfMainAddress || isOwnerOfOtherProperties;
-			propertyStatusDescription = results["PropertyStatusDescription"];
-			allMPsNum = results["NumOfMps"];
-			appAccountNumber = results["AccountNumber"];
-			appSortCode = results["SortCode"];
-			appRegistrationDate = results["RegistrationDate"];
-			appBankAccountType = results["BankAccountType"];
-			int numOfLoans = results["NumOfLoans"];
-			isFirstLoan = numOfLoans == 0;
-			typeOfBusiness = results["TypeOfBusiness"];
-			numOfHmrcMps = results["NumOfHmrcMps"];
-
-			GetCompanySeniorityDays();
-		}
-
+		
 		private void SendRejectionExplanationMail(string templateName, RejectionModel rejection)
 		{
 			string additionalValues = string.Empty;
@@ -1088,36 +993,36 @@
 						rejection.HasHmrc ? rejection.Yodlee1Y.ToString("C2") : "",
 						rejection.HasHmrc ? rejection.Yodlee3M.ToString("C2") : "",
 						rejection.LateAccounts,
-						isOffline,
-						companySeniorityDays
+						dataGatherer.IsOffline,
+						dataGatherer.CompanySeniorityDays
 					);
 			}
 			
 			mailer.Send(templateName, new Dictionary<string, string> {
-				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", appEmail},
-				{"FirstName", appFirstName},
-				{"Surname", appSurname},
-				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+				{"Name", dataGatherer.AppEmail},
+				{"FirstName", dataGatherer.AppFirstName},
+				{"Surname", dataGatherer.AppSurname},
+				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", "Reject"},
 				{"ExperianConsumerScore", initialExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
-				{"CVExperianConsumerScore", lowCreditScore.ToString(CultureInfo.InvariantCulture)},
+				{"CVExperianConsumerScore", dataGatherer.LowCreditScore.ToString(CultureInfo.InvariantCulture)},
 				{"TotalAnnualTurnover", totalSumOfOrders1YTotalForRejection.ToString("C2")},
-				{"CVTotalAnnualTurnover", lowTotalAnnualTurnover.ToString("C2")},
+				{"CVTotalAnnualTurnover", dataGatherer.LowTotalAnnualTurnover.ToString("C2")},
 				{"Total3MTurnover", totalSumOfOrders3MTotalForRejection.ToString("C2")},
-				{"CVTotal3MTurnover", lowTotalThreeMonthTurnover.ToString("C2")},
+				{"CVTotal3MTurnover", dataGatherer.LowTotalThreeMonthTurnover.ToString("C2")},
 				{"PayPalStoresNum", rejection.PayPalNumberOfStores.ToString(CultureInfo.InvariantCulture)},
 				{"PayPalAnnualTurnover", rejection.PayPalTotalSumOfOrders1Y.ToString("C2")},
-				{"CVPayPalAnnualTurnover", lowTotalAnnualTurnover.ToString("C2")},
+				{"CVPayPalAnnualTurnover", dataGatherer.LowTotalAnnualTurnover.ToString("C2")},
 				{"PayPal3MTurnover", rejection.PayPalTotalSumOfOrders3M.ToString("C2")},
-				{"CVPayPal3MTurnover", lowTotalThreeMonthTurnover.ToString("C2")},
-				{"CVExperianConsumerScoreDefAcc", rejectDefaultsCreditScore.ToString(CultureInfo.InvariantCulture)},
+				{"CVPayPal3MTurnover", dataGatherer.LowTotalThreeMonthTurnover.ToString("C2")},
+				{"CVExperianConsumerScoreDefAcc", dataGatherer.RejectDefaultsCreditScore.ToString(CultureInfo.InvariantCulture)},
 				{"ExperianDefAccNum", rejection.NumOfDefaultAccounts.ToString(CultureInfo.InvariantCulture)},
-				{"CVExperianDefAccNum", rejectDefaultsAccountsNum.ToString(CultureInfo.InvariantCulture)},
+				{"CVExperianDefAccNum", dataGatherer.RejectDefaultsAccountsNum.ToString(CultureInfo.InvariantCulture)},
 				{"Seniority", marketplaceSeniorityDays.ToString(CultureInfo.InvariantCulture)},
-				{"SeniorityThreshold", rejectMinimalSeniority.ToString(CultureInfo.InvariantCulture) + additionalValues}
+				{"SeniorityThreshold", dataGatherer.RejectMinimalSeniority.ToString(CultureInfo.InvariantCulture) + additionalValues}
 			});
 		}
 
@@ -1133,7 +1038,7 @@
 
 		private void GetAml()
 		{
-			if (wasMainStrategyExecutedBefore)
+			if (dataGatherer.WasMainStrategyExecutedBefore)
 			{
 				Log.Info("Getting AML for customer: {0}", customerId);
 				var amlChecker = new AmlChecker(customerId, DB, Log);
@@ -1143,7 +1048,7 @@
 
 		private bool ShouldRunBwa()
 		{
-			return appBankAccountType == "Personal" && bwaBusinessCheck == "1" && appSortCode != null && appAccountNumber != null;
+			return dataGatherer.AppBankAccountType == "Personal" && dataGatherer.BwaBusinessCheck == "1" && dataGatherer.AppSortCode != null && dataGatherer.AppAccountNumber != null;
 		}
 
 		private void GetZooplaData()

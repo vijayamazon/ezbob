@@ -108,7 +108,8 @@
     <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
-    <Compile Include="MainStrategy\MainStrategyStaller.cs" />
+    <Compile Include="MainStrategy\DataGatherer.cs" />
+    <Compile Include="MainStrategy\Staller.cs" />
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
     <Compile Include="Misc\BackfillAml.cs" />
     <Compile Include="Experian\BackfillNonLimitedCompanies.cs" />

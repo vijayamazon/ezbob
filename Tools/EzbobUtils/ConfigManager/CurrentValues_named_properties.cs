@@ -2468,5 +2468,11 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.LimitedMedalDaysOfMpRelevancy]; }
 		}
+
+		public virtual VariableValue LimitedMedalMinOffer
+		{
+			get { return this[Variables.LimitedMedalMinOffer]; }
+		}
+		
 	} // class CurrentValues
 } // namespace ConfigManager

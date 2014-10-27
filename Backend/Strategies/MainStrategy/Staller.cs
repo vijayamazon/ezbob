@@ -10,7 +10,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class MainStrategyStaller
+	public class Staller
 	{
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly StrategiesMailer mailer;
@@ -32,7 +32,7 @@
 		private readonly string typeOfBusiness;
 		private readonly string customerEmail;
 
-		public MainStrategyStaller(int customerId, NewCreditLineOption newCreditLineOption, StrategiesMailer mailer, AConnection db, ASafeLog log)
+		public Staller(int customerId, NewCreditLineOption newCreditLineOption, StrategiesMailer mailer, AConnection db, ASafeLog log)
 		{
 			this.customerId = customerId;
 			this.db = db;
