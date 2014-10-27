@@ -6,18 +6,22 @@
 	public class EmailUnderReview : ABrokerMailToo {
 		#region constructor
 
-		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(customerId, true, oDb, oLog)
-		{
-			if (CustomerData.IsFilledByBroker)
-			{
-				SendToCustomer = false;
-			}
-		} // constructor
+		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {} // constructor
 
 		#endregion constructor
 
 		public override string Name { get { return "Email Under Review"; } }
+
+		#region method LoadRecipientData
+
+		protected override void LoadRecipientData() {
+			base.LoadRecipientData();
+
+			if (CustomerData.IsFilledByBroker)
+				SendToCustomer = false;
+		} // LoadRecipientData
+
+		#endregion method LoadRecipientData
 
 		#region method SetTemplateAndVariables
 
