@@ -287,7 +287,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				that.model.set('loggedIn', true); // triggers 'ready' and 'next'
 			}
 			else {
-				EzBob.ServerLog.alert('Customer', sEmail, 'failed to sign up with error message:', result.errorMessage);
+				EzBob.ServerLog.warn('Customer', sEmail, 'failed to sign up with error message:', result.errorMessage);
 
 				if (result.errorMessage)
 					EzBob.App.trigger('error', result.errorMessage);
