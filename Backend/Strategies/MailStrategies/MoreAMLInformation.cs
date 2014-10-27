@@ -4,7 +4,13 @@
 	using Ezbob.Logger;
 
 	public class MoreAmlInformation : ABrokerMailToo {
-		public MoreAmlInformation(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public MoreAmlInformation(int customerId, AConnection oDb, ASafeLog oLog)
+			: base(customerId, true, oDb, oLog)
+		{
+			if (CustomerData.IsFilledByBroker)
+			{
+				SendToCustomer = false;
+			}
 		} // constructor
 
 		public override string Name { get { return "More AML Information"; } } // Name

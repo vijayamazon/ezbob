@@ -6,8 +6,7 @@
 	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-
-	using EzBob.Backend.Strategies.MailStrategies.API;
+	using API;
 	using Ezbob.Utils.Exceptions;
 
 	public abstract class AMailStrategyBase : AStrategy {
