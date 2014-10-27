@@ -72,7 +72,7 @@
 		#region constructor
 
 		protected AMailStrategyBase(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			toTrustPilot = false;
+			ToTrustPilot = false;
 			m_oMailer = new StrategiesMailer(DB, Log);
 
 			CustomerId = customerId;
@@ -82,13 +82,13 @@
 
 		#endregion constructor
 
-		protected virtual bool toTrustPilot { get; set; }
+		protected bool ToTrustPilot { get; set; }
 
 		#region method GetRecipients
 
 		protected virtual Addressee[] GetRecipients() {
 			return SendToCustomer
-				? new[] { new Addressee(CustomerData.Mail, toTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "") }
+				? new[] { new Addressee(CustomerData.Mail, ToTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "") }
 				: new Addressee[0];
 		} // GetRecipients
 
