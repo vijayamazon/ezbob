@@ -258,14 +258,14 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		var loanType = this.currentLoanTypeID;
 		var repaymentPeriod = this.currentRepaymentPeriod;
 		var view = this.getCurrentViewId();
-
-		this.agreementView.$el.find('.download').attr('href', "" + window.gRootPath + "Customer/Agreement/Download?amount=" + amount + "&viewName=" + view + "&loanType=" + loanType + "&repaymentPeriod=" + repaymentPeriod);
+		this.agreementView.$el.find('.download').attr('href', "" + window.gRootPath + "Customer/Agreement/Download?amount=" + amount + "&viewName=" + view + "&loanType=" + loanType + "&repaymentPeriod=" + repaymentPeriod + "&isAlibaba=" + this.isAlibaba);
         }, // updateDownloadLink
 
 	createAgreementView: function(agreementdata) {
 		var oViewArgs = {
 			el: this.ui.agreement,
 			onTabSwitch: _.bind(this.updateDownloadLink, this),
+			isAlibaba: this.isAlibaba
 		};
 
 		if (_.contains([0, 4, 2], this.customer.get("CustomerPersonalInfo").TypeOfBusiness))

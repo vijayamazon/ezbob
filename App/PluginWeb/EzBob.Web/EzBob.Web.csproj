@@ -763,6 +763,10 @@
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\MarkAsPending.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditActAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\AlibabaGuarantyAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\AlibabaPre-Contract-Agreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\AlibabaPrivateCompanyLoanAgreement.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
