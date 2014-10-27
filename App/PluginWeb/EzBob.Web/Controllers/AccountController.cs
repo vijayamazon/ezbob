@@ -338,6 +338,8 @@ namespace EzBob.Web.Controllers {
 		[CaptchaValidationFilter(Order = 999999)]
 		public JsonResult SignUp(
 			User model,
+			string FirstName,
+			string Surname,
 			string signupPass1,
 			string signupPass2,
 			string securityQuestion,
@@ -362,11 +364,15 @@ namespace EzBob.Web.Controllers {
 					throw new Exception(DbStrings.PasswordDoesNotMatch);
 
 				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
+
 				if (signupPass1.Length < maxPassLength)
 					throw new Exception(DbStrings.NotValidEmailAddress);
+
 				bool mobilePhoneVerified = false;
+
 				if (isInCaptchaMode != "True") {
 					mobilePhoneVerified = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
+
 					if (!mobilePhoneVerified)
 						throw new Exception("Invalid code.");
 				} // if
@@ -384,12 +390,20 @@ namespace EzBob.Web.Controllers {
 				var blm = new WizardBrokerLeadModel(Session);
 
 				new Transactional(
-					() => customer = CreateCustomer(model.EMail, promoCode, amount, mobilePhone, mobilePhoneVerified, blm.BrokerFillsForCustomer, whiteLabelId)
+					() => customer = CreateCustomer(
+						model.EMail,
+						FirstName,
+						Surname,
+						promoCode,
+						amount,
+						mobilePhone,
+						mobilePhoneVerified,
+						blm.BrokerFillsForCustomer,
+						whiteLabelId
+					)
 				).Execute();
 
 				string link = m_oServiceClient.Instance.EmailConfirmationGenerate(customer.Id).Address;
-
-				
 
 				if (blm.IsSet)
 					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.FirstName, blm.BrokerFillsForCustomer, link);
@@ -766,6 +780,8 @@ namespace EzBob.Web.Controllers {
 
 		private Customer CreateCustomer(
 			string email,
+			string sFirstName,
+			string sLastName,
 			string promoCode,
 			double? amount,
 			string mobilePhone,
@@ -778,11 +794,22 @@ namespace EzBob.Web.Controllers {
 			var isAutomaticTest = IsAutomaticTest(email);
 			var vip = m_oVipRequestRepository.RequestedVip(email);
 			var whiteLabel = whiteLabelId != 0 ? _whiteLabelProviderRepository.GetAll().FirstOrDefault(x => x.Id == whiteLabelId) : null;
+
 			Broker broker = null;
+
 			if (whiteLabel != null) {
 				var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
 				broker = brokerRepo.GetAll().FirstOrDefault(x => x.WhiteLabel == whiteLabel);
-			}
+			} // if
+
+			sFirstName = (sFirstName ?? string.Empty).Trim();
+			sLastName = (sLastName ?? string.Empty).Trim();
+
+			if (sFirstName == string.Empty)
+				sFirstName = null;
+
+			if (sLastName == string.Empty)
+				sLastName = null;
 
 			var customer = new Customer {
 				Name = email,
@@ -795,12 +822,17 @@ namespace EzBob.Web.Controllers {
 				IsOffline = null,
 				PromoCode = promoCode,
 				CustomerInviteFriend = new List<CustomerInviteFriend>(),
-				PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, MobilePhoneVerified = mobilePhoneVerified},
+				PersonalInfo = new PersonalInfo {
+					MobilePhone = mobilePhone,
+					MobilePhoneVerified = mobilePhoneVerified,
+					FirstName = sFirstName,
+					Surname = sLastName,
+				},
 				TrustPilotStatus = m_oDatabaseHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
 				GreetingMailSentDate = DateTime.UtcNow,
 				Vip = vip,
 				WhiteLabel = whiteLabel,
-				Broker = broker
+				Broker = broker,
 			};
 
 			ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
@@ -843,7 +875,7 @@ namespace EzBob.Web.Controllers {
 
 			customer.ABTesting = GetAndRemoveCookie("ezbobab");
 			customer.FirstVisitTime = GetAndRemoveCookie("firstvisit");
-			
+
 			if (Request.Cookies["istest"] != null)
 				customer.IsTest = true;
 
@@ -869,40 +901,40 @@ namespace EzBob.Web.Controllers {
 			catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to save sourceref history.");
 			} // try
-			
 
 			return customer;
-		}
+		} // CreateCustomer
 
-		[NonAction]
+		#endregion method CreateCustomer
+
 		private DateTime? ToDate(string dateStr) {
-			if (string.IsNullOrEmpty(dateStr)) {
+			if (string.IsNullOrEmpty(dateStr))
 				return null;
-			}
-			DateTime date;
-			if (DateTime.TryParseExact(dateStr, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
-			                           DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out date)) {
-				return date;
-			}
-			return null;
 
-		}
+			DateTime date;
+
+			bool bSuccess = DateTime.TryParseExact(
+				dateStr,
+				"dd/MM/yyyy HH:mm:ss",
+				CultureInfo.InvariantCulture,
+				DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal,
+				out date
+			);
+
+			return bSuccess ? date : (DateTime?)null;
+		} // ToDate
 
 		private string GetAndRemoveCookie(string cookieName) {
 			var reqCookie = Request.Cookies[cookieName];
-			if (reqCookie != null)
-			{
+
+			if (reqCookie != null) {
 				var cookie = new HttpCookie(cookieName, "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
 				return reqCookie.Value;
 			} // if
 
 			return null;
-		}
-
-// CreateCustomer
-
-		#endregion method CreateCustomer
+		} // GetAndRemoveCookie
 
 		#region method ValidateUser
 

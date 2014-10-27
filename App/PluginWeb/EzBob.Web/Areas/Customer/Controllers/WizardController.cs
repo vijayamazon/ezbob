@@ -1,11 +1,16 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
+	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Code;
+	using Code.UiEvents;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Marketplaces;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Models;
@@ -16,6 +21,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ServiceClientProxy;
 	using Web.Models;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class WizardController : Controller {
 		#region public
@@ -29,7 +35,8 @@
 			ISession session,
 			ICustomerReasonRepository customerReasonRepository,
 			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository,
-			IVipRequestRepository vipRequestRepository) {
+			IVipRequestRepository vipRequestRepository
+		) {
 			_context = context;
 			_questions = questions;
 			_customerModelBuilder = customerModelBuilder;
@@ -37,7 +44,8 @@
 			_reasons = customerReasonRepository;
 			_sourcesOfRepayment = customerSourceOfRepaymentRepository;
 			_vipRequestRepository = vipRequestRepository;
-			} // constructor
+			m_oDB = DbConnectionGenerator.Get(ms_oLog);
+		} // constructor
 
 		#endregion constructor
 
@@ -49,10 +57,13 @@
 			ViewData["Reasons"] = _reasons.GetAll().OrderBy(x => x.Id).ToList();
 			ViewData["Sources"] = _sourcesOfRepayment.GetAll().OrderBy(x => x.Id).ToList();
 			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
+
 			bool wizardTopNaviagtionEnabled = CurrentValues.Instance.WizardTopNaviagtionEnabled;
 			ViewData["WizardTopNaviagtionEnabled"] = wizardTopNaviagtionEnabled;
+
 			bool targetsEnabled = CurrentValues.Instance.TargetsEnabled;
 			ViewData["TargetsEnabled"] = targetsEnabled;
+
 			bool targetsEnabledEntrepreneur = CurrentValues.Instance.TargetsEnabledEntrepreneur;
 			ViewData["TargetsEnabledEntrepreneur"] = targetsEnabledEntrepreneur;
 			
@@ -64,8 +75,10 @@
 				.Query<MP_MarketplaceGroup>()
 				.ToArray();
 
-			var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session, provider);
-	
+			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session, provider);
+
+			SavePageLoadEvent();
+
 			return View(wizardModel);
 		} // Index
 
@@ -124,14 +137,13 @@
 			}
 
 			return Json(vipModel, JsonRequestBehavior.AllowGet);
-		}
+		} // Vip
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Vip(VipModel model)
-		{
+		public JsonResult Vip(VipModel model) {
 			var customer = _context.Customer;
 			var vip = new VipRequest
 				{
@@ -150,7 +162,7 @@
 			var c = new ServiceClient();
 			c.Instance.VipRequest(customer != null ? customer.Id : 0, model.VipFullName, model.VipEmail, model.VipPhone);
 			return Json(new {});
-		}
+		} // Vip
 
 		#endregion public
 
@@ -163,6 +175,48 @@
 		private readonly ICustomerReasonRepository _reasons;
 		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
 		private readonly IVipRequestRepository _vipRequestRepository;
+		private readonly AConnection m_oDB;
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (WizardController));
+
+		#region method GetCookie
+
+		private string GetCookie(string cookieName) {
+			var reqCookie = Request.Cookies[cookieName];
+
+			if (reqCookie != null)
+				return reqCookie.Value ?? string.Empty;
+
+			return null;
+		} // GetCookie
+
+		#endregion method GetCookie
+
+		#region method SavePageLoadEvent
+
+		private void SavePageLoadEvent() {
+			try {
+				string sNow = DateTime.UtcNow.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+
+				var oPageLoadEvent = new UiActionEventModel {
+					actionName = UiActionNames.PageLoad.ToDBName(),
+					controlName = UiActionEventModel.NoControl,
+					eventArgs = "alibaba:" + GetCookie("alibabaid") + ";sourceref:" + GetCookie("sourceref"),
+					eventID = "0" + sNow,
+					eventTime = sNow,
+					htmlID = "Customer/Wizard",
+				};
+
+				int nBrowserVersionID = this.GetBrowserVersionID(Request.UserAgent ?? "Unknown browser version", m_oDB, ms_oLog);
+
+				if (nBrowserVersionID > 0)
+					oPageLoadEvent.Save(m_oDB, nBrowserVersionID, this.GetRemoteIP(), this.GetSessionID());
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to save page load event.");
+			} // try
+		} // SavePageLoadEvent
+
+		#endregion method SavePageLoadEvent
 
 		#endregion private
 	} // class WizardController

@@ -1,28 +1,14 @@
 ﻿namespace EzBob.Web.Controllers {
-	using System;
 	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Web.Configuration;
 	using System.Web.Mvc;
+	using Code;
+	using Ezbob.Logger;
 	using Newtonsoft.Json;
-	using log4net;
 	using Ezbob.Database;
 	using Code.UiEvents;
 
 	public class UiActionController : Controller {
 		#region public
-
-		#region constructor
-
-		public UiActionController() {
-			var sessionStateSection = (SessionStateSection)ConfigurationManager.GetSection("system.web/sessionState");
-
-			m_sSessionCookieName = sessionStateSection.CookieName;
-
-			m_oDB = DbConnectionGenerator.Get();
-		} // constructor
-
-		#endregion constructor
 
 		#region method Save
 
@@ -35,50 +21,26 @@
 				return Json(new { result = "success" });
 			} // if
 
-			string sSessionID = Request.Cookies[m_sSessionCookieName] == null ? "NO SESSION COOKIE" : (Request.Cookies[m_sSessionCookieName].Value ?? string.Empty).Trim();
+			string sSessionID = this.GetSessionID();
 
-			if (string.IsNullOrEmpty(sSessionID))
-				sSessionID = "EMPTY SESSION COOKIE";
+			string sRemoteIP = this.GetRemoteIP();
 
-			string sRemoteIP = (RemoteIp() ?? string.Empty).Trim();
+			AConnection oDB = DbConnectionGenerator.Get(ms_oLog);
 
-			if (string.IsNullOrEmpty(sRemoteIP))
-				sRemoteIP = "UNKNOWN SOURCE";
-
-			int nBrowserVersionID = 0;
-			const int nRetryCount = 3;
-
-			for (int i = 1; i <= nRetryCount; i++) {
-				try {
-					nBrowserVersionID = m_oDB.ExecuteScalar<int>(
-						"UiEventBrowserVersion",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("@Version", version)
-					);
-				}
-				catch (Exception e) {
-					ms_oLog.Warn("Failed to save browser version.", e);
-				} // try
-
-				if (nBrowserVersionID != 0)
-					break;
-
-				if (i < nRetryCount)
-					ms_oLog.Debug("Retrying to save browser version.");
-			} // for
+			int nBrowserVersionID = this.GetBrowserVersionID(version, oDB, ms_oLog);
 
 			if (nBrowserVersionID == 0)
 				return Json(new { result = "Failed to save browser version." });
 
-			// ms_oLog.DebugFormat("{1} at {2}: UiActionController.Save(version: {3} - {0}), data:", oBrowserVersion.UserAgent, sSessionID, sRemoteIP, oBrowserVersion.ID );
+			// ms_oLog.Debug("{1} at {2}: UiActionController.Save(version: {3} - {0}), data:", oBrowserVersion.UserAgent, sSessionID, sRemoteIP, oBrowserVersion.ID );
 
 			var oSavedPackages = new List<string>();
 			var oFailedPackages = new List<UiCachePkgModel.SaveResult>();
 
-			foreach (var pair in oHistory) {
-				// ms_oLog.DebugFormat("\tkey: {0} pkg: {1}", pair.Key, pair.Value);
+			foreach (KeyValuePair<string, UiCachePkgModel> pair in oHistory) {
+				// ms_oLog.Debug("\tkey: {0} pkg: {1}", pair.Key, pair.Value);
 
-				UiCachePkgModel.SaveResult oResult = pair.Value.Save(m_oDB, nBrowserVersionID, sRemoteIP, sSessionID, nRetryCount);
+				UiCachePkgModel.SaveResult oResult = pair.Value.Save(oDB, nBrowserVersionID, sRemoteIP, sSessionID);
 
 				if (oResult.Overall())
 					oSavedPackages.Add(pair.Key);
@@ -95,22 +57,7 @@
 
 		#region private
 
-		#region method RemoteIp
-
-		private string RemoteIp() {
-			string ip = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-
-			if (string.IsNullOrEmpty(ip))
-				ip = Request.ServerVariables["REMOTE_ADDR"];
-
-			return ip;
-		} // RemoteIp
-
-		#endregion method RemoteIp
-
-		private readonly string m_sSessionCookieName;
-		private readonly AConnection m_oDB;
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(UiActionController));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(UiActionController));
 
 		#endregion private
 	} // class UiActionController

@@ -36,12 +36,12 @@
 
 		#region method Save
 
-		public SaveResult Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie, int nRetryCount) {
+		public SaveResult Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie) {
 			var oResult = new SaveResult(id);
 
 			if (data != null)
 				foreach (UiActionEventModel oEvt in data)
-					oResult.Add(oEvt.eventID, oEvt.Save(oDB, nBrowserVersionID, sRemoteIP, sSessionCookie, nRetryCount));
+					oResult.Add(oEvt.eventID, oEvt.Save(oDB, nBrowserVersionID, sRemoteIP, sSessionCookie));
 
 			return oResult;
 		} // Save
@@ -58,8 +58,8 @@
 			if (data == null)
 				os.Append("\n\t-- No data --");
 			else {
-				foreach (var oEvt in data)
-					os.AppendFormat("\n\t{0}", oEvt.ToString());
+				foreach (UiActionEventModel oEvt in data)
+					os.AppendFormat("\n\t{0}", oEvt);
 			} // if
 
 			os.Append("\n)");

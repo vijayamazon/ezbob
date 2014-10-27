@@ -2,12 +2,14 @@
 	using System;
 	using System.Globalization;
 	using System.Text;
-	using log4net;
+	using Ezbob.Logger;
 	using Ezbob.Database;
 
 	#region class UiActionEventModel
 
 	public class UiActionEventModel {
+		public const string NoControl = "no HTML control";
+
 		public string userName { get; set; }
 		public string controlName { get; set; }
 		public string htmlID { get; set; }
@@ -18,50 +20,46 @@
 
 		#region method Save
 
-		public bool Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie, int nRetryCount) {
+		public bool Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie) {
 			long nRefNum = 0;
 
 			if (!long.TryParse(eventID, out nRefNum)) {
-				ms_oLog.ErrorFormat("Failed to save UI event: cannot parse eventID as long in {0}.", this);
+				ms_oLog.Error("Failed to save UI event: cannot parse eventID as long in {0}.", this);
 				return false;
 			} // if
 
 			DateTime oTime;
 
 			if (!DateTime.TryParseExact(eventTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out oTime)) {
-				ms_oLog.ErrorFormat("Failed to save UI event: cannot parse event time in {0}.", this);
+				ms_oLog.Error("Failed to save UI event: cannot parse event time in {0}.", this);
 				return false;
 			} // if failed to parse time
 
-			for (int i = 1; i <= nRetryCount; i++) {
-				try {
-					string sResult = oDB.ExecuteScalar<string>(
-						"UiEventSave",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("@ActionName", actionName),
-						new QueryParameter("@UserName", userName),
-						new QueryParameter("@ControlName", controlName),
-						new QueryParameter("@EventArgs", eventArgs),
-						new QueryParameter("@BrowserVersionID", nBrowserVersionID),
-						new QueryParameter("@HtmlID", htmlID),
-						new QueryParameter("@RefNum", nRefNum),
-						new QueryParameter("@RemoteIP", sRemoteIP),
-						new QueryParameter("@SessionCookie", sSessionCookie),
-						new QueryParameter("@EventTime", oTime)
-					);
+			string sResult = null;
 
-					if (string.IsNullOrWhiteSpace(sResult))
-						return true;
+			var oRetryer = new SqlRetryer(oLog: ms_oLog);
 
-					ms_oLog.WarnFormat("Failed to save UI event: {0}", sResult);
-				}
-				catch (Exception e) {
-					ms_oLog.Warn("Failed to save UI event.", e);
-				} // try
+			oRetryer.Retry(() => {
+				sResult = oDB.ExecuteScalar<string>(
+					"UiEventSave",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@ActionName", actionName),
+					new QueryParameter("@UserName", userName),
+					new QueryParameter("@ControlName", controlName),
+					new QueryParameter("@EventArgs", eventArgs),
+					new QueryParameter("@BrowserVersionID", nBrowserVersionID),
+					new QueryParameter("@HtmlID", htmlID),
+					new QueryParameter("@RefNum", nRefNum),
+					new QueryParameter("@RemoteIP", sRemoteIP),
+					new QueryParameter("@SessionCookie", sSessionCookie),
+					new QueryParameter("@EventTime", oTime)
+				);
+			}, "saving UI event");
 
-				if (i < nRetryCount)
-					ms_oLog.Debug("Retrying to save UI event.");
-			} // for
+			if (string.IsNullOrWhiteSpace(sResult))
+				return true;
+
+			ms_oLog.Warn("Failed to save UI event: {0}", sResult);
 
 			return false;
 		} // Save
@@ -86,7 +84,7 @@
 
 		#endregion method ToString
 
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(UiActionEventModel));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(UiActionEventModel));
 	} // class UiActionEventModel
 
 	#endregion class UiActionEventModel
