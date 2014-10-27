@@ -29,13 +29,17 @@
 
 			if (m_bIsFirst)
 			{
-				if (CustomerData.IsCampaign)
+				if (CustomerData.IsAlibaba)
+				{
+					TemplateName = "Mandrill - Alibaba - Approval (1st time)";
+				}
+				else if (CustomerData.IsCampaign)
 				{
 					TemplateName = "Mandrill - Approval Campaign (1st time)";
 				}
 				else
 				{
-					TemplateName = CustomerData.IsAlibaba ? "Mandrill - Alibaba - Approval (1st time)" : "Mandrill - Approval (1st time)";
+					TemplateName = "Mandrill - Approval (1st time)";
 				}
 			}
 			else
