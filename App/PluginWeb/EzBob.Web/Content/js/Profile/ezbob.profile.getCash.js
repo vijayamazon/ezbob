@@ -7,12 +7,23 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 
 		this.isRequestInProgress = false;
 
+		this.refreshInterval = null;
+
+		this.startRefresh();
+	}, // initialize
+
+	startRefresh: function() {
 		var that = this;
 
 		$.post(window.gRootPath + 'Customer/CustomerStatus/GetRefreshInterval').done(function (result) {
-			setInterval(function() { that.refresh(); }, result.Interval);
+			if (!that.refreshInterval) {
+				that.refreshInterval = setInterval(
+					_.bind(that.refresh, that),
+					Math.max(parseInt(result.Interval) || 0, 15000) // do not allow refresh more frequently than 15 sec
+				);
+			} // if
 		});
-	}, // initialize
+	}, // startRefresh
 
 	refresh: function() {
 		var that = this;
@@ -20,10 +31,12 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 		if (!that.isRequestInProgress) {
 			that.isRequestInProgress = true;
 
-			$.post(
+			var oRequest = $.post(
 				window.gRootPath + 'Customer/CustomerStatus/GetCustomerStatus',
 				{ customerId: that.customer.get('Id') }
-			).done(function(result) {
+			);
+			
+			oRequest.done(function(result) {
 				if (result.State !== that.previousState) {
 					that.previousState = result.State;
 
@@ -35,6 +48,19 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 				} // if
 
 				that.isRequestInProgress = false;
+			});
+
+			oRequest.fail(function() {
+				// In case of error:
+
+				// 1. stop refreshing
+				if (that.refreshInterval) {
+					clearInterval(that.refreshInterval);
+					that.refreshInterval = null;
+				} // if
+
+				// 2. restart refreshing after five minutes
+				setTimeout(_.bind(that.start, that), 300000);
 			});
 		} // if
 	}, // refresh
