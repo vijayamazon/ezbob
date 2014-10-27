@@ -6,7 +6,7 @@
 	public class EmailUnderReview : ABrokerMailToo {
 		#region constructor
 
-		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
+		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
 		#endregion constructor
