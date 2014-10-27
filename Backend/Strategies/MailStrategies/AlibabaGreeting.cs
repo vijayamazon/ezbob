@@ -26,7 +26,8 @@
 			TemplateName = "Greeting - Alibaba";
 
 			Variables = new Dictionary<string, string> {
-				{"Email", CustomerData.Mail}
+				{"Email", CustomerData.Mail},
+				{"FirstName", CustomerData.FirstName}
 			};
 		}
 
