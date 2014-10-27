@@ -270,8 +270,8 @@ namespace EZBob.DatabaseLib {
 			}
 		}
 
-		public LoanAgreementTemplate GetOrCreateLoanAgreementTemplate(string template, int type) {
-			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template && x.TemplateType == type) ?? new LoanAgreementTemplate { Template = template, TemplateType = type };
+		public LoanAgreementTemplate GetOrCreateLoanAgreementTemplate(string template, LoanAgreementTemplateType type) {
+			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template && x.TemplateType == (int)type) ?? new LoanAgreementTemplate { Template = template, TemplateType = (int)type };
 			return loanAgreementTemplate;
 		}
 

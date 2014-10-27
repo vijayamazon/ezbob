@@ -25,15 +25,15 @@
 			_loanBuilder = loanBuilder;
 		} // constructor
 
-		public ActionResult Download(decimal amount, string viewName, int loanType, int repaymentPeriod) {
+		public ActionResult Download(decimal amount, string viewName, int loanType, int repaymentPeriod, bool isAlibaba) {
 			var oLog = new SafeILog(log4net.LogManager.GetLogger(GetType()));
 
-			oLog.Debug("Download agreement: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}", amount, viewName, loanType, repaymentPeriod);
+			oLog.Debug("Download agreement: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}, isAlibaba = {4}", amount, viewName, loanType, repaymentPeriod, isAlibaba);
 
 			string file;
 
 			try {
-				file = _templates.GetTemplateByName(viewName);
+				file = _templates.GetTemplateByName(isAlibaba ? "Alibaba" + viewName : viewName);
 			}
 			catch (Exception e) {
 				oLog.Debug(e, "Agreement template not found: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}", amount, viewName, loanType, repaymentPeriod);

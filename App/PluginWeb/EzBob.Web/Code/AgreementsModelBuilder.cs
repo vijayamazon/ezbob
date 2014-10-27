@@ -11,8 +11,6 @@
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using PaymentServices.Calculators;
-	using EZBob.DatabaseLib.Model;
-	using StructureMap;
 
 	public class AgreementsModelBuilder
 	{

@@ -5,6 +5,19 @@
 	using FluentNHibernate.Mapping;
 	using NHibernate;
 
+	public enum LoanAgreementTemplateType {
+		GuarantyAgreement = 1,
+		PreContractAgreement = 2,
+		CreditActAgreement = 3,
+		PrivateCompanyLoanAgreement = 4,
+
+		AlibabaGuarantyAgreement = 5,
+		AlibabaPreContractAgreement = 6,
+		AlibabaCreditActAgreement = 7,
+		AlibabaPrivateCompanyLoanAgreement = 8,
+
+	}
+
 	public class LoanAgreementTemplate
 	{
 		public LoanAgreementTemplate()
