@@ -12,6 +12,7 @@
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using NHibernate;
+	using NHibernate.Criterion;
 	using NHibernate.Linq;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
@@ -633,7 +634,9 @@
 		public JsonResult FindCustomer(string term) {
 			term = term.Trim();
 			int id;
-			int.TryParse(term, out id);
+			if (!int.TryParse(term, out id)) {
+				term = term.Replace(" ", "%");
+			}
 
 			var findResult = _session.Query<Customer>()
 				.Where(c =>
