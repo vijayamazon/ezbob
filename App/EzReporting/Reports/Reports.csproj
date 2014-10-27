@@ -76,6 +76,12 @@
     <Compile Include="AAttribute.cs" />
     <Compile Include="Alibaba\DataSharing\CustomerData.cs" />
     <Compile Include="Alibaba\DataSharing\DataSharing.cs" />
+    <Compile Include="Alibaba\ExcelPackageExt.cs" />
+    <Compile Include="Alibaba\ExcelWorksheetExt.cs" />
+    <Compile Include="Alibaba\Funnel\EzbobFunnelRow.cs" />
+    <Compile Include="Alibaba\Funnel\Funnel.cs" />
+    <Compile Include="Alibaba\Funnel\RejectReasonRow.cs" />
+    <Compile Include="Alibaba\Funnel\StrInt.cs" />
     <Compile Include="ATag.cs" />
     <Compile Include="attributes.cs" />
     <Compile Include="BaseReportHandler\brh.cs" />

@@ -34,6 +34,8 @@
 
 			foreach (KeyValuePair<int, CustomerData> pair in m_oData)
 				pair.Value.SaveTo(Report);
+
+			Report.AutoFitColumns();
 		} // Generate
 
 		#endregion method Generate
