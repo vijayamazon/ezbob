@@ -13,6 +13,13 @@
 
 @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" }))
 {
+	@*
+	The following control is only used to save customer name for Alibaba customer.
+	ui-event-control-id attribute is used to copy a value from cookie to the control.
+	*@
+    <input type="hidden" name="FirstName" ui-event-control-id="personal-info:first_name" />
+    <input type="hidden" name="Surname" ui-event-control-id="personal-info:last_name" />
+
     <h2 class="form_start @sBrokerForCustomerIndicator">Create account</h2>
 
     <div class="form_field_container">

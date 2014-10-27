@@ -95,7 +95,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 			var oDialog = this.$el.find('#offline_help');
 			if (oDialog.length > 0)
-				var x = $.colorbox({ inline: true, open: true, href: oDialog });
+				$.colorbox({ inline: true, open: true, href: oDialog });
 		} // if
 
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');
@@ -235,7 +235,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 			mobilePhone = $('#mobilePhone').val();
 			mobileCode = $('#mobileCode').val();
 			this.model.set('twilioPhone', mobilePhone);
-		}
+		} // if
 
 		if (this.model.get('loggedIn')) {
 			this.trigger('ready');
@@ -250,17 +250,18 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		} // if
 
 		var data = this.form.serializeArray();
-		var amount = _.find(data, function(d) { return d.name === 'amount'; });
-		if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
 
-		if (isInCaptchaMode) {
+		var amount = _.find(data, function(d) { return d.name === 'amount'; });
+		if (amount)
+			amount.value = this.$el.find('#amount').autoNumericGet();
+
+		if (isInCaptchaMode)
 			data.push({ name: "isInCaptchaMode", value: "True" });
-		} else {
+		else
 			data.push({ name: "isInCaptchaMode", value: "False" });
-		}
 
 		data.push({ name: "whiteLabelId", value: this.model.get('WhiteLabelId') });
-		
+
 		var xhr = $.post(this.form.attr('action'), data);
 
 		var that = this;
@@ -281,7 +282,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 				$('body').attr('data-user-name', sEmail);
 
-				ShowHideSignLogOnOff();
+				window.ShowHideSignLogOnOff();
 
 				that.model.set('loggedIn', true); // triggers 'ready' and 'next'
 			}

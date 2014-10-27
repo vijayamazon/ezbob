@@ -132,29 +132,30 @@
     <script type="text/javascript">
         var EzBob = EzBob || {};
 
-        function ShowHideSignLogOnOff() {
-            var sEmail = $('body').attr('data-user-name');
-            if (sEmail) {
-                $('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
-                $('#user-menu .login_btn, .signup_btn').hide();
-            }
-            else {
-                $('#logoff-li').hide();
+        window.ShowHideSignLogOnOff = function() {
+	        var sEmail = $('body').attr('data-user-name');
+	        if (sEmail) {
+				$('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
+				$('#user-menu .login_btn, .signup_btn').hide();
+			}
+	        else {
+				$('#logoff-li').hide();
 
-                if ($('.login-form-user-name').length) {
-                    $('.login_btn').hide();
-                    $('.signup_btn').show();
-                }
-                else {
-                    $('.login_btn').show();
-                    $('.signup_btn').hide();
-                } // if
-            } // if
-        } // ShowHideSignLogOnOff
+				if ($('.login-form-user-name').length) {
+					$('.login_btn').hide();
+					$('.signup_btn').show();
+				}
+				else {
+					$('.login_btn').show();
+					$('.signup_btn').hide();
+				} // if
+			} // if
+        }; // ShowHideSignLogOnOff
 
         $(document).ready(function() {
             $('body').attr('data-user-name', '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")');
-            ShowHideSignLogOnOff();
+
+            window.ShowHideSignLogOnOff();
 
 			EzBob_CgVendors_init();
 
@@ -162,9 +163,8 @@
         });
 
         function EzBob_CgVendors_init() {
-            if (EzBob.CgVendors) {
+            if (EzBob.CgVendors)
                 EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
-            }
         } // EzBob_CgVendors_init
     </script>
 	
