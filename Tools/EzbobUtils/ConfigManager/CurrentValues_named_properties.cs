@@ -2474,9 +2474,19 @@ namespace ConfigManager {
 			get { return this[Variables.LimitedMedalMinOffer]; }
 		}
 
-		public virtual VariableValue AlibabaRejectionMailTo
+		public virtual VariableValue AlibabaMailTo
 		{
-			get { return this[Variables.AlibabaRejectionMailTo]; }
+			get { return this[Variables.AlibabaMailTo]; }
+		}
+
+		public virtual VariableValue AlibabaMailCc
+		{
+			get { return this[Variables.AlibabaMailCc]; }
+		}
+
+		public virtual VariableValue AlibabaCurrencyConversionCoefficient
+		{
+			get { return this[Variables.AlibabaCurrencyConversionCoefficient]; }
 		}
 	} // class CurrentValues
 } // namespace ConfigManager

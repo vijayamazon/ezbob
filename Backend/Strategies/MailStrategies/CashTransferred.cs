@@ -2,6 +2,7 @@
 	using System;
 	using System.Globalization;
 	using System.Collections.Generic;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Repository;
@@ -15,9 +16,7 @@
 			this.loanRefNum = loanRefNum;
 			this.isFirst = isFirst;
 			ToTrustPilot = true;
-			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
-			double currencyRate = currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
-			amountInUsd = (double)amount * currencyRate;
+			amountInUsd = CalculateLoanAmountInUsd();
 		} // constructor
 
 		#endregion consturctor
@@ -34,29 +33,35 @@
 				{"LOANREFNUM", loanRefNum},
 				{"AmountInUsd", amountInUsd.ToString(CultureInfo.InvariantCulture)}
 			};
-
-			if (isFirst)
+			
+			if (CustomerData.IsAlibaba)
 			{
-				if (CustomerData.IsAlibaba)
-				{
-					TemplateName = "Mandrill - Alibaba - Took Loan (1st loan)";
-				}
-				else if (CustomerData.IsCampaign)
-				{
-					TemplateName = "Mandrill - Took Loan Campaign (1st loan)";
-				}
-				else
-				{
-					TemplateName = "Mandrill - Took Loan (1st loan)";
-				}
+				TemplateName = "Mandrill - Alibaba - Took Loan";
+			}
+			else if (CustomerData.IsCampaign)
+			{
+				TemplateName = "Mandrill - Took Loan Campaign (1st loan)";
+			}
+			else if (isFirst)
+			{
+				TemplateName = "Mandrill - Took Loan (1st loan)";
 			}
 			else
 			{
-				TemplateName = CustomerData.IsAlibaba ? "Mandrill - Alibaba - Took Loan (not 1st loan)" : "Mandrill - Took Loan (not 1st loan)";
+				TemplateName = "Mandrill - Took Loan (not 1st loan)";
 			}
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables
+
+		private double CalculateLoanAmountInUsd()
+		{
+			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
+			double currencyRate = currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
+			double convertedLoanAmount = (double)amount * currencyRate * CurrentValues.Instance.AlibabaCurrencyConversionCoefficient;
+			Log.Info("Calculating Alibaba loan amount in USD. CurrencyRate:{0} Coefficient:{1} LoanAmount:{2} ConvertedLoanAmount:{3}", currencyRate, CurrentValues.Instance.AlibabaCurrencyConversionCoefficient, amount, convertedLoanAmount);
+			return convertedLoanAmount;
+		}
 
 		private readonly decimal amount;
 		private readonly double amountInUsd;

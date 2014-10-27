@@ -22,7 +22,7 @@
 		{
 			if (CustomerData.IsAlibaba)
 			{
-				TemplateName = "Mandrill - Rejection email";
+				TemplateName = "Mandrill - Alibaba rejection email";
 			}
 			else if (CurrentValues.Instance.RejectionPartnersCities.Value.Contains("all") ||
 				CurrentValues.Instance.RejectionPartnersCities.Value.Contains(CustomerData.City))
@@ -46,8 +46,8 @@
 		{
 			if (CustomerData.IsAlibaba)
 			{
-				var address = new Addressee(CurrentValues.Instance.AlibabaRejectionMailTo);
-				Log.Info("Sending Alibaba rejection mail");
+				var address = new Addressee(CurrentValues.Instance.AlibabaMailTo, CurrentValues.Instance.AlibabaMailCc);
+				Log.Info("Sending Alibaba internal rejection mail");
 				SendCostumeMail("Mandrill - Alibaba - Internal rejection email", Variables, new[] { address });
 			}
 		}

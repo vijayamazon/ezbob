@@ -371,6 +371,8 @@ namespace ConfigManager {
 		CompanyCaisLateAlertShortPeriodThreshold,
 		LimitedMedalDaysOfMpRelevancy,
 		LimitedMedalMinOffer,
-		AlibabaRejectionMailTo
+		AlibabaMailTo,
+		AlibabaMailCc,
+		AlibabaCurrencyConversionCoefficient
 	} // enum Variables
 } // namespace ConfigManager
