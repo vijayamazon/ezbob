@@ -91,6 +91,9 @@
 			var sourceStats = app.FetchBySource();
 
 			SaveStats(sourceStats);
+
+			var landingPageStats = app.FetchByLandingPage();
+			SaveStats(landingPageStats);
 			Log.Debug("Program.Run complete.");
 		} // Run
 
