@@ -12,7 +12,7 @@
 	public class ApprovedUser : ABrokerMailToo {
 		#region constructor
 
-		public ApprovedUser(int customerId, decimal nLoanAmount, int nValidHours, bool isFirst, AConnection oDB, ASafeLog oLog) : base(customerId, false, oDB, oLog) {
+		public ApprovedUser(int customerId, decimal nLoanAmount, int nValidHours, bool isFirst, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
 			m_nLoanAmount = nLoanAmount;
 			m_nValidHours = nValidHours;
 			m_bIsFirst = isFirst;

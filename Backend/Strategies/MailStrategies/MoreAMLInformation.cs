@@ -4,7 +4,7 @@
 	using Ezbob.Logger;
 
 	public class MoreAmlInformation : ABrokerMailToo {
-		public MoreAmlInformation(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
+		public MoreAmlInformation(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
 		public override string Name { get { return "More AML Information"; } } // Name
