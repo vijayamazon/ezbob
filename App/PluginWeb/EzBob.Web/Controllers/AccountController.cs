@@ -844,6 +844,11 @@ namespace EzBob.Web.Controllers {
 			else {
 				customer.GoogleCookie = GetAndRemoveCookie("__utmz");
 				customer.ReferenceSource = GetAndRemoveCookie("sourceref");
+				customer.AlibabaId = GetAndRemoveCookie("alibaba_id");
+
+				if (!string.IsNullOrEmpty(customer.AlibabaId)) {
+					customer.IsAlibaba = true;
+				}
 
 				campaignSourceRef = new CampaignSourceRef();
 				campaignSourceRef.FContent = GetAndRemoveCookie("fcontent");

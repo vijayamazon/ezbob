@@ -3,7 +3,6 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models;
-	using Code;
 	using Infrastructure;
 
 	public class PacnetStatusController : Controller
@@ -28,6 +27,7 @@
 			ViewData["loanNo"] = loan.RefNumber;
 			ViewData["SetupFee"] = loan.SetupFee > 0 ? FormattingUtils.FormatPounds(loan.SetupFee) : "";
 			ViewData["Total"] = FormattingUtils.FormatPounds(loan.Balance + loan.SetupFee);
+			ViewData["IsAlibaba"] = customer.IsAlibaba;
 
 			return View("Index");
 		}

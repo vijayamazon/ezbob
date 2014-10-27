@@ -529,6 +529,11 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.html(this.templates[state](data));
 
 		this.$el.find('button').popover({ placement: 'top' });
+	    
+        if(this.customer.get("IsAlibaba")) {
+            this.$el.find('button.get-cash').text('Get a loan');
+            this.$el.find('button.choose-amount-wait').text('Get a loan');
+        }
 
 		EzBob.UiAction.registerView(this);
 

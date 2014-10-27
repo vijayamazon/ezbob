@@ -35,9 +35,10 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
             hasRollOver = this.model.get('HasRollovers'),
             name = this.model.get('CustomerPersonalInfo').FirstName,
             sum = this.model.get('CreditSum'),
-            save = this.model.get('TotalPayEarlySavings');
+            save = this.model.get('TotalPayEarlySavings'),
+            isAlibaba = this.model.get("IsAlibaba");
       
-        if (state == 'get' && hasLoans) {
+        if (state == 'get' && hasLoans && !isAlibaba) {
             message = "<em>Congratulations!</em> Click Choose Amount and choose the exact amount you need.";
             cls = "green";
         }
@@ -65,7 +66,7 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
             cls = "green";
         }
 
-        if (state == 'get' && !hasLoans) {
+        if (state == 'get' && !hasLoans && !isAlibaba) {
             message = "<em>Congratulations!</em> Click Choose Amount and choose the exact amount you need.";
             cls = "green";
         }

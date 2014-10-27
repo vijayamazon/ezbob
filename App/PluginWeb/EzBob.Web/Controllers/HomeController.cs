@@ -34,6 +34,7 @@
 			string bloken = "",
 			string sourceref_time = "",
 			string lead_data = "",
+			string alibaba_id = "",
 
 			string furl = "",
 			string fsource = "",
@@ -67,6 +68,8 @@
 			AddCookie(ezbobab, "ezbobab", 3);
 			AddCookie(sourceref_time, "firstvisit", 3);
 
+			AddCookie(alibaba_id, "alibaba_id", 6);
+			
 			AddCookie(furl, "furl", 6);
 			AddCookie(fsource, "fsource", 6);
 			AddCookie(fmedium, "fmedium", 6);
