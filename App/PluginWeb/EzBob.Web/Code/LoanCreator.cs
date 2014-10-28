@@ -72,6 +72,7 @@
 					ret = SendMoney(cus, transfered);
 					VerifyAvailableFunds(transfered);
 				} else {
+					Log.DebugFormat("Not sending money via pacnet. isFake: {0}, isAlibaba: {1}", isFakeLoanCreate, cus.IsAlibaba);
 					ret = new PacnetReturnData {
 						Status = "Done",
 						TrackingNumber = "fake"
@@ -120,6 +121,7 @@
 					Fees = fee,
 					LoanTransactionMethod = m_oTranMethodRepo.FindOrDefault("Manual"),
 				};
+				Log.Debug("Alibaba loan, adding manual pacnet transaction to loan schedule");
 			}
 
 			loan.AddTransaction(loanTransaction);
