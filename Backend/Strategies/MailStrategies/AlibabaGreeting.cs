@@ -7,9 +7,12 @@
 
 	public class AlibabaGreeting : ABrokerMailToo
 	{
-		public AlibabaGreeting(int customerId, AConnection oDb, ASafeLog oLog)
+		private readonly string confirmEmailAddress;
+
+		public AlibabaGreeting(int customerId, string confirmEmailAddress, AConnection oDb, ASafeLog oLog)
 			: base(customerId, true, oDb, oLog)
 		{
+			this.confirmEmailAddress = confirmEmailAddress;
 		}
 
 		public override string Name { get { return "AlibabaGreeting"; } }
@@ -27,7 +30,8 @@
 
 			Variables = new Dictionary<string, string> {
 				{"Email", CustomerData.Mail},
-				{"FirstName", CustomerData.FirstName}
+				{"FirstName", CustomerData.FirstName},
+				{"ConfirmEmailAddress", confirmEmailAddress}
 			};
 		}
 
