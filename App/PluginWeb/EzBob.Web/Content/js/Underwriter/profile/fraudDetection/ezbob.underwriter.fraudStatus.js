@@ -101,8 +101,8 @@ EzBob.Underwriter.FraudStatusLayout = Backbone.Marionette.Layout.extend({
 			draggable: true,
 			width: '400',
 			buttons: {
-				'OK': this.onSave,
-				'Cancel': this.onCancel
+			    'OK': _.bind(this.onSave, this),
+			    'Cancel': _.bind(this.onCancel, this)
 			},
 		};
 	}, // jqoptions
