@@ -36,10 +36,9 @@
 
 		public CashRequest CreateCashRequest(Customer customer, CashRequestOriginator originator)
 		{
-			var loanType = _loanTypes.GetDefault();
+			LoanType loanType = customer.IsAlibaba ? _loanTypes.ByName("Alibaba Loan") : _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
 			var score = customer.ScoringResults.OrderByDescending(x => x.ScoreDate).FirstOrDefault();
-
 
 			int? experianScore = customer.ExperianConsumerScore;
 

@@ -378,23 +378,9 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			});
 		},
 
-		LoanTypeSelectionAllowedChanged: function() {
-			var _ref;
-
-			var loanSource = this.model.get('LoanSource') || {};
-
-			var isCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed;
-
-			var isLoanTypeSelectionAllowed = this.model.get('IsLoanTypeSelectionAllowed');
-
-			if (!isCustomerRepaymentPeriodSelectionAllowed || (isLoanTypeSelectionAllowed === 1 || isLoanTypeSelectionAllowed === '1')) {
-				this.$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
-
-				if (this.model.get('LoanTypeId') !== 1)
-					this.model.set('LoanTypeId', 1);
-			}
-			else
-				this.$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').removeAttr('disabled');
+		LoanTypeSelectionAllowedChanged: function () {
+		    // We used to set the loan type here and the availability of the edit repayment period button here
+		    // Until a logic for that will be defined clearly we'll do nothing in this event
 		},
 
 		loanType: function() {
@@ -443,7 +429,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			var self = this;
 
-			d.on("done", function() {
+			d.on("done", function () {
 				self.model.fetch();
 			});
 		},
