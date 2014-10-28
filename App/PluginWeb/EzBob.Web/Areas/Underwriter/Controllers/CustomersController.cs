@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using System.Web.Script.Serialization;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -12,7 +13,6 @@
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using NHibernate;
-	using NHibernate.Criterion;
 	using NHibernate.Linq;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
@@ -144,182 +144,118 @@
 
 		#region underwriter grids
 
-		#region method GridWaiting
+		#region enum GridActions
+
+		private enum GridActions {
+			UwGridWaiting,
+			UwGridPending,
+			UwGridRegistered,
+			UwGridRejected,
+			UwGridSignature,
+			UwGridAll,
+			UwGridApproved,
+			UwGridCollection,
+			UwGridEscalated,
+			UwGridLate,
+			UwGridLoans,
+			UwGridLogbook,
+			UwGridSales,
+			UwGridBrokers,
+		} // enum GridActions
+
+		#endregion enum GridActions
+
+		#region method GetGrid
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		public JsonResult GridWaiting(bool includeTestCustomers) {
-			return LoadGrid("UwGridWaiting", includeTestCustomers, () => new GridWaitingRow());
-		} // GridWaiting
+		public ContentResult GetGrid(string grid, bool includeTestCustomers, bool includeAllCustomers) {
+			m_oLog.Debug("Started: GetGrid('{0}', {1}, {2}...)", grid, includeTestCustomers, includeAllCustomers);
 
-		#endregion method GridWaiting
+			GridActions nAction;
 
-		#region method GridEscalated
+			if (!Enum.TryParse(grid, true, out nAction)) {
+				string sMsg = string.Format("Cannot load underwriter grid because '{0}' is not known grid name.", grid);
+				throw new Exception(sMsg);
+			} // if
 
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridEscalated(bool includeTestCustomers) {
-			return LoadGrid("UwGridEscalated", includeTestCustomers, () => new GridEscalatedRow());
-		} // GridEscalated
+			switch (nAction) {
+			case GridActions.UwGridWaiting:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridWaitingRow());
 
-		#endregion method GridEscalated
+			case GridActions.UwGridPending:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridPendingRow());
 
-		#region method GridPending
+			case GridActions.UwGridRegistered:
+				return LoadGrid(
+					nAction,
+					includeTestCustomers,
+					() => new GridRegisteredRow(),
+					includeAllCustomers,
+					oMoreSpArgs: new [] { new QueryParameter("@Now", DateTime.UtcNow), }
+				);
 
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridPending(bool includeTestCustomers) {
-			return LoadGrid("UwGridPending", includeTestCustomers, () => new GridPendingRow());
-		} // GridPending
+			case GridActions.UwGridRejected:
+				return LoadGrid(
+					nAction,
+					includeTestCustomers,
+					() => new GridRejectedRow(),
+					oMoreSpArgs: new [] { new QueryParameter("@Now", DateTime.UtcNow), }
+				);
 
-		#endregion method GridPending
+			case GridActions.UwGridSignature:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridPendingRow());
 
-		#region method GridSignature
+			case GridActions.UwGridAll:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridAllRow());
 
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridSignature(bool includeTestCustomers) {
-			return LoadGrid("UwGridSignature", includeTestCustomers, () => new GridPendingRow());
-		} // GridSignature
+			case GridActions.UwGridApproved:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridApprovedRow());
 
-		#endregion method GridWaitingForSignature
+			case GridActions.UwGridCollection:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridCollectionRow());
 
-		#region method GridApproved
+			case GridActions.UwGridEscalated:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridEscalatedRow());
 
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridApproved(bool includeTestCustomers) {
-			return LoadGrid("UwGridApproved", includeTestCustomers, () => new GridApprovedRow());
-		} // GridApproved
+			case GridActions.UwGridLate:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridLateRow(), null, DateTime.UtcNow);
 
-		#endregion method GridApproved
+			case GridActions.UwGridLoans:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridLoansRow());
 
-		#region method GridLate
+			case GridActions.UwGridLogbook:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridLogbookRow());
 
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridLate(bool includeTestCustomers) {
-			return LoadGrid("UwGridLate", includeTestCustomers, () => new GridLateRow(),null, DateTime.UtcNow);
-		} // GridLate
+			case GridActions.UwGridSales:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridSalesRow(), null, DateTime.UtcNow);
 
-		#endregion method GridLate
+			case GridActions.UwGridBrokers:
+				return LoadGrid(nAction, includeTestCustomers, () => new GridBroker());
 
-		#region method GridLoans
+			default:
+				string sMsg = string.Format("Cannot load underwriter grid because '{0}' is not implemented.", nAction);
+				throw new ArgumentOutOfRangeException(sMsg);
+			} // switch
+		} // GetGrid
 
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridLoans(bool includeTestCustomers) {
-			return LoadGrid("UwGridLoans", includeTestCustomers, () => new GridLoansRow());
-		} // GridLoans
-
-		#endregion method GridLoans
-
-		#region method GridSales
-
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridSales(bool includeTestCustomers) {
-			return LoadGrid("UwGridSales", includeTestCustomers, () => new GridSalesRow(), null, DateTime.UtcNow);
-		} // GridSales
-
-		#endregion method GridSales
-
-		#region method GridCollection
-
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridCollection(bool includeTestCustomers) {
-			return LoadGrid("UwGridCollection", includeTestCustomers, () => new GridCollectionRow());
-		} // GridCollection
-
-		#endregion method GridCollection
-
-		#region method GridRejected
-
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridRejected(bool includeTestCustomers) {
-			return LoadGrid(
-				"UwGridRejected",
-				includeTestCustomers,
-				() => new GridRejectedRow(),
-				oMoreSpArgs: new [] { new QueryParameter("@Now", DateTime.UtcNow), }
-			);
-		} // GridRejected
-
-		#endregion method GridRejected
-		
-		#region method GridAll
-
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridAll(bool includeTestCustomers) {
-			return LoadGrid("UwGridAll", includeTestCustomers, () => new GridAllRow());
-		} // GridAll
-
-		#endregion method GridAll
-
-		#region method GridRegistered
-
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridRegistered(bool includeTestCustomers, bool includeAllCustomers) {
-			return LoadGrid(
-				"UwGridRegistered",
-				includeTestCustomers,
-				includeAllCustomers,
-				() => new GridRegisteredRow(),
-				oMoreSpArgs: new [] { new QueryParameter("@Now", DateTime.UtcNow), }
-			);
-		} // GridRegistered
-
-		#endregion method GridRegistered
-
-		#region method GridLogbook
-
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridLogbook(bool includeTestCustomers) {
-			return LoadGrid("UwGridLogbook", includeTestCustomers, () => new GridLogbookRow());
-		} // GridLogbook
-
-		#endregion method GridLogbook
-
-		#region method GridBrokers
-
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridBrokers(bool includeTestCustomers) {
-			return LoadGrid("UwGridBrokers", includeTestCustomers, () => new GridBroker());
-		} // GridBrokers
-
-		#endregion method GridBrokers
+		#endregion method GetGrid
 
 		#region method LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, IEnumerable<QueryParameter> oMoreSpArgs = null) {
-			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, null, oMoreSpArgs: oMoreSpArgs);
+		private ContentResult LoadGrid(GridActions nSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, IEnumerable<QueryParameter> oMoreSpArgs = null) {
+			return LoadGrid(nSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers: null, oMoreSpArgs: oMoreSpArgs);
 		} // LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, bool bIncludeAllCustomers, Func<AGridRow> oFactory, IEnumerable<QueryParameter> oMoreSpArgs = null) {
-			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers, oMoreSpArgs: oMoreSpArgs);
-		} // LoadGrid
-
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, bool? bIncludeAllCustomers, DateTime? now = null, IEnumerable<QueryParameter> oMoreSpArgs = null) {
+		private ContentResult LoadGrid(
+			GridActions nSpName,
+			bool bIncludeTestCustomers,
+			Func<AGridRow> oFactory,
+			bool? bIncludeAllCustomers,
+			DateTime? now = null,
+			IEnumerable<QueryParameter> oMoreSpArgs = null
+		) {
 			var oRes = new SortedDictionary<long, AGridRow>();
 
 			var args = new List<QueryParameter> {
@@ -352,18 +288,21 @@
 
 					return ActionResult.Continue;
 				},
-				sSpName,
+				nSpName.ToString(),
 				CommandSpecies.StoredProcedure,
 				args.ToArray()
 			); // foreach
 
-			m_oLog.Debug("{0}: traversing done.", sSpName);
+			m_oLog.Debug("{0}: traversing done.", nSpName);
 
-			var j = Json(new { aaData = oRes.Values }, JsonRequestBehavior.AllowGet);
+			var serializer = new JavaScriptSerializer {
+				MaxJsonLength = Int32.MaxValue
+			};
 
-			m_oLog.Debug("{0}: converted to json.", sSpName);
-
-			return j;
+			return new ContentResult {
+				Content = serializer.Serialize(new { aaData = oRes.Values }),
+				ContentType = "application/json",
+			};
 		} // LoadGrid
 
 		#endregion method LoadGrid

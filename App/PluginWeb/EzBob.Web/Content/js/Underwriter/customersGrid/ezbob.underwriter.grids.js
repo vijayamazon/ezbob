@@ -67,62 +67,62 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			waiting: new GridProperties({
 				icon: 'envelope-o',
 				title: 'Waiting for decision',
-				action: 'GridWaiting',
+				action: 'UwGridWaiting',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CustomerStatus,$CalcAmount,$OSBalance,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale',
 			}), // waiting
 			escalated: new GridProperties({
 				icon: 'arrow-up',
-				action: 'GridEscalated',
+				action: 'UwGridEscalated',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,^EscalationDate,Underwriter,Reason',
 			}), // escalated
 			pending: new GridProperties({
 				icon: 'clock-o',
-				action: 'GridPending',
+				action: 'UwGridPending',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,Pending,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale',
 			}), // pending
 			signature: new GridProperties({
 				icon: 'pencil-square-o',
-				action: 'GridSignature',
+				action: 'UwGridSignature',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,Pending,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale',
 			}), // signature
 			approved: new GridProperties({
 				icon: 'thumbs-o-up',
-				action: 'GridApproved',
+				action: 'UwGridApproved',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken,#ApprovesNum,#RejectsNum,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale'
 			}), // approved
 			loans: new GridProperties({
 				icon: 'gbp',
-				action: 'GridLoans',
+				action: 'UwGridLoans',
 				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^FirstLoanDate,^LastLoanDate,$LastLoanAmount,$AmountTaken,$TotalPrincipalRepaid,$OSBalance,^NextRepaymentDate,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale',
 			}), // loans
 			sales: new GridProperties({
 				icon: 'phone',
-				action: 'GridSales',
+				action: 'UwGridSales',
 				columns: '#Id,Email,Name,MobilePhone,DaytimePhone,$ApprovedSum,$AmountTaken,^OfferDate,$OSBalance,CRMstatus,CRMcomment,#Interactions,SegmentType',
 			}), // sales
 			collection: new GridProperties({
 				icon: 'rocket',
-				action: 'GridCollection',
+				action: 'UwGridCollection',
 				columns: '#Id,Email,Name,MobilePhone,DaytimePhone,$AmountTaken,$OSBalance,CRMstatus,CRMcomment,CollectionStatus,SegmentType',
 			}), // collection
 			late: new GridProperties({
 				icon: 'flag',
-				action: 'GridLate',
+				action: 'UwGridLate',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken,#ApprovesNum,#RejectsNum,SegmentType,$OSBalance,^LatePaymentDate,$LatePaymentAmount,#Delinquency,CRMstatus,CRMcomment'
 			}), // late
 			rejected: new GridProperties({
 				icon: 'thumbs-o-down',
-				action: 'GridRejected',
+				action: 'UwGridRejected',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,^DateRejected,Reason,#RejectsNum,#ApprovesNum,$OSBalance,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale',
 			}), // rejected
 			all: new GridProperties({
 				icon: 'female',
-				action: 'GridAll',
+				action: 'UwGridAll',
 				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^ApplyDate,CustomerStatus,$CalcAmount,$ApprovedSum,$OSBalance',
 			}), // all
 			registered: new GridProperties({
 				icon: 'bars',
-				action: 'GridRegistered',
+				action: 'UwGridRegistered',
 				columns: '#UserId,Email,UserStatus,^RegDate,MP_Statuses,WizardStep,SegmentType',
 				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 					$('.grid-item-UserId', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.UserId));
@@ -137,7 +137,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			}), // registered
 			logbook: new GridProperties({
 				icon: 'file-text-o',
-				action: 'GridLogbook',
+				action: 'UwGridLogbook',
 				columns: '#EntryID,LogbookEntryTypeDescription,FullName,^EntryTime,EntryContent',
 				AddToTitle: function() {
 					return $('#reload-button-template')
@@ -159,7 +159,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			}), // logbook
 			brokers: new GridProperties({
 				icon: 'male',
-				action: 'GridBrokers',
+				action: 'UwGridBrokers',
 				columns: '#BrokerID,FirmName,ContactName,ContactEmail,ContactMobile,ContactOtherPhone,FirmWebSiteUrl',
 				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 					$('.grid-item-BrokerID', oTR).empty().html(EzBob.Underwriter.GridTools.brokerProfileLink(oData.BrokerID));
@@ -396,8 +396,9 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		else
 			oShowingTest.remove();
 
-		return window.gRootPath + 'Underwriter/Customers/' + oGridProperties.action +
-			'?includeTestCustomers=' + (bIncludeTest ? 'true' : 'false') +
+		return window.gRootPath + 'Underwriter/Customers/GetGrid' +
+			'?grid=' + oGridProperties.action +
+			'&includeTestCustomers=' + (bIncludeTest ? 'true' : 'false') +
 			'&includeAllCustomers=' + (bIncludeAll ? 'true' : 'false');
 	}, // gridSrcUrl
 
