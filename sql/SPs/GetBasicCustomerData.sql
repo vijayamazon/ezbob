@@ -65,7 +65,8 @@ BEGIN
 		@IsCampaign AS IsCampaign,
 		ISNULL(c.BrokerID, 0) AS BrokerID,
 		c.FilledByBroker AS IsFilledByBroker,
-		c.IsAlibaba
+		c.IsAlibaba,
+		c.AlibabaId
 	FROM
 		Customer c
 		LEFT JOIN CustomerAddress a

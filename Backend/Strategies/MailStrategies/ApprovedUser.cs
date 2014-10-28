@@ -41,7 +41,8 @@
 				{ "FirstName", CustomerData.FirstName },
 				{ "LoanAmount", m_nLoanAmount.ToString(CultureInfo.InvariantCulture) },
 				{ "ValidFor", m_nValidHours.ToString(CultureInfo.InvariantCulture) },
-				{ "AmountInUsd", amountInUsd.ToString(CultureInfo.InvariantCulture) }
+				{ "AmountInUsd", amountInUsd.ToString(CultureInfo.InvariantCulture) },
+				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) }
 			};
 
 			if (CustomerData.IsAlibaba)

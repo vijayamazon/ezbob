@@ -74,6 +74,7 @@
 		public virtual int BrokerID { get; protected set; }
 		public virtual bool IsFilledByBroker { get; protected set; }
 		public virtual bool IsAlibaba { get; protected set; }
+		public virtual string AlibabaId { get; protected set; }
 
 		#endregion properties
 
@@ -113,6 +114,7 @@
 			BrokerID = sr["BrokerID"];
 			IsFilledByBroker = sr["IsFilledByBroker"];
 			IsAlibaba = sr["IsAlibaba"];
+			AlibabaId = sr["AlibabaId"];
 		} // Load
 
 		#endregion private
