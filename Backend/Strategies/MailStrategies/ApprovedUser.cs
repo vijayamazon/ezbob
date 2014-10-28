@@ -52,11 +52,11 @@
 			decimal setupFeePercents;
 			if (cashRequestRelevantData.ManagerApprovedSum != 0)
 			{
-				setupFeePercents = Math.Round((decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.ManagerApprovedSum * 100, 2) / 100;
+				setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.ManagerApprovedSum;
 			}
 			else if (cashRequestRelevantData.SystemCalculatedSum != 0)
 			{
-				setupFeePercents = Math.Round((decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.SystemCalculatedSum * 100, 2) / 100;
+				setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.SystemCalculatedSum;
 			}
 			else
 			{
@@ -64,16 +64,16 @@
 			}
 
 			decimal interestRatePercents = cashRequestRelevantData.InterestRate*100;
-			decimal remainingPercentsAfterSetupFee = 100 - setupFeePercents;
-
+			decimal remainingPercentsAfterSetupFee = 100 - (Math.Truncate(setupFeePercents * 100) / 100);
+			
 			Variables = new Dictionary<string, string> {
 				{ "FirstName", CustomerData.FirstName },
 				{ "LoanAmount", m_nLoanAmount.ToString(CultureInfo.InvariantCulture) },
 				{ "ValidFor", m_nValidHours.ToString(CultureInfo.InvariantCulture) },
-				{ "AmountInUsd", amountInUsd.ToString(CultureInfo.InvariantCulture) },
+				{ "AmountInUsd", (Math.Truncate(amountInUsd * 100) / 100).ToString(CultureInfo.InvariantCulture)},
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
-				{ "InterestRate", interestRatePercents.ToString(CultureInfo.InvariantCulture) },
-				{ "SetupFee", setupFeePercents.ToString(CultureInfo.InvariantCulture) },
+				{ "InterestRate", (Math.Truncate(interestRatePercents * 100) / 100).ToString(CultureInfo.InvariantCulture) },
+				{ "SetupFee", (Math.Truncate(setupFeePercents * 100) / 100).ToString(CultureInfo.InvariantCulture) },
 				{ "RemainingPercentsAfterSetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) },
 				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
 				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) }
@@ -114,7 +114,6 @@
 			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			double currencyRate = currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
 			double convertedLoanAmount = (double)m_nLoanAmount * currencyRate * CurrentValues.Instance.AlibabaCurrencyConversionCoefficient;
-			convertedLoanAmount = Math.Round(convertedLoanAmount * 100, 2) / 100;
 			Log.Info("Calculating Alibaba loan amount in USD. CurrencyRate:{0} Coefficient:{1} LoanAmount:{2} ConvertedLoanAmount:{3}", currencyRate, CurrentValues.Instance.AlibabaCurrencyConversionCoefficient, m_nLoanAmount, convertedLoanAmount);
 			return convertedLoanAmount;
 		}
