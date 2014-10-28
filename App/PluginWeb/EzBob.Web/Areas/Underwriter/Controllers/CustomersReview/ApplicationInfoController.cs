@@ -616,6 +616,11 @@
 
 			var oArgs = new FinishWizardArgs { CustomerID = customerId, };
 
+			Customer customer = _customerRepository.Get(customerId);
+
+			if ((customer != null) && customer.IsAlibaba)
+				customer.AddBankAccount("00000000", "000000", BankAccountType.Personal);
+
 			new ServiceClient().Instance.FinishWizard(oArgs, underwriterId);
 
 			return Json(true);

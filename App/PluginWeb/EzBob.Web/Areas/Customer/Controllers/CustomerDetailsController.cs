@@ -874,6 +874,9 @@
 
 				m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
 				ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
+
+				if (customer.IsAlibaba)
+					customer.AddBankAccount("00000000", "000000", BankAccountType.Personal);
 			}).Execute();
 
 			// Updates broker lead state if needed and sends "Email Under Review".
