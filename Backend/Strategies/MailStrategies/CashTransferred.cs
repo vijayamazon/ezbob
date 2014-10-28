@@ -32,7 +32,8 @@
 				{"Amount", amount.ToString(CultureInfo.InvariantCulture)},
 				{"EMAIL", CustomerData.Mail},
 				{"LOANREFNUM", loanRefNum},
-				{"AmountInUsd", amountInUsd.ToString(CultureInfo.InvariantCulture)}
+				{"AmountInUsd", amountInUsd.ToString(CultureInfo.InvariantCulture)},
+				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) }
 			};
 			
 			if (CustomerData.IsAlibaba)

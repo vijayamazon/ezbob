@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
+	using System.Globalization;
 	using API;
 	using ConfigManager;
 	using Ezbob.Database;
@@ -36,7 +37,8 @@
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
-				{"EzbobAccount", CurrentValues.Instance.CustomerSite + "/Customer/Profile"}
+				{"EzbobAccount", CurrentValues.Instance.CustomerSite + "/Customer/Profile"},
+				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) }
 			};
 		} // SetTemplateAndVariables
 
