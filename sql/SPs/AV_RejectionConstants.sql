@@ -8,6 +8,31 @@ GO
 CREATE PROCEDURE [dbo].[AV_RejectionConstants]
 AS
 BEGIN
-	SELECT Name, Value FROM ConfigurationVariables WHERE Name IN ('Reject_Defaults_AccountsNum','Reject_Defaults_Amount','Reject_Defaults_CreditScore','Reject_Defaults_MonthsNum','Reject_Minimal_Seniority', 'LowCreditScore', 'TotalAnnualTurnover', 'TotalThreeMonthTurnover','AutoRejectionException_AnualTurnover','AutoRejectionException_CreditScore')
+	SELECT Name, Value FROM ConfigurationVariables WHERE Name 
+	IN (
+		'Reject_Defaults_AccountsNum',
+		'Reject_Defaults_Amount',
+		'Reject_Defaults_CreditScore',
+		'Reject_Defaults_MonthsNum',
+		'Reject_Minimal_Seniority', 
+		'LowCreditScore', 
+		'TotalAnnualTurnover', 
+		'TotalThreeMonthTurnover',
+		'AutoRejectionException_AnualTurnover',
+		'AutoRejectionException_CreditScore',
+		'RejectionExceptionMaxCompanyScore',
+		'RejectionExceptionMaxCompanyScoreForMpError',
+		'RejectionExceptionMaxConsumerScoreForMpError',
+		'RejectionCompanyScore',
+		'Reject_LowOfflineAnnualRevenue',
+		'Reject_LowOfflineQuarterRevenue',
+		'Reject_LateLastMonthsNum',
+		'Reject_NumOfLateAccounts',
+		'RejectionLastValidLate',
+		'Reject_Defaults_CompanyScore',
+		'Reject_Defaults_CompanyAccountsNum',
+		'Reject_Defaults_CompanyAmount'
+		
+	)
 END
 GO

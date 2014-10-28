@@ -1,7 +1,6 @@
 ﻿namespace AutomationCalculator
 {
 	using System;
-	using System.Collections.Generic;
 
 	public class ScoreMedalOffer
 	{
@@ -159,15 +158,12 @@
 
 	public class RejectionData
 	{
+		//from sp
 		public string CustomerStatus { get; set; }
 
 		public int ExperianScore { get; set; }
 		public int CompanyScore { get; set; }
 		
-		public double AnualTurnover { get; set; }
-		public double ThreeMonthTurnover { get; set; }
-		public int MpsSeniority { get; set; }
-
 		public bool WasApproved { get; set; }
 		
 		public int DefaultAccountsNum { get; set; }
@@ -180,6 +176,11 @@
 
 		public bool HasErrorMp { get; set; }
 		public bool HasCompanyFiles { get; set; }
+
+		//Calculated
+		public double AnualTurnover { get; set; }
+		public double ThreeMonthTurnover { get; set; }
+		public int MpsSeniority { get; set; }
 	}
 
 	public class ReApprovalData

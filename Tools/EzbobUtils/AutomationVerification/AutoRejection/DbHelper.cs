@@ -52,7 +52,6 @@
 					case "AutoRejectionException_AnualTurnover":
 						consts.NoRejectIfTotalAnnualTurnoverAbove = row["Value"];
 						break;
-
 					case "RejectionExceptionMaxCompanyScore":
 						consts.NoRejectIfCompanyCreditScoreAbove = row["Value"];
 						break;
@@ -86,7 +85,7 @@
 					case "Reject_Defaults_CompanyAccountsNum":
 						consts.DefaultCompanyMinAccountsNum = row["Value"];
 						break;
-					case "Reject_Defaults_CompanyAmoun":
+					case "Reject_Defaults_CompanyAmount":
 						consts.DefaultCompanyMinAmount = row["Value"];
 						break;	
 					default:

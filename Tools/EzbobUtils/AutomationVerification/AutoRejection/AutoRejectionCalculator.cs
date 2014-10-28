@@ -121,7 +121,6 @@
 			}
 
 			//b for clients with business credit score below 20: at least 1 default in amount of 1,000+ GBP on any of the financial accounts in the last 24 months,
-			//TODO 
 			if (data.CompanyScore < _const.DefaultCompanyScoreBelow &&
 			    data.DefaultCompanyAccountsNum >= _const.DefaultCompanyMinAccountsNum &&
 			    data.DefaultCompanyAccountAmount > _const.DefaultCompanyMinAmount) {
@@ -130,7 +129,6 @@
 			}
 
 			//c for clients who are late over 30 days in at least 2 different accounts in the last 3 months
-			//TODO
 			if (data.NumLateAccounts >= _const.LateAccountMinNumber) {
 				reason = string.Format("Rejected. Late in {0} account{1} over {2} days in the last {3} months", data.NumLateAccounts, data.NumLateAccounts > 1 ? "s" : "", _const.LateAccountMinDays, _const.LateAccountLastMonth);
 				return true;
