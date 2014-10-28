@@ -17,16 +17,21 @@
 			m_nValidHours = nValidHours;
 			m_bIsFirst = isFirst;
 			amountInUsd = CalculateLoanAmountInUsd();
-
-			if (CustomerData.IsFilledByBroker)
-			{
-				SendToCustomer = false;
-			}
 		} // constructor
 
 		#endregion constructor
 
 		public override string Name { get { return "Approved User"; } } // Name
+		
+		protected override void LoadRecipientData()
+		{
+			base.LoadRecipientData();
+
+			if (CustomerData.IsFilledByBroker)
+			{
+				SendToCustomer = false;
+			}
+		}
 
 		#region method SetTemplateAndVariables
 
