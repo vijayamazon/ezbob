@@ -2,15 +2,18 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using Backend.Models;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using PaymentServices.Calculators;
+	using StructureMap;
 
 	public class AgreementsModelBuilder
 	{
@@ -157,6 +160,10 @@
 			model.TotalInterest = FormattingUtils.NumericFormats(schedule.Sum(a => a.Interest));
 			model.TotalAmoutOfCredit = FormattingUtils.NumericFormats(schedule.Sum(a => a.LoanRepayment));
 			model.TotalFees = FormattingUtils.NumericFormats(fee);
+
+			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
+			decimal currencyRate = (decimal)currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
+			model.TotalPrincipalUsd = "$ " + (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient * currencyRate * schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"))
 		}
 	}
 }

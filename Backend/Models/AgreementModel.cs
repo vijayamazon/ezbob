@@ -17,6 +17,9 @@
 		[DataMember]
 		public string TotalPrincipal { get; set; }
 		[DataMember]
+		public string TotalPrincipalUsd { get; set; }
+
+		[DataMember]
 		public string TotalInterest { get; set; }
 		[DataMember]
 		public string TotalFees { get; set; }
