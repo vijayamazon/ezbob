@@ -38,7 +38,9 @@
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
 				{"EzbobAccount", CurrentValues.Instance.CustomerSite + "/Customer/Profile"},
-				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) }
+				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
+				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
+				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) }
 			};
 		} // SetTemplateAndVariables
 
