@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using Code;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
@@ -34,14 +35,11 @@
 			_customers = customers;
 			m_oServiceClient = new ServiceClient();
 			_customerMarketplaces = customerMarketplaces;
-			if (CurrentValues.Instance.PostcodeAnywhereEnabled)
-			{
-				_sortCodeChecker = new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
-			}
-			else
-			{
-				_sortCodeChecker = new FakeSortCodeChecker();
-			}
+
+			_sortCodeChecker = CurrentValues.Instance.PostcodeAnywhereEnabled
+				? (ISortCodeChecker)new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts)
+				: (ISortCodeChecker)new FakeSortCodeChecker();
+
 			_payPointFacade = payPointFacade;
 			_context = context;
 		}
@@ -113,27 +111,15 @@
 
 		[Ajax]
 		[Transactional]
-		public JsonResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType)
-		{
+		public JsonResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType) {
 			var customer = _customers.Get(customerId);
 
-			if (customer.BankAccounts.Any(a => a.BankAccount == bankAccount && a.SortCode == sortCode))
-			{
+			int nCardID = customer.AddBankAccount(bankAccount, sortCode, accountType, _sortCodeChecker);
+
+			if (nCardID < 0)
 				return Json(new { error = "This bank account is already added." }, JsonRequestBehavior.AllowGet);
-			}
 
-			var card = new CardInfo() { BankAccount = bankAccount, SortCode = sortCode, Customer = customer, Type = accountType };
-			try
-			{
-				_sortCodeChecker.Check(card);
-			}
-			catch (Exception)
-			{
-			}
-			customer.BankAccounts.Add(card);
-			customer.SetDefaultCard(card);
-
-			return Json(new { r = card.Id }, JsonRequestBehavior.AllowGet);
+			return Json(new { r = nCardID, }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
