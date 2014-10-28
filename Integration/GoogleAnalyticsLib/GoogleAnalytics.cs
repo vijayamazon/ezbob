@@ -248,18 +248,17 @@
 
 				int nNewUsers = oItem[GoogleReportMetrics.newUsers];
 
-				model.Add(new StatsModel
-					{
-						Code = DbConsts.SourceUsers,
-						Source = source,
-						Value = nUsers
-					});
-				model.Add(new StatsModel
-					{
-						Code = DbConsts.SourceNewUsers,
-						Source = source,
-						Value = nNewUsers
-					});
+				model.Add(new StatsModel {
+					CodeName = DbConsts.SourceUsers,
+					Source = source,
+					Value = nUsers
+				});
+
+				model.Add(new StatsModel {
+					CodeName = DbConsts.SourceNewUsers,
+					Source = source,
+					Value = nNewUsers
+				});
 					
 				Log.Debug("source: {0}, Users: {1}, new Users: {2}", source, nUsers, nNewUsers);
 			} // for each item
@@ -297,18 +296,17 @@
 
 				int nNewUsers = oItem[GoogleReportMetrics.newUsers];
 
-				model.Add(new StatsModel
-					{
-						Code = DbConsts.LandingPageUsers,
-						Source = landingPagePath,
-						Value = nUsers
-					});
-				model.Add(new StatsModel
-					{
-						Code = DbConsts.LandingPageNewUsers,
-						Source = landingPagePath,
-						Value = nNewUsers
-					});
+				model.Add(new StatsModel {
+					CodeName = DbConsts.LandingPageUsers,
+					Source = landingPagePath,
+					Value = nUsers
+				});
+
+				model.Add(new StatsModel {
+					CodeName = DbConsts.LandingPageNewUsers,
+					Source = landingPagePath,
+					Value = nNewUsers
+				});
 
 				Log.Debug("landingPagePath: {0}, Users: {1}, new Users: {2}", landingPagePath, nUsers, nNewUsers);
 			} // for each item
@@ -359,12 +357,16 @@
 			var cert = store.Certificates.Find(X509FindType.FindByThumbprint, thumb, false);
 			if (cert.Count == 0)
 			{
-				Log.Error("GA Certificate not found");
+				Log.Error("GA Certificate not found by thumb '{0}'", thumb);
 				throw new Exception("Certificate not found");
 			}
 
 			Log.Debug("certs found {0}, first: {1}", cert.Count, cert[0].FriendlyName);
+
+			Log.Debug("strServiceAccEmailId = '{0}', strScope = '{1}'", strServiceAccEmailId, strScope);
+
 			var objClient = new AssertionFlowClient(objAuthServerDesc, cert[0]) { ServiceAccountId = strSrvAccEmailId, Scope = scopeUrl };
+
 			var objAuth = new OAuth2Authenticator<AssertionFlowClient>(objClient, AssertionFlowClient.GetState);
 			return objAuth;
 		} // ObjGetOAuth2

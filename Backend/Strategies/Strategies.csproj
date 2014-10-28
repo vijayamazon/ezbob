@@ -151,6 +151,7 @@
     <Compile Include="LimitedMedalCalculation\MedalParameter.cs" />
     <Compile Include="LimitedMedalCalculation\NewMedalScoreCalculator2.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
+    <Compile Include="Tools\UpdateGoogleAnalytics.cs" />
     <Compile Include="UserManagement\AddCciHistory.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />
@@ -399,6 +400,10 @@
     <ProjectReference Include="..\..\Integration\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\GoogleAnalyticsLib\GoogleAnalyticsLib.csproj">
+      <Project>{47a4a5a8-ac7c-4f76-acab-be61eaee1f50}</Project>
+      <Name>GoogleAnalyticsLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\LandRegistryLib\LandRegistryLib.csproj">
       <Project>{637833c1-b500-4310-be16-f157f15b17c1}</Project>

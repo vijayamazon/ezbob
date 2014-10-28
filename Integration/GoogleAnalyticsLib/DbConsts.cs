@@ -1,7 +1,4 @@
-﻿namespace GoogleAnalyticsLib
-{
-	#region class DbConsts
-
+﻿namespace GoogleAnalyticsLib {
 	public static class DbConsts {
 		public const string InsertSiteAnalyticsSP = "InsertSiteAnalytics";
 		public const string IsaspDate = "@Date";
@@ -24,10 +21,5 @@
 		public const string LandingPageUsers = "LandingPageUsers";
 
 		public const string Page = "Page";
-
-		
-		
 	} // class DbConsts
-
-	#endregion class DbConsts
 } // namespace

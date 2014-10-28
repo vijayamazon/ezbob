@@ -134,7 +134,7 @@
 			{
 				conn.ExecuteNonQuery(DbConsts.InsertSiteAnalyticsSP,
 					new QueryParameter(DbConsts.IsaspDate, dbDate),
-					new QueryParameter(DbConsts.IsaspCodeName, stat.Code),
+					new QueryParameter(DbConsts.IsaspCodeName, stat.CodeName),
 					new QueryParameter(DbConsts.IsaspValue, stat.Value),
 					new QueryParameter(DbConsts.IsaspSource, stat.Source)
 				);
