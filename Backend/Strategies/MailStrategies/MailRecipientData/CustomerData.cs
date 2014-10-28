@@ -102,7 +102,7 @@
 			Mail = sr["Mail"];
 			IsOffline = sr["IsOffline"];
 			NumOfLoans = sr["NumOfLoans"];
-			RefNum = sr["RefNum"];
+			RefNum = sr["RefNumber"];
 			MobilePhone = sr["MobilePhone"];
 			DaytimePhone = sr["DaytimePhone"];
 			IsTest = sr["IsTest"];
