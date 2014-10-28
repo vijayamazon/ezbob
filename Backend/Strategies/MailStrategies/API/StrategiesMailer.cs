@@ -34,19 +34,26 @@
 
 		#region method Send
 
-		public void Send(string templateName, Dictionary<string, string> variables, params Addressee[] aryRecipients) {
-			var oMeta = new MailMetaData(templateName) { 
-				new Addressee(m_sEzbobCopyTo, m_sEzbobCopyCc, false),
-			};
+		public void Send(string templateName, Dictionary<string, string> variables, params Addressee[] aryRecipients)
+		{
+			var oMeta = new MailMetaData(templateName)
+				{
+					new Addressee(m_sEzbobCopyTo, m_sEzbobCopyCc, false)
+				};
 
+			Send(oMeta, variables, aryRecipients);
+		} // Send
+
+		public void Send(MailMetaData meta, Dictionary<string, string> variables, params Addressee[] aryRecipients)
+		{
 			foreach (KeyValuePair<string, string> oVar in variables)
-				oMeta.Add(oVar.Key, oVar.Value);
+				meta.Add(oVar.Key, oVar.Value);
 
 			foreach (var sAddr in aryRecipients)
-				oMeta.Add(sAddr);
+				meta.Add(sAddr);
 
-			SendMailViaMandrill(oMeta);
-		} // Send
+			SendMailViaMandrill(meta);
+		}
 
 		#endregion method Send
 

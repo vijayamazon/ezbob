@@ -122,7 +122,8 @@
 
 		protected void SendCostumeMail(string templateName, Dictionary<string, string> variables, Addressee[] addresses)
 		{
-			m_oMailer.Send(templateName, variables, addresses);
+			var meta = new MailMetaData(templateName);
+			m_oMailer.Send(meta, variables, addresses);
 		}
 
 		#region properties
