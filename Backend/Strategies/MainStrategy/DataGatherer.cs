@@ -53,6 +53,7 @@
 		public int NumOfLoans { get; private set; }
 		public int NumOfHmrcMps { get; private set; }
 		public int CompanySeniorityDays { get; private set; } // TODO: Get incorporation date and calc the days in main
+		public bool IsAlibaba { get; private set; }
 
 		public DataGatherer(int customerId, AConnection db, ASafeLog log)
 		{
@@ -114,6 +115,7 @@
 			NumOfLoans = results["NumOfLoans"];
 			TypeOfBusiness = results["TypeOfBusiness"];
 			NumOfHmrcMps = results["NumOfHmrcMps"];
+			IsAlibaba = results["IsAlibaba"];
 		}
 
 		private void GetCompanySeniorityDays()

@@ -579,7 +579,7 @@
 					{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 				};
 
-				mailer.Send("Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
+				mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 			}
 		}
 
@@ -956,6 +956,11 @@
 			if (dataGatherer.IsBrokerCustomer)
 			{
 				dataGatherer.EnableAutomaticApproval = false;
+				dataGatherer.EnableAutomaticRejection = false;
+			}
+
+			if (dataGatherer.IsAlibaba)
+			{
 				dataGatherer.EnableAutomaticRejection = false;
 			}
 
