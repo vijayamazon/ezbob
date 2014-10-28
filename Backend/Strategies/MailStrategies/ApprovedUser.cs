@@ -64,6 +64,7 @@
 			}
 
 			decimal interestRatePercents = cashRequestRelevantData.InterestRate*100;
+			decimal remainingPercentsAfterSetupFee = 100 - setupFeePercents;
 
 			Variables = new Dictionary<string, string> {
 				{ "FirstName", CustomerData.FirstName },
@@ -72,7 +73,8 @@
 				{ "AmountInUsd", amountInUsd.ToString(CultureInfo.InvariantCulture) },
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
 				{ "InterestRate", interestRatePercents.ToString(CultureInfo.InvariantCulture) },
-				{ "SetupFee", setupFeePercents.ToString(CultureInfo.InvariantCulture) }
+				{ "SetupFee", setupFeePercents.ToString(CultureInfo.InvariantCulture) },
+				{ "SetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) }
 			};
 
 			if (CustomerData.IsAlibaba)
