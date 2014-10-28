@@ -33,16 +33,46 @@
 			}
 		}
 
+		public class CashRequestRelevantData : AResultRow
+		{
+			public decimal InterestRate { get; set; }
+			public int ManualSetupFeeAmount { get; set; }
+			public int SystemCalculatedSum { get; set; }
+			public int ManagerApprovedSum { get; set; }
+		}
+
 		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndVariables() {
+		protected override void SetTemplateAndVariables()
+		{
+			var cashRequestRelevantData = DB.FillFirst<CashRequestRelevantData>(
+				"GetCashRequestData",
+				new QueryParameter("@CustomerId", CustomerData.Id));
+
+			decimal setupFeePercents;
+			if (cashRequestRelevantData.ManagerApprovedSum != 0)
+			{
+				setupFeePercents = Math.Round((decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.ManagerApprovedSum * 100, 2) / 100;
+			}
+			else if (cashRequestRelevantData.SystemCalculatedSum != 0)
+			{
+				setupFeePercents = Math.Round((decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.SystemCalculatedSum * 100, 2) / 100;
+			}
+			else
+			{
+				setupFeePercents = 0;
+			}
+
+			decimal interestRatePercents = cashRequestRelevantData.InterestRate*100;
 
 			Variables = new Dictionary<string, string> {
 				{ "FirstName", CustomerData.FirstName },
 				{ "LoanAmount", m_nLoanAmount.ToString(CultureInfo.InvariantCulture) },
 				{ "ValidFor", m_nValidHours.ToString(CultureInfo.InvariantCulture) },
 				{ "AmountInUsd", amountInUsd.ToString(CultureInfo.InvariantCulture) },
-				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) }
+				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
+				{ "InterestRate", interestRatePercents.ToString(CultureInfo.InvariantCulture) },
+				{ "SetupFee", setupFeePercents.ToString(CultureInfo.InvariantCulture) }
 			};
 
 			if (CustomerData.IsAlibaba)
