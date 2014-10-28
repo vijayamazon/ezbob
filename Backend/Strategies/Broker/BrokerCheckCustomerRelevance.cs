@@ -25,7 +25,7 @@
 
 			if (isAlibaba)
 			{
-				m_oGreetingStrat = new AlibabaGreeting(nCustomerID, DB, Log);
+				m_oGreetingStrat = new AlibabaGreeting(nCustomerID, sConfirmEmailLink, DB, Log);
 			}
 			else
 			{

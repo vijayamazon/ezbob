@@ -74,7 +74,9 @@
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
 				{ "InterestRate", interestRatePercents.ToString(CultureInfo.InvariantCulture) },
 				{ "SetupFee", setupFeePercents.ToString(CultureInfo.InvariantCulture) },
-				{ "RemainingPercentsAfterSetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) }
+				{ "RemainingPercentsAfterSetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) },
+				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
+				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) }
 			};
 
 			if (CustomerData.IsAlibaba)
@@ -112,6 +114,7 @@
 			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			double currencyRate = currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
 			double convertedLoanAmount = (double)m_nLoanAmount * currencyRate * CurrentValues.Instance.AlibabaCurrencyConversionCoefficient;
+			convertedLoanAmount = Math.Round(convertedLoanAmount * 100, 2) / 100;
 			Log.Info("Calculating Alibaba loan amount in USD. CurrencyRate:{0} Coefficient:{1} LoanAmount:{2} ConvertedLoanAmount:{3}", currencyRate, CurrentValues.Instance.AlibabaCurrencyConversionCoefficient, m_nLoanAmount, convertedLoanAmount);
 			return convertedLoanAmount;
 		}
