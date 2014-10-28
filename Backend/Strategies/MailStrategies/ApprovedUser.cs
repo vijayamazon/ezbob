@@ -74,7 +74,7 @@
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
 				{ "InterestRate", interestRatePercents.ToString(CultureInfo.InvariantCulture) },
 				{ "SetupFee", setupFeePercents.ToString(CultureInfo.InvariantCulture) },
-				{ "SetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) }
+				{ "RemainingPercentsAfterSetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) }
 			};
 
 			if (CustomerData.IsAlibaba)
