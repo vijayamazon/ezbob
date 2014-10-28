@@ -84,6 +84,9 @@
 			case "halfwayloantype":
 				ApprovedType = "n";
 				break;
+			case "alibabaloantype":
+				ApprovedType = "a";
+				break;
 			default:
 				throw new ArgumentOutOfRangeException("Unsupported loan type: " + sLoanType);
 			} // switch
