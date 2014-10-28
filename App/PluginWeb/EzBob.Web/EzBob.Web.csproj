@@ -241,7 +241,6 @@
     <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
     <Compile Include="Areas\Customer\Models\DirectorAddressModel.cs" />
-    <Compile Include="Areas\Underwriter\Controllers\Admin.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CAISController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CollectionStatusController.cs" />
@@ -1362,7 +1361,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\DebitCards.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\AddDebitCard.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\AddBankAccount.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Admin\Index.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\LoanDetails.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\LoanOptions.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\PaymentRollover.cshtml" />
