@@ -163,7 +163,9 @@
 
 			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			decimal currencyRate = (decimal)currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
-			model.TotalPrincipalUsd = "$ " + (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient * currencyRate * schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"))
+			model.TotalPrincipalUsd = "$ " +
+			                          (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient*currencyRate*
+			                           schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
 		}
 	}
 }
