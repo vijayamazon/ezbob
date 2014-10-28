@@ -56,8 +56,8 @@ EzBob.Underwriter.SendSms = EzBob.BoundItemView.extend({
 		return this.ui.Content.val(this.ui.Comment.val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
 	}, // commentKeyup
 
-	defaultSms: function(el) {
-		this.ui.Content.val(this.ui.Default.data('default'));
+	defaultSms: function (el) {
+	    this.ui.Content.val($(el.currentTarget).data('default'));
 	},
 
 	ui: {
