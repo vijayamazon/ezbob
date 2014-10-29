@@ -253,9 +253,9 @@
 
 		private bool IsNotEnoughMoney(PayPointReturnData payPointReturnData)
 		{
-			bool isNotEnoughMoney = payPointReturnData.Code == "N" && payPointReturnData.Message == "INSUFF FUNDS";
-			Log.Debug("Checking if not enough money. Code:{0} Message:{1} AuthCode:{2} RespCode:{3}. Result:{4}",
-				payPointReturnData.Code, payPointReturnData.Message, payPointReturnData.AuthCode, payPointReturnData.RespCode, isNotEnoughMoney);
+			bool isNotEnoughMoney = payPointReturnData.Code == "N" && payPointReturnData.Error == "INSUFF FUNDS";
+			Log.Debug("Checking if not enough money. Code:{0} Message:{1} AuthCode:{2} RespCode:{3} Error:{4}. Result:{5}",
+				payPointReturnData.Code, payPointReturnData.Message, payPointReturnData.AuthCode, payPointReturnData.RespCode, payPointReturnData.Error, isNotEnoughMoney);
 			return isNotEnoughMoney;
 		}
 	}
