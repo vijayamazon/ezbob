@@ -10,11 +10,27 @@
 		#region method AddBankAccount
 
 		public static int AddBankAccount(this Customer customer, string bankAccount, string sortCode, BankAccountType accountType, ISortCodeChecker sortCodeChecker = null) {
-			if (customer == null) // should never happen
-				return -1;
+			if (customer == null) { // should never happen
+				ms_oLog.Debug("Customer not specified for adding an account (#{0}, code {1}, type {2}).",
+					bankAccount,
+					sortCode,
+					accountType
+				);
 
-			if (customer.BankAccounts.Any(a => a.BankAccount == bankAccount && a.SortCode == sortCode))
+				return -1;
+			} // if
+
+			if (customer.BankAccounts.Any(a => a.BankAccount == bankAccount && a.SortCode == sortCode)) {
+				ms_oLog.Debug(
+					"Bank account (#{1}, code {2}, type {3}) already exists at customer {0}.",
+					customer.Stringify(),
+					bankAccount,
+					sortCode,
+					accountType
+				);
+
 				return -2;
+			} // if
 
 			if (sortCodeChecker == null) {
 				sortCodeChecker = CurrentValues.Instance.PostcodeAnywhereEnabled

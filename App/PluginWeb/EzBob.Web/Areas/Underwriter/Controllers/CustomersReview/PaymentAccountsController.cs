@@ -116,8 +116,18 @@
 
 			int nCardID = customer.AddBankAccount(bankAccount, sortCode, accountType, _sortCodeChecker);
 
-			if (nCardID < 0)
-				return Json(new { error = "This bank account is already added." }, JsonRequestBehavior.AllowGet);
+			if (nCardID < 0) {
+				switch (nCardID) {
+				case -1:
+					return Json(new {error = "Could not add bank account."}, JsonRequestBehavior.AllowGet);
+
+				case -2:
+					return Json(new {error = "This bank account is already added."}, JsonRequestBehavior.AllowGet);
+
+				default:
+					return Json(new {error = "Failed to add bank account."}, JsonRequestBehavior.AllowGet);
+				} // switch
+			} // if
 
 			return Json(new { r = nCardID, }, JsonRequestBehavior.AllowGet);
 		}
