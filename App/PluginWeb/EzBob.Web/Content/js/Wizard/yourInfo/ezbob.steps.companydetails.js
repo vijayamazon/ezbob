@@ -4,7 +4,7 @@ EzBob.CompanyDetailsStepModel = EzBob.WizardStepModel.extend({});
 
 EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	initialize: function() {
-		this.template = _.template($('#company-data-template').html());
+	    this.template = _.template($('#company-data-template').html());
 
 		this.companyTypes = {
 			entrepreneur: {
@@ -190,9 +190,12 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
 		this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
 
-		// if (!this.curOobts) this.$el.find('.after-business-type *').disable();
+	    // if (!this.curOobts) this.$el.find('.after-business-type *').disable();
+	    if (this.model.get('IsAlibaba')) {
+	        this.$el.find('.NonAlibabaTypeOfBusiness').hide();
+	    }
 
-		this.readyToProceed = true;
+	    this.readyToProceed = true;
 		return this;
 	}, // render
 
