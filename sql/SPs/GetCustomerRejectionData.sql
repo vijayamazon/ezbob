@@ -94,7 +94,7 @@ BEGIN
 	FROM
 		ExperianLtdDL97 dl97
 		INNER JOIN ExperianLtd ltd ON dl97.ExperianLtdID = ltd.ExperianLtdID
-		INNER JOIN MP_ServiceLog log ON log.Id = @ServiceLogID
+		INNER JOIN MP_ServiceLog log ON log.Id = @ServiceLogID AND log.Id = ltd.ServiceLogID
 	WHERE
 		log.InsertDate > @CompanyDefaultStartDate
 		AND
