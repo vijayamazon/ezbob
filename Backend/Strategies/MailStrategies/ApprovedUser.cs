@@ -70,7 +70,7 @@
 
 			Variables = new Dictionary<string, string> {
 				{ "FirstName", CustomerData.FirstName },
-				{ "LoanAmount", m_nLoanAmount.ToString(CultureInfo.InvariantCulture) },
+				{ "LoanAmount", m_nLoanAmount.ToString("#,#") },
 				{ "ValidFor", m_nValidHours.ToString(CultureInfo.InvariantCulture) },
 				{ "AmountInUsd", Round2DecimalDown(amountInUsd).ToString("#,#.00") },
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },

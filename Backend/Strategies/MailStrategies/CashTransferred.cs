@@ -30,7 +30,7 @@
 		protected override void SetTemplateAndVariables() {
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
-				{"Amount", amount.ToString(CultureInfo.InvariantCulture)},
+				{"Amount", amount.ToString("#,#")},
 				{"EMAIL", CustomerData.Mail},
 				{"LOANREFNUM", loanRefNum},
 				{"AmountInUsd", Round2DecimalDown(amountInUsd).ToString("#,#.00") },
