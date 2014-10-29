@@ -198,25 +198,6 @@
 			return payPointReturnData;
 		}
 
-		//-----------------------------------------------------------------------------------
-		public PayPointReturnData RepeatTransaction(string transactionId, decimal amount)
-		{
-			try
-			{
-				return RepeatTransactionEx(transactionId, amount);
-			}
-			catch (PayPointException ex)
-			{
-				return new PayPointReturnData { Error = ex.Message };
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex);
-				return new PayPointReturnData { Error = ex.Message };
-			}
-
-		}
-
 		public PayPointReturnData RepeatTransactionEx(string transactionId, decimal amount)
 		{
 

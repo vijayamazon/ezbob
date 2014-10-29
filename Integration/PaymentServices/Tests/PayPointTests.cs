@@ -49,14 +49,6 @@
 			var report = service.getReport("secpay", "secpay", "secpay", "CSV", "Date", "201204", "GBP", "", false, false);*/
 		}
 
-		[Test]
-		public void RepeatTransaction()
-		{
-			PayPointApi papi = new PayPointApi();
-			papi.RepeatTransaction("edf7951a-225b-4fd3-bd28-cde7c03f7df7", 100.99M);
-			string repo = papi.GetReport("CSV", "Date", DateTime.Now.ToString("yyyyMMdd"), "GBP");
-		}
-
 		#region PayPointPayPal
 
 		[Test]
