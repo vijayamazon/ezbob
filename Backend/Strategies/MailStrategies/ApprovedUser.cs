@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using StructureMap;
 
 	public class ApprovedUser : ABrokerMailToo {
@@ -64,16 +65,17 @@
 			}
 
 			decimal interestRatePercents = cashRequestRelevantData.InterestRate*100;
-			decimal remainingPercentsAfterSetupFee = 100 - (Math.Truncate(setupFeePercents * 100) / 100);
-			
+			setupFeePercents = Round2DecimalDown(setupFeePercents);
+			decimal remainingPercentsAfterSetupFee = 100 - setupFeePercents;
+
 			Variables = new Dictionary<string, string> {
 				{ "FirstName", CustomerData.FirstName },
 				{ "LoanAmount", m_nLoanAmount.ToString(CultureInfo.InvariantCulture) },
 				{ "ValidFor", m_nValidHours.ToString(CultureInfo.InvariantCulture) },
-				{ "AmountInUsd", (Math.Truncate(amountInUsd * 100) / 100).ToString(CultureInfo.InvariantCulture)},
+				{ "AmountInUsd", Round2DecimalDown(amountInUsd).ToString("#,#.00") },
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
-				{ "InterestRate", (Math.Truncate(interestRatePercents * 100) / 100).ToString(CultureInfo.InvariantCulture) },
-				{ "SetupFee", (Math.Truncate(setupFeePercents * 100) / 100).ToString(CultureInfo.InvariantCulture) },
+				{ "InterestRate", Round2DecimalDown(interestRatePercents).ToString("#,#.00") },
+				{ "SetupFee", setupFeePercents.ToString("#,#.00") },
 				{ "RemainingPercentsAfterSetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) },
 				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
 				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) }

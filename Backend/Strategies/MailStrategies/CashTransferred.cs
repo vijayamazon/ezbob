@@ -7,6 +7,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Repository;
+	using Ezbob.Utils;
 	using StructureMap;
 
 	public class CashTransferred : ABrokerMailToo {
@@ -32,7 +33,7 @@
 				{"Amount", amount.ToString(CultureInfo.InvariantCulture)},
 				{"EMAIL", CustomerData.Mail},
 				{"LOANREFNUM", loanRefNum},
-				{"AmountInUsd", (Math.Truncate(amountInUsd * 100) / 100).ToString(CultureInfo.InvariantCulture) },
+				{"AmountInUsd", Round2DecimalDown(amountInUsd).ToString("#,#.00") },
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
 				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
 				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) }

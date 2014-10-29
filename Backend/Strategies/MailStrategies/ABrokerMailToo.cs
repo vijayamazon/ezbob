@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
 	using System.Collections.Generic;
 	using API;
 	using Ezbob.Database;
@@ -7,6 +8,26 @@
 	#region class ABrokerMailToo
 
 	public abstract class ABrokerMailToo : AMailStrategyBase {
+
+		// These methods are here to avoid deployment of other dlls
+		public static decimal Round2DecimalDown(decimal value)
+		{
+			decimal tmp2 = Math.Round(value, 2);
+			decimal tmp3 = Math.Truncate(value * 1000) / 1000;
+			if (tmp2 - 0.005m == tmp3)
+			{
+				return tmp2 - 0.01m;
+			}
+
+			return tmp2;
+		}
+
+		public static decimal Round2DecimalDown(double value)
+		{
+			return Round2DecimalDown((decimal)value);
+		}
+		
+		
 		#region constructor
 
 		protected ABrokerMailToo(int nCustomerID, bool bSendToCustomer, AConnection oDB, ASafeLog oLog, bool bSendWhenOneLoan = false)
