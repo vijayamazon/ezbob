@@ -49,6 +49,7 @@
     <Compile Include="ARetryer.cs" />
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="MathUtils.cs" />
     <Compile Include="dbutils\CodeToSql.cs" />
     <Compile Include="dbutils\FKAttribute.cs" />
     <Compile Include="dbutils\PKAttribute.cs" />
