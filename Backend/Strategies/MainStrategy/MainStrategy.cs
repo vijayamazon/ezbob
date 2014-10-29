@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy
 {
 	using AutoDecisions;
-	using Experian;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using MailStrategies.API;
@@ -52,11 +51,6 @@
 		private bool isViaBroker;
 		private int companySeniorityDays;
 
-
-		private int minExperianScore;
-		private int maxExperianScore;
-		private int maxCompanyScore;
-		private int experianConsumerScore;
 		private AutoDecisionResponse autoDecisionResponse;
 		private MedalMultiplier medalType;
 		private decimal loanOfferApr;
@@ -77,7 +71,6 @@
 		private decimal loanOfferReApprovalFullAmountOld;
 		private decimal loanOfferReApprovalRemainingAmountOld;
 		private int offeredCreditLine;
-		private double initialExperianConsumerScore;
 		private double marketplaceSeniorityDays;
 		private int modelLoanOffer;
 		private double totalSumOfOrders1YTotal;
@@ -86,7 +79,7 @@
 		private double yodlee1YForRejection;
 		private double yodlee3MForRejection;
 
-		private readonly List<string> consumerCaisDetailWorstStatuses = new List<string>();
+		private List<string> consumerCaisDetailWorstStatuses;
 		
 		public override string Name { get { return "Main strategy"; } }
 
@@ -129,6 +122,16 @@
 			// Wait for data to be filled by other strategies
 			staller.Stall();
 
+			// Gather preliminary data that is required by AdditionalStrategiesCaller
+			dataGatherer.GatherPreliminaryData();
+			wasMainStrategyExecutedBefore = dataGatherer.LastStartedMainStrategyEndTime.HasValue;
+
+			// Trigger other strategies
+			var additionalStrategiesCaller = new AdditionalStrategiesCaller(customerId, newCreditLineOption,
+				wasMainStrategyExecutedBefore, dataGatherer.TypeOfBusiness, dataGatherer.BwaBusinessCheck, dataGatherer.AppBankAccountType,
+				dataGatherer.AppAccountNumber, dataGatherer.AppSortCode, DB, Log);
+			consumerCaisDetailWorstStatuses = additionalStrategiesCaller.Call();
+
 			// Gather Raw Data
 			dataGatherer.Gather();
 
@@ -141,15 +144,11 @@
 			// Processing logic
 			isHomeOwner = dataGatherer.IsOwnerOfMainAddress || dataGatherer.IsOwnerOfOtherProperties;
 			isFirstLoan = dataGatherer.NumOfLoans == 0;
-			wasMainStrategyExecutedBefore = dataGatherer.LastStartedMainStrategyEndTime.HasValue;
 			isViaBroker = dataGatherer.BrokerId.HasValue;
 			companySeniorityDays = dataGatherer.CompanyIncorporationDate.HasValue ? (DateTime.UtcNow - dataGatherer.CompanyIncorporationDate.Value).Days : 0;
 
+			// TODO: Refactor all Execute() below this line
 			SetAutoDecisionAvailability();
-
-			GetExperianData();
-
-			GetZooplaData();
 
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
 
@@ -187,7 +186,7 @@
 
 			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
 
-			if (dataGatherer.NumOfHmrcMps < 2 && (dataGatherer.TypeOfBusiness == "LLP" || dataGatherer.TypeOfBusiness == "Limited"))
+			if (dataGatherer.NumOfHmrcMps < 2 && Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness))
 			{
 				var instance = new CalculateLimitedMedal(DB, Log, customerId);
 				instance.Execute();
@@ -336,9 +335,9 @@
 			{
 				autoDecisionResponse = autoDecisionMaker.MakeDecision(
 					customerId,
-					minExperianScore,
-					maxExperianScore,
-					maxCompanyScore,
+					dataGatherer.MinExperianConsumerScore,
+					dataGatherer.MaxExperianConsumerScore,
+					dataGatherer.MaxCompanyScore,
 					totalSumOfOrders1YTotalForRejection,
 					totalSumOfOrders3MTotalForRejection,
 					yodlee1YForRejection,
@@ -356,7 +355,7 @@
 					dataGatherer.CustomerStatusIsEnabled,
 					dataGatherer.CustomerStatusIsWarning,
 					isViaBroker,
-					dataGatherer.TypeOfBusiness == "Limited" || dataGatherer.TypeOfBusiness == "LLP",
+					Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness),
 					companySeniorityDays,
 					dataGatherer.IsOffline,
 					dataGatherer.CustomerStatusName,
@@ -384,8 +383,8 @@
 		{
 			AutoDecisionRejectionResponse autoDecisionRejectionResponse = autoDecisionMaker.MakeRejectionDecision(
 				customerId,
-				maxExperianScore,
-				maxCompanyScore,
+				dataGatherer.MaxExperianConsumerScore,
+				dataGatherer.MaxCompanyScore,
 				totalSumOfOrders1YTotalForRejection,
 				totalSumOfOrders3MTotalForRejection,
 				yodlee1YForRejection,
@@ -396,38 +395,12 @@
 				dataGatherer.CustomerStatusIsEnabled,
 				dataGatherer.CustomerStatusIsWarning,
 				isViaBroker,
-				dataGatherer.TypeOfBusiness == "Limited" || dataGatherer.TypeOfBusiness == "LLP",
+				Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness),
 				companySeniorityDays,
 				dataGatherer.IsOffline,
 				dataGatherer.CustomerStatusName
 				);
 			return autoDecisionRejectionResponse;
-		}
-
-		private void GetExperianData()
-		{
-			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
-			{
-				PerformCompanyExperianCheck();
-				PerformConsumerExperianCheck();
-
-				minExperianScore = experianConsumerScore;
-				maxExperianScore = experianConsumerScore;
-				initialExperianConsumerScore = experianConsumerScore;
-
-				PerformExperianConsumerCheckForDirectors();
-
-				GetAml();
-				GetBwa();
-			}
-			else
-			{
-				experianConsumerScore = GetCurrentExperianScore();
-				GetMaxCompanyExperianScore();
-				minExperianScore = experianConsumerScore;
-				maxExperianScore = experianConsumerScore;
-				initialExperianConsumerScore = experianConsumerScore;
-			}
 		}
 
 		private void GetLandRegistry()
@@ -543,7 +516,7 @@
 				new QueryParameter("SystemDecision", systemDecision),
 				new QueryParameter("MedalType", medalType.ToString()),
 				new QueryParameter("ScorePoints", scoringResult),
-				new QueryParameter("ExpirianRating", experianConsumerScore),
+				new QueryParameter("ExpirianRating", dataGatherer.ExperianConsumerScore),
 				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
 				new QueryParameter("InterestRate", interestAccordingToPast == -1 ? loanInterestBase : interestAccordingToPast),
 				new QueryParameter("ManualSetupFeeAmount", manualSetupFeeAmount),
@@ -618,7 +591,7 @@
 				new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOfferUnderwriterComment),
 				new QueryParameter("IsLoanTypeSelectionAllowed", loanOfferIsLoanTypeSelectionAllowed),
 				new QueryParameter("DiscountPlanId", loanOfferDiscountPlanId),
-				new QueryParameter("ExperianRating", experianConsumerScore),
+				new QueryParameter("ExperianRating", dataGatherer.ExperianConsumerScore),
 				new QueryParameter("LoanSourceId", loanSourceId),
 				new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed),
 				new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee),
@@ -802,7 +775,7 @@
 
 			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(
 				totalSumOfOrdersForLoanOffer,
-				minExperianScore,
+				dataGatherer.MinExperianConsumerScore,
 				marketplaceSeniorityYears,
 				modelMaxFeedback,
 				maritalStatus,
@@ -849,111 +822,6 @@
 				new QueryParameter("EarlyPayments", modelEarlyPayments)
 			);
 			return scoringResult;
-		}
-
-		private void PerformExperianConsumerCheckForDirectors()
-		{
-			if (dataGatherer.CompanyType == "Entrepreneur")
-				return;
-
-			DB.ForEachRowSafe((sr, bRowsetStart) => {
-				int appDirId = sr["DirId"];
-				string appDirName = sr["DirName"];
-				string appDirSurname = sr["DirSurname"];
-
-				if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
-					return ActionResult.Continue;
-
-				PerformConsumerExperianCheck(appDirId);
-				
-				return ActionResult.Continue;
-			},
-				"GetCustomerDirectorsForConsumerCheck",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-		}
-
-		private void PerformConsumerExperianCheck(int? directorId = null)
-		{
-			if (wasMainStrategyExecutedBefore)
-			{
-				Log.Info("Performing experian consumer check");
-
-				var strat = new ExperianConsumerCheck(customerId, directorId, false, DB, Log);
-				strat.Execute();
-
-				if (strat.Result != null && strat.Result.Cais != null)
-				{
-					foreach (var caisDetails in strat.Result.Cais)
-					{
-						consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
-					}
-				}
-
-				if (directorId == null)
-				{
-					experianConsumerScore = strat.Score;
-				}
-				else
-				{
-					if (experianConsumerScore > 0 && strat.Score < minExperianScore)
-						minExperianScore = strat.Score;
-
-					if (experianConsumerScore > 0 && strat.Score > maxExperianScore)
-						maxExperianScore = strat.Score;
-				}
-
-				return;
-			}
-
-			if (directorId == null)
-			{
-				var strat = new ExperianConsumerCheck(customerId, null, false, DB, Log);
-				strat.Execute();
-
-				if (strat.Result != null && strat.Result.Cais != null)
-				{
-					foreach (var caisDetails in strat.Result.Cais)
-					{
-						consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
-					}
-				}
-
-				experianConsumerScore = GetCurrentExperianScore();
-			}
-		}
-
-		private int GetCurrentExperianScore()
-		{
-			var scoreStrat = new GetExperianConsumerScore(customerId, DB, Log);
-			scoreStrat.Execute();
-			return scoreStrat.Score;
-		}
-
-		private void GetMaxCompanyExperianScore()
-		{
-			maxCompanyScore = DB.ExecuteScalar<int>(
-				"GetCompanyScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-		}
-
-		private void PerformCompanyExperianCheck()
-		{
-			if (wasMainStrategyExecutedBefore)
-			{
-				Log.Info("Performing experian company check");
-				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, DB, Log);
-				experianCompanyChecker.Execute();
-
-				maxCompanyScore = Math.Max((int)experianCompanyChecker.MaxScore, (int)experianCompanyChecker.Score);
-			}
-			else
-			{
-				GetMaxCompanyExperianScore();
-			}
 		}
 
 		private void SetAutoDecisionAvailability()
@@ -1030,7 +898,7 @@
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", "Reject"},
-				{"ExperianConsumerScore", initialExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
+				{"ExperianConsumerScore", dataGatherer.ExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianConsumerScore", dataGatherer.LowCreditScore.ToString(CultureInfo.InvariantCulture)},
 				{"TotalAnnualTurnover", totalSumOfOrders1YTotalForRejection.ToString("C2")},
 				{"CVTotalAnnualTurnover", dataGatherer.LowTotalAnnualTurnover.ToString("C2")},
@@ -1047,37 +915,6 @@
 				{"Seniority", marketplaceSeniorityDays.ToString(CultureInfo.InvariantCulture)},
 				{"SeniorityThreshold", dataGatherer.RejectMinimalSeniority.ToString(CultureInfo.InvariantCulture) + additionalValues}
 			});
-		}
-
-		private void GetBwa()
-		{
-			if (ShouldRunBwa())
-			{
-				Log.Info("Getting BWA for customer: {0}", customerId);
-				var bwaChecker = new BwaChecker(customerId, DB, Log);
-				bwaChecker.Execute();
-			}
-		}
-
-		private void GetAml()
-		{
-			if (wasMainStrategyExecutedBefore)
-			{
-				Log.Info("Getting AML for customer: {0}", customerId);
-				var amlChecker = new AmlChecker(customerId, DB, Log);
-				amlChecker.Execute();
-			} 
-		}
-
-		private bool ShouldRunBwa()
-		{
-			return dataGatherer.AppBankAccountType == "Personal" && dataGatherer.BwaBusinessCheck == "1" && dataGatherer.AppSortCode != null && dataGatherer.AppAccountNumber != null;
-		}
-
-		private void GetZooplaData()
-		{
-			Log.Info("Getting zoopla data for customer:{0}", customerId);
-			strategyHelper.GetZooplaData(customerId);
 		}
 	}
 }
