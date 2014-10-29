@@ -57,10 +57,8 @@ BEGIN
 		@CustomerStatusIsWarning AS CustomerStatusIsWarning,
 		@CustomerStatusName AS CustomerStatusName,		
 		IsOffline,
-		CAST(CASE WHEN BrokerID IS NULL THEN 0 ELSE 1 END AS BIT) AS IsBrokerCustomer,
 		Name AS CustomerEmail,
 		Company.TypeOfBusiness AS CompanyType,
-		CAST(CASE WHEN LastStartedMainStrategyEndTime IS NULL THEN 0 ELSE 1 END AS BIT) AS MainStrategyExecutedBefore,
 		FirstName, 
 		Surname,
 		Gender,
@@ -77,7 +75,9 @@ BEGIN
 		@NumOfLoans AS NumOfLoans,
 		Customer.TypeOfBusiness,
 		@NumOfHmrcMps AS NumOfHmrcMps,
-		Customer.IsAlibaba
+		Customer.IsAlibaba,
+		Customer.BrokerID AS BrokerId,
+		Customer.LastStartedMainStrategyEndTime
 	FROM
 		CustomerPropertyStatuses,
 		Customer

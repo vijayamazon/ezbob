@@ -38,9 +38,19 @@
 		/// then customer's status should not change.
 		/// </summary>
 		private bool overrideApprovedRejected;
-		
+
+		// Automation availability
+		private bool enableAutomaticReRejection;
+		private bool enableAutomaticReApproval;
+		private bool enableAutomaticApproval;
+		private bool enableAutomaticRejection;
+
 		// Calculated based on raw data
 		private bool isHomeOwner;
+		private bool isFirstLoan;
+		private bool wasMainStrategyExecutedBefore;
+		private bool isViaBroker;
+		private int companySeniorityDays;
 
 
 		private int minExperianScore;
@@ -75,7 +85,6 @@
 		private double totalSumOfOrders3MTotalForRejection;
 		private double yodlee1YForRejection;
 		private double yodlee3MForRejection;
-		private bool isFirstLoan;
 
 		private readonly List<string> consumerCaisDetailWorstStatuses = new List<string>();
 		
@@ -123,9 +132,18 @@
 			// Gather Raw Data
 			dataGatherer.Gather();
 
+			// Automation availability
+			enableAutomaticReRejection = dataGatherer.EnableAutomaticReRejection;
+			enableAutomaticReApproval = dataGatherer.EnableAutomaticReApproval;
+			enableAutomaticApproval = dataGatherer.EnableAutomaticApproval;
+			enableAutomaticRejection = dataGatherer.EnableAutomaticRejection;
+
 			// Processing logic
 			isHomeOwner = dataGatherer.IsOwnerOfMainAddress || dataGatherer.IsOwnerOfOtherProperties;
 			isFirstLoan = dataGatherer.NumOfLoans == 0;
+			wasMainStrategyExecutedBefore = dataGatherer.LastStartedMainStrategyEndTime.HasValue;
+			isViaBroker = dataGatherer.BrokerId.HasValue;
+			companySeniorityDays = dataGatherer.CompanyIncorporationDate.HasValue ? (DateTime.UtcNow - dataGatherer.CompanyIncorporationDate.Value).Days : 0;
 
 			SetAutoDecisionAvailability();
 
@@ -149,8 +167,8 @@
 			{
 				modelLoanOffer = 0;
 
-				if ((autoDecisionRejectionResponse.IsReRejected && !dataGatherer.EnableAutomaticReRejection) ||
-					(!autoDecisionRejectionResponse.IsReRejected && !dataGatherer.EnableAutomaticRejection))
+				if ((autoDecisionRejectionResponse.IsReRejected && !enableAutomaticReRejection) ||
+					(!autoDecisionRejectionResponse.IsReRejected && !enableAutomaticRejection))
 				{
 					SendRejectionExplanationMail(autoDecisionRejectionResponse.IsReRejected
 													 ? "Mandrill - User supposed to be re-rejected by the strategy"
@@ -297,7 +315,7 @@
 						UpdateReApprovalData();
 						SendReApprovalMails();
 
-						if (dataGatherer.EnableAutomaticReApproval)
+						if (enableAutomaticReApproval)
 						{
 							strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
 						}
@@ -327,19 +345,19 @@
 					yodlee3MForRejection,
 					offeredCreditLine,
 					marketplaceSeniorityDays,
-					dataGatherer.EnableAutomaticReRejection,
-					dataGatherer.EnableAutomaticRejection,
-					dataGatherer.EnableAutomaticReApproval,
-					dataGatherer.EnableAutomaticApproval,
+					enableAutomaticReRejection,
+					enableAutomaticRejection,
+					enableAutomaticReApproval,
+					enableAutomaticApproval,
 					loanOfferReApprovalFullAmountOld,
 					loanOfferReApprovalFullAmount,
 					loanOfferReApprovalRemainingAmount,
 					loanOfferReApprovalRemainingAmountOld,
 					dataGatherer.CustomerStatusIsEnabled,
 					dataGatherer.CustomerStatusIsWarning,
-					dataGatherer.IsBrokerCustomer,
+					isViaBroker,
 					dataGatherer.TypeOfBusiness == "Limited" || dataGatherer.TypeOfBusiness == "LLP",
-					dataGatherer.CompanySeniorityDays,
+					companySeniorityDays,
 					dataGatherer.IsOffline,
 					dataGatherer.CustomerStatusName,
 					consumerCaisDetailWorstStatuses,
@@ -373,13 +391,13 @@
 				yodlee1YForRejection,
 				yodlee3MForRejection,
 				marketplaceSeniorityDays,
-				dataGatherer.EnableAutomaticReRejection,
-				dataGatherer.EnableAutomaticRejection,
+				enableAutomaticReRejection,
+				enableAutomaticRejection,
 				dataGatherer.CustomerStatusIsEnabled,
 				dataGatherer.CustomerStatusIsWarning,
-				dataGatherer.IsBrokerCustomer,
+				isViaBroker,
 				dataGatherer.TypeOfBusiness == "Limited" || dataGatherer.TypeOfBusiness == "LLP",
-				dataGatherer.CompanySeniorityDays,
+				companySeniorityDays,
 				dataGatherer.IsOffline,
 				dataGatherer.CustomerStatusName
 				);
@@ -571,7 +589,7 @@
 				}
 			});
 
-			if (dataGatherer.EnableAutomaticReApproval)
+			if (enableAutomaticReApproval)
 			{
 				var customerMailVariables = new Dictionary<string, string> {
 					{"FirstName", dataGatherer.AppFirstName},
@@ -858,7 +876,7 @@
 
 		private void PerformConsumerExperianCheck(int? directorId = null)
 		{
-			if (dataGatherer.WasMainStrategyExecutedBefore)
+			if (wasMainStrategyExecutedBefore)
 			{
 				Log.Info("Performing experian consumer check");
 
@@ -924,7 +942,7 @@
 
 		private void PerformCompanyExperianCheck()
 		{
-			if (dataGatherer.WasMainStrategyExecutedBefore)
+			if (wasMainStrategyExecutedBefore)
 			{
 				Log.Info("Performing experian company check");
 				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, DB, Log);
@@ -944,24 +962,24 @@
 
 			if (!dataGatherer.CustomerStatusIsEnabled || dataGatherer.CustomerStatusIsWarning)
 			{
-				dataGatherer.EnableAutomaticReApproval = false;
-				dataGatherer.EnableAutomaticApproval = false;
+				enableAutomaticReApproval = false;
+				enableAutomaticApproval = false;
 			}
 
 			if (dataGatherer.IsOffline)
 			{
-				dataGatherer.EnableAutomaticApproval = false;
+				enableAutomaticApproval = false;
 			}
 
-			if (dataGatherer.IsBrokerCustomer)
+			if (isViaBroker)
 			{
-				dataGatherer.EnableAutomaticApproval = false;
-				dataGatherer.EnableAutomaticRejection = false;
+				enableAutomaticApproval = false;
+				enableAutomaticRejection = false;
 			}
 
 			if (dataGatherer.IsAlibaba)
 			{
-				dataGatherer.EnableAutomaticRejection = false;
+				enableAutomaticRejection = false;
 			}
 
 			if (
@@ -971,10 +989,10 @@
 				avoidAutomaticDecision == 1
 			)
 			{
-				dataGatherer.EnableAutomaticApproval = false;
-				dataGatherer.EnableAutomaticReApproval = false;
-				dataGatherer.EnableAutomaticRejection = false;
-				dataGatherer.EnableAutomaticReRejection = false;
+				enableAutomaticApproval = false;
+				enableAutomaticReApproval = false;
+				enableAutomaticRejection = false;
+				enableAutomaticReRejection = false;
 			}
 		}
 		
@@ -999,7 +1017,7 @@
 						rejection.HasHmrc ? rejection.Yodlee3M.ToString("C2") : "",
 						rejection.LateAccounts,
 						dataGatherer.IsOffline,
-						dataGatherer.CompanySeniorityDays
+						companySeniorityDays
 					);
 			}
 			
@@ -1043,7 +1061,7 @@
 
 		private void GetAml()
 		{
-			if (dataGatherer.WasMainStrategyExecutedBefore)
+			if (wasMainStrategyExecutedBefore)
 			{
 				Log.Info("Getting AML for customer: {0}", customerId);
 				var amlChecker = new AmlChecker(customerId, DB, Log);

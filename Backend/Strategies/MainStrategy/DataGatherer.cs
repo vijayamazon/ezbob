@@ -17,10 +17,10 @@
 		public int RejectDefaultsAccountsNum { get; private set; }
 		public int RejectMinimalSeniority { get; private set; }
 		public string BwaBusinessCheck { get; private set; }
-		public bool EnableAutomaticReRejection { get; set; } // TODO: make the set private
-		public bool EnableAutomaticReApproval { get; set; } // TODO: make the set private
-		public bool EnableAutomaticApproval { get; set; } // TODO: make the set private
-		public bool EnableAutomaticRejection { get; set; } // TODO: make the set private
+		public bool EnableAutomaticReRejection { get; private set; }
+		public bool EnableAutomaticReApproval { get; private set; }
+		public bool EnableAutomaticApproval { get; private set; }
+		public bool EnableAutomaticRejection { get; private set; }
 		public int MaxCapHomeOwner { get; private set; }
 		public int MaxCapNotHomeOwner { get; private set; }
 		public int LowCreditScore { get; private set; }
@@ -34,13 +34,11 @@
 		public bool CustomerStatusIsWarning { get; private set; }
 		public string CustomerStatusName { get; private set; }
 		public bool IsOffline { get; private set; }
-		public bool IsBrokerCustomer { get; private set; } // TODO: fetch from DB BrokerId and apply logic within main
 		public string AppEmail { get; private set; }
 		public string CompanyType { get; private set; }
 		public string AppFirstName { get; private set; }
 		public string AppSurname { get; private set; }
 		public string AppGender { get; private set; }
-		public bool WasMainStrategyExecutedBefore { get; private set; } // TODO: fetch from DB LastStartedMainStrategyEndTime and apply logic within main
 		public bool IsOwnerOfMainAddress { get; private set; }
 		public bool IsOwnerOfOtherProperties { get; private set; }
 		public string PropertyStatusDescription { get; private set; }
@@ -52,8 +50,10 @@
 		public string TypeOfBusiness;
 		public int NumOfLoans { get; private set; }
 		public int NumOfHmrcMps { get; private set; }
-		public int CompanySeniorityDays { get; private set; } // TODO: Get incorporation date and calc the days in main
 		public bool IsAlibaba { get; private set; }
+		public int? BrokerId { get; private set; }
+		public DateTime? LastStartedMainStrategyEndTime { get; private set; }
+		public DateTime? CompanyIncorporationDate { get; private set; }
 
 		public DataGatherer(int customerId, AConnection db, ASafeLog log)
 		{
@@ -97,10 +97,8 @@
 			CustomerStatusIsWarning = results["CustomerStatusIsWarning"];
 			CustomerStatusName = results["CustomerStatusName"];
 			IsOffline = results["IsOffline"];
-			IsBrokerCustomer = results["IsBrokerCustomer"];
 			AppEmail = results["CustomerEmail"];
 			CompanyType = results["CompanyType"];
-			WasMainStrategyExecutedBefore = results["MainStrategyExecutedBefore"];
 			AppFirstName = results["FirstName"];
 			AppSurname = results["Surname"];
 			AppGender = results["Gender"];
@@ -116,16 +114,16 @@
 			TypeOfBusiness = results["TypeOfBusiness"];
 			NumOfHmrcMps = results["NumOfHmrcMps"];
 			IsAlibaba = results["IsAlibaba"];
+			BrokerId = results["BrokerId"];
+			LastStartedMainStrategyEndTime = results["LastStartedMainStrategyEndTime"];
 		}
 
 		private void GetCompanySeniorityDays()
 		{
 			// TODO: create IsLimited method elsewhere
-			var seniority = new GetCompanySeniority(customerId, TypeOfBusiness == "Limited" || TypeOfBusiness == "LLP", db, log);
-			seniority.Execute();
-			CompanySeniorityDays = seniority.CompanyIncorporationDate.HasValue
-								   ? (DateTime.UtcNow - seniority.CompanyIncorporationDate.Value).Days
-								   : 0;
+			var getCompanySeniority = new GetCompanySeniority(customerId, Utils.IsLimitedCompany(TypeOfBusiness), db, log);
+			getCompanySeniority.Execute();
+			CompanyIncorporationDate = getCompanySeniority.CompanyIncorporationDate;
 		}
 	}
 }
