@@ -12,7 +12,6 @@
 			NewCreditLineOption = NewCreditLineOption.UpdateEverythingAndApplyAutoRules;
 			FraudMode = FraudMode.FullCheck;
 			AvoidAutoDecision = 0;
-			IsUnderwriterForced = false;
 		} // constructor
 
 		[DataMember]
@@ -33,9 +32,6 @@
 
 		[DataMember]
 		public int AvoidAutoDecision { get; set; }
-
-		[DataMember]
-		public bool IsUnderwriterForced { get; set; }
 
 		[JsonConverter(typeof(StringEnumConverter))]
 		[DataMember]

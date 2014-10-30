@@ -89,11 +89,7 @@
 
 		private bool MakeSureMpDataIsSufficient()
 		{
-			bool shouldExpectMpData =
-				newCreditLineOption != NewCreditLineOption.SkipEverything &&
-				newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
-
-			if (shouldExpectMpData)
+			if (newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp)
 			{
 				if (!WaitForMarketplacesToFinishUpdates())
 				{
@@ -241,7 +237,7 @@
 
 		public void Stall()
 		{
-			if (!wasMainStrategyExecutedBefore && newCreditLineOption != NewCreditLineOption.SkipEverything)
+			if (!wasMainStrategyExecutedBefore)
 			{
 				WaitForExperianConsumerCheckIfNeeded();
 				WaitForExperianCompanyCheckIfNeeded();

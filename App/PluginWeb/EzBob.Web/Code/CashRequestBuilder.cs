@@ -137,7 +137,7 @@
 
 		#region method ForceEvaluate
 
-		public void ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced, bool isSync) {
+		public void ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isSync) {
 			m_oServiceClient.Instance.FraudCheckerAsync(customer.Id, FraudMode.FullCheck);
 			bool bUpdateMarketplaces =
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
@@ -156,15 +156,10 @@
 				}
 			} // if
 
-			if (!isUnderwriterForced)
-			{
-				if (isSync)
-					m_oServiceClient.Instance.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
-				else
-					m_oServiceClient.Instance.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
-			}
+			if (isSync)
+				m_oServiceClient.Instance.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
 			else
-				m_oServiceClient.Instance.MainStrategy2(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid), true);
+				m_oServiceClient.Instance.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
 		} // ForceEvaluate
 
 		#endregion method ForceEvaluate

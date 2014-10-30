@@ -28,7 +28,6 @@
 		// Inputs
 		private readonly int customerId;
 		private readonly NewCreditLineOption newCreditLineOption;
-		private readonly bool underwriterCheck;
 		private readonly int avoidAutomaticDecision;
 
 		/// <summary>
@@ -82,23 +81,11 @@
 		private List<string> consumerCaisDetailWorstStatuses;
 		
 		public override string Name { get { return "Main strategy"; } }
-
+		
 		public MainStrategy(
 			int customerId,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDecision,
-			AConnection oDb,
-			ASafeLog oLog
-		)
-			: this(customerId, newCreditLine, avoidAutoDecision, false, oDb, oLog)
-		{
-		}
-
-		public MainStrategy(
-			int customerId,
-			NewCreditLineOption newCreditLine,
-			int avoidAutoDecision,
-			bool isUnderwriterForced,
 			AConnection oDb,
 			ASafeLog oLog
 		)
@@ -110,7 +97,6 @@
 			this.customerId = customerId;
 			newCreditLineOption = newCreditLine;
 			avoidAutomaticDecision = avoidAutoDecision;
-			underwriterCheck = isUnderwriterForced;
 			overrideApprovedRejected = true;
 			autoDecisionMaker = new AutoDecisionMaker(DB, Log);
 			staller = new Staller(customerId, newCreditLineOption, mailer, DB, Log);
@@ -119,6 +105,12 @@
 
 		public override void Execute()
 		{
+			if (newCreditLineOption == NewCreditLineOption.SkipEverything)
+			{
+				Log.Alert("MainStrategy was activated in SkipEverything mode. Nothing is done. Avoid such calls!");
+				return;
+			}
+
 			// Wait for data to be filled by other strategies
 			staller.Stall();
 
@@ -151,12 +143,6 @@
 			SetAutoDecisionAvailability();
 
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
-
-			if (underwriterCheck)
-			{
-				SetEndTimestamp();
-				return;
-			}
 
 			GetLastCashRequestData();
 
@@ -850,9 +836,7 @@
 				enableAutomaticRejection = false;
 			}
 
-			if (
-				newCreditLineOption == NewCreditLineOption.SkipEverything ||
-				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
+			if (newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
 				avoidAutomaticDecision == 1
 			)

@@ -489,26 +489,12 @@
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
 
-			switch (m_aryArgs.Length) {
-			case 5:
-				if (int.TryParse(m_aryArgs[1], out underwriterId) && int.TryParse(m_aryArgs[2], out customerId) && Enum.TryParse(m_aryArgs[3], out newCreditLineOption) && int.TryParse(m_aryArgs[4], out avoidAutoDescison)) {
-					m_oServiceClient.MainStrategy1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
-					return;
-				}
-				break;
-
-			case 6:
-				bool isUnderwriterForced;
-				if (int.TryParse(m_aryArgs[1], out underwriterId) && int.TryParse(m_aryArgs[2], out customerId) && Enum.TryParse(m_aryArgs[3], out newCreditLineOption) && int.TryParse(m_aryArgs[4], out avoidAutoDescison) && bool.TryParse(m_aryArgs[5], out isUnderwriterForced)) {
-					m_oServiceClient.MainStrategy2(underwriterId, customerId, newCreditLineOption, avoidAutoDescison, isUnderwriterForced);
-					return;
-				}
-				break;
-			} // switch
+			if (int.TryParse(m_aryArgs[1], out underwriterId) && int.TryParse(m_aryArgs[2], out customerId) && Enum.TryParse(m_aryArgs[3], out newCreditLineOption) && int.TryParse(m_aryArgs[4], out avoidAutoDescison)) {
+				m_oServiceClient.MainStrategy1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
+				return;
+			}
 
 			m_oLog.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
-			m_oLog.Msg("OR");
-			m_oLog.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <isUnderwriterForced(should always be true)>");
 		}
 
 		[Activation]

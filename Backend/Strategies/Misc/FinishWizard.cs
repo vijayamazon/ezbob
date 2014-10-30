@@ -33,7 +33,6 @@
 					m_oArgs.CustomerID,
 					m_oArgs.NewCreditLineOption,
 					m_oArgs.AvoidAutoDecision,
-					m_oArgs.IsUnderwriterForced,
 					DB,
 					Log
 				).SetOverrideApprovedRejected(false).Execute();

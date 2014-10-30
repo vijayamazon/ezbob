@@ -331,7 +331,7 @@
 					m_oServiceClient.Instance.RequestCashWithoutTakenLoan(customer.Id);
 
 				m_oCashRequestBuilder.CreateCashRequest(customer, CashRequestOriginator.RequestCashBtn);
-				m_oCashRequestBuilder.ForceEvaluate(customer.Id, customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false, false);
+				m_oCashRequestBuilder.ForceEvaluate(customer.Id, customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);
 
 				m_oSession.Flush();
 			});

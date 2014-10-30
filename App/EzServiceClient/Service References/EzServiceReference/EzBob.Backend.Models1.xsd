@@ -54,6 +54,7 @@
       <xs:element minOccurs="0" name="TotalFees" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TotalInterest" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TotalPrincipal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TotalPrincipalUsd" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TotalPrincipalWithSetupFee" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TypeOfBusinessName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="isHalwayLoan" type="xs:boolean" />

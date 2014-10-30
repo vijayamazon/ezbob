@@ -42,61 +42,58 @@
 		public List<string> Call()
 		{
 			var consumerCaisDetailWorstStatuses = new List<string>();
-			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
+			var strat = new ExperianConsumerCheck(customerId, null, false, db, log);
+			strat.Execute();
+
+			// TODO: load from DB within dataGatherer.Gather()
+			if (strat.Result != null && strat.Result.Cais != null)
 			{
-				var strat = new ExperianConsumerCheck(customerId, null, false, db, log);
-				strat.Execute();
-
-				// TODO: load from DB within dataGatherer.Gather()
-				if (strat.Result != null && strat.Result.Cais != null)
+				foreach (var caisDetails in strat.Result.Cais)
 				{
-					foreach (var caisDetails in strat.Result.Cais)
-					{
-						consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
-					}
+					consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
 				}
-
-				if (typeOfBusiness != "Entrepreneur")
-				{
-					db.ForEachRowSafe((sr, bRowsetStart) =>
-					{
-						int appDirId = sr["DirId"];
-						string appDirName = sr["DirName"];
-						string appDirSurname = sr["DirSurname"];
-
-						if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
-							return ActionResult.Continue;
-
-						var directorExperianConsumerCheck = new ExperianConsumerCheck(customerId, appDirId, false, db, log);
-						directorExperianConsumerCheck.Execute();
-
-						// TODO: load from DB within dataGatherer.Gather()
-						if (directorExperianConsumerCheck.Result != null && directorExperianConsumerCheck.Result.Cais != null)
-						{
-							foreach (var caisDetails in directorExperianConsumerCheck.Result.Cais)
-							{
-								consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
-							}
-						}
-
-						return ActionResult.Continue;
-					},
-									  "GetCustomerDirectorsForConsumerCheck",
-									  CommandSpecies.StoredProcedure,
-									  new QueryParameter("CustomerId", customerId)
-						);
-				}
-
-				if (wasMainStrategyExecutedBefore)
-				{
-					log.Info("Performing experian company check");
-					var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, db, log);
-					experianCompanyChecker.Execute();
-				}
-
-				GetAml();
-				GetBwa();
 			}
+
+			if (typeOfBusiness != "Entrepreneur")
+			{
+				db.ForEachRowSafe((sr, bRowsetStart) =>
+				{
+					int appDirId = sr["DirId"];
+					string appDirName = sr["DirName"];
+					string appDirSurname = sr["DirSurname"];
+
+					if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
+						return ActionResult.Continue;
+
+					var directorExperianConsumerCheck = new ExperianConsumerCheck(customerId, appDirId, false, db, log);
+					directorExperianConsumerCheck.Execute();
+
+					// TODO: load from DB within dataGatherer.Gather()
+					if (directorExperianConsumerCheck.Result != null && directorExperianConsumerCheck.Result.Cais != null)
+					{
+						foreach (var caisDetails in directorExperianConsumerCheck.Result.Cais)
+						{
+							consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
+						}
+					}
+
+					return ActionResult.Continue;
+				},
+									"GetCustomerDirectorsForConsumerCheck",
+									CommandSpecies.StoredProcedure,
+									new QueryParameter("CustomerId", customerId)
+					);
+			}
+
+			if (wasMainStrategyExecutedBefore)
+			{
+				log.Info("Performing experian company check");
+				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, db, log);
+				experianCompanyChecker.Execute();
+			}
+
+			GetAml();
+			GetBwa();
 
 			GetZooplaData();
 

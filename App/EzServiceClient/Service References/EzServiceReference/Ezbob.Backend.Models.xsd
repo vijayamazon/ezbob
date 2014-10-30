@@ -518,7 +518,6 @@
       <xs:element minOccurs="0" name="DoMain" type="xs:boolean" />
       <xs:element minOccurs="0" name="DoSendEmail" type="xs:boolean" />
       <xs:element minOccurs="0" name="FraudMode" type="tns:FraudMode" />
-      <xs:element minOccurs="0" name="IsUnderwriterForced" type="xs:boolean" />
       <xs:element minOccurs="0" name="NewCreditLineOption" type="tns:NewCreditLineOption" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />
