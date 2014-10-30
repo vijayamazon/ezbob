@@ -2,7 +2,10 @@
 {
 	using System;
 	using ConfigManager;
+	using EZBob.DatabaseLib.Model.Database;
 	using Experian;
+	using EzBob.Models;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Misc;
@@ -12,6 +15,7 @@
 		private readonly int customerId;
 		private readonly AConnection db;
 		private readonly ASafeLog log;
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
 		// Preliminary
 		public string BwaBusinessCheck { get; private set; }
@@ -60,6 +64,45 @@
 		public int ExperianConsumerScore { get; private set; }
 		public int MinExperianConsumerScore { get; private set; }
 		public int MaxExperianConsumerScore { get; private set; }
+		public int NumOfEbayAmazonPayPalMps { get; private set; }
+
+		// Online medal
+		public int ModelEzbobSeniority { get; private set; }
+		public MaritalStatus MaritalStatus { get; private set; }
+		public int ModelMaxFeedback { get; private set; }
+		public int ModelOnTimeLoans { get; private set; }
+		public int ModelLatePayments { get; private set; }
+		public int ModelEarlyPayments { get; private set; }
+		public bool FirstRepaymentDatePassed { get; private set; }
+
+		// Turnovers and seniority
+		public double TotalSumOfOrders1YTotal { get; private set; }
+		public double TotalSumOfOrders1YTotalForRejection { get; private set; }
+		public double TotalSumOfOrders3MTotalForRejection { get; private set; }
+		public double Yodlee1YForRejection { get; private set; }
+		public double Yodlee3MForRejection { get; private set; }
+		public double MarketplaceSeniorityDays { get; private set; }
+		public decimal TotalSumOfOrdersForLoanOffer { get; private set; }
+		public decimal MarketplaceSeniorityYears { get; private set; }
+		public decimal EzbobSeniorityMonths { get; private set; }
+
+		// Last cash request
+		public decimal LoanOfferReApprovalFullAmount { get; private set; }
+		public decimal LoanOfferReApprovalRemainingAmount { get; private set; }
+		public decimal LoanOfferReApprovalFullAmountOld { get; private set; }
+		public decimal LoanOfferReApprovalRemainingAmountOld { get; private set; }
+		public decimal LoanOfferApr { get; private set; }
+		public int LoanOfferRepaymentPeriod { get; private set; }
+		public decimal LoanOfferInterestRate { get; private set; }
+		public int LoanOfferUseSetupFee { get; private set; }
+		public int LoanOfferLoanTypeId { get; private set; }
+		public int LoanOfferIsLoanTypeSelectionAllowed { get; private set; }
+		public int LoanOfferDiscountPlanId { get; private set; }
+		public int LoanSourceId { get; private set; }
+		public int IsCustomerRepaymentPeriodSelectionAllowed { get; private set; }
+		public bool UseBrokerSetupFee { get; private set; }
+		public int ManualSetupFeeAmount { get; private set; }
+		public decimal ManualSetupFeePercent { get; private set; }
 
 		public DataGatherer(int customerId, AConnection db, ASafeLog log)
 		{
@@ -76,6 +119,9 @@
 			GetMaxCompanyScore();
 			GetCurrentExperianScore();
 			GetMinMaxExperianScore();
+			GatherOnlineMedalData();
+			GatherTurnoversAndSeniority();
+			GetLastCashRequestData();
 		}
 
 		public void GatherPreliminaryData()
@@ -167,6 +213,89 @@
 			{
 				MinExperianConsumerScore = sr["MinExperianScore"];
 				MaxExperianConsumerScore = sr["MaxExperianScore"];
+			}
+		}
+
+		private void GatherOnlineMedalData()
+		{
+			log.Info("Starting to calculate score and medal");
+
+			var scoreCardResults = db.GetFirst(
+				"GetScoreCardData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("Today", DateTime.Today)
+			);
+
+			string maritalStatusStr = scoreCardResults["MaritalStatus"];
+			MaritalStatus maritalStatusTmp;
+
+			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatusTmp))
+			{
+				log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
+				maritalStatusTmp = MaritalStatus.Other;
+			}
+			MaritalStatus = maritalStatusTmp;
+
+			ModelMaxFeedback = scoreCardResults["MaxFeedback", DefaultFeedbackValue];
+
+			NumOfEbayAmazonPayPalMps = scoreCardResults["MPsNumber"];
+			ModelEzbobSeniority = scoreCardResults["EZBOBSeniority"];
+			ModelOnTimeLoans = scoreCardResults["OnTimeLoans"];
+			ModelLatePayments = scoreCardResults["LatePayments"];
+			ModelEarlyPayments = scoreCardResults["EarlyPayments"];
+
+			FirstRepaymentDatePassed = false;
+
+			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
+			if (modelFirstRepaymentDate != default(DateTime))
+			{
+				FirstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
+			}
+		}
+
+		private void GatherTurnoversAndSeniority()
+		{
+			log.Info("Getting turnovers and seniority");
+			MpsTotals totals = strategyHelper.GetMpsTotals(customerId);
+			TotalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
+			TotalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
+			TotalSumOfOrders3MTotalForRejection = totals.TotalSumOfOrders3MTotalForRejection;
+			Yodlee1YForRejection = totals.Yodlee1YForRejection;
+			Yodlee3MForRejection = totals.Yodlee3MForRejection;
+			MarketplaceSeniorityDays = totals.MarketplaceSeniorityDays;
+			TotalSumOfOrdersForLoanOffer = totals.TotalSumOfOrdersForLoanOffer;
+			MarketplaceSeniorityYears = (decimal)totals.MarketplaceSeniorityDays / 365; // It is done this way to fit to the excel
+			EzbobSeniorityMonths = (decimal)ModelEzbobSeniority * 12 / 365; // It is done this way to fit to the excel
+		}
+
+		private void GetLastCashRequestData()
+		{
+			var lastOfferResults = db.GetFirst(
+				"GetLastOfferForAutomatedDecision",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+
+			if (!lastOfferResults.IsEmpty)
+			{
+				LoanOfferReApprovalFullAmount = lastOfferResults["ReApprovalFullAmountNew"];
+				LoanOfferReApprovalRemainingAmount = lastOfferResults["ReApprovalRemainingAmount"];
+				LoanOfferReApprovalFullAmountOld = lastOfferResults["ReApprovalFullAmountOld"];
+				LoanOfferReApprovalRemainingAmountOld = lastOfferResults["ReApprovalRemainingAmountOld"];
+				LoanOfferApr = lastOfferResults["APR"];
+				LoanOfferRepaymentPeriod = lastOfferResults["RepaymentPeriod"];
+				LoanOfferInterestRate = lastOfferResults["InterestRate"];
+				LoanOfferUseSetupFee = lastOfferResults["UseSetupFee"];
+				LoanOfferLoanTypeId = lastOfferResults["LoanTypeId"];
+				LoanOfferIsLoanTypeSelectionAllowed = lastOfferResults["IsLoanTypeSelectionAllowed"];
+				LoanOfferDiscountPlanId = lastOfferResults["DiscountPlanId"];
+				LoanSourceId = lastOfferResults["LoanSourceID"];
+				IsCustomerRepaymentPeriodSelectionAllowed = lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"];
+				UseBrokerSetupFee = lastOfferResults["UseBrokerSetupFee"];
+				ManualSetupFeeAmount = lastOfferResults["ManualSetupFeeAmount"];
+				ManualSetupFeePercent = lastOfferResults["ManualSetupFeePercent"];
 			}
 		}
 	}

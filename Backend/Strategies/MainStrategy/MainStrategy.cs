@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy
 {
+	using System.Linq;
 	using AutoDecisions;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
@@ -9,7 +10,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -49,34 +49,14 @@
 		private bool wasMainStrategyExecutedBefore;
 		private bool isViaBroker;
 		private int companySeniorityDays;
+		private decimal loanOfferReApprovalRemainingAmount;
+		private decimal loanOfferReApprovalRemainingAmountOld;
 
 		private AutoDecisionResponse autoDecisionResponse;
 		private MedalMultiplier medalType;
-		private decimal loanOfferApr;
-		private int loanOfferRepaymentPeriod;
-		private decimal loanOfferInterestRate;
-		private int loanOfferUseSetupFee;
-		private int loanOfferLoanTypeId;
-		private int loanOfferIsLoanTypeSelectionAllowed;
-		private int loanOfferDiscountPlanId;
-		private bool useBrokerSetupFee;
-		private int manualSetupFeeAmount;
-		private decimal manualSetupFeePercent;
-		private int loanSourceId;
-		private int isCustomerRepaymentPeriodSelectionAllowed;
 		private decimal loanOfferReApprovalSum;
-		private decimal loanOfferReApprovalFullAmount;
-		private decimal loanOfferReApprovalRemainingAmount;
-		private decimal loanOfferReApprovalFullAmountOld;
-		private decimal loanOfferReApprovalRemainingAmountOld;
 		private int offeredCreditLine;
-		private double marketplaceSeniorityDays;
 		private int modelLoanOffer;
-		private double totalSumOfOrders1YTotal;
-		private double totalSumOfOrders1YTotalForRejection;
-		private double totalSumOfOrders3MTotalForRejection;
-		private double yodlee1YForRejection;
-		private double yodlee3MForRejection;
 
 		private List<string> consumerCaisDetailWorstStatuses;
 		
@@ -119,9 +99,9 @@
 			wasMainStrategyExecutedBefore = dataGatherer.LastStartedMainStrategyEndTime.HasValue;
 
 			// Trigger other strategies
-			var additionalStrategiesCaller = new AdditionalStrategiesCaller(customerId, newCreditLineOption,
-				wasMainStrategyExecutedBefore, dataGatherer.TypeOfBusiness, dataGatherer.BwaBusinessCheck, dataGatherer.AppBankAccountType,
-				dataGatherer.AppAccountNumber, dataGatherer.AppSortCode, DB, Log);
+			var additionalStrategiesCaller = new AdditionalStrategiesCaller(customerId, wasMainStrategyExecutedBefore,
+				dataGatherer.TypeOfBusiness, dataGatherer.BwaBusinessCheck, dataGatherer.AppBankAccountType,
+			    dataGatherer.AppAccountNumber, dataGatherer.AppSortCode, DB, Log);
 			consumerCaisDetailWorstStatuses = additionalStrategiesCaller.Call();
 
 			// Gather Raw Data
@@ -138,13 +118,13 @@
 			isFirstLoan = dataGatherer.NumOfLoans == 0;
 			isViaBroker = dataGatherer.BrokerId.HasValue;
 			companySeniorityDays = dataGatherer.CompanyIncorporationDate.HasValue ? (DateTime.UtcNow - dataGatherer.CompanyIncorporationDate.Value).Days : 0;
+			loanOfferReApprovalRemainingAmount = dataGatherer.LoanOfferReApprovalRemainingAmount;
+			loanOfferReApprovalRemainingAmountOld = dataGatherer.LoanOfferReApprovalRemainingAmountOld;
 
 			// TODO: Refactor all Execute() below this line
 			SetAutoDecisionAvailability();
 
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
-
-			GetLastCashRequestData();
 
 			AutoDecisionRejectionResponse autoDecisionRejectionResponse = ProcessRejections();
 
@@ -324,18 +304,18 @@
 					dataGatherer.MinExperianConsumerScore,
 					dataGatherer.MaxExperianConsumerScore,
 					dataGatherer.MaxCompanyScore,
-					totalSumOfOrders1YTotalForRejection,
-					totalSumOfOrders3MTotalForRejection,
-					yodlee1YForRejection,
-					yodlee3MForRejection,
+					dataGatherer.TotalSumOfOrders1YTotalForRejection,
+					dataGatherer.TotalSumOfOrders3MTotalForRejection,
+					dataGatherer.Yodlee1YForRejection,
+					dataGatherer.Yodlee3MForRejection,
 					offeredCreditLine,
-					marketplaceSeniorityDays,
+					dataGatherer.MarketplaceSeniorityDays,
 					enableAutomaticReRejection,
 					enableAutomaticRejection,
 					enableAutomaticReApproval,
 					enableAutomaticApproval,
-					loanOfferReApprovalFullAmountOld,
-					loanOfferReApprovalFullAmount,
+					dataGatherer.LoanOfferReApprovalFullAmountOld,
+					dataGatherer.LoanOfferReApprovalFullAmount,
 					loanOfferReApprovalRemainingAmount,
 					loanOfferReApprovalRemainingAmountOld,
 					dataGatherer.CustomerStatusIsEnabled,
@@ -371,11 +351,11 @@
 				customerId,
 				dataGatherer.MaxExperianConsumerScore,
 				dataGatherer.MaxCompanyScore,
-				totalSumOfOrders1YTotalForRejection,
-				totalSumOfOrders3MTotalForRejection,
-				yodlee1YForRejection,
-				yodlee3MForRejection,
-				marketplaceSeniorityDays,
+				dataGatherer.TotalSumOfOrders1YTotalForRejection,
+				dataGatherer.TotalSumOfOrders3MTotalForRejection,
+				dataGatherer.Yodlee1YForRejection,
+				dataGatherer.Yodlee3MForRejection,
+				dataGatherer.MarketplaceSeniorityDays,
 				enableAutomaticReRejection,
 				enableAutomaticRejection,
 				dataGatherer.CustomerStatusIsEnabled,
@@ -424,9 +404,9 @@
 			}
 
 			loanOfferReApprovalSum = new[] {
-				loanOfferReApprovalFullAmount,
+				dataGatherer.LoanOfferReApprovalFullAmount,
 				loanOfferReApprovalRemainingAmount,
-				loanOfferReApprovalFullAmountOld,
+				dataGatherer.LoanOfferReApprovalFullAmountOld,
 				loanOfferReApprovalRemainingAmountOld
 			}.Max();
 
@@ -503,10 +483,10 @@
 				new QueryParameter("MedalType", medalType.ToString()),
 				new QueryParameter("ScorePoints", scoringResult),
 				new QueryParameter("ExpirianRating", dataGatherer.ExperianConsumerScore),
-				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
+				new QueryParameter("AnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
 				new QueryParameter("InterestRate", interestAccordingToPast == -1 ? loanInterestBase : interestAccordingToPast),
-				new QueryParameter("ManualSetupFeeAmount", manualSetupFeeAmount),
-				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent),
+				new QueryParameter("ManualSetupFeeAmount", dataGatherer.ManualSetupFeeAmount),
+				new QueryParameter("ManualSetupFeePercent", dataGatherer.ManualSetupFeePercent),
 				new QueryParameter("RepaymentPeriod", repaymentPeriod),
 				new QueryParameter("Now", DateTime.UtcNow)
 			);
@@ -539,8 +519,8 @@
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
-				{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
+				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
+				{"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
 				{
 					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
 						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
@@ -568,19 +548,19 @@
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("UnderwriterDecision", autoDecisionResponse.UserStatus),
 				new QueryParameter("ManagerApprovedSum", loanOfferReApprovalSum),
-				new QueryParameter("APR", loanOfferApr),
-				new QueryParameter("RepaymentPeriod", loanOfferRepaymentPeriod),
-				new QueryParameter("InterestRate", loanOfferInterestRate),
-				new QueryParameter("UseSetupFee", loanOfferUseSetupFee),
+				new QueryParameter("APR", dataGatherer.LoanOfferApr),
+				new QueryParameter("RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod),
+				new QueryParameter("InterestRate", dataGatherer.LoanOfferInterestRate),
+				new QueryParameter("UseSetupFee", dataGatherer.LoanOfferUseSetupFee),
 				new QueryParameter("EmailSendingBanned", autoDecisionResponse.LoanOfferEmailSendingBannedNew),
-				new QueryParameter("LoanTypeId", loanOfferLoanTypeId),
+				new QueryParameter("LoanTypeId", dataGatherer.LoanOfferLoanTypeId),
 				new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOfferUnderwriterComment),
-				new QueryParameter("IsLoanTypeSelectionAllowed", loanOfferIsLoanTypeSelectionAllowed),
-				new QueryParameter("DiscountPlanId", loanOfferDiscountPlanId),
+				new QueryParameter("IsLoanTypeSelectionAllowed", dataGatherer.LoanOfferIsLoanTypeSelectionAllowed),
+				new QueryParameter("DiscountPlanId", dataGatherer.LoanOfferDiscountPlanId),
 				new QueryParameter("ExperianRating", dataGatherer.ExperianConsumerScore),
-				new QueryParameter("LoanSourceId", loanSourceId),
-				new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed),
-				new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee),
+				new QueryParameter("LoanSourceId", dataGatherer.LoanSourceId),
+				new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", dataGatherer.IsCustomerRepaymentPeriodSelectionAllowed),
+				new QueryParameter("UseBrokerSetupFee", dataGatherer.UseBrokerSetupFee),
 				new QueryParameter("Now", DateTime.UtcNow)
 			);
 		}
@@ -598,7 +578,7 @@
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
+				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 				{"InterestRate", interestRate.ToString(CultureInfo.InvariantCulture)},
 				{
 					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
@@ -640,7 +620,7 @@
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
+				{"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
 				{
 					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
 						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
@@ -677,107 +657,30 @@
 			);
 		}
 
-		private void GetLastCashRequestData()
-		{
-			var lastOfferResults = DB.GetFirst(
-				"GetLastOfferForAutomatedDecision",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Now", DateTime.UtcNow)
-			);
-
-			if (!lastOfferResults.IsEmpty)
-			{
-				loanOfferReApprovalFullAmount = lastOfferResults["ReApprovalFullAmountNew"];
-				loanOfferReApprovalRemainingAmount = lastOfferResults["ReApprovalRemainingAmount"];
-				loanOfferReApprovalFullAmountOld = lastOfferResults["ReApprovalFullAmountOld"];
-				loanOfferReApprovalRemainingAmountOld = lastOfferResults["ReApprovalRemainingAmountOld"];
-				loanOfferApr = lastOfferResults["APR"];
-				loanOfferRepaymentPeriod = lastOfferResults["RepaymentPeriod"];
-				loanOfferInterestRate = lastOfferResults["InterestRate"];
-				loanOfferUseSetupFee = lastOfferResults["UseSetupFee"];
-				loanOfferLoanTypeId = lastOfferResults["LoanTypeId"];
-				loanOfferIsLoanTypeSelectionAllowed = lastOfferResults["IsLoanTypeSelectionAllowed"];
-				loanOfferDiscountPlanId = lastOfferResults["DiscountPlanId"];
-				loanSourceId = lastOfferResults["LoanSourceID"];
-				isCustomerRepaymentPeriodSelectionAllowed = lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"];
-				useBrokerSetupFee = lastOfferResults["UseBrokerSetupFee"];
-				manualSetupFeeAmount = lastOfferResults["ManualSetupFeeAmount"];
-				manualSetupFeePercent = lastOfferResults["ManualSetupFeePercent"];
-			}
-		}
-
 		private ScoreMedalOffer CalculateScoreAndMedal()
 		{
-			Log.Info("Starting to calculate score and medal");
-
-			var scoreCardResults = DB.GetFirst(
-				"GetScoreCardData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Today", DateTime.Today)
-			);
-
-			string maritalStatusStr = scoreCardResults["MaritalStatus"];
-			MaritalStatus maritalStatus;
-
-			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatus))
-			{
-				Log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
-				maritalStatus = MaritalStatus.Other;
-			}
-
-			int modelMaxFeedback = scoreCardResults["MaxFeedback", dataGatherer.DefaultFeedbackValue];
-
-			int modelMPsNumber = scoreCardResults["MPsNumber"];
-			int modelEzbobSeniority = scoreCardResults["EZBOBSeniority"];
-			int modelOnTimeLoans = scoreCardResults["OnTimeLoans"];
-			int modelLatePayments = scoreCardResults["LatePayments"];
-			int modelEarlyPayments = scoreCardResults["EarlyPayments"];
-
-			bool firstRepaymentDatePassed = false;
-
-			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
-			if (modelFirstRepaymentDate != default(DateTime))
-			{
-				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
-			}
-
-			Log.Info("Getting turnovers and seniority");
-
-			// TODO: Should be out of this method
-			MpsTotals totals = strategyHelper.GetMpsTotals(customerId);
-			totalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
-			totalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
-			totalSumOfOrders3MTotalForRejection = totals.TotalSumOfOrders3MTotalForRejection;
-			yodlee1YForRejection = totals.Yodlee1YForRejection;
-			yodlee3MForRejection = totals.Yodlee3MForRejection;
-			marketplaceSeniorityDays = totals.MarketplaceSeniorityDays;
-			decimal totalSumOfOrdersForLoanOffer = totals.TotalSumOfOrdersForLoanOffer;
-			decimal marketplaceSeniorityYears = (decimal)totals.MarketplaceSeniorityDays / 365; // It is done this way to fit to the excel
-			decimal ezbobSeniorityMonths = (decimal)modelEzbobSeniority * 12 / 365; // It is done this way to fit to the excel
-
 			Log.Info("Calculating score & medal");
 
 			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(
-				totalSumOfOrdersForLoanOffer,
+				dataGatherer.TotalSumOfOrdersForLoanOffer,
 				dataGatherer.MinExperianConsumerScore,
-				marketplaceSeniorityYears,
-				modelMaxFeedback,
-				maritalStatus,
+				dataGatherer.MarketplaceSeniorityYears,
+				dataGatherer.ModelMaxFeedback,
+				dataGatherer.MaritalStatus,
 				dataGatherer.AppGender == "M" ? Gender.M : Gender.F,
-				modelMPsNumber,
-				firstRepaymentDatePassed,
-				ezbobSeniorityMonths,
-				modelOnTimeLoans,
-				modelLatePayments,
-				modelEarlyPayments
+				dataGatherer.NumOfEbayAmazonPayPalMps,
+				dataGatherer.FirstRepaymentDatePassed,
+				dataGatherer.EzbobSeniorityMonths,
+				dataGatherer.ModelOnTimeLoans,
+				dataGatherer.ModelLatePayments,
+				dataGatherer.ModelEarlyPayments
 			);
 
 			modelLoanOffer = scoringResult.MaxOffer;
 
 			medalType = scoringResult.Medal;
 
+			// Save online medal
 			DB.ExecuteNonQuery(
 				"CustomerScoringResult_Insert",
 				CommandSpecies.StoredProcedure,
@@ -791,21 +694,22 @@
 				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
 			);
 
+			// Update CustomerAnalyticsLocalData
 			DB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateLocalData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerId),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
-				new QueryParameter("AnnualTurnover", totalSumOfOrders1YTotal),
-				new QueryParameter("TotalSumOfOrdersForLoanOffer", totalSumOfOrdersForLoanOffer),
-				new QueryParameter("MarketplaceSeniorityYears", marketplaceSeniorityYears),
-				new QueryParameter("MaxFeedback", modelMaxFeedback),
-				new QueryParameter("MPsNumber", modelMPsNumber),
-				new QueryParameter("FirstRepaymentDatePassed", firstRepaymentDatePassed),
-				new QueryParameter("EzbobSeniorityMonths", ezbobSeniorityMonths),
-				new QueryParameter("OnTimeLoans", modelOnTimeLoans),
-				new QueryParameter("LatePayments", modelLatePayments),
-				new QueryParameter("EarlyPayments", modelEarlyPayments)
+				new QueryParameter("AnnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
+				new QueryParameter("TotalSumOfOrdersForLoanOffer", dataGatherer.TotalSumOfOrdersForLoanOffer),
+				new QueryParameter("MarketplaceSeniorityYears", dataGatherer.MarketplaceSeniorityYears),
+				new QueryParameter("MaxFeedback", dataGatherer.ModelMaxFeedback),
+				new QueryParameter("MPsNumber", dataGatherer.NumOfEbayAmazonPayPalMps),
+				new QueryParameter("FirstRepaymentDatePassed", dataGatherer.FirstRepaymentDatePassed),
+				new QueryParameter("EzbobSeniorityMonths", dataGatherer.EzbobSeniorityMonths),
+				new QueryParameter("OnTimeLoans", dataGatherer.ModelOnTimeLoans),
+				new QueryParameter("LatePayments", dataGatherer.ModelLatePayments),
+				new QueryParameter("EarlyPayments", dataGatherer.ModelEarlyPayments)
 			);
 			return scoringResult;
 		}
@@ -884,9 +788,9 @@
 				{"SystemDecision", "Reject"},
 				{"ExperianConsumerScore", dataGatherer.ExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianConsumerScore", dataGatherer.LowCreditScore.ToString(CultureInfo.InvariantCulture)},
-				{"TotalAnnualTurnover", totalSumOfOrders1YTotalForRejection.ToString("C2")},
+				{"TotalAnnualTurnover", dataGatherer.TotalSumOfOrders1YTotalForRejection.ToString("C2")},
 				{"CVTotalAnnualTurnover", dataGatherer.LowTotalAnnualTurnover.ToString("C2")},
-				{"Total3MTurnover", totalSumOfOrders3MTotalForRejection.ToString("C2")},
+				{"Total3MTurnover", dataGatherer.TotalSumOfOrders3MTotalForRejection.ToString("C2")},
 				{"CVTotal3MTurnover", dataGatherer.LowTotalThreeMonthTurnover.ToString("C2")},
 				{"PayPalStoresNum", rejection.PayPalNumberOfStores.ToString(CultureInfo.InvariantCulture)},
 				{"PayPalAnnualTurnover", rejection.PayPalTotalSumOfOrders1Y.ToString("C2")},
@@ -896,7 +800,7 @@
 				{"CVExperianConsumerScoreDefAcc", dataGatherer.RejectDefaultsCreditScore.ToString(CultureInfo.InvariantCulture)},
 				{"ExperianDefAccNum", rejection.NumOfDefaultAccounts.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianDefAccNum", dataGatherer.RejectDefaultsAccountsNum.ToString(CultureInfo.InvariantCulture)},
-				{"Seniority", marketplaceSeniorityDays.ToString(CultureInfo.InvariantCulture)},
+				{"Seniority", dataGatherer.MarketplaceSeniorityDays.ToString(CultureInfo.InvariantCulture)},
 				{"SeniorityThreshold", dataGatherer.RejectMinimalSeniority.ToString(CultureInfo.InvariantCulture) + additionalValues}
 			});
 		}

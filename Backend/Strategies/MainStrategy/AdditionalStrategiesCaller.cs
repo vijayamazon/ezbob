@@ -10,7 +10,6 @@
 
 	public class AdditionalStrategiesCaller
 	{
-		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly int customerId;
 		private readonly AConnection db;
 		private readonly ASafeLog log;
@@ -22,7 +21,7 @@
 		private readonly string appSortCode;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
-		public AdditionalStrategiesCaller(int customerId, NewCreditLineOption newCreditLineOption,
+		public AdditionalStrategiesCaller(int customerId,
 		                                  bool wasMainStrategyExecutedBefore, string typeOfBusiness, string bwaBusinessCheck,
 		                                  string appBankAccountType, string appAccountNumber, string appSortCode,
 		                                  AConnection db, ASafeLog log)
@@ -30,7 +29,6 @@
 			this.customerId = customerId;
 			this.db = db;
 			this.log = log;
-			this.newCreditLineOption = newCreditLineOption;
 			this.wasMainStrategyExecutedBefore = wasMainStrategyExecutedBefore;
 			this.typeOfBusiness = typeOfBusiness;
 			this.bwaBusinessCheck = bwaBusinessCheck;
