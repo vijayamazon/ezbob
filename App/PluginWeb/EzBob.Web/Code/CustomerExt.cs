@@ -3,13 +3,15 @@
 	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Logger;
 	using PostcodeAnywhere;
+	using StructureMap;
 
 	public static class CustomerExt {
 		#region method AddAlibabaDefaultBankAccount
 
-		public static bool AddAlibabaDefaultBankAccount(this Customer customer, ISortCodeChecker sortCodeChecker = null) {
+		public static void AddAlibabaDefaultBankAccount(this Customer customer, ISortCodeChecker sortCodeChecker = null) {
 			const string bankAccount = "00000000";
 			const string sortCode = "000000";
 			const BankAccountType accountType = BankAccountType.Personal;
@@ -21,11 +23,13 @@
 					accountType
 				);
 
-				return false;
+				return;
 			} // if
 
-			if (customer.IsAlibaba)
-				return customer.AddBankAccount("00000000", "000000", BankAccountType.Personal) > 0;
+			if (customer.IsAlibaba) {
+				customer.AddBankAccount("00000000", "000000", BankAccountType.Personal);
+				return;
+			} // if
 
 			ms_oLog.Debug(
 				"Not adding an Alibaba default bank account (#{1}, code {2}, type {3}) to customer {0} because this is not an Alibaba customer.",
@@ -34,8 +38,6 @@
 				sortCode,
 				accountType
 			);
-
-			return false;
 		} // AddAlibabaDefaultBankAccount
 
 		#endregion method AddAlibabaDefaultBankAccount
@@ -92,9 +94,44 @@
 				);
 			} // try
 
+			ms_oLog.Debug(
+				"Adding a new bank account (#{1}, code {2}, type {3}) to customer {0}.",
+				customer.Stringify(),
+				bankAccount,
+				sortCode,
+				accountType
+			);
+
 			customer.BankAccounts.Add(card);
 
+			ms_oLog.Debug(
+				"Setting a new bank account (#{1}, code {2}, type {3}) as a default one for customer {0}.",
+				customer.Stringify(),
+				bankAccount,
+				sortCode,
+				accountType
+			);
+
 			customer.SetDefaultCard(card);
+
+			ms_oLog.Debug(
+				"Saving to DB a new bank account (#{1}, code {2}, type {3}) for customer {0}.",
+				customer.Stringify(),
+				bankAccount,
+				sortCode,
+				accountType
+			);
+
+			ObjectFactory.GetInstance<CustomerRepository>().SaveOrUpdate(customer);
+
+			ms_oLog.Debug(
+				"A new bank account (#{1}, code {2}, type {3}) has been added to customer {0}. Account id: {4}",
+				customer.Stringify(),
+				bankAccount,
+				sortCode,
+				accountType,
+				card.Id
+			);
 
 			return card.Id;
 		} // AddBankAccount
