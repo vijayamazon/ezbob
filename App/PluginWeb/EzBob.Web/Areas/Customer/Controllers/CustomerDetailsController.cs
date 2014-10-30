@@ -27,6 +27,7 @@
 	using NHibernate;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 
 	#endregion using
 
@@ -875,8 +876,8 @@
 				m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
 				ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
-				if (customer.IsAlibaba)
-					customer.AddBankAccount("00000000", "000000", BankAccountType.Personal);
+				if (customer.AddAlibabaDefaultBankAccount())
+					ObjectFactory.GetInstance<CustomerRepository>().SaveOrUpdate(customer);
 			}).Execute();
 
 			// Updates broker lead state if needed and sends "Email Under Review".
@@ -1155,7 +1156,7 @@
 
 		#endregion method DetailsToKey
 
-		#region private properties
+		#region private fields
 
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly IPersonalInfoHistoryRepository m_oPersonalInfoHistoryRepository;
@@ -1170,7 +1171,7 @@
 		private readonly CustomerAddressRepository customerAddressRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CustomerDetailsController));
 
-		#endregion private properties
+		#endregion private fields
 
 		#endregion private
 	} // class CustomerDetailsController
