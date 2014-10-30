@@ -5,7 +5,7 @@
 	using Html.Tags;
 	using OfficeOpenXml;
 
-	class BaseReportSender : SafeLog {
+	public class BaseReportSender : SafeLog {
 		#region public
 
 		#region constructor

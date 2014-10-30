@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Tools {
+﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;

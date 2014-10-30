@@ -60,6 +60,9 @@
 			Init(row);
 		} // constructor
 
+		public Report(AConnection oDB, ReportType nReportTypeName) : this(oDB, nReportTypeName.ToString()) {
+		} // constructor
+
 		public Report(AConnection oDB, string sReportTypeName) : this() {
 			bool bFound = false;
 

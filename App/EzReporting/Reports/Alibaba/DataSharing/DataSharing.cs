@@ -6,7 +6,7 @@
 	using JetBrains.Annotations;
 	using OfficeOpenXml;
 
-	public class DataSharing {
+	public class DataSharing : IAlibaba {
 		#region public
 
 		#region constructor
