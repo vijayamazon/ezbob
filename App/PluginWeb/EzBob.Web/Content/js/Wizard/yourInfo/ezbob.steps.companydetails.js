@@ -192,7 +192,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 	    // if (!this.curOobts) this.$el.find('.after-business-type *').disable();
 	    if (this.model.get('IsAlibaba')) {
-	        this.$el.find('.NonAlibabaTypeOfBusiness').hide();
+	        this.$el.find('.NonAlibabaTypeOfBusiness').remove();
 	    }
 
 	    this.readyToProceed = true;
