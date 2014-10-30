@@ -668,15 +668,15 @@ namespace TestApp {
 		#region method TestDataSharing
 
 		private static void TestDataSharing(AConnection oDB, ASafeLog oLog) {
-			DataSharing ds = new DataSharing(true, oDB, oLog);
+			DataSharing ds = new DataSharing(false, oDB, oLog);
 			ds.Generate();
 
-			ds.Report.SaveAs(new FileInfo(@"c:\temp\data_sharing_test.xlsx"));
+			ds.Report.SaveAs(new FileInfo(@".\data\data_sharing_test.xlsx"));
 
 			Funnel f = new Funnel(null, oDB, oLog);
 			f.Generate();
 
-			f.Report.SaveAs(new FileInfo(@"c:\temp\funnel_test.xlsx"));
+			f.Report.SaveAs(new FileInfo(@".\data\funnel_test.xlsx"));
 		} // TestDataSharing
 
 		#endregion method TestDataSharing

@@ -82,6 +82,7 @@
     <Compile Include="Alibaba\Funnel\Funnel.cs" />
     <Compile Include="Alibaba\Funnel\RejectReasonRow.cs" />
     <Compile Include="Alibaba\Funnel\StrInt.cs" />
+    <Compile Include="Alibaba\IAlibaba.cs" />
     <Compile Include="ATag.cs" />
     <Compile Include="attributes.cs" />
     <Compile Include="BaseReportHandler\brh.cs" />

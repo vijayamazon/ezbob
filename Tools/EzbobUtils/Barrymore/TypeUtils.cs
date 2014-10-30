@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+	using Ezbob.Logger;
 
 	public static class TypeUtils {
 		#region static constructor
@@ -48,7 +49,7 @@
 
 		#region FindType
 
-		public static Type FindType(string sName) {
+		public static Type FindType(string sName, ASafeLog oLog = null) {
 			if (string.IsNullOrWhiteSpace(sName))
 				return null;
 
@@ -57,7 +58,7 @@
 			bool bHasDot = sName.IndexOf('.') > 0;
 
 			foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies()) {
-				Type t = PureFindType(sName, a, bHasDot);
+				Type t = PureFindType(sName, a, bHasDot, oLog);
 
 				if (t != null)
 					return t;
@@ -66,7 +67,7 @@
 			return null;
 		} // FindType
 
-		public static Type FindType(string sName, Assembly asm) {
+		public static Type FindType(string sName, Assembly asm, ASafeLog oLog = null) {
 			if (string.IsNullOrWhiteSpace(sName))
 				return null;
 
@@ -75,15 +76,41 @@
 			bool bHasDot = sName.IndexOf('.') > 0;
 
 			if (asm != null)
-				return PureFindType(sName, asm, bHasDot);
+				return PureFindType(sName, asm, bHasDot, oLog);
 
 			return
-				PureFindType(sName, Assembly.GetCallingAssembly(), bHasDot) ??
-				PureFindType(sName, Assembly.GetExecutingAssembly(), bHasDot);
+				PureFindType(sName, Assembly.GetCallingAssembly(), bHasDot, oLog) ??
+				PureFindType(sName, Assembly.GetExecutingAssembly(), bHasDot, oLog);
 		} // FindType
 
-		private static Type PureFindType(string sName, Assembly asm, bool bHasDot) {
-			foreach (Type t in asm.GetTypes()) {
+		private static Type PureFindType(string sName, Assembly asm, bool bHasDot, ASafeLog oLog) {
+			Type[] aryTypes;
+
+			oLog = oLog ?? new SafeLog();
+
+			try {
+				aryTypes = asm.GetTypes();
+			}
+			catch (ReflectionTypeLoadException rtle) {
+				oLog.Alert(rtle, "Failed to retrieve types list of assembly '{0}' while looking for '{1}'.", asm.FullName, sName);
+
+				if ((rtle.LoaderExceptions != null) && (rtle.LoaderExceptions.Length > 0)) {
+					oLog.Debug("ReflectionTypeLoadException.LoaderExceptions - begin");
+
+					for (int i = 0; i < rtle.LoaderExceptions.Length; i++)
+						oLog.Debug(rtle.LoaderExceptions[i], "Inner exception #{0}.", i);
+
+					oLog.Debug("ReflectionTypeLoadException.LoaderExceptions - end.");
+				} // if
+
+				return null;
+			}
+			catch (Exception e) {
+				oLog.Alert(e, "Failed to retrieve types list of assembly '{0}' while looking for '{1}'.", asm.FullName, sName);
+				return null;
+			} // try
+
+			foreach (Type t in aryTypes) {
 				if (bHasDot) {
 					if ((t.AssemblyQualifiedName ?? string.Empty).StartsWith(sName))
 						return t;

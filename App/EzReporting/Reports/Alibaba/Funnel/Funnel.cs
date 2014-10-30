@@ -6,7 +6,7 @@
 	using JetBrains.Annotations;
 	using OfficeOpenXml;
 
-	public class Funnel {
+	public class Funnel : IAlibaba {
 		#region public
 
 		#region constructor
