@@ -622,10 +622,7 @@
 		{
 			int underwriterId = _context.User.Id;
 
-			Customer customer = _customerRepository.Get(customerId);
-
-			if (customer.AddAlibabaDefaultBankAccount())
-				_customerRepository.SaveOrUpdate(customer);
+			_customerRepository.Get(customerId).AddAlibabaDefaultBankAccount();
 
 			var oArgs = new FinishWizardArgs { CustomerID = customerId, };
 

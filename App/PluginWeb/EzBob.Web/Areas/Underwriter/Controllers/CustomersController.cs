@@ -339,8 +339,7 @@
 				case CreditResultStatus.Approved:
 				if (!customer.WizardStep.TheLastOne) {
 					try {
-						if (customer.AddAlibabaDefaultBankAccount())
-							_customers.SaveOrUpdate(customer);
+						customer.AddAlibabaDefaultBankAccount();
 
 						var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(CurrentValues.Instance.FinishWizardForApproved);
 						oArgs.CustomerID = customer.Id;
