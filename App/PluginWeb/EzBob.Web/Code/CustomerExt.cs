@@ -7,10 +7,43 @@
 	using PostcodeAnywhere;
 
 	public static class CustomerExt {
+		#region method AddAlibabaDefaultBankAccount
+
+		public static bool AddAlibabaDefaultBankAccount(this Customer customer, ISortCodeChecker sortCodeChecker = null) {
+			const string bankAccount = "00000000";
+			const string sortCode = "000000";
+			const BankAccountType accountType = BankAccountType.Personal;
+
+			if (customer == null) {
+				ms_oLog.Debug("Customer not specified for adding an Alibaba default bank account (#{0}, code {1}, type {2}).",
+					bankAccount,
+					sortCode,
+					accountType
+				);
+
+				return false;
+			} // if
+
+			if (customer.IsAlibaba)
+				return customer.AddBankAccount("00000000", "000000", BankAccountType.Personal) > 0;
+
+			ms_oLog.Debug(
+				"Not adding an Alibaba default bank account (#{1}, code {2}, type {3}) to customer {0} because this is not an Alibaba customer.",
+				customer.Stringify(),
+				bankAccount,
+				sortCode,
+				accountType
+			);
+
+			return false;
+		} // AddAlibabaDefaultBankAccount
+
+		#endregion method AddAlibabaDefaultBankAccount
+
 		#region method AddBankAccount
 
 		public static int AddBankAccount(this Customer customer, string bankAccount, string sortCode, BankAccountType accountType, ISortCodeChecker sortCodeChecker = null) {
-			if (customer == null) { // should never happen
+			if (customer == null) { // can happen for Alibaba call only
 				ms_oLog.Debug("Customer not specified for adding an account (#{0}, code {1}, type {2}).",
 					bankAccount,
 					sortCode,
