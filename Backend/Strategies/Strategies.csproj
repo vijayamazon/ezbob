@@ -152,6 +152,7 @@
     <Compile Include="LimitedMedalCalculation\FreeCashFlowMedalParameter.cs" />
     <Compile Include="LimitedMedalCalculation\MedalParameter.cs" />
     <Compile Include="LimitedMedalCalculation\NewMedalScoreCalculator2.cs" />
+    <Compile Include="Reports\Alibaba.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="Tools\UpdateGoogleAnalytics.cs" />
     <Compile Include="UserManagement\AddCciHistory.cs" />
@@ -323,6 +324,10 @@
     <Compile Include="VatReturn\UpdateLinkedHmrcPassword.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\EzReporting\Reports\Reports.csproj">
+      <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
+      <Name>Reports</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
       <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
       <Name>EzServiceConfigurationLoader</Name>
