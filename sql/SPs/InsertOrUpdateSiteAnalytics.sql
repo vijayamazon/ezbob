@@ -22,7 +22,7 @@ CREATE TYPE SiteAnalyticsList AS TABLE (
 	[Date] DATETIME NOT NULL,
 	CodeName NVARCHAR(300) NOT NULL,
 	Value INT NOT NULL,
-	Source NVARCHAR(300) NULL
+	Source NVARCHAR(MAX) NULL
 )
 GO
 
@@ -37,7 +37,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO SiteAnalyticsCodes (Name, Description)
-	SELECT
+	SELECT DISTINCT
 		CodeName,
 		'@' + CodeName
 	FROM
@@ -49,14 +49,18 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	UPDATE SiteAnalytics SET
-		SiteAnalyticsValue = l.Value,
-		Source = l.Source
+		SiteAnalyticsValue = l.Value
 	FROM
 		@lst l
 		INNER JOIN SiteAnalyticsCodes c ON l.CodeName = c.Name
 		INNER JOIN SiteAnalytics a
 			ON l.[Date] = a.[Date]
 			AND c.Id = a.SiteAnalyticsCode
+			AND (
+				(l.Source IS NULL AND a.Source IS NULL)
+				OR
+				l.Source = a.Source
+			)
 
 	------------------------------------------------------------------------------
 
@@ -72,6 +76,11 @@ BEGIN
 		LEFT JOIN SiteAnalytics a
 			ON l.[Date] = a.[Date]
 			AND c.Id = a.SiteAnalyticsCode
+			AND (
+				(l.Source IS NULL AND a.Source IS NULL)
+				OR
+				l.Source = a.Source
+			)
 	WHERE
 		a.Id IS NULL
 

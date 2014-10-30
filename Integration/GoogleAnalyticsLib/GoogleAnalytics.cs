@@ -363,8 +363,6 @@
 
 			Log.Debug("certs found {0}, first: {1}", cert.Count, cert[0].FriendlyName);
 
-			Log.Debug("strServiceAccEmailId = '{0}', strScope = '{1}'", strServiceAccEmailId, strScope);
-
 			var objClient = new AssertionFlowClient(objAuthServerDesc, cert[0]) { ServiceAccountId = strSrvAccEmailId, Scope = scopeUrl };
 
 			var objAuth = new OAuth2Authenticator<AssertionFlowClient>(objClient, AssertionFlowClient.GetState);
