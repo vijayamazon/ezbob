@@ -563,8 +563,16 @@
 		public JsonResult RunNewCreditLineNewMode2(int Id, int newCreditLineOption)
 		{
 			var customer = _customerRepository.Get(Id);
-			var underwriter = _users.GetUserByLogin(User.Identity.Name);
-			_crBuilder.ForceEvaluate(underwriter.Id, customer, (NewCreditLineOption)newCreditLineOption, false, true);
+			var typedNewCreditLineOption = (NewCreditLineOption) newCreditLineOption;
+			if (typedNewCreditLineOption == NewCreditLineOption.SkipEverything)
+			{
+				customer.CreditResult = CreditResultStatus.WaitingForDecision;
+			}
+			else
+			{
+				var underwriter = _users.GetUserByLogin(User.Identity.Name);
+				_crBuilder.ForceEvaluate(underwriter.Id, customer, typedNewCreditLineOption, true);
+			}
 			return Json(new { });
 		}
 
