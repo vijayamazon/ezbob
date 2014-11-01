@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Tasks {
+	using System;
 	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.Reports;
 	using Ezbob.Database;
@@ -23,7 +24,8 @@
 		#region method Execute
 
 		public override void Execute() {
-			new UpdateGoogleAnalytics(null, null, DB, Log).Execute();
+			DateTime oToday = DateTime.Today;
+			new UpdateGoogleAnalytics(oToday.AddDays(-2), oToday, DB, Log).Execute();
 			new Alibaba(null, false, DB, Log).Execute();
 		} // Execute
 
