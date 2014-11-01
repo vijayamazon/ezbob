@@ -1287,6 +1287,28 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oAdminClient.WriteToLog(m_aryArgs[1], string.Join(" ", m_aryArgs.Skip(2)));
 		} // Noop
 
+		[Activation]
+		private void UpdateGoogleAnalytics() {
+			if (m_aryArgs.Length < 2) {
+				m_oServiceClient.UpdateGoogleAnalytics(null, null);
+				return;
+			} // if
+
+			DateTime oFrom;
+			DateTime oTo;
+
+			if (
+				(m_aryArgs.Length != 3) ||
+				!DateTime.TryParse(m_aryArgs[1], out oFrom) ||
+				!DateTime.TryParse(m_aryArgs[2], out oTo)
+			) {
+				m_oLog.Msg("Usage: UpdateGoogleAnalytics [<backfill from date> <backfill to date>]");
+				return;
+			} // if
+
+			m_oServiceClient.UpdateGoogleAnalytics(oFrom, oTo);
+		} // UpdateGoogleAnalytics
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

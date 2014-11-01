@@ -74,6 +74,7 @@
     <Compile Include="GoogleDataItem.cs" />
     <Compile Include="GoogleReportDimensions.cs" />
     <Compile Include="GoogleReportMetrics.cs" />
+    <Compile Include="InsertOrUpdateSiteAnalytics.cs" />
     <Compile Include="PageID.cs" />
     <Compile Include="GoogleAnalytics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,6 +90,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>

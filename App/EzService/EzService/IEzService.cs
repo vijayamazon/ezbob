@@ -440,6 +440,9 @@
 		[OperationContract]
 		StringStringMapActionResult LoadCustomerLeadFieldNames();
 
+		[OperationContract]
+		ActionMetaData UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate);
+
 		#endregion other strategies
 
 		#region pricing model

@@ -215,7 +215,7 @@
 
 		#endregion method FetchByPage
 
-		#region method FetchByPage
+		#region method FetchBySource
 
 		public List<StatsModel> FetchBySource()
 		{
@@ -250,13 +250,13 @@
 
 				model.Add(new StatsModel
 					{
-						Code = DbConsts.SourceUsers,
+						CodeName = DbConsts.SourceUsers,
 						Source = source,
 						Value = nUsers
 					});
 				model.Add(new StatsModel
 					{
-						Code = DbConsts.SourceNewUsers,
+						CodeName = DbConsts.SourceNewUsers,
 						Source = source,
 						Value = nNewUsers
 					});
@@ -269,7 +269,56 @@
 			return model;
 		} // FetchByPage
 
-		#endregion method FetchByPage
+		#endregion method FetchBySource
+
+		#region method FetchByLandingPage
+
+		public List<StatsModel> FetchByLandingPage()
+		{
+			Log.Debug("Fetching by source started...");
+
+			var oFetcher = new GoogleDataFetcher(
+				m_oService,
+				m_oReportDate,
+				m_oReportDate,
+				new GoogleReportDimensions[] { GoogleReportDimensions.landingPagePath },
+				new GoogleReportMetrics[] { GoogleReportMetrics.users, GoogleReportMetrics.newUsers },
+				null,
+				Log
+			);
+			var model = new List<StatsModel>(); 
+			List<GoogleDataItem> oFetchResult = oFetcher.Fetch();
+
+			foreach (GoogleDataItem oItem in oFetchResult)
+			{
+				string landingPagePath = oItem[GoogleReportDimensions.landingPagePath];
+
+				int nUsers = oItem[GoogleReportMetrics.users];
+
+				int nNewUsers = oItem[GoogleReportMetrics.newUsers];
+
+				model.Add(new StatsModel
+					{
+						CodeName = DbConsts.LandingPageUsers,
+						Source = landingPagePath,
+						Value = nUsers
+					});
+				model.Add(new StatsModel
+					{
+						CodeName = DbConsts.LandingPageNewUsers,
+						Source = landingPagePath,
+						Value = nNewUsers
+					});
+
+				Log.Debug("landingPagePath: {0}, Users: {1}, new Users: {2}", landingPagePath, nUsers, nNewUsers);
+			} // for each item
+
+			Log.Debug("Fetching by source complete.");
+
+			return model;
+		} // FetchByPage
+
+		#endregion method FetchBySource
 
 		#region method GetPageID
 

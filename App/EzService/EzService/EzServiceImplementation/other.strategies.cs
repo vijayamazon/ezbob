@@ -199,5 +199,13 @@
 		} // LoadCustomerLeadFieldNames
 
 		#endregion method LoadCustomerLeadFieldNames
+
+		#region method UpdateGoogleAnalytics
+
+		public ActionMetaData UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate) {
+			return Execute<UpdateGoogleAnalytics>(null, null, oBackfillStartDate, oBackfillEndDate);
+		} // UpdateGoogleAnalytics
+
+		#endregion method UpdateGoogleAnalytics
 	} // class EzServiceImplementation
 } // namespace EzService

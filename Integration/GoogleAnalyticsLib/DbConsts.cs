@@ -17,8 +17,11 @@
 		public const string WorldWideNewUsers = "WorldWideNewUsers";
 		public const string WorldWideReturningUsers = "WorldWideReturningUsers";
 
-		public const string SourceNewUsers = "SourceUsers";
-		public const string SourceUsers = "SourceNewUsers";
+		public const string SourceNewUsers = "SourceNewUsers";
+		public const string SourceUsers = "SourceUsers";
+
+		public const string LandingPageNewUsers = "LandingPageNewUsers";
+		public const string LandingPageUsers = "LandingPageUsers";
 
 		public const string Page = "Page";
 

@@ -7,6 +7,7 @@
 		hostname,
 		pagePath,
 		sourceMedium,
+		landingPagePath
 	} // enum GoogleReportDimensions
 
 	#endregion enum GoogleReportDimensions
