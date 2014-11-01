@@ -9,6 +9,19 @@
 	using OfficeOpenXml;
 
 	public class CustomerData {
+		#region static constructor
+
+		static CustomerData() {
+			ms_oColumnTitles = new Dictionary<string, Dictionary<string, string>>();
+
+			ms_oColumnTitles["VatAccount"] = new Dictionary<string, string> {
+				{ "Linked", "Automatic upload" },
+				{ "Uploaded", "Sales call upload" },
+			};
+		} // static constructor
+
+		#endregion static constructor
+
 		#region public
 
 		public const string RowType = "RowType";
@@ -105,7 +118,11 @@
 				string sSectionName = pair.Key;
 				Dictionary<string, ParsedValue> oSection = pair.Value;
 
-				ExcelWorksheet oSheet = oReport.FindOrCreateSheet(sSectionName, true, oSection.Keys.ToArray());
+				ExcelWorksheet oSheet = oReport.FindOrCreateSheet(
+					sSectionName,
+					true,
+					oSection.Keys.Select(sTitle => GetColumnDisplayName(sSectionName, sTitle)).ToArray()
+				);
 
 				int nCustomerRow = 2;
 
@@ -253,6 +270,21 @@
 		} // CashRequestData
 
 		#endregion class CashRequestData
+
+		private static readonly Dictionary<string, Dictionary<string, string>> ms_oColumnTitles;
+
+		#region method GetColumnDisplayName
+
+		private static string GetColumnDisplayName(string sSectionName, string sColumnTitle) {
+			if (!ms_oColumnTitles.ContainsKey(sSectionName))
+				return sColumnTitle;
+
+			var dic = ms_oColumnTitles[sSectionName];
+
+			return dic.ContainsKey(sColumnTitle) ? dic[sColumnTitle] : sColumnTitle;
+		} // GetColumnDisplayName
+
+		#endregion method GetColumnDisplayName
 
 		#endregion private
 	} // class CustomerData
