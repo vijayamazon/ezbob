@@ -34,7 +34,7 @@ BEGIN
 		WHERE
 			a.Date < @DateEnd
 			AND
-			a.Source LIKE '/new-lp-form%' -- TODO whatever the address is
+			a.Source LIKE '/alibaba%' -- TODO whatever the address is
 	), 0))
 
 	------------------------------------------------------------------------------
@@ -138,24 +138,6 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (55, 0, 1, 'Linked accounts', ISNULL((
-		SELECT
-			COUNT(DISTINCT CustomerID)
-		FROM
-			Customer c
-			INNER JOIN MP_CustomerMarketPlace m ON c.Id = m.CustomerId
-		WHERE
-			c.IsAlibaba = 1
-			AND
-			c.IsTest = 0
-			AND
-			m.Created < @DateEnd
-	), 0))
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
 	SELECT
 		c.Id AS CustomerID,
 		MIN(r.CreationDate) AS CrDate
@@ -176,7 +158,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (60, 1, 1, 'Complete online application', ISNULL((SELECT COUNT(*) FROM #cr), 0))
+	VALUES (60, 1, 1, 'Linked accounts and finished wizard', ISNULL((SELECT COUNT(*) FROM #cr), 0))
 
 	------------------------------------------------------------------------------
 
