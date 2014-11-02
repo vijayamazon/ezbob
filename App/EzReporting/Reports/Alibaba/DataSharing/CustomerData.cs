@@ -15,11 +15,13 @@
 		static CustomerData() {
 			TotalApprovedAmount = 0;
 
+			ms_oAllMarketplaces = new SortedSet<string>();
+
 			ms_oColumnTitles = new Dictionary<string, Dictionary<string, string>>();
 
-			ms_oColumnTitles["VatAccount"] = new Dictionary<string, string> {
-				{ "Linked", "Automatic upload" },
-				{ "Uploaded", "Sales call upload" },
+			ms_oColumnTitles["DataPoint"] = new Dictionary<string, string> {
+				{ "VatLinked", "Automatic VAT upload" },
+				{ "VatUploaded", "VAT Sales call upload" },
 			};
 
 			ms_oColumnNumberFormats = new Dictionary<string, Dictionary<string, string>>();
@@ -43,6 +45,8 @@
 			CustomerID = 0;
 			CustomerRefNum = string.Empty;
 			AlibabaID = string.Empty;
+
+			m_oMarketplaces = new SortedSet<string>();
 
 			for (int nIdx = 0; nIdx < sr.Count; nIdx++) {
 				string sFieldName = sr.GetName(nIdx);
@@ -127,6 +131,12 @@
 		public void SaveTo(ExcelPackage oReport) {
 			foreach (KeyValuePair<string, Dictionary<string, ParsedValue>> pair in Data) {
 				string sSectionName = pair.Key;
+
+				if (sSectionName == DataPoint) {
+					SaveDataPointSection(oReport);
+					continue;
+				} // if
+
 				Dictionary<string, ParsedValue> oSection = pair.Value;
 
 				Action<ExcelWorksheet> onCreate = (sSectionName == FinancialDetails) ? new Action<ExcelWorksheet>(ws => {
@@ -229,6 +239,20 @@
 
 		#endregion method AddApprovalPhaseTotal
 
+		#region method AddMarketplace
+
+		public void AddMarketplace(SafeReader sr) {
+			string sMpName = sr["Marketplace"];
+
+			if (string.IsNullOrWhiteSpace(sMpName))
+				return;
+
+			ms_oAllMarketplaces.Add(sMpName);
+			m_oMarketplaces.Add(sMpName);
+		} // AddMarketplace
+
+		#endregion method AddMarketplace
+
 		#endregion public
 
 		#region private
@@ -290,6 +314,48 @@
 
 		#endregion method SaveLoanServicingSection
 
+		#region method SaveDataPointSection
+
+		private void SaveDataPointSection(ExcelPackage oReport) {
+			if (!Data.ContainsKey(DataPoint))
+				return;
+
+			Dictionary<string, ParsedValue> oSection = Data[DataPoint];
+
+			var oTitles = new List<string>();
+
+			foreach (var pair in oSection)
+				oTitles.Add(GetColumnDisplayName(DataPoint, pair.Key));
+
+			foreach (var sMpName in ms_oAllMarketplaces)
+				oTitles.Add(GetColumnDisplayName(DataPoint, sMpName));
+
+			ExcelWorksheet oSheet = oReport.FindOrCreateSheet(
+				DataPoint,
+				true,
+				oTitles.ToArray()
+			);
+
+			int nMpRow = 2;
+
+			while (oSheet.Cells[nMpRow, 1].Value != null)
+				nMpRow++;
+
+			int nColumn = 1;
+
+			nColumn = oSheet.SetCellValue(nMpRow, nColumn, CustomerRefNum);
+			nColumn = oSheet.SetCellValue(nMpRow, nColumn, AlibabaID);
+
+			foreach (var sMpName in oTitles) {
+				if (oSection.ContainsKey(sMpName))
+					nColumn = oSheet.SetCellValue(nMpRow, nColumn, oSection[sMpName] ? "yes" : null);
+				else
+					nColumn = oSheet.SetCellValue(nMpRow, nColumn, m_oMarketplaces.Contains(sMpName) ? "yes" : null);
+			} // for each
+		} // SaveDataPointSection
+
+		#endregion method SaveDataPointSection
+
 		private const string CustomerIDField = "CustomerID";
 		private const string CustomerRefNumField = "CustomerRefnum";
 		private const string AlibabaIDField = "AlibabaID";
@@ -301,10 +367,14 @@
 		private const string ApprovedAmountField = "ApprovalPhaseFeedback_" + ApprovedAmount;
 		private const string FinancialDetails = "FinancialDetails";
 
-		public const string ApprovalPhaseFeedback = "ApprovalPhaseFeedback";
+		private const string ApprovalPhaseFeedback = "ApprovalPhaseFeedback";
+
+		private const string DataPoint = "DataPoint";
 
 		private readonly SortedDictionary<int, LoanData> m_oLoans; 
 		private readonly SortedDictionary<int, CashRequestData> m_oCashRequests; 
+
+		private readonly SortedSet<string> m_oMarketplaces;
 
 		#region class LoanData
 
@@ -365,6 +435,8 @@
 
 		#endregion class CashRequestData
 
+		private static readonly SortedSet<string> ms_oAllMarketplaces;
+ 
 		private static readonly Dictionary<string, Dictionary<string, string>> ms_oColumnNumberFormats;
 		private static readonly Dictionary<string, Dictionary<string, string>> ms_oColumnTitles;
 		private static decimal TotalApprovedAmount { get; set; }

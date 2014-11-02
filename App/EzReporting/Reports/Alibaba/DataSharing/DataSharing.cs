@@ -87,7 +87,7 @@
 				} // if
 
 				m_oData[nCustomerID].AddLoanData(sr);
-				} break;
+			} break;
 
 			case RptAlibabaDataSharing.RowTypes.Repayment: {
 				int nCustomerID = sr[CustomerData.LoanDataCustomerIDField];
@@ -98,7 +98,18 @@
 				} // if
 
 				m_oData[nCustomerID].AddRepayment(sr, m_oLateLoans);
-				} break;
+			} break;
+
+			case RptAlibabaDataSharing.RowTypes.Marketplace: {
+				int nCustomerID = sr[CustomerData.LoanDataCustomerIDField];
+
+				if (!m_oData.ContainsKey(nCustomerID)) {
+					m_oLog.Alert("Ignoring marketplace for customer {0} because customer not found.", nCustomerID);
+					break;
+				} // if
+
+				m_oData[nCustomerID].AddMarketplace(sr);
+			} break;
 
 			case RptAlibabaDataSharing.RowTypes.IsLate:
 				m_oLateLoans.Add(sr["LoanID"]);
@@ -124,6 +135,7 @@
 				Loan,
 				IsLate,
 				Repayment,
+				Marketplace,
 			};
 
 			public RptAlibabaDataSharing(bool bIncludeTestCustomers, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
