@@ -70,7 +70,16 @@ BEGIN
 			LEFT JOIN Loan ON CustomerId = IdCustomer
 		WHERE 
 			IdCustomer = @CustomerId AND 
-			CashRequests.Id = @PreviousFilledCashRequest
+			CashRequests.Id = @PreviousFilledCashRequest AND
+			CashRequests.CreationDate <= 
+			(
+				SELECT 
+					MIN(l1.date) 
+				FROM 
+					Loan l1
+				WHERE
+					l1.CustomerId = @CustomerId
+			)
 		GROUP BY
 			ManagerApprovedSum	
 		
