@@ -70,17 +70,7 @@ BEGIN
 			LEFT JOIN Loan ON CustomerId = IdCustomer
 		WHERE 
 			IdCustomer = @CustomerId AND 
-			CashRequests.Id = @PreviousFilledCashRequest AND
-			UnderwriterDecision = 'Approved' AND 
-			HasLoans = 1 AND 
-			CashRequests.CreationDate <= 
-			(
-				SELECT 
-					MIN(l1.date) 
-				FROM 
-					Loan l1
-			) AND 							
-			Loan.Status != 'Late' 
+			CashRequests.Id = @PreviousFilledCashRequest
 		GROUP BY
 			ManagerApprovedSum	
 		
