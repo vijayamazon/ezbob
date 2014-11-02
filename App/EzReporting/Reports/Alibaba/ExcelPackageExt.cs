@@ -1,4 +1,5 @@
 ﻿namespace Reports.Alibaba {
+	using System.Collections.Generic;
 	using OfficeOpenXml;
 
 	internal static class ExcelPackageExt {
@@ -7,13 +8,16 @@
 		public static ExcelWorksheet CreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, params string[] oColumnNames) {
 			var oSheet = oReport.Workbook.Worksheets.Add(sSheetName);
 
-			int nColumn = 1;
+			var lst = new List<object>();
 
-			if (bAddCustomerIDColumn)
-				nColumn = oSheet.SetCellTitle(1, 1, "Customer ID");
+			if (bAddCustomerIDColumn) {
+				lst.Add("Ezbob Customer ID");
+				lst.Add("Alibaba Customer ID");
+			} // if
 
-			foreach (var sName in oColumnNames)
-				nColumn = oSheet.SetCellTitle(1, nColumn, sName);
+			lst.AddRange(oColumnNames);
+
+			oSheet.SetRowTitles(1, lst.ToArray());
 
 			oSheet.View.ShowGridLines = false;
 

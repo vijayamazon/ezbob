@@ -153,6 +153,8 @@ BEGIN
 	SELECT
 		RowType    = 'MetaData',
 		CustomerID = c.Id,
+		AlibabaID  = c.AlibabaId,
+		CustomerRefnum = c.RefNumber,
 		--
 		--
 		CreditAccount_Email               = c.Name,
@@ -200,8 +202,6 @@ BEGIN
 		VatAccount_Uploaded = CASE WHEN ISNULL(hmrc_uploaded.Counter, 0) > 0 THEN 'yes' ELSE 'no' END,
 		--
 		--
-		ApprovalPhaseVerify_BuyerID       = c.AlibabaId,
-		ApprovalPhaseVerify_EzbobMemberID = c.RefNumber,
 		ApprovalPhaseVerify_Email         = c.Name,
 		ApprovalPhaseVerify_BusinessName  = b.CompanyName,
 		--
@@ -227,9 +227,10 @@ BEGIN
 		ApprovalPhaseVerify_Turnover              = c.OverallTurnOver,
 		--
 		--
-		ApprovalPhaseFeedback_IsApproved     = CASE c.CreditResult
-			WHEN 'Approved' THEN 'yes'
-			WHEN 'Late' THEN 'yes'
+		ApprovalPhaseFeedback_IsApproved     = CASE 
+			WHEN c.CreditResult IN ('Approved', 'Late') THEN 'yes'
+			WHEN c.CreditResult IN ('ApprovedPending', 'Escalated', 'WaitingForDecision') THEN 'pending'
+			WHEN c.CreditResult IS NULL THEN 'n/a'
 			ELSE 'no'
 		END,
 		ApprovalPhaseFeedback_ApprovedAmount = CASE c.CreditResult
@@ -243,7 +244,8 @@ BEGIN
 			ELSE NULL
 		END,
 		ApprovalPhaseFeedback_Remarks        = CASE
-			WHEN c.CreditResult IN ('ApprovedPending', 'Escalated', 'WaitingForDecision') THEN 'Pending approval'
+			WHEN c.CreditResult IN ('Escalated', 'WaitingForDecision') THEN 'Under review'
+			WHEN c.CreditResult = 'ApprovedPending' THEN 'Waiting for VAT or bank statements'
 			WHEN c.CreditResult IS NULL THEN 'Did not finish application process'
 			ELSE NULL
 		END,

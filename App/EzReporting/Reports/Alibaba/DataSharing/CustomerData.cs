@@ -33,7 +33,7 @@
 			Data = new Dictionary<string, Dictionary<string, ParsedValue>>();
 			CustomerID = 0;
 			CustomerRefNum = string.Empty;
-			BuyerID = string.Empty;
+			AlibabaID = string.Empty;
 
 			for (int nIdx = 0; nIdx < sr.Count; nIdx++) {
 				string sFieldName = sr.GetName(nIdx);
@@ -45,14 +45,12 @@
 
 				if (sFieldName == CustomerIDField)
 					CustomerID = oValue;
-				else {
-					if (sFieldName == CustomerRefNumField)
-						CustomerRefNum = oValue;
-					else if (sFieldName == BuyerIDField)
-						BuyerID = oValue;
-
+				else if (sFieldName == AlibabaIDField)
+					AlibabaID = oValue;
+				else if (sFieldName == CustomerRefNumField)
+					CustomerRefNum = oValue;
+				else
 					AddSectionItem(sFieldName, oValue);
-				} // if
 			} // for
 
 			m_oLoans = new SortedDictionary<int, LoanData>();
@@ -67,7 +65,7 @@
 
 		public string CustomerRefNum { get; private set; }
 
-		public string BuyerID { get; private set; }
+		public string AlibabaID { get; private set; }
 
 		#region method AddLoanData
 
@@ -129,12 +127,14 @@
 				while (oSheet.Cells[nCustomerRow, 1].Value != null)
 					nCustomerRow++;
 
-				oSheet.SetCellValue(nCustomerRow, 1, CustomerRefNum);
+				var lst = new List<object> {
+					new ParsedValue(CustomerRefNum),
+					new ParsedValue(AlibabaID),
+				};
 
-				int nColumn = 2;
+				lst.AddRange(oSection.Values);
 
-				foreach (var oValuePair in oSection)
-					nColumn = oSheet.SetCellValue(nCustomerRow, nColumn, oValuePair.Value.Raw);
+				oSheet.SetRowValues(nCustomerRow, true, lst.ToArray());
 			} // for each section
 
 			SaveLoanServicingSection(oReport);
@@ -185,16 +185,17 @@
 			foreach (KeyValuePair<int, LoanData> pair in m_oLoans) {
 				LoanData oLoan = pair.Value;
 
-				oSheet.SetCellValue(nLoanRow, 1, CustomerRefNum);
+				oSheet.SetRowValues(nLoanRow, true,
+					CustomerRefNum,
+					AlibabaID,
 
-				int nColumn = 2;
-
-				nColumn = oSheet.SetCellValue(nLoanRow, nColumn, oLoan.RefNum);
-				nColumn = oSheet.SetCellValue(nLoanRow, nColumn, oLoan.DateClosed);
-				nColumn = oSheet.SetCellValue(nLoanRow, nColumn, oLoan.TotalRepaid);
-				nColumn = oSheet.SetCellValue(nLoanRow, nColumn, oLoan.InterestRepaid);
-				nColumn = oSheet.SetCellValue(nLoanRow, nColumn, oLoan.IsLate ? "yes" : "no");
-				nColumn = oSheet.SetCellValue(nLoanRow, nColumn, m_oCashRequests[oLoan.CashRequestID].UnusedAmount);
+					oLoan.RefNum,
+					oLoan.DateClosed,
+					oLoan.TotalRepaid,
+					oLoan.InterestRepaid,
+					oLoan.IsLate ? "yes" : "no",
+					m_oCashRequests[oLoan.CashRequestID].UnusedAmount
+				);
 
 				nLoanRow++;
 			} // for each loan
@@ -203,8 +204,8 @@
 		#endregion method SaveLoanServicingSection
 
 		private const string CustomerIDField = "CustomerID";
-		private const string CustomerRefNumField = "ApprovalPhaseVerify_EzbobMemberID";
-		private const string BuyerIDField = "ApprovalPhaseVerify_BuyerID";
+		private const string CustomerRefNumField = "CustomerRefnum";
+		private const string AlibabaIDField = "AlibabaID";
 
 		private const string SignedField = "LoanAgreementPhase_SignOnlineFinancingAgreement";
 		private static readonly ParsedValue Yes = new ParsedValue("yes");
