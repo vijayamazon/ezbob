@@ -41,10 +41,12 @@ BEGIN
 	SELECT 
 		@NumOfLates = COUNT(1) 
 	FROM 
-		LoanSchedule
+		LoanSchedule,
+		Loan
 	WHERE 
-		Status='Late' AND
-		LoanId = @PreviousFilledCashRequest
+		LoanSchedule.Status = 'Late' AND
+		LoanId = Loan.Id AND
+		Loan.CustomerId = @CustomerId
 
 	IF @NumOfLates = 0 AND -- No lates...		
 		DATEADD(DD, 30, @LastApprovalDate) >= @Now AND -- Last approval was in last 30 days
