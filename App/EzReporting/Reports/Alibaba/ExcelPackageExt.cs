@@ -1,4 +1,5 @@
 ﻿namespace Reports.Alibaba {
+	using System;
 	using System.Collections.Generic;
 	using OfficeOpenXml;
 
@@ -29,7 +30,21 @@
 		#region method FindOrCreateSheet
 
 		public static ExcelWorksheet FindOrCreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, params string[] oColumnNames) {
-			return oReport.Workbook.Worksheets[sSheetName] ?? oReport.CreateSheet(sSheetName, bAddCustomerIDColumn, oColumnNames);
+			return FindOrCreateSheet(oReport, sSheetName, bAddCustomerIDColumn, null, oColumnNames);
+		} // FindOrCreateSheet
+
+		public static ExcelWorksheet FindOrCreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, Action<ExcelWorksheet> OnCreate, params string[] oColumnNames) {
+			ExcelWorksheet ws = oReport.Workbook.Worksheets[sSheetName];
+
+			if (ws != null)
+				return ws;
+
+			ws = oReport.CreateSheet(sSheetName, bAddCustomerIDColumn, oColumnNames);
+
+			if (OnCreate != null)
+				OnCreate(ws);
+
+			return ws;
 		} // FindOrCreateSheet
 
 		#endregion method FindOrCreateSheet

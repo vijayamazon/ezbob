@@ -1,6 +1,7 @@
 ﻿namespace Reports.Alibaba.DataSharing {
 	using System;
 	using System.Collections.Generic;
+	using System.Drawing;
 	using System.Linq;
 	using Ezbob.Database;
 	using Ezbob.Utils;
@@ -26,6 +27,7 @@
 
 		public const string RowType = "RowType";
 		public const string LoanDataCustomerIDField = "CustomerID";
+		public const string ApprovalPhaseFeedback = "ApprovalPhaseFeedback";
 
 		#region constructor
 
@@ -116,9 +118,21 @@
 				string sSectionName = pair.Key;
 				Dictionary<string, ParsedValue> oSection = pair.Value;
 
+				Action<ExcelWorksheet> onCreate = (sSectionName == FinancialDetails) ? new Action<ExcelWorksheet>(ws => {
+					int nColumn = 1;
+
+					while (ws.Cells[1, nColumn].Value != null)
+						nColumn++;
+
+					ws.SetCellValue(1, nColumn, "The data is provided by customers.", false);
+					ws.Cells[1, nColumn].Style.Font.Bold = true;
+					ws.Cells[1, nColumn].Style.Font.Color.SetColor(Color.Red);
+				}) : null;
+
 				ExcelWorksheet oSheet = oReport.FindOrCreateSheet(
 					sSectionName,
 					true,
+					onCreate,
 					oSection.Keys.Select(sTitle => GetColumnDisplayName(sSectionName, sTitle)).ToArray()
 				);
 
@@ -209,6 +223,8 @@
 
 		private const string SignedField = "LoanAgreementPhase_SignOnlineFinancingAgreement";
 		private static readonly ParsedValue Yes = new ParsedValue("yes");
+
+		private const string FinancialDetails = "FinancialDetails";
 
 		private readonly SortedDictionary<int, LoanData> m_oLoans; 
 		private readonly SortedDictionary<int, CashRequestData> m_oCashRequests; 
