@@ -9,9 +9,6 @@
 		SkipEverything = 1,
 
 		[EnumMember]
-		UpdateEverythingExceptMp = 2,
-
-		[EnumMember]
 		UpdateEverythingAndApplyAutoRules = 3,
 
 		[EnumMember]

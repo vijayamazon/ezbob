@@ -6,16 +6,14 @@
 
 	public class ReRejection
 	{
-		private readonly bool enableAutomaticReRejection;
 		private readonly AConnection Db;
 		private readonly ASafeLog log;
 		private readonly int customerId;
 
-		public ReRejection(int customerId, bool enableAutomaticReRejection, AConnection oDb, ASafeLog oLog)
+		public ReRejection(int customerId, AConnection oDb, ASafeLog oLog)
 		{
 			Db = oDb;
 			log = oLog;
-			this.enableAutomaticReRejection = enableAutomaticReRejection;
 			this.customerId = customerId;
 		}
 
@@ -38,11 +36,12 @@
 					response.IsReRejected = true;
 					response.AutoRejectReason = "Auto Re-Reject";
 
-					response.CreditResult = enableAutomaticReRejection ? "Rejected" : "WaitingForDecision";
+					response.CreditResult = "Rejected";
 
 					response.UserStatus = "Rejected";
 					response.SystemDecision = "Reject";
 					response.DecidedToReject = true;
+					response.DecisionName = "Re-rejection";
 
 					return true;
 				}

@@ -89,7 +89,7 @@
 
 		private bool MakeSureMpDataIsSufficient()
 		{
-			if (newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp)
+			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
 				if (!WaitForMarketplacesToFinishUpdates())
 				{

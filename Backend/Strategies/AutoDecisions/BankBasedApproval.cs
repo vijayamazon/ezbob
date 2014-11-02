@@ -286,6 +286,7 @@
 			response.UserStatus = "Approved";
 			response.SystemDecision = "Approve";
 			response.LoanOfferUnderwriterComment = "Auto bank based approval";
+			response.DecisionName = "Bank Based Approval";
 			response.IsAutoBankBasedApproval = true;
 			response.AppValidFor = DateTime.UtcNow.AddHours(offerValidForHours);
 			response.RepaymentPeriod = loanTerm;

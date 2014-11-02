@@ -31,7 +31,6 @@
 		private readonly double _yodlee1YForRejection;
 		private readonly double _yodlee3MForRejection;
 		private readonly double _marketplaceSeniorityDays;
-		private readonly bool _enableAutomaticRejection;
 		private int _lowTotalAnnualTurnover;
 		private int _lowTotalThreeMonthTurnover;
 		private readonly double _maxExperianConsumerScore;
@@ -64,7 +63,6 @@
 			double yodlee1YForRejection,
 			double yodlee3MForRejection,
 			double marketplaceSeniorityDays,
-			bool enableAutomaticRejection,
 			double maxExperianConsumerScore,
 			int maxCompanyScore,
 			bool customerStatusIsEnabled,
@@ -83,7 +81,6 @@
 			_yodlee1YForRejection = yodlee1YForRejection;
 			_yodlee3MForRejection = yodlee3MForRejection;
 			_marketplaceSeniorityDays = marketplaceSeniorityDays;
-			_enableAutomaticRejection = enableAutomaticRejection;
 			_maxExperianConsumerScore = maxExperianConsumerScore;
 			_customerId = customerId;
 			_maxCompanyScore = maxCompanyScore;
@@ -380,9 +377,10 @@
 
 				_log.Info("customer {0} auto rejected", response.AutoRejectReason);
 
-				response.CreditResult = _enableAutomaticRejection ? "Rejected" : "WaitingForDecision";
+				response.CreditResult = "Rejected";
 				response.UserStatus = "Rejected";
 				response.SystemDecision = "Reject";
+				response.DecisionName = "Rejection";
 				response.DecidedToReject = true;
 				FillFiguresForExplanationMail(response);
 				return true;
@@ -416,7 +414,7 @@
 		public override string ToString()
 		{
 			return string.Format(
-				@"Rejection input parameters for customer id {19}: \n 
+				@"Rejection input parameters for customer id {18}: \n 
 					_autoRejectionExceptionAnualTurnover : {0} \n
 					_rejectDefaultsCreditScore : {1} \n
 					_rejectMinimalSeniority : {2} \n 
@@ -428,23 +426,22 @@
 					_numOfDefaultAccounts : {8} \n
 					_totalSumOfOrders1YTotalForRejection : {10} _totalSumOfOrders3MTotalForRejection : {11} \n 
 					_marketplaceSeniorityDays : {14} \n 
-					_enableAutomaticRejection : {15} \n 
-					_lowTotalAnnualTurnover : {16} _lowTotalThreeMonthTurnover : {17} \n 
-					_maxExperianConsumerScore : {18} _maxCompanyScore : {20} \n
-					_customerStatusIsEnabled : {21} _customerStatusIsWarning : {22} _customerStatusName : {9} \n
-					_isBrokerCustomer : {23} \n
-					_isLimitedCompany : {24} \n
-					_companySeniorityDays : {25} \n
-					_isOffline : {26} \n
-					_hasYodlee: {36} _yodlee1YForRejection : {12} _yodlee3MForRejection : {13} \n
-					_hasHmrc: {37} _hmrcAnnualRevenues : {27} _hmrcQuarterRevenues : {28} \n
-					_lowOfflineQuarterRevenue : {29} \n
-					_lowOfflineAnnualRevenue : {30} \n
-					_numOfLateAccounts : {31} \n
-					_rejectNumOfLateAccounts : {32} \n
-					_payPalNumberOfStores : {33} _payPalTotalSumOfOrders3M : {34} _payPalTotalSumOfOrders1Y : {35} \n
-					_rejectDefaultsCompanyScore : {38} \n
-					_numOfCompanyDefaultAccounts : {39} _rejectDefaultsCompanyAccountsNum : {40} \n",
+					_lowTotalAnnualTurnover : {15} _lowTotalThreeMonthTurnover : {16} \n 
+					_maxExperianConsumerScore : {17} _maxCompanyScore : {19} \n
+					_customerStatusIsEnabled : {20} _customerStatusIsWarning : {21} _customerStatusName : {9} \n
+					_isBrokerCustomer : {22} \n
+					_isLimitedCompany : {23} \n
+					_companySeniorityDays : {24} \n
+					_isOffline : {25} \n
+					_hasYodlee: {35} _yodlee1YForRejection : {12} _yodlee3MForRejection : {13} \n
+					_hasHmrc: {36} _hmrcAnnualRevenues : {26} _hmrcQuarterRevenues : {27} \n
+					_lowOfflineQuarterRevenue : {28} \n
+					_lowOfflineAnnualRevenue : {29} \n
+					_numOfLateAccounts : {30} \n
+					_rejectNumOfLateAccounts : {31} \n
+					_payPalNumberOfStores : {32} _payPalTotalSumOfOrders3M : {33} _payPalTotalSumOfOrders1Y : {34} \n
+					_rejectDefaultsCompanyScore : {37} \n
+					_numOfCompanyDefaultAccounts : {38} _rejectDefaultsCompanyAccountsNum : {39} \n",
 				_autoRejectionExceptionAnualTurnover,
 				_rejectDefaultsCreditScore,
 				_rejectMinimalSeniority,
@@ -460,7 +457,6 @@
 				_yodlee1YForRejection,
 				_yodlee3MForRejection,
 				_marketplaceSeniorityDays,
-				_enableAutomaticRejection,
 				_lowTotalAnnualTurnover,
 				_lowTotalThreeMonthTurnover,
 				_maxExperianConsumerScore,

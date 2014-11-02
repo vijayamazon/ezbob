@@ -3,7 +3,6 @@
 	using EzBob.Models;
 	using Ezbob.Database;
 	using System;
-	using System.Data;
 	using Ezbob.Logger;
 	using Misc;
 
@@ -12,18 +11,16 @@
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly AConnection Db;
 		private readonly ASafeLog log;
-		private readonly bool enableAutomaticReApproval;
 		private readonly int customerId;
 		private readonly decimal loanOfferReApprovalFullAmount;
 		private readonly decimal loanOfferReApprovalRemainingAmount;
 		private readonly decimal loanOfferReApprovalFullAmountOld;
 		private readonly decimal loanOfferReApprovalRemainingAmountOld;
 		
-		public ReApproval(int customerId, bool enableAutomaticReApproval, decimal loanOfferReApprovalFullAmount, decimal loanOfferReApprovalRemainingAmount, decimal loanOfferReApprovalFullAmountOld, decimal loanOfferReApprovalRemainingAmountOld, AConnection oDb, ASafeLog oLog)
+		public ReApproval(int customerId, decimal loanOfferReApprovalFullAmount, decimal loanOfferReApprovalRemainingAmount, decimal loanOfferReApprovalFullAmountOld, decimal loanOfferReApprovalRemainingAmountOld, AConnection oDb, ASafeLog oLog)
 		{
 			Db = oDb;
 			log = oLog;
-			this.enableAutomaticReApproval = enableAutomaticReApproval;
 			this.customerId = customerId;
 			this.loanOfferReApprovalFullAmount = loanOfferReApprovalFullAmount;
 			this.loanOfferReApprovalRemainingAmount = loanOfferReApprovalRemainingAmount;
@@ -75,10 +72,11 @@
 							return true;
 						}
 
-						response.CreditResult = enableAutomaticReApproval ? "Approved" : "WaitingForDecision";
+						response.CreditResult = "Approved";
 						response.UserStatus = "Approved";
 						response.SystemDecision = "Approve";
 						response.LoanOfferUnderwriterComment = "Auto Re-Approval";
+						response.DecisionName = "Re-Approval";
 						response.AppValidFor = DateTime.UtcNow.AddDays((loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays);
 						response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
 						return true;

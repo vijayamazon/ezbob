@@ -2,6 +2,7 @@
 {
 	using System.Linq;
 	using AutoDecisions;
+	using ConfigManager;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using MailStrategies.API;
@@ -36,12 +37,6 @@
 		/// then customer's status should not change.
 		/// </summary>
 		private bool overrideApprovedRejected;
-
-		// Automation availability
-		private bool enableAutomaticReRejection;
-		private bool enableAutomaticReApproval;
-		private bool enableAutomaticApproval;
-		private bool enableAutomaticRejection;
 
 		// Calculated based on raw data
 		private bool isHomeOwner;
@@ -107,12 +102,6 @@
 			// Gather Raw Data
 			dataGatherer.Gather();
 
-			// Automation availability
-			enableAutomaticReRejection = dataGatherer.EnableAutomaticReRejection;
-			enableAutomaticReApproval = dataGatherer.EnableAutomaticReApproval;
-			enableAutomaticApproval = dataGatherer.EnableAutomaticApproval;
-			enableAutomaticRejection = dataGatherer.EnableAutomaticRejection;
-
 			// Processing logic
 			isHomeOwner = dataGatherer.IsOwnerOfMainAddress || dataGatherer.IsOwnerOfOtherProperties;
 			isFirstLoan = dataGatherer.NumOfLoans == 0;
@@ -121,37 +110,15 @@
 			loanOfferReApprovalRemainingAmount = dataGatherer.LoanOfferReApprovalRemainingAmount;
 			loanOfferReApprovalRemainingAmountOld = dataGatherer.LoanOfferReApprovalRemainingAmountOld;
 
-			// TODO: Refactor all Execute() below this line
-			SetAutoDecisionAvailability();
-
+			// Calculate old medal
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
 
 			AutoDecisionRejectionResponse autoDecisionRejectionResponse = ProcessRejections();
 
-			if (autoDecisionRejectionResponse.DecidedToReject)
-			{
-				modelLoanOffer = 0;
-
-				if ((autoDecisionRejectionResponse.IsReRejected && !enableAutomaticReRejection) ||
-					(!autoDecisionRejectionResponse.IsReRejected && !enableAutomaticRejection))
-				{
-					SendRejectionExplanationMail(autoDecisionRejectionResponse.IsReRejected
-													 ? "Mandrill - User supposed to be re-rejected by the strategy"
-													 : "Mandrill - User supposed to be rejected by the strategy",
-												 autoDecisionRejectionResponse.RejectionModel);
-				}
-				else
-				{
-					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy", autoDecisionRejectionResponse.RejectionModel);
-
-					new RejectUser(customerId, true, DB, Log).Execute();
-
-					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionRejectionResponse.AutoRejectReason);
-				}
-			}
-
+			// 2nd step gather
 			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
 
+			// More logic
 			if (dataGatherer.NumOfHmrcMps < 2 && Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness))
 			{
 				var instance = new CalculateLimitedMedal(DB, Log, customerId);
@@ -182,35 +149,35 @@
 							// Get min that is over threshold
 							if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded ||
 								 offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
-							    (offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
+								(offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
 								 offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
 								offerAccordingToFreeCashFlow >= dataGatherer.LimitedMedalMinOffer)
 							{
-								offerAccordingToThisMedal = (int) offerAccordingToFreeCashFlow;
+								offerAccordingToThisMedal = (int)offerAccordingToFreeCashFlow;
 								Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId, offerAccordingToFreeCashFlow);
 							}
 							else if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow ||
 									  offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
-							         (offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
+									 (offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
 									  offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
 									 offerAccordingToValueAdded >= dataGatherer.LimitedMedalMinOffer)
 							{
-								offerAccordingToThisMedal = (int) offerAccordingToValueAdded;
+								offerAccordingToThisMedal = (int)offerAccordingToValueAdded;
 								Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId, offerAccordingToValueAdded);
 							}
 							else if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow ||
 									  offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
-							         (offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
+									 (offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
 									  offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
 									 offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
 							{
-								offerAccordingToThisMedal = (int) offerAccordingToAnnualTurnover;
+								offerAccordingToThisMedal = (int)offerAccordingToAnnualTurnover;
 								Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
 							}
 						}
 						else if (offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
 						{
-							offerAccordingToThisMedal = (int) offerAccordingToAnnualTurnover;
+							offerAccordingToThisMedal = (int)offerAccordingToAnnualTurnover;
 							Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
 						}
 					}
@@ -224,8 +191,6 @@
 			}
 
 			ProcessApprovals(autoDecisionRejectionResponse);
-
-			autoDecisionMaker.LogDecision(customerId, autoDecisionRejectionResponse, autoDecisionResponse);
 
 			if (autoDecisionResponse != null && autoDecisionResponse.IsAutoApproval)
 			{
@@ -244,6 +209,19 @@
 				{
 					offeredCreditLine = modelLoanOffer;
 				}
+			}
+
+			// Actions after decision
+			autoDecisionMaker.LogDecision(customerId, autoDecisionRejectionResponse, autoDecisionResponse);
+			
+			if (autoDecisionRejectionResponse.DecidedToReject)
+			{
+				modelLoanOffer = 0;
+				SendRejectionExplanationMail("Mandrill - User is rejected by the strategy", autoDecisionRejectionResponse.RejectionModel);
+
+				new RejectUser(customerId, true, DB, Log).Execute();
+
+				strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionRejectionResponse.AutoRejectReason);
 			}
 
 			if (autoDecisionResponse == null)
@@ -280,10 +258,7 @@
 						UpdateReApprovalData();
 						SendReApprovalMails();
 
-						if (enableAutomaticReApproval)
-						{
-							strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
-						}
+						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
 					}
 				}
 				else
@@ -297,38 +272,42 @@
 
 		private void ProcessApprovals(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
 		{
-			if (!autoDecisionRejectionResponse.DecidedToReject)
+			if (!autoDecisionRejectionResponse.DecidedToReject &&
+				newCreditLineOption != NewCreditLineOption.UpdateEverythingAndGoToManualDecision &&
+				avoidAutomaticDecision != 1 &&
+				dataGatherer.CustomerStatusIsEnabled && 
+				!dataGatherer.CustomerStatusIsWarning)
 			{
-				autoDecisionResponse = autoDecisionMaker.MakeDecision(
-					customerId,
-					dataGatherer.MinExperianConsumerScore,
-					dataGatherer.MaxExperianConsumerScore,
-					dataGatherer.MaxCompanyScore,
-					dataGatherer.TotalSumOfOrders1YTotalForRejection,
-					dataGatherer.TotalSumOfOrders3MTotalForRejection,
-					dataGatherer.Yodlee1YForRejection,
-					dataGatherer.Yodlee3MForRejection,
-					offeredCreditLine,
-					dataGatherer.MarketplaceSeniorityDays,
-					enableAutomaticReRejection,
-					enableAutomaticRejection,
-					enableAutomaticReApproval,
-					enableAutomaticApproval,
-					dataGatherer.LoanOfferReApprovalFullAmountOld,
-					dataGatherer.LoanOfferReApprovalFullAmount,
-					loanOfferReApprovalRemainingAmount,
-					loanOfferReApprovalRemainingAmountOld,
-					dataGatherer.CustomerStatusIsEnabled,
-					dataGatherer.CustomerStatusIsWarning,
-					isViaBroker,
-					Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness),
-					companySeniorityDays,
-					dataGatherer.IsOffline,
-					dataGatherer.CustomerStatusName,
-					consumerCaisDetailWorstStatuses,
-					DB,
-					Log
-					);
+				autoDecisionResponse = new AutoDecisionResponse { DecisionName = "Manual" };
+
+				if (dataGatherer.EnableAutomaticReApproval)
+				{
+					new ReApproval(customerId, dataGatherer.LoanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount,
+					               dataGatherer.LoanOfferReApprovalFullAmountOld,
+					               loanOfferReApprovalRemainingAmountOld, DB, Log).MakeDecision(autoDecisionResponse);
+				}
+
+				if (string.IsNullOrEmpty(autoDecisionResponse.SystemDecision) &&
+					dataGatherer.EnableAutomaticApproval &&
+					!dataGatherer.IsOffline &&
+					!isViaBroker
+					)
+				{
+					new Approval(customerId, dataGatherer.MinExperianConsumerScore, offeredCreditLine,
+					             consumerCaisDetailWorstStatuses, DB, Log).MakeDecision(autoDecisionResponse);
+				}
+
+				if (string.IsNullOrEmpty(autoDecisionResponse.SystemDecision) && CurrentValues.Instance.BankBasedApprovalIsEnabled)
+				{
+					new BankBasedApproval(customerId, DB, Log).MakeDecision(autoDecisionResponse);
+				}
+
+				if (string.IsNullOrEmpty(autoDecisionResponse.SystemDecision)) // No decision is made so far
+				{
+					autoDecisionResponse.CreditResult = "WaitingForDecision";
+					autoDecisionResponse.UserStatus = "Manual";
+					autoDecisionResponse.SystemDecision = "Manual";
+				}
 			}
 		}
 
@@ -347,25 +326,34 @@
 
 		private AutoDecisionRejectionResponse ProcessRejections()
 		{
-			AutoDecisionRejectionResponse autoDecisionRejectionResponse = autoDecisionMaker.MakeRejectionDecision(
-				customerId,
-				dataGatherer.MaxExperianConsumerScore,
-				dataGatherer.MaxCompanyScore,
-				dataGatherer.TotalSumOfOrders1YTotalForRejection,
-				dataGatherer.TotalSumOfOrders3MTotalForRejection,
-				dataGatherer.Yodlee1YForRejection,
-				dataGatherer.Yodlee3MForRejection,
-				dataGatherer.MarketplaceSeniorityDays,
-				enableAutomaticReRejection,
-				enableAutomaticRejection,
-				dataGatherer.CustomerStatusIsEnabled,
-				dataGatherer.CustomerStatusIsWarning,
-				isViaBroker,
-				Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness),
-				companySeniorityDays,
-				dataGatherer.IsOffline,
-				dataGatherer.CustomerStatusName
-				);
+			var autoDecisionRejectionResponse = new AutoDecisionRejectionResponse();
+
+			if (newCreditLineOption != NewCreditLineOption.UpdateEverythingAndGoToManualDecision &&
+			    avoidAutomaticDecision != 1)
+			{
+				if (dataGatherer.EnableAutomaticReRejection)
+				{
+					new ReRejection(customerId, DB, Log).MakeDecision(autoDecisionRejectionResponse);
+				}
+
+				if (!autoDecisionRejectionResponse.IsReRejected &&
+				    dataGatherer.EnableAutomaticRejection &&
+				    !isViaBroker &&
+				    !dataGatherer.IsAlibaba)
+				{
+					var rejection = new Rejection(customerId, dataGatherer.TotalSumOfOrders1YTotalForRejection,
+					                              dataGatherer.TotalSumOfOrders3MTotalForRejection,
+					                              dataGatherer.Yodlee1YForRejection,
+					                              dataGatherer.Yodlee3MForRejection, dataGatherer.MarketplaceSeniorityDays,
+					                              dataGatherer.MaxExperianConsumerScore, dataGatherer.MaxCompanyScore,
+					                              dataGatherer.CustomerStatusIsEnabled,
+					                              dataGatherer.CustomerStatusIsWarning, isViaBroker,
+					                              Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness), companySeniorityDays,
+					                              dataGatherer.IsOffline, dataGatherer.CustomerStatusName, DB, Log).MakeDecision(
+						                              autoDecisionRejectionResponse);
+					Log.Debug(rejection.ToString());
+				}
+			}
 			return autoDecisionRejectionResponse;
 		}
 
@@ -528,16 +516,13 @@
 				}
 			});
 
-			if (enableAutomaticReApproval)
-			{
-				var customerMailVariables = new Dictionary<string, string> {
-					{"FirstName", dataGatherer.AppFirstName},
-					{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
-					{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-				};
+			var customerMailVariables = new Dictionary<string, string> {
+				{"FirstName", dataGatherer.AppFirstName},
+				{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
+			};
 
-				mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
-			}
+			mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
 
 		private void UpdateReApprovalData()
@@ -712,44 +697,6 @@
 				new QueryParameter("EarlyPayments", dataGatherer.ModelEarlyPayments)
 			);
 			return scoringResult;
-		}
-
-		private void SetAutoDecisionAvailability()
-		{
-			Log.Info("Setting auto decision availability");
-
-			if (!dataGatherer.CustomerStatusIsEnabled || dataGatherer.CustomerStatusIsWarning)
-			{
-				enableAutomaticReApproval = false;
-				enableAutomaticApproval = false;
-			}
-
-			if (dataGatherer.IsOffline)
-			{
-				enableAutomaticApproval = false;
-			}
-
-			if (isViaBroker)
-			{
-				enableAutomaticApproval = false;
-				enableAutomaticRejection = false;
-			}
-
-			if (dataGatherer.IsAlibaba)
-			{
-				enableAutomaticRejection = false;
-			}
-
-			if (newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
-				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
-				avoidAutomaticDecision == 1
-			)
-			{
-				enableAutomaticApproval = false;
-				enableAutomaticReApproval = false;
-				enableAutomaticRejection = false;
-				enableAutomaticReRejection = false;
-			}
 		}
 		
 		private void SendRejectionExplanationMail(string templateName, RejectionModel rejection)
