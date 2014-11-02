@@ -66,12 +66,15 @@ BEGIN
 		ISNULL(c.BrokerID, 0) AS BrokerID,
 		c.FilledByBroker AS IsFilledByBroker,
 		c.IsAlibaba,
-		c.AlibabaId
+		c.AlibabaId,
+		c.OverallTurnOver AS ReportedAnnualTurnover,
+		crl.Amount AS RequestedLoanAmount
 	FROM
 		Customer c
 		LEFT JOIN CustomerAddress a
 			ON c.Id = a.CustomerId
 			AND a.addressType = 1
+		INNER JOIN CustomerRequestedLoan crl ON c.Id = crl.CustomerId
 	WHERE
 		c.Id = @CustomerId
 END

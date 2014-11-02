@@ -75,6 +75,8 @@
 		public virtual bool IsFilledByBroker { get; protected set; }
 		public virtual bool IsAlibaba { get; protected set; }
 		public virtual string AlibabaId { get; protected set; }
+		public virtual int RequestedLoanAmount { get; protected set; }
+		public virtual int ReportedAnnualTurnover { get; protected set; }
 
 		#endregion properties
 
@@ -115,6 +117,8 @@
 			IsFilledByBroker = sr["IsFilledByBroker"];
 			IsAlibaba = sr["IsAlibaba"];
 			AlibabaId = sr["AlibabaId"];
+			RequestedLoanAmount = sr["RequestedLoanAmount"];
+			ReportedAnnualTurnover = sr["ReportedAnnualTurnover"];
 		} // Load
 
 		#endregion private

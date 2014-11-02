@@ -78,7 +78,9 @@
 				{ "SetupFee", setupFeePercents.ToString("#,#.00") },
 				{ "RemainingPercentsAfterSetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) },
 				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
-				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) }
+				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) },
+				{ "RequestedLoanAmount", CustomerData.RequestedLoanAmount.ToString("#,#.00") },
+				{ "ReportedAnnualTurnover", CustomerData.ReportedAnnualTurnover.ToString("#,#.00") }
 			};
 
 			if (CustomerData.IsAlibaba)
