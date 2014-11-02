@@ -27,6 +27,14 @@
 
 		#endregion method CreateSheet
 
+		#region method FindSheet
+
+		public static ExcelWorksheet FindSheet(this ExcelPackage oReport, string sSheetName) {
+			return oReport.Workbook.Worksheets[sSheetName];
+		} // FindSheet
+
+		#endregion method FindSheet
+
 		#region method FindOrCreateSheet
 
 		public static ExcelWorksheet FindOrCreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, params string[] oColumnNames) {
