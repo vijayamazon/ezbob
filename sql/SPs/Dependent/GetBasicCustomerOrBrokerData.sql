@@ -33,7 +33,9 @@ BEGIN
 			CONVERT(BIT, 0) AS BrokerID,
 			CONVERT(BIT, 0) AS IsFilledByBroker,
 			CONVERT(BIT, 0) AS IsAlibaba,
-			CONVERT(NVARCHAR(300), '') AS AlibabaId
+			CONVERT(NVARCHAR(300), '') AS AlibabaId,
+			0 AS ReportedAnnualTurnover,
+			0 AS RequestedLoanAmount
 		FROM
 			Broker b
 		WHERE

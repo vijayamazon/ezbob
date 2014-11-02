@@ -40,7 +40,9 @@
 				{"EzbobAccount", CurrentValues.Instance.CustomerSite + "/Customer/Profile"},
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
 				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
-				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) }
+				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) },
+				{ "RequestedLoanAmount", CustomerData.RequestedLoanAmount.ToString("#,#.00") },
+				{ "ReportedAnnualTurnover", CustomerData.ReportedAnnualTurnover.ToString("#,#.00") }
 			};
 		} // SetTemplateAndVariables
 
