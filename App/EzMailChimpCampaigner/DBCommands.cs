@@ -34,12 +34,6 @@
 						oSubscriberModel.DayAfter = DateTime.Today;
 						break;
 
-					//case Constants.ConditionType.ThreeDays:
-					//	fromDate = DateTime.Today.AddDays(-4);
-					//	toDate = DateTime.Today.AddDays(-3);
-					//	oSubscriberModel.ThreeDays = DateTime.Today;
-					//	break;
-
 					case Constants.ConditionType.Week:
 						toDate = DateTime.Today.AddDays(-7);
 						oSubscriberModel.Week = DateTime.Today;
@@ -89,18 +83,6 @@
 					}); // for each result
 
 					m_oLog.Debug("Added subscribers from db for campaign: {0} {1}", campaign, condition);
-					//subscriberList.Add(new Subscriber()
-					//	{
-					//		Group = campaign.ToString(),
-					//		Email = "adic@ezbob.com",
-					//		FirstName = "Adi",
-					//		LastName = "Cohen",
-					//		LoanOffer = 1500,
-					//		DayAfter = DateTime.Today,
-					//		Month = DateTime.Today,
-					//		TwoWeeks = DateTime.Today,
-					//		Week = DateTime.Today
-					//	});
 				} // for each condition
 
 				return subscriberList;

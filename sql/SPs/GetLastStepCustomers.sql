@@ -51,8 +51,9 @@ BEGIN
 				@DateStart <= CONVERT(DATE, l.Date)
 		) lt ON c.Id = lt.CustomerId
 	WHERE
-		lt.CustomerId IS NULL AND
-		cs.IsDefault = 0
+		lt.CustomerId IS NULL 
+		AND cs.IsDefault = 0
+		AND c.IsAlibaba = 0
 		AND (
 			(cr.IdUnderwriter IS NOT NULL AND cr.UnderwriterDecision = 'Approved')
 			OR
@@ -63,6 +64,7 @@ BEGIN
 			OR
 			(cr.IdUnderwriter IS NULL AND CONVERT(DATE, cr.SystemDecisionDate) = @DateStart)
 		)
+		
 
 	--------------------------------------------------------------------------
 	--
@@ -106,3 +108,5 @@ BEGIN
 	--------------------------------------------------------------------------
 END
 GO
+
+

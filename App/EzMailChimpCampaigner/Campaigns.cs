@@ -30,7 +30,14 @@
 							DayList = GetDayList(Constants.CampaignsType.DidntTakeLoan),
 							ListId = Constants.EzbobCustomersListId,
 							Title = Constants.LastStepCustomersTitle,
-						}
+						},
+					new Campaign
+						{
+							CampaignType = Constants.CampaignsType.DidntTakeLoanAlibaba,
+							DayList = GetDayList(Constants.CampaignsType.DidntTakeLoanAlibaba),
+							ListId = Constants.EzbobCustomersListId,
+							Title = Constants.LastStepCustomersAlibabaTitle,
+						},
 				};
 		}
 
@@ -47,55 +54,8 @@
 							TemplateId = Constants.FirstStepCustomersDayAfterTemplateId,
 							Subject = Constants.FirstStepCustomersDayAfterSubject,
 						});
-					//week
-					//dayList.Add(new Day
-					//	{
-					//		Condition = Constants.WeekConditionField,
-					//		TemplateId = Constants.FirstStepCustomersWeekTemplateId,
-					//		Subject = Constants.FirstStepCustomersWeekSubject
-					//	});
-					//dayList.Add(new Day
-					//{
-					//	Condition = Constants.ThreeDaysConditionField,
-					//	TemplateId = Constants.FirstStepCustomersThreeDaysTemplateId,
-					//	Subject = Constants.FirstStepCustomersThreeDaysSubject,
-					//});
 					break;
 				case Constants.CampaignsType.OnlyRegisteredStore:
-					//day after
-					//dayList.Add(new Day
-					//	{
-					//		Condition = Constants.DayAfterConditionField,
-					//		TemplateId = Constants.SecondStepCustomersDayAfterTemplateId,
-					//		Subject = Constants.SecondStepCustomersDayAfterSubject,
-					//	});
-					//threeDays = new Day
-					//{
-					//	Condition = Constants.ThreeDaysConditionField,
-					//	TemplateId = Constants.SecondStepCustomersThreeDaysTemplateId,
-					//	Subject = Constants.SecondStepCustomersThreeDaysSubject,
-					//};
-					//week
-					//dayList.Add(new Day
-					//	{
-					//		Condition = Constants.WeekConditionField,
-					//		TemplateId = Constants.SecondStepCustomersWeekTemplateId,
-					//		Subject = Constants.SecondStepCustomersWeekSubject,
-					//	});
-					////two weeks
-					//dayList.Add(new Day
-					//	{
-					//		Condition = Constants.TwoWeeksConditionField,
-					//		TemplateId = Constants.SecondStepCustomersTwoWeeksTemplateId,
-					//		Subject = Constants.SecondStepCustomersTwoWeeksSubject,
-					//	});
-					//month
-					//dayList.Add(new Day
-					//	{
-					//		Condition = Constants.MonthConditionField,
-					//		TemplateId = Constants.SecondStepCustomersMonthTemplateId,
-					//		Subject = Constants.SecondStepCustomersMonthSubject,
-					//	});
 					break;
 				case Constants.CampaignsType.DidntTakeLoan:
 					//day after
@@ -105,12 +65,6 @@
 							TemplateId = Constants.LastStepCustomersDayAfterTemplateId,
 							Subject = Constants.LastStepCustomersDayAfterSubject,
 						});
-					//threeDays = new Day
-					//{
-					//	Condition = Constants.ThreeDaysConditionField,
-					//	TemplateId = Constants.LastStepCustomersThreeDaysTemplateId,
-					//	Subject = Constants.LastStepCustomersThreeDaysSubject,
-					//};
 					//week
 					dayList.Add(new Day
 						{
@@ -132,6 +86,29 @@
 							TemplateId = Constants.LastStepCustomersMonthTemplateId,
 							Subject = Constants.LastStepCustomersMonthSubject,
 						});
+					break;
+				case Constants.CampaignsType.DidntTakeLoanAlibaba:
+					//week
+					dayList.Add(new Day
+					{
+						Condition = Constants.WeekConditionField,
+						TemplateId = Constants.LastStepCustomersAlibabaWeekTemplateId,
+						Subject = Constants.LastStepCustomersWeekSubject,
+					});
+					//two weeks
+					dayList.Add(new Day
+					{
+						Condition = Constants.TwoWeeksConditionField,
+						TemplateId = Constants.LastStepCustomersAlibabaTwoWeeksTemplateId,
+						Subject = Constants.LastStepCustomersTwoWeeksSubject,
+					});
+					//month
+					dayList.Add(new Day
+					{
+						Condition = Constants.MonthConditionField,
+						TemplateId = Constants.LastStepCustomersAlibabaMonthTemplateId,
+						Subject = Constants.LastStepCustomersMonthSubject,
+					});
 					break;
 			}
 			return dayList;

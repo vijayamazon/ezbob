@@ -30,6 +30,12 @@
 				DateEnd = oDateEnd.AddDays(-1);
 				break;
 
+			case Constants.CampaignsType.DidntTakeLoanAlibaba:
+				m_sSpName = Constants.GetLastStepCustomersAlibabaSp;
+				DateStart = oDateStart.AddDays(-1);
+				DateEnd = oDateEnd.AddDays(-1);
+				break;
+
 			default:
 				throw new NotImplementedException("Not implemented for campaign type " + nCampaignType);
 			} // switch

@@ -7,6 +7,7 @@
 			OnlyRegisteredEmail,
 			OnlyRegisteredStore,
 			DidntTakeLoan,
+			DidntTakeLoanAlibaba,
 		}
 
 		public enum ConditionType
@@ -21,6 +22,7 @@
 		public const string GetFirstStepCustomersSp = "GetFirstStepCustomers";
 		public const string GetSecondStepCustomersSp = "GetSecondStepCustomers";
 		public const string GetLastStepCustomersSp = "GetLastStepCustomers";
+		public const string GetLastStepCustomersAlibabaSp = "GetLastStepCustomersAlibaba";
 
 		public const string FromEmail = "customercare@ezbob.com";
 		public const string FromEmailName = "EZBOB";
@@ -44,6 +46,7 @@
 		public const string FirstStepCustomersTitle = "EZBOB Registered Email";
 		public const string SecondStepCustomersTitle = "EZBOB Registered Store";
 		public const string LastStepCustomersTitle = "EZBOB Didnt Take Offer";
+		public const string LastStepCustomersAlibabaTitle = "EZBOB Didnt Take Offer Alibaba";
 
 		public const int FirstStepCustomersDayAfterTemplateId = 90669;
 		//public const int SecondStepCustomersDayAfterTemplateId = 66273;
@@ -56,12 +59,15 @@
 		//public const int FirstStepCustomersWeekTemplateId = 77577;
 		//public const int SecondStepCustomersWeekTemplateId = 66269;
 		public const int LastStepCustomersWeekTemplateId = 90661;
+		public const int LastStepCustomersAlibabaWeekTemplateId = 103945;
 
 		//public const int SecondStepCustomersTwoWeeksTemplateId = 66285;
 		public const int LastStepCustomersTwoWeeksTemplateId = 90657;
+		public const int LastStepCustomersAlibabaTwoWeeksTemplateId = 103949;
 
 		//public const int SecondStepCustomersMonthTemplateId = 66289;
 		public const int LastStepCustomersMonthTemplateId = 90649;
+		public const int LastStepCustomersAlibabaMonthTemplateId = 103953;
 
 		public const string SignUpProcessGroupId = "8209";
 		public const string SignUpProcessGroupName = "SignUpProcess";
