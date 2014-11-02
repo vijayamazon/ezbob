@@ -32,8 +32,15 @@
 
 			m_oSp.ForEachRowSafe(ProcessRow);
 
-			foreach (KeyValuePair<int, CustomerData> pair in m_oData)
+			CustomerData oRandomCustomer = null;
+
+			foreach (KeyValuePair<int, CustomerData> pair in m_oData) {
 				pair.Value.SaveTo(Report);
+				oRandomCustomer = pair.Value;
+			} // for each
+
+			if (oRandomCustomer != null)
+				oRandomCustomer.AddApprovalPhaseTotal(Report);
 
 			Report.AutoFitColumns();
 		} // Generate

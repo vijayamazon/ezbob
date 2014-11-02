@@ -13,11 +13,19 @@
 		#region static constructor
 
 		static CustomerData() {
+			TotalApprovedAmount = 0;
+
 			ms_oColumnTitles = new Dictionary<string, Dictionary<string, string>>();
 
 			ms_oColumnTitles["VatAccount"] = new Dictionary<string, string> {
 				{ "Linked", "Automatic upload" },
 				{ "Uploaded", "Sales call upload" },
+			};
+
+			ms_oColumnNumberFormats = new Dictionary<string, Dictionary<string, string>>();
+
+			ms_oColumnNumberFormats[ApprovalPhaseFeedback] = new Dictionary<string, string> {
+				{ ApprovedAmount, "£#,##0.00" },
 			};
 		} // static constructor
 
@@ -27,7 +35,6 @@
 
 		public const string RowType = "RowType";
 		public const string LoanDataCustomerIDField = "CustomerID";
-		public const string ApprovalPhaseFeedback = "ApprovalPhaseFeedback";
 
 		#region constructor
 
@@ -51,8 +58,12 @@
 					AlibabaID = oValue;
 				else if (sFieldName == CustomerRefNumField)
 					CustomerRefNum = oValue;
-				else
+				else {
+					if ((sFieldName == ApprovedAmountField) && (oValue != null) && (oValue.Raw != null))
+						TotalApprovedAmount += (decimal)oValue;
+
 					AddSectionItem(sFieldName, oValue);
+				} // if
 			} // for
 
 			m_oLoans = new SortedDictionary<int, LoanData>();
@@ -119,14 +130,19 @@
 				Dictionary<string, ParsedValue> oSection = pair.Value;
 
 				Action<ExcelWorksheet> onCreate = (sSectionName == FinancialDetails) ? new Action<ExcelWorksheet>(ws => {
-					int nColumn = 1;
+					int nCol = 1;
 
-					while (ws.Cells[1, nColumn].Value != null)
-						nColumn++;
+					while (ws.Cells[1, nCol].Value != null)
+						nCol++;
 
-					ws.SetCellValue(1, nColumn, "The data is provided by customers.", false);
-					ws.Cells[1, nColumn].Style.Font.Bold = true;
-					ws.Cells[1, nColumn].Style.Font.Color.SetColor(Color.Red);
+					ws.SetCellValue(
+						1,
+						nCol,
+						"The data is provided by customers.",
+						bIsBold: true,
+						bSetZebra: false,
+						oFontColour: Color.Red
+					);
 				}) : null;
 
 				ExcelWorksheet oSheet = oReport.FindOrCreateSheet(
@@ -141,20 +157,77 @@
 				while (oSheet.Cells[nCustomerRow, 1].Value != null)
 					nCustomerRow++;
 
-				var lst = new List<object> {
-					new ParsedValue(CustomerRefNum),
-					new ParsedValue(AlibabaID),
-				};
+				int nColumn = 1;
 
-				lst.AddRange(oSection.Values);
+				nColumn = oSheet.SetCellValue(nCustomerRow, nColumn, CustomerRefNum);
+				nColumn = oSheet.SetCellValue(nCustomerRow, nColumn, AlibabaID);
 
-				oSheet.SetRowValues(nCustomerRow, true, lst.ToArray());
+				Dictionary<string, string> oFormats = null;
+
+				if (ms_oColumnNumberFormats.ContainsKey(sSectionName))
+					oFormats = ms_oColumnNumberFormats[sSectionName];
+
+				foreach (KeyValuePair<string, ParsedValue> sectionPair in oSection) {
+					string sFormat = ((oFormats != null) && oFormats.ContainsKey(sectionPair.Key))
+						? oFormats[sectionPair.Key]
+						: null;
+
+					nColumn = oSheet.SetCellValue(
+						nCustomerRow,
+						nColumn,
+						sectionPair.Value,
+						sNumberFormat: sFormat
+					);
+				} // for each
 			} // for each section
 
 			SaveLoanServicingSection(oReport);
 		} // SaveTo
 
 		#endregion method SaveTo
+
+		#region method AddApprovalPhaseTotal
+
+		public void AddApprovalPhaseTotal(ExcelPackage oReport) {
+			var ws = oReport.FindSheet(ApprovalPhaseFeedback);
+
+			if (ws == null)
+				return;
+
+			int nTotalRow = 1;
+
+			while (ws.Cells[nTotalRow, 1].Value != null)
+				nTotalRow++;
+
+			Color oFontColour = Color.White;
+			Color oBgColour = Color.Black;
+
+			int nColumn = 1;
+
+			nColumn = ws.SetCellValue(nTotalRow, nColumn, "Total", oFontColour: oFontColour, oBgColour: oBgColour, bIsBold: true, bSetZebra: false);
+			nColumn = ws.SetCellValue(nTotalRow, nColumn, null, oFontColour: oFontColour, oBgColour: oBgColour, bSetZebra: false);
+
+			var oSection = Data[ApprovalPhaseFeedback];
+
+			foreach (KeyValuePair<string, ParsedValue> pair in oSection) {
+				decimal? oValue = pair.Key == ApprovedAmount ? TotalApprovedAmount : (decimal?)null;
+				string sFormat = pair.Key == ApprovedAmount ? ms_oColumnNumberFormats[ApprovalPhaseFeedback][ApprovedAmount] : null;
+
+				nColumn = ws.SetCellValue(
+					nTotalRow,
+					nColumn,
+					oValue,
+					bIsBold: true,
+					bSetZebra: false,
+					oFontColour: oFontColour,
+					oBgColour: oBgColour,
+					sNumberFormat: sFormat
+				);
+			} // for each
+
+		} // AddApprovalPhaseTotal
+
+		#endregion method AddApprovalPhaseTotal
 
 		#endregion public
 
@@ -224,7 +297,11 @@
 		private const string SignedField = "LoanAgreementPhase_SignOnlineFinancingAgreement";
 		private static readonly ParsedValue Yes = new ParsedValue("yes");
 
+		private const string ApprovedAmount = "ApprovedAmount";
+		private const string ApprovedAmountField = "ApprovalPhaseFeedback_" + ApprovedAmount;
 		private const string FinancialDetails = "FinancialDetails";
+
+		public const string ApprovalPhaseFeedback = "ApprovalPhaseFeedback";
 
 		private readonly SortedDictionary<int, LoanData> m_oLoans; 
 		private readonly SortedDictionary<int, CashRequestData> m_oCashRequests; 
@@ -288,7 +365,9 @@
 
 		#endregion class CashRequestData
 
+		private static readonly Dictionary<string, Dictionary<string, string>> ms_oColumnNumberFormats;
 		private static readonly Dictionary<string, Dictionary<string, string>> ms_oColumnTitles;
+		private static decimal TotalApprovedAmount { get; set; }
 
 		#region method GetColumnDisplayName
 

@@ -10,14 +10,16 @@
 		#region method SetCellTitle
 
 		public static int SetCellTitle(this ExcelWorksheet oSheet, int nRow, int nColumn, object oRaw) {
-			oSheet.Cells[nRow, nColumn].Style.Font.Bold = true;
-
-			oSheet.Cells[nRow, nColumn].Style.Font.Color.SetColor(Color.White);
-
-			oSheet.Cells[nRow, nColumn].Style.Fill.PatternType = ExcelFillStyle.Solid;
-			oSheet.Cells[nRow, nColumn].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(0x67, 0xc1, 0x0b));
-
-			return SetCellValue(oSheet, nRow, nColumn, oRaw, false);
+			return SetCellValue(
+				oSheet,
+				nRow,
+				nColumn,
+				oRaw,
+				bIsBold: true,
+				bSetZebra: false,
+				oFontColour: Color.White,
+				oBgColour: Color.FromArgb(0x67, 0xc1, 0x0b)
+			);
 		} // SetCellTitle
 
 		#endregion method SetCellTitle
@@ -37,7 +39,17 @@
 
 		#region method SetCellValue
 
-		public static int SetCellValue(this ExcelWorksheet oSheet, int nRow, int nColumn, object oRaw, bool bSetZebra = true) {
+		public static int SetCellValue(
+			this ExcelWorksheet oSheet,
+			int nRow,
+			int nColumn,
+			object oRaw,
+			bool? bIsBold = false,
+			bool? bSetZebra = true,
+			Color? oFontColour = null,
+			Color? oBgColour = null,
+			string sNumberFormat = null
+		) {
 			ExcelRange oCell = oSheet.Cells[nRow, nColumn];
 
 			if (oRaw == null)
@@ -54,10 +66,28 @@
 					oCell.Value = oRaw;
 			} // if
 
-			if (bSetZebra && (nRow % 2 != 0)) {
-				oCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-				oCell.Style.Fill.BackgroundColor.SetColor(Color.AliceBlue);
+			if (oFontColour.HasValue)
+				oCell.Style.Font.Color.SetColor(oFontColour.Value);
+
+			bool bDoZebra = bSetZebra.HasValue && bSetZebra.Value;
+
+			if (bDoZebra) {
+				if (nRow % 2 != 0) {
+					oCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+					oCell.Style.Fill.BackgroundColor.SetColor(Color.AliceBlue);
+				} // if
+			}
+			else {
+				if (oBgColour.HasValue) {
+					oCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+					oCell.Style.Fill.BackgroundColor.SetColor(oBgColour.Value);
+				} // if
 			} // if
+
+			oCell.Style.Font.Bold = bIsBold.HasValue && bIsBold.Value;
+
+			if (!string.IsNullOrWhiteSpace(sNumberFormat))
+				oCell.Style.Numberformat.Format = sNumberFormat;
 
 			nColumn++;
 
@@ -72,7 +102,7 @@
 			int nColumn = 1;
 
 			for (int i = 0; i < aryRaw.Length; i++)
-				nColumn = oSheet.SetCellValue(nRow, nColumn, aryRaw[i], bSetZebra);
+				nColumn = oSheet.SetCellValue(nRow, nColumn, aryRaw[i], bSetZebra: bSetZebra);
 
 			return nColumn;
 		} // SetRowValues
