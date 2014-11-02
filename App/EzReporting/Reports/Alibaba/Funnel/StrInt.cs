@@ -12,10 +12,10 @@
 			while (oSheet.Cells[nRow, 1].Value != null)
 				nRow++;
 
-			int nColumn = 1;
-
-			nColumn = oSheet.SetCellValue(nRow, nColumn, Caption);
-			nColumn = oSheet.SetCellValue(nRow, nColumn, Counter);
+			int nColumn = oSheet.SetRowValues(nRow, true, 
+				Caption,
+				Counter
+			);
 
 			foreach (object obj in GetAdditionalReportFields()) {
 				if (obj is double)
