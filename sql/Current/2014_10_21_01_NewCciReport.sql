@@ -1,4 +1,4 @@
-IF NOT EXISTS (SELECT 1 FROM ReportScheduler WHERE Title = 'RPT_NEW_CCI')
+IF NOT EXISTS (SELECT 1 FROM ReportScheduler WHERE Type = 'RPT_NEW_CCI')
 BEGIN
 	INSERT INTO ReportScheduler
 		(Type, Title, StoredProcedure, IsDaily, IsWeekly, IsMonthly, Header, Fields, ToEmail, IsMonthToDate)
