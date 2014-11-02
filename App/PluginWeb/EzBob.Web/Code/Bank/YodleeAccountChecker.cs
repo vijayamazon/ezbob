@@ -2,7 +2,6 @@
 {
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Models;
 	using YodleeLib.connector;
 	using log4net;
 
@@ -32,14 +31,17 @@
 				return;
 			}
 
-			if (!customer.GetYodleeAccounts().ToList().Any())
+
+			var yodleeServiceInfo = new YodleeServiceInfo();
+			var yodleeMps = customer.CustomerMarketPlaces
+				.Where(m => m.Marketplace.InternalId == yodleeServiceInfo.InternalId && m.DisplayName != "ParsedBank").ToList();
+
+			if (!yodleeMps.Any())
 			{
 				return;
 			}
-
-			var yodleeServiceInfo = new YodleeServiceInfo();
-			var yodleeAcounts = customer.CustomerMarketPlaces
-				.Where(m => m.Marketplace.InternalId == yodleeServiceInfo.InternalId && m.DisplayName != "ParsedBank")
+			
+			var yodleeAcounts = yodleeMps
 				.SelectMany(x => x.YodleeOrders)
 				.SelectMany(o => o.OrderItems)
 				.Select(i => new YodleeAccount {
