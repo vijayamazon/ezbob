@@ -13,6 +13,8 @@ BEGIN
 
 	SET @IncludeTest = ISNULL(@IncludeTest, 0)
 
+	DECLARE @Hmrc UNIQUEIDENTIFIER = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
+
 	------------------------------------------------------------------------------
 
 	SELECT DISTINCT
@@ -90,7 +92,7 @@ BEGIN
 		FROM
 			MP_MarketplaceType
 		WHERE
-			InternalId = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
+			InternalId = @Hmrc
 	),
 	hmrc_linked AS (
 		SELECT
@@ -140,7 +142,7 @@ BEGIN
 		SELECT
 			t.CustomerID,
 			t.AddressType,
-			MAX(a.addressId) AS AddressID
+			MAX(ISNULL(a.addressId, 0)) AS AddressID
 		FROM
 			comp_addr_types t
 			LEFT JOIN CustomerAddress a
@@ -196,8 +198,8 @@ BEGIN
 		FinancialDetails_WhoFilesWithHmrc   = b.VatReporting,
 		--
 		--
-		VatAccount_Linked   = CASE WHEN ISNULL(hmrc_linked.Counter,   0) > 0 THEN 'yes' ELSE 'no' END,
-		VatAccount_Uploaded = CASE WHEN ISNULL(hmrc_uploaded.Counter, 0) > 0 THEN 'yes' ELSE 'no' END,
+		DataPoint_VatLinked   = CASE WHEN ISNULL(hmrc_linked.Counter,   0) > 0 THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END,
+		DataPoint_VatUploaded = CASE WHEN ISNULL(hmrc_uploaded.Counter, 0) > 0 THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END,
 		--
 		--
 		ApprovalPhaseVerify_Email         = c.Name,
@@ -285,7 +287,27 @@ BEGIN
 			OR
 			c.IsTest = 0
 		)
-	
+
+	------------------------------------------------------------------------------
+
+	SELECT DISTINCT
+		RowType     = 'Marketplace',
+		CustomerID  = c.Id,
+		Marketplace = m.Name
+	FROM
+		Customer c
+		INNER JOIN MP_CustomerMarketPlace cmp ON c.Id = cmp.CustomerId
+		INNER JOIN MP_MarketplaceType m
+			ON cmp.MarketPlaceId = m.Id
+			AND m.InternalId != @Hmrc
+	WHERE
+		c.IsAlibaba = 1
+		AND (
+			@IncludeTest = 1
+			OR
+			c.IsTest = 0
+		)
+
 	------------------------------------------------------------------------------
 
 	SELECT
