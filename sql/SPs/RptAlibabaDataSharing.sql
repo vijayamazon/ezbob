@@ -158,8 +158,6 @@ BEGIN
 		--
 		--
 		CreditAccount_Email               = c.Name,
-		CreditAccount_SecurityQuestion    = q.name,
-		CreditAccount_SecurityAnswer      = u.SecurityAnswer1,
 		CreditAccount_PromoCode           = c.PromoCode,
 		CreditAccount_RequestedLoanAmount = crl_data.Amount,
 		CreditAccount_MobilePhone         = c.MobilePhone,
@@ -257,10 +255,6 @@ BEGIN
 		--
 	FROM
 		Customer c
-		INNER JOIN Security_User u
-			ON c.Id = u.UserId
-		INNER JOIN Security_Question q
-			ON u.SecurityQuestion1Id = q.id
 		LEFT JOIN crl
 			ON c.Id = crl.CustomerId
 		LEFT JOIN CustomerRequestedLoan crl_data
