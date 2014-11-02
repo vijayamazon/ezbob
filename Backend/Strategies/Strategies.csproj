@@ -79,8 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin\Nop.cs" />
-    <Compile Include="AutoDecisions\AutoDecisionCondition.cs" />
-    <Compile Include="AutoDecisions\AutoDecisionRejectionResponse.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\AutoDecisionCondition.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\AutoDecisionRejectionResponse.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />
@@ -180,13 +180,12 @@
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="Misc\AmlChecker.cs" />
-    <Compile Include="AutoDecisions\Approval.cs" />
-    <Compile Include="AutoDecisions\AutoDecisionMaker.cs" />
-    <Compile Include="AutoDecisions\AutoDecisionResponse.cs" />
-    <Compile Include="AutoDecisions\BankBasedApproval.cs" />
-    <Compile Include="AutoDecisions\Rejection.cs" />
-    <Compile Include="AutoDecisions\ReApproval.cs" />
-    <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\Approval.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\AutoDecisionResponse.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\BankBasedApproval.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\Rejection.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\ReApproval.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\ReRejection.cs" />
     <Compile Include="Broker\BrokerBackFromCustomerWizard.cs" />
     <Compile Include="Broker\BrokerCheckCustomerRelevance.cs" />
     <Compile Include="Broker\BrokerCustomerWizardComplete.cs" />

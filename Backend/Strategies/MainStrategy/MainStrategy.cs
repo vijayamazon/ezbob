@@ -24,7 +24,6 @@
 		private readonly DataGatherer dataGatherer;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly MedalScoreCalculator medalScoreCalculator;
-		private readonly AutoDecisionMaker autoDecisionMaker;
 
 		// Inputs
 		private readonly int customerId;
@@ -73,7 +72,6 @@
 			newCreditLineOption = newCreditLine;
 			avoidAutomaticDecision = avoidAutoDecision;
 			overrideApprovedRejected = true;
-			autoDecisionMaker = new AutoDecisionMaker(DB, Log);
 			staller = new Staller(customerId, newCreditLineOption, mailer, DB, Log);
 			dataGatherer = new DataGatherer(customerId, DB, Log);
 		}
@@ -99,7 +97,7 @@
 			    dataGatherer.AppAccountNumber, dataGatherer.AppSortCode, DB, Log);
 			consumerCaisDetailWorstStatuses = additionalStrategiesCaller.Call();
 
-			// Gather Raw Data
+			// Gather Raw Data - most data is gathered here
 			dataGatherer.Gather();
 
 			// Processing logic
@@ -112,86 +110,37 @@
 
 			// Calculate old medal
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
+			modelLoanOffer = scoringResult.MaxOffer;
 
+			// Make rejection decisions
 			AutoDecisionRejectionResponse autoDecisionRejectionResponse = ProcessRejections();
 
-			// 2nd step gather
+			// Gather LR data - must be done after rejection decisions
 			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
 
-			// More logic
+			// Calculate limited medal
 			if (dataGatherer.NumOfHmrcMps < 2 && Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness))
 			{
-				var instance = new CalculateLimitedMedal(DB, Log, customerId);
-				instance.Execute();
-
-				int offerAccordingToThisMedal = 0;
-				if (instance.Result != null && string.IsNullOrEmpty(instance.Result.Error))
-				{
-					SafeReader sr = DB.GetFirst(
-						"GetMedalCoefficients",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("MedalFlow", "Limited"),
-						new QueryParameter("Medal", instance.Result.Medal.ToString())
-					);
-
-					if (!sr.IsEmpty)
-					{
-						decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
-						decimal offerAccordingToAnnualTurnover = instance.Result.AnnualTurnover * annualTurnoverMedalFactor;
-
-						if (instance.Result.BasedOnHmrcValues)
-						{
-							decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
-							decimal valueAddedMedalFactor = sr["ValueAdded"];
-							decimal offerAccordingToFreeCashFlow = instance.Result.FreeCashFlowValue * freeCashFlowMedalFactor;
-							decimal offerAccordingToValueAdded = instance.Result.ValueAdded * valueAddedMedalFactor;
-
-							// Get min that is over threshold
-							if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded ||
-								 offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
-								(offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
-								 offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
-								offerAccordingToFreeCashFlow >= dataGatherer.LimitedMedalMinOffer)
-							{
-								offerAccordingToThisMedal = (int)offerAccordingToFreeCashFlow;
-								Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId, offerAccordingToFreeCashFlow);
-							}
-							else if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow ||
-									  offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
-									 (offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
-									  offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
-									 offerAccordingToValueAdded >= dataGatherer.LimitedMedalMinOffer)
-							{
-								offerAccordingToThisMedal = (int)offerAccordingToValueAdded;
-								Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId, offerAccordingToValueAdded);
-							}
-							else if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow ||
-									  offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
-									 (offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
-									  offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
-									 offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
-							{
-								offerAccordingToThisMedal = (int)offerAccordingToAnnualTurnover;
-								Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
-							}
-						}
-						else if (offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
-						{
-							offerAccordingToThisMedal = (int)offerAccordingToAnnualTurnover;
-							Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
-						}
-					}
-				}
-
-				CalcAndCapOffer(offerAccordingToThisMedal);
-			}
-			else
-			{
-				CalcAndCapOffer(modelLoanOffer);
+				modelLoanOffer = CalculateLimitedMedal();
 			}
 
+			// Cap offer
+			CapOffer();
+
+			// Make approve decisions
 			ProcessApprovals(autoDecisionRejectionResponse);
 
+			// Log decision
+			LogDecision(autoDecisionRejectionResponse);
+
+			// process the decision - DB + mails
+			ProcessDecision(scoringResult, autoDecisionRejectionResponse);
+
+			SetEndTimestamp();
+		}
+
+		private void ProcessDecision(ScoreMedalOffer scoringResult, AutoDecisionRejectionResponse autoDecisionRejectionResponse)
+		{
 			if (autoDecisionResponse != null && autoDecisionResponse.IsAutoApproval)
 			{
 				modelLoanOffer = autoDecisionResponse.AutoApproveAmount;
@@ -211,9 +160,6 @@
 				}
 			}
 
-			// Actions after decision
-			autoDecisionMaker.LogDecision(customerId, autoDecisionRejectionResponse, autoDecisionResponse);
-			
 			if (autoDecisionRejectionResponse.DecidedToReject)
 			{
 				modelLoanOffer = 0;
@@ -266,8 +212,31 @@
 					SendWaitingForDecisionMail();
 				}
 			}
+		}
 
-			SetEndTimestamp();
+		private void LogDecision(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
+		{
+			string decisionName = autoDecisionRejectionResponse.DecidedToReject ? autoDecisionRejectionResponse.DecisionName : autoDecisionResponse.DecisionName;
+
+			int decisionId = DB.ExecuteScalar<int>(
+				"AutoDecisionRecord",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("DecisionName", decisionName),
+				new QueryParameter("Date", DateTime.UtcNow)
+			);
+
+			foreach (AutoDecisionCondition condition in autoDecisionRejectionResponse.RejectionConditions)
+			{
+				DB.ExecuteNonQuery(
+					"AutoDecisionConditionRecord",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("DecisionId", decisionId),
+					new QueryParameter("DecisionName", condition.DecisionName),
+					new QueryParameter("Satisfied", condition.Satisfied),
+					new QueryParameter("Description", condition.Description)
+				);
+			}
 		}
 
 		private void ProcessApprovals(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
@@ -324,6 +293,76 @@
 			}
 		}
 
+		private int CalculateLimitedMedal()
+		{
+			var instance = new CalculateLimitedMedal(DB, Log, customerId);
+			instance.Execute();
+
+			if (instance.Result != null && string.IsNullOrEmpty(instance.Result.Error))
+			{
+				SafeReader sr = DB.GetFirst(
+					"GetMedalCoefficients",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("MedalFlow", "Limited"),
+					new QueryParameter("Medal", instance.Result.Medal.ToString())
+				);
+
+				if (!sr.IsEmpty)
+				{
+					decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
+					decimal offerAccordingToAnnualTurnover = instance.Result.AnnualTurnover * annualTurnoverMedalFactor;
+
+					if (instance.Result.BasedOnHmrcValues)
+					{
+						decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
+						decimal valueAddedMedalFactor = sr["ValueAdded"];
+						decimal offerAccordingToFreeCashFlow = instance.Result.FreeCashFlowValue * freeCashFlowMedalFactor;
+						decimal offerAccordingToValueAdded = instance.Result.ValueAdded * valueAddedMedalFactor;
+
+						// Get min that is over threshold
+						if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded ||
+							 offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
+							(offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
+							 offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
+							offerAccordingToFreeCashFlow >= dataGatherer.LimitedMedalMinOffer)
+						{
+							Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId, offerAccordingToFreeCashFlow);
+							return (int)offerAccordingToFreeCashFlow;
+						}
+
+						if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow ||
+							 offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
+							(offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
+							 offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
+							offerAccordingToValueAdded >= dataGatherer.LimitedMedalMinOffer)
+						{
+							Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId,
+									 offerAccordingToValueAdded);
+							return (int)offerAccordingToValueAdded;
+						}
+
+						if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow ||
+							 offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
+							(offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
+							 offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
+							offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
+						{
+							Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId,
+									 offerAccordingToAnnualTurnover);
+							return (int)offerAccordingToAnnualTurnover;
+						}
+					}
+					else if (offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
+					{
+						Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
+						return (int)offerAccordingToAnnualTurnover;
+					}
+				}
+			}
+
+			return 0;
+		}
+
 		private AutoDecisionRejectionResponse ProcessRejections()
 		{
 			var autoDecisionRejectionResponse = new AutoDecisionRejectionResponse();
@@ -377,7 +416,7 @@
 			return this;
 		}
 
-		private void CalcAndCapOffer(int loanAmount)
+		private void CapOffer()
 		{
 			Log.Info("Finalizing and capping offer");
 
@@ -398,7 +437,7 @@
 				loanOfferReApprovalRemainingAmountOld
 			}.Max();
 
-			offeredCreditLine = loanAmount;
+			offeredCreditLine = modelLoanOffer;
 
 			bool isHomeOwnerAccordingToLandRegistry = false;
 			SafeReader sr = DB.GetFirst(
@@ -660,8 +699,6 @@
 				dataGatherer.ModelLatePayments,
 				dataGatherer.ModelEarlyPayments
 			);
-
-			modelLoanOffer = scoringResult.MaxOffer;
 
 			medalType = scoringResult.Medal;
 

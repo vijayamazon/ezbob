@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using Experian;
 	using EzBob.Models;
-	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Misc;
