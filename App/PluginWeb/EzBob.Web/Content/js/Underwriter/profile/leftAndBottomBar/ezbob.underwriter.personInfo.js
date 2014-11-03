@@ -215,7 +215,11 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 		var self = this;
 
-		var oRequest = $.getJSON(window.gRootPath + 'Customers/GridBrokers', { includeTestCustomers: false });
+		var oRequest = $.getJSON(window.gRootPath + 'Customers/GetGrid', {
+			grid: 'UwGridBrokers',
+			includeTestCustomers: false,
+			includeAllCustomers: false,
+		});
 
 		oRequest.done(function(oResponse) {
 			oResponse.aaData.sort(function(a, b) {
