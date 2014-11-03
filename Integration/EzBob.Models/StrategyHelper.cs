@@ -1014,9 +1014,17 @@
 			var b = new LandRegistryModelBuilder();
 			var lrData = b.BuildResModel(response, titleNumber);
 
-			foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties) {
-				if (
-					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
+			foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties)
+			{
+				// We are taking the first part of the LR first name as it may contain both first and middle name, while we might be missing the middle name
+				string firstPartOfFirstName = proprietorshipParty.PrivateIndividualForename;
+				int indexOfSpace = firstPartOfFirstName.IndexOf(' ');
+				if (indexOfSpace != -1)
+				{
+					firstPartOfFirstName = firstPartOfFirstName.Substring(0, indexOfSpace);
+				}
+				
+				if (customer.PersonalInfo.Fullname.Contains(firstPartOfFirstName) &&
 					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname)
 				) {
 					// Customer is owner
