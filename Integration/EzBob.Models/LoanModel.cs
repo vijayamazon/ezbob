@@ -112,10 +112,10 @@
 				}
 			}
 
+			loanModel.LoanSourceName = loan.LoanSource.Name;
             if (loan.CashRequest!= null)
             {
                 loanModel.DiscountPlan = loan.CashRequest.DiscountPlan.Name;
-	            loanModel.LoanSourceName = loan.LoanSource.Name;
             }
             return loanModel;
         }
