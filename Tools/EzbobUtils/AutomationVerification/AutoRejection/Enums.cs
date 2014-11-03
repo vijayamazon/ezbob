@@ -28,17 +28,18 @@
 
 	public enum Parameter
 	{
-		ExperianScore,
-		MpSeniority,
-		MaritalStatus,
-		PositiveFeedback,
-		Other,
-		AnnualTurnover,
-		NumOfStores,
+		BusinessScore,
+		TangibleEquity,
+		BusinessSeniority,
+		ConsumerScore,
 		EzbobSeniority,
-		EzbobNumOfLoans,
-		EzbobNumOfLateRepayments,
-		EzbobNumOfEarlyRepayments
+		MaritalStatus,
+		NumOfOnTimeLoans,
+		NumOfLatePayments,
+		NumOfEarlyPayments,
+		AnnualTurnover,
+		FreeCashFlow,
+		NetWorth,
 	}
 
 	public enum Decision

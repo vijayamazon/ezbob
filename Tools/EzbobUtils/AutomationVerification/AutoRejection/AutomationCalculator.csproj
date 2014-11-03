@@ -48,17 +48,22 @@
     <Compile Include="AutoReRejectionCalculator.cs" />
     <Compile Include="AutoApprovalCalculator.cs" />
     <Compile Include="AutoReApprovalCalculator.cs" />
+    <Compile Include="OfflineLimitedMedalCalculator.cs" />
     <Compile Include="DbHelper.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="MarketPlacesHelper.cs" />
-    <Compile Include="MedalScoreCalculator.cs" />
     <Compile Include="Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Range.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>

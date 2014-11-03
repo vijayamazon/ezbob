@@ -2,57 +2,22 @@
 {
 	using System;
 
-	public class ScoreMedalOffer
+	public class MedalOutputModel
 	{
 		public Medal Medal { get; set; }
 		public decimal Score { get; set; }
-		public int MaxOffer { get; set; }
-		public decimal MaxOfferPercent { get; set; }
+		public string Error { get; set; }
 	}
 
 	public class Weight
 	{
-		public decimal FinalWeightFixedWeightParameter { get; set; }
-		public decimal StandardWeightFixedWeightParameter { get; set; }
-		public decimal StandardWeightAdjustableWeightParameter { get; set; }
-		public decimal DeltaForAdjustableWeightParameter { get; set; }
 		public decimal FinalWeight { get; set; }
 		public decimal MinimumScore { get; set; }
 		public decimal MaximumScore { get; set; }
 		public int MinimumGrade { get; set; }
 		public int MaximumGrade { get; set; }
-
 		public int Grade { get; set; }
 		public decimal Score { get; set; }
-	}
-
-	public class Range
-	{
-		public decimal? MinValue { get; set; }
-		public decimal? MaxValue { get; set; }
-
-		public bool IsInRange(decimal value)
-		{
-			if (MinValue.HasValue && MaxValue.HasValue && value >= MinValue.Value && value <= MaxValue.Value) return true;
-			if (MaxValue.HasValue && !MinValue.HasValue && value <= MaxValue.Value) return true;
-			if (MinValue.HasValue && !MaxValue.HasValue && value >= MinValue.Value) return true;
-			return false;
-		}
-	}
-
-	public class RangeGrage : Range
-	{
-		public int Grade { get; set; }
-	}
-
-	public class RangeMedal : Range
-	{
-		public Medal Medal { get; set; }
-	}
-
-	public class RangeOfferPercent : Range
-	{
-		public decimal OfferPercent { get; set; }
 	}
 
 	public class AutoDecision
@@ -193,5 +158,50 @@
 		public bool TookLoanLastRequest { get; set; }
 		public decimal PrincipalRepaymentsSinceOffer { get; set; }
 		public bool WasLate { get; set; }
+	}
+
+	public class MedalInputModel {
+		public int BusinessScore { get; set; }
+		public decimal TangibleEquity { get; set; }
+		public int BusinessSeniority { get; set; }
+		public int ConsumerScore { get; set; }
+		public decimal EzbobSeniority { get; set; }
+		public MaritalStatus MaritalStatus { get; set; }
+		public int NumOfOnTimeLoans { get; set; }
+		public int NumOfLatePayments { get; set; }
+		public int NumOfEarlyPayments { get; set; }
+		public decimal AnnualTurnover { get; set; }
+		public decimal FreeCashFlow { get; set; }
+		public decimal NetWorth { get; set; }
+		public bool IsLimited { get; set; }
+		public bool IsOffline { get; set; }
+		public DateTime? FirstRepaymentDate { get; set; }
+		public bool HasHmrc { get; set; }
+		public bool HasMoreThanOneHmrc { get; set; }
+
+		public override string ToString()
+		{
+			return string.Format(
+				@"Medal input params:
+					BusinessScore: {0}, 
+					TangibleEquity: {1}, 
+					BusinessSeniority: {2}, 
+					ConsumerScore: {3}, 
+					EzbobSeniority: {4}, 
+					MaritalStatus: {5}, 
+					NumOfOnTimeLoans: {6}, 
+					NumOfLatePayments: {7}, 
+					NumOfEarlyPayments: {8}, 
+					AnnualTurnover: {9}, 
+					FreeCashFlow: {10}, 
+					NetWorth: {11},
+					IsLimited: {12},
+					IsOffline: {13},
+					FirstRepaymentDate: {14}",
+				BusinessScore, TangibleEquity, BusinessSeniority, ConsumerScore, 
+				EzbobSeniority, MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, 
+				NumOfEarlyPayments, AnnualTurnover, FreeCashFlow, NetWorth, IsLimited,
+				IsOffline, FirstRepaymentDate); 
+		}
 	}
 }
