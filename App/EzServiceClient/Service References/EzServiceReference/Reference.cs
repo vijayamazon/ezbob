@@ -184,6 +184,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
@@ -215,12 +216,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomerFileContentsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerLeadDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EsignatureListActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EsignatureFileActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianLtdActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerInstantOfferResponseActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -260,6 +261,29 @@ namespace ServiceClientProxy.EzServiceReference {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ExperianConsumerActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class ExperianConsumerActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.ModelsWithDB.Experian.ExperianConsumerData ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.ModelsWithDB.Experian.ExperianConsumerData Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
             }
         }
     }
@@ -1395,6 +1419,29 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CustomerManualAnnualizedRevenueActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CustomerManualAnnualizedRevenueActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.CustomerManualAnnualizedRevenue ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.CustomerManualAnnualizedRevenue Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EsignatureListActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class EsignatureListActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -1560,29 +1607,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.ModelsWithDB.Experian.ExperianLtd Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ExperianConsumerActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class ExperianConsumerActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.ModelsWithDB.Experian.ExperianConsumerData ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.ModelsWithDB.Experian.ExperianConsumerData Value {
             get {
                 return this.ValueField;
             }
@@ -2470,6 +2494,18 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
+        ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumer", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerResponse")]
+        ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumer", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> LoadExperianConsumerAsync(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerMortgageDataResponse")]
         ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId);
         
@@ -3208,6 +3244,18 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
         System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerManualAnnualizedRevenue", ReplyAction="http://tempuri.org/IEzService/GetCustomerManualAnnualizedRevenueResponse")]
+        ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult GetCustomerManualAnnualizedRevenue(int nCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerManualAnnualizedRevenue", ReplyAction="http://tempuri.org/IEzService/GetCustomerManualAnnualizedRevenueResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult> GetCustomerManualAnnualizedRevenueAsync(int nCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetCustomerManualAnnualizedRevenue", ReplyAction="http://tempuri.org/IEzService/SetCustomerManualAnnualizedRevenueResponse")]
+        ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult SetCustomerManualAnnualizedRevenue(int nCustomerID, decimal nRevenue, string sComment);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetCustomerManualAnnualizedRevenue", ReplyAction="http://tempuri.org/IEzService/SetCustomerManualAnnualizedRevenueResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult> SetCustomerManualAnnualizedRevenueAsync(int nCustomerID, decimal nRevenue, string sComment);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
         
@@ -3459,18 +3507,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianConsumer", ReplyAction="http://tempuri.org/IEzService/BackfillExperianConsumerResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianConsumerAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
-        ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumer", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerResponse")]
-        ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumer", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> LoadExperianConsumerAsync(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3498,6 +3534,22 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId) {
+            return base.Channel.ParseExperianConsumer(nServiceLogId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId) {
+            return base.Channel.ParseExperianConsumerAsync(nServiceLogId);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
+            return base.Channel.LoadExperianConsumer(userId, customerId, directorId, nServiceLogId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> LoadExperianConsumerAsync(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
+            return base.Channel.LoadExperianConsumerAsync(userId, customerId, directorId, nServiceLogId);
         }
         
         public ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId) {
@@ -4484,6 +4536,22 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetCompanyFileAsync(userId, companyFileId);
         }
         
+        public ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult GetCustomerManualAnnualizedRevenue(int nCustomerID) {
+            return base.Channel.GetCustomerManualAnnualizedRevenue(nCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult> GetCustomerManualAnnualizedRevenueAsync(int nCustomerID) {
+            return base.Channel.GetCustomerManualAnnualizedRevenueAsync(nCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult SetCustomerManualAnnualizedRevenue(int nCustomerID, decimal nRevenue, string sComment) {
+            return base.Channel.SetCustomerManualAnnualizedRevenue(nCustomerID, nRevenue, sComment);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult> SetCustomerManualAnnualizedRevenueAsync(int nCustomerID, decimal nRevenue, string sComment) {
+            return base.Channel.SetCustomerManualAnnualizedRevenueAsync(nCustomerID, nRevenue, sComment);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst) {
             return base.Channel.ApprovedUser(userId, customerId, loanAmount, nValidHours, isFirst);
         }
@@ -4818,22 +4886,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianConsumerAsync() {
             return base.Channel.BackfillExperianConsumerAsync();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId) {
-            return base.Channel.ParseExperianConsumer(nServiceLogId);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId) {
-            return base.Channel.ParseExperianConsumerAsync(nServiceLogId);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
-            return base.Channel.LoadExperianConsumer(userId, customerId, directorId, nServiceLogId);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> LoadExperianConsumerAsync(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
-            return base.Channel.LoadExperianConsumerAsync(userId, customerId, directorId, nServiceLogId);
         }
     }
 }

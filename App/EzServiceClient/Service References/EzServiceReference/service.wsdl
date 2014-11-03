@@ -131,6 +131,18 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_ParseExperianConsumer_InputMessage">
+    <wsdl:part name="parameters" element="tns:ParseExperianConsumer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ParseExperianConsumer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ParseExperianConsumerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianConsumer_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianConsumer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianConsumer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianConsumerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LoadExperianConsumerMortgageData_InputMessage">
     <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortgageData" />
   </wsdl:message>
@@ -869,6 +881,18 @@
   <wsdl:message name="IEzService_GetCompanyFile_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyFileResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerManualAnnualizedRevenue_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerManualAnnualizedRevenue" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerManualAnnualizedRevenue_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerManualAnnualizedRevenueResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetCustomerManualAnnualizedRevenue_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetCustomerManualAnnualizedRevenue" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetCustomerManualAnnualizedRevenue_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetCustomerManualAnnualizedRevenueResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_ApprovedUser_InputMessage">
     <wsdl:part name="parameters" element="tns:ApprovedUser" />
   </wsdl:message>
@@ -1121,18 +1145,6 @@
   <wsdl:message name="IEzService_BackfillExperianConsumer_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillExperianConsumerResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ParseExperianConsumer_InputMessage">
-    <wsdl:part name="parameters" element="tns:ParseExperianConsumer" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ParseExperianConsumer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ParseExperianConsumerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoadExperianConsumer_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoadExperianConsumer" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoadExperianConsumer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoadExperianConsumerResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1168,6 +1180,14 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="ParseExperianConsumer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumer" message="tns:IEzService_ParseExperianConsumer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumerResponse" message="tns:IEzService_ParseExperianConsumer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadExperianConsumer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumer" message="tns:IEzService_LoadExperianConsumer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerResponse" message="tns:IEzService_LoadExperianConsumer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LoadExperianConsumerMortgageData">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" message="tns:IEzService_LoadExperianConsumerMortgageData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageDataResponse" message="tns:IEzService_LoadExperianConsumerMortgageData_OutputMessage" />
@@ -1660,6 +1680,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetCustomerManualAnnualizedRevenue">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerManualAnnualizedRevenue" message="tns:IEzService_GetCustomerManualAnnualizedRevenue_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerManualAnnualizedRevenueResponse" message="tns:IEzService_GetCustomerManualAnnualizedRevenue_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetCustomerManualAnnualizedRevenue">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetCustomerManualAnnualizedRevenue" message="tns:IEzService_SetCustomerManualAnnualizedRevenue_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetCustomerManualAnnualizedRevenueResponse" message="tns:IEzService_SetCustomerManualAnnualizedRevenue_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ApprovedUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ApprovedUser" message="tns:IEzService_ApprovedUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ApprovedUserResponse" message="tns:IEzService_ApprovedUser_OutputMessage" />
@@ -1828,14 +1856,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumer" message="tns:IEzService_BackfillExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumerResponse" message="tns:IEzService_BackfillExperianConsumer_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ParseExperianConsumer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumer" message="tns:IEzService_ParseExperianConsumer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumerResponse" message="tns:IEzService_ParseExperianConsumer_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LoadExperianConsumer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumer" message="tns:IEzService_LoadExperianConsumer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerResponse" message="tns:IEzService_LoadExperianConsumer_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1918,6 +1938,24 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="ParseExperianConsumer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianConsumer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadExperianConsumer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LoadExperianConsumerMortgageData">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" style="document" />
       <wsdl:input>
@@ -3025,6 +3063,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetCustomerManualAnnualizedRevenue">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerManualAnnualizedRevenue" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCustomerManualAnnualizedRevenue">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SetCustomerManualAnnualizedRevenue" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ApprovedUser">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ApprovedUser" style="document" />
       <wsdl:input>
@@ -3396,24 +3452,6 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillExperianConsumer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianConsumer" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ParseExperianConsumer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianConsumer" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LoadExperianConsumer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

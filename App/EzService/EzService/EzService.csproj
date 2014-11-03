@@ -81,6 +81,7 @@
     <Compile Include="ActionResults\CompanyDataForCreditBureauActionResult.cs" />
     <Compile Include="ActionResults\CompanyCaisDataActionResult.cs" />
     <Compile Include="ActionResults\ConfigTableActionResult.cs" />
+    <Compile Include="ActionResults\CustomerManualAnnualizedRevenueActionResult.cs" />
     <Compile Include="ActionResults\EmailConfirmationTokenActionResult.cs" />
     <Compile Include="ActionResults\PropertyStatusesActionResult.cs" />
     <Compile Include="ActionResults\CustomerDetailsActionResult.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="ExecuteArguments.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\customer.manual.annualized.revenue.cs" />
     <Compile Include="EzServiceImplementation\esign.cs" />
     <Compile Include="EzServiceImplementation\Funding.cs" />
     <Compile Include="EzServiceImplementation\vat.return.cs" />

@@ -34,7 +34,7 @@ BEGIN
 				l.Status = 'Late'
 			)
 	WHERE
-		c.IsAlibaba = 1
+		c.AlibabaId IS NOT NULL
 		AND (
 			@IncludeTest = 1
 			OR
@@ -192,10 +192,10 @@ BEGIN
 		CompanyDetails_CompanyName               = b.CompanyName,
 		--
 		--
-		FinancialDetails_TotalAnnualRevenue = c.OverallTurnOver,
-		FinancialDetails_EmployeeCount      = cec_data.EmployeeCount,
-		FinancialDetails_TotalMonthlySalary = cec_data.TotalMonthlySalary,
-		FinancialDetails_WhoFilesWithHmrc   = b.VatReporting,
+		FinancialDetails_TotalAnnualizedRevenue = muw.AnnualizedRevenue,
+		FinancialDetails_EmployeeCount          = cec_data.EmployeeCount,
+		FinancialDetails_TotalMonthlySalary     = cec_data.TotalMonthlySalary,
+		FinancialDetails_WhoFilesWithHmrc       = b.VatReporting,
 		--
 		--
 		DataPoint_VatLinked   = CASE WHEN ISNULL(hmrc_linked.Counter,   0) > 0 THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END,
@@ -221,10 +221,10 @@ BEGIN
 			WHEN 3 THEN '3 years or more'
 			ELSE NULL
 		END,
-		ApprovalPhaseVerify_BusinessPhoneNumber   = b.BusinessPhone,
-		ApprovalPhaseVerify_NumberOfEmployees     = cec_data.EmployeeCount,
-		ApprovalPhaseVerify_MainIndustry          = cac.Sic1992Desc1,
-		ApprovalPhaseVerify_Turnover              = c.OverallTurnOver,
+		ApprovalPhaseVerify_BusinessPhoneNumber    = b.BusinessPhone,
+		ApprovalPhaseVerify_NumberOfEmployees      = cec_data.EmployeeCount,
+		ApprovalPhaseVerify_MainIndustry           = cac.Sic1992Desc1,
+		ApprovalPhaseVerify_TotalAnnualizedRevenue = muw.AnnualizedRevenue,
 		--
 		--
 		ApprovalPhaseFeedback_IsApproved     = CASE 
@@ -280,8 +280,13 @@ BEGIN
 		LEFT JOIN CustomerAnalyticsCompany cac
 			ON c.Id = cac.CustomerID
 			AND cac.IsActive = 1
+		LEFT JOIN CustomerManualUwData muw
+			ON c.Id = muw.CustomerID
+			AND muw.IsActive = 1
 	WHERE
-		c.IsAlibaba = 1
+		c.AlibabaId IS NOT NULL
+		AND
+		c.DateOfBirth IS NOT NULL
 		AND (
 			@IncludeTest = 1
 			OR
@@ -301,7 +306,9 @@ BEGIN
 			ON cmp.MarketPlaceId = m.Id
 			AND m.InternalId != @Hmrc
 	WHERE
-		c.IsAlibaba = 1
+		c.AlibabaId IS NOT NULL
+		AND
+		c.DateOfBirth IS NOT NULL
 		AND (
 			@IncludeTest = 1
 			OR
@@ -326,7 +333,9 @@ BEGIN
 		INNER JOIN Customer c
 			ON l.CustomerId = c.Id
 	WHERE
-		c.IsAlibaba = 1
+		c.AlibabaId IS NOT NULL
+		AND
+		c.DateOfBirth IS NOT NULL
 		AND (
 			@IncludeTest = 1
 			OR
@@ -361,7 +370,9 @@ BEGIN
 			AND t.Type = 'PaypointTransaction'
 			ANd t.Status = 'Done'
 	WHERE
-		c.IsAlibaba = 1
+		c.AlibabaId IS NOT NULL
+		AND
+		c.DateOfBirth IS NOT NULL
 		AND (
 			@IncludeTest = 1
 			OR

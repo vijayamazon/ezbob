@@ -169,6 +169,16 @@
 
 		#endregion
 
+		#region Customer manual annualized revenue
+
+		[OperationContract]
+		CustomerManualAnnualizedRevenueActionResult GetCustomerManualAnnualizedRevenue(int nCustomerID);
+
+		[OperationContract]
+		CustomerManualAnnualizedRevenueActionResult SetCustomerManualAnnualizedRevenue(int nCustomerID, decimal nRevenue, string sComment);
+
+		#endregion Customer manual annualized revenue
+
 		#region email strategies
 
 		[OperationContract]

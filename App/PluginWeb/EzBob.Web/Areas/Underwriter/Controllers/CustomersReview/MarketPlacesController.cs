@@ -26,15 +26,15 @@
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using Web.Models;
 	using YodleeLib;
 	using YodleeLib.connector;
-	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class MarketPlacesController : Controller
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(MarketPlacesController));
+		private static readonly ASafeLog Log = new SafeILog(typeof(MarketPlacesController));
 		private readonly CustomerRepository _customers;
 		private readonly AnalyisisFunctionValueRepository _functions;
 		private readonly WebMarketPlacesFacade _marketPlaces;
@@ -98,7 +98,7 @@
 			}
 			catch (Exception ex)
 			{
-				Log.Error("failed to retrieve mp data from service", ex);
+				Log.Error(ex, "failed to retrieve mp data from service");
 				return Json(new List<MarketPlaceModel>(), JsonRequestBehavior.AllowGet); 
 			}
 		}
@@ -115,8 +115,10 @@
 		public JsonResult GetTeraPeakOrderItems(int customerMarketPlaceId)
 		{
 			var data = _teraPeakOrderItems.GetTeraPeakOrderItems(customerMarketPlaceId);
-			return Json(data.Select(item => new Double?[2] { (ToUnixTimestamp(item.StartDate) + ToUnixTimestamp(item.EndDate)) / 2, item.Revenue }).Cast<object>().ToArray(), JsonRequestBehavior.AllowGet);
-
+			return Json(data.Select(item => new double?[] {
+				(ToUnixTimestamp(item.StartDate) + ToUnixTimestamp(item.EndDate)) / 2,
+				item.Revenue
+			}).Cast<object>().ToArray(), JsonRequestBehavior.AllowGet);
 		}
 
 		public static long ToUnixTimestamp(DateTime d)
@@ -211,9 +213,8 @@
 				{
 					isRefreshed = yodleeMain.RefreshNotMFAItem(itemId);
 				}
-				catch (RefreshYodleeException ex)
-				{
-					Log.WarnFormat("TryRecheckYodlee exception {0}", ex);
+				catch (RefreshYodleeException ex) {
+					Log.Warn(ex, "TryRecheckYodlee exception");
 					return View(new { error = ex.ToString() });
 				}
 				if (isRefreshed)
@@ -225,12 +226,11 @@
 
 				return View(new { error = "Account wasn't refreshed successfully" });
 			}
-			else //MFA Account for testing redirecting to Yodlee LAW
-			{
-				var callback = Url.Action("YodleeCallback", "YodleeRecheck", new { Area = "Underwriter" }, "https") + "/" + umi;
-				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
-				return Redirect(finalUrl);
-			}
+
+			//MFA Account for testing redirecting to Yodlee LAW
+			var callback = Url.Action("YodleeCallback", "YodleeRecheck", new { Area = "Underwriter" }, "https") + "/" + umi;
+			string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
+			return Redirect(finalUrl);
 		} // TryRecheckYodlee
 
 		[Ajax]
@@ -285,7 +285,7 @@
 		[Ajax]
 		public void AddYodleeRule(int group, int rule, string literal)
 		{
-			Log.DebugFormat("{0} {1} {2}", group, rule, literal);
+			Log.Debug("{0} {1} {2}", group, rule, literal);
 			var oGroup = _yodleeGroupRepository.Get(group);
 			var oRule = _yodleeRuleRepository.Get(rule);
 
@@ -351,13 +351,9 @@
 
 				var pdfDocument = AgreementRenderer.ConvertToPdf(document);
 
-				if (pdfDocument != null) {
-					return File(pdfDocument, "application/pdf");
-				}
-				else {
-					return File(document, fileMetaData.FileContentType);
-				}
+				return pdfDocument == null ? File(document, fileMetaData.FileContentType) : File(pdfDocument, "application/pdf");
 			}
+
 			return null;
 		}
 
@@ -431,7 +427,7 @@
 					//nResult = mp.Id;
 				}).Execute();
 			} catch (Exception ex) {
-				Log.Error(ex);
+				Log.Error(ex, "Failed to create a company files marketplace for customer {0}.", customer.Stringify());
 				return Json(new {error = ex.Message});
 			}
 
@@ -445,7 +441,7 @@
 					int nRead = file.InputStream.Read(content, 0, file.ContentLength);
 
 					if (nRead != file.ContentLength) {
-						Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
+						Log.Warn("File {0}: failed to read entire file contents, ignoring.", i);
 						error.AppendLine("File ").Append(file.FileName).Append(" failed to read entire file contents, ignoring.");
 						continue;
 					} // if
@@ -453,7 +449,7 @@
 					string sMimeType = oLimitations.DetectFileMimeType(content, file.FileName, oLog: new SafeILog(Log));
 
 					if (string.IsNullOrWhiteSpace(sMimeType)) {
-						Log.WarnFormat("Not saving file #" + (i + 1) + ": " + file.FileName + " because it has unsupported MIME type.");
+						Log.Warn("Not saving file #" + (i + 1) + ": " + file.FileName + " because it has unsupported MIME type.");
 						error.AppendLine("Not saving file ").Append(file.FileName).Append(" because it has unsupported MIME type.");
 						continue;
 					} // if
@@ -463,7 +459,93 @@
 			}
 
 			return error.Length > 0 ? Json(new {error = error.ToString()}) : Json(new {success = true});
-
 		} // UploadedFiles
-	}
-}
+
+		#region action GetCustomerManualAnnualRevenue
+
+		[Ajax]
+		[HttpGet]
+		public JsonResult GetCustomerManualAnnualRevenue(int nCustomerID) {
+			CustomerManualAnnualizedRevenueActionResult cmarar = null;
+			Customer customer = _customers.ReallyTryGet(nCustomerID);
+
+			if (customer == null) {
+				Log.Alert("Failed to load manual annual revenue for customer {0}: no customer found.", nCustomerID);
+				return Json(new { success = false, }, JsonRequestBehavior.AllowGet);
+			} // if
+
+			Log.Debug("Loading customer manual annual revenue for customer {0}...", nCustomerID);
+
+			try {
+				cmarar = m_oServiceClient.Instance.GetCustomerManualAnnualizedRevenue(nCustomerID);
+			}
+			catch (Exception e) {
+				Log.Warn(e, "Failed to load manual annual revenue for customer {0}.", nCustomerID);
+				return Json(new { success = false, }, JsonRequestBehavior.AllowGet);
+			} // try
+
+			Log.Debug(
+				"Loading customer manual annual revenue for customer {0} complete, result: has value: {1}, value: {2}, set time: {3}, comment: {4}.",
+				nCustomerID,
+				cmarar.Value.Revenue.HasValue ? "yes" : "no",
+				cmarar.Value.Revenue,
+				cmarar.Value.EntryTime,
+				cmarar.Value.Comment
+			);
+
+			return Json(new {
+				success = true,
+				has_value = cmarar.Value.Revenue.HasValue,
+				is_alibaba = customer.IsAlibaba,
+				value = cmarar.Value,
+			}, JsonRequestBehavior.AllowGet);
+		} // GetCustomerManualAnnualRevenue
+
+		#endregion action GetCustomerManualAnnualRevenue
+
+		#region action SetCustomerManualAnnualRevenue
+
+		[Ajax]
+		[HttpPost]
+		public JsonResult SetCustomerManualAnnualRevenue(int nCustomerID, decimal nRevenue, string sComment) {
+			CustomerManualAnnualizedRevenueActionResult cmarar = null;
+			Customer customer = _customers.ReallyTryGet(nCustomerID);
+
+			if (customer == null) {
+				Log.Alert("Failed to set manual annual revenue for customer {0}: no customer found.", nCustomerID);
+				return Json(new { success = false, });
+			} // if
+
+			Log.Debug("Setting customer manual annual revenue for customer {0} to be {1} ({2})...", nCustomerID, nRevenue, sComment);
+
+			if (string.IsNullOrWhiteSpace(sComment)) {
+				Log.Alert("Failed to set manual annual revenue for customer {0}: no comment provided.", nCustomerID);
+				return Json(new { success = false, });
+			} // if
+
+			try {
+				cmarar = m_oServiceClient.Instance.SetCustomerManualAnnualizedRevenue(nCustomerID, nRevenue, sComment);
+			}
+			catch (Exception e) {
+				Log.Warn(e, "Failed to set customer manual annual revenue for customer {0} to be {1} ({2})...", nCustomerID, nRevenue, sComment);
+				return Json(new { success = false, });
+			} // try
+
+			if (!cmarar.Value.Revenue.HasValue) {
+				Log.Warn("Failed to set customer manual annual revenue for customer {0} to be {1} ({2})...", nCustomerID, nRevenue, sComment);
+				return Json(new { success = false, });
+			} // try
+
+			Log.Debug("Setting customer manual annual revenue for customer {0} to be {1} ({2}) complete.", nCustomerID, nRevenue, sComment);
+
+			return Json(new {
+				success = true,
+				has_value = true,
+				is_alibaba = customer.IsAlibaba,
+				value = cmarar.Value,
+			});
+		} // SetCustomerManualAnnualRevenue
+
+		#endregion action SetCustomerManualAnnualRevenue
+	} // class MarketPlacesController
+} // namespace
