@@ -206,13 +206,6 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingExceptMp">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
       <xs:enumeration value="UpdateEverythingAndApplyAutoRules">
         <xs:annotation>
           <xs:appinfo>
@@ -768,6 +761,14 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="FileDescription" nillable="true" type="tns:FileDescription" />
+  <xs:complexType name="CustomerManualAnnualizedRevenue">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EntryTime" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Revenue" nillable="true" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerManualAnnualizedRevenue" nillable="true" type="tns:CustomerManualAnnualizedRevenue" />
   <xs:complexType name="ArrayOfEsignature">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Esignature" nillable="true" type="tns:Esignature" />

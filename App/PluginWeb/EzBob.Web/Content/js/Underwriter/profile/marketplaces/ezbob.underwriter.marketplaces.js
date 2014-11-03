@@ -53,7 +53,7 @@ EzBob.Underwriter.Affordability = Backbone.Model.extend({
 	}
 });
 
-EzBob.Underwriter.MarketPlacesView = Backbone.Marionette.ItemView.extend({
+EzBob.Underwriter.MarketPlacesView = EzBob.ItemView.extend({
 	template: "#marketplace-template",
 
 	initialize: function() {
@@ -116,6 +116,8 @@ EzBob.Underwriter.MarketPlacesView = Backbone.Marionette.ItemView.extend({
 	},
 
 	onRender: function() {
+		this.reloadRevenue();
+
 		this.$el.find('.mp-error-description').tooltip({ placement: "bottom" });
 
 		this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
@@ -142,6 +144,120 @@ EzBob.Underwriter.MarketPlacesView = Backbone.Marionette.ItemView.extend({
 		return this;
 	},
 
+	reloadRevenue: function() {
+		this.startReloadRevenue();
+
+		this.cancelUpdateRevenue();
+
+		var self = this;
+
+		var oRequest = $.getJSON(
+			window.gRootPath + 'Underwriter/MarketPlaces/GetCustomerManualAnnualRevenue',
+			{ nCustomerID: this.model.customerId, }
+		);
+
+		oRequest.done(function(oResponse) {
+			self.drawRevenue(oResponse, 'load');
+		}); // on success
+
+		oRequest.fail(function() {
+			self.$el.find('.revenue-value').text('failed to load');
+		}); // on fail
+
+		oRequest.always(_.bind(this.finishReloadRevenue, this));
+	}, // reloadRevenue
+
+	finishReloadRevenue: function() {
+		this.$el.find('.manual-annualized-revenue-loading').addClass('hide');
+		this.$el.find('.manual-annualized-revenue').removeClass('hide');
+	}, // finishReloadRevenue
+
+	startReloadRevenue: function() {
+		this.$el.find('.manual-annualized-revenue-loading').removeClass('hide');
+		this.$el.find('.manual-annualized-revenue').addClass('hide');
+
+		this.$el.find('.alibaba-no-revenue').addClass('hide');
+	}, // startReloadRevenue
+
+	drawRevenue: function(oResponse, sAction) {
+		this.cancelUpdateRevenue();
+
+		if (!oResponse.success) {
+			this.$el.find('.revenue-value').text('failed to ' + sAction);
+			return;
+		} // if
+
+		if (!oResponse.has_value) {
+			this.$el.find('.revenue-value').text('none');
+			this.$el.find('.alibaba-no-revenue').toggleClass('hide', !oResponse.is_alibaba);
+			return;
+		} // if
+
+		this.$el.find('.revenue-value').text(
+			oResponse.value.Revenue + ' since ' +
+			EzBob.formatDate(oResponse.value.EntryTime) + ' (' +
+			oResponse.value.Comment + ')'
+		);
+	}, // drawRevenue
+
+	showUpdateRevenueValue: function() {
+		this.$el.find('.show-update-revenue-value').addClass('hide');
+		this.$el.find('.update-revenue-value').removeClass('hide');
+
+		this.$el.find('.new-revenue-comment').val('');
+
+		this.toggleUpdateRevenueEnabled();
+
+		this.$el.find('.new-revenue-value').val('').focus();
+	}, // showUpdateRevenueValue
+
+	doUpdateRevenue: function() {
+		this.toggleUpdateRevenueEnabled();
+
+		if (!this.isSomethingEnabled('.do-update-revenue'))
+			return;
+
+		var nRevenue = parseFloat(this.$el.find('.new-revenue-value').val());
+
+		var sComment = $.trim(this.$el.find('.new-revenue-comment').val());
+
+		this.startReloadRevenue();
+
+		var oRequest = $.post( window.gRootPath + 'Underwriter/MarketPlaces/SetCustomerManualAnnualRevenue', {
+			nCustomerID: this.model.customerId,
+			nRevenue: nRevenue,
+			sComment: sComment,
+		});
+
+		var self = this;
+
+		oRequest.done(function(oResponse) {
+			self.drawRevenue(oResponse, 'update');
+		}); // on success
+
+		oRequest.fail(function() {
+			EzBob.ShowMessage('Failed to update customer annualized revenue.', 'Error');
+		}); // on fail
+
+		oRequest.always(_.bind(this.finishReloadRevenue, this));
+	}, // doUpdateRevenue
+
+	cancelUpdateRevenue: function() {
+		this.$el.find('.show-update-revenue-value').removeClass('hide');
+		this.$el.find('.update-revenue-value').addClass('hide');
+
+		this.$el.find('.new-revenue-value, .new-revenue-comment').val('');
+		this.toggleUpdateRevenueEnabled();
+	}, // cancelUpdateRevenue
+
+	toggleUpdateRevenueEnabled: function() {
+		var bRevenue = !isNaN(parseFloat(this.$el.find('.new-revenue-value').val()));
+
+		var bComment = !!$.trim(this.$el.find('.new-revenue-comment').val());
+
+		this.setSomethingEnabled('.do-update-revenue', bRevenue && bComment);
+	}, // toggleUpdateRevenueEnabled
+
 	events: {
 		"click .tryRecheckYodlee": "tryRecheckYodlee",
 		"click .reCheckMP": "reCheckmarketplaces",
@@ -149,7 +265,24 @@ EzBob.Underwriter.MarketPlacesView = Backbone.Marionette.ItemView.extend({
 		"click .mp-error-description": "showMPError",
 		"click .renew-token": "renewTokenClicked",
 		"click .disable-shop": "disableShop",
-		"click .enable-shop": "enableShop"
+		"click .enable-shop": "enableShop",
+		'click .show-update-revenue-value': 'showUpdateRevenueValue',
+		'click .do-update-revenue': 'doUpdateRevenue',
+		'click .cancel-update-revenue': 'cancelUpdateRevenue',
+
+		'click .new-revenue-comment': 'toggleUpdateRevenueEnabled',
+		'change .new-revenue-comment': 'toggleUpdateRevenueEnabled',
+		'paste .new-revenue-comment': 'toggleUpdateRevenueEnabled',
+		'cut .new-revenue-comment': 'toggleUpdateRevenueEnabled',
+		'keyup .new-revenue-comment': 'toggleUpdateRevenueEnabled',
+		'blur .new-revenue-comment': 'toggleUpdateRevenueEnabled',
+
+		'click .new-revenue-value': 'toggleUpdateRevenueEnabled',
+		'change .new-revenue-value': 'toggleUpdateRevenueEnabled',
+		'paste .new-revenue-value': 'toggleUpdateRevenueEnabled',
+		'cut .new-revenue-value': 'toggleUpdateRevenueEnabled',
+		'keyup .new-revenue-value': 'toggleUpdateRevenueEnabled',
+		'blur .new-revenue-value': 'toggleUpdateRevenueEnabled',
 	},
 
 	rowClick: function(e) {

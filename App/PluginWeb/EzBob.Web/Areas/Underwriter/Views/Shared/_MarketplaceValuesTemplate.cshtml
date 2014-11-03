@@ -136,6 +136,42 @@
     <div class="row">
         <div class="col-md-12">
             <div class="mps-tables">
+				<div class="box manual-annualized-revenue-section">
+					<div class="box-title"><h3>Customer annualized revenue</h3>
+						<button
+							type="button"
+							class="show-update-revenue-value btn btn-mini show-tooltip btn-primary"
+							data-original-title="Update customer annualized revenue"
+						><i class="fa fa-edit"></i></button>
+					</div>
+
+					<div class="manual-annualized-revenue-loading box-content">Loading...</div>
+
+					<div class="manual-annualized-revenue box-content hide">
+						<div class="alibaba-no-revenue hide">This is an Alibaba customer, please specify annualized revenue.</div>
+
+						<div class="current-revenue">Current customer annualized revenue is: <span class="revenue-value"></span>.</div>
+
+
+						<div class="aka-table update-revenue-value hide">
+							<div class="aka-row">
+								<div class="aka-cell narrow-as-possible">New revenue value*:</div>
+								<div class="aka-cell"><input type="text" class="new-revenue-value" /></div>
+							</div>
+							<div class="aka-row">
+								<div class="aka-cell narrow-as-possible">Value source description*:</div>
+								<div class="aka-cell"><input type="text" class="new-revenue-comment" /></div>
+							</div>
+							<div class="aka-row">
+								<div class="aka-cell">
+									<button type="button" class="do-update-revenue btn btn-primary">Update</button>
+									<button type="button" class="cancel-update-revenue btn btn-primary">Cancel</button>
+								</div>
+								<div class="aka-cell"></div>
+							</div>
+						</div>
+					</div>
+				</div>
                 @MarketPlaces()
             </div>
             <div id="hmrc-upload-container" class="box"></div>

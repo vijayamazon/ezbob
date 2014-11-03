@@ -181,30 +181,12 @@ padding-top: 0;
     padding: 5px;
 }
 
-.aka-table {
-    display: table;
-    width: 100%;
+.aka-caption .dataTables_filter {
+	float: right;
 }
 
-.aka-caption {
-    display: table-caption;
-    font-weight: bold;
-}
-
-    .aka-caption .dataTables_filter {
-        float: right;
-    }
-
-        .aka-caption .dataTables_filter input {
-            margin: 0 !important;
-        }
-
-.aka-row {
-    display: table-row;
-}
-
-.aka-column {
-    display: table-cell;
+.aka-caption .dataTables_filter input {
+	margin: 0 !important;
 }
 
 .value-title {

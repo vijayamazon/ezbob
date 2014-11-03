@@ -6,7 +6,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE RptAlibabaFunnel
-@DateEnd DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -32,9 +31,7 @@ BEGIN
 				ON a.SiteAnalyticsCode = ac.Id
 				AND ac.Name = 'LandingPageNewUsers'
 		WHERE
-			a.Date < @DateEnd
-			AND
-			a.Source LIKE '/alibaba%' -- TODO whatever the address is
+			a.Source LIKE '/alibaba%'
 	), 0))
 
 	------------------------------------------------------------------------------
@@ -55,8 +52,6 @@ BEGIN
 		e.ControlHtmlID = 'Customer/Wizard'
 		AND
 		e.EventArguments LIKE 'alibaba_id:%'
-		AND
-		e.EventTime < @DateEnd
 	GROUP BY
 		e.SessionCookie,
 		e.UserID
@@ -80,11 +75,9 @@ BEGIN
 		FROM
 			Customer c
 		WHERE
-			c.IsAlibaba = 1
+			c.AlibabaId IS NOT NULL
 			AND
 			c.IsTest = 0
-			AND
-			c.GreetingMailSentDate < @DateEnd
 	), 0))
 
 	------------------------------------------------------------------------------
@@ -96,19 +89,12 @@ BEGIN
 			COUNT(*)
 		FROM
 			Customer c
-			INNER JOIN UiEvents e ON c.Id = e.UserID
-			INNER JOIN UiActions ua
-				ON e.UiActionID = ua.UiActionID
-				AND ua.UiActionName = 'click'
-			INNER JOIN UiControls uc
-				ON e.UiControlID = uc.UiControlID
-				AND uc.UiControlName = 'personal-info:continue'
 		WHERE
-			c.IsAlibaba = 1
+			c.AlibabaId IS NOT NULL
 			AND
 			c.IsTest = 0
 			AND
-			e.EventTime < @DateEnd
+			c.DateOfBirth IS NOT NULL
 	), 0))
 
 	------------------------------------------------------------------------------
@@ -120,19 +106,12 @@ BEGIN
 			COUNT(*)
 		FROM
 			Customer c
-			INNER JOIN UiEvents e ON c.Id = e.UserID
-			INNER JOIN UiActions ua
-				ON e.UiActionID = ua.UiActionID
-				AND ua.UiActionName = 'click'
-			INNER JOIN UiControls uc
-				ON e.UiControlID = uc.UiControlID
-				AND uc.UiControlName = 'personal-info:company_continue'
+			INNER JOIN Company co ON c.CompanyId = co.Id
+				AND co.CompanyName IS NOT NULL
 		WHERE
-			c.IsAlibaba = 1
+			c.AlibabaId IS NOT NULL
 			AND
 			c.IsTest = 0
-			AND
-			e.EventTime < @DateEnd
 	), 0))
 
 	------------------------------------------------------------------------------
@@ -147,11 +126,9 @@ BEGIN
 		Customer c
 		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
 	WHERE
-		c.IsAlibaba = 1
+		c.AlibabaId IS NOT NULL
 		AND
 		c.IsTest = 0
-		AND
-		r.CreationDate < @DateEnd
 	GROUP BY
 		c.Id
 
@@ -189,10 +166,8 @@ BEGIN
 			INNER JOIN Customer c
 				ON cr.IdCustomer = c.Id
 				AND c.IsTest = 0
-				AND c.IsAlibaba = 1
+				AND c.AlibabaId IS NOT NULL
 		WHERE
-			cr.UnderwriterDecisionDate < @DateEnd
-			AND
 			cr.UnderwriterDecision = 'Approved'
 	), 0))
 
@@ -208,9 +183,7 @@ BEGIN
 			INNER JOIN Customer c
 				ON l.CustomerId = c.Id
 				AND c.IsTest = 0
-				AND c.IsAlibaba = 1
-		WHERE
-			l.[Date] < @DateEnd
+				AND c.AlibabaId IS NOT NULL
 	), 0))
 
 	------------------------------------------------------------------------------
@@ -261,11 +234,9 @@ BEGIN
 		INNER JOIN Customer c
 			ON cr.IdCustomer = c.Id
 			AND c.IsTest = 0
-			AND c.IsAlibaba = 1
+			AND c.AlibabaId IS NOT NULL
 	WHERE
 		cr.UnderwriterDecision = 'Rejected'
-		AND
-		dh.[Date] < @DateEnd
 	GROUP BY
 		rr.Reason
 END

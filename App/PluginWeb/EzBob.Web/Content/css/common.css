@@ -3262,3 +3262,22 @@ iframe[src^='https://finimpact'] {
     color: #acacac !important;
     text-shadow: 0 1px 1px #fff;
 }
+
+.aka-table {
+    display: table;
+    width: 100%;
+}
+
+.aka-caption {
+    display: table-caption;
+    font-weight: bold;
+}
+
+.aka-row {
+    display: table-row;
+}
+
+.aka-cell,
+.aka-column {
+    display: table-cell;
+}

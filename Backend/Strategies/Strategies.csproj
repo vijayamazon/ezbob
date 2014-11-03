@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin\Nop.cs" />
+    <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
+    <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="MainStrategy\AutoDecisions\AutoDecisionCondition.cs" />
     <Compile Include="MainStrategy\AutoDecisions\AutoDecisionRejectionResponse.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />

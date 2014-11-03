@@ -1,17 +1,4 @@
-﻿.aka-table {
-	display: table;
-	width: 100%;
-}
-
-.aka-row {
-	display: table-row;
-}
-
-.aka-column {
-	display: table-cell;
-}
-
-.hmrc-enter-business-data {
+﻿.hmrc-enter-business-data {
 	margin-top: 1em;
 }
 

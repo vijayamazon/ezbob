@@ -139,26 +139,10 @@
 
 				Dictionary<string, ParsedValue> oSection = pair.Value;
 
-				Action<ExcelWorksheet> onCreate = (sSectionName == FinancialDetails) ? new Action<ExcelWorksheet>(ws => {
-					int nCol = 1;
-
-					while (ws.Cells[1, nCol].Value != null)
-						nCol++;
-
-					ws.SetCellValue(
-						1,
-						nCol,
-						"The data is provided by customers.",
-						bIsBold: true,
-						bSetZebra: false,
-						oFontColour: Color.Red
-					);
-				}) : null;
-
 				ExcelWorksheet oSheet = oReport.FindOrCreateSheet(
 					sSectionName,
 					true,
-					onCreate,
+					null,
 					oSection.Keys.Select(sTitle => GetColumnDisplayName(sSectionName, sTitle)).ToArray()
 				);
 
@@ -365,7 +349,6 @@
 
 		private const string ApprovedAmount = "ApprovedAmount";
 		private const string ApprovedAmountField = "ApprovalPhaseFeedback_" + ApprovedAmount;
-		private const string FinancialDetails = "FinancialDetails";
 
 		private const string ApprovalPhaseFeedback = "ApprovalPhaseFeedback";
 

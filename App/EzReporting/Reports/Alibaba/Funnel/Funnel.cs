@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using JetBrains.Annotations;
 	using OfficeOpenXml;
 
 	public class Funnel : IAlibaba {
@@ -11,13 +10,17 @@
 
 		#region constructor
 
+		// ReSharper disable UnusedParameter.Local
+		// oDateEnd: for future use.
 		public Funnel(DateTime? oDateEnd, AConnection oDB, ASafeLog oLog) {
 			if (oDB == null)
 				throw new Exception("Database connection not specified for Funnel report.");
 
+			m_oDB = oDB;
+
 			m_oLog = oLog ?? new SafeLog();
-			m_oSp = new RptAlibabaFunnel(oDateEnd, oDB, oLog);
 		} // constructor
+		// ReSharper restore UnusedParameter.Local
 
 		#endregion constructor
 
@@ -29,7 +32,7 @@
 			m_oRejectReasons = new List<RejectReasonRow>();
 			m_nRejectReasonTotal = 0;
 
-			m_oSp.ForEachRowSafe(ProcessRow);
+			m_oDB.ForEachRowSafe(ProcessRow, "RptAlibabaFunnel", CommandSpecies.StoredProcedure);
 
 			foreach (RejectReasonRow rrr in m_oRejectReasons)
 				rrr.Pct = m_nRejectReasonTotal < 0.8 ? 0 : rrr.Counter / m_nRejectReasonTotal;
@@ -73,27 +76,7 @@
 		#endregion method CreateOneSheet
 
 		private readonly ASafeLog m_oLog;
-
-		private readonly RptAlibabaFunnel m_oSp;
-
-		#region class RptAlibabaFunnel
-
-		private class RptAlibabaFunnel : AStoredProcedure {
-			public RptAlibabaFunnel(DateTime? oDateEnd, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-				DateEnd = oDateEnd ?? DateTime.UtcNow.AddDays(1);
-			} // constructor
-
-			public override bool HasValidParameters() {
-				return DateEnd > FirstDay;
-			} // HasValidParameters
-
-			[UsedImplicitly]
-			public DateTime DateEnd { get; set; }
-
-			private static readonly DateTime FirstDay = new DateTime(2012, 9, 1, 0, 0, 0, DateTimeKind.Utc);
-		} // class RptAlibabaFunnel
-
-		#endregion class RptAlibabaFunnel
+		private readonly AConnection m_oDB;
 
 		#region method ProcessRow
 
