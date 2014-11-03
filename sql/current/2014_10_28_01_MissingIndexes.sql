@@ -1,3 +1,5 @@
+SET QUOTED_IDENTIFIER ON
+GO
 
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name='IX_LoanScheduleTransaction_ScheduleID' AND object_id = OBJECT_ID('LoanScheduleTransaction'))
 BEGIN
