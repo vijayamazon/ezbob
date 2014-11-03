@@ -115,7 +115,7 @@
             if (loan.CashRequest!= null)
             {
                 loanModel.DiscountPlan = loan.CashRequest.DiscountPlan.Name;
-	            loanModel.LoanSourceName = loan.CashRequest.LoanSource.Name;
+	            loanModel.LoanSourceName = loan.LoanSource.Name;
             }
             return loanModel;
         }
