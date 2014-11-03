@@ -79,7 +79,8 @@ BEGIN
 					Loan l1
 				WHERE
 					l1.CustomerId = @CustomerId
-			)
+			) AND
+			Loan.RequestCashId = @PreviousFilledCashRequest
 		GROUP BY
 			ManagerApprovedSum	
 		
@@ -111,17 +112,19 @@ BEGIN
 					MIN(l1.date) 
 				FROM 
 					Loan l1
-			) AND 
-			Loan.Status != 'Late' 
+				WHERE
+					l1.CustomerId = @CustomerId
+			) AND
+			Loan.RequestCashId = @PreviousFilledCashRequest
 		GROUP BY
 			ManagerApprovedSum
 	END
 	ELSE
 	BEGIN
-		SELECT @ReApprovalFullAmountNew = NULL
-		SELECT @ReApprovalRemainingAmountNew = NULL
-		SELECT @ReApprovalFullAmountOld = NULL
-		SELECT @ReApprovalRemainingAmountOld = NULL
+		SELECT @ReApprovalFullAmountNew = 0
+		SELECT @ReApprovalRemainingAmountNew = 0
+		SELECT @ReApprovalFullAmountOld = 0
+		SELECT @ReApprovalRemainingAmountOld = 0
 	END
 		
 	SELECT
