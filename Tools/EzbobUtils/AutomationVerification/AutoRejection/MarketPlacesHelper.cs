@@ -51,5 +51,27 @@
 			}
 			return sum + Math.Max(paypal, ebay);
 		}
+
+		public static decimal GetYodleeAnnualized(List<MarketPlace> yodlees, ASafeLog log) {
+			double incomeAnnualized = 0;
+			var dbHelper = new DbHelper(log);
+			foreach (var yodlee in yodlees) {
+				var afs = dbHelper.GetAnalysisFunctions(yodlee.Id);
+				if (!afs.Any())
+				{
+					continue;
+				}
+
+				var av = afs
+					.OrderByDescending(af => af.TimePeriod)
+					.FirstOrDefault(af => af.Function == "TotalIncomeAnnualized" && af.TimePeriod <= TimePeriodEnum.Year);
+				
+				if (av != null) {
+					incomeAnnualized += av.Value;
+				}
+			}
+
+			return (decimal)incomeAnnualized;
+		}
 	}
 }

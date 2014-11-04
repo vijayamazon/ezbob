@@ -102,7 +102,7 @@
 		}
 
 		/// <summary>
-		/// Retrieve all shops and paypal
+		/// Retrieve all online shops and paypal
 		/// </summary>
 		/// <param name="customerId">Customer Id</param>
 		/// <returns></returns>
@@ -110,14 +110,21 @@
 		{
 
 			var conn = new SqlConnection(_log);
-			var srList = conn.ExecuteEnumerable("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
+			var mps = conn.Fill<MarketPlace>("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
+			return mps;
+		}
 
-			var mps = new List<MarketPlace>();
-			foreach (SafeReader row in srList)
-			{
-				AddMpToList(mps, row);
-			}
 
+		/// <summary>
+		/// Retrieve all yodlee accounts
+		/// </summary>
+		/// <param name="customerId">Customer Id</param>
+		/// <returns></returns>
+		public List<MarketPlace> GetCustomerYodlees(int customerId)
+		{
+
+			var conn = new SqlConnection(_log);
+			var mps = conn.Fill<MarketPlace>("AV_GetCustomerYodlees", new QueryParameter("@CustomerId", customerId));
 			return mps;
 
 		}
@@ -138,23 +145,6 @@
 
 			return mps;
 
-		}
-
-		private void AddMpToList(List<MarketPlace> mps, SafeReader row)
-		{
-			DateTime? originationDate = null;
-			string odStr = row["OriginationDate"];
-			if (!string.IsNullOrEmpty(odStr))
-			{
-				originationDate = DateTime.Parse(odStr);
-			}
-			mps.Add(new MarketPlace
-				{
-					Id = row["mpId"],
-					Name = row["Name"],
-					Type = row["Type"],
-					OriginationDate = originationDate
-				});
 		}
 
 		/// <summary>
@@ -223,6 +213,7 @@
 			return conn.FillFirst<RejectionData>("AV_GetRejectionData", CommandSpecies.StoredProcedure,
 			                              new QueryParameter("@CustomerId", customerId));
 		}
+		
 		public ReRejectionData GetReRejectionData(int customerId, int cashRequestId)
 		{
 			var conn = new SqlConnection(_log);
@@ -275,8 +266,16 @@
 			return conn.ExecuteScalar<bool>("AV_IsCustomerOffline", new QueryParameter("@CustomerId", customerId));
 		}
 
+
 		public int GetExperianCompanyScore(int customerId) {
 			throw new NotImplementedException();
+		}
+
+		public MedalInputModelDb GetMedalInputModel(int customerId)
+		{
+			var conn = new SqlConnection(_log);
+			var model = conn.FillFirst<MedalInputModelDb>("AV_GetMedalInputParams", new QueryParameter("@CustomerId", customerId));
+			return model;
 		}
 	}
 }

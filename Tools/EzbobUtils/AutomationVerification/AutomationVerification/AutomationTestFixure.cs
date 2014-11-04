@@ -12,7 +12,7 @@
 		[Test]
 		public void testMedalCalculation()
 		{
-			var msc = new OfflineLImitedMedalCalculator();
+			var msc = new OfflineLImitedMedalCalculator(Log);
 			var data = new MedalInputModel {
 				AnnualTurnover = 125000,
 				BusinessScore = 55,
@@ -23,7 +23,7 @@
 				BusinessSeniority = 2,
 				ConsumerScore = 850,
 				EzbobSeniority = 7,
-				FirstRepaymentDate = null,
+				FirstRepaymentDatePassed = false,
 				FreeCashFlow = 0.42M,
 				HasHmrc = true,
 				HasMoreThanOneHmrc = false,
@@ -35,33 +35,14 @@
 			};
 			var medal = msc.CalculateMedal(data);
 
-			Assert.AreEqual(Medal.Diamond, medal.Medal);
+			Assert.AreEqual(Medal.Gold, medal.Medal);
 		}
 
 		[Test]
 		public void testMedalCalculation2()
 		{
-			var msc = new OfflineLImitedMedalCalculator();
-			var data = new MedalInputModel {
-				AnnualTurnover = 125000,
-				BusinessScore = 55,
-				MaritalStatus = MaritalStatus.Married,
-				IsOffline = true,
-				TangibleEquity = 0.1M,
-				IsLimited = true,
-				BusinessSeniority = 2,
-				ConsumerScore = 765,
-				EzbobSeniority = 7,
-				FirstRepaymentDate = null,
-				FreeCashFlow = 0.42M,
-				HasHmrc = true,
-				HasMoreThanOneHmrc = false,
-				NetWorth = 20000,
-				NumOfEarlyPayments = 0,
-				NumOfLatePayments = 0,
-				NumOfOnTimeLoans = 0
-
-			};
+			var msc = new OfflineLImitedMedalCalculator(Log);
+			var data = msc.GetInputParameters(14223);
 			var medal = msc.CalculateMedal(data);
 
 			Assert.AreEqual(medal.Medal, Medal.Gold);

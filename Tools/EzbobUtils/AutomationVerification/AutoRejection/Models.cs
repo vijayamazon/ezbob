@@ -160,10 +160,32 @@
 		public bool WasLate { get; set; }
 	}
 
+	public class MedalInputModelDb {
+		public int BusinessScore { get; set; }
+		public DateTime IncorporationDate { get; set; }
+		public decimal TangibleEquity { get; set; }
+		public int ConsumerScore { get; set; }
+		public DateTime RegistrationDate { get; set; }
+		public string MaritalStatus { get; set; }
+		public string TypeOfBusiness { get; set; }
+		public int NumOfOnTimeLoans { get; set; }
+		public int NumOfLatePayments { get; set; }
+		public int NumOfEarlyPayments { get; set; }
+		public bool HasHmrc { get; set; }
+		public bool HasMoreThanOneHmrc { get; set; }
+		public decimal HmrcRevenues { get; set; }
+		public decimal HmrcEbida { get; set; }
+		public decimal FCFFactor { get; set; }
+		public decimal CurrentBalanceSum { get; set; }
+		public int ZooplaValue { get; set; }
+		public int Mortages { get; set; }
+		public DateTime? FirstRepaymentDate { get; set; }
+	}
+
 	public class MedalInputModel {
 		public int BusinessScore { get; set; }
 		public decimal TangibleEquity { get; set; }
-		public int BusinessSeniority { get; set; }
+		public decimal BusinessSeniority { get; set; }
 		public int ConsumerScore { get; set; }
 		public decimal EzbobSeniority { get; set; }
 		public MaritalStatus MaritalStatus { get; set; }
@@ -174,10 +196,10 @@
 		public decimal FreeCashFlow { get; set; }
 		public decimal NetWorth { get; set; }
 		public bool IsLimited { get; set; }
-		public bool IsOffline { get; set; }
-		public DateTime? FirstRepaymentDate { get; set; }
-		public bool HasHmrc { get; set; }
 		public bool HasMoreThanOneHmrc { get; set; }
+		public bool HasHmrc { get; set; }
+		public bool IsOffline { get; set; }
+		public bool FirstRepaymentDatePassed { get; set; }
 
 		public override string ToString()
 		{
@@ -196,12 +218,10 @@
 					FreeCashFlow: {10}, 
 					NetWorth: {11},
 					IsLimited: {12},
-					IsOffline: {13},
-					FirstRepaymentDate: {14}",
-				BusinessScore, TangibleEquity, BusinessSeniority, ConsumerScore, 
-				EzbobSeniority, MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, 
-				NumOfEarlyPayments, AnnualTurnover, FreeCashFlow, NetWorth, IsLimited,
-				IsOffline, FirstRepaymentDate); 
+					FirstRepaymentDatePassed: {13}",
+				BusinessScore, TangibleEquity, BusinessSeniority, ConsumerScore, EzbobSeniority,
+				MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, NumOfEarlyPayments, AnnualTurnover,
+				FreeCashFlow, NetWorth, IsLimited, FirstRepaymentDatePassed); 
 		}
 	}
 }

@@ -3,36 +3,74 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Text;
+	using Ezbob.Logger;
 
 	public class OfflineLImitedMedalCalculator
 	{
+		private static ASafeLog _log;
+		public OfflineLImitedMedalCalculator(ASafeLog log) {
+			_log = log;
+		}
+
+		
 		public MedalInputModel GetInputParameters(int customerId) {
-			//TODO
-			return new MedalInputModel();
+			var dbHelper = new DbHelper(_log);
+			var dbData = dbHelper.GetMedalInputModel(customerId);
+			var model = new MedalInputModel();
+			if (dbData.HasMoreThanOneHmrc) {
+				model.HasMoreThanOneHmrc = dbData.HasMoreThanOneHmrc;
+				return model;
+			}
+
+			var yodlees = dbHelper.GetCustomerYodlees(customerId);
+			var yodleeIncome = MarketPlacesHelper.GetYodleeAnnualized(yodlees, _log);
+			var today = DateTime.Today;
+			const int year = 365;
+
+			model.HasHmrc = dbData.HasHmrc;
+			model.BusinessScore = dbData.BusinessScore;
+			model.BusinessSeniority = (decimal)(today - dbData.IncorporationDate).TotalDays/year;
+			model.ConsumerScore = dbData.ConsumerScore;
+			model.EzbobSeniority = ((today.Year - dbData.RegistrationDate.Year)*12) + today.Month - dbData.RegistrationDate.Month;
+			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < today;
+			model.IsLimited = dbData.TypeOfBusiness == "Limited" || dbData.TypeOfBusiness == "LLP";
+			model.NumOfEarlyPayments = dbData.NumOfEarlyPayments;
+			model.NumOfLatePayments = dbData.NumOfLatePayments;
+			model.NumOfOnTimeLoans = dbData.NumOfOnTimeLoans;
+			model.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), dbData.MaritalStatus);
+			model.AnnualTurnover = dbData.HasHmrc ? dbData.HmrcRevenues : yodleeIncome;
+			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;
+
+			var balance = dbData.CurrentBalanceSum < 0 ? 0 : (dbData.CurrentBalanceSum / dbData.FCFFactor);
+			model.FreeCashFlow = model.AnnualTurnover == 0 ? 0 : (dbData.HmrcEbida - balance) / model.AnnualTurnover;
+			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : dbData.TangibleEquity/model.AnnualTurnover;
+			model.NetWorth = dbData.ZooplaValue == 0 ? 0 : (dbData.ZooplaValue - dbData.Mortages) / (decimal)dbData.ZooplaValue;
+
+			return model;
 		}
 
 		public MedalOutputModel CalculateMedal(MedalInputModel model)
 		{
-			Console.WriteLine(model.ToString());
+			_log.Debug(model.ToString());
 
 			if (model.HasMoreThanOneHmrc) {
 				var medal = new MedalOutputModel { Error = "More then one hmrc. can't Calc Medal" };
 				return medal;
 			}
-
-			bool firstRepaymentDatePassed = model.FirstRepaymentDate.HasValue && model.FirstRepaymentDate.Value.Date < DateTime.Today;
+			
 			var dict = new Dictionary<Parameter, Weight>
 				{
 					
-					{Parameter.BusinessScore,            GetBusinessScoreWeight(model.BusinessScore, firstRepaymentDatePassed, model.HasHmrc)},
+					{Parameter.BusinessScore,            GetBusinessScoreWeight(model.BusinessScore, model.FirstRepaymentDatePassed, model.HasHmrc)},
 					{Parameter.TangibleEquity,           GetTangibleEquityWeight(model.TangibleEquity)},
-					{Parameter.BusinessSeniority,        GetBusinessSeniorityWeight(model.BusinessSeniority, firstRepaymentDatePassed, model.HasHmrc)},
-					{Parameter.ConsumerScore,            GetConsumerScoreWeight(model.ConsumerScore, firstRepaymentDatePassed, model.HasHmrc)},
-					{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(model.EzbobSeniority, firstRepaymentDatePassed)},
+					{Parameter.BusinessSeniority,        GetBusinessSeniorityWeight(model.BusinessSeniority, model.FirstRepaymentDatePassed, model.HasHmrc)},
+					{Parameter.ConsumerScore,            GetConsumerScoreWeight(model.ConsumerScore, model.FirstRepaymentDatePassed, model.HasHmrc)},
+					{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(model.EzbobSeniority, model.FirstRepaymentDatePassed)},
 					{Parameter.MaritalStatus,            GetMaritalStatusWeight(model.MaritalStatus)},
-					{Parameter.NumOfOnTimeLoans,         GetNumOfOnTimeLoansWeight(model.NumOfOnTimeLoans, firstRepaymentDatePassed)},
-					{Parameter.NumOfLatePayments,        GetNumOfLatePaymentsWeight(model.NumOfLatePayments, firstRepaymentDatePassed)},
-					{Parameter.NumOfEarlyPayments,       GetNumOfEarlyPaymentsWeight(model.NumOfEarlyPayments, firstRepaymentDatePassed)},
+					{Parameter.NumOfOnTimeLoans,         GetNumOfOnTimeLoansWeight(model.NumOfOnTimeLoans, model.FirstRepaymentDatePassed)},
+					{Parameter.NumOfLatePayments,        GetNumOfLatePaymentsWeight(model.NumOfLatePayments, model.FirstRepaymentDatePassed)},
+					{Parameter.NumOfEarlyPayments,       GetNumOfEarlyPaymentsWeight(model.NumOfEarlyPayments, model.FirstRepaymentDatePassed)},
 					{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(model.AnnualTurnover, model.HasHmrc)},
 					{Parameter.FreeCashFlow,             GetFreeCashFlowWeight(model.FreeCashFlow, model.HasHmrc)},
 					{Parameter.NetWorth,                 GetNetWorthWeight(model.NetWorth)}
@@ -206,7 +244,7 @@
 			return businessScoreWeight;
 		}
 
-		private Weight GetBusinessSeniorityWeight(int businessSeniority, bool firstRepaymentDatePassed, bool hasHmrc)
+		private Weight GetBusinessSeniorityWeight(decimal businessSeniority, bool firstRepaymentDatePassed, bool hasHmrc)
 		{
 			var businessScoreWeight = new Weight
 			{
@@ -330,13 +368,13 @@
 
 		private void PrintDict(MedalOutputModel medalOutput, Dictionary<Parameter, Weight> dict)
 		{
-			Console.WriteLine("{0} {1}%", medalOutput.Medal, medalOutput.Score * 100);
-			Console.WriteLine();
+			var sb = new StringBuilder();
+			sb.AppendFormat("Medal: {0} Score: {1}%\n", medalOutput.Medal, ToPercent(medalOutput.Score));
 			decimal s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
-			Console.WriteLine("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|", "Parameter".PadRight(25), "Weight".PadRight(10), "MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10), "Grade".PadRight(10), "Score".PadRight(10));
+			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|\n", "Parameter".PadRight(25), "Weight".PadRight(10), "MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10), "Grade".PadRight(10), "Score".PadRight(10));
 			foreach (var weight in dict) {
-				
-				Console.WriteLine("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|", 
+
+				sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|\n", 
 					weight.Key.ToString().PadRight(25),
 					ToPercent(weight.Value.FinalWeight).PadRight(10),
 					ToPercent(weight.Value.MinimumScore / 100).PadRight(10),
@@ -353,8 +391,8 @@
 				s11 += weight.Value.Grade;
 				s10 += weight.Value.Score;
 			}
-			Console.WriteLine("--------------------------------------------------------------------");
-			Console.WriteLine("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|", 
+			sb.AppendLine("--------------------------------------------------------------------");
+			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|\n", 
 				"Sum".PadRight(25), 
 				ToPercent(s5).PadRight(10),
 				ToPercent(s6 / 100).PadRight(10),
@@ -364,6 +402,7 @@
 				s11.ToString().PadRight(10),
 				ToShort(s10).PadRight(10));
 
+			_log.Debug(sb.ToString());
 		}
 
 		private string ToPercent(decimal val)
