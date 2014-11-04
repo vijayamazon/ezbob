@@ -288,7 +288,7 @@
 
 			using (var csvReader = new TextFieldParser(stream) { TextFieldType = FieldType.Delimited, HasFieldsEnclosedInQuotes = true })
 			{
-				csvReader.SetDelimiters(new string[] { ",", ";" });
+				csvReader.SetDelimiters(",");
 				bool headerFound = false;
 				do
 				{

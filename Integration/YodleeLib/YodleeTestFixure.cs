@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
+	using BankTransactionsParser;
 	using Ezbob.Utils.Security;
 	using NUnit.Framework;
 
@@ -78,6 +79,16 @@
 			}
 
 			Assert.AreEqual(true, containsLiteral);
+		}
+
+
+		[Test]
+		public void test_parse()
+		{
+			var parser = new TransactionsParser();
+			var parsed = parser.ParseFile(@"c:\ezbob\test-data\bank\NatWest.csv");
+			Assert.NotNull(parsed);
+			Assert.AreEqual(null, parsed.Error);
 		}
 	}
 }
