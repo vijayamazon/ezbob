@@ -200,6 +200,10 @@
 		public bool HasHmrc { get; set; }
 		public bool IsOffline { get; set; }
 		public bool FirstRepaymentDatePassed { get; set; }
+		
+		/*online only*/
+		public int NumOfStores { get; set; }
+		public int PositiveFeedbacks { get; set; }
 
 		public override string ToString()
 		{
@@ -218,10 +222,14 @@
 					FreeCashFlow: {10}, 
 					NetWorth: {11},
 					IsLimited: {12},
-					FirstRepaymentDatePassed: {13}",
+					FirstRepaymentDatePassed: {13},
+
+					NumOfStores: {14}
+					PositiveFeedbacks: {15}"
+				,
 				BusinessScore, TangibleEquity, BusinessSeniority, ConsumerScore, EzbobSeniority,
 				MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, NumOfEarlyPayments, AnnualTurnover,
-				FreeCashFlow, NetWorth, IsLimited, FirstRepaymentDatePassed); 
+				FreeCashFlow, NetWorth, IsLimited, FirstRepaymentDatePassed, NumOfStores, NumOfPositiveFeedbacks); 
 		}
 	}
 }

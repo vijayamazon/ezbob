@@ -78,8 +78,6 @@
 
 	public static class OfflineLimitedMedalConstants {
 
-		#region MedalScoreCalculation
-
 		#region Weight
 
 		#region Base Weight
@@ -128,7 +126,64 @@
 		#endregion
 
 		#endregion Weight
+	}
 
+	public static class OnlineLimitedMedalConstants
+	{
+		#region Weight
+
+		#region Base Weight
+		public static readonly decimal BusinessScoreBaseWeight = 0.20M;
+		public static readonly decimal FreeCashFlowBaseWeight = 0.13M;
+		public static readonly decimal AnnualTurnoverBaseWeight = 0.10M;
+		public static readonly decimal TangibleEquityBaseWeight = 0.08M;
+		public static readonly decimal BusinessSeniorityBaseWeight = 0.07M;
+		public static readonly decimal ConsumerScoreBaseWeight = 0.20M;
+		public static readonly decimal NetWorthBaseWeight = 0.10M;
+		public static readonly decimal MaritalStatusBaseWeight = 0.05M;
+		public static readonly decimal NumOfStoresBaseWeight = 0.02M;
+		public static readonly decimal PositiveFeedbacksBaseWeight = 0.05M;
+		public static readonly decimal EzbobSeniorityBaseWeight = 0;
+		public static readonly decimal NumOfOnTimeLoansBaseWeight = 0;
+		public static readonly decimal NumOfLateRepaymentsBaseWeight = 0;
+		public static readonly decimal NumOfEarlyRepaymentsBaseWeight = 0;
+		#endregion
+
+		#region No HMRC Weight
+		public static readonly decimal FreeCashFlowNoHmrcWeight = 0;
+		public static readonly decimal AnnualTurnoverNoHmrcWeightChange = 0.05M;
+		public static readonly decimal BusinessScoreNoHmrcWeightChange = 0.03M;
+		public static readonly decimal ConsumerScoreNoHmrcWeightChange = 0.03M;
+		public static readonly decimal BusinessSeniorityNoHmrcWeightChange = 0.02M;
+		#endregion
+
+		#region Low Score Weight
+
+		public static readonly int LowBusinessScore = 30;
+		public static readonly int LowConsumerScore = 800;
+
+		public static readonly decimal BusinessScoreLowScoreWeight = 0.2750M;
+		public static readonly decimal ConsumerScoreLowScoreWeight = 0.2750M;
+
+		#endregion
+
+		#region First Repayment Passed Weight
+		public static readonly decimal EzbobSeniorityFirstRepaymentWeight = 0.02M;
+		public static readonly decimal NumOfOnTimeLoansFirstRepaymentWeight = 0.0333M;
+		public static readonly decimal NumOfLateRepaymentsFirstRepaymentWeight = 0.0267M;
+		public static readonly decimal NumOfEarlyRepaymentsFirstRepaymentWeight = 0.02M;
+
+		public static readonly decimal ConsumerScoreFirstRepaymentWeightChange = -0.04M;
+		public static readonly decimal BusinessScoreFirstRepaymentWeightChange = -0.04M;
+		public static readonly decimal BusinessSeniorityFirstRepaymentWeightChange = -0.02M;
+
+		#endregion
+
+		#endregion Weight
+
+	}
+
+	public static class MedalRangesConstats {
 		#region Grade Ranges
 
 		public static readonly List<RangeGrage> BusinessScoreRanges = new List<RangeGrage>
@@ -216,33 +271,48 @@
 
 		public static readonly List<RangeGrage> EzbobSeniorityRanges = new List<RangeGrage>
 			{
-				new RangeGrage {MinValue = null,MaxValue = 1, Grade = 0},
-				new RangeGrage {MinValue = 1,MaxValue = 6, Grade = 2},
-				new RangeGrage {MinValue = 6,MaxValue = 18, Grade = 3},
-				new RangeGrage {MinValue = 18,MaxValue = null, Grade = 4},
+				new RangeGrage {MinValue = null, MaxValue = 1,    Grade = 0},
+				new RangeGrage {MinValue = 1,    MaxValue = 6,    Grade = 2},
+				new RangeGrage {MinValue = 6,    MaxValue = 18,   Grade = 3},
+				new RangeGrage {MinValue = 18,   MaxValue = null, Grade = 4},
 			};
 
 		public static readonly List<RangeGrage> NumOfOnTimeLoansRanges = new List<RangeGrage>
 			{
-				new RangeGrage {MinValue = 0,MaxValue = 2, Grade = 1},
-				new RangeGrage {MinValue = 2,MaxValue = 4, Grade = 3},
-				new RangeGrage {MinValue = 4,MaxValue = null, Grade = 4},
+				new RangeGrage {MinValue = null, MaxValue = 2,    Grade = 1},
+				new RangeGrage {MinValue = 2,    MaxValue = 4,    Grade = 3},
+				new RangeGrage {MinValue = 4,    MaxValue = null, Grade = 4},
 			};
 
 		public static readonly List<RangeGrage> NumOfLateRepaymentsRanges = new List<RangeGrage>
 			{
-				new RangeGrage {MinValue = 0,MaxValue = 1, Grade = 5},
-				new RangeGrage {MinValue = 1,MaxValue = 2, Grade = 2},
-				new RangeGrage {MinValue = 2,MaxValue = null, Grade = 0},
+				new RangeGrage {MinValue = null, MaxValue = 1,    Grade = 5},
+				new RangeGrage {MinValue = 1,    MaxValue = 2,    Grade = 2},
+				new RangeGrage {MinValue = 2,    MaxValue = null, Grade = 0},
 			};
 
 		public static readonly List<RangeGrage> NumOfEarlyRepaymentsRanges = new List<RangeGrage>
 			{
-				new RangeGrage {MinValue = 0,MaxValue = 1, Grade = 2},
-				new RangeGrage {MinValue = 1,MaxValue = 4, Grade = 3},
-				new RangeGrage {MinValue = 4,MaxValue = null, Grade = 5},
+				new RangeGrage {MinValue = null, MaxValue = 1,    Grade = 2},
+				new RangeGrage {MinValue = 1,    MaxValue = 4,    Grade = 3},
+				new RangeGrage {MinValue = 4,    MaxValue = null, Grade = 5},
 			};
-		
+
+		public static readonly List<RangeGrage> NumOfStoresRanges = new List<RangeGrage>
+			{
+				new RangeGrage {MinValue = null, MaxValue = 3,    Grade = 1},
+				new RangeGrage {MinValue = 3,    MaxValue = 5,    Grade = 3},
+				new RangeGrage {MinValue = 5,    MaxValue = null, Grade = 5},
+			};
+
+		public static readonly List<RangeGrage> PositiveFeedbacksRanges = new List<RangeGrage>
+			{
+				new RangeGrage {MinValue = null,  MaxValue = 1,     Grade = 0},
+				new RangeGrage {MinValue = 1,     MaxValue = 5001,  Grade = 2},
+				new RangeGrage {MinValue = 5001,  MaxValue = 50000, Grade = 3},
+				new RangeGrage {MinValue = 50000, MaxValue = null,  Grade = 5},
+			};
+
 		#endregion Grade Ranges
 
 		#region Medal Range
@@ -256,7 +326,5 @@
 			};
 
 		#endregion Medal Range
-
-		#endregion MedalScoreCalculation
 	}
 }

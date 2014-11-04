@@ -40,6 +40,11 @@
 		AnnualTurnover,
 		FreeCashFlow,
 		NetWorth,
+
+		/*online only*/
+		NumOfStores,
+		PositiveFeedbacks,
+
 	}
 
 	public enum Decision

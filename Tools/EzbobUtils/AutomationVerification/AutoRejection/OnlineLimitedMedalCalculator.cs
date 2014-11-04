@@ -5,9 +5,9 @@
 	using System.Linq;
 	using Ezbob.Logger;
 
-	public class OfflineLImitedMedalCalculator : MedalCalculator
+	public class OnlineLImitedMedalCalculator : MedalCalculator
 	{
-		public OfflineLImitedMedalCalculator(ASafeLog log):base(log) {}
+		public OnlineLImitedMedalCalculator(ASafeLog log):base(log) {}
 
 		public override MedalInputModel GetInputParameters(int customerId) {
 			var dbHelper = new DbHelper(Log);
@@ -64,6 +64,8 @@
 					{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(model.AnnualTurnover, model.HasHmrc)},
 					{Parameter.FreeCashFlow,             GetFreeCashFlowWeight(model.FreeCashFlow, model.HasHmrc)},
 					{Parameter.NetWorth,                 GetNetWorthWeight(model.NetWorth)},
+					{Parameter.NumOfStores,              GetNumOfStoresWeight(model.NumOfStores)},
+					{Parameter.PositiveFeedbacks,        GetPositiveFeedbacksWeight(model.PositiveFeedbacks)}
 				};
 
 			CalcDelta(model, dict);
@@ -101,17 +103,23 @@
 		private void CalcDelta(MedalInputModel model, Dictionary<Parameter, Weight> dict)
 		{
 
-			if (model.BusinessScore <= OfflineLimitedMedalConstants.LowBusinessScore || model.ConsumerScore <= OfflineLimitedMedalConstants.LowConsumerScore)
-			{
+			if (model.BusinessScore <= OnlineLimitedMedalConstants.LowBusinessScore || model.ConsumerScore <= OnlineLimitedMedalConstants.LowConsumerScore) {
 				//Sum of all weights
 				var sow = dict.Sum(x => x.Value.FinalWeight);
-				//Sum of weights of TangibleEquity, NetWorth, MaritalStatus
-				var sonf = dict[Parameter.TangibleEquity].FinalWeight + dict[Parameter.NetWorth].FinalWeight + dict[Parameter.MaritalStatus].FinalWeight;
+				//Sum of weights of of TangibleEquity, NetWorth, MaritalStatus, NumberOfStores, PositiveFeedbacks
+				var sonf = dict[Parameter.TangibleEquity].FinalWeight + 
+					dict[Parameter.NetWorth].FinalWeight + 
+					dict[Parameter.MaritalStatus].FinalWeight + 
+					dict[Parameter.NumOfStores].FinalWeight + 
+					dict[Parameter.PositiveFeedbacks].FinalWeight;
+
 				var sonfDesired = sonf - sow + 1;
-				var ratio = sonfDesired / sonf;
+				var ratio = sonfDesired/sonf;
 				dict[Parameter.TangibleEquity].FinalWeight *= ratio;
 				dict[Parameter.NetWorth].FinalWeight *= ratio;
 				dict[Parameter.MaritalStatus].FinalWeight *= ratio;
+				dict[Parameter.NumOfStores].FinalWeight *= ratio;
+				dict[Parameter.PositiveFeedbacks].FinalWeight *= ratio;
 			}
 
 			foreach (var weight in dict.Values)
@@ -124,33 +132,43 @@
 
 		private Weight GetNumOfEarlyPaymentsWeight(int ezbobNumOfEarlyReayments, bool firstRepaymentDatePassed)
 		{
-			return GetBaseWeight(ezbobNumOfEarlyReayments, OfflineLimitedMedalConstants.NumOfEarlyRepaymentsBaseWeight, MedalRangesConstats.NumOfEarlyRepaymentsRanges,
-				firstRepaymentDatePassed, OfflineLimitedMedalConstants.NumOfEarlyRepaymentsFirstRepaymentWeight);
+			return GetBaseWeight(ezbobNumOfEarlyReayments, OnlineLimitedMedalConstants.NumOfEarlyRepaymentsBaseWeight, MedalRangesConstats.NumOfEarlyRepaymentsRanges,
+				firstRepaymentDatePassed, OnlineLimitedMedalConstants.NumOfEarlyRepaymentsFirstRepaymentWeight);
 		}
 
 		private Weight GetNumOfLatePaymentsWeight(int ezbobNumOfLateRepayments, bool firstRepaymentDatePassed)
 		{
-			return GetBaseWeight(ezbobNumOfLateRepayments, OfflineLimitedMedalConstants.NumOfLateRepaymentsBaseWeight, MedalRangesConstats.NumOfLateRepaymentsRanges,
-				firstRepaymentDatePassed, OfflineLimitedMedalConstants.NumOfLateRepaymentsFirstRepaymentWeight);
+			return GetBaseWeight(ezbobNumOfLateRepayments, OnlineLimitedMedalConstants.NumOfLateRepaymentsBaseWeight, MedalRangesConstats.NumOfLateRepaymentsRanges,
+				firstRepaymentDatePassed, OnlineLimitedMedalConstants.NumOfLateRepaymentsFirstRepaymentWeight);
 		}
 
 		private Weight GetNumOfOnTimeLoansWeight(int ezbobNumOfLoans, bool firstRepaymentDatePassed)
 		{
-			return GetBaseWeight(ezbobNumOfLoans, OfflineLimitedMedalConstants.NumOfOnTimeLoansBaseWeight, MedalRangesConstats.NumOfOnTimeLoansRanges,
-				firstRepaymentDatePassed, OfflineLimitedMedalConstants.NumOfOnTimeLoansFirstRepaymentWeight);
+			return GetBaseWeight(ezbobNumOfLoans, OnlineLimitedMedalConstants.NumOfOnTimeLoansBaseWeight, MedalRangesConstats.NumOfOnTimeLoansRanges,
+				firstRepaymentDatePassed, OnlineLimitedMedalConstants.NumOfOnTimeLoansFirstRepaymentWeight);
 		}
 
 		private Weight GetEzbobSeniorityWeight(decimal ezbobSeniority, bool firstRepaymentDatePassed)
 		{
-			return GetBaseWeight(ezbobSeniority, OfflineLimitedMedalConstants.EzbobSeniorityBaseWeight, MedalRangesConstats.EzbobSeniorityRanges, 
-				firstRepaymentDatePassed, OfflineLimitedMedalConstants.EzbobSeniorityFirstRepaymentWeight);
+			return GetBaseWeight(ezbobSeniority, OnlineLimitedMedalConstants.EzbobSeniorityBaseWeight, MedalRangesConstats.EzbobSeniorityRanges, 
+				firstRepaymentDatePassed, OnlineLimitedMedalConstants.EzbobSeniorityFirstRepaymentWeight);
+		}
+
+		private Weight GetPositiveFeedbacksWeight(int positiveFeedbacks)
+		{
+			return GetBaseWeight(positiveFeedbacks, OnlineLimitedMedalConstants.PositiveFeedbacksBaseWeight, MedalRangesConstats.PositiveFeedbacksRanges);
+		}
+
+		private Weight GetNumOfStoresWeight(int numOfStores)
+		{
+			return GetBaseWeight(numOfStores, OnlineLimitedMedalConstants.NumOfStoresBaseWeight, MedalRangesConstats.NumOfStoresRanges);
 		}
 		
 		private Weight GetAnnualTurnoverWeight(decimal annualTurnover, bool hasHmrc) {
-			var annualTurnoverWeight = GetBaseWeight(annualTurnover, OfflineLimitedMedalConstants.AnnualTurnoverBaseWeight, MedalRangesConstats.AnnualTurnoverRanges);
+			var annualTurnoverWeight = GetBaseWeight(annualTurnover, OnlineLimitedMedalConstants.AnnualTurnoverBaseWeight, MedalRangesConstats.AnnualTurnoverRanges);
 				
 			if (!hasHmrc) {
-				annualTurnoverWeight.FinalWeight += OfflineLimitedMedalConstants.AnnualTurnoverNoHmrcWeightChange;
+				annualTurnoverWeight.FinalWeight += OnlineLimitedMedalConstants.AnnualTurnoverNoHmrcWeightChange;
 			}
 
 			return annualTurnoverWeight;
@@ -160,7 +178,7 @@
 		{
 			var maritalStatusWeight = new Weight
 			{
-				FinalWeight = OfflineLimitedMedalConstants.MaritalStatusBaseWeight,
+				FinalWeight = OnlineLimitedMedalConstants.MaritalStatusBaseWeight,
 				MinimumGrade = MedalRangesConstats.MaritalStatusGrade_Single,
 				MaximumGrade = MedalRangesConstats.MaritalStatusGrade_Married
 			};
@@ -196,16 +214,16 @@
 
 		private Weight GetNetWorthWeight(decimal netWorth)
 		{
-			return GetBaseWeight(netWorth, OfflineLimitedMedalConstants.NetWorthBaseWeight, MedalRangesConstats.NetWorthRanges);
+			return GetBaseWeight(netWorth, OnlineLimitedMedalConstants.NetWorthBaseWeight, MedalRangesConstats.NetWorthRanges);
 		}
 
 		private Weight GetFreeCashFlowWeight(decimal freeCashFlow, bool hasHmrc)
 		{
-			var freeCashFlowWeight = GetBaseWeight(freeCashFlow, OfflineLimitedMedalConstants.FreeCashFlowBaseWeight, MedalRangesConstats.FreeCashFlowRanges);
+			var freeCashFlowWeight = GetBaseWeight(freeCashFlow, OnlineLimitedMedalConstants.FreeCashFlowBaseWeight, MedalRangesConstats.FreeCashFlowRanges);
 			
 			if (!hasHmrc)
 			{
-				freeCashFlowWeight.FinalWeight = OfflineLimitedMedalConstants.FreeCashFlowNoHmrcWeight;
+				freeCashFlowWeight.FinalWeight = OnlineLimitedMedalConstants.FreeCashFlowNoHmrcWeight;
 			}
 
 			return freeCashFlowWeight;
@@ -213,14 +231,14 @@
 
 		private Weight GetBusinessSeniorityWeight(decimal businessSeniority, bool firstRepaymentDatePassed, bool hasHmrc)
 		{
-			var businessSeniorityWeight = GetBaseWeight(businessSeniority, OfflineLimitedMedalConstants.BusinessSeniorityBaseWeight, MedalRangesConstats.BusinessSeniorityRanges);
+			var businessSeniorityWeight = GetBaseWeight(businessSeniority, OnlineLimitedMedalConstants.BusinessSeniorityBaseWeight, MedalRangesConstats.BusinessSeniorityRanges);
 			
 			if (!hasHmrc) {
-				businessSeniorityWeight.FinalWeight += OfflineLimitedMedalConstants.BusinessSeniorityNoHmrcWeightChange;
+				businessSeniorityWeight.FinalWeight += OnlineLimitedMedalConstants.BusinessSeniorityNoHmrcWeightChange;
 			}
 
 			if (firstRepaymentDatePassed) {
-				businessSeniorityWeight.FinalWeight += OfflineLimitedMedalConstants.BusinessSeniorityFirstRepaymentWeightChange;
+				businessSeniorityWeight.FinalWeight += OnlineLimitedMedalConstants.BusinessSeniorityFirstRepaymentWeightChange;
 			}
 
 			return businessSeniorityWeight;
@@ -228,26 +246,26 @@
 
 		private Weight GetTangibleEquityWeight(decimal tangibleEquity)
 		{
-			return GetBaseWeight(tangibleEquity, OfflineLimitedMedalConstants.TangibleEquityBaseWeight, MedalRangesConstats.TangibleEquityRanges);
+			return GetBaseWeight(tangibleEquity, OnlineLimitedMedalConstants.TangibleEquityBaseWeight, MedalRangesConstats.TangibleEquityRanges);
 		}
 
 		private Weight GetBusinessScoreWeight(int businessScore, bool firstRepaymentDatePassed, bool hasHmrc)
 		{
-			var businessScoreWeight = GetBaseWeight(businessScore, OfflineLimitedMedalConstants.BusinessScoreBaseWeight, MedalRangesConstats.BusinessScoreRanges);
+			var businessScoreWeight = GetBaseWeight(businessScore, OnlineLimitedMedalConstants.BusinessScoreBaseWeight, MedalRangesConstats.BusinessScoreRanges);
 			
-			if (businessScore <= OfflineLimitedMedalConstants.LowBusinessScore)
+			if (businessScore <= OnlineLimitedMedalConstants.LowBusinessScore)
 			{
-				businessScoreWeight.FinalWeight = OfflineLimitedMedalConstants.BusinessScoreLowScoreWeight;
+				businessScoreWeight.FinalWeight = OnlineLimitedMedalConstants.BusinessScoreLowScoreWeight;
 			}
 
 			if (!hasHmrc)
 			{
-				businessScoreWeight.FinalWeight += OfflineLimitedMedalConstants.BusinessScoreNoHmrcWeightChange;
+				businessScoreWeight.FinalWeight += OnlineLimitedMedalConstants.BusinessScoreNoHmrcWeightChange;
 			}
 
 			if (firstRepaymentDatePassed)
 			{
-				businessScoreWeight.FinalWeight += OfflineLimitedMedalConstants.BusinessScoreFirstRepaymentWeightChange;
+				businessScoreWeight.FinalWeight += OnlineLimitedMedalConstants.BusinessScoreFirstRepaymentWeightChange;
 			}
 
 			return businessScoreWeight;
@@ -255,18 +273,18 @@
 
 		private Weight GetConsumerScoreWeight(int consumerScore, bool firstRepaymentDatePassed, bool hasHmrc)
 		{
-			var consumerScoreWeight = GetBaseWeight(consumerScore, OfflineLimitedMedalConstants.ConsumerScoreBaseWeight, MedalRangesConstats.ConsumerScoreRanges);
+			var consumerScoreWeight = GetBaseWeight(consumerScore, OnlineLimitedMedalConstants.ConsumerScoreBaseWeight, MedalRangesConstats.ConsumerScoreRanges);
 			
-			if (consumerScore <= OfflineLimitedMedalConstants.LowConsumerScore) {
-				consumerScoreWeight.FinalWeight = OfflineLimitedMedalConstants.ConsumerScoreLowScoreWeight;
+			if (consumerScore <= OnlineLimitedMedalConstants.LowConsumerScore) {
+				consumerScoreWeight.FinalWeight = OnlineLimitedMedalConstants.ConsumerScoreLowScoreWeight;
 			}
 
 			if (!hasHmrc) {
-				consumerScoreWeight.FinalWeight += OfflineLimitedMedalConstants.ConsumerScoreNoHmrcWeightChange;
+				consumerScoreWeight.FinalWeight += OnlineLimitedMedalConstants.ConsumerScoreNoHmrcWeightChange;
 			}
 
 			if (firstRepaymentDatePassed) {
-				consumerScoreWeight.FinalWeight += OfflineLimitedMedalConstants.ConsumerScoreFirstRepaymentWeightChange;
+				consumerScoreWeight.FinalWeight += OnlineLimitedMedalConstants.ConsumerScoreFirstRepaymentWeightChange;
 			}
 
 			return consumerScoreWeight;
