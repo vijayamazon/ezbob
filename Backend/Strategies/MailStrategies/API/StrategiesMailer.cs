@@ -91,6 +91,10 @@
 		#region method HtmlToDocxBinary
 
 		private byte[] HtmlToDocxBinary(string html) {
+			if (html == null)
+			{
+				return new byte[0];
+			}
 			var doc = new Document();
 			var docBuilder = new DocumentBuilder(doc);
 			docBuilder.InsertHtml(html);
