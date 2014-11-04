@@ -6,56 +6,16 @@
 
 	public class ScoreResult
 	{
-		public ScoreResult()
-		{
-			BusinessScoreWeight = 30;
-			FreeCashFlowWeight = 19;
-			AnnualTurnoverWeight = 10;
-			TangibleEquityWeight = 8;
-			BusinessSeniorityWeight = 8;
-			ConsumerScoreWeight = 10;
-			NetWorthWeight = 10;
-			MaritalStatusWeight = 5;
-			EzbobSeniorityWeight = 0;
-			NumOfLoansWeight = 0;
-			NumOfLateRepaymentsWeight = 0;
-			NumOfEarlyRepaymentsWeight = 0;
-			MedalType = "Limited";
-		}
+		// Inputs
+		public int CustomerId { get; set; }
+		public DateTime CalculationTime { get; set; }
+		public string MedalType { get; set; }
 
-		/// <summary>
-		/// Constructor for broker instant offer
-		/// </summary>
-		public ScoreResult(
-			int businessScore, 
-			decimal freeCashFlow,
-			decimal annualTurnover,
-			decimal tangibleEquity, 
-			DateTime? businessSeniority,
-			int consumerScore,
-			decimal netWorth ): this() {
-
-			BusinessScore = businessScore;
-			FreeCashFlow = freeCashFlow;
-			AnnualTurnover = annualTurnover;
-			TangibleEquity = tangibleEquity;
-			BusinessSeniority = businessSeniority;
-			ConsumerScore = consumerScore;
-			NetWorth = netWorth;
-			
-			MaritalStatus = MaritalStatus.Married; //todo?
-			EzbobSeniority = DateTime.Today;
-			NumOfEarlyRepayments = 0;
-			NumOfLateRepayments = 0;
-			NumOfLoans = 0;
-		}
-
-		#region input 
-
+		// Gathered data
 		public int BusinessScore { get; set; }
-		public decimal FreeCashFlow { get; set; }
+		public decimal FreeCashFlowValue { get; set; }
 		public decimal AnnualTurnover { get; set; }
-		public decimal TangibleEquity { get; set; }
+		public decimal TangibleEquityValue { get; set; }
 		public DateTime? BusinessSeniority { get; set; }
 		public int ConsumerScore { get; set; }
 		public decimal NetWorth { get; set; }
@@ -66,17 +26,14 @@
 		public int NumOfLoans { get; set; }
 		public int NumOfLateRepayments { get; set; }
 		public int NumOfEarlyRepayments { get; set; }
-
-		#endregion input
-
-		public decimal FreeCashFlowValue { get; set; }
-		public decimal TangibleEquityValue { get; set; }
+		
+		// Calculated data
+		public decimal TangibleEquity { get; set; }
+		public decimal FreeCashFlow { get; set; }
 		public decimal ValueAdded { get; set; }
 		public string InnerFlowName { get; set; }
-		public string MedalType { get; set; }
-
-		#region constants / internal
-
+		
+		// Weights, grades, scores
 		public decimal BusinessScoreWeight { get; set; }
 		public decimal BusinessScoreGrade { get; set; }
 		public decimal BusinessScoreScore { get; set; }
@@ -133,15 +90,10 @@
 		public decimal NumOfEarlyRepaymentsGrade { get; set; }
 		public decimal NumOfEarlyRepaymentsScore { get; set; }
 
-		#endregion constants / internal
-
-		#region output
-
+		// Output
 		public decimal TotalScore { get; set; }
 		public decimal TotalScoreNormalized { get; set; }
 		public MedalMultiplier Medal { get; set; }
 		public string Error { get; set; }
-
-		#endregion output
 	}
 }

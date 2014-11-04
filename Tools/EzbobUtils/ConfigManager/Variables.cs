@@ -374,6 +374,7 @@ namespace ConfigManager {
 		LimitedMedalMinOffer,
 		AlibabaMailTo,
 		AlibabaMailCc,
-		AlibabaCurrencyConversionCoefficient
+		AlibabaCurrencyConversionCoefficient,
+		OnlineMedalTurnoverCutoff
 	} // enum Variables
 } // namespace ConfigManager

@@ -5,6 +5,7 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using Experian;
+	using EzBob.Models;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Models.Marketplaces.Yodlee;
 	using Ezbob.Backend.Models;
@@ -12,9 +13,11 @@
 	using Ezbob.Logger;
 	using VatReturn;
 
-	public class LimitedMedalCalculator1 : MedalCalculatorBase
+	public class OnlineLimitedMedalCalculator1 : MedalCalculatorBase
 	{
-		public LimitedMedalCalculator1(AConnection db, ASafeLog log)
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+
+		public OnlineLimitedMedalCalculator1(AConnection db, ASafeLog log)
 			: base(db, log)
 		{
 		}
@@ -25,17 +28,17 @@
 				{
 					CustomerId = customerId,
 					CalculationTime = calculationTime,
-					MedalType = "Limited",
-					BusinessScoreWeight = 30,
-					FreeCashFlowWeight = 19,
+					MedalType = "OnlineLimited",
+					BusinessScoreWeight = 20,
+					FreeCashFlowWeight = 13,
 					AnnualTurnoverWeight = 10,
 					TangibleEquityWeight = 8,
-					BusinessSeniorityWeight = 8,
-					ConsumerScoreWeight = 10,
+					BusinessSeniorityWeight = 7,
+					ConsumerScoreWeight = 20,
 					NetWorthWeight = 10,
 					MaritalStatusWeight = 5,
-					NumberOfStoresWeight = 0,
-					PositiveFeedbacksWeight = 0,
+					NumberOfStoresWeight = 2,
+					PositiveFeedbacksWeight = 5,
 					EzbobSeniorityWeight = 0,
 					NumOfLoansWeight = 0,
 					NumOfLateRepaymentsWeight = 0,
@@ -72,6 +75,15 @@
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
 			DateTime? earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
 			DateTime? earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+
+			// TODO: complete logic
+			// Implement the 0.7 logic
+			Results.PositiveFeedbacks = 7000;
+			Results.NumberOfStores = 2;
+
+			double onlineTurnover = strategyHelper.GetOnlineAnnualTurnoverForMedal(Results.CustomerId);
+			decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
+
 
 			if (numOfHmrcMps > 1)
 			{
@@ -177,12 +189,12 @@
 
 		protected override decimal GetConsumerScoreWeightForLowScore()
 		{
-			return 13.75m;
+			return 27.5m;
 		}
 
 		protected override decimal GetCompanyScoreWeightForLowScore()
 		{
-			return 41.25m;
+			return 27.5m;
 		}
 
 		protected override void RedistributeFreeCashFlowWeight()
@@ -190,10 +202,10 @@
 			if (!freeCashFlowDataAvailable)
 			{
 				Results.FreeCashFlowWeight = 0;
-				Results.AnnualTurnoverWeight += 7;
-				Results.BusinessScoreWeight += 5;
+				Results.AnnualTurnoverWeight += 5;
+				Results.BusinessScoreWeight += 3;
 				Results.ConsumerScoreWeight += 3;
-				Results.BusinessSeniorityWeight += 4;
+				Results.BusinessSeniorityWeight += 2;
 			}
 		}
 
@@ -206,9 +218,9 @@
 				Results.NumOfLateRepaymentsWeight = 2.67m;
 				Results.NumOfEarlyRepaymentsWeight = 2;
 
-				Results.BusinessScoreWeight -= 6.25m;
-				Results.BusinessSeniorityWeight -= 1.67m;
-				Results.ConsumerScoreWeight -= 2.08m;
+				Results.BusinessScoreWeight -= 4;
+				Results.BusinessSeniorityWeight -= 2;
+				Results.ConsumerScoreWeight -= 4;
 			}
 		}
 	}

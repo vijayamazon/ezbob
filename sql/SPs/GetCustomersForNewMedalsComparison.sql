@@ -6,7 +6,7 @@ ALTER PROCEDURE GetCustomersForNewMedalsComparison
 AS
 BEGIN
 	SELECT 
-		Customer.Id AS CustomerId, MAX(UpdatingEnd) AS CalculationTime
+		Customer.Id AS CustomerId, ISNULL(MAX(UpdatingEnd), getutcdate()) AS CalculationTime
 	FROM 
 		Customer, 
 		WizardStepTypes,
@@ -15,7 +15,8 @@ BEGIN
 		WizardStep = WizardStepTypeID AND 
 		TheLastOne = 1 AND 
 		(TypeOfBusiness = 'Limited' OR TypeOfBusiness = 'LLP') AND
-		MP_CustomerMarketPlace.CustomerId = Customer.Id
+		MP_CustomerMarketPlace.CustomerId = Customer.Id AND
+		CustomerId NOT IN (SELECT CustomerId AS Num FROM MP_CustomerMarketPlace, MP_MarketplaceType WHERE MarketPlaceId = MP_MarketplaceType.Id AND MP_MarketplaceType.Name = 'HMRC' GROUP BY CustomerId HAVING count(CustomerId) > 1)
 	GROUP BY Customer.Id
 END
 GO

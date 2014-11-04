@@ -203,6 +203,23 @@
 			return mpAnalysis;
 		}
 
+		public Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> GetOnlineAnalysisValsForCustomer(int customerId)
+		{
+			var mps = _marketPlaceRepository.GetAllByCustomer(customerId);
+			var mpAnalysis = new Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>>();
+			foreach (var mp in mps.Where(mp => !mp.Disabled && (mp.Marketplace.Name == "Pay Pal" || mp.Marketplace.Name == "eBay" || mp.Marketplace.Name == "Amazon")))
+			{
+				var analisysFunction = mp.GetRetrieveDataHelper().GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+				if (av != null)
+				{
+					mpAnalysis.Add(mp, av);
+				}
+			}
+
+			return mpAnalysis;
+		}
+
 		public Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> GetAllAnalysisValsForCustomer(int customerId)
 		{
 			var mps = _marketPlaceRepository.GetAllByCustomer(customerId);
@@ -254,6 +271,20 @@
 		public double GetTotalSumOfOrdersForLoanOffer(int customerId)
 		{
 			var analysisVals = GetAnalysisValsForCustomer(customerId);
+
+			double year = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Year);
+			double month6 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month6);
+			double month3 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month3);
+			double month = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month);
+
+			double min = Math.Min(year, Math.Min(month6, Math.Min(month3, month)));
+			log.InfoFormat("Calculated annualized turnover. Year:{0} 6Months:{1} 3Months:{2} Month:{3}. Using min:{4}", year, month6, month3, month, min);
+			return min;
+		}
+
+		public double GetOnlineAnnualTurnoverForMedal(int customerId)
+		{
+			var analysisVals = GetOnlineAnalysisValsForCustomer(customerId);
 
 			double year = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Year);
 			double month6 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month6);

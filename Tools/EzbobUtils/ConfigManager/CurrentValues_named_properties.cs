@@ -2362,5 +2362,11 @@ namespace ConfigManager {
 		public virtual VariableValue AlibabaCurrencyConversionCoefficient {
 			get { return this[Variables.AlibabaCurrencyConversionCoefficient]; }
 		}
+
+		public virtual VariableValue OnlineMedalTurnoverCutoff
+		{
+			get { return this[Variables.OnlineMedalTurnoverCutoff]; }
+		}
+		
 	} // class CurrentValues
 } // namespace ConfigManager
