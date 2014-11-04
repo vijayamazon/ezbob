@@ -2,6 +2,9 @@ IF OBJECT_ID('GetBasicCustomerData') IS NULL
 	EXECUTE('CREATE PROCEDURE GetBasicCustomerData AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE GetBasicCustomerData
 @CustomerId INT
 AS
@@ -68,13 +71,13 @@ BEGIN
 		c.IsAlibaba,
 		c.AlibabaId,
 		c.OverallTurnOver AS ReportedAnnualTurnover,
-		crl.Amount AS RequestedLoanAmount
+		ISNULL(crl.Amount, 0) AS RequestedLoanAmount
 	FROM
 		Customer c
 		LEFT JOIN CustomerAddress a
 			ON c.Id = a.CustomerId
 			AND a.addressType = 1
-		INNER JOIN CustomerRequestedLoan crl ON c.Id = crl.CustomerId
+		LEFT JOIN CustomerRequestedLoan crl ON c.Id = crl.CustomerId
 	WHERE
 		c.Id = @CustomerId
 END
