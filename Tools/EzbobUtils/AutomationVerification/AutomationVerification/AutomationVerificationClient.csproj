@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D7B3530E-4038-446D-A25A-45D6DF5B6D45}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{87D86A46-A199-4D0A-A597-7769B7578533}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutomationCalculator</RootNamespace>
-    <AssemblyName>AutomationCalculator</AssemblyName>
+    <RootNamespace>AutomationVerification</RootNamespace>
+    <AssemblyName>AutomationVerification</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,9 +32,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
       <HintPath>..\..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,30 +55,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoRejectionCalculator.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="AutoReRejectionCalculator.cs" />
-    <Compile Include="AutoApprovalCalculator.cs" />
-    <Compile Include="AutoReApprovalCalculator.cs" />
-    <Compile Include="OfflineLimitedMedalCalculator.cs" />
-    <Compile Include="DbHelper.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="MarketPlacesHelper.cs" />
-    <Compile Include="Models.cs" />
+    <Compile Include="AutomationTestFixure.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Range.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Integration\DbConstants\DbConstants.csproj">
-      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
-      <Name>DbConstants</Name>
+    <ProjectReference Include="..\..\..\..\App\EzReporting\Mailer\Mailer.csproj">
+      <Project>{68180204-5112-43af-9d83-e5cdd39f93a0}</Project>
+      <Name>Mailer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\App\EzReporting\Reports\Reports.csproj">
+      <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
+      <Name>Reports</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ConfigurationBase\ConfigurationBase.csproj">
+      <Project>{e31f233f-09aa-47c8-a2e0-8e33a87f868d}</Project>
+      <Name>ConfigurationBase</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
@@ -80,6 +91,15 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="AutomationCalculator.csproj">
+      <Project>{d7b3530e-4038-446d-a25a-45d6df5b6d45}</Project>
+      <Name>AutomationCalculator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,5 +1,6 @@
-﻿namespace AutomationCalculator
+﻿namespace AutomationCalculator.AutoDecision
 {
+	using Common;
 	using Ezbob.Logger;
 
 	public class AutoReRejectionCalculator

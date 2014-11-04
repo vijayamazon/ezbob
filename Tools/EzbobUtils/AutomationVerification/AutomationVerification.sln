@@ -9,11 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzEnvironment", "..\EzEnvir
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "..\Logger\Logger.csproj", "{F92CA169-9532-4C4D-8D84-6F48ACE5719C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationCalculator", "AutoRejection\AutomationCalculator.csproj", "{D7B3530E-4038-446D-A25A-45D6DF5B6D45}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzbobScoringModelCalculator", "EzbobScoringModelCalculator\EzbobScoringModelCalculator.csproj", "{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationVerification", "AutomationVerification\AutomationVerification.csproj", "{87D86A46-A199-4D0A-A597-7769B7578533}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationVerificationClient", "AutomationVerification\AutomationVerificationClient.csproj", "{87D86A46-A199-4D0A-A597-7769B7578533}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports", "..\..\..\App\EzReporting\Reports\Reports.csproj", "{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}"
 EndProject
@@ -28,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ezbob.Backend.ModelsWithDB", "..\..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj", "{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbConstants", "..\..\..\Integration\DbConstants\DbConstants.csproj", "{0527009D-A650-4505-9385-49FACA6991CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationCalculator", "AutomationVerification\AutomationCalculator.csproj", "{D7B3530E-4038-446D-A25A-45D6DF5B6D45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,14 +49,6 @@ Global
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87D86A46-A199-4D0A-A597-7769B7578533}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87D86A46-A199-4D0A-A597-7769B7578533}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D86A46-A199-4D0A-A597-7769B7578533}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -91,6 +81,10 @@ Global
 		{0527009D-A650-4505-9385-49FACA6991CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0527009D-A650-4505-9385-49FACA6991CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0527009D-A650-4505-9385-49FACA6991CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

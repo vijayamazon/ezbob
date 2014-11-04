@@ -1,6 +1,7 @@
-﻿namespace AutomationCalculator
+﻿namespace AutomationCalculator.AutoDecision
 {
 	using System;
+	using Common;
 	using Ezbob.Logger;
 
 	public class AutoReApprovalCalculator

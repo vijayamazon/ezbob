@@ -1,8 +1,9 @@
-﻿namespace AutomationCalculator
+﻿namespace AutomationCalculator.MedalCalculation
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Text;
+	using Common;
 	using Ezbob.Logger;
 
 	public interface IMedalCalulator {

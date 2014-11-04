@@ -1,4 +1,4 @@
-﻿namespace AutomationCalculator
+﻿namespace AutomationCalculator.Common
 {
 	public enum Gender
 	{

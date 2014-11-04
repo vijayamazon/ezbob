@@ -1,4 +1,4 @@
-﻿namespace AutomationCalculator
+﻿namespace AutomationCalculator.Common
 {
 	using System;
 
@@ -229,7 +229,7 @@
 				,
 				BusinessScore, TangibleEquity, BusinessSeniority, ConsumerScore, EzbobSeniority,
 				MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, NumOfEarlyPayments, AnnualTurnover,
-				FreeCashFlow, NetWorth, IsLimited, FirstRepaymentDatePassed, NumOfStores, NumOfPositiveFeedbacks); 
+				FreeCashFlow, NetWorth, IsLimited, FirstRepaymentDatePassed, NumOfStores, PositiveFeedbacks); 
 		}
 	}
 }

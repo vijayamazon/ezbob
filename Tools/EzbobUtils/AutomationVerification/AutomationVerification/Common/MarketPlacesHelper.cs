@@ -1,8 +1,9 @@
-﻿namespace AutomationCalculator
+﻿namespace AutomationCalculator.Common
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Common;
 	using Ezbob.Logger;
 
 	public class MarketPlacesHelper
