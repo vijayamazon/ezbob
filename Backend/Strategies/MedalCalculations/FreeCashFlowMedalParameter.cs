@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
+﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	public class FreeCashFlowMedalParameter : MedalParameter
 	{

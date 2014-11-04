@@ -4,10 +4,12 @@ GO
 
 ALTER PROCEDURE StoreNewMedalForComparison1
 	(@CustomerId INT
+	,@MedalType NVARCHAR(20)
 	,@BusinessScore INT
 	,@BusinessScoreWeight DECIMAL(18,6)
 	,@BusinessScoreGrade DECIMAL(18,6)
 	,@BusinessScoreScore DECIMAL(18,6)
+	,@FreeCashFlowValue DECIMAL(18,6)
 	,@FreeCashFlow DECIMAL(18,6)
 	,@FreeCashFlowWeight DECIMAL(18,6)
 	,@FreeCashFlowGrade DECIMAL(18,6)
@@ -16,6 +18,7 @@ ALTER PROCEDURE StoreNewMedalForComparison1
 	,@AnnualTurnoverWeight DECIMAL(18,6)
 	,@AnnualTurnoverGrade DECIMAL(18,6)
 	,@AnnualTurnoverScore DECIMAL(18,6)
+	,@TangibleEquityValue DECIMAL(18,6)
 	,@TangibleEquity DECIMAL(18,6)
 	,@TangibleEquityWeight DECIMAL(18,6)
 	,@TangibleEquityGrade DECIMAL(18,6)
@@ -35,7 +38,15 @@ ALTER PROCEDURE StoreNewMedalForComparison1
 	,@MaritalStatus NVARCHAR(50)
 	,@MaritalStatusWeight DECIMAL(18,6)
 	,@MaritalStatusGrade DECIMAL(18,6)
-	,@MaritalStatusScore DECIMAL(18,6)
+	,@MaritalStatusScore DECIMAL(18,6)	
+	,@NumberOfStores INT
+	,@NumberOfStoresWeight DECIMAL(18,6)
+	,@NumberOfStoresGrade DECIMAL(18,6)
+	,@NumberOfStoresScore DECIMAL(18,6)	
+	,@PositiveFeedbacks INT
+	,@PositiveFeedbacksWeight DECIMAL(18,6)
+	,@PositiveFeedbacksGrade DECIMAL(18,6)
+	,@PositiveFeedbacksScore DECIMAL(18,6)	
 	,@EzbobSeniority DATETIME
 	,@EzbobSeniorityWeight DECIMAL(18,6)
 	,@EzbobSeniorityGrade DECIMAL(18,6)
@@ -52,22 +63,22 @@ ALTER PROCEDURE StoreNewMedalForComparison1
 	,@NumOfEarlyRepaymentsWeight DECIMAL(18,6)
 	,@NumOfEarlyRepaymentsGrade DECIMAL(18,6)
 	,@NumOfEarlyRepaymentsScore DECIMAL(18,6)
+	,@ValueAdded DECIMAL(18,6)
+	,@InnerFlowName NVARCHAR(20)
 	,@TotalScore DECIMAL(18,6)
 	,@TotalScoreNormalized DECIMAL(18,6)
 	,@Medal NVARCHAR(50)
-	,@Error NVARCHAR(500)
-	,@FreeCashFlowValue DECIMAL(18,6)
-	,@TangibleEquityValue DECIMAL(18,6)
-	,@ValueAdded DECIMAL(18,6)
-	,@BasedOnHmrcValues BIT)
+	,@Error NVARCHAR(500))
 AS
 BEGIN
 	INSERT INTO NewMedalComparison1 (
 	 CustomerId
+	,MedalType
 	,BusinessScore
 	,BusinessScoreWeight
 	,BusinessScoreGrade
 	,BusinessScoreScore
+	,FreeCashFlowValue
 	,FreeCashFlow
 	,FreeCashFlowWeight
 	,FreeCashFlowGrade
@@ -76,6 +87,7 @@ BEGIN
 	,AnnualTurnoverWeight
 	,AnnualTurnoverGrade
 	,AnnualTurnoverScore
+	,TangibleEquityValue
 	,TangibleEquity
 	,TangibleEquityWeight
 	,TangibleEquityGrade
@@ -96,6 +108,14 @@ BEGIN
 	,MaritalStatusWeight
 	,MaritalStatusGrade
 	,MaritalStatusScore
+	,NumberOfStores
+	,NumberOfStoresWeight
+	,NumberOfStoresGrade
+	,NumberOfStoresScore
+	,PositiveFeedbacks
+	,PositiveFeedbacksWeight
+	,PositiveFeedbacksGrade
+	,PositiveFeedbacksScore	
 	,EzbobSeniority
 	,EzbobSeniorityWeight
 	,EzbobSeniorityGrade
@@ -112,20 +132,20 @@ BEGIN
 	,NumOfEarlyRepaymentsWeight
 	,NumOfEarlyRepaymentsGrade
 	,NumOfEarlyRepaymentsScore
+	,ValueAdded
+	,InnerFlowName
 	,TotalScore
 	,TotalScoreNormalized
 	,Medal
-	,Error
-	,FreeCashFlowValue
-	,TangibleEquityValue
-	,ValueAdded
-	,BasedOnHmrcValues)
+	,Error)
 	VALUES (
 	 @CustomerId
+	,@MedalType
 	,@BusinessScore
 	,@BusinessScoreWeight
 	,@BusinessScoreGrade
 	,@BusinessScoreScore
+	,@FreeCashFlowValue
 	,@FreeCashFlow
 	,@FreeCashFlowWeight
 	,@FreeCashFlowGrade
@@ -134,6 +154,7 @@ BEGIN
 	,@AnnualTurnoverWeight
 	,@AnnualTurnoverGrade
 	,@AnnualTurnoverScore
+	,@TangibleEquityValue
 	,@TangibleEquity
 	,@TangibleEquityWeight
 	,@TangibleEquityGrade
@@ -154,6 +175,14 @@ BEGIN
 	,@MaritalStatusWeight
 	,@MaritalStatusGrade
 	,@MaritalStatusScore
+	,@NumberOfStores
+	,@NumberOfStoresWeight
+	,@NumberOfStoresGrade
+	,@NumberOfStoresScore
+	,@PositiveFeedbacks
+	,@PositiveFeedbacksWeight
+	,@PositiveFeedbacksGrade
+	,@PositiveFeedbacksScore	
 	,@EzbobSeniority
 	,@EzbobSeniorityWeight
 	,@EzbobSeniorityGrade
@@ -170,13 +199,11 @@ BEGIN
 	,@NumOfEarlyRepaymentsWeight
 	,@NumOfEarlyRepaymentsGrade
 	,@NumOfEarlyRepaymentsScore
+	,@ValueAdded
+	,@InnerFlowName
 	,@TotalScore
 	,@TotalScoreNormalized
 	,@Medal
-	,@Error
-	,@FreeCashFlowValue
-	,@TangibleEquityValue
-	,@ValueAdded
-	,@BasedOnHmrcValues)
+	,@Error)
 END
 GO

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
+﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
@@ -20,6 +20,7 @@
 			NumOfLoansWeight = 0;
 			NumOfLateRepaymentsWeight = 0;
 			NumOfEarlyRepaymentsWeight = 0;
+			MedalType = "Limited";
 		}
 
 		/// <summary>
@@ -59,6 +60,8 @@
 		public int ConsumerScore { get; set; }
 		public decimal NetWorth { get; set; }
 		public MaritalStatus MaritalStatus { get; set; }
+		public int NumberOfStores { get; set; }
+		public int PositiveFeedbacks { get; set; }
 		public DateTime? EzbobSeniority { get; set; }
 		public int NumOfLoans { get; set; }
 		public int NumOfLateRepayments { get; set; }
@@ -69,7 +72,8 @@
 		public decimal FreeCashFlowValue { get; set; }
 		public decimal TangibleEquityValue { get; set; }
 		public decimal ValueAdded { get; set; }
-		public bool BasedOnHmrcValues { get; set; } // If false then it is based on Yodlee values
+		public string InnerFlowName { get; set; }
+		public string MedalType { get; set; }
 
 		#region constants / internal
 
@@ -105,6 +109,14 @@
 		public decimal MaritalStatusGrade { get; set; }
 		public decimal MaritalStatusScore { get; set; }
 
+		public decimal NumberOfStoresWeight { get; set; }
+		public decimal NumberOfStoresGrade { get; set; }
+		public decimal NumberOfStoresScore { get; set; }
+
+		public decimal PositiveFeedbacksWeight { get; set; }
+		public decimal PositiveFeedbacksGrade { get; set; }
+		public decimal PositiveFeedbacksScore { get; set; }
+		
 		public decimal EzbobSeniorityWeight { get; set; }
 		public decimal EzbobSeniorityGrade { get; set; }
 		public decimal EzbobSeniorityScore { get; set; }

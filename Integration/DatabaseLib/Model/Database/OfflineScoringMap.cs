@@ -2,11 +2,11 @@
 {
 	using FluentNHibernate.Mapping;
 
-	public class OfflineScoringMap : ClassMap<OfflineScoring>
+	public class MedalCalculationsMap : ClassMap<MedalCalculations>
     {
-		public OfflineScoringMap()
+		public MedalCalculationsMap()
         {
-			Table("OfflineScoring");
+			Table("MedalCalculations");
 			Id(x => x.Id).GeneratedBy.Native().Column("Id");
 			Map(x => x.IsActive);
 			Map(x => x.CustomerId);

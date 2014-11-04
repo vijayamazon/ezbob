@@ -15,7 +15,7 @@ BEGIN
 	
 	DECLARE 
 		@CustomerId INT,
-		@NumOfEntriesInOfflineScoringTable INT,
+		@NumOfEntriesInMedalCalculationsTable INT,
 		@NumOfHmrcMps INT,
 		@CalculationTime DATETIME
 	
@@ -23,7 +23,7 @@ BEGIN
 		Id AS CustomerId,
 		TypeOfBusiness,
 		0 AS NumOfHmrcMps,
-		0 AS NumOfEntriesInOfflineScoringTable,
+		0 AS NumOfEntriesInMedalCalculationsTable,
 		CAST (NULL AS DATETIME) AS CalculationTime
 	INTO
 		#GetCustomersForMedalBackfillTemp
@@ -55,9 +55,9 @@ BEGIN
 			MP_CustomerMarketPlace.CustomerId = @CustomerId
 		
 		SELECT 
-			@NumOfEntriesInOfflineScoringTable = COUNT(1) 
+			@NumOfEntriesInMedalCalculationsTable = COUNT(1) 
 		FROM 
-			OfflineScoring 
+			MedalCalculations 
 		WHERE 
 			CustomerId = @CustomerId
 			
@@ -72,7 +72,7 @@ BEGIN
 			#GetCustomersForMedalBackfillTemp
 		SET 
 			NumOfHmrcMps = @NumOfHmrcMps,
-			NumOfEntriesInOfflineScoringTable = @NumOfEntriesInOfflineScoringTable,
+			NumOfEntriesInMedalCalculationsTable = @NumOfEntriesInMedalCalculationsTable,
 			CalculationTime = @CalculationTime
 		WHERE 
 			CustomerId = @CustomerId
@@ -82,7 +82,7 @@ BEGIN
 	CLOSE cur
 	DEALLOCATE cur
 	
-	SELECT CustomerId, TypeOfBusiness, NumOfHmrcMps, NumOfEntriesInOfflineScoringTable, CalculationTime FROM #GetCustomersForMedalBackfillTemp
+	SELECT CustomerId, TypeOfBusiness, NumOfHmrcMps, NumOfEntriesInMedalCalculationsTable, CalculationTime FROM #GetCustomersForMedalBackfillTemp
 	DROP TABLE #GetCustomersForMedalBackfillTemp
 END
 GO

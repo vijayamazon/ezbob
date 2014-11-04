@@ -249,12 +249,12 @@
 				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Has mortgages but not a home owner", AlertType = AlertType.Warning.DescriptionAttr() });
 			}
 
-			OfflineScoring offlineScoringRecord = customer.OfflineScoring.FirstOrDefault(x => x.IsActive);
+			MedalCalculations medalCalculationsRecord = customer.MedalCalculations.FirstOrDefault(x => x.IsActive);
 
 			if (customer.Company != null && (customer.Company.TypeOfBusiness == TypeOfBusiness.LLP || customer.Company.TypeOfBusiness == TypeOfBusiness.Limited) && customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") < 2)
 			{
 				// The customer should have medal
-				if (offlineScoringRecord == null)
+				if (medalCalculationsRecord == null)
 				{
 					summary.Alerts.Errors.Add(new AlertModel
 						{
@@ -263,12 +263,12 @@
 							AlertType = AlertType.Error.DescriptionAttr()
 						});
 				}
-				else if (!string.IsNullOrEmpty(offlineScoringRecord.Error))
+				else if (!string.IsNullOrEmpty(medalCalculationsRecord.Error))
 				{
 					summary.Alerts.Errors.Add(new AlertModel
 						{
 							Abbreviation = "MDL",
-							Alert = string.Format("Error while calculating new medal: {0}", offlineScoringRecord.Error),
+							Alert = string.Format("Error while calculating new medal: {0}", medalCalculationsRecord.Error),
 							AlertType = AlertType.Error.DescriptionAttr()
 						});
 				}

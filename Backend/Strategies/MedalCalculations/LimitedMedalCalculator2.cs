@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
+﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	using System.Collections.Generic;
 	using ConfigManager;
@@ -10,7 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using ScoreCalculation;
 
-	public class NewMedalScoreCalculator2
+	public class LimitedMedalCalculator2
 	{
 		private readonly ASafeLog log;
 		private readonly AConnection db;
@@ -18,7 +18,7 @@
 		private decimal freeCashFlowValue;
 		private decimal valueAdded;
 		private decimal tangibleEquityValue;
-		private bool basedOnHmrc;
+		private string innerFlowName;
 
 		private BusinessScoreMedalParameter businessScoreMedalParameter;
 		private TangibleEquityMedalParameter tangibleEquityMedalParameter;
@@ -33,7 +33,7 @@
 		private LateRepaymentsMedalParameter lateRepaymentsMedalParameter;
 		private EarlyRepaymentsMedalParameter earlyRepaymentsMedalParameter;
 
-		public NewMedalScoreCalculator2(AConnection db, ASafeLog log)
+		public LimitedMedalCalculator2(AConnection db, ASafeLog log)
 		{
 			this.log = log;
 			this.db = db;
@@ -150,7 +150,7 @@
 
 				scoreResult.FreeCashFlowValue = freeCashFlowValue;
 				scoreResult.TangibleEquityValue = tangibleEquityValue;
-				scoreResult.BasedOnHmrcValues = basedOnHmrc;
+				scoreResult.InnerFlowName = innerFlowName;
 				scoreResult.ValueAdded = valueAdded;
 
 				scoreResult.Medal = CalculateMedal(normalizedTotalScore);
@@ -266,7 +266,7 @@
 				}
 
 				annualTurnover = hmrcAnnualTurnover;
-				basedOnHmrc = true;
+				innerFlowName = "HMRC";
 
 				decimal factoredLoanRepayments = actualLoanRepayments;
 				if (fcfFactor != 0)
@@ -313,7 +313,7 @@
 					annualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
 				}
 
-				basedOnHmrc = false;
+				innerFlowName = "Bank";
 				freeCashFlowValue = 0;
 				valueAdded = 0;
 			}

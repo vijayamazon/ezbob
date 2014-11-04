@@ -32,7 +32,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.GreetingMailSentDate, "GreetingMailSentDate");
 			Map(x => x.ApplyCount, "ApplyCount");
 			HasMany(x => x.ScoringResults).KeyColumn("CustomerId").Cascade.All();
-			HasMany(x => x.OfflineScoring).KeyColumn("CustomerId").Cascade.All();
+			HasMany(x => x.MedalCalculations).KeyColumn("CustomerId").Cascade.All();
 
 			Map(x => x.DateEscalated).CustomType<UtcDateTimeType>();
 			Map(x => x.DateApproved).CustomType<UtcDateTimeType>();

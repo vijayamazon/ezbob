@@ -57,11 +57,11 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			var scoringResult = scorRes.FirstOrDefault(s => s.ScoreDate == maxdate);
 			Score = BuildScore(scoringResult);
 
-			var offlineScoring = customer.OfflineScoring.FirstOrDefault(x => x.IsActive);
-			if (offlineScoring != null)
+			var medalCalculations = customer.MedalCalculations.FirstOrDefault(x => x.IsActive);
+			if (medalCalculations != null)
 			{
-				Score.OfflineMedal = offlineScoring.Medal;
-				Score.OfflineResult = (double) offlineScoring.TotalScoreNormalized;
+				Score.OfflineMedal = medalCalculations.Medal;
+				Score.OfflineResult = (double) medalCalculations.TotalScoreNormalized;
 			}
 			else
 			{

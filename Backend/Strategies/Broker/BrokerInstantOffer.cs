@@ -4,7 +4,7 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using LimitedMedalCalculation;
+	using MedalCalculations;
 
 	public class BrokerInstantOffer : AStrategy {
 		#region public
@@ -72,7 +72,7 @@
 			if (_request.IsHomeOwner) {
 				netWorth = 100000; //todo get the net worth
 			}
-			var calculator = new NewMedalScoreCalculator1(DB, Log);
+			var calculator = new LimitedMedalCalculator1(DB, Log);
 			var medalScore = calculator.CalculateMedalScore(new ScoreResult(businessScore, _request.AnnualProfit, _request.AnnualTurnover,
 			                                               tangibleEquity, businessSeniority, consumerScore, netWorth), 0, DateTime.UtcNow);
 			

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
+﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	using System.Collections.Generic;
 	using ConfigManager;
@@ -14,7 +14,7 @@
 	using ScoreCalculation;
 	using VatReturn;
 
-	public class NewMedalScoreCalculator1
+	public class LimitedMedalCalculator1
 	{
 		private readonly ASafeLog log;
 		private readonly AConnection db;
@@ -26,7 +26,7 @@
 
 		public ScoreResult Results { get; set; }
 
-		public NewMedalScoreCalculator1(AConnection db, ASafeLog log)
+		public LimitedMedalCalculator1(AConnection db, ASafeLog log)
 		{
 			this.log = log;
 			this.db = db;
@@ -134,7 +134,7 @@
 					throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
 				}
 
-				inputData.BasedOnHmrcValues = true;
+				inputData.InnerFlowName = "HMRC";
 				freeCashFlowDataAvailable = true;
 				
 				foreach (VatReturnSummary singleSummary in summaryData)
@@ -152,7 +152,7 @@
 					throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", customerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
 				}
 
-				inputData.BasedOnHmrcValues = false;
+				inputData.InnerFlowName = "Bank";
 				var yodleeMps = new List<int>();
 
 				db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>

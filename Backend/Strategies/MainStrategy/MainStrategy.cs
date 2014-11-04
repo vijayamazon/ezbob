@@ -312,7 +312,7 @@
 					decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
 					decimal offerAccordingToAnnualTurnover = instance.Result.AnnualTurnover * annualTurnoverMedalFactor;
 
-					if (instance.Result.BasedOnHmrcValues)
+					if (instance.Result.InnerFlowName == "HMRC")
 					{
 						decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
 						decimal valueAddedMedalFactor = sr["ValueAdded"];

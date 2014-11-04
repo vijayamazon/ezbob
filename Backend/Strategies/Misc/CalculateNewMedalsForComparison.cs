@@ -3,18 +3,18 @@
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using LimitedMedalCalculation;
+	using MedalCalculations;
 
 	public class CalculateNewMedalsForComparison : AStrategy
 	{
-		private readonly NewMedalScoreCalculator1 calculator1;
-		private readonly NewMedalScoreCalculator2 calculator2;
+		private readonly LimitedMedalCalculator1 calculator1;
+		private readonly LimitedMedalCalculator2 calculator2;
 
 		public CalculateNewMedalsForComparison(AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
-			calculator1 = new NewMedalScoreCalculator1(oDb, oLog);
-			calculator2 = new NewMedalScoreCalculator2(oDb, oLog);
+			calculator1 = new LimitedMedalCalculator1(oDb, oLog);
+			calculator2 = new LimitedMedalCalculator2(oDb, oLog);
 		}
 
 		public override string Name {
@@ -35,11 +35,13 @@
 						ScoreResult result2 = calculator2.CalculateMedalScore(customerId, calculationTime);
 
 						DB.ExecuteNonQuery("StoreNewMedalForComparison1", CommandSpecies.StoredProcedure,
-						                   new QueryParameter("CustomerId", customerId),
+										   new QueryParameter("CustomerId", customerId),
+										   new QueryParameter("MedalType", "Limited"),
 						                   new QueryParameter("BusinessScore", result1.BusinessScore),
 						                   new QueryParameter("BusinessScoreWeight", result1.BusinessScoreWeight),
 						                   new QueryParameter("BusinessScoreGrade", result1.BusinessScoreGrade),
-						                   new QueryParameter("BusinessScoreScore", result1.BusinessScoreScore),
+										   new QueryParameter("BusinessScoreScore", result1.BusinessScoreScore),
+										   new QueryParameter("FreeCashFlowValue", result1.FreeCashFlowValue),
 						                   new QueryParameter("FreeCashFlow", result1.FreeCashFlow),
 						                   new QueryParameter("FreeCashFlowWeight", result1.FreeCashFlowWeight),
 						                   new QueryParameter("FreeCashFlowGrade", result1.FreeCashFlowGrade),
@@ -47,7 +49,8 @@
 						                   new QueryParameter("AnnualTurnover", result1.AnnualTurnover),
 						                   new QueryParameter("AnnualTurnoverWeight", result1.AnnualTurnoverWeight),
 						                   new QueryParameter("AnnualTurnoverGrade", result1.AnnualTurnoverGrade),
-						                   new QueryParameter("AnnualTurnoverScore", result1.AnnualTurnoverScore),
+										   new QueryParameter("AnnualTurnoverScore", result1.AnnualTurnoverScore),
+										   new QueryParameter("TangibleEquityValue", result1.TangibleEquityValue),
 						                   new QueryParameter("TangibleEquity", result1.TangibleEquity),
 						                   new QueryParameter("TangibleEquityWeight", result1.TangibleEquityWeight),
 						                   new QueryParameter("TangibleEquityGrade", result1.TangibleEquityGrade),
@@ -67,7 +70,15 @@
 						                   new QueryParameter("MaritalStatus", result1.MaritalStatus.ToString()),
 						                   new QueryParameter("MaritalStatusWeight", result1.MaritalStatusWeight),
 						                   new QueryParameter("MaritalStatusGrade", result1.MaritalStatusGrade),
-						                   new QueryParameter("MaritalStatusScore", result1.MaritalStatusScore),
+										   new QueryParameter("MaritalStatusScore", result1.MaritalStatusScore),
+										   new QueryParameter("NumberOfStores", result1.NumberOfStores),
+										   new QueryParameter("NumberOfStoresWeight", result1.NumberOfStoresWeight),
+										   new QueryParameter("NumberOfStoresGrade", result1.NumberOfStoresGrade),
+										   new QueryParameter("NumberOfStoresScore", result1.NumberOfStoresScore),
+										   new QueryParameter("PositiveFeedbacks", result1.PositiveFeedbacks),
+										   new QueryParameter("PositiveFeedbacksWeight", result1.PositiveFeedbacksWeight),
+										   new QueryParameter("PositiveFeedbacksGrade", result1.PositiveFeedbacksGrade),
+										   new QueryParameter("PositiveFeedbacksScore", result1.PositiveFeedbacksScore),
 						                   new QueryParameter("EzbobSeniority", result1.EzbobSeniority.HasValue && result1.EzbobSeniority.Value.Year > 1800 ? result1.EzbobSeniority : null),
 						                   new QueryParameter("EzbobSeniorityWeight", result1.EzbobSeniorityWeight),
 						                   new QueryParameter("EzbobSeniorityGrade", result1.EzbobSeniorityGrade),
@@ -83,22 +94,22 @@
 						                   new QueryParameter("NumOfEarlyRepayments", result1.NumOfEarlyRepayments),
 						                   new QueryParameter("NumOfEarlyRepaymentsWeight", result1.NumOfEarlyRepaymentsWeight),
 						                   new QueryParameter("NumOfEarlyRepaymentsGrade", result1.NumOfEarlyRepaymentsGrade),
-						                   new QueryParameter("NumOfEarlyRepaymentsScore", result1.NumOfEarlyRepaymentsScore),
+										   new QueryParameter("NumOfEarlyRepaymentsScore", result1.NumOfEarlyRepaymentsScore),
+										   new QueryParameter("ValueAdded", result1.ValueAdded),
+										   new QueryParameter("InnerFlowName", result1.InnerFlowName),
 						                   new QueryParameter("TotalScore", result1.TotalScore),
 						                   new QueryParameter("TotalScoreNormalized", result1.TotalScoreNormalized),
 						                   new QueryParameter("Medal", result1.Medal.ToString()),
-						                   new QueryParameter("Error", result1.Error),
-						                   new QueryParameter("FreeCashFlowValue", result1.FreeCashFlowValue),
-						                   new QueryParameter("TangibleEquityValue", result1.TangibleEquityValue),
-						                   new QueryParameter("ValueAdded", result1.ValueAdded),
-						                   new QueryParameter("BasedOnHmrcValues", result1.BasedOnHmrcValues));
+						                   new QueryParameter("Error", result1.Error));
 
 						DB.ExecuteNonQuery("StoreNewMedalForComparison2", CommandSpecies.StoredProcedure,
-						                   new QueryParameter("CustomerId", customerId),
+										   new QueryParameter("CustomerId", customerId),
+										   new QueryParameter("MedalType", "Limited"),
 						                   new QueryParameter("BusinessScore", result2.BusinessScore),
 						                   new QueryParameter("BusinessScoreWeight", result2.BusinessScoreWeight),
 						                   new QueryParameter("BusinessScoreGrade", result2.BusinessScoreGrade),
-						                   new QueryParameter("BusinessScoreScore", result2.BusinessScoreScore),
+										   new QueryParameter("BusinessScoreScore", result2.BusinessScoreScore),
+										   new QueryParameter("FreeCashFlowValue", result2.FreeCashFlowValue),
 						                   new QueryParameter("FreeCashFlow", result2.FreeCashFlow),
 						                   new QueryParameter("FreeCashFlowWeight", result2.FreeCashFlowWeight),
 						                   new QueryParameter("FreeCashFlowGrade", result2.FreeCashFlowGrade),
@@ -106,7 +117,8 @@
 						                   new QueryParameter("AnnualTurnover", result2.AnnualTurnover),
 						                   new QueryParameter("AnnualTurnoverWeight", result2.AnnualTurnoverWeight),
 						                   new QueryParameter("AnnualTurnoverGrade", result2.AnnualTurnoverGrade),
-						                   new QueryParameter("AnnualTurnoverScore", result2.AnnualTurnoverScore),
+										   new QueryParameter("AnnualTurnoverScore", result2.AnnualTurnoverScore),
+										   new QueryParameter("TangibleEquityValue", result2.TangibleEquityValue),
 						                   new QueryParameter("TangibleEquity", result2.TangibleEquity),
 						                   new QueryParameter("TangibleEquityWeight", result2.TangibleEquityWeight),
 						                   new QueryParameter("TangibleEquityGrade", result2.TangibleEquityGrade),
@@ -126,7 +138,15 @@
 						                   new QueryParameter("MaritalStatus", result2.MaritalStatus.ToString()),
 						                   new QueryParameter("MaritalStatusWeight", result2.MaritalStatusWeight),
 						                   new QueryParameter("MaritalStatusGrade", result2.MaritalStatusGrade),
-						                   new QueryParameter("MaritalStatusScore", result2.MaritalStatusScore),
+										   new QueryParameter("MaritalStatusScore", result2.MaritalStatusScore),
+										   new QueryParameter("NumberOfStores", result2.NumberOfStores),
+										   new QueryParameter("NumberOfStoresWeight", result2.NumberOfStoresWeight),
+										   new QueryParameter("NumberOfStoresGrade", result2.NumberOfStoresGrade),
+										   new QueryParameter("NumberOfStoresScore", result2.NumberOfStoresScore),
+										   new QueryParameter("PositiveFeedbacks", result2.PositiveFeedbacks),
+										   new QueryParameter("PositiveFeedbacksWeight", result2.PositiveFeedbacksWeight),
+										   new QueryParameter("PositiveFeedbacksGrade", result2.PositiveFeedbacksGrade),
+										   new QueryParameter("PositiveFeedbacksScore", result2.PositiveFeedbacksScore),
 						                   new QueryParameter("EzbobSeniority", result2.EzbobSeniority.HasValue && result2.EzbobSeniority.Value.Year > 1800 ? result2.EzbobSeniority: null),
 						                   new QueryParameter("EzbobSeniorityWeight", result2.EzbobSeniorityWeight),
 						                   new QueryParameter("EzbobSeniorityGrade", result2.EzbobSeniorityGrade),
@@ -142,15 +162,13 @@
 						                   new QueryParameter("NumOfEarlyRepayments", result2.NumOfEarlyRepayments),
 						                   new QueryParameter("NumOfEarlyRepaymentsWeight", result2.NumOfEarlyRepaymentsWeight),
 						                   new QueryParameter("NumOfEarlyRepaymentsGrade", result2.NumOfEarlyRepaymentsGrade),
-						                   new QueryParameter("NumOfEarlyRepaymentsScore", result2.NumOfEarlyRepaymentsScore),
+										   new QueryParameter("NumOfEarlyRepaymentsScore", result2.NumOfEarlyRepaymentsScore),
+										   new QueryParameter("ValueAdded", result2.ValueAdded),
+										   new QueryParameter("InnerFlowName", result2.InnerFlowName),
 						                   new QueryParameter("TotalScore", result2.TotalScore),
 						                   new QueryParameter("TotalScoreNormalized", result2.TotalScoreNormalized),
 						                   new QueryParameter("Medal", result2.Medal.ToString()),
-						                   new QueryParameter("Error", result2.Error),
-						                   new QueryParameter("FreeCashFlowValue", result2.FreeCashFlowValue),
-						                   new QueryParameter("TangibleEquityValue", result2.TangibleEquityValue),
-						                   new QueryParameter("ValueAdded", result2.ValueAdded),
-						                   new QueryParameter("BasedOnHmrcValues", result2.BasedOnHmrcValues));
+						                   new QueryParameter("Error", result2.Error));
 					}
 					catch (Exception ex)
 					{

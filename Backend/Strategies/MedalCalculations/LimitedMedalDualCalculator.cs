@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.LimitedMedalCalculation
+﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -8,8 +8,8 @@
 	{
 		private readonly ASafeLog log;
 		private readonly AConnection db;
-		private readonly NewMedalScoreCalculator1 limitedMedalCalculator1;
-		private readonly NewMedalScoreCalculator2 limitedMedalCalculator2;
+		private readonly LimitedMedalCalculator1 limitedMedalCalculator1;
+		private readonly LimitedMedalCalculator2 limitedMedalCalculator2;
 
 		public ScoreResult Results { get; set; }
 
@@ -17,8 +17,8 @@
 		{
 			this.log = log;
 			this.db = db;
-			limitedMedalCalculator1 = new NewMedalScoreCalculator1(db, log);
-			limitedMedalCalculator2 = new NewMedalScoreCalculator2(db, log);
+			limitedMedalCalculator1 = new LimitedMedalCalculator1(db, log);
+			limitedMedalCalculator2 = new LimitedMedalCalculator2(db, log);
 		}
 
 		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime)
@@ -47,10 +47,12 @@
 
 		private bool CheckResultsForMatching(ScoreResult result1, ScoreResult result2)
 		{
-			if (result1.BusinessScore != result2.BusinessScore ||
+			if (result1.MedalType != result2.MedalType ||
+				result1.BusinessScore != result2.BusinessScore ||
 				result1.BusinessScoreWeight != result2.BusinessScoreWeight ||
 				result1.BusinessScoreGrade != result2.BusinessScoreGrade ||
 				result1.BusinessScoreScore != result2.BusinessScoreScore ||
+				result1.FreeCashFlowValue != result2.FreeCashFlowValue ||
 				result1.FreeCashFlow != result2.FreeCashFlow ||
 				result1.FreeCashFlowWeight != result2.FreeCashFlowWeight ||
 				result1.FreeCashFlowGrade != result2.FreeCashFlowGrade ||
@@ -59,6 +61,7 @@
 				result1.AnnualTurnoverWeight != result2.AnnualTurnoverWeight ||
 				result1.AnnualTurnoverGrade != result2.AnnualTurnoverGrade ||
 				result1.AnnualTurnoverScore != result2.AnnualTurnoverScore ||
+				result1.TangibleEquityValue != result2.TangibleEquityValue ||
 				result1.TangibleEquity != result2.TangibleEquity ||
 				result1.TangibleEquityWeight != result2.TangibleEquityWeight ||
 				result1.TangibleEquityGrade != result2.TangibleEquityGrade ||
@@ -79,6 +82,14 @@
 				result1.MaritalStatusWeight != result2.MaritalStatusWeight ||
 				result1.MaritalStatusGrade != result2.MaritalStatusGrade ||
 				result1.MaritalStatusScore != result2.MaritalStatusScore ||
+				result1.NumberOfStores != result2.NumberOfStores ||
+				result1.NumberOfStoresWeight != result2.NumberOfStoresWeight ||
+				result1.NumberOfStoresGrade != result2.NumberOfStoresGrade ||
+				result1.NumberOfStoresScore != result2.NumberOfStoresScore ||
+				result1.PositiveFeedbacks != result2.PositiveFeedbacks ||
+				result1.PositiveFeedbacksWeight != result2.PositiveFeedbacksWeight ||
+				result1.PositiveFeedbacksGrade != result2.PositiveFeedbacksGrade ||
+				result1.PositiveFeedbacksScore != result2.PositiveFeedbacksScore ||
 				result1.EzbobSeniority != result2.EzbobSeniority ||
 				result1.EzbobSeniorityWeight != result2.EzbobSeniorityWeight ||
 				result1.EzbobSeniorityGrade != result2.EzbobSeniorityGrade ||
@@ -95,14 +106,12 @@
 				result1.NumOfEarlyRepaymentsWeight != result2.NumOfEarlyRepaymentsWeight ||
 				result1.NumOfEarlyRepaymentsGrade != result2.NumOfEarlyRepaymentsGrade ||
 				result1.NumOfEarlyRepaymentsScore != result2.NumOfEarlyRepaymentsScore ||
+				result1.ValueAdded != result2.ValueAdded ||
+				result1.InnerFlowName != result2.InnerFlowName ||
 				result1.TotalScore != result2.TotalScore ||
 				result1.TotalScoreNormalized != result2.TotalScoreNormalized ||
 				result1.Medal != result2.Medal ||
-				result1.Error != result2.Error ||
-				result1.FreeCashFlowValue != result2.FreeCashFlowValue ||
-				result1.TangibleEquityValue != result2.TangibleEquityValue ||
-				result1.ValueAdded != result2.ValueAdded ||
-				result1.BasedOnHmrcValues != result2.BasedOnHmrcValues)
+				result1.Error != result2.Error)
 			{
 				return false;
 			}
@@ -113,11 +122,13 @@
 		private void Save(ScoreResult result, int customerId)
 		{
 			db.ExecuteNonQuery("StoreNewMedal", CommandSpecies.StoredProcedure,
-			                   new QueryParameter("CustomerId", customerId),
+							   new QueryParameter("CustomerId", customerId),
+							   new QueryParameter("MedalType", "Limited"),
 			                   new QueryParameter("BusinessScore", result.BusinessScore),
 			                   new QueryParameter("BusinessScoreWeight", result.BusinessScoreWeight),
 			                   new QueryParameter("BusinessScoreGrade", result.BusinessScoreGrade),
-			                   new QueryParameter("BusinessScoreScore", result.BusinessScoreScore),
+							   new QueryParameter("BusinessScoreScore", result.BusinessScoreScore),
+							   new QueryParameter("FreeCashFlowValue", result.FreeCashFlowValue),
 			                   new QueryParameter("FreeCashFlow", result.FreeCashFlow),
 			                   new QueryParameter("FreeCashFlowWeight", result.FreeCashFlowWeight),
 			                   new QueryParameter("FreeCashFlowGrade", result.FreeCashFlowGrade),
@@ -125,7 +136,8 @@
 			                   new QueryParameter("AnnualTurnover", result.AnnualTurnover),
 			                   new QueryParameter("AnnualTurnoverWeight", result.AnnualTurnoverWeight),
 			                   new QueryParameter("AnnualTurnoverGrade", result.AnnualTurnoverGrade),
-			                   new QueryParameter("AnnualTurnoverScore", result.AnnualTurnoverScore),
+							   new QueryParameter("AnnualTurnoverScore", result.AnnualTurnoverScore),
+							   new QueryParameter("TangibleEquityValue", result.TangibleEquityValue),
 			                   new QueryParameter("TangibleEquity", result.TangibleEquity),
 			                   new QueryParameter("TangibleEquityWeight", result.TangibleEquityWeight),
 			                   new QueryParameter("TangibleEquityGrade", result.TangibleEquityGrade),
@@ -146,6 +158,14 @@
 			                   new QueryParameter("MaritalStatusWeight", result.MaritalStatusWeight),
 			                   new QueryParameter("MaritalStatusGrade", result.MaritalStatusGrade),
 			                   new QueryParameter("MaritalStatusScore", result.MaritalStatusScore),
+							   new QueryParameter("NumberOfStores", result.NumberOfStores),
+							   new QueryParameter("NumberOfStoresWeight", result.NumberOfStoresWeight),
+							   new QueryParameter("NumberOfStoresGrade", result.NumberOfStoresGrade),
+							   new QueryParameter("NumberOfStoresScore", result.NumberOfStoresScore),
+							   new QueryParameter("PositiveFeedbacks", result.PositiveFeedbacks),
+							   new QueryParameter("PositiveFeedbacksWeight", result.PositiveFeedbacksWeight),
+							   new QueryParameter("PositiveFeedbacksGrade", result.PositiveFeedbacksGrade),
+							   new QueryParameter("PositiveFeedbacksScore", result.PositiveFeedbacksScore),
 			                   new QueryParameter("EzbobSeniority", result.EzbobSeniority),
 			                   new QueryParameter("EzbobSeniorityWeight", result.EzbobSeniorityWeight),
 			                   new QueryParameter("EzbobSeniorityGrade", result.EzbobSeniorityGrade),
@@ -161,15 +181,13 @@
 			                   new QueryParameter("NumOfEarlyRepayments", result.NumOfEarlyRepayments),
 			                   new QueryParameter("NumOfEarlyRepaymentsWeight", result.NumOfEarlyRepaymentsWeight),
 			                   new QueryParameter("NumOfEarlyRepaymentsGrade", result.NumOfEarlyRepaymentsGrade),
-			                   new QueryParameter("NumOfEarlyRepaymentsScore", result.NumOfEarlyRepaymentsScore),
+							   new QueryParameter("NumOfEarlyRepaymentsScore", result.NumOfEarlyRepaymentsScore),
+							   new QueryParameter("ValueAdded", result.ValueAdded),
+							   new QueryParameter("InnerFlowName", result.InnerFlowName),
 			                   new QueryParameter("TotalScore", result.TotalScore),
 			                   new QueryParameter("TotalScoreNormalized", result.TotalScoreNormalized),
 							   new QueryParameter("Medal", result.Medal.ToString()),
-							   new QueryParameter("Error", result.Error),
-							   new QueryParameter("FreeCashFlowValue", result.FreeCashFlowValue),
-							   new QueryParameter("TangibleEquityValue", result.TangibleEquityValue),
-							   new QueryParameter("ValueAdded", result.ValueAdded),
-							   new QueryParameter("BasedOnHmrcValues", result.BasedOnHmrcValues));
+							   new QueryParameter("Error", result.Error));
 		}
 	}
 }

@@ -3,7 +3,7 @@
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using LimitedMedalCalculation;
+	using MedalCalculations;
 
 	public class CalculateLimitedMedal : AStrategy
 	{
