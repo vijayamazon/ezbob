@@ -85,7 +85,7 @@
 
 			if (autoPaymentResult.PaymentFailed)
 			{
-				SendFailureMail(firstName, initialAmountDue, customerMail);
+				Log.Warn("Failed collection from customer:{0} amount:{1}", customerId, initialAmountDue);
 				return;
 			} // if
 
@@ -202,18 +202,6 @@
 
 				mailer.Send("Mandrill - Loan paid in full", variables, new Addressee(customerMail));
 			}
-		}
-
-		private void SendFailureMail(string firstName, decimal initialAmountDue, string customerMail)
-		{
-			var variables = new Dictionary<string, string>
-			{
-				{"FirstName", firstName},
-				{"AmountOwed", initialAmountDue.ToString(CultureInfo.InvariantCulture)},
-				{"DueDate", FormattingUtils.FormatDateToString(DateTime.UtcNow)}
-			};
-
-			mailer.Send("Mandrill - Automatic Re-Payment has Failed", variables, new Addressee(customerMail));
 		}
 
 		private void SendExceptionMail(decimal initialAmountDue, int customerId, string customerMail, string fullName)
