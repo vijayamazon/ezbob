@@ -45,22 +45,6 @@
 			}
 		}
 
-		protected override void DetermineFlow(decimal hmrcFreeCashFlow, decimal hmrcValueAdded)
-		{
-			if (freeCashFlowDataAvailable)
-			{
-				Results.InnerFlowName = "HMRC";
-				Results.AnnualTurnover = Results.HmrcAnnualTurnover;
-				Results.FreeCashFlowValue = hmrcFreeCashFlow;
-				Results.ValueAdded = hmrcValueAdded;
-			}
-			else
-			{
-				Results.InnerFlowName = "Bank";
-				Results.AnnualTurnover = Results.BankAnnualTurnover;
-			}
-		}
-
 		protected override decimal GetConsumerScoreWeightForLowScore()
 		{
 			return 55;
@@ -73,27 +57,16 @@
 
 		protected override void RedistributeFreeCashFlowWeight()
 		{
-			if (Results.InnerFlowName != "HMRC")
-			{
-				Results.FreeCashFlowWeight = 0;
-				Results.AnnualTurnoverWeight += 10;
-				Results.ConsumerScoreWeight += 13;
-				Results.BusinessSeniorityWeight += 2;
-			}
+			Results.FreeCashFlowWeight = 0;
+			Results.AnnualTurnoverWeight += 10;
+			Results.ConsumerScoreWeight += 13;
+			Results.BusinessSeniorityWeight += 2;
 		}
 
-		protected override void RedistributeWightsForPayingCustomer()
+		protected override void RedistributeWeightsForPayingCustomer()
 		{
-			if (firstRepaymentDatePassed)
-			{
-				Results.EzbobSeniorityWeight = 2;
-				Results.NumOfLoansWeight = 3.33m;
-				Results.NumOfLateRepaymentsWeight = 2.67m;
-				Results.NumOfEarlyRepaymentsWeight = 2;
-
-				Results.BusinessSeniorityWeight -= 1;
-				Results.ConsumerScoreWeight -= 9;
-			}
+			Results.BusinessSeniorityWeight -= 1;
+			Results.ConsumerScoreWeight -= 9;
 		}
 	}
 }

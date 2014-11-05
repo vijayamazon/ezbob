@@ -53,8 +53,19 @@
 				GatherInputData();
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
-				RedistributeFreeCashFlowWeight();
-				RedistributeWightsForPayingCustomer();
+				if (!freeCashFlowDataAvailable)
+				{
+					RedistributeFreeCashFlowWeight();
+				}
+				if (firstRepaymentDatePassed)
+				{
+					Results.EzbobSeniorityWeight = 2;
+					Results.NumOfLoansWeight = 3.33m;
+					Results.NumOfLateRepaymentsWeight = 2.67m;
+					Results.NumOfEarlyRepaymentsWeight = 2;
+
+					RedistributeWeightsForPayingCustomer();
+				}
 				AdjustSumOfWeights();
 				CalculateGrades();
 
@@ -74,13 +85,10 @@
 			return Results;
 		}
 
-		protected abstract void DetermineFlow(decimal hmrcFreeCashFlow, decimal hmrcValueAdded);
 		protected abstract decimal GetConsumerScoreWeightForLowScore();
 		protected abstract decimal GetCompanyScoreWeightForLowScore();
 		protected abstract void RedistributeFreeCashFlowWeight();
-		protected abstract void RedistributeWightsForPayingCustomer();
-
-		protected virtual void AdditionalLegalInputValidations() { }
+		protected abstract void RedistributeWeightsForPayingCustomer();
 
 		private void ValidateLegalInput()
 		{
@@ -97,6 +105,24 @@
 				earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
 			{
 				throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
+			}
+		}
+
+		protected virtual void AdditionalLegalInputValidations() { }
+
+		protected virtual void DetermineFlow(decimal hmrcFreeCashFlow, decimal hmrcValueAdded)
+		{
+			if (freeCashFlowDataAvailable)
+			{
+				Results.InnerFlowName = "HMRC";
+				Results.AnnualTurnover = Results.HmrcAnnualTurnover;
+				Results.FreeCashFlowValue = hmrcFreeCashFlow;
+				Results.ValueAdded = hmrcValueAdded;
+			}
+			else
+			{
+				Results.InnerFlowName = "Bank";
+				Results.AnnualTurnover = Results.BankAnnualTurnover;
 			}
 		}
 

@@ -1,12 +1,13 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	using System;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class LimitedMedalCalculator1 : MedalCalculatorBase
+	public class NonLimitedMedalCalculator1 : MedalCalculatorBase
 	{
-		public LimitedMedalCalculator1(AConnection db, ASafeLog log)
+		public NonLimitedMedalCalculator1(AConnection db, ASafeLog log)
 			: base(db, log)
 		{
 		}
@@ -17,15 +18,15 @@
 				{
 					CustomerId = customerId,
 					CalculationTime = calculationTime,
-					MedalType = "Limited",
-					BusinessScoreWeight = 30,
-					FreeCashFlowWeight = 19,
+					MedalType = "NonLimited",
+					BusinessScoreWeight = 21,
+					FreeCashFlowWeight = 15,
 					AnnualTurnoverWeight = 10,
-					TangibleEquityWeight = 8,
+					TangibleEquityWeight = 0,
 					BusinessSeniorityWeight = 8,
-					ConsumerScoreWeight = 10,
+					ConsumerScoreWeight = 30,
 					NetWorthWeight = 10,
-					MaritalStatusWeight = 5,
+					MaritalStatusWeight = 6,
 					NumberOfStoresWeight = 0,
 					PositiveFeedbacksWeight = 0,
 					EzbobSeniorityWeight = 0,
@@ -39,28 +40,28 @@
 
 		protected override decimal GetConsumerScoreWeightForLowScore()
 		{
-			return 13.75m;
+			return 41.25m;
 		}
 
 		protected override decimal GetCompanyScoreWeightForLowScore()
 		{
-			return 41.25m;
+			return 28.875m;
 		}
 
 		protected override void RedistributeFreeCashFlowWeight()
 		{
 			Results.FreeCashFlowWeight = 0;
-			Results.AnnualTurnoverWeight += 7;
-			Results.BusinessScoreWeight += 5;
-			Results.ConsumerScoreWeight += 3;
-			Results.BusinessSeniorityWeight += 4;
+			Results.AnnualTurnoverWeight += 5;
+			Results.BusinessScoreWeight += 4;
+			Results.ConsumerScoreWeight += 4;
+			Results.BusinessSeniorityWeight += 2;
 		}
 
 		protected override void RedistributeWeightsForPayingCustomer()
 		{
-			Results.BusinessScoreWeight -= 6.25m;
-			Results.BusinessSeniorityWeight -= 1.67m;
-			Results.ConsumerScoreWeight -= 2.08m;
+			Results.BusinessScoreWeight -= 4;
+			Results.BusinessSeniorityWeight -= 2;
+			Results.ConsumerScoreWeight -= 4;
 		}
 	}
 }

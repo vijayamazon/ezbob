@@ -72,29 +72,18 @@
 
 		protected override void RedistributeFreeCashFlowWeight()
 		{
-			if (Results.InnerFlowName != "HMRC")
-			{
-				Results.FreeCashFlowWeight = 0;
-				Results.AnnualTurnoverWeight += 5;
-				Results.BusinessScoreWeight += 3;
-				Results.ConsumerScoreWeight += 3;
-				Results.BusinessSeniorityWeight += 2;
-			}
+			Results.FreeCashFlowWeight = 0;
+			Results.AnnualTurnoverWeight += 5;
+			Results.BusinessScoreWeight += 3;
+			Results.ConsumerScoreWeight += 3;
+			Results.BusinessSeniorityWeight += 2;
 		}
 
-		protected override void RedistributeWightsForPayingCustomer()
+		protected override void RedistributeWeightsForPayingCustomer()
 		{
-			if (firstRepaymentDatePassed)
-			{
-				Results.EzbobSeniorityWeight = 2;
-				Results.NumOfLoansWeight = 3.33m;
-				Results.NumOfLateRepaymentsWeight = 2.67m;
-				Results.NumOfEarlyRepaymentsWeight = 2;
-
-				Results.BusinessScoreWeight -= 4;
-				Results.BusinessSeniorityWeight -= 2;
-				Results.ConsumerScoreWeight -= 4;
-			}
+			Results.BusinessScoreWeight -= 4;
+			Results.BusinessSeniorityWeight -= 2;
+			Results.ConsumerScoreWeight -= 4;
 		}
 	}
 }
