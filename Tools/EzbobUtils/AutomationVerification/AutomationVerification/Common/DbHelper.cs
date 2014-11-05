@@ -95,6 +95,7 @@
 
 			return consts;
 		}
+
 		public DateTime? GetCustomerBirthDate(int customerId)
 		{
 			var conn = new SqlConnection(_log);

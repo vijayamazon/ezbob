@@ -57,6 +57,8 @@
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Common\MarketPlacesHelper.cs" />
     <Compile Include="Common\Models.cs" />
+    <Compile Include="ProcessHistory\Trail.cs" />
+    <Compile Include="ProcessHistory\ATrace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
