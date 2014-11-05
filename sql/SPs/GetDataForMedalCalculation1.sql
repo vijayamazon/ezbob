@@ -35,7 +35,11 @@ BEGIN
 		@CurrentMpTurnoverValue FLOAT,
 		@LoanStatus NVARCHAR(50),
 		@EarliestHmrcLastUpdateDate DATETIME,
-		@EarliestYodleeLastUpdateDate DATETIME
+		@EarliestYodleeLastUpdateDate DATETIME,
+		@NumberOfOnlineStores INT,
+		@AmazonPositiveFeedbacks INT,
+		@EbayPositiveFeedbacks INT,
+		@NumOfPaypalTransactions INT	
 		
 	SET @Threshold = 2
 	
@@ -228,7 +232,82 @@ BEGIN
 	WHERE 
 		CustomerId = @CustomerId AND 
 		CustomerAddress.addressId = Zoopla.CustomerAddressId AND 
-		CustomerAddress.IsOwnerAccordingToLandRegistry = 1	
+		CustomerAddress.IsOwnerAccordingToLandRegistry = 1
+
+	SELECT
+		@NumberOfOnlineStores = COUNT(1) 
+	FROM
+		MP_CustomerMarketPlace,
+		MP_MarketplaceType
+	WHERE
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
+		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
+		MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal')
+			
+	SELECT
+		cmp.Id AS CustomerMarketPlaceId,
+		MAX(fb.Created) AS MaxCreated
+	INTO
+		#MaxAmazonCreated
+	FROM
+		MP_AmazonFeedback fb
+		INNER JOIN MP_CustomerMarketPlace cmp ON fb.CustomerMarketPlaceId = cmp.Id
+	WHERE
+		cmp.CustomerId = @CustomerId
+	GROUP BY
+		cmp.Id
+
+	SELECT
+		@AmazonPositiveFeedbacks = fbi.Positive
+	FROM
+		MP_AmazonFeedback fb
+		INNER JOIN #MaxAmazonCreated mc
+			ON fb.CustomerMarketPlaceId = mc.CustomerMarketPlaceId
+			AND fb.Created = mc.MaxCreated
+		INNER JOIN MP_AmazonFeedbackItem fbi
+			ON fbi.AmazonFeedbackId = fb.Id
+			AND fbi.TimePeriodId = 5 -- 'Lifetime'
+
+	SELECT
+		cmp.Id AS CustomerMarketPlaceId,
+		MAX(fb.Created) AS MaxCreated
+	INTO
+		#MaxEbayCreated
+	FROM
+		MP_EbayFeedback fb
+		INNER JOIN MP_CustomerMarketPlace cmp ON fb.CustomerMarketPlaceId = cmp.Id
+	WHERE
+		cmp.CustomerId = @CustomerId
+	GROUP BY
+		cmp.Id
+
+	SELECT
+		@EbayPositiveFeedbacks = fbi.Positive
+	FROM
+		MP_EbayFeedback fb
+		INNER JOIN #MaxEbayCreated mc
+			ON fb.CustomerMarketPlaceId = mc.CustomerMarketPlaceId
+			AND fb.Created = mc.MaxCreated
+		INNER JOIN MP_EbayFeedbackItem fbi
+			ON fbi.EbayFeedbackId = fb.Id
+			AND fbi.TimePeriodId = 6 -- '0'
+	
+	DROP TABLE #MaxAmazonCreated
+	DROP TABLE #MaxEbayCreated
+	
+	SELECT
+		@NumOfPaypalTransactions = COUNT(1)
+	FROM
+		MP_CustomerMarketPlace,
+		MP_PayPalTransaction,
+		MP_PayPalTransactionItem2,
+		MP_MarketplaceType
+	WHERE
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
+		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
+		MP_MarketplaceType.Name='Pay Pal' AND
+		MP_PayPalTransaction.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
+		MP_PayPalTransactionItem2.TransactionId = MP_PayPalTransaction.Id
 				
 	SELECT
 		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
@@ -245,6 +324,10 @@ BEGIN
 		@NumOfHmrcMps AS NumOfHmrcMps,
 		@TotalZooplaValue AS TotalZooplaValue,
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
-		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate
+		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
+		@NumberOfOnlineStores AS NumberOfOnlineStores,
+		@AmazonPositiveFeedbacks AS AmazonPositiveFeedbacks,
+		@EbayPositiveFeedbacks AS EbayPositiveFeedbacks,
+		@NumOfPaypalTransactions AS NumOfPaypalTransactions
 END
 GO

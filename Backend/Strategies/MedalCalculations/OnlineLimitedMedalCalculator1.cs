@@ -75,6 +75,10 @@
 			int numOfHmrcMps = sr["NumOfHmrcMps"];
 			DateTime? earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
 			DateTime? earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+			Results.NumberOfStores = sr["NumberOfOnlineStores"];
+			int amazonPositiveFeedbacks = sr["AmazonPositiveFeedbacks"];
+			int ebayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
+			int numberOfPaypalTransactions = sr["NumOfPaypalTransactions"];
 
 			if (numOfHmrcMps > 1)
 			{
@@ -91,9 +95,11 @@
 				throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
 			}
 
-			// TODO: fill
-			Results.PositiveFeedbacks = 7000;
-			Results.NumberOfStores = 2;
+			Results.PositiveFeedbacks = amazonPositiveFeedbacks + ebayPositiveFeedbacks;
+			if (Results.PositiveFeedbacks == 0)
+			{
+				Results.PositiveFeedbacks = numberOfPaypalTransactions;
+			}
 
 			Results.OnlineAnnualTurnover = strategyHelper.GetOnlineAnnualTurnoverForMedal(Results.CustomerId);
 
@@ -216,7 +222,7 @@
 
 		protected override void RedistributeFreeCashFlowWeight()
 		{
-			if (!freeCashFlowDataAvailable)
+			if (Results.InnerFlowName != "HMRC")
 			{
 				Results.FreeCashFlowWeight = 0;
 				Results.AnnualTurnoverWeight += 5;
