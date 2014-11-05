@@ -462,6 +462,10 @@
       <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
       <Name>YodleeLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj">
+      <Project>{d7b3530e-4038-446d-a25a-45d6df5b6d45}</Project>
+      <Name>AutomationCalculator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
       <Name>Barrymore</Name>

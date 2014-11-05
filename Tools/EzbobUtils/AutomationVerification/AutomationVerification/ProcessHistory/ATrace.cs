@@ -1,17 +1,46 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
-	public class ATrace {
+	public abstract class ATrace {
 		#region public
 
-		#region constructor
+		#region property Name
 
-		public ATrace() {
-		} // constructor
+		public virtual string Name {
+			get { return this.GetType().Name; } // get
+		} // Name
 
-		#endregion constructor
+		#endregion property Name
+
+		#region property CompletedSuccessfully
+
+		public virtual bool CompletedSuccessfully { get; private set; }
+
+		#endregion property CompletedSuccessfully
+
+		#region property CustomerID
+
+		public virtual int CustomerID { get; private set; }
+
+		#endregion property CustomerID
+
+		#region property Comment
+
+		public virtual string Comment { get; protected set; } // Comment
+
+		#endregion property Comment
 
 		#endregion public
 
 		#region protected
+
+		#region constructor
+
+		protected ATrace(int nCustomerID, bool bCompletedSuccessfully) {
+			CustomerID = nCustomerID;
+			CompletedSuccessfully = bCompletedSuccessfully;
+		} // constructor
+
+		#endregion constructor
+
 		#endregion protected
 
 		#region private

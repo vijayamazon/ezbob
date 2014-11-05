@@ -57,6 +57,20 @@
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Common\MarketPlacesHelper.cs" />
     <Compile Include="Common\Models.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\BusinessScore.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\ConsumerScore.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\Age.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\OutstandingOffers.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\MarketplaceSeniority.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\Turnover.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\CustomerStatus.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\DefaultAccounts.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\ExceptionThrown.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\ReduceOutstandingPrincipal.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\InitialAssignment.cs" />
     <Compile Include="ProcessHistory\Trail.cs" />
     <Compile Include="ProcessHistory\ATrace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +101,7 @@
       <Name>Logger</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

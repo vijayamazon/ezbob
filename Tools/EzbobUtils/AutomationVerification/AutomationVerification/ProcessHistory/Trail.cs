@@ -1,29 +1,37 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
+	using System;
 	using System.Collections.Generic;
 
 	public class Trail {
-		#region operator +
-
-		public static Trail operator +(Trail oTrail, ATrace oTrace) {
-			if ((oTrail == null) || (oTrace == null))
-				return oTrail;
-
-			oTrail.m_oSteps.Add(oTrace);
-
-			return oTrail;
-		} // operator +
-
-		#endregion operator +
-
 		#region public
 
 		#region constructor
 
-		public Trail() {
+		public Trail(int nCustomerID) {
 			m_oSteps = new List<ATrace>();
+
+			CustomerID = nCustomerID;
 		} // constructor
 
 		#endregion constructor
+
+		#region property CustomerID
+
+		public int CustomerID { get; private set; }
+
+		#endregion property CustomerID
+
+		#region method Add
+
+		public T Add<T>(bool bCompletedSuccessfully) where T: ATrace {
+			T oTrace = (T)Activator.CreateInstance(typeof (T), CustomerID, bCompletedSuccessfully);
+
+			m_oSteps.Add(oTrace);
+
+			return oTrace;
+		} // Add
+
+		#endregion method Add
 
 		#region property Length
 
@@ -49,6 +57,5 @@
 		private readonly List<ATrace> m_oSteps;
 
 		#endregion private
-
 	} // class Trail
 } // namespace
