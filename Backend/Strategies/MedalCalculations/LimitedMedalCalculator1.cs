@@ -77,6 +77,16 @@
 			{
 				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", numOfHmrcMps));
 			}
+			if (earliestHmrcLastUpdateDate.HasValue &&
+					earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
+			{
+				throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
+			}
+			if (earliestYodleeLastUpdateDate.HasValue &&
+				earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
+			{
+				throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
+			}
 
 			bool wasAbleToGetSummaryData = false;
 			VatReturnSummary[] summaryData = null;
@@ -94,50 +104,26 @@
 
 			failedCalculatingFreeCashFlow = false;
 			freeCashFlowDataAvailable = false;
+			CalculateBankAnnualTurnover();
 
 			if (wasAbleToGetSummaryData)
 			{
-				if (earliestHmrcLastUpdateDate.HasValue &&
-					earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
-				{
-					throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
-				}
-
 				Results.InnerFlowName = "HMRC";
 				freeCashFlowDataAvailable = true;
 
 				foreach (VatReturnSummary singleSummary in summaryData)
 				{
-					Results.AnnualTurnover += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
+					Results.HmrcAnnualTurnover += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
 					Results.FreeCashFlowValue += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
 					Results.ValueAdded += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
 				}
+
+				Results.AnnualTurnover = Results.HmrcAnnualTurnover;
 			}
 			else
 			{
-				if (earliestYodleeLastUpdateDate.HasValue &&
-					earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
-				{
-					throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
-				}
-
 				Results.InnerFlowName = "Bank";
-				var yodleeMps = new List<int>();
-
-				db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>
-				{
-					int mpId = yodleeSafeReader["Id"];
-					yodleeMps.Add(mpId);
-					return ActionResult.Continue;
-				}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", Results.CustomerId));
-
-				foreach (int mpId in yodleeMps)
-				{
-					var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
-					YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
-
-					Results.AnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
-				}
+				Results.AnnualTurnover = Results.BankAnnualTurnover;
 			}
 
 			failedCalculatingTangibleEquity = false;
@@ -165,6 +151,26 @@
 			{
 				Results.NetWorth = 0;
 			}
+		}
+
+		private void CalculateBankAnnualTurnover()
+		{
+			var yodleeMps = new List<int>();
+
+				db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>
+				{
+					int mpId = yodleeSafeReader["Id"];
+					yodleeMps.Add(mpId);
+					return ActionResult.Continue;
+				}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", Results.CustomerId));
+
+				foreach (int mpId in yodleeMps)
+				{
+					var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
+					YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
+
+					Results.BankAnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
+				}
 		}
 
 		private decimal GetMortgages(int customerId)

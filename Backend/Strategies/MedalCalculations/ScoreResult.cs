@@ -14,7 +14,6 @@
 		// Gathered data
 		public int BusinessScore { get; set; }
 		public decimal FreeCashFlowValue { get; set; }
-		public decimal AnnualTurnover { get; set; }
 		public decimal TangibleEquityValue { get; set; }
 		public DateTime? BusinessSeniority { get; set; }
 		public int ConsumerScore { get; set; }
@@ -26,11 +25,15 @@
 		public int NumOfLoans { get; set; }
 		public int NumOfLateRepayments { get; set; }
 		public int NumOfEarlyRepayments { get; set; }
-		
+		public decimal ValueAdded { get; set; }
+		public decimal HmrcAnnualTurnover { get; set; }
+		public decimal BankAnnualTurnover { get; set; }
+		public decimal OnlineAnnualTurnover { get; set; }
+
 		// Calculated data
+		public decimal AnnualTurnover { get; set; }
 		public decimal TangibleEquity { get; set; }
 		public decimal FreeCashFlow { get; set; }
-		public decimal ValueAdded { get; set; }
 		public string InnerFlowName { get; set; }
 		
 		// Weights, grades, scores

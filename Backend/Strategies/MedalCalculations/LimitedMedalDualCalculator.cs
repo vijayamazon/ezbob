@@ -57,6 +57,9 @@
 				result1.FreeCashFlowWeight != result2.FreeCashFlowWeight ||
 				result1.FreeCashFlowGrade != result2.FreeCashFlowGrade ||
 				result1.FreeCashFlowScore != result2.FreeCashFlowScore ||
+				result1.HmrcAnnualTurnover != result2.HmrcAnnualTurnover ||
+				result1.BankAnnualTurnover != result2.BankAnnualTurnover ||
+				result1.OnlineAnnualTurnover != result2.OnlineAnnualTurnover ||
 				result1.AnnualTurnover != result2.AnnualTurnover ||
 				result1.AnnualTurnoverWeight != result2.AnnualTurnoverWeight ||
 				result1.AnnualTurnoverGrade != result2.AnnualTurnoverGrade ||
@@ -132,8 +135,11 @@
 			                   new QueryParameter("FreeCashFlow", result.FreeCashFlow),
 			                   new QueryParameter("FreeCashFlowWeight", result.FreeCashFlowWeight),
 			                   new QueryParameter("FreeCashFlowGrade", result.FreeCashFlowGrade),
-			                   new QueryParameter("FreeCashFlowScore", result.FreeCashFlowScore),
-			                   new QueryParameter("AnnualTurnover", result.AnnualTurnover),
+							   new QueryParameter("FreeCashFlowScore", result.FreeCashFlowScore),
+							   new QueryParameter("HmrcAnnualTurnover", result.HmrcAnnualTurnover),
+							   new QueryParameter("BankAnnualTurnover", result.BankAnnualTurnover),
+							   new QueryParameter("OnlineAnnualTurnover", result.OnlineAnnualTurnover),
+							   new QueryParameter("AnnualTurnover", result.AnnualTurnover),
 			                   new QueryParameter("AnnualTurnoverWeight", result.AnnualTurnoverWeight),
 			                   new QueryParameter("AnnualTurnoverGrade", result.AnnualTurnoverGrade),
 							   new QueryParameter("AnnualTurnoverScore", result.AnnualTurnoverScore),

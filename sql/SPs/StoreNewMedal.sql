@@ -14,6 +14,9 @@ ALTER PROCEDURE StoreNewMedal
 	,@FreeCashFlowWeight DECIMAL(18,6)
 	,@FreeCashFlowGrade DECIMAL(18,6)
 	,@FreeCashFlowScore DECIMAL(18,6)
+	,@HmrcAnnualTurnover DECIMAL(18,6)
+	,@BankAnnualTurnover DECIMAL(18,6)
+	,@OnlineAnnualTurnover DECIMAL(18,6)
 	,@AnnualTurnover DECIMAL(18,6)
 	,@AnnualTurnoverWeight DECIMAL(18,6)
 	,@AnnualTurnoverGrade DECIMAL(18,6)
@@ -86,6 +89,9 @@ BEGIN
 	,FreeCashFlowWeight
 	,FreeCashFlowGrade
 	,FreeCashFlowScore
+	,HmrcAnnualTurnover
+	,BankAnnualTurnover
+	,OnlineAnnualTurnover
 	,AnnualTurnover
 	,AnnualTurnoverWeight
 	,AnnualTurnoverGrade
@@ -154,6 +160,9 @@ BEGIN
 	,@FreeCashFlowWeight
 	,@FreeCashFlowGrade
 	,@FreeCashFlowScore
+	,@HmrcAnnualTurnover
+	,@BankAnnualTurnover
+	,@OnlineAnnualTurnover
 	,@AnnualTurnover
 	,@AnnualTurnoverWeight
 	,@AnnualTurnoverGrade

@@ -282,7 +282,7 @@
 			return min;
 		}
 
-		public double GetOnlineAnnualTurnoverForMedal(int customerId)
+		public decimal GetOnlineAnnualTurnoverForMedal(int customerId)
 		{
 			var analysisVals = GetOnlineAnalysisValsForCustomer(customerId);
 
@@ -293,7 +293,7 @@
 
 			double min = Math.Min(year, Math.Min(month6, Math.Min(month3, month)));
 			log.InfoFormat("Calculated annualized turnover. Year:{0} 6Months:{1} 3Months:{2} Month:{3}. Using min:{4}", year, month6, month3, month, min);
-			return min;
+			return (decimal)min;
 		}
 
 		public double GetAnnualizedTurnoverForPeriod(Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis, TimePeriodEnum period)
