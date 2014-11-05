@@ -34,6 +34,14 @@ namespace ConfigManager {
 
 		#endregion property AmountToChargeFrom
 
+		#region property AutoApproveBusinessScoreThreshold
+
+		public virtual VariableValue AutoApproveBusinessScoreThreshold {
+			get { return this[Variables.AutoApproveBusinessScoreThreshold]; } // get
+		} // AutoApproveBusinessScoreThreshold
+
+		#endregion property AutoApproveBusinessScoreThreshold
+
 		#region property AutoApproveCustomerMaxAge
 
 		public virtual VariableValue AutoApproveCustomerMaxAge {
