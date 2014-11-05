@@ -305,9 +305,10 @@ BEGIN
 	WHERE
 		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
 		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
-		MP_MarketplaceType.Name='Pay Pal' AND
+		MP_MarketplaceType.Name = 'Pay Pal' AND
 		MP_PayPalTransaction.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
-		MP_PayPalTransactionItem2.TransactionId = MP_PayPalTransaction.Id
+		MP_PayPalTransactionItem2.TransactionId = MP_PayPalTransaction.Id AND
+		MP_PayPalTransactionItem2.GrossAmount > 0
 				
 	SELECT
 		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
