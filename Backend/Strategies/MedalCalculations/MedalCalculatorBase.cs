@@ -1,21 +1,39 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
+	using System.Collections.Generic;
+	using ConfigManager;
+	using Experian;
+	using EzBob.Models;
+	using EzBob.Models.Marketplaces.Builders;
+	using EzBob.Models.Marketplaces.Yodlee;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Utils;
 	using ScoreCalculation;
+	using VatReturn;
 
 	public abstract class MedalCalculatorBase
 	{
 		protected readonly ASafeLog log;
 		protected readonly AConnection db;
 
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+
 		protected bool firstRepaymentDatePassed;
 		protected bool failedCalculatingFreeCashFlow;
 		protected bool failedCalculatingTangibleEquity;
 		protected bool freeCashFlowDataAvailable;
+		protected int hmrcId;
+		protected int totalZooplaValue;
+		protected int numOfHmrcMps;
+		protected DateTime? earliestHmrcLastUpdateDate;
+		protected DateTime? earliestYodleeLastUpdateDate;
+		protected int amazonPositiveFeedbacks;
+		protected int ebayPositiveFeedbacks;
+		protected int numberOfPaypalTransactions;
 
 		public ScoreResult Results { get; set; }
 
@@ -56,11 +74,163 @@
 			return Results;
 		}
 
-		protected abstract void GatherInputData();
+		protected abstract void DetermineFlow(decimal hmrcFreeCashFlow, decimal hmrcValueAdded);
 		protected abstract decimal GetConsumerScoreWeightForLowScore();
 		protected abstract decimal GetCompanyScoreWeightForLowScore();
 		protected abstract void RedistributeFreeCashFlowWeight();
 		protected abstract void RedistributeWightsForPayingCustomer();
+
+		protected virtual void AdditionalLegalInputValidations() { }
+
+		private void ValidateLegalInput()
+		{
+			if (numOfHmrcMps > 1)
+			{
+				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", numOfHmrcMps));
+			}
+			if (earliestHmrcLastUpdateDate.HasValue &&
+				earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
+			{
+				throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
+			}
+			if (earliestYodleeLastUpdateDate.HasValue &&
+				earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
+			{
+				throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
+			}
+		}
+
+		protected virtual void GatherInputData()
+		{
+			SafeReader sr = db.GetFirst("GetDataForMedalCalculation1", CommandSpecies.StoredProcedure,
+										new QueryParameter("CustomerId", Results.CustomerId),
+										new QueryParameter("CalculationTime", Results.CalculationTime));
+
+			if (sr.IsEmpty)
+			{
+				throw new Exception("Couldn't gather required data for the medal calculation");
+			}
+
+			Results.BusinessScore = sr["BusinessScore"];
+			Results.TangibleEquityValue = sr["TangibleEquity"];
+			Results.BusinessSeniority = sr["BusinessSeniority"];
+			Results.ConsumerScore = sr["ConsumerScore"];
+			string maritalStatusStr = sr["MaritalStatus"];
+			Results.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusStr);
+			firstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
+			Results.EzbobSeniority = sr["EzbobSeniority"];
+			Results.NumOfLoans = sr["OnTimeLoans"];
+			Results.NumOfLateRepayments = sr["NumOfLatePayments"];
+			Results.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
+			hmrcId = sr["HmrcId"];
+			totalZooplaValue = sr["TotalZooplaValue"];
+			numOfHmrcMps = sr["NumOfHmrcMps"];
+			earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
+			earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+			Results.NumberOfStores = sr["NumberOfOnlineStores"];
+			amazonPositiveFeedbacks = sr["AmazonPositiveFeedbacks"];
+			ebayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
+			numberOfPaypalTransactions = sr["NumOfPaypalTransactions"];
+
+			ValidateLegalInput();
+			AdditionalLegalInputValidations();
+
+			Results.PositiveFeedbacks = amazonPositiveFeedbacks + ebayPositiveFeedbacks;
+			if (Results.PositiveFeedbacks == 0)
+			{
+				Results.PositiveFeedbacks = numberOfPaypalTransactions;
+			}
+
+			Results.OnlineAnnualTurnover = strategyHelper.GetOnlineAnnualTurnoverForMedal(Results.CustomerId);
+
+			bool wasAbleToGetSummaryData = false;
+			VatReturnSummary[] summaryData = null;
+			if (hmrcId != 0)
+			{
+				var loadVatReturnSummary = new LoadVatReturnSummary(Results.CustomerId, hmrcId, db, log);
+				loadVatReturnSummary.Execute();
+				summaryData = loadVatReturnSummary.Summary;
+
+				if (summaryData != null && summaryData.Length != 0)
+				{
+					wasAbleToGetSummaryData = true;
+				}
+			}
+
+			failedCalculatingFreeCashFlow = false;
+			freeCashFlowDataAvailable = false;
+			CalculateBankAnnualTurnover();
+
+			decimal tmpValueAdded = 0;
+			decimal tmpFreeCashFlow = 0;
+			if (wasAbleToGetSummaryData)
+			{
+				freeCashFlowDataAvailable = true;
+
+				foreach (VatReturnSummary singleSummary in summaryData)
+				{
+					Results.HmrcAnnualTurnover += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
+					tmpFreeCashFlow += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
+					tmpValueAdded += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
+				}
+			}
+
+			DetermineFlow(tmpFreeCashFlow, tmpValueAdded);
+
+			failedCalculatingTangibleEquity = false;
+
+			if (Results.AnnualTurnover > 0)
+			{
+				Results.TangibleEquity = Results.TangibleEquityValue / Results.AnnualTurnover;
+				Results.FreeCashFlow = Results.FreeCashFlowValue / Results.AnnualTurnover;
+			}
+			else
+			{
+				failedCalculatingFreeCashFlow = true;
+				failedCalculatingTangibleEquity = true;
+				Results.TangibleEquity = 0;
+				Results.AnnualTurnover = 0;
+				Results.FreeCashFlow = 0;
+			}
+
+			decimal mortgageBalance = GetMortgages(Results.CustomerId);
+			if (totalZooplaValue != 0)
+			{
+				Results.NetWorth = (totalZooplaValue - mortgageBalance) / totalZooplaValue;
+			}
+			else
+			{
+				Results.NetWorth = 0;
+			}
+		}
+
+		private void CalculateBankAnnualTurnover()
+		{
+			var yodleeMps = new List<int>();
+
+			db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) =>
+			{
+				int mpId = yodleeSafeReader["Id"];
+				yodleeMps.Add(mpId);
+				return ActionResult.Continue;
+			}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", Results.CustomerId));
+
+			foreach (int mpId in yodleeMps)
+			{
+				var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
+				YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
+
+				Results.BankAnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
+			}
+		}
+
+		private decimal GetMortgages(int customerId)
+		{
+			var instance = new LoadExperianConsumerMortgageData(customerId, db, log);
+			instance.Execute();
+
+			return instance.Result.MortgageBalance;
+		}
 		
 		private void AdjustCompanyScoreWeight()
 		{
