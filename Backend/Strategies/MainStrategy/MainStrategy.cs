@@ -262,7 +262,7 @@
 					!isViaBroker
 					)
 				{
-					new Approval(customerId, dataGatherer.MinExperianConsumerScore, offeredCreditLine,
+					new Approval(customerId, dataGatherer.MinExperianConsumerScore, dataGatherer.MinCompanyScore, offeredCreditLine,
 					             consumerCaisDetailWorstStatuses, DB, Log).MakeDecision(autoDecisionResponse);
 				}
 

@@ -12,16 +12,18 @@
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly AConnection db;
 		private readonly int minExperianScore;
+		private readonly int minCompanyScore;
 		private readonly int offeredCreditLine;
 		private readonly ASafeLog log;
 		private readonly int customerId;
 		private readonly List<string> consumerCaisDetailWorstStatuses;
 
-		public Approval(int customerId, int minExperianScore, int offeredCreditLine, List<string> consumerCaisDetailWorstStatuses, AConnection db, ASafeLog log)
+		public Approval(int customerId, int minExperianScore, int minCompanyScore, int offeredCreditLine, List<string> consumerCaisDetailWorstStatuses, AConnection db, ASafeLog log)
 		{
 			this.db = db;
 			this.log = log;
 			this.minExperianScore = minExperianScore;
+			this.minCompanyScore = minCompanyScore;
 			this.offeredCreditLine = offeredCreditLine;
 			this.customerId = customerId;
 			this.consumerCaisDetailWorstStatuses = consumerCaisDetailWorstStatuses;

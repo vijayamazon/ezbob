@@ -61,6 +61,7 @@
 		public int? BrokerId { get; private set; }
 		public DateTime? CompanyIncorporationDate { get; private set; }
 		public int MaxCompanyScore { get; private set; }
+		public int MinCompanyScore { get; private set; }
 		public int ExperianConsumerScore { get; private set; }
 		public int MinExperianConsumerScore { get; private set; }
 		public int MaxExperianConsumerScore { get; private set; }
@@ -116,7 +117,7 @@
 			ReadConfigurations();
 			GetPersonalInfo();
 			GetCompanySeniorityDays();
-			GetMaxCompanyScore();
+			GetCompanyScore();
 			GetCurrentExperianScore();
 			GetMinMaxExperianScore();
 			GatherOnlineMedalData();
@@ -185,13 +186,16 @@
 			CompanyIncorporationDate = getCompanySeniority.CompanyIncorporationDate;
 		}
 
-		private void GetMaxCompanyScore()
+		private void GetCompanyScore()
 		{
-			MaxCompanyScore = db.ExecuteScalar<int>(
+			SafeReader sr = db.GetFirst(
 				"GetCompanyScore",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
+
+			MaxCompanyScore = sr["MaxScore"];
+			MinCompanyScore = sr["MinScore"];
 		}
 
 		private void GetCurrentExperianScore()

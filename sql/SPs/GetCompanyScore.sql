@@ -15,9 +15,11 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @MaxScore INT = 0
+	DECLARE @MinScore INT = 0
 
 	SELECT
-		@MaxScore = (CASE WHEN MaxScore IS NULL OR MaxScore < Score THEN Score ELSE MaxScore END)
+		@MaxScore = (CASE WHEN MaxScore IS NULL OR MaxScore < Score THEN Score ELSE MaxScore END),
+		@MinScore = (CASE WHEN MaxScore IS NULL OR MaxScore < Score THEN MaxScore ELSE Score END)
 	FROM
 		CustomerAnalyticsCompany
 	WHERE
@@ -25,6 +27,6 @@ BEGIN
 		AND
 		IsActive = 1
 
-	SELECT @MaxScore AS MaxScore
+	SELECT @MaxScore AS MaxScore, @MinScore AS MinScore
 END
 GO
