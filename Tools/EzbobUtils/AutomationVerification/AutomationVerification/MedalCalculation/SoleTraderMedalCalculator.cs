@@ -6,9 +6,9 @@
 	using Common;
 	using Ezbob.Logger;
 
-	public class OnlineLImitedMedalCalculator : MedalCalculator
+	public class SoleTraderMedalCalculator : MedalCalculator
 	{
-		public OnlineLImitedMedalCalculator(ASafeLog log) : base(log) { }
+		public SoleTraderMedalCalculator(ASafeLog log) : base(log) { }
 
 		public override MedalInputModel GetInputParameters(int customerId)
 		{
@@ -23,8 +23,9 @@
 				model.HasMoreThanOneHmrc = dbData.HasMoreThanOneHmrc;
 				return model;
 			}
-			var mpHelper = new MarketPlacesHelper(Log);
+
 			var yodlees = dbHelper.GetCustomerYodlees(customerId);
+			var mpHelper = new MarketPlacesHelper(Log);
 			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, Log);
 			var today = DateTime.Today;
 			const int year = 365;
@@ -48,11 +49,6 @@
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : dbData.TangibleEquity / model.AnnualTurnover;
 			model.NetWorth = dbData.ZooplaValue == 0 ? 0 : (dbData.ZooplaValue - dbData.Mortages) / (decimal)dbData.ZooplaValue;
 
-			model.NumOfStores = dbData.NumOfStores;
-
-			
-			model.PositiveFeedbacks = mpHelper.GetPositiveFeedbacks(customerId);
-
 			return model;
 		}
 
@@ -63,8 +59,6 @@
 			var dict = new Dictionary<Parameter, Weight>
 				{
 					
-					{Parameter.BusinessScore,            GetBusinessScoreWeight(model.BusinessScore, model.FirstRepaymentDatePassed, model.HasHmrc)},
-					{Parameter.TangibleEquity,           GetTangibleEquityWeight(model.TangibleEquity)},
 					{Parameter.BusinessSeniority,        GetBusinessSeniorityWeight(model.BusinessSeniority, model.FirstRepaymentDatePassed, model.HasHmrc)},
 					{Parameter.ConsumerScore,            GetConsumerScoreWeight(model.ConsumerScore, model.FirstRepaymentDatePassed, model.HasHmrc)},
 					{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(model.EzbobSeniority, model.FirstRepaymentDatePassed)},
@@ -75,13 +69,11 @@
 					{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(model.AnnualTurnover, model.HasHmrc)},
 					{Parameter.FreeCashFlow,             GetFreeCashFlowWeight(model.FreeCashFlow, model.HasHmrc)},
 					{Parameter.NetWorth,                 GetNetWorthWeight(model.NetWorth)},
-					{Parameter.NumOfStores,              GetNumOfStoresWeight(model.NumOfStores)},
-					{Parameter.PositiveFeedbacks,        GetPositiveFeedbacksWeight(model.PositiveFeedbacks)}
 				};
 
 			CalcDelta(model, dict);
 
-			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.OnlineLimited);
+			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict);
 
 			return scoreMedal;
 		}
@@ -89,55 +81,43 @@
 		protected override void CalcDelta(MedalInputModel model, Dictionary<Parameter, Weight> dict)
 		{
 
-			if (model.BusinessScore <= LowBusinessScore || model.ConsumerScore <= LowConsumerScore)
+			if (model.ConsumerScore <= LowConsumerScore)
 			{
 				//Sum of all weights
 				var sow = dict.Sum(x => x.Value.FinalWeight);
-				//Sum of weights of of TangibleEquity, NetWorth, MaritalStatus, NumberOfStores, PositiveFeedbacks
-				var sonf = dict[Parameter.TangibleEquity].FinalWeight +
-					dict[Parameter.NetWorth].FinalWeight +
-					dict[Parameter.MaritalStatus].FinalWeight +
-					dict[Parameter.NumOfStores].FinalWeight +
-					dict[Parameter.PositiveFeedbacks].FinalWeight;
+				//Sum of weights of , NetWorth, MaritalStatus
+				var sonf = dict[Parameter.NetWorth].FinalWeight + dict[Parameter.MaritalStatus].FinalWeight;
 
 				var sonfDesired = sonf - sow + 1;
 				var ratio = sonfDesired / sonf;
-				dict[Parameter.TangibleEquity].FinalWeight *= ratio;
 				dict[Parameter.NetWorth].FinalWeight *= ratio;
 				dict[Parameter.MaritalStatus].FinalWeight *= ratio;
-				dict[Parameter.NumOfStores].FinalWeight *= ratio;
-				dict[Parameter.PositiveFeedbacks].FinalWeight *= ratio;
 			}
 		}
-		
+
 		#region WeightConstants
 		#region Base Weight
-		public override decimal BusinessScoreBaseWeight { get { return 0.20M; } }
-		public override decimal FreeCashFlowBaseWeight { get { return 0.13M; } }
-		public override decimal AnnualTurnoverBaseWeight { get { return 0.10M; } }
-		public override decimal TangibleEquityBaseWeight { get { return 0.08M; } }
-		public override decimal BusinessSeniorityBaseWeight { get { return 0.07M; } }
-		public override decimal ConsumerScoreBaseWeight { get { return 0.20M; } }
+		public override decimal BusinessScoreBaseWeight { get { return 0; } } //not in use
+		public override decimal FreeCashFlowBaseWeight { get { return 0.25M; } }
+		public override decimal AnnualTurnoverBaseWeight { get { return 0.16M; } }
+		public override decimal BusinessSeniorityBaseWeight { get { return 0.03M; } }
+		public override decimal ConsumerScoreBaseWeight { get { return 0.40M; } }
 		public override decimal NetWorthBaseWeight { get { return 0.10M; } }
-		public override decimal MaritalStatusBaseWeight { get { return 0.05M; } }
-		
-
-		public override decimal NumOfStoresBaseWeight { get { return 0.02M; } }
-		public override decimal PositiveFeedbacksBaseWeight { get { return 0.05M; } }
+		public override decimal MaritalStatusBaseWeight { get { return 0.06M; } }
 		#endregion
 
 		#region No HMRC Weight
 		public override decimal FreeCashFlowNoHmrcWeight { get { return 0; } }
 
-		public override decimal AnnualTurnoverNoHmrcWeightChange { get { return 0.05M; } }
-		public override decimal BusinessScoreNoHmrcWeightChange { get { return 0.03M; } }
-		public override decimal ConsumerScoreNoHmrcWeightChange { get { return 0.03M; } }
-		public override decimal BusinessSeniorityNoHmrcWeightChange { get { return 0.04M; } }
+		public override decimal AnnualTurnoverNoHmrcWeightChange { get { return 0.10M; } }
+		public override decimal BusinessScoreNoHmrcWeightChange { get { return 0; } } //not in use
+		public override decimal ConsumerScoreNoHmrcWeightChange { get { return 0.13M; } }
+		public override decimal BusinessSeniorityNoHmrcWeightChange { get { return 0.02M; } }
 		#endregion
 
 		#region Low Score Weight
-		public override decimal BusinessScoreLowScoreWeight { get { return 0.2750M; } }
-		public override decimal ConsumerScoreLowScoreWeight { get { return 0.2750M; } }
+		public override decimal BusinessScoreLowScoreWeight { get { return 0; } } //not in use
+		public override decimal ConsumerScoreLowScoreWeight { get { return 0.55M; } }
 		#endregion
 
 		#region First Repayment Passed Weight
@@ -146,9 +126,9 @@
 		public override decimal NumOfLateRepaymentsFirstRepaymentWeight { get { return 0.0267M; } }
 		public override decimal NumOfEarlyRepaymentsFirstRepaymentWeight { get { return 0.02M; } }
 
-		public override decimal ConsumerScoreFirstRepaymentWeightChange { get { return -0.04M; } }
-		public override decimal BusinessScoreFirstRepaymentWeightChange { get { return -0.04M; } }
-		public override decimal BusinessSeniorityFirstRepaymentWeightChange { get { return -0.02M; } }
+		public override decimal ConsumerScoreFirstRepaymentWeightChange { get { return -0.09M; } }
+		public override decimal BusinessScoreFirstRepaymentWeightChange { get { return 0; } } //not in use
+		public override decimal BusinessSeniorityFirstRepaymentWeightChange { get { return -0.01M; } }
 		#endregion
 		#endregion
 	}

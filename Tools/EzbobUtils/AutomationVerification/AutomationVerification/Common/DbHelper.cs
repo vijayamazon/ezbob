@@ -266,7 +266,6 @@
 			return conn.ExecuteScalar<bool>("AV_IsCustomerOffline", new QueryParameter("@CustomerId", customerId));
 		}
 
-
 		public int GetExperianCompanyScore(int customerId) {
 			throw new NotImplementedException();
 		}
@@ -275,6 +274,13 @@
 		{
 			var conn = new SqlConnection(_log);
 			var model = conn.FillFirst<MedalInputModelDb>("AV_GetMedalInputParams", new QueryParameter("@CustomerId", customerId));
+			return model;
+		}
+
+		public PositiveFeedbacksModelDb GetPositiveFeedbacks(int customerId)
+		{
+			var conn = new SqlConnection(_log);
+			var model = conn.FillFirst<PositiveFeedbacksModelDb>("AV_GetFeedbacks", new QueryParameter("@CustomerId", customerId));
 			return model;
 		}
 	}

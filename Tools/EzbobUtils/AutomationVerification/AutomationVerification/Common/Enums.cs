@@ -26,6 +26,14 @@
 		Diamond = 12,
 	} // enum Medal
 
+	public enum MedalType {
+		OfflineLimited,
+		OnlineLimited,
+		NonLimited,
+		SoleTrader,
+		Other
+	}
+
 	public enum Parameter
 	{
 		BusinessScore,

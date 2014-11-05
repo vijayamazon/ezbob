@@ -18,11 +18,12 @@
 			var dbHelper = new DbHelper(_log);
 			var experianScore = dbHelper.GetExperianScore(customerId);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
-			var anualTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year, _log);
-			var quarterTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
-			var lastTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month, _log);
+			var mpHelper = new MarketPlacesHelper(_log);
+			var anualTurnover = mpHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year);
+			var quarterTurnover = mpHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3);
+			var lastTurnover = mpHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month);
 			var hasDefaultAccounts = dbHelper.HasDefaultAccounts(customerId, 0);
-			var seniorityMonth = MarketPlacesHelper.GetMarketPlacesSeniority(mps) / 12;
+			var seniorityMonth = mpHelper.GetMarketPlacesSeniority(mps) / 12;
 			var birthDate = dbHelper.GetCustomerBirthDate(customerId);
 			var medalRate = dbHelper.GetMedalRate(customerId);
 

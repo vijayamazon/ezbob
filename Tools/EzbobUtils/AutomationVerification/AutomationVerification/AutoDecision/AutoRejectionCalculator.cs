@@ -21,9 +21,10 @@
 			var data = dbHelper.GetRejectionData(customerId);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
 			var paymentMps = dbHelper.GetCustomerPaymentMarketPlaces(customerId);
-			var anualTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year, _log);
-			var threeMonthTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
-			var seniority = MarketPlacesHelper.GetMarketPlacesSeniority(mps);
+			var mpHelper = new MarketPlacesHelper(_log);
+			var anualTurnover = mpHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year);
+			var threeMonthTurnover = mpHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3);
+			var seniority = mpHelper.GetMarketPlacesSeniority(mps);
 
 			data.AnualTurnover = anualTurnover;
 			data.ThreeMonthTurnover = threeMonthTurnover;

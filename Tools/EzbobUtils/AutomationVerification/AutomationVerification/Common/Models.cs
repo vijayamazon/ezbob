@@ -5,7 +5,9 @@
 	public class MedalOutputModel
 	{
 		public Medal Medal { get; set; }
+		public MedalType MedalType { get; set; }
 		public decimal Score { get; set; }
+		public decimal NormalizedScore { get; set; }
 		public string Error { get; set; }
 	}
 
@@ -160,6 +162,13 @@
 		public bool WasLate { get; set; }
 	}
 
+	public class PositiveFeedbacksModelDb {
+		public int AmazonFeedbacks { get; set; }
+		public int EbayFeedbacks { get; set; }
+		public int PaypalFeedbacks { get; set; }
+		public int DefaultFeedbacks { get; set; }
+	}
+
 	public class MedalInputModelDb {
 		public int BusinessScore { get; set; }
 		public DateTime IncorporationDate { get; set; }
@@ -175,11 +184,14 @@
 		public bool HasMoreThanOneHmrc { get; set; }
 		public decimal HmrcRevenues { get; set; }
 		public decimal HmrcEbida { get; set; }
+		public decimal HmrcValueAdded { get; set; }
 		public decimal FCFFactor { get; set; }
 		public decimal CurrentBalanceSum { get; set; }
 		public int ZooplaValue { get; set; }
 		public int Mortages { get; set; }
 		public DateTime? FirstRepaymentDate { get; set; }
+		public int NumOfStores { get; set; }
+		
 	}
 
 	public class MedalInputModel {
@@ -194,6 +206,7 @@
 		public int NumOfEarlyPayments { get; set; }
 		public decimal AnnualTurnover { get; set; }
 		public decimal FreeCashFlow { get; set; }
+		public decimal ValueAdded { get; set; }
 		public decimal NetWorth { get; set; }
 		public bool IsLimited { get; set; }
 		public bool HasMoreThanOneHmrc { get; set; }

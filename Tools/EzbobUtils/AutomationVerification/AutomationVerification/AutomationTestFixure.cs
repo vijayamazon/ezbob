@@ -109,5 +109,13 @@
 			var s = string.Join(",", mps);
 			Assert.IsNotNullOrEmpty(s);
 		}
+
+		[Test]
+		public void TestFeedbacks() {
+			var mpHelper = new MarketPlacesHelper(Log);
+			var feedbacks = mpHelper.GetPositiveFeedbacks(14166);
+			Assert.AreEqual(33885, feedbacks);
+
+		}
 	}
 }

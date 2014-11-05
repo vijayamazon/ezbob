@@ -1,4 +1,3 @@
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -11,15 +10,32 @@ ALTER PROCEDURE AV_GetMedalInputParams
 AS
 BEGIN
 
-	-- BusinessScore IncorporationDate TangibleEquity CurrentBalanceSum taken from CustomerAnalyticsCompany
-	DECLARE @BusinessScore INT
-	DECLARE @IncorporationDate DATETIME
-	DECLARE @TangibleEquity DECIMAL(18,4)
-	DECLARE @CurrentBalanceSum DECIMAL(18,4)
-	SELECT @BusinessScore = Score, @IncorporationDate = IncorporationDate, @TangibleEquity = TangibleEquity, @CurrentBalanceSum = CurrentBalanceSum  
-	FROM CustomerAnalyticsCompany 
-	WHERE CustomerID = @CustomerId AND IsActive=1
+	DECLARE @RegistrationDate DATETIME
+	DECLARE @MaritalStatus NVARCHAR(100)
+	DECLARE @TypeOfBusiness NVARCHAR(100)
 	
+	SELECT @RegistrationDate=GreetingMailSentDate, @MaritalStatus = MaritalStatus, @TypeOfBusiness = TypeOfBusiness 
+	FROM Customer 
+	WHERE Id=@CustomerId
+	
+	-- BusinessScore IncorporationDate TangibleEquity CurrentBalanceSum taken from CustomerAnalyticsCompany
+	DECLARE @BusinessScore INT = 0
+	DECLARE @IncorporationDate DATETIME = NULL
+	DECLARE @TangibleEquity DECIMAL(18,4) = 0
+	DECLARE @CurrentBalanceSum DECIMAL(18,4) = 0
+	
+	IF @TypeOfBusiness IN ('Limited', 'LLP')
+	BEGIN
+		SELECT @BusinessScore = Score, @IncorporationDate = IncorporationDate, @TangibleEquity = TangibleEquity, @CurrentBalanceSum = CurrentBalanceSum  
+		FROM CustomerAnalyticsCompany 
+		WHERE CustomerID = @CustomerId AND IsActive=1
+	END
+	ELSE
+	BEGIN
+		SELECT @IncorporationDate = nl.IncorporationDate, @BusinessScore = nl.CommercialDelphiScore FROM Customer c INNER JOIN Company co ON c.CompanyId=co.Id INNER JOIN ExperianNonLimitedResults nl ON co.ExperianRefNum = nl.RefNumber
+		WHERE c.Id = @CustomerId AND nl.IsActive=1
+	END
+			
 	-- Minimal Consumer/Directors score
 	DECLARE @ConsumerScore INT 
 	SELECT @ConsumerScore = ISNULL(MIN(x.ExperianConsumerScore), 0) FROM
@@ -29,13 +45,6 @@ BEGIN
 	SELECT ExperianConsumerScore FROM Director WHERE CustomerId=@CustomerId AND ExperianConsumerScore IS NOT NULL
 	) x
 	
-	DECLARE @RegistrationDate DATETIME
-	DECLARE @MaritalStatus NVARCHAR(100)
-	DECLARE @TypeOfBusiness NVARCHAR(100)
-	
-	SELECT @RegistrationDate=GreetingMailSentDate, @MaritalStatus = MaritalStatus, @TypeOfBusiness = TypeOfBusiness 
-	FROM Customer 
-	WHERE Id=@CustomerId
 	
 	--NumOfOnTimeLoans
 	DECLARE @NumOfOnTimeLoans INT 
@@ -89,11 +98,12 @@ BEGIN
 	DECLARE @FCFFactor DECIMAL(18,4)
 	DECLARE @HmrcRevenues DECIMAL(18,4) = 0
 	DECLARE @HmrcEbida DECIMAL(18,4) = 0
+	DECLARE @HmrcValueAdded DECIMAL(18,4) = 0
 	
 	IF @NumOfHmrc > 0 SET @HasHmrc = 1
 	IF @NumOfHmrc > 1 SET @HasMoreThenOneHmrc = 1
 	IF @NumOfHmrc = 1
-		SELECT @HmrcEbida = v.Ebida, @HmrcRevenues = v.Revenues
+		SELECT @HmrcEbida = v.Ebida, @HmrcRevenues = v.Revenues, @HmrcValueAdded = v.TotalValueAdded
 		FROM MP_VatReturnSummary v INNER JOIN MP_CustomerMarketPlace mp ON v.CustomerMarketplaceID = mp.Id
 		WHERE v.IsActive=1 AND mp.CustomerId=@CustomerId AND mp.Disabled=0
 	
@@ -159,6 +169,12 @@ BEGIN
 											FROM Loan l INNER JOIN LoanSchedule ls ON ls.LoanId = l.Id 
 											WHERE l.CustomerId=@CustomerId ORDER BY ls.[Date])
 	
+	--Num of ebay amazon and paypal stores
+	DECLARE @NumOfStores INT 
+	SELECT @NumOfStores = isnull(count(mp.Id), 0) FROM MP_CustomerMarketPlace mp INNER JOIN MP_MarketplaceType t ON t.Id = mp.MarketPlaceId
+	WHERE mp.CustomerId=@CustomerId AND mp.Disabled=0
+	AND t.InternalId IN ('A7120CB7-4C93-459B-9901-0E95E7281B59', 'A4920125-411F-4BB9-A52D-27E8A00D0A3B', '3FA5E327-FCFD-483B-BA5A-DC1815747A28')
+	
 	
 	-- Return All Params
 	SELECT 
@@ -176,10 +192,12 @@ BEGIN
 		@HasMoreThenOneHmrc AS HasMoreThenOneHmrc,
 		@HmrcRevenues AS HmrcRevenues,
 		@HmrcEbida AS HmrcEbida,
+		@HmrcValueAdded AS HmrcValueAdded,
 		@FCFFactor AS FCFFactor,
 		@CurrentBalanceSum AS CurrentBalanceSum,
 		@ZooplaValue AS ZooplaValue,
 		@Mortages AS Mortages,
-		@FirstRepaymentDate AS FirstRepaymentDate
+		@FirstRepaymentDate AS FirstRepaymentDate,
+		@NumOfStores AS NumOfStores
 END
 GO

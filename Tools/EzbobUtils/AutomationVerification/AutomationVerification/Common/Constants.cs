@@ -76,113 +76,6 @@
 		#endregion
 	}
 
-	public static class OfflineLimitedMedalConstants {
-
-		#region Weight
-
-		#region Base Weight
-		public static readonly decimal BusinessScoreBaseWeight = 0.30M;
-		public static readonly decimal FreeCashFlowBaseWeight = 0.19M;
-		public static readonly decimal AnnualTurnoverBaseWeight = 0.10M;
-		public static readonly decimal TangibleEquityBaseWeight = 0.08M;
-		public static readonly decimal BusinessSeniorityBaseWeight = 0.08M;
-		public static readonly decimal ConsumerScoreBaseWeight = 0.10M;
-		public static readonly decimal NetWorthBaseWeight = 0.10M;
-		public static readonly decimal MaritalStatusBaseWeight = 0.05M;
-		public static readonly decimal EzbobSeniorityBaseWeight = 0;
-		public static readonly decimal NumOfOnTimeLoansBaseWeight = 0;
-		public static readonly decimal NumOfLateRepaymentsBaseWeight = 0;
-		public static readonly decimal NumOfEarlyRepaymentsBaseWeight = 0;
-		#endregion
-
-		#region No HMRC Weight
-		public static readonly decimal FreeCashFlowNoHmrcWeight = 0;
-		public static readonly decimal AnnualTurnoverNoHmrcWeightChange = 0.07M;
-		public static readonly decimal BusinessScoreNoHmrcWeightChange = 0.05M;
-		public static readonly decimal ConsumerScoreNoHmrcWeightChange = 0.03M;
-		public static readonly decimal BusinessSeniorityNoHmrcWeightChange = 0.04M;
-		#endregion
-
-		#region Low Score Weight
-
-		public static readonly int LowBusinessScore = 30;
-		public static readonly int LowConsumerScore = 800;
-
-		public static readonly decimal BusinessScoreLowScoreWeight = 0.4125M;
-		public static readonly decimal ConsumerScoreLowScoreWeight = 0.1375M;
-		
-		#endregion
-
-		#region First Repayment Passed Weight
-		public static readonly decimal EzbobSeniorityFirstRepaymentWeight = 0.02M;
-		public static readonly decimal NumOfOnTimeLoansFirstRepaymentWeight = 0.0333M;
-		public static readonly decimal NumOfLateRepaymentsFirstRepaymentWeight = 0.0267M;
-		public static readonly decimal NumOfEarlyRepaymentsFirstRepaymentWeight = 0.02M;
-		
-		public static readonly decimal ConsumerScoreFirstRepaymentWeightChange = -0.0208M;
-		public static readonly decimal BusinessScoreFirstRepaymentWeightChange = -0.0625M;
-		public static readonly decimal BusinessSeniorityFirstRepaymentWeightChange = -0.0167M;
-
-		#endregion
-
-		#endregion Weight
-	}
-
-	public static class OnlineLimitedMedalConstants
-	{
-		#region Weight
-
-		#region Base Weight
-		public static readonly decimal BusinessScoreBaseWeight = 0.20M;
-		public static readonly decimal FreeCashFlowBaseWeight = 0.13M;
-		public static readonly decimal AnnualTurnoverBaseWeight = 0.10M;
-		public static readonly decimal TangibleEquityBaseWeight = 0.08M;
-		public static readonly decimal BusinessSeniorityBaseWeight = 0.07M;
-		public static readonly decimal ConsumerScoreBaseWeight = 0.20M;
-		public static readonly decimal NetWorthBaseWeight = 0.10M;
-		public static readonly decimal MaritalStatusBaseWeight = 0.05M;
-		public static readonly decimal NumOfStoresBaseWeight = 0.02M;
-		public static readonly decimal PositiveFeedbacksBaseWeight = 0.05M;
-		public static readonly decimal EzbobSeniorityBaseWeight = 0;
-		public static readonly decimal NumOfOnTimeLoansBaseWeight = 0;
-		public static readonly decimal NumOfLateRepaymentsBaseWeight = 0;
-		public static readonly decimal NumOfEarlyRepaymentsBaseWeight = 0;
-		#endregion
-
-		#region No HMRC Weight
-		public static readonly decimal FreeCashFlowNoHmrcWeight = 0;
-		public static readonly decimal AnnualTurnoverNoHmrcWeightChange = 0.05M;
-		public static readonly decimal BusinessScoreNoHmrcWeightChange = 0.03M;
-		public static readonly decimal ConsumerScoreNoHmrcWeightChange = 0.03M;
-		public static readonly decimal BusinessSeniorityNoHmrcWeightChange = 0.02M;
-		#endregion
-
-		#region Low Score Weight
-
-		public static readonly int LowBusinessScore = 30;
-		public static readonly int LowConsumerScore = 800;
-
-		public static readonly decimal BusinessScoreLowScoreWeight = 0.2750M;
-		public static readonly decimal ConsumerScoreLowScoreWeight = 0.2750M;
-
-		#endregion
-
-		#region First Repayment Passed Weight
-		public static readonly decimal EzbobSeniorityFirstRepaymentWeight = 0.02M;
-		public static readonly decimal NumOfOnTimeLoansFirstRepaymentWeight = 0.0333M;
-		public static readonly decimal NumOfLateRepaymentsFirstRepaymentWeight = 0.0267M;
-		public static readonly decimal NumOfEarlyRepaymentsFirstRepaymentWeight = 0.02M;
-
-		public static readonly decimal ConsumerScoreFirstRepaymentWeightChange = -0.04M;
-		public static readonly decimal BusinessScoreFirstRepaymentWeightChange = -0.04M;
-		public static readonly decimal BusinessSeniorityFirstRepaymentWeightChange = -0.02M;
-
-		#endregion
-
-		#endregion Weight
-
-	}
-
 	public static class MedalRangesConstats {
 		#region Grade Ranges
 
@@ -258,7 +151,7 @@
 				new RangeGrage {MinValue = null,  MaxValue = 0.15M, Grade = 0},
 				new RangeGrage {MinValue = 0.15M, MaxValue = 0.5M,  Grade = 1},
 				new RangeGrage {MinValue = 0.5M,  MaxValue = 1,     Grade = 2},
-				new RangeGrage {MinValue = 1,     MaxValue = null,  Grade = 3},
+				new RangeGrage {MinValue = 1,     MaxValue = null,  Grade = 1},
 			};
 
 		public static readonly int MaritalStatusGrade_Married = 4;
