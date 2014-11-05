@@ -290,5 +290,10 @@
 			SendPendingMails instance;
 			return ExecuteSync(out instance, 0, 0, customerId);
 		}
+
+		public ActionMetaData Temp_BackFillMedals()
+		{
+			return Execute<Temp_BackFillMedals>(null, null);
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

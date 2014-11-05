@@ -770,13 +770,27 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // BackfillCustomerAnalyticsCompany
 
 		[Activation]
-		private void BackfillAml() {
-			if ((m_aryArgs.Length != 1)) {
+		private void BackfillAml()
+		{
+			if ((m_aryArgs.Length != 1))
+			{
 				m_oLog.Msg("Usage: BackfillAml");
 				return;
 			} // if
 
 			m_oServiceClient.BackfillAml();
+		}
+
+		[Activation]
+		private void Temp_BackFillMedals()
+		{
+			if ((m_aryArgs.Length != 1))
+			{
+				m_oLog.Msg("Usage: Temp_BackFillMedals");
+				return;
+			} // if
+
+			m_oServiceClient.Temp_BackFillMedals();
 		}
 
 		[Activation]

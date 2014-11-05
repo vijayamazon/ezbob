@@ -120,6 +120,25 @@
 			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
 
 			// Calculate new medal
+			CalculateNewMedal();
+
+			// Cap offer
+			CapOffer();
+
+			// Make approve decisions
+			ProcessApprovals(autoDecisionRejectionResponse);
+
+			// Log decision
+			LogDecision(autoDecisionRejectionResponse);
+
+			// process the decision - DB + mails
+			ProcessDecision(scoringResult, autoDecisionRejectionResponse);
+
+			SetEndTimestamp();
+		}
+
+		private void CalculateNewMedal()
+		{
 			bool medalCalculated = false;
 			if (Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness))
 			{
@@ -151,21 +170,6 @@
 					Log.Warn("No new medal was calculated for customer:{0}", customerId);
 				}
 			}
-			
-
-			// Cap offer
-			CapOffer();
-
-			// Make approve decisions
-			ProcessApprovals(autoDecisionRejectionResponse);
-
-			// Log decision
-			LogDecision(autoDecisionRejectionResponse);
-
-			// process the decision - DB + mails
-			ProcessDecision(scoringResult, autoDecisionRejectionResponse);
-
-			SetEndTimestamp();
 		}
 
 		private void ProcessDecision(ScoreMedalOffer scoringResult, AutoDecisionRejectionResponse autoDecisionRejectionResponse)

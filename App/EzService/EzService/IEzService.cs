@@ -614,6 +614,9 @@
 
 		[OperationContract]
 		ActionMetaData SendPendingMails(int underwriterId, int customerId);
+
+		[OperationContract]
+		ActionMetaData Temp_BackFillMedals();
 	} // interface IEzService
 } // namespace EzService
 

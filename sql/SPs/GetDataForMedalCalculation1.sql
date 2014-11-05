@@ -57,8 +57,7 @@ BEGIN
 	CREATE TABLE #LateLoans
 	(
 		LoanId INT
-	)
-	
+	)	
 	
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN

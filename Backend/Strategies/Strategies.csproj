@@ -108,6 +108,7 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="Broker\LimitedMedalCalculatorForInstantOffer.cs" />
+    <Compile Include="MedalCalculations\Temp_BackFillMedals.cs" />
     <Compile Include="MedalCalculations\OnlineLimitedMedalDualCalculator.cs" />
     <Compile Include="MedalCalculations\NonLimitedMedalDualCalculator.cs" />
     <Compile Include="MedalCalculations\SoleTraderMedalDualCalculator.cs" />
