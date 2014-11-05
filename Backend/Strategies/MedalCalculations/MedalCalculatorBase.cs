@@ -164,7 +164,7 @@
 			Results.PositiveFeedbacks = amazonPositiveFeedbacks + ebayPositiveFeedbacks;
 			if (Results.PositiveFeedbacks == 0)
 			{
-				Results.PositiveFeedbacks = numberOfPaypalTransactions;
+				Results.PositiveFeedbacks = numberOfPaypalTransactions != 0 ? numberOfPaypalTransactions : CurrentValues.Instance.DefaultFeedbackValue;
 			}
 
 			Results.OnlineAnnualTurnover = strategyHelper.GetOnlineAnnualTurnoverForMedal(Results.CustomerId);
