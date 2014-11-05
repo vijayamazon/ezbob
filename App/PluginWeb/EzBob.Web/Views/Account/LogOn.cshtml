@@ -43,7 +43,16 @@
                 }
                 <p style="font-weight: bold;">@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
 
-                @EzForm.InputText("UserName", "Email address", cls: "form_field login-form-user-name", isRequired: true, statusIcon: true, uiEventControlID: "login:user_name")
+                <div class="form_field_container control-group">
+                    <div class="controls">
+                        <label class="attardi-input">
+                            <span>Email address</span>
+                            <input type="email" name="UserName" id="UserName" class="form_field login-form-user-name" autocorrect="off" autocapitalize="off" value="" ui-event-control-id="login:user_name" />
+                            <img id="UserNameImage" class="field_status required"/>
+                        </label>
+                    </div>
+                </div>
+
                 @EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "login:password")
 
                 <div class="form_field_container">
