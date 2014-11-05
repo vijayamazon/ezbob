@@ -108,6 +108,9 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="Broker\LimitedMedalCalculatorForInstantOffer.cs" />
+    <Compile Include="MedalCalculations\OnlineLimitedMedalDualCalculator.cs" />
+    <Compile Include="MedalCalculations\NonLimitedMedalDualCalculator.cs" />
+    <Compile Include="MedalCalculations\SoleTraderMedalDualCalculator.cs" />
     <Compile Include="MedalCalculations\NonLimitedMedalCalculator1.cs" />
     <Compile Include="MedalCalculations\SoleTraderMedalCalculator1.cs" />
     <Compile Include="MedalCalculations\OnlineLimitedMedalCalculator1.cs" />
@@ -128,12 +131,15 @@
     <Compile Include="Misc\BackfillAml.cs" />
     <Compile Include="Experian\BackfillNonLimitedCompanies.cs" />
     <Compile Include="Misc\BackfillLandRegistry2PropertyLink.cs" />
-    <Compile Include="Misc\CalculateNewMedalsForComparison.cs" />
+    <Compile Include="MedalCalculations\CalculateNewMedalsForComparison.cs" />
     <Compile Include="Misc\BackfillZooplaValue.cs" />
     <Compile Include="Misc\BackfillAndRemoveLimitedMedal.cs" />
-    <Compile Include="Misc\CalculateLimitedMedal.cs" />
+    <Compile Include="MedalCalculations\CalculateLimitedMedal.cs" />
     <Compile Include="Misc\ChangeBrokerEmail.cs" />
     <Compile Include="MailStrategies\SendPendingMail.cs" />
+    <Compile Include="MedalCalculations\CalculateSoleTraderMedal.cs" />
+    <Compile Include="MedalCalculations\CalculateNonLimitedMedal.cs" />
+    <Compile Include="MedalCalculations\CalculateOnlineLimitedMedal.cs" />
     <Compile Include="Misc\SendPendingMails.cs" />
     <Compile Include="Misc\GetConfigTable.cs" />
     <Compile Include="Misc\LoadCustomerLeadFieldNames.cs" />

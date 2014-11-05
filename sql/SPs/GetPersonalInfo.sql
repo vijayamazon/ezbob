@@ -15,7 +15,8 @@ BEGIN
 		@NumOfMps INT,
 		@NumOfLoans INT,
 		@CustomerStatusName NVARCHAR(100),
-		@NumOfHmrcMps INT
+		@NumOfHmrcMps INT,
+		@NumOfYodleeMps INT
 		
 	SELECT 
 		@CustomerStatusIsEnabled = IsEnabled, 
@@ -51,6 +52,16 @@ BEGIN
 		CustomerId = @CustomerId AND 
 		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND 
 		MP_MarketplaceType.Name = 'HMRC'
+		
+	SELECT 
+		@NumOfYodleeMps = COUNT(1) 
+	FROM 
+		MP_CustomerMarketPlace, 
+		MP_MarketplaceType 
+	WHERE 
+		CustomerId = @CustomerId AND 
+		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND 
+		MP_MarketplaceType.Name = 'Yodlee'		
 	
 	SELECT
 		@CustomerStatusIsEnabled AS CustomerStatusIsEnabled,
@@ -77,7 +88,8 @@ BEGIN
 		@NumOfHmrcMps AS NumOfHmrcMps,
 		Customer.IsAlibaba,
 		Customer.BrokerID AS BrokerId,
-		Customer.LastStartedMainStrategyEndTime
+		Customer.LastStartedMainStrategyEndTime,
+		@NumOfYodleeMps AS NumOfYodleeMps
 	FROM
 		CustomerPropertyStatuses,
 		Customer

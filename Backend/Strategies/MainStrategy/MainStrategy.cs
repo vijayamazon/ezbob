@@ -6,6 +6,7 @@
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using MailStrategies.API;
+	using MedalCalculations;
 	using Misc;
 	using ScoreCalculation;
 	using System;
@@ -118,11 +119,39 @@
 			// Gather LR data - must be done after rejection decisions
 			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
 
-			// Calculate limited medal
-			if (dataGatherer.NumOfHmrcMps < 2 && Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness))
+			// Calculate new medal
+			bool medalCalculated = false;
+			if (Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness))
 			{
-				modelLoanOffer = CalculateLimitedMedal();
+				if (dataGatherer.NumOfEbayAmazonPayPalMps > 0)
+				{
+					modelLoanOffer = CalculateOnlineLimitedMedal();
+					medalCalculated = true;
+				}
+				else if (dataGatherer.NumOfHmrcMps < 2)
+				{
+					modelLoanOffer = CalculateLimitedMedal();
+					medalCalculated = true;
+				}
 			}
+			else if (dataGatherer.MaxCompanyScore > 0 && dataGatherer.NumOfHmrcMps < 2)
+			{
+				modelLoanOffer = CalculateNonLimitedMedal();
+				medalCalculated = true;
+			}
+
+			if (!medalCalculated)
+			{
+				if (dataGatherer.MaxExperianConsumerScore > 0 && (dataGatherer.NumOfHmrcMps > 0 || dataGatherer.NumOfYodleeMps > 0) && dataGatherer.NumOfHmrcMps < 2)
+				{
+					modelLoanOffer = CalculateSoleTraderMedal();
+				}
+				else
+				{
+					Log.Warn("No new medal was calculated for customer:{0}", customerId);
+				}
+			}
+			
 
 			// Cap offer
 			CapOffer();
@@ -298,64 +327,95 @@
 			var instance = new CalculateLimitedMedal(DB, Log, customerId);
 			instance.Execute();
 
-			if (instance.Result != null && string.IsNullOrEmpty(instance.Result.Error))
+			return CalculateOfferAccordingToMedal(instance.Result);
+		}
+
+		private int CalculateSoleTraderMedal()
+		{
+			var instance = new CalculateSoleTraderMedal(DB, Log, customerId);
+			instance.Execute();
+
+			return CalculateOfferAccordingToMedal(instance.Result);
+		}
+
+		private int CalculateNonLimitedMedal()
+		{
+			var instance = new CalculateNonLimitedMedal(DB, Log, customerId);
+			instance.Execute();
+
+			return CalculateOfferAccordingToMedal(instance.Result);
+		}
+
+		private int CalculateOnlineLimitedMedal()
+		{
+			var instance = new CalculateOnlineLimitedMedal(DB, Log, customerId);
+			instance.Execute();
+
+			return CalculateOfferAccordingToMedal(instance.Result);
+		}
+
+		private int CalculateOfferAccordingToMedal(ScoreResult scoreResult)
+		{
+			if (scoreResult != null && string.IsNullOrEmpty(scoreResult.Error))
 			{
 				SafeReader sr = DB.GetFirst(
 					"GetMedalCoefficients",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("MedalFlow", "Limited"),
-					new QueryParameter("Medal", instance.Result.Medal.ToString())
-				);
+					new QueryParameter("Medal", scoreResult.Medal.ToString())
+					);
 
 				if (!sr.IsEmpty)
 				{
 					decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
-					decimal offerAccordingToAnnualTurnover = instance.Result.AnnualTurnover * annualTurnoverMedalFactor;
+					decimal offerAccordingToAnnualTurnover = scoreResult.AnnualTurnover * annualTurnoverMedalFactor;
 
-					if (instance.Result.InnerFlowName == "HMRC")
+					if (scoreResult.InnerFlowName == "HMRC")
 					{
 						decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
 						decimal valueAddedMedalFactor = sr["ValueAdded"];
-						decimal offerAccordingToFreeCashFlow = instance.Result.FreeCashFlowValue * freeCashFlowMedalFactor;
-						decimal offerAccordingToValueAdded = instance.Result.ValueAdded * valueAddedMedalFactor;
+						decimal offerAccordingToFreeCashFlow = scoreResult.FreeCashFlowValue * freeCashFlowMedalFactor;
+						decimal offerAccordingToValueAdded = scoreResult.ValueAdded * valueAddedMedalFactor;
 
 						// Get min that is over threshold
 						if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded ||
-							 offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
-							(offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
-							 offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
-							offerAccordingToFreeCashFlow >= dataGatherer.LimitedMedalMinOffer)
+						     offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
+						    (offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
+						     offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
+						    offerAccordingToFreeCashFlow >= dataGatherer.LimitedMedalMinOffer)
 						{
-							Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId, offerAccordingToFreeCashFlow);
-							return (int)offerAccordingToFreeCashFlow;
+							Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId,
+							         offerAccordingToFreeCashFlow);
+							return (int) offerAccordingToFreeCashFlow;
 						}
 
 						if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow ||
-							 offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
-							(offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
-							 offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
-							offerAccordingToValueAdded >= dataGatherer.LimitedMedalMinOffer)
+						     offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
+						    (offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
+						     offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
+						    offerAccordingToValueAdded >= dataGatherer.LimitedMedalMinOffer)
 						{
 							Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId,
-									 offerAccordingToValueAdded);
-							return (int)offerAccordingToValueAdded;
+							         offerAccordingToValueAdded);
+							return (int) offerAccordingToValueAdded;
 						}
 
 						if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow ||
-							 offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
-							(offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
-							 offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
-							offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
+						     offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
+						    (offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
+						     offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
+						    offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
 						{
 							Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId,
-									 offerAccordingToAnnualTurnover);
-							return (int)offerAccordingToAnnualTurnover;
+							         offerAccordingToAnnualTurnover);
+							return (int) offerAccordingToAnnualTurnover;
 						}
 					}
 					else if (offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
 					{
-						Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId, offerAccordingToAnnualTurnover);
-						return (int)offerAccordingToAnnualTurnover;
+						Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId,
+						         offerAccordingToAnnualTurnover);
+						return (int) offerAccordingToAnnualTurnover;
 					}
 				}
 			}

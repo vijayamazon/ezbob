@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies.Experian;
-	using EzBob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;

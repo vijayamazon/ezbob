@@ -2,6 +2,7 @@
 {
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Database;
 	using ScoreCalculation;
 
 	public class ScoreResult
@@ -98,5 +99,157 @@
 		public decimal TotalScoreNormalized { get; set; }
 		public MedalMultiplier Medal { get; set; }
 		public string Error { get; set; }
+
+		public bool IsIdentical(ScoreResult other)
+		{
+			if (CustomerId != other.CustomerId ||
+				MedalType != other.MedalType ||
+				BusinessScore != other.BusinessScore ||
+				BusinessScoreWeight != other.BusinessScoreWeight ||
+				BusinessScoreGrade != other.BusinessScoreGrade ||
+				BusinessScoreScore != other.BusinessScoreScore ||
+				FreeCashFlowValue != other.FreeCashFlowValue ||
+				FreeCashFlow != other.FreeCashFlow ||
+				FreeCashFlowWeight != other.FreeCashFlowWeight ||
+				FreeCashFlowGrade != other.FreeCashFlowGrade ||
+				FreeCashFlowScore != other.FreeCashFlowScore ||
+				HmrcAnnualTurnover != other.HmrcAnnualTurnover ||
+				BankAnnualTurnover != other.BankAnnualTurnover ||
+				OnlineAnnualTurnover != other.OnlineAnnualTurnover ||
+				AnnualTurnover != other.AnnualTurnover ||
+				AnnualTurnoverWeight != other.AnnualTurnoverWeight ||
+				AnnualTurnoverGrade != other.AnnualTurnoverGrade ||
+				AnnualTurnoverScore != other.AnnualTurnoverScore ||
+				TangibleEquityValue != other.TangibleEquityValue ||
+				TangibleEquity != other.TangibleEquity ||
+				TangibleEquityWeight != other.TangibleEquityWeight ||
+				TangibleEquityGrade != other.TangibleEquityGrade ||
+				TangibleEquityScore != other.TangibleEquityScore ||
+				BusinessSeniority != other.BusinessSeniority ||
+				BusinessSeniorityWeight != other.BusinessSeniorityWeight ||
+				BusinessSeniorityGrade != other.BusinessSeniorityGrade ||
+				BusinessSeniorityScore != other.BusinessSeniorityScore ||
+				ConsumerScore != other.ConsumerScore ||
+				ConsumerScoreWeight != other.ConsumerScoreWeight ||
+				ConsumerScoreGrade != other.ConsumerScoreGrade ||
+				ConsumerScoreScore != other.ConsumerScoreScore ||
+				NetWorth != other.NetWorth ||
+				NetWorthWeight != other.NetWorthWeight ||
+				NetWorthGrade != other.NetWorthGrade ||
+				NetWorthScore != other.NetWorthScore ||
+				MaritalStatus != other.MaritalStatus ||
+				MaritalStatusWeight != other.MaritalStatusWeight ||
+				MaritalStatusGrade != other.MaritalStatusGrade ||
+				MaritalStatusScore != other.MaritalStatusScore ||
+				NumberOfStores != other.NumberOfStores ||
+				NumberOfStoresWeight != other.NumberOfStoresWeight ||
+				NumberOfStoresGrade != other.NumberOfStoresGrade ||
+				NumberOfStoresScore != other.NumberOfStoresScore ||
+				PositiveFeedbacks != other.PositiveFeedbacks ||
+				PositiveFeedbacksWeight != other.PositiveFeedbacksWeight ||
+				PositiveFeedbacksGrade != other.PositiveFeedbacksGrade ||
+				PositiveFeedbacksScore != other.PositiveFeedbacksScore ||
+				EzbobSeniority != other.EzbobSeniority ||
+				EzbobSeniorityWeight != other.EzbobSeniorityWeight ||
+				EzbobSeniorityGrade != other.EzbobSeniorityGrade ||
+				EzbobSeniorityScore != other.EzbobSeniorityScore ||
+				NumOfLoans != other.NumOfLoans ||
+				NumOfLoansWeight != other.NumOfLoansWeight ||
+				NumOfLoansGrade != other.NumOfLoansGrade ||
+				NumOfLoansScore != other.NumOfLoansScore ||
+				NumOfLateRepayments != other.NumOfLateRepayments ||
+				NumOfLateRepaymentsWeight != other.NumOfLateRepaymentsWeight ||
+				NumOfLateRepaymentsGrade != other.NumOfLateRepaymentsGrade ||
+				NumOfLateRepaymentsScore != other.NumOfLateRepaymentsScore ||
+				NumOfEarlyRepayments != other.NumOfEarlyRepayments ||
+				NumOfEarlyRepaymentsWeight != other.NumOfEarlyRepaymentsWeight ||
+				NumOfEarlyRepaymentsGrade != other.NumOfEarlyRepaymentsGrade ||
+				NumOfEarlyRepaymentsScore != other.NumOfEarlyRepaymentsScore ||
+				ValueAdded != other.ValueAdded ||
+				InnerFlowName != other.InnerFlowName ||
+				TotalScore != other.TotalScore ||
+				TotalScoreNormalized != other.TotalScoreNormalized ||
+				Medal != other.Medal ||
+				Error != other.Error)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		public void SaveToDb(AConnection db)
+		{
+			db.ExecuteNonQuery("StoreNewMedal", CommandSpecies.StoredProcedure,
+							   new QueryParameter("CustomerId", CustomerId),
+							   new QueryParameter("MedalType", MedalType),
+							   new QueryParameter("BusinessScore", BusinessScore),
+							   new QueryParameter("BusinessScoreWeight", BusinessScoreWeight),
+							   new QueryParameter("BusinessScoreGrade", BusinessScoreGrade),
+							   new QueryParameter("BusinessScoreScore", BusinessScoreScore),
+							   new QueryParameter("FreeCashFlowValue", FreeCashFlowValue),
+							   new QueryParameter("FreeCashFlow", FreeCashFlow),
+							   new QueryParameter("FreeCashFlowWeight", FreeCashFlowWeight),
+							   new QueryParameter("FreeCashFlowGrade", FreeCashFlowGrade),
+							   new QueryParameter("FreeCashFlowScore", FreeCashFlowScore),
+							   new QueryParameter("HmrcAnnualTurnover", HmrcAnnualTurnover),
+							   new QueryParameter("BankAnnualTurnover", BankAnnualTurnover),
+							   new QueryParameter("OnlineAnnualTurnover", OnlineAnnualTurnover),
+							   new QueryParameter("AnnualTurnover", AnnualTurnover),
+							   new QueryParameter("AnnualTurnoverWeight", AnnualTurnoverWeight),
+							   new QueryParameter("AnnualTurnoverGrade", AnnualTurnoverGrade),
+							   new QueryParameter("AnnualTurnoverScore", AnnualTurnoverScore),
+							   new QueryParameter("TangibleEquityValue", TangibleEquityValue),
+							   new QueryParameter("TangibleEquity", TangibleEquity),
+							   new QueryParameter("TangibleEquityWeight", TangibleEquityWeight),
+							   new QueryParameter("TangibleEquityGrade", TangibleEquityGrade),
+							   new QueryParameter("TangibleEquityScore", TangibleEquityScore),
+							   new QueryParameter("BusinessSeniority", BusinessSeniority.HasValue && BusinessSeniority.Value.Year > 1800 ? BusinessSeniority : null),
+							   new QueryParameter("BusinessSeniorityWeight", BusinessSeniorityWeight),
+							   new QueryParameter("BusinessSeniorityGrade", BusinessSeniorityGrade),
+							   new QueryParameter("BusinessSeniorityScore", BusinessSeniorityScore),
+							   new QueryParameter("ConsumerScore", ConsumerScore),
+							   new QueryParameter("ConsumerScoreWeight", ConsumerScoreWeight),
+							   new QueryParameter("ConsumerScoreGrade", ConsumerScoreGrade),
+							   new QueryParameter("ConsumerScoreScore", ConsumerScoreScore),
+							   new QueryParameter("NetWorth", NetWorth),
+							   new QueryParameter("NetWorthWeight", NetWorthWeight),
+							   new QueryParameter("NetWorthGrade", NetWorthGrade),
+							   new QueryParameter("NetWorthScore", NetWorthScore),
+							   new QueryParameter("MaritalStatus", MaritalStatus.ToString()),
+							   new QueryParameter("MaritalStatusWeight", MaritalStatusWeight),
+							   new QueryParameter("MaritalStatusGrade", MaritalStatusGrade),
+							   new QueryParameter("MaritalStatusScore", MaritalStatusScore),
+							   new QueryParameter("NumberOfStores", NumberOfStores),
+							   new QueryParameter("NumberOfStoresWeight", NumberOfStoresWeight),
+							   new QueryParameter("NumberOfStoresGrade", NumberOfStoresGrade),
+							   new QueryParameter("NumberOfStoresScore", NumberOfStoresScore),
+							   new QueryParameter("PositiveFeedbacks", PositiveFeedbacks),
+							   new QueryParameter("PositiveFeedbacksWeight", PositiveFeedbacksWeight),
+							   new QueryParameter("PositiveFeedbacksGrade", PositiveFeedbacksGrade),
+							   new QueryParameter("PositiveFeedbacksScore", PositiveFeedbacksScore),
+							   new QueryParameter("EzbobSeniority", EzbobSeniority),
+							   new QueryParameter("EzbobSeniorityWeight", EzbobSeniorityWeight),
+							   new QueryParameter("EzbobSeniorityGrade", EzbobSeniorityGrade),
+							   new QueryParameter("EzbobSeniorityScore", EzbobSeniorityScore),
+							   new QueryParameter("NumOfLoans", NumOfLoans),
+							   new QueryParameter("NumOfLoansWeight", NumOfLoansWeight),
+							   new QueryParameter("NumOfLoansGrade", NumOfLoansGrade),
+							   new QueryParameter("NumOfLoansScore", NumOfLoansScore),
+							   new QueryParameter("NumOfLateRepayments", NumOfLateRepayments),
+							   new QueryParameter("NumOfLateRepaymentsWeight", NumOfLateRepaymentsWeight),
+							   new QueryParameter("NumOfLateRepaymentsGrade", NumOfLateRepaymentsGrade),
+							   new QueryParameter("NumOfLateRepaymentsScore", NumOfLateRepaymentsScore),
+							   new QueryParameter("NumOfEarlyRepayments", NumOfEarlyRepayments),
+							   new QueryParameter("NumOfEarlyRepaymentsWeight", NumOfEarlyRepaymentsWeight),
+							   new QueryParameter("NumOfEarlyRepaymentsGrade", NumOfEarlyRepaymentsGrade),
+							   new QueryParameter("NumOfEarlyRepaymentsScore", NumOfEarlyRepaymentsScore),
+							   new QueryParameter("ValueAdded", ValueAdded),
+							   new QueryParameter("InnerFlowName", InnerFlowName),
+							   new QueryParameter("TotalScore", TotalScore),
+							   new QueryParameter("TotalScoreNormalized", TotalScoreNormalized),
+							   new QueryParameter("Medal", Medal.ToString()),
+							   new QueryParameter("Error", Error));
+		}
 	}
 }

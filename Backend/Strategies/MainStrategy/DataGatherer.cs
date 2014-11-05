@@ -66,6 +66,7 @@
 		public int MinExperianConsumerScore { get; private set; }
 		public int MaxExperianConsumerScore { get; private set; }
 		public int NumOfEbayAmazonPayPalMps { get; private set; }
+		public int NumOfYodleeMps { get; private set; }
 
 		// Online medal
 		public int ModelEzbobSeniority { get; private set; }
@@ -177,6 +178,7 @@
 			NumOfHmrcMps = results["NumOfHmrcMps"];
 			IsAlibaba = results["IsAlibaba"];
 			BrokerId = results["BrokerId"];
+			NumOfYodleeMps = results["NumOfYodleeMps"];
 		}
 
 		private void GetCompanySeniorityDays()

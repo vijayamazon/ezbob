@@ -286,14 +286,34 @@
 		{
 			var analysisVals = GetOnlineAnalysisValsForCustomer(customerId);
 
-			double year = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Year);
-			double month6 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month6);
-			double month3 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month3);
-			double month = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month);
+			decimal year = (decimal)GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Year);
+			decimal month6 = (decimal)GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month6);
+			decimal month3 = (decimal)GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month3);
+			decimal month = (decimal)GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month);
 
-			double min = Math.Min(year, Math.Min(month6, Math.Min(month3, month)));
+			var vals = new List<decimal>();
+			
+			if (month != 0)
+			{
+				vals.Add(month);
+			}
+			if (month3 != 0)
+			{
+				vals.Add(month3);
+			}
+			if (month6 != 0)
+			{
+				vals.Add(month6);
+			}
+			if (year != 0)
+			{
+				vals.Add(year);
+			}
+			
+			decimal min = vals.Count > 0 ? vals.ToArray().Min() : 0;
+			
 			log.InfoFormat("Calculated annualized turnover. Year:{0} 6Months:{1} 3Months:{2} Month:{3}. Using min:{4}", year, month6, month3, month, min);
-			return (decimal)min;
+			return min;
 		}
 
 		public double GetAnnualizedTurnoverForPeriod(Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis, TimePeriodEnum period)

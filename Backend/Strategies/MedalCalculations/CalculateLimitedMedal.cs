@@ -1,9 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.Misc 
+﻿namespace EzBob.Backend.Strategies.MedalCalculations 
 {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using MedalCalculations;
 
 	public class CalculateLimitedMedal : AStrategy
 	{
