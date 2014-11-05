@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations 
 {
+	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -28,41 +29,48 @@
 					int numOfYodleeMps = sr["NumOfYodleeMps"];
 					int consumerScore = sr["ConsumerScore"];
 					int customerId = sr["CustomerId"];
-
-					bool medalCalculated = false;
-					if (typeOfBusiness == "LLP" || typeOfBusiness == "Limited")
+					
+					try
 					{
-						if (numOfEbayAmazonPayPalMps > 0)
+						bool medalCalculated = false;
+						if (typeOfBusiness == "LLP" || typeOfBusiness == "Limited")
 						{
-							var instance = new CalculateOnlineLimitedMedal(DB, Log, customerId);
+							if (numOfEbayAmazonPayPalMps > 0)
+							{
+								var instance = new CalculateOnlineLimitedMedal(DB, Log, customerId);
+								instance.Execute();
+								medalCalculated = true;
+							}
+							else if (numOfHmrcMps < 2)
+							{
+								var instance = new CalculateLimitedMedal(DB, Log, customerId);
+								instance.Execute();
+								medalCalculated = true;
+							}
+						}
+						else if (companyScore > 0 && numOfHmrcMps < 2)
+						{
+							var instance = new CalculateNonLimitedMedal(DB, Log, customerId);
 							instance.Execute();
 							medalCalculated = true;
 						}
-						else if (numOfHmrcMps < 2)
-						{
-							var instance = new CalculateLimitedMedal(DB, Log, customerId);
-							instance.Execute();
-							medalCalculated = true;
-						}
-					}
-					else if (companyScore > 0 && numOfHmrcMps < 2)
-					{
-						var instance = new CalculateNonLimitedMedal(DB, Log, customerId);
-						instance.Execute();
-						medalCalculated = true;
-					}
 
-					if (!medalCalculated)
+						if (!medalCalculated)
+						{
+							if (consumerScore > 0 && (numOfHmrcMps > 0 || numOfYodleeMps > 0) && numOfHmrcMps < 2)
+							{
+								var instance = new CalculateSoleTraderMedal(DB, Log, customerId);
+								instance.Execute();
+							}
+							else
+							{
+								Log.Warn("No new medal was calculated for customer:{0}", customerId);
+							}
+						}
+					}
+					catch (Exception e)
 					{
-						if (consumerScore > 0 && (numOfHmrcMps > 0 || numOfYodleeMps > 0) && numOfHmrcMps < 2)
-						{
-							var instance = new CalculateSoleTraderMedal(DB, Log, customerId);
-							instance.Execute();
-						}
-						else
-						{
-							Log.Warn("No new medal was calculated for customer:{0}", customerId);
-						}
+						Log.Error("Exception during medal calculation for customer:{0}", customerId);
 					}
 					return ActionResult.SkipAll;
 				},
