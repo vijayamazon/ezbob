@@ -39,25 +39,61 @@ BEGIN
 		@NumberOfOnlineStores INT,
 		@AmazonPositiveFeedbacks INT,
 		@EbayPositiveFeedbacks INT,
-		@NumOfPaypalTransactions INT	
+		@NumOfPaypalTransactions INT,
+		@TypeOfBusiness NVARCHAR(50),
+		@ServiceLogId BIGINT
 		
 	SET @Threshold = 2
+			
+	SELECT 
+		@EzbobSeniority = GreetingMailSentDate, 
+		@MaritalStatus = MaritalStatus,
+		@TypeOfBusiness = TypeOfBusiness
+	FROM 
+		Customer 
+	WHERE 
+		Id = @CustomerId
 	
 	CREATE TABLE #LateLoans
 	(
 		LoanId INT
 	)
 	
-	SELECT 
-		@BusinessScore = Score, 
-		@TangibleEquity = TangibleEquity, 
-		@BusinessSeniority = IncorporationDate 
-	FROM 
-		CustomerAnalyticsCompany 
-	WHERE 
-		CustomerID = @CustomerId AND
-		IsActive = 1
-		
+	
+	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
+	BEGIN
+		SELECT 
+			@BusinessScore = Score, 
+			@TangibleEquity = TangibleEquity, 
+			@BusinessSeniority = IncorporationDate 
+		FROM 
+			CustomerAnalyticsCompany 
+		WHERE 
+			CustomerID = @CustomerId AND
+			IsActive = 1
+	END
+	ELSE
+	BEGIN
+		SELECT TOP 1
+			@ServiceLogId = Id
+		FROM
+			MP_ServiceLog
+		WHERE
+			ServiceType = 'E-SeriesNonLimitedData' AND
+			CustomerId = @CustomerId
+		ORDER BY 
+			Id DESC
+	
+		SELECT 
+			@BusinessScore = CommercialDelphiScore,
+			@BusinessSeniority = IncorporationDate 
+		FROM 
+			ExperianNonLimitedResults
+		WHERE
+			ServiceLogId = @ServiceLogId AND
+			IsActive = 1
+	END
+	
 	IF @BusinessSeniority IS NULL
 		SET @BusinessSeniority = @CalculationTime
 	
@@ -72,14 +108,6 @@ BEGIN
 		FROM Director
 		WHERE CustomerId = @CustomerId AND ExperianConsumerScore IS NOT NULL
 	) AS X
-			
-	SELECT 
-		@EzbobSeniority = GreetingMailSentDate, 
-		@MaritalStatus = MaritalStatus
-	FROM 
-		Customer 
-	WHERE 
-		Id = @CustomerId
 
 	SELECT @FirstRepaymentDatePassed = 0
 	SELECT 
