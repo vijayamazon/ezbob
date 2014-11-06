@@ -32,45 +32,13 @@
 					
 					try
 					{
-						bool medalCalculated = false;
-						if (typeOfBusiness == "LLP" || typeOfBusiness == "Limited")
-						{
-							if (numOfEbayAmazonPayPalMps > 0)
-							{
-								var instance = new CalculateOnlineLimitedMedal(DB, Log, customerId);
-								instance.Execute();
-								medalCalculated = true;
-							}
-							else if (numOfHmrcMps < 2)
-							{
-								var instance = new CalculateLimitedMedal(DB, Log, customerId);
-								instance.Execute();
-								medalCalculated = true;
-							}
-						}
-						else if (companyScore > 0 && numOfHmrcMps < 2)
-						{
-							var instance = new CalculateNonLimitedMedal(DB, Log, customerId);
-							instance.Execute();
-							medalCalculated = true;
-						}
-
-						if (!medalCalculated)
-						{
-							if (consumerScore > 0 && (numOfHmrcMps > 0 || numOfYodleeMps > 0) && numOfHmrcMps < 2)
-							{
-								var instance = new CalculateSoleTraderMedal(DB, Log, customerId);
-								instance.Execute();
-							}
-							else
-							{
-								Log.Warn("No new medal was calculated for customer:{0}", customerId);
-							}
-						}
+						var instance = new CalculateMedal(DB, Log, customerId, typeOfBusiness, consumerScore, companyScore, numOfHmrcMps, numOfYodleeMps, numOfEbayAmazonPayPalMps);
+						instance.Execute();
+						
 					}
 					catch (Exception e)
 					{
-						Log.Error("Exception during medal calculation for customer:{0}", customerId);
+						Log.Error("Exception during medal calculation for customer:{0} The exception:{1}", customerId, e);
 					}
 					return ActionResult.Continue;
 				},

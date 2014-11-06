@@ -794,16 +794,6 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
-		private void BackfillAndRemoveLimitedMedal() {
-			if ((m_aryArgs.Length != 1)) {
-				m_oLog.Msg("Usage: BackfillAndRemoveLimitedMedal");
-				return;
-			}
-
-			m_oServiceClient.BackfillAndRemoveLimitedMedal();
-		}
-
-		[Activation]
 		private void BackfillZooplaValue() {
 			if ((m_aryArgs.Length != 1)) {
 				m_oLog.Msg("Usage: BackfillZooplaValue");

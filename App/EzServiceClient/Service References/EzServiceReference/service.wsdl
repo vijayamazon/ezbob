@@ -131,12 +131,6 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ParseExperianConsumer_InputMessage">
-    <wsdl:part name="parameters" element="tns:ParseExperianConsumer" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ParseExperianConsumer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ParseExperianConsumerResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_LoadExperianConsumer_InputMessage">
     <wsdl:part name="parameters" element="tns:LoadExperianConsumer" />
   </wsdl:message>
@@ -593,11 +587,11 @@
   <wsdl:message name="IEzService_CalculateNewMedalsForComparison_OutputMessage">
     <wsdl:part name="parameters" element="tns:CalculateNewMedalsForComparisonResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CalculateLimitedMedal_InputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateLimitedMedal" />
+  <wsdl:message name="IEzService_CalculateMedal_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateMedal" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CalculateLimitedMedal_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateLimitedMedalResponse" />
+  <wsdl:message name="IEzService_CalculateMedal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateMedalResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetUnfetchedDataErrors_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUnfetchedDataErrors" />
@@ -646,12 +640,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillAml_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillAmlResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BackfillAndRemoveLimitedMedal_InputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillAndRemoveLimitedMedal" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BackfillAndRemoveLimitedMedal_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillAndRemoveLimitedMedalResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillZooplaValue_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillZooplaValue" />
@@ -1145,6 +1133,12 @@
   <wsdl:message name="IEzService_BackfillExperianConsumer_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillExperianConsumerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_ParseExperianConsumer_InputMessage">
+    <wsdl:part name="parameters" element="tns:ParseExperianConsumer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ParseExperianConsumer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ParseExperianConsumerResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1180,10 +1174,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
-    <wsdl:operation name="ParseExperianConsumer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumer" message="tns:IEzService_ParseExperianConsumer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumerResponse" message="tns:IEzService_ParseExperianConsumer_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="LoadExperianConsumer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumer" message="tns:IEzService_LoadExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerResponse" message="tns:IEzService_LoadExperianConsumer_OutputMessage" />
@@ -1488,9 +1478,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateNewMedalsForComparison" message="tns:IEzService_CalculateNewMedalsForComparison_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateNewMedalsForComparisonResponse" message="tns:IEzService_CalculateNewMedalsForComparison_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CalculateLimitedMedal">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateLimitedMedal" message="tns:IEzService_CalculateLimitedMedal_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateLimitedMedalResponse" message="tns:IEzService_CalculateLimitedMedal_OutputMessage" />
+    <wsdl:operation name="CalculateMedal">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateMedal" message="tns:IEzService_CalculateMedal_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateMedalResponse" message="tns:IEzService_CalculateMedal_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetUnfetchedDataErrors">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors" message="tns:IEzService_GetUnfetchedDataErrors_InputMessage" />
@@ -1523,10 +1513,6 @@
     <wsdl:operation name="BackfillAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillAml" message="tns:IEzService_BackfillAml_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillAmlResponse" message="tns:IEzService_BackfillAml_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BackfillAndRemoveLimitedMedal">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedal" message="tns:IEzService_BackfillAndRemoveLimitedMedal_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedalResponse" message="tns:IEzService_BackfillAndRemoveLimitedMedal_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackfillZooplaValue">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillZooplaValue" message="tns:IEzService_BackfillZooplaValue_InputMessage" />
@@ -1856,6 +1842,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumer" message="tns:IEzService_BackfillExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumerResponse" message="tns:IEzService_BackfillExperianConsumer_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ParseExperianConsumer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumer" message="tns:IEzService_ParseExperianConsumer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumerResponse" message="tns:IEzService_ParseExperianConsumer_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1938,15 +1928,6 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="ParseExperianConsumer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianConsumer" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="LoadExperianConsumer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumer" style="document" />
       <wsdl:input>
@@ -2631,8 +2612,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CalculateLimitedMedal">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateLimitedMedal" style="document" />
+    <wsdl:operation name="CalculateMedal">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateMedal" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2705,15 +2686,6 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillAml">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillAml" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BackfillAndRemoveLimitedMedal">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedal" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3452,6 +3424,15 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillExperianConsumer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianConsumer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParseExperianConsumer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianConsumer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

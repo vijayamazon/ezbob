@@ -229,12 +229,6 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData BackfillAndRemoveLimitedMedal()
-		{
-			BackfillAndRemoveLimitedMedal instance;
-			return ExecuteSync(out instance, 0, 0);
-		}
-
 		public ActionMetaData BackfillLandRegistry2PropertyLink()
 		{
 			BackfillLandRegistry2PropertyLink instance;
@@ -247,9 +241,9 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData CalculateLimitedMedal(int underwriterId, int customerId)
+		public ActionMetaData CalculateMedal(int underwriterId, int customerId)
 		{
-			CalculateLimitedMedal instance;
+			CalculateMedal instance;
 			return ExecuteSync(out instance, customerId, underwriterId, customerId);
 		}
 		

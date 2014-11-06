@@ -23,9 +23,6 @@
 		ActionMetaData BackfillAml();
 
 		[OperationContract]
-		ActionMetaData BackfillAndRemoveLimitedMedal();
-
-		[OperationContract]
 		ActionMetaData BackfillZooplaValue();
 
 		[OperationContract]
@@ -598,7 +595,7 @@
 		ActionMetaData CalculateNewMedalsForComparison();
 
 		[OperationContract]
-		ActionMetaData CalculateLimitedMedal(int underwriterId, int customerId);
+		ActionMetaData CalculateMedal(int underwriterId, int customerId);
 
 		[OperationContract]
 		StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);

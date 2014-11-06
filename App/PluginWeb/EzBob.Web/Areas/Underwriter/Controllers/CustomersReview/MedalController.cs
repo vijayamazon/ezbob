@@ -42,7 +42,7 @@
 		[HttpPost]
 		public void RecalculateMedal(int customerId)
 		{
-			serviceClient.Instance.CalculateLimitedMedal(context.UserId, customerId);
+			serviceClient.Instance.CalculateMedal(context.UserId, customerId);
 		}
 	}
 }

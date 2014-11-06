@@ -2494,12 +2494,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
-        ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumer", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerResponse")]
         ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
         
@@ -2956,11 +2950,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateNewMedalsForComparison", ReplyAction="http://tempuri.org/IEzService/CalculateNewMedalsForComparisonResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateNewMedalsForComparisonAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateLimitedMedal", ReplyAction="http://tempuri.org/IEzService/CalculateLimitedMedalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateLimitedMedal(int underwriterId, int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateMedal", ReplyAction="http://tempuri.org/IEzService/CalculateMedalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateMedal(int underwriterId, int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateLimitedMedal", ReplyAction="http://tempuri.org/IEzService/CalculateLimitedMedalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateLimitedMedalAsync(int underwriterId, int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateMedal", ReplyAction="http://tempuri.org/IEzService/CalculateMedalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
         ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
@@ -3009,12 +3003,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillAml", ReplyAction="http://tempuri.org/IEzService/BackfillAmlResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillAmlAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedal", ReplyAction="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillAndRemoveLimitedMedal();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedal", ReplyAction="http://tempuri.org/IEzService/BackfillAndRemoveLimitedMedalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillAndRemoveLimitedMedalAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillZooplaValue", ReplyAction="http://tempuri.org/IEzService/BackfillZooplaValueResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BackfillZooplaValue();
@@ -3507,6 +3495,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianConsumer", ReplyAction="http://tempuri.org/IEzService/BackfillExperianConsumerResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianConsumerAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
+        ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3534,14 +3528,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId) {
-            return base.Channel.ParseExperianConsumer(nServiceLogId);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId) {
-            return base.Channel.ParseExperianConsumerAsync(nServiceLogId);
         }
         
         public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
@@ -4152,12 +4138,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateNewMedalsForComparisonAsync();
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateLimitedMedal(int underwriterId, int customerId) {
-            return base.Channel.CalculateLimitedMedal(underwriterId, customerId);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateMedal(int underwriterId, int customerId) {
+            return base.Channel.CalculateMedal(underwriterId, customerId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateLimitedMedalAsync(int underwriterId, int customerId) {
-            return base.Channel.CalculateLimitedMedalAsync(underwriterId, customerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId) {
+            return base.Channel.CalculateMedalAsync(underwriterId, customerId);
         }
         
         public ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId) {
@@ -4222,14 +4208,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillAmlAsync() {
             return base.Channel.BackfillAmlAsync();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillAndRemoveLimitedMedal() {
-            return base.Channel.BackfillAndRemoveLimitedMedal();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillAndRemoveLimitedMedalAsync() {
-            return base.Channel.BackfillAndRemoveLimitedMedalAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillZooplaValue() {
@@ -4886,6 +4864,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianConsumerAsync() {
             return base.Channel.BackfillExperianConsumerAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId) {
+            return base.Channel.ParseExperianConsumer(nServiceLogId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId) {
+            return base.Channel.ParseExperianConsumerAsync(nServiceLogId);
         }
     }
 }
