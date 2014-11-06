@@ -9,10 +9,35 @@
 		public decimal Score { get; set; }
 		public decimal NormalizedScore { get; set; }
 		public string Error { get; set; }
+		public MedalComparisonModel MedalComparisonModel { get; set; }
+	}
+
+	public class MedalComparisonModel {
+		public int CustomerId { get; set; }
+		public MedalType MedalType { get; set; }
+		public Weight BusinessScore { get; set; }
+		public Weight FreeCashFlow { get; set; }
+		public Weight AnnualTurnover { get; set; }
+		public Weight TangibleEquity { get; set; }
+		public Weight BusinessSeniority { get; set; }
+		public Weight ConsumerScore { get; set; }
+		public Weight NetWorth { get; set; }
+		public Weight MaritalStatus { get; set; }
+		public Weight NumbOfStores { get; set; }
+		public Weight PositiveFeedback { get; set; }
+		public Weight EzbobSeniority { get; set; }
+		public Weight NumOfLoans { get; set; }
+		public Weight NumOfLateRepayments { get; set; }
+		public Weight NumOfEarlyRepayments { get; set; }
+
+		public decimal HmrcTurnover { get; set; }
+		public decimal BankTurnover { get; set; }
+		public decimal OnlineTurnover { get; set; }
 	}
 
 	public class Weight
 	{
+		public string Value { get; set; }
 		public decimal FinalWeight { get; set; }
 		public decimal MinimumScore { get; set; }
 		public decimal MaximumScore { get; set; }

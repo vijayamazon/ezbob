@@ -149,6 +149,7 @@
 		{
 			var weight = new Weight
 			{
+				Value = value.ToString(),
 				FinalWeight = baseWeight,
 				MinimumGrade = ranges.MinGrade(),
 				MaximumGrade = ranges.MaxGrade(),
@@ -188,11 +189,11 @@
 			var sb = new StringBuilder();
 			sb.AppendFormat("Medal Type {2} Medal: {0} Score: {1}%\n", medalOutput.Medal, ToPercent(medalOutput.Score), medalOutput.MedalType);
 			decimal s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
-			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|\n", "Parameter".PadRight(25), "Weight".PadRight(10), "MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10), "Grade".PadRight(10), "Score".PadRight(10));
+			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8} \n", "Parameter".PadRight(25), "Weight".PadRight(10), "MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10), "Grade".PadRight(10), "Score".PadRight(10), "Value".PadRight(20));
 			foreach (var weight in dict)
 			{
 
-				sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|\n",
+				sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}|\n",
 					weight.Key.ToString().PadRight(25),
 					ToPercent(weight.Value.FinalWeight).PadRight(10),
 					ToPercent(weight.Value.MinimumScore / 100).PadRight(10),
@@ -200,7 +201,7 @@
 					weight.Value.MinimumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
 					weight.Value.MaximumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
 					weight.Value.Grade.ToString(CultureInfo.InvariantCulture).PadRight(10),
-					ToShort(weight.Value.Score).PadRight(10));
+					ToShort(weight.Value.Score).PadRight(10), weight.Value.Value.PadRight(20));
 				s5 += weight.Value.FinalWeight;
 				s6 += weight.Value.MinimumScore;
 				s7 += weight.Value.MaximumScore;
@@ -210,7 +211,7 @@
 				s10 += weight.Value.Score;
 			}
 			sb.AppendLine("--------------------------------------------------------------------");
-			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|\n",
+			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}\n",
 				"Sum".PadRight(25),
 				ToPercent(s5).PadRight(10),
 				ToPercent(s6 / 100).PadRight(10),
@@ -218,7 +219,7 @@
 				s8.ToString(CultureInfo.InvariantCulture).PadRight(10),
 				s9.ToString(CultureInfo.InvariantCulture).PadRight(10),
 				s11.ToString(CultureInfo.InvariantCulture).PadRight(10),
-				ToShort(s10).PadRight(10));
+				ToShort(s10).PadRight(10), string.Empty.PadRight(20));
 
 			Log.Debug(sb.ToString());
 		}
@@ -284,6 +285,7 @@
 		{
 			var maritalStatusWeight = new Weight
 			{
+				Value = maritalStatus.ToString(),
 				FinalWeight = MaritalStatusBaseWeight,
 				MinimumGrade = MedalRangesConstats.MaritalStatusGrade_Single,
 				MaximumGrade = MedalRangesConstats.MaritalStatusGrade_Married
