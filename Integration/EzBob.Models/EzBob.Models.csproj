@@ -84,7 +84,6 @@
     <Compile Include="Marketplaces\EBayModel.cs" />
     <Compile Include="Marketplaces\FreeAgentModel.cs" />
     <Compile Include="Marketplaces\MarketPlaceModel.cs" />
-    <Compile Include="Marketplaces\MarketPlacesFacade.cs" />
     <Compile Include="Marketplaces\Builders\ChannelGrabberMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\CompanyFilesMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\EKMMarketplaceModelBuilder.cs" />

@@ -27,14 +27,12 @@
 	public class ProfileSummaryModelBuilder
 	{
 		private readonly IDecisionHistoryRepository _decisions;
-		private readonly MarketPlacesFacade _mpFacade;
 		private readonly ServiceClient serviceClient;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
 
-		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, MarketPlacesFacade mpFacade, CreditBureauModelBuilder creditBureauModelBuilder)
+		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, CreditBureauModelBuilder creditBureauModelBuilder)
 		{
 			_decisions = decisions;
-			_mpFacade = mpFacade;
 			_creditBureauModelBuilder = creditBureauModelBuilder;
 			serviceClient = new ServiceClient();
 		}
@@ -624,7 +622,7 @@
 
 		private double GetSeniority(Customer customer, bool isPaymentAccountOnly)
 		{
-			var marketplacesSeniority = _mpFacade.MarketplacesSeniority(customer, isPaymentAccountOnly);
+			var marketplacesSeniority = customer.GetMarketplaceOriginationDate(isPaymentAccount: isPaymentAccountOnly);
 			var minAccountAge = DateTime.UtcNow - marketplacesSeniority;
 			var minAccountAgeTotalMonth = minAccountAge.TotalDays / 30;
 			return minAccountAgeTotalMonth;

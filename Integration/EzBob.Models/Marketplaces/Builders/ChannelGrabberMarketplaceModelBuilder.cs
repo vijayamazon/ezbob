@@ -143,7 +143,15 @@ namespace EzBob.Models.Marketplaces.Builders {
 				)
 				.Select(oi => oi.PaymentDate);
 
-			return oListOfDates.Any() ? oExtractDate(oListOfDates) : (DateTime?)null;
+			IQueryable<MP_VatReturnRecord> oVatPeriods = _session
+				.Query<MP_VatReturnRecord>()
+				.Where(r => r.CustomerMarketPlace.Id == mp.Id && (r.IsDeleted == null || !r.IsDeleted.Value));
+
+			IQueryable<DateTime> oAllDates = oListOfDates
+				.Union(oVatPeriods.Select(r => r.DateFrom))
+				.Union(oVatPeriods.Select(r => r.DateTo));
+
+			return oAllDates.Any() ? oExtractDate(oAllDates) : (DateTime?)null;
 		} // GetDateFromList
 
 		#endregion method GetDateFromList

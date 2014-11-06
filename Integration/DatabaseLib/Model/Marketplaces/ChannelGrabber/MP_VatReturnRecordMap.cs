@@ -20,6 +20,8 @@
 
 			References(x => x.Business, "BusinessId");
 
+			Map(x => x.IsDeleted);
+
 			Map(x => x.SourceID);
 
 			References(x => x.HistoryRecord)

@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using ApplicationMng.Repository;
@@ -19,12 +18,10 @@
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using LandRegistryLib;
-	using Marketplaces;
 	using NHibernate;
 	using StructureMap;
 	using ZooplaLib;
 	using log4net;
-	using MailApi;
 
 	public class StrategyHelper
 	{
@@ -33,7 +30,6 @@
 		private readonly DecisionHistoryRepository _decisionHistory;
 		private readonly ISession _session;
 		private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
-		private readonly MarketPlacesFacade _mpFacade;
 		private readonly LoanRepository loanRepository;
 		private readonly CustomerMarketPlaceRepository _marketPlaceRepository;
 		private readonly CustomerAddressRepository customerAddressRepository;
@@ -45,7 +41,6 @@
 			_decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
 			_caisReportsHistoryRepository = ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
-			_mpFacade = ObjectFactory.GetInstance<MarketPlacesFacade>();
 			loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			_marketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
 			customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
@@ -382,9 +377,17 @@
 			_decisionHistory.LogAction(DecisionActions.Approve, comment, _session.Get<User>(1), customer);
 		}
 
-		public int MarketplaceSeniority(Customer customer)
-		{
-			return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customer)).TotalDays);
+		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
+		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+
+		public int MarketplaceSeniority(Customer customer) {
+			return Convert.ToInt32(
+				(DateTime.UtcNow - customer.GetMarketplaceOriginationDate(oIncludeMp: mp =>
+					!mp.Marketplace.IsPaymentAccount ||
+					mp.Marketplace.InternalId == PayPal ||
+					mp.Marketplace.InternalId == Hmrc
+				)).TotalDays
+			);
 		}
 
 		public List<Loan> GetOutstandingLoans(int customerId)

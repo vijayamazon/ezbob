@@ -16,6 +16,8 @@
 
 		public virtual Business Business { get; set; }
 
+		public virtual bool? IsDeleted { get; set; }
+
 		public virtual int SourceID { get; set; }
 
 		public virtual Iesi.Collections.Generic.ISet<MP_VatReturnEntry> Entries { get; set; }
