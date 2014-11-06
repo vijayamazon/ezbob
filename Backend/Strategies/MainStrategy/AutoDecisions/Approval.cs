@@ -20,7 +20,16 @@
 	using StructureMap;
 
 	public class Approval {
-		public Approval(int customerId, int minExperianScore, int minCompanyScore, int offeredCreditLine, List<string> consumerCaisDetailWorstStatuses, AConnection db, ASafeLog log) {
+		public Approval(
+			int customerId,
+			bool bIsBrokerCustomer,
+			int minExperianScore,
+			int minCompanyScore,
+			int offeredCreditLine,
+			List<string> consumerCaisDetailWorstStatuses,
+			AConnection db,
+			ASafeLog log
+		) {
 			this.db = db;
 			this.log = log;
 			this.minExperianScore = minExperianScore;
@@ -28,6 +37,7 @@
 			this.autoApprovedAmount = offeredCreditLine;
 			this.customerId = customerId;
 			this.consumerCaisDetailWorstStatuses = consumerCaisDetailWorstStatuses;
+			this.isBrokerCustomer = bIsBrokerCustomer;
 
 			loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -40,7 +50,7 @@
 			m_oTrail = new Trail(customerId);
 		} // constructor
 
-		public bool MakeDecision(AutoDecisionResponse response) {
+		public void MakeDecision(AutoDecisionResponse response) {
 			try {
 				var configSafeReader = db.GetFirst("GetApprovalConfigs", CommandSpecies.StoredProcedure);
 
@@ -90,22 +100,17 @@
 							response.AppValidFor = DateTime.UtcNow.AddDays((loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays);
 							response.IsAutoApproval = true;
 							response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
-						} // if
+						} // if is silent
 					}
 					else {
 						response.CreditResult = "WaitingForDecision";
 						response.UserStatus = "Manual";
 						response.SystemDecision = "Manual";
-					} // if
-
-					return true;
-				} // if
-
-				return false;
+					} // if there are enough funds
+				} // if auto approved amount is not 0
 			}
 			catch (Exception e) {
 				log.Error(e, "Exception during auto approval.");
-				return false;
 			} // try
 		} // MakeDecision
 
@@ -115,6 +120,8 @@
 			log.Debug("Checking if auto approval should take place for customer {0}...", customerId);
 
 			try {
+				m_oTrail.Append<IsBrokerCustomer>(!isBrokerCustomer);
+
 				CheckAMLResult();
 				CheckBusinessScore();
 				CheckCustomerStatus();
@@ -414,6 +421,7 @@
 		private readonly LoanRepository loanRepository;
 
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly bool isBrokerCustomer;
 		private readonly AConnection db;
 		private readonly Customer customer;
 		private readonly int minExperianScore;

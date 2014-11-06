@@ -64,6 +64,7 @@
     <Compile Include="ProcessHistory\AutoApproval\BusinessScore.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ConsumerScore.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Age.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\IsBrokerCustomer.cs" />
     <Compile Include="ProcessHistory\AutoApproval\WorstCaisStatus.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OutstandingRepayRatio.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OutstandingLoanCount.cs" />

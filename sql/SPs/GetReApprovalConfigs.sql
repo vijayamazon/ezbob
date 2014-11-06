@@ -1,14 +1,23 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetReApprovalConfigs]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetReApprovalConfigs]
+IF OBJECT_ID('GetReApprovalConfigs') IS NULL
+	EXECUTE('CREATE PROCEDURE GetReApprovalConfigs AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetReApprovalConfigs]
+
+ALTER PROCEDURE GetReApprovalConfigs
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT
-		(SELECT convert(INT, Value) FROM ConfigurationVariables WHERE Name = 'AutoReApproveMaxNumOfOutstandingLoans') AS AutoReApproveMaxNumOfOutstandingLoans
+		AutoReApproveMaxNumOfOutstandingLoans = CONVERT(INT, Value)
+	FROM
+		ConfigurationVariables
+	WHERE
+		Name = 'AutoReApproveMaxNumOfOutstandingLoans'
 END
 GO

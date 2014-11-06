@@ -246,45 +246,95 @@
 			}
 		}
 
-		private void ProcessApprovals(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
-		{
-			if (!autoDecisionRejectionResponse.DecidedToReject &&
-				newCreditLineOption != NewCreditLineOption.UpdateEverythingAndGoToManualDecision &&
-				avoidAutomaticDecision != 1 &&
-				dataGatherer.CustomerStatusIsEnabled && 
-				!dataGatherer.CustomerStatusIsWarning)
-			{
-				autoDecisionResponse = new AutoDecisionResponse { DecisionName = "Manual" };
+		private void ProcessApprovals(AutoDecisionRejectionResponse autoDecisionRejectionResponse) {
+			if (autoDecisionRejectionResponse.DecidedToReject) {
+				Log.Debug("Not processing approvals: reject decision has been made.");
+				return;
+			} // if
 
-				if (dataGatherer.EnableAutomaticReApproval)
-				{
-					new ReApproval(customerId, dataGatherer.LoanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount,
-					               dataGatherer.LoanOfferReApprovalFullAmountOld,
-					               loanOfferReApprovalRemainingAmountOld, DB, Log).MakeDecision(autoDecisionResponse);
-				}
+			if (newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision) {
+				Log.Debug("Not processing approvals: {0} option selected.", newCreditLineOption);
+				return;
+			} // if
 
-				if (string.IsNullOrEmpty(autoDecisionResponse.SystemDecision) &&
-					dataGatherer.EnableAutomaticApproval &&
-					!isViaBroker
-				)
-				{
-					new Approval(customerId, dataGatherer.MinExperianConsumerScore, dataGatherer.MinCompanyScore, offeredCreditLine,
-					             consumerCaisDetailWorstStatuses, DB, Log).MakeDecision(autoDecisionResponse);
-				}
+			if (avoidAutomaticDecision == 1) {
+				Log.Debug("Not processing approvals: automatic decisions should be avoided.");
+				return;
+			} // if
 
-				if (string.IsNullOrEmpty(autoDecisionResponse.SystemDecision) && CurrentValues.Instance.BankBasedApprovalIsEnabled)
-				{
-					new BankBasedApproval(customerId, DB, Log).MakeDecision(autoDecisionResponse);
-				}
+			if (!dataGatherer.CustomerStatusIsEnabled) {
+				Log.Debug("Not processing approvals: customer status is not enabled.");
+				return;
+			} // if
 
-				if (string.IsNullOrEmpty(autoDecisionResponse.SystemDecision)) // No decision is made so far
-				{
-					autoDecisionResponse.CreditResult = "WaitingForDecision";
-					autoDecisionResponse.UserStatus = "Manual";
-					autoDecisionResponse.SystemDecision = "Manual";
-				}
+			if (dataGatherer.CustomerStatusIsWarning) {
+				Log.Debug("Not processing approvals: customer status is 'warning'.");
+				return;
+			} // if
+
+			autoDecisionResponse = new AutoDecisionResponse { DecisionName = "Manual" };
+			bool bContinue = true;
+
+			// ReSharper disable ConditionIsAlwaysTrueOrFalse
+			if (dataGatherer.EnableAutomaticReApproval && bContinue) {
+				// ReSharper restore ConditionIsAlwaysTrueOrFalse
+				new ReApproval(
+					customerId,
+					dataGatherer.LoanOfferReApprovalFullAmount,
+					loanOfferReApprovalRemainingAmount,
+					dataGatherer.LoanOfferReApprovalFullAmountOld,
+					loanOfferReApprovalRemainingAmountOld,
+					DB,
+					Log
+				).MakeDecision(autoDecisionResponse);
+
+				bContinue = string.IsNullOrWhiteSpace(autoDecisionResponse.SystemDecision);
+
+				if (!bContinue)
+					Log.Debug("Auto re-approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
 			}
-		}
+			else
+				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
+
+			if (dataGatherer.EnableAutomaticApproval && bContinue) {
+				new Approval(
+					customerId,
+					isViaBroker,
+					dataGatherer.MinExperianConsumerScore,
+					dataGatherer.MinCompanyScore,
+					offeredCreditLine,
+					consumerCaisDetailWorstStatuses,
+					DB,
+					Log
+				).MakeDecision(autoDecisionResponse);
+
+				bContinue = string.IsNullOrEmpty(autoDecisionResponse.SystemDecision);
+
+				if (!bContinue)
+					Log.Debug("Auto approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
+			} // if
+			else
+				Log.Debug("Not processed auto approval: it is currently disabled in configuration or decision has already been made earlier.");
+
+			if (CurrentValues.Instance.BankBasedApprovalIsEnabled && bContinue) {
+				new BankBasedApproval(customerId, DB, Log).MakeDecision(autoDecisionResponse);
+
+				bContinue = string.IsNullOrEmpty(autoDecisionResponse.SystemDecision);
+
+				if (!bContinue)
+					Log.Debug("Bank based approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
+			}
+			else
+				Log.Debug("Not processed bank based approval: it is currently disabled in configuration or decision has already been made earlier.");
+
+			if (bContinue) { // No decision is made so far
+				autoDecisionResponse.CreditResult = "WaitingForDecision";
+				autoDecisionResponse.UserStatus = "Manual";
+				autoDecisionResponse.SystemDecision = "Manual";
+
+				Log.Debug("Not approval has reached decision: setting it to be 'waiting for decision'.");
+			} // if
+		} // ProcessApprovals
 
 		private void GetLandRegistryDataIfNotRejected(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
 		{
@@ -352,19 +402,14 @@
 			return this;
 		}
 
-		private void CapOffer()
-		{
+		private void CapOffer() {
 			Log.Info("Finalizing and capping offer");
 
 			if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
-			{
 				loanOfferReApprovalRemainingAmount = 0;
-			}
 
 			if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
-			{
 				loanOfferReApprovalRemainingAmountOld = 0;
-			}
 
 			loanOfferReApprovalSum = new[] {
 				dataGatherer.LoanOfferReApprovalFullAmount,
@@ -375,38 +420,21 @@
 
 			offeredCreditLine = modelLoanOffer;
 
-			bool isHomeOwnerAccordingToLandRegistry = false;
-			SafeReader sr = DB.GetFirst(
+			bool isHomeOwnerAccordingToLandRegistry = DB.ExecuteScalar<bool>(
 				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			if (!sr.IsEmpty)
-			{
-				isHomeOwnerAccordingToLandRegistry = sr["IsOwner"];
+			if (isHomeOwnerAccordingToLandRegistry) {
+				loanOfferReApprovalSum = Math.Min(loanOfferReApprovalSum, dataGatherer.MaxCapHomeOwner);
+				offeredCreditLine      = Math.Min(offeredCreditLine,      dataGatherer.MaxCapHomeOwner);
 			}
-
-			if (isHomeOwnerAccordingToLandRegistry && dataGatherer.MaxCapHomeOwner < loanOfferReApprovalSum)
-			{
-				loanOfferReApprovalSum = dataGatherer.MaxCapHomeOwner;
-			}
-
-			if (!isHomeOwnerAccordingToLandRegistry && dataGatherer.MaxCapNotHomeOwner < loanOfferReApprovalSum)
-			{
-				loanOfferReApprovalSum = dataGatherer.MaxCapNotHomeOwner;
-			}
-
-			if (isHomeOwnerAccordingToLandRegistry && dataGatherer.MaxCapHomeOwner < offeredCreditLine)
-			{
-				offeredCreditLine = dataGatherer.MaxCapHomeOwner;
-			}
-
-			if (!isHomeOwnerAccordingToLandRegistry && dataGatherer.MaxCapNotHomeOwner < offeredCreditLine)
-			{
-				offeredCreditLine = dataGatherer.MaxCapNotHomeOwner;
-			}
-		}
+			else {
+				loanOfferReApprovalSum = Math.Min(loanOfferReApprovalSum, dataGatherer.MaxCapNotHomeOwner);
+				offeredCreditLine      = Math.Min(offeredCreditLine,      dataGatherer.MaxCapNotHomeOwner);
+			} // if
+		} // CappOffer
 		
 		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase, string creditResult, string systemDecision, string userStatus, DateTime? appValidFor, int repaymentPeriod)
 		{
