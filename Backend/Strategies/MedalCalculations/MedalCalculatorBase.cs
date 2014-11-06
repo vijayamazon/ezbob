@@ -142,7 +142,17 @@
 			Results.BusinessSeniority = sr["BusinessSeniority"];
 			Results.ConsumerScore = sr["ConsumerScore"];
 			string maritalStatusStr = sr["MaritalStatus"];
-			Results.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusStr);
+			MaritalStatus maritalStatus;
+			if (Enum.TryParse(maritalStatusStr, out maritalStatus))
+			{
+				Results.MaritalStatus = maritalStatus;
+			}
+			else
+			{
+				log.Error("Unable to parse marital status for customer:{0} will use 'Other'. The value was:{1}", Results.CustomerId, maritalStatusStr);
+				Results.MaritalStatus = MaritalStatus.Other;
+			}
+
 			firstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
 			Results.EzbobSeniority = sr["EzbobSeniority"];
 			Results.NumOfLoans = sr["OnTimeLoans"];

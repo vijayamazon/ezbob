@@ -36,7 +36,9 @@ BEGIN
 	FROM 
 		Customer
 	WHERE
-		IsTest = 0
+		IsTest = 0 AND
+		WizardStep = 4 AND
+		GreetingMailSentDate >= '1 Sep 2014'
 		
 	OPEN cur
 	FETCH NEXT FROM cur INTO @CustomerId
