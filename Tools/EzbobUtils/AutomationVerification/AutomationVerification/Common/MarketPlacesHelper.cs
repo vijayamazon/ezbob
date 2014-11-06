@@ -59,6 +59,12 @@
 			return sum + Math.Max(paypal, ebay);
 		}
 
+		/// <summary>
+		/// Calculate online turnover: use this formula:
+		///Amazon + Max(ebay,paypal)
+		///Calculate it for 1M, 3M, 6M (annualize figure) and 1Y
+		///Take the minimum between these 4. (The non-zero minimum)
+		/// </summary>
 		public decimal GetOnlineTurnoverAnnualized(int customerId) {
 			var dbHelper = new DbHelper(Log);
 			

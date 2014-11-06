@@ -10,47 +10,6 @@
 	{
 		public NonLimitedMedalCalculator(ASafeLog log) : base(log) { }
 
-		public override MedalInputModel GetInputParameters(int customerId)
-		{
-			throw new NotImplementedException();
-			//TODO retrieve the data!!!!
-
-			var dbHelper = new DbHelper(Log);
-			var dbData = dbHelper.GetMedalInputModel(customerId);
-			var model = new MedalInputModel();
-			if (dbData.HasMoreThanOneHmrc)
-			{
-				model.HasMoreThanOneHmrc = dbData.HasMoreThanOneHmrc;
-				return model;
-			}
-
-			var yodlees = dbHelper.GetCustomerYodlees(customerId);
-			var mpHelper = new MarketPlacesHelper(Log);
-			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, Log);
-			var today = DateTime.Today;
-			const int year = 365;
-
-			model.HasHmrc = dbData.HasHmrc;
-			model.BusinessScore = dbData.BusinessScore;
-			model.BusinessSeniority = (decimal)(today - dbData.IncorporationDate).TotalDays / year;
-			model.ConsumerScore = dbData.ConsumerScore;
-			model.EzbobSeniority = ((today.Year - dbData.RegistrationDate.Year) * 12) + today.Month - dbData.RegistrationDate.Month;
-			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < today;
-			model.IsLimited = dbData.TypeOfBusiness == "Limited" || dbData.TypeOfBusiness == "LLP";
-			model.NumOfEarlyPayments = dbData.NumOfEarlyPayments;
-			model.NumOfLatePayments = dbData.NumOfLatePayments;
-			model.NumOfOnTimeLoans = dbData.NumOfOnTimeLoans;
-			model.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), dbData.MaritalStatus);
-			model.AnnualTurnover = dbData.HasHmrc ? dbData.HmrcRevenues : yodleeIncome;
-			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;
-
-			var balance = dbData.CurrentBalanceSum < 0 ? 0 : (dbData.CurrentBalanceSum / dbData.FCFFactor);
-			model.FreeCashFlow = model.AnnualTurnover == 0 ? 0 : (dbData.HmrcEbida - balance) / model.AnnualTurnover;
-			model.NetWorth = dbData.ZooplaValue == 0 ? 0 : (dbData.ZooplaValue - dbData.Mortages) / (decimal)dbData.ZooplaValue;
-
-			return model;
-		}
-
 		public override MedalOutputModel CalculateMedal(MedalInputModel model)
 		{
 			Log.Debug(model.ToString());

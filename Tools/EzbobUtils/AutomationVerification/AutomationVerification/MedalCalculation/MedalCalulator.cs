@@ -71,7 +71,47 @@
 			Log = log;
 		}
 
-		public abstract MedalInputModel GetInputParameters(int customerId);
+		public virtual MedalInputModel GetInputParameters(int customerId) {
+			var dbHelper = new DbHelper(Log);
+			var dbData = dbHelper.GetMedalInputModel(customerId);
+			var model = new MedalInputModel {MedalInputModelDb = dbData};
+
+			if (dbData.HasMoreThanOneHmrc)
+			{
+				model.HasMoreThanOneHmrc = dbData.HasMoreThanOneHmrc;
+				return model;
+			}
+
+			var today = DateTime.Today;
+			const int year = 365;
+
+			model.HasHmrc = dbData.HasHmrc;
+			model.BusinessScore = dbData.BusinessScore;
+			model.BusinessSeniority = (decimal)(today - dbData.IncorporationDate).TotalDays / year;
+			model.ConsumerScore = dbData.ConsumerScore;
+			model.EzbobSeniority = ((today.Year - dbData.RegistrationDate.Year) * 12) + today.Month - dbData.RegistrationDate.Month;
+			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < today;
+			model.IsLimited = dbData.TypeOfBusiness == "Limited" || dbData.TypeOfBusiness == "LLP";
+			model.NumOfEarlyPayments = dbData.NumOfEarlyPayments;
+			model.NumOfLatePayments = dbData.NumOfLatePayments;
+			model.NumOfOnTimeLoans = dbData.NumOfOnTimeLoans;
+			model.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), dbData.MaritalStatus);
+			model.NetWorth = dbData.ZooplaValue == 0 ? 0 : (dbData.ZooplaValue - dbData.Mortages) / (decimal)dbData.ZooplaValue;
+
+			// This Logic is good only for OfflineLimited,SoleTrader,NonLimited Medals
+			var yodlees = dbHelper.GetCustomerYodlees(customerId);
+			var mpHelper = new MarketPlacesHelper(Log);
+			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, Log);
+			model.AnnualTurnover = dbData.HasHmrc ? dbData.HmrcRevenues : yodleeIncome;
+			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;
+
+			var balance = dbData.CurrentBalanceSum < 0 ? 0 : (dbData.CurrentBalanceSum / dbData.FCFFactor);
+			model.FreeCashFlow = model.AnnualTurnover == 0 ? 0 : (model.MedalInputModelDb.HmrcEbida - balance) / model.AnnualTurnover;
+			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
+
+			return model;
+		}
+
 		public abstract MedalOutputModel CalculateMedal(MedalInputModel model);
 
 		protected abstract void CalcDelta(MedalInputModel model, Dictionary<Parameter, Weight> dict);

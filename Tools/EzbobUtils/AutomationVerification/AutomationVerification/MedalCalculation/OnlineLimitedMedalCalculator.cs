@@ -1,6 +1,5 @@
 ﻿namespace AutomationCalculator.MedalCalculation
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using Common;
@@ -10,50 +9,46 @@
 	{
 		public OnlineLImitedMedalCalculator(ASafeLog log) : base(log) { }
 
-		public override MedalInputModel GetInputParameters(int customerId)
-		{
-			throw new NotImplementedException();
-			//TODO retrieve the data!!!!
-
-			var dbHelper = new DbHelper(Log);
-			var dbData = dbHelper.GetMedalInputModel(customerId);
-			var model = new MedalInputModel();
-			if (dbData.HasMoreThanOneHmrc)
-			{
-				model.HasMoreThanOneHmrc = dbData.HasMoreThanOneHmrc;
+		public override MedalInputModel GetInputParameters(int customerId) {
+			var model = base.GetInputParameters(customerId);
+			if (model.HasMoreThanOneHmrc) {
 				return model;
 			}
+			model.AnnualTurnover = GetOnlineAnnualTurnover(customerId, model.MedalInputModelDb);
+			var balance = model.MedalInputModelDb.CurrentBalanceSum < 0 ? 0 : (model.MedalInputModelDb.CurrentBalanceSum / model.MedalInputModelDb.FCFFactor);
+			model.FreeCashFlow = model.AnnualTurnover == 0 ? 0 : (model.MedalInputModelDb.HmrcEbida - balance) / model.AnnualTurnover;
+			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
+			model.NumOfStores = model.MedalInputModelDb.NumOfStores;
+			var mpHelper = new MarketPlacesHelper(Log);
+			model.PositiveFeedbacks = mpHelper.GetPositiveFeedbacks(customerId);
+			return model;
+		}
+
+		/// <summary>
+		/// If HMRC turnover > 0.7*OnlineTurnover use HMRC turnover, otherwise, if yodlee turnover > 0.7*OnlineTurnover use yodlee turnover, otherwise use online turnover 
+		///If it is negative – use 0 instead
+		///The 0.7 should be configurable via UW – config name: OnlineMedalTurnoverCutoff
+		/// </summary>
+		private decimal GetOnlineAnnualTurnover(int customerId, MedalInputModelDb dbData) {
+			var dbHelper = new DbHelper(Log);
 			var mpHelper = new MarketPlacesHelper(Log);
 			var yodlees = dbHelper.GetCustomerYodlees(customerId);
 			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, Log);
-			var today = DateTime.Today;
-			const int year = 365;
+			var onlineTurnover = mpHelper.GetOnlineTurnoverAnnualized(customerId);
+			if (dbData.HmrcRevenues > onlineTurnover*dbData.OnlineMedalTurnoverCutoff) {
+				return dbData.HmrcRevenues;
+			}
 
-			model.HasHmrc = dbData.HasHmrc;
-			model.BusinessScore = dbData.BusinessScore;
-			model.BusinessSeniority = (decimal)(today - dbData.IncorporationDate).TotalDays / year;
-			model.ConsumerScore = dbData.ConsumerScore;
-			model.EzbobSeniority = ((today.Year - dbData.RegistrationDate.Year) * 12) + today.Month - dbData.RegistrationDate.Month;
-			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < today;
-			model.IsLimited = dbData.TypeOfBusiness == "Limited" || dbData.TypeOfBusiness == "LLP";
-			model.NumOfEarlyPayments = dbData.NumOfEarlyPayments;
-			model.NumOfLatePayments = dbData.NumOfLatePayments;
-			model.NumOfOnTimeLoans = dbData.NumOfOnTimeLoans;
-			model.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), dbData.MaritalStatus);
-			model.AnnualTurnover = dbData.HasHmrc ? dbData.HmrcRevenues : yodleeIncome;
-			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;
+			if (yodleeIncome > onlineTurnover * dbData.OnlineMedalTurnoverCutoff)
+			{
+				return yodleeIncome;
+			}
 
-			var balance = dbData.CurrentBalanceSum < 0 ? 0 : (dbData.CurrentBalanceSum / dbData.FCFFactor);
-			model.FreeCashFlow = model.AnnualTurnover == 0 ? 0 : (dbData.HmrcEbida - balance) / model.AnnualTurnover;
-			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : dbData.TangibleEquity / model.AnnualTurnover;
-			model.NetWorth = dbData.ZooplaValue == 0 ? 0 : (dbData.ZooplaValue - dbData.Mortages) / (decimal)dbData.ZooplaValue;
+			if (onlineTurnover < 0) {
+				return 0;
+			}
 
-			model.NumOfStores = dbData.NumOfStores;
-
-			
-			model.PositiveFeedbacks = mpHelper.GetPositiveFeedbacks(customerId);
-
-			return model;
+			return onlineTurnover;
 		}
 
 		public override MedalOutputModel CalculateMedal(MedalInputModel model)
@@ -82,13 +77,11 @@
 			CalcDelta(model, dict);
 
 			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.OnlineLimited);
-
 			return scoreMedal;
 		}
 
 		protected override void CalcDelta(MedalInputModel model, Dictionary<Parameter, Weight> dict)
 		{
-
 			if (model.BusinessScore <= LowBusinessScore || model.ConsumerScore <= LowConsumerScore)
 			{
 				//Sum of all weights

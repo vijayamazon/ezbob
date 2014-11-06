@@ -191,7 +191,7 @@
 		public int Mortages { get; set; }
 		public DateTime? FirstRepaymentDate { get; set; }
 		public int NumOfStores { get; set; }
-		
+		public decimal OnlineMedalTurnoverCutoff { get; set; }
 	}
 
 	public class MedalInputModel {
@@ -217,7 +217,9 @@
 		/*online only*/
 		public int NumOfStores { get; set; }
 		public int PositiveFeedbacks { get; set; }
+		public decimal OnlineMedalTurnoverCutoff { get; set; }
 
+		public MedalInputModelDb MedalInputModelDb { get; set; }
 		public override string ToString()
 		{
 			return string.Format(

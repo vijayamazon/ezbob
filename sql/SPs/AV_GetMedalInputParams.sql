@@ -175,6 +175,10 @@ BEGIN
 	WHERE mp.CustomerId=@CustomerId AND mp.Disabled=0
 	AND t.InternalId IN ('A7120CB7-4C93-459B-9901-0E95E7281B59', 'A4920125-411F-4BB9-A52D-27E8A00D0A3B', '3FA5E327-FCFD-483B-BA5A-DC1815747A28')
 	
+	--Config for online cap
+	DECLARE @OnlineMedalTurnoverCutoff DECIMAL(18,4)
+	SELECT @OnlineMedalTurnoverCutoff = CAST(Value AS DECIMAL(18,4)) FROM ConfigurationVariables WHERE Name='OnlineMedalTurnoverCutoff'
+	
 	
 	-- Return All Params
 	SELECT 
@@ -198,6 +202,7 @@ BEGIN
 		@ZooplaValue AS ZooplaValue,
 		@Mortages AS Mortages,
 		@FirstRepaymentDate AS FirstRepaymentDate,
-		@NumOfStores AS NumOfStores
+		@NumOfStores AS NumOfStores,
+		@OnlineMedalTurnoverCutoff AS OnlineMedalTurnoverCutoff
 END
 GO
