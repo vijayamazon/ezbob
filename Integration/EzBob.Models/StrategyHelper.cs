@@ -11,7 +11,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
 	using CommonLib.TimePeriodLogic;
 	using Ezbob.Backend.Models;
@@ -34,6 +33,7 @@
 		private readonly CustomerMarketPlaceRepository _marketPlaceRepository;
 		private readonly CustomerAddressRepository customerAddressRepository;
 		private readonly LandRegistryRepository landRegistryRepository;
+		private readonly CustomerAnalyticsRepository _customerAnalytics;
 
 		public StrategyHelper()
 		{
@@ -45,6 +45,7 @@
 			_marketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
 			customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
 			landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
+			_customerAnalytics = ObjectFactory.GetInstance<CustomerAnalyticsRepository>();
 		}
 
 		public double GetAnualTurnOverByCustomer(int customerId)
@@ -381,14 +382,23 @@
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
 
 		public int MarketplaceSeniority(Customer customer) {
-			return Convert.ToInt32(
-				(DateTime.UtcNow - customer.GetMarketplaceOriginationDate(oIncludeMp: mp =>
-					!mp.Marketplace.IsPaymentAccount ||
-					mp.Marketplace.InternalId == PayPal ||
-					mp.Marketplace.InternalId == Hmrc
-				)).TotalDays
+			DateTime oMpOriginationDate = customer.GetMarketplaceOriginationDate(oIncludeMp: mp =>
+				!mp.Marketplace.IsPaymentAccount ||
+				mp.Marketplace.InternalId == PayPal ||
+				mp.Marketplace.InternalId == Hmrc
 			);
-		}
+
+			CustomerAnalytics oAnalytics = _customerAnalytics.GetAll().FirstOrDefault(ca => ca.Id == customer.Id);
+
+			DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;
+
+			if (oIncorporationDate.Year < 1000)
+				oIncorporationDate = DateTime.UtcNow;
+
+			DateTime oDate = (oMpOriginationDate < oIncorporationDate) ? oMpOriginationDate : oIncorporationDate;
+
+			return (int)(DateTime.UtcNow - oDate).TotalDays;
+		} // MarketplaceSeniority
 
 		public List<Loan> GetOutstandingLoans(int customerId)
 		{
