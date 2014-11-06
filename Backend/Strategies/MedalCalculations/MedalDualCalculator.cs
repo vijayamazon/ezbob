@@ -25,7 +25,7 @@
 				bool medalCalculated = false;
 				if (typeOfBusiness == "LLP" || typeOfBusiness == "Limited")
 				{
-					if (numOfEbayAmazonPayPalMps > 0)
+					if (numOfEbayAmazonPayPalMps > 0 && numOfHmrcMps < 2)
 					{
 						var onlineLimitedMedalCalculator1 = new OnlineLimitedMedalCalculator1(db, log);
 						result1 = onlineLimitedMedalCalculator1.CalculateMedalScore(customerId, calculationTime);
