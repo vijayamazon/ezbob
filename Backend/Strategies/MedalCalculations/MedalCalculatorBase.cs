@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using ConfigManager;
 	using Experian;
 	using EzBob.Models;
@@ -22,7 +23,6 @@
 
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
-		protected bool firstRepaymentDatePassed;
 		protected bool failedCalculatingFreeCashFlow;
 		protected bool failedCalculatingTangibleEquity;
 		protected bool freeCashFlowDataAvailable;
@@ -57,7 +57,7 @@
 				{
 					RedistributeFreeCashFlowWeight();
 				}
-				if (firstRepaymentDatePassed)
+				if (Results.FirstRepaymentDatePassed)
 				{
 					Results.EzbobSeniorityWeight = 2;
 					Results.NumOfLoansWeight = 3.33m;
@@ -75,6 +75,10 @@
 				Results.TotalScoreNormalized = (Results.TotalScore - totalScoreMin) / (totalScoreMax - totalScoreMin);
 
 				CalculateMedal();
+
+				CalculateOffer();
+
+				// TODO: calculate interest rate according to pricing model (and loan source?)
 			}
 			catch (Exception e)
 			{
@@ -153,7 +157,7 @@
 				Results.MaritalStatus = MaritalStatus.Other;
 			}
 
-			firstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
+			Results.FirstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
 			Results.EzbobSeniority = sr["EzbobSeniority"];
 			Results.NumOfLoans = sr["OnTimeLoans"];
 			Results.NumOfLateRepayments = sr["NumOfLatePayments"];
@@ -301,6 +305,37 @@
 			else
 			{
 				Results.Medal = MedalMultiplier.Diamond;
+			}
+		}
+
+		private void CalculateOffer()
+		{
+			if (Results == null || string.IsNullOrEmpty(Results.Error) || Results.MedalType == "NoMedal")
+			{
+				return;
+			}
+
+			SafeReader sr = db.GetFirst(
+				"GetMedalCoefficients",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("MedalFlow", "Limited"), // The coefficients are CURRENTLY identical for all flows - we use "Limited" as it is the only existing one
+				new QueryParameter("Medal", Results.Medal.ToString())
+				);
+
+			if (!sr.IsEmpty)
+			{
+				decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
+				decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
+				decimal valueAddedMedalFactor = sr["ValueAdded"];
+				decimal offerAccordingToAnnualTurnover = Results.AnnualTurnover * annualTurnoverMedalFactor;
+				decimal offerAccordingToFreeCashFlow = Results.FreeCashFlowValue * freeCashFlowMedalFactor;
+				decimal offerAccordingToValueAdded = Results.ValueAdded * valueAddedMedalFactor;
+
+				Results.OfferedLoanAmount = (int) new[] {
+					offerAccordingToAnnualTurnover,
+					offerAccordingToFreeCashFlow,
+					offerAccordingToValueAdded
+				}.Where(x => x >= CurrentValues.Instance.LimitedMedalMinOffer).Min();
 			}
 		}
 

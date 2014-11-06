@@ -143,7 +143,7 @@
 				dataGatherer.NumOfYodleeMps, dataGatherer.NumOfEbayAmazonPayPalMps);
 			instance.Execute();
 
-			modelLoanOffer = CalculateOfferAccordingToMedal(instance.Result);
+			modelLoanOffer = instance.Result.OfferedLoanAmount;
 		}
 
 		private void ProcessDecision(ScoreMedalOffer scoringResult, AutoDecisionRejectionResponse autoDecisionRejectionResponse)
@@ -297,77 +297,6 @@
 			{
 				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, dataGatherer.PropertyStatusDescription);
 			}
-		}
-
-		private int CalculateOfferAccordingToMedal(ScoreResult scoreResult)
-		{
-			if (scoreResult == null || string.IsNullOrEmpty(scoreResult.Error) || scoreResult.MedalType == "NoMedal")
-			{
-				return 0;
-			}
-
-			SafeReader sr = DB.GetFirst(
-				"GetMedalCoefficients",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("MedalFlow", "Limited"), // The coefficients are identical for all flows
-				new QueryParameter("Medal", scoreResult.Medal.ToString())
-				);
-
-			if (!sr.IsEmpty)
-			{
-				decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
-				decimal offerAccordingToAnnualTurnover = scoreResult.AnnualTurnover * annualTurnoverMedalFactor;
-
-				if (scoreResult.InnerFlowName == "HMRC")
-				{
-					decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
-					decimal valueAddedMedalFactor = sr["ValueAdded"];
-					decimal offerAccordingToFreeCashFlow = scoreResult.FreeCashFlowValue * freeCashFlowMedalFactor;
-					decimal offerAccordingToValueAdded = scoreResult.ValueAdded * valueAddedMedalFactor;
-
-					// Get min that is over threshold
-					if ((offerAccordingToFreeCashFlow <= offerAccordingToValueAdded ||
-						    offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
-						(offerAccordingToFreeCashFlow <= offerAccordingToAnnualTurnover ||
-						    offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
-						offerAccordingToFreeCashFlow >= dataGatherer.LimitedMedalMinOffer)
-					{
-						Log.Info("Calculated offer for customer: {0} according to free cash flow ({1})", customerId,
-							        offerAccordingToFreeCashFlow);
-						return (int) offerAccordingToFreeCashFlow;
-					}
-
-					if ((offerAccordingToValueAdded <= offerAccordingToFreeCashFlow ||
-						    offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
-						(offerAccordingToValueAdded <= offerAccordingToAnnualTurnover ||
-						    offerAccordingToAnnualTurnover <= dataGatherer.LimitedMedalMinOffer) &&
-						offerAccordingToValueAdded >= dataGatherer.LimitedMedalMinOffer)
-					{
-						Log.Info("Calculated offer for customer: {0} according to value added ({1})", customerId,
-							        offerAccordingToValueAdded);
-						return (int) offerAccordingToValueAdded;
-					}
-
-					if ((offerAccordingToAnnualTurnover <= offerAccordingToFreeCashFlow ||
-						    offerAccordingToFreeCashFlow <= dataGatherer.LimitedMedalMinOffer) &&
-						(offerAccordingToAnnualTurnover <= offerAccordingToValueAdded ||
-						    offerAccordingToValueAdded <= dataGatherer.LimitedMedalMinOffer) &&
-						offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
-					{
-						Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId,
-							        offerAccordingToAnnualTurnover);
-						return (int) offerAccordingToAnnualTurnover;
-					}
-				}
-				else if (offerAccordingToAnnualTurnover >= dataGatherer.LimitedMedalMinOffer)
-				{
-					Log.Info("Calculated offer for customer: {0} according to annual turnover ({1})", customerId,
-						        offerAccordingToAnnualTurnover);
-					return (int) offerAccordingToAnnualTurnover;
-				}
-			}
-
-			return 0;
 		}
 
 		private AutoDecisionRejectionResponse ProcessRejections()

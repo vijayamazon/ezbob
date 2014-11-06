@@ -4,7 +4,9 @@ GO
 
 ALTER PROCEDURE StoreNewMedal
 	(@CustomerId INT
+	,@CalculationTime DATETIME
 	,@MedalType NVARCHAR(20)
+	,@FirstRepaymentDatePassed BIT
 	,@BusinessScore INT
 	,@BusinessScoreWeight DECIMAL(18,6)
 	,@BusinessScoreGrade DECIMAL(18,6)
@@ -71,14 +73,17 @@ ALTER PROCEDURE StoreNewMedal
 	,@TotalScore DECIMAL(18,6)
 	,@TotalScoreNormalized DECIMAL(18,6)
 	,@Medal NVARCHAR(50)
-	,@Error NVARCHAR(500))
+	,@Error NVARCHAR(500)
+	,@OfferedLoanAmount INT)
 AS
 BEGIN
 	UPDATE MedalCalculations SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
 
 	INSERT INTO MedalCalculations (
 	 CustomerId
+	,CalculationTime
 	,MedalType
+	,FirstRepaymentDatePassed
 	,IsActive
 	,BusinessScore
 	,BusinessScoreWeight
@@ -146,10 +151,13 @@ BEGIN
 	,TotalScore
 	,TotalScoreNormalized
 	,Medal
-	,Error)
+	,Error
+	,OfferedLoanAmount)
 	VALUES (
 	 @CustomerId
+	,@CalculationTime
 	,@MedalType
+	,@FirstRepaymentDatePassed
 	,1
 	,@BusinessScore
 	,@BusinessScoreWeight
@@ -217,6 +225,7 @@ BEGIN
 	,@TotalScore
 	,@TotalScoreNormalized
 	,@Medal
-	,@Error)
+	,@Error
+	,@OfferedLoanAmount)
 END
 GO

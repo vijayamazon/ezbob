@@ -30,6 +30,7 @@
 		public decimal HmrcAnnualTurnover { get; set; }
 		public decimal BankAnnualTurnover { get; set; }
 		public decimal OnlineAnnualTurnover { get; set; }
+		public bool FirstRepaymentDatePassed { get; set; }
 
 		// Calculated data
 		public decimal AnnualTurnover { get; set; }
@@ -99,11 +100,14 @@
 		public decimal TotalScoreNormalized { get; set; }
 		public MedalMultiplier Medal { get; set; }
 		public string Error { get; set; }
+		public int OfferedLoanAmount { get; set; }
 
 		public bool IsIdentical(ScoreResult other)
 		{
 			if (CustomerId != other.CustomerId ||
+				CalculationTime != other.CalculationTime ||
 				MedalType != other.MedalType ||
+				FirstRepaymentDatePassed != other.FirstRepaymentDatePassed ||
 				BusinessScore != other.BusinessScore ||
 				BusinessScoreWeight != other.BusinessScoreWeight ||
 				BusinessScoreGrade != other.BusinessScoreGrade ||
@@ -170,7 +174,8 @@
 				TotalScore != other.TotalScore ||
 				TotalScoreNormalized != other.TotalScoreNormalized ||
 				Medal != other.Medal ||
-				Error != other.Error)
+				Error != other.Error ||
+				OfferedLoanAmount != other.OfferedLoanAmount)
 			{
 				return false;
 			}
@@ -182,7 +187,9 @@
 		{
 			db.ExecuteNonQuery("StoreNewMedal", CommandSpecies.StoredProcedure,
 							   new QueryParameter("CustomerId", CustomerId),
+							   new QueryParameter("CalculationTime", CalculationTime),
 							   new QueryParameter("MedalType", MedalType),
+							   new QueryParameter("FirstRepaymentDatePassed", FirstRepaymentDatePassed),
 							   new QueryParameter("BusinessScore", BusinessScore),
 							   new QueryParameter("BusinessScoreWeight", BusinessScoreWeight),
 							   new QueryParameter("BusinessScoreGrade", BusinessScoreGrade),
@@ -249,7 +256,8 @@
 							   new QueryParameter("TotalScore", TotalScore),
 							   new QueryParameter("TotalScoreNormalized", TotalScoreNormalized),
 							   new QueryParameter("Medal", Medal.ToString()),
-							   new QueryParameter("Error", Error));
+							   new QueryParameter("Error", Error),
+							   new QueryParameter("OfferedLoanAmount", OfferedLoanAmount));
 		}
 	}
 }
