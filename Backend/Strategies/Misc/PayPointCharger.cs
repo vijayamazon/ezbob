@@ -91,7 +91,7 @@
 
 			if (autoPaymentResult.PaymentCollectedSuccessfully)
 			{
-				SendConfirmationMail(firstName, amountDue, refNum, customerMail);
+				SendConfirmationMail(firstName, autoPaymentResult.ActualAmountCharged, refNum, customerMail);
 				SendLoanStatusMail(loanId, firstName, refNum, customerMail);
 			}
 		}
