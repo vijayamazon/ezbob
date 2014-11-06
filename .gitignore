@@ -50,3 +50,4 @@ packages/
 App/EzReporting/EzReportsWeb/connection-strings.xml
 App/PluginWeb/EzBob.Web/connection-strings.xml
 App/EzReporting/EzReportsWeb/Properties/PublishProfiles/LocalPublish.pubxml.user
+App/EzTvDashboard/EzTvDashboard/Properties/PublishProfiles/TvDashboard.pubxml.user
