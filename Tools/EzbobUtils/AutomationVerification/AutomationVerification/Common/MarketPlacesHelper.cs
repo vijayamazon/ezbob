@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Common;
 	using Ezbob.Logger;
 
 	public class MarketPlacesHelper
@@ -60,42 +59,28 @@
 			return sum + Math.Max(paypal, ebay);
 		}
 
-		public decimal GetOnlineTurnoverAnnualized(List<MarketPlace> mps)
-		{
-			//TODO implement
-			/*
-			double paypal = 0;
-			double ebay = 0;
-			double sum = 0;
+		public decimal GetOnlineTurnoverAnnualized(int customerId) {
 			var dbHelper = new DbHelper(Log);
-
-			foreach (var marketPlace in mps)
-			{
-				var afs = dbHelper.GetAnalysisFunctions(marketPlace.Id);
-				if (!afs.Any())
-				{
-					continue;
-				}
-				var av =
-					afs.OrderByDescending(af => af.TimePeriod).FirstOrDefault(af => AnalysisFunctionIncome.IncomeFunctions.Contains(af.Function) && af.TimePeriod <= timePeriod);
-				double currentTurnover = Convert.ToDouble(av != null ? av.Value : 0);
-
-				if (afs[0].MarketPlaceName == "Pay Pal")
-				{
-					paypal += currentTurnover;
-				}
-				else if (afs[0].MarketPlaceName == "eBay")
-				{
-					ebay += currentTurnover;
-				}
-				else
-				{
-					sum += currentTurnover;
+			
+			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
+			decimal paypal = 0;
+			decimal ebay = 0;
+			decimal amazon = 0;
+			foreach (var marketPlace in mps) {
+				var annualizedRevenue = dbHelper.GetOnlineAnnaulizedRevenue(marketPlace.Id);
+				switch (marketPlace.Type) {
+					case "eBay":
+						ebay += annualizedRevenue;
+						break;
+					case "Amazon":
+						amazon += annualizedRevenue;
+						break;
+					case "Pay Pal":
+						paypal += annualizedRevenue;
+						break;
 				}
 			}
-			return sum + Math.Max(paypal, ebay);
-			*/
-			return 0;
+			return amazon + Math.Max(paypal, ebay);
 		}
 
 		public decimal GetYodleeAnnualized(List<MarketPlace> yodlees, ASafeLog log) {

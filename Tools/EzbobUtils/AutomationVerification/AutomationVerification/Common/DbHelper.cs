@@ -161,14 +161,7 @@
 			var afvs = new List<AnalysisFunction>();
 			foreach (SafeReader row in srList)
 			{
-				AddAnalysisFunctionToList(afvs, row);
-			}
-			return afvs;
-		}
-
-		private void AddAnalysisFunctionToList(List<AnalysisFunction> afvs, SafeReader row)
-		{
-			afvs.Add(new AnalysisFunction
+				afvs.Add(new AnalysisFunction
 				{
 					Updated = row["Updated"],
 					MarketPlaceName = row["MarketPlaceName"],
@@ -176,8 +169,22 @@
 					Function = row["FunctionName"],
 					TimePeriod = (TimePeriodEnum)(int.Parse(row["TimePeriod"].ToString())),
 				});
+			}
+			return afvs;
 		}
 
+		/// <summary>
+		/// Retrieve last analysis functions values form min annaulized income for ebay/amazon/paypal mp
+		/// </summary>
+		/// <param name="mpId">Marketplace id</param>
+		/// <returns></returns>
+		public decimal GetOnlineAnnaulizedRevenue(int mpId)
+		{
+			var conn = new SqlConnection(_log);
+			var minAnnualizedRevenue = conn.ExecuteScalar<decimal>("AV_GetMinAnnualizedRevenue", new QueryParameter("@CustomerMarketPlaceId", mpId));
+			return minAnnualizedRevenue;
+		}
+		
 		public int GetExperianScore(int customerId)
 		{
 			var conn = new SqlConnection(_log);

@@ -72,7 +72,7 @@
 					{
 						Log.Error("Exception during medal calculation for customer:{0}", customerId);
 					}
-					return ActionResult.SkipAll;
+					return ActionResult.Continue;
 				},
 				"Temp_GetAllCustomersForMedalComparison",
 				CommandSpecies.StoredProcedure

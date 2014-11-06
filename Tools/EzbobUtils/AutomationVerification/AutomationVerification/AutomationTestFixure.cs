@@ -1,5 +1,6 @@
 ﻿namespace AutomationVerification
 {
+	using System;
 	using AutomationCalculator.AutoDecision;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
@@ -12,7 +13,7 @@
 		public static readonly ASafeLog Log = new ConsoleLog();
 
 		[Test]
-		public void testMedalCalculation()
+		public void TestMedalCalculation()
 		{
 			var msc = new OfflineLImitedMedalCalculator(Log);
 			var data = new MedalInputModel {
@@ -41,7 +42,7 @@
 		}
 
 		[Test]
-		public void testMedalCalculation2()
+		public void TestMedalCalculation2()
 		{
 			var msc = new OfflineLImitedMedalCalculator(Log);
 			var data = msc.GetInputParameters(14223);
@@ -51,7 +52,7 @@
 		}
 
 		[Test]
-		public void testAutoRerejetion()
+		public void TestAutoRerejetion()
 		{
 			var arr = new AutoReRejectionCalculator(Log);
 			string reason;
@@ -60,7 +61,7 @@
 		}
 
 		[Test]
-		public void testAutoRejetion()
+		public void TestAutoRejetion()
 		{
 			var db = new DbHelper(Log);
 			var rejectionConstants = db.GetRejectionConstants();
@@ -71,27 +72,27 @@
 		}
 
 		[Test]
-		public void testAutoReapproval()
+		public void TestAutoReapproval()
 		{
 			var arr = new AutoReApprovalCalculator(Log);
 			string reason;
-			int amount = 0;
+			int amount;
 			var des = arr.IsAutoReApproved(14223,0, out reason, out amount);
 			Assert.AreEqual(false, des);
 		}
 
 		[Test]
-		public void testAutoApproval()
+		public void TestAutoApproval()
 		{
 			var arr = new AutoApprovalCalculator(Log);
 			string reason;
-			int amount = 0;
+			int amount;
 			var des = arr.IsAutoApproved(14223, out reason, out amount);
 			Assert.AreEqual(false, des);
 		}
 
 		[Test]
-		public void testIsOffline()
+		public void TestIsOffline()
 		{
 			var db = new DbHelper(Log);
 			var isOffline = db.IsOffline(25);
@@ -102,7 +103,7 @@
 		}
 
 		[Test]
-		public void testJoin()
+		public void TestJoin()
 		{
 			var db = new DbHelper(Log);
 			var mps = db.GetCustomerPaymentMarketPlaces(16241);
@@ -116,6 +117,14 @@
 			var feedbacks = mpHelper.GetPositiveFeedbacks(14166);
 			Assert.AreEqual(33885, feedbacks);
 
+		}
+
+		[Test]
+		public void TestOnlineTurnover()
+		{
+			var mpHelper = new MarketPlacesHelper(Log);
+			var turnover = mpHelper.GetOnlineTurnoverAnnualized(14166);
+			Assert.IsTrue(Math.Abs(turnover - 10812) < 1);
 		}
 	}
 }

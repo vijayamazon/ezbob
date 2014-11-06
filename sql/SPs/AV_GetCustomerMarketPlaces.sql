@@ -11,7 +11,7 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	SELECT mp.Id mpId, mp.DisplayName Name, t.Name Type, mp.OriginationDate FROM MP_CustomerMarketPlace mp 
+	SELECT mp.Id Id, mp.DisplayName Name, t.Name Type, mp.OriginationDate FROM MP_CustomerMarketPlace mp 
 	INNER JOIN MP_MarketplaceType t 
 	ON t.Id = mp.MarketPlaceId 
 	WHERE CustomerId=@CustomerId 
