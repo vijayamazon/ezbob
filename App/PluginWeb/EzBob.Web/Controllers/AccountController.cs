@@ -502,7 +502,6 @@ namespace EzBob.Web.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Authorize(Roles = "Underwriter, Web")]
 		public JsonResult CheckingCompany(string postcode, string companyName, string filter, string refNum) {
 			var nFilter = TargetResults.LegalStatus.DontCare;
 
