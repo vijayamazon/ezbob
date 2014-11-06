@@ -310,7 +310,7 @@
 
 		private void CalculateOffer()
 		{
-			if (Results == null || string.IsNullOrEmpty(Results.Error) || Results.MedalType == "NoMedal")
+			if (Results == null || !string.IsNullOrEmpty(Results.Error) || Results.MedalType == "NoMedal")
 			{
 				return;
 			}
