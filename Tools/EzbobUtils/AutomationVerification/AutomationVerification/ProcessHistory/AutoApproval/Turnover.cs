@@ -3,7 +3,7 @@
 		public Turnover(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
-		public string PeriodName { get; set; }
+		public virtual string PeriodName { get; set; }
 
 		protected override string ScoreName {
 			get { return PeriodName + " turnover"; }

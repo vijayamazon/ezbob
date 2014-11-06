@@ -3,12 +3,18 @@
 		public DefaultAccounts(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
-		public void Init() {
-			HasDefaultAccounts = !CompletedSuccessfully;
+		public virtual ATrace Init() {
+			HasProperty = !CompletedSuccessfully;
 
-			Comment = string.Format("customer {0} has {1}default accounts", CustomerID, HasDefaultAccounts ? string.Empty : "no ");
+			Comment = string.Format("customer {0} has {1}{2}", CustomerID, HasProperty ? string.Empty : "no ", PropertyName);
+
+			return this;
 		} // Init
 
-		public bool HasDefaultAccounts { get; private set; }
+		public virtual bool HasProperty { get; private set; }
+
+		protected virtual string PropertyName {
+			get { return "default accounts"; }
+		} // PropertyName
 	}  // class DefaultAccounts
 } // namespace

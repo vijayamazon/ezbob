@@ -28,6 +28,14 @@
 
 		#endregion property Comment
 
+		#region method ToString
+
+		public override string ToString() {
+			return string.Format("{1} {0}: {2}", Name, CompletedSuccessfully ? "passed" : "failed", Comment);
+		} // ToString
+
+		#endregion method ToString
+
 		#endregion public
 
 		#region protected

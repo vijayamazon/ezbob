@@ -9,7 +9,7 @@
 			Max = nMax;
 
 			Comment = string.Format(
-				"customer {0} {3} is {1}, allowed range is {2}...{3} (inclusive)",
+				"customer {0} {4} is {1}, allowed range is {2}...{3} (inclusive)",
 				CustomerID, Value, Min, Max, ValueName
 			);
 

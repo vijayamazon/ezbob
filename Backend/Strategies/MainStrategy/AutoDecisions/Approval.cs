@@ -110,9 +110,9 @@
 		} // MakeDecision
 
 		private void CheckAutoApprovalConformance(decimal outstandingOffers) {
-			m_oTrail.Add<InititalAssignment>(this.autoApprovedAmount > 0).Init(this.autoApprovedAmount);
+			m_oTrail.Append<InitialAssignment>(this.autoApprovedAmount > 0).Init(this.autoApprovedAmount);
 
-			log.Info("Checking if auto approval should take place for customer {0}...", customerId);
+			log.Debug("Checking if auto approval should take place for customer {0}...", customerId);
 
 			try {
 				CheckAMLResult();
@@ -138,120 +138,90 @@
 					// Reduce the system calculated amount by the already open amount
 					autoApprovedAmount -= (int)outstandingPrincipal;
 
-					m_oTrail.Add<ReduceOutstandingPrincipal>(true).Init(outstandingPrincipal, autoApprovedAmount);
+					StepDone<ReduceOutstandingPrincipal>().Init(outstandingPrincipal, autoApprovedAmount);
 				} // if
 
 				int autoApproveMinAmount = CurrentValues.Instance.AutoApproveMinAmount;
 				int autoApproveMaxAmount = CurrentValues.Instance.AutoApproveMaxAmount;
 
-				if (autoApprovedAmount < autoApproveMinAmount || autoApprovedAmount > autoApproveMaxAmount) {
-					autoApprovedAmount = 0;
-					ATrace oTrace = m_oTrail.Add<AmountOutOfRangle>(false).Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
-					log.Info("No auto approval: {0}", oTrace.Comment);
-				} // if
+				if (autoApprovedAmount < autoApproveMinAmount || autoApprovedAmount > autoApproveMaxAmount)
+					StepFailed<AmountOutOfRangle>().Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
 				else
-					m_oTrail.Add<AmountOutOfRangle>(true).Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
+					StepDone<AmountOutOfRangle>().Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
 			}
 			catch (Exception ex) {
-				autoApprovedAmount = 0;
-				log.Error(ex, "No auto approval: Exception while checking auto approval conditions.");
-				m_oTrail.Add<ExceptionThrown>(false).Init(ex);
+				StepFailed<ExceptionThrown>().Init(ex);
 			} // try
 
-			log.Info("Calculated auto approve amount:{0}", autoApprovedAmount);
-			m_oTrail.Add<Complete>(true).Init(autoApprovedAmount);
+			m_oTrail.Append<Complete>(autoApprovedAmount > 0).Init(autoApprovedAmount);
+
+			log.Debug("Checking if auto approval should take place for customer {0} complete.", customerId);
+
+			log.Msg("Auto approved amount: {0}. {1}", autoApprovedAmount, m_oTrail);
 		} // CheckAutoApprovalConformance
 
 		private void CheckDefaultAccounts() {
-			if (experianDefaultAccountRepository.GetAll().Any(entry => entry.Customer.Id == customerId)) {
-				autoApprovedAmount = 0;
-				log.Info("No auto approval: No auto approval for customer with default accounts");
-				m_oTrail.Add<DefaultAccounts>(false).Init();
-			} // if
+			if (experianDefaultAccountRepository.GetAll().Any(entry => entry.Customer.Id == customerId))
+				StepFailed<DefaultAccounts>().Init();
 			else
-				m_oTrail.Add<DefaultAccounts>(true).Init();
+				StepDone<DefaultAccounts>().Init();
 		} // CheckDefaultAccounts
 
 		private void CheckAMLResult() {
-			if (customer == null) {
-				autoApprovedAmount = 0;
-				log.Info("No auto approval: AML is not checked because customer not found by id {0}", customerId);
-				m_oTrail.Add<AmlCheck>(false).Init("failed because customer not found");
-			}
-			else if (customer.AMLResult != "Passed") {
-				autoApprovedAmount = 0;
-				log.Info("No auto approval: AML is not passed");
-				m_oTrail.Add<AmlCheck>(false).Init(customer.AMLResult);
-			} // if
+			if (customer == null)
+				StepFailed<AmlCheck>().Init("failed because customer not found");
+			else if (customer.AMLResult != "Passed")
+				StepFailed<AmlCheck>().Init(customer.AMLResult);
 			else
-				m_oTrail.Add<AmlCheck>(true).Init(customer.AMLResult);
+				StepDone<AmlCheck>().Init(customer.AMLResult);
 		} // CheckAMLResult
 
 		private void CheckCustomerStatus() {
-			if (customer == null) {
-				autoApprovedAmount = 0;
-				log.Info("No auto approval: customer status not checked because customer not found by id {0}", customerId);
-				m_oTrail.Add<CustomerStatus>(false).Init("unknown");
-			}
-			else if (!customer.CollectionStatus.CurrentStatus.IsEnabled) {
-				autoApprovedAmount = 0;
-				log.Info("No auto approval: Only 'enabled' statuses are allowed for auto approval. Customer status is:{0}", customer.CollectionStatus.CurrentStatus.Name);
-				m_oTrail.Add<CustomerStatus>(false).Init(customer.CollectionStatus.CurrentStatus.Name);
-			} // if
+			if (customer == null)
+				StepFailed<CustomerStatus>().Init("unknown");
+			else if (!customer.CollectionStatus.CurrentStatus.IsEnabled)
+				StepFailed<CustomerStatus>().Init(customer.CollectionStatus.CurrentStatus.Name);
 			else
-				m_oTrail.Add<CustomerStatus>(true).Init(customer.CollectionStatus.CurrentStatus.Name);
+				StepDone<CustomerStatus>().Init(customer.CollectionStatus.CurrentStatus.Name);
 		} // CheckCustomerStatus
 
 		private void CheckBusinessScore() {
 			int nThreshold = CurrentValues.Instance.AutoApproveBusinessScoreThreshold;
 
-			if (minCompanyScore < nThreshold) {
-				autoApprovedAmount = 0;
-				var oTrace = m_oTrail.Add<BusinessScore>(false).Init(minCompanyScore, nThreshold);
-				log.Info("No auto approval: {0}.", oTrace.Comment);
-			} // if
+			if (minCompanyScore < nThreshold)
+				StepFailed<BusinessScore>().Init(minCompanyScore, nThreshold);
 			else
-				m_oTrail.Add<BusinessScore>(true).Init(minCompanyScore, nThreshold);
+				StepDone<BusinessScore>().Init(minCompanyScore, nThreshold);
 		} // CheckBusinessScore
 
 		private void CheckExperianScore() {
 			int autoApproveExperianScoreThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold;
 
-			if (minExperianScore < autoApproveExperianScoreThreshold) {
-				autoApprovedAmount = 0;
-				var oTrace = m_oTrail.Add<BusinessScore>(false).Init(minExperianScore, autoApproveExperianScoreThreshold);
-				log.Info("No auto approval: {0}.", oTrace.Comment);
-			} // if
+			if (minExperianScore < autoApproveExperianScoreThreshold)
+				StepFailed<BusinessScore>().Init(minExperianScore, autoApproveExperianScoreThreshold);
 			else
-				m_oTrail.Add<BusinessScore>(true).Init(minExperianScore, autoApproveExperianScoreThreshold);
+				StepDone<BusinessScore>().Init(minExperianScore, autoApproveExperianScoreThreshold);
 		} // CheckExperianScore
 
 		private void CheckAge() {
-			int? customerAge = null;
 			int autoApproveCustomerMinAge = CurrentValues.Instance.AutoApproveCustomerMinAge;
 			int autoApproveCustomerMaxAge = CurrentValues.Instance.AutoApproveCustomerMaxAge;
 
-			if (customer == null) {
-				log.Info("No auto approval: customer age not checked because customer not found by id {0}", customerId);
-				autoApprovedAmount = 0;
-				m_oTrail.Add<Age>(false).Init(-1, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
-			}
+			if (customer == null)
+				StepFailed<Age>().Init(-1, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
 			else if (customer.PersonalInfo.DateOfBirth != null) {
 				DateTime now = DateTime.UtcNow;
 
-				customerAge = now.Year - customer.PersonalInfo.DateOfBirth.Value.Year;
+				int customerAge = now.Year - customer.PersonalInfo.DateOfBirth.Value.Year;
 
-				if (now < customer.PersonalInfo.DateOfBirth.Value.AddYears(customerAge.Value))
+				if (now < customer.PersonalInfo.DateOfBirth.Value.AddYears(customerAge))
 					customerAge--;
-			} // if
 
-			if (customerAge == null || customerAge < autoApproveCustomerMinAge || customerAge > autoApproveCustomerMaxAge) {
-				autoApprovedAmount = 0;
-				ATrace oTrace = m_oTrail.Add<Age>(false).Init(customerAge ?? -1, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
-				log.Info("No auto approval: {0}.", oTrace.Comment);
+				if (customerAge < autoApproveCustomerMinAge || customerAge > autoApproveCustomerMaxAge)
+					StepFailed<Age>().Init(customerAge, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
+				else
+					StepDone<Age>().Init(customerAge, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
 			} // if
-			else
-				m_oTrail.Add<Age>(true).Init(customerAge.Value, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
 		} // CheckAge
 
 		private void CheckTurnovers() {
@@ -269,51 +239,39 @@
 		) {
 			int turnover = (int)strategyHelper.GetTurnoverForPeriod(mpAnalysis, nPeriod);
 
-			if (turnover < nThreshold) {
-				autoApprovedAmount = 0;
+			Turnover oTrace;
 
-				Turnover oTrace = (Turnover)m_oTrail.Add<Turnover>(false).Init(turnover, nThreshold);
-				oTrace.PeriodName = nPeriod.ToString();
+			if (turnover < nThreshold)
+				oTrace = (Turnover)StepFailed<Turnover>();
+			else
+				oTrace = (Turnover)StepDone<Turnover>();
 
-				log.Info("No auto approval: {0}.", oTrace.Comment);
-			}
-			else {
-				Turnover oTrace = (Turnover)m_oTrail.Add<Turnover>(true).Init(turnover, nThreshold);
-				oTrace.PeriodName = nPeriod.ToString();
-			} // if
+			oTrace.PeriodName = nPeriod.ToString();
+			oTrace.Init(turnover, nThreshold);
 		} // CheckOnePeriodTurnover
 
 		private void CheckSeniority() {
 			int autoApproveMinMpSeniorityDays = CurrentValues.Instance.AutoApproveMinMPSeniorityDays;
 
-			if (customer == null) {
-				autoApprovedAmount = 0;
-				var oTrace = m_oTrail.Add<MarketplaceSeniority>(false).Init(-1, autoApproveMinMpSeniorityDays);
-				log.Info("No auto approval: {0}.", oTrace.Comment);
-			}
+			if (customer == null)
+				StepFailed<MarketplaceSeniority>().Init(-1, autoApproveMinMpSeniorityDays);
 			else {
 				int marketplaceSeniorityInDays = strategyHelper.MarketplaceSeniority(customer);
 
-				if (marketplaceSeniorityInDays < autoApproveMinMpSeniorityDays) {
-					autoApprovedAmount = 0;
-					var oTrace = m_oTrail.Add<MarketplaceSeniority>(false).Init(marketplaceSeniorityInDays, autoApproveMinMpSeniorityDays);
-					log.Info("No auto approval: {0}.", oTrace.Comment);
-				} // if
+				if (marketplaceSeniorityInDays < autoApproveMinMpSeniorityDays)
+					StepFailed<MarketplaceSeniority>().Init(marketplaceSeniorityInDays, autoApproveMinMpSeniorityDays);
 				else
-					m_oTrail.Add<MarketplaceSeniority>(true).Init(marketplaceSeniorityInDays, autoApproveMinMpSeniorityDays);
+					StepDone<MarketplaceSeniority>().Init(marketplaceSeniorityInDays, autoApproveMinMpSeniorityDays);
 			} // if
 		} // CheckSeniority
 
 		private void CheckOutstandingOffers(decimal outstandingOffers) {
 			int autoApproveMaxOutstandingOffers = CurrentValues.Instance.AutoApproveMaxOutstandingOffers;
 
-			if (outstandingOffers >= autoApproveMaxOutstandingOffers) {
-				autoApprovedAmount = 0;
-				var oTrace = m_oTrail.Add<OutstandingOffers>(false).Init(outstandingOffers, autoApproveMaxOutstandingOffers);
-				log.Info("No auto approval: {0}.", oTrace.Comment);
-			} // if
+			if (outstandingOffers >= autoApproveMaxOutstandingOffers)
+				StepFailed<OutstandingOffers>().Init(outstandingOffers, autoApproveMaxOutstandingOffers);
 			else
-				m_oTrail.Add<OutstandingOffers>(true).Init(outstandingOffers, autoApproveMaxOutstandingOffers);
+				StepDone<OutstandingOffers>().Init(outstandingOffers, autoApproveMaxOutstandingOffers);
 		} // CheckOutstandingOffers
 
 		private void CheckTodaysLoans() {
@@ -328,10 +286,10 @@
 			if (todayLoans.Any())
 				todayLoansAmount = todayLoans.Sum(l => l.LoanAmount);
 
-			if (todayLoansAmount >= autoApproveMaxTodayLoans) {
-				log.Info("No auto approval: Maximal allowed today's loans for auto approval is: {0}. Today's loan amount is:{1}", autoApproveMaxTodayLoans, todayLoansAmount);
-				autoApprovedAmount = 0;
-			} // if
+			if (todayLoansAmount >= autoApproveMaxTodayLoans)
+				StepFailed<TodayLoans>().Init(todayLoansAmount, autoApproveMaxTodayLoans);
+			else
+				StepDone<TodayLoans>().Init(todayLoansAmount, autoApproveMaxTodayLoans);
 		} // CheckTodaysLoans
 
 		private void CheckTodaysApprovals() {
@@ -341,23 +299,24 @@
 
 			int numOfApprovalsToday = cashRequestsRepository.GetAll().Count(cr => cr.CreationDate.HasValue && cr.CreationDate.Value.Year == today.Year && cr.CreationDate.Value.Month == today.Month && cr.CreationDate.Value.Day == today.Day && cr.UnderwriterComment == "Auto Approval");
 
-			if (numOfApprovalsToday >= autoApproveMaxDailyApprovals) {
-				log.Info("No auto approval: Maximal allowed auto approvals per day is: {0}.", autoApproveMaxDailyApprovals);
-				autoApprovedAmount = 0;
-			} // if
+			if (numOfApprovalsToday >= autoApproveMaxDailyApprovals)
+				StepFailed<TodayApprovalCount>().Init(numOfApprovalsToday, autoApproveMaxDailyApprovals);
+			else
+				StepDone<TodayApprovalCount>().Init(numOfApprovalsToday, autoApproveMaxDailyApprovals);
 		} // CheckTodaysApprovals
 
 		private void CheckRollovers() {
-			if (loanRepository.ByCustomer(customerId).Any(l => l.Schedule.Any(s => s.Rollovers.Any()))) {
-				log.Info("No auto approval: No auto approval for customers with rollovers");
-				autoApprovedAmount = 0;
-			} // if
+			if (loanRepository.ByCustomer(customerId).Any(l => l.Schedule.Any(s => s.Rollovers.Any())))
+				StepFailed<Rollovers>().Init();
+			else
+				StepDone<Rollovers>().Init();
 		} // CheckRollovers
 
 		private void CheckLateDays() {
 			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
 
 			List<int> customerLoanIds = loanRepository.ByCustomer(customerId).Select(d => d.Id).ToList();
+			bool bSuccess = true;
 
 			foreach (int loanId in customerLoanIds) {
 				int innerLoanId = loanId;
@@ -369,12 +328,17 @@
 
 					var transactionDate = new DateTime(paymentMapping.Transaction.PostDate.Year, paymentMapping.Transaction.PostDate.Month, paymentMapping.Transaction.PostDate.Day);
 
-					if (transactionDate.Subtract(scheduleDate).TotalDays > autoApproveMaxAllowedDaysLate) {
-						log.Info("No auto approval: No auto approvals if a customer was late over {0} days. This customer was {1} days late for loan: {2} schedule: {3} transaction: {4}", autoApproveMaxAllowedDaysLate, transactionDate.Subtract(scheduleDate).TotalDays, innerLoanId, paymentMapping.Schedule.Id, paymentMapping.Transaction.Id);
-						autoApprovedAmount = 0;
+					double nTotalLateDays = transactionDate.Subtract(scheduleDate).TotalDays;
+
+					if (nTotalLateDays > autoApproveMaxAllowedDaysLate) {
+						bSuccess = false;
+						StepFailed<LateDays>().Init((int)nTotalLateDays, innerLoanId, paymentMapping.Schedule.Id, paymentMapping.Transaction.Id, autoApproveMaxAllowedDaysLate);
 					} // if
 				} // for
 			} // for
+
+			if (bSuccess)
+				StepDone<LateDays>().Init(0, 0, 0, 0, autoApproveMaxAllowedDaysLate);
 		} // CheckLateDays
 
 		private decimal CheckOutstandingLoans() {
@@ -383,10 +347,10 @@
 
 			List<Loan> outstandingLoans = strategyHelper.GetOutstandingLoans(customerId);
 
-			if (outstandingLoans.Count > autoApproveMaxNumOfOutstandingLoans) {
-				log.Info("No auto approval: No auto approval for customers with more than {0} outstanding loans. This customer has {1} outstanding loans.", autoApproveMaxNumOfOutstandingLoans, outstandingLoans.Count);
-				autoApprovedAmount = 0;
-			} // if
+			if (outstandingLoans.Count > autoApproveMaxNumOfOutstandingLoans)
+				StepFailed<OutstandingLoanCount>().Init(outstandingLoans.Count, autoApproveMaxNumOfOutstandingLoans);
+			else
+				StepDone<OutstandingLoanCount>().Init(outstandingLoans.Count, autoApproveMaxNumOfOutstandingLoans);
 
 			decimal loanAmount = 0;
 			decimal outstandingPrincipal = 0;
@@ -396,24 +360,31 @@
 				outstandingPrincipal += loan.Principal;
 			} // for
 
-			if (outstandingPrincipal != 0 && outstandingPrincipal >= autoApproveMinRepaidPortion * loanAmount) {
-				log.Info("No auto approval: No auto approval for customers that didn't repay at least {0} of their original principal. This customer has repaid {1}", autoApproveMinRepaidPortion, loanAmount == 0 ? 0 : outstandingPrincipal / loanAmount);
-				autoApprovedAmount = 0;
-			} // if
+			if (outstandingPrincipal != 0 && outstandingPrincipal >= autoApproveMinRepaidPortion * loanAmount)
+				StepFailed<OutstandingRepayRatio>().Init(loanAmount == 0 ? 0 : outstandingPrincipal / loanAmount, autoApproveMinRepaidPortion);
+			else
+				StepDone<OutstandingRepayRatio>().Init(loanAmount == 0 ? 0 : outstandingPrincipal / loanAmount, autoApproveMinRepaidPortion);
 
 			return outstandingPrincipal;
 		} // CheckOutstandingLoans
 
 		private void CheckWorstCaisStatus(List<string> allowedStatuses) {
-			log.Info("checking worst CAIS status");
+			List<string> diff = consumerCaisDetailWorstStatuses.Except(allowedStatuses).ToList();
 
-			foreach (string consumerCaisDetailWorstStatus in consumerCaisDetailWorstStatuses) {
-				if (!allowedStatuses.Contains(consumerCaisDetailWorstStatus)) {
-					log.Info("No auto approval: Worst CAIS status is {0}. Allowed CAIS statuses are: {1}", consumerCaisDetailWorstStatus, allowedStatuses.Aggregate((i, j) => i + "," + j));
-					autoApprovedAmount = 0;
-				} // if
-			} // for each
+			if (diff.Count > 1)
+				StepFailed<WorstCaisStatus>().Init(diff, consumerCaisDetailWorstStatuses, allowedStatuses);
+			else
+				StepDone<WorstCaisStatus>().Init(null, consumerCaisDetailWorstStatuses, allowedStatuses);
 		} // CheckWorstCaisStatus
+
+		private T StepFailed<T>() where T : ATrace {
+			autoApprovedAmount = 0;
+			return m_oTrail.Failed<T>();
+		} // StepFailed
+
+		private T StepDone<T>() where T : ATrace {
+			return m_oTrail.Done<T>();
+		} // StepFailed
 
 		private void NotifyAutoApproveSilentMode(int autoApproveAmount, string autoApproveSilentTemplateName, string autoApproveSilentToAddress) {
 			try {

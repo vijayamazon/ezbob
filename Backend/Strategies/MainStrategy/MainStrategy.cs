@@ -265,9 +265,8 @@
 
 				if (string.IsNullOrEmpty(autoDecisionResponse.SystemDecision) &&
 					dataGatherer.EnableAutomaticApproval &&
-					!dataGatherer.IsOffline &&
 					!isViaBroker
-					)
+				)
 				{
 					new Approval(customerId, dataGatherer.MinExperianConsumerScore, dataGatherer.MinCompanyScore, offeredCreditLine,
 					             consumerCaisDetailWorstStatuses, DB, Log).MakeDecision(autoDecisionResponse);

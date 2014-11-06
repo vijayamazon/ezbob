@@ -63,6 +63,13 @@
     <Compile Include="ProcessHistory\AutoApproval\BusinessScore.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ConsumerScore.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Age.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\WorstCaisStatus.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\OutstandingRepayRatio.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\OutstandingLoanCount.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\LateDays.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\Rollovers.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\TodayApprovalCount.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\TodayLoans.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OutstandingOffers.cs" />
     <Compile Include="ProcessHistory\AutoApproval\MarketplaceSeniority.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Turnover.cs" />

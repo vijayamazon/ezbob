@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class InititalAssignment : ATrace {
-		public InititalAssignment(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+	public class InitialAssignment : ATrace {
+		public InitialAssignment(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
 		public void Init(int nOfferedCreditLine) {
