@@ -307,12 +307,10 @@
 				return 0;
 			}
 
-			// TODO: complete implementations - define logic for other medals
-
 			SafeReader sr = DB.GetFirst(
 				"GetMedalCoefficients",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("MedalFlow", "Limited"),
+				new QueryParameter("MedalFlow", "Limited"), // The coefficients are identical for all flows
 				new QueryParameter("Medal", scoreResult.Medal.ToString())
 				);
 
