@@ -30,7 +30,7 @@
 
 			CalcDelta(model, dict);
 
-			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict);
+			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.SoleTrader);
 
 			return scoreMedal;
 		}

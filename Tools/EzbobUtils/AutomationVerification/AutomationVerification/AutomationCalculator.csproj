@@ -48,6 +48,7 @@
     <Compile Include="AutoDecision\AutoReRejectionCalculator.cs" />
     <Compile Include="AutoDecision\AutoApprovalCalculator.cs" />
     <Compile Include="AutoDecision\AutoReApprovalCalculator.cs" />
+    <Compile Include="MedalCalculation\MedalChooser.cs" />
     <Compile Include="MedalCalculation\SoleTraderMedalCalculator.cs" />
     <Compile Include="MedalCalculation\MedalCalulator.cs" />
     <Compile Include="MedalCalculation\NonLimitedMedalCalculator.cs" />

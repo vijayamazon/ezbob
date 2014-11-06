@@ -194,6 +194,16 @@
 		public int DefaultFeedbacks { get; set; }
 	}
 
+	public class MedalChooserInputModelDb {
+		public bool IsLimited { get; set; }
+		public bool HasOnline { get; set; } //ebay/amazon/paypal mp
+		public bool HasHmrc { get; set; }
+		public bool HasCompanyScore { get; set; }
+		public bool HasPersonalScore { get; set; }
+		public bool HasBank { get; set; }
+		public int NumOfHmrc { get; set; }
+	}
+
 	public class MedalInputModelDb {
 		public int BusinessScore { get; set; }
 		public DateTime IncorporationDate { get; set; }
@@ -261,15 +271,16 @@
 					AnnualTurnover: {9}, 
 					FreeCashFlow: {10}, 
 					NetWorth: {11},
-					IsLimited: {12},
-					FirstRepaymentDatePassed: {13},
+					ValueAdded: {12},
+					IsLimited: {13},
+					FirstRepaymentDatePassed: {14},
 
-					NumOfStores: {14}
-					PositiveFeedbacks: {15}"
+					NumOfStores: {15}
+					PositiveFeedbacks: {16}"
 				,
 				BusinessScore, TangibleEquity, BusinessSeniority, ConsumerScore, EzbobSeniority,
 				MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, NumOfEarlyPayments, AnnualTurnover,
-				FreeCashFlow, NetWorth, IsLimited, FirstRepaymentDatePassed, NumOfStores, PositiveFeedbacks); 
+				FreeCashFlow, NetWorth, ValueAdded, IsLimited, FirstRepaymentDatePassed, NumOfStores, PositiveFeedbacks); 
 		}
 	}
 }

@@ -126,5 +126,12 @@
 			var turnover = mpHelper.GetOnlineTurnoverAnnualized(14166);
 			Assert.IsTrue(Math.Abs(turnover - 10812) < 1);
 		}
+
+		[Test]
+		public void TestMedalChooser() {
+			var medalChooser = new MedalChooser(Log);
+			var medal = medalChooser.GetMedal(14223);
+			Assert.AreEqual(Medal.Gold, medal.Medal);
+		}
 	}
 }

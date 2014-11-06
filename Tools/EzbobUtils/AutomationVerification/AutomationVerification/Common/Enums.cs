@@ -27,7 +27,7 @@
 	} // enum Medal
 
 	public enum MedalType {
-		OfflineLimited,
+		Limited,
 		OnlineLimited,
 		NonLimited,
 		SoleTrader,

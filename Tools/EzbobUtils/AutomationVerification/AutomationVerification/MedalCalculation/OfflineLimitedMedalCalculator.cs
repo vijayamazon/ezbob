@@ -38,7 +38,7 @@
 
 			CalcDelta(model, dict);
 
-			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.OfflineLimited);
+			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.Limited);
 
 			return scoreMedal;
 		}

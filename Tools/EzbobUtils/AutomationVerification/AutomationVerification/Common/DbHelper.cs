@@ -291,5 +291,12 @@
 			var model = conn.FillFirst<PositiveFeedbacksModelDb>("AV_GetFeedbacks", new QueryParameter("@CustomerId", customerId));
 			return model;
 		}
+
+		public MedalChooserInputModelDb GetMedalChooserData(int customerId)
+		{
+			var conn = new SqlConnection(_log);
+			var model = conn.FillFirst<MedalChooserInputModelDb>("AV_GetMedalChooserInputParams", new QueryParameter("@CustomerId", customerId));
+			return model;
+		}
 	}
 }
