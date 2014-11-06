@@ -235,7 +235,7 @@
 		public JsonResult SetDefaultCard(int cardId) {
 			var customer = m_oContext.Customer;
 
-			if (!customer.DefaultCardSelectionAllowed)
+			if (!customer.DefaultCardSelectionAllowed && customer.PayPointTransactionId != null)
 				return Json(new { error = "Default card selection is not allowed" });
 
 			var card = customer.PayPointCards.SingleOrDefault(c => c.Id == cardId);
