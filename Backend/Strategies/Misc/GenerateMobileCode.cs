@@ -106,25 +106,37 @@
 
 			string content = string.Format("Your authentication code is: {0}", code);
 
-			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
+			_sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
 
-			var dateSent = DateTime.UtcNow;
-			EzbobSmsMessage message = EzbobSmsMessage.FromSmsMessage(twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, content, ""));
+			_dateSent = DateTime.UtcNow;
+			twilio.SendSmsMessage(m_sFromNumber, _sendMobilePhone, content, SaveSms);
+		}
 
+		private void SaveSms(SMSMessage twilioResponse) {
+			EzbobSmsMessage message = EzbobSmsMessage.FromSmsMessage(twilioResponse);
 			message.UserId = null;
 			message.UnderwriterId = 1; //system id
-			message.DateSent = dateSent;
-			DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure, DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
+			message.DateSent = _dateSent;
+
+			try {
+				DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure, DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
+			}
+			catch (Exception ex) {
+				Log.Error(string.Format("Failed saving twilio SMS send response to DB: {0}", message));
+			}
 			
 
-			if (message.Status == null) {
+			if (message.Status == null)
+			{
 				IsError = true;
-				Log.Warn(string.Format("Failed sending SMS to number:{0}", sendMobilePhone));
+				Log.Warn(string.Format("Failed sending SMS to number:{0}", _sendMobilePhone));
 				return;
 			} // if
 
-			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", sendMobilePhone, message.Sid);
-		} // GenerateCodeAndSend
+			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", _sendMobilePhone, message.Sid);
+		}
+
+// GenerateCodeAndSend
 
 		#endregion method GenerateCodeAndSend
 
@@ -137,6 +149,8 @@
 		private int m_nMaxPerDay;
 		private int m_nMaxPerNumber;
 		private string m_sSkipCodeGenerationNumber;
+		private string _sendMobilePhone;
+		private DateTime _dateSent;
 
 		#endregion private
 	} // class GenerateMobileCode

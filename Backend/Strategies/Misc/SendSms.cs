@@ -43,26 +43,40 @@
 			}
 
 			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
-			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
-			var dateSent = DateTime.UtcNow;
-			var message = EzbobSmsMessage.FromSmsMessage(twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, m_sContent, ""));
+			_sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
+			_dateSent = DateTime.UtcNow;
+			twilio.SendSmsMessage(m_sFromNumber, _sendMobilePhone, m_sContent, SaveSms);
+			
+
+		}
+
+		private void SaveSms(SMSMessage smsResponse) {
+			var message = EzbobSmsMessage.FromSmsMessage(smsResponse);
 			message.UserId = m_nUserId;
 			message.UnderwriterId = m_nUnderwriterId;
-			message.DateSent = dateSent;
+			message.DateSent = _dateSent;
 
-			DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure,
+			try {
+				DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure,
 							DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
+			}
+			catch (Exception ex) {
+				Log.Error(string.Format("Failed saving twilio SMS send response to DB: {0}", message));
+			}
 
-			if (message.Status == null) {
+			if (message.Status == null)
+			{
 				Result = false;
-				Log.Warn("Failed sending SMS to number:{0}", sendMobilePhone);
+				Log.Warn("Failed sending SMS to number:{0}", _sendMobilePhone);
 				return;
 			} // if
 
 			Result = true;
-			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", sendMobilePhone, message.Sid);
+			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", _sendMobilePhone, message.Sid);
 
-		} // Execute
+		}
+
+// Execute
 
 		public bool Result { get; private set; }
 		private readonly int m_nUserId;
@@ -73,5 +87,7 @@
 		private string m_sAccountSid;
 		private string m_sAuthToken;
 		private string m_sFromNumber;
+		private DateTime _dateSent;
+		private string _sendMobilePhone;
 	} // class GenerateMobileCode
 } // namespace
