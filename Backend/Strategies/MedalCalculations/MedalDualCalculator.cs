@@ -67,6 +67,8 @@
 					}
 				}
 
+				// TODO: remove these 2 lines
+				result1.SaveToDb(db);
 				return result1;
 
 				// TODO: uncomment this code
