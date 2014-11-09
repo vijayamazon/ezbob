@@ -127,12 +127,14 @@
 				CheckCustomerStatus();
 				CheckExperianScore();
 				CheckAge();
-				CheckTurnovers();
-				CheckSeniority();
+				CheckTurnovers(); // TODO: print to log or new step detailed turnover
+				CheckSeniority(); // TODO: print to log or new step detailed seniority
 				CheckOutstandingOffers(outstandingOffers);
 				CheckTodaysLoans();
 				CheckTodaysApprovals();
 				CheckDefaultAccounts();
+
+				// TODO: create new step "total number of loans" which is always passed just to indicate number of loans
 
 				if (!loanRepository.ByCustomer(customerId).Any())
 					CheckWorstCaisStatus(new List<string> { "0", "1", "2" }); // Up to 60 days
