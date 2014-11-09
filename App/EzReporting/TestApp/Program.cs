@@ -673,7 +673,7 @@ namespace TestApp {
 
 			ds.Report.SaveAs(new FileInfo(@".\data\data_sharing_test.xlsx"));
 
-			Funnel f = new Funnel(null, oDB, oLog);
+			FunnelCreator f = new FunnelCreator(null, oDB, oLog);
 			f.Generate();
 
 			f.Report.SaveAs(new FileInfo(@".\data\funnel_test.xlsx"));

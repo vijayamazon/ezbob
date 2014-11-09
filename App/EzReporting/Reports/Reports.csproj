@@ -78,6 +78,7 @@
     <Compile Include="Alibaba\DataSharing\DataSharing.cs" />
     <Compile Include="Alibaba\ExcelPackageExt.cs" />
     <Compile Include="Alibaba\ExcelWorksheetExt.cs" />
+    <Compile Include="Alibaba\Funnel\FunnelCreator.cs" />
     <Compile Include="Alibaba\Funnel\FunnelRow.cs" />
     <Compile Include="Alibaba\Funnel\Funnel.cs" />
     <Compile Include="Alibaba\Funnel\RejectReasonRow.cs" />

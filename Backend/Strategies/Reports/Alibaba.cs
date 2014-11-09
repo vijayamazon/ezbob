@@ -39,7 +39,7 @@
 		public override void Execute() {
 			var lst = new List<Tuple<string, Report, IAlibaba>> {
 				new Tuple<string, Report, IAlibaba>("data sharing", m_oDataSharing, new DataSharing(m_bIncludeTestCustomers, DB, Log)),
-				new Tuple<string, Report, IAlibaba>("funnel", m_oFunnel, new Funnel(m_oDateEnd, DB, Log)),
+				new Tuple<string, Report, IAlibaba>("funnel", m_oFunnel, new FunnelCreator(m_oDateEnd, DB, Log)),
 			};
 
 			foreach (var tpl in lst) {

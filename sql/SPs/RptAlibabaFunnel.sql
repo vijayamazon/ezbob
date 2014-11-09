@@ -6,6 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE RptAlibabaFunnel
+@BatchName NVARCHAR(255)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -20,49 +21,60 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
-	VALUES (10, 1, 'Landing page unique visitors', ISNULL((
+	IF @BatchName IS NULL
+	BEGIN
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+		INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+		VALUES (10, 1, 'Landing page unique visitors', ISNULL((
+			SELECT
+				SUM(a.SiteAnalyticsValue)
+			FROM
+				SiteAnalytics a
+				INNER JOIN SiteAnalyticsCodes ac
+					ON a.SiteAnalyticsCode = ac.Id
+					AND ac.Name = 'LandingPageNewUsers'
+			WHERE
+				a.Source LIKE '/alibaba%'
+		), 0))
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
 		SELECT
-			SUM(a.SiteAnalyticsValue)
+			e.SessionCookie,
+			e.UserID,
+			COUNT(*) AS Counter
+		INTO
+			#ws
 		FROM
-			SiteAnalytics a
-			INNER JOIN SiteAnalyticsCodes ac
-				ON a.SiteAnalyticsCode = ac.Id
-				AND ac.Name = 'LandingPageNewUsers'
+			UiEvents e
+			INNER JOIN UiActions a
+				ON e.UiActionID = a.UiActionID
+				AND a.UiActionName = 'pageload'
 		WHERE
-			a.Source LIKE '/alibaba%'
-	), 0))
+			e.ControlHtmlID = 'Customer/Wizard'
+			AND
+			e.EventArguments LIKE 'alibaba_id:%'
+		GROUP BY
+			e.SessionCookie,
+			e.UserID
+	
+	------------------------------------------------------------------------------
+
+		INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+		VALUES (20, 1, 'Start EZBOB appliation', ISNULL((SELECT COUNT(*) FROM #ws), 0))
+
+	------------------------------------------------------------------------------
+
+		DROP TABLE #ws
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	SELECT
-		e.SessionCookie,
-		e.UserID,
-		COUNT(*) AS Counter
-	INTO
-		#ws
-	FROM
-		UiEvents e
-		INNER JOIN UiActions a
-			ON e.UiActionID = a.UiActionID
-			AND a.UiActionName = 'pageload'
-	WHERE
-		e.ControlHtmlID = 'Customer/Wizard'
-		AND
-		e.EventArguments LIKE 'alibaba_id:%'
-	GROUP BY
-		e.SessionCookie,
-		e.UserID
-
-	------------------------------------------------------------------------------
-
-	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
-	VALUES (20, 1, 'Start EZBOB appliation', ISNULL((SELECT COUNT(*) FROM #ws), 0))
-
-	------------------------------------------------------------------------------
-
-	DROP TABLE #ws
+	END -- if @BatchName is null
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -73,6 +85,9 @@ BEGIN
 			COUNT(*)
 		FROM
 			Customer c
+			INNER JOIN CampaignSourceRef csr
+				ON c.Id = csr.CustomerId
+				AND (@BatchName IS NULL OR csr.FName = @BatchName)
 		WHERE
 			c.AlibabaId IS NOT NULL
 			AND
@@ -88,6 +103,9 @@ BEGIN
 			COUNT(*)
 		FROM
 			Customer c
+			INNER JOIN CampaignSourceRef csr
+				ON c.Id = csr.CustomerId
+				AND (@BatchName IS NULL OR csr.FName = @BatchName)
 		WHERE
 			c.AlibabaId IS NOT NULL
 			AND
@@ -108,6 +126,9 @@ BEGIN
 			INNER JOIN Company co
 				ON c.CompanyId = co.Id
 				AND co.CompanyName IS NOT NULL
+			INNER JOIN CampaignSourceRef csr
+				ON c.Id = csr.CustomerId
+				AND (@BatchName IS NULL OR csr.FName = @BatchName)
 		WHERE
 			c.AlibabaId IS NOT NULL
 			AND
@@ -125,6 +146,9 @@ BEGIN
 	FROM
 		Customer c
 		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
+		INNER JOIN CampaignSourceRef csr
+			ON c.Id = csr.CustomerId
+			AND (@BatchName IS NULL OR csr.FName = @BatchName)
 	WHERE
 		c.AlibabaId IS NOT NULL
 		AND
@@ -184,6 +208,9 @@ BEGIN
 				ON cr.IdCustomer = c.Id
 				AND c.IsTest = 0
 				AND c.AlibabaId IS NOT NULL
+			INNER JOIN CampaignSourceRef csr
+				ON c.Id = csr.CustomerId
+				AND (@BatchName IS NULL OR csr.FName = @BatchName)
 		WHERE
 			cr.UnderwriterDecision = 'Approved'
 	), 0)
@@ -199,6 +226,9 @@ BEGIN
 				ON cr.IdCustomer = c.Id
 				AND c.IsTest = 0
 				AND c.AlibabaId IS NOT NULL
+			INNER JOIN CampaignSourceRef csr
+				ON c.Id = csr.CustomerId
+				AND (@BatchName IS NULL OR csr.FName = @BatchName)
 		WHERE
 			cr.UnderwriterDecision = 'Rejected'
 	), 0)
@@ -231,6 +261,9 @@ BEGIN
 				ON l.CustomerId = c.Id
 				AND c.IsTest = 0
 				AND c.AlibabaId IS NOT NULL
+			INNER JOIN CampaignSourceRef csr
+				ON c.Id = csr.CustomerId
+				AND (@BatchName IS NULL OR csr.FName = @BatchName)
 	), 0))
 
 	------------------------------------------------------------------------------
@@ -268,6 +301,9 @@ BEGIN
 			ON cr.IdCustomer = c.Id
 			AND c.IsTest = 0
 			AND c.AlibabaId IS NOT NULL
+		INNER JOIN CampaignSourceRef csr
+			ON c.Id = csr.CustomerId
+			AND (@BatchName IS NULL OR csr.FName = @BatchName)
 	WHERE
 		cr.UnderwriterDecision = 'Rejected'
 	GROUP BY
