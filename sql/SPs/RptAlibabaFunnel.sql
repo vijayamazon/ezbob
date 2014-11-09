@@ -10,10 +10,9 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	CREATE TABLE #EclFunnel (
+	CREATE TABLE #Funnel (
 		DatumID INT NOT NULL,
-		IsEcl BIT NOT NULL,
-		IsEzbob BIT NOT NULL,
+		DoDropoff BIT NOT NULL,
 		Caption NVARCHAR(255) NOT NULL,
 		Counter INT NOT NULL
 	)
@@ -21,8 +20,8 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (10, 1, 0, 'Landing page unique visitors', ISNULL((
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (10, 1, 'Landing page unique visitors', ISNULL((
 		SELECT
 			SUM(a.SiteAnalyticsValue)
 		FROM
@@ -58,8 +57,8 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (20, 1, 1, 'Start EZBOB appliation', ISNULL((SELECT COUNT(*) FROM #ws), 0))
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (20, 1, 'Start EZBOB appliation', ISNULL((SELECT COUNT(*) FROM #ws), 0))
 
 	------------------------------------------------------------------------------
 
@@ -68,8 +67,8 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (30, 0, 1, 'Signed up', ISNULL((
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (30, 1, 'Signed up', ISNULL((
 		SELECT
 			COUNT(*)
 		FROM
@@ -83,8 +82,8 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (40, 0, 1, 'Filled personal details', ISNULL((
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (40, 1, 'Filled personal details', ISNULL((
 		SELECT
 			COUNT(*)
 		FROM
@@ -100,13 +99,14 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (50, 0, 1, 'Filled company details', ISNULL((
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (50, 1, 'Filled company details', ISNULL((
 		SELECT
 			COUNT(*)
 		FROM
 			Customer c
-			INNER JOIN Company co ON c.CompanyId = co.Id
+			INNER JOIN Company co
+				ON c.CompanyId = co.Id
 				AND co.CompanyName IS NOT NULL
 		WHERE
 			c.AlibabaId IS NOT NULL
@@ -134,13 +134,11 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (60, 1, 1, 'Linked accounts and finished wizard', ISNULL((SELECT COUNT(*) FROM #cr), 0))
+	DECLARE @CompleteWizardCount INT = ISNULL((SELECT COUNT(*) FROM #cr), 0)
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (70, 1, 0, 'Complete application via offline channels', ISNULL((
+	DECLARE @OfflineCompleteWizardCount INT = ISNULL((
 		SELECT
 			COUNT(DISTINCT cr.CustomerID)
 		FROM
@@ -148,17 +146,36 @@ BEGIN
 			INNER JOIN CustomerRelations ros
 				ON cr.CustomerID = ros.CustomerId
 				AND cr.CrDate >= ros.Timestamp
-	), 0))
+	), 0)
 
 	------------------------------------------------------------------------------
 
 	DROP TABLE #cr
 
 	------------------------------------------------------------------------------
+
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (60, 0, 'Linked accounts and finished wizard', @CompleteWizardCount)
+
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (80, 1, 0, 'How many approved', ISNULL((
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (63, 0, '* Linked accounts automatically', @CompleteWizardCount - @OfflineCompleteWizardCount)
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (67, 0, '* Complete application via offline channels', @OfflineCompleteWizardCount)
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (70, 0, 'Total completed applications', @CompleteWizardCount)
+
+	------------------------------------------------------------------------------
+
+	DECLARE @ApprovedCount INT = ISNULL((
 		SELECT
 			COUNT(DISTINCT cr.IdCustomer)
 		FROM
@@ -169,13 +186,43 @@ BEGIN
 				AND c.AlibabaId IS NOT NULL
 		WHERE
 			cr.UnderwriterDecision = 'Approved'
-	), 0))
+	), 0)
+
+	------------------------------------------------------------------------------
+
+	DECLARE @RejectedCount INT = ISNULL((
+		SELECT
+			COUNT(DISTINCT cr.IdCustomer)
+		FROM
+			CashRequests cr
+			INNER JOIN Customer c
+				ON cr.IdCustomer = c.Id
+				AND c.IsTest = 0
+				AND c.AlibabaId IS NOT NULL
+		WHERE
+			cr.UnderwriterDecision = 'Rejected'
+	), 0)
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (72, 0, '* Approved', @ApprovedCount)
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (74, 0, '* Rejected', @RejectedCount)
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (76, 0, '* Waiting for additional information', @CompleteWizardCount - @ApprovedCount - @RejectedCount)
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	INSERT INTO #EclFunnel(DatumID, IsEcl, IsEzbob, Caption, Counter)
-	VALUES (90, 1, 0, 'Started taking loan', ISNULL((
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (80, 0, 'Started taking loan', ISNULL((
 		SELECT
 			COUNT(DISTINCT l.CustomerId)
 		FROM
@@ -191,33 +238,19 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		RowType = 'EclFunnel',
+		RowType = 'Funnel',
+		DoDropoff,
 		Caption,
 		Counter
 	FROM
-		#EclFunnel
-	WHERE
-		IsEcl = 1
-	ORDER BY
-		DatumID
-
-	------------------------------------------------------------------------------
-
-	SELECT
-		RowType = 'EzbobFunnel',
-		Caption,
-		Counter
-	FROM
-		#EclFunnel
-	WHERE
-		IsEzbob = 1
+		#Funnel
 	ORDER BY
 		DatumID
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	DROP TABLE #EclFunnel
+	DROP TABLE #Funnel
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
