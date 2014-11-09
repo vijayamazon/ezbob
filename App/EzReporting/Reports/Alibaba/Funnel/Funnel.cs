@@ -5,20 +5,24 @@
 	using Ezbob.Logger;
 	using OfficeOpenXml;
 
-	public class Funnel : IAlibaba {
+	class Funnel : IAlibaba {
 		#region public
 
 		#region constructor
 
 		// ReSharper disable UnusedParameter.Local
 		// oDateEnd: for future use.
-		public Funnel(DateTime? oDateEnd, AConnection oDB, ASafeLog oLog) {
+		public Funnel(ExcelPackage oExcel, string sBatchName, DateTime? oDateEnd, AConnection oDB, ASafeLog oLog) {
 			if (oDB == null)
 				throw new Exception("Database connection not specified for Funnel report.");
 
 			m_oDB = oDB;
 
 			m_oLog = oLog ?? new SafeLog();
+
+			Report = oExcel;
+
+			m_sBatchName = sBatchName;
 		} // constructor
 		// ReSharper restore UnusedParameter.Local
 
@@ -31,7 +35,12 @@
 			m_oRejectReasons = new List<RejectReasonRow>();
 			m_nRejectReasonTotal = 0;
 
-			m_oDB.ForEachRowSafe(ProcessRow, "RptAlibabaFunnel", CommandSpecies.StoredProcedure);
+			m_oDB.ForEachRowSafe(
+				ProcessRow,
+				"RptAlibabaFunnel",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("BatchName", m_sBatchName)
+			);
 
 			foreach (RejectReasonRow rrr in m_oRejectReasons)
 				rrr.Pct = m_nRejectReasonTotal < 0.8 ? 0 : rrr.Counter / m_nRejectReasonTotal;
@@ -48,12 +57,10 @@
 				oCur.Pct = oCur.Counter < 1 ? 0 : (double)oNext.Counter / (double)oCur.Counter;
 			} // for
 
-			Report = new ExcelPackage();
+			string sPrefix = (m_sBatchName ?? "Total") + ": ";
 
-			CreateOneSheet(m_oFunnel, "Funnel", "Funnel", "Unique page views", "Drop off", "Conversion");
-			CreateOneSheet(m_oRejectReasons, "Decline reasons", "Decline reason", "Count", "% of total");
-
-			Report.AutoFitColumns();
+			CreateOneSheet(m_oFunnel, "Funnel", sPrefix + "Funnel", "Unique page views", "Drop off", "Conversion");
+			CreateOneSheet(m_oRejectReasons, sPrefix + "Decline reasons", "Decline reason", "Count", "% of total");
 		} // Generate
 
 		#endregion method Generate
@@ -112,6 +119,8 @@
 
 		private List<FunnelRow> m_oFunnel;
 		private List<RejectReasonRow> m_oRejectReasons;
+
+		private readonly string m_sBatchName;
 
 		private double m_nRejectReasonTotal;
 
