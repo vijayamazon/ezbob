@@ -49,6 +49,7 @@
 				CalculateRatiosOfAnnualTurnover();
 				CalculateNetWorth();
 
+				// Set type and calculate weights
 				SetTypeAndInitialWeights();
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
@@ -66,6 +67,7 @@
 					RedistributeWeightsForPayingCustomer();
 				}
 				AdjustSumOfWeights();
+
 				CalculateGrades();
 
 				CalculateCustomerScore();
