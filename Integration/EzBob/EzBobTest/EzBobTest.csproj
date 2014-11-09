@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="TestMedal.cs" />
     <Compile Include="TestExecutes.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="TestClassToDb.cs" />

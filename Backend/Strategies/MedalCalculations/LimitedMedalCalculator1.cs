@@ -11,7 +11,7 @@
 		{
 		}
 
-		protected override ScoreResult CreateResultWithInitialWeights(int customerId, DateTime calculationTime)
+		public override ScoreResult CreateResultWithInitialWeights(int customerId, DateTime calculationTime)
 		{
 			Results = new ScoreResult
 				{

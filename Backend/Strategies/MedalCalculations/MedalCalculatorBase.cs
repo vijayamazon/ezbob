@@ -26,7 +26,6 @@
 		protected bool failedCalculatingFreeCashFlow;
 		protected bool failedCalculatingTangibleEquity;
 		protected bool freeCashFlowDataAvailable;
-		protected int hmrcId;
 		protected int totalZooplaValue;
 		protected int numOfHmrcMps;
 		protected DateTime? earliestHmrcLastUpdateDate;
@@ -35,9 +34,11 @@
 		protected int ebayPositiveFeedbacks;
 		protected int numberOfPaypalTransactions;
 
+		private bool shouldGather = true;
+
 		public ScoreResult Results { get; set; }
 
-		protected abstract ScoreResult CreateResultWithInitialWeights(int customerId, DateTime calculationTime);
+		public abstract ScoreResult CreateResultWithInitialWeights(int customerId, DateTime calculationTime);
 
 		protected MedalCalculatorBase(AConnection db, ASafeLog log)
 		{
@@ -47,10 +48,14 @@
 
 		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime)
 		{
-			Results = CreateResultWithInitialWeights(customerId, calculationTime);
 			try
 			{
-				GatherInputData();
+				if (shouldGather)
+				{
+					Results = CreateResultWithInitialWeights(customerId, calculationTime);
+					GatherInputData();
+				}
+
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
 				if (!freeCashFlowDataAvailable)
@@ -114,6 +119,43 @@
 
 		protected virtual void AdditionalLegalInputValidations() { }
 
+		public virtual void ReplaceGather(ScoreResult resultsInput, bool freeCashFlowDataAvailableInput,
+		                                  decimal tmpFreeCashFlow, decimal tmpValueAdded, decimal mortgageBalance,
+		                                  int totalZooplaValueInput)
+		{
+			shouldGather = false;
+
+			Results = resultsInput;
+			totalZooplaValue = totalZooplaValueInput;
+			freeCashFlowDataAvailable = freeCashFlowDataAvailableInput;
+			DetermineFlow(tmpFreeCashFlow, tmpValueAdded);
+
+			failedCalculatingTangibleEquity = false;
+
+			if (Results.AnnualTurnover > 0)
+			{
+				Results.TangibleEquity = Results.TangibleEquityValue/Results.AnnualTurnover;
+				Results.FreeCashFlow = Results.FreeCashFlowValue/Results.AnnualTurnover;
+			}
+			else
+			{
+				failedCalculatingFreeCashFlow = true;
+				failedCalculatingTangibleEquity = true;
+				Results.TangibleEquity = 0;
+				Results.AnnualTurnover = 0;
+				Results.FreeCashFlow = 0;
+			}
+
+			if (totalZooplaValue != 0)
+			{
+				Results.NetWorth = (totalZooplaValue - mortgageBalance)/totalZooplaValue;
+			}
+			else
+			{
+				Results.NetWorth = 0;
+			}
+		}
+
 		protected virtual void DetermineFlow(decimal hmrcFreeCashFlow, decimal hmrcValueAdded)
 		{
 			if (freeCashFlowDataAvailable)
@@ -162,7 +204,7 @@
 			Results.NumOfLoans = sr["OnTimeLoans"];
 			Results.NumOfLateRepayments = sr["NumOfLatePayments"];
 			Results.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
-			hmrcId = sr["HmrcId"];
+			int hmrcId = sr["HmrcId"];
 			totalZooplaValue = sr["TotalZooplaValue"];
 			numOfHmrcMps = sr["NumOfHmrcMps"];
 			earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
