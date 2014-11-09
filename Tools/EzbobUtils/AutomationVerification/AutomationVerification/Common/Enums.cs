@@ -31,7 +31,7 @@
 		OnlineLimited,
 		NonLimited,
 		SoleTrader,
-		Other
+		NoMedal
 	}
 
 	public enum Parameter

@@ -76,12 +76,6 @@
 			var dbData = dbHelper.GetMedalInputModel(customerId);
 			var model = new MedalInputModel {MedalInputModelDb = dbData};
 
-			if (dbData.HasMoreThanOneHmrc)
-			{
-				model.HasMoreThanOneHmrc = dbData.HasMoreThanOneHmrc;
-				return model;
-			}
-
 			var today = DateTime.Today;
 			const int year = 365;
 
@@ -91,7 +85,6 @@
 			model.ConsumerScore = dbData.ConsumerScore;
 			model.EzbobSeniority = ((today.Year - dbData.RegistrationDate.Year) * 12) + today.Month - dbData.RegistrationDate.Month;
 			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < today;
-			model.IsLimited = dbData.TypeOfBusiness == "Limited" || dbData.TypeOfBusiness == "LLP";
 			model.NumOfEarlyPayments = dbData.NumOfEarlyPayments;
 			model.NumOfLatePayments = dbData.NumOfLatePayments;
 			model.NumOfOnTimeLoans = dbData.NumOfOnTimeLoans;
@@ -116,7 +109,7 @@
 
 		protected abstract void CalcDelta(MedalInputModel model, Dictionary<Parameter, Weight> dict);
 
-		protected MedalOutputModel CalcScoreMedalOffer(Dictionary<Parameter, Weight> dict, MedalType medalType = MedalType.Other)
+		protected MedalOutputModel CalcScoreMedalOffer(Dictionary<Parameter, Weight> dict, MedalType medalType = MedalType.NoMedal)
 		{
 			decimal minScoreSum = 0;
 			decimal maxScoreSum = 0;
@@ -210,7 +203,7 @@
 				s11 += weight.Value.Grade;
 				s10 += weight.Value.Score;
 			}
-			sb.AppendLine("--------------------------------------------------------------------");
+			sb.AppendLine("----------------------------------------------------------------------------------------------------------------------------------------");
 			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}|\n",
 				"Sum".PadRight(25),
 				ToPercent(s5).PadRight(10),

@@ -16,20 +16,18 @@
 		public void TestMedalCalculation()
 		{
 			var msc = new OfflineLImitedMedalCalculator(Log);
-			var data = new MedalInputModel {
+			var data = new MedalInputModel
+			{
 				AnnualTurnover = 125000,
 				BusinessScore = 55,
 				MaritalStatus = MaritalStatus.Married,
-				IsOffline = true,
 				TangibleEquity = 0.1M,
-				IsLimited = true,
 				BusinessSeniority = 2,
 				ConsumerScore = 850,
 				EzbobSeniority = 7,
 				FirstRepaymentDatePassed = false,
 				FreeCashFlow = 0.42M,
 				HasHmrc = true,
-				HasMoreThanOneHmrc = false,
 				NetWorth = 0.3M,
 				NumOfEarlyPayments = 0,
 				NumOfLatePayments = 0,
@@ -56,7 +54,7 @@
 		{
 			var arr = new AutoReRejectionCalculator(Log);
 			string reason;
-			var des = arr.IsAutoReRejected(10144,150232, out reason);
+			var des = arr.IsAutoReRejected(10144, 150232, out reason);
 			Assert.AreEqual(true, des);
 		}
 
@@ -77,7 +75,7 @@
 			var arr = new AutoReApprovalCalculator(Log);
 			string reason;
 			int amount;
-			var des = arr.IsAutoReApproved(14223,0, out reason, out amount);
+			var des = arr.IsAutoReApproved(14223, 0, out reason, out amount);
 			Assert.AreEqual(false, des);
 		}
 
@@ -112,7 +110,8 @@
 		}
 
 		[Test]
-		public void TestFeedbacks() {
+		public void TestFeedbacks()
+		{
 			var mpHelper = new MarketPlacesHelper(Log);
 			var feedbacks = mpHelper.GetPositiveFeedbacks(14166);
 			Assert.AreEqual(33885, feedbacks);
@@ -128,10 +127,23 @@
 		}
 
 		[Test]
-		public void TestMedalChooser() {
+		public void TestMedalChooser()
+		{
 			var medalChooser = new MedalChooser(Log);
 			var medal = medalChooser.GetMedal(14223);
 			Assert.AreEqual(Medal.Gold, medal.Medal);
 		}
+
+
+		[Test]
+		public void TestTestMedal() {
+			var medalTests = new MedalTests(Log);
+			var passed = medalTests.TestMedalCalculation();
+			Assert.AreEqual(true, passed);
+			//var db = new DbHelper(Log);
+			//var models = db.GetMedalTestData();
+			//Assert.IsTrue(models.Count > 0);
+		}
+
 	}
 }

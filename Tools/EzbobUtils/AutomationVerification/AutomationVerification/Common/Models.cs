@@ -23,16 +23,24 @@
 		public Weight ConsumerScore { get; set; }
 		public Weight NetWorth { get; set; }
 		public Weight MaritalStatus { get; set; }
-		public Weight NumbOfStores { get; set; }
-		public Weight PositiveFeedback { get; set; }
+		public Weight NumOfStores { get; set; }
+		public Weight PositiveFeedbacks { get; set; }
 		public Weight EzbobSeniority { get; set; }
 		public Weight NumOfLoans { get; set; }
 		public Weight NumOfLateRepayments { get; set; }
 		public Weight NumOfEarlyRepayments { get; set; }
 
-		public decimal HmrcTurnover { get; set; }
-		public decimal BankTurnover { get; set; }
-		public decimal OnlineTurnover { get; set; }
+		public decimal? ValueAdded { get; set; }
+		public string InnerFlow { get; set; }
+		public string Error { get; set; }
+		public decimal? HmrcTurnover { get; set; }
+		public decimal? BankTurnover { get; set; }
+		public decimal? OnlineTurnover { get; set; }
+
+		public Medal Medal { get; set; }
+		public decimal TotalScore { get; set; }
+		public decimal TotalScoreNormalized { get; set; }
+		
 	}
 
 	public class Weight
@@ -241,18 +249,14 @@
 		public int NumOfEarlyPayments { get; set; }
 		public decimal AnnualTurnover { get; set; }
 		public decimal FreeCashFlow { get; set; }
-		public decimal ValueAdded { get; set; }
+		public decimal? ValueAdded { get; set; }//todo
 		public decimal NetWorth { get; set; }
-		public bool IsLimited { get; set; }
-		public bool HasMoreThanOneHmrc { get; set; }
 		public bool HasHmrc { get; set; }
-		public bool IsOffline { get; set; }
 		public bool FirstRepaymentDatePassed { get; set; }
 		
 		/*online only*/
 		public int NumOfStores { get; set; }
 		public int PositiveFeedbacks { get; set; }
-		public decimal OnlineMedalTurnoverCutoff { get; set; }
 
 		public MedalInputModelDb MedalInputModelDb { get; set; }
 		public override string ToString()
@@ -272,15 +276,14 @@
 					FreeCashFlow: {10}, 
 					NetWorth: {11},
 					ValueAdded: {12},
-					IsLimited: {13},
-					FirstRepaymentDatePassed: {14},
+					FirstRepaymentDatePassed: {13},
 
-					NumOfStores: {15}
-					PositiveFeedbacks: {16}"
+					NumOfStores: {14}
+					PositiveFeedbacks: {15}"
 				,
 				BusinessScore, TangibleEquity, BusinessSeniority, ConsumerScore, EzbobSeniority,
 				MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, NumOfEarlyPayments, AnnualTurnover,
-				FreeCashFlow, NetWorth, ValueAdded, IsLimited, FirstRepaymentDatePassed, NumOfStores, PositiveFeedbacks); 
+				FreeCashFlow, NetWorth, ValueAdded, FirstRepaymentDatePassed, NumOfStores, PositiveFeedbacks); 
 		}
 	}
 }

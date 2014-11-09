@@ -13,12 +13,6 @@
 		{
 			Log.Debug(model.ToString());
 
-			if (model.HasMoreThanOneHmrc)
-			{
-				var medal = new MedalOutputModel {Error = "More then one hmrc. can't Calc Medal", Medal = Medal.NoMedal};
-				return medal;
-			}
-
 			var dict = new Dictionary<Parameter, Weight>
 				{
 					

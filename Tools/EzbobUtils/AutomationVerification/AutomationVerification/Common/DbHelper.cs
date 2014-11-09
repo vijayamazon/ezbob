@@ -298,5 +298,61 @@
 			var model = conn.FillFirst<MedalChooserInputModelDb>("AV_GetMedalChooserInputParams", new QueryParameter("@CustomerId", customerId));
 			return model;
 		}
+
+		public List<MedalComparisonModel> GetMedalTestData() {
+			var conn = new SqlConnection(_log);
+			var model = new List<MedalComparisonModel>();
+			conn.ForEachRowSafe((sr, bRowsetStart) => {
+				MedalType medalType;
+				Medal medal;
+
+				if (!Enum.TryParse(sr["MedalType"].ToString(), false, out medalType)) {
+					_log.Error("Failed to parse medal type {0} for {1}", (string)sr["MedalType"], (string)sr["CustomerId"]);
+					medalType = MedalType.NoMedal;
+				}
+
+				if (!Enum.TryParse(sr["Medal"], false, out medal))
+				{
+					_log.Error("Failed to parse medal {0} for {1}", (string)sr["Medal"], (string)sr["CustomerId"]);
+					medal = Medal.NoMedal;
+				}
+				DateTime? businessSeniority = sr["BusinessSeniority"];
+				string businessSeniorityStr = businessSeniority.HasValue ? businessSeniority.Value.ToString("yyyy-MM-dd HH:mm:ss") : null;
+
+				DateTime regDate = sr["EzbobSeniority"];
+				string ezbobSeniorityStr = regDate.ToString("yyyy-MM-dd HH:mm:ss");
+
+				model.Add(new MedalComparisonModel {
+					CustomerId = sr["CustomerId"],
+					MedalType = medalType,
+					BusinessScore = new Weight { Value = sr["BusinessScore"], FinalWeight = sr["BusinessScoreWeight"], Score = sr["BusinessScoreScore"], Grade = (int)(decimal)sr["BusinessScoreGrade"] },
+					FreeCashFlow = new Weight { Value = sr["FreeCashFlow"], FinalWeight = sr["FreeCashFlowWeight"], Score = sr["FreeCashFlowScore"], Grade = (int)(decimal)sr["FreeCashFlowGrade"] },
+					AnnualTurnover = new Weight { Value = sr["AnnualTurnover"], FinalWeight = sr["AnnualTurnoverWeight"], Score = sr["AnnualTurnoverScore"], Grade = (int)(decimal)sr["AnnualTurnoverGrade"] },
+					TangibleEquity = new Weight { Value = sr["TangibleEquity"], FinalWeight = sr["TangibleEquityWeight"], Score = sr["TangibleEquityScore"], Grade = (int)(decimal)sr["TangibleEquityGrade"] },
+					BusinessSeniority = new Weight { Value = businessSeniorityStr, FinalWeight = sr["BusinessSeniorityWeight"], Score = sr["BusinessSeniorityScore"], Grade = (int)(decimal)sr["BusinessSeniorityGrade"] },
+					ConsumerScore = new Weight { Value = sr["ConsumerScore"], FinalWeight = sr["ConsumerScoreWeight"], Score = sr["ConsumerScoreScore"], Grade = (int)(decimal)sr["ConsumerScoreGrade"] },
+					NetWorth = new Weight { Value = sr["NetWorth"], FinalWeight = sr["NetWorthWeight"], Score = sr["NetWorthScore"], Grade = (int)(decimal)sr["NetWorthGrade"] },
+					MaritalStatus = new Weight { Value = sr["MaritalStatus"], FinalWeight = sr["MaritalStatusWeight"], Score = sr["MaritalStatusScore"], Grade = (int)(decimal)sr["MaritalStatusGrade"] },
+					NumOfLoans = new Weight { Value = sr["NumOfLoans"], FinalWeight = sr["NumOfLoansWeight"], Score = sr["NumOfLoansScore"], Grade = (int)(decimal)sr["NumOfLoansGrade"] },
+					NumOfEarlyRepayments = new Weight { Value = sr["NumOfEarlyRepayments"], FinalWeight = sr["NumOfEarlyRepaymentsWeight"], Score = (int)(decimal)sr["NumOfEarlyRepaymentsScore"], Grade = sr["NumOfEarlyRepaymentsGrade"] },
+					NumOfLateRepayments = new Weight { Value = sr["NumOfLateRepayments"], FinalWeight = sr["NumOfLateRepaymentsWeight"], Score = (int)(decimal)sr["NumOfLateRepaymentsScore"], Grade = sr["NumOfLateRepaymentsGrade"] },
+					NumOfStores = new Weight { Value = sr["NumberOfStores"], FinalWeight = sr["NumberOfStoresWeight"], Score = sr["NumberOfStoresScore"], Grade = (int)(decimal)sr["NumberOfStoresGrade"] },
+					PositiveFeedbacks = new Weight { Value = sr["PositiveFeedbacks"], FinalWeight = sr["PositiveFeedbacksWeight"], Score = sr["PositiveFeedbacksScore"], Grade = (int)(decimal)sr["PositiveFeedbacksGrade"] },
+					EzbobSeniority = new Weight { Value = ezbobSeniorityStr, FinalWeight = sr["EzbobSeniorityWeight"], Score = sr["EzbobSeniorityScore"], Grade = (int)(decimal)sr["EzbobSeniorityGrade"] },
+					ValueAdded = sr["ValueAdded"],
+					InnerFlow = sr["InnerFlowName"],
+					Error = sr["Error"],
+					BankTurnover = sr["BankAnnualTurnover"],
+					HmrcTurnover = sr["HmrcAnnualTurnover"],
+					OnlineTurnover = sr["OnlineAnnualTurnover"],
+					Medal = medal,
+					TotalScore = sr["TotalScore"],
+					TotalScoreNormalized = sr["TotalScoreNormalized"]
+				});
+				return ActionResult.Continue;
+			}, "AV_GetMedalsForTest");
+
+			return model;
+		}
 	}
 }

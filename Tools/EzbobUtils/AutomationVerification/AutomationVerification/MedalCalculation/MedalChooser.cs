@@ -5,7 +5,7 @@
 
 	public class MedalChooser
 	{
-		private ASafeLog Log;
+		protected ASafeLog Log;
 		public MedalChooser(ASafeLog log)
 		{
 			Log = log;
@@ -15,7 +15,7 @@
 			var dbHelper = new DbHelper(Log);
 			var medalChooserData = dbHelper.GetMedalChooserData(customerId);
 
-			var type = MedalType.Other;
+			var type = MedalType.NoMedal;
 			if (medalChooserData.IsLimited) {
 				if (medalChooserData.HasOnline) {
 					type = MedalType.OnlineLimited;
@@ -31,7 +31,7 @@
 				}
 			}
 
-			if (type == MedalType.Other && medalChooserData.HasPersonalScore && medalChooserData.NumOfHmrc < 2 &&
+			if (type == MedalType.NoMedal && medalChooserData.HasPersonalScore && medalChooserData.NumOfHmrc < 2 &&
 			    (medalChooserData.HasBank || medalChooserData.HasHmrc)) {
 				type = MedalType.SoleTrader;
 			}

@@ -11,9 +11,6 @@
 
 		public override MedalInputModel GetInputParameters(int customerId) {
 			var model = base.GetInputParameters(customerId);
-			if (model.HasMoreThanOneHmrc) {
-				return model;
-			}
 			model.AnnualTurnover = GetOnlineAnnualTurnover(customerId, model.MedalInputModelDb);
 			var balance = model.MedalInputModelDb.CurrentBalanceSum < 0 ? 0 : (model.MedalInputModelDb.CurrentBalanceSum / model.MedalInputModelDb.FCFFactor);
 			model.FreeCashFlow = model.AnnualTurnover == 0 ? 0 : (model.MedalInputModelDb.HmrcEbida - balance) / model.AnnualTurnover;
