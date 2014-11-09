@@ -38,15 +38,13 @@
 			return Results;
 		}
 
-		protected override void DetermineFlow(decimal hmrcFreeCashFlow, decimal hmrcValueAdded)
+		protected override void DetermineFlow()
 		{
 			decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
 			if (Results.HmrcAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
 			{
 				Results.InnerFlowName = "HMRC";
 				Results.AnnualTurnover = Results.HmrcAnnualTurnover;
-				Results.FreeCashFlowValue = hmrcFreeCashFlow;
-				Results.ValueAdded = hmrcValueAdded;
 			}
 			else if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
 			{

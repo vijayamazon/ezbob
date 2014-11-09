@@ -31,6 +31,14 @@
 		public decimal BankAnnualTurnover { get; set; }
 		public decimal OnlineAnnualTurnover { get; set; }
 		public bool FirstRepaymentDatePassed { get; set; }
+		public int NumOfHmrcMps { get; set; }
+		public int ZooplaValue { get; set; }
+		public DateTime? EarliestHmrcLastUpdateDate { get; set; }
+		public DateTime? EarliestYodleeLastUpdateDate { get; set; }
+		public int AmazonPositiveFeedbacks { get; set; }
+		public int EbayPositiveFeedbacks { get; set; }
+		public int NumberOfPaypalPositiveTransactions { get; set; }
+		public decimal MortgageBalance { get; set; }
 
 		// Calculated data
 		public decimal AnnualTurnover { get; set; }

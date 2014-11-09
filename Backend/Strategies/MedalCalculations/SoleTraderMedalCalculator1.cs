@@ -39,7 +39,7 @@
 
 		protected override void AdditionalLegalInputValidations()
 		{
-			if (!earliestHmrcLastUpdateDate.HasValue && !earliestYodleeLastUpdateDate.HasValue)
+			if (!Results.EarliestHmrcLastUpdateDate.HasValue && !Results.EarliestYodleeLastUpdateDate.HasValue)
 			{
 				throw new Exception("Medal is meant only for customers with HMRC or bank");
 			}

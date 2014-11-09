@@ -5,8 +5,25 @@ namespace EzBobTest
 	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	using NUnit.Framework;
 	using StructureMap;
+
+	public class LimitedMedalCalculator1NoGathering : LimitedMedalCalculator1
+	{
+		private readonly ScoreResult resultInput;
+
+		public LimitedMedalCalculator1NoGathering(ScoreResult resultInput, AConnection db, ASafeLog log) : base(db, log)
+		{
+			this.resultInput = resultInput;
+		}
+
+		protected override void GatherInputData()
+		{
+			Results = resultInput;
+		}
+	}
 
 	[TestFixture]
 	public class TestMedal : BaseTestFixtue
@@ -25,8 +42,9 @@ namespace EzBobTest
 		{
 			DateTime calculationTime = new DateTime(2014, 11, 06);
 			int customerId = 18112;
-			var limitedMedalCalculator1 = new LimitedMedalCalculator1(m_oDB, m_oLog);
-			ScoreResult resultsInput = limitedMedalCalculator1.CreateResultWithInitialWeights(customerId, calculationTime);
+			var tmp = new LimitedMedalCalculator1(m_oDB, m_oLog);
+			ScoreResult resultsInput = tmp.CreateResultWithInitialWeights(customerId, calculationTime);
+
 			resultsInput.BusinessScore = 0;
 			resultsInput.TangibleEquityValue = 0;
 			resultsInput.BusinessSeniority = null;
@@ -41,11 +59,14 @@ namespace EzBobTest
 			resultsInput.OnlineAnnualTurnover = 22954;
 			resultsInput.BankAnnualTurnover = 22954;
 			resultsInput.HmrcAnnualTurnover = 22954;
+			resultsInput.ZooplaValue = 55;
+			resultsInput.MortgageBalance = 0;
 
-			limitedMedalCalculator1.ReplaceGather(resultsInput, true, -1000, 1, 0, 1);
-			ScoreResult result1 = limitedMedalCalculator1.CalculateMedalScore(customerId, calculationTime);
-			Assert.AreEqual(result1.NetWorthGrade, 1);
-			Assert.AreEqual(result1.EzbobSeniorityGrade, 3);
+			var calculatorTester = new LimitedMedalCalculator1NoGathering(resultsInput, m_oDB, m_oLog);
+
+			ScoreResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
+			Assert.AreEqual(resultsOutput.NetWorthGrade, 1);
+			Assert.AreEqual(resultsOutput.EzbobSeniorityGrade, 3);
 		}
 	}
 }

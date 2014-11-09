@@ -23,19 +23,6 @@
 
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
-		protected bool failedCalculatingFreeCashFlow;
-		protected bool failedCalculatingTangibleEquity;
-		protected bool freeCashFlowDataAvailable;
-		protected int totalZooplaValue;
-		protected int numOfHmrcMps;
-		protected DateTime? earliestHmrcLastUpdateDate;
-		protected DateTime? earliestYodleeLastUpdateDate;
-		protected int amazonPositiveFeedbacks;
-		protected int ebayPositiveFeedbacks;
-		protected int numberOfPaypalTransactions;
-
-		private bool shouldGather = true;
-
 		public ScoreResult Results { get; set; }
 
 		public abstract ScoreResult CreateResultWithInitialWeights(int customerId, DateTime calculationTime);
@@ -48,17 +35,24 @@
 
 		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime)
 		{
+			Results = CreateResultWithInitialWeights(customerId, calculationTime);
 			try
 			{
-				if (shouldGather)
-				{
-					Results = CreateResultWithInitialWeights(customerId, calculationTime);
-					GatherInputData();
-				}
+				GatherInputData();
+				
+				// Validations
+				ValidateLegalInput();
+				AdditionalLegalInputValidations();
+
+				// Process raw input data to data
+				CalculateFeedbacks();
+				DetermineFlow();
+				CalculateRatiosOfAnnualTurnover();
+				CalculateNetWorth();
 
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
-				if (!freeCashFlowDataAvailable)
+				if (Results.NumOfHmrcMps != 1)
 				{
 					RedistributeFreeCashFlowWeight();
 				}
@@ -94,61 +88,35 @@
 			return Results;
 		}
 
-		protected abstract decimal GetConsumerScoreWeightForLowScore();
-		protected abstract decimal GetCompanyScoreWeightForLowScore();
-		protected abstract void RedistributeFreeCashFlowWeight();
-		protected abstract void RedistributeWeightsForPayingCustomer();
-
-		private void ValidateLegalInput()
+		private void CalculateFeedbacks()
 		{
-			if (numOfHmrcMps > 1)
+			Results.PositiveFeedbacks = Results.AmazonPositiveFeedbacks + Results.EbayPositiveFeedbacks;
+			if (Results.PositiveFeedbacks == 0)
 			{
-				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", numOfHmrcMps));
-			}
-			if (earliestHmrcLastUpdateDate.HasValue &&
-				earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
-			{
-				throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
-			}
-			if (earliestYodleeLastUpdateDate.HasValue &&
-				earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
-			{
-				throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, earliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
+				Results.PositiveFeedbacks = Results.NumberOfPaypalPositiveTransactions != 0 ? Results.NumberOfPaypalPositiveTransactions : CurrentValues.Instance.DefaultFeedbackValue;
 			}
 		}
 
-		protected virtual void AdditionalLegalInputValidations() { }
-
-		public virtual void ReplaceGather(ScoreResult resultsInput, bool freeCashFlowDataAvailableInput,
-		                                  decimal tmpFreeCashFlow, decimal tmpValueAdded, decimal mortgageBalance,
-		                                  int totalZooplaValueInput)
+		private void CalculateRatiosOfAnnualTurnover()
 		{
-			shouldGather = false;
-
-			Results = resultsInput;
-			totalZooplaValue = totalZooplaValueInput;
-			freeCashFlowDataAvailable = freeCashFlowDataAvailableInput;
-			DetermineFlow(tmpFreeCashFlow, tmpValueAdded);
-
-			failedCalculatingTangibleEquity = false;
-
 			if (Results.AnnualTurnover > 0)
 			{
-				Results.TangibleEquity = Results.TangibleEquityValue/Results.AnnualTurnover;
-				Results.FreeCashFlow = Results.FreeCashFlowValue/Results.AnnualTurnover;
+				Results.TangibleEquity = Results.TangibleEquityValue / Results.AnnualTurnover;
+				Results.FreeCashFlow = Results.FreeCashFlowValue / Results.AnnualTurnover;
 			}
 			else
 			{
-				failedCalculatingFreeCashFlow = true;
-				failedCalculatingTangibleEquity = true;
 				Results.TangibleEquity = 0;
 				Results.AnnualTurnover = 0;
 				Results.FreeCashFlow = 0;
 			}
+		}
 
-			if (totalZooplaValue != 0)
+		private void CalculateNetWorth()
+		{
+			if (Results.ZooplaValue != 0)
 			{
-				Results.NetWorth = (totalZooplaValue - mortgageBalance)/totalZooplaValue;
+				Results.NetWorth = (Results.ZooplaValue - Results.MortgageBalance) / Results.ZooplaValue;
 			}
 			else
 			{
@@ -156,14 +124,37 @@
 			}
 		}
 
-		protected virtual void DetermineFlow(decimal hmrcFreeCashFlow, decimal hmrcValueAdded)
+		protected abstract decimal GetConsumerScoreWeightForLowScore();
+		protected abstract decimal GetCompanyScoreWeightForLowScore();
+		protected abstract void RedistributeFreeCashFlowWeight();
+		protected abstract void RedistributeWeightsForPayingCustomer();
+
+		private void ValidateLegalInput()
 		{
-			if (freeCashFlowDataAvailable)
+			if (Results.NumOfHmrcMps > 1)
+			{
+				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", Results.NumOfHmrcMps));
+			}
+			if (Results.EarliestHmrcLastUpdateDate.HasValue &&
+				Results.EarliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
+			{
+				throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, Results.EarliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
+			}
+			if (Results.EarliestYodleeLastUpdateDate.HasValue &&
+				Results.EarliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
+			{
+				throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, Results.EarliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
+			}
+		}
+
+		protected virtual void AdditionalLegalInputValidations() { }
+		
+		protected virtual void DetermineFlow()
+		{
+			if (Results.NumOfHmrcMps == 1)
 			{
 				Results.InnerFlowName = "HMRC";
 				Results.AnnualTurnover = Results.HmrcAnnualTurnover;
-				Results.FreeCashFlowValue = hmrcFreeCashFlow;
-				Results.ValueAdded = hmrcValueAdded;
 			}
 			else
 			{
@@ -205,85 +196,38 @@
 			Results.NumOfLateRepayments = sr["NumOfLatePayments"];
 			Results.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
 			int hmrcId = sr["HmrcId"];
-			totalZooplaValue = sr["TotalZooplaValue"];
-			numOfHmrcMps = sr["NumOfHmrcMps"];
-			earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
-			earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+			Results.ZooplaValue = sr["TotalZooplaValue"];
+			Results.NumOfHmrcMps = sr["NumOfHmrcMps"];
 			Results.NumberOfStores = sr["NumberOfOnlineStores"];
-			amazonPositiveFeedbacks = sr["AmazonPositiveFeedbacks"];
-			ebayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
-			numberOfPaypalTransactions = sr["NumOfPaypalTransactions"];
 
-			ValidateLegalInput();
-			AdditionalLegalInputValidations();
-
-			Results.PositiveFeedbacks = amazonPositiveFeedbacks + ebayPositiveFeedbacks;
-			if (Results.PositiveFeedbacks == 0)
-			{
-				Results.PositiveFeedbacks = numberOfPaypalTransactions != 0 ? numberOfPaypalTransactions : CurrentValues.Instance.DefaultFeedbackValue;
-			}
-
+			Results.EarliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
+			Results.EarliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+			Results.AmazonPositiveFeedbacks = sr["AmazonPositiveFeedbacks"];
+			Results.EbayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
+			Results.NumberOfPaypalPositiveTransactions = sr["NumOfPaypalTransactions"];
+			
 			Results.OnlineAnnualTurnover = strategyHelper.GetOnlineAnnualTurnoverForMedal(Results.CustomerId);
 
-			bool wasAbleToGetSummaryData = false;
-			VatReturnSummary[] summaryData = null;
-			if (hmrcId != 0)
+			if (Results.NumOfHmrcMps == 1)
 			{
 				var loadVatReturnSummary = new LoadVatReturnSummary(Results.CustomerId, hmrcId, db, log);
 				loadVatReturnSummary.Execute();
-				summaryData = loadVatReturnSummary.Summary;
+				VatReturnSummary[] summaryData = loadVatReturnSummary.Summary;
 
 				if (summaryData != null && summaryData.Length != 0)
 				{
-					wasAbleToGetSummaryData = true;
+					foreach (VatReturnSummary singleSummary in summaryData)
+					{
+						Results.HmrcAnnualTurnover += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
+						Results.FreeCashFlowValue += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
+						Results.ValueAdded += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
+					}
 				}
 			}
 
-			failedCalculatingFreeCashFlow = false;
-			freeCashFlowDataAvailable = false;
 			CalculateBankAnnualTurnover();
 
-			decimal tmpValueAdded = 0;
-			decimal tmpFreeCashFlow = 0;
-			if (wasAbleToGetSummaryData)
-			{
-				freeCashFlowDataAvailable = true;
-
-				foreach (VatReturnSummary singleSummary in summaryData)
-				{
-					Results.HmrcAnnualTurnover += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
-					tmpFreeCashFlow += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
-					tmpValueAdded += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
-				}
-			}
-
-			DetermineFlow(tmpFreeCashFlow, tmpValueAdded);
-
-			failedCalculatingTangibleEquity = false;
-
-			if (Results.AnnualTurnover > 0)
-			{
-				Results.TangibleEquity = Results.TangibleEquityValue / Results.AnnualTurnover;
-				Results.FreeCashFlow = Results.FreeCashFlowValue / Results.AnnualTurnover;
-			}
-			else
-			{
-				failedCalculatingFreeCashFlow = true;
-				failedCalculatingTangibleEquity = true;
-				Results.TangibleEquity = 0;
-				Results.AnnualTurnover = 0;
-				Results.FreeCashFlow = 0;
-			}
-
-			decimal mortgageBalance = GetMortgages(Results.CustomerId);
-			if (totalZooplaValue != 0)
-			{
-				Results.NetWorth = (totalZooplaValue - mortgageBalance) / totalZooplaValue;
-			}
-			else
-			{
-				Results.NetWorth = 0;
-			}
+			Results.MortgageBalance = GetMortgages(Results.CustomerId);
 		}
 
 		private void CalculateBankAnnualTurnover()
@@ -738,7 +682,7 @@
 
 		private void CalculateTangibleEquityGrade()
 		{
-			if (Results.TangibleEquity < -0.05m || failedCalculatingTangibleEquity) // When turnover is zero we can't calc tangible equity, we want the min grade
+			if (Results.TangibleEquity < -0.05m || Results.AnnualTurnover <= 0) // When turnover is zero we can't calc tangible equity, we want the min grade
 			{
 				Results.TangibleEquityGrade = 0;
 			}
@@ -794,7 +738,7 @@
 
 		private void CalculateFreeCashFlowGrade()
 		{
-			if (Results.FreeCashFlow < -0.1m || !freeCashFlowDataAvailable || failedCalculatingFreeCashFlow) // When turnover is zero we can't calc FCF, we want the min grade
+			if (Results.FreeCashFlow < -0.1m || Results.NumOfHmrcMps != 1 || Results.AnnualTurnover <= 0) // When turnover is zero we can't calc FCF, we want the min grade
 			{
 				Results.FreeCashFlowGrade = 0;
 			}
