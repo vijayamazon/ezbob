@@ -46,6 +46,7 @@ namespace EzBobTest
 			ScoreResult resultsInput = new ScoreResult();
 			resultsInput.CustomerId = customerId;
 			resultsInput.CalculationTime = calculationTime;
+			resultsInput.MedalType = "Limited";
 			resultsInput.BusinessScore = 0;
 			resultsInput.TangibleEquityValue = 0;
 			resultsInput.BusinessSeniority = null;

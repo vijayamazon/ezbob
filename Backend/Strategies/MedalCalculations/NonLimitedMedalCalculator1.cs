@@ -10,9 +10,13 @@
 		{
 		}
 
-		public override void SetTypeAndInitialWeights()
+		protected override void SetMedalType()
 		{
 			Results.MedalType = "NonLimited";
+		}
+
+		public override void SetInitialWeights()
+		{
 			Results.BusinessScoreWeight = 21;
 			Results.FreeCashFlowWeight = 15;
 			Results.AnnualTurnoverWeight = 10;

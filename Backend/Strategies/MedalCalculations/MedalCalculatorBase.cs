@@ -25,7 +25,7 @@
 
 		public ScoreResult Results { get; set; }
 
-		public abstract void SetTypeAndInitialWeights();
+		public abstract void SetInitialWeights();
 
 		protected MedalCalculatorBase(AConnection db, ASafeLog log)
 		{
@@ -35,6 +35,9 @@
 
 		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime)
 		{
+			Results = new ScoreResult { CustomerId = customerId, CalculationTime = calculationTime };
+			SetMedalType();
+
 			try
 			{
 				GatherInputData(customerId, calculationTime);
@@ -49,8 +52,8 @@
 				CalculateRatiosOfAnnualTurnover();
 				CalculateNetWorth();
 
-				// Set type and calculate weights
-				SetTypeAndInitialWeights();
+				// Calculate weights
+				SetInitialWeights();
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
 				if (Results.NumOfHmrcMps != 1)
@@ -130,6 +133,7 @@
 		protected abstract decimal GetCompanyScoreWeightForLowScore();
 		protected abstract void RedistributeFreeCashFlowWeight();
 		protected abstract void RedistributeWeightsForPayingCustomer();
+		protected abstract void SetMedalType();
 
 		private void ValidateLegalInput()
 		{
@@ -167,10 +171,6 @@
 
 		protected virtual void GatherInputData(int customerId, DateTime calculationTime)
 		{
-			Results = new ScoreResult();
-			Results.CustomerId = customerId;
-			Results.CalculationTime = calculationTime;
-
 			SafeReader sr = db.GetFirst("GetDataForMedalCalculation1", CommandSpecies.StoredProcedure,
 										new QueryParameter("CustomerId", Results.CustomerId),
 										new QueryParameter("CalculationTime", Results.CalculationTime));

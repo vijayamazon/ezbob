@@ -30,10 +30,6 @@
 
 		protected override void GatherInputData(int customerId, DateTime calculationTime)
 		{
-			Results = new ScoreResult();
-			Results.CustomerId = customerId;
-			Results.CalculationTime = calculationTime;
-
 			// Filling fake data for instant offer
 			Results.BusinessScore = businessScore;
 			Results.FreeCashFlow = freeCashFlow;
