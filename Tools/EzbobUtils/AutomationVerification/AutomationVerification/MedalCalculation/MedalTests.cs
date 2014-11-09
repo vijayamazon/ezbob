@@ -91,7 +91,8 @@
 
 
 
-				if (medal.NormalizedScore != medalComparisonModel.TotalScoreNormalized) {
+				if (Math.Round(medal.NormalizedScore - medalComparisonModel.TotalScoreNormalized, 2) != 0)
+				{
 					if (medal.Medal != medalComparisonModel.Medal) {
 						passed = false;
 						Log.Error("Medal Mismatch for customerid {0} 1st {1} 2nd {2}", medalComparisonModel.CustomerId,
@@ -158,12 +159,13 @@
 			weight = medalOutput.NetWorth;
 			sb.AddWeight(weight, "NetWorth", ref summary);
 
-			weight = medalOutput.NumOfStores;
-			sb.AddWeight(weight, "NumOfStores", ref summary);
+			if (medalOutput.MedalType == MedalType.OnlineLimited) {
+				weight = medalOutput.NumOfStores;
+				sb.AddWeight(weight, "NumOfStores", ref summary);
 
-			weight = medalOutput.PositiveFeedbacks;
-			sb.AddWeight(weight, "PositiveFeedbacks", ref summary);
-
+				weight = medalOutput.PositiveFeedbacks;
+				sb.AddWeight(weight, "PositiveFeedbacks", ref summary);
+			}
 
 			sb.AppendLine("----------------------------------------------------------------------------------------------------------------------------------------");
 			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}\n",

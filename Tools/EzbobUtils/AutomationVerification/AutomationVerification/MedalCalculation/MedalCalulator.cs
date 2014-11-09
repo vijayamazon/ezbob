@@ -194,7 +194,7 @@
 					weight.Value.MinimumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
 					weight.Value.MaximumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
 					weight.Value.Grade.ToString(CultureInfo.InvariantCulture).PadRight(10),
-					ToShort(weight.Value.Score).PadRight(10), weight.Value.Value);
+					ToShort(weight.Value.Score*100).PadRight(10), weight.Value.Value);
 				s5 += weight.Value.FinalWeight;
 				s6 += weight.Value.MinimumScore;
 				s7 += weight.Value.MaximumScore;
@@ -212,7 +212,7 @@
 				s8.ToString(CultureInfo.InvariantCulture).PadRight(10),
 				s9.ToString(CultureInfo.InvariantCulture).PadRight(10),
 				s11.ToString(CultureInfo.InvariantCulture).PadRight(10),
-				ToShort(s10).PadRight(10));
+				ToShort(s10*100).PadRight(10));
 
 			Log.Debug(sb.ToString());
 		}
@@ -318,13 +318,19 @@
 			return GetBaseWeight(netWorth, NetWorthBaseWeight, MedalRangesConstats.NetWorthRanges);
 		}
 
-		protected virtual Weight GetFreeCashFlowWeight(decimal freeCashFlow, bool hasHmrc)
+		protected virtual Weight GetFreeCashFlowWeight(decimal freeCashFlow, bool hasHmrc, decimal annualTurnover)
 		{
 			var freeCashFlowWeight = GetBaseWeight(freeCashFlow, FreeCashFlowBaseWeight, MedalRangesConstats.FreeCashFlowRanges);
 
 			if (!hasHmrc)
 			{
 				freeCashFlowWeight.FinalWeight = FreeCashFlowNoHmrcWeight;
+				freeCashFlowWeight.Grade = MedalRangesConstats.FreeCashFlowRanges.MinGrade();
+			}
+
+			if (annualTurnover <= 0)
+			{
+				freeCashFlowWeight.Grade = MedalRangesConstats.FreeCashFlowRanges.MinGrade();
 			}
 
 			return freeCashFlowWeight;
@@ -347,9 +353,13 @@
 			return businessSeniorityWeight;
 		}
 
-		protected virtual Weight GetTangibleEquityWeight(decimal tangibleEquity)
+		protected virtual Weight GetTangibleEquityWeight(decimal tangibleEquity, decimal annualTurnover)
 		{
-			return GetBaseWeight(tangibleEquity, TangibleEquityBaseWeight, MedalRangesConstats.TangibleEquityRanges);
+			var tangibleEquityWeight = GetBaseWeight(tangibleEquity, TangibleEquityBaseWeight, MedalRangesConstats.TangibleEquityRanges);
+			if (annualTurnover <= 0) {
+				tangibleEquityWeight.Grade = MedalRangesConstats.TangibleEquityRanges.MinGrade();
+			}
+			return tangibleEquityWeight;
 		}
 
 		protected virtual Weight GetBusinessScoreWeight(int businessScore, bool firstRepaymentDatePassed, bool hasHmrc)
