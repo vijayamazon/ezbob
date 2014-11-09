@@ -364,7 +364,7 @@
 			int tangibleEquityMaxGrade = 4;
 			int businessSeniorityMaxGrade = 4;
 			int consumerScoreMaxGrade = 8;
-			int netWorthMaxGrade = 3;
+			int netWorthMaxGrade = 2;
 			int maritalStatusMaxGrade = 4;
 			int numberOfStoresMaxGrade = 5;
 			int positiveFeedbacksMaxGrade = 5;
