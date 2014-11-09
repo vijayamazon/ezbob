@@ -476,15 +476,15 @@
 		{
 			if (Results.NumberOfStores < 3)
 			{
-				Results.NumOfLoansGrade = 1;
+				Results.NumberOfStoresGrade = 1;
 			}
 			else if (Results.NumberOfStores < 5)
 			{
-				Results.NumOfLoansGrade = 3;
+				Results.NumberOfStoresGrade = 3;
 			} 
 			else
 			{
-				Results.NumOfLoansGrade = 5;
+				Results.NumberOfStoresGrade = 5;
 			}
 		}
 
