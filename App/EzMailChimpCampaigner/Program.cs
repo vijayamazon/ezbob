@@ -61,12 +61,16 @@
 					if (day == null)
 						continue;
 
+					ms_oLog.Debug("CreateSegmentedCampaign listId:{0}, templateId:{1}, condition:{2}, subject:{3}, title:{4}, type:{5}", campaign.ListId, day.TemplateId, day.Condition, day.Subject, campaign.Title, campaign.CampaignType.ToString());
 					string campaignId = oMailChimpApiControler.CreateSegmentedCampaign(campaign.ListId, day.TemplateId, day.Condition, day.Subject, campaign.Title, campaign.CampaignType.ToString());
 
 					if (!string.IsNullOrEmpty(campaignId)) {
 						ms_oLog.Debug("Sending campaign {0}, {1} {2}", campaignId, campaign.Title, day.Condition);
 						oMailChimpApiControler.SendCampaign(campaignId);
 					} // fi
+					else {
+						ms_oLog.Error("Failed to CreateSegmentedCampaign");
+					}
 				} // for each day
 			} // for each campaign
 		} // ExecuteAutomaticMailChimp
@@ -135,6 +139,60 @@
             //sw.AutoFlush = true;
             //sw.Close();
         }*/
+
+		public static void TestAlibaba(MailChimpApiControler oMailChimpApiControler)
+		{
+			Campaigns.InitCampaignsList();
+			foreach (Campaign campaign in Campaigns.CampaignsList)
+			{
+				if (campaign.CampaignType == Constants.CampaignsType.DidntTakeLoanAlibaba) {
+					var subscriberList = new List<Subscriber>() {
+						new Subscriber() {
+							Email = "stasd+alitest@ezbob.com",
+							DayAfter = DateTime.Today,
+							FirstName = "Stas",
+							Group = Constants.CampaignsType.DidntTakeLoanAlibaba.ToString(),
+							LastName = "Dulman",
+							LoanOffer = 1000,
+							Month = DateTime.Today,
+							TwoWeeks = DateTime.Today,
+							Week = DateTime.Today
+						}
+					};
+
+					if (subscriberList.Count == 0) {
+						ms_oLog.Debug("subscriberList is empty {0}", campaign);
+						continue;
+					} // if
+
+					ms_oLog.Debug("subscriberList has {0} customers", subscriberList.Count);
+
+					PrintSubscribersList(campaign.Title, subscriberList);
+
+					oMailChimpApiControler.ListBatchSubscribe(campaign.ListId, subscriberList);
+
+					foreach (Day day in campaign.DayList) {
+						if (day == null)
+							continue;
+
+						ms_oLog.Debug("CreateSegmentedCampaign listId:{0}, templateId:{1}, condition:{2}, subject:{3}, title:{4}, type:{5}",
+							campaign.ListId, day.TemplateId, day.Condition, day.Subject, campaign.Title, campaign.CampaignType.ToString());
+						
+						string campaignId = oMailChimpApiControler.CreateSegmentedCampaign(campaign.ListId, day.TemplateId, day.Condition,
+						                                                                   day.Subject, campaign.Title,
+						                                                                   campaign.CampaignType.ToString());
+
+						if (!string.IsNullOrEmpty(campaignId)) {
+							ms_oLog.Debug("Sending campaign {0}, {1} {2}", campaignId, campaign.Title, day.Condition);
+							//oMailChimpApiControler.SendCampaign(campaignId);
+						} // fi
+						else {
+							ms_oLog.Error("Failed to CreateSegmentedCampaign");
+						}
+					} // for each day
+				}
+			} // for each campaign
+		}
 		#endregion
 	} // class Program
 } // namesapce
