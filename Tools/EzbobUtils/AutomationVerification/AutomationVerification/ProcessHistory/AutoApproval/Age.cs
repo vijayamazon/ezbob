@@ -1,5 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class Age : AmountOutOfRangle {
+	public class Age : ARangeTrace {
 		public Age(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 

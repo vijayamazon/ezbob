@@ -1,12 +1,12 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class Turnover : BusinessScore {
+	public class Turnover : AThresholdTrace {
 		public Turnover(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
 		public virtual string PeriodName { get; set; }
 
-		protected override string ScoreName {
+		protected override string ValueName {
 			get { return PeriodName + " turnover"; }
-		} // ScoreName
+		} // ValueName
 	}  // class Turnover
 } // namespace

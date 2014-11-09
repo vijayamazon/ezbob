@@ -1,5 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class IsBrokerCustomer : DefaultAccounts {
+	public class IsBrokerCustomer : ABoolTrace {
 		public IsBrokerCustomer(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 

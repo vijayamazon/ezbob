@@ -1,10 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class ConsumerScore : BusinessScore {
+	public class ConsumerScore : AThresholdTrace {
 		public ConsumerScore(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
-		protected override string ScoreName {
+		protected override string ValueName {
 			get { return "consumer score"; }
-		} // ScoreName
+		} // ValueName
 	}  // class ConsumerScore
 } // namespace

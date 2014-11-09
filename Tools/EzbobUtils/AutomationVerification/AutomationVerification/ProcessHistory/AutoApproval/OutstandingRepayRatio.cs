@@ -1,10 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class OutstandingRepayRatio : BusinessScore {
+	public class OutstandingRepayRatio : AThresholdTrace {
 		public OutstandingRepayRatio(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
-		protected override string ScoreName {
+		protected override string ValueName {
 			get { return "outstanding principal repay ratio"; }
-		} // ScoreName
+		} // ValueName
 	}  // class OutstandingRepayRatio
 } // namespace

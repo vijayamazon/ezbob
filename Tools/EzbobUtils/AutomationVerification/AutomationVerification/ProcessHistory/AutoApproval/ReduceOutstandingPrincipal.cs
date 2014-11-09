@@ -1,7 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	public class ReduceOutstandingPrincipal : ATrace {
-		public ReduceOutstandingPrincipal(int nCustomerID, bool bCompletedSuccessfully)
-			: base(nCustomerID, bCompletedSuccessfully) {
+		public ReduceOutstandingPrincipal(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
 		public void Init(decimal nOutstandingPrincipal, int nNewAutoApprovedAmount) {

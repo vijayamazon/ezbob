@@ -1,10 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class OutstandingOffers : BusinessScore {
+	public class OutstandingOffers : AThresholdTrace {
 		public OutstandingOffers(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
-		protected override string ScoreName {
+		protected override string ValueName {
 			get { return "outstanding offers"; }
-		} // ScoreName
+		} // ValueName
 	}  // class OutstandingOffers
 } // namespace

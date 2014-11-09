@@ -207,9 +207,9 @@
 			int autoApproveExperianScoreThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold;
 
 			if (minExperianScore < autoApproveExperianScoreThreshold)
-				StepFailed<BusinessScore>().Init(minExperianScore, autoApproveExperianScoreThreshold);
+				StepFailed<ConsumerScore>().Init(minExperianScore, autoApproveExperianScoreThreshold);
 			else
-				StepDone<BusinessScore>().Init(minExperianScore, autoApproveExperianScoreThreshold);
+				StepDone<ConsumerScore>().Init(minExperianScore, autoApproveExperianScoreThreshold);
 		} // CheckExperianScore
 
 		private void CheckAge() {

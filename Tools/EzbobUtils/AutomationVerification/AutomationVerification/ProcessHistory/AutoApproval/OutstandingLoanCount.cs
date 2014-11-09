@@ -1,10 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class OutstandingLoanCount : BusinessScore {
+	public class OutstandingLoanCount : AThresholdTrace {
 		public OutstandingLoanCount(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
-		protected override string ScoreName {
+		protected override string ValueName {
 			get { return "outstanding loan count"; }
-		} // ScoreName
+		} // ValueName
 	}  // class OutstandingLoanCount
 } // namespace

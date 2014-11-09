@@ -59,6 +59,7 @@
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Common\MarketPlacesHelper.cs" />
     <Compile Include="Common\Models.cs" />
+    <Compile Include="ProcessHistory\ARangeTrace.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="ProcessHistory\AutoApproval\ExceptionThrown.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ReduceOutstandingPrincipal.cs" />
     <Compile Include="ProcessHistory\AutoApproval\InitialAssignment.cs" />
+    <Compile Include="ProcessHistory\ABoolTrace.cs" />
+    <Compile Include="ProcessHistory\AThresholdTrace.cs" />
     <Compile Include="ProcessHistory\Trail.cs" />
     <Compile Include="ProcessHistory\ATrace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,10 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class MarketplaceSeniority : BusinessScore {
+	public class MarketplaceSeniority : AThresholdTrace {
 		public MarketplaceSeniority(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
-		protected override string ScoreName {
+		protected override string ValueName {
 			get { return "marketplace seniority"; }
-		} // ScoreName
+		} // ValueName
 	}  // class MarketplaceSeniority
 } // namespace

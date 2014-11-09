@@ -14,10 +14,11 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		AutoReApproveMaxNumOfOutstandingLoans = CONVERT(INT, Value)
+		Name,
+		Value
 	FROM
 		ConfigurationVariables
 	WHERE
-		Name = 'AutoReApproveMaxNumOfOutstandingLoans'
+		Name LIKE 'AutoReApprove%'
 END
 GO

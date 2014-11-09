@@ -1,5 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class Rollovers : DefaultAccounts {
+	public class Rollovers : ABoolTrace {
 		public Rollovers(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 

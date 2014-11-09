@@ -44,8 +44,6 @@
 		private bool wasMainStrategyExecutedBefore;
 		private bool isViaBroker;
 		private int companySeniorityDays;
-		private decimal loanOfferReApprovalRemainingAmount;
-		private decimal loanOfferReApprovalRemainingAmountOld;
 
 		private AutoDecisionResponse autoDecisionResponse;
 		private MedalMultiplier medalType;
@@ -106,8 +104,6 @@
 			isFirstLoan = dataGatherer.NumOfLoans == 0;
 			isViaBroker = dataGatherer.BrokerId.HasValue;
 			companySeniorityDays = dataGatherer.CompanyIncorporationDate.HasValue ? (DateTime.UtcNow - dataGatherer.CompanyIncorporationDate.Value).Days : 0;
-			loanOfferReApprovalRemainingAmount = dataGatherer.LoanOfferReApprovalRemainingAmount;
-			loanOfferReApprovalRemainingAmountOld = dataGatherer.LoanOfferReApprovalRemainingAmountOld;
 
 			// Calculate old medal
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
@@ -280,10 +276,7 @@
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
 				new ReApproval(
 					customerId,
-					dataGatherer.LoanOfferReApprovalFullAmount,
-					loanOfferReApprovalRemainingAmount,
-					dataGatherer.LoanOfferReApprovalFullAmountOld,
-					loanOfferReApprovalRemainingAmountOld,
+					loanOfferReApprovalSum,
 					DB,
 					Log
 				).MakeDecision(autoDecisionResponse);
@@ -404,19 +397,6 @@
 
 		private void CapOffer() {
 			Log.Info("Finalizing and capping offer");
-
-			if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
-				loanOfferReApprovalRemainingAmount = 0;
-
-			if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
-				loanOfferReApprovalRemainingAmountOld = 0;
-
-			loanOfferReApprovalSum = new[] {
-				dataGatherer.LoanOfferReApprovalFullAmount,
-				loanOfferReApprovalRemainingAmount,
-				dataGatherer.LoanOfferReApprovalFullAmountOld,
-				loanOfferReApprovalRemainingAmountOld
-			}.Max();
 
 			offeredCreditLine = modelLoanOffer;
 

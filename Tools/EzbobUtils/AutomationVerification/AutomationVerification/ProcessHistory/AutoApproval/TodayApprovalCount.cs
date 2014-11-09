@@ -1,10 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class TodayApprovalCount : BusinessScore {
+	public class TodayApprovalCount : AThresholdTrace {
 		public TodayApprovalCount(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor
 
-		protected override string ScoreName {
+		protected override string ValueName {
 			get { return "today approval count"; }
-		} // ScoreName
+		} // ValueName
 	}  // class TodayApprovalCount
 } // namespace
