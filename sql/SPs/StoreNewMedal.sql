@@ -74,7 +74,15 @@ ALTER PROCEDURE StoreNewMedal
 	,@TotalScoreNormalized DECIMAL(18,6)
 	,@Medal NVARCHAR(50)
 	,@Error NVARCHAR(500)
-	,@OfferedLoanAmount INT)
+	,@OfferedLoanAmount INT
+	,@NumOfHmrcMps INT
+	,@ZooplaValue INT	
+	,@EarliestHmrcLastUpdateDate DATETIME
+	,@EarliestYodleeLastUpdateDate DATETIME	
+	,@AmazonPositiveFeedbacks INT
+	,@EbayPositiveFeedbacks INT
+	,@NumberOfPaypalPositiveTransactions INT	
+	,@MortgageBalance DECIMAL(18,6))
 AS
 BEGIN
 	UPDATE MedalCalculations SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
@@ -152,7 +160,15 @@ BEGIN
 	,TotalScoreNormalized
 	,Medal
 	,Error
-	,OfferedLoanAmount)
+	,OfferedLoanAmount
+	,NumOfHmrcMps
+	,ZooplaValue	
+	,EarliestHmrcLastUpdateDate
+	,EarliestYodleeLastUpdateDate	
+	,AmazonPositiveFeedbacks
+	,EbayPositiveFeedbacks
+	,NumberOfPaypalPositiveTransactions	
+	,MortgageBalance)
 	VALUES (
 	 @CustomerId
 	,@CalculationTime
@@ -226,6 +242,14 @@ BEGIN
 	,@TotalScoreNormalized
 	,@Medal
 	,@Error
-	,@OfferedLoanAmount)
+	,@OfferedLoanAmount
+	,@NumOfHmrcMps
+	,@ZooplaValue	
+	,@EarliestHmrcLastUpdateDate
+	,@EarliestYodleeLastUpdateDate	
+	,@AmazonPositiveFeedbacks
+	,@EbayPositiveFeedbacks
+	,@NumberOfPaypalPositiveTransactions	
+	,@MortgageBalance)
 END
 GO

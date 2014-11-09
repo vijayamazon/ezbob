@@ -183,7 +183,15 @@
 				TotalScoreNormalized != other.TotalScoreNormalized ||
 				Medal != other.Medal ||
 				Error != other.Error ||
-				OfferedLoanAmount != other.OfferedLoanAmount)
+				OfferedLoanAmount != other.OfferedLoanAmount ||
+				NumOfHmrcMps != other.NumOfHmrcMps ||
+				ZooplaValue != other.ZooplaValue ||
+				EarliestHmrcLastUpdateDate != other.EarliestHmrcLastUpdateDate ||
+				EarliestYodleeLastUpdateDate != other.EarliestYodleeLastUpdateDate ||
+				AmazonPositiveFeedbacks != other.AmazonPositiveFeedbacks ||
+				EbayPositiveFeedbacks != other.EbayPositiveFeedbacks ||
+				NumberOfPaypalPositiveTransactions != other.NumberOfPaypalPositiveTransactions ||
+				MortgageBalance != other.MortgageBalance)
 			{
 				return false;
 			}
@@ -265,7 +273,15 @@
 							   new QueryParameter("TotalScoreNormalized", TotalScoreNormalized),
 							   new QueryParameter("Medal", Medal.ToString()),
 							   new QueryParameter("Error", Error),
-							   new QueryParameter("OfferedLoanAmount", OfferedLoanAmount));
+							   new QueryParameter("OfferedLoanAmount", OfferedLoanAmount),
+							   new QueryParameter("NumOfHmrcMps", NumOfHmrcMps),
+							   new QueryParameter("ZooplaValue", ZooplaValue),
+							   new QueryParameter("EarliestHmrcLastUpdateDate", EarliestHmrcLastUpdateDate),
+							   new QueryParameter("EarliestYodleeLastUpdateDate", EarliestYodleeLastUpdateDate),
+							   new QueryParameter("AmazonPositiveFeedbacks", AmazonPositiveFeedbacks),
+							   new QueryParameter("EbayPositiveFeedbacks", EbayPositiveFeedbacks),
+							   new QueryParameter("NumberOfPaypalPositiveTransactions", NumberOfPaypalPositiveTransactions),
+							   new QueryParameter("MortgageBalance", MortgageBalance));
 		}
 	}
 }
