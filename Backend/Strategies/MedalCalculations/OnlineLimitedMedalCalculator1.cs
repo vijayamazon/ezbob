@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
-	using System;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -12,30 +11,23 @@
 		{
 		}
 
-		public override ScoreResult CreateResultWithInitialWeights(int customerId, DateTime calculationTime)
+		public override void SetTypeAndInitialWeights()
 		{
-			Results = new ScoreResult
-				{
-					CustomerId = customerId,
-					CalculationTime = calculationTime,
-					MedalType = "OnlineLimited",
-					BusinessScoreWeight = 20,
-					FreeCashFlowWeight = 13,
-					AnnualTurnoverWeight = 10,
-					TangibleEquityWeight = 8,
-					BusinessSeniorityWeight = 7,
-					ConsumerScoreWeight = 20,
-					NetWorthWeight = 10,
-					MaritalStatusWeight = 5,
-					NumberOfStoresWeight = 2,
-					PositiveFeedbacksWeight = 5,
-					EzbobSeniorityWeight = 0,
-					NumOfLoansWeight = 0,
-					NumOfLateRepaymentsWeight = 0,
-					NumOfEarlyRepaymentsWeight = 0
-				};
-
-			return Results;
+			Results.MedalType = "OnlineLimited";
+			Results.BusinessScoreWeight = 20;
+			Results.FreeCashFlowWeight = 13;
+			Results.AnnualTurnoverWeight = 10;
+			Results.TangibleEquityWeight = 8;
+			Results.BusinessSeniorityWeight = 7;
+			Results.ConsumerScoreWeight = 20;
+			Results.NetWorthWeight = 10;
+			Results.MaritalStatusWeight = 5;
+			Results.NumberOfStoresWeight = 2;
+			Results.PositiveFeedbacksWeight = 5;
+			Results.EzbobSeniorityWeight = 0;
+			Results.NumOfLoansWeight = 0;
+			Results.NumOfLateRepaymentsWeight = 0;
+			Results.NumOfEarlyRepaymentsWeight = 0;
 		}
 
 		protected override void DetermineFlow()

@@ -11,30 +11,23 @@
 		{
 		}
 
-		public override ScoreResult CreateResultWithInitialWeights(int customerId, DateTime calculationTime)
+		public override void SetTypeAndInitialWeights()
 		{
-			Results = new ScoreResult
-				{
-					CustomerId = customerId,
-					CalculationTime = calculationTime,
-					MedalType = "SoleTrader",
-					BusinessScoreWeight = 0,
-					FreeCashFlowWeight = 25,
-					AnnualTurnoverWeight = 16,
-					TangibleEquityWeight = 0,
-					BusinessSeniorityWeight = 3,
-					ConsumerScoreWeight = 40,
-					NetWorthWeight = 10,
-					MaritalStatusWeight = 6,
-					NumberOfStoresWeight = 0,
-					PositiveFeedbacksWeight = 0,
-					EzbobSeniorityWeight = 0,
-					NumOfLoansWeight = 0,
-					NumOfLateRepaymentsWeight = 0,
-					NumOfEarlyRepaymentsWeight = 0
-				};
-
-			return Results;
+			Results.MedalType = "SoleTrader";
+			Results.BusinessScoreWeight = 0;
+			Results.FreeCashFlowWeight = 25;
+			Results.AnnualTurnoverWeight = 16;
+			Results.TangibleEquityWeight = 0;
+			Results.BusinessSeniorityWeight = 3;
+			Results.ConsumerScoreWeight = 40;
+			Results.NetWorthWeight = 10;
+			Results.MaritalStatusWeight = 6;
+			Results.NumberOfStoresWeight = 0;
+			Results.PositiveFeedbacksWeight = 0;
+			Results.EzbobSeniorityWeight = 0;
+			Results.NumOfLoansWeight = 0;
+			Results.NumOfLateRepaymentsWeight = 0;
+			Results.NumOfEarlyRepaymentsWeight = 0;
 		}
 
 		protected override void AdditionalLegalInputValidations()

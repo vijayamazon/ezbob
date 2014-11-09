@@ -19,7 +19,7 @@ namespace EzBobTest
 			this.resultInput = resultInput;
 		}
 
-		protected override void GatherInputData()
+		protected override void GatherInputData(int customerId, DateTime calculationTime)
 		{
 			Results = resultInput;
 		}
@@ -42,9 +42,10 @@ namespace EzBobTest
 		{
 			DateTime calculationTime = new DateTime(2014, 11, 06);
 			int customerId = 18112;
-			var tmp = new LimitedMedalCalculator1(m_oDB, m_oLog);
-			ScoreResult resultsInput = tmp.CreateResultWithInitialWeights(customerId, calculationTime);
 
+			ScoreResult resultsInput = new ScoreResult();
+			resultsInput.CustomerId = customerId;
+			resultsInput.CalculationTime = calculationTime;
 			resultsInput.BusinessScore = 0;
 			resultsInput.TangibleEquityValue = 0;
 			resultsInput.BusinessSeniority = null;

@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
-	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -11,30 +10,23 @@
 		{
 		}
 
-		public override ScoreResult CreateResultWithInitialWeights(int customerId, DateTime calculationTime)
+		public override void SetTypeAndInitialWeights()
 		{
-			Results = new ScoreResult
-				{
-					CustomerId = customerId,
-					CalculationTime = calculationTime,
-					MedalType = "Limited",
-					BusinessScoreWeight = 30,
-					FreeCashFlowWeight = 19,
-					AnnualTurnoverWeight = 10,
-					TangibleEquityWeight = 8,
-					BusinessSeniorityWeight = 8,
-					ConsumerScoreWeight = 10,
-					NetWorthWeight = 10,
-					MaritalStatusWeight = 5,
-					NumberOfStoresWeight = 0,
-					PositiveFeedbacksWeight = 0,
-					EzbobSeniorityWeight = 0,
-					NumOfLoansWeight = 0,
-					NumOfLateRepaymentsWeight = 0,
-					NumOfEarlyRepaymentsWeight = 0
-				};
-
-			return Results;
+			Results.MedalType = "Limited";
+			Results.BusinessScoreWeight = 30;
+			Results.FreeCashFlowWeight = 19;
+			Results.AnnualTurnoverWeight = 10;
+			Results.TangibleEquityWeight = 8;
+			Results.BusinessSeniorityWeight = 8;
+			Results.ConsumerScoreWeight = 10;
+			Results.NetWorthWeight = 10;
+			Results.MaritalStatusWeight = 5;
+			Results.NumberOfStoresWeight = 0;
+			Results.PositiveFeedbacksWeight = 0;
+			Results.EzbobSeniorityWeight = 0;
+			Results.NumOfLoansWeight = 0;
+			Results.NumOfLateRepaymentsWeight = 0;
+			Results.NumOfEarlyRepaymentsWeight = 0;
 		}
 
 		protected override decimal GetConsumerScoreWeightForLowScore()
