@@ -57,9 +57,9 @@
 				oCur.Pct = oCur.Counter < 1 ? 0 : (double)oNext.Counter / (double)oCur.Counter;
 			} // for
 
-			string sPrefix = (m_sBatchName ?? "Total") + ": ";
+			string sPrefix = (m_sBatchName ?? "Total") + " ";
 
-			CreateOneSheet(m_oFunnel, "Funnel", sPrefix + "Funnel", "Unique page views", "Drop off", "Conversion");
+			CreateOneSheet(m_oFunnel, sPrefix + "Funnel", "Funnel", "Unique page views", "Drop off", "Conversion");
 			CreateOneSheet(m_oRejectReasons, sPrefix + "Decline reasons", "Decline reason", "Count", "% of total");
 		} // Generate
 
