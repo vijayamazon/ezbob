@@ -145,5 +145,18 @@
 			//Assert.IsTrue(models.Count > 0);
 		}
 
+		[Test]
+		public void TestTestDataGatherForMedal() {
+			var medalTests = new MedalTests(Log);
+			medalTests.TestMedalDataGathering();
+		}
+
+		[Test]
+		public void TestMedal()
+		{
+			var medalChooser = new MedalChooser(Log);
+			medalChooser.GetMedal(18626);
+		}
+
 	}
 }

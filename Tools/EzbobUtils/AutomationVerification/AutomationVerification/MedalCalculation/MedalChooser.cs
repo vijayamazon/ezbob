@@ -20,8 +20,7 @@
 				if (medalChooserData.HasOnline) {
 					type = MedalType.OnlineLimited;
 				}
-
-				if (medalChooserData.NumOfHmrc < 2) {
+				else if (medalChooserData.NumOfHmrc < 2) {
 					type = MedalType.Limited;
 				}
 			}
@@ -55,7 +54,9 @@
 					return new MedalOutputModel {
 						MedalType = type,
 						Medal = Medal.NoMedal,
-						Error = "None of the medals match the criteria for medal calculation"
+						Error = "None of the medals match the criteria for medal calculation",
+						NumOfHmrcMps = medalChooserData.NumOfHmrc,
+						CustomerId = customerId
 					};
 			}
 

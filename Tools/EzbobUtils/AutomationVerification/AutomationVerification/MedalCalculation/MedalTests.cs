@@ -45,7 +45,7 @@
 				numChecked++;
 				DateTime companyDate;
 				DateTime regDate;
-				DateTime today = DateTime.Today;
+				DateTime calcTime = medalComparisonModel.CalculationTime;
 				decimal businessSeniority;
 				decimal ezbobSeniority;
 				if (
@@ -55,7 +55,7 @@
 					businessSeniority = 0;
 				}
 				else {
-					businessSeniority = (decimal) (today - companyDate).TotalDays/365.0M;
+					businessSeniority = (decimal)(calcTime - companyDate).TotalDays / 365.0M;
 				}
 
 				if (
@@ -65,13 +65,13 @@
 					ezbobSeniority = 0;
 				}
 				else {
-					ezbobSeniority = (decimal) (today - regDate).TotalDays/(365.0M/12.0M);
+					ezbobSeniority = (decimal)(calcTime - regDate).TotalDays / (365.0M / 12.0M);
 				}
 				var model = new MedalInputModel {
 					AnnualTurnover = decimal.Parse(medalComparisonModel.AnnualTurnover.Value),
 					TangibleEquity = decimal.Parse(medalComparisonModel.TangibleEquity.Value),
 					BusinessScore = int.Parse(medalComparisonModel.BusinessScore.Value),
-					FirstRepaymentDatePassed = medalComparisonModel.NumOfLoans.FinalWeight > 0,
+					FirstRepaymentDatePassed = medalComparisonModel.FirstRepaymentDatePassed,
 					BusinessSeniority = businessSeniority,
 					MaritalStatus = (MaritalStatus) Enum.Parse(typeof (MaritalStatus), medalComparisonModel.MaritalStatus.Value),
 					EzbobSeniority = ezbobSeniority,
@@ -84,15 +84,13 @@
 					FreeCashFlow = decimal.Parse(medalComparisonModel.FreeCashFlow.Value),
 					
 					ConsumerScore = int.Parse(medalComparisonModel.ConsumerScore.Value),
+					HasHmrc = medalComparisonModel.NumOfHmrcMps > 0
 				};
 
-				model.HasHmrc = model.FreeCashFlow != 0;
 				var medal = calulator.CalculateMedal(model);
 
-
-
-				if (Math.Round(medal.NormalizedScore - medalComparisonModel.TotalScoreNormalized, 2) != 0)
-				{
+				if (Math.Abs(medal.NormalizedScore - medalComparisonModel.TotalScoreNormalized) > 0.009M ) {
+					calulator.PrintDict(medal);
 					if (medal.Medal != medalComparisonModel.Medal) {
 						passed = false;
 						Log.Error("Medal Mismatch for customerid {0} 1st {1} 2nd {2}", medalComparisonModel.CustomerId,
@@ -116,19 +114,26 @@
 
 		private void PrintComparisonMedal(MedalComparisonModel medalOutput) {
 			var sb = new StringBuilder();
-			sb.AppendFormat("Calculation Num 1 .........Medal Type {2} Medal: {0} Score: {1}%\n", medalOutput.Medal,
-			                ToPercent(medalOutput.TotalScoreNormalized), medalOutput.MedalType);
+			sb.AppendFormat("Calculation Num 1 .........Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", medalOutput.Medal,
+			                ToPercent(medalOutput.TotalScoreNormalized), medalOutput.MedalType, medalOutput.TotalScore);
 			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8} \n", "Parameter".PadRight(25), "Weight".PadRight(10),
 			                "MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10),
 			                "Grade".PadRight(10), "Score".PadRight(10), "Value");
 
-			var weight = medalOutput.BusinessScore;
 			var summary = new Weight();
-			sb.AddWeight(weight, "BusinessScore", ref summary);
-		
-			weight = medalOutput.TangibleEquity;
-			sb.AddWeight(weight, "TangibleEquity", ref summary);
-	
+			
+			Weight weight;
+			
+			if (medalOutput.MedalType != MedalType.SoleTrader) {
+				weight = medalOutput.BusinessScore;
+				sb.AddWeight(weight, "BusinessScore", ref summary);
+			}
+
+			if (medalOutput.MedalType == MedalType.Limited || medalOutput.MedalType == MedalType.OnlineLimited) {
+				weight = medalOutput.TangibleEquity;
+				sb.AddWeight(weight, "TangibleEquity", ref summary);
+			}
+
 			weight = medalOutput.BusinessSeniority;
 			sb.AddWeight(weight, "BusinessSeniority", ref summary);
 		
@@ -190,7 +195,17 @@
 			return String.Format("{0:F2}", val).PadRight(6);
 		}
 
-		public void TestMedalDataGathering() {}
+		public void TestMedalDataGathering() {
+			var dbHelper = new DbHelper(Log);
+			var customers = dbHelper.GetCustomersForMedalsCompare();
+				//new int[] { 25, 26, 28, 29, 30, 31, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 50, 51, 52, 53, 55, 56, 57, 58, 60, 61, 64, 65, 66, 69, 70, 71, 72, 74, 75, 76, 77, 78, 83, 84, 85, 105, 108, 2106, 4108, 4116, 4117, 4118, 4119, 5116, 5117, 5118, 5119, 5120, 5121, 5122, 5125, 5126, 5127, 5128, 5129, 5133, 5134, 5135, 7133, 10139, 10140, 10141, 10144, 10145, 10146, 11154, 11159, 11164, 14164, 14165, 14166, 14173, 14175, 14177, 14178, 14183, 14197, 14198, 14209, 14214, 14216, 14217, 14218, 14220, 14221, 14222, 14223, 14226, 15227, 15228, 15230, 15232, 16232, 16235, 16236, 16237, 16238, 16240, 16241, 16242, 16243, 16244, 16246, 16248, 16249, 17251, 17252, 17254, 17258, 17259, 17260, 17261, 17265, 17267, 18268, 18269, 18271, 18275, 18277, 18281, 18285, 18286, 18287, 18289, 18290, 20290, 20291, 20292, 20293, 20294, 20295, 20296, 20297, 20298, 20299, 20300, 20302, 20303, 20304, 20305, 20306, 20307, 20308, 20309, 20310, 20311, 20312, 20313, 20319, 20321, 21322, 21323, 21327, 21333, 21335, 21336, 21337, 21340, 21341, 21342, 21343, 21344, 21345, 21364, 21367, 21370, 21375, 21377, 21378, 21387, 21388, 21394, 21399, 21400, 21402, 21403 };
+			var medalChooser = new MedalChooser(Log);
+			
+			foreach (var customer in customers) {
+				var medal = medalChooser.GetMedal(customer);
+				dbHelper.StoreMedalVerification(medal);
+			}
+		}
 
 		public void TestFullMedalLogic() {}
 

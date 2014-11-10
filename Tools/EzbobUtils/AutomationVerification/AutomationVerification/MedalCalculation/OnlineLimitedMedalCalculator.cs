@@ -50,7 +50,7 @@
 
 		public override MedalOutputModel CalculateMedal(MedalInputModel model)
 		{
-			Log.Debug(model.ToString());
+			//Log.Debug(model.ToString());
 
 			var dict = new Dictionary<Parameter, Weight>
 				{
@@ -74,6 +74,9 @@
 			CalcDelta(model, dict);
 
 			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.OnlineLimited);
+			scoreMedal.FirstRepaymentDatePassed = model.FirstRepaymentDatePassed;
+			scoreMedal.NumOfHmrcMps = model.HasHmrc ? 1 : 0;
+			scoreMedal.CustomerId = model.CustomerId;
 			return scoreMedal;
 		}
 
@@ -122,7 +125,7 @@
 		public override decimal AnnualTurnoverNoHmrcWeightChange { get { return 0.05M; } }
 		public override decimal BusinessScoreNoHmrcWeightChange { get { return 0.03M; } }
 		public override decimal ConsumerScoreNoHmrcWeightChange { get { return 0.03M; } }
-		public override decimal BusinessSeniorityNoHmrcWeightChange { get { return 0.04M; } }
+		public override decimal BusinessSeniorityNoHmrcWeightChange { get { return 0.02M; } }
 		#endregion
 
 		#region Low Score Weight

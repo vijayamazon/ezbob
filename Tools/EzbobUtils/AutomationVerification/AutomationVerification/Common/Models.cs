@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator.Common
 {
 	using System;
+	using System.Collections.Generic;
 
 	public class MedalOutputModel
 	{
@@ -9,7 +10,20 @@
 		public decimal Score { get; set; }
 		public decimal NormalizedScore { get; set; }
 		public string Error { get; set; }
-		public MedalComparisonModel MedalComparisonModel { get; set; }
+		public int CustomerId { get; set; }
+
+		public MedalComparisonModel MedalComparisonModel { get; set; } //todo remove
+		public Dictionary<Parameter, Weight> Dict { get; set; }
+
+		public bool FirstRepaymentDatePassed { get; set; }
+		public int OfferedLoanAmount { get; set; }
+		public int NumOfHmrcMps { get; set; }
+		public DateTime? EarliestHmrcLastUpdateDate { get; set; }
+		public DateTime? EarliestYodleeLastUpdateDate { get; set; }
+		public int AmazonPositiveFeedbacks { get; set; }
+		public int EbayPositiveFeedbacks { get; set; }
+		public int NumberOfPaypalPositiveTransactions { get; set; }
+		public decimal? ValueAdded { get; set; }
 	}
 
 	public class MedalComparisonModel {
@@ -40,7 +54,17 @@
 		public Medal Medal { get; set; }
 		public decimal TotalScore { get; set; }
 		public decimal TotalScoreNormalized { get; set; }
-		
+
+		public DateTime CalculationTime { get; set; }
+		public bool FirstRepaymentDatePassed { get; set; }
+		public int OfferedLoanAmount { get; set; }
+		public int NumOfHmrcMps { get; set; }
+		public DateTime? EarliestHmrcLastUpdateDate { get; set; }
+		public DateTime? EarliestYodleeLastUpdateDate { get; set; }
+		public int AmazonPositiveFeedbacks { get; set; }
+		public int EbayPositiveFeedbacks { get; set; }
+		public int NumberOfPaypalPositiveTransactions { get; set; }
+		public decimal MortageBalance { get; set; }
 	}
 
 	public class Weight
@@ -238,6 +262,7 @@
 	}
 
 	public class MedalInputModel {
+		public int CustomerId { get; set; }
 		public int BusinessScore { get; set; }
 		public decimal TangibleEquity { get; set; }
 		public decimal BusinessSeniority { get; set; }

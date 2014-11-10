@@ -11,7 +11,7 @@
 
 		public override MedalOutputModel CalculateMedal(MedalInputModel model)
 		{
-			Log.Debug(model.ToString());
+			//Log.Debug(model.ToString());
 
 			var dict = new Dictionary<Parameter, Weight>
 				{
@@ -31,7 +31,9 @@
 			CalcDelta(model, dict);
 
 			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.SoleTrader);
-
+			scoreMedal.FirstRepaymentDatePassed = model.FirstRepaymentDatePassed;
+			scoreMedal.NumOfHmrcMps = model.HasHmrc ? 1 : 0;
+			scoreMedal.CustomerId = model.CustomerId;
 			return scoreMedal;
 		}
 

@@ -11,6 +11,7 @@
 	{
 		MedalInputModel GetInputParameters(int customerId);
 		MedalOutputModel CalculateMedal(MedalInputModel model);
+		void PrintDict(MedalOutputModel medalOutput);
 	}
 
 	public interface IMedalWeightConstatns
@@ -101,7 +102,7 @@
 			var balance = dbData.CurrentBalanceSum < 0 ? 0 : (dbData.CurrentBalanceSum / dbData.FCFFactor);
 			model.FreeCashFlow = model.AnnualTurnover == 0 ? 0 : (model.MedalInputModelDb.HmrcEbida - balance) / model.AnnualTurnover;
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
-
+			model.CustomerId = customerId;
 			return model;
 		}
 
@@ -131,10 +132,11 @@
 					Medal = medal,
 					MedalType = medalType,
 					NormalizedScore = score,
-					Score = scoreSum
+					Score = scoreSum,
+					Dict = dict
 				};
 
-			PrintDict(medalOutput, dict);
+			//PrintDict(medalOutput, dict);
 			return medalOutput;
 		}
 
@@ -177,10 +179,10 @@
 			return 0;
 		}
 
-		protected void PrintDict(MedalOutputModel medalOutput, Dictionary<Parameter, Weight> dict)
-		{
+		public void PrintDict(MedalOutputModel medalOutput) {
+			Dictionary<Parameter, Weight> dict = medalOutput.Dict;
 			var sb = new StringBuilder();
-			sb.AppendFormat("Medal Type {2} Medal: {0} Score: {1}%\n", medalOutput.Medal, ToPercent(medalOutput.NormalizedScore), medalOutput.MedalType);
+			sb.AppendFormat("Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", medalOutput.Medal, ToPercent(medalOutput.NormalizedScore), medalOutput.MedalType, medalOutput.Score);
 			decimal s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
 			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8} \n", "Parameter".PadRight(25), "Weight".PadRight(10), "MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10), "Grade".PadRight(10), "Score".PadRight(10), "Value");
 			foreach (var weight in dict)
