@@ -127,21 +127,46 @@
 
 		protected abstract decimal GetConsumerScoreWeightForLowScore();
 		protected abstract decimal GetCompanyScoreWeightForLowScore();
-		protected abstract void RedistributeFreeCashFlowWeight();
 		protected abstract void RedistributeWeightsForPayingCustomer();
 		protected abstract void SetMedalType();
 		
-		protected virtual void DetermineFlow()
+		protected virtual void RedistributeFreeCashFlowWeight() { }
+		
+		private void DetermineFlow()
 		{
-			if (Results.NumOfHmrcMps == 1)
+			if (Results.MedalType == MedalType.OnlineLimited ||
+				Results.MedalType == MedalType.OnlineNonLimitedNoBusinessScore ||
+				Results.MedalType == MedalType.OnlineNonLimitedWithBusinessScore)
 			{
-				Results.InnerFlowName = "HMRC";
-				Results.AnnualTurnover = Results.HmrcAnnualTurnover;
+				decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
+				if (Results.HmrcAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
+				{
+					Results.InnerFlowName = "HMRC";
+					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
+				}
+				else if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
+				{
+					Results.InnerFlowName = "Bank";
+					Results.AnnualTurnover = Results.BankAnnualTurnover;
+				}
+				else
+				{
+					Results.InnerFlowName = "Online";
+					Results.AnnualTurnover = Results.OnlineAnnualTurnover;
+				}
 			}
 			else
 			{
-				Results.InnerFlowName = "Bank";
-				Results.AnnualTurnover = Results.BankAnnualTurnover;
+				if (Results.NumOfHmrcMps == 1)
+				{
+					Results.InnerFlowName = "HMRC";
+					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
+				}
+				else
+				{
+					Results.InnerFlowName = "Bank";
+					Results.AnnualTurnover = Results.BankAnnualTurnover;
+				}
 			}
 		}
 
@@ -278,7 +303,7 @@
 
 		private void CalculateOffer()
 		{
-			if (Results == null || !string.IsNullOrEmpty(Results.Error) || Results.MedalType == "NoMedal")
+			if (Results == null || !string.IsNullOrEmpty(Results.Error) || Results.MedalType == MedalType.NoMedal)
 			{
 				return;
 			}
@@ -311,6 +336,9 @@
 			}
 		}
 
+		protected abstract decimal GetSumOfNonFixedWeights();
+		protected abstract void AdjustWeightsWithRatio(decimal ratio);
+
 		private void AdjustSumOfWeights()
 		{
 			decimal sumOfWeights = Results.BusinessScoreWeight + Results.FreeCashFlowWeight + Results.AnnualTurnoverWeight +
@@ -321,18 +349,10 @@
 
 			if (sumOfWeights != 100)
 			{
-				decimal sumOfNonFixed = Results.TangibleEquityWeight + Results.NetWorthWeight + Results.MaritalStatusWeight +
-				                        Results.NumberOfStoresWeight + Results.PositiveFeedbacksWeight;
-
+				decimal sumOfNonFixed = GetSumOfNonFixedWeights();
 				decimal sumOfNonFixedDestination = sumOfNonFixed - sumOfWeights + 100;
-
-				decimal ratioForDestionation = sumOfNonFixedDestination/sumOfNonFixed;
-
-				Results.TangibleEquityWeight *= ratioForDestionation;
-				Results.NetWorthWeight *= ratioForDestionation;
-				Results.MaritalStatusWeight *= ratioForDestionation;
-				Results.NumberOfStoresWeight *= ratioForDestionation;
-				Results.PositiveFeedbacksWeight *= ratioForDestionation;
+				decimal ratioForDestination = sumOfNonFixedDestination/sumOfNonFixed;
+				AdjustWeightsWithRatio(ratioForDestination);
 			}
 		}
 

@@ -114,7 +114,7 @@
 			var result = new ScoreResult();
 			result.CustomerId = customerId;
 			result.CalculationTime = calculationTime;
-			result.MedalType = "NoMedal";
+			result.MedalType = MedalType.NoMedal;
 			result.Error = errorMessage;
 			return result;
 		}

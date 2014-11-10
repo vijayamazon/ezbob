@@ -13,7 +13,7 @@
 
 		protected override void SetMedalType()
 		{
-			Results.MedalType = "OnlineLimited";
+			Results.MedalType = MedalType.OnlineLimited;
 		}
 
 		public override void SetInitialWeights()
@@ -32,26 +32,6 @@
 			Results.NumOfLoansWeight = 0;
 			Results.NumOfLateRepaymentsWeight = 0;
 			Results.NumOfEarlyRepaymentsWeight = 0;
-		}
-
-		protected override void DetermineFlow()
-		{
-			decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
-			if (Results.HmrcAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
-			{
-				Results.InnerFlowName = "HMRC";
-				Results.AnnualTurnover = Results.HmrcAnnualTurnover;
-			}
-			else if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
-			{
-				Results.InnerFlowName = "Bank";
-				Results.AnnualTurnover = Results.BankAnnualTurnover;
-			}
-			else
-			{
-				Results.InnerFlowName = "Online";
-				Results.AnnualTurnover = Results.OnlineAnnualTurnover;
-			}
 		}
 
 		protected override decimal GetConsumerScoreWeightForLowScore()
@@ -78,6 +58,20 @@
 			Results.BusinessScoreWeight -= 4;
 			Results.BusinessSeniorityWeight -= 2;
 			Results.ConsumerScoreWeight -= 4;
+		}
+
+		protected override decimal GetSumOfNonFixedWeights()
+		{
+			return Results.TangibleEquityWeight + Results.NetWorthWeight + Results.MaritalStatusWeight + Results.NumberOfStoresWeight + Results.PositiveFeedbacksWeight;
+		}
+
+		protected override void AdjustWeightsWithRatio(decimal ratio)
+		{
+			Results.TangibleEquityWeight *= ratio;
+			Results.NetWorthWeight *= ratio;
+			Results.MaritalStatusWeight *= ratio;
+			Results.NumberOfStoresWeight *= ratio;
+			Results.PositiveFeedbacksWeight *= ratio;
 		}
 	}
 }

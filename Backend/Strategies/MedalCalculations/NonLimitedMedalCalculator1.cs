@@ -12,7 +12,7 @@
 
 		protected override void SetMedalType()
 		{
-			Results.MedalType = "NonLimited";
+			Results.MedalType = MedalType.NonLimited;
 		}
 
 		public override void SetInitialWeights()
@@ -57,6 +57,17 @@
 			Results.BusinessScoreWeight -= 4;
 			Results.BusinessSeniorityWeight -= 2;
 			Results.ConsumerScoreWeight -= 4;
+		}
+
+		protected override decimal GetSumOfNonFixedWeights()
+		{
+			return Results.NetWorthWeight + Results.MaritalStatusWeight;
+		}
+
+		protected override void AdjustWeightsWithRatio(decimal ratio)
+		{
+			Results.NetWorthWeight *= ratio;
+			Results.MaritalStatusWeight *= ratio;
 		}
 	}
 }

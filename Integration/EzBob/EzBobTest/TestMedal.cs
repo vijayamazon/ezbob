@@ -9,6 +9,7 @@ namespace EzBobTest
 	using Ezbob.Logger;
 	using NUnit.Framework;
 	using StructureMap;
+	using MedalType = EzBob.Backend.Strategies.MedalCalculations.MedalType;
 
 	public class LimitedMedalCalculator1NoGathering : LimitedMedalCalculator1
 	{
@@ -46,7 +47,7 @@ namespace EzBobTest
 			ScoreResult resultsInput = new ScoreResult();
 			resultsInput.CustomerId = customerId;
 			resultsInput.CalculationTime = calculationTime;
-			resultsInput.MedalType = "Limited";
+			resultsInput.MedalType = MedalType.Limited;
 			resultsInput.BusinessScore = 0;
 			resultsInput.TangibleEquityValue = 0;
 			resultsInput.BusinessSeniority = null;

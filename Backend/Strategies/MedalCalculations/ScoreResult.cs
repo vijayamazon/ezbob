@@ -5,12 +5,23 @@
 	using Ezbob.Database;
 	using ScoreCalculation;
 
+	public enum MedalType
+	{
+		NoMedal,
+		Limited,
+		NonLimited,
+		OnlineLimited,
+		OnlineNonLimitedNoBusinessScore,
+		OnlineNonLimitedWithBusinessScore,
+		SoleTrader
+	}
+
 	public class ScoreResult
 	{
 		// Inputs
 		public int CustomerId { get; set; }
 		public DateTime CalculationTime { get; set; }
-		public string MedalType { get; set; }
+		public MedalType MedalType { get; set; }
 
 		// Gathered data
 		public int BusinessScore { get; set; }
@@ -204,7 +215,7 @@
 			db.ExecuteNonQuery("StoreNewMedal", CommandSpecies.StoredProcedure,
 							   new QueryParameter("CustomerId", CustomerId),
 							   new QueryParameter("CalculationTime", CalculationTime),
-							   new QueryParameter("MedalType", MedalType),
+							   new QueryParameter("MedalType", MedalType.ToString()),
 							   new QueryParameter("FirstRepaymentDatePassed", FirstRepaymentDatePassed),
 							   new QueryParameter("BusinessScore", BusinessScore),
 							   new QueryParameter("BusinessScoreWeight", BusinessScoreWeight),

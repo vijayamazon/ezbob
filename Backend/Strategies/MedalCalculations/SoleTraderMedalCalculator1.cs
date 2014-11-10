@@ -12,7 +12,7 @@
 
 		protected override void SetMedalType()
 		{
-			Results.MedalType = "SoleTrader";
+			Results.MedalType = MedalType.SoleTrader;
 		}
 
 		public override void SetInitialWeights()
@@ -55,6 +55,17 @@
 		{
 			Results.BusinessSeniorityWeight -= 1;
 			Results.ConsumerScoreWeight -= 9;
+		}
+
+		protected override decimal GetSumOfNonFixedWeights()
+		{
+			return Results.NetWorthWeight + Results.MaritalStatusWeight;
+		}
+
+		protected override void AdjustWeightsWithRatio(decimal ratio)
+		{
+			Results.NetWorthWeight *= ratio;
+			Results.MaritalStatusWeight *= ratio;
 		}
 	}
 }
