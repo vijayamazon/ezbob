@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
-	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

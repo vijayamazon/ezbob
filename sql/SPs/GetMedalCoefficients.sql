@@ -6,8 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetMedalCoefficients]
-	(@MedalFlow NVARCHAR(50),
-	 @Medal NVARCHAR(50))
+	(@MedalClassification NVARCHAR(50))
 AS
 BEGIN
 	SELECT 
@@ -17,7 +16,6 @@ BEGIN
 	FROM
 		MedalCoefficients
 	WHERE
-		MedalFlow = @MedalFlow AND
-		Medal = @Medal
+		Medal = @MedalClassification
 END
 GO

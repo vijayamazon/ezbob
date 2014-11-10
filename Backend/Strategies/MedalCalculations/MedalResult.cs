@@ -3,20 +3,8 @@
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
-	using ScoreCalculation;
 
-	public enum MedalType
-	{
-		NoMedal,
-		Limited,
-		NonLimited,
-		OnlineLimited,
-		OnlineNonLimitedNoBusinessScore,
-		OnlineNonLimitedWithBusinessScore,
-		SoleTrader
-	}
-
-	public class ScoreResult
+	public class MedalResult
 	{
 		// Inputs
 		public int CustomerId { get; set; }
@@ -117,11 +105,11 @@
 		// Output
 		public decimal TotalScore { get; set; }
 		public decimal TotalScoreNormalized { get; set; }
-		public MedalMultiplier Medal { get; set; }
+		public MedalClassification MedalClassification { get; set; }
 		public string Error { get; set; }
 		public int OfferedLoanAmount { get; set; }
 
-		public bool IsIdentical(ScoreResult other)
+		public bool IsIdentical(MedalResult other)
 		{
 			if (CustomerId != other.CustomerId ||
 				CalculationTime != other.CalculationTime ||
@@ -192,7 +180,7 @@
 				InnerFlowName != other.InnerFlowName ||
 				TotalScore != other.TotalScore ||
 				TotalScoreNormalized != other.TotalScoreNormalized ||
-				Medal != other.Medal ||
+				MedalClassification != other.MedalClassification ||
 				Error != other.Error ||
 				OfferedLoanAmount != other.OfferedLoanAmount ||
 				NumOfHmrcMps != other.NumOfHmrcMps ||
@@ -282,7 +270,7 @@
 							   new QueryParameter("InnerFlowName", InnerFlowName),
 							   new QueryParameter("TotalScore", TotalScore),
 							   new QueryParameter("TotalScoreNormalized", TotalScoreNormalized),
-							   new QueryParameter("Medal", Medal.ToString()),
+							   new QueryParameter("Medal", MedalClassification.ToString()),
 							   new QueryParameter("Error", Error),
 							   new QueryParameter("OfferedLoanAmount", OfferedLoanAmount),
 							   new QueryParameter("NumOfHmrcMps", NumOfHmrcMps),

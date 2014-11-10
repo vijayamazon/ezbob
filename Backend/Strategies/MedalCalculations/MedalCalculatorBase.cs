@@ -13,7 +13,6 @@
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Utils;
-	using ScoreCalculation;
 	using VatReturn;
 
 	public abstract class MedalCalculatorBase
@@ -23,7 +22,7 @@
 
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
-		public ScoreResult Results { get; set; }
+		public MedalResult Results { get; set; }
 
 		public abstract void SetInitialWeights();
 
@@ -33,9 +32,9 @@
 			this.db = db;
 		}
 
-		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime)
+		public MedalResult CalculateMedalScore(int customerId, DateTime calculationTime)
 		{
-			Results = new ScoreResult { CustomerId = customerId, CalculationTime = calculationTime };
+			Results = new MedalResult { CustomerId = customerId, CalculationTime = calculationTime };
 			SetMedalType();
 
 			try
@@ -77,8 +76,6 @@
 				CalculateMedal();
 
 				CalculateOffer();
-
-				// TODO: calculate interest rate according to pricing model (and loan source?)
 			}
 			catch (Exception e)
 			{
@@ -134,9 +131,7 @@
 		
 		private void DetermineFlow()
 		{
-			if (Results.MedalType == MedalType.OnlineLimited ||
-				Results.MedalType == MedalType.OnlineNonLimitedNoBusinessScore ||
-				Results.MedalType == MedalType.OnlineNonLimitedWithBusinessScore)
+			if (Results.MedalType.IsOnline())
 			{
 				decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
 				if (Results.HmrcAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
@@ -285,19 +280,19 @@
 		{
 			if (Results.TotalScoreNormalized <= 0.4m)
 			{
-				Results.Medal = MedalMultiplier.Silver;
+				Results.MedalClassification = MedalClassification.Silver;
 			}
 			else if (Results.TotalScoreNormalized <= 0.62m)
 			{
-				Results.Medal = MedalMultiplier.Gold;
+				Results.MedalClassification = MedalClassification.Gold;
 			}
 			else if (Results.TotalScoreNormalized <= 0.84m)
 			{
-				Results.Medal = MedalMultiplier.Platinum;
+				Results.MedalClassification = MedalClassification.Platinum;
 			}
 			else
 			{
-				Results.Medal = MedalMultiplier.Diamond;
+				Results.MedalClassification = MedalClassification.Diamond;
 			}
 		}
 
@@ -311,8 +306,7 @@
 			SafeReader sr = db.GetFirst(
 				"GetMedalCoefficients",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("MedalFlow", "Limited"), // TODO: The coefficients are CURRENTLY identical for all flows - we use "Limited" as it is the only existing one
-				new QueryParameter("Medal", Results.Medal.ToString())
+				new QueryParameter("MedalClassification", Results.MedalClassification.ToString())
 				);
 
 			if (!sr.IsEmpty)
@@ -358,20 +352,20 @@
 
 		private decimal CalculateScoreMax()
 		{
-			int annualTurnoverMaxGrade = 6;
-			int businessScoreMaxGrade = 9;
-			int freeCashflowMaxGrade = 6;
-			int tangibleEquityMaxGrade = 4;
-			int businessSeniorityMaxGrade = 4;
-			int consumerScoreMaxGrade = 8;
-			int netWorthMaxGrade = 2;
-			int maritalStatusMaxGrade = 4;
-			int numberOfStoresMaxGrade = 5;
-			int positiveFeedbacksMaxGrade = 5;
-			int ezbobSeniorityMaxGrade = 4;
-			int numOfLoansMaxGrade = 4;
-			int numOfLateRepaymentsMaxGrade = 5;
-			int numOfEarlyRepaymentsMaxGrade = 5;
+			const int annualTurnoverMaxGrade = 6;
+			const int businessScoreMaxGrade = 9;
+			const int freeCashflowMaxGrade = 6;
+			const int tangibleEquityMaxGrade = 4;
+			const int businessSeniorityMaxGrade = 4;
+			const int consumerScoreMaxGrade = 8;
+			const int netWorthMaxGrade = 2;
+			const int maritalStatusMaxGrade = 4;
+			const int numberOfStoresMaxGrade = 5;
+			const int positiveFeedbacksMaxGrade = 5;
+			const int ezbobSeniorityMaxGrade = 4;
+			const int numOfLoansMaxGrade = 4;
+			const int numOfLateRepaymentsMaxGrade = 5;
+			const int numOfEarlyRepaymentsMaxGrade = 5;
 
 			decimal annualTurnoverScoreMax = Results.AnnualTurnoverWeight * annualTurnoverMaxGrade;
 			decimal businessScoreScoreMax = Results.BusinessScoreWeight * businessScoreMaxGrade;
@@ -396,20 +390,20 @@
 
 		private decimal CalculateScoreMin()
 		{
-			int annualTurnoverMinGrade = 0;
-			int businessScoreMinGrade = 0;
-			int freeCashflowMinGrade = 0;
-			int tangibleEquityMinGrade = 0;
-			int businessSeniorityMinGrade = 0;
-			int consumerScoreMinGrade = 0;
-			int netWorthMinGrade = 0;
-			int maritalStatusMinGrade = 2;
-			int numberOfStoresMinGrade = 1;
-			int positiveFeedbacksMinGrade = 0;
-			int ezbobSeniorityMinGrade = 0;
-			int numOfLoansMinGrade = 1;
-			int numOfLateRepaymentsMinGrade = 0;
-			int numOfEarlyRepaymentsMinGrade = 2;
+			const int annualTurnoverMinGrade = 0;
+			const int businessScoreMinGrade = 0;
+			const int freeCashflowMinGrade = 0;
+			const int tangibleEquityMinGrade = 0;
+			const int businessSeniorityMinGrade = 0;
+			const int consumerScoreMinGrade = 0;
+			const int netWorthMinGrade = 0;
+			const int maritalStatusMinGrade = 2;
+			const int numberOfStoresMinGrade = 1;
+			const int positiveFeedbacksMinGrade = 0;
+			const int ezbobSeniorityMinGrade = 0;
+			const int numOfLoansMinGrade = 1;
+			const int numOfLateRepaymentsMinGrade = 0;
+			const int numOfEarlyRepaymentsMinGrade = 2;
 
 			decimal annualTurnoverScoreMin = Results.AnnualTurnoverWeight * annualTurnoverMinGrade;
 			decimal businessScoreScoreMin = Results.BusinessScoreWeight * businessScoreMinGrade;

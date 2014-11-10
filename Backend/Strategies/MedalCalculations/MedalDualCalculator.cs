@@ -10,7 +10,7 @@
 		private readonly ASafeLog log;
 		private readonly AConnection db;
 
-		public ScoreResult Results { get; set; }
+		public MedalResult Results { get; set; }
 
 		public MedalDualCalculator(AConnection db, ASafeLog log)
 		{
@@ -18,11 +18,11 @@
 			this.db = db;
 		}
 
-		public ScoreResult CalculateMedalScore(int customerId, DateTime calculationTime, string typeOfBusiness, int consumerScore, int companyScore, int numOfHmrcMps, int numOfYodleeMps, int numOfEbayAmazonPayPalMps, DateTime? earliestHmrcLastUpdateDate, DateTime? earliestYodleeLastUpdateDate)
+		public MedalResult CalculateMedalScore(int customerId, DateTime calculationTime, string typeOfBusiness, int consumerScore, int companyScore, int numOfHmrcMps, int numOfYodleeMps, int numOfEbayAmazonPayPalMps, DateTime? earliestHmrcLastUpdateDate, DateTime? earliestYodleeLastUpdateDate)
 		{
 			try
 			{
-				ScoreResult result1 = null, result2 = null;
+				MedalResult result1 = null, result2 = null;
 
 				result1 = AssignMedal(customerId, calculationTime, typeOfBusiness, consumerScore, companyScore, numOfHmrcMps, numOfYodleeMps, numOfEbayAmazonPayPalMps, earliestHmrcLastUpdateDate, earliestYodleeLastUpdateDate);
 				// TODO: Calculate result2 here
@@ -49,7 +49,7 @@
 			return null;
 		}
 
-		private ScoreResult AssignMedal(int customerId, DateTime calculationTime, string typeOfBusiness, int consumerScore, int companyScore, int numOfHmrcMps, int numOfYodleeMps, int numOfEbayAmazonPayPalMps, DateTime? earliestHmrcLastUpdateDate, DateTime? earliestYodleeLastUpdateDate)
+		private MedalResult AssignMedal(int customerId, DateTime calculationTime, string typeOfBusiness, int consumerScore, int companyScore, int numOfHmrcMps, int numOfYodleeMps, int numOfEbayAmazonPayPalMps, DateTime? earliestHmrcLastUpdateDate, DateTime? earliestYodleeLastUpdateDate)
 		{
 			// TODO: rename LimitedMedalDaysOfMpRelevancy
 			if (numOfHmrcMps > 0 && earliestHmrcLastUpdateDate.HasValue &&
@@ -108,10 +108,10 @@
 			return SetNoMedal(customerId, calculationTime, "Customer doesn't fit any of the existing medals");
 		}
 
-		private ScoreResult SetNoMedal(int customerId, DateTime calculationTime, string errorMessage)
+		private MedalResult SetNoMedal(int customerId, DateTime calculationTime, string errorMessage)
 		{
 			log.Warn("No medal was calculated for customer:{0}", customerId);
-			var result = new ScoreResult();
+			var result = new MedalResult();
 			result.CustomerId = customerId;
 			result.CalculationTime = calculationTime;
 			result.MedalType = MedalType.NoMedal;

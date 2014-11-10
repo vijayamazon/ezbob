@@ -59,7 +59,7 @@
 			get { return "CalculateMedal"; }
 		}
 
-		public ScoreResult Result { get; private set; }
+		public MedalResult Result { get; private set; }
 
 		public override void Execute()
 		{

@@ -74,7 +74,7 @@
 				netWorth = 100000; //todo get the net worth
 			}
 			var calculator = new LimitedMedalCalculatorForInstantOffer(businessScore, _request.AnnualProfit, _request.AnnualTurnover, tangibleEquity, businessSeniority, consumerScore, netWorth, DB, Log);
-			ScoreResult medalScore = calculator.CalculateMedalScore(0, DateTime.UtcNow);
+			MedalResult medalScore = calculator.CalculateMedalScore(0, DateTime.UtcNow);
 			
 			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {

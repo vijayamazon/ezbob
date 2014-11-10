@@ -108,6 +108,8 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="Broker\LimitedMedalCalculatorForInstantOffer.cs" />
+    <Compile Include="MedalCalculations\MedalClassification.cs" />
+    <Compile Include="MedalCalculations\MedalType.cs" />
     <Compile Include="MedalCalculations\OnlineNonLimitedNoBusinessScoreMedalCalculator1.cs" />
     <Compile Include="MedalCalculations\OnlineNonLimitedWithBusinessScoreMedalCalculator1.cs" />
     <Compile Include="MedalCalculations\Temp_BackFillMedals.cs" />
@@ -167,7 +169,7 @@
     <Compile Include="Misc\GetAvailableFunds.cs" />
     <Compile Include="PricingModel\SavePricingModelSettings.cs" />
     <Compile Include="PricingModel\GetPricingModelScenarios.cs" />
-    <Compile Include="MedalCalculations\ScoreResult.cs" />
+    <Compile Include="MedalCalculations\MedalResult.cs" />
     <Compile Include="StoredProcs\GetCustomerAddresses.cs" />
     <Compile Include="UserManagement\LoadCustomerByCreatePasswordToken.cs" />
     <Compile Include="UserManagement\SetCustomerPasswordByToken.cs" />
