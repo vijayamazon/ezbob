@@ -1,4 +1,4 @@
-﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
+﻿namespace AutomationCalculator.ProcessHistory.Common {
 	using System;
 
 	public class ExceptionThrown : ATrace {

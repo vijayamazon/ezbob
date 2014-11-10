@@ -112,6 +112,11 @@
     <Compile Include="MedalCalculations\MedalType.cs" />
     <Compile Include="MedalCalculations\OnlineNonLimitedNoBusinessScoreMedalCalculator1.cs" />
     <Compile Include="MedalCalculations\OnlineNonLimitedWithBusinessScoreMedalCalculator1.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\ReApproval\Arguments.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\ReApproval\Configuration.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\ReApproval\Payment.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\ReApproval\Marketplace.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\ReApproval\MetaData.cs" />
     <Compile Include="MedalCalculations\Temp_BackFillMedals.cs" />
     <Compile Include="MedalCalculations\NonLimitedMedalCalculator1.cs" />
     <Compile Include="MedalCalculations\SoleTraderMedalCalculator1.cs" />
@@ -180,7 +185,7 @@
     <Compile Include="MainStrategy\AutoDecisions\AutoDecisionResponse.cs" />
     <Compile Include="MainStrategy\AutoDecisions\BankBasedApproval.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Rejection.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\ReApproval.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\ReApproval\Agent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\ReRejection.cs" />
     <Compile Include="Broker\BrokerBackFromCustomerWizard.cs" />
     <Compile Include="Broker\BrokerCheckCustomerRelevance.cs" />

@@ -45,14 +45,6 @@
 
 		#endregion method Enumerate
 
-		#region method Append
-
-		public T Append<T>(bool bCompletedSuccessfully) where T : ATrace {
-			return Add<T>(bCompletedSuccessfully);
-		} // Append
-
-		#endregion method Append
-
 		#region method Done
 
 		public T Done<T>() where T : ATrace {

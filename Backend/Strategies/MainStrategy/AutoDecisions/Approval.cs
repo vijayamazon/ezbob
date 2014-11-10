@@ -5,6 +5,7 @@
 	using System.Linq;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
+	using AutomationCalculator.ProcessHistory.Common;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -101,11 +102,6 @@
 							response.IsAutoApproval = true;
 							response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
 						} // if is silent
-					}
-					else {
-						response.CreditResult = "WaitingForDecision";
-						response.UserStatus = "Manual";
-						response.SystemDecision = "Manual";
 					} // if there are enough funds
 				} // if auto approved amount is not 0
 			}
@@ -115,12 +111,20 @@
 		} // MakeDecision
 
 		private void CheckAutoApprovalConformance(decimal outstandingOffers) {
-			m_oTrail.Append<InitialAssignment>(this.autoApprovedAmount > 0).Init(this.autoApprovedAmount);
+			int nAutoApprovedAmount = this.autoApprovedAmount;
+
+			if (nAutoApprovedAmount > 0)
+				StepDone<InitialAssignment>().Init(this.autoApprovedAmount);
+			else
+				StepFailed<InitialAssignment>().Init(this.autoApprovedAmount);
 
 			log.Debug("Checking if auto approval should take place for customer {0}...", customerId);
 
 			try {
-				m_oTrail.Append<IsBrokerCustomer>(!isBrokerCustomer);
+				if (isBrokerCustomer)
+					StepFailed<IsBrokerCustomer>();
+				else
+					StepDone<IsBrokerCustomer>();
 
 				CheckAMLResult();
 				CheckBusinessScore();
@@ -162,7 +166,12 @@
 				StepFailed<ExceptionThrown>().Init(ex);
 			} // try
 
-			m_oTrail.Append<Complete>(autoApprovedAmount > 0).Init(autoApprovedAmount);
+			nAutoApprovedAmount = autoApprovedAmount;
+
+			if (nAutoApprovedAmount > 0)
+				StepDone<Complete>().Init(nAutoApprovedAmount);
+			else
+				StepFailed<Complete>().Init(nAutoApprovedAmount);
 
 			log.Debug("Checking if auto approval should take place for customer {0} complete.", customerId);
 

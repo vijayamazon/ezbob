@@ -1,4 +1,4 @@
-﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
+﻿namespace AutomationCalculator.ProcessHistory.Common {
 	public class OutstandingLoanCount : AThresholdTrace {
 		public OutstandingLoanCount(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor

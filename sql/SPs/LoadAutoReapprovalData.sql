@@ -159,7 +159,7 @@ BEGIN
 		LateLoanCount      = @LateLoanCount,
 		OpenLoanCount      = @OpenLoanCount,
 		SumOfCharges       = @SumOfCharges,
-		ManagerApprovedSum = @ManagerApprovedSum,
+		ManagerApprovedSum = ISNULL(@ManagerApprovedSum, 0),
 		TakenLoanAmount    = @TakenLoanAmount,
 		RepaidPrincipal    = @RepaidPrincipal,
 		SetupFees          = @SetupFees,
@@ -174,12 +174,12 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		RowType = 'LatePayment',
-		l.Id AS LoanID,
-		s.Id AS ScheduleID,
-		s.[Date] AS ScheduleDate,
-		t.Id AS TransactionID,
-		t.PostDate AS TransactionTime
+		RowType         = 'LatePayment',
+		LoanID          = l.Id,
+		ScheduleID      = s.Id,
+		ScheduleDate    = s.[Date],
+		TransactionID   = t.Id,
+		TransactionTime = t.PostDate
 	FROM
 		LoanScheduleTransaction lst
 		INNER JOIN Loan l ON lst.LoanID = l.Id
@@ -200,11 +200,11 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		RowType = 'Marketplace',
-		m.Id AS MarketplaceID,
-		m.DisplayName AS MarketplaceName,
-		mt.Name AS MarketplaceType,
-		m.Created AS MarketplaceAddTime
+		RowType            = 'Marketplace',
+		MarketplaceID      = m.Id,
+		MarketplaceName    = m.DisplayName,
+		MarketplaceType    = mt.Name,
+		MarketplaceAddTime = m.Created
 	FROM
 		MP_CustomerMarketPlace m
 		INNER JOIN MP_MarketplaceType mt ON m.MarketPlaceId = mt.Id

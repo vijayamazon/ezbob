@@ -1,21 +1,21 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy
 {
-	using System.Linq;
-	using AutoDecisions;
-	using ConfigManager;
-	using EzBob.Models;
-	using Ezbob.Backend.Models;
-	using MailStrategies.API;
-	using MedalCalculations;
-	using Misc;
-	using ScoreCalculation;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+
+	using ConfigManager;
+	using EzBob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.MailStrategies.API;
+	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
+	using EzBob.Backend.Strategies.MedalCalculations;
+	using EzBob.Backend.Strategies.Misc;
+	using EzBob.Backend.Strategies.ScoreCalculation;
+	using Ezbob.Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using MailStrategies;
+	using EzBob.Models;
 
 	public class MainStrategy : AStrategy
 	{
@@ -274,7 +274,7 @@
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (dataGatherer.EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				new ReApproval(
+				new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(
 					customerId,
 					loanOfferReApprovalSum,
 					DB,

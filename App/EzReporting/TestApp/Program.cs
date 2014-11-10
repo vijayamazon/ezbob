@@ -11,6 +11,7 @@ namespace TestApp {
 	using ConfigManager;
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies.Broker;
+	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -96,6 +97,8 @@ namespace TestApp {
 			// TestDataSharing(oDB, log);
 
 			// TestAddBrokers(oDB, log);
+
+			TestReapproval(oDB, log);
 		} // Main
 
 		#endregion method Main
@@ -706,7 +709,21 @@ namespace TestApp {
 		} // TestAddBrokers
 
 		#endregion method TestAddBrokers
+
+		#region method TestReapproval
+
+		private static void TestReapproval(AConnection oDB, ASafeLog oLog) {
+			var adr = new AutoDecisionResponse();
+
+			var ra = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(339, 12345, oDB, oLog);
+
+			ra.MakeDecision(adr);
+		} // TestReapproval
+
+		#endregion method TestReapproval
 	} // class Program
+
+	#region class BrokerData
 
 	internal class BrokerData {
 		public BrokerData(string sEmail, string sFirstName, string sLastName, string sCompany, string sPrimaryPhone, string sOtherPhone) {
@@ -754,6 +771,8 @@ namespace TestApp {
 			stra.Execute();
 		} // Signup
 	} // class BrokerData
+
+	#endregion class BrokerData
 } // namespace
 
 // ReSharper restore UnusedMember.Local
