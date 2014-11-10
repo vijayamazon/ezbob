@@ -136,7 +136,7 @@
 		private void CalculateNewMedal()
 		{
 			var instance = new CalculateMedal(DB, Log, customerId, dataGatherer.TypeOfBusiness, dataGatherer.MaxExperianConsumerScore, dataGatherer.MaxCompanyScore, dataGatherer.NumOfHmrcMps,
-				dataGatherer.NumOfYodleeMps, dataGatherer.NumOfEbayAmazonPayPalMps);
+				dataGatherer.NumOfYodleeMps, dataGatherer.NumOfEbayAmazonPayPalMps, dataGatherer.EarliestHmrcLastUpdateDate, dataGatherer.EarliestYodleeLastUpdateDate);
 			instance.Execute();
 
 			modelLoanOffer = instance.Result.OfferedLoanAmount;

@@ -17,7 +17,9 @@ BEGIN
 		@CompanyScore INT,
 		@ConsumerScore INT,
 		@CustomerId INT,
-		@ServiceLogId BIGINT
+		@ServiceLogId BIGINT,
+		@FirstHmrcDate DATETIME,
+		@FirstYodleeDate DATETIME
 		
 	CREATE TABLE #RelevantData
 	(
@@ -27,7 +29,9 @@ BEGIN
 		NumOfYodleeMps INT,
 		NumOfEbayAmazonPayPalMps INT,
 		CompanyScore INT,
-		ConsumerScore INT
+		ConsumerScore INT,
+		FirstHmrcDate DATETIME,
+		FirstYodleeDate DATETIME
 	)
 	
 	DECLARE cur CURSOR FOR 
@@ -95,7 +99,6 @@ BEGIN
 		) AS X
 		
 		SELECT
-			@NumOfHmrcMps = COUNT(1)
 		FROM
 			MP_CustomerMarketPlace,
 			MP_MarketplaceType
@@ -105,7 +108,8 @@ BEGIN
 			MP_CustomerMarketPlace.CustomerId = @CustomerId
 		
 		SELECT
-			@NumOfYodleeMps = COUNT(1)
+			@NumOfYodleeMps = COUNT(1),
+			@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
 		FROM
 			MP_CustomerMarketPlace,
 			MP_MarketplaceType
@@ -123,14 +127,25 @@ BEGIN
 			MP_CustomerMarketPlace.CustomerId = @CustomerId AND
 			MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
 			MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal')
+			
+		SELECT		
+			@NumOfHmrcMps = COUNT(1),
+			@EarliestHmrcLastUpdateDate = MIN(UpdatingEnd)
+		FROM
+			MP_CustomerMarketPlace,
+			MP_MarketplaceType
+		WHERE
+			MP_MarketplaceType.Name = 'HMRC' AND
+			MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
+			MP_CustomerMarketPlace.CustomerId = @CustomerId
 	
-		INSERT INTO #RelevantData VALUES (@CustomerId, @TypeOfBusiness, @NumOfHmrcMps, @NumOfYodleeMps, @NumOfEbayAmazonPayPalMps, @CompanyScore, @ConsumerScore)
+		INSERT INTO #RelevantData VALUES (@CustomerId, @TypeOfBusiness, @NumOfHmrcMps, @NumOfYodleeMps, @NumOfEbayAmazonPayPalMps, @CompanyScore, @ConsumerScore, @FirstHmrcDate, @FirstYodleeDate)
 		FETCH NEXT FROM cur INTO @CustomerId
 	END
 	CLOSE cur
 	DEALLOCATE cur
 	
-	SELECT CustomerId, TypeOfBusiness, NumOfHmrcMps, NumOfYodleeMps, NumOfEbayAmazonPayPalMps, CompanyScore, ConsumerScore FROM #RelevantData
+	SELECT CustomerId, TypeOfBusiness, NumOfHmrcMps, NumOfYodleeMps, NumOfEbayAmazonPayPalMps, CompanyScore, ConsumerScore, FirstHmrcDate, FirstYodleeDate FROM #RelevantData
 	
 	DROP TABLE #RelevantData
 END

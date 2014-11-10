@@ -67,6 +67,8 @@
 		public int MaxExperianConsumerScore { get; private set; }
 		public int NumOfEbayAmazonPayPalMps { get; private set; }
 		public int NumOfYodleeMps { get; private set; }
+		public DateTime? EarliestHmrcLastUpdateDate { get; private set; }
+		public DateTime? EarliestYodleeLastUpdateDate { get; private set; }
 
 		// Online medal
 		public int ModelEzbobSeniority { get; private set; }
@@ -179,6 +181,8 @@
 			IsAlibaba = results["IsAlibaba"];
 			BrokerId = results["BrokerId"];
 			NumOfYodleeMps = results["NumOfYodleeMps"];
+			EarliestHmrcLastUpdateDate = results["EarliestHmrcLastUpdateDate"];
+			EarliestYodleeLastUpdateDate = results["EarliestYodleeLastUpdateDate"];
 		}
 
 		private void GetCompanySeniorityDays()

@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
-	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -32,14 +31,6 @@
 			Results.NumOfLoansWeight = 0;
 			Results.NumOfLateRepaymentsWeight = 0;
 			Results.NumOfEarlyRepaymentsWeight = 0;
-		}
-
-		protected override void AdditionalLegalInputValidations()
-		{
-			if (!Results.EarliestHmrcLastUpdateDate.HasValue && !Results.EarliestYodleeLastUpdateDate.HasValue)
-			{
-				throw new Exception("Medal is meant only for customers with HMRC or bank");
-			}
 		}
 
 		protected override decimal GetConsumerScoreWeightForLowScore()

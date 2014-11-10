@@ -16,7 +16,9 @@ BEGIN
 		@NumOfLoans INT,
 		@CustomerStatusName NVARCHAR(100),
 		@NumOfHmrcMps INT,
-		@NumOfYodleeMps INT
+		@NumOfYodleeMps INT,
+		@FirstHmrcDate DATETIME,
+		@FirstYodleeDate DATETIME
 		
 	SELECT 
 		@CustomerStatusIsEnabled = IsEnabled, 
@@ -43,25 +45,37 @@ BEGIN
 	WHERE
 		CustomerId = @CustomerId
 		
-	SELECT 
-		@NumOfHmrcMps = COUNT(1) 
-	FROM 
-		MP_CustomerMarketPlace, 
-		MP_MarketplaceType 
-	WHERE 
-		CustomerId = @CustomerId AND 
-		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND 
-		MP_MarketplaceType.Name = 'HMRC'
+	SELECT
+		@NumOfYodleeMps = COUNT(1),
+		@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
+	FROM
+		MP_CustomerMarketPlace,
+		MP_MarketplaceType
+	WHERE
+		MP_MarketplaceType.Name = 'Yodlee' AND
+		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
+		MP_CustomerMarketPlace.CustomerId = @CustomerId
 		
-	SELECT 
-		@NumOfYodleeMps = COUNT(1) 
-	FROM 
-		MP_CustomerMarketPlace, 
-		MP_MarketplaceType 
-	WHERE 
-		CustomerId = @CustomerId AND 
-		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND 
-		MP_MarketplaceType.Name = 'Yodlee'		
+	SELECT
+		@NumOfEbayAmazonPayPalMps = COUNT(1) 
+	FROM
+		MP_CustomerMarketPlace,
+		MP_MarketplaceType
+	WHERE
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
+		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
+		MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal')
+		
+	SELECT		
+		@NumOfHmrcMps = COUNT(1),
+		@EarliestHmrcLastUpdateDate = MIN(UpdatingEnd)
+	FROM
+		MP_CustomerMarketPlace,
+		MP_MarketplaceType
+	WHERE
+		MP_MarketplaceType.Name = 'HMRC' AND
+		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
+		MP_CustomerMarketPlace.CustomerId = @CustomerId		
 	
 	SELECT
 		@CustomerStatusIsEnabled AS CustomerStatusIsEnabled,
@@ -89,7 +103,9 @@ BEGIN
 		Customer.IsAlibaba,
 		Customer.BrokerID AS BrokerId,
 		Customer.LastStartedMainStrategyEndTime,
-		@NumOfYodleeMps AS NumOfYodleeMps
+		@NumOfYodleeMps AS NumOfYodleeMps,
+		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
+		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate
 	FROM
 		CustomerPropertyStatuses,
 		Customer

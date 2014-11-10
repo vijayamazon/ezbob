@@ -42,10 +42,6 @@
 			{
 				GatherInputData(customerId, calculationTime);
 				
-				// Validations
-				ValidateLegalInput();
-				AdditionalLegalInputValidations();
-
 				// Process raw input data to data
 				CalculateFeedbacks();
 				DetermineFlow();
@@ -134,26 +130,6 @@
 		protected abstract void RedistributeFreeCashFlowWeight();
 		protected abstract void RedistributeWeightsForPayingCustomer();
 		protected abstract void SetMedalType();
-
-		private void ValidateLegalInput()
-		{
-			if (Results.NumOfHmrcMps > 1)
-			{
-				throw new Exception(string.Format("Medal is meant only for customers with 1 HMRC MP at most. Num of HMRCs: {0}", Results.NumOfHmrcMps));
-			}
-			if (Results.EarliestHmrcLastUpdateDate.HasValue &&
-				Results.EarliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
-			{
-				throw new Exception(string.Format("HMRC data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, Results.EarliestHmrcLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
-			}
-			if (Results.EarliestYodleeLastUpdateDate.HasValue &&
-				Results.EarliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < Results.CalculationTime)
-			{
-				throw new Exception(string.Format("Yodlee data of customer {0} is too old: {1}. Threshold is: {2} days ", Results.CustomerId, Results.EarliestYodleeLastUpdateDate.Value, CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy.Value));
-			}
-		}
-
-		protected virtual void AdditionalLegalInputValidations() { }
 		
 		protected virtual void DetermineFlow()
 		{
@@ -310,7 +286,7 @@
 			SafeReader sr = db.GetFirst(
 				"GetMedalCoefficients",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("MedalFlow", "Limited"), // The coefficients are CURRENTLY identical for all flows - we use "Limited" as it is the only existing one
+				new QueryParameter("MedalFlow", "Limited"), // TODO: The coefficients are CURRENTLY identical for all flows - we use "Limited" as it is the only existing one
 				new QueryParameter("Medal", Results.Medal.ToString())
 				);
 
@@ -323,11 +299,15 @@
 				decimal offerAccordingToFreeCashFlow = Results.FreeCashFlowValue * freeCashFlowMedalFactor;
 				decimal offerAccordingToValueAdded = Results.ValueAdded * valueAddedMedalFactor;
 
-				Results.OfferedLoanAmount = (int) new[] {
+				List<decimal> validOfferAmounts = new[] {
 					offerAccordingToAnnualTurnover,
 					offerAccordingToFreeCashFlow,
 					offerAccordingToValueAdded
-				}.Where(x => x >= CurrentValues.Instance.LimitedMedalMinOffer).Min();
+				}.Where(x => x >= CurrentValues.Instance.LimitedMedalMinOffer).ToList();
+				if (validOfferAmounts.Count > 0)
+				{
+					Results.OfferedLoanAmount = (int) validOfferAmounts.Min();
+				}
 			}
 		}
 

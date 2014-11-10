@@ -29,12 +29,14 @@
 					int numOfYodleeMps = sr["NumOfYodleeMps"];
 					int consumerScore = sr["ConsumerScore"];
 					int customerId = sr["CustomerId"];
+					DateTime? earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
+					DateTime? earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
 
 					Log.Info("Will calculate medal for customer:{0}", customerId);
 					
 					try
 					{
-						var instance = new CalculateMedal(DB, Log, customerId, typeOfBusiness, consumerScore, companyScore, numOfHmrcMps, numOfYodleeMps, numOfEbayAmazonPayPalMps);
+						var instance = new CalculateMedal(DB, Log, customerId, typeOfBusiness, consumerScore, companyScore, numOfHmrcMps, numOfYodleeMps, numOfEbayAmazonPayPalMps, earliestHmrcLastUpdateDate, earliestYodleeLastUpdateDate);
 						instance.Execute();
 					}
 					catch (Exception e)

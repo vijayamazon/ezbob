@@ -41,7 +41,9 @@ BEGIN
 		@EbayPositiveFeedbacks INT,
 		@NumOfPaypalTransactions INT,
 		@TypeOfBusiness NVARCHAR(50),
-		@ServiceLogId BIGINT
+		@ServiceLogId BIGINT,
+		@FirstHmrcDate DATETIME,
+		@FirstYodleeDate DATETIME
 		
 	SET @Threshold = 2
 			
@@ -94,7 +96,49 @@ BEGIN
 	END
 	
 	IF @BusinessSeniority IS NULL
-		SET @BusinessSeniority = @CalculationTime
+	BEGIN
+		SELECT
+			@FirstHmrcDate = MIN(MP_VatReturnRecords.DateFrom)
+		FROM
+			MP_VatReturnRecords,
+			MP_CustomerMarketPlace,
+			MP_MarketplaceType
+		WHERE
+			MP_VatReturnRecords.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
+			MP_CustomerMarketPlace.CustomerId = @CustomerId AND
+			MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
+			MP_MarketplaceType.Name = 'HMRC'
+		
+		SELECT
+			@FirstYodleeDate = MIN(MP_YodleeOrderItemBankTransaction.postDate)
+		FROM
+			MP_YodleeOrderItemBankTransaction,
+			MP_YodleeOrderItem,
+			MP_YodleeOrder,
+			MP_CustomerMarketPlace,
+			MP_MarketplaceType
+		WHERE
+			MP_CustomerMarketPlace.CustomerId = @CustomerId AND
+			MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
+			MP_MarketplaceType.Name = 'Yodlee' AND
+			MP_YodleeOrder.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
+			MP_YodleeOrderItem.OrderId = MP_YodleeOrder.Id AND
+			MP_YodleeOrderItemBankTransaction.OrderItemId = MP_YodleeOrderItem.Id
+		
+		IF @FirstHmrcDate IS NULL AND @FirstYodleeDate IS NOT NULL
+			SET @BusinessSeniority = @FirstYodleeDate
+		ELSE IF @FirstHmrcDate IS NOT NULL AND @FirstYodleeDate IS NULL
+			SET @BusinessSeniority = @FirstHmrcDate
+		ELSE IF @FirstHmrcDate IS NULL AND @FirstYodleeDate IS NULL
+			SET @BusinessSeniority = DATEADD(yy, -1, @CalculationTime)
+		ELSE
+		BEGIN -- Both are not null
+			IF @FirstHmrcDate > @FirstYodleeDate
+				SET @BusinessSeniority = @FirstYodleeDate
+			ELSE
+				SET @BusinessSeniority = @FirstHmrcDate
+		END
+	END
 	
 	SELECT @ConsumerScore = MIN(ExperianConsumerScore)
 	FROM
