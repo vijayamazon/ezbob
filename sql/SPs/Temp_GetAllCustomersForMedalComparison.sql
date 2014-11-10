@@ -18,8 +18,8 @@ BEGIN
 		@ConsumerScore INT,
 		@CustomerId INT,
 		@ServiceLogId BIGINT,
-		@FirstHmrcDate DATETIME,
-		@FirstYodleeDate DATETIME
+		@EarliestHmrcLastUpdateDate DATETIME,
+		@EarliestYodleeLastUpdateDate DATETIME
 		
 	CREATE TABLE #RelevantData
 	(
@@ -30,8 +30,8 @@ BEGIN
 		NumOfEbayAmazonPayPalMps INT,
 		CompanyScore INT,
 		ConsumerScore INT,
-		FirstHmrcDate DATETIME,
-		FirstYodleeDate DATETIME
+		EarliestHmrcLastUpdateDate DATETIME,
+		EarliestYodleeLastUpdateDate DATETIME
 	)
 	
 	DECLARE cur CURSOR FOR 
@@ -99,15 +99,6 @@ BEGIN
 		) AS X
 		
 		SELECT
-		FROM
-			MP_CustomerMarketPlace,
-			MP_MarketplaceType
-		WHERE
-			MP_MarketplaceType.Name = 'HMRC' AND
-			MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-			MP_CustomerMarketPlace.CustomerId = @CustomerId
-		
-		SELECT
 			@NumOfYodleeMps = COUNT(1),
 			@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
 		FROM
@@ -139,13 +130,13 @@ BEGIN
 			MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
 			MP_CustomerMarketPlace.CustomerId = @CustomerId
 	
-		INSERT INTO #RelevantData VALUES (@CustomerId, @TypeOfBusiness, @NumOfHmrcMps, @NumOfYodleeMps, @NumOfEbayAmazonPayPalMps, @CompanyScore, @ConsumerScore, @FirstHmrcDate, @FirstYodleeDate)
+		INSERT INTO #RelevantData VALUES (@CustomerId, @TypeOfBusiness, @NumOfHmrcMps, @NumOfYodleeMps, @NumOfEbayAmazonPayPalMps, @CompanyScore, @ConsumerScore, @EarliestHmrcLastUpdateDate, @EarliestYodleeLastUpdateDate)
 		FETCH NEXT FROM cur INTO @CustomerId
 	END
 	CLOSE cur
 	DEALLOCATE cur
 	
-	SELECT CustomerId, TypeOfBusiness, NumOfHmrcMps, NumOfYodleeMps, NumOfEbayAmazonPayPalMps, CompanyScore, ConsumerScore, FirstHmrcDate, FirstYodleeDate FROM #RelevantData
+	SELECT CustomerId, TypeOfBusiness, NumOfHmrcMps, NumOfYodleeMps, NumOfEbayAmazonPayPalMps, CompanyScore, ConsumerScore, EarliestHmrcLastUpdateDate, EarliestYodleeLastUpdateDate FROM #RelevantData
 	
 	DROP TABLE #RelevantData
 END

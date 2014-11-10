@@ -235,12 +235,6 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData CalculateNewMedalsForComparison()
-		{
-			CalculateNewMedalsForComparison instance;
-			return ExecuteSync(out instance, 0, 0);
-		}
-
 		public ActionMetaData CalculateMedal(int underwriterId, int customerId)
 		{
 			CalculateMedal instance;
