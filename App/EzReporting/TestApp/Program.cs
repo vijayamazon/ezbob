@@ -5,10 +5,12 @@ namespace TestApp {
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
-	using System.Data.SqlClient;
+	// using System.Data.SqlClient;
 	using System.Diagnostics;
 	using System.IO;
+	using ConfigManager;
 	using EzBob.Backend.Models;
+	using EzBob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -48,6 +50,8 @@ namespace TestApp {
 			ms_oLog = log;
 
 			var oDB = new SqlConnection(log);
+
+			CurrentValues.Init(oDB, log);
 
 			// TestBadPeriods(oDB, ms_oLog);
 
@@ -89,7 +93,9 @@ namespace TestApp {
 
 			// TestSpeed(oDB, log);
 
-			TestDataSharing(oDB, log);
+			// TestDataSharing(oDB, log);
+
+			// TestAddBrokers(oDB, log);
 		} // Main
 
 		#endregion method Main
@@ -680,7 +686,74 @@ namespace TestApp {
 		} // TestDataSharing
 
 		#endregion method TestDataSharing
+
+		#region method TestAddBrokers
+
+		private static void TestAddBrokers(AConnection oDB, ASafeLog oLog) {
+			var oBrokers = new List<BrokerData> {
+			// In Excel:
+			// =CONCATENATE("new BrokerData(""",F2, """, """, A2,""", """, B2, """, """, C2, """, """, D2, """, """, E2, """),")
+			};
+
+			foreach (BrokerData bd in oBrokers) {
+				try {
+					bd.Signup(oDB, oLog);
+				}
+				catch (Exception e) {
+					oLog.Alert(e, "Failed to create a broker {0}", bd.Email);
+				} // try
+			} // for each
+		} // TestAddBrokers
+
+		#endregion method TestAddBrokers
 	} // class Program
+
+	internal class BrokerData {
+		public BrokerData(string sEmail, string sFirstName, string sLastName, string sCompany, string sPrimaryPhone, string sOtherPhone) {
+			FirstName = sFirstName;
+			LastName = sLastName;
+			Company = sCompany;
+			PrimaryPhone = sPrimaryPhone;
+			OtherPhone = sOtherPhone;
+			Email = sEmail;
+		} // BrokerData
+
+		public string FirstName { get; private set; }
+		public string LastName { get; private set; }
+		public string Company { get; private set; }
+		public string PrimaryPhone { get; private set; }
+		public string OtherPhone { get; private set; }
+		public string Email { get; private set; }
+
+		private string ContactName {
+			get { return 
+				(FirstName.Trim() + " " + LastName.Trim()).Trim();
+			} // get
+		} // ContactName
+
+		public void Signup(AConnection oDB, ASafeLog oLog) {
+			var stra = new BrokerSignup(
+				Company,
+				string.Empty, // sFirmRegNum,
+				ContactName,
+				Email,
+				PrimaryPhone,
+				"222222",
+				OtherPhone,
+				10000m, // decimal nEstimatedMonthlyClientAmount,
+				new Password("123456", "123456"),
+				string.Empty, // string sFirmWebSiteUrl,
+				5, // int nEstimatedMonthlyApplicationCount,
+				true, // bool bIsCaptchaEnabled,
+				6, // int nBrokerTermsID,
+				"Finance Professional Show - Nov 2014", // string sReferredBy,
+				oDB,
+				oLog
+			);
+
+			stra.Execute();
+		} // Signup
+	} // class BrokerData
 } // namespace
 
 // ReSharper restore UnusedMember.Local
