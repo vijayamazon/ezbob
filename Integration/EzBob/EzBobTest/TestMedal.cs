@@ -13,9 +13,10 @@ namespace EzBobTest
 
 	public class LimitedMedalCalculator1NoGathering : LimitedMedalCalculator1
 	{
-		private readonly ScoreResult resultInput;
+		private readonly MedalResult resultInput;
 
-		public LimitedMedalCalculator1NoGathering(ScoreResult resultInput, AConnection db, ASafeLog log) : base(db, log)
+		public LimitedMedalCalculator1NoGathering(MedalResult resultInput, AConnection db, ASafeLog log)
+			: base(db, log)
 		{
 			this.resultInput = resultInput;
 		}
@@ -44,7 +45,7 @@ namespace EzBobTest
 			DateTime calculationTime = new DateTime(2014, 11, 06);
 			int customerId = 18112;
 
-			ScoreResult resultsInput = new ScoreResult();
+			MedalResult resultsInput = new MedalResult();
 			resultsInput.CustomerId = customerId;
 			resultsInput.CalculationTime = calculationTime;
 			resultsInput.MedalType = MedalType.Limited;
@@ -67,7 +68,7 @@ namespace EzBobTest
 
 			var calculatorTester = new LimitedMedalCalculator1NoGathering(resultsInput, m_oDB, m_oLog);
 
-			ScoreResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
+			MedalResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
 			Assert.AreEqual(resultsOutput.NetWorthGrade, 1);
 			Assert.AreEqual(resultsOutput.EzbobSeniorityGrade, 3);
 		}

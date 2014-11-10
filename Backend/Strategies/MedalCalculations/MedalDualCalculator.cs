@@ -51,15 +51,14 @@
 
 		private MedalResult AssignMedal(int customerId, DateTime calculationTime, string typeOfBusiness, int consumerScore, int companyScore, int numOfHmrcMps, int numOfYodleeMps, int numOfEbayAmazonPayPalMps, DateTime? earliestHmrcLastUpdateDate, DateTime? earliestYodleeLastUpdateDate)
 		{
-			// TODO: rename LimitedMedalDaysOfMpRelevancy
 			if (numOfHmrcMps > 0 && earliestHmrcLastUpdateDate.HasValue &&
-				earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < calculationTime)
+				earliestHmrcLastUpdateDate.Value.AddDays(CurrentValues.Instance.MedalDaysOfMpRelevancy) < calculationTime)
 			{
 				return SetNoMedal(customerId, calculationTime, string.Format("Customer has out of date HMRC marketplace that its last update was at:{0}", earliestHmrcLastUpdateDate.Value));
 			}
 
 			if (numOfYodleeMps > 0 && earliestYodleeLastUpdateDate.HasValue &&
-				earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.LimitedMedalDaysOfMpRelevancy) < calculationTime)
+				earliestYodleeLastUpdateDate.Value.AddDays(CurrentValues.Instance.MedalDaysOfMpRelevancy) < calculationTime)
 			{
 				return SetNoMedal(customerId, calculationTime, string.Format("Customer has out of date Yodlee marketplace that its last update was at:{0}", earliestYodleeLastUpdateDate.Value));
 			}

@@ -79,7 +79,7 @@
 			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {
 				BrokerInstantOfferRequestId = _requestId,
-				ApprovedSum = CalcAndCapOffer((int)Math.Round((int)((int)medalScore.Medal * _request.AnnualTurnover * GetLoanOfferMultiplier(consumerScore) / 100) / 100d, 0, MidpointRounding.AwayFromZero) * 100),
+				ApprovedSum = CalcAndCapOffer((int)Math.Round((int)((int)medalScore.MedalClassification * _request.AnnualTurnover * GetLoanOfferMultiplier(consumerScore) / 100) / 100d, 0, MidpointRounding.AwayFromZero) * 100),
 				InterestRate = GetBasicInterestRate(consumerScore),
 				RepaymentPeriod = 12,
 				UseSetupFee = rand.Next(0,2) > 0,

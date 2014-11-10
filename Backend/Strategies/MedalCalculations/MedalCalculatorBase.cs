@@ -322,7 +322,7 @@
 					offerAccordingToAnnualTurnover,
 					offerAccordingToFreeCashFlow,
 					offerAccordingToValueAdded
-				}.Where(x => x >= CurrentValues.Instance.LimitedMedalMinOffer).ToList();
+				}.Where(x => x >= CurrentValues.Instance.MedalMinOffer).ToList();
 				if (validOfferAmounts.Count > 0)
 				{
 					Results.OfferedLoanAmount = (int) validOfferAmounts.Min();

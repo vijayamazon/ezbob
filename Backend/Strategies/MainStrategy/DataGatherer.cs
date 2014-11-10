@@ -155,7 +155,7 @@
 			LowTotalAnnualTurnover = CurrentValues.Instance.TotalAnnualTurnover;
 			LowTotalThreeMonthTurnover = CurrentValues.Instance.TotalThreeMonthTurnover;
 			DefaultFeedbackValue = CurrentValues.Instance.DefaultFeedbackValue;
-			LimitedMedalMinOffer = CurrentValues.Instance.LimitedMedalMinOffer;
+			LimitedMedalMinOffer = CurrentValues.Instance.MedalMinOffer;
 		}
 
 		private void GetPersonalInfo()

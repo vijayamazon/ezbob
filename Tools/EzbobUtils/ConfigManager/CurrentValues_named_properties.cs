@@ -2351,12 +2351,13 @@ namespace ConfigManager {
 			get { return this[Variables.CompanyCaisLateAlertShortPeriodThreshold]; }
 		}
 
-		public virtual VariableValue LimitedMedalDaysOfMpRelevancy {
-			get { return this[Variables.LimitedMedalDaysOfMpRelevancy]; }
+		public virtual VariableValue MedalDaysOfMpRelevancy
+		{
+			get { return this[Variables.MedalDaysOfMpRelevancy]; }
 		}
 
-		public virtual VariableValue LimitedMedalMinOffer {
-			get { return this[Variables.LimitedMedalMinOffer]; }
+		public virtual VariableValue MedalMinOffer {
+			get { return this[Variables.MedalMinOffer]; }
 		}
 
 		public virtual VariableValue AlibabaMailTo {
