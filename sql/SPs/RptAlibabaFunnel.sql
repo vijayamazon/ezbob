@@ -23,10 +23,6 @@ BEGIN
 
 	IF @BatchName IS NULL
 	BEGIN
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
 		INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
 		VALUES (10, 1, 'Landing page unique visitors', ISNULL((
 			SELECT
@@ -39,16 +35,43 @@ BEGIN
 			WHERE
 				a.Source LIKE '/alibaba%'
 		), 0))
+	END
+	ELSE BEGIN
+		INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+		VALUES (10, 1, 'Landing page unique visitors', ISNULL((
+			SELECT
+				SUM(a.SiteAnalyticsValue)
+			FROM
+				SiteAnalytics a
+				INNER JOIN SiteAnalyticsCodes ac
+					ON a.SiteAnalyticsCode = ac.Id
+					AND ac.Name = 'LandingPageNewUsers'
+				INNER JOIN AlibabaCampaigns ali
+					ON ali.Name = @BatchName
+					AND ali.DateFrom <= a.[Date] AND a.[Date] < ali.DateTo
+			WHERE
+				a.Source LIKE '/alibaba%'
+		), 0))
+	END -- if @BatchName is null
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
+	CREATE TABLE #ws (
+		SessionCookie NVARCHAR(255),
+		UserID INT,
+		Counter INT
+	)
+
+	------------------------------------------------------------------------------
+
+	IF @BatchName IS NULL
+	BEGIN
+		INSERT INTO #ws (SessionCookie, UserID, Counter)
 		SELECT
 			e.SessionCookie,
 			e.UserID,
 			COUNT(*) AS Counter
-		INTO
-			#ws
 		FROM
 			UiEvents e
 			INNER JOIN UiActions a
@@ -61,20 +84,38 @@ BEGIN
 		GROUP BY
 			e.SessionCookie,
 			e.UserID
-	
-	------------------------------------------------------------------------------
-
-		INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
-		VALUES (20, 1, 'Start EZBOB appliation', ISNULL((SELECT COUNT(*) FROM #ws), 0))
-
-	------------------------------------------------------------------------------
-
-		DROP TABLE #ws
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
+	END
+	ELSE BEGIN
+		INSERT INTO #ws (SessionCookie, UserID, Counter)
+		SELECT
+			e.SessionCookie,
+			e.UserID,
+			COUNT(*) AS Counter
+		FROM
+			UiEvents e
+			INNER JOIN UiActions a
+				ON e.UiActionID = a.UiActionID
+				AND a.UiActionName = 'pageload'
+			INNER JOIN AlibabaCampaigns ali
+				ON ali.Name = @BatchName
+				AND ali.DateFrom <= e.EventTime AND e.EventTime < ali.DateTo
+		WHERE
+			e.ControlHtmlID = 'Customer/Wizard'
+			AND
+			e.EventArguments LIKE 'alibaba_id:%'
+		GROUP BY
+			e.SessionCookie,
+			e.UserID
 	END -- if @BatchName is null
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
+	VALUES (20, 1, 'Start EZBOB appliation', ISNULL((SELECT COUNT(*) FROM #ws), 0))
+
+	------------------------------------------------------------------------------
+
+	DROP TABLE #ws
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
