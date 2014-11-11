@@ -117,7 +117,19 @@
 			} // if
 
 			if (feedBackParams.Count > 0)
-				data.AddData(oLatestFeedback.HistoryRecord.UpdatingStart.Value, feedBackParams);
+			{
+				if (data.Data != null && data.Data.Count > 0)
+				{
+					List<DateTime> keys = data.Data.Keys.ToList();
+					keys.Sort();
+
+					data.Data[keys[keys.Count - 1]].AddRange(feedBackParams);
+				}
+				else
+				{
+					data.AddData(oLatestFeedback.HistoryRecord.UpdatingStart.Value, feedBackParams);
+				}
+			}
 		} // AddAnalysisValues
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
