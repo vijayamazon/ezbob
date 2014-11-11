@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
 	public abstract class ARangeTrace : ATrace {
-		public virtual ATrace Init(int nValue, int nMin, int nMax) {
+		public virtual ATrace Init(decimal nValue, decimal nMin, decimal nMax) {
 			Value = nValue;
 			Min = nMin;
 			Max = nMax;
@@ -13,9 +13,9 @@
 			return this;
 		} // Init
 
-		public virtual int Value { get; private set; }
-		public virtual int Min { get; private set; }
-		public virtual int Max { get; private set; }
+		public virtual decimal Value { get; private set; }
+		public virtual decimal Min { get; private set; }
+		public virtual decimal Max { get; private set; }
 
 		protected ARangeTrace(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
 		} // constructor

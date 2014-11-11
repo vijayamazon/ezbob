@@ -11,6 +11,8 @@ namespace ConfigManager {
 		AllowFinishOfflineWizardWithoutMarketplaces,
 		AllowFinishOnlineWizardWithoutMarketplaces,
 		AmountToChargeFrom,
+		AutoApproveAllowedCaisStatusesWithLoan,
+		AutoApproveAllowedCaisStatusesWithoutLoan,
 		AutoApproveBusinessScoreThreshold,
 		AutoApproveCustomerMaxAge,
 		AutoApproveCustomerMinAge,

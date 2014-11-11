@@ -729,7 +729,7 @@ namespace TestApp {
 		private static void TestAutoApproval(AConnection oDB, ASafeLog oLog) {
 			var adr = new AutoDecisionResponse();
 
-			var ra = new AutomationCalculator.AutoDecision.AutoApproval.Agent(339, 12345, oDB, oLog);
+			var ra = new AutomationCalculator.AutoDecision.AutoApproval.Agent(339, 10000, oDB, oLog);
 
 			ra.MakeDecision(); // adr);
 		} // TestAutoApproval

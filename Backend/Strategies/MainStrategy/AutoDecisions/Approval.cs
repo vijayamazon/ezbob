@@ -148,21 +148,24 @@
 				CheckTodaysApprovals();
 				CheckDefaultAccounts();
 
-				// TODO: create new step "total number of loans" which is always passed just to indicate number of loans
+				int nLoanCount = loanRepository.ByCustomer(customerId).Count();
 
-				if (!loanRepository.ByCustomer(customerId).Any())
-					CheckWorstCaisStatus(new List<string> { "0", "1", "2" }); // Up to 60 days
-				else {
-					CheckWorstCaisStatus(new List<string> { "0", "1", "2", "3" }); // Up to 90 days
-					CheckRollovers();
-					CheckLateDays();
-					decimal outstandingPrincipal = CheckOutstandingLoans();
+				StepDone<TotalLoanCount>().Init(nLoanCount);
 
-					// Reduce the system calculated amount by the already open amount
-					autoApprovedAmount -= (int)outstandingPrincipal;
+				CheckWorstCaisStatus(
+					nLoanCount > 0
+					? CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithLoan
+					: CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan
+				);
 
-					StepDone<ReduceOutstandingPrincipal>().Init(outstandingPrincipal, autoApprovedAmount);
-				} // if
+				CheckRollovers();
+				CheckLateDays();
+				decimal outstandingPrincipal = CheckOutstandingLoans();
+
+				// Reduce the system calculated amount by the already open amount
+				autoApprovedAmount -= (int)outstandingPrincipal;
+
+				StepDone<ReduceOutstandingPrincipal>().Init(outstandingPrincipal, autoApprovedAmount);
 
 				int autoApproveMinAmount = CurrentValues.Instance.AutoApproveMinAmount;
 				int autoApproveMaxAmount = CurrentValues.Instance.AutoApproveMaxAmount;
@@ -400,13 +403,15 @@
 			return outstandingPrincipal;
 		} // CheckOutstandingLoans
 
-		private void CheckWorstCaisStatus(List<string> allowedStatuses) {
-			List<string> diff = consumerCaisDetailWorstStatuses.Except(allowedStatuses).ToList();
+		private void CheckWorstCaisStatus(string allowedStatuses) {
+			List<string> oAllowedStatuses = allowedStatuses.Split(',').ToList();
+
+			List<string> diff = consumerCaisDetailWorstStatuses.Except(oAllowedStatuses).ToList();
 
 			if (diff.Count > 1)
-				StepFailed<WorstCaisStatus>().Init(diff, consumerCaisDetailWorstStatuses, allowedStatuses);
+				StepFailed<WorstCaisStatus>().Init(diff, consumerCaisDetailWorstStatuses, oAllowedStatuses);
 			else
-				StepDone<WorstCaisStatus>().Init(null, consumerCaisDetailWorstStatuses, allowedStatuses);
+				StepDone<WorstCaisStatus>().Init(null, consumerCaisDetailWorstStatuses, oAllowedStatuses);
 		} // CheckWorstCaisStatus
 
 		private T StepFailed<T>() where T : ATrace {

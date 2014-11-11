@@ -34,6 +34,22 @@ namespace ConfigManager {
 
 		#endregion property AmountToChargeFrom
 
+		#region property AutoApproveAllowedCaisStatusesWithLoan
+
+		public virtual VariableValue AutoApproveAllowedCaisStatusesWithLoan {
+			get { return this[Variables.AutoApproveAllowedCaisStatusesWithLoan]; } // get
+		} // AutoApproveAllowedCaisStatusesWithLoan
+
+		#endregion property AutoApproveAllowedCaisStatusesWithLoan
+
+		#region property AutoApproveAllowedCaisStatusesWithoutLoan
+
+		public virtual VariableValue AutoApproveAllowedCaisStatusesWithoutLoan {
+			get { return this[Variables.AutoApproveAllowedCaisStatusesWithoutLoan]; } // get
+		} // AutoApproveAllowedCaisStatusesWithoutLoan
+
+		#endregion property AutoApproveAllowedCaisStatusesWithoutLoan
+
 		#region property AutoApproveBusinessScoreThreshold
 
 		public virtual VariableValue AutoApproveBusinessScoreThreshold {

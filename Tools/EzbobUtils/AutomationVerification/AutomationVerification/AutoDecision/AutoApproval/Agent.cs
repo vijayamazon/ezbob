@@ -50,20 +50,19 @@
 					new QueryParameter("Now", Now)
 				);
 
-				// TODO: load consumer score and director score using separate stored procedures:
-				// GetExperianConsumerScore and GetExperianMinMaxConsumerDirectorsScore
-
 				// TODO: load data for turnovers
 
 				// TODO: load data for seniority
 
 				// TODO: load worst CAIS statuses
 
-				// TODO: load data for after "if has loans".
-
 				m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
 
 				m_oMetaData.Validate();
+
+				// Once a step is not passed there is no need to continue result-wise. However the
+				// process continues because we want to pick all the possible reasons for not
+				// approving a customer in order to compare different implementations of the process.
 
 				if ((ApprovedAmount > 0) && (m_oMetaData.ValidationErrors.Count == 0))
 					StepDone<InitialAssignment>().Init(ApprovedAmount, m_oMetaData.ValidationErrors);
@@ -77,28 +76,24 @@
 				CheckAml();
 				CheckCustomerStatus();
 				CheckCompanyScore();
-				// TODO CheckConsumerScore();
+				CheckConsumerScore();
 				CheckCustomerAge();
-				/*
-				CheckTurnovers();
-				CheckCompanyAge();
+				// TODO CheckTurnovers();
+				// TODO CheckCompanyAge();
 				CheckDefaultAccounts();
 
-				if (customer has loans) {
-					CheckCaisStatuses(m_oCfg.GetAllowedCaisStatusesWithLoan());
-					CheckRollovers();
-				*/
-					CheckLatePayments();
-				/*
-					CheckCustomerOpenLoans();
-					CheckRepaidRatio();
-					ReduceOutstandingPrincipal();
-				}
-				else
-					CheckCaisStatuses(m_oCfg.GetAllowedCaisStatusesWithoutLoan());
+				StepDone<TotalLoanCount>().Init(m_oMetaData.TotalLoanCount);
+
+				// TODO: CheckCaisStatuses((m_oMetaData.TotalLoanCount > 0) ? m_oCfg.GetAllowedCaisStatusesWithLoan() : m_oCfg.GetAllowedCaisStatusesWithoutLoan());
+				CheckRollovers();
+				CheckLatePayments();
+				CheckCustomerOpenLoans();
+				CheckRepaidRatio();
+				ReduceOutstandingPrincipal();
 
 				CheckAllowedRange();
 
+				/*
 				if (m_oTrail.IsApproved) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.CreditResult = "Approved";
@@ -152,10 +147,10 @@
 		#region method CheckTodayApprovedCount
 
 		private void CheckTodayApprovedCount() {
-			if (m_oMetaData.TodayAutoApprovalCount > m_oCfg.MaxDailyApprovals)
-				StepFailed<TodayApprovalCount>().Init(m_oMetaData.TodayAutoApprovalCount, m_oCfg.MaxDailyApprovals);
+			if (m_oMetaData.NumOfTodayAutoApproval > m_oCfg.MaxDailyApprovals)
+				StepFailed<TodayApprovalCount>().Init(m_oMetaData.NumOfTodayAutoApproval, m_oCfg.MaxDailyApprovals);
 			else
-				StepDone<TodayApprovalCount>().Init(m_oMetaData.TodayAutoApprovalCount, m_oCfg.MaxDailyApprovals);
+				StepDone<TodayApprovalCount>().Init(m_oMetaData.NumOfTodayAutoApproval, m_oCfg.MaxDailyApprovals);
 		} // CheckTodayApprovedCount
 
 		#endregion method CheckTodayApprovedCount
@@ -217,9 +212,16 @@
 
 		#endregion method CheckCompanyScore
 
+		#region method CheckConsumerScore
 
+		private void CheckConsumerScore() {
+			if (m_oMetaData.ConsumerScore >= m_oCfg.ExperianScoreThreshold)
+				StepDone<ConsumerScore>().Init(m_oMetaData.ConsumerScore, m_oCfg.ExperianScoreThreshold);
+			else
+				StepFailed<ConsumerScore>().Init(m_oMetaData.ConsumerScore, m_oCfg.ExperianScoreThreshold);
+		} // CheckConsumerScore
 
-
+		#endregion method CheckConsumerScore
 
 		#region method CheckCustomerAge
 
@@ -238,13 +240,27 @@
 
 		#endregion method CheckCustomerAge
 
+		#region method CheckDefaultAccounts
 
+		private void CheckDefaultAccounts() {
+			if (m_oMetaData.NumOfDefaultAccounts > 0)
+				StepFailed<DefaultAccounts>().Init();
+			else
+				StepDone<DefaultAccounts>().Init();
+		} // CheckDefaultAccounts
 
+		#endregion method CheckDefaultAccounts
 
+		#region method CheckRollovers
 
+		private void CheckRollovers() {
+			if (m_oMetaData.NumOfRollovers > 0)
+				StepFailed<Rollovers>().Init();
+			else
+				StepDone<Rollovers>().Init();
+		} // CheckRollovers
 
-
-
+		#endregion method CheckRollovers
 
 		#region method CheckLatePayments
 
@@ -264,6 +280,51 @@
 		} // CheckLatePayments
 
 		#endregion method CheckLatePayments
+
+		#region method CheckCustomerOpenLoans
+
+		private void CheckCustomerOpenLoans() {
+			if (m_oMetaData.OpenLoanCount > m_oCfg.MaxNumOfOutstandingLoans)
+				StepFailed<OutstandingLoanCount>().Init(m_oMetaData.OpenLoanCount, m_oCfg.MaxNumOfOutstandingLoans);
+			else
+				StepDone<OutstandingLoanCount>().Init(m_oMetaData.OpenLoanCount, m_oCfg.MaxNumOfOutstandingLoans);
+		} // CheckCustomerOpenLoans
+
+		#endregion method CheckCustomerOpenLoans
+
+		#region method CheckRepaidRatio
+
+		private void CheckRepaidRatio() {
+			decimal nRatio = m_oMetaData.RepaidRatio;
+
+			if (nRatio > m_oCfg.MinRepaidPortion)
+				StepDone<OutstandingRepayRatio>().Init(nRatio, m_oCfg.MinRepaidPortion);
+			else
+				StepFailed<OutstandingRepayRatio>().Init(nRatio, m_oCfg.MinRepaidPortion);
+		} // CheckRepaidRatio
+
+		#endregion method CheckRepaidRatio
+
+		#region method ReduceOutstandingPrincipal
+
+		private void ReduceOutstandingPrincipal() {
+			ApprovedAmount -= m_oMetaData.OutstandingPrincipal;
+		} // ReduceOutstandingPrincipal
+
+		#endregion method ReduceOutstandingPrincipal
+
+		#region method CheckAllowedRange
+
+		private void CheckAllowedRange() {
+			decimal nApprovedAmount = ApprovedAmount;
+
+			if ((m_oCfg.MinAmount <= nApprovedAmount) && (nApprovedAmount <= m_oCfg.MaxAmount))
+				StepDone<AmountOutOfRangle>().Init(nApprovedAmount, m_oCfg.MinAmount, m_oCfg.MaxAmount);
+			else
+				StepFailed<AmountOutOfRangle>().Init(nApprovedAmount, m_oCfg.MinAmount, m_oCfg.MaxAmount);
+		} // CheckAllowedRange
+
+		#endregion method CheckAllowedRange
 
 		#endregion steps
 

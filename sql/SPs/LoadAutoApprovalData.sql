@@ -68,6 +68,17 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	DECLARE @TotalLoanCount INT = ISNULL((
+		SELECT
+			COUNT(*)
+		FROM
+			Loan l
+		WHERE
+			l.CustomerId = @CustomerID
+	), 0)
+
+	------------------------------------------------------------------------------
+
 	DECLARE @TakenLoanAmount DECIMAL(18, 0) = ISNULL((
 		SELECT
 			SUM(l.LoanAmount)
@@ -166,16 +177,100 @@ BEGIN
 	), 0)
 
 	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
-	DECLARE @CompanyScore INT = ISNULL((
+	DECLARE @CompanyScore INT = 0
+	DECLARE @IncorporationDate DATETIME = NULL
+
+	------------------------------------------------------------------------------
+
+	DECLARE @TypeOfBusiness NVARCHAR(100) = ISNULL((
 		SELECT
-			(CASE WHEN MaxScore IS NULL OR MaxScore < Score THEN MaxScore ELSE Score END)
+			c.TypeOfBusiness
 		FROM
-			CustomerAnalyticsCompany
+			Customer c
 		WHERE
-			CustomerID = @CustomerID
+			c.Id = @CustomerID
+	), '')
+
+	------------------------------------------------------------------------------
+
+	IF @TypeOfBusiness IN ('Limited', 'LLP')
+	BEGIN
+		SELECT
+			@CompanyScore = (CASE
+				WHEN a.MaxScore IS     NULL AND a.Score IS     NULL THEN 0
+				WHEN a.MaxScore IS NOT NULL AND a.Score IS     NULL THEN a.MaxScore
+				WHEN a.MaxScore IS     NULL AND a.Score IS NOT NULL THEN a.Score
+				WHEN a.MaxScore < a.Score THEN a.MaxScore ELSE a.Score
+			END),
+			@IncorporationDate = a.IncorporationDate
+		FROM
+			CustomerAnalyticsCompany a
+		WHERE
+			a.CustomerID = @CustomerID
 			AND
-			IsActive = 1
+			a.IsActive = 1
+	END
+	ELSE BEGIN
+		SELECT
+			@CompanyScore = nl.CommercialDelphiScore,
+			@IncorporationDate = nl.IncorporationDate
+		FROM
+			Customer c
+			INNER JOIN Company co ON c.CompanyId = co.Id
+			INNER JOIN ExperianNonLimitedResults nl ON co.ExperianRefNum = nl.RefNumber
+		WHERE
+			c.Id = @CustomerID
+			AND
+			nl.IsActive = 1
+	END
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	DECLARE @NumOfDefaultAccounts INT = ISNULL((
+		SELECT
+			COUNT(*)
+		FROM
+			ExperianDefaultAccount eda
+		WHERE
+			eda.CustomerId = @CustomerID
+			AND
+			eda.Balance != 0
+	), 0)
+
+	------------------------------------------------------------------------------
+
+	DECLARE @NumOfRollovers INT = ISNULL((
+		SELECT
+			COUNT(*)
+		FROM
+			PaymentRollover r
+			INNER JOIN LoanSchedule s ON r.LoanScheduleId = s.Id
+			INNER JOIN Loan l ON s.LoanId = l.Id
+		WHERE
+			l.CustomerId = @CustomerID
+	), 0)
+
+	------------------------------------------------------------------------------
+
+	DECLARE @ConsumerScore INT = ISNULL((
+		SELECT
+			MIN(x.ExperianConsumerScore)
+		FROM	(
+			SELECT ExperianConsumerScore
+			FROM Customer
+			WHERE Id = @CustomerID
+			AND ExperianConsumerScore IS NOT NULL
+			
+			UNION
+			
+			SELECT ExperianConsumerScore
+			FROM Director
+			WHERE CustomerId = @CustomerID
+			AND ExperianConsumerScore IS NOT NULL
+		) x
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -185,15 +280,21 @@ BEGIN
 		RowType                = 'MetaData',
 
 		IsBrokerCustomer       = (CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END),
-		TodayAutoApprovalCount = @TodayAutoApprovalCount,
+		NumOfTodayAutoApproval = @TodayAutoApprovalCount,
 		TodayLoanSum           = @TodayLoanSum,
 
 		AmlResult              = c.AMLResult,
 		CustomerStatusName     = cs.Name,
 		CustomerStatusEnabled  = cs.IsEnabled,
-		CompanyScore           = @CompanyScore,
+		CompanyScore           = ISNULL(@CompanyScore, 0),
+		ConsumerScore          = @ConsumerScore,
+		IncorporationDate      = @IncorporationDate,
 		DateOfBirth            = c.DateOfBirth,
-		
+
+		NumOfDefaultAccounts   = @NumOfDefaultAccounts,
+		NumOfRollovers         = @NumOfRollovers,
+
+		TotalLoanCount         = @TotalLoanCount,
 		OpenLoanCount          = @OpenLoanCount,
 		TakenLoanAmount        = @TakenLoanAmount,
 		RepaidPrincipal        = @RepaidPrincipal,
