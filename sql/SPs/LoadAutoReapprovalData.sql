@@ -153,6 +153,7 @@ BEGIN
 
 	SELECT
 		RowType            = 'MetaData',
+		FraudStatusValue   = c.FraudStatus,
 		LacrID             = @LacrID,
 		RejectAfterLacrID  = @RejectAfterLacrID,
 		LacrTime           = @LacrTime,

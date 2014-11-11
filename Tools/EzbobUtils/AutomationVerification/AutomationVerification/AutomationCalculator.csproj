@@ -78,6 +78,7 @@
     <Compile Include="ProcessHistory\AutoApproval\IsBrokerCustomer.cs" />
     <Compile Include="ProcessHistory\AutoApproval\WorstCaisStatus.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OutstandingRepayRatio.cs" />
+    <Compile Include="ProcessHistory\Common\FraudSuspect.cs" />
     <Compile Include="ProcessHistory\Common\OutstandingLoanCount.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Rollovers.cs" />
     <Compile Include="ProcessHistory\AutoApproval\TodayApprovalCount.cs" />

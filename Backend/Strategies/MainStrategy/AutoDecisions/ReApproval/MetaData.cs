@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
 	using System;
 	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
 
 	internal class MetaData {
 		public MetaData() {
@@ -21,6 +22,17 @@
 		public bool? EmailSendingBanned { get; set; }
 		public DateTime? OfferValidUntil { get; set; }
 		public DateTime? OfferStart { get; set; }
+
+		public int FraudStatusValue {
+			get { return (int)FraudStatus; }
+			set {
+				FraudStatus = Enum.IsDefined(typeof (FraudStatus), value)
+					? (FraudStatus)value
+					: FraudStatus.UnderInvestigation;
+			} // set
+		} // FraudStatusValue
+
+		public FraudStatus FraudStatus { get; private set; }
 
 		public bool IsEmailSendingBanned {
 			get { return !EmailSendingBanned.HasValue || EmailSendingBanned.Value; } // get

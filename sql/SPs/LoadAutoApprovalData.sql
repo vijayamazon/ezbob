@@ -283,6 +283,7 @@ BEGIN
 		NumOfTodayAutoApproval = @TodayAutoApprovalCount,
 		TodayLoanSum           = @TodayLoanSum,
 
+		FraudStatusValue       = c.FraudStatus,
 		AmlResult              = c.AMLResult,
 		CustomerStatusName     = cs.Name,
 		CustomerStatusEnabled  = cs.IsEnabled,

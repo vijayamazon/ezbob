@@ -4,6 +4,7 @@
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -69,6 +70,7 @@
 				else
 					StepFailed<InitialAssignment>().Init(ApprovedAmount, m_oMetaData.ValidationErrors);
 
+				CheckIsFraud();
 				CheckIsBrokerCustomer();
 				CheckTodayApprovedCount();
 				CheckTodayOpenLoans();
@@ -132,6 +134,17 @@
 		#region private
 
 		#region steps
+
+		#region method CheckIsFraud
+
+		private void CheckIsFraud() {
+			if (m_oMetaData.FraudStatus == FraudStatus.Ok)
+				StepDone<FraudSuspect>().Init(m_oMetaData.FraudStatus);
+			else
+				StepFailed<FraudSuspect>().Init(m_oMetaData.FraudStatus);
+		} // CheckIsFraud
+
+		#endregion method CheckIsFraud
 
 		#region method CheckIsBrokerCustomer
 

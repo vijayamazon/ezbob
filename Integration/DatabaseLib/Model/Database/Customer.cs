@@ -10,7 +10,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
 	using NHibernateWrapper.NHibernate.Types;
-	using System.ComponentModel;
 
 	#region relevant to Customer class
 
@@ -73,26 +72,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	#endregion enum CreditResultStatus
 
-	#region enum FraudStatus
-
-	public enum FraudStatus {
-		[Description("Ok")]
-		Ok = 0,
-		[Description("Fishy")]
-		Fishy = 1,
-		[Description("Fraud Suspect")]
-		FraudSuspect = 2,
-		[Description("Under Investigation")]
-		UnderInvestigation = 3,
-		[Description("Fraud Done")]
-		FraudDone = 4,
-		[Description("Identity/Details Theft")]
-		IdentityOrDetailsTheft = 5
-	} // enum FraudStatus
-
 	public class GenderType : EnumStringType<Gender> { }
-
-	#endregion enum FraudStatus
 
 	public class MaritalStatusType : EnumStringType<MaritalStatus> { }
 

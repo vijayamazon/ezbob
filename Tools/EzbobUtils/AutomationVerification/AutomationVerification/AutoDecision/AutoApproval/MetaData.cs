@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
 	using System;
 	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
 
 	internal class MetaData {
 		#region constructor
@@ -18,6 +19,15 @@
 		public bool IsBrokerCustomer { get; set; }
 		public int NumOfTodayAutoApproval { get; set; }
 		public decimal TodayLoanSum { get; set; }
+
+		public int FraudStatusValue {
+			get { return (int)FraudStatus; }
+			set {
+				FraudStatus = Enum.IsDefined(typeof (FraudStatus), value)
+					? (FraudStatus)value
+					: FraudStatus.UnderInvestigation;
+			} // set
+		} // FraudStatusValue
 
 		public string AmlResult { get; set; }
 		public string CustomerStatusName { get; set; }
@@ -41,6 +51,8 @@
 		public bool? EmailSendingBanned { get; set; }
 
 		#endregion properties read from DB
+
+		public FraudStatus FraudStatus { get; private set; }
 
 		#region property IsEmailSendingBanned
 

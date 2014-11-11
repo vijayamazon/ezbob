@@ -131,6 +131,8 @@
 			log.Debug("Checking if auto approval should take place for customer {0}...", customerId);
 
 			try {
+				CheckIsFraud();
+
 				if (isBrokerCustomer)
 					StepFailed<IsBrokerCustomer>();
 				else
@@ -197,6 +199,15 @@
 			else
 				StepDone<DefaultAccounts>().Init();
 		} // CheckDefaultAccounts
+
+		private void CheckIsFraud() {
+			if (customer == null)
+				StepFailed<FraudSuspect>().Init(FraudStatus.UnderInvestigation);
+			else if (customer.FraudStatus == 0)
+				StepDone<FraudSuspect>().Init(customer.FraudStatus);
+			else
+				StepFailed<FraudSuspect>().Init(customer.FraudStatus);
+		} // CheckIsFraud
 
 		private void CheckAMLResult() {
 			if (customer == null)
