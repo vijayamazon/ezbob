@@ -262,7 +262,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			if (model.banks.Any() && model.banks.SelectMany(x => x.transactions).Any())
 			{
 				model.BankStatementDataModel.DateFrom = model.banks.SelectMany(x => x.transactions).Min(x => x.transactionDate);
-				model.BankStatementDataModel.DateTo = model.banks.SelectMany(x => x.transactions).Max(x => x.transactionDate);
+				model.BankStatementDataModel.DateTo = model.banks.Max(x => x.asOfDate);
 				model.BankStatementAnnualizedModel =
 					yodleeCashFlowReportModelBuilder.GetAnualizedBankStatementDataModel(model.BankStatementDataModel);
 			}

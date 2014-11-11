@@ -423,8 +423,8 @@
 							isSeidMod = bankTransaction.isSeidMod,
 							srcElementId = bankTransaction.srcElementId,
 							transactionStatusId = bankTransaction.transactionStatusId,
-							userDescription = bankTransaction.transactionCategory.Type, //userdesc used for category type
-							memo = bankTransaction.transactionCategory.Name, //memo used for category name
+							userDescription = bankTransaction.transactionCategory != null? bankTransaction.transactionCategory.Type : null, //userdesc used for category type
+							memo = bankTransaction.transactionCategory != null ? bankTransaction.transactionCategory.Name : null, //memo used for category name
 							transactionStatus = bankTransaction.transactionStatus,
 							transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
 							transactionBaseType = bankTransaction.transactionBaseType,

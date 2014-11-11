@@ -11,14 +11,8 @@
 		public OnlineLImitedMedalCalculator(ASafeLog log) : base(log) { }
 
 		public override MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null) {
-			var model = base.GetInputParameters(customerId);
-			bool usingHmrc;
-			model.AnnualTurnover = GetOnlineAnnualTurnover(customerId, model.MedalInputModelDb, out usingHmrc);
-			model.FreeCashFlow = model.AnnualTurnover <= 0 || !usingHmrc ? 0 : model.MedalInputModelDb.HmrcFreeCashFlow;
-			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
-			model.NumOfStores = model.MedalInputModelDb.NumOfStores;
-			var mpHelper = new MarketPlacesHelper(Log);
-			model.PositiveFeedbacks = mpHelper.GetPositiveFeedbacks(customerId);
+			var model = base.GetInputParameters(customerId, calculationDate);
+			model = GetOnlineInputParameters(customerId, model);
 			return model;
 		}
 

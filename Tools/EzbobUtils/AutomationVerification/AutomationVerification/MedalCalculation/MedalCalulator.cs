@@ -120,31 +120,38 @@
 		///If it is negative – use 0 instead
 		///The 0.7 should be configurable via UW – config name: OnlineMedalTurnoverCutoff
 		/// </summary>
-		protected decimal GetOnlineAnnualTurnover(int customerId, MedalInputModelDb dbData, out bool usingHmrc)
+		protected MedalInputModel GetOnlineInputParameters(int customerId, MedalInputModel intputModel)
 		{
-			usingHmrc = false;
+			var usingHmrc = false;
 			var dbHelper = new DbHelper(Log);
 			var mpHelper = new MarketPlacesHelper(Log);
 			var yodlees = dbHelper.GetCustomerYodlees(customerId);
 			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, Log);
 			var onlineTurnover = mpHelper.GetOnlineTurnoverAnnualized(customerId);
-			if (dbData.HmrcRevenues > onlineTurnover * dbData.OnlineMedalTurnoverCutoff)
+			if (intputModel.MedalInputModelDb.HmrcRevenues > onlineTurnover * intputModel.MedalInputModelDb.OnlineMedalTurnoverCutoff)
 			{
 				usingHmrc = true;
-				return dbData.HmrcRevenues;
+				intputModel.AnnualTurnover = intputModel.MedalInputModelDb.HmrcRevenues;
 			}
-
-			if (yodleeIncome > onlineTurnover * dbData.OnlineMedalTurnoverCutoff)
-			{
-				return yodleeIncome;
+			else if (yodleeIncome > onlineTurnover*intputModel.MedalInputModelDb.OnlineMedalTurnoverCutoff) {
+				intputModel.AnnualTurnover = yodleeIncome;
+			}
+			else {
+				intputModel.AnnualTurnover = onlineTurnover;
 			}
 
 			if (onlineTurnover < 0)
 			{
-				return 0;
+				intputModel.AnnualTurnover = 0;
 			}
 
-			return onlineTurnover;
+			intputModel.FreeCashFlow = intputModel.AnnualTurnover <= 0 || !usingHmrc ? 0 : intputModel.MedalInputModelDb.HmrcFreeCashFlow / intputModel.AnnualTurnover;
+			intputModel.TangibleEquity = intputModel.AnnualTurnover == 0 ? 0 : intputModel.MedalInputModelDb.TangibleEquity / intputModel.AnnualTurnover;
+			intputModel.NumOfStores = intputModel.MedalInputModelDb.NumOfStores;
+
+			intputModel.PositiveFeedbacks = mpHelper.GetPositiveFeedbacks(customerId);
+
+			return intputModel;
 		}
 
 		protected MedalOutputModel CalcScoreMedalOffer(Dictionary<Parameter, Weight> dict, MedalInputModel inputModel, MedalType medalType = MedalType.NoMedal)
