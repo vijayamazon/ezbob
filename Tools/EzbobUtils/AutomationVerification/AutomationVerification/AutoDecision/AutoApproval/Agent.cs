@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
@@ -25,6 +26,7 @@
 			m_oPayments = new List<Payment>();
 
 			m_oFunds = new AvailableFunds();
+			m_oWorstStatuses = new SortedSet<string>();
 
 			m_oTrail = new Trail(m_oArgs.CustomerID);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
@@ -55,8 +57,6 @@
 
 				// TODO: load data for seniority
 
-				// TODO: load worst CAIS statuses
-
 				m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
 
 				m_oMetaData.Validate();
@@ -86,7 +86,11 @@
 
 				StepDone<TotalLoanCount>().Init(m_oMetaData.TotalLoanCount);
 
-				// TODO: CheckCaisStatuses((m_oMetaData.TotalLoanCount > 0) ? m_oCfg.GetAllowedCaisStatusesWithLoan() : m_oCfg.GetAllowedCaisStatusesWithoutLoan());
+				CheckCaisStatuses(m_oMetaData.TotalLoanCount > 0
+					? m_oCfg.GetAllowedCaisStatusesWithLoan()
+					: m_oCfg.GetAllowedCaisStatusesWithoutLoan()
+				);
+
 				CheckRollovers();
 				CheckLatePayments();
 				CheckCustomerOpenLoans();
@@ -264,6 +268,19 @@
 
 		#endregion method CheckDefaultAccounts
 
+		#region method CheckCaisStatuses
+
+		private void CheckCaisStatuses(List<string> oAllowedStatuses) {
+			List<string> diff = m_oWorstStatuses.Except(oAllowedStatuses).ToList();
+
+			if (diff.Count > 1)
+				StepFailed<WorstCaisStatus>().Init(diff, m_oWorstStatuses.ToList(), oAllowedStatuses);
+			else
+				StepDone<WorstCaisStatus>().Init(null, m_oWorstStatuses.ToList(), oAllowedStatuses);
+		} // CheckCaisStatuses
+
+		#endregion method CheckCaisStatuses
+
 		#region method CheckRollovers
 
 		private void CheckRollovers() {
@@ -362,6 +379,10 @@
 				m_oPayments.Add(sr.Fill<Payment>());
 				break;
 
+			case RowType.Cais:
+				m_oWorstStatuses.Add(sr["WorstStatus"]);
+				break;
+
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
@@ -374,6 +395,7 @@
 		private enum RowType {
 			MetaData,
 			Payment,
+			Cais,
 		} // enum RowType
 
 		#endregion enum RowType
@@ -407,6 +429,8 @@
 
 		private readonly MetaData m_oMetaData;
 		private readonly List<Payment> m_oPayments;
+
+		private readonly SortedSet<string> m_oWorstStatuses;
 
 		private readonly AvailableFunds m_oFunds;
 

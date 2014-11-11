@@ -276,6 +276,23 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
+	DECLARE @ExperianConsumerDataID BIGINT
+
+	------------------------------------------------------------------------------
+
+	SELECT TOP 1
+		@ExperianConsumerDataID = e.Id
+	FROM
+		MP_ServiceLog l
+		INNER JOIN ExperianConsumerData e ON l.Id = e.ServiceLogId
+	WHERE
+		l.CustomerId = @CustomerID
+	ORDER BY
+		l.InsertDate DESC
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
 	SELECT
 		RowType                = 'MetaData',
 
@@ -333,6 +350,16 @@ BEGIN
 		t.PostDate > s.[Date]
 	ORDER BY
 		t.PostDate
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		RowType     = 'Cais',
+		WorstStatus = ec.WorstStatus
+	FROM
+		ExperianConsumerDataCais ec
+	WHERE
+		ec.ExperianConsumerDataId = @ExperianConsumerDataID
 
 	------------------------------------------------------------------------------
 END
