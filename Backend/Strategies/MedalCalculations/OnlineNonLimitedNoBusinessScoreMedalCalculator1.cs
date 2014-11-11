@@ -45,7 +45,7 @@
 
 		protected override void RedistributeWeightsForPayingCustomer()
 		{
-			Results.NetWorth -= 2;
+			Results.NetWorthWeight -= 2;
 			Results.BusinessSeniorityWeight -= 3;
 			Results.ConsumerScoreWeight -= 5;
 		}
