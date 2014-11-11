@@ -50,6 +50,7 @@
 		private decimal loanOfferReApprovalSum;
 		private int offeredCreditLine;
 		private int modelLoanOffer;
+		private MedalClassification medalClassification;
 
 		private List<string> consumerCaisDetailWorstStatuses;
 		
@@ -139,6 +140,7 @@
 				dataGatherer.NumOfYodleeMps, dataGatherer.NumOfEbayAmazonPayPalMps, dataGatherer.EarliestHmrcLastUpdateDate, dataGatherer.EarliestYodleeLastUpdateDate);
 			instance.Execute();
 
+			medalClassification = instance.Result.MedalClassification;
 			modelLoanOffer = instance.Result.OfferedLoanAmount;
 		}
 
@@ -297,6 +299,7 @@
 					dataGatherer.MinCompanyScore,
 					offeredCreditLine,
 					consumerCaisDetailWorstStatuses,
+					medalClassification,
 					DB,
 					Log
 				).MakeDecision(autoDecisionResponse);

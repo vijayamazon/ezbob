@@ -158,6 +158,9 @@
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
     <Compile Include="Misc\SaveSourceRefHistory.cs" />
+    <Compile Include="OfferCalculation\CalculateOffer.cs" />
+    <Compile Include="OfferCalculation\OfferDualCalculator.cs" />
+    <Compile Include="OfferCalculation\OfferResult.cs" />
     <Compile Include="Reports\Alibaba.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="Misc\UpdateGoogleAnalytics.cs" />

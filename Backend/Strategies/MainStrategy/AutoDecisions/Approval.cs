@@ -12,12 +12,14 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
-	using EzBob.Backend.Strategies.Misc;
-	using EzBob.CommonLib.TimePeriodLogic;
+	using MedalCalculations;
+	using Misc;
+	using CommonLib.TimePeriodLogic;
 	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MailApi;
+	using OfferCalculation;
 	using StructureMap;
 
 	public class Approval {
@@ -28,6 +30,7 @@
 			int minCompanyScore,
 			int offeredCreditLine,
 			List<string> consumerCaisDetailWorstStatuses,
+			MedalClassification medalClassification,
 			AConnection db,
 			ASafeLog log
 		) {
@@ -39,6 +42,7 @@
 			this.customerId = customerId;
 			this.consumerCaisDetailWorstStatuses = consumerCaisDetailWorstStatuses;
 			this.isBrokerCustomer = bIsBrokerCustomer;
+			this.medalClassification = medalClassification;
 
 			loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -73,6 +77,7 @@
 				log.Info("Decided to auto approve rounded amount: {0}", response.AutoApproveAmount);
 
 				if (response.AutoApproveAmount != 0) {
+
 					if (availFunds.AvailableFunds > response.AutoApproveAmount) {
 						if (autoApproveIsSilent) {
 							NotifyAutoApproveSilentMode(response.AutoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
@@ -101,6 +106,11 @@
 							response.AppValidFor = DateTime.UtcNow.AddDays((loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays);
 							response.IsAutoApproval = true;
 							response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
+
+							var offerDualCalculator = new OfferDualCalculator(db, log);
+							offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, response.AutoApproveAmount, medalClassification);
+							OfferResult offerResult = offerDualCalculator.Results;
+							// TODO: the data inside offerResult should effect the cash request that is upodated in the main strategy
 						} // if is silent
 					} // if there are enough funds
 				} // if auto approved amount is not 0
@@ -439,6 +449,7 @@
 		private readonly int minCompanyScore;
 		private readonly int customerId;
 		private readonly List<string> consumerCaisDetailWorstStatuses;
+		private readonly MedalClassification medalClassification;
 
 		private int autoApprovedAmount;
 
