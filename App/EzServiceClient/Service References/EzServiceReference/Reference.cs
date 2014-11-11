@@ -2345,6 +2345,27 @@ namespace ServiceClientProxy.EzServiceReference {
         Broker = 1,
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MedalClassification", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.MedalCalculation" +
+        "s")]
+    public enum MedalClassification : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoClassification = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Silver = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Gold = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Platinum = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Diamond = 4,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzServiceAdmin")]
     public interface IEzServiceAdmin {
@@ -2949,6 +2970,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateMedal", ReplyAction="http://tempuri.org/IEzService/CalculateMedalResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateOffer", ReplyAction="http://tempuri.org/IEzService/CalculateOfferResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateOffer", ReplyAction="http://tempuri.org/IEzService/CalculateOfferResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
         ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
@@ -4130,6 +4157,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId) {
             return base.Channel.CalculateMedalAsync(underwriterId, customerId);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification) {
+            return base.Channel.CalculateOffer(underwriterId, customerId, amount, medalClassification);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification) {
+            return base.Channel.CalculateOfferAsync(underwriterId, customerId, amount, medalClassification);
         }
         
         public ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId) {

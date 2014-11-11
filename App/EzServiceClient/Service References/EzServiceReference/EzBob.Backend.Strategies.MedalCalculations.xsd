@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.MedalCalculations" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.MedalCalculations" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="MedalClassification">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NoClassification" />
+      <xs:enumeration value="Silver" />
+      <xs:enumeration value="Gold" />
+      <xs:enumeration value="Platinum" />
+      <xs:enumeration value="Diamond" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="MedalClassification" nillable="true" type="tns:MedalClassification" />
+</xs:schema>

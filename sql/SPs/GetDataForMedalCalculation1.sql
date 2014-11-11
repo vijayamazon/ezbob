@@ -328,7 +328,7 @@ BEGIN
 		cmp.Id
 
 	SELECT
-		@AmazonPositiveFeedbacks = fbi.Positive
+		@AmazonPositiveFeedbacks = SUM(fbi.Positive)
 	FROM
 		MP_AmazonFeedback fb
 		INNER JOIN #MaxAmazonCreated mc
@@ -352,7 +352,7 @@ BEGIN
 		cmp.Id
 
 	SELECT
-		@EbayPositiveFeedbacks = fbi.Positive
+		@EbayPositiveFeedbacks = SUM(fbi.Positive)
 	FROM
 		MP_EbayFeedback fb
 		INNER JOIN #MaxEbayCreated mc

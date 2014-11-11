@@ -5,6 +5,7 @@
 	using ActionResults;
 	using EchoSignLib;
 	using EzBob.Backend.Models;
+	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzBob.Backend.Strategies.PricingModel;
 	using EzBob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Models;
@@ -593,6 +594,9 @@
 
 		[OperationContract]
 		ActionMetaData CalculateMedal(int underwriterId, int customerId);
+
+		[OperationContract]
+		ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, MedalClassification medalClassification);
 
 		[OperationContract]
 		StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);

@@ -2376,6 +2376,10 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.OnlineMedalTurnoverCutoff]; }
 		}
-		
+
+		public virtual VariableValue AspireToMinSetupFee
+		{
+			get { return this[Variables.AspireToMinSetupFee]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

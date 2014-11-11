@@ -17,5 +17,6 @@
 		public bool IsEu { get; set; }
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
+		public string Error { get; set; }
 	}
 }

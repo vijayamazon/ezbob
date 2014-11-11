@@ -2,9 +2,10 @@
 {
 	public enum MedalClassification
 	{
+		NoClassification,
 		Silver,
 		Gold,
 		Platinum,
-		Diamond,
+		Diamond
 	}
 }

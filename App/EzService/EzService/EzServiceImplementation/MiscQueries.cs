@@ -5,6 +5,7 @@
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzBob.Backend.Strategies.Misc;
+	using EzBob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 
@@ -240,7 +241,13 @@
 			CalculateMedal instance;
 			return ExecuteSync(out instance, customerId, underwriterId, customerId);
 		}
-		
+
+		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, MedalClassification medalClassification)
+		{
+			CalculateOffer instance;
+			return ExecuteSync(out instance, customerId, underwriterId, customerId, amount, medalClassification);
+		}
+
 		public StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId)
 		{
 			GetUnfetchedDataErrors instance;

@@ -34,6 +34,7 @@
     <MetadataFile FileName="EzBob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="5a55e74b-f770-42f7-bc19-b6352fbb1f80" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="62102531-0cb5-424e-8419-15aef6b68c94" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Utils.xsd" MetadataType="Schema" ID="08c2e82a-5577-493c-9cb8-1dffe995071f" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Backend.Strategies.MedalCalculations.xsd" MetadataType="Schema" ID="ebf02938-a630-4050-a889-e35f1c178139" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="8833b6cd-14e5-4d79-a987-4e61d0e4ac95" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EchoSignLib.xsd" MetadataType="Schema" ID="088f898c-a232-4690-9eb3-4ced92ac3df1" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
   </Metadata>
