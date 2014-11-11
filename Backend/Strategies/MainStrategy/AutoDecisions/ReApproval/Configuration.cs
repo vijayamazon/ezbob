@@ -19,7 +19,7 @@
 		#region method Load
 
 		public void Load() {
-			m_oDB.ForEachRowSafe(SetValue, "GetReApprovalConfigs", CommandSpecies.StoredProcedure);
+			m_oDB.ForEachRowSafe(SetValue, "LoadReApprovalConfigs", CommandSpecies.StoredProcedure);
 		} // Load
 
 		#endregion method Load

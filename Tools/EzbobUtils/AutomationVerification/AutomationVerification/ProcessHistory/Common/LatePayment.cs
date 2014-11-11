@@ -1,4 +1,4 @@
-﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
+﻿namespace AutomationCalculator.ProcessHistory.Common {
 	using System;
 	using System.Globalization;
 	using Ezbob.Utils.Lingvo;

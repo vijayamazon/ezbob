@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoDecision\AutoApproval\Agent.cs" />
+    <Compile Include="AutoDecision\AutoApproval\Arguments.cs" />
+    <Compile Include="AutoDecision\AutoApproval\Configuration.cs" />
+    <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
+    <Compile Include="AutoDecision\AutoApproval\Payment.cs" />
     <Compile Include="AutoDecision\AutoRejectionCalculator.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="AutoDecision\AutoReRejectionCalculator.cs" />
@@ -72,7 +77,6 @@
     <Compile Include="ProcessHistory\AutoApproval\WorstCaisStatus.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OutstandingRepayRatio.cs" />
     <Compile Include="ProcessHistory\Common\OutstandingLoanCount.cs" />
-    <Compile Include="ProcessHistory\AutoApproval\LateDays.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Rollovers.cs" />
     <Compile Include="ProcessHistory\AutoApproval\TodayApprovalCount.cs" />
     <Compile Include="ProcessHistory\AutoApproval\TodayLoans.cs" />
@@ -89,7 +93,7 @@
     <Compile Include="ProcessHistory\ReApproval\ApprovedAmount.cs" />
     <Compile Include="ProcessHistory\ReApproval\Charges.cs" />
     <Compile Include="ProcessHistory\ReApproval\InitialAssignment.cs" />
-    <Compile Include="ProcessHistory\ReApproval\LatePayment.cs" />
+    <Compile Include="ProcessHistory\Common\LatePayment.cs" />
     <Compile Include="ProcessHistory\ReApproval\NewMarketplace.cs" />
     <Compile Include="ProcessHistory\ReApproval\RejectAfterLacr.cs" />
     <Compile Include="ProcessHistory\ReApproval\LacrTooOld.cs" />
@@ -124,6 +128,10 @@
     <ProjectReference Include="..\..\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MiniResharper\MiniResharper.csproj">
+      <Project>{805f29c1-d575-49c5-a95d-4d393e65481f}</Project>
+      <Name>MiniResharper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

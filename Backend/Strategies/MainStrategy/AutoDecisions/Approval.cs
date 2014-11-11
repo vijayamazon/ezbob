@@ -360,13 +360,15 @@
 
 					if (nTotalLateDays > autoApproveMaxAllowedDaysLate) {
 						bSuccess = false;
-						StepFailed<LateDays>().Init((int)nTotalLateDays, innerLoanId, paymentMapping.Schedule.Id, paymentMapping.Transaction.Id, autoApproveMaxAllowedDaysLate);
+						StepFailed<LatePayment>().Init(
+							innerLoanId, paymentMapping.Schedule.Id, scheduleDate, paymentMapping.Transaction.Id, transactionDate, autoApproveMaxAllowedDaysLate
+						);
 					} // if
 				} // for
 			} // for
 
 			if (bSuccess)
-				StepDone<LateDays>().Init(0, 0, 0, 0, autoApproveMaxAllowedDaysLate);
+				StepDone<LatePayment>().Init(0, 0, DateTime.UtcNow, 0, DateTime.UtcNow, autoApproveMaxAllowedDaysLate);
 		} // CheckLateDays
 
 		private decimal CheckOutstandingLoans() {
