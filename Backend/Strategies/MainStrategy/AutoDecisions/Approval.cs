@@ -216,7 +216,9 @@
 		private void CheckBusinessScore() {
 			int nThreshold = CurrentValues.Instance.AutoApproveBusinessScoreThreshold;
 
-			if (minCompanyScore < nThreshold)
+			if (minCompanyScore <= 0)
+				StepDone<BusinessScore>().Init(minCompanyScore, nThreshold);
+			else if (minCompanyScore < nThreshold)
 				StepFailed<BusinessScore>().Init(minCompanyScore, nThreshold);
 			else
 				StepDone<BusinessScore>().Init(minCompanyScore, nThreshold);

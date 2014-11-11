@@ -46,6 +46,7 @@
 		public bool IsSilent { get; [UsedImplicitly] private set; }
 		public string SilentTemplateName { get; [UsedImplicitly] private set; }
 		public string SilentToAddress { get; [UsedImplicitly] private set; }
+		public int BusinessScoreThreshold { get; [UsedImplicitly] private set; }
 
 		public List<string> GetAllowedCaisStatusesWithLoan() {
 			return m_oAllowedCaisStatusesWithLoan;
@@ -67,7 +68,10 @@
 			if (sName.StartsWith(StandardPrefix))
 				sName = sName.Substring(StandardPrefix.Length);
 
-			PropertyInfo pi = this.GetType().GetProperty(sName);
+			PropertyInfo pi = this.GetType().GetProperty(
+				sName,
+				BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+			);
 
 			if (pi == null) {
 				m_oLog.Alert("Auto approval configuration: unsupported parameter found '{0}'.", sName);

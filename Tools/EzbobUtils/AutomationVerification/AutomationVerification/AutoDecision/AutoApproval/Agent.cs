@@ -13,6 +13,7 @@
 		#region constructor
 
 		public Agent(int nCustomerID, decimal nSystemCalculatedAmount, AConnection oDB, ASafeLog oLog) {
+			Now = DateTime.UtcNow;
 			ApprovedAmount = 0;
 
 			m_oDB = oDB;
@@ -21,6 +22,8 @@
 
 			m_oMetaData = new MetaData();
 			m_oPayments = new List<Payment>();
+
+			m_oFunds = new AvailableFunds();
 
 			m_oTrail = new Trail(m_oArgs.CustomerID);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
@@ -44,7 +47,7 @@
 					"LoadAutoApprovalData",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", m_oArgs.CustomerID),
-					new QueryParameter("Now", DateTime.UtcNow)
+					new QueryParameter("Now", Now)
 				);
 
 				// TODO: load consumer score and director score using separate stored procedures:
@@ -58,6 +61,8 @@
 
 				// TODO: load data for after "if has loans".
 
+				m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
+
 				m_oMetaData.Validate();
 
 				if ((ApprovedAmount > 0) && (m_oMetaData.ValidationErrors.Count == 0))
@@ -65,16 +70,16 @@
 				else
 					StepFailed<InitialAssignment>().Init(ApprovedAmount, m_oMetaData.ValidationErrors);
 
-				/*
 				CheckIsBrokerCustomer();
 				CheckTodayApprovedCount();
 				CheckTodayOpenLoans();
-				CheckOutstandingOffers(); // ReservedAmount from available funds
+				CheckOutstandingOffers();
 				CheckAml();
 				CheckCustomerStatus();
 				CheckCompanyScore();
-				CheckConsumerScore();
+				// TODO CheckConsumerScore();
 				CheckCustomerAge();
+				/*
 				CheckTurnovers();
 				CheckCompanyAge();
 				CheckDefaultAccounts();
@@ -101,7 +106,7 @@
 					response.SystemDecision = "Approve";
 					response.LoanOfferUnderwriterComment = "Auto Approval";
 					response.DecisionName = "Approval";
-					response.AppValidFor = DateTime.UtcNow.AddDays(m_oMetaData.OfferLength);
+					response.AppValidFor = Now.AddDays(m_oMetaData.OfferLength);
 					response.IsAutoApproval = true;
 					response.LoanOfferEmailSendingBannedNew = m_oMetaData.IsEmailSendingBanned;
 				} // if
@@ -133,6 +138,114 @@
 
 		#region steps
 
+		#region method CheckIsBrokerCustomer
+
+		private void CheckIsBrokerCustomer() {
+			if (m_oMetaData.IsBrokerCustomer)
+				StepFailed<IsBrokerCustomer>().Init();
+			else
+				StepDone<IsBrokerCustomer>().Init();
+		} // CheckIsBrokerCustomer
+
+		#endregion method CheckIsBrokerCustomer
+
+		#region method CheckTodayApprovedCount
+
+		private void CheckTodayApprovedCount() {
+			if (m_oMetaData.TodayAutoApprovalCount > m_oCfg.MaxDailyApprovals)
+				StepFailed<TodayApprovalCount>().Init(m_oMetaData.TodayAutoApprovalCount, m_oCfg.MaxDailyApprovals);
+			else
+				StepDone<TodayApprovalCount>().Init(m_oMetaData.TodayAutoApprovalCount, m_oCfg.MaxDailyApprovals);
+		} // CheckTodayApprovedCount
+
+		#endregion method CheckTodayApprovedCount
+
+		#region method CheckTodayOpenLoans
+
+		private void CheckTodayOpenLoans() {
+			if (m_oMetaData.TodayLoanSum > m_oCfg.MaxTodayLoans)
+				StepFailed<TodayLoans>().Init(m_oMetaData.TodayLoanSum, m_oCfg.MaxTodayLoans);
+			else
+				StepDone<TodayLoans>().Init(m_oMetaData.TodayLoanSum, m_oCfg.MaxTodayLoans);
+		} // CheckTodayOpenLoans
+
+		#endregion method CheckTodayOpenLoans
+
+		#region method CheckOutstandingOffers
+
+		private void CheckOutstandingOffers() {
+			if (m_oFunds.Reserved > m_oCfg.MaxOutstandingOffers)
+				StepFailed<OutstandingOffers>().Init(m_oFunds.Reserved, m_oCfg.MaxOutstandingOffers);
+			else
+				StepDone<OutstandingOffers>().Init(m_oFunds.Reserved, m_oCfg.MaxOutstandingOffers);
+		} // CheckOutstandingOffers
+
+		#endregion method CheckOutstandingOffers
+
+		#region method CheckAml
+
+		private void CheckAml() {
+			if (0 == string.Compare(m_oMetaData.AmlResult, "passed", StringComparison.InvariantCultureIgnoreCase))
+				StepDone<AmlCheck>().Init(m_oMetaData.AmlResult);
+			else
+				StepFailed<AmlCheck>().Init(m_oMetaData.AmlResult);
+		} // CheckAml
+
+		#endregion method CheckAml
+
+		#region method CheckCustomerStatus
+
+		private void CheckCustomerStatus() {
+			if (m_oMetaData.CustomerStatusEnabled)
+				StepDone<CustomerStatus>().Init(m_oMetaData.CustomerStatusName);
+			else
+				StepFailed<CustomerStatus>().Init(m_oMetaData.CustomerStatusName);
+		} // CheckCustomerStatus
+
+		#endregion method CheckCustomerStatus
+
+		#region method CheckCompanyScore
+
+		private void CheckCompanyScore() {
+			if (m_oMetaData.CompanyScore <= 0)
+				StepDone<BusinessScore>().Init(m_oMetaData.CompanyScore, m_oCfg.BusinessScoreThreshold);
+			else if (m_oMetaData.CompanyScore > m_oCfg.BusinessScoreThreshold)
+				StepDone<BusinessScore>().Init(m_oMetaData.CompanyScore, m_oCfg.BusinessScoreThreshold);
+			else
+				StepFailed<BusinessScore>().Init(m_oMetaData.CompanyScore, m_oCfg.BusinessScoreThreshold);
+		} // CheckCompayScore
+
+		#endregion method CheckCompanyScore
+
+
+
+
+
+		#region method CheckCustomerAge
+
+		private void CheckCustomerAge() {
+			// nAge: full number of years in customer's age.
+			int nAge = Now.Year - m_oMetaData.DateOfBirth.Year;
+
+			if (m_oMetaData.DateOfBirth.AddYears(nAge) < Now) // this happens if customer had no birthday this year.
+				nAge--;
+
+			if ((m_oCfg.CustomerMinAge <= nAge) && (nAge <= m_oCfg.CustomerMaxAge))
+				StepDone<Age>().Init(nAge, m_oCfg.CustomerMinAge, m_oCfg.CustomerMaxAge);
+			else
+				StepFailed<Age>().Init(nAge, m_oCfg.CustomerMinAge, m_oCfg.CustomerMaxAge);
+		} // CheckCustomerAge
+
+		#endregion method CheckCustomerAge
+
+
+
+
+
+
+
+
+
 		#region method CheckLatePayments
 
 		private void CheckLatePayments() {
@@ -147,7 +260,7 @@
 			} // for each
 
 			if (!bHasLatePayments)
-				StepDone<LatePayment>().Init(0, 0, DateTime.UtcNow, 0, DateTime.UtcNow, m_oCfg.MaxAllowedDaysLate);
+				StepDone<LatePayment>().Init(0, 0, Now, 0, Now, m_oCfg.MaxAllowedDaysLate);
 		} // CheckLatePayments
 
 		#endregion method CheckLatePayments
@@ -210,6 +323,8 @@
 
 		#region fields
 
+		private readonly DateTime Now;
+
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 
@@ -218,6 +333,8 @@
 
 		private readonly MetaData m_oMetaData;
 		private readonly List<Payment> m_oPayments;
+
+		private readonly AvailableFunds m_oFunds;
 
 		private readonly Trail m_oTrail;
 
