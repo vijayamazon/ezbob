@@ -27,15 +27,12 @@
 					{Parameter.NumOfEarlyPayments,       GetNumOfEarlyPaymentsWeight(model.NumOfEarlyPayments, model.FirstRepaymentDatePassed)},
 					{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(model.AnnualTurnover, model.HasHmrc)},
 					{Parameter.FreeCashFlow,             GetFreeCashFlowWeight(model.FreeCashFlow, model.HasHmrc, model.AnnualTurnover)},
-					{Parameter.NetWorth,                 GetNetWorthWeight(model.NetWorth)},
+					{Parameter.NetWorth,                 GetNetWorthWeight(model.NetWorth, model.FirstRepaymentDatePassed)},
 				};
 
 			CalcDelta(model, dict);
 
-			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.Limited);
-			scoreMedal.FirstRepaymentDatePassed = model.FirstRepaymentDatePassed;
-			scoreMedal.NumOfHmrcMps = model.HasHmrc ? 1 : 0;
-			scoreMedal.CustomerId = model.CustomerId;
+			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, model, MedalType.Limited);
 			return scoreMedal;
 		}
 

@@ -17,6 +17,7 @@ DECLARE @HasBank BIT = 0
 DECLARE @HasCompanyScore BIT = 0
 DECLARE @HasPersonalScore BIT = 0
 DECLARE @NumOfHmrc INT = 0
+DECLARE @LastBankHmrcUpdateDate DATETIME  
 
 DECLARE @TypeOfBusiness NVARCHAR(30)
 DECLARE @CompanyRefNum NVARCHAR(30)
@@ -63,7 +64,22 @@ WHERE m.CustomerId=@CustomerId AND m.Disabled=0 AND t.InternalId = 'AE85D6FC-DBD
 IF @NumOfHmrc > 0
 	SET @HasHmrc = 1
 
-SELECT  @IsLimited AS IsLimited, @HasOnline AS HasOnline, @HasHmrc AS HasHmrc, @HasBank AS HasBank, @HasCompanyScore AS HasCompanyScore, @HasPersonalScore AS HasPersonalScore, @NumOfHmrc AS NumOfHmrc
+SELECT @LastBankHmrcUpdateDate = min(m.UpdatingEnd)
+FROM MP_CustomerMarketPlace m INNER JOIN MP_MarketplaceType t ON t.Id = m.MarketPlaceId 
+WHERE m.CustomerId=@CustomerId AND m.Disabled=0 AND t.InternalId IN ('AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA', '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF')
 
+
+DECLARE @MedalDaysOfMpRelevancy INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name='MedalDaysOfMpRelevancy')
+
+SELECT
+ @IsLimited AS IsLimited, 
+ @HasOnline AS HasOnline, 
+ @HasHmrc AS HasHmrc, 
+ @HasBank AS HasBank, 
+ @HasCompanyScore AS HasCompanyScore, 
+ @HasPersonalScore AS HasPersonalScore, 
+ @NumOfHmrc AS NumOfHmrc, 
+ @LastBankHmrcUpdateDate AS LastBankHmrcUpdateDate,
+ @MedalDaysOfMpRelevancy AS MedalDaysOfMpRelevancy
 END 
 GO

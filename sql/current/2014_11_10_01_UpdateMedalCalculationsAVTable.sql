@@ -1,0 +1,3 @@
+ALTER TABLE MedalCalculationsAV ALTER COLUMN MedalType NVARCHAR(50)
+GO
+

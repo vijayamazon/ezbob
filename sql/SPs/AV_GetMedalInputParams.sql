@@ -1,3 +1,4 @@
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -69,6 +70,7 @@ BEGIN
 	    ll.LoanID IS NULL
 	    AND
 	    l.CustomerId = @CustomerID
+	    AND l.DateClosed IS NOT NULL
 	  
 	
 	--NumOfLatePayments
@@ -97,13 +99,13 @@ BEGIN
 	
 	DECLARE @FCFFactor DECIMAL(18,4)
 	DECLARE @HmrcRevenues DECIMAL(18,4) = 0
-	DECLARE @HmrcEbida DECIMAL(18,4) = 0
+	DECLARE @HmrcFreeCashFlow DECIMAL(18,4) = 0
 	DECLARE @HmrcValueAdded DECIMAL(18,4) = 0
 	
 	IF @NumOfHmrc > 0 SET @HasHmrc = 1
 	IF @NumOfHmrc > 1 SET @HasMoreThenOneHmrc = 1
 	IF @NumOfHmrc = 1
-		SELECT @HmrcEbida = v.Ebida, @HmrcRevenues = v.Revenues, @HmrcValueAdded = v.TotalValueAdded
+		SELECT @HmrcFreeCashFlow = isnull(sum(v.AnnualizedFreeCashFlow),0), @HmrcRevenues = isnull(sum(v.AnnualizedTurnover), 0), @HmrcValueAdded = isnull(sum(v.AnnualizedValueAdded), 0)
 		FROM MP_VatReturnSummary v INNER JOIN MP_CustomerMarketPlace mp ON v.CustomerMarketplaceID = mp.Id
 		WHERE v.IsActive=1 AND mp.CustomerId=@CustomerId AND mp.Disabled=0
 	
@@ -195,7 +197,7 @@ BEGIN
 		@HasHmrc AS HasHmrc,
 		@HasMoreThenOneHmrc AS HasMoreThenOneHmrc,
 		@HmrcRevenues AS HmrcRevenues,
-		@HmrcEbida AS HmrcEbida,
+		@HmrcFreeCashFlow AS HmrcFreeCashFlow,
 		@HmrcValueAdded AS HmrcValueAdded,
 		@FCFFactor AS FCFFactor,
 		@CurrentBalanceSum AS CurrentBalanceSum,

@@ -202,7 +202,7 @@
 			var medalChooser = new MedalChooser(Log);
 			
 			foreach (var customer in customers) {
-				var medal = medalChooser.GetMedal(customer);
+				var medal = medalChooser.GetMedal(customer.Key, customer.Value);
 				dbHelper.StoreMedalVerification(medal);
 			}
 		}

@@ -365,13 +365,14 @@
 			return model;
 		}
 
-		public List<int> GetCustomersForMedalsCompare() {
-			var customers = new List<int>();
+		public List<KeyValuePair<int, DateTime>> GetCustomersForMedalsCompare()
+		{
+			var customers = new List<KeyValuePair<int, DateTime>>();
 			var conn = new SqlConnection(_log);
 			conn.ForEachRowSafe((sr, hren) => {
-				customers.Add(sr["CustomerId"]);
+				customers.Add(new KeyValuePair<int, DateTime>(sr["CustomerId"], sr["CalculationTime"]));
 				return ActionResult.Continue;
-			}, "SELECT TOP 1000 CustomerId  FROM MedalCalculations ORDER BY CustomerId DESC", CommandSpecies.Text);
+			}, "SELECT TOP 1000 CustomerId, CalculationTime FROM MedalCalculations ORDER BY CustomerId DESC", CommandSpecies.Text);
 			return customers;
 		}
 		public void StoreMedalVerification(MedalOutputModel model) {
@@ -398,6 +399,12 @@
 				{
 					model.Dict[Parameter.TangibleEquity] = new Weight();
 				}
+
+				if (!model.Dict.ContainsKey(Parameter.FreeCashFlow))
+				{
+					model.Dict[Parameter.FreeCashFlow] = new Weight();
+				}
+
 				conn.ExecuteNonQuery("AV_StoreNewMedal", CommandSpecies.StoredProcedure,
 				                     new QueryParameter("CustomerId", model.CustomerId),
 				                     new QueryParameter("CalculationTime", DateTime.UtcNow),
@@ -485,6 +492,28 @@
 				                     new QueryParameter("Error", model.Error),
 				                     new QueryParameter("NumOfHmrcMps", model.NumOfHmrcMps));
 			}
+		}
+
+		public YodleeRevenuesModelDb GetYodleeRevenues(int customerMarketplaceId) {
+			var conn = new SqlConnection(_log);
+			var model = conn.FillFirst<YodleeRevenuesModelDb>("AV_GetYodleeRevenues", CommandSpecies.StoredProcedure, new QueryParameter("CustomerMarketplaceId", customerMarketplaceId));
+			return model;
+		}
+
+		public List<MedalCoefficientsModelDb> GetMedalCoefficients() {
+			var conn = new SqlConnection(_log);
+			var model = new List<MedalCoefficientsModelDb>();
+			conn.ForEachRowSafe((sr, hren) => {
+				var medal = (Medal) Enum.Parse(typeof (Medal), sr["Medal"]);
+				model.Add(new MedalCoefficientsModelDb {
+					Medal = medal,
+					AnnualTurnover = sr["AnnualTurnover"],
+					ValueAdded = sr["ValueAdded"],
+					FreeCashFlow = sr["FreeCashFlow"],
+				});
+				return ActionResult.Continue;
+			}, "SELECT * FROM MedalCoefficients", CommandSpecies.Text); 
+			return model;
 		}
 	}
 }

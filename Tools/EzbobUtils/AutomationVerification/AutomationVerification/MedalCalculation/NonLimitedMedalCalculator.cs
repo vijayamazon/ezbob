@@ -27,15 +27,12 @@
 					{Parameter.NumOfEarlyPayments,       GetNumOfEarlyPaymentsWeight(model.NumOfEarlyPayments, model.FirstRepaymentDatePassed)},
 					{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(model.AnnualTurnover, model.HasHmrc)},
 					{Parameter.FreeCashFlow,             GetFreeCashFlowWeight(model.FreeCashFlow, model.HasHmrc, model.AnnualTurnover)},
-					{Parameter.NetWorth,                 GetNetWorthWeight(model.NetWorth)},
+					{Parameter.NetWorth,                 GetNetWorthWeight(model.NetWorth, model.FirstRepaymentDatePassed)},
 				};
 
 			CalcDelta(model, dict);
 
-			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, MedalType.NonLimited);
-			scoreMedal.FirstRepaymentDatePassed = model.FirstRepaymentDatePassed;
-			scoreMedal.NumOfHmrcMps = model.HasHmrc ? 1 : 0;
-			scoreMedal.CustomerId = model.CustomerId;
+			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, model, MedalType.NonLimited);
 			return scoreMedal;
 		}
 		
@@ -82,11 +79,6 @@
 		#endregion
 
 		#region First Repayment Passed Weight
-		public override decimal EzbobSeniorityFirstRepaymentWeight { get { return 0.02M; } }
-		public override decimal NumOfOnTimeLoansFirstRepaymentWeight { get { return 0.0333M; } }
-		public override decimal NumOfLateRepaymentsFirstRepaymentWeight { get { return 0.0267M; } }
-		public override decimal NumOfEarlyRepaymentsFirstRepaymentWeight { get { return 0.02M; } }
-
 		public override decimal ConsumerScoreFirstRepaymentWeightChange { get { return -0.04M; } }
 		public override decimal BusinessScoreFirstRepaymentWeightChange { get { return -0.04M; } }
 		public override decimal BusinessSeniorityFirstRepaymentWeightChange { get { return -0.02M; } }

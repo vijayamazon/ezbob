@@ -29,6 +29,8 @@
 	public enum MedalType {
 		Limited,
 		OnlineLimited,
+		OnlineNonLimitedNoBusinessScore,
+		OnlineNonLimitedWithBusinessScore,
 		NonLimited,
 		SoleTrader,
 		NoMedal

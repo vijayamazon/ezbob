@@ -90,25 +90,22 @@
 		}
 
 		public decimal GetYodleeAnnualized(List<MarketPlace> yodlees, ASafeLog log) {
-			double incomeAnnualized = 0;
+			decimal incomeAnnualized = 0;
 			var dbHelper = new DbHelper(log);
 			foreach (var yodlee in yodlees) {
-				var afs = dbHelper.GetAnalysisFunctions(yodlee.Id);
-				if (!afs.Any())
-				{
-					continue;
-				}
+				var yodleeRevenues = dbHelper.GetYodleeRevenues(yodlee.Id);
+				if (yodleeRevenues.MinDate.HasValue && yodleeRevenues.MaxDate.HasValue) {
+					decimal days = (decimal) (yodleeRevenues.MaxDate.Value - yodleeRevenues.MinDate.Value).TotalDays;
 
-				var av = afs
-					.OrderByDescending(af => af.TimePeriod)
-					.FirstOrDefault(af => af.Function == "TotalIncomeAnnualized" && af.TimePeriod <= TimePeriodEnum.Year);
-				
-				if (av != null) {
-					incomeAnnualized += av.Value;
+					if (days > 60 && days < 90) {
+						days = 90; // we get usually 90 of data
+					}
+
+					decimal ratio = Math.Abs(days) < 1 ? 1 : 365.0M/days;
+					incomeAnnualized += yodleeRevenues.YodleeRevenues*ratio;
 				}
 			}
-
-			return (decimal)incomeAnnualized;
+			return incomeAnnualized;
 		}
 
 		public int GetPositiveFeedbacks(int customerId) {

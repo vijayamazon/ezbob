@@ -11,6 +11,7 @@
 		public decimal NormalizedScore { get; set; }
 		public string Error { get; set; }
 		public int CustomerId { get; set; }
+		public DateTime CalculationDate { get; set; }
 
 		public MedalComparisonModel MedalComparisonModel { get; set; } //todo remove
 		public Dictionary<Parameter, Weight> Dict { get; set; }
@@ -23,7 +24,9 @@
 		public int AmazonPositiveFeedbacks { get; set; }
 		public int EbayPositiveFeedbacks { get; set; }
 		public int NumberOfPaypalPositiveTransactions { get; set; }
-		public decimal? ValueAdded { get; set; }
+		public decimal ValueAdded { get; set; }
+		public decimal FreeCashflow { get; set; }
+		public decimal AnnualTurnover { get; set; }
 	}
 
 	public class MedalComparisonModel {
@@ -234,11 +237,13 @@
 		public bool HasPersonalScore { get; set; }
 		public bool HasBank { get; set; }
 		public int NumOfHmrc { get; set; }
+		public DateTime? LastBankHmrcUpdateDate { get; set; }
+		public int MedalDaysOfMpRelevancy { get; set; }
 	}
 
 	public class MedalInputModelDb {
 		public int BusinessScore { get; set; }
-		public DateTime IncorporationDate { get; set; }
+		public DateTime? IncorporationDate { get; set; }
 		public decimal TangibleEquity { get; set; }
 		public int ConsumerScore { get; set; }
 		public DateTime RegistrationDate { get; set; }
@@ -250,7 +255,7 @@
 		public bool HasHmrc { get; set; }
 		public bool HasMoreThanOneHmrc { get; set; }
 		public decimal HmrcRevenues { get; set; }
-		public decimal HmrcEbida { get; set; }
+		public decimal HmrcFreeCashFlow { get; set; }
 		public decimal HmrcValueAdded { get; set; }
 		public decimal FCFFactor { get; set; }
 		public decimal CurrentBalanceSum { get; set; }
@@ -263,6 +268,7 @@
 
 	public class MedalInputModel {
 		public int CustomerId { get; set; }
+		public DateTime CalculationDate { get; set; }
 		public int BusinessScore { get; set; }
 		public decimal TangibleEquity { get; set; }
 		public decimal BusinessSeniority { get; set; }
@@ -274,7 +280,8 @@
 		public int NumOfEarlyPayments { get; set; }
 		public decimal AnnualTurnover { get; set; }
 		public decimal FreeCashFlow { get; set; }
-		public decimal? ValueAdded { get; set; }//todo
+		public decimal FreeCashFlowValue { get; set; }
+		public decimal ValueAdded { get; set; }
 		public decimal NetWorth { get; set; }
 		public bool HasHmrc { get; set; }
 		public bool FirstRepaymentDatePassed { get; set; }
@@ -310,5 +317,18 @@
 				MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, NumOfEarlyPayments, AnnualTurnover,
 				FreeCashFlow, NetWorth, ValueAdded, FirstRepaymentDatePassed, NumOfStores, PositiveFeedbacks); 
 		}
+	}
+
+	public class YodleeRevenuesModelDb {
+		public decimal YodleeRevenues { get; set; }
+		public DateTime? MinDate { get; set; }
+		public DateTime? MaxDate { get; set; }
+	}
+
+	public class MedalCoefficientsModelDb {
+		public Medal Medal { get; set; }
+		public decimal AnnualTurnover { get; set; }
+		public decimal ValueAdded { get; set; }
+		public decimal FreeCashFlow { get; set; }
 	}
 }
