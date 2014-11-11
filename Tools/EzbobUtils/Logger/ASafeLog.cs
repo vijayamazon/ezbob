@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using System.Reflection;
 	using System.Text;
+	using System.Threading;
 	using JetBrains.Annotations;
 
 	#region enum LoggingEvent
@@ -186,7 +187,11 @@
 		#region property CurrentTime
 
 		protected virtual string CurrentTime {
-			get { return DateTime.UtcNow.ToString("dd-MMM-yyyy HH:mm:ss.ffffff", CultureInfo.InvariantCulture); }
+			get {
+				return string.Format("{0} [{1}]", DateTime.UtcNow.ToString(
+					"dd-MMM-yyyy HH:mm:ss.ffffff", CultureInfo.InvariantCulture
+				), Thread.CurrentThread.ManagedThreadId);
+			} // get
 		} // CurrentTime
 
 		#endregion property CurrentTime
