@@ -49,6 +49,16 @@ BEGIN
 	FETCH NEXT FROM cur INTO @CustomerId
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
+		SET @TypeOfBusiness = NULL
+		SET @CompanyScore = NULL
+		SET @ServiceLogId = NULL
+		SET @ConsumerScore = NULL		
+		SET @NumOfYodleeMps = NULL
+		SET @EarliestYodleeLastUpdateDate = NULL
+		SET @NumOfHmrcMps = NULL
+		SET @EarliestHmrcLastUpdateDate = NULL
+		SET @NumOfEbayAmazonPayPalMps = NULL
+		
 		SELECT 
 			@TypeOfBusiness = TypeOfBusiness
 		FROM 
