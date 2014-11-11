@@ -17,9 +17,9 @@ BEGIN
 		@CompanyScore INT,
 		@ConsumerScore INT,
 		@CustomerId INT,
-		@ServiceLogId BIGINT,
 		@EarliestHmrcLastUpdateDate DATETIME,
-		@EarliestYodleeLastUpdateDate DATETIME
+		@EarliestYodleeLastUpdateDate DATETIME,
+		@RefNumber NVARCHAR(50)
 		
 	CREATE TABLE #RelevantData
 	(
@@ -51,13 +51,13 @@ BEGIN
 	BEGIN
 		SET @TypeOfBusiness = NULL
 		SET @CompanyScore = NULL
-		SET @ServiceLogId = NULL
 		SET @ConsumerScore = NULL		
 		SET @NumOfYodleeMps = NULL
 		SET @EarliestYodleeLastUpdateDate = NULL
 		SET @NumOfHmrcMps = NULL
 		SET @EarliestHmrcLastUpdateDate = NULL
 		SET @NumOfEbayAmazonPayPalMps = NULL
+		SET @RefNumber = NULL
 		
 		SELECT 
 			@TypeOfBusiness = TypeOfBusiness
@@ -65,6 +65,15 @@ BEGIN
 			Customer 
 		WHERE 
 			Id = @CustomerId
+			
+		SELECT
+			@RefNumber = ExperianRefNum
+		FROM
+			Customer,
+			Company
+		WHERE
+			Customer.Id = @CustomerId AND
+			Customer.CompanyId = Company.Id
 			
 		IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 		BEGIN
@@ -78,22 +87,12 @@ BEGIN
 		END
 		ELSE
 		BEGIN
-			SELECT TOP 1
-				@ServiceLogId = Id
-			FROM
-				MP_ServiceLog
-			WHERE
-				ServiceType = 'E-SeriesNonLimitedData' AND
-				CustomerId = @CustomerId
-			ORDER BY 
-				Id DESC
-		
 			SELECT 
 				@CompanyScore = CommercialDelphiScore
 			FROM 
 				ExperianNonLimitedResults
 			WHERE
-				ServiceLogId = @ServiceLogId AND
+				RefNumber = @RefNumber AND
 				IsActive = 1
 		END
 		

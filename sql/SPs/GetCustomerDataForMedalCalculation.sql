@@ -16,9 +16,9 @@ BEGIN
 		@NumOfEbayAmazonPayPalMps INT,
 		@CompanyScore INT,
 		@ConsumerScore INT,
-		@ServiceLogId BIGINT,
 		@EarliestHmrcLastUpdateDate DATETIME,
-		@EarliestYodleeLastUpdateDate DATETIME
+		@EarliestYodleeLastUpdateDate DATETIME,
+		@RefNumber NVARCHAR(50)
 		
 	SELECT 
 		@TypeOfBusiness = TypeOfBusiness
@@ -26,6 +26,15 @@ BEGIN
 		Customer 
 	WHERE 
 		Id = @CustomerId
+		
+	SELECT
+		@RefNumber = ExperianRefNum
+	FROM
+		Customer,
+		Company
+	WHERE
+		Customer.Id = @CustomerId AND
+		Customer.CompanyId = Company.Id
 		
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN
@@ -38,23 +47,13 @@ BEGIN
 			IsActive = 1
 	END
 	ELSE
-	BEGIN
-		SELECT TOP 1
-			@ServiceLogId = Id
-		FROM
-			MP_ServiceLog
-		WHERE
-			ServiceType = 'E-SeriesNonLimitedData' AND
-			CustomerId = @CustomerId
-		ORDER BY 
-			Id DESC
-	
+	BEGIN	
 		SELECT 
 			@CompanyScore = CommercialDelphiScore
 		FROM 
 			ExperianNonLimitedResults
 		WHERE
-			ServiceLogId = @ServiceLogId AND
+			RefNumber = @RefNumber AND
 			IsActive = 1
 	END
 	

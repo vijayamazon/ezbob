@@ -41,7 +41,7 @@ BEGIN
 		@EbayPositiveFeedbacks INT,
 		@NumOfPaypalTransactions INT,
 		@TypeOfBusiness NVARCHAR(50),
-		@ServiceLogId BIGINT,
+		@RefNumber NVARCHAR(50),
 		@FirstHmrcDate DATETIME,
 		@FirstYodleeDate DATETIME
 		
@@ -61,6 +61,15 @@ BEGIN
 		LoanId INT
 	)	
 	
+	SELECT
+		@RefNumber = ExperianRefNum
+	FROM
+		Customer,
+		Company
+	WHERE
+		Customer.Id = @CustomerId AND
+		Customer.CompanyId = Company.Id
+	
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN
 		SELECT 
@@ -74,24 +83,14 @@ BEGIN
 			IsActive = 1
 	END
 	ELSE
-	BEGIN
-		SELECT TOP 1
-			@ServiceLogId = Id
-		FROM
-			MP_ServiceLog
-		WHERE
-			ServiceType = 'E-SeriesNonLimitedData' AND
-			CustomerId = @CustomerId
-		ORDER BY 
-			Id DESC
-	
+	BEGIN	
 		SELECT 
 			@BusinessScore = CommercialDelphiScore,
 			@BusinessSeniority = IncorporationDate 
 		FROM 
 			ExperianNonLimitedResults
 		WHERE
-			ServiceLogId = @ServiceLogId AND
+			RefNumber = @RefNumber AND
 			IsActive = 1
 	END
 	
