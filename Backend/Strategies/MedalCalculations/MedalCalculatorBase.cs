@@ -51,7 +51,7 @@
 				SetInitialWeights();
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
-				if (Results.NumOfHmrcMps != 1 || (Results.MedalType.IsOnline() && Results.InnerFlowName != "HMRC"))
+				if (Results.NumOfHmrcMps != 1 || IsOnlineMedalNotViaHmrcInnerFlow())
 				{
 					RedistributeFreeCashFlowWeight();
 				}
@@ -322,6 +322,11 @@
 				decimal offerAccordingToFreeCashFlow = Results.FreeCashFlowValue * freeCashFlowMedalFactor;
 				decimal offerAccordingToValueAdded = Results.ValueAdded * valueAddedMedalFactor;
 
+				if (IsOnlineMedalNotViaHmrcInnerFlow())
+				{
+					offerAccordingToValueAdded = 0;
+				}
+
 				List<decimal> validOfferAmounts = new[] {
 					offerAccordingToAnnualTurnover,
 					offerAccordingToFreeCashFlow,
@@ -332,6 +337,11 @@
 					Results.OfferedLoanAmount = (int) validOfferAmounts.Min();
 				}
 			}
+		}
+
+		private bool IsOnlineMedalNotViaHmrcInnerFlow()
+		{
+			return Results.MedalType.IsOnline() && Results.InnerFlowName != "HMRC";
 		}
 
 		protected abstract decimal GetSumOfNonFixedWeights();
