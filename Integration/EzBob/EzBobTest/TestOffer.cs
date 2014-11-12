@@ -25,7 +25,7 @@ namespace EzBobTest
 		{
 			int customerId = 18112;
 
-			var offer = new CalculateOffer(customerId, 10000, MedalClassification.Gold, m_oDB, m_oLog);
+			var offer = new CalculateOffer(customerId, 10000, false, MedalClassification.Gold, m_oDB, m_oLog);
 			offer.Execute();
 			var f = offer.Result;
 			int h = 9;

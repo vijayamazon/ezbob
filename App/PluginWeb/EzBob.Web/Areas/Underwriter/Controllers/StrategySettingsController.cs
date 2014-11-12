@@ -77,7 +77,7 @@
 		[HttpGet]
 		public JsonResult SettingsPricingModel()
 		{
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(0, _context.UserId, "Basic");
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(0, _context.UserId, "Basic New");
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
 		}
 

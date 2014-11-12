@@ -30,6 +30,7 @@
 			int minCompanyScore,
 			int offeredCreditLine,
 			List<string> consumerCaisDetailWorstStatuses,
+			bool hasLoans,
 			MedalClassification medalClassification,
 			AConnection db,
 			ASafeLog log
@@ -43,6 +44,7 @@
 			this.consumerCaisDetailWorstStatuses = consumerCaisDetailWorstStatuses;
 			this.isBrokerCustomer = bIsBrokerCustomer;
 			this.medalClassification = medalClassification;
+			this.hasLoans = hasLoans;
 
 			loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -108,7 +110,7 @@
 							response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
 
 							var offerDualCalculator = new OfferDualCalculator(db, log);
-							offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, response.AutoApproveAmount, medalClassification);
+							offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, response.AutoApproveAmount, hasLoans, medalClassification);
 							OfferResult offerResult = offerDualCalculator.Results;
 							// TODO: the data inside offerResult should effect the cash request that is upodated in the main strategy
 						} // if is silent
@@ -469,6 +471,7 @@
 		private readonly int minCompanyScore;
 		private readonly int customerId;
 		private readonly List<string> consumerCaisDetailWorstStatuses;
+		private readonly bool hasLoans;
 		private readonly MedalClassification medalClassification;
 
 		private int autoApprovedAmount;

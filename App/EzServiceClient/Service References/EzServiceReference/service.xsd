@@ -1262,6 +1262,7 @@
         <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="amount" type="xs:int" />
+        <xs:element minOccurs="0" name="hasLoans" type="xs:boolean" />
         <xs:element xmlns:q109="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.MedalCalculations" minOccurs="0" name="medalClassification" type="q109:MedalClassification" />
       </xs:sequence>
     </xs:complexType>

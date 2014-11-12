@@ -242,10 +242,10 @@
 			return ExecuteSync(out instance, customerId, underwriterId, customerId);
 		}
 
-		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, MedalClassification medalClassification)
+		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, MedalClassification medalClassification)
 		{
 			CalculateOffer instance;
-			return ExecuteSync(out instance, customerId, underwriterId, customerId, amount, medalClassification);
+			return ExecuteSync(out instance, customerId, underwriterId, customerId, amount, hasLoans, medalClassification);
 		}
 
 		public StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId)

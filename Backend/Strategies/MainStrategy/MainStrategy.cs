@@ -299,6 +299,7 @@
 					dataGatherer.MinCompanyScore,
 					offeredCreditLine,
 					consumerCaisDetailWorstStatuses,
+					dataGatherer.NumOfLoans > 0,
 					medalClassification,
 					DB,
 					Log

@@ -10,14 +10,16 @@
 		private readonly OfferDualCalculator offerDualCalculator;
 		private readonly int customerId;
 		private readonly int amount;
+		private readonly bool hasLoans;
 		private readonly MedalClassification medalClassification;
 
-		public CalculateOffer(int customerId, int amount, MedalClassification medalClassification, AConnection db, ASafeLog log)
+		public CalculateOffer(int customerId, int amount, bool hasLoans, MedalClassification medalClassification, AConnection db, ASafeLog log)
 			: base(db, log)
 		{
 			offerDualCalculator = new OfferDualCalculator(db, log);
 			this.customerId = customerId;
 			this.amount = amount;
+			this.hasLoans = hasLoans;
 			this.medalClassification = medalClassification;
 		}
 
@@ -29,7 +31,7 @@
 
 		public override void Execute()
 		{
-			Result = offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, amount, medalClassification);
+			Result = offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, amount, hasLoans, medalClassification);
 		}
 	}
 }

@@ -596,7 +596,7 @@
 		ActionMetaData CalculateMedal(int underwriterId, int customerId);
 
 		[OperationContract]
-		ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, MedalClassification medalClassification);
+		ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, MedalClassification medalClassification);
 
 		[OperationContract]
 		StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);

@@ -34,7 +34,7 @@
 		[HttpGet]
 		public ActionResult Index(int customerId)
 		{
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customerId, context.UserId, "Basic");
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customerId, context.UserId, "Basic New");
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
 		}
 

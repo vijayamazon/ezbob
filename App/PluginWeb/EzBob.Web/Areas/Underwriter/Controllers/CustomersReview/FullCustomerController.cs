@@ -126,7 +126,7 @@
 				using (tc.AddStep("PricingModelCalculations Time taken")) {
 					try {
 						PricingModelModelActionResult getPricingModelModelResponse =
-							serviceClient.Instance.GetPricingModelModel(customer.Id, _context.UserId, "Basic");
+							serviceClient.Instance.GetPricingModelModel(customer.Id, _context.UserId, "Basic New");
 
 						model.PricingModelCalculations = getPricingModelModelResponse.Value;
 					}

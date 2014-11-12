@@ -20,13 +20,13 @@
 			this.db = db;
 		}
 
-		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, MedalClassification medalClassification)
+		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, bool hasLoans, MedalClassification medalClassification)
 		{
 			try
 			{
 				OfferResult result1 = null, result2 = null;
 
-				result1 = CalculateOffer1(customerId, calculationTime, amount, medalClassification);
+				result1 = CalculateOffer1(customerId, calculationTime, amount, hasLoans, medalClassification);
 				// TODO: Calculate result2 here
 
 				// TODO: remove these 2 lines
@@ -51,7 +51,7 @@
 			return null;
 		}
 
-		private OfferResult CalculateOffer1(int customerId, DateTime calculationTime, int amount, MedalClassification medalClassification)
+		private OfferResult CalculateOffer1(int customerId, DateTime calculationTime, int amount, bool hasLoans, MedalClassification medalClassification)
 		{
 			var result = new OfferResult
 				{
@@ -67,8 +67,19 @@
 			// We always use standard loan type
 			result.IsEu = false;
 
-			// TODO: vitas to define rules for scenario usage
-			result.ScenarioName = "Basic";
+			// Choose scenario
+			if (amount <= CurrentValues.Instance.SmallLoanScenarioLimit)
+			{
+				result.ScenarioName = "Small Loan";
+			}
+			else if (hasLoans)
+			{
+				result.ScenarioName = "Basic New";
+			}
+			else
+			{
+				result.ScenarioName = "Basic Repeating";
+			}
 
 			OfferRanges ranges = db.FillFirst<OfferRanges>(
 				"LoadOfferRanges",
@@ -84,12 +95,12 @@
 				return result;
 			}
 
-			CalculateInterestRateAndSetupFee(customerId, amount, result.Period, result.ScenarioName, ranges, result);
+			CalculateInterestRateAndSetupFee(customerId, amount, ranges, result);
 			
 			return result;
 		}
 
-		private void CalculateInterestRateAndSetupFee(int customerId, int amount, int loanTerm, string scenarioName, OfferRanges ranges, OfferResult result)
+		private void CalculateInterestRateAndSetupFee(int customerId, int amount, OfferRanges ranges, OfferResult result)
 		{
 			bool aspireToMinSetupFee = CurrentValues.Instance.AspireToMinSetupFee;
 
@@ -98,25 +109,31 @@
 				decimal lowerBoundary = ranges.MinSetupFee;
 				decimal upperBoundary = ranges.MaxSetupFee;
 
-				var lowerBoundaryModelInstance = new GetPricingModelModel(customerId, scenarioName, db, log);
+				var lowerBoundaryModelInstance = new GetPricingModelModel(customerId, result.ScenarioName, db, log);
 				lowerBoundaryModelInstance.Execute();
 
 				PricingModelModel lowerBoundaryModel = lowerBoundaryModelInstance.Model;
-				lowerBoundaryModel.LoanTerm = loanTerm;
+				lowerBoundaryModel.LoanTerm = result.Period;
 				lowerBoundaryModel.LoanAmount = amount;
 				lowerBoundaryModel.SetupFeePercents = lowerBoundary / 100;
 				lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
 
+				var pricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel, db, log);
+				if (!pricingModelCalculator.CalculateInterestRate())
+				{
+					result.Error = pricingModelCalculator.Error;
+					return;
+				}
+
 				var lowerBoundaryCalculateInstance = new PricingModelCalculate(customerId, lowerBoundaryModel, db, log);
 				lowerBoundaryCalculateInstance.Execute();
 				PricingModelModel lowerBoundaryResultModel = lowerBoundaryCalculateInstance.Model;
-
-
-				var upperBoundaryModelInstance = new GetPricingModelModel(customerId, scenarioName, db, log);
+				
+				var upperBoundaryModelInstance = new GetPricingModelModel(customerId, result.ScenarioName, db, log);
 				upperBoundaryModelInstance.Execute();
 
 				PricingModelModel upperBoundaryModel = upperBoundaryModelInstance.Model;
-				upperBoundaryModel.LoanTerm = loanTerm;
+				upperBoundaryModel.LoanTerm = result.Period;
 				upperBoundaryModel.LoanAmount = amount;
 				upperBoundaryModel.SetupFeePercents = upperBoundary / 100;
 				upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
@@ -156,18 +173,16 @@
 					return;
 				}
 
-				// binary
-				// if in range move lower
-				// if out of range move upper
-				decimal epsilon = 0.01m;
+				// 'Close in' to find best possible value
+				decimal epsilon = 0.01m; // TODO: define config with vitas
 				while (ranges.MaxInterestRate - lowerBoundaryResultModel.MonthlyInterestRate * 100 > epsilon)
 				{
 					decimal midPoint = (lowerBoundary + upperBoundary)/2;
-					var midPointModelInstance = new GetPricingModelModel(customerId, scenarioName, db, log);
+					var midPointModelInstance = new GetPricingModelModel(customerId, result.ScenarioName, db, log);
 					midPointModelInstance.Execute();
 
 					PricingModelModel midPointModel = midPointModelInstance.Model;
-					midPointModel.LoanTerm = loanTerm;
+					midPointModel.LoanTerm = result.Period;
 					midPointModel.LoanAmount = amount;
 					midPointModel.SetupFeePercents = midPoint / 100;
 					midPointModel.SetupFeePounds = midPointModel.SetupFeePercents * amount;
@@ -176,23 +191,17 @@
 					midPointCalculateInstance.Execute();
 					PricingModelModel midPointResultModel = lowerBoundaryCalculateInstance.Model;
 
-					if (midPointResultModel.MonthlyInterestRate * 100 < ranges.MaxInterestRate)
+					if (midPointResultModel.MonthlyInterestRate * 100 <= ranges.MaxInterestRate)
 					{
 						lowerBoundary = midPoint;
+						lowerBoundaryResultModel = midPointResultModel;
 					}
-					else if (midPointResultModel.MonthlyInterestRate * 100 > ranges.MaxInterestRate)
+					else
 					{
 						upperBoundary = midPoint;
 					}
 				}
 
-				lowerBoundaryModel = lowerBoundaryModelInstance.Model;
-				lowerBoundaryModel.SetupFeePercents = lowerBoundary / 100;
-				lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
-
-				lowerBoundaryCalculateInstance = new PricingModelCalculate(customerId, lowerBoundaryModel, db, log);
-				lowerBoundaryCalculateInstance.Execute();
-				lowerBoundaryResultModel = lowerBoundaryCalculateInstance.Model;
 				result.SetupFee = lowerBoundaryResultModel.SetupFeePercents * 100;
 				result.InterestRate = lowerBoundaryResultModel.MonthlyInterestRate * 100;
 			}

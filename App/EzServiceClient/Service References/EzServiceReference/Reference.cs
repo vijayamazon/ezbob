@@ -2972,10 +2972,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateOffer", ReplyAction="http://tempuri.org/IEzService/CalculateOfferResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateOffer", ReplyAction="http://tempuri.org/IEzService/CalculateOfferResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
         ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
@@ -4159,12 +4159,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateMedalAsync(underwriterId, customerId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification) {
-            return base.Channel.CalculateOffer(underwriterId, customerId, amount, medalClassification);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification) {
+            return base.Channel.CalculateOffer(underwriterId, customerId, amount, hasLoans, medalClassification);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification) {
-            return base.Channel.CalculateOfferAsync(underwriterId, customerId, amount, medalClassification);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification) {
+            return base.Channel.CalculateOfferAsync(underwriterId, customerId, amount, hasLoans, medalClassification);
         }
         
         public ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId) {

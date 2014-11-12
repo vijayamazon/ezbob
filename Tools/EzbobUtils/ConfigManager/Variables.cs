@@ -379,6 +379,7 @@ namespace ConfigManager {
 		AlibabaMailCc,
 		AlibabaCurrencyConversionCoefficient,
 		OnlineMedalTurnoverCutoff,
-		AspireToMinSetupFee
+		AspireToMinSetupFee,
+		SmallLoanScenarioLimit
 	} // enum Variables
 } // namespace ConfigManager

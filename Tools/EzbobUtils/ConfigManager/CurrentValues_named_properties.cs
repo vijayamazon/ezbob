@@ -2397,5 +2397,10 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.AspireToMinSetupFee]; }
 		}
+
+		public virtual VariableValue SmallLoanScenarioLimit
+		{
+			get { return this[Variables.SmallLoanScenarioLimit]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager
