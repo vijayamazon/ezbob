@@ -110,7 +110,7 @@
 					};
 			}
 
-			var data = medalCalulator.GetInputParameters(customerId);
+			var data = medalCalulator.GetInputParameters(customerId, calculationDate);
 			var medal = medalCalulator.CalculateMedal(data);
 			medal.OfferedLoanAmount = GetOfferedAmount(medal);
 			return medal;
