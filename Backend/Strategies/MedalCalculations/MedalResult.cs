@@ -200,7 +200,7 @@
 
 		public void SaveToDb(AConnection db)
 		{
-			db.ExecuteNonQuery("StoreNewMedal", CommandSpecies.StoredProcedure,
+			db.ExecuteNonQuery("StoreMedal", CommandSpecies.StoredProcedure,
 							   new QueryParameter("CustomerId", CustomerId),
 							   new QueryParameter("CalculationTime", CalculationTime),
 							   new QueryParameter("MedalType", MedalType.ToString()),

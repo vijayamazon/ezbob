@@ -1,8 +1,8 @@
-IF OBJECT_ID('StoreNewMedal') IS NULL
-	EXECUTE('CREATE PROCEDURE StoreNewMedal AS SELECT 1')
+IF OBJECT_ID('StoreMedal') IS NULL
+	EXECUTE('CREATE PROCEDURE StoreMedal AS SELECT 1')
 GO
 
-ALTER PROCEDURE StoreNewMedal
+ALTER PROCEDURE StoreMedal
 	(@CustomerId INT
 	,@CalculationTime DATETIME
 	,@MedalType NVARCHAR(20)
