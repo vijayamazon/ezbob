@@ -75,6 +75,19 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	IF @DateTo IS NULL
+	BEGIN
+		SELECT
+			@DateTo = MAX(i.EndDate)
+		FROM
+			MP_TeraPeakOrderItem i
+			INNER JOIN MP_TeraPeakOrder o ON i.TeraPeakOrderId = o.Id
+		WHERE
+			o.CustomerMarketPlaceId = @MpID
+			AND
+			i.RangeMarker IN (0, 1)
+	END
+
+	IF @DateTo IS NULL
 		SET @DateTo = GETUTCDATE()
 
 	------------------------------------------------------------------------------
