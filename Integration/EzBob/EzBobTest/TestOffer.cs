@@ -1,5 +1,6 @@
 namespace EzBobTest
 {
+	using System;
 	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzBob.Backend.Strategies.OfferCalculation;
 	using EzServiceAccessor;
@@ -25,9 +26,9 @@ namespace EzBobTest
 		{
 			int customerId = 18112;
 
-			var offer = new CalculateOffer(customerId, 10000, false, MedalClassification.Gold, m_oDB, m_oLog);
-			offer.Execute();
-			var f = offer.Result;
+			var offer = new OfferCalculator1(m_oDB, m_oLog);
+			OfferResult res = offer.CalculateOffer(customerId, DateTime.UtcNow, 10000, false, MedalClassification.Gold);
+			
 			int h = 9;
 		}
 	}

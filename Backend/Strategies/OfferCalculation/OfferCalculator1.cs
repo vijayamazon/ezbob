@@ -85,16 +85,13 @@
 				lowerBoundaryModel.SetupFeePercents = lowerBoundary / 100;
 				lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
 
-				var pricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel, db, log);
-				if (!pricingModelCalculator.CalculateInterestRate())
+				var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel, db, log);
+				if (!lowerBoundaryPricingModelCalculator.CalculateInterestRate())
 				{
-					result.Error = pricingModelCalculator.Error;
+					result.Error = lowerBoundaryPricingModelCalculator.Error;
 					return;
 				}
-
-				var lowerBoundaryCalculateInstance = new PricingModelCalculate(customerId, lowerBoundaryModel, db, log);
-				lowerBoundaryCalculateInstance.Execute();
-				PricingModelModel lowerBoundaryResultModel = lowerBoundaryCalculateInstance.Model;
+				PricingModelModel lowerBoundaryResultModel = lowerBoundaryPricingModelCalculator.Model;
 				
 				var upperBoundaryModelInstance = new GetPricingModelModel(customerId, result.ScenarioName, db, log);
 				upperBoundaryModelInstance.Execute();
@@ -105,9 +102,13 @@
 				upperBoundaryModel.SetupFeePercents = upperBoundary / 100;
 				upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
 
-				var upperBoundaryCalculateInstance = new PricingModelCalculate(customerId, upperBoundaryModel, db, log);
-				upperBoundaryCalculateInstance.Execute();
-				PricingModelModel upperBoundaryResultModel = upperBoundaryCalculateInstance.Model;
+				var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel, db, log);
+				if (!upperBoundaryPricingModelCalculator.CalculateInterestRate())
+				{
+					result.Error = upperBoundaryPricingModelCalculator.Error;
+					return;
+				}
+				PricingModelModel upperBoundaryResultModel = upperBoundaryPricingModelCalculator.Model;
 
 				// if both is out of range (same direction)
 				if ((lowerBoundaryResultModel.MonthlyInterestRate * 100 > ranges.MaxInterestRate &&
@@ -154,9 +155,13 @@
 					midPointModel.SetupFeePercents = midPoint / 100;
 					midPointModel.SetupFeePounds = midPointModel.SetupFeePercents * amount;
 
-					var midPointCalculateInstance = new PricingModelCalculate(customerId, midPointModel, db, log);
-					midPointCalculateInstance.Execute();
-					PricingModelModel midPointResultModel = lowerBoundaryCalculateInstance.Model;
+					var midPointPricingModelCalculator = new PricingModelCalculator(customerId, midPointModel, db, log);
+					if (!midPointPricingModelCalculator.CalculateInterestRate())
+					{
+						result.Error = midPointPricingModelCalculator.Error;
+						return;
+					}
+					PricingModelModel midPointResultModel = midPointPricingModelCalculator.Model;
 
 					if (midPointResultModel.MonthlyInterestRate * 100 <= ranges.MaxInterestRate)
 					{
