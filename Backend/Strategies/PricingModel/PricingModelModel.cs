@@ -53,5 +53,52 @@
 
 		public decimal AnnualizedInterestRateEu175 { get; set; }
 		public decimal AprEu175 { get; set; }
+
+		public PricingModelModel Clone()
+		{
+			return new PricingModelModel
+				{
+					LoanAmount = LoanAmount,
+					DefaultRate = DefaultRate,
+					DefaultRateCompanyShare = DefaultRateCompanyShare,
+					DefaultRateCustomerShare = DefaultRateCustomerShare,
+					SetupFeePounds = SetupFeePounds,
+					SetupFeePercents = SetupFeePercents,
+					BrokerSetupFeePounds = BrokerSetupFeePounds,
+					BrokerSetupFeePercents = BrokerSetupFeePercents,
+					LoanTerm = LoanTerm,
+					InterestOnlyPeriod = InterestOnlyPeriod,
+					TenurePercents = TenurePercents,
+					TenureMonths = TenureMonths,
+					CollectionRate = CollectionRate,
+					EuCollectionRate = EuCollectionRate,
+					Cogs = Cogs,
+					DebtPercentOfCapital = DebtPercentOfCapital,
+					CostOfDebt = CostOfDebt,
+					OpexAndCapex = OpexAndCapex,
+					ProfitMarkup = ProfitMarkup,
+					MonthlyInterestRate = MonthlyInterestRate,
+					SetupFeeForEuLoanHigh = SetupFeeForEuLoanHigh,
+					SetupFeeForEuLoanLow = SetupFeeForEuLoanLow,
+					EuLoanPercentages = EuLoanPercentages,
+					Revenue = Revenue,
+					InterestRevenue = InterestRevenue,
+					FeesRevenue = FeesRevenue,
+					CogsOutput = CogsOutput,
+					GrossProfit = GrossProfit,
+					OpexAndCapexOutput = OpexAndCapexOutput,
+					Ebitda = Ebitda,
+					NetLossFromDefaults = NetLossFromDefaults,
+					CostOfDebtOutput = CostOfDebtOutput,
+					TotalCost = TotalCost,
+					ProfitMarkupOutput = ProfitMarkupOutput,
+					AnnualizedInterestRate = AnnualizedInterestRate,
+					Apr = Apr,
+					AnnualizedInterestRateEu2 = AnnualizedInterestRateEu2,
+					AprEu2 = AprEu2,
+					AnnualizedInterestRateEu175 = AnnualizedInterestRateEu175,
+					AprEu175 = AprEu175
+				};
+		}
 	}
 }

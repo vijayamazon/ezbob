@@ -19,17 +19,13 @@ namespace EzBobTest
 			ObjectFactory.Configure(x => x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>());
 
 			EzServiceAccessorShort.Set(m_oDB, m_oLog);
-		} // Init
+		}
 
 		[Test]
 		public void Test_FirstOfferTest()
 		{
-			int customerId = 18112;
-
 			var offer = new OfferCalculator1(m_oDB, m_oLog);
-			OfferResult res = offer.CalculateOffer(customerId, DateTime.UtcNow, 10000, false, MedalClassification.Gold);
-			
-			int h = 9;
+			OfferResult res = offer.CalculateOffer(14029, DateTime.UtcNow, 20000, false, MedalClassification.Gold);
 		}
 	}
 }
