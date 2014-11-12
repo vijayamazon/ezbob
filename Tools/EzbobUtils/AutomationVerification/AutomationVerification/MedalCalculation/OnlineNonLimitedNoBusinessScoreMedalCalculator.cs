@@ -46,7 +46,7 @@
 
 		protected override void CalcDelta(MedalInputModel model, Dictionary<Parameter, Weight> dict)
 		{
-			if (model.BusinessScore <= LowBusinessScore || model.ConsumerScore <= LowConsumerScore)
+			if (model.ConsumerScore <= LowConsumerScore)
 			{
 				//Sum of all weights
 				var sow = dict.Sum(x => x.Value.FinalWeight);
@@ -69,12 +69,12 @@
 		#region Base Weight
 		public override decimal BusinessScoreBaseWeight { get { return 0.0M; } }
 		public override decimal FreeCashFlowBaseWeight { get { return 0.25M; } }
-		public override decimal AnnualTurnoverBaseWeight { get { return 0.16M; } }
+		public override decimal AnnualTurnoverBaseWeight { get { return 0.11M; } }
 		public override decimal TangibleEquityBaseWeight { get { return 0.0M; } }
-		public override decimal BusinessSeniorityBaseWeight { get { return 0.03M; } }
+		public override decimal BusinessSeniorityBaseWeight { get { return 0.15M; } }
 		public override decimal ConsumerScoreBaseWeight { get { return 0.40M; } }
 		public override decimal NetWorthBaseWeight { get { return 0.10M; } }
-		public override decimal MaritalStatusBaseWeight { get { return 0.06M; } }
+		public override decimal MaritalStatusBaseWeight { get { return 0.05M; } }
 		
 		public override decimal NumOfStoresBaseWeight { get { return 0.04M; } }
 		public override decimal PositiveFeedbacksBaseWeight { get { return 0.15M; } }

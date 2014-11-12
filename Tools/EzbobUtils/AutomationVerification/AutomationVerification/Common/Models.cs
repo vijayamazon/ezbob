@@ -131,6 +131,14 @@
 		public string MarketPlaceName { get; set; }
 	}
 
+	public class OnlineRevenues {
+		public decimal AnnualizedRevenue1M { get; set; }
+		public decimal AnnualizedRevenue3M { get; set; }
+		public decimal AnnualizedRevenue6M { get; set; }
+		public decimal AnnualizedRevenue1Y { get; set; }
+		public decimal Revenue1Y{ get; set; }
+	}
+
 	public static class AnalysisFunctionIncome
 	{
 		public static string[] IncomeFunctions =
@@ -271,7 +279,7 @@
 		public DateTime CalculationDate { get; set; }
 		public int BusinessScore { get; set; }
 		public decimal TangibleEquity { get; set; }
-		public decimal BusinessSeniority { get; set; }
+		public int BusinessSeniority { get; set; }
 		public int ConsumerScore { get; set; }
 		public decimal EzbobSeniority { get; set; }
 		public MaritalStatus MaritalStatus { get; set; }

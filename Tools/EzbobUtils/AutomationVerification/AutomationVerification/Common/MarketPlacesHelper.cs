@@ -67,14 +67,77 @@
 		/// </summary>
 		public decimal GetOnlineTurnoverAnnualized(int customerId) {
 			var dbHelper = new DbHelper(Log);
-			
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
+			var dict = new Dictionary<MarketPlace, OnlineRevenues>();
+			foreach (var marketPlace in mps) {
+				dict[marketPlace] = dbHelper.GetOnlineAnnaulizedRevenueForPeriod(marketPlace.Id);
+			}
+
+			var month = GetOnlineTurnoverAnnualizedForPeriod(dict, TimePeriodEnum.Month);
+			var threeMonth = GetOnlineTurnoverAnnualizedForPeriod(dict, TimePeriodEnum.Month3);
+			var sixMonth = GetOnlineTurnoverAnnualizedForPeriod(dict, TimePeriodEnum.Month6);
+			var year = GetOnlineTurnoverAnnualizedForPeriod(dict, TimePeriodEnum.Year);
+
+			var revenues = new[] {month, threeMonth, sixMonth, year};
+			var posRevenues = revenues.Where(x => x > 0).ToList();
+			return posRevenues.Any() ? posRevenues.Min() : 0;
+
+		}
+
+		public decimal GetOnlineTurnoverAnnualizedForPeriod(Dictionary<MarketPlace, OnlineRevenues> dict, TimePeriodEnum timePeriod)
+		{
 			decimal paypal = 0;
 			decimal ebay = 0;
 			decimal amazon = 0;
-			foreach (var marketPlace in mps) {
-				var annualizedRevenue = dbHelper.GetOnlineAnnaulizedRevenue(marketPlace.Id);
-				switch (marketPlace.Type) {
+			
+			foreach (var marketPlace in dict) {
+				decimal annualizedRevenue = 0;
+
+				switch (timePeriod) {
+					case TimePeriodEnum.Month:
+						annualizedRevenue = marketPlace.Value.AnnualizedRevenue1M;
+						break;
+					case TimePeriodEnum.Month3:
+						annualizedRevenue = marketPlace.Value.AnnualizedRevenue3M;
+						if (annualizedRevenue == 0) {
+							annualizedRevenue = marketPlace.Value.AnnualizedRevenue1M;
+						}
+						break;
+					case TimePeriodEnum.Month6:
+						annualizedRevenue = marketPlace.Value.AnnualizedRevenue6M;
+						if (annualizedRevenue == 0)
+						{
+							annualizedRevenue = marketPlace.Value.AnnualizedRevenue3M;
+						}
+						if (annualizedRevenue == 0)
+						{
+							annualizedRevenue = marketPlace.Value.AnnualizedRevenue1M;
+						}
+						break;
+					case TimePeriodEnum.Year:
+						annualizedRevenue = marketPlace.Value.AnnualizedRevenue1Y;
+						if (annualizedRevenue == 0)
+						{
+							annualizedRevenue = marketPlace.Value.Revenue1Y;
+						}
+						if (annualizedRevenue == 0)
+						{
+							annualizedRevenue = marketPlace.Value.AnnualizedRevenue6M;
+						}
+						if (annualizedRevenue == 0)
+						{
+							annualizedRevenue = marketPlace.Value.AnnualizedRevenue3M;
+						}
+						if (annualizedRevenue == 0)
+						{
+							annualizedRevenue = marketPlace.Value.AnnualizedRevenue1M;
+						}
+						break;
+				}
+
+				
+				switch (marketPlace.Key.Type)
+				{
 					case "eBay":
 						ebay += annualizedRevenue;
 						break;

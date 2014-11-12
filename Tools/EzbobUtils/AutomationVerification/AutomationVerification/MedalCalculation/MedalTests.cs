@@ -46,7 +46,7 @@
 				DateTime companyDate;
 				DateTime regDate;
 				DateTime calcTime = medalComparisonModel.CalculationTime;
-				decimal businessSeniority;
+				int businessSeniority;
 				decimal ezbobSeniority;
 				if (
 					!DateTime.TryParseExact(medalComparisonModel.BusinessSeniority.Value,
@@ -55,7 +55,7 @@
 					businessSeniority = 0;
 				}
 				else {
-					businessSeniority = (decimal)(calcTime - companyDate).TotalDays / 365.0M;
+					businessSeniority = (int)(calcTime - companyDate).TotalDays / 365;
 				}
 
 				if (

@@ -82,11 +82,17 @@
 			var today = calculationDate.HasValue ? calculationDate.Value : DateTime.Today;
 			model.CalculationDate = today;
 
-			const int year = 365;
+			
 			
 			model.HasHmrc = dbData.HasHmrc;
 			model.BusinessScore = dbData.BusinessScore;
-			model.BusinessSeniority = dbData.IncorporationDate.HasValue ? (decimal)(today - dbData.IncorporationDate.Value).TotalDays / year : 0;
+
+			const int defaultBusinessSeniority = 1;
+			model.BusinessSeniority = dbData.IncorporationDate.HasValue ? today.Year - dbData.IncorporationDate.Value.Year : defaultBusinessSeniority;
+			if (dbData.IncorporationDate.HasValue && dbData.IncorporationDate.Value > today.AddYears(-model.BusinessSeniority)) {
+				model.BusinessSeniority--;
+			}
+
 			model.ConsumerScore = dbData.ConsumerScore;
 			model.EzbobSeniority = ((today.Year - dbData.RegistrationDate.Year) * 12) + today.Month - dbData.RegistrationDate.Month;
 			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value.Date <= today;
@@ -103,8 +109,8 @@
 			model.AnnualTurnover = dbData.HasHmrc ? dbData.HmrcRevenues : yodleeIncome;
 			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;
 
-			model.FreeCashFlowValue = dbData.HmrcFreeCashFlow;
-			model.FreeCashFlow = model.AnnualTurnover == 0 || dbData.HmrcFreeCashFlow < 0 || !dbData.HasHmrc ? 0 : dbData.HmrcFreeCashFlow / model.AnnualTurnover;
+			model.FreeCashFlowValue = dbData.HmrcFreeCashFlow - (dbData.CurrentBalanceSum / dbData.FCFFactor);
+			model.FreeCashFlow = model.AnnualTurnover <= 0 || !dbData.HasHmrc ? 0 : model.FreeCashFlowValue / model.AnnualTurnover;
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
 			model.ValueAdded = dbData.HmrcValueAdded;
 			model.CustomerId = customerId;
@@ -145,12 +151,12 @@
 				intputModel.AnnualTurnover = 0;
 			}
 
-			intputModel.FreeCashFlow = intputModel.AnnualTurnover <= 0 || !usingHmrc ? 0 : intputModel.MedalInputModelDb.HmrcFreeCashFlow / intputModel.AnnualTurnover;
+			intputModel.FreeCashFlow = intputModel.AnnualTurnover <= 0 || !usingHmrc ? 0 : intputModel.FreeCashFlowValue / intputModel.AnnualTurnover;
 			intputModel.TangibleEquity = intputModel.AnnualTurnover == 0 ? 0 : intputModel.MedalInputModelDb.TangibleEquity / intputModel.AnnualTurnover;
 			intputModel.NumOfStores = intputModel.MedalInputModelDb.NumOfStores;
 
 			intputModel.PositiveFeedbacks = mpHelper.GetPositiveFeedbacks(customerId);
-
+			intputModel.ValueAdded = !usingHmrc ? 0 : intputModel.ValueAdded;
 			return intputModel;
 		}
 

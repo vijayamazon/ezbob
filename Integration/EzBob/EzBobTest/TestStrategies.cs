@@ -5,6 +5,7 @@ namespace EzBobTest
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.MainStrategy;
+	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzBob.Backend.Strategies.Misc;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
@@ -205,8 +206,15 @@ namespace EzBobTest
 
 		[Test]
 		public void TestCalculateModelsAndAffordability() {
-			new CalculateModelsAndAffordability(234, null, m_oDB, m_oLog).Execute();
+			new CalculateModelsAndAffordability(15821, null, m_oDB, m_oLog).Execute();
 		} // TestCalculateModelsAndAffordability
+
+		[Test]
+		public void TestMedalCalculation()
+		{
+			new CalculateMedal(m_oDB, m_oLog, 18570).Execute();
+		} // TestCalculateModelsAndAffordability
+
 
 		[Test]
 		public void TestLREnquiry()

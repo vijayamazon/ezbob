@@ -174,15 +174,14 @@
 		}
 
 		/// <summary>
-		/// Retrieve last analysis functions values form min annaulized income for ebay/amazon/paypal mp
+		/// Retrieve last analysis functions values form min annualized income for ebay/amazon/paypal mp by for 1m 3m 6m 1y and 1y not annualized
 		/// </summary>
-		/// <param name="mpId">Marketplace id</param>
 		/// <returns></returns>
-		public decimal GetOnlineAnnaulizedRevenue(int mpId)
+		public OnlineRevenues GetOnlineAnnaulizedRevenueForPeriod(int mpId)
 		{
 			var conn = new SqlConnection(_log);
-			var minAnnualizedRevenue = conn.ExecuteScalar<decimal>("AV_GetMinAnnualizedRevenue", new QueryParameter("@CustomerMarketPlaceId", mpId));
-			return minAnnualizedRevenue;
+			var onlineRevenue = conn.FillFirst<OnlineRevenues>("AV_GetAnnualizedRevenueForPeriod", new QueryParameter("@CustomerMarketPlaceId", mpId));
+			return onlineRevenue;
 		}
 		
 		public int GetExperianScore(int customerId)

@@ -36,7 +36,28 @@ BEGIN
 		SELECT @IncorporationDate = nl.IncorporationDate, @BusinessScore = nl.CommercialDelphiScore FROM Customer c INNER JOIN Company co ON c.CompanyId=co.Id INNER JOIN ExperianNonLimitedResults nl ON co.ExperianRefNum = nl.RefNumber
 		WHERE c.Id = @CustomerId AND nl.IsActive=1
 	END
-			
+	
+	--IncorporationDate if not exist in experian
+	
+	IF @IncorporationDate IS NULL
+	BEGIN
+		SELECT @IncorporationDate = min(x.MinDate) FROM
+		(
+		SELECT min(v.DateFrom) MinDate FROM MP_VatReturnRecords v INNER JOIN MP_CustomerMarketPlace m ON m.Id = v.CustomerMarketPlaceId 
+		WHERE m.CustomerId=@CustomerId AND m.Disabled=0
+		UNION
+		SELECT min(tr.transactionDate) MinDate FROM MP_CustomerMarketPlace m INNER JOIN MP_YodleeOrder o ON o.CustomerMarketPlaceId = m.Id
+		INNER JOIN MP_YodleeOrderItem i ON i.OrderId = o.Id
+		INNER JOIN MP_YodleeOrderItemBankTransaction tr ON tr.OrderItemId = i.Id
+		WHERE m.CustomerId=@CustomerId AND m.Disabled=0
+		UNION
+		SELECT min(tr.postDate) MinDate FROM MP_CustomerMarketPlace m INNER JOIN MP_YodleeOrder o ON o.CustomerMarketPlaceId = m.Id
+		INNER JOIN MP_YodleeOrderItem i ON i.OrderId = o.Id
+		INNER JOIN MP_YodleeOrderItemBankTransaction tr ON tr.OrderItemId = i.Id
+		WHERE m.CustomerId=@CustomerId AND m.Disabled=0
+		) x
+	END 
+		
 	-- Minimal Consumer/Directors score
 	DECLARE @ConsumerScore INT 
 	SELECT @ConsumerScore = ISNULL(MIN(x.ExperianConsumerScore), 0) FROM
@@ -45,7 +66,6 @@ BEGIN
 	UNION
 	SELECT ExperianConsumerScore FROM Director WHERE CustomerId=@CustomerId AND ExperianConsumerScore IS NOT NULL
 	) x
-	
 	
 	--NumOfOnTimeLoans
 	DECLARE @NumOfOnTimeLoans INT 

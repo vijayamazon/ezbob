@@ -122,15 +122,43 @@
 		public void TestOnlineTurnover()
 		{
 			var mpHelper = new MarketPlacesHelper(Log);
-			var turnover = mpHelper.GetOnlineTurnoverAnnualized(14166);
-			Assert.IsTrue(Math.Abs(turnover - 10812) < 1);
+			//var turnover = mpHelper.GetOnlineTurnoverAnnualized(15689);
+			//Assert.IsTrue(Math.Abs(turnover - 45299.52M) < 1);
+
+			//turnover = mpHelper.GetOnlineTurnoverAnnualized(15898);
+			//Assert.IsTrue(Math.Abs(turnover - 125762.575M) < 1);
+
+			//turnover = mpHelper.GetOnlineTurnoverAnnualized(16305);
+			//Assert.IsTrue(Math.Abs(turnover - 107665.91M) < 1);
+
+			//turnover = mpHelper.GetOnlineTurnoverAnnualized(16387);
+			//Assert.IsTrue(Math.Abs(turnover - 140229.9M) < 1);
+
+			//turnover = mpHelper.GetOnlineTurnoverAnnualized(16448);
+			//Assert.IsTrue(Math.Abs(turnover - 390054.541935M) < 1);
+
+			var turnover = mpHelper.GetOnlineTurnoverAnnualized(15885);
+			Assert.IsTrue(Math.Abs(turnover - 11826.403198M) < 1);
+
+			turnover = mpHelper.GetOnlineTurnoverAnnualized(16254);
+			Assert.IsTrue(Math.Abs(turnover - 98838.020323M) < 1);
+
+			turnover = mpHelper.GetOnlineTurnoverAnnualized(16620);
+			Assert.IsTrue(Math.Abs(turnover - 42177.345988M) < 1);
+
+			turnover = mpHelper.GetOnlineTurnoverAnnualized(16717);
+			Assert.IsTrue(Math.Abs(turnover - 625.526154M) < 1);
+
+			turnover = mpHelper.GetOnlineTurnoverAnnualized(17322);
+			Assert.IsTrue(Math.Abs(turnover - 261.676923M) < 1);
+
 		}
 
 		[Test]
 		public void TestMedalChooser()
 		{
 			var medalChooser = new MedalChooser(Log);
-			var medal = medalChooser.GetMedal(14223);
+			var medal = medalChooser.GetMedal(18539, new DateTime(2014, 11, 10));
 			Assert.AreEqual(Medal.Gold, medal.Medal);
 		}
 
