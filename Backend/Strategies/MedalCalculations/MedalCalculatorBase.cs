@@ -51,7 +51,7 @@
 				SetInitialWeights();
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
-				if (Results.NumOfHmrcMps != 1)
+				if (Results.NumOfHmrcMps != 1 || (Results.MedalType.IsOnline() && Results.InnerFlowName != "HMRC"))
 				{
 					RedistributeFreeCashFlowWeight();
 				}
@@ -134,20 +134,24 @@
 			if (Results.MedalType.IsOnline())
 			{
 				decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
-				if (Results.HmrcAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
+				if (Results.HmrcAnnualTurnover > onlineMedalTurnoverCutoff*Results.OnlineAnnualTurnover)
 				{
 					Results.InnerFlowName = "HMRC";
 					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
 				}
-				else if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover)
-				{
-					Results.InnerFlowName = "Bank";
-					Results.AnnualTurnover = Results.BankAnnualTurnover;
-				}
 				else
 				{
-					Results.InnerFlowName = "Online";
-					Results.AnnualTurnover = Results.OnlineAnnualTurnover;
+					Results.FreeCashFlow = 0;
+					if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff*Results.OnlineAnnualTurnover)
+					{
+						Results.InnerFlowName = "Bank";
+						Results.AnnualTurnover = Results.BankAnnualTurnover;
+					}
+					else
+					{
+						Results.InnerFlowName = "Online";
+						Results.AnnualTurnover = Results.OnlineAnnualTurnover;
+					}
 				}
 			}
 			else
