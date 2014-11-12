@@ -362,5 +362,9 @@ BEGIN
 		ec.ExperianConsumerDataId = @ExperianConsumerDataID
 
 	------------------------------------------------------------------------------
+
+	EXECUTE LoadCustomerMarketplaceOriginationTimes @CustomerID
+	
+	------------------------------------------------------------------------------
 END
 GO

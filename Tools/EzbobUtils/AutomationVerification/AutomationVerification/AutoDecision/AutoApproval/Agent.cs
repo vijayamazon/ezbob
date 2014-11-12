@@ -28,6 +28,8 @@
 			m_oFunds = new AvailableFunds();
 			m_oWorstStatuses = new SortedSet<string>();
 
+			m_oOriginationTime = new OriginationTime();
+
 			m_oTrail = new Trail(m_oArgs.CustomerID);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
 		} // constructor
@@ -53,9 +55,9 @@
 					new QueryParameter("Now", Now)
 				);
 
-				// TODO: load data for turnovers
+				m_oOriginationTime.FromExperian(m_oMetaData.IncorporationDate);
 
-				// TODO: load data for seniority
+				// TODO: load data for turnovers
 
 				m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
 
@@ -81,7 +83,7 @@
 				CheckConsumerScore();
 				CheckCustomerAge();
 				// TODO CheckTurnovers();
-				// TODO CheckCompanyAge();
+				CheckCompanyAge();
 				CheckDefaultAccounts();
 
 				StepDone<TotalLoanCount>().Init(m_oMetaData.TotalLoanCount);
@@ -257,6 +259,25 @@
 
 		#endregion method CheckCustomerAge
 
+		#region method CheckCompanyAge
+
+		private void CheckCompanyAge() {
+			m_oLog.Msg("Customer {0} business seniority: {1}.", m_oArgs.CustomerID, m_oOriginationTime);
+
+			if (m_oOriginationTime.Since == null)
+				StepFailed<MarketplaceSeniority>().Init(-1, m_oCfg.MinMPSeniorityDays);
+			else {
+				int nAge = (int)(DateTime.UtcNow - m_oOriginationTime.Since.Value).TotalDays;
+
+				if (nAge >= m_oCfg.MinMPSeniorityDays)
+					StepDone<MarketplaceSeniority>().Init(nAge, m_oCfg.MinMPSeniorityDays);
+				else
+					StepFailed<MarketplaceSeniority>().Init(nAge, m_oCfg.MinMPSeniorityDays);
+			} // if
+		} // CheckCompanyAge
+
+		#endregion method CheckCompanyAge
+
 		#region method CheckDefaultAccounts
 
 		private void CheckDefaultAccounts() {
@@ -383,6 +404,10 @@
 				m_oWorstStatuses.Add(sr["WorstStatus"]);
 				break;
 
+			case RowType.OriginationTime:
+				m_oOriginationTime.Process(sr);
+				break;
+
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
@@ -396,6 +421,7 @@
 			MetaData,
 			Payment,
 			Cais,
+			OriginationTime,
 		} // enum RowType
 
 		#endregion enum RowType
@@ -431,6 +457,8 @@
 		private readonly List<Payment> m_oPayments;
 
 		private readonly SortedSet<string> m_oWorstStatuses;
+
+		private readonly OriginationTime m_oOriginationTime;
 
 		private readonly AvailableFunds m_oFunds;
 
