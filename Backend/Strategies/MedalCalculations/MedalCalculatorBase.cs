@@ -540,7 +540,7 @@
 			{
 				Results.NumOfEarlyRepaymentsGrade = 2;
 			}
-			else if (Results.NumOfEarlyRepayments < 3)
+			else if (Results.NumOfEarlyRepayments < 4)
 			{
 				Results.NumOfEarlyRepaymentsGrade = 3;
 			}
