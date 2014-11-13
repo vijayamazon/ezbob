@@ -5,7 +5,7 @@ GO
 ALTER PROCEDURE StoreMedal
 	(@CustomerId INT
 	,@CalculationTime DATETIME
-	,@MedalType NVARCHAR(20)
+	,@MedalType NVARCHAR(50)
 	,@FirstRepaymentDatePassed BIT
 	,@BusinessScore INT
 	,@BusinessScoreWeight DECIMAL(18,6)

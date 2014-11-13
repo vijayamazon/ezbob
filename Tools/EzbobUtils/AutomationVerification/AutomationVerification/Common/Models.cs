@@ -247,6 +247,7 @@
 		public int NumOfHmrc { get; set; }
 		public DateTime? LastBankHmrcUpdateDate { get; set; }
 		public int MedalDaysOfMpRelevancy { get; set; }
+		public int MinApprovalAmount { get; set; }
 	}
 
 	public class MedalInputModelDb {

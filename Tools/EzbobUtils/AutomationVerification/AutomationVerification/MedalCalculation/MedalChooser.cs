@@ -48,25 +48,11 @@
 
 			if (medalChooserData.IsLimited)
 			{
-				if (medalChooserData.HasOnline)
-				{
-					type = MedalType.OnlineLimited;
-				}
-				else
-				{
-					type = MedalType.Limited;
-				}
+				type = medalChooserData.HasOnline ? MedalType.OnlineLimited : MedalType.Limited;
 			}
 			else if (medalChooserData.HasCompanyScore)
 			{
-				if (medalChooserData.HasOnline)
-				{
-					type = MedalType.OnlineNonLimitedWithBusinessScore;
-				}
-				else
-				{
-					type = MedalType.NonLimited;
-				}
+				type = medalChooserData.HasOnline ? MedalType.OnlineNonLimitedWithBusinessScore : MedalType.NonLimited;
 			}
 			else if (medalChooserData.HasOnline)
 			{
@@ -112,11 +98,11 @@
 
 			var data = medalCalulator.GetInputParameters(customerId, calculationDate);
 			var medal = medalCalulator.CalculateMedal(data);
-			medal.OfferedLoanAmount = GetOfferedAmount(medal);
+			medal.OfferedLoanAmount = GetOfferedAmount(medal, medalChooserData.MinApprovalAmount);
 			return medal;
 		}
 
-		private int GetOfferedAmount(MedalOutputModel medal)
+		private int GetOfferedAmount(MedalOutputModel medal, int minApprovalAmount)
 		{
 			var dbHelper = new DbHelper(Log);
 			var medalCoefficients = dbHelper.GetMedalCoefficients();
@@ -125,8 +111,8 @@
 			var freeCashflowOffer = medal.FreeCashflow * coefficients.FreeCashFlow;
 			var valueAddedOffer = medal.ValueAdded * coefficients.ValueAdded;
 
-			var offers = new decimal[] { annualTurnoverOffer, freeCashflowOffer, valueAddedOffer };
-			var positiveOffers = offers.Where(x => x > 0).ToList();
+			var offers = new [] { annualTurnoverOffer, freeCashflowOffer, valueAddedOffer };
+			var positiveOffers = offers.Where(x => x >= minApprovalAmount).ToList();
 			return positiveOffers.Any() ? positiveOffers.Min(x => (int)x) : 0;
 		}
 	}

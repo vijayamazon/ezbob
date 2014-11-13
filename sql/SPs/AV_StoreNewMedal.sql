@@ -8,7 +8,7 @@ GO
 ALTER PROCEDURE AV_StoreNewMedal
 	(@CustomerId INT
 	,@CalculationTime DATETIME
-	,@MedalType NVARCHAR(20)
+	,@MedalType NVARCHAR(50)
 	,@FirstRepaymentDatePassed BIT
 	,@BusinessScore INT
 	,@BusinessScoreWeight DECIMAL(18,6)

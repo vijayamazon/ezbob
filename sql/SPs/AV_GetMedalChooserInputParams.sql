@@ -68,7 +68,7 @@ SELECT @LastBankHmrcUpdateDate = min(m.UpdatingEnd)
 FROM MP_CustomerMarketPlace m INNER JOIN MP_MarketplaceType t ON t.Id = m.MarketPlaceId 
 WHERE m.CustomerId=@CustomerId AND m.Disabled=0 AND t.InternalId IN ('AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA', '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF')
 
-
+DECLARE @MinApprovalAmount INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name='MedalMinOffer')
 DECLARE @MedalDaysOfMpRelevancy INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name='MedalDaysOfMpRelevancy')
 
 SELECT
@@ -80,6 +80,7 @@ SELECT
  @HasPersonalScore AS HasPersonalScore, 
  @NumOfHmrc AS NumOfHmrc, 
  @LastBankHmrcUpdateDate AS LastBankHmrcUpdateDate,
- @MedalDaysOfMpRelevancy AS MedalDaysOfMpRelevancy
+ @MedalDaysOfMpRelevancy AS MedalDaysOfMpRelevancy,
+ @MinApprovalAmount AS MinApprovalAmount
 END 
 GO
