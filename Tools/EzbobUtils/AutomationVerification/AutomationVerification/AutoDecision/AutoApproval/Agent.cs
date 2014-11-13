@@ -21,7 +21,7 @@
 			m_nApprovedAmount = 0;
 
 			m_oDB = oDB;
-			m_oLog = oLog;
+			m_oLog = oLog ?? new SafeLog();
 			m_oArgs = new Arguments(nCustomerID, nSystemCalculatedAmount);
 
 			m_oMetaData = new MetaData();
@@ -34,7 +34,7 @@
 
 			m_oOriginationTime = new OriginationTime();
 
-			m_oTrail = new Trail(m_oArgs.CustomerID);
+			Trail = new Trail(m_oArgs.CustomerID, m_oLog);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
 		} // constructor
 
@@ -102,25 +102,25 @@
 				ReduceOutstandingPrincipal();
 
 				CheckAllowedRange();
+
+				decimal nApprovedAmount = m_nApprovedAmount;
+				if (nApprovedAmount > 0)
+					StepDone<Complete>().Init(nApprovedAmount);
+				else
+					StepFailed<Complete>().Init(nApprovedAmount);
 			}
 			catch (Exception e) {
 				m_oLog.Error(e, "Exception during auto approval.");
 				StepFailed<ExceptionThrown>().Init(e);
 			} // try
 
-			decimal nApprovedAmount = m_nApprovedAmount;
-			if (nApprovedAmount > 0)
-				StepDone<Complete>().Init(nApprovedAmount);
-			else
-				StepFailed<Complete>().Init(nApprovedAmount);
-
-			if (m_oTrail.IsApproved)
+			if (Trail.IsApproved)
 				Result = new Result((int)m_nApprovedAmount, (int)m_oMetaData.OfferLength, m_oMetaData.IsEmailSendingBanned);
 
 			m_oLog.Debug(
 				"Checking if auto approval should take place for customer {0} complete; {1}\n{2}",
 				m_oArgs.CustomerID,
-				m_oTrail,
+				Trail,
 				Result == null ? string.Empty : "Approved " + Result + "."
 			);
 		} // MakeDecision
@@ -128,6 +128,8 @@
 		#endregion method MakeDecision
 
 		public Result Result { get; private set; }
+
+		public Trail Trail { get; private set; }
 
 		#endregion public
 
@@ -451,7 +453,7 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			m_nApprovedAmount = 0;
-			return m_oTrail.Failed<T>();
+			return Trail.Failed<T>();
 		} // StepFailed
 
 		#endregion method StepFailed
@@ -459,7 +461,7 @@
 		#region method StepDone
 
 		private T StepDone<T>() where T : ATrace {
-			return m_oTrail.Done<T>();
+			return Trail.Done<T>();
 		} // StepFailed
 
 		#endregion method StepDone
@@ -486,8 +488,6 @@
 		private readonly CalculatedTurnover m_oTurnover;
 
 		private readonly AvailableFunds m_oFunds;
-
-		private readonly Trail m_oTrail;
 
 		#endregion fields
 

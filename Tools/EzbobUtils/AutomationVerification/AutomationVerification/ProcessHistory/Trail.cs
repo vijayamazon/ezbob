@@ -1,13 +1,18 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Logger;
 
 	public class Trail {
 		#region public
 
 		#region constructor
 
-		public Trail(int nCustomerID) {
+		public Trail(int nCustomerID, ASafeLog oLog) {
+			m_oLog = oLog ?? new SafeLog();
+
+			m_oDiffNotes = new List<string>();
+
 			IsApproved = true;
 			m_oSteps = new List<ATrace>();
 
@@ -79,11 +84,29 @@
 
 		#endregion method ToString
 
+		#region method EqualsTo
+
+		public bool EqualsTo(Trail oTrail) {
+			if (oTrail == null) {
+				m_oDiffNotes.Add("The second trail is not specified.");
+				m_oLog.Warn("Trails are different: the second trail is not specified.");
+				return false;
+			} // if
+
+			return true;
+		} // EqualsTo
+
+		#endregion method EqualsTo
+
 		#endregion public
 
 		#region private
 
+		private readonly List<string> m_oDiffNotes;
+
 		private readonly List<ATrace> m_oSteps;
+
+		private readonly ASafeLog m_oLog;
 
 		#region method Add
 

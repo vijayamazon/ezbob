@@ -21,10 +21,10 @@
 			ApprovedAmount = 0;
 
 			m_oDB = oDB;
-			m_oLog = oLog;
+			m_oLog = oLog ?? new SafeLog();
 			m_oArgs = new Arguments(nCustomerID, nMaxApprovalAmount);
 
-			m_oTrail = new Trail(m_oArgs.CustomerID);
+			m_oTrail = new Trail(m_oArgs.CustomerID, m_oLog);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
 		} // constructor
 

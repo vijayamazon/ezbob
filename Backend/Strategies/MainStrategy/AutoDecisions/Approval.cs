@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -36,7 +37,7 @@
 			ASafeLog log
 		) {
 			this.db = db;
-			this.log = log;
+			this.log = log ?? new SafeLog();
 			this.minExperianScore = minExperianScore;
 			this.minCompanyScore = minCompanyScore;
 			this.autoApprovedAmount = offeredCreditLine;
@@ -54,7 +55,9 @@
 
 			customer = _customers.ReallyTryGet(customerId);
 
-			m_oTrail = new Trail(customerId);
+			m_oTrail = new Trail(customerId, this.log);
+
+			m_oSecondaryImplementation = new Agent(customerId, offeredCreditLine, db, log);
 		} // constructor
 
 		public void MakeDecision(AutoDecisionResponse response) {
@@ -70,7 +73,30 @@
 				availFunds.Execute();
 
 				CheckAutoApprovalConformance(availFunds.ReservedAmount);
-				response.AutoApproveAmount = autoApprovedAmount;
+				m_oSecondaryImplementation.MakeDecision();
+
+				if (m_oTrail.EqualsTo(m_oSecondaryImplementation.Trail)) {
+					log.Info("Both Auto Approval implementations have reached the same decision: {0}", m_oTrail.IsApproved ? "approved" : "not approved");
+					response.AutoApproveAmount = autoApprovedAmount;
+				}
+				else {
+					Guid oDiffID = Guid.NewGuid();
+
+					// TODO: save to db difference between the trails under id oDiffID
+
+					log.Alert(
+						"Switching to manual decision: Auto Approval implementations " +
+						"have not reached the same decision for customer {0}, diff id is {1}.",
+						customerId,
+						oDiffID.ToString("N")
+					);
+
+					response.AutoApproveAmount = 0;
+
+					response.CreditResult = "WaitingForDecision";
+					response.UserStatus = "Manual";
+					response.SystemDecision = "Manual";
+				} // if
 
 				response.AutoApproveAmount = (int)(
 					Math.Round(response.AutoApproveAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
@@ -79,7 +105,6 @@
 				log.Info("Decided to auto approve rounded amount: {0}", response.AutoApproveAmount);
 
 				if (response.AutoApproveAmount != 0) {
-
 					if (availFunds.AvailableFunds > response.AutoApproveAmount) {
 						if (autoApproveIsSilent) {
 							NotifyAutoApproveSilentMode(response.AutoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
@@ -193,17 +218,17 @@
 					StepFailed<AmountOutOfRangle>().Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
 				else
 					StepDone<AmountOutOfRangle>().Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
+
+				nAutoApprovedAmount = autoApprovedAmount;
+
+				if (nAutoApprovedAmount > 0)
+					StepDone<Complete>().Init(nAutoApprovedAmount);
+				else
+					StepFailed<Complete>().Init(nAutoApprovedAmount);
 			}
 			catch (Exception ex) {
 				StepFailed<ExceptionThrown>().Init(ex);
 			} // try
-
-			nAutoApprovedAmount = autoApprovedAmount;
-
-			if (nAutoApprovedAmount > 0)
-				StepDone<Complete>().Init(nAutoApprovedAmount);
-			else
-				StepFailed<Complete>().Init(nAutoApprovedAmount);
 
 			log.Debug("Checking if auto approval should take place for customer {0} complete.", customerId);
 
@@ -492,6 +517,8 @@
 		private int autoApprovedAmount;
 
 		private readonly Trail m_oTrail;
+
+		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
 
 		private readonly ASafeLog log;
 	} // class Approval
