@@ -119,7 +119,7 @@
 
 			if (MedalType.ToString() != other.MedalType.ToString() ||
 				Math.Abs(ValueAdded - other.ValueAdded) > 0.001M ||
-				Math.Abs(TotalScore - other.Score) > 0.001M ||
+				Math.Abs(TotalScore - other.Score*100) > 0.001M ||
 				Math.Abs(TotalScoreNormalized - other.NormalizedScore) > 0.001M ||
 				MedalClassification.ToString() != other.Medal.ToString() ||
 				Math.Abs(OfferedLoanAmount - other.OfferedLoanAmount) > 0.001M)

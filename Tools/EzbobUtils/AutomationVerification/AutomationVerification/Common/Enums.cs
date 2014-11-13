@@ -85,4 +85,15 @@
 		Lifetime = 8,
 		Zero = 9
 	}
+
+	public enum LoanSource {
+		Standard,
+		EU
+	}
+
+	public enum LoanType {
+		StandardLoanType,
+		HalfWayLoanType,
+		AlibabaLoanType
+	}
 }

@@ -41,7 +41,7 @@
 
 		public void PrintDict(ASafeLog log)
 		{
-			Dictionary<Parameter, Weight> dict = Dict;
+			Dictionary<Parameter, Weight> dict = Dict ?? new Dictionary<Parameter, Weight>();
 			var sb = new StringBuilder();
 			sb.AppendFormat("Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", Medal, ToPercent(NormalizedScore), MedalType, Score);
 			decimal s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
@@ -402,5 +402,37 @@
 		public decimal AnnualTurnover { get; set; }
 		public decimal ValueAdded { get; set; }
 		public decimal FreeCashFlow { get; set; }
+	}
+
+	public class PricingScenarioModel {
+		//TODO implement
+	}
+	
+	public class OfferInputModel {
+		public int Amount { get; set; }
+		public bool HasLoans { get; set; }
+		public Medal Medal { get; set; }
+		public bool AspireToMinSetupFee { get; set; }
+	}
+
+	public class OfferOutputModel
+	{
+		public int RepaymentPeriod { get { return 12; } } //Currently Hard coded
+		public LoanSource LoanSource { get { return LoanSource.Standard; } } //Currently Hard coded
+		public LoanType LoanType { get { return LoanType.StandardLoanType; } } //Currently Hard coded
+		public decimal InterestRate { get; set; }
+		public decimal SetupFee { get; set; }
+	}
+
+	public class OfferInterestRateRangeModelDb {
+		public decimal MinInterestRate { get; set; }
+		public decimal MaxInterestRate { get; set; }
+	}
+
+	public class OfferSetupFeeRangeModelDb
+	{
+		public string LoanSizeName { get; set; }
+		public decimal MinSetupFee { get; set; }
+		public decimal MaxSetupFee { get; set; }
 	}
 }
