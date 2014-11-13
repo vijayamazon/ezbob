@@ -28,7 +28,7 @@
 			this.netWorth = netWorth;
 		}
 
-		protected override void GatherInputData(int customerId, DateTime calculationTime)
+		protected override void GatherInputData(DateTime calculationTime)
 		{
 			// Filling fake data for instant offer
 			Results.BusinessScore = businessScore;

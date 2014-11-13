@@ -39,7 +39,7 @@
 
 			try
 			{
-				GatherInputData(customerId, calculationTime);
+				GatherInputData(calculationTime);
 				
 				// Process raw input data to data
 				CalculateFeedbacks();
@@ -51,7 +51,7 @@
 				SetInitialWeights();
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
-				if (Results.NumOfHmrcMps != 1 || IsOnlineMedalNotViaHmrcInnerFlow())
+				if (Results.InnerFlowName != "HMRC")
 				{
 					RedistributeFreeCashFlowWeight();
 				}
@@ -141,7 +141,7 @@
 				}
 				else
 				{
-					Results.FreeCashFlow = 0;
+					Results.FreeCashFlow = 0; // change weight instead
 					if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff*Results.OnlineAnnualTurnover)
 					{
 						Results.InnerFlowName = "Bank";
@@ -169,7 +169,7 @@
 			}
 		}
 
-		protected virtual void GatherInputData(int customerId, DateTime calculationTime)
+		protected virtual void GatherInputData(DateTime calculationTime)
 		{
 			SafeReader sr = db.GetFirst("GetDataForMedalCalculation1", CommandSpecies.StoredProcedure,
 										new QueryParameter("CustomerId", Results.CustomerId),
@@ -668,23 +668,20 @@
 
 		private void CalculateBusinessSeniorityGrade()
 		{
-			if (!Results.BusinessSeniority.HasValue)
+			var dateOnlyCalculationTime = new DateTime(Results.CalculationTime.Year, Results.CalculationTime.Month, Results.CalculationTime.Day);
+			if (!Results.BusinessSeniority.HasValue || Results.BusinessSeniority.Value.AddYears(1) > dateOnlyCalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 0;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(1) >= Results.CalculationTime)
-			{
-				Results.BusinessSeniorityGrade = 0;
-			}
-			else if (Results.BusinessSeniority.Value.AddYears(3) >= Results.CalculationTime)
+			else if (Results.BusinessSeniority.Value.AddYears(3) > dateOnlyCalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 1;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(5) >= Results.CalculationTime)
+			else if (Results.BusinessSeniority.Value.AddYears(5) > dateOnlyCalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 2;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(10) >= Results.CalculationTime)
+			else if (Results.BusinessSeniority.Value.AddYears(10) > dateOnlyCalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 3;
 			}
@@ -752,7 +749,7 @@
 
 		private void CalculateFreeCashFlowGrade()
 		{
-			if (Results.FreeCashFlow < -0.1m || Results.NumOfHmrcMps != 1 || Results.AnnualTurnover <= 0) // When turnover is zero we can't calc FCF, we want the min grade
+			if (Results.FreeCashFlow < -0.1m || Results.AnnualTurnover <= 0) // When turnover is zero we can't calc FCF, we want the min grade
 			{
 				Results.FreeCashFlowGrade = 0;
 			}
