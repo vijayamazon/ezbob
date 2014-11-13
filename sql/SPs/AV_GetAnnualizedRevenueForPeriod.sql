@@ -1,3 +1,11 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('AV_GetAnnualizedRevenueForPeriod') IS NULL
+	EXECUTE('CREATE PROCEDURE AV_GetAnnualizedRevenueForPeriod AS SELECT 1')
+GO
+
+
 ALTER PROCEDURE AV_GetAnnualizedRevenueForPeriod
 @CustomerMarketPlaceId INT
 AS

@@ -108,8 +108,8 @@
 			var medalCoefficients = dbHelper.GetMedalCoefficients();
 			var coefficients = medalCoefficients.First(x => x.Medal == medal.Medal);
 			var annualTurnoverOffer = decimal.Parse(medal.Dict[Parameter.AnnualTurnover].Value) * coefficients.AnnualTurnover;
-			var freeCashflowOffer = medal.FreeCashflow * coefficients.FreeCashFlow;
-			var valueAddedOffer = medal.ValueAdded * coefficients.ValueAdded;
+			var freeCashflowOffer = medal.UseHmrc ? medal.FreeCashflow * coefficients.FreeCashFlow : 0;
+			var valueAddedOffer = medal.UseHmrc ? medal.ValueAdded * coefficients.ValueAdded : 0;
 
 			var offers = new [] { annualTurnoverOffer, freeCashflowOffer, valueAddedOffer };
 			var positiveOffers = offers.Where(x => x >= minApprovalAmount).ToList();

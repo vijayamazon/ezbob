@@ -371,7 +371,7 @@
 			conn.ForEachRowSafe((sr, hren) => {
 				customers.Add(new KeyValuePair<int, DateTime>(sr["CustomerId"], sr["CalculationTime"]));
 				return ActionResult.Continue;
-			}, "SELECT TOP 1000 CustomerId, CalculationTime FROM MedalCalculations ORDER BY CustomerId DESC", CommandSpecies.Text);
+			}, "SELECT CustomerId, CalculationTime FROM MedalCalculations", CommandSpecies.Text);
 			return customers;
 		}
 		public void StoreMedalVerification(MedalOutputModel model) {

@@ -27,6 +27,7 @@
 		public decimal ValueAdded { get; set; }
 		public decimal FreeCashflow { get; set; }
 		public decimal AnnualTurnover { get; set; }
+		public bool UseHmrc { get; set; }
 	}
 
 	public class MedalComparisonModel {
@@ -293,6 +294,7 @@
 		public decimal ValueAdded { get; set; }
 		public decimal NetWorth { get; set; }
 		public bool HasHmrc { get; set; }
+		public bool UseHmrc { get; set; }
 		public bool FirstRepaymentDatePassed { get; set; }
 		
 		/*online only*/

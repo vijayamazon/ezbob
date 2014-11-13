@@ -85,6 +85,7 @@
 			
 			
 			model.HasHmrc = dbData.HasHmrc;
+			model.UseHmrc = dbData.HasHmrc;
 			model.BusinessScore = dbData.BusinessScore;
 
 			const int defaultBusinessSeniority = 1;
@@ -95,7 +96,7 @@
 
 			model.ConsumerScore = dbData.ConsumerScore;
 			model.EzbobSeniority = ((today.Year - dbData.RegistrationDate.Year) * 12) + today.Month - dbData.RegistrationDate.Month;
-			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value.Date <= today;
+			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < today;
 			model.NumOfEarlyPayments = dbData.NumOfEarlyPayments;
 			model.NumOfLatePayments = dbData.NumOfLatePayments;
 			model.NumOfOnTimeLoans = dbData.NumOfOnTimeLoans;
@@ -110,7 +111,7 @@
 			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;
 
 			model.FreeCashFlowValue = dbData.HmrcFreeCashFlow - (dbData.CurrentBalanceSum / dbData.FCFFactor);
-			model.FreeCashFlow = model.AnnualTurnover <= 0 || !dbData.HasHmrc ? 0 : model.FreeCashFlowValue / model.AnnualTurnover;
+			model.FreeCashFlow = model.AnnualTurnover == 0 || !dbData.HasHmrc ? 0 : model.FreeCashFlowValue / model.AnnualTurnover;
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
 			model.ValueAdded = dbData.HmrcValueAdded;
 			model.CustomerId = customerId;
@@ -151,12 +152,14 @@
 				intputModel.AnnualTurnover = 0;
 			}
 
-			intputModel.FreeCashFlow = intputModel.AnnualTurnover <= 0 || !usingHmrc ? 0 : intputModel.FreeCashFlowValue / intputModel.AnnualTurnover;
+			intputModel.FreeCashFlow = intputModel.AnnualTurnover == 0 || !intputModel.HasHmrc ? 0 : intputModel.FreeCashFlowValue / intputModel.AnnualTurnover;
+			
 			intputModel.TangibleEquity = intputModel.AnnualTurnover == 0 ? 0 : intputModel.MedalInputModelDb.TangibleEquity / intputModel.AnnualTurnover;
 			intputModel.NumOfStores = intputModel.MedalInputModelDb.NumOfStores;
 
 			intputModel.PositiveFeedbacks = mpHelper.GetPositiveFeedbacks(customerId);
-			intputModel.ValueAdded = !usingHmrc ? 0 : intputModel.ValueAdded;
+			intputModel.UseHmrc = usingHmrc;
+
 			return intputModel;
 		}
 
@@ -190,7 +193,8 @@
 					ValueAdded = inputModel.ValueAdded,
 					NumOfHmrcMps = inputModel.HasHmrc ? 1 : 0,
 					CustomerId = inputModel.CustomerId,
-					CalculationDate = inputModel.CalculationDate
+					CalculationDate = inputModel.CalculationDate,
+					UseHmrc = inputModel.UseHmrc,
 				};
 
 			//PrintDict(medalOutput, dict);
@@ -321,11 +325,11 @@
 			return GetBaseWeight(numOfStores, NumOfStoresBaseWeight, MedalRangesConstats.NumOfStoresRanges);
 		}
 
-		protected virtual Weight GetAnnualTurnoverWeight(decimal annualTurnover, bool hasHmrc)
+		protected virtual Weight GetAnnualTurnoverWeight(decimal annualTurnover, bool useHmrc)
 		{
 			var annualTurnoverWeight = GetBaseWeight(annualTurnover, AnnualTurnoverBaseWeight, MedalRangesConstats.AnnualTurnoverRanges);
 
-			if (!hasHmrc)
+			if (!useHmrc)
 			{
 				annualTurnoverWeight.FinalWeight += AnnualTurnoverNoHmrcWeightChange;
 			}
@@ -381,11 +385,11 @@
 			return netWorthWeight;
 		}
 
-		protected virtual Weight GetFreeCashFlowWeight(decimal freeCashFlow, bool hasHmrc, decimal annualTurnover)
+		protected virtual Weight GetFreeCashFlowWeight(decimal freeCashFlow, bool useHmrc, decimal annualTurnover)
 		{
 			var freeCashFlowWeight = GetBaseWeight(freeCashFlow, FreeCashFlowBaseWeight, MedalRangesConstats.FreeCashFlowRanges);
 
-			if (!hasHmrc)
+			if (!useHmrc)
 			{
 				freeCashFlowWeight.FinalWeight = FreeCashFlowNoHmrcWeight;
 				freeCashFlowWeight.Grade = MedalRangesConstats.FreeCashFlowRanges.MinGrade();
@@ -399,11 +403,11 @@
 			return freeCashFlowWeight;
 		}
 
-		protected virtual Weight GetBusinessSeniorityWeight(decimal businessSeniority, bool firstRepaymentDatePassed, bool hasHmrc)
+		protected virtual Weight GetBusinessSeniorityWeight(decimal businessSeniority, bool firstRepaymentDatePassed, bool useHmrc)
 		{
 			var businessSeniorityWeight = GetBaseWeight(businessSeniority, BusinessSeniorityBaseWeight, MedalRangesConstats.BusinessSeniorityRanges);
 
-			if (!hasHmrc)
+			if (!useHmrc)
 			{
 				businessSeniorityWeight.FinalWeight += BusinessSeniorityNoHmrcWeightChange;
 			}
@@ -425,7 +429,7 @@
 			return tangibleEquityWeight;
 		}
 
-		protected virtual Weight GetBusinessScoreWeight(int businessScore, bool firstRepaymentDatePassed, bool hasHmrc)
+		protected virtual Weight GetBusinessScoreWeight(int businessScore, bool firstRepaymentDatePassed, bool useHmrc)
 		{
 			var businessScoreWeight = GetBaseWeight(businessScore, BusinessScoreBaseWeight, MedalRangesConstats.BusinessScoreRanges);
 
@@ -434,7 +438,7 @@
 				businessScoreWeight.FinalWeight = BusinessScoreLowScoreWeight;
 			}
 
-			if (!hasHmrc)
+			if (!useHmrc)
 			{
 				businessScoreWeight.FinalWeight += BusinessScoreNoHmrcWeightChange;
 			}
@@ -447,7 +451,7 @@
 			return businessScoreWeight;
 		}
 
-		protected virtual Weight GetConsumerScoreWeight(int consumerScore, bool firstRepaymentDatePassed, bool hasHmrc)
+		protected virtual Weight GetConsumerScoreWeight(int consumerScore, bool firstRepaymentDatePassed, bool useHmrc)
 		{
 			var consumerScoreWeight = GetBaseWeight(consumerScore, ConsumerScoreBaseWeight, MedalRangesConstats.ConsumerScoreRanges);
 
@@ -456,7 +460,7 @@
 				consumerScoreWeight.FinalWeight = ConsumerScoreLowScoreWeight;
 			}
 
-			if (!hasHmrc)
+			if (!useHmrc)
 			{
 				consumerScoreWeight.FinalWeight += ConsumerScoreNoHmrcWeightChange;
 			}
