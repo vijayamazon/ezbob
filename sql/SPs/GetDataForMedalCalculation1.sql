@@ -43,7 +43,9 @@ BEGIN
 		@TypeOfBusiness NVARCHAR(50),
 		@RefNumber NVARCHAR(50),
 		@FirstHmrcDate DATETIME,
-		@FirstYodleeDate DATETIME
+		@FirstYodleeDate DATETIME,
+		@FirstYodleePostDate DATETIME,
+		@FirstYodleeTransactionDate DATETIME
 		
 	SET @Threshold = 2
 			
@@ -109,7 +111,7 @@ BEGIN
 			MP_MarketplaceType.Name = 'HMRC'
 		
 		SELECT
-			@FirstYodleeDate = MIN(MP_YodleeOrderItemBankTransaction.postDate)
+			@FirstYodleePostDate = MIN(MP_YodleeOrderItemBankTransaction.postDate), @FirstYodleeTransactionDate = MIN(MP_YodleeOrderItemBankTransaction.transactionDate)
 		FROM
 			MP_YodleeOrderItemBankTransaction,
 			MP_YodleeOrderItem,
@@ -123,7 +125,16 @@ BEGIN
 			MP_YodleeOrder.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
 			MP_YodleeOrderItem.OrderId = MP_YodleeOrder.Id AND
 			MP_YodleeOrderItemBankTransaction.OrderItemId = MP_YodleeOrderItem.Id
-		
+			
+		IF @FirstYodleePostDate IS NULL
+			SELECT @FirstYodleeDate = @FirstYodleeTransactionDate
+		ELSE IF @FirstYodleeTransactionDate IS NULL
+			SELECT @FirstYodleeDate = @FirstYodleePostDate
+		ELSE IF @FirstYodleePostDate < @FirstYodleeTransactionDate
+			SELECT @FirstYodleeDate = @FirstYodleePostDate
+		ELSE 
+			SELECT @FirstYodleeDate = @FirstYodleeTransactionDate
+	
 		IF @FirstHmrcDate IS NULL AND @FirstYodleeDate IS NOT NULL
 			SET @BusinessSeniority = @FirstYodleeDate
 		ELSE IF @FirstHmrcDate IS NOT NULL AND @FirstYodleeDate IS NULL
