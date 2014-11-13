@@ -21,7 +21,7 @@ namespace EzBobTest
 			this.resultInput = resultInput;
 		}
 
-		protected override void GatherInputData(int customerId, DateTime calculationTime)
+		protected override void GatherInputData(DateTime calculationTime)
 		{
 			Results = resultInput;
 		}
