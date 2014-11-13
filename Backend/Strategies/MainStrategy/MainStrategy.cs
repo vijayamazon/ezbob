@@ -437,7 +437,7 @@
 
 			decimal interestRateToUse;
 			decimal setupFeePercentToUse, setupFeeAmountToUse;
-			int repaymentPeriodToUse;
+			int repaymentPeriodToUse, loanTypeIdToUse;
 			bool isEuToUse;
 
 			if (autoDecisionResponse.IsAutoApproval)
@@ -447,6 +447,7 @@
 				setupFeeAmountToUse = setupFeePercentToUse * offeredCreditLine;
 				repaymentPeriodToUse = autoDecisionResponse.RepaymentPeriod;
 				isEuToUse = autoDecisionResponse.IsEu;
+				loanTypeIdToUse = autoDecisionResponse.LoanTypeId;
 			}
 			else
 			{
@@ -469,6 +470,7 @@
 				setupFeeAmountToUse = dataGatherer.ManualSetupFeeAmount;
 				repaymentPeriodToUse = repaymentPeriod;
 				isEuToUse = false;
+				loanTypeIdToUse = 0;
 			}
 
 			DB.ExecuteNonQuery(
@@ -487,7 +489,8 @@
 				new QueryParameter("ManualSetupFeePercent", setupFeePercentToUse),
 				new QueryParameter("RepaymentPeriod", repaymentPeriodToUse),
 				new QueryParameter("Now", DateTime.UtcNow),
-				new QueryParameter("IsEu", isEuToUse)
+				new QueryParameter("IsEu", isEuToUse),
+				new QueryParameter("LoanTypeId", loanTypeIdToUse)
 			);
 		}
 

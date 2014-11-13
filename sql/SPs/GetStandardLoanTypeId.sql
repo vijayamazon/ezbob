@@ -1,0 +1,13 @@
+IF OBJECT_ID('GetStandardLoanTypeId') IS NULL
+	EXECUTE('CREATE PROCEDURE GetStandardLoanTypeId AS SELECT 1')
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE GetStandardLoanTypeId
+AS
+BEGIN
+	SELECT Id FROM LoanType WHERE Type = 'StandardLoanType'
+END
+GO

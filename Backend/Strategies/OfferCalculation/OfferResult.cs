@@ -16,6 +16,7 @@
 		public string ScenarioName { get; set; }
 		public int Period { get; set; }
 		public bool IsEu { get; set; }
+		public int LoanTypeId { get; set; }
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
 		public string Error { get; set; }
@@ -27,8 +28,9 @@
 			    Amount != other.Amount ||
 			    MedalClassification != other.MedalClassification ||
 			    ScenarioName != other.ScenarioName ||
-			    Period != other.Period ||
-			    IsEu != other.IsEu ||
+				Period != other.Period ||
+				IsEu != other.IsEu ||
+				LoanTypeId != other.LoanTypeId ||
 			    InterestRate != other.InterestRate ||
 			    SetupFee != other.SetupFee ||
 			    Error != other.Error)
@@ -47,8 +49,9 @@
 			                   new QueryParameter("Amount", Amount),
 			                   new QueryParameter("MedalClassification", MedalClassification.ToString()),
 			                   new QueryParameter("ScenarioName", ScenarioName),
-			                   new QueryParameter("Period", Period),
-			                   new QueryParameter("IsEu", IsEu),
+							   new QueryParameter("Period", Period),
+							   new QueryParameter("IsEu", IsEu),
+							   new QueryParameter("LoanTypeId", LoanTypeId),
 			                   new QueryParameter("InterestRate", InterestRate),
 			                   new QueryParameter("SetupFee", SetupFee),
 			                   new QueryParameter("Error", Error));

@@ -34,6 +34,16 @@
 			// We always use standard loan type
 			result.IsEu = false;
 
+			// We use standard loan type
+			SafeReader sr = db.GetFirst("GetStandardLoanTypeId", CommandSpecies.StoredProcedure);
+			if (sr.IsEmpty)
+			{
+				result.Error = "Can't load standard loan type";
+				return result;
+			}
+
+			result.LoanTypeId = sr["Id"];
+
 			// Choose scenario
 			if (amount <= CurrentValues.Instance.SmallLoanScenarioLimit)
 			{

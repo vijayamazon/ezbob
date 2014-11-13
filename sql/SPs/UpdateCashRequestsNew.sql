@@ -19,7 +19,8 @@ CREATE PROCEDURE [dbo].[UpdateCashRequestsNew]
 	@ManualSetupFeePercent DECIMAL(18,4),
 	@RepaymentPeriod INT,
 	@Now DATETIME,
-	@IsEu BIT)
+	@IsEu BIT,
+	@LoanTypeId INT)
 AS
 BEGIN
 	DECLARE
@@ -32,6 +33,9 @@ BEGIN
 		SELECT @LoanSourceId = LoanSourceId FROM LoanSource WHERE LoanSourceName = 'EU'
 	ELSE
 		SELECT @LoanSourceId = LoanSourceId FROM LoanSource WHERE LoanSourceName = 'Standard'
+		
+	IF @LoanTypeId = 0
+		SELECT @LoanTypeId = Id FROM LoanType WHERE Type = 'StandardLoanType'
 	
 	IF @RepaymentPeriod = 0
 	BEGIN
@@ -50,7 +54,8 @@ BEGIN
 			InterestRate = @InterestRate,
 			ManualSetupFeeAmount = @ManualSetupFeeAmount,
 			ManualSetupFeePercent = @ManualSetupFeePercent,
-			LoanSourceID = @LoanSourceId
+			LoanSourceID = @LoanSourceId,
+			LoanTypeId = @LoanTypeId
 		WHERE 
 			Id = @MaxId
 	END
@@ -73,7 +78,8 @@ BEGIN
 			ManualSetupFeePercent = @ManualSetupFeePercent,
 			RepaymentPeriod = @RepaymentPeriod,
 			ApprovedRepaymentPeriod = @RepaymentPeriod,
-			LoanSourceID = @LoanSourceId
+			LoanSourceID = @LoanSourceId,
+			LoanTypeId = @LoanTypeId
 		WHERE 
 			Id = @MaxId
 	END

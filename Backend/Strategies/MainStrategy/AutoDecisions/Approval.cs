@@ -124,6 +124,7 @@
 								// Use offer calculated data
 								response.RepaymentPeriod = offerResult.Period;
 								response.IsEu = offerResult.IsEu;
+								response.LoanTypeId = offerResult.LoanTypeId;
 								response.InterestRate = offerResult.InterestRate / 100;
 								response.SetupFee = offerResult.SetupFee / 100;
 							}

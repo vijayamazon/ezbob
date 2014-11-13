@@ -10,6 +10,7 @@ ALTER PROCEDURE StoreOffer
 	,@ScenarioName NVARCHAR(50)
 	,@Period INT
 	,@IsEu BIT
+	,@LoanTypeId INT
 	,@InterestRate DECIMAL(18,6)
 	,@SetupFee DECIMAL(18,6)
 	,@Error NVARCHAR (500))
@@ -26,6 +27,7 @@ BEGIN
 	,ScenarioName
 	,Period
 	,IsEu
+	,LoanTypeId
 	,InterestRate
 	,SetupFee
 	,Error)
@@ -38,6 +40,7 @@ BEGIN
 	,@ScenarioName
 	,@Period
 	,@IsEu
+	,@LoanTypeId
 	,@InterestRate
 	,@SetupFee
 	,@Error)
