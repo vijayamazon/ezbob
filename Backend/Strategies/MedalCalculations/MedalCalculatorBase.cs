@@ -141,7 +141,6 @@
 				}
 				else
 				{
-					Results.FreeCashFlow = 0; // change weight instead
 					if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff*Results.OnlineAnnualTurnover)
 					{
 						Results.InnerFlowName = "Bank";
