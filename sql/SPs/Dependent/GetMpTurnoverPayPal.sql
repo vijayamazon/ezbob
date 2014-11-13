@@ -68,7 +68,7 @@ BEGIN
 	SELECT
 		RowType          = 'Turnover',
 		MpID             = @MpID,
-		MpTypeInternalID = '3FA5E327-FCFD-483B-BA5A-DC1815747A28',
+		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, '3FA5E327-FCFD-483B-BA5A-DC1815747A28'),
 		TurnoverType     = 'Total',
 		Turnover         = @Turnover,
 		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE @Turnover / @TurnoverDayCount * 365.0 END),

@@ -281,7 +281,7 @@ BEGIN
 	SELECT
 		RowType          = 'Turnover',
 		MpID             = @MpID,
-		MpTypeInternalID = 'A7120CB7-4C93-459B-9901-0E95E7281B59',
+		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, 'A7120CB7-4C93-459B-9901-0E95E7281B59'),
 		TurnoverType     = o.Name,
 		Turnover         = o.Turnover,
 		Annualized       = (CASE o.DayCount WHEN 0 THEN 0 ELSE o.Turnover / o.DayCount * 365.0 END),

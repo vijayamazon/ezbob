@@ -50,6 +50,8 @@
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
     <Compile Include="AutoDecision\AutoApproval\OriginationTime.cs" />
     <Compile Include="AutoDecision\AutoApproval\Payment.cs" />
+    <Compile Include="AutoDecision\AutoApproval\CalculatedTurnover.cs" />
+    <Compile Include="AutoDecision\AutoApproval\Result.cs" />
     <Compile Include="AutoDecision\AutoRejectionCalculator.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="AutoDecision\AutoReRejectionCalculator.cs" />

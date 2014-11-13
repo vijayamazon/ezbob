@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
@@ -15,8 +16,9 @@
 		#region constructor
 
 		public Agent(int nCustomerID, decimal nSystemCalculatedAmount, AConnection oDB, ASafeLog oLog) {
+			Result = null;
 			Now = DateTime.UtcNow;
-			ApprovedAmount = 0;
+			m_nApprovedAmount = 0;
 
 			m_oDB = oDB;
 			m_oLog = oLog;
@@ -27,6 +29,8 @@
 
 			m_oFunds = new AvailableFunds();
 			m_oWorstStatuses = new SortedSet<string>();
+
+			m_oTurnover = new CalculatedTurnover();
 
 			m_oOriginationTime = new OriginationTime();
 
@@ -42,7 +46,7 @@
 		public void MakeDecision() {
 			m_oLog.Debug("Checking if auto approval should take place for customer {0}...", m_oArgs.CustomerID);
 
-			ApprovedAmount = m_oArgs.SystemCalculatedAmount;
+			m_nApprovedAmount = m_oArgs.SystemCalculatedAmount;
 
 			try {
 				m_oCfg.Load();
@@ -57,8 +61,6 @@
 
 				m_oOriginationTime.FromExperian(m_oMetaData.IncorporationDate);
 
-				// TODO: load data for turnovers
-
 				m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
 
 				m_oMetaData.Validate();
@@ -67,10 +69,10 @@
 				// process continues because we want to pick all the possible reasons for not
 				// approving a customer in order to compare different implementations of the process.
 
-				if ((ApprovedAmount > 0) && (m_oMetaData.ValidationErrors.Count == 0))
-					StepDone<InitialAssignment>().Init(ApprovedAmount, m_oMetaData.ValidationErrors);
+				if ((m_nApprovedAmount > 0) && (m_oMetaData.ValidationErrors.Count == 0))
+					StepDone<InitialAssignment>().Init(m_nApprovedAmount, m_oMetaData.ValidationErrors);
 				else
-					StepFailed<InitialAssignment>().Init(ApprovedAmount, m_oMetaData.ValidationErrors);
+					StepFailed<InitialAssignment>().Init(m_nApprovedAmount, m_oMetaData.ValidationErrors);
 
 				CheckIsFraud();
 				CheckIsBrokerCustomer();
@@ -82,7 +84,7 @@
 				CheckCompanyScore();
 				CheckConsumerScore();
 				CheckCustomerAge();
-				// TODO CheckTurnovers();
+				CheckTurnovers();
 				CheckCompanyAge();
 				CheckDefaultAccounts();
 
@@ -100,40 +102,32 @@
 				ReduceOutstandingPrincipal();
 
 				CheckAllowedRange();
-
-				/* TODO
-				if (m_oTrail.IsApproved) {
-					response.AutoApproveAmount = (int)ApprovedAmount;
-					response.CreditResult = "Approved";
-					response.UserStatus = "Approved";
-					response.SystemDecision = "Approve";
-					response.LoanOfferUnderwriterComment = "Auto Approval";
-					response.DecisionName = "Approval";
-					response.AppValidFor = Now.AddDays(m_oMetaData.OfferLength);
-					response.IsAutoApproval = true;
-					response.LoanOfferEmailSendingBannedNew = m_oMetaData.IsEmailSendingBanned;
-				} // if
-				*/
 			}
 			catch (Exception e) {
 				m_oLog.Error(e, "Exception during auto approval.");
 				StepFailed<ExceptionThrown>().Init(e);
 			} // try
 
-			decimal nApprovedAmount = ApprovedAmount;
+			decimal nApprovedAmount = m_nApprovedAmount;
 			if (nApprovedAmount > 0)
 				StepDone<Complete>().Init(nApprovedAmount);
 			else
 				StepFailed<Complete>().Init(nApprovedAmount);
 
-			m_oLog.Debug("Checking if auto approval should take place for customer {0} complete.", m_oArgs.CustomerID);
+			if (m_oTrail.IsApproved)
+				Result = new Result((int)m_nApprovedAmount, (int)m_oMetaData.OfferLength, m_oMetaData.IsEmailSendingBanned);
 
-			m_oLog.Msg("Auto approved amount: {0}. {1}", ApprovedAmount, m_oTrail);
+			m_oLog.Debug(
+				"Checking if auto approval should take place for customer {0} complete; {1}\n{2}",
+				m_oArgs.CustomerID,
+				m_oTrail,
+				Result == null ? string.Empty : "Approved " + Result + "."
+			);
 		} // MakeDecision
 
 		#endregion method MakeDecision
 
-		public decimal ApprovedAmount { get; private set; }
+		public Result Result { get; private set; }
 
 		#endregion public
 
@@ -259,6 +253,28 @@
 
 		#endregion method CheckCustomerAge
 
+		#region method CheckTurnovers
+
+		private void CheckTurnovers() {
+			var oThresholds = new SortedDictionary<int, Tuple<decimal, TimePeriodEnum>> {
+				{  1, new Tuple<decimal, TimePeriodEnum>(m_oCfg.MinTurnover1M, TimePeriodEnum.Month)  },
+				{  3, new Tuple<decimal, TimePeriodEnum>(m_oCfg.MinTurnover3M, TimePeriodEnum.Month3) },
+				{ 12, new Tuple<decimal, TimePeriodEnum>(m_oCfg.MinTurnover1Y, TimePeriodEnum.Year)   },
+			};
+
+			foreach (var pair in oThresholds) {
+				decimal nTurnover = m_oTurnover[pair.Key];
+				decimal nThreshold = pair.Value.Item1;
+				TimePeriodEnum nPeriod = pair.Value.Item2;
+
+				Turnover oTrace = (nTurnover > nThreshold) ? StepDone<Turnover>() : StepFailed<Turnover>();
+				oTrace.PeriodName = nPeriod.ToString();
+				oTrace.Init(nTurnover, nThreshold);
+			} // for each
+		} // CheckTurnovers
+
+		#endregion method CheckTurnovers
+
 		#region method CheckCompanyAge
 
 		private void CheckCompanyAge() {
@@ -359,7 +375,7 @@
 		#region method ReduceOutstandingPrincipal
 
 		private void ReduceOutstandingPrincipal() {
-			ApprovedAmount -= m_oMetaData.OutstandingPrincipal;
+			m_nApprovedAmount -= m_oMetaData.OutstandingPrincipal;
 		} // ReduceOutstandingPrincipal
 
 		#endregion method ReduceOutstandingPrincipal
@@ -367,7 +383,7 @@
 		#region method CheckAllowedRange
 
 		private void CheckAllowedRange() {
-			decimal nApprovedAmount = ApprovedAmount;
+			decimal nApprovedAmount = m_nApprovedAmount;
 
 			if ((m_oCfg.MinAmount <= nApprovedAmount) && (nApprovedAmount <= m_oCfg.MaxAmount))
 				StepDone<AmountOutOfRangle>().Init(nApprovedAmount, m_oCfg.MinAmount, m_oCfg.MaxAmount);
@@ -408,6 +424,10 @@
 				m_oOriginationTime.Process(sr);
 				break;
 
+			case RowType.Turnover:
+				m_oTurnover.Add(sr, m_oLog);
+				break;
+
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
@@ -422,6 +442,7 @@
 			Payment,
 			Cais,
 			OriginationTime,
+			Turnover,
 		} // enum RowType
 
 		#endregion enum RowType
@@ -429,7 +450,7 @@
 		#region method StepFailed
 
 		private T StepFailed<T>() where T : ATrace {
-			ApprovedAmount = 0;
+			m_nApprovedAmount = 0;
 			return m_oTrail.Failed<T>();
 		} // StepFailed
 
@@ -459,6 +480,10 @@
 		private readonly SortedSet<string> m_oWorstStatuses;
 
 		private readonly OriginationTime m_oOriginationTime;
+
+		private decimal m_nApprovedAmount;
+
+		private readonly CalculatedTurnover m_oTurnover;
 
 		private readonly AvailableFunds m_oFunds;
 

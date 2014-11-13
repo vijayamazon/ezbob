@@ -70,7 +70,7 @@
 				os.Add(oTrace.ToString());
 
 			return string.Format(
-				"Customer {0} is {1}auto approved. Decision trail:\n\t{2}",
+				"customer {0} is {1}auto approved. Decision trail:\n\t{2}",
 				CustomerID,
 				IsApproved ? string.Empty : "not ",
 				string.Join("\n\t", os)
