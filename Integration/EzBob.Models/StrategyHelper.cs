@@ -736,9 +736,10 @@
 				{
 					firstPartOfFirstName = firstPartOfFirstName.Substring(0, indexOfSpace);
 				}
-				
-				if (customer.PersonalInfo.Fullname.Contains(firstPartOfFirstName) &&
-					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname)
+
+				string lowerCasedFullName = customer.PersonalInfo.Fullname.ToLower();
+				if (lowerCasedFullName.Contains(firstPartOfFirstName.ToLower()) &&
+					lowerCasedFullName.Contains(proprietorshipParty.PrivateIndividualSurname.ToLower())
 				) {
 					// Customer is owner
 					return true;
