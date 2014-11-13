@@ -288,7 +288,8 @@
 				return;
 			}
 
-			result.InterestRate = lowerBoundaryPricingModelCalculator.Model.MonthlyInterestRate * 100;
+			decimal roundedInterestRate = Math.Round(lowerBoundaryPricingModelCalculator.Model.MonthlyInterestRate * 2000, 0, MidpointRounding.AwayFromZero)/20;
+			result.InterestRate = roundedInterestRate;
 		}
 	}
 }
