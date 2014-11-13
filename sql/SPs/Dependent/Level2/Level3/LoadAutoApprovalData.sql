@@ -366,5 +366,12 @@ BEGIN
 	EXECUTE LoadCustomerMarketplaceOriginationTimes @CustomerID
 	
 	------------------------------------------------------------------------------
+
+	EXECUTE GetCustomerTurnoverData @CustomerID, 1
+	EXECUTE GetCustomerTurnoverData @CustomerID, 3
+	EXECUTE GetCustomerTurnoverData @CustomerID, 12
+
+	------------------------------------------------------------------------------
+
 END
 GO

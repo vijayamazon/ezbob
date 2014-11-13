@@ -90,6 +90,9 @@ BEGIN
 	IF @DateTo IS NULL
 		SET @DateTo = GETUTCDATE()
 
+	-- Convert @DateTo's time part to 23:59:59 without changing a date part
+	SET @DateTo = DATEADD(second, -1, DATEADD(day, 1, CONVERT(DATETIME, CONVERT(DATE, @DateTo))))
+
 	------------------------------------------------------------------------------
 
 	IF @MonthCount = 0
@@ -122,6 +125,9 @@ BEGIN
 			SET @DateFrom = DATEADD(month, DATEDIFF(month, 0, @DateFrom), 0)
 		END
 	END
+
+	-- Convert @DateFrom's time part to 0:00:00 without changing a date part
+	SET @DateFrom = CONVERT(DATETIME, CONVERT(DATE, @DateFrom))
 
 	------------------------------------------------------------------------------
 
@@ -205,6 +211,7 @@ BEGIN
 		INNER JOIN MP_EbayOrder o
 			ON i.OrderId = o.CustomerMarketPlaceId
 			AND o.CustomerMarketPlaceId = @MpID
+			AND i.OrderStatus IN ('Completed', 'Authenticated', 'Shipped')
 		LEFT JOIN #latest_data ld
 			ON ld.StartDate <= i.CreatedTime AND i.CreatedTime <= ld.EndDate
 	WHERE
@@ -272,12 +279,16 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		o.Name,
-		o.Turnover,
-		Annualized = (CASE o.DayCount WHEN 0 THEN 0 ELSE o.Turnover / o.DayCount * 365.0 END),
-		o.DayCount,
-		o.DateFrom,
-		o.DateTo
+		RowType          = 'Turnover',
+		MpID             = @MpID,
+		MpTypeInternalID = 'A7120CB7-4C93-459B-9901-0E95E7281B59',
+		TurnoverType     = o.Name,
+		Turnover         = o.Turnover,
+		Annualized       = (CASE o.DayCount WHEN 0 THEN 0 ELSE o.Turnover / o.DayCount * 365.0 END),
+		MonthCount       = @MonthCount,
+		DayCount         = o.DayCount,
+		DateFrom         = o.DateFrom,
+		DateTo           = o.DateTo
 	FROM
 		#out o
 	ORDER BY
