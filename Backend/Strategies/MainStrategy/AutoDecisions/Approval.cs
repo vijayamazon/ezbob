@@ -75,15 +75,17 @@
 				CheckAutoApprovalConformance(availFunds.ReservedAmount);
 				m_oSecondaryImplementation.MakeDecision();
 
-				if (m_oTrail.EqualsTo(m_oSecondaryImplementation.Trail)) {
+				Guid oDiffID = Guid.NewGuid();
+
+				bool bSuccess = m_oTrail.EqualsTo(m_oSecondaryImplementation.Trail);
+
+				// TODO: save to db difference between the trails under id oDiffID
+
+				if (bSuccess) {
 					log.Info("Both Auto Approval implementations have reached the same decision: {0}", m_oTrail.IsApproved ? "approved" : "not approved");
 					response.AutoApproveAmount = autoApprovedAmount;
 				}
 				else {
-					Guid oDiffID = Guid.NewGuid();
-
-					// TODO: save to db difference between the trails under id oDiffID
-
 					log.Alert(
 						"Switching to manual decision: Auto Approval implementations " +
 						"have not reached the same decision for customer {0}, diff id is {1}.",
