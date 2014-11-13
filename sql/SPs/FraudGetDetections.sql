@@ -1,11 +1,11 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FraudGetDetections]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[FraudGetDetections]
-GO
-SET ANSI_NULLS ON
-GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[FraudGetDetections] 
+
+IF OBJECT_ID('FraudGetDetections') IS NULL
+	EXECUTE('CREATE PROCEDURE FraudGetDetections AS SELECT 1')
+GO
+
+ALTER PROCEDURE [dbo].[FraudGetDetections] 
 	(@CustomerId INT)
 AS
 BEGIN
@@ -18,7 +18,6 @@ BEGIN
 	DECLARE @DateOfBirth DATETIME = (SELECT DateOfBirth FROM Customer WHERE Id=@CustomerId)
 	DECLARE @AccountNumber NVARCHAR(20) = (SELECT AccountNumber FROM Customer WHERE Id=@CustomerId)
 	DECLARE @SortCode NVARCHAR(20) = (SELECT SortCode FROM Customer WHERE Id=@CustomerId)
-	DECLARE @Ip NVARCHAR(30) = (SELECT TOP 1 Ip FROM CustomerSession WHERE CustomerId = @CustomerId)
 	DECLARE @CompanyId INT = (SELECT CompanyId FROM Customer WHERE Id = @CustomerId)
 	DECLARE @CompanyRefNum NVARCHAR(30) = (SELECT ExperianRefNum FROM Company WHERE Id=@CompanyId)
 
@@ -101,7 +100,7 @@ BEGIN
 
 	UNION
 	--ip
-	SELECT CustomerId AS CustomerId FROM CustomerSession WHERE CustomerId <> @CustomerId AND Ip = @Ip
+	SELECT CustomerId AS CustomerId FROM CustomerSession WHERE CustomerId <> @CustomerId AND Ip IN (SELECT DISTINCT Ip FROM CustomerSession WHERE CustomerId = @CustomerId)
 
 	UNION
 	--director
@@ -131,4 +130,7 @@ BEGIN
 	DROP TABLE #tmpCustomerAddresses
 	DROP TABLE #tmpCustomerYodlees
 END
+
 GO
+
+
