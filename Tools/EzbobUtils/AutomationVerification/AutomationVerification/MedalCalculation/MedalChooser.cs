@@ -25,7 +25,7 @@
 				return new MedalOutputModel
 				{
 					MedalType = MedalType.NoMedal,
-					Medal = Medal.NoMedal,
+					Medal = Medal.NoClassification,
 					Error = "Bank or Hmrc data is too old",
 					NumOfHmrcMps = medalChooserData.NumOfHmrc,
 					CustomerId = customerId,
@@ -37,7 +37,7 @@
 				return new MedalOutputModel
 				{
 					MedalType = MedalType.NoMedal,
-					Medal = Medal.NoMedal,
+					Medal = Medal.NoClassification,
 					Error = string.Format("Customer has {0} HMRC MPs", medalChooserData.NumOfHmrc),
 					NumOfHmrcMps = medalChooserData.NumOfHmrc,
 					CustomerId = customerId,
@@ -89,7 +89,7 @@
 					return new MedalOutputModel
 					{
 						MedalType = type,
-						Medal = Medal.NoMedal,
+						Medal = Medal.NoClassification,
 						Error = "None of the medals match the criteria for medal calculation",
 						NumOfHmrcMps = medalChooserData.NumOfHmrc,
 						CustomerId = customerId

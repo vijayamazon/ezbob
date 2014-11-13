@@ -1,8 +1,9 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	using System;
-	using EZBob.DatabaseLib.Model.Database;
+	using AutomationCalculator.Common;
 	using Ezbob.Database;
+	using MaritalStatus = EZBob.DatabaseLib.Model.Database.MaritalStatus;
 
 	public class MedalResult
 	{
@@ -109,88 +110,19 @@
 		public string Error { get; set; }
 		public int OfferedLoanAmount { get; set; }
 
-		public bool IsIdentical(MedalResult other)
+		public bool IsIdentical(MedalOutputModel other)
 		{
-			if (CustomerId != other.CustomerId ||
-				CalculationTime != other.CalculationTime ||
-				MedalType != other.MedalType ||
-				FirstRepaymentDatePassed != other.FirstRepaymentDatePassed ||
-				BusinessScore != other.BusinessScore ||
-				BusinessScoreWeight != other.BusinessScoreWeight ||
-				BusinessScoreGrade != other.BusinessScoreGrade ||
-				BusinessScoreScore != other.BusinessScoreScore ||
-				FreeCashFlowValue != other.FreeCashFlowValue ||
-				FreeCashFlow != other.FreeCashFlow ||
-				FreeCashFlowWeight != other.FreeCashFlowWeight ||
-				FreeCashFlowGrade != other.FreeCashFlowGrade ||
-				FreeCashFlowScore != other.FreeCashFlowScore ||
-				HmrcAnnualTurnover != other.HmrcAnnualTurnover ||
-				BankAnnualTurnover != other.BankAnnualTurnover ||
-				OnlineAnnualTurnover != other.OnlineAnnualTurnover ||
-				AnnualTurnover != other.AnnualTurnover ||
-				AnnualTurnoverWeight != other.AnnualTurnoverWeight ||
-				AnnualTurnoverGrade != other.AnnualTurnoverGrade ||
-				AnnualTurnoverScore != other.AnnualTurnoverScore ||
-				TangibleEquityValue != other.TangibleEquityValue ||
-				TangibleEquity != other.TangibleEquity ||
-				TangibleEquityWeight != other.TangibleEquityWeight ||
-				TangibleEquityGrade != other.TangibleEquityGrade ||
-				TangibleEquityScore != other.TangibleEquityScore ||
-				BusinessSeniority != other.BusinessSeniority ||
-				BusinessSeniorityWeight != other.BusinessSeniorityWeight ||
-				BusinessSeniorityGrade != other.BusinessSeniorityGrade ||
-				BusinessSeniorityScore != other.BusinessSeniorityScore ||
-				ConsumerScore != other.ConsumerScore ||
-				ConsumerScoreWeight != other.ConsumerScoreWeight ||
-				ConsumerScoreGrade != other.ConsumerScoreGrade ||
-				ConsumerScoreScore != other.ConsumerScoreScore ||
-				NetWorth != other.NetWorth ||
-				NetWorthWeight != other.NetWorthWeight ||
-				NetWorthGrade != other.NetWorthGrade ||
-				NetWorthScore != other.NetWorthScore ||
-				MaritalStatus != other.MaritalStatus ||
-				MaritalStatusWeight != other.MaritalStatusWeight ||
-				MaritalStatusGrade != other.MaritalStatusGrade ||
-				MaritalStatusScore != other.MaritalStatusScore ||
-				NumberOfStores != other.NumberOfStores ||
-				NumberOfStoresWeight != other.NumberOfStoresWeight ||
-				NumberOfStoresGrade != other.NumberOfStoresGrade ||
-				NumberOfStoresScore != other.NumberOfStoresScore ||
-				PositiveFeedbacks != other.PositiveFeedbacks ||
-				PositiveFeedbacksWeight != other.PositiveFeedbacksWeight ||
-				PositiveFeedbacksGrade != other.PositiveFeedbacksGrade ||
-				PositiveFeedbacksScore != other.PositiveFeedbacksScore ||
-				EzbobSeniority != other.EzbobSeniority ||
-				EzbobSeniorityWeight != other.EzbobSeniorityWeight ||
-				EzbobSeniorityGrade != other.EzbobSeniorityGrade ||
-				EzbobSeniorityScore != other.EzbobSeniorityScore ||
-				NumOfLoans != other.NumOfLoans ||
-				NumOfLoansWeight != other.NumOfLoansWeight ||
-				NumOfLoansGrade != other.NumOfLoansGrade ||
-				NumOfLoansScore != other.NumOfLoansScore ||
-				NumOfLateRepayments != other.NumOfLateRepayments ||
-				NumOfLateRepaymentsWeight != other.NumOfLateRepaymentsWeight ||
-				NumOfLateRepaymentsGrade != other.NumOfLateRepaymentsGrade ||
-				NumOfLateRepaymentsScore != other.NumOfLateRepaymentsScore ||
-				NumOfEarlyRepayments != other.NumOfEarlyRepayments ||
-				NumOfEarlyRepaymentsWeight != other.NumOfEarlyRepaymentsWeight ||
-				NumOfEarlyRepaymentsGrade != other.NumOfEarlyRepaymentsGrade ||
-				NumOfEarlyRepaymentsScore != other.NumOfEarlyRepaymentsScore ||
-				ValueAdded != other.ValueAdded ||
-				InnerFlowName != other.InnerFlowName ||
-				TotalScore != other.TotalScore ||
-				TotalScoreNormalized != other.TotalScoreNormalized ||
-				MedalClassification != other.MedalClassification ||
-				Error != other.Error ||
-				OfferedLoanAmount != other.OfferedLoanAmount ||
-				NumOfHmrcMps != other.NumOfHmrcMps ||
-				ZooplaValue != other.ZooplaValue ||
-				EarliestHmrcLastUpdateDate != other.EarliestHmrcLastUpdateDate ||
-				EarliestYodleeLastUpdateDate != other.EarliestYodleeLastUpdateDate ||
-				AmazonPositiveFeedbacks != other.AmazonPositiveFeedbacks ||
-				EbayPositiveFeedbacks != other.EbayPositiveFeedbacks ||
-				NumberOfPaypalPositiveTransactions != other.NumberOfPaypalPositiveTransactions ||
-				MortgageBalance != other.MortgageBalance)
+			//if NoMedal no need to compare any other field
+			if (MedalType == MedalType.NoMedal && other.MedalType == AutomationCalculator.Common.MedalType.NoMedal) {
+				return true;
+			}
+
+			if (MedalType.ToString() != other.MedalType.ToString() ||
+				Math.Abs(ValueAdded - other.ValueAdded) > 0.001M ||
+				Math.Abs(TotalScore - other.Score) > 0.001M ||
+				Math.Abs(TotalScoreNormalized - other.NormalizedScore) > 0.001M ||
+				MedalClassification.ToString() != other.Medal.ToString() ||
+				Math.Abs(OfferedLoanAmount - other.OfferedLoanAmount) > 0.001M)
 			{
 				return false;
 			}

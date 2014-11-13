@@ -9,18 +9,22 @@
 	public class DbHelper
 	{
 		private static ASafeLog _log;
+		private static AConnection _db;
+		public DbHelper(AConnection db, ASafeLog log)
+		{
+			_log = log;
+			_db = db;
+		}
 
 		public DbHelper(ASafeLog log)
 		{
 			_log = log;
+			_db = new SqlConnection(log);
 		}
 
 		public RejectionConstants GetRejectionConstants()
 		{
-
-			var conn = new SqlConnection(_log);
-			var sr = conn.ExecuteEnumerable("AV_RejectionConstants", CommandSpecies.StoredProcedure);
-			
+			var sr = _db.ExecuteEnumerable("AV_RejectionConstants", CommandSpecies.StoredProcedure);
 			var consts = new RejectionConstants();
 			foreach (SafeReader row in sr)
 			{
@@ -98,8 +102,7 @@
 
 		public DateTime? GetCustomerBirthDate(int customerId)
 		{
-			var conn = new SqlConnection(_log);
-			return conn.ExecuteScalar<DateTime?>("AV_GetCustomerBirthDate", new QueryParameter("@CustomerId", customerId));
+			return _db.ExecuteScalar<DateTime?>("AV_GetCustomerBirthDate", new QueryParameter("@CustomerId", customerId));
 		}
 
 		/// <summary>
@@ -109,9 +112,7 @@
 		/// <returns></returns>
 		public List<MarketPlace> GetCustomerMarketPlaces(int customerId)
 		{
-
-			var conn = new SqlConnection(_log);
-			var mps = conn.Fill<MarketPlace>("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
+			var mps = _db.Fill<MarketPlace>("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
 			return mps;
 		}
 
@@ -123,11 +124,8 @@
 		/// <returns></returns>
 		public List<MarketPlace> GetCustomerYodlees(int customerId)
 		{
-
-			var conn = new SqlConnection(_log);
-			var mps = conn.Fill<MarketPlace>("AV_GetCustomerYodlees", new QueryParameter("@CustomerId", customerId));
+			var mps = _db.Fill<MarketPlace>("AV_GetCustomerYodlees", new QueryParameter("@CustomerId", customerId));
 			return mps;
-
 		}
 
 		/// <summary>
@@ -137,13 +135,9 @@
 		/// <returns></returns>
 		public List<string> GetCustomerPaymentMarketPlaces(int customerId)
 		{
-
-			var conn = new SqlConnection(_log);
-			var srList = conn.ExecuteEnumerable("AV_GetCustomerPaymentMarketPlaces", new QueryParameter("@CustomerId", customerId));
-
+			var srList = _db.ExecuteEnumerable("AV_GetCustomerPaymentMarketPlaces", new QueryParameter("@CustomerId", customerId));
 			var mps = (from SafeReader row in srList
 					   select row[0].ToString()).ToList();
-
 			return mps;
 
 		}
@@ -155,8 +149,7 @@
 		/// <returns></returns>
 		public List<AnalysisFunction> GetAnalysisFunctions(int mpId)
 		{
-			var conn = new SqlConnection(_log);
-			var srList = conn.ExecuteEnumerable("AV_GetAnalysisFunctions", new QueryParameter("@CustomerMarketPlaceId", mpId));
+			var srList = _db.ExecuteEnumerable("AV_GetAnalysisFunctions", new QueryParameter("@CustomerMarketPlaceId", mpId));
 
 			var afvs = new List<AnalysisFunction>();
 			foreach (SafeReader row in srList)
@@ -179,15 +172,13 @@
 		/// <returns></returns>
 		public OnlineRevenues GetOnlineAnnaulizedRevenueForPeriod(int mpId)
 		{
-			var conn = new SqlConnection(_log);
-			var onlineRevenue = conn.FillFirst<OnlineRevenues>("AV_GetAnnualizedRevenueForPeriod", new QueryParameter("@CustomerMarketPlaceId", mpId));
+			var onlineRevenue = _db.FillFirst<OnlineRevenues>("AV_GetAnnualizedRevenueForPeriod", new QueryParameter("@CustomerMarketPlaceId", mpId));
 			return onlineRevenue;
 		}
 		
 		public int GetExperianScore(int customerId)
 		{
-			var conn = new SqlConnection(_log);
-			var sr = conn.GetFirst("AV_GetExperianScore", new QueryParameter("@CustomerId", customerId));
+			var sr = _db.GetFirst("AV_GetExperianScore", new QueryParameter("@CustomerId", customerId));
 			if (sr.Count == 0)
 			{
 				return 0;
@@ -198,33 +189,28 @@
 
 		public bool WasApprovedForLoan(int customerId)
 		{
-			var conn = new SqlConnection(_log);
-			return bool.Parse(conn.ExecuteScalar<string>("AV_WasLoanApproved", new QueryParameter("@CustomerId", customerId)));
+			return bool.Parse(_db.ExecuteScalar<string>("AV_WasLoanApproved", new QueryParameter("@CustomerId", customerId)));
 		}
 
 		//todo retrieve defaults accounts num, amount, lates
 		public bool HasDefaultAccounts(int customerId, int minDefBalance)
 		{
-			var conn = new SqlConnection(_log);
-			return bool.Parse(conn.ExecuteScalar<string>("AV_HasDefaultAccounts", new QueryParameter("@CustomerId", customerId), new QueryParameter("@MinDefBalance", minDefBalance)));
+			return bool.Parse(_db.ExecuteScalar<string>("AV_HasDefaultAccounts", new QueryParameter("@CustomerId", customerId), new QueryParameter("@MinDefBalance", minDefBalance)));
 		}
 
 		public IEnumerable<SafeReader> GetAutoDecisions(DateTime from, DateTime to)
 		{
-			var conn = new SqlConnection(_log);
-			return conn.ExecuteEnumerable("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
+			return _db.ExecuteEnumerable("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
 		}
 
 		public RejectionData GetRejectionData(int customerId) {
-			var conn = new SqlConnection(_log);
-			return conn.FillFirst<RejectionData>("AV_GetRejectionData", CommandSpecies.StoredProcedure,
+			return _db.FillFirst<RejectionData>("AV_GetRejectionData", CommandSpecies.StoredProcedure,
 			                              new QueryParameter("@CustomerId", customerId));
 		}
 		
 		public ReRejectionData GetReRejectionData(int customerId, int cashRequestId)
 		{
-			var conn = new SqlConnection(_log);
-			var sqlData = conn.GetFirst("AV_ReRejectionData",
+			var sqlData = _db.GetFirst("AV_ReRejectionData",
 				new QueryParameter("@CustomerId", customerId), 
 				new QueryParameter("@CashRequestId", cashRequestId));
 
@@ -242,8 +228,7 @@
 
 		public ReApprovalData GetReApprovalData(int customerId, int cashRequestId)
 		{
-			var conn = new SqlConnection(_log);
-			var sqlData = conn.GetFirst("AV_ReApprovalData", 
+			var sqlData = _db.GetFirst("AV_ReApprovalData", 
 				new QueryParameter("@CustomerId", customerId), 
 				new QueryParameter("@CashRequestId", cashRequestId));
 
@@ -263,14 +248,12 @@
 
 		public decimal GetMedalRate(int customerId)
 		{
-			var conn = new SqlConnection(_log);
-			return conn.ExecuteScalar<decimal>("AV_GetMedalRate", new QueryParameter("@CustomerId", customerId));
+			return _db.ExecuteScalar<decimal>("AV_GetMedalRate", new QueryParameter("@CustomerId", customerId));
 		}
 
 		public bool IsOffline(int customerId)
 		{
-			var conn = new SqlConnection(_log);
-			return conn.ExecuteScalar<bool>("AV_IsCustomerOffline", new QueryParameter("@CustomerId", customerId));
+			return _db.ExecuteScalar<bool>("AV_IsCustomerOffline", new QueryParameter("@CustomerId", customerId));
 		}
 
 		public int GetExperianCompanyScore(int customerId) {
@@ -279,29 +262,26 @@
 
 		public MedalInputModelDb GetMedalInputModel(int customerId)
 		{
-			var conn = new SqlConnection(_log);
-			var model = conn.FillFirst<MedalInputModelDb>("AV_GetMedalInputParams", new QueryParameter("@CustomerId", customerId));
+			var model = _db.FillFirst<MedalInputModelDb>("AV_GetMedalInputParams", new QueryParameter("@CustomerId", customerId));
 			return model;
 		}
 
 		public PositiveFeedbacksModelDb GetPositiveFeedbacks(int customerId)
 		{
-			var conn = new SqlConnection(_log);
-			var model = conn.FillFirst<PositiveFeedbacksModelDb>("AV_GetFeedbacks", new QueryParameter("@CustomerId", customerId));
+			var model = _db.FillFirst<PositiveFeedbacksModelDb>("AV_GetFeedbacks", new QueryParameter("@CustomerId", customerId));
 			return model;
 		}
 
 		public MedalChooserInputModelDb GetMedalChooserData(int customerId)
 		{
-			var conn = new SqlConnection(_log);
-			var model = conn.FillFirst<MedalChooserInputModelDb>("AV_GetMedalChooserInputParams", new QueryParameter("@CustomerId", customerId));
+			var model = _db.FillFirst<MedalChooserInputModelDb>("AV_GetMedalChooserInputParams", new QueryParameter("@CustomerId", customerId));
 			return model;
 		}
 
 		public List<MedalComparisonModel> GetMedalTestData() {
-			var conn = new SqlConnection(_log);
 			var model = new List<MedalComparisonModel>();
-			conn.ForEachRowSafe((sr, bRowsetStart) => {
+			_db.ForEachRowSafe((sr, bRowsetStart) =>
+			{
 				MedalType medalType;
 				Medal medal;
 
@@ -313,7 +293,7 @@
 				if (!Enum.TryParse(sr["Medal"], false, out medal))
 				{
 					_log.Error("Failed to parse medal {0} for {1}", (string)sr["Medal"], (string)sr["CustomerId"]);
-					medal = Medal.NoMedal;
+					medal = Medal.NoClassification;
 				}
 				DateTime? businessSeniority = sr["BusinessSeniority"];
 				string businessSeniorityStr = businessSeniority.HasValue ? businessSeniority.Value.ToString("yyyy-MM-dd HH:mm:ss") : null;
@@ -367,17 +347,14 @@
 		public List<KeyValuePair<int, DateTime>> GetCustomersForMedalsCompare()
 		{
 			var customers = new List<KeyValuePair<int, DateTime>>();
-			var conn = new SqlConnection(_log);
-			conn.ForEachRowSafe((sr, hren) => {
+			_db.ForEachRowSafe((sr, hren) =>
+			{
 				customers.Add(new KeyValuePair<int, DateTime>(sr["CustomerId"], sr["CalculationTime"]));
 				return ActionResult.Continue;
 			}, "SELECT CustomerId, CalculationTime FROM MedalCalculations", CommandSpecies.Text);
 			return customers;
 		}
 		public void StoreMedalVerification(MedalOutputModel model) {
-			var conn = new SqlConnection(_log);
-			
-
 			if (model.Dict != null) {
 				if (!model.Dict.ContainsKey(Parameter.BusinessScore))
 				{
@@ -404,7 +381,7 @@
 					model.Dict[Parameter.FreeCashFlow] = new Weight();
 				}
 
-				conn.ExecuteNonQuery("AV_StoreNewMedal", CommandSpecies.StoredProcedure,
+				_db.ExecuteNonQuery("AV_StoreNewMedal", CommandSpecies.StoredProcedure,
 				                     new QueryParameter("CustomerId", model.CustomerId),
 				                     new QueryParameter("CalculationTime", DateTime.UtcNow),
 				                     new QueryParameter("MedalType", model.MedalType.ToString()),
@@ -483,7 +460,7 @@
 				                                        model.NumberOfPaypalPositiveTransactions));
 			}
 			else {
-				conn.ExecuteNonQuery("AV_StoreNewMedalError", CommandSpecies.StoredProcedure,
+				_db.ExecuteNonQuery("AV_StoreNewMedalError", CommandSpecies.StoredProcedure,
 				                     new QueryParameter("CustomerId", model.CustomerId),
 				                     new QueryParameter("CalculationTime", DateTime.UtcNow),
 				                     new QueryParameter("MedalType", model.MedalType.ToString()),
@@ -494,15 +471,14 @@
 		}
 
 		public YodleeRevenuesModelDb GetYodleeRevenues(int customerMarketplaceId) {
-			var conn = new SqlConnection(_log);
-			var model = conn.FillFirst<YodleeRevenuesModelDb>("AV_GetYodleeRevenues", CommandSpecies.StoredProcedure, new QueryParameter("CustomerMarketplaceId", customerMarketplaceId));
+			var model = _db.FillFirst<YodleeRevenuesModelDb>("AV_GetYodleeRevenues", CommandSpecies.StoredProcedure, new QueryParameter("CustomerMarketplaceId", customerMarketplaceId));
 			return model;
 		}
 
 		public List<MedalCoefficientsModelDb> GetMedalCoefficients() {
-			var conn = new SqlConnection(_log);
 			var model = new List<MedalCoefficientsModelDb>();
-			conn.ForEachRowSafe((sr, hren) => {
+			_db.ForEachRowSafe((sr, hren) =>
+			{
 				var medal = (Medal) Enum.Parse(typeof (Medal), sr["Medal"]);
 				model.Add(new MedalCoefficientsModelDb {
 					Medal = medal,

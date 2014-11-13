@@ -19,11 +19,11 @@
 
 	public enum Medal
 	{
-		NoMedal = 0,
-		Silver = 6,
-		Gold = 8,
-		Platinum = 10,
-		Diamond = 12,
+		NoClassification,
+		Silver,
+		Gold,
+		Platinum,
+		Diamond,
 	} // enum Medal
 
 	public enum MedalType {
