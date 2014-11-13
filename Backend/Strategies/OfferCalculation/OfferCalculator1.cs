@@ -39,7 +39,7 @@
 			{
 				result.ScenarioName = "Small Loan";
 			}
-			else if (hasLoans)
+			else if (!hasLoans)
 			{
 				result.ScenarioName = "Basic New";
 			}
