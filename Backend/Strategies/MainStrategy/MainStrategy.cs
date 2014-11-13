@@ -435,18 +435,41 @@
 				new QueryParameter("OverrideApprovedRejected", overrideApprovedRejected)
 			);
 
-			decimal interestAccordingToPast = -1;
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) =>
-				{
-					interestAccordingToPast = sr["InterestRate"];
-					return ActionResult.SkipAll;
-				},
-				"GetLatestInterestRate",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Today", DateTime.UtcNow.Date)
-			);
+			decimal interestRateToUse;
+			decimal setupFeePercentToUse, setupFeeAmountToUse;
+			int repaymentPeriodToUse;
+			bool isEuToUse;
+
+			if (autoDecisionResponse.IsAutoApproval)
+			{
+				interestRateToUse = autoDecisionResponse.InterestRate;
+				setupFeePercentToUse = autoDecisionResponse.SetupFee;
+				setupFeeAmountToUse = setupFeePercentToUse * offeredCreditLine;
+				repaymentPeriodToUse = autoDecisionResponse.RepaymentPeriod;
+				isEuToUse = autoDecisionResponse.IsEu;
+			}
+			else
+			{
+				// Dont calculate interest if there was an auto approval (the interest was already calculated)
+				decimal interestAccordingToPast = -1;
+				DB.ForEachRowSafe(
+					(sr, bRowsetStart) =>
+						{
+							interestAccordingToPast = sr["InterestRate"];
+							return ActionResult.SkipAll;
+						},
+					"GetLatestInterestRate",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", customerId),
+					new QueryParameter("Today", DateTime.UtcNow.Date)
+					);
+
+				interestRateToUse = interestAccordingToPast == -1 ? loanInterestBase : interestAccordingToPast;
+				setupFeePercentToUse = dataGatherer.ManualSetupFeePercent;
+				setupFeeAmountToUse = dataGatherer.ManualSetupFeeAmount;
+				repaymentPeriodToUse = repaymentPeriod;
+				isEuToUse = false;
+			}
 
 			DB.ExecuteNonQuery(
 				"UpdateCashRequestsNew",
@@ -458,12 +481,13 @@
 				new QueryParameter("MedalType", medalType.ToString()),
 				new QueryParameter("ScorePoints", scoringResult),
 				new QueryParameter("ExpirianRating", dataGatherer.ExperianConsumerScore),
-				new QueryParameter("AnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
-				new QueryParameter("InterestRate", interestAccordingToPast == -1 ? loanInterestBase : interestAccordingToPast),
-				new QueryParameter("ManualSetupFeeAmount", dataGatherer.ManualSetupFeeAmount),
-				new QueryParameter("ManualSetupFeePercent", dataGatherer.ManualSetupFeePercent),
-				new QueryParameter("RepaymentPeriod", repaymentPeriod),
-				new QueryParameter("Now", DateTime.UtcNow)
+				new QueryParameter("AnnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
+				new QueryParameter("InterestRate", interestRateToUse),
+				new QueryParameter("ManualSetupFeeAmount", setupFeeAmountToUse),
+				new QueryParameter("ManualSetupFeePercent", setupFeePercentToUse),
+				new QueryParameter("RepaymentPeriod", repaymentPeriodToUse),
+				new QueryParameter("Now", DateTime.UtcNow),
+				new QueryParameter("IsEu", isEuToUse)
 			);
 		}
 

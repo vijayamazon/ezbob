@@ -13,17 +13,26 @@ CREATE PROCEDURE [dbo].[UpdateCashRequestsNew]
 	@MedalType VARCHAR(50),
 	@ScorePoints NUMERIC(8,3),
 	@ExpirianRating INT,
-	@AnualTurnover INT,
+	@AnnualTurnover INT,
 	@InterestRate DECIMAL(18,4),
 	@ManualSetupFeeAmount INT,
 	@ManualSetupFeePercent DECIMAL(18,4),
 	@RepaymentPeriod INT,
-	@Now DATETIME)
+	@Now DATETIME,
+	@IsEu BIT)
 AS
 BEGIN
-	DECLARE @MaxId INT
+	DECLARE
+		@MaxId INT,
+		@LoanSourceId INT
+		
 	SELECT @MaxId = MAX(id) FROM CashRequests WHERE IdCustomer = @CustomerId
 
+	IF @IsEu = 1
+		SELECT @LoanSourceId = LoanSourceId FROM LoanSource WHERE LoanSourceName = 'EU'
+	ELSE
+		SELECT @LoanSourceId = LoanSourceId FROM LoanSource WHERE LoanSourceName = 'Standard'
+	
 	IF @RepaymentPeriod = 0
 	BEGIN
 		UPDATE
@@ -37,10 +46,11 @@ BEGIN
 			MedalType= @MedalType,
 			ScorePoints= @ScorePoints,
 			ExpirianRating = @ExpirianRating,
-			AnualTurnover = @AnualTurnover,
+			AnualTurnover = @AnnualTurnover,
 			InterestRate = @InterestRate,
 			ManualSetupFeeAmount = @ManualSetupFeeAmount,
-			ManualSetupFeePercent = @ManualSetupFeePercent
+			ManualSetupFeePercent = @ManualSetupFeePercent,
+			LoanSourceID = @LoanSourceId
 		WHERE 
 			Id = @MaxId
 	END
@@ -57,11 +67,13 @@ BEGIN
 			MedalType= @MedalType,
 			ScorePoints= @ScorePoints,
 			ExpirianRating = @ExpirianRating,
-			AnualTurnover = @AnualTurnover,
+			AnualTurnover = @AnnualTurnover,
 			InterestRate = @InterestRate,
 			ManualSetupFeeAmount = @ManualSetupFeeAmount,
 			ManualSetupFeePercent = @ManualSetupFeePercent,
-			RepaymentPeriod = @RepaymentPeriod
+			RepaymentPeriod = @RepaymentPeriod,
+			ApprovedRepaymentPeriod = @RepaymentPeriod,
+			LoanSourceID = @LoanSourceId
 		WHERE 
 			Id = @MaxId
 	END

@@ -88,31 +88,45 @@
 							response.UserStatus = "Manual";
 							response.SystemDecision = "Manual";
 						}
-						else {
-							SafeReader sr = db.GetFirst(
-								"GetLastOfferDataForApproval",
-								CommandSpecies.StoredProcedure,
-								new QueryParameter("CustomerId", customerId),
-								new QueryParameter("Now", DateTime.UtcNow)
-							);
-
-							bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
-							DateTime loanOfferOfferStart = sr["OfferStart"];
-							DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];
-
-							response.CreditResult = "Approved";
-							response.UserStatus = "Approved";
-							response.SystemDecision = "Approve";
-							response.LoanOfferUnderwriterComment = "Auto Approval";
-							response.DecisionName = "Approval";
-							response.AppValidFor = DateTime.UtcNow.AddDays((loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays);
-							response.IsAutoApproval = true;
-							response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
-
+						else
+						{
 							var offerDualCalculator = new OfferDualCalculator(db, log);
-							offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, response.AutoApproveAmount, hasLoans, medalClassification);
-							OfferResult offerResult = offerDualCalculator.Results;
-							// TODO: the data inside offerResult should effect the cash request that is upodated in the main strategy
+							OfferResult offerResult = offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, response.AutoApproveAmount, hasLoans, medalClassification);
+							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error))
+							{
+								log.Alert("Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}", offerResult != null ? offerResult.Error : "", customerId);
+								response.CreditResult = "WaitingForDecision";
+								response.UserStatus = "Manual";
+								response.SystemDecision = "Manual";
+							}
+							else
+							{
+								SafeReader sr = db.GetFirst(
+									"GetLastOfferDataForApproval",
+									CommandSpecies.StoredProcedure,
+									new QueryParameter("CustomerId", customerId),
+									new QueryParameter("Now", DateTime.UtcNow)
+									);
+
+								bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
+								DateTime loanOfferOfferStart = sr["OfferStart"];
+								DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];
+
+								response.CreditResult = "Approved";
+								response.UserStatus = "Approved";
+								response.SystemDecision = "Approve";
+								response.LoanOfferUnderwriterComment = "Auto Approval";
+								response.DecisionName = "Approval";
+								response.AppValidFor = DateTime.UtcNow.AddDays((loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays);
+								response.IsAutoApproval = true;
+								response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
+
+								// Use offer calculated data
+								response.RepaymentPeriod = offerResult.Period;
+								response.IsEu = offerResult.IsEu;
+								response.InterestRate = offerResult.InterestRate / 100;
+								response.SetupFee = offerResult.SetupFee / 100;
+							}
 						} // if is silent
 					} // if there are enough funds
 				} // if auto approved amount is not 0

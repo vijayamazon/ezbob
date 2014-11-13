@@ -10,16 +10,7 @@ CREATE PROCEDURE [dbo].[UpdateAutoApproval]
     @AutoApproveAmount INT)
 AS
 BEGIN
-	DECLARE 
-		@Score INT,
-		@InterestRate NUMERIC(18,4)
-
-	SELECT @Score = ISNULL(ExperianConsumerScore,0) FROM Customer WHERE Id=@CustomerId
-
-	SELECT @InterestRate = Value FROM BasicInterestRate WHERE Start <= @Score AND [End] >= @Score
-	IF @InterestRate IS NULL SET @InterestRate=0
-
-	UPDATE CashRequests SET SystemCalculatedSum=@AutoApproveAmount, InterestRate=@InterestRate WHERE IdCustomer=@CustomerId
+	UPDATE CashRequests SET SystemCalculatedSum=@AutoApproveAmount WHERE IdCustomer=@CustomerId
 	UPDATE Customer SET SystemCalculatedSum = @AutoApproveAmount, CreditSum=@AutoApproveAmount, IsLoanTypeSelectionAllowed=1, LastStatus='Approve' WHERE Id=@CustomerId
 END
 GO

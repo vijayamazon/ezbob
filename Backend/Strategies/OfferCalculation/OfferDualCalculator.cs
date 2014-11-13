@@ -11,8 +11,6 @@
 		private readonly AConnection db;
 		private readonly OfferCalculator1 offerCalculator1;
 
-		public OfferResult Results { get; set; }
-
 		public OfferDualCalculator(AConnection db, ASafeLog log)
 		{
 			this.log = log;

@@ -20,5 +20,8 @@
 		public int BankBasedAutoApproveAmount { get; set; }
 		public RejectionModel RejectionModel { get; set; }
 		public string DecisionName { get; set; }
+		public bool IsEu { get; set; }
+		public decimal InterestRate { get; set; }
+		public decimal SetupFee { get; set; }
 	}
 }

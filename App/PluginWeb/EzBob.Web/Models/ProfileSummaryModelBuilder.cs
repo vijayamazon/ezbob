@@ -12,7 +12,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Areas.Underwriter.Models;
 	using EzBob.Models;
-	using EzBob.Models.Marketplaces;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
 	using Infrastructure;
