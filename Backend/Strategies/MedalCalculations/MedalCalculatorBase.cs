@@ -672,19 +672,19 @@
 			{
 				Results.BusinessSeniorityGrade = 0;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(1) > Results.CalculationTime)
+			else if (Results.BusinessSeniority.Value.AddYears(1) >= Results.CalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 0;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(3) > Results.CalculationTime)
+			else if (Results.BusinessSeniority.Value.AddYears(3) >= Results.CalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 1;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(5) > Results.CalculationTime)
+			else if (Results.BusinessSeniority.Value.AddYears(5) >= Results.CalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 2;
 			}
-			else if (Results.BusinessSeniority.Value.AddYears(10) > Results.CalculationTime)
+			else if (Results.BusinessSeniority.Value.AddYears(10) >= Results.CalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 3;
 			}
