@@ -667,7 +667,7 @@
 
 		private void CalculateBusinessSeniorityGrade()
 		{
-			var dateOnlyCalculationTime = new DateTime(Results.CalculationTime.Year, Results.CalculationTime.Month, Results.CalculationTime.Day);
+			var dateOnlyCalculationTime = Results.CalculationTime.Date;
 			if (!Results.BusinessSeniority.HasValue || Results.BusinessSeniority.Value.AddYears(1) > dateOnlyCalculationTime)
 			{
 				Results.BusinessSeniorityGrade = 0;

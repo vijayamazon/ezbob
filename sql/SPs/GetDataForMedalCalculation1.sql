@@ -129,7 +129,7 @@ BEGIN
 		ELSE IF @FirstHmrcDate IS NOT NULL AND @FirstYodleeDate IS NULL
 			SET @BusinessSeniority = @FirstHmrcDate
 		ELSE IF @FirstHmrcDate IS NULL AND @FirstYodleeDate IS NULL
-			SET @BusinessSeniority = CONVERT(DATETIME, CONVERT(VARCHAR(11), DATEADD(yy, -1, @CalculationTime))) 
+			SET @BusinessSeniority = CONVERT(DATE, DATEADD(yy, -1, @CalculationTime)) 
 		ELSE
 		BEGIN -- Both are not null
 			IF @FirstHmrcDate > @FirstYodleeDate
