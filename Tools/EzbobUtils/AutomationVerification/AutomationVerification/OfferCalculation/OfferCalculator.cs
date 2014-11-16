@@ -1,5 +1,6 @@
 ﻿namespace AutomationCalculator.OfferCalculation
 {
+	using System;
 	using Common;
 	using Ezbob.Logger;
 
@@ -17,10 +18,82 @@
 			var dbHelper = new DbHelper(Log);
 			var setupFeeRange = dbHelper.GetOfferSetupFeeRange(input.Amount);
 			var interestRateRange = dbHelper.GetOfferIneterestRateRange(input.Medal);
+			var pricingScenario = dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
 
-			//todo implement
+			var pricingCalculator = new PricingCalculator();
 
-			return new OfferOutputModel();
+			var outModel = new OfferOutputModel();
+
+			
+			if (input.AspireToMinSetupFee) {
+				bool wasTooSmallInterest = false;
+				var setupFee = setupFeeRange.MinSetupFee;
+				do {
+					pricingScenario.SetupFee = setupFee;
+					var interest = pricingCalculator.GetInterestRate(input.Amount, pricingScenario);
+					if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate) {
+						outModel.InterestRate = RoundInterest(interest);
+						outModel.SetupFee = setupFee;
+						return outModel;
+					}
+
+					if (interest > interestRateRange.MaxInterestRate && wasTooSmallInterest) {
+						outModel.InterestRate = RoundInterest(interest);
+						outModel.SetupFee = setupFee;
+						return outModel;
+					}
+
+					if (interest < interestRateRange.MinInterestRate) {
+						wasTooSmallInterest = true;
+					}
+					else {
+						wasTooSmallInterest = false;
+					}
+
+					setupFee += SetupFeeStep;
+				} while (setupFee <= setupFeeRange.MaxSetupFee);
+			}
+
+
+			if (!input.AspireToMinSetupFee) {
+				var wasTooBigIneteres = false;
+				var setupFee = setupFeeRange.MaxSetupFee;
+				do
+				{
+					pricingScenario.SetupFee = setupFee;
+					var interest = pricingCalculator.GetInterestRate(input.Amount, pricingScenario);
+					if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate)
+					{
+						outModel.InterestRate = RoundInterest(interest);
+						outModel.SetupFee = setupFee;
+						return outModel;
+					}
+
+					if (interest < interestRateRange.MinInterestRate && wasTooBigIneteres)
+					{
+						outModel.InterestRate = RoundInterest(interest);
+						outModel.SetupFee = setupFee;
+						return outModel;
+					}
+
+					if (interest > interestRateRange.MaxInterestRate)
+					{
+						wasTooBigIneteres = true;
+					}
+					else
+					{
+						wasTooBigIneteres = false;
+					}
+
+					setupFee -= SetupFeeStep;
+				} while (setupFee <= setupFeeRange.MaxSetupFee);
+			}
+			
+			return outModel;
+		}
+
+		private decimal RoundInterest(decimal interest) {
+			return Math.Round(interest*2000, 0, MidpointRounding.AwayFromZero)/20;
 		}
 	}
 }

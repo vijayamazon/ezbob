@@ -4,6 +4,7 @@
 	using AutomationCalculator.AutoDecision;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
+	using AutomationCalculator.OfferCalculation;
 	using Ezbob.Logger;
 	using NUnit.Framework;
 
@@ -186,5 +187,18 @@
 			medalChooser.GetMedal(18626);
 		}
 
+		[Test]
+		public void TestOfferCalculator()
+		{
+			var offerCalculator = new OfferCalculator(Log);
+			var offer = offerCalculator.GetOffer(new OfferInputModel() {
+				Amount = 1000,
+				HasLoans = false,
+				AspireToMinSetupFee = true,
+				Medal = Medal.Gold
+			});
+
+			Assert.GreaterOrEqual(offer.InterestRate, 0.03M);
+		}
 	}
 }

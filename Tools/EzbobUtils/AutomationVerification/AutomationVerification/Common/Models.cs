@@ -404,10 +404,22 @@
 		public decimal FreeCashFlow { get; set; }
 	}
 
-	public class PricingScenarioModel {
-		//TODO implement
+	public class PricingScenarioModel
+	{
+		public string ScenarioName { get; set; }
+		public decimal TenurePercents { get; set; }
+		public decimal SetupFee { get; set; }
+		public decimal ProfitMarkupPercentsOfRevenue { get; set; }
+		public decimal OpexAndCapex { get; set; }
+		public decimal InterestOnlyPeriod { get; set; }
+		public decimal EuCollectionRate { get; set; }
+		public decimal DefaultRateCompanyShare { get; set; }
+		public decimal DebtPercentOfCapital { get; set; }
+		public decimal CostOfDebtPA { get; set; }
+		public decimal CollectionRate { get; set; }
+		public decimal Cogs { get; set; }
+		public decimal BrokerSetupFee { get; set; }
 	}
-	
 	public class OfferInputModel {
 		public int Amount { get; set; }
 		public bool HasLoans { get; set; }

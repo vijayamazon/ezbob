@@ -387,7 +387,11 @@
 													 new QueryParameter("Medal", medal.ToString()));
 		}
 
-
+		public PricingScenarioModel GetPricingScenario(int amount, bool hasLoans)
+		{
+			var model = _db.FillFirst<PricingScenarioModel>("AV_PricingScenario", new QueryParameter("Amount", amount), new QueryParameter("HasLoans", hasLoans));
+			return model;
+		}
 
 		#region big ugly insert
 		public void StoreMedalVerification(MedalOutputModel model)

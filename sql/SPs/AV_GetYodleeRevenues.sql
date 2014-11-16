@@ -1,3 +1,9 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('AV_GetYodleeRevenues') IS NULL
+	EXECUTE('CREATE PROCEDURE AV_GetYodleeRevenues AS SELECT 1')
+GO
 
 ALTER PROCEDURE AV_GetYodleeRevenues
 @CustomerMarketplaceId INT
