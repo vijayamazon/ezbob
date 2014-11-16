@@ -225,7 +225,10 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         var medal = this.medalModel.get('Score');
         if (medal) {
             var fillColor = 'black';
-            switch (medal.Medal) {
+            var medalToUse = medal.OfflineResult == -1 ? medal.Medal : medal.OfflineMedal;
+            var resultToUse = medal.OfflineResult == -1 ? medal.Result : medal.OfflineResult;
+            
+            switch (medalToUse) {
                 case 'Silver':
                     fillColor = 'silver'; break;
                 case 'Gold':
@@ -235,7 +238,8 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 case 'Diamond':
                     fillColor = '#39A3E1'; break;
             }
-            this.drawDonut('medalCanvas', fillColor, medal.Result, false);
+
+            this.drawDonut('medalCanvas', fillColor, resultToUse, false);
         }
 
         var offer = this.loanModel.get('OfferedCreditLine') || 0;
