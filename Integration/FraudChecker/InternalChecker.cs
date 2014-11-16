@@ -475,8 +475,8 @@
 								IEnumerable<Customer> customerPortion,
 								Customer customer)
 		{
-			var customerSession = customer.Session.FirstOrDefault();
-			if (customerSession == null)
+			var customerIps = customer.Session.Select(x => x.Ip).Distinct().ToList();
+			if (!customerIps.Any())
 			{
 				return;
 			}
@@ -492,22 +492,20 @@
 
 				fraudDetections.AddRange(
 					brokerFilledClients
-						.Where(c => c.Broker.FirmName != customer.Broker.FirmName && c.Session.Any(s => s.Ip == customerSession.Ip))
-						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, string.Format("{0}", customerSession.Ip))));
+						.Where(c => c.Broker.FirmName != customer.Broker.FirmName && c.Session.Any(s => customerIps.Contains(s.Ip)))
+						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, null)));
 
 				fraudDetections.AddRange(
 					otherClients
-						.Where(c => c.Session.Any(x => x.Ip == customerSession.Ip))
-						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null,
-															string.Format("{0}", customerSession.Ip))));
+						.Where(c => c.Session.Any(x => customerIps.Contains(x.Ip)))
+						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, null)));
 			}
 			else
 			{
 				fraudDetections.AddRange(
-					from c in customerPortion
-					where c.Session.Select(s => s.Ip).ToList().Contains(customerSession.Ip)
-					select
-						Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, string.Format("{0}", customerSession.Ip)));
+					customerPortion
+					.Where(c => c.Session.Any(s => customerIps.Contains(s.Ip)))
+					.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, null)));
 			}
 		}
 	}
