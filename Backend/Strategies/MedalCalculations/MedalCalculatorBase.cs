@@ -317,9 +317,9 @@
 				decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
 				decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
 				decimal valueAddedMedalFactor = sr["ValueAdded"];
-				decimal offerAccordingToAnnualTurnover = Results.AnnualTurnover * annualTurnoverMedalFactor;
-				decimal offerAccordingToFreeCashFlow = Results.FreeCashFlowValue * freeCashFlowMedalFactor;
-				decimal offerAccordingToValueAdded = Results.ValueAdded * valueAddedMedalFactor;
+				decimal offerAccordingToAnnualTurnover = Results.AnnualTurnover * annualTurnoverMedalFactor / 100;
+				decimal offerAccordingToFreeCashFlow = Results.FreeCashFlowValue * freeCashFlowMedalFactor / 100;
+				decimal offerAccordingToValueAdded = Results.ValueAdded * valueAddedMedalFactor / 100;
 
 				if (IsOnlineMedalNotViaHmrcInnerFlow())
 				{
