@@ -13,11 +13,13 @@
 
 	public enum DecisionActions
 	{
-		Approve,
-		Reject,
-		Escalate,
-		Pending,
-		Waiting
+		Approve   = 1,
+		Reject    = 2,
+		Escalate  = 3,
+		Pending   = 4,
+		Waiting   = 5,
+		ReApprove = 6,
+		ReReject  = 7,
 	}
 
 	public class CreditResultDecisionActionsType : EnumStringType<DecisionActions>
@@ -59,7 +61,7 @@
 
 			customer.LastStatus = lastAction == null ? "N/A" : lastAction.Action.ToString();
 
-			if (action == DecisionActions.Approve)
+			if ((action == DecisionActions.Approve) || (action == DecisionActions.ReApprove))
 			{
 				customer.NumApproves++;
 
@@ -99,7 +101,7 @@
 				}
 			}
 
-			if (action == DecisionActions.Reject)
+			if ((action == DecisionActions.Reject) || (action == DecisionActions.ReReject))
 			{
 				customer.NumRejects++;
 				string reasons = item.RejectReasons.Any() ? item.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b) : null;

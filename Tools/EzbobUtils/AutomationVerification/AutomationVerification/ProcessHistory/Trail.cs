@@ -88,12 +88,69 @@
 
 		public bool EqualsTo(Trail oTrail) {
 			if (oTrail == null) {
-				m_oDiffNotes.Add("The second trail is not specified.");
-				m_oLog.Warn("Trails are different: the second trail is not specified.");
+				const string sMsg = "The second trail is not specified.";
+				m_oDiffNotes.Add(sMsg);
+				m_oLog.Warn("Trails are different: {0}", sMsg);
 				return false;
 			} // if
 
-			return true;
+			bool bResult = true;
+
+			if (this.IsApproved != oTrail.IsApproved) {
+				bResult = false;
+				const string sMsg = "Different conclusions have been reached.";
+				m_oDiffNotes.Add(sMsg);
+				m_oLog.Warn("Trails are different: {0}", sMsg);
+			} // if
+
+			if (this.Length != oTrail.Length) {
+				bResult = false;
+
+				string sMsg = string.Format(
+					"Different number of steps in the trail: {0} in the first vs {1} in the second.",
+					this.Length, oTrail.Length
+				);
+
+				m_oDiffNotes.Add(sMsg);
+				m_oLog.Warn("Trails are different: {0}", sMsg);
+
+				return bResult;
+			} // if
+
+			for (int i = 0; i < this.Length; i++) {
+				ATrace oMy = this.m_oSteps[i];
+				ATrace oOther = oTrail.m_oSteps[i];
+
+				if (oMy.GetType() != oOther.GetType()) {
+					bResult = false;
+
+					string sMsg = string.Format(
+						"Different checks encountered on step {0}: {1} in the first vs {2} in the second.",
+						i,
+						oMy.GetType().Name,
+						oOther.GetType().Name
+					);
+
+					m_oDiffNotes.Add(sMsg);
+					m_oLog.Warn("Trails are different: {0}", sMsg);
+				}
+				else if (oMy.CompletedSuccessfully != oOther.CompletedSuccessfully) {
+					bResult = false;
+
+					string sMsg = string.Format(
+						"Different conclusions have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
+						i,
+						oMy.GetType().Name,
+						oMy.CompletedSuccessfully,
+						oOther.CompletedSuccessfully
+					);
+
+					m_oDiffNotes.Add(sMsg);
+					m_oLog.Warn("Trails are different: {0}", sMsg);
+				} // if
+			} // for
+
+			return bResult;
 		} // EqualsTo
 
 		#endregion method EqualsTo
