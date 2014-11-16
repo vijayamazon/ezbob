@@ -6,6 +6,7 @@
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
+	using AutomationCalculator.ProcessHistory.Trails;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -34,7 +35,7 @@
 
 			m_oOriginationTime = new OriginationTime();
 
-			Trail = new Trail(m_oArgs.CustomerID, m_oLog);
+			Trail = new ApprovalTrail(m_oArgs.CustomerID, m_oLog);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
 		} // constructor
 
@@ -114,7 +115,7 @@
 				StepFailed<ExceptionThrown>().Init(e);
 			} // try
 
-			if (Trail.IsApproved)
+			if (Trail.HasDecided)
 				Result = new Result((int)m_nApprovedAmount, (int)m_oMetaData.OfferLength, m_oMetaData.IsEmailSendingBanned);
 
 			m_oLog.Debug(
@@ -129,7 +130,7 @@
 
 		public Result Result { get; private set; }
 
-		public Trail Trail { get; private set; }
+		public ApprovalTrail Trail { get; private set; }
 
 		#endregion public
 
@@ -453,7 +454,7 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			m_nApprovedAmount = 0;
-			return Trail.Failed<T>();
+			return Trail.Dunno<T>();
 		} // StepFailed
 
 		#endregion method StepFailed
@@ -461,7 +462,7 @@
 		#region method StepDone
 
 		private T StepDone<T>() where T : ATrace {
-			return Trail.Done<T>();
+			return Trail.Affirmative<T>();
 		} // StepFailed
 
 		#endregion method StepDone

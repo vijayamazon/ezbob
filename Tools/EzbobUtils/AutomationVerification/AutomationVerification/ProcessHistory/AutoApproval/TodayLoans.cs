@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	public class TodayLoans : AThresholdTrace {
-		public TodayLoans(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public TodayLoans(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		protected override string ValueName {

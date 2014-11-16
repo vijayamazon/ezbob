@@ -1,14 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Common {
-	public class Complete : ATrace {
-		public Complete(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+	public class Complete : ANumericTrace {
+		public Complete(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
-		public void Init(decimal nApprovedAmount) {
-			ApprovedAmount = nApprovedAmount;
-
-			Comment = string.Format("customer {0} approved amount is {1}", CustomerID, ApprovedAmount.ToString("N2"));
-		} // Init
-
-		public decimal ApprovedAmount { get; private set; }
+		protected override string ValueStr {
+			get { return string.Format("approved amount is {0}", Value.ToString("N2")); }
+		} // ValueStr
 	}  // class Complete
 } // namespace

@@ -1,11 +1,13 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
+	using Newtonsoft.Json;
 
 	public class NewMarketplace : ATrace {
 		#region constructor
 
-		public NewMarketplace(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public NewMarketplace(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor
@@ -38,5 +40,9 @@
 		public string MpName { get; private set; }
 		public string MpType { get; private set; }
 		public DateTime MpAddTime { get; private set; }
+
+		public override string GetInitArgs() {
+			return JsonConvert.SerializeObject(new List<object> { MpID, MpName, MpType, MpAddTime });
+		} // GetInitArgse
 	} // class NewMarketplace
 } // namespace

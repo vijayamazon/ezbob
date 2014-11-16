@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	public class Turnover : AThresholdTrace {
-		public Turnover(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public Turnover(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		public virtual string PeriodName { get; set; }

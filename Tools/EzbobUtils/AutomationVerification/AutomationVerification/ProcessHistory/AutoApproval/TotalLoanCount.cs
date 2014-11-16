@@ -1,24 +1,16 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	using Ezbob.Utils.Lingvo;
 
-	public class TotalLoanCount : ATrace {
+	public class TotalLoanCount : ANumericTrace {
 		#region constructor
 
-		public TotalLoanCount(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public TotalLoanCount(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor
 
-		#region method Init
-
-		public void Init(int nLoanCount) {
-			LoanCount = nLoanCount;
-
-			Comment = string.Format("customer {0} has {1}", CustomerID, Grammar.Number(LoanCount, "loan"));
-		} // Init
-
-		#endregion method Init
-
-		public int LoanCount { get; private set; }
+		protected override string ValueStr {
+			get { return Grammar.Number((int)Value, "loan"); }
+		} // ValueStr
 	} // class TotalLoanCount
 } // namespace

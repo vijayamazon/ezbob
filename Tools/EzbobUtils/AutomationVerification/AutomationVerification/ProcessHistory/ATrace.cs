@@ -12,7 +12,7 @@
 
 		#region property CompletedSuccessfully
 
-		public virtual bool CompletedSuccessfully { get; private set; }
+		public virtual DecisionStatus DecisionStatus { get; private set; }
 
 		#endregion property CompletedSuccessfully
 
@@ -31,10 +31,16 @@
 		#region method ToString
 
 		public override string ToString() {
-			return string.Format("{1} {0}: {2}", Name, CompletedSuccessfully ? "passed" : "failed", Comment);
+			return string.Format("{1,-12} {0}: {2}", Name, DecisionStatus, Comment);
 		} // ToString
 
 		#endregion method ToString
+
+		public abstract string GetInitArgs();
+
+		public virtual string GetProperties() {
+			return null;
+		} // GetProperties
 
 		#endregion public
 
@@ -42,9 +48,9 @@
 
 		#region constructor
 
-		protected ATrace(int nCustomerID, bool bCompletedSuccessfully) {
+		protected ATrace(int nCustomerID, DecisionStatus nDecisionStatus) {
 			CustomerID = nCustomerID;
-			CompletedSuccessfully = bCompletedSuccessfully;
+			DecisionStatus = nDecisionStatus;
 		} // constructor
 
 		#endregion constructor

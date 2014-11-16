@@ -21,9 +21,7 @@
 
 		public DateTime? Since {
 			get { return m_oRow == null ? null : m_oRow.Time; }
-		}
-
-		// Since
+		} // Since
 
 		#endregion property Since
 

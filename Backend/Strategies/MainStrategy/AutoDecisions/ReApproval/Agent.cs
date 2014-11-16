@@ -4,6 +4,7 @@
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.ReApproval;
+	using AutomationCalculator.ProcessHistory.Trails;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Database;
@@ -24,7 +25,7 @@
 			m_oLog = oLog ?? new SafeLog();
 			m_oArgs = new Arguments(nCustomerID, nMaxApprovalAmount);
 
-			m_oTrail = new Trail(m_oArgs.CustomerID, m_oLog);
+			m_oTrail = new ReapprovalTrail(m_oArgs.CustomerID, m_oLog);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
 		} // constructor
 
@@ -64,7 +65,7 @@
 				CheckCap();
 				CheckAvailableFunds();
 
-				if (m_oTrail.IsApproved) {
+				if (m_oTrail.HasDecided) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.IsAutoApproval = true;
 					response.CreditResult = "Approved";
@@ -202,7 +203,7 @@
 		#region method SetApprovedAmount
 
 		private void SetApprovedAmount() {
-			if (m_oTrail.IsApproved)
+			if (m_oTrail.HasDecided)
 				ApprovedAmount = m_oMetaData.ApprovedAmount;
 
 			if (ApprovedAmount > 0)
@@ -290,7 +291,7 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			ApprovedAmount = 0;
-			return m_oTrail.Failed<T>();
+			return m_oTrail.Dunno<T>();
 		} // StepFailed
 
 		#endregion method StepFailed
@@ -298,7 +299,7 @@
 		#region method StepDone
 
 		private T StepDone<T>() where T : ATrace {
-			return m_oTrail.Done<T>();
+			return m_oTrail.Affirmative<T>();
 		} // StepFailed
 
 		#endregion method StepDone
@@ -316,7 +317,7 @@
 
 		private readonly List<Marketplace> m_oNewMarketplaces;
 
-		private readonly Trail m_oTrail;
+		private readonly ReapprovalTrail m_oTrail;
 
 		#endregion fields
 

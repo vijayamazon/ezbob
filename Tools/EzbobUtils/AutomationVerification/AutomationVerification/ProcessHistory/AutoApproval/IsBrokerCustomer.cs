@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	public class IsBrokerCustomer : ABoolTrace {
-		public IsBrokerCustomer(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public IsBrokerCustomer(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		protected override string PropertyName {

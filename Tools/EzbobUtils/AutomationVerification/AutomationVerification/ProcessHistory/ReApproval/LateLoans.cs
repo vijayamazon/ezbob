@@ -1,6 +1,6 @@
 namespace AutomationCalculator.ProcessHistory.ReApproval {
 	public class LateLoans : ABoolTrace {
-		public LateLoans(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public LateLoans(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		protected override string PropertyName {

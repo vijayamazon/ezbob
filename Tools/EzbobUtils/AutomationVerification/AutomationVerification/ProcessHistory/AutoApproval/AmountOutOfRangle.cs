@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	public class AmountOutOfRangle : ARangeTrace {
-		public AmountOutOfRangle(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public AmountOutOfRangle(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		protected override string ValueName {

@@ -1,18 +1,20 @@
 namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	using System.Collections.Generic;
+	using System.Linq;
+	using Newtonsoft.Json;
 
 	public class WorstCaisStatus : ATrace {
-		public WorstCaisStatus(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public WorstCaisStatus(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		public List<string> FoundForbiddenStatuses { get; private set; }
 		public List<string> AllCustomerStatuses { get; private set; }
 		public List<string> AllowedStatuses { get; private set; }
 
-		public void Init(List<string> oFoundForbiddenStatuses, List<string> oAllCustomerStatuses, List<string> oAllowedStatuses) {
-			FoundForbiddenStatuses = oFoundForbiddenStatuses ?? new List<string>();
-			AllCustomerStatuses = oAllCustomerStatuses ?? new List<string>();
-			AllowedStatuses = oAllowedStatuses ?? new List<string>();
+		public void Init(IEnumerable<string> oFoundForbiddenStatuses, IEnumerable<string> oAllCustomerStatuses, IEnumerable<string> oAllowedStatuses) {
+			FoundForbiddenStatuses = oFoundForbiddenStatuses == null ? new List<string>() : oFoundForbiddenStatuses.ToList();
+			AllCustomerStatuses = oAllCustomerStatuses == null ? new List<string>() : oAllCustomerStatuses.ToList();
+			AllowedStatuses = oAllowedStatuses == null ? new List<string>() : oAllowedStatuses.ToList();
 
 			if (FoundForbiddenStatuses.Count < 1) {
 				Comment = string.Format(
@@ -32,5 +34,9 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 				);
 			} // if
 		} // Init
+
+		public override string GetInitArgs() {
+			return JsonConvert.SerializeObject(new List<IEnumerable<string>> { FoundForbiddenStatuses, AllCustomerStatuses, AllowedStatuses });
+		} // GetInitArgs
 	} // class WorstCaisStatus
 } // namespace

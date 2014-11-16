@@ -7,6 +7,7 @@
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
 	using AutomationCalculator.ProcessHistory.Common;
+	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -55,7 +56,7 @@
 
 			customer = _customers.ReallyTryGet(customerId);
 
-			m_oTrail = new Trail(customerId, this.log);
+			m_oTrail = new ApprovalTrail(customerId, this.log);
 
 			m_oSecondaryImplementation = new Agent(customerId, offeredCreditLine, db, log);
 		} // constructor
@@ -82,7 +83,7 @@
 				// TODO: save to db difference between the trails under id oDiffID
 
 				if (bSuccess) {
-					log.Info("Both Auto Approval implementations have reached the same decision: {0}", m_oTrail.IsApproved ? "approved" : "not approved");
+					log.Info("Both Auto Approval implementations have reached the same decision: {0}", m_oTrail.HasDecided ? "approved" : "not approved");
 					response.AutoApproveAmount = autoApprovedAmount;
 				}
 				else {
@@ -471,11 +472,11 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			autoApprovedAmount = 0;
-			return m_oTrail.Failed<T>();
+			return m_oTrail.Dunno<T>();
 		} // StepFailed
 
 		private T StepDone<T>() where T : ATrace {
-			return m_oTrail.Done<T>();
+			return m_oTrail.Affirmative<T>();
 		} // StepFailed
 
 		private void NotifyAutoApproveSilentMode(int autoApproveAmount, string autoApproveSilentTemplateName, string autoApproveSilentToAddress) {
@@ -518,7 +519,7 @@
 
 		private int autoApprovedAmount;
 
-		private readonly Trail m_oTrail;
+		private readonly ApprovalTrail m_oTrail;
 
 		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
 

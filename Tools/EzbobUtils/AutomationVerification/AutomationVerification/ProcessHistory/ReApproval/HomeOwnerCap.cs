@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
 	public class HomeOwnerCap : AThresholdTrace {
-		public HomeOwnerCap(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public HomeOwnerCap(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		protected override string ValueName {

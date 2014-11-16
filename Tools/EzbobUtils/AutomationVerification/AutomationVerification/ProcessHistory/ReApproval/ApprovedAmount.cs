@@ -1,18 +1,14 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
-	public class ApprovedAmount : ATrace {
+	public class ApprovedAmount : ANumericTrace {
 		#region constructor
 
-		public ApprovedAmount(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public ApprovedAmount(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor
 
-		public void Init(decimal nApprovedAmount) {
-			Amount = nApprovedAmount;
-
-			Comment = string.Format("customer {0} approved amount is {1}", CustomerID, Amount.ToString("N2"));
-		} // Init
-
-		public decimal Amount { get; private set; }
+		protected override string ValueStr {
+			get { return string.Format("approved amount of {0}", Value.ToString("N2")); }
+		} // ValueStr
 	} // class ApprovedAmount
 } // namespace

@@ -1,6 +1,9 @@
 namespace AutomationCalculator.ProcessHistory.ReApproval {
+	using System.Collections.Generic;
+	using Newtonsoft.Json;
+
 	public class RejectAfterLacr : ATrace {
-		public RejectAfterLacr(int nCustomerID, bool bCompletedSuccessfully) : base(nCustomerID, bCompletedSuccessfully) {
+		public RejectAfterLacr(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
 
 		public int LacrID { get; private set; }
@@ -26,5 +29,9 @@ namespace AutomationCalculator.ProcessHistory.ReApproval {
 				);
 			} // if
 		} // Init
+
+		public override string GetInitArgs() {
+			return JsonConvert.SerializeObject(new List<int> { RejectID, LacrID });
+		} // GetInitArgs
 	} // class RejectAfterLacr
 } // namespace
