@@ -70,6 +70,8 @@
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Common\MarketPlacesHelper.cs" />
     <Compile Include="Common\Models.cs" />
+    <Compile Include="OfferCalculation\OfferCalculator.cs" />
+    <Compile Include="OfferCalculation\PricingCalculator.cs" />
     <Compile Include="ProcessHistory\ARangeTrace.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />

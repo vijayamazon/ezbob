@@ -1,8 +1,11 @@
 ﻿namespace EzBob.Backend.Strategies.MedalCalculations
 {
 	using System;
+	using System.Globalization;
+	using System.Text;
 	using AutomationCalculator.Common;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 	using MaritalStatus = EZBob.DatabaseLib.Model.Database.MaritalStatus;
 
 	public class MedalResult
@@ -213,6 +216,136 @@
 							   new QueryParameter("EbayPositiveFeedbacks", EbayPositiveFeedbacks),
 							   new QueryParameter("NumberOfPaypalPositiveTransactions", NumberOfPaypalPositiveTransactions),
 							   new QueryParameter("MortgageBalance", MortgageBalance));
+		}
+
+		public void PrintToLog(ASafeLog log) {
+
+			var sb = new StringBuilder();
+			sb.AppendFormat("Calculation Num 1 .........Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", MedalClassification,
+							StringBuilderExtention.ToPercent(TotalScoreNormalized), MedalType, TotalScore);
+			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8} \n", "Parameter".PadRight(25), "Weight".PadRight(10),
+							"MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10),
+							"Grade".PadRight(10), "Score".PadRight(10), "Value");
+
+			var summary = new Weight();
+
+			Weight weight;
+
+			if (MedalType != MedalType.SoleTrader) {
+				weight = new Weight {Value = BusinessScore.ToString(CultureInfo.InvariantCulture), FinalWeight = BusinessScoreWeight,Grade = (int)BusinessScoreGrade,Score = BusinessScoreScore};
+				sb.AddWeight(weight, "BusinessScore", ref summary);
+			}
+
+			if (MedalType == MedalType.Limited || MedalType == MedalType.OnlineLimited)
+			{
+				weight = new Weight {Value = TangibleEquity.ToString(CultureInfo.InvariantCulture), FinalWeight = TangibleEquityWeight,Grade = (int)TangibleEquityGrade,Score = TangibleEquityScore};
+				sb.AddWeight(weight, "TangibleEquity", ref summary);
+			}
+
+			DateTime calcTime = CalculationTime;
+			int businessSeniorityYears = 0;
+			decimal ezbobSeniorityMonth = 0;
+			if (BusinessSeniority.HasValue) {
+				businessSeniorityYears = (int)(calcTime - BusinessSeniority.Value).TotalDays / 365;
+			}
+
+			if(EzbobSeniority.HasValue){
+				ezbobSeniorityMonth = (decimal)(calcTime - EzbobSeniority.Value).TotalDays / (365.0M / 12.0M);
+			}
+
+			weight = new Weight { Value = businessSeniorityYears.ToString(CultureInfo.InvariantCulture), FinalWeight = BusinessSeniorityWeight, Grade = (int)BusinessSeniorityGrade, Score = BusinessSeniorityScore };
+			sb.AddWeight(weight, "BusinessSeniority", ref summary);
+
+			weight = new Weight {Value = ConsumerScore.ToString(CultureInfo.InvariantCulture), FinalWeight = ConsumerScoreWeight,Grade = (int)ConsumerScoreGrade,Score = ConsumerScoreScore};
+			sb.AddWeight(weight, "ConsumerScore", ref summary);
+
+			weight = new Weight { Value = ezbobSeniorityMonth.ToString(CultureInfo.InvariantCulture), FinalWeight = EzbobSeniorityWeight, Grade = (int)EzbobSeniorityGrade, Score = EzbobSeniorityScore };
+			sb.AddWeight(weight, "EzbobSeniority", ref summary);
+
+			weight = new Weight {Value = MaritalStatus.ToString(CultureInfo.InvariantCulture), FinalWeight = MaritalStatusWeight,Grade = (int)MaritalStatusGrade,Score = MaritalStatusScore};
+			sb.AddWeight(weight, "MaritalStatus", ref summary);
+
+			weight = new Weight {Value = NumOfLoans.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfLoansWeight,Grade = (int)NumOfLoansGrade,Score = NumOfLoansScore};
+			sb.AddWeight(weight, "NumOfLoans", ref summary);
+
+			weight = new Weight {Value = NumOfLateRepayments.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfLateRepaymentsWeight,Grade = (int)NumOfLateRepaymentsGrade,Score = NumOfLateRepaymentsScore};
+			sb.AddWeight(weight, "NumOfLateRepayments", ref summary);
+
+			weight = new Weight {Value = NumOfEarlyRepayments.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfEarlyRepaymentsWeight,Grade = (int)NumOfEarlyRepaymentsGrade,Score = NumOfEarlyRepaymentsScore};
+			sb.AddWeight(weight, "NumOfEarlyRepayments", ref summary);
+
+			weight = new Weight {Value = AnnualTurnover.ToString(CultureInfo.InvariantCulture), FinalWeight = AnnualTurnoverWeight,Grade = (int)AnnualTurnoverGrade,Score = AnnualTurnoverScore};
+			sb.AddWeight(weight, "AnnualTurnover", ref summary);
+
+			weight = new Weight {Value = FreeCashFlow.ToString(CultureInfo.InvariantCulture), FinalWeight = FreeCashFlowWeight,Grade = (int)FreeCashFlowGrade,Score = FreeCashFlowScore};
+			sb.AddWeight(weight, "FreeCashFlow", ref summary);
+
+			weight = new Weight {Value = NetWorth.ToString(CultureInfo.InvariantCulture), FinalWeight = NetWorthWeight,Grade = (int)NetWorthGrade,Score = NetWorthScore};
+			sb.AddWeight(weight, "NetWorth", ref summary);
+
+			if (MedalType == MedalType.OnlineLimited || MedalType == MedalType.OnlineNonLimitedNoBusinessScore || MedalType == MedalType.OnlineNonLimitedWithBusinessScore)
+			{
+				weight = new Weight {Value = NumberOfStores.ToString(CultureInfo.InvariantCulture), FinalWeight = NumberOfStoresWeight,Grade = (int)NumberOfStoresGrade,Score = NumberOfStoresScore};
+				sb.AddWeight(weight, "NumOfStores", ref summary);
+
+				weight = new Weight { Value = PositiveFeedbacks.ToString(CultureInfo.InvariantCulture), FinalWeight = PositiveFeedbacksWeight, Grade = (int)PositiveFeedbacksGrade, Score = PositiveFeedbacksScore };
+				sb.AddWeight(weight, "PositiveFeedbacks", ref summary);
+			}
+
+			sb.AppendLine("----------------------------------------------------------------------------------------------------------------------------------------");
+			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}\n",
+							"Sum".PadRight(25),
+							StringBuilderExtention.ToShort(summary.FinalWeight).PadRight(10),
+							StringBuilderExtention.ToPercent(summary.MinimumScore / 100).PadRight(10),
+							StringBuilderExtention.ToPercent(summary.MaximumScore / 100).PadRight(10),
+							summary.MinimumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
+							summary.MaximumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
+							summary.Grade.ToString(CultureInfo.InvariantCulture).PadRight(10),
+							StringBuilderExtention.ToShort(summary.Score).PadRight(10), summary.Value);
+
+			log.Debug(sb.ToString());
+			
+
+		}
+	}
+
+	public static class StringBuilderExtention
+	{
+		public static void AddWeight(this StringBuilder sb, Weight weight, string name, ref Weight summary)
+		{
+			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}\n",
+							name.PadRight(25),
+							ToShort(weight.FinalWeight).PadRight(10),
+							ToPercent(weight.MinimumScore / 100).PadRight(10),
+							ToPercent(weight.MaximumScore / 100).PadRight(10),
+							weight.MinimumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
+							weight.MaximumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
+							weight.Grade.ToString(CultureInfo.InvariantCulture).PadRight(10),
+							ToShort(weight.Score).PadRight(10), weight.Value);
+
+
+
+			if (summary == null) summary = weight;
+			else
+			{
+				summary.FinalWeight += weight.FinalWeight;
+				summary.MinimumGrade += weight.MinimumGrade;
+				summary.MinimumScore += weight.MinimumScore;
+				summary.MaximumGrade += weight.MaximumGrade;
+				summary.MaximumScore += weight.MaximumScore;
+				summary.Score += weight.Score;
+				summary.Grade += weight.Grade;
+			}
+		}
+
+		public static string ToPercent(decimal val)
+		{
+			return String.Format("{0:F2}", val * 100).PadRight(6);
+		}
+
+		public static string ToShort(decimal val)
+		{
+			return String.Format("{0:F2}", val).PadRight(6);
 		}
 	}
 }
