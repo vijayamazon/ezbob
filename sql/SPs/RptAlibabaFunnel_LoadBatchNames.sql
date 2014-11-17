@@ -11,16 +11,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT DISTINCT
-		csr.FName AS BatchName
+		c.Name AS BatchName
 	FROM
-		Customer c
-		INNER JOIN CampaignSourceRef csr
-			ON c.Id = csr.CustomerId
-	WHERE
-		csr.FName IS NOT NULL
-		AND
-		c.AlibabaId IS NOT NULL
-		AND
-		c.IsTest = 0
+		AlibabaCampaigns c
+	ORDER BY
+		c.Name
 END
 GO
