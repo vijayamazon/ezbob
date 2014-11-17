@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection
 {
 	using System;
+	using AutomationCalculator.ProcessHistory.Trails;
 	using ProcessHistory;
 	using ProcessHistory.Common;
 	using Ezbob.Database;
@@ -48,7 +49,7 @@
 
 		#endregion method MakeDecision
 
-		public Trail Trail { get; private set; }
+		public RejectionTrail Trail { get; private set; }
 
 		#endregion public
 
@@ -73,7 +74,7 @@
 
 		private T StepFailed<T>() where T : ATrace
 		{
-			return Trail.Failed<T>();
+			return Trail.Dunno<T>();
 		} // StepFailed
 
 		#endregion method StepFailed
@@ -82,7 +83,7 @@
 
 		private T StepDone<T>() where T : ATrace
 		{
-			return Trail.Done<T>();
+			return Trail.Affirmative<T>();
 		} // StepFailed
 
 		#endregion method StepDone
