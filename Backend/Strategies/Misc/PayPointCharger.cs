@@ -78,12 +78,7 @@
 				reductionFee
 				);
 
-			if (autoPaymentResult.IsException)
-			{
-				return;
-			}
-
-			if (autoPaymentResult.PaymentFailed)
+			if (autoPaymentResult.IsException || autoPaymentResult.PaymentFailed)
 			{
 				Log.Warn("Failed collection from customer:{0} amount:{1}", customerId, initialAmountDue);
 				return;
@@ -92,7 +87,7 @@
 			if (autoPaymentResult.PaymentCollectedSuccessfully)
 			{
 				SendConfirmationMail(firstName, autoPaymentResult.ActualAmountCharged, refNum, customerMail);
-				SendLoanStatusMail(loanId, firstName, refNum, customerMail);
+				SendLoanStatusMail(loanId, firstName, refNum, customerMail); // Will send mail for paid off loans
 			}
 		}
 
