@@ -333,7 +333,8 @@
 				}.Where(x => x >= CurrentValues.Instance.MedalMinOffer).ToList();
 				if (validOfferAmounts.Count > 0)
 				{
-					Results.OfferedLoanAmount = (int) validOfferAmounts.Min();
+					decimal unroundedValue = validOfferAmounts.Min();
+					Results.OfferedLoanAmount = (int) Math.Truncate(unroundedValue/CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
 				}
 			}
 		}
