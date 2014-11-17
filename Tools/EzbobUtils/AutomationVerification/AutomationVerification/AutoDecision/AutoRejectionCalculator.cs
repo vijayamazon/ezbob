@@ -1,6 +1,5 @@
 ﻿namespace AutomationCalculator.AutoDecision
 {
-	using System.Linq;
 	using Common;
 	using Ezbob.Logger;
 
@@ -49,7 +48,7 @@
 				reason = string.Format("Not Rejected. Total Annual Turnover Above {0} ({1})", _const.NoRejectIfTotalAnnualTurnoverAbove, data.AnualTurnover);
 				return false;
 			}
-			//3. Do not apply to clients with credit score above 900.
+			//3. Do not apply to clients with credit score above 800.
 			if (data.ExperianScore >= _const.NoRejectIfCreditScoreAbove)
 			{
 				reason = string.Format("Not Rejected. Credit Score Above {0} ({1})", _const.NoRejectIfCreditScoreAbove, data.ExperianScore);
@@ -71,17 +70,22 @@
 				return false;
 			}
 
+			if (data.IsBrokerLead) {
+				reason = string.Format("Not Rejected. Customer is via broker");
+				return false;
+			}
+
 			//1.1  Low credit score: less than 500
 			if (data.ExperianScore < _const.MinCreditScore && data.ExperianScore > 0)
 			{
-				reason = string.Format("Rejected. Credit Score Below {0} ({1})", _const.MinCreditScore, data.ExperianScore);
+				reason = string.Format("Rejected. Max Credit Score Below {0} ({1})", _const.MinCreditScore, data.ExperianScore);
 				return true;
 			}
 
 			//1.2  Low company credit score: less than 500
 			if (data.CompanyScore < _const.MinCompanyCreditScore)
 			{
-				reason = string.Format("Rejected. Company Credit Score Below {0} ({1})", _const.MinCompanyCreditScore, data.CompanyScore);
+				reason = string.Format("Rejected. Max Company Credit Score Below {0} ({1})", _const.MinCompanyCreditScore, data.CompanyScore);
 				return true;
 			}
 

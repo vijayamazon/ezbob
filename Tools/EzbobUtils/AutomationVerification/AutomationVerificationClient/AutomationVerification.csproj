@@ -96,13 +96,9 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AutoRejection\AutomationCalculator.csproj">
+    <ProjectReference Include="..\AutomationVerification\AutomationCalculator.csproj">
       <Project>{d7b3530e-4038-446d-a25a-45d6df5b6d45}</Project>
       <Name>AutomationCalculator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EzbobScoringModelCalculator\EzbobScoringModelCalculator.csproj">
-      <Project>{e20b81c9-a226-4463-a2e3-7d2b576a0da8}</Project>
-      <Name>EzbobScoringModelCalculator</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

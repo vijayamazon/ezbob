@@ -278,6 +278,8 @@
 		public double AnualTurnover { get; set; }
 		public double ThreeMonthTurnover { get; set; }
 		public int MpsSeniority { get; set; }
+
+		public bool IsBrokerLead { get; set; }
 	}
 
 	public class ReApprovalData
