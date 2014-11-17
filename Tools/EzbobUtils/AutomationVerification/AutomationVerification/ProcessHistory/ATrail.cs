@@ -216,8 +216,49 @@
 			var oPrimary = new List<ATrace.DBModel>();
 			var oSecondary = new List<ATrace.DBModel>();
 
+			for (int i = 0; i < this.Length; i++)
+				oPrimary.Add(this.m_oSteps[i].ToDBModel(i, true));
 
-			// TODO
+			for (int i = 0; i < oTrail.Length; i++)
+				oSecondary.Add(oTrail.m_oSteps[i].ToDBModel(i, false));
+
+			ConnectionWrapper cw = oDB.GetPersistent();
+
+			cw.BeginTransaction();
+
+			try {
+				oDB.ExecuteNonQuery(
+					"",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", this.CustomerID),
+					new QueryParameter("DecisionID", (int)this.Decision),
+					new QueryParameter("DecisionTime", DateTime.UtcNow),
+					new QueryParameter("UniqueID", this.DiffID),
+					new QueryParameter("DecisionStatusID", (int)this.DecisionStatus),
+					new QueryParameter("InputData", InputData.Serialize()),
+					new QueryParameter("IsPrimary", true),
+					oDB.CreateTableParameter("Traces", (IEnumerable<ATrace.DBModel>)oPrimary)
+				);
+
+				oDB.ExecuteNonQuery(
+					"",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", this.CustomerID),
+					new QueryParameter("DecisionID", (int)oTrail.Decision),
+					new QueryParameter("DecisionTime", DateTime.UtcNow),
+					new QueryParameter("UniqueID", this.DiffID),
+					new QueryParameter("DecisionStatusID", (int)oTrail.DecisionStatus),
+					new QueryParameter("InputData"),
+					new QueryParameter("IsPrimary", false),
+					oDB.CreateTableParameter("Traces", (IEnumerable<ATrace.DBModel>)oSecondary)
+				);
+
+				cw.Commit();
+			}
+			catch (Exception e) {
+				cw.Rollback();
+				m_oLog.Alert(e, "Failed to save decision trail.");
+			} // try
 		} // Save
 
 		#endregion method Save

@@ -1,7 +1,7 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
 	using Ezbob.Database;
 
-	internal class AvailableFunds {
+	public class AvailableFunds {
 		[FieldName("AvailableFunds")]
 		public decimal Available { get; set; }
 

@@ -72,7 +72,8 @@
 					m_oWorstStatuses,
 					m_oPayments,
 					m_oOriginationTime,
-					m_oTurnover
+					m_oTurnover,
+					m_oFunds
 				);
 
 				m_oMetaData.Validate();

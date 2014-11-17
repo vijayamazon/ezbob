@@ -222,10 +222,12 @@
 			var availFunds = new GetAvailableFunds(m_oDB, m_oLog);
 			availFunds.Execute();
 
-			if (nApprovedAmount < availFunds.AvailableFunds)
-				StepDone<EnoughFunds>().Init(nApprovedAmount, availFunds.AvailableFunds);
+			var nAvailFunds = availFunds.AvailableFunds - availFunds.ReservedAmount;
+
+			if (nApprovedAmount < nAvailFunds)
+				StepDone<EnoughFunds>().Init(nApprovedAmount, nAvailFunds);
 			else
-				StepFailed<EnoughFunds>().Init(nApprovedAmount, availFunds.AvailableFunds);
+				StepFailed<EnoughFunds>().Init(nApprovedAmount, nAvailFunds);
 		} // CheckAvailableFunds
 
 		#endregion method CheckAvailableFunds

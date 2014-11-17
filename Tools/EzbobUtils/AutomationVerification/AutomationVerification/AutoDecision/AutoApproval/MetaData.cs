@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.Database;
+	using Newtonsoft.Json;
 
 	public class MetaData {
 		#region constructor
@@ -14,12 +15,14 @@
 
 		#region properties read from DB
 
+		[JsonIgnore]
 		public string RowType { get; set; }
 
 		public bool IsBrokerCustomer { get; set; }
 		public int NumOfTodayAutoApproval { get; set; }
 		public decimal TodayLoanSum { get; set; }
 
+		[JsonIgnore]
 		public int FraudStatusValue {
 			get { return (int)FraudStatus; }
 			set {
@@ -56,6 +59,7 @@
 
 		#region property IsEmailSendingBanned
 
+		[JsonIgnore]
 		public bool IsEmailSendingBanned {
 			get { return !EmailSendingBanned.HasValue || EmailSendingBanned.Value; } // get
 		} // IsEmailSendingBanned
@@ -64,6 +68,7 @@
 
 		#region property OfferLength 
 
+		[JsonIgnore]
 		public double OfferLength {
 			get {
 				if (!OfferStart.HasValue || !OfferValidUntil.HasValue)
@@ -93,6 +98,7 @@
 
 		#region property OutstandingPrincipal
 
+		[JsonIgnore]
 		public decimal OutstandingPrincipal {
 			get {
 				return TakenLoanAmount - RepaidPrincipal - SetupFees;
@@ -103,6 +109,7 @@
 
 		#region property RepaidRatio
 
+		[JsonIgnore]
 		public decimal RepaidRatio {
 			get {
 				if (Math.Abs(TakenLoanAmount) < 0.00000001m)
