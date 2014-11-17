@@ -1,3 +1,9 @@
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF OBJECT_ID('Decisions') IS NULL
 BEGIN
 	CREATE TABLE Decisions (
@@ -46,10 +52,12 @@ FROM
 	LEFT JOIN Decisions e ON n.DecisionID = e.DecisionID
 WHERE
 	e.DecisionID IS NULL
+GO
 
 -------------------------------------------------------------------------------
 
 DROP TABLE #d
+GO
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
