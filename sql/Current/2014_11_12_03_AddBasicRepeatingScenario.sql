@@ -14,3 +14,10 @@ BEGIN
 	INSERT INTO PricingModelScenarios (ScenarioName, ConfigName, ConfigValue) VALUES ('Basic Repeating', 'BrokerSetupFee', 0)
 END
 GO
+
+IF EXISTS (SELECT 1 FROM PricingModelScenarios WHERE ScenarioName = 'Basic Repeating' AND ScenarioId IS NULL)
+BEGIN
+	UPDATE PricingModelScenarios SET ScenarioId = 6 WHERE ScenarioName = 'Basic Repeating' AND ScenarioId IS NULL
+END
+GO
+
