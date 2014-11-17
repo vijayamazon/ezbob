@@ -421,11 +421,15 @@
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			if (isHomeOwnerAccordingToLandRegistry) {
+			if (isHomeOwnerAccordingToLandRegistry)
+			{
+				Log.Info("Capped for home owner according to land registry");
 				loanOfferReApprovalSum = Math.Min(loanOfferReApprovalSum, dataGatherer.MaxCapHomeOwner);
 				offeredCreditLine      = Math.Min(offeredCreditLine,      dataGatherer.MaxCapHomeOwner);
 			}
-			else {
+			else
+			{
+				Log.Info("Capped for not home owner");
 				loanOfferReApprovalSum = Math.Min(loanOfferReApprovalSum, dataGatherer.MaxCapNotHomeOwner);
 				offeredCreditLine      = Math.Min(offeredCreditLine,      dataGatherer.MaxCapNotHomeOwner);
 			} // if
