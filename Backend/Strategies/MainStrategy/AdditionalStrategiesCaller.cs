@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy
 {
-	using System.Collections.Generic;
 	using Experian;
 	using EzBob.Models;
 	using Ezbob.Database;
@@ -36,49 +35,30 @@
 			this.appSortCode = appSortCode;
 		}
 
-		public List<string> Call()
+		public void Call()
 		{
-			var consumerCaisDetailWorstStatuses = new List<string>();
 			var strat = new ExperianConsumerCheck(customerId, null, false, db, log);
 			strat.Execute();
-
-			// TODO: load from DB within dataGatherer.Gather()
-			if (strat.Result != null && strat.Result.Cais != null)
-			{
-				foreach (var caisDetails in strat.Result.Cais)
-				{
-					consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
-				}
-			}
 
 			if (typeOfBusiness != "Entrepreneur")
 			{
 				db.ForEachRowSafe((sr, bRowsetStart) =>
-				{
-					int appDirId = sr["DirId"];
-					string appDirName = sr["DirName"];
-					string appDirSurname = sr["DirSurname"];
-
-					if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
-						return ActionResult.Continue;
-
-					var directorExperianConsumerCheck = new ExperianConsumerCheck(customerId, appDirId, false, db, log);
-					directorExperianConsumerCheck.Execute();
-
-					// TODO: load from DB within dataGatherer.Gather()
-					if (directorExperianConsumerCheck.Result != null && directorExperianConsumerCheck.Result.Cais != null)
 					{
-						foreach (var caisDetails in directorExperianConsumerCheck.Result.Cais)
-						{
-							consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
-						}
-					}
+						int appDirId = sr["DirId"];
+						string appDirName = sr["DirName"];
+						string appDirSurname = sr["DirSurname"];
 
-					return ActionResult.Continue;
-				},
-									"GetCustomerDirectorsForConsumerCheck",
-									CommandSpecies.StoredProcedure,
-									new QueryParameter("CustomerId", customerId)
+						if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
+							return ActionResult.Continue;
+
+						var directorExperianConsumerCheck = new ExperianConsumerCheck(customerId, appDirId, false, db, log);
+						directorExperianConsumerCheck.Execute();
+
+						return ActionResult.Continue;
+					},
+				                  "GetCustomerDirectorsForConsumerCheck",
+				                  CommandSpecies.StoredProcedure,
+				                  new QueryParameter("CustomerId", customerId)
 					);
 			}
 
@@ -93,8 +73,6 @@
 			GetBwa();
 
 			GetZooplaData();
-
-			return consumerCaisDetailWorstStatuses;
 		}
 
 		private void GetBwa()

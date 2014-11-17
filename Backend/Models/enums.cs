@@ -4,9 +4,13 @@
 	#region enum NewCreditLineOption
 
 	[DataContract]
-	public enum NewCreditLineOption {
+	public enum NewCreditLineOption
+	{
 		[EnumMember]
 		SkipEverything = 1,
+
+		[EnumMember]
+		SkipEverythingAndApplyAutoRules = 2,
 
 		[EnumMember]
 		UpdateEverythingAndApplyAutoRules = 3,

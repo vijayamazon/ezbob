@@ -89,14 +89,11 @@
 
 		private bool MakeSureMpDataIsSufficient()
 		{
-			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
+			if (!WaitForMarketplacesToFinishUpdates())
 			{
-				if (!WaitForMarketplacesToFinishUpdates())
-				{
-					log.Info("Waiting for marketplace data ended with error");
+				log.Info("Waiting for marketplace data ended with error");
 
-					return true;
-				}
+				return true;
 			}
 
 			return false;

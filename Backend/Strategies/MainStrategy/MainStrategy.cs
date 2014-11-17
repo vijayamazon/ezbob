@@ -5,12 +5,12 @@
 	using System.Globalization;
 
 	using ConfigManager;
-	using EzBob.Backend.Strategies.MailStrategies;
-	using EzBob.Backend.Strategies.MailStrategies.API;
-	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
-	using EzBob.Backend.Strategies.MedalCalculations;
-	using EzBob.Backend.Strategies.Misc;
-	using EzBob.Backend.Strategies.ScoreCalculation;
+	using MailStrategies;
+	using MailStrategies.API;
+	using AutoDecisions;
+	using MedalCalculations;
+	using Misc;
+	using ScoreCalculation;
 	using Ezbob.Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
@@ -51,8 +51,6 @@
 		private int offeredCreditLine;
 		private int modelLoanOffer;
 		private MedalClassification medalClassification;
-
-		private List<string> consumerCaisDetailWorstStatuses;
 		
 		public override string Name { get { return "Main strategy"; } }
 		
@@ -85,17 +83,26 @@
 			}
 
 			// Wait for data to be filled by other strategies
-			staller.Stall();
+			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
+			{
+				staller.Stall();
+			}
 
 			// Gather preliminary data that is required by AdditionalStrategiesCaller
 			dataGatherer.GatherPreliminaryData();
 			wasMainStrategyExecutedBefore = dataGatherer.LastStartedMainStrategyEndTime.HasValue;
 
 			// Trigger other strategies
-			var additionalStrategiesCaller = new AdditionalStrategiesCaller(customerId, wasMainStrategyExecutedBefore,
-				dataGatherer.TypeOfBusiness, dataGatherer.BwaBusinessCheck, dataGatherer.AppBankAccountType,
-			    dataGatherer.AppAccountNumber, dataGatherer.AppSortCode, DB, Log);
-			consumerCaisDetailWorstStatuses = additionalStrategiesCaller.Call();
+			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
+			{
+				var additionalStrategiesCaller = new AdditionalStrategiesCaller(customerId, wasMainStrategyExecutedBefore,
+				                                                                dataGatherer.TypeOfBusiness,
+				                                                                dataGatherer.BwaBusinessCheck,
+				                                                                dataGatherer.AppBankAccountType,
+				                                                                dataGatherer.AppAccountNumber,
+				                                                                dataGatherer.AppSortCode, DB, Log);
+				additionalStrategiesCaller.Call();
+			}
 
 			// Gather Raw Data - most data is gathered here
 			dataGatherer.Gather();
@@ -114,7 +121,10 @@
 			AutoDecisionRejectionResponse autoDecisionRejectionResponse = ProcessRejections();
 
 			// Gather LR data - must be done after rejection decisions
-			GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
+			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
+			{
+				GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
+			}
 
 			// Calculate new medal
 			CalculateNewMedal();
@@ -131,6 +141,7 @@
 			// process the decision - DB + mails
 			ProcessDecision(scoringResult, autoDecisionRejectionResponse);
 
+			// TODO: retire this
 			SetEndTimestamp();
 		}
 
@@ -276,7 +287,7 @@
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (dataGatherer.EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(
+				new AutoDecisions.ReApproval.Agent(
 					customerId,
 					loanOfferReApprovalSum,
 					DB,
@@ -298,7 +309,7 @@
 					dataGatherer.MinExperianConsumerScore,
 					dataGatherer.MinCompanyScore,
 					offeredCreditLine,
-					consumerCaisDetailWorstStatuses,
+					dataGatherer.ConsumerCaisDetailWorstStatuses,
 					dataGatherer.NumOfLoans > 0,
 					medalClassification,
 					DB,
@@ -480,8 +491,8 @@
 				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
 				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
 				new QueryParameter("SystemDecision", systemDecision),
-				new QueryParameter("MedalType", medalType.ToString()),
-				new QueryParameter("ScorePoints", scoringResult),
+				new QueryParameter("MedalType", medalType.ToString()), // TODO: This is the classification of the old medal and should be replaced
+				new QueryParameter("ScorePoints", scoringResult), // TODO: this is the score of the old medal and should be replaced
 				new QueryParameter("ExpirianRating", dataGatherer.ExperianConsumerScore),
 				new QueryParameter("AnnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
 				new QueryParameter("InterestRate", interestRateToUse),

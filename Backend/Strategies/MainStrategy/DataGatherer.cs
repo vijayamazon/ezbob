@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy
 {
 	using System;
+	using System.Collections.Generic;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using Experian;
@@ -54,7 +55,7 @@
 		public string PropertyStatusDescription { get; private set; }
 		public int AllMPsNum { get; private set; }
 		public DateTime AppRegistrationDate { get; private set; }
-		public string TypeOfBusiness;
+		public string TypeOfBusiness { get; private set; }
 		public int NumOfLoans { get; private set; }
 		public int NumOfHmrcMps { get; private set; }
 		public bool IsAlibaba { get; private set; }
@@ -69,6 +70,7 @@
 		public int NumOfYodleeMps { get; private set; }
 		public DateTime? EarliestHmrcLastUpdateDate { get; private set; }
 		public DateTime? EarliestYodleeLastUpdateDate { get; private set; }
+		public List<string> ConsumerCaisDetailWorstStatuses { get; private set; }
 
 		// Online medal
 		public int ModelEzbobSeniority { get; private set; }
@@ -126,6 +128,24 @@
 			GatherOnlineMedalData();
 			GatherTurnoversAndSeniority();
 			GetLastCashRequestData();
+			GetWorstCaisStatuses();
+		}
+
+		private void GetWorstCaisStatuses()
+		{
+			ConsumerCaisDetailWorstStatuses = new List<string>();
+
+			db.ForEachRowSafe((sr, bRowsetStart) =>
+				{
+					string worstStatus = sr["WorstStatus"];
+
+					if (!string.IsNullOrEmpty(worstStatus))
+					{
+						ConsumerCaisDetailWorstStatuses.Add(worstStatus);
+					}
+
+					return ActionResult.Continue;
+				}, "GetWorstCaisStatuses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 		}
 
 		public void GatherPreliminaryData()
