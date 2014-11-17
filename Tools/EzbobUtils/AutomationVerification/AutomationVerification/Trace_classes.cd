@@ -9,15 +9,8 @@
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.AmlCheck">
     <Position X="1.75" Y="8.25" Width="1.75" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" ManuallyRouted="true" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="8.875" />
-        <Point X="3.5" Y="8.875" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAACABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\AutoApproval\AmlCheck.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -52,15 +45,8 @@
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.CustomerStatus">
     <Position X="4.25" Y="9" Width="1.75" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="10.312" />
-        <Point X="6" Y="10.312" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAEAAAQAAAAAAAAAAAACABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAQAAAAAAAAAAAACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\AutoApproval\CustomerStatus.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -82,7 +68,7 @@
   <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.InitialAssignment">
     <Position X="4.25" Y="17" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAAACABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAAACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\AutoApproval\InitialAssignment.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -98,8 +84,8 @@
     <InheritanceLine Type="AutomationCalculator.ProcessHistory.AThresholdTrace" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="11.375" Y="10.25" />
-        <Point X="11.375" Y="9.734" />
-        <Point X="15.125" Y="9.734" />
+        <Point X="11.375" Y="9.745" />
+        <Point X="15.125" Y="9.745" />
         <Point X="15.125" Y="9.434" />
       </Path>
     </InheritanceLine>
@@ -124,15 +110,8 @@
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.ReduceOutstandingPrincipal">
     <Position X="6.75" Y="13.75" Width="2.75" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="15" />
-        <Point X="6.75" Y="15" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAIAAAAAAAAAAAAAAAAAAAAACABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAIAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\AutoApproval\ReduceOutstandingPrincipal.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -155,8 +134,8 @@
     <InheritanceLine Type="AutomationCalculator.ProcessHistory.AThresholdTrace" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="11.375" Y="10.25" />
-        <Point X="11.375" Y="9.734" />
-        <Point X="13.375" Y="9.734" />
+        <Point X="11.375" Y="9.745" />
+        <Point X="13.375" Y="9.745" />
         <Point X="13.375" Y="10" />
       </Path>
     </InheritanceLine>
@@ -178,24 +157,17 @@
       <FileName>ProcessHistory\AutoApproval\TotalLoanCount.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.Turnover">
+  <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.OneMonthTurnover">
     <Position X="14.25" Y="13.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAACA=</HashCode>
-      <FileName>ProcessHistory\AutoApproval\Turnover.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>ProcessHistory\AutoApproval\OneMonthTurnover.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.WorstCaisStatus">
     <Position X="6.75" Y="16.25" Width="2.75" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="16.75" />
-        <Point X="6.75" Y="16.75" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAIAAAAAAICABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAIAAAAAAICAAAAAAA=</HashCode>
       <FileName>ProcessHistory\AutoApproval\WorstCaisStatus.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -216,43 +188,22 @@
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.Common.ExceptionThrown">
     <Position X="6.75" Y="9" Width="1.75" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="10.312" />
-        <Point X="6.75" Y="10.312" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\Common\ExceptionThrown.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.Common.FraudSuspect">
     <Position X="6.75" Y="11.5" Width="2" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="12.875" />
-        <Point X="6.75" Y="12.875" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAACABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\Common\FraudSuspect.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.Common.LatePayment">
     <Position X="1.25" Y="15.75" Width="2.25" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="16.75" />
-        <Point X="3.5" Y="16.75" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAgAAAIAAACAABiABgAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAgAAAIAAACAABiAAgAAAA=</HashCode>
       <FileName>ProcessHistory\Common\LatePayment.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -295,15 +246,8 @@
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.ReApproval.EnoughFunds">
     <Position X="3.75" Y="11.75" Width="2.25" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="12.875" />
-        <Point X="6" Y="12.875" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACABAAAAA=</HashCode>
+      <HashCode>AAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\ReApproval\EnoughFunds.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -317,7 +261,7 @@
   <Class Name="AutomationCalculator.ProcessHistory.ReApproval.InitialAssignment">
     <Position X="1.25" Y="10.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\ReApproval\InitialAssignment.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -345,49 +289,29 @@
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.ReApproval.NewMarketplace">
     <Position X="1.5" Y="13" Width="2" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="14.125" />
-        <Point X="3.5" Y="14.125" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAEAAAAACAAAAACABAAAIA=</HashCode>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAEAAAAACAAAAACAAAAAIA=</HashCode>
       <FileName>ProcessHistory\ReApproval\NewMarketplace.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.ReApproval.RejectAfterLacr">
     <Position X="4.25" Y="14.25" Width="1.75" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="8.459" />
-        <Point X="6.5" Y="15.562" />
-        <Point X="6" Y="15.562" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAABAAAAAAAAACABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAABAAAAAAAAACAAAAAAA=</HashCode>
       <FileName>ProcessHistory\ReApproval\RejectAfterLacr.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.ABoolTrace">
     <Position X="8.75" Y="5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAACABBAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAACAABAAAA=</HashCode>
       <FileName>ProcessHistory\ABoolTrace.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.ARangeTrace">
     <Position X="5.75" Y="2.75" Width="1.75" />
-    <InheritanceLine Type="AutomationCalculator.ProcessHistory.ATrace" FixedToPoint="true">
-      <Path>
-        <Point X="6.5" Y="5.75" />
-        <Point X="6.5" Y="5.396" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAAAAiABgAAAA=</HashCode>
+      <HashCode>AAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAAAAiAAgAAAA=</HashCode>
       <FileName>ProcessHistory\ARangeTrace.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -402,22 +326,58 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiABgAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAgAAAA=</HashCode>
       <FileName>ProcessHistory\AThresholdTrace.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.ATrace">
     <Position X="5.25" Y="5.75" Width="2.5" />
+    <NestedTypes>
+      <Class Name="AutomationCalculator.ProcessHistory.ATrace.DBModel" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ProcessHistory\ATrace.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AIAACAAEAAAAAAAEAAAAAAQAEAAAAAAAAAAAABAAAAA=</HashCode>
+      <HashCode>AIAAAAAEAAAAAAAEAAAAAAQAEAAAAAAAAAAAAAIAAAA=</HashCode>
       <FileName>ProcessHistory\ATrace.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AutomationCalculator.ProcessHistory.ANumericTrace">
     <Position X="3.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAiABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAiAAAAAAA=</HashCode>
       <FileName>ProcessHistory\ANumericTrace.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.OneYearTurnover">
+    <Position X="14.5" Y="10" Width="1.75" />
+    <InheritanceLine Type="AutomationCalculator.ProcessHistory.AThresholdTrace" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.375" Y="12.511" />
+        <Point X="11.375" Y="13.125" />
+        <Point X="15.25" Y="13.125" />
+        <Point X="15.25" Y="11.684" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>ProcessHistory\AutoApproval\OneYearTurnover.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutomationCalculator.ProcessHistory.AutoApproval.ThreeMonthsTurnover">
+    <Position X="15.5" Y="11.75" Width="2" />
+    <InheritanceLine Type="AutomationCalculator.ProcessHistory.AThresholdTrace" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.375" Y="12.511" />
+        <Point X="11.375" Y="13.125" />
+        <Point X="15.5" Y="13.125" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

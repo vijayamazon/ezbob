@@ -1,6 +1,8 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
 	using System;
 	using System.Collections.Generic;
+	using DbConstants;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public abstract class ATrail {
@@ -13,6 +15,10 @@
 		#endregion property CustomerID
 
 		public abstract string DecisionName { get; }
+
+		public abstract ITrailInputData InputData { get; }
+
+		public abstract DecisionActions Decision { get; }
 
 		#region property DecisionStatus
 
@@ -53,7 +59,7 @@
 
 		public virtual T Affirmative<T>() where T : ATrace {
 			return Add<T>(DecisionStatus.Affirmative);
-		} // Done
+		} // Affirmative
 
 		#endregion method Affirmative
 
@@ -87,7 +93,7 @@
 				DecisionName,
 				DecisionStatus,
 				string.Join("\n\t", os)
-			);
+				);
 		} // ToString
 
 		#endregion method ToString
@@ -95,6 +101,8 @@
 		#region method EqualsTo
 
 		public virtual bool EqualsTo(ATrail oTrail, bool bQuiet = false) {
+			DiffID = Guid.NewGuid();
+
 			if (oTrail == null) {
 				const string sMsg = "The second trail is not specified.";
 				m_oDiffNotes.Add(sMsg);
@@ -110,7 +118,7 @@
 					"This trail is of for decision '{0}' while the second one is for '{1}'.",
 					this.DecisionName,
 					oTrail.DecisionName
-				);
+					);
 
 				m_oDiffNotes.Add(sMsg);
 
@@ -130,7 +138,7 @@
 					this.DecisionStatus,
 					oTrail.DecisionStatus,
 					this.DecisionName
-				);
+					);
 
 				m_oDiffNotes.Add(sMsg);
 
@@ -142,7 +150,7 @@
 				string sMsg = string.Format(
 					"Different number of steps in the trail: {0} in this vs {1} in the second.",
 					this.Length, oTrail.Length
-				);
+					);
 
 				m_oDiffNotes.Add(sMsg);
 
@@ -195,6 +203,24 @@
 		} // EqualsTo
 
 		#endregion method EqualsTo
+
+		#region property DiffID
+
+		public virtual Guid DiffID { get; private set; } // DiffID
+
+		#endregion property DiffID
+
+		#region method Save
+
+		public virtual void Save(AConnection oDB, ATrail oTrail) {
+			var oPrimary = new List<ATrace.DBModel>();
+			var oSecondary = new List<ATrace.DBModel>();
+
+
+			// TODO
+		} // Save
+
+		#endregion method Save
 
 		#endregion public
 

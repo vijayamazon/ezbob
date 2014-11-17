@@ -3,6 +3,7 @@
 	using ConfigManager;
 	using System;
 	using System.Linq;
+	using DbConstants;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;

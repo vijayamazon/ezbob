@@ -1,7 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Common {
-	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.Database;
-	using Newtonsoft.Json;
 
 	public class FraudSuspect : ATrace {
 		#region constructor
@@ -18,9 +16,5 @@
 		} // Init
 
 		public FraudStatus FraudStatus { get; private set; }
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(new List<string> { FraudStatus.ToString() });
-		} // GetInitArgs
 	} // class FraudSuspect
 } // namespace

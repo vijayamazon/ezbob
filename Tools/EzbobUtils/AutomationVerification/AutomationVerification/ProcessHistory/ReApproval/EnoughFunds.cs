@@ -1,7 +1,4 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
-	using System.Collections.Generic;
-	using Newtonsoft.Json;
-
 	public class EnoughFunds : ATrace {
 		public EnoughFunds(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
@@ -20,9 +17,5 @@
 
 		public decimal ApprovedAmount { get; private set; }
 		public decimal AvailableFunds { get; private set; }
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(new List<decimal>{ ApprovedAmount, AvailableFunds });
-		} // GetInitArgs
 	}  // class EnoughFunds
 } // namespace

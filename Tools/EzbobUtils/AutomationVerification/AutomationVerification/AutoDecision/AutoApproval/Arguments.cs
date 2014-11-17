@@ -1,5 +1,5 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
-	internal class Arguments {
+	public class Arguments {
 		#region constructor
 
 		public Arguments(int nCustomerID, decimal nSystemCalculatedAmount) {

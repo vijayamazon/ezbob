@@ -2,7 +2,7 @@
 	using System;
 	using AutomationCalculator.ProcessHistory.Common;
 
-	internal class Payment {
+	public class Payment {
 		public int LoanID { get; set; }
 		public int ScheduleID { get; set;} 
 		public DateTime ScheduleDate { get; set;} 

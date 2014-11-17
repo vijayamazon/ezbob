@@ -1,7 +1,4 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
-	using System.Collections.Generic;
-	using Newtonsoft.Json;
-
 	public abstract class ANumericTrace : ATrace {
 		public virtual decimal Value { get; private set; }
 
@@ -14,14 +11,6 @@
 		} // Init
 
 		#endregion method Init
-
-		#region method GetInitArgs
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(new List<decimal> { Value });
-		} // GetInitArgs
-
-		#endregion method GetInitArgs
 
 		#region constructor
 

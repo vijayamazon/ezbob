@@ -5,7 +5,7 @@
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
-	internal class Configuration {
+	public class Configuration {
 		#region public
 
 		#region constructor

@@ -1,8 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
 	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
-	using Newtonsoft.Json;
 
 	public class NewMarketplace : ATrace {
 		#region constructor
@@ -40,9 +38,5 @@
 		public string MpName { get; private set; }
 		public string MpType { get; private set; }
 		public DateTime MpAddTime { get; private set; }
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(new List<object> { MpID, MpName, MpType, MpAddTime });
-		} // GetInitArgse
 	} // class NewMarketplace
 } // namespace

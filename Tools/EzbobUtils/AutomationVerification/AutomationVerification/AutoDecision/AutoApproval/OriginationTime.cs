@@ -4,7 +4,7 @@
 	using Ezbob.Database;
 	using JetBrains.Annotations;
 
-	internal class OriginationTime {
+	public class OriginationTime {
 		#region public
 
 		#region constructor

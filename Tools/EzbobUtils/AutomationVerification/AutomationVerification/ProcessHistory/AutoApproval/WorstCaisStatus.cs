@@ -1,7 +1,6 @@
 namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	using System.Collections.Generic;
 	using System.Linq;
-	using Newtonsoft.Json;
 
 	public class WorstCaisStatus : ATrace {
 		public WorstCaisStatus(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
@@ -34,9 +33,5 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 				);
 			} // if
 		} // Init
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(new List<IEnumerable<string>> { FoundForbiddenStatuses, AllCustomerStatuses, AllowedStatuses });
-		} // GetInitArgs
 	} // class WorstCaisStatus
 } // namespace

@@ -64,6 +64,17 @@
 
 				m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
 
+				Trail.MyInputData.Init(
+					DateTime.UtcNow,
+					m_oCfg,
+					m_oArgs,
+					m_oMetaData,
+					m_oWorstStatuses,
+					m_oPayments,
+					m_oOriginationTime,
+					m_oTurnover
+				);
+
 				m_oMetaData.Validate();
 
 				// Once a step is not passed there is no need to continue result-wise. However the
@@ -270,8 +281,25 @@
 				decimal nThreshold = pair.Value.Item1;
 				TimePeriodEnum nPeriod = pair.Value.Item2;
 
-				Turnover oTrace = (nTurnover > nThreshold) ? StepDone<Turnover>() : StepFailed<Turnover>();
-				oTrace.PeriodName = nPeriod.ToString();
+				AThresholdTrace oTrace = null;
+
+				switch (nPeriod) {
+				case TimePeriodEnum.Month:
+					oTrace = (nTurnover > nThreshold) ? StepDone<OneMonthTurnover>() : StepFailed<OneMonthTurnover>();
+					break;
+
+				case TimePeriodEnum.Month3:
+					oTrace = (nTurnover > nThreshold) ? StepDone<ThreeMonthsTurnover>() : StepFailed<ThreeMonthsTurnover>();
+					break;
+
+				case TimePeriodEnum.Year:
+					oTrace = (nTurnover > nThreshold) ? StepDone<OneYearTurnover>() : StepFailed<OneYearTurnover>();
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException();
+				} // switch
+
 				oTrace.Init(nTurnover, nThreshold);
 			} // for each
 		} // CheckTurnovers

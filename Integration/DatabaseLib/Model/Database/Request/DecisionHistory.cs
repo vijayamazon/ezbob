@@ -3,6 +3,7 @@
 	using System;
 	using System.Linq;
 	using ApplicationMng.Repository;
+	using DbConstants;
 	using Iesi.Collections.Generic;
 	using Model.Loans;
 	using FluentNHibernate.Mapping;
@@ -10,17 +11,6 @@
 	using NHibernate.Type;
 	using System.Collections.Generic;
 	using UserManagement;
-
-	public enum DecisionActions
-	{
-		Approve   = 1,
-		Reject    = 2,
-		Escalate  = 3,
-		Pending   = 4,
-		Waiting   = 5,
-		ReApprove = 6,
-		ReReject  = 7,
-	}
 
 	public class CreditResultDecisionActionsType : EnumStringType<DecisionActions>
 	{

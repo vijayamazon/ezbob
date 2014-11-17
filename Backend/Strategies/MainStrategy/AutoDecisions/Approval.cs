@@ -76,11 +76,9 @@
 				CheckAutoApprovalConformance(availFunds.ReservedAmount);
 				m_oSecondaryImplementation.MakeDecision();
 
-				Guid oDiffID = Guid.NewGuid();
-
 				bool bSuccess = m_oTrail.EqualsTo(m_oSecondaryImplementation.Trail);
 
-				// TODO: save to db difference between the trails under id oDiffID
+				m_oTrail.Save(db, m_oSecondaryImplementation.Trail);
 
 				if (bSuccess) {
 					log.Info("Both Auto Approval implementations have reached the same decision: {0}", m_oTrail.HasDecided ? "approved" : "not approved");
@@ -91,7 +89,7 @@
 						"Switching to manual decision: Auto Approval implementations " +
 						"have not reached the same decision for customer {0}, diff id is {1}.",
 						customerId,
-						oDiffID.ToString("N")
+						m_oTrail.DiffID.ToString("N")
 					);
 
 					response.AutoApproveAmount = 0;
@@ -328,14 +326,25 @@
 		) {
 			int turnover = (int)strategyHelper.GetTurnoverForPeriod(mpAnalysis, nPeriod);
 
-			Turnover oTrace;
+			AThresholdTrace oTrace;
 
-			if (turnover < nThreshold)
-				oTrace = (Turnover)StepFailed<Turnover>();
-			else
-				oTrace = (Turnover)StepDone<Turnover>();
+			switch (nPeriod) {
+			case TimePeriodEnum.Month:
+				oTrace = (turnover > nThreshold) ? StepDone<OneMonthTurnover>() : StepFailed<OneMonthTurnover>();
+				break;
 
-			oTrace.PeriodName = nPeriod.ToString();
+			case TimePeriodEnum.Month3:
+				oTrace = (turnover > nThreshold) ? StepDone<ThreeMonthsTurnover>() : StepFailed<ThreeMonthsTurnover>();
+				break;
+
+			case TimePeriodEnum.Year:
+				oTrace = (turnover > nThreshold) ? StepDone<OneYearTurnover>() : StepFailed<OneYearTurnover>();
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+
 			oTrace.Init(turnover, nThreshold);
 		} // CheckOnePeriodTurnover
 

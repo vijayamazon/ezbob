@@ -1,6 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
 	using System.Collections.Generic;
-	using Newtonsoft.Json;
 
 	public class InitialAssignment : ATrace {
 		public InitialAssignment(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
@@ -22,9 +21,5 @@
 		} // Init
 
 		public List<string> ValidationErrors { get; private set; }
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(ValidationErrors);
-		} // GetInitArgs
 	}  // class InitialAssignment
 } // namespace

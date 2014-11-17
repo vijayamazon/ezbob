@@ -80,6 +80,9 @@
     <Compile Include="ProcessHistory\ARangeTrace.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\OneYearTurnover.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\OneMonthTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\TotalLoanCount.cs" />
     <Compile Include="ProcessHistory\Common\Complete.cs" />
     <Compile Include="ProcessHistory\AutoApproval\BusinessScore.cs" />
@@ -95,7 +98,6 @@
     <Compile Include="ProcessHistory\AutoApproval\TodayLoans.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OutstandingOffers.cs" />
     <Compile Include="ProcessHistory\AutoApproval\MarketplaceSeniority.cs" />
-    <Compile Include="ProcessHistory\AutoApproval\Turnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\CustomerStatus.cs" />
     <Compile Include="ProcessHistory\AutoApproval\DefaultAccounts.cs" />
     <Compile Include="ProcessHistory\Common\ExceptionThrown.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="ProcessHistory\ABoolTrace.cs" />
     <Compile Include="ProcessHistory\AThresholdTrace.cs" />
     <Compile Include="ProcessHistory\DecisionStatus.cs" />
+    <Compile Include="ProcessHistory\ITrailInputData.cs" />
     <Compile Include="ProcessHistory\ReApproval\ApprovedAmount.cs" />
     <Compile Include="ProcessHistory\ReApproval\Charges.cs" />
     <Compile Include="ProcessHistory\ReApproval\InitialAssignment.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="ProcessHistory\ANumericTrace.cs" />
     <Compile Include="ProcessHistory\ATrail.cs" />
     <Compile Include="ProcessHistory\ATrace.cs" />
+    <Compile Include="ProcessHistory\Trails\ApprovalInputData.cs" />
     <Compile Include="ProcessHistory\Trails\ApprovalTrail.cs" />
     <Compile Include="ProcessHistory\Trails\ReapprovalTrail .cs" />
     <Compile Include="ProcessHistory\Trails\RejectionTrail.cs" />

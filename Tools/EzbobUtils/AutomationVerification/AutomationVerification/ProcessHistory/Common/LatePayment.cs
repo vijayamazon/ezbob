@@ -1,9 +1,7 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Common {
 	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
 	using Ezbob.Utils.Lingvo;
-	using Newtonsoft.Json;
 
 	public class LatePayment : ATrace {
 		#region constructor
@@ -67,9 +65,5 @@
 		public int Delay {
 			get { return (int)(TransactionTime - ScheduleDate).TotalDays; } // get
 		} // Delay
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(new List<object> { LoanID, ScheduleID, ScheduleDate, TransactionID, TransactionTime });
-		} // GetInitArgs
 	} // class LatePayment
 } // namespace

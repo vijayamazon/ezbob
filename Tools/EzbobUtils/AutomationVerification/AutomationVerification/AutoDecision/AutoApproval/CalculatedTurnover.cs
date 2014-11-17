@@ -6,7 +6,7 @@
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
-	internal class CalculatedTurnover {
+	public class CalculatedTurnover {
 		#region public
 
 		#region constructor

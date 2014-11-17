@@ -1,7 +1,4 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	using System.Collections.Generic;
-	using Newtonsoft.Json;
-
 	public class ReduceOutstandingPrincipal : ATrace {
 		public ReduceOutstandingPrincipal(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
@@ -20,9 +17,5 @@
 
 		public decimal OutstandingPrincipal { get; private set; }
 		public decimal NewAutoApprovedAmount { get; private set; }
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(new List<decimal> { OutstandingPrincipal, NewAutoApprovedAmount });
-		} // GetInitArgs
 	}  // class ReduceOutstandingPrincipal
 } // namespace

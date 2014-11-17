@@ -2,6 +2,18 @@
 	public abstract class ATrace {
 		#region public
 
+		#region class DBModel
+
+		public class DBModel {
+			public int Position { get; set; }
+			public bool IsPrimary { get; set; }
+			public int DecisionStatusID { get; set; }
+			public string Name { get; set; }
+			public string Comment { get; set; }
+		} // class DBModel
+
+		#endregion class DBModel
+
 		#region property Name
 
 		public virtual string Name {
@@ -36,28 +48,28 @@
 
 		#endregion method ToString
 
-		public abstract string GetInitArgs();
+		#region method ToModel
 
-		public virtual string GetProperties() {
-			return null;
-		} // GetProperties
+		public virtual DBModel ToDBModel(int nPosition, bool bIsPrimary) {
+			return new DBModel {
+				Position = nPosition,
+				IsPrimary = bIsPrimary,
+				DecisionStatusID = (int)this.DecisionStatus,
+				Name = this.GetType().FullName,
+			};
+		} // ToDBModel
+
+		#endregion method ToModel
 
 		#endregion public
 
 		#region protected
-
-		#region constructor
 
 		protected ATrace(int nCustomerID, DecisionStatus nDecisionStatus) {
 			CustomerID = nCustomerID;
 			DecisionStatus = nDecisionStatus;
 		} // constructor
 
-		#endregion constructor
-
 		#endregion protected
-
-		#region private
-		#endregion private
 	} // class ATrace
 } // namespace

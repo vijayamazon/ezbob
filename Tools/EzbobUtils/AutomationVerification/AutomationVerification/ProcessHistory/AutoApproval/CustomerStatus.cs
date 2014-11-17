@@ -1,7 +1,4 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	using System.Collections.Generic;
-	using Newtonsoft.Json;
-
 	public class CustomerStatus : ATrace {
 		public CustomerStatus(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
 		} // constructor
@@ -20,9 +17,5 @@
 
 		public string StatusName { get; private set; }
 		public bool IsEnabled { get; private set; }
-
-		public override string GetInitArgs() {
-			return JsonConvert.SerializeObject(new List<string> { StatusName });
-		} // GetInitArgs
 	}  // class CustomerStatus
 } // namespace

@@ -1,4 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Trails {
+	using DbConstants;
 	using Ezbob.Logger;
 
 	public class ReapprovalTrail : ATrail {
@@ -16,6 +17,24 @@
 		} // DecisionName
 
 		#endregion property DecisionName
+
+		#region property Decision
+
+		public override DecisionActions Decision {
+			get { return DecisionActions.ReApprove; }
+		} // Decision
+
+		#endregion property Decision
+
+		#region property InputData
+
+		public override ITrailInputData InputData {
+			get { return null; } // TODO { return MyInputData; }
+		} // InputData
+
+		// public virtual ApprovalInputData MyInputData { get; private set; }
+
+		#endregion property InputData
 
 		#region method UpdateDecision
 
