@@ -200,6 +200,8 @@
 			) {
 				IsTotal = false;
 
+				WriteOffTotalBalance = 0;
+
 				Transactions = new SortedSet<int>();
 				LoanCharges = new SortedSet<int>();
 
@@ -240,16 +242,25 @@
 
 			public void UpdateTotal(AccountingLoanBalanceRow row) {
 				LoanID++;
+
 				IssuedAmount += row.IssuedAmount;
 				SetupFee += row.SetupFee;
 				EarnedInterest += row.EarnedInterest;
+				WriteOffEarnedFees += row.WriteOffEarnedFees;
+				WriteOffCashPaid += row.WriteOffCashPaid;
+
+				if (row.CurrentCustomerStatus == CustomerStatus.WriteOff) {
+					WriteOffTotalBalance +=
+						row.IssuedAmount +
+						row.SetupFee +
+						row.EarnedInterest +
+						row.WriteOffEarnedFees -
+						row.WriteOffCashPaid;
+				} // if
+
 				EarnedFees += row.EarnedFees;
 				CashPaid += row.CashPaid;
 				NonCashPaid += row.NonCashPaid;
-
-				EarnedFees += row.EarnedFees;
-				WriteOffEarnedFees += row.WriteOffEarnedFees;
-				WriteOffCashPaid += row.WriteOffCashPaid;
 			} // UpdateTotal
 
 			#endregion method UpdateTotal
@@ -338,7 +349,7 @@
 						EarnedFees,
 						CashPaid,
 						NonCashPaid,
-						WriteOffBalance,
+						WriteOffTotalBalance,
 						Balance,
 						DBNull.Value,
 						DBNull.Value,
@@ -360,7 +371,7 @@
 						EarnedFees,
 						CashPaid,
 						NonCashPaid,
-						WriteOffBalance,
+						CurrentCustomerStatus == CustomerStatus.WriteOff ? (object)WriteOffBalance : (object)DBNull.Value,
 						Balance,
 						LastInPeriodCustomerStatus.ToString(),
 						LastStatusChangeDate,
@@ -383,6 +394,12 @@
 			} // WriteOffBalance
 
 			#endregion property WriteOffBalance
+
+			#region property WriteOffTotalBalance
+
+			private decimal WriteOffTotalBalance { get; set; } // WriteOffBalance
+
+			#endregion property WriteOffTotalBalance
 
 			#region property Balance
 
