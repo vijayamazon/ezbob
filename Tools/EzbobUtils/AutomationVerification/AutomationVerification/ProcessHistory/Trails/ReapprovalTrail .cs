@@ -1,4 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Trails {
+	using AutoDecision.AutoReApproval;
 	using DbConstants;
 	using Ezbob.Logger;
 
@@ -29,10 +30,10 @@
 		#region property InputData
 
 		public override ITrailInputData InputData {
-			get { return null; } // TODO { return MyInputData; }
+			get { return MyInputData; }
 		} // InputData
 
-		// public virtual ApprovalInputData MyInputData { get; private set; }
+		public virtual ReApprovalInputData MyInputData { get; private set; }
 
 		#endregion property InputData
 

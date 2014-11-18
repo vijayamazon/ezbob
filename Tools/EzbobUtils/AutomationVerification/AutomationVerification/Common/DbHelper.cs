@@ -3,6 +3,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using AutomationCalculator.AutoDecision.AutoApproval;
+	using AutomationCalculator.AutoDecision.AutoReApproval;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -390,6 +392,29 @@
 		public PricingScenarioModel GetPricingScenario(int amount, bool hasLoans)
 		{
 			var model = _db.FillFirst<PricingScenarioModel>("AV_PricingScenario", new QueryParameter("Amount", amount), new QueryParameter("HasLoans", hasLoans));
+			return model;
+		}
+
+		public OriginationTime GetCustomerMarketPlacesOriginationTimes(int customerId) {
+			var srList = _db.ExecuteEnumerable("LoadCustomerMarketplaceOriginationTimes", CommandSpecies.StoredProcedure,
+			                               new QueryParameter("CustomerId", customerId));
+			var originationTime = new OriginationTime();
+			foreach (var safeReader in srList) {
+				originationTime.Process(safeReader);
+			}
+			return originationTime;
+		}
+
+		public AvailableFunds GetAvailableFunds()
+		{
+			var availableFunds = new AvailableFunds();
+			_db.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(availableFunds);
+			return availableFunds;
+		}
+
+		public AutoReApprovalInputDataModelDb GetAutoReApprovalInputData(int customerId) {
+			var model = _db.FillFirst<AutoReApprovalInputDataModelDb>("AV_ReApprovalData", CommandSpecies.StoredProcedure,
+			                                              new QueryParameter("CustomerId", customerId));
 			return model;
 		}
 

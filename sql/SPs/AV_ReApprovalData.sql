@@ -11,22 +11,22 @@ AS
 BEGIN
 
 	--is fraud suspect
-	DECLARE @IsFraudSuspect BIT = 0
+	DECLARE @FraudStatus NVARCHAR(50)
 	
-	SELECT @IsFraudSuspect = CASE WHEN c.FraudStatus=0 THEN 0 ELSE 1 END 
+	SELECT @FraudStatus = c.FraudStatus
 	FROM Customer c 
 	WHERE c.Id=@CustomerId
 
 	--last manual approve
 	DECLARE @ManualApproveDate DATETIME 
-	DECLARE @OfferedAmount INT	
+	DECLARE @ApprovedAmount INT	
 	DECLARE @ManualApproveRequestId INT = (SELECT max(Id)
   										   FROM CashRequests 
   										   WHERE IdCustomer=@CustomerId 
   										   AND IdUnderwriter IS NOT NULL 
   										   AND UnderwriterDecision='Approved')
   										   
-	SELECT @ManualApproveDate = c.UnderwriterDecisionDate, @OfferedAmount = c.ManagerApprovedSum
+	SELECT @ManualApproveDate = c.UnderwriterDecisionDate, @ApprovedAmount = c.ManagerApprovedSum
 	FROM CashRequests c
 	WHERE Id = @ManualApproveRequestId
 	
@@ -111,16 +111,16 @@ BEGIN
 	 
 ----------------------------data---------------------------------------
 SELECT 
-		@IsFraudSuspect AS IsFraudSuspect,
+		@FraudStatus AS FraudStatus,
 		@ManualApproveDate AS ManualApproveDate, 
-		@OfferedAmount AS OfferedAmount, 
+		@ApprovedAmount AS ApprovedAmount, 
 		@WasRejected AS WasRejected,
 		@WasLate AS WasLate,
 		@MaxLateDays AS MaxLateDays,
 		@NewDataSourceAdded AS NewDataSourceAdded,
 		@NumOutstandingLoans AS NumOutstandingLoans,
 		@HasLoanCharges AS HasLoanCharges,
-		@TookLoanAmount AS LoanAmount,
+		@TookLoanAmount AS TookLoanAmount,
 		@RepaidPrincipal AS RepaidPrincipal,
 		@SetupFee AS SetupFee,
 		

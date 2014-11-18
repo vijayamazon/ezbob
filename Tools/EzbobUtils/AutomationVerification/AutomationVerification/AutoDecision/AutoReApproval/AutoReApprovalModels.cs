@@ -2,18 +2,22 @@
 
 namespace AutomationCalculator.AutoDecision.AutoReApproval
 {
+	using EZBob.DatabaseLib.Model.Database;
+	using Newtonsoft.Json;
+	using ProcessHistory;
+
 	public class AutoReApprovalInputDataModelDb
 	{
-		public bool IsFraudSuspect { get; set; }
+		public int FraudStatus { get; set; }
 		public DateTime? ManualApproveDate { get; set; }
-		public int OfferedAmount { get; set; }
+		public int ApprovedAmount { get; set; }
 		public bool WasRejected { get; set; }
 		public bool WasLate { get; set; }
 		public int MaxLateDays { get; set; }
 		public bool NewDataSourceAdded { get; set; }
 		public int NumOutstandingLoans { get; set; }
 		public bool HasLoanCharges { get; set; }
-		public int LoanAmount { get; set; }
+		public int TookLoanAmount { get; set; }
 		public decimal RepaidPrincipal { get; set; }
 		public decimal SetupFee { get; set; }
 
@@ -23,10 +27,27 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 		public int AutoReApproveMaxNumOfOutstandingLoans { get; set; }
 	}
 
-	public class AutoReApprovalInputDataModel
+	public class ReApprovalInputData : ITrailInputData
 	{
-		public DateTime AsOfDate { get; set; }
-		public bool IsFraudSuspect { get; set; }
+		public void Init(DateTime dataAsOf, ReApprovalInputData data)
+		{
+			DataAsOf = dataAsOf;
+			FraudStatus = data.FraudStatus;
+			ManualApproveDate = data.ManualApproveDate;
+			WasLate = data.WasLate;
+			WasRejected = data.WasRejected;
+			MaxLateDays = data.MaxLateDays;
+			NewDataSourceAdded = data.NewDataSourceAdded;
+			NumOutstandingLoans = data.NumOutstandingLoans;
+			HasLoanCharges = data.HasLoanCharges;
+			ReApproveAmount = data.ReApproveAmount;
+			AvaliableFunds = data.AvaliableFunds;
+			AutoReApproveMaxLacrAge = data.AutoReApproveMaxLacrAge;
+			AutoReApproveMaxLatePayment = data.AutoReApproveMaxLatePayment;
+			AutoReApproveMaxNumOfOutstandingLoans = data.AutoReApproveMaxNumOfOutstandingLoans;
+		}
+		public DateTime DataAsOf { get; private set; }
+		public FraudStatus FraudStatus { get; set; }
 		public DateTime? ManualApproveDate { get; set; }
 		public bool WasRejected { get; set; }
 		public bool WasLate { get; set; }
@@ -35,10 +56,33 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 		public int NumOutstandingLoans { get; set; }
 		public bool HasLoanCharges { get; set; }
 		public decimal ReApproveAmount { get; set; }
-		public int AvaliableFunds { get; set; }
+		public decimal AvaliableFunds { get; set; }
 		//configs
 		public int AutoReApproveMaxLacrAge { get; set; }
 		public int AutoReApproveMaxLatePayment { get; set; }
 		public int AutoReApproveMaxNumOfOutstandingLoans { get; set; }
+
+		public string Serialize()
+		{
+			return JsonConvert.SerializeObject(this);
+		}
+	}
+
+	public class ReApprovalResult
+	{
+
+		public ReApprovalResult(bool isAutoReApproved, int reApproveAmount)
+		{
+			IsAutoReApproved = isAutoReApproved;
+			ReApproveAmount = reApproveAmount;
+		}
+
+		public bool IsAutoReApproved { get; private set; }
+		public int ReApproveAmount { get; private set; }
+
+		public override string ToString()
+		{
+			return IsAutoReApproved ? "ReApproved for " + ReApproveAmount : "Not ReApproved";
+		}
 	}
 }

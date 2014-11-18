@@ -217,7 +217,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AutomationVerification", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationCalculator", "Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj", "{D7B3530E-4038-446D-A25A-45D6DF5B6D45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationVerification", "Tools\EzbobUtils\AutomationVerification\AutomationVerificationClient\AutomationVerification.csproj", "{87D86A46-A199-4D0A-A597-7769B7578533}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationVerificationClient", "Tools\EzbobUtils\AutomationVerification\AutomationVerificationClient\AutomationVerificationClient.csproj", "{87D86A46-A199-4D0A-A597-7769B7578533}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
