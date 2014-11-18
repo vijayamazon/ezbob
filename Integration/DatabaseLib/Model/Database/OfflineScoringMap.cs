@@ -10,8 +10,10 @@
 			Id(x => x.Id).GeneratedBy.Native().Column("Id");
 			Map(x => x.IsActive);
 			Map(x => x.CustomerId);
-            Map(x => x.Medal);
+			Map(x => x.Medal);
+			Map(x => x.TotalScore);
 			Map(x => x.TotalScoreNormalized);
+			Map(x => x.CalculationTime);
 			Map(x => x.Error).Length(500);
         }
     }

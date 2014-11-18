@@ -298,7 +298,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool IsActive { get; set; }
 		public virtual int CustomerId { get; set; }
 		public virtual string Medal { get; set; }
+		public virtual decimal TotalScore { get; set; }
 		public virtual decimal TotalScoreNormalized { get; set; }
+		public virtual DateTime CalculationTime { get; set; }
 		public virtual string Error { get; set; }
 	}
 

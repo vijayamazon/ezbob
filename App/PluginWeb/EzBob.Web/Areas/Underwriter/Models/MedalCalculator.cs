@@ -49,9 +49,20 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public MedalCalculators(EZBob.DatabaseLib.Model.Database.Customer customer)
 		{
 			var scorRes = customer.ScoringResults.ToList();
-			if (scorRes.Count == 0) return;
+			var newScorRes = customer.MedalCalculations.ToList();
+			if (scorRes.Count == 0 && newScorRes.Count == 0) return;
 
-			History.MedalHistories = scorRes.Select(BuildScore).OrderBy(x => x.Date);
+			var newMedalHistories = newScorRes.Select(BuildNewScore).ToList();
+
+			DateTime? firstNewMedalDate = null;
+			if (newMedalHistories.Any())
+			{
+				firstNewMedalDate = newMedalHistories.Min(x => x.Date);
+			}
+			var oldMedalHistories = scorRes.Where(x => firstNewMedalDate == null || x.ScoreDate < firstNewMedalDate).Select(BuildScore);
+
+			newMedalHistories.AddRange(oldMedalHistories);
+			History.MedalHistories = newMedalHistories.OrderBy(x => x.Date);
 			
 			var maxdate = scorRes.Max(s => s.ScoreDate);
 			var scoringResult = scorRes.FirstOrDefault(s => s.ScoreDate == maxdate);
@@ -81,6 +92,17 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				Points = scoringResult.ScorePoints,
 				Result = scoringResult.ScoreResult,
 				Date = scoringResult.ScoreDate
+			};
+		}
+
+		private Score BuildNewScore(MedalCalculations medalCalculation)
+		{
+			return new Score
+			{
+				Medal = medalCalculation.Medal,
+				Points = (double)medalCalculation.TotalScore,
+				Result = (double)medalCalculation.TotalScoreNormalized,
+				Date = medalCalculation.CalculationTime
 			};
 		}
 
