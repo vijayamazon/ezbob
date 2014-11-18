@@ -6,6 +6,7 @@
 	using ProcessHistory.Common;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using ProcessHistory.Trails;
 
 	public class RejectionAgent
 	{
@@ -17,26 +18,26 @@
 		{
 			_customerId = nCustomerID;
 			_isAutoRejected = false;
+
+			Trail = new RejectionTrail(nCustomerID, oLog);
 		} // constructor
 
 		#endregion constructor
 
 		#region method MakeDecision
 
-		// public void MakeDecision(AutoDecisionResponse response) {
 		public void MakeDecision()
 		{
 			m_oLog.Debug("Checking if auto reject should take place for customer {0}...", _customerId);
-
-
-			try
-			{
-
+			try {
+				CheckRejectionExceptions();
+				Trail.LockDecision();
+				CheckRejections();
 			}
 			catch (Exception e)
 			{
 				m_oLog.Error(e, "Exception during auto rejection.");
-				StepFailed<ExceptionThrown>().Init(e);
+				StepNoDecision<ExceptionThrown>().Init(e);
 			} // try
 
 			m_oLog.Debug(
@@ -45,7 +46,17 @@
 				Trail,
 				_isAutoRejected ? "Auto rejected" : "Not auto rejected"
 			);
-		} // MakeDecision
+		}
+
+		private void CheckRejections() {
+			
+		}
+
+		private void CheckRejectionExceptions() {
+			throw new NotImplementedException();
+		}
+
+// MakeDecision
 
 		#endregion method MakeDecision
 
@@ -68,25 +79,22 @@
 		} // ProcessRow
 
 		#endregion method ProcessRow
-
-
-		#region method StepFailed
-
-		private T StepFailed<T>() where T : ATrace
-		{
-			return Trail.Dunno<T>();
-		} // StepFailed
-
-		#endregion method StepFailed
-
-		#region method StepDone
-
-		private T StepDone<T>() where T : ATrace
+		
+		private T StepReject<T>() where T : ATrace
 		{
 			return Trail.Affirmative<T>();
-		} // StepFailed
+		} // StepReject
 
-		#endregion method StepDone
+		private T StepNoReject<T>() where T : ATrace
+		{
+			return Trail.Negative<T>();
+		} // StepNoReject
+
+		private T StepNoDecision<T>() where T : ATrace
+		{
+			return Trail.Dunno<T>();
+		} // StepReject
+
 
 		#region fields
 

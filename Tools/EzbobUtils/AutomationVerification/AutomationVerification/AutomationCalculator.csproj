@@ -56,6 +56,7 @@
     <Compile Include="AutoDecision\AutoApproval\Payment.cs" />
     <Compile Include="AutoDecision\AutoApproval\CalculatedTurnover.cs" />
     <Compile Include="AutoDecision\AutoApproval\Result.cs" />
+    <Compile Include="AutoDecision\AutoReApproval\AutoReApprovalModels.cs" />
     <Compile Include="AutoDecision\AutoRejectionCalculator.cs" />
     <Compile Include="AutoDecision\AutoRejection\Agent.cs" />
     <Compile Include="Common\Constants.cs" />
@@ -84,6 +85,14 @@
     <Compile Include="ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OneMonthTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\TotalLoanCount.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\BusinessScoreException.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\ConsumerScoreException.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\BrokerClientException.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\ConsumerScore.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\BusinessScore.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\MarketPlaceWithErrorException.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\WasApprovedException.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\AnnualTurnoverException.cs" />
     <Compile Include="ProcessHistory\Common\Complete.cs" />
     <Compile Include="ProcessHistory\AutoApproval\BusinessScore.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ConsumerScore.cs" />
