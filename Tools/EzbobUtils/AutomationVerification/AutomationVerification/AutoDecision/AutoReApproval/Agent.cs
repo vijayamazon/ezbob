@@ -1,16 +1,11 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoReApproval {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using AutoApproval;
 	using Common;
 	using ProcessHistory;
 	using ProcessHistory.Common;
-	using ProcessHistory.AutoApproval;
 	using ProcessHistory.ReApproval;
 	using ProcessHistory.Trails;
 	using EZBob.DatabaseLib.Model.Database;
-	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class Agent {
@@ -59,16 +54,7 @@
 
 			try {
 				Trail.MyInputData.Init(Now, data);
-
-				// Once a step is not passed there is no need to continue result-wise. However the
-				// process continues because we want to pick all the possible reasons for not
-				// approving a customer in order to compare different implementations of the process.
-
-				//if ((m_nApprovedAmount > 0))
-				//	StepDone<InitialAssignment>().Init(m_nApprovedAmount);
-				//else
-				//	StepFailed<InitialAssignment>().Init(m_nApprovedAmount);
-
+				
 				CheckIsFraud();
 				CheckIsLACRTooOld();
 				CheckWasRejected();
@@ -80,6 +66,7 @@
 				CheckAvailableFunds();
 
 				m_nApprovedAmount = (int)data.ReApproveAmount;
+
 				if (m_nApprovedAmount > 0)
 					StepDone<Complete>().Init(m_nApprovedAmount);
 				else
@@ -124,7 +111,7 @@
 		private void CheckHasLoanCharges()
 		{
 			if (!Trail.MyInputData.HasLoanCharges)
-				StepDone<Charges>().Init(1); // Why to retrieve charges amount???
+				StepDone<Charges>().Init(1); // Not retrieving charges amount???
 			else
 				StepFailed<Charges>().Init(0);
 		}
@@ -139,42 +126,42 @@
 
 		private void CheckHasAddedMp()
 		{
-			if (Trail.MyInputData.FraudStatus == FraudStatus.Ok)
-				StepDone<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+			if (!Trail.MyInputData.NewDataSourceAdded)
+				StepDone<NewMarketplace>().Init(Trail.MyInputData.NewDataSourceAdded);
 			else
-				StepFailed<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+				StepFailed<NewMarketplace>().Init(Trail.MyInputData.NewDataSourceAdded);
 		}
 
 		private void CheckHasLatePayment()
 		{
-			if (Trail.MyInputData.FraudStatus == FraudStatus.Ok)
-				StepDone<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+			if (Trail.MyInputData.MaxLateDays <=  Trail.MyInputData.AutoReApproveMaxLatePayment)
+				StepDone<LatePayment>().Init(Trail.MyInputData.MaxLateDays, Trail.MyInputData.AutoReApproveMaxLatePayment);
 			else
-				StepFailed<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+				StepFailed<LatePayment>().Init(Trail.MyInputData.MaxLateDays, Trail.MyInputData.AutoReApproveMaxLatePayment);
 		}
 
 		private void CheckHasLateLoans()
 		{
-			if (Trail.MyInputData.FraudStatus == FraudStatus.Ok)
-				StepDone<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+			if (!Trail.MyInputData.WasLate)
+				StepDone<LateLoans>().Init();
 			else
-				StepFailed<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+				StepFailed<LateLoans>().Init();
 		}
 
 		private void CheckWasRejected()
 		{
-			if (Trail.MyInputData.FraudStatus == FraudStatus.Ok)
-				StepDone<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+			if (!Trail.MyInputData.WasRejected)
+				StepDone<RejectAfterLacr>().Init(1,1);
 			else
-				StepFailed<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+				StepFailed<RejectAfterLacr>().Init(0,0);
 		}
 
-		private void CheckIsLACRTooOld()
-		{
-			if (Trail.MyInputData.FraudStatus == FraudStatus.Ok)
-				StepDone<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+		private void CheckIsLACRTooOld() {
+			var approvedDaysAgo = Trail.MyInputData.ManualApproveDate.HasValue ? (decimal)(Now - Trail.MyInputData.ManualApproveDate.Value).TotalDays : 0.0M;
+			if (Trail.MyInputData.ManualApproveDate.HasValue && approvedDaysAgo <= Trail.MyInputData.AutoReApproveMaxLacrAge)
+				StepDone<LacrTooOld>().Init(approvedDaysAgo, Trail.MyInputData.AutoReApproveMaxLacrAge);
 			else
-				StepFailed<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+				StepFailed<LacrTooOld>().Init(approvedDaysAgo, Trail.MyInputData.AutoReApproveMaxLacrAge);
 		}
 
 		private void CheckIsFraud() {

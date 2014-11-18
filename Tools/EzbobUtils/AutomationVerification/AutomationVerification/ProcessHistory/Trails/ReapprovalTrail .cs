@@ -7,6 +7,7 @@
 		#region constructor
 
 		public ReapprovalTrail(int nCustomerID, ASafeLog oLog) : base (nCustomerID, DecisionStatus.Affirmative, oLog) {
+			MyInputData = new ReApprovalInputData();
 		} // constructor
 
 		#endregion constructor

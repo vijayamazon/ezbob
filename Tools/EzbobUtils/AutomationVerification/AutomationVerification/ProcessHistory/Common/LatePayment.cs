@@ -12,6 +12,26 @@
 		#endregion constructor
 
 		#region method Init
+		public void Init(int delay, int threshhold) {
+			if (DecisionStatus == DecisionStatus.Affirmative)
+			{
+				Comment = string.Format(
+					"customer {0} has no payments that are more than {1} late",
+					CustomerID,
+					Grammar.Number(Threshold, "day")
+				);
+			}
+			else
+			{
+				Comment = string.Format(
+					"customer {0} was {1} late; allowed delay: {2}",
+					CustomerID,
+					Grammar.Number(delay, "day"),
+					Grammar.Number(Threshold, "day")
+				);
+			} // if
+		}
+
 
 		public void Init(
 			int nLoanID,
@@ -60,7 +80,8 @@
 
 		public int Threshold { get; private set; }
 
-		public int Delay {
+		public int Delay
+		{
 			get { return (int)(TransactionTime - ScheduleDate).TotalDays; } // get
 		} // Delay
 	} // class LatePayment

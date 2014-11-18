@@ -213,5 +213,13 @@
 			var model = db.GetAutoReApprovalInputData(14223);
 			Assert.AreEqual(900, model.ApprovedAmount);
 		}
+
+		[Test]
+		public void TestReApprovalAgent() {
+			var agent = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(Log, 14223);
+			var data = agent.GetInputData();
+			agent.MakeDecision(data);
+			Assert.AreEqual(false, agent.Result.IsAutoReApproved);
+		}
 	}
 }

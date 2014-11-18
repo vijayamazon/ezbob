@@ -12,6 +12,12 @@
 
 		#region method Init
 
+		public void Init(bool newMpWasAdded) {
+			Comment = newMpWasAdded
+						  ? string.Format("customer {0} has added a new marketplace", CustomerID)
+				          : string.Format("customer {0} has not added marketplaces after the last manually approved cash request", CustomerID);
+		}
+
 		public void Init(int nID, string sName, string sType, DateTime oAddTime) {
 			MpID = nID;
 			MpName = sName;
