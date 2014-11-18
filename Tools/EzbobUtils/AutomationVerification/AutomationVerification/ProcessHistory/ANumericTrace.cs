@@ -7,14 +7,14 @@
 		public void Init(decimal nValue) {
 			Value = nValue;
 
-			Comment = string.Format("customer {0} has {1}", CustomerID, ValueStr);
+			Comment = string.Format("customer has {0}", ValueStr);
 		} // Init
 
 		#endregion method Init
 
 		#region constructor
 
-		protected ANumericTrace(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		protected ANumericTrace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor

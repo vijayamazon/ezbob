@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
 	public abstract class AThresholdTrace : ATrace {
-		protected AThresholdTrace(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		protected AThresholdTrace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		public virtual ATrace Init(decimal nScore, decimal nThreshold) {
@@ -8,11 +8,10 @@
 			Threshold = nThreshold;
 
 			Comment = string.Format(
-				"customer {0} {3} is {1}, threshold is {2}",
-				CustomerID,
+				"{0} is {1}, threshold is {2}",
+				ValueName,
 				Value,
-				Threshold,
-				ValueName
+				Threshold
 			);
 
 			return this;

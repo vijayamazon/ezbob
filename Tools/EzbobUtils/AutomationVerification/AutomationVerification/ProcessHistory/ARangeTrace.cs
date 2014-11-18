@@ -6,8 +6,8 @@
 			Max = nMax;
 
 			Comment = string.Format(
-				"customer {0} {4} is {1}, allowed range is {2}...{3} (inclusive)",
-				CustomerID, Value, Min, Max, ValueName
+				"{0} is {1}, allowed range is {2}...{3} (inclusive)",
+				ValueName, Value, Min, Max
 			);
 
 			return this;
@@ -17,7 +17,7 @@
 		public virtual decimal Min { get; private set; }
 		public virtual decimal Max { get; private set; }
 
-		protected ARangeTrace(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		protected ARangeTrace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		protected abstract string ValueName { get; }

@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	public class ConsumerScore : AThresholdTrace {
-		public ConsumerScore(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public ConsumerScore(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		protected override string ValueName {

@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
 	public class LacrTooOld : AThresholdTrace {
-		public LacrTooOld(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public LacrTooOld(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		protected override string ValueName {

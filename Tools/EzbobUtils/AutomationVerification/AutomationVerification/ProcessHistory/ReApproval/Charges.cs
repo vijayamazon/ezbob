@@ -2,7 +2,7 @@
 	public class Charges : ANumericTrace {
 		#region constructor
 
-		public Charges(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public Charges(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor

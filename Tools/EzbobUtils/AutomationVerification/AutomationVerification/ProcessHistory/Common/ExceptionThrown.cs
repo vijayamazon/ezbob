@@ -2,15 +2,15 @@
 	using System;
 
 	public class ExceptionThrown : ATrace {
-		public ExceptionThrown(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public ExceptionThrown(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		public void Init(Exception oException) {
 			Thrown = oException;
 
 			Comment = string.Format(
-				"customer {0}: exception of type {1} thrown with message '{2}'",
-				CustomerID, Thrown.GetType(), Thrown.Message
+				"exception of type {0} thrown with message '{1}'",
+				Thrown.GetType(), Thrown.Message
 			);
 		} // Init
 

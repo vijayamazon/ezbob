@@ -28,12 +28,6 @@
 
 		#endregion property CompletedSuccessfully
 
-		#region property CustomerID
-
-		public virtual int CustomerID { get; private set; }
-
-		#endregion property CustomerID
-
 		#region property Comment
 
 		public virtual string Comment { get; protected set; } // Comment
@@ -65,8 +59,7 @@
 
 		#region protected
 
-		protected ATrace(int nCustomerID, DecisionStatus nDecisionStatus) {
-			CustomerID = nCustomerID;
+		protected ATrace(DecisionStatus nDecisionStatus) {
 			DecisionStatus = nDecisionStatus;
 		} // constructor
 

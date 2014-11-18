@@ -1,7 +1,7 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoRejection
 {
 	public class BrokerClientException : ABoolTrace {
-		public BrokerClientException(int nCustomerID, DecisionStatus nDecisionStatus): base(nCustomerID, nDecisionStatus){} // constructor
+		public BrokerClientException(DecisionStatus nDecisionStatus): base(nDecisionStatus){} // constructor
 
 		protected override string PropertyName
 		{

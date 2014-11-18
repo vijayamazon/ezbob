@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	public class OneYearTurnover : AThresholdTrace {
-		public OneYearTurnover(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public OneYearTurnover(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		protected override string ValueName {

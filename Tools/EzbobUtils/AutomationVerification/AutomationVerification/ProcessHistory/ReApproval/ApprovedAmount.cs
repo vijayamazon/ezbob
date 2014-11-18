@@ -2,7 +2,7 @@
 	public class ApprovedAmount : ANumericTrace {
 		#region constructor
 
-		public ApprovedAmount(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public ApprovedAmount(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor

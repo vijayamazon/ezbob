@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Common {
 	public class OutstandingLoanCount : AThresholdTrace {
-		public OutstandingLoanCount(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public OutstandingLoanCount(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		protected override string ValueName {

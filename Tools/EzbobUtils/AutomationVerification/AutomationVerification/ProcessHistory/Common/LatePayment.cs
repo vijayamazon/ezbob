@@ -6,7 +6,7 @@
 	public class LatePayment : ATrace {
 		#region constructor
 
-		public LatePayment(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public LatePayment(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor
@@ -31,23 +31,21 @@
 
 			if (LoanID == 0) {
 				Comment = string.Format(
-					"customer {0} has no payments that are more than {1} late",
-					CustomerID,
+					"there are no payments that are more than {0} late",
 					Grammar.Number(Threshold, "day")
 				);
 			}
 			else {
 				Comment = string.Format(
-					"customer {0} was {1} late for loan {2}, schedule id {3}, transaction id {4}; " +
-					"paid on {5} instead of {6}; allowed delay: {7}",
-					CustomerID,
+					"customer was {1} late for loan {2}, schedule id {3}, transaction id {4}; " +
+					"paid on {5} instead of {6}; allowed delay: {0}",
+					Grammar.Number(Threshold, "day"),
 					Grammar.Number(Delay, "day"),
 					LoanID,
 					ScheduleID,
 					TransactionID,
 					TransactionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
-					ScheduleDate.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
-					Grammar.Number(Threshold, "day")
+					ScheduleDate.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
 				);
 			} // if
 		} // Init

@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
 	public class EnoughFunds : ATrace {
-		public EnoughFunds(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public EnoughFunds(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		public void Init(decimal nApprovedAmount, decimal nAvailableFunds) {
@@ -8,8 +8,7 @@
 			AvailableFunds = nAvailableFunds;
 
 			Comment = string.Format(
-				"customer {0} approved amount is {1}, available funds is {2}",
-				CustomerID,
+				"approved amount is {0}, available funds is {1}",
 				ApprovedAmount.ToString("N2"),
 				AvailableFunds.ToString("N2")
 			);

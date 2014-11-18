@@ -5,7 +5,7 @@
 	public class NewMarketplace : ATrace {
 		#region constructor
 
-		public NewMarketplace(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public NewMarketplace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor
@@ -19,15 +19,14 @@
 			MpAddTime = oAddTime;
 
 			if (MpID == 0)
-				Comment = string.Format("customer {0} has not added marketplaces after the last manually approved cash request", CustomerID);
+				Comment = string.Format("customer has not added marketplaces after the last manually approved cash request");
 			else {
 				Comment = string.Format(
-					"customer {0} has added a marketplace {1}({2} - {3}) on {4}",
-					CustomerID,
+					"customer has added a marketplace {1}({2} - {3}) on {0}",
+					MpAddTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
 					MpName,
 					MpID,
-					MpType,
-					MpAddTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					MpType
 				);
 			} // if
 		} // Init

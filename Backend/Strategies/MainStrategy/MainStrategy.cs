@@ -289,7 +289,6 @@
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
 				new AutoDecisions.ReApproval.Agent(
 					customerId,
-					loanOfferReApprovalSum,
 					DB,
 					Log
 				).MakeDecision(autoDecisionResponse);

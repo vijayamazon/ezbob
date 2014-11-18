@@ -1,6 +1,6 @@
 namespace AutomationCalculator.ProcessHistory.ReApproval {
 	public class RejectAfterLacr : ATrace {
-		public RejectAfterLacr(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public RejectAfterLacr(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		public int LacrID { get; private set; }
@@ -12,16 +12,14 @@ namespace AutomationCalculator.ProcessHistory.ReApproval {
 
 			if (RejectID > 0) {
 				Comment = string.Format(
-					"customer {0} has rejected cash request ({1}) after the last manually approved cash request ({2})",
-					CustomerID,
+					"customer has a rejected cash request ({0}) after the last manually approved cash request ({1})",
 					RejectID,
 					LacrID
 				);
 			}
 			else {
 				Comment = string.Format(
-					"customer {0} has no rejected cash request after the last manually approved cash request ({1})",
-					CustomerID,
+					"customer has no rejected cash request after the last manually approved cash request ({0})",
 					LacrID
 				);
 			} // if

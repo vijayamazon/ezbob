@@ -2,14 +2,12 @@
 	internal class Arguments {
 		#region constructor
 
-		public Arguments(int nCustomerID, decimal nMaxApprovalAmount) {
+		public Arguments(int nCustomerID) {
 			CustomerID = nCustomerID;
-			MaxApprovalAmount = nMaxApprovalAmount;
 		} // constructor
 
 		#endregion constructor
 
 		public int CustomerID { get; private set; }
-		public decimal MaxApprovalAmount { get; private set; }
 	} // Arguments
 } // namespace

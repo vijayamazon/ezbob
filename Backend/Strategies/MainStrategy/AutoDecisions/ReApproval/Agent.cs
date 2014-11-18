@@ -15,7 +15,7 @@
 
 		#region constructor
 
-		public Agent(int nCustomerID, decimal nMaxApprovalAmount, AConnection oDB, ASafeLog oLog) {
+		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
 			m_oMetaData = new MetaData();
 			m_oLatePayments = new List<Payment>();
 			m_oNewMarketplaces = new List<Marketplace>();
@@ -23,7 +23,7 @@
 
 			m_oDB = oDB;
 			m_oLog = oLog ?? new SafeLog();
-			m_oArgs = new Arguments(nCustomerID, nMaxApprovalAmount);
+			m_oArgs = new Arguments(nCustomerID);
 
 			m_oTrail = new ReapprovalTrail(m_oArgs.CustomerID, m_oLog);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
@@ -62,7 +62,6 @@
 				CheckOutstandingLoans();
 				CheckLoanCharges();
 				SetApprovedAmount();
-				CheckCap();
 				CheckAvailableFunds();
 
 				if (m_oTrail.HasDecided) {
@@ -231,19 +230,6 @@
 		} // CheckAvailableFunds
 
 		#endregion method CheckAvailableFunds
-
-		#region method CheckCap
-
-		private void CheckCap() {
-			decimal nApprovedAmount = ApprovedAmount;
-
-			if (nApprovedAmount < m_oArgs.MaxApprovalAmount)
-				StepDone<HomeOwnerCap>().Init(nApprovedAmount, m_oArgs.MaxApprovalAmount);
-			else
-				StepFailed<HomeOwnerCap>().Init(nApprovedAmount, m_oArgs.MaxApprovalAmount);
-		} // CheckCap
-
-		#endregion method CheckCap
 
 		#endregion steps
 

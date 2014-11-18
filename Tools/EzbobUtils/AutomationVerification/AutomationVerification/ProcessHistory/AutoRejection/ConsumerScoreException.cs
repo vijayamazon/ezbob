@@ -1,7 +1,7 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoRejection
 {
 	public class ConsumerScoreException : AThresholdTrace {
-		public ConsumerScoreException(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {} // constructor
+		public ConsumerScoreException(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {} // constructor
 
 		protected override string ValueName {
 			get { return "consumer score exception"; }

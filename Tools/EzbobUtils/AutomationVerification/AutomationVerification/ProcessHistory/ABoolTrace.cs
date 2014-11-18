@@ -3,14 +3,14 @@
 		public virtual ATrace Init() {
 			HasProperty = DecisionStatus == DecisionStatus.Affirmative;
 
-			Comment = string.Format("customer {0} has {1}{2}", CustomerID, HasProperty ? string.Empty : "no ", PropertyName);
+			Comment = string.Format("customer has {0}{1}", HasProperty ? string.Empty : "no ", PropertyName);
 
 			return this;
 		} // Init
 
 		public virtual bool HasProperty { get; private set; }
 
-		protected ABoolTrace(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		protected ABoolTrace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		protected abstract string PropertyName { get; }

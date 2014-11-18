@@ -3,7 +3,7 @@
 	using System.Text;
 
 	public class InitialAssignment : ATrace {
-		public InitialAssignment(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public InitialAssignment(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 			ValidationErrors = new List<string>();
 		} // constructor
 
@@ -15,7 +15,7 @@
 
 			var os = new StringBuilder();
 
-			os.AppendFormat("customer {0} system calculated sum is {1}", CustomerID, OfferedCreditLine);
+			os.AppendFormat("system calculated sum is {0}", OfferedCreditLine);
 
 			if (DecisionStatus == DecisionStatus.Affirmative)
 				os.Append("; data has been fully loaded");

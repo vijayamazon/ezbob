@@ -3,7 +3,7 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	using System.Linq;
 
 	public class WorstCaisStatus : ATrace {
-		public WorstCaisStatus(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public WorstCaisStatus(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		public List<string> FoundForbiddenStatuses { get; private set; }
@@ -17,16 +17,14 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 
 			if (FoundForbiddenStatuses.Count < 1) {
 				Comment = string.Format(
-					"customer {0} no forbidden statuses found among '{1}'; allowed statuses are '{2}'",
-					CustomerID,
+					"no forbidden statuses found among '{0}'; allowed statuses are '{1}'",
 					string.Join(", ", AllCustomerStatuses),
 					string.Join(", ", AllowedStatuses)
 				);
 			}
 			else {
 				Comment = string.Format(
-					"customer {0} forbidden statuses found '{3}' among '{1}'; allowed statuses are '{2}'",
-					CustomerID,
+					"forbidden statuses found '{2}' among '{0}'; allowed statuses are '{1}'",
 					string.Join(", ", AllCustomerStatuses),
 					string.Join(", ", AllowedStatuses),
 					string.Join(", ", FoundForbiddenStatuses)

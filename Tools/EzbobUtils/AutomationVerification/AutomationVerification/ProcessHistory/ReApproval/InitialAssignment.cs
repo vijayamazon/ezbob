@@ -2,7 +2,7 @@
 	using System.Collections.Generic;
 
 	public class InitialAssignment : ATrace {
-		public InitialAssignment(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public InitialAssignment(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 			ValidationErrors = new List<string>();
 		} // constructor
 
@@ -10,11 +10,10 @@
 			ValidationErrors.AddRange(oValidationErrors);
 
 			if (DecisionStatus == DecisionStatus.Affirmative)
-				Comment = string.Format("customer {0} data has been fully loaded", CustomerID);
+				Comment = string.Format("customer data has been fully loaded");
 			else {
 				Comment = string.Format(
-					"customer {0} data has not been fully loaded: {1}",
-					CustomerID,
+					"customer data has not been fully loaded: {0}",
 					string.Join("; ", ValidationErrors)
 				);
 			} // if

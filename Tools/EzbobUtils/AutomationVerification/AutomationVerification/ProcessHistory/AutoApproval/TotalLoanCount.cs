@@ -4,7 +4,7 @@
 	public class TotalLoanCount : ANumericTrace {
 		#region constructor
 
-		public TotalLoanCount(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public TotalLoanCount(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor

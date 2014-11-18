@@ -126,7 +126,6 @@
     <Compile Include="ProcessHistory\ReApproval\LacrTooOld.cs" />
     <Compile Include="ProcessHistory\ReApproval\LateLoans.cs" />
     <Compile Include="ProcessHistory\ReApproval\EnoughFunds.cs" />
-    <Compile Include="ProcessHistory\ReApproval\HomeOwnerCap.cs" />
     <Compile Include="ProcessHistory\ANumericTrace.cs" />
     <Compile Include="ProcessHistory\ATrail.cs" />
     <Compile Include="ProcessHistory\ATrace.cs" />

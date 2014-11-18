@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Common {
 	public class Complete : ANumericTrace {
-		public Complete(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public Complete(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		protected override string ValueStr {

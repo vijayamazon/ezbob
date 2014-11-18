@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
 	public class CustomerStatus : ATrace {
-		public CustomerStatus(int nCustomerID, DecisionStatus nDecisionStatus) : base(nCustomerID, nDecisionStatus) {
+		public CustomerStatus(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		public void Init(string sStatusName) {
@@ -8,8 +8,7 @@
 			IsEnabled = DecisionStatus == DecisionStatus.Affirmative;
 
 			Comment = string.Format(
-				"customer {0} has status '{1}' which is currently {2}abled",
-				CustomerID,
+				"customer status '{0}' which is currently {1}abled",
 				StatusName,
 				IsEnabled ? "en" : "dis"
 			);
