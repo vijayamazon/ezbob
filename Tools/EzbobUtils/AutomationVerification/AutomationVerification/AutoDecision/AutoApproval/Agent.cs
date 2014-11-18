@@ -64,7 +64,7 @@
 
 				m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
 
-				Trail.MyInputData.Init(
+				Trail.MyInputData.FullInit(
 					DateTime.UtcNow,
 					m_oCfg,
 					m_oArgs,

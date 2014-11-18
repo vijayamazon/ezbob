@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
 	using System;
 	using AutomationCalculator.ProcessHistory.Common;
+	using Newtonsoft.Json;
 
 	public class Payment {
 		public int LoanID { get; set; }
@@ -9,6 +10,7 @@
 		public int TransactionID { get; set;} 
 		public DateTime TransactionTime { get; set;}
 
+		[JsonIgnore]
 		public int Delay {
 			get { return (int)(TransactionTime - ScheduleDate).TotalDays; } // get
 		} // Delay

@@ -3,19 +3,20 @@
 	using System.Reflection;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using JetBrains.Annotations;
 
 	public class Configuration {
 		#region public
 
 		#region constructor
 
-		public Configuration(AConnection oDB, ASafeLog oLog) {
-			m_oDB = oDB;
-			m_oLog = oLog;
-
+		public Configuration() {
 			m_oAllowedCaisStatusesWithLoan = new List<string>();
 			m_oAllowedCaisStatusesWithoutLoan = new List<string>();
+		} // constructor
+
+		public Configuration(AConnection oDB, ASafeLog oLog) : this() {
+			m_oDB = oDB;
+			m_oLog = oLog;
 		} // constructor
 
 		#endregion constructor
@@ -28,25 +29,47 @@
 
 		#endregion method Load
 
-		public int ExperianScoreThreshold { get; [UsedImplicitly] private set; }
-		public int CustomerMinAge { get; [UsedImplicitly] private set; }
-		public int CustomerMaxAge { get; [UsedImplicitly] private set; }
-		public int MinTurnover1M { get; [UsedImplicitly] private set; }
-		public int MinTurnover3M { get; [UsedImplicitly] private set; }
-		public int MinTurnover1Y { get; [UsedImplicitly] private set; }
-		public int MinMPSeniorityDays { get; [UsedImplicitly] private set; }
-		public int MaxOutstandingOffers { get; [UsedImplicitly] private set; }
-		public int MaxTodayLoans { get; [UsedImplicitly] private set; }
-		public int MaxDailyApprovals { get; [UsedImplicitly] private set; }
-		public int MaxAllowedDaysLate { get; [UsedImplicitly] private set; }
-		public int MaxNumOfOutstandingLoans { get; [UsedImplicitly] private set; }
-		public decimal MinRepaidPortion { get; [UsedImplicitly] private set; }
-		public int MinAmount { get; [UsedImplicitly] private set; }
-		public int MaxAmount { get; [UsedImplicitly] private set; }
-		public bool IsSilent { get; [UsedImplicitly] private set; }
-		public string SilentTemplateName { get; [UsedImplicitly] private set; }
-		public string SilentToAddress { get; [UsedImplicitly] private set; }
-		public int BusinessScoreThreshold { get; [UsedImplicitly] private set; }
+		public int ExperianScoreThreshold { get; set; }
+		public int CustomerMinAge { get; set; }
+		public int CustomerMaxAge { get; set; }
+		public int MinTurnover1M { get; set; }
+		public int MinTurnover3M { get; set; }
+		public int MinTurnover1Y { get; set; }
+		public int MinMPSeniorityDays { get; set; }
+		public int MaxOutstandingOffers { get; set; }
+		public int MaxTodayLoans { get; set; }
+		public int MaxDailyApprovals { get; set; }
+		public int MaxAllowedDaysLate { get; set; }
+		public int MaxNumOfOutstandingLoans { get; set; }
+		public decimal MinRepaidPortion { get; set; }
+		public int MinAmount { get; set; }
+		public int MaxAmount { get; set; }
+		public bool IsSilent { get; set; }
+		public string SilentTemplateName { get; set; }
+		public string SilentToAddress { get; set; }
+		public int BusinessScoreThreshold { get; set; }
+
+		#region property AllowedCaisStatusesWithLoan
+
+		public string AllowedCaisStatusesWithLoan {
+			get { return string.Join(", ", m_oAllowedCaisStatusesWithLoan); } // get
+			set { SaveCaisStatuses(value, m_oAllowedCaisStatusesWithLoan); } // set
+		} // AllowedCaisStatusesWithLoan
+
+		private readonly List<string> m_oAllowedCaisStatusesWithLoan;
+
+		#endregion property AllowedCaisStatusesWithLoan
+
+		#region property AllowedCaisStatusesWithoutLoan
+
+		public string AllowedCaisStatusesWithoutLoan {
+			get { return string.Join(", ", m_oAllowedCaisStatusesWithoutLoan); } // get
+			set { SaveCaisStatuses(value, m_oAllowedCaisStatusesWithoutLoan); } // set
+		} // AllowedCaisStatusesWithoutLoan
+
+		private readonly List<string> m_oAllowedCaisStatusesWithoutLoan;
+
+		#endregion property AllowedCaisStatusesWithoutLoan
 
 		public List<string> GetAllowedCaisStatusesWithLoan() {
 			return m_oAllowedCaisStatusesWithLoan;
@@ -90,26 +113,6 @@
 
 		private const string StandardPrefix = "AutoApprove";
 
-		#region property AllowedCaisStatusesWithLoan
-
-		[UsedImplicitly]
-		private string AllowedCaisStatusesWithLoan {
-			get { return string.Join(", ", m_oAllowedCaisStatusesWithLoan); } // get
-			set { SaveCaisStatuses(value, m_oAllowedCaisStatusesWithLoan); } // set
-		} // AllowedCaisStatusesWithLoan
-
-		#endregion property AllowedCaisStatusesWithLoan
-
-		#region property AllowedCaisStatusesWithoutLoan
-
-		[UsedImplicitly]
-		private string AllowedCaisStatusesWithoutLoan {
-			get { return string.Join(", ", m_oAllowedCaisStatusesWithoutLoan); } // get
-			set { SaveCaisStatuses(value, m_oAllowedCaisStatusesWithoutLoan); } // set
-		} // AllowedCaisStatusesWithoutLoan
-
-		#endregion property AllowedCaisStatusesWithoutLoan
-
 		#region method SaveCaisStatuses
 
 		private void SaveCaisStatuses(string sList, List<string> oList) {
@@ -122,9 +125,6 @@
 		} // SaveCaisStatuses
 
 		#endregion method SaveCaisStatuses
-
-		private readonly List<string> m_oAllowedCaisStatusesWithLoan;
-		private readonly List<string> m_oAllowedCaisStatusesWithoutLoan;
 
 		#endregion private
 	} // class Configuration

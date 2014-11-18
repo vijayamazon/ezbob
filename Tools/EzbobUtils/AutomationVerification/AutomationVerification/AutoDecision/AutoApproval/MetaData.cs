@@ -57,6 +57,8 @@
 
 		public FraudStatus FraudStatus { get; private set; }
 
+		public List<string> ValidationErrors { get; private set; }
+
 		#region property IsEmailSendingBanned
 
 		[JsonIgnore]
@@ -79,22 +81,6 @@
 		} // OfferLength
 
 		#endregion property OfferLength
-
-		public List<string> ValidationErrors { get; private set; }
-
-		#region method Validate
-
-		public void Validate() {
-			if (string.IsNullOrWhiteSpace(RowType))
-				throw new Exception("Meta data was not loaded.");
-
-			// TODO
-
-			if (!OfferStart.HasValue || !OfferValidUntil.HasValue)
-				ValidationErrors.Add("last offer start time/length not filled");
-		} // Validate
-
-		#endregion method Validate
 
 		#region property OutstandingPrincipal
 
@@ -120,5 +106,17 @@
 		} // RepaidRatio
 
 		#endregion property RepaidRatio
+
+		#region method Validate
+
+		public void Validate() {
+			if (string.IsNullOrWhiteSpace(RowType))
+				throw new Exception("Meta data was not loaded.");
+
+			if (!OfferStart.HasValue || !OfferValidUntil.HasValue)
+				ValidationErrors.Add("last offer start time/length not filled");
+		} // Validate
+
+		#endregion method Validate
 	} // class MetaData
 } // namespace

@@ -25,6 +25,14 @@
 
 		#endregion property Since
 
+		#region property Seniority
+
+		public int Seniority {
+			get { return Since == null ? 0 : (int)(DateTime.UtcNow - Since.Value).TotalDays; }
+		} // Seniority
+
+		#endregion property Seniority
+
 		#region method Process
 
 		public void Process(SafeReader sr) {

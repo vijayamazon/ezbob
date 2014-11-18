@@ -58,6 +58,8 @@
 
 			m_oTrail = new ApprovalTrail(customerId, this.log);
 
+			m_oTurnover = new SortedDictionary<TimePeriodEnum, decimal>();
+
 			m_oSecondaryImplementation = new Agent(customerId, offeredCreditLine, db, log);
 		} // constructor
 
@@ -72,6 +74,8 @@
 
 				var availFunds = new GetAvailableFunds(db, log);
 				availFunds.Execute();
+
+				SaveTrailInputData(availFunds);
 
 				CheckAutoApprovalConformance(availFunds.ReservedAmount);
 				m_oSecondaryImplementation.MakeDecision();
@@ -162,6 +166,78 @@
 				log.Error(e, "Exception during auto approval.");
 			} // try
 		} // MakeDecision
+
+		private void SaveTrailInputData(GetAvailableFunds availFunds) {
+			CalculateTurnovers();
+			m_oTrail.MyInputData.SetTurnover(1, m_oTurnover[TimePeriodEnum.Month]);
+			m_oTrail.MyInputData.SetTurnover(3, m_oTurnover[TimePeriodEnum.Month3]);
+			m_oTrail.MyInputData.SetTurnover(12, m_oTurnover[TimePeriodEnum.Year]);
+
+			m_oTrail.MyInputData.SetDataAsOf(DateTime.UtcNow);
+
+			m_oTrail.MyInputData.SetConfiguration(new Configuration {
+				ExperianScoreThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold,
+				CustomerMinAge = CurrentValues.Instance.AutoApproveCustomerMinAge,
+				CustomerMaxAge = CurrentValues.Instance.AutoApproveCustomerMaxAge,
+				MinTurnover1M = CurrentValues.Instance.AutoApproveMinTurnover1M,
+				MinTurnover3M = CurrentValues.Instance.AutoApproveMinTurnover3M,
+				MinTurnover1Y = CurrentValues.Instance.AutoApproveMinTurnover1Y,
+				MinMPSeniorityDays = CurrentValues.Instance.AutoApproveMinMPSeniorityDays,
+				MaxOutstandingOffers = CurrentValues.Instance.AutoApproveMaxOutstandingOffers,
+				MaxTodayLoans = CurrentValues.Instance.AutoApproveMaxTodayLoans,
+				MaxDailyApprovals = CurrentValues.Instance.AutoApproveMaxDailyApprovals,
+				MaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate,
+				MaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans,
+				MinRepaidPortion = CurrentValues.Instance.AutoApproveMinRepaidPortion,
+				MinAmount = CurrentValues.Instance.AutoApproveMinAmount,
+				MaxAmount = CurrentValues.Instance.AutoApproveMaxAmount,
+				IsSilent = CurrentValues.Instance.AutoApproveIsSilent,
+				SilentTemplateName = CurrentValues.Instance.AutoApproveSilentTemplateName,
+				SilentToAddress = CurrentValues.Instance.AutoApproveSilentToAddress,
+				BusinessScoreThreshold = CurrentValues.Instance.AutoApproveBusinessScoreThreshold,
+				AllowedCaisStatusesWithLoan = CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithLoan,
+				AllowedCaisStatusesWithoutLoan = CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan,
+			});
+
+			m_oTrail.MyInputData.SetArgs(customerId, autoApprovedAmount);
+
+			m_oTrail.MyInputData.SetMetaData(new MetaData {
+				RowType = "MetaData",
+				IsBrokerCustomer = isBrokerCustomer,
+				NumOfTodayAutoApproval = CalculateTodaysApprovals(),
+				TodayLoanSum = CalculateTodaysLoans(),
+				/* TODO
+				FraudStatusValue =,
+				AmlResult =,
+				CustomerStatusName =,
+				CustomerStatusEnabled =,
+				CompanyScore =,
+				ConsumerScore =,
+				IncorporationDate =,
+				DateOfBirth =,
+
+				NumOfDefaultAccounts =,
+				NumOfRollovers =,
+
+				TotalLoanCount =,
+				OpenLoanCount =,
+				TakenLoanAmount =,
+				RepaidPrincipal =,
+				SetupFees =,
+
+				OfferValidUntil =,
+				OfferStart =,
+				EmailSendingBanned =,
+				*/
+			});
+
+			m_oTrail.MyInputData.MetaData.Validate();
+
+			m_oTrail.MyInputData.SetWorstStatuses(consumerCaisDetailWorstStatuses);
+			FindLatePayments();
+			m_oTrail.MyInputData.SetSeniority(CalculateSeniority());
+			m_oTrail.MyInputData.SetAvailableFunds(availFunds.AvailableFunds, availFunds.ReservedAmount);
+		} // SaveTrailInputData
 
 		private void CheckAutoApprovalConformance(decimal outstandingOffers) {
 			int nAutoApprovedAmount = this.autoApprovedAmount;
@@ -311,20 +387,31 @@
 			} // if
 		} // CheckAge
 
-		private void CheckTurnovers() {
+		private void CalculateTurnovers() {
+			m_oTurnover.Clear();
+
 			Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis = strategyHelper.GetAnalysisValsForCustomer(customerId);
 
-			CheckOnePeriodTurnover(mpAnalysis, CurrentValues.Instance.AutoApproveMinTurnover1M, TimePeriodEnum.Month);
-			CheckOnePeriodTurnover(mpAnalysis, CurrentValues.Instance.AutoApproveMinTurnover3M, TimePeriodEnum.Month3);
-			CheckOnePeriodTurnover(mpAnalysis, CurrentValues.Instance.AutoApproveMinTurnover1Y, TimePeriodEnum.Year);
+			CalcOneTurnover(mpAnalysis, TimePeriodEnum.Month);
+			CalcOneTurnover(mpAnalysis, TimePeriodEnum.Month3);
+			CalcOneTurnover(mpAnalysis, TimePeriodEnum.Year);
+		} // CalculateTurnovers
+
+		private void CalcOneTurnover(Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis, TimePeriodEnum nPeriod) {
+			m_oTurnover[nPeriod] = (decimal)strategyHelper.GetTurnoverForPeriod(mpAnalysis, nPeriod);
+		} // CalcOneTurnover
+
+		private void CheckTurnovers() {
+			CheckOnePeriodTurnover(CurrentValues.Instance.AutoApproveMinTurnover1M, TimePeriodEnum.Month);
+			CheckOnePeriodTurnover(CurrentValues.Instance.AutoApproveMinTurnover3M, TimePeriodEnum.Month3);
+			CheckOnePeriodTurnover(CurrentValues.Instance.AutoApproveMinTurnover1Y, TimePeriodEnum.Year);
 		} // CheckTurnovers
 
 		private void CheckOnePeriodTurnover(
-			Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis,
 			int nThreshold,
 			TimePeriodEnum nPeriod
 		) {
-			int turnover = (int)strategyHelper.GetTurnoverForPeriod(mpAnalysis, nPeriod);
+			int turnover = (int)m_oTurnover[nPeriod];
 
 			AThresholdTrace oTrace;
 
@@ -348,19 +435,17 @@
 			oTrace.Init(turnover, nThreshold);
 		} // CheckOnePeriodTurnover
 
+		private int CalculateSeniority() {
+			return customer == null ? -1 : strategyHelper.MarketplaceSeniority(customer);
+		} // CalculateSeniority
+
 		private void CheckSeniority() {
 			int autoApproveMinMpSeniorityDays = CurrentValues.Instance.AutoApproveMinMPSeniorityDays;
 
-			if (customer == null)
-				StepFailed<MarketplaceSeniority>().Init(-1, autoApproveMinMpSeniorityDays);
-			else {
-				int marketplaceSeniorityInDays = strategyHelper.MarketplaceSeniority(customer);
-
-				if (marketplaceSeniorityInDays < autoApproveMinMpSeniorityDays)
-					StepFailed<MarketplaceSeniority>().Init(marketplaceSeniorityInDays, autoApproveMinMpSeniorityDays);
-				else
-					StepDone<MarketplaceSeniority>().Init(marketplaceSeniorityInDays, autoApproveMinMpSeniorityDays);
-			} // if
+			if (m_oTrail.MyInputData.MarketplaceSeniority < autoApproveMinMpSeniorityDays)
+				StepFailed<MarketplaceSeniority>().Init(m_oTrail.MyInputData.MarketplaceSeniority, autoApproveMinMpSeniorityDays);
+			else
+				StepDone<MarketplaceSeniority>().Init(m_oTrail.MyInputData.MarketplaceSeniority, autoApproveMinMpSeniorityDays);
 		} // CheckSeniority
 
 		private void CheckOutstandingOffers(decimal outstandingOffers) {
@@ -372,9 +457,7 @@
 				StepDone<OutstandingOffers>().Init(outstandingOffers, autoApproveMaxOutstandingOffers);
 		} // CheckOutstandingOffers
 
-		private void CheckTodaysLoans() {
-			int autoApproveMaxTodayLoans = CurrentValues.Instance.AutoApproveMaxTodayLoans;
-
+		private decimal CalculateTodaysLoans() {
 			DateTime today = DateTime.UtcNow;
 
 			var todayLoans = loanRepository.GetAll().Where(l => l.Date.Year == today.Year && l.Date.Month == today.Month && l.Date.Day == today.Day);
@@ -384,23 +467,30 @@
 			if (todayLoans.Any())
 				todayLoansAmount = todayLoans.Sum(l => l.LoanAmount);
 
-			if (todayLoansAmount >= autoApproveMaxTodayLoans)
-				StepFailed<TodayLoans>().Init(todayLoansAmount, autoApproveMaxTodayLoans);
+			return todayLoansAmount;
+		} // CalculateTodaysLoans
+
+		private void CheckTodaysLoans() {
+			int autoApproveMaxTodayLoans = CurrentValues.Instance.AutoApproveMaxTodayLoans;
+
+			if (m_oTrail.MyInputData.MetaData.TodayLoanSum >= autoApproveMaxTodayLoans)
+				StepFailed<TodayLoans>().Init(m_oTrail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
 			else
-				StepDone<TodayLoans>().Init(todayLoansAmount, autoApproveMaxTodayLoans);
+				StepDone<TodayLoans>().Init(m_oTrail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
 		} // CheckTodaysLoans
+
+		private int CalculateTodaysApprovals() {
+			DateTime today = DateTime.UtcNow;
+			return cashRequestsRepository.GetAll().Count(cr => cr.CreationDate.HasValue && cr.CreationDate.Value.Year == today.Year && cr.CreationDate.Value.Month == today.Month && cr.CreationDate.Value.Day == today.Day && cr.UnderwriterComment == "Auto Approval");
+		} // CalculateTodaysApprovals
 
 		private void CheckTodaysApprovals() {
 			int autoApproveMaxDailyApprovals = CurrentValues.Instance.AutoApproveMaxDailyApprovals;
 
-			DateTime today = DateTime.UtcNow;
-
-			int numOfApprovalsToday = cashRequestsRepository.GetAll().Count(cr => cr.CreationDate.HasValue && cr.CreationDate.Value.Year == today.Year && cr.CreationDate.Value.Month == today.Month && cr.CreationDate.Value.Day == today.Day && cr.UnderwriterComment == "Auto Approval");
-
-			if (numOfApprovalsToday >= autoApproveMaxDailyApprovals)
-				StepFailed<TodayApprovalCount>().Init(numOfApprovalsToday, autoApproveMaxDailyApprovals);
+			if (m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval >= autoApproveMaxDailyApprovals)
+				StepFailed<TodayApprovalCount>().Init(m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval, autoApproveMaxDailyApprovals);
 			else
-				StepDone<TodayApprovalCount>().Init(numOfApprovalsToday, autoApproveMaxDailyApprovals);
+				StepDone<TodayApprovalCount>().Init(m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval, autoApproveMaxDailyApprovals);
 		} // CheckTodaysApprovals
 
 		private void CheckRollovers() {
@@ -413,8 +503,25 @@
 		private void CheckLateDays() {
 			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
 
+			if (m_oTrail.MyInputData.LatePayments.Count < 1) {
+				StepDone<LatePayment>().Init(0, 0, DateTime.UtcNow, 0, DateTime.UtcNow, autoApproveMaxAllowedDaysLate);
+				return;
+			} // if
+
+			foreach (Payment oPayment in m_oTrail.MyInputData.LatePayments) {
+				StepFailed<LatePayment>().Init(
+					oPayment.LoanID,
+					oPayment.ScheduleID, oPayment.ScheduleDate,
+					oPayment.TransactionID, oPayment.ScheduleDate,
+					autoApproveMaxAllowedDaysLate
+				);
+			} // for
+		} // CheckLateDays
+
+		private void FindLatePayments() {
+			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
+
 			List<int> customerLoanIds = loanRepository.ByCustomer(customerId).Select(d => d.Id).ToList();
-			bool bSuccess = true;
 
 			foreach (int loanId in customerLoanIds) {
 				int innerLoanId = loanId;
@@ -429,17 +536,17 @@
 					double nTotalLateDays = transactionDate.Subtract(scheduleDate).TotalDays;
 
 					if (nTotalLateDays > autoApproveMaxAllowedDaysLate) {
-						bSuccess = false;
-						StepFailed<LatePayment>().Init(
-							innerLoanId, paymentMapping.Schedule.Id, scheduleDate, paymentMapping.Transaction.Id, transactionDate, autoApproveMaxAllowedDaysLate
-						);
+						m_oTrail.MyInputData.AddLatePayment(new Payment {
+							LoanID = innerLoanId,
+							ScheduleDate = paymentMapping.Schedule.Date,
+							ScheduleID = paymentMapping.Schedule.Id,
+							TransactionID = paymentMapping.Transaction.Id,
+							TransactionTime = paymentMapping.Transaction.PostDate,
+						});
 					} // if
 				} // for
 			} // for
-
-			if (bSuccess)
-				StepDone<LatePayment>().Init(0, 0, DateTime.UtcNow, 0, DateTime.UtcNow, autoApproveMaxAllowedDaysLate);
-		} // CheckLateDays
+		} // FindLatePayments
 
 		private decimal CheckOutstandingLoans() {
 			int autoApproveMaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans;
@@ -529,6 +636,8 @@
 		private int autoApprovedAmount;
 
 		private readonly ApprovalTrail m_oTrail;
+
+		private readonly SortedDictionary<TimePeriodEnum, decimal> m_oTurnover;
 
 		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
 

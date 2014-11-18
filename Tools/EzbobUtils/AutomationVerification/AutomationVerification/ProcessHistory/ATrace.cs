@@ -6,7 +6,6 @@
 
 		public class DBModel {
 			public int Position { get; set; }
-			public bool IsPrimary { get; set; }
 			public int DecisionStatusID { get; set; }
 			public string Name { get; set; }
 			public string Comment { get; set; }
@@ -39,9 +38,9 @@
 		public virtual DBModel ToDBModel(int nPosition, bool bIsPrimary) {
 			return new DBModel {
 				Position = nPosition,
-				IsPrimary = bIsPrimary,
 				DecisionStatusID = (int)this.DecisionStatus,
 				Name = this.GetType().FullName,
+				Comment = this.Comment,
 			};
 		} // ToDBModel
 

@@ -6,6 +6,7 @@
 	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using JetBrains.Annotations;
 
 	public abstract class ATrail {
 		#region public
@@ -172,7 +173,7 @@
 					"This trail is of for decision '{0}' while the second one is for '{1}'.",
 					this.Decision,
 					oTrail.Decision
-					);
+				);
 
 				m_oDiffNotes.Add(sMsg);
 
@@ -267,53 +268,28 @@
 		#region method Save
 
 		public virtual void Save(AConnection oDB, ATrail oTrail) {
-			var oPrimary = new List<ATrace.DBModel>();
-			var oSecondary = new List<ATrace.DBModel>();
+			ConnectionWrapper cw = null;
 
-			for (int i = 0; i < this.Length; i++)
-				oPrimary.Add(this.m_oSteps[i].ToDBModel(i, true));
-
-			for (int i = 0; i < oTrail.Length; i++)
-				oSecondary.Add(oTrail.m_oSteps[i].ToDBModel(i, false));
-
-			if (false) {
-				ConnectionWrapper cw = oDB.GetPersistent();
+			try {
+				cw = oDB.GetPersistent();
 				cw.BeginTransaction();
 
-				try {
-					oDB.ExecuteNonQuery(
-						"",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerID", this.CustomerID),
-						new QueryParameter("DecisionID", (int)this.Decision),
-						new QueryParameter("DecisionTime", DateTime.UtcNow),
-						new QueryParameter("UniqueID", this.DiffID),
-						new QueryParameter("DecisionStatusID", (int)this.DecisionStatus),
-						new QueryParameter("InputData", InputData.Serialize()),
-						new QueryParameter("IsPrimary", true),
-						oDB.CreateTableParameter("Traces", (IEnumerable<ATrace.DBModel>)oPrimary)
-					);
+				SaveDecisionTrail sp = new SaveDecisionTrail(this, this.DiffID, true, oDB, this.m_oLog);
+				sp.ExecuteNonQuery(cw);
 
-					oDB.ExecuteNonQuery(
-						"",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerID", this.CustomerID),
-						new QueryParameter("DecisionID", (int)oTrail.Decision),
-						new QueryParameter("DecisionTime", DateTime.UtcNow),
-						new QueryParameter("UniqueID", this.DiffID),
-						new QueryParameter("DecisionStatusID", (int)oTrail.DecisionStatus),
-						new QueryParameter("InputData"),
-						new QueryParameter("IsPrimary", false),
-						oDB.CreateTableParameter("Traces", (IEnumerable<ATrace.DBModel>)oSecondary)
-					);
+				if (oTrail != null) {
+					sp = new SaveDecisionTrail(oTrail, this.DiffID, false, oDB, this.m_oLog);
+					sp.ExecuteNonQuery(cw);
+				} // if
 
-					cw.Commit();
-				}
-				catch (Exception e) {
+				cw.Commit();
+			}
+			catch (Exception e) {
+				if (cw != null)
 					cw.Rollback();
-					m_oLog.Alert(e, "Failed to save decision trail.");
-				} // try
-			} // if
+
+				m_oLog.Alert(e, "Failed to save decision trail.");
+			} // try
 		} // Save
 
 		#endregion method Save
@@ -352,6 +328,96 @@
 		#endregion protected
 
 		#region private
+
+		#region class SaveDecisionTrail
+
+		private class SaveDecisionTrail : AStoredProcedure {
+			#region constructor
+
+			public SaveDecisionTrail(ATrail oTrail, Guid oDiffID, bool bIsPrimary, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+				m_oTrail = oTrail;
+				CustomerID = oTrail.CustomerID;
+				DecisionID = (int)oTrail.Decision;
+				UniqueID = oDiffID;
+				DecisionStatusID = (int)oTrail.DecisionStatus;
+				InputData = oTrail.InputData.Serialize();
+				IsPrimary = bIsPrimary;
+				Traces = new List<ATrace.DBModel>();
+
+				for (int i = 0; i < oTrail.Length; i++)
+					Traces.Add(oTrail.m_oSteps[i].ToDBModel(i, false));
+			} // constructor
+
+			#endregion constructor
+
+			#region method HasValidParameters
+
+			public override bool HasValidParameters() {
+				return
+					(CustomerID > 0) &&
+					(DecisionID > 0) &&
+					(UniqueID != Guid.Empty) &&
+					Enum.IsDefined(typeof(DecisionStatus), DecisionStatusID) &&
+					(Traces != null) &&
+					(Traces.Count > 0) &&
+					(Notes != null);
+			} // HasValidParameters
+
+			#endregion method HasValidParameters
+
+			[UsedImplicitly]
+			public int CustomerID { get; set; }
+
+			[UsedImplicitly]
+			public int DecisionID { get; set; }
+
+			#region property DecisionTime
+
+			[UsedImplicitly]
+			public DateTime DecisionTime {
+				get { return DateTime.UtcNow; }
+				// ReSharper disable ValueParameterNotUsed
+				set { }
+				// ReSharper restore ValueParameterNotUsed
+			} // DecisionTime
+
+			#endregion property DecisionTime
+
+			[UsedImplicitly]
+			public Guid UniqueID { get; set; }
+
+			[UsedImplicitly]
+			public int DecisionStatusID { get; set; }
+
+			[UsedImplicitly]
+			public string InputData { get; set; }
+
+			[UsedImplicitly]
+			public bool IsPrimary { get; set; }
+
+			[UsedImplicitly]
+			public List<ATrace.DBModel> Traces { get; set; }
+
+			#region property Notes
+
+			[UsedImplicitly]
+			public List<string> Notes {
+				get { return IsPrimary ? m_oTrail.m_oDiffNotes : new List<string>(); }
+				// ReSharper disable ValueParameterNotUsed
+				set { }
+				// ReSharper restore ValueParameterNotUsed
+			} // Notes
+
+			#endregion property Notes
+
+			#region private
+
+			private readonly ATrail m_oTrail;
+
+			#endregion private
+		} // SaveDecisionTrail
+
+		#endregion class SaveDecisionTrail
 
 		private readonly List<string> m_oDiffNotes;
 
