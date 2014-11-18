@@ -14,8 +14,8 @@
 
 		public void Init(bool newMpWasAdded) {
 			Comment = newMpWasAdded
-						  ? string.Format("customer {0} has added a new marketplace", CustomerID)
-				          : string.Format("customer {0} has not added marketplaces after the last manually approved cash request", CustomerID);
+						  ? string.Format("customer has added a new marketplace")
+				          : string.Format("customer has not added marketplaces after the last manually approved cash request");
 		}
 
 		public void Init(int nID, string sName, string sType, DateTime oAddTime) {

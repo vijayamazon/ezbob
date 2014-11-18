@@ -16,16 +16,14 @@
 			if (DecisionStatus == DecisionStatus.Affirmative)
 			{
 				Comment = string.Format(
-					"customer {0} has no payments that are more than {1} late",
-					CustomerID,
+					"customer has no payments that are more than {0} late",
 					Grammar.Number(Threshold, "day")
 				);
 			}
 			else
 			{
 				Comment = string.Format(
-					"customer {0} was {1} late; allowed delay: {2}",
-					CustomerID,
+					"customer was {0} late; allowed delay: {1}",
 					Grammar.Number(delay, "day"),
 					Grammar.Number(Threshold, "day")
 				);
