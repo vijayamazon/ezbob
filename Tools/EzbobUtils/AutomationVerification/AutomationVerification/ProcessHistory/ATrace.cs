@@ -34,14 +34,6 @@
 
 		#endregion property Comment
 
-		#region method ToString
-
-		public override string ToString() {
-			return string.Format("{1,-12} {0}: {2}", Name, DecisionStatus, Comment);
-		} // ToString
-
-		#endregion method ToString
-
 		#region method ToModel
 
 		public virtual DBModel ToDBModel(int nPosition, bool bIsPrimary) {

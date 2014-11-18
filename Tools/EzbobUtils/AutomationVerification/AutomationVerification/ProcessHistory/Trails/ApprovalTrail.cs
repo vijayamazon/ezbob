@@ -11,13 +11,21 @@
 
 		#endregion constructor
 
-		#region property DecisionName
+		#region property PositiveDecisionName
 
-		public override string DecisionName {
-			get { return "auto approve"; }
-		} // DecisionName
+		public override string PositiveDecisionName {
+			get { return "approved"; }
+		} // PositiveDecisionName
 
-		#endregion property DecisionName
+		#endregion property PositiveDecisionName
+
+		#region property NegativeDecisionName
+
+		public override string NegativeDecisionName {
+			get { return "not approved"; }
+		} // NegativeDecisionName
+
+		#endregion property NegativeDecisionName
 
 		#region property Decision
 
@@ -41,7 +49,7 @@
 
 		protected override void UpdateDecision(DecisionStatus nDecisionStatus) {
 			if (nDecisionStatus != DecisionStatus.Affirmative)
-				DecisionStatus = DecisionStatus.Dunno;
+				DecisionStatus = DecisionStatus.Negative;
 		} // UpdateDecision
 
 		#endregion method UpdateDecision

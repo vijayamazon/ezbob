@@ -10,13 +10,21 @@
 
 		#endregion constructor
 
-		#region property DecisionName
+		#region property PositiveDecisionName
 
-		public override string DecisionName {
-			get { return "auto reject"; }
-		} // DecisionName
+		public override string PositiveDecisionName {
+			get { return "rejected"; }
+		} // PositiveDecisionName
 
-		#endregion property DecisionName
+		#endregion property PositiveDecisionName
+
+		#region property NegativeDecisionName
+
+		public override string NegativeDecisionName {
+			get { return "not rejected"; }
+		} // NegativeDecisionName
+
+		#endregion property NegativeDecisionName
 
 		#region property Decision
 

@@ -18,9 +18,9 @@
 				configuration = m_oConfiguration,
 				arguments = m_oArguments,
 				meta_data = m_oMetaData,
-				worst_statuses = m_sWorstStatuses,
+				worst_statuses = m_sWorstStatuses ?? string.Empty,
 				max_payment_delay = m_nMaxDelay,
-				marketplace_origination_time = m_oSince,
+				marketplace_origination_time = m_oSince ?? DateTime.UtcNow,
 				turnover_one_month = m_oTurnover[1],
 				turnover_three_months = m_oTurnover[3],
 				turnover_one_year = m_oTurnover[12],
@@ -48,7 +48,7 @@
 			m_oArguments = oArgs;
 			m_oMetaData = oMetaData;
 			m_sWorstStatuses = string.Join(",", oWorstStatuses);
-			m_nMaxDelay = oPayments.Max(p => p.Delay);
+			m_nMaxDelay = oPayments.Count > 0 ? oPayments.Max(p => p.Delay) : 0;
 			m_oSince = oOriginationTime.Since;
 			m_oTurnover = oTurnover;
 			m_nAvailableFunds = oFunds.Available - oFunds.Reserved;

@@ -89,16 +89,16 @@
 
 				CheckIsFraud();
 				CheckIsBrokerCustomer();
-				CheckTodayApprovedCount();
-				CheckTodayOpenLoans();
-				CheckOutstandingOffers();
 				CheckAml();
-				CheckCustomerStatus();
 				CheckCompanyScore();
+				CheckCustomerStatus();
 				CheckConsumerScore();
 				CheckCustomerAge();
 				CheckTurnovers();
 				CheckCompanyAge();
+				CheckOutstandingOffers();
+				CheckTodayOpenLoans();
+				CheckTodayApprovedCount();
 				CheckDefaultAccounts();
 
 				StepDone<TotalLoanCount>().Init(m_oMetaData.TotalLoanCount);
@@ -408,6 +408,8 @@
 
 		private void ReduceOutstandingPrincipal() {
 			m_nApprovedAmount -= m_oMetaData.OutstandingPrincipal;
+
+			StepDone<ReduceOutstandingPrincipal>().Init(m_oMetaData.OutstandingPrincipal, m_nApprovedAmount);
 		} // ReduceOutstandingPrincipal
 
 		#endregion method ReduceOutstandingPrincipal
@@ -483,7 +485,7 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			m_nApprovedAmount = 0;
-			return Trail.Dunno<T>();
+			return Trail.Negative<T>();
 		} // StepFailed
 
 		#endregion method StepFailed

@@ -177,9 +177,9 @@
 				CheckIsFraud();
 
 				if (isBrokerCustomer)
-					StepFailed<IsBrokerCustomer>();
+					StepFailed<IsBrokerCustomer>().Init();
 				else
-					StepDone<IsBrokerCustomer>();
+					StepDone<IsBrokerCustomer>().Init();
 
 				CheckAMLResult();
 				CheckBusinessScore();
@@ -481,7 +481,7 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			autoApprovedAmount = 0;
-			return m_oTrail.Dunno<T>();
+			return m_oTrail.Negative<T>();
 		} // StepFailed
 
 		private T StepDone<T>() where T : ATrace {

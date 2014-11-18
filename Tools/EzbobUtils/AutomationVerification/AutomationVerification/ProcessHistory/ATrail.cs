@@ -1,6 +1,8 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Text;
 	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -8,13 +10,38 @@
 	public abstract class ATrail {
 		#region public
 
+		#region method GetDecisionName
+
+		public virtual string GetDecisionName(DecisionStatus? nStatus = null) {
+			if (nStatus == null)
+				nStatus = this.DecisionStatus;
+
+			switch (nStatus.Value) {
+			case DecisionStatus.Dunno:
+				return "not decided";
+
+			case DecisionStatus.Affirmative:
+				return this.PositiveDecisionName;
+
+			case DecisionStatus.Negative:
+				return this.NegativeDecisionName;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // GetDecisionName
+
+		#endregion method GetDecisionName
+
 		#region property CustomerID
 
 		public virtual int CustomerID { get; private set; }
 
 		#endregion property CustomerID
 
-		public abstract string DecisionName { get; }
+		public abstract string PositiveDecisionName { get; }
+
+		public abstract string NegativeDecisionName { get; }
 
 		public abstract ITrailInputData InputData { get; }
 
@@ -82,18 +109,45 @@
 		#region method ToString
 
 		public override string ToString() {
-			var os = new List<string>();
+			var lst = new List<Tuple<string, string, string>>();
 
-			foreach (ATrace oTrace in m_oSteps)
-				os.Add(oTrace.ToString());
+			int nFirstFieldLength = 0;
+			int nSecondFieldLength = 0;
+
+			for (int i = 0; i < m_oSteps.Count; i++) {
+				ATrace oTrace = m_oSteps[i];
+
+				string sDecisionName = GetDecisionName(this.DecisionStatus);
+
+				if (nFirstFieldLength < sDecisionName.Length)
+					nFirstFieldLength = sDecisionName.Length;
+
+				if (nSecondFieldLength < oTrace.Name.Length)
+					nSecondFieldLength = oTrace.Name.Length;
+
+				lst.Add(new Tuple<string, string, string>(sDecisionName, oTrace.Name, oTrace.Comment));
+			} // for
+
+			var os = new StringBuilder();
+
+			string sFormat = string.Format(
+				"\t{{0,{0}}}. '{{1,-{1}}}' {{2,-{2}}} {{3}}\n",
+				lst.Count.ToString("G", CultureInfo.InvariantCulture).Length,
+				nFirstFieldLength,
+				nSecondFieldLength + 1
+			);
+
+			for (int i = 0; i < lst.Count; i++) {
+				Tuple<string, string, string> tpl = lst[i];
+				os.AppendFormat(sFormat, i + 1, tpl.Item1, tpl.Item2 + ':', tpl.Item3);
+			} // for each
 
 			return string.Format(
-				"customer {0} '{1}' decision status is '{2}'. Decision trail:\n\t{3}",
-				CustomerID,
-				DecisionName,
-				DecisionStatus,
-				string.Join("\n\t", os)
-				);
+				"decision for '{0}' is '{1}'. Decision trail:\n{2}\tOverall: decision for '{0}' is '{1}'.",
+				Decision,
+				GetDecisionName(),
+				os
+			);
 		} // ToString
 
 		#endregion method ToString
@@ -116,8 +170,8 @@
 			if (this.GetType() != oTrail.GetType()) {
 				string sMsg = string.Format(
 					"This trail is of for decision '{0}' while the second one is for '{1}'.",
-					this.DecisionName,
-					oTrail.DecisionName
+					this.Decision,
+					oTrail.Decision
 					);
 
 				m_oDiffNotes.Add(sMsg);
@@ -135,10 +189,10 @@
 
 				string sMsg = string.Format(
 					"Different conclusions for '{2}' have been reached: '{0}' in this vs '{1}' in the second.",
-					this.DecisionStatus,
-					oTrail.DecisionStatus,
-					this.DecisionName
-					);
+					this.GetDecisionName(),
+					oTrail.GetDecisionName(),
+					this.Decision
+				);
 
 				m_oDiffNotes.Add(sMsg);
 
@@ -172,7 +226,7 @@
 						i,
 						oMy.GetType().Name,
 						oOther.GetType().Name,
-						this.DecisionName
+						this.Decision
 					);
 
 					m_oDiffNotes.Add(sMsg);
@@ -189,7 +243,7 @@
 						oMy.GetType().Name,
 						oMy.DecisionStatus,
 						oOther.DecisionStatus,
-						this.DecisionName
+						this.Decision
 					);
 
 					m_oDiffNotes.Add(sMsg);
@@ -222,43 +276,44 @@
 			for (int i = 0; i < oTrail.Length; i++)
 				oSecondary.Add(oTrail.m_oSteps[i].ToDBModel(i, false));
 
-			ConnectionWrapper cw = oDB.GetPersistent();
+			if (false) {
+				ConnectionWrapper cw = oDB.GetPersistent();
+				cw.BeginTransaction();
 
-			cw.BeginTransaction();
+				try {
+					oDB.ExecuteNonQuery(
+						"",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("CustomerID", this.CustomerID),
+						new QueryParameter("DecisionID", (int)this.Decision),
+						new QueryParameter("DecisionTime", DateTime.UtcNow),
+						new QueryParameter("UniqueID", this.DiffID),
+						new QueryParameter("DecisionStatusID", (int)this.DecisionStatus),
+						new QueryParameter("InputData", InputData.Serialize()),
+						new QueryParameter("IsPrimary", true),
+						oDB.CreateTableParameter("Traces", (IEnumerable<ATrace.DBModel>)oPrimary)
+					);
 
-			try {
-				oDB.ExecuteNonQuery(
-					"",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", this.CustomerID),
-					new QueryParameter("DecisionID", (int)this.Decision),
-					new QueryParameter("DecisionTime", DateTime.UtcNow),
-					new QueryParameter("UniqueID", this.DiffID),
-					new QueryParameter("DecisionStatusID", (int)this.DecisionStatus),
-					new QueryParameter("InputData", InputData.Serialize()),
-					new QueryParameter("IsPrimary", true),
-					oDB.CreateTableParameter("Traces", (IEnumerable<ATrace.DBModel>)oPrimary)
-				);
+					oDB.ExecuteNonQuery(
+						"",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("CustomerID", this.CustomerID),
+						new QueryParameter("DecisionID", (int)oTrail.Decision),
+						new QueryParameter("DecisionTime", DateTime.UtcNow),
+						new QueryParameter("UniqueID", this.DiffID),
+						new QueryParameter("DecisionStatusID", (int)oTrail.DecisionStatus),
+						new QueryParameter("InputData"),
+						new QueryParameter("IsPrimary", false),
+						oDB.CreateTableParameter("Traces", (IEnumerable<ATrace.DBModel>)oSecondary)
+					);
 
-				oDB.ExecuteNonQuery(
-					"",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", this.CustomerID),
-					new QueryParameter("DecisionID", (int)oTrail.Decision),
-					new QueryParameter("DecisionTime", DateTime.UtcNow),
-					new QueryParameter("UniqueID", this.DiffID),
-					new QueryParameter("DecisionStatusID", (int)oTrail.DecisionStatus),
-					new QueryParameter("InputData"),
-					new QueryParameter("IsPrimary", false),
-					oDB.CreateTableParameter("Traces", (IEnumerable<ATrace.DBModel>)oSecondary)
-				);
-
-				cw.Commit();
-			}
-			catch (Exception e) {
-				cw.Rollback();
-				m_oLog.Alert(e, "Failed to save decision trail.");
-			} // try
+					cw.Commit();
+				}
+				catch (Exception e) {
+					cw.Rollback();
+					m_oLog.Alert(e, "Failed to save decision trail.");
+				} // try
+			} // if
 		} // Save
 
 		#endregion method Save
@@ -307,7 +362,7 @@
 		#region method Add
 
 		private T Add<T>(DecisionStatus nDecisionStatus) where T: ATrace {
-			T oTrace = (T)Activator.CreateInstance(typeof (T), CustomerID, nDecisionStatus);
+			T oTrace = (T)Activator.CreateInstance(typeof (T), nDecisionStatus);
 
 			m_oSteps.Add(oTrace);
 
