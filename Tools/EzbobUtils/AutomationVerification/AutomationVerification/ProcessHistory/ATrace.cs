@@ -2,6 +2,17 @@
 	public abstract class ATrace {
 		#region public
 
+		#region property HasLockedDecision
+
+		public virtual bool HasLockedDecision {
+			get { return m_bHasLockedDecision; }
+			set { m_bHasLockedDecision = value; }
+		} // HasLockedDecision
+
+		private bool m_bHasLockedDecision;
+
+		#endregion property HasLockedDecision
+
 		#region class DBModel
 
 		public class DBModel {
@@ -51,6 +62,7 @@
 		#region protected
 
 		protected ATrace(DecisionStatus nDecisionStatus) {
+			m_bHasLockedDecision = false;
 			DecisionStatus = nDecisionStatus;
 		} // constructor
 

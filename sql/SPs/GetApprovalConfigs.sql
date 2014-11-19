@@ -1,17 +1,3 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetApprovalConfigs]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetApprovalConfigs]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetApprovalConfigs]
-AS
-BEGIN
-	SELECT
-		(SELECT convert(BIT, Value) FROM ConfigurationVariables WHERE Name = 'AutoApproveIsSilent') AS AutoApproveIsSilent,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'AutoApproveSilentTemplateName') AS AutoApproveSilentTemplateName,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'AutoApproveSilentToAddress') AS AutoApproveSilentToAddress,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'MinLoanAmount') AS MinLoanAmount
-END
+IF OBJECT_ID('GetApprovalConfigs') IS NOT NULL
+	DROP PROCEDURE GetApprovalConfigs
 GO

@@ -85,16 +85,16 @@
 
 		#region method Affirmative
 
-		public virtual T Affirmative<T>() where T : ATrace {
-			return Add<T>(DecisionStatus.Affirmative);
+		public virtual T Affirmative<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
+			return Add<T>(DecisionStatus.Affirmative, bLockDecisionAfterAddingAStep);
 		} // Affirmative
 
 		#endregion method Affirmative
 
 		#region method Negative
 
-		public virtual T Negative<T>() where T : ATrace {
-			return Add<T>(DecisionStatus.Negative);
+		public virtual T Negative<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
+			return Add<T>(DecisionStatus.Negative, bLockDecisionAfterAddingAStep);
 		} // Negative
 
 		#endregion method Negative
@@ -102,7 +102,7 @@
 		#region method Dunno
 
 		public virtual T Dunno<T>() where T : ATrace {
-			return Add<T>(DecisionStatus.Dunno);
+			return Add<T>(DecisionStatus.Dunno, false);
 		} // Dunno
 
 		#endregion method Dunno
@@ -110,7 +110,7 @@
 		#region method ToString
 
 		public override string ToString() {
-			var lst = new List<Tuple<string, string, string>>();
+			var lst = new List<Tuple<string, string, string, string>>();
 
 			int nFirstFieldLength = 0;
 			int nSecondFieldLength = 0;
@@ -126,21 +126,21 @@
 				if (nSecondFieldLength < oTrace.Name.Length)
 					nSecondFieldLength = oTrace.Name.Length;
 
-				lst.Add(new Tuple<string, string, string>(sDecisionName, oTrace.Name, oTrace.Comment));
+				lst.Add(new Tuple<string, string, string, string>(sDecisionName, oTrace.Name, oTrace.Comment, oTrace.HasLockedDecision ? "locked " : "       "));
 			} // for
 
 			var os = new StringBuilder();
 
 			string sFormat = string.Format(
-				"\t{{0,{0}}}. '{{1,-{1}}}' {{2,-{2}}} {{3}}\n",
+				"\t{{0,{0}}}. '{{1,-{1}}}' {{2,-{2}}} {{4}}{{3}}\n",
 				lst.Count.ToString("G", CultureInfo.InvariantCulture).Length,
 				nFirstFieldLength,
 				nSecondFieldLength + 1
 			);
 
 			for (int i = 0; i < lst.Count; i++) {
-				Tuple<string, string, string> tpl = lst[i];
-				os.AppendFormat(sFormat, i + 1, tpl.Item1, tpl.Item2 + ':', tpl.Item3);
+				Tuple<string, string, string, string> tpl = lst[i];
+				os.AppendFormat(sFormat, i + 1, tpl.Item1, tpl.Item2 + ':', tpl.Item3, tpl.Item4);
 			} // for each
 
 			return string.Format(
@@ -427,13 +427,18 @@
 
 		#region method Add
 
-		private T Add<T>(DecisionStatus nDecisionStatus) where T: ATrace {
+		private T Add<T>(DecisionStatus nDecisionStatus, bool bLockDecisionAfterAddingAStep) where T: ATrace {
 			T oTrace = (T)Activator.CreateInstance(typeof (T), nDecisionStatus);
 
 			m_oSteps.Add(oTrace);
 
 			if (!IsDecisionLocked)
 				UpdateDecision(nDecisionStatus);
+
+			if (bLockDecisionAfterAddingAStep) {
+				LockDecision();
+				oTrace.HasLockedDecision = true;
+			} // if
 
 			return oTrace;
 		} // Add

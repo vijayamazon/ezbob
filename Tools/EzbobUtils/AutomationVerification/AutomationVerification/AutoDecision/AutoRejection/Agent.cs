@@ -80,14 +80,14 @@
 
 		#endregion method ProcessRow
 		
-		private T StepReject<T>() where T : ATrace
+		private T StepReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace
 		{
-			return Trail.Affirmative<T>();
+			return Trail.Affirmative<T>(bLockDecisionAfterAddingAStep);
 		} // StepReject
 
-		private T StepNoReject<T>() where T : ATrace
+		private T StepNoReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace
 		{
-			return Trail.Negative<T>();
+			return Trail.Negative<T>(bLockDecisionAfterAddingAStep);
 		} // StepNoReject
 
 		private T StepNoDecision<T>() where T : ATrace

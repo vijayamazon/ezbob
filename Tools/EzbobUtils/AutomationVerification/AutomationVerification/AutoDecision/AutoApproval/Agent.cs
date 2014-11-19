@@ -485,7 +485,7 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			m_nApprovedAmount = 0;
-			return Trail.Negative<T>();
+			return Trail.Negative<T>(false);
 		} // StepFailed
 
 		#endregion method StepFailed
@@ -493,7 +493,7 @@
 		#region method StepDone
 
 		private T StepDone<T>() where T : ATrace {
-			return Trail.Affirmative<T>();
+			return Trail.Affirmative<T>(false);
 		} // StepFailed
 
 		#endregion method StepDone

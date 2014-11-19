@@ -65,12 +65,10 @@
 
 		public void MakeDecision(AutoDecisionResponse response) {
 			try {
-				var configSafeReader = db.GetFirst("GetApprovalConfigs", CommandSpecies.StoredProcedure);
-
-				bool autoApproveIsSilent = configSafeReader["AutoApproveIsSilent"];
-				string autoApproveSilentTemplateName = configSafeReader["AutoApproveSilentTemplateName"];
-				string autoApproveSilentToAddress = configSafeReader["AutoApproveSilentToAddress"];
-				decimal minLoanAmount = configSafeReader["MinLoanAmount"];
+				bool autoApproveIsSilent = CurrentValues.Instance.AutoApproveIsSilent;
+				string autoApproveSilentTemplateName = CurrentValues.Instance.AutoApproveSilentTemplateName;
+				string autoApproveSilentToAddress = CurrentValues.Instance.AutoApproveSilentToAddress;
+				decimal minLoanAmount = CurrentValues.Instance.MinLoanAmount;
 
 				var availFunds = new GetAvailableFunds(db, log);
 				availFunds.Execute();
@@ -218,13 +216,10 @@
 
 				NumOfDefaultAccounts =,
 				NumOfRollovers =,
+				*/
 
-				TotalLoanCount =,
-				OpenLoanCount =,
-				TakenLoanAmount =,
-				RepaidPrincipal =,
-				SetupFees =,
-
+				TotalLoanCount = loanRepository.ByCustomer(customerId).Count(),
+				/*
 				OfferValidUntil =,
 				OfferStart =,
 				EmailSendingBanned =,
@@ -251,12 +246,7 @@
 
 			try {
 				CheckIsFraud();
-
-				if (isBrokerCustomer)
-					StepFailed<IsBrokerCustomer>().Init();
-				else
-					StepDone<IsBrokerCustomer>().Init();
-
+				CheckIsBroker();
 				CheckAMLResult();
 				CheckBusinessScore();
 				CheckCustomerStatus();
@@ -269,12 +259,11 @@
 				CheckTodaysApprovals();
 				CheckDefaultAccounts();
 
-				int nLoanCount = loanRepository.ByCustomer(customerId).Count();
 
-				StepDone<TotalLoanCount>().Init(nLoanCount);
+				StepDone<TotalLoanCount>().Init(m_oTrail.MyInputData.MetaData.TotalLoanCount);
 
 				CheckWorstCaisStatus(
-					nLoanCount > 0
+					m_oTrail.MyInputData.MetaData.TotalLoanCount > 0
 					? CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithLoan
 					: CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan
 				);
@@ -311,6 +300,13 @@
 
 			log.Msg("Auto approved amount: {0}. {1}", autoApprovedAmount, m_oTrail);
 		} // CheckAutoApprovalConformance
+
+		private void CheckIsBroker() {
+			if (isBrokerCustomer)
+				StepFailed<IsBrokerCustomer>().Init();
+			else
+				StepDone<IsBrokerCustomer>().Init();
+		} // CheckIsBroker
 
 		private void CheckDefaultAccounts() {
 			if (experianDefaultAccountRepository.GetAll().Any(entry => entry.Customer.Id == customerId))
@@ -548,6 +544,29 @@
 			} // for
 		} // FindLatePayments
 
+		private void FindOutstandingLoans() {
+			/*
+			MetaData oMeta = m_oTrail.MyInputData.MetaData; // just a shortcut
+
+				TakenLoanAmount =,
+				RepaidPrincipal =,
+				SetupFees =,
+
+			List<Loan> outstandingLoans = strategyHelper.GetOutstandingLoans(customerId);
+
+			oMeta.OpenLoanCount = outstandingLoans.Count;
+			oMeta.TakenLoanAmount = 0;
+			oMeta.RepaidPrincipal = 0;
+			oMeta.SetupFees = 0;
+
+			foreach (var loan in outstandingLoans) {
+				loanAmount += loan.LoanAmount;
+				outstandingPrincipal += loan.Principal;
+			} // for
+			*/
+
+		} // FindOutstandingLoans
+
 		private decimal CheckOutstandingLoans() {
 			int autoApproveMaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans;
 			decimal autoApproveMinRepaidPortion = CurrentValues.Instance.AutoApproveMinRepaidPortion;
@@ -588,11 +607,11 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			autoApprovedAmount = 0;
-			return m_oTrail.Negative<T>();
+			return m_oTrail.Negative<T>(false);
 		} // StepFailed
 
 		private T StepDone<T>() where T : ATrace {
-			return m_oTrail.Affirmative<T>();
+			return m_oTrail.Affirmative<T>(false);
 		} // StepFailed
 
 		private void NotifyAutoApproveSilentMode(int autoApproveAmount, string autoApproveSilentTemplateName, string autoApproveSilentToAddress) {
