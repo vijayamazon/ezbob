@@ -45,14 +45,13 @@
 					ConfigManager.CurrentValues.Instance.AutoReRejectMinRepaidPortion,
 					ConfigManager.CurrentValues.Instance.AutoReRejectMaxLRDAge);
 
-
-
 				CheckWasRejected();
 				CheckNewMarketPlaceAdded();
 				CheckLRDIsTooOld();
 				CheckHasNoLoans();
 				CheckOpenLoansRepayments();
 
+				log.Debug("{0}", m_oTrail);
 				if (m_oTrail.DecisionStatus == DecisionStatus.Affirmative)
 				{
 					response.IsReRejected = true;
@@ -73,7 +72,8 @@
 			catch (Exception ex)
 			{
 				StepNoReReject<ExceptionThrown>(true).Init(ex);
-				log.Error("Exception during rerejection:{0}", ex);
+				log.Error("Exception during rerejection {0}", m_oTrail);
+				//log.Error("Exception during rerejection:{0}", ex);
 				return false;
 			}
 		}
@@ -142,7 +142,6 @@
 
 		private T StepNoReReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace
 		{
-
 			return m_oTrail.Negative<T>(bLockDecisionAfterAddingAStep);
 		}
 

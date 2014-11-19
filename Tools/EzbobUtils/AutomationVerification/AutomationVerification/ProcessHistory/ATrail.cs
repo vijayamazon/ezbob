@@ -118,7 +118,7 @@
 			for (int i = 0; i < m_oSteps.Count; i++) {
 				ATrace oTrace = m_oSteps[i];
 
-				string sDecisionName = GetDecisionName(this.DecisionStatus);
+				string sDecisionName = GetDecisionName(oTrace.DecisionStatus);
 
 				if (nFirstFieldLength < sDecisionName.Length)
 					nFirstFieldLength = sDecisionName.Length;

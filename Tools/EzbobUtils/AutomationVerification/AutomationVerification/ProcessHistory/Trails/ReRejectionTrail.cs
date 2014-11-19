@@ -7,6 +7,7 @@
 		#region constructor
 
 		public ReRejectionTrail(int nCustomerID, ASafeLog oLog) : base (nCustomerID, DecisionStatus.Negative, oLog) {
+			MyInputData = new ReRejectInputData();
 		} // constructor
 
 		#endregion constructor
@@ -49,7 +50,7 @@
 		#region method UpdateDecision
 
 		protected override void UpdateDecision(DecisionStatus nDecisionStatus) {
-			DecisionStatus = DecisionStatus.Dunno;
+			DecisionStatus = nDecisionStatus;
 		} // UpdateDecision
 
 		#endregion method UpdateDecision

@@ -5,6 +5,7 @@ namespace EzBobTest
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.MainStrategy;
+	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
 	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzBob.Backend.Strategies.Misc;
 	using EzServiceAccessor;
@@ -215,6 +216,14 @@ namespace EzBobTest
 			new CalculateMedal(m_oDB, m_oLog, 18570).Execute();
 		} // TestCalculateModelsAndAffordability
 
+		[Test]
+		public void TestAutoReRejection()
+		{
+			var rerejection = new ReRejection(21334, m_oDB, m_oLog);
+			var decision = new AutoDecisionRejectionResponse();
+			var isrerejected = rerejection.MakeDecision(decision);
+			Assert.AreEqual(false, isrerejected);
+		} // TestCalculateModelsAndAffordability
 
 		[Test]
 		public void TestLREnquiry()
