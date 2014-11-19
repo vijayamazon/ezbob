@@ -9,103 +9,70 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE GetCustomerDataForReRejection
-@CustomerId INT,
-@Now DATETIME
+@CustomerId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @ManualDecisionDate DATE
-
-	------------------------------------------------------------------------------
-
-	SELECT
-		@ManualDecisionDate = MAX(cr.UnderwriterDecisionDate)
-	FROM
-		CashRequests cr
-	WHERE
-		cr.IdCustomer = @CustomerId AND
-		cr.IdUnderwriter IS NOT NULL AND
-		cr.UnderwriterDecision = 'Rejected'
 	
-	IF @ManualDecisionDate IS NULL
-	BEGIN
-		SELECT 
-			0 AS NewCustomer_ReReject, 
-			0 AS OldCustomer_ReReject,
-			0 AS PrincipalPaidAmount,
-			0 AS LoanAmountTaken
-		RETURN
-	END
-
+	DECLARE @WasManuallyRejected BIT = 0
+	DECLARE @LastManualRejectDate DATETIME
+	DECLARE @NewDataSourceAdded BIT = 0
+	DECLARE @HasLoans BIT = 0
+	DECLARE @OpenLoansAmount INT = 0
+	DECLARE @PrincipalRepaymentAmount DECIMAL(18,4) = 0
 	------------------------------------------------------------------------------
-
-	SELECT
-		ISNULL((
-			SELECT
-				COUNT(cmp.Id)
-			FROM
-				CashRequests cr
-				LEFT JOIN MP_CustomerMarketPlace cmp ON cmp.CustomerId = cr.IdCustomer
-				LEFT JOIN Loan l ON l.CustomerId = cmp.CustomerId
-			WHERE
-				cr.IdCustomer = @CustomerId
-				AND
-				cr.IdUnderwriter IS NOT NULL
-				AND
-				cr.UnderwriterDecision = 'Rejected'
-				AND
-				@ManualDecisionDate >= (SELECT CAST(MAX(created) AS DATE) FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerId)
-				AND
-				DATEADD(DD, 30, @ManualDecisionDate) >= @Now AND l.Id IS NULL
-				AND
-				@ManualDecisionDate = (SELECT CAST(MAX(cr.UnderwriterDecisionDate) AS DATE) FROM CashRequests cr WHERE cr.IdCustomer = @CustomerId)
-		), 0) AS NewCustomer_ReReject,
-
-		ISNULL((
-			SELECT
-				COUNT(cmp.Id)
-			FROM
-				CashRequests cr
-				LEFT JOIN MP_CustomerMarketPlace cmp ON cmp.CustomerId = cr.IdCustomer
-				LEFT JOIN Loan l ON l.CustomerId = cmp.CustomerId
-			WHERE
-				cr.IdCustomer = @CustomerId
-				AND
-				cr.IdUnderwriter IS NOT NULL
-				AND
-				cr.UnderwriterDecision = 'Rejected'
-				AND
-				@ManualDecisionDate >= (SELECT CAST(MAX(created) AS DATE) FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerId)
-				AND
-				DATEADD(DD, 30, @ManualDecisionDate) >= @Now
-				AND
-				l.Id IS NOT NULL
-				AND
-				@ManualDecisionDate = (SELECT CAST(MAX(cr.UnderwriterDecisionDate) AS DATE) FROM CashRequests cr WHERE cr.IdCustomer = @CustomerId)
-		), 0) AS OldCustomer_ReReject,
-
-		ISNULL((
-			SELECT
-				SUM(ISNULL(lt.LoanRepayment, 0)) AS PrincipalPaidAmount
-			FROM
-				Loan l
-				LEFT JOIN LoanTransaction lt ON lt.LoanId = l.Id
-			WHERE
-				l.Customerid = @CustomerId
-				AND
-				lt.Status = 'Done'
-				AND
-				Type ='PaypointTransaction'
-		), 0) AS PrincipalPaidAmount,
-
-		ISNULL((
-			SELECT
-				SUM(ISNULL(l.LoanAmount, 0))
-			FROM
-				Loan l
-			WHERE
-				l.Customerid = @CustomerId
-		), 0) AS LoanAmountTaken
+	
+	-- last manual reject date
+	SELECT @LastManualRejectDate = MAX(cr.UnderwriterDecisionDate)
+	FROM CashRequests cr
+	WHERE cr.IdCustomer = @CustomerId 
+	AND	cr.IdUnderwriter IS NOT NULL 
+	AND	cr.UnderwriterDecision = 'Rejected'
+	
+	-- has loans
+	IF EXISTS (SELECT * FROM Loan WHERE CustomerId=@CustomerId)
+	BEGIN
+		SET @HasLoans = 1
+	END
+	
+	-- open loans amount
+	SELECT @OpenLoansAmount = isnull(sum(LoanAmount), 0)  
+	FROM Loan 
+	WHERE CustomerId=@CustomerId 
+	AND Status<>'PaidOff'
+	
+	--principal repayment of open loans
+	SELECT @PrincipalRepaymentAmount = isnull(sum(lt.Principal), 0) 
+	FROM Loan l INNER JOIN LoanTransaction lt ON l.Id=lt.LoanId
+	WHERE l.CustomerId=@CustomerId 
+	AND l.Status<>'PaidOff'
+	AND lt.Type='PaypointTransaction'
+	AND lt.Status='Done'
+	
+	
+	IF @LastManualRejectDate IS NOT NULL
+	BEGIN
+	
+		--manual rejected
+		SET @WasManuallyRejected = 1
+		
+		-- added new mp after last reject
+		IF EXISTS (SELECT * FROM MP_CustomerMarketPlace mp
+				   WHERE mp.CustomerId=@CustomerId 
+				   AND mp.Disabled=0 
+				   AND mp.Created > @LastManualRejectDate)
+		BEGIN
+			SET @NewDataSourceAdded = 1
+		END
+	END
+	
+	SELECT 
+		@WasManuallyRejected AS WasManuallyRejected
+	   ,@LastManualRejectDate AS LastManualRejectDate
+	   ,@NewDataSourceAdded AS NewDataSourceAdded
+	   ,@OpenLoansAmount AS OpenLoansAmount
+	   ,@PrincipalRepaymentAmount AS PrincipalRepaymentAmount
 END
+
 GO
+

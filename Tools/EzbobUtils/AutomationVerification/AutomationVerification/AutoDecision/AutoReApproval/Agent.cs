@@ -81,8 +81,8 @@
 				Result = new ReApprovalResult(true, m_nApprovedAmount);
 
 			m_oLog.Debug(
-				"Checking if auto approval should take place for customer {0} complete; {1}\n{2}", CustomerId, Trail,
-				Result == null ? string.Empty : "ReApproved " + Result + "."
+				"Checking if auto re approval should take place for customer {0} complete; {1}\n{2}", CustomerId, Trail,
+				Result == null ? string.Empty : Result + "."
 			);
 		}
 

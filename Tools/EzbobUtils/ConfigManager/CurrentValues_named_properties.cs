@@ -242,6 +242,24 @@ namespace ConfigManager {
 
 		#endregion property AutoRejectionException_CreditScore
 
+		#region property AutoReRejectMaxLRDAge
+
+		public virtual VariableValue AutoReRejectMaxLRDAge
+		{
+			get { return this[Variables.AutoReRejectMaxLRDAge]; } // get
+		} // AutoReRejectMaxLRDAge
+
+		#endregion property AutoReRejectMaxLRDAge
+
+		#region property AutoReRejectMinRepaidPortion
+
+		public virtual VariableValue AutoReRejectMinRepaidPortion
+		{
+			get { return this[Variables.AutoReRejectMinRepaidPortion]; } // get
+		} // AutoReRejectMinRepaidPortion
+
+		#endregion property AutoReRejectMinRepaidPortion
+
 		#region property BankBasedApprovalBelowAverageRiskMaxBusinessScore
 
 		public virtual VariableValue BankBasedApprovalBelowAverageRiskMaxBusinessScore {

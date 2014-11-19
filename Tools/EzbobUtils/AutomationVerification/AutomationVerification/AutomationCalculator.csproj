@@ -60,6 +60,7 @@
     <Compile Include="AutoDecision\AutoReApproval\AutoReApprovalModels.cs" />
     <Compile Include="AutoDecision\AutoRejectionCalculator.cs" />
     <Compile Include="AutoDecision\AutoRejection\Agent.cs" />
+    <Compile Include="AutoDecision\AutoReRejection\AutoReRejectionModels.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="AutoDecision\AutoReRejectionCalculator.cs" />
     <Compile Include="AutoDecision\AutoApprovalCalculator.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="ProcessHistory\ATrace.cs" />
     <Compile Include="ProcessHistory\Trails\ApprovalInputData.cs" />
     <Compile Include="ProcessHistory\Trails\ApprovalTrail.cs" />
+    <Compile Include="ProcessHistory\Trails\ReRejectionTrail.cs" />
     <Compile Include="ProcessHistory\Trails\ReapprovalTrail .cs" />
     <Compile Include="ProcessHistory\Trails\RejectionTrail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

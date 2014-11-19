@@ -37,6 +37,8 @@ namespace ConfigManager {
 		AutoReApproveMaxNumOfOutstandingLoans,
 		AutoRejectionException_AnualTurnover,
 		AutoRejectionException_CreditScore,
+		AutoReRejectMaxLRDAge,
+		AutoReRejectMinRepaidPortion,
 		BankBasedApprovalBelowAverageRiskMaxBusinessScore,
 		BankBasedApprovalBelowAverageRiskMaxPersonalScore,
 		BankBasedApprovalBelowAverageRiskMinBusinessScore,
