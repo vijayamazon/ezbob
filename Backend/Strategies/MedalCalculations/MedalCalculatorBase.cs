@@ -334,7 +334,7 @@
 				if (validOfferAmounts.Count > 0)
 				{
 					decimal unroundedValue = validOfferAmounts.Min();
-					Results.OfferedLoanAmount = (int) Math.Truncate(unroundedValue/CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
+					Results.OfferedLoanAmount = (int)unroundedValue;
 				}
 			}
 		}

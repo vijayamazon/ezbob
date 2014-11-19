@@ -152,7 +152,8 @@
 			instance.Execute();
 
 			medalClassification = instance.Result.MedalClassification;
-			modelLoanOffer = instance.Result.OfferedLoanAmount;
+
+			modelLoanOffer = (int)Math.Truncate((decimal)instance.Result.OfferedLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep; 
 		}
 
 		private void ProcessDecision(ScoreMedalOffer scoringResult, AutoDecisionRejectionResponse autoDecisionRejectionResponse)
