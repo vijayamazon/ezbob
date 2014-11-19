@@ -389,6 +389,17 @@
 				mp.Marketplace.InternalId == Hmrc
 			);
 
+			DateTime oIncorporationDate = GetCustomerIncorporationDate(customer);
+
+			DateTime oDate = (oMpOriginationDate < oIncorporationDate) ? oMpOriginationDate : oIncorporationDate;
+
+			return (int)(DateTime.UtcNow - oDate).TotalDays;
+		} // MarketplaceSeniority
+
+		public DateTime GetCustomerIncorporationDate(Customer customer = null) {
+			if (customer == null)
+				return DateTime.UtcNow;
+
 			CustomerAnalytics oAnalytics = _customerAnalytics.GetAll().FirstOrDefault(ca => ca.Id == customer.Id);
 
 			DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;
@@ -396,10 +407,8 @@
 			if (oIncorporationDate.Year < 1000)
 				oIncorporationDate = DateTime.UtcNow;
 
-			DateTime oDate = (oMpOriginationDate < oIncorporationDate) ? oMpOriginationDate : oIncorporationDate;
-
-			return (int)(DateTime.UtcNow - oDate).TotalDays;
-		} // MarketplaceSeniority
+			return oIncorporationDate;
+		} // GetCustomerIncorporationDate
 
 		public List<Loan> GetOutstandingLoans(int customerId)
 		{

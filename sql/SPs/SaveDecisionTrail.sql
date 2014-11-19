@@ -13,6 +13,7 @@ CREATE TYPE DecisionTraceList AS TABLE (
 	Position INT,
 	DecisionStatusID INT,
 	Name NVARCHAR(255),
+	HasLockedDecision BIT,
 	Comment NVARCHAR(MAX)
 )
 GO
@@ -51,12 +52,13 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO DecisionTrace (TrailID, Position, Name, DecisionStatusID, Comment)
+	INSERT INTO DecisionTrace (TrailID, Position, Name, DecisionStatusID, HasLockedDecision, Comment)
 	SELECT
 		@TrailID,
 		Position,
 		Name,
 		DecisionStatusID,
+		HasLockedDecision,
 		Comment
 	FROM
 		@Traces

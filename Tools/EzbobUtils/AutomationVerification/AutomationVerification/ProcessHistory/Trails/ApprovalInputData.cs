@@ -64,7 +64,6 @@
 
 			SetSeniority(oOriginationTime.Seniority);
 
-			m_oTurnover = new SortedDictionary<int, decimal>();
 			SetTurnover(1, oTurnover[1]);
 			SetTurnover(3, oTurnover[3]);
 			SetTurnover(12, oTurnover[12]);
@@ -125,6 +124,9 @@
 		#region method SetTurnover
 
 		public void SetTurnover(int nMonthCount, decimal nTurnover) {
+			if (m_oTurnover == null)
+				m_oTurnover = new SortedDictionary<int, decimal>();
+
 			m_oTurnover[nMonthCount] = nTurnover;
 		} // SetTurnover
 

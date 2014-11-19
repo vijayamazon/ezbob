@@ -19,6 +19,7 @@
 			public int Position { get; set; }
 			public int DecisionStatusID { get; set; }
 			public string Name { get; set; }
+			public bool HasLockedDecision { get; set; }
 			public string Comment { get; set; }
 		} // class DBModel
 
@@ -51,6 +52,7 @@
 				Position = nPosition,
 				DecisionStatusID = (int)this.DecisionStatus,
 				Name = this.GetType().FullName,
+				HasLockedDecision = this.HasLockedDecision,
 				Comment = this.Comment,
 			};
 		} // ToDBModel

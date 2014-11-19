@@ -68,7 +68,7 @@
 
 		#endregion property IsEmailSendingBanned
 
-		#region property OfferLength 
+		#region property OfferLength
 
 		[JsonIgnore]
 		public double OfferLength {

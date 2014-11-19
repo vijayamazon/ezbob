@@ -43,49 +43,19 @@
 
 		#region method MakeDecision
 
-		// public void MakeDecision(AutoDecisionResponse response) {
 		public void MakeDecision() {
 			m_oLog.Debug("Checking if auto approval should take place for customer {0}...", m_oArgs.CustomerID);
 
 			m_nApprovedAmount = m_oArgs.SystemCalculatedAmount;
 
 			try {
-				m_oCfg.Load();
-
-				m_oDB.ForEachRowSafe(
-					ProcessRow,
-					"LoadAutoApprovalData",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", m_oArgs.CustomerID),
-					new QueryParameter("Now", Now)
-				);
-
-				m_oOriginationTime.FromExperian(m_oMetaData.IncorporationDate);
-
-				m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
-
-				Trail.MyInputData.FullInit(
-					DateTime.UtcNow,
-					m_oCfg,
-					m_oArgs,
-					m_oMetaData,
-					m_oWorstStatuses,
-					m_oPayments,
-					m_oOriginationTime,
-					m_oTurnover,
-					m_oFunds
-				);
-
-				m_oMetaData.Validate();
+				GatherData();
 
 				// Once a step is not passed there is no need to continue result-wise. However the
 				// process continues because we want to pick all the possible reasons for not
 				// approving a customer in order to compare different implementations of the process.
 
-				if ((m_nApprovedAmount > 0) && (m_oMetaData.ValidationErrors.Count == 0))
-					StepDone<InitialAssignment>().Init(m_nApprovedAmount, m_oMetaData.ValidationErrors);
-				else
-					StepFailed<InitialAssignment>().Init(m_nApprovedAmount, m_oMetaData.ValidationErrors);
+				CheckInit();
 
 				CheckIsFraud();
 				CheckIsBrokerCustomer();
@@ -101,7 +71,7 @@
 				CheckTodayApprovedCount();
 				CheckDefaultAccounts();
 
-				StepDone<TotalLoanCount>().Init(m_oMetaData.TotalLoanCount);
+				CheckTotalLoanCount();
 
 				CheckCaisStatuses(m_oMetaData.TotalLoanCount > 0
 					? m_oCfg.GetAllowedCaisStatusesWithLoan()
@@ -116,11 +86,7 @@
 
 				CheckAllowedRange();
 
-				decimal nApprovedAmount = m_nApprovedAmount;
-				if (nApprovedAmount > 0)
-					StepDone<Complete>().Init(nApprovedAmount);
-				else
-					StepFailed<Complete>().Init(nApprovedAmount);
+				CheckComplete();
 			}
 			catch (Exception e) {
 				m_oLog.Error(e, "Exception during auto approval.");
@@ -148,7 +114,52 @@
 
 		#region private
 
+		#region method GatherData
+
+		private void GatherData() {
+			m_oCfg.Load();
+
+			m_oDB.ForEachRowSafe(
+				ProcessRow,
+				"LoadAutoApprovalData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", m_oArgs.CustomerID),
+				new QueryParameter("Now", Now)
+			);
+
+			m_oOriginationTime.FromExperian(m_oMetaData.IncorporationDate);
+
+			m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
+
+			Trail.MyInputData.FullInit(
+				DateTime.UtcNow,
+				m_oCfg,
+				m_oArgs,
+				m_oMetaData,
+				m_oWorstStatuses,
+				m_oPayments,
+				m_oOriginationTime,
+				m_oTurnover,
+				m_oFunds
+			);
+
+			m_oMetaData.Validate();
+		} // GatherData
+
+		#endregion method GatherData
+
 		#region steps
+
+		#region method CheckInit
+
+		private void CheckInit() {
+			if ((m_nApprovedAmount > 0) && (m_oMetaData.ValidationErrors.Count == 0))
+				StepDone<InitialAssignment>().Init(m_nApprovedAmount, m_oMetaData.ValidationErrors);
+			else
+				StepFailed<InitialAssignment>().Init(m_nApprovedAmount, m_oMetaData.ValidationErrors);
+		} // CheckInit
+
+		#endregion method CheckInit
 
 		#region method CheckIsFraud
 
@@ -337,6 +348,14 @@
 
 		#endregion method CheckDefaultAccounts
 
+		#region method CheckTotalLoanCount
+
+		private void CheckTotalLoanCount() {
+			StepDone<TotalLoanCount>().Init(m_oMetaData.TotalLoanCount);
+		} // CheckTotalLoanCount
+
+		#endregion method CheckTotalLoanCount
+
 		#region method CheckCaisStatuses
 
 		private void CheckCaisStatuses(List<string> oAllowedStatuses) {
@@ -426,6 +445,19 @@
 		} // CheckAllowedRange
 
 		#endregion method CheckAllowedRange
+
+		#region method CheckComplete
+
+		private void CheckComplete() {
+			decimal nApprovedAmount = m_nApprovedAmount;
+
+			if (nApprovedAmount > 0)
+				StepDone<Complete>().Init(nApprovedAmount);
+			else
+				StepFailed<Complete>().Init(nApprovedAmount);
+		} // CheckComplete
+
+		#endregion method CheckComplete
 
 		#endregion steps
 

@@ -126,13 +126,13 @@
 				if (nSecondFieldLength < oTrace.Name.Length)
 					nSecondFieldLength = oTrace.Name.Length;
 
-				lst.Add(new Tuple<string, string, string, string>(sDecisionName, oTrace.Name, oTrace.Comment, oTrace.HasLockedDecision ? "locked " : "       "));
+				lst.Add(new Tuple<string, string, string, string>(sDecisionName, oTrace.Name, oTrace.Comment, oTrace.HasLockedDecision ? "LOCKED DECISION " : string.Empty));
 			} // for
 
 			var os = new StringBuilder();
 
 			string sFormat = string.Format(
-				"\t{{0,{0}}}. '{{1,-{1}}}' {{2,-{2}}} {{4}}{{3}}\n",
+				"\t{{0,{0}}}. '{{1,-{1}}}' {{4}}{{2,-{2}}} {{3}}\n",
 				lst.Count.ToString("G", CultureInfo.InvariantCulture).Length,
 				nFirstFieldLength,
 				nSecondFieldLength + 1
