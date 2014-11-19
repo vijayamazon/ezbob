@@ -22,20 +22,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @DateTo IS NULL
-	BEGIN
-		SELECT
-			@DateTo = MAX(i.OrderDate)
-		FROM
-			MP_EkmOrderItem i
-			INNER JOIN MP_EkmOrder o ON i.OrderId = o.Id
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
-	END
-
-	------------------------------------------------------------------------------
-
-	EXECUTE AdjustTurnoveDatesAndMonthCount @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
+	EXECUTE AdjustTurnoveDatesAndMonthCount @MpID, @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
 
 	------------------------------------------------------------------------------
 

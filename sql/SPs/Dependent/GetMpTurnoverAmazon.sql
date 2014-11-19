@@ -22,20 +22,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @DateTo IS NULL
-	BEGIN
-		SELECT
-			@DateTo = MAX(i.LastUpdateDate)
-		FROM
-			MP_AmazonOrderItem i
-			INNER JOIN MP_AmazonOrder o ON i.AmazonOrderId = o.Id
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
-	END
-
-	------------------------------------------------------------------------------
-
-	EXECUTE AdjustTurnoveDatesAndMonthCount @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
+	EXECUTE AdjustTurnoveDatesAndMonthCount @MpID, @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
 
 	------------------------------------------------------------------------------
 

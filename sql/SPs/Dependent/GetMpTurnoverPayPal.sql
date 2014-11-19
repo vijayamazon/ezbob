@@ -33,18 +33,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @DateTo IS NULL
-	BEGIN
-		SELECT
-			@DateTo = MAX(i.Created)
-		FROM
-			MP_PayPalTransactionItem2 i
-			INNER JOIN #trn o ON i.TransactionId = o.Id
-	END
-
-	------------------------------------------------------------------------------
-
-	EXECUTE AdjustTurnoveDatesAndMonthCount @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
+	EXECUTE AdjustTurnoveDatesAndMonthCount @MpID, @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
 
 	------------------------------------------------------------------------------
 

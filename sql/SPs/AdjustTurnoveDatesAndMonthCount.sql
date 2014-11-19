@@ -6,6 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE AdjustTurnoveDatesAndMonthCount
+@MpID INT,
 @MonthCount INT OUTPUT,
 @DateTo DATETIME OUTPUT,
 @DateFrom DATETIME OUTPUT
@@ -21,6 +22,16 @@ BEGIN
 	SET @MonthCount = ABS(@MonthCount)
 
 	------------------------------------------------------------------------------
+
+	IF @DateTo IS NULL
+	BEGIN
+		SELECT
+			@DateTo = m.UpdatingEnd
+		FROM
+			MP_CustomerMarketPlace m
+		WHERE
+			m.Id = @MpID
+	END
 
 	IF @DateTo IS NULL
 		SET @DateTo = GETUTCDATE()

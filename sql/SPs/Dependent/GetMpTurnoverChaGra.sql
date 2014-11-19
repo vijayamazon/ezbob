@@ -22,20 +22,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @DateTo IS NULL
-	BEGIN
-		SELECT
-			@DateTo = MAX(i.PaymentDate)
-		FROM
-			MP_ChannelGrabberOrderItem i
-			INNER JOIN MP_ChannelGrabberOrder o ON i.OrderId = o.Id
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
-	END
-
-	------------------------------------------------------------------------------
-
-	EXECUTE AdjustTurnoveDatesAndMonthCount @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
+	EXECUTE AdjustTurnoveDatesAndMonthCount @MpID, @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
 
 	------------------------------------------------------------------------------
 
