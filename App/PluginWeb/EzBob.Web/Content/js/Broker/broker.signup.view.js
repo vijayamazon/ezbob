@@ -169,7 +169,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			rules: {
 				FirmName: { required: true, maxlength: 255, },
 				FirmRegNum: { required: false, maxlength: 255, regex: '^[a-zA-Z0-9]+$', },
-				FirmWebSite: { required: false, maxlength: 255, optionalUrl: true, },
+				FirmWebSite: { required: false, url: false, optionalUrl: true },
 				ContactName: { required: true, maxlength: 255, },
 				ContactEmail: { required: true, email: true, maxlength: 255, },
 				ContactOtherPhone: { required: false, regex: '^0[0-9]{10}$', },
