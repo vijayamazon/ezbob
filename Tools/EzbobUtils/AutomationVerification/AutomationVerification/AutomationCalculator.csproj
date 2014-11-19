@@ -95,6 +95,11 @@
     <Compile Include="ProcessHistory\AutoRejection\MarketPlaceWithErrorException.cs" />
     <Compile Include="ProcessHistory\AutoRejection\WasApprovedException.cs" />
     <Compile Include="ProcessHistory\AutoRejection\AnnualTurnoverException.cs" />
+    <Compile Include="ProcessHistory\AutoReRejection\OpenLoansRepayments.cs" />
+    <Compile Include="ProcessHistory\AutoReRejection\HasNoLoans.cs" />
+    <Compile Include="ProcessHistory\AutoReRejection\LRDIsTooOld.cs" />
+    <Compile Include="ProcessHistory\AutoReRejection\MarketPlaceWasAdded.cs" />
+    <Compile Include="ProcessHistory\AutoReRejection\WasRejected.cs" />
     <Compile Include="ProcessHistory\Common\Complete.cs" />
     <Compile Include="ProcessHistory\AutoApproval\BusinessScore.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ConsumerScore.cs" />

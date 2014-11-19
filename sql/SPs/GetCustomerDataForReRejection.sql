@@ -72,6 +72,7 @@ BEGIN
 	   ,@NewDataSourceAdded AS NewDataSourceAdded
 	   ,@OpenLoansAmount AS OpenLoansAmount
 	   ,@PrincipalRepaymentAmount AS PrincipalRepaymentAmount
+	   ,@HasLoans AS HasLoans
 END
 
 GO

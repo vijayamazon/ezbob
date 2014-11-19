@@ -6,18 +6,10 @@
 	public class ReRejectionTrail : ATrail {
 		#region constructor
 
-		public ReRejectionTrail(int nCustomerID, ASafeLog oLog) : base (nCustomerID, DecisionStatus.Dunno, oLog) {
+		public ReRejectionTrail(int nCustomerID, ASafeLog oLog) : base (nCustomerID, DecisionStatus.Negative, oLog) {
 		} // constructor
 
 		#endregion constructor
-
-		#region property DecisionName
-
-		public override string DecisionName {
-			get { return "Re-rejection"; }
-		} // DecisionName
-
-		#endregion property DecisionName
 
 		#region property Decision
 
@@ -37,6 +29,14 @@
 		#endregion method LockDecision
 
 		#region property InputData
+
+		public override string PositiveDecisionName {
+			get { return "re-rejected"; }
+		}
+
+		public override string NegativeDecisionName {
+			get { return "not re-rejected"; }
+		}
 
 		public override ITrailInputData InputData {
 			get { return MyInputData; }

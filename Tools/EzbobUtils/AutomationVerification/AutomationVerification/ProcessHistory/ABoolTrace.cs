@@ -8,6 +8,15 @@
 			return this;
 		} // Init
 
+		public virtual ATrace Init(bool value)
+		{
+			HasProperty = value;
+
+			Comment = string.Format("customer has {0}{1}", HasProperty ? string.Empty : "no ", PropertyName);
+
+			return this;
+		} // Init
+
 		public virtual bool HasProperty { get; private set; }
 
 		protected ABoolTrace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
