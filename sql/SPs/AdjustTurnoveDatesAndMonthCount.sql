@@ -55,8 +55,10 @@ BEGIN
 			SET @DateTo = DATEADD(day, -1, @DateTo)
 			SET @DateFrom = DATEADD(month, DATEDIFF(month, 0, @DateTo), 0)
 		END
-		ELSE
+		ELSE BEGIN
 			SET @DateFrom = DATEADD(month, -1, @DateTo)
+			SET @DateFrom = DATEADD(month, DATEDIFF(month, 0, @DateFrom), 0)
+		END
 	END
 	ELSE BEGIN
 		IF DATEPART(day, @DateTo) = 1
@@ -65,7 +67,8 @@ BEGIN
 			SET @DateTo = DATEADD(day, -1, @DateTo)
 		END
 		ELSE BEGIN
-			SET @DateFrom = DATEADD(month, -@MonthCount, @DateTo)
+			SET @DateFrom = DATEADD(month, -(@MonthCount - 1), @DateTo)
+			SET @DateFrom = DATEADD(month, DATEDIFF(month, 0, @DateFrom), 0)
 		END
 	END
 

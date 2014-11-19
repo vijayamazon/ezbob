@@ -59,33 +59,28 @@
 
 				CheckIsFraud();
 				CheckIsBrokerCustomer();
+				CheckTodayApprovedCount();
+				CheckTodayOpenLoans();
+				CheckOutstandingOffers();
 				CheckAml();
-				CheckCompanyScore();
 				CheckCustomerStatus();
+				CheckCompanyScore();
 				CheckConsumerScore();
 				CheckCustomerAge();
 				CheckTurnovers();
 				CheckCompanyAge();
-				CheckOutstandingOffers();
-				CheckTodayOpenLoans();
-				CheckTodayApprovedCount();
 				CheckDefaultAccounts();
-
 				CheckTotalLoanCount();
-
 				CheckCaisStatuses(m_oMetaData.TotalLoanCount > 0
 					? m_oCfg.GetAllowedCaisStatusesWithLoan()
 					: m_oCfg.GetAllowedCaisStatusesWithoutLoan()
 				);
-
 				CheckRollovers();
 				CheckLatePayments();
 				CheckCustomerOpenLoans();
 				CheckRepaidRatio();
 				ReduceOutstandingPrincipal();
-
 				CheckAllowedRange();
-
 				CheckComplete();
 			}
 			catch (Exception e) {

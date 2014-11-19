@@ -232,32 +232,28 @@
 
 				CheckIsFraud();
 				CheckIsBroker();
+				CheckTodaysApprovals();
+				CheckTodaysLoans();
+				CheckOutstandingOffers(outstandingOffers);
 				CheckAMLResult();
-				CheckBusinessScore();
 				CheckCustomerStatus();
+				CheckBusinessScore();
 				CheckExperianScore();
 				CheckAge();
 				CheckTurnovers(); // TODO: print to log or new step detailed turnover
 				CheckSeniority(); // TODO: print to log or new step detailed seniority
-				CheckOutstandingOffers(outstandingOffers);
-				CheckTodaysLoans();
-				CheckTodaysApprovals();
 				CheckDefaultAccounts();
-
 				CheckTotalLoanCount();
-
 				CheckWorstCaisStatus(
 					m_oTrail.MyInputData.MetaData.TotalLoanCount > 0
 					? CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithLoan
 					: CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan
 				);
-
 				CheckRollovers();
 				CheckLateDays();
-				CheckOutstandingLoans();
-
+				CheckCustomerOpenLoans();
+				CheckRepaidRatio();
 				ReduceOutstandingPrincipal();
-
 				CheckAllowedRange();
 
 				CheckComplete();
@@ -546,20 +542,23 @@
 			} // for
 		} // FindOutstandingLoans
 
-		private void CheckOutstandingLoans() {
+		private void CheckCustomerOpenLoans() {
 			int autoApproveMaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans;
-			decimal autoApproveMinRepaidPortion = CurrentValues.Instance.AutoApproveMinRepaidPortion;
 
 			if (m_oTrail.MyInputData.MetaData.OpenLoanCount > autoApproveMaxNumOfOutstandingLoans)
 				StepFailed<OutstandingLoanCount>().Init(m_oTrail.MyInputData.MetaData.OpenLoanCount, autoApproveMaxNumOfOutstandingLoans);
 			else
 				StepDone<OutstandingLoanCount>().Init(m_oTrail.MyInputData.MetaData.OpenLoanCount, autoApproveMaxNumOfOutstandingLoans);
+		} // CheckCustomerOpenLoans
+
+		private void CheckRepaidRatio() {
+			decimal autoApproveMinRepaidPortion = CurrentValues.Instance.AutoApproveMinRepaidPortion;
 
 			if (m_oTrail.MyInputData.MetaData.RepaidRatio >= autoApproveMinRepaidPortion)
-				StepFailed<OutstandingRepayRatio>().Init(m_oTrail.MyInputData.MetaData.RepaidRatio, autoApproveMinRepaidPortion);
-			else
 				StepDone<OutstandingRepayRatio>().Init(m_oTrail.MyInputData.MetaData.RepaidRatio, autoApproveMinRepaidPortion);
-		} // CheckOutstandingLoans
+			else
+				StepFailed<OutstandingRepayRatio>().Init(m_oTrail.MyInputData.MetaData.RepaidRatio, autoApproveMinRepaidPortion);
+		} // CheckRepaidRatio
 
 		private void ReduceOutstandingPrincipal() {
 			autoApprovedAmount -= (int)m_oTrail.MyInputData.MetaData.OutstandingPrincipal;
