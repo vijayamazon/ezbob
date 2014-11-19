@@ -30,7 +30,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		Silver,
 		Gold,
 		Platinum,
-		Diamond
+		Diamond,
 	} // enum Medal
 
 	#endregion enum Medal

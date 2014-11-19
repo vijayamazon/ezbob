@@ -14,6 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Repository;
 	using CommonLib.TimePeriodLogic;
+	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
@@ -400,14 +401,20 @@
 			if (customer == null)
 				return DateTime.UtcNow;
 
-			CustomerAnalytics oAnalytics = _customerAnalytics.GetAll().FirstOrDefault(ca => ca.Id == customer.Id);
+			if (customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited) {
+				CustomerAnalytics oAnalytics = _customerAnalytics.GetAll().FirstOrDefault(ca => ca.Id == customer.Id);
 
-			DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;
+				DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;
 
-			if (oIncorporationDate.Year < 1000)
-				oIncorporationDate = DateTime.UtcNow;
+				if (oIncorporationDate.Year < 1000)
+					oIncorporationDate = DateTime.UtcNow;
 
-			return oIncorporationDate;
+				return oIncorporationDate;
+			} // if ltd
+
+			// ObjectFactory.GetInstance<IEzServiceAccessor>().;
+			// TODO: get seniority for non limited
+			return DateTime.UtcNow;
 		} // GetCustomerIncorporationDate
 
 		public List<Loan> GetOutstandingLoans(int customerId)
@@ -708,8 +715,8 @@
 		public MpsTotals GetMpsTotals(int customerId)
 		{
 			var customer = _customers.Get(customerId);
-			var totals = new MpsTotals
-				{
+			try {
+				var totals = new MpsTotals {
 					TotalSumOfOrders1YTotal = GetAnualTurnOverByCustomer(customer.Id),
 					TotalSumOfOrders3MTotal = GetTotalSumOfOrders3M(customer.Id),
 					MarketplaceSeniorityDays = MarketplaceSeniority(customer),
@@ -719,7 +726,12 @@
 					Yodlee1YForRejection = GetYodleeForRejection(customer.Id, GetAnnualizedTurnoverFromValues),
 					Yodlee3MForRejection = GetYodleeForRejection(customer.Id, Get3MTurnoverFromValues)
 				};
-			return totals;
+				return totals;
+			}
+			catch (Exception) {
+				return new MpsTotals();
+			}
+			
 		}
 
 		private bool IsOwner(Customer customer, string response, string titleNumber)

@@ -229,19 +229,6 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	DECLARE @NumOfDefaultAccounts INT = ISNULL((
-		SELECT
-			COUNT(*)
-		FROM
-			ExperianDefaultAccount eda
-		WHERE
-			eda.CustomerId = @CustomerID
-			AND
-			eda.Balance != 0
-	), 0)
-
-	------------------------------------------------------------------------------
-
 	DECLARE @NumOfRollovers INT = ISNULL((
 		SELECT
 			COUNT(*)
@@ -291,12 +278,25 @@ BEGIN
 		l.InsertDate DESC
 
 	------------------------------------------------------------------------------
+
+	DECLARE @NumOfDefaultAccounts INT = ISNULL((
+		SELECT
+			COUNT(*)
+		FROM
+			ExperianConsumerDataCais c
+		WHERE
+			c.ExperianConsumerDataId = @ExperianConsumerDataID
+			AND
+			c.AccountStatus = 'F'
+	), 0)
+
+	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SELECT
 		RowType                = 'MetaData',
 
-		IsBrokerCustomer       = (CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END),
+		IsBrokerCustomer       = CONVERT(BIT, (CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END)),
 		NumOfTodayAutoApproval = @TodayAutoApprovalCount,
 		TodayLoanSum           = @TodayLoanSum,
 
@@ -353,7 +353,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT
+	SELECT DISTINCT
 		RowType     = 'Cais',
 		WorstStatus = ec.WorstStatus
 	FROM
@@ -372,6 +372,5 @@ BEGIN
 	EXECUTE GetCustomerTurnoverData @CustomerID, 12
 
 	------------------------------------------------------------------------------
-
 END
 GO

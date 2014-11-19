@@ -6,10 +6,23 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LoadDecisionTrail
-@DiffID UNIQUEIDENTIFIER
+@DiffID UNIQUEIDENTIFIER,
+@TrailID BIGINT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	------------------------------------------------------------------------------
+
+	IF @DiffID IS NULL
+	BEGIN
+		SELECT
+			@DiffID = t.UniqueID
+		FROM
+			DecisionTrail t
+		WHERE
+			t.TrailID = @TrailID
+	END
 
 	------------------------------------------------------------------------------
 

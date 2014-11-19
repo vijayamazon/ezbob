@@ -9,6 +9,27 @@ ALTER PROCEDURE GetWorstCaisStatuses
 @CustomerId INT
 AS
 BEGIN
-	SELECT rtrim(ltrim(WorstStatus)) AS WorstStatus FROM ExperianConsumerData WHERE WorstStatus IS NOT NULL AND CustomerId = @CustomerId
+	DECLARE @ExperianConsumerDataID BIGINT
+
+	------------------------------------------------------------------------------
+
+	SELECT TOP 1
+		@ExperianConsumerDataID = e.Id
+	FROM
+		MP_ServiceLog l
+		INNER JOIN ExperianConsumerData e ON l.Id = e.ServiceLogId
+	WHERE
+		l.CustomerId = @CustomerId
+	ORDER BY
+		l.InsertDate DESC
+
+	------------------------------------------------------------------------------
+
+	SELECT DISTINCT
+		WorstStatus = RTRIM(LTRIM(ec.WorstStatus))
+	FROM
+		ExperianConsumerDataCais ec
+	WHERE
+		ec.ExperianConsumerDataId = @ExperianConsumerDataID
 END
 GO

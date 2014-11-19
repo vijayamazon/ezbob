@@ -2,6 +2,7 @@
 	using System;
 	using System.Globalization;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
 	public class OriginationTime {
@@ -9,11 +10,10 @@
 
 		#region constructor
 
-		public OriginationTime() {
+		public OriginationTime(ASafeLog oLog) {
 			m_oRow = null;
-		}
-
-		// constructor
+			m_oLog = oLog ?? new SafeLog();
+		} // constructor
 
 		#endregion constructor
 
@@ -46,11 +46,11 @@
 				return;
 			} // if
 
-			if (r.Time < Since.Value)
+			if (r.Time < Since.Value) {
 				m_oRow = r;
-		}
-
-		// Process
+				m_oLog.Debug("Marketplace origination time updated from {0}.", r);
+			} // if
+		} // Process
 
 		#endregion method Process
 
@@ -69,6 +69,8 @@
 				};
 
 				m_oRow.SetTime();
+
+				m_oLog.Debug("Marketplace origination time updated from {0}.", m_oRow);
 			} // if
 		} // FromExperian
 
@@ -111,6 +113,7 @@
 		#endregion property MarketplaceID
 
 		private Row m_oRow;
+		private readonly ASafeLog m_oLog;
 
 		#region class Row
 
@@ -164,6 +167,14 @@
 			} // IsIncluded
 
 			#endregion property IsIncluded
+
+			#region method ToString
+
+			public override string ToString() {
+				return string.Format("time: {0}, mp id: {1}, mp type: {2}", Time, MarketplaceID, MarketplaceType);
+			} // ToString
+
+			#endregion method ToString
 
 			private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
 			private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");

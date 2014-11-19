@@ -14,6 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
+	using EzBob.Backend.Strategies.Experian;
 	using MedalCalculations;
 	using Misc;
 	using CommonLib.TimePeriodLogic;
@@ -63,10 +64,7 @@
 
 		public void MakeDecision(AutoDecisionResponse response) {
 			try {
-				bool autoApproveIsSilent = CurrentValues.Instance.AutoApproveIsSilent;
-				string autoApproveSilentTemplateName = CurrentValues.Instance.AutoApproveSilentTemplateName;
-				string autoApproveSilentToAddress = CurrentValues.Instance.AutoApproveSilentToAddress;
-				decimal minLoanAmount = CurrentValues.Instance.MinLoanAmount;
+				response.LoanOfferUnderwriterComment = "Checking auto approve...";
 
 				var availFunds = new GetAvailableFunds(db, log);
 				availFunds.Execute();
@@ -92,12 +90,16 @@
 						m_oTrail.DiffID.ToString("N")
 					);
 
+					response.LoanOfferUnderwriterComment = "Mismatch - " + m_oTrail.DiffID;
+
 					response.AutoApproveAmount = 0;
 
 					response.CreditResult = "WaitingForDecision";
 					response.UserStatus = "Manual";
 					response.SystemDecision = "Manual";
 				} // if
+
+				decimal minLoanAmount = CurrentValues.Instance.MinLoanAmount;
 
 				response.AutoApproveAmount = (int)(
 					Math.Round(response.AutoApproveAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
@@ -107,9 +109,14 @@
 
 				if (response.AutoApproveAmount != 0) {
 					if (availFunds.AvailableFunds > response.AutoApproveAmount) {
-						if (autoApproveIsSilent) {
-							NotifyAutoApproveSilentMode(response.AutoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
+						if (CurrentValues.Instance.AutoApproveIsSilent) {
+							NotifyAutoApproveSilentMode(
+								response.AutoApproveAmount,
+								CurrentValues.Instance.AutoApproveSilentTemplateName,
+								CurrentValues.Instance.AutoApproveSilentToAddress
+							);
 
+							response.LoanOfferUnderwriterComment = "Silent Approve - " + m_oTrail.DiffID;
 							response.CreditResult = "WaitingForDecision";
 							response.UserStatus = "Manual";
 							response.SystemDecision = "Manual";
@@ -124,6 +131,7 @@
 								response.CreditResult = "WaitingForDecision";
 								response.UserStatus = "Manual";
 								response.SystemDecision = "Manual";
+								response.LoanOfferUnderwriterComment = "Calculator failure - " + m_oTrail.DiffID;
 							}
 							else
 							{
@@ -149,6 +157,7 @@
 			}
 			catch (Exception e) {
 				log.Error(e, "Exception during auto approval.");
+				response.LoanOfferUnderwriterComment = "Exception - " + m_oTrail.DiffID;
 			} // try
 		} // MakeDecision
 
@@ -197,11 +206,12 @@
 				IncorporationDate = strategyHelper.GetCustomerIncorporationDate(customer),
 				DateOfBirth = ((customer != null) && (customer.PersonalInfo != null) && customer.PersonalInfo.DateOfBirth.HasValue) ? customer.PersonalInfo.DateOfBirth.Value : DateTime.UtcNow,
 
-				NumOfDefaultAccounts = experianDefaultAccountRepository.GetAll().Count(entry => entry.Customer.Id == customerId),
+				NumOfDefaultAccounts = FindNumOfDefaultAccounts(),
 				NumOfRollovers = CalculateRollovers(),
 
 				TotalLoanCount = loanRepository.ByCustomer(customerId).Count(),
 			});
+
 
 			FindOutstandingLoans();
 
@@ -266,6 +276,16 @@
 
 			log.Msg("Auto approved amount: {0}. {1}", autoApprovedAmount, m_oTrail);
 		} // CheckAutoApprovalConformance
+
+		private int FindNumOfDefaultAccounts() {
+			var stra = new LoadExperianConsumerData(customerId, null, null, db, log);
+			stra.Execute();
+
+			if (stra.Result.Cais.Count == 0)
+				return 0;
+
+			return stra.Result.Cais.Count(c => c.AccountStatus == "F");
+		} // FindNumOfDefaultAccounts
 
 		private void CheckIsBroker() {
 			if (isBrokerCustomer)
