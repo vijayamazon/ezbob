@@ -68,13 +68,13 @@
 				m_nApprovedAmount = (int)data.ReApproveAmount;
 
 				if (m_nApprovedAmount > 0)
-					StepDone<Complete>().Init(m_nApprovedAmount);
+					StepNoDecision<Complete>().Init(m_nApprovedAmount);
 				else
-					StepFailed<Complete>().Init(m_nApprovedAmount);
+					StepNoReApprove<Complete>().Init(m_nApprovedAmount);
 			}
 			catch (Exception e) {
 				m_oLog.Error(e, "Exception during auto approval.");
-				StepFailed<ExceptionThrown>().Init(e);
+				StepNoReApprove<ExceptionThrown>().Init(e);
 			} // try
 
 			if (Trail.HasDecided)
@@ -103,92 +103,90 @@
 		private void CheckAvailableFunds()
 		{
 			if (Trail.MyInputData.AvaliableFunds <= Trail.MyInputData.ReApproveAmount)
-				StepDone<EnoughFunds>().Init(Trail.MyInputData.ReApproveAmount, Trail.MyInputData.AvaliableFunds);
+				StepNoDecision<EnoughFunds>().Init(Trail.MyInputData.ReApproveAmount, Trail.MyInputData.AvaliableFunds);
 			else
-				StepFailed<EnoughFunds>().Init(Trail.MyInputData.ReApproveAmount, Trail.MyInputData.AvaliableFunds);
+				StepNoReApprove<EnoughFunds>().Init(Trail.MyInputData.ReApproveAmount, Trail.MyInputData.AvaliableFunds);
 		}
 
 		private void CheckHasLoanCharges()
 		{
 			if (!Trail.MyInputData.HasLoanCharges)
-				StepDone<Charges>().Init(1); // Not retrieving charges amount???
+				StepNoDecision<Charges>().Init(1); // Not retrieving charges amount???
 			else
-				StepFailed<Charges>().Init(0);
+				StepNoReApprove<Charges>().Init(0);
 		}
 
 		private void CheckHasOutstandingLoans()
 		{
 			if (Trail.MyInputData.NumOutstandingLoans <= Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans)
-				StepDone<OutstandingLoanCount>().Init(Trail.MyInputData.NumOutstandingLoans, Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans);
+				StepNoDecision<OutstandingLoanCount>().Init(Trail.MyInputData.NumOutstandingLoans, Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans);
 			else
-				StepFailed<OutstandingLoanCount>().Init(Trail.MyInputData.NumOutstandingLoans, Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans);
+				StepNoReApprove<OutstandingLoanCount>().Init(Trail.MyInputData.NumOutstandingLoans, Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans);
 		}
 
 		private void CheckHasAddedMp()
 		{
 			if (!Trail.MyInputData.NewDataSourceAdded)
-				StepDone<NewMarketplace>().Init(Trail.MyInputData.NewDataSourceAdded);
+				StepNoDecision<NewMarketplace>().Init(Trail.MyInputData.NewDataSourceAdded);
 			else
-				StepFailed<NewMarketplace>().Init(Trail.MyInputData.NewDataSourceAdded);
+				StepNoReApprove<NewMarketplace>().Init(Trail.MyInputData.NewDataSourceAdded);
 		}
 
 		private void CheckHasLatePayment()
 		{
 			if (Trail.MyInputData.MaxLateDays <=  Trail.MyInputData.AutoReApproveMaxLatePayment)
-				StepDone<LatePayment>().Init(Trail.MyInputData.MaxLateDays, Trail.MyInputData.AutoReApproveMaxLatePayment);
+				StepNoDecision<LatePayment>().Init(Trail.MyInputData.MaxLateDays, Trail.MyInputData.AutoReApproveMaxLatePayment);
 			else
-				StepFailed<LatePayment>().Init(Trail.MyInputData.MaxLateDays, Trail.MyInputData.AutoReApproveMaxLatePayment);
+				StepNoReApprove<LatePayment>().Init(Trail.MyInputData.MaxLateDays, Trail.MyInputData.AutoReApproveMaxLatePayment);
 		}
 
 		private void CheckHasLateLoans()
 		{
 			if (!Trail.MyInputData.WasLate)
-				StepDone<LateLoans>().Init();
+				StepNoDecision<LateLoans>().Init();
 			else
-				StepFailed<LateLoans>().Init();
+				StepNoReApprove<LateLoans>().Init();
 		}
 
 		private void CheckWasRejected()
 		{
 			if (!Trail.MyInputData.WasRejected)
-				StepDone<RejectAfterLacr>().Init(1,1);
+				StepNoDecision<RejectAfterLacr>().Init(1, 1);
 			else
-				StepFailed<RejectAfterLacr>().Init(0,0);
+				StepNoReApprove<RejectAfterLacr>().Init(0, 0);
 		}
 
 		private void CheckIsLACRTooOld() {
 			var approvedDaysAgo = Trail.MyInputData.ManualApproveDate.HasValue ? (decimal)(Now - Trail.MyInputData.ManualApproveDate.Value).TotalDays : 0.0M;
 			if (Trail.MyInputData.ManualApproveDate.HasValue && approvedDaysAgo <= Trail.MyInputData.AutoReApproveMaxLacrAge)
-				StepDone<LacrTooOld>().Init(approvedDaysAgo, Trail.MyInputData.AutoReApproveMaxLacrAge);
+				StepNoDecision<LacrTooOld>().Init(approvedDaysAgo, Trail.MyInputData.AutoReApproveMaxLacrAge);
 			else
-				StepFailed<LacrTooOld>().Init(approvedDaysAgo, Trail.MyInputData.AutoReApproveMaxLacrAge);
+				StepNoReApprove<LacrTooOld>().Init(approvedDaysAgo, Trail.MyInputData.AutoReApproveMaxLacrAge);
 		}
 
 		private void CheckIsFraud() {
 			if (Trail.MyInputData.FraudStatus == FraudStatus.Ok)
-				StepDone<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+				StepNoDecision<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
 			else
-				StepFailed<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
+				StepNoReApprove<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
 		} // CheckIsFraud
 
 		#endregion steps
-		
-		#region method StepFailed
 
-		private T StepFailed<T>() where T : ATrace {
+		private T StepNoDecision<T>() where T : ATrace
+		{
+			m_nApprovedAmount = 0;
+			return Trail.Dunno<T>();
+		} 
+
+		private T StepNoReApprove<T>() where T : ATrace {
 			m_nApprovedAmount = 0;
 			return Trail.Negative<T>(false);
-		} // StepFailed
+		} 
 
-		#endregion method StepFailed
-
-		#region method StepDone
-
-		private T StepDone<T>() where T : ATrace {
-			return Trail.Affirmative<T>(false);
-		} // StepFailed
-
-		#endregion method StepDone
+		//private T StepReApprove<T>() where T : ATrace {
+		//	return Trail.Affirmative<T>(false);
+		//} 
 
 		#region fields
 
@@ -197,7 +195,6 @@
 
 		private readonly ASafeLog m_oLog;
 		private int m_nApprovedAmount;
-		
 
 		#endregion fields
 
