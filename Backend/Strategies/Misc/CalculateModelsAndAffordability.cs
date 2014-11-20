@@ -438,29 +438,52 @@
 				try {
 					if (mp.Disabled) {
 						model = GetDefaultModel(mp);
+						Log.Debug("Marketplace {0} of type {1} is disabled, default model is used.", mp.Id, mp.Marketplace.Name);
 					}
 					else {
 						var builder = GetMpModelBuilder(mp);
 
-						using (
-							m_oTimeCounter.AddStep("Model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName, mp.Marketplace.Name)
-							)
+						Log.Debug(
+							"Model builder of type {0} has been created for marketplace {1} of type {2}.",
+							builder.GetType(),
+							mp.Id,
+							mp.Marketplace.Name
+						);
+
+						using (m_oTimeCounter.AddStep(
+							"Model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName, mp.Marketplace.Name
+						)) {
 							model = builder.Create(mp, m_oHistory);
 
-						using (
-							m_oTimeCounter.AddStep("Payment model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName,
-							                       mp.Marketplace.Name))
+							Log.Debug(
+								"Model has been built for marketplace {0} of type {1}.",
+								mp.Id,
+								mp.Marketplace.Name
+							);
+						} // using
+
+						using (m_oTimeCounter.AddStep(
+							"Payment model build time for mp {0}: {1} of type {2}",
+							mp.Id, mp.DisplayName, mp.Marketplace.Name
+						)) {
 							model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, m_oHistory);
-					}
+
+							Log.Debug(
+								"Payment account model has been built for marketplace {0} of type {1}.",
+								mp.Id,
+								mp.Marketplace.Name
+							);
+						} // using
+					} // if
 				}
 				catch (Exception e) {
-					Log.Warn(e, "Something went wrong while building marketplace model for marketplace id {0} of type {1}.", mp.Id, mp.Marketplace.Name);
-
+					Log.Warn(e, "Something went wrong while building marketplace model for marketplace id {0} of type {1}, default model is used.", mp.Id, mp.Marketplace.Name);
 					model = GetDefaultModel(mp);
 				} // try
 
 				m_oMundMs.Add(new LocalMp(model, mp));
 			} // for each mp
+
 			try {
 				if (m_oMundMs.Any(x => x.Model.Name == "HMRC") && m_oMundMs.Any(x => x.Model.Name == "Yodlee")) {
 					foreach (var mp in m_oMundMs.Where(x => x.Model.Name == "HMRC")) {

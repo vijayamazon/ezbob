@@ -113,7 +113,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		#region method GetSeniority
 
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
-			return GetDateFromList(mp, lst => lst.Min());
+			return GetDateFromList(mp, WhichDateToTake.Min);
 		} // GetSeniority
 
 		#endregion method GetSeniority
@@ -121,7 +121,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		#region method GetLastTransaction
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp) {
-			return GetDateFromList(mp, lst => lst.Max());
+			return GetDateFromList(mp, WhichDateToTake.Max);
 		} // GetSeniority
 
 		#endregion method GetLastTransaction
@@ -130,31 +130,66 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 		#region private
 
+		#region enum WhichDateToTake
+
+		private enum WhichDateToTake {
+			Min,
+			Max,
+		} // enum WhichDateToTake
+
+		#endregion enum WhichDateToTake
+
 		#region method GetDateFromList
 
-		private DateTime? GetDateFromList(MP_CustomerMarketPlace mp, Func<IQueryable<DateTime>, DateTime> oExtractDate) {
+		private DateTime? GetDateFromList(MP_CustomerMarketPlace mp, WhichDateToTake nWhich) {
 			if (null == Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
 				return null;
 
-			IQueryable<DateTime> oListOfDates = _session
+			DateTime? oResult = null;
+
+			IQueryable<DateTime> oListOfPaymentDates = _session
 				.Query<MP_ChannelGrabberOrderItem>()
 				.Where(oi =>
 					(oi.Order.CustomerMarketPlace.Id == mp.Id) && (oi.PaymentDate != null)
 				)
 				.Select(oi => oi.PaymentDate);
 
+			foreach (DateTime oDate in oListOfPaymentDates)
+				oResult = SelectOne(oResult, oDate, nWhich);
+
 			IQueryable<MP_VatReturnRecord> oVatPeriods = _session
 				.Query<MP_VatReturnRecord>()
 				.Where(r => r.CustomerMarketPlace.Id == mp.Id && (r.IsDeleted == null || !r.IsDeleted.Value));
 
-			IQueryable<DateTime> oAllDates = oListOfDates
-				.Union(oVatPeriods.Select(r => r.DateFrom))
-				.Union(oVatPeriods.Select(r => r.DateTo));
+			foreach (MP_VatReturnRecord oPeriod in oVatPeriods) {
+				oResult = SelectOne(oResult, oPeriod.DateFrom, nWhich);
+				oResult = SelectOne(oResult, oPeriod.DateTo, nWhich);
+			} // for each
 
-			return oAllDates.Any() ? oExtractDate(oAllDates) : (DateTime?)null;
+			return oResult;
 		} // GetDateFromList
 
 		#endregion method GetDateFromList
+
+		#region method SelectOne
+
+		private static DateTime? SelectOne(DateTime? oResult, DateTime oDate, WhichDateToTake nWhich) {
+			if (oResult == null)
+				return oDate;
+
+			switch (nWhich) {
+			case WhichDateToTake.Min:
+				return (oDate < oResult) ? oDate : oResult;
+
+			case WhichDateToTake.Max:
+				return (oDate > oResult) ? oDate : oResult;
+
+			default:
+				throw new ArgumentOutOfRangeException("nWhich");
+			} // switch
+		} // SelectOne
+
+		#endregion method SelectOne
 
 		#endregion private
 	} // class ChannelGrabberMarketplaceBuilder
