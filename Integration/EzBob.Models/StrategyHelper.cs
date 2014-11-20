@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using ApplicationMng.Repository;
@@ -14,7 +15,6 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Repository;
 	using CommonLib.TimePeriodLogic;
-	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
@@ -412,9 +412,20 @@
 				return oIncorporationDate;
 			} // if ltd
 
-			// ObjectFactory.GetInstance<IEzServiceAccessor>().;
-			// TODO: get seniority for non limited
-			return DateTime.UtcNow;
+			System.Data.IDbCommand cmd = _session.Connection.CreateCommand();
+			cmd.CommandText = "GetNoLtdIncorporationDate";
+			cmd.CommandType = CommandType.StoredProcedure;
+
+			IDbDataParameter prm = cmd.CreateParameter();
+			prm.ParameterName = "@CustomerID";
+			prm.Direction = ParameterDirection.Input;
+			prm.DbType = DbType.Int32;
+			prm.Value = customer.Id;
+			cmd.Parameters.Add(prm);
+
+			DateTime? oDate = (DateTime?)cmd.ExecuteScalar();
+
+			return oDate ?? DateTime.UtcNow;
 		} // GetCustomerIncorporationDate
 
 		public List<Loan> GetOutstandingLoans(int customerId)
