@@ -398,7 +398,7 @@
 		public OriginationTime GetCustomerMarketPlacesOriginationTimes(int customerId) {
 			var srList = _db.ExecuteEnumerable("LoadCustomerMarketplaceOriginationTimes", CommandSpecies.StoredProcedure,
 			                               new QueryParameter("CustomerId", customerId));
-			var originationTime = new OriginationTime();
+			var originationTime = new OriginationTime(_log);
 			foreach (var safeReader in srList) {
 				originationTime.Process(safeReader);
 			}

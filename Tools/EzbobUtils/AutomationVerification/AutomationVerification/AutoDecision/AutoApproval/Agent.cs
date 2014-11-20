@@ -33,7 +33,7 @@
 
 			m_oTurnover = new CalculatedTurnover();
 
-			m_oOriginationTime = new OriginationTime();
+			m_oOriginationTime = new OriginationTime(oLog);
 
 			Trail = new ApprovalTrail(m_oArgs.CustomerID, m_oLog);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
