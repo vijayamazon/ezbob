@@ -1,4 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Trails {
+	using AutoDecision.AutoRejection;
 	using DbConstants;
 	using Ezbob.Logger;
 
@@ -6,7 +7,9 @@
 		#region constructor
 
 		public RejectionTrail(int nCustomerID, ASafeLog oLog) : base (nCustomerID, DecisionStatus.Dunno, oLog) {
-		} // constructor
+			MyInputData = new RejectionInputData();
+
+	} // constructor
 
 		#endregion constructor
 
@@ -46,17 +49,17 @@
 		#region property InputData
 
 		public override ITrailInputData InputData {
-			get { return null; } // TODO { return MyInputData; }
+			get { return MyInputData; }
 		} // InputData
 
-		// public virtual ApprovalInputData MyInputData { get; private set; }
+		public virtual RejectionInputData MyInputData { get; private set; }
 
 		#endregion property InputData
 
 		#region method UpdateDecision
 
 		protected override void UpdateDecision(DecisionStatus nDecisionStatus) {
-			DecisionStatus = DecisionStatus.Dunno;
+			DecisionStatus = nDecisionStatus;
 		} // UpdateDecision
 
 		#endregion method UpdateDecision

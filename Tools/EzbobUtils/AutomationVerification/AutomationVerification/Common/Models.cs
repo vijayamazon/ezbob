@@ -220,39 +220,7 @@
 		public decimal RepaidAmount { get; set; }
 		public int LoanAmount { get; set; }
 	}
-
-	public class RejectionConstants
-	{
-		public int MinCreditScore { get; set; }
-		public int MinCompanyCreditScore { get; set; }
-		public int MinAnnualTurnover { get; set; }
-		public int MinThreeMonthTurnover { get; set; }
-
-		public int LowOfflineAnnualRevenue { get; set; }
-		public int LowOfflineQuarterRevenue { get; set; }
-
-		public int DefaultScoreBelow { get; set; }
-		public int DefaultMinAmount { get; set; }
-		public int DefaultMinAccountsNum { get; set; }
-
-		public int DefaultCompanyScoreBelow { get; set; }
-		public int DefaultCompanyMinAmount { get; set; }
-		public int DefaultCompanyMinAccountsNum { get; set; }
-
-		public int LateAccountMinDays { get; set; }
-		public int LateAccountMinNumber { get; set; }
-		public int LateAccountLastMonth { get; set; }
-
-		public int MinMarketPlaceSeniorityDays { get; set; }
-
-		public int NoRejectIfTotalAnnualTurnoverAbove { get; set; }
-		public int NoRejectIfCreditScoreAbove { get; set; }
-		public int NoRejectIfCompanyCreditScoreAbove { get; set; }
-
-		public int AutoRejectIfErrorInAtLeastOneMPMinScore { get; set; }
-		public int AutoRejectIfErrorInAtLeastOneMPMinCompanyScore { get; set; }
-	}
-
+	
 	public class RejectionData
 	{
 		//from sp

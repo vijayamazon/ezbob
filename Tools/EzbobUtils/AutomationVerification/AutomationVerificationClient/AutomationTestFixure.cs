@@ -62,7 +62,7 @@
 		public void TestAutoRejetion()
 		{
 			var db = new DbHelper(Log);
-			var rejectionConstants = db.GetRejectionConstants();
+			var rejectionConstants = db.GetRejectionConfigs();
 			var arr = new AutoRejectionCalculator(Log, rejectionConstants);
 			string reason;
 			var des = arr.IsAutoRejected(5894, out reason);
@@ -220,6 +220,13 @@
 			var data = agent.GetInputData();
 			agent.MakeDecision(data);
 			Assert.AreEqual(false, agent.Result.IsAutoReApproved);
+		}
+
+		[Test]
+		public void GetRejectionConfigs() {
+			var db = new DbHelper(Log);
+			var conf = db.GetRejectionConfigs();
+			Assert.GreaterOrEqual(250000, conf.AutoRejectionException_AnualTurnover);
 		}
 	}
 }

@@ -5,6 +5,7 @@
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoReApproval;
+	using AutomationCalculator.AutoDecision.AutoRejection;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -24,81 +25,9 @@
 			_db = new SqlConnection(log);
 		}
 
-		public RejectionConstants GetRejectionConstants()
+		public RejectionConfigs GetRejectionConfigs()
 		{
-			var sr = _db.ExecuteEnumerable("AV_RejectionConstants", CommandSpecies.StoredProcedure);
-			var consts = new RejectionConstants();
-			foreach (SafeReader row in sr)
-			{
-				switch (row["Name"].ToString())
-				{
-					case "LowCreditScore":
-						consts.MinCreditScore = row["Value"];
-						break;
-					case "TotalAnnualTurnover":
-						consts.MinAnnualTurnover = row["Value"];
-						break;
-					case "TotalThreeMonthTurnover":
-						consts.MinThreeMonthTurnover = row["Value"];
-						break;
-					case "Reject_Defaults_CreditScore":
-						consts.DefaultScoreBelow = row["Value"];
-						break;
-					case "Reject_Defaults_AccountsNum":
-						break;
-					case "Reject_Defaults_Amount":
-						consts.DefaultMinAmount = row["Value"];
-						break;
-					case "Reject_Minimal_Seniority":
-						consts.MinMarketPlaceSeniorityDays = row["Value"];
-						break;
-					case "AutoRejectionException_CreditScore":
-						consts.NoRejectIfCreditScoreAbove = row["Value"];
-						break;
-					case "AutoRejectionException_AnualTurnover":
-						consts.NoRejectIfTotalAnnualTurnoverAbove = row["Value"];
-						break;
-					case "RejectionExceptionMaxCompanyScore":
-						consts.NoRejectIfCompanyCreditScoreAbove = row["Value"];
-						break;
-					case "RejectionExceptionMaxCompanyScoreForMpError":
-						consts.AutoRejectIfErrorInAtLeastOneMPMinCompanyScore = row["Value"];
-						break;
-					case "RejectionExceptionMaxConsumerScoreForMpError":
-						consts.AutoRejectIfErrorInAtLeastOneMPMinScore = row["Value"];
-						break;
-					case "RejectionCompanyScore":
-						consts.MinCompanyCreditScore = row["Value"];
-						break;
-					case "Reject_LowOfflineAnnualRevenue":
-						consts.LowOfflineAnnualRevenue = row["Value"];
-						break;
-					case "Reject_LowOfflineQuarterRevenue":
-						consts.LowOfflineQuarterRevenue = row["Value"];
-						break;
-					case "Reject_LateLastMonthsNum":
-						consts.LateAccountLastMonth = row["Value"];
-						break;
-					case "Reject_NumOfLateAccounts":
-						consts.LateAccountMinNumber = row["Value"];
-						break;
-					case "RejectionLastValidLate":
-						consts.LateAccountMinDays = row["Value"];
-						break;
-					case "Reject_Defaults_CompanyScore":
-						consts.DefaultCompanyScoreBelow = row["Value"];
-						break;
-					case "Reject_Defaults_CompanyAccountsNum":
-						consts.DefaultCompanyMinAccountsNum = row["Value"];
-						break;
-					case "Reject_Defaults_CompanyAmount":
-						consts.DefaultCompanyMinAmount = row["Value"];
-						break;	
-					default:
-						break;
-				}
-			}
-
+			var consts = _db.FillFirst<RejectionConfigs>("AV_RejectionConstants", CommandSpecies.StoredProcedure);
 			return consts;
 		}
 
@@ -205,9 +134,15 @@
 			return _db.ExecuteEnumerable("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
 		}
 
-		public RejectionData GetRejectionData(int customerId) {
+		//TODO retire
+		public RejectionData GetRejectionDataOld(int customerId) {
 			return _db.FillFirst<RejectionData>("AV_GetRejectionData", CommandSpecies.StoredProcedure,
 			                              new QueryParameter("@CustomerId", customerId));
+		}
+
+		public AutoRejectionInputDataModelDb GetRejectionData(int customerId) {
+			return _db.FillFirst<AutoRejectionInputDataModelDb>(
+				"AV_GetRejectionData", CommandSpecies.StoredProcedure,new QueryParameter("@CustomerId", customerId));
 		}
 		
 		public ReRejectionData GetReRejectionData(int customerId, int cashRequestId)

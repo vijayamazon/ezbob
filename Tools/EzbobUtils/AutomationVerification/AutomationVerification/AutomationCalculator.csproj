@@ -60,6 +60,7 @@
     <Compile Include="AutoDecision\AutoReApproval\AutoReApprovalModels.cs" />
     <Compile Include="AutoDecision\AutoRejectionCalculator.cs" />
     <Compile Include="AutoDecision\AutoRejection\Agent.cs" />
+    <Compile Include="AutoDecision\AutoRejection\AutoRejectModels.cs" />
     <Compile Include="AutoDecision\AutoReRejection\AutoReRejectionModels.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="AutoDecision\AutoReRejectionCalculator.cs" />

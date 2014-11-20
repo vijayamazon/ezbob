@@ -203,7 +203,7 @@
 		{
 			var verificationDecisions = new Dictionary<int, Dictionary<DecisionType,AutoDecision>>();
 			var db = new DbHelper(Log);
-			var rejectionConstants = db.GetRejectionConstants();
+			var rejectionConstants = db.GetRejectionConfigs();
 			var aj = new AutoRejectionCalculator(Log, rejectionConstants);
 			var arr = new AutoReRejectionCalculator(Log);
 			var ara = new AutoReApprovalCalculator(Log);

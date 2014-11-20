@@ -1,38 +1,61 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AV_RejectionConstants]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[AV_RejectionConstants]
+IF OBJECT_ID('AV_RejectionConstants') IS NULL
+	EXECUTE('CREATE PROCEDURE AV_RejectionConstants AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[AV_RejectionConstants]
+
+ALTER PROCEDURE [dbo].[AV_RejectionConstants]
 AS
 BEGIN
-	SELECT Name, Value FROM ConfigurationVariables WHERE Name 
-	IN (
-		'Reject_Defaults_AccountsNum',
-		'Reject_Defaults_Amount',
-		'Reject_Defaults_CreditScore',
-		'Reject_Defaults_MonthsNum',
-		'Reject_Minimal_Seniority', 
-		'LowCreditScore', 
-		'TotalAnnualTurnover', 
-		'TotalThreeMonthTurnover',
-		'AutoRejectionException_AnualTurnover',
-		'AutoRejectionException_CreditScore',
-		'RejectionExceptionMaxCompanyScore',
-		'RejectionExceptionMaxCompanyScoreForMpError',
-		'RejectionExceptionMaxConsumerScoreForMpError',
-		'RejectionCompanyScore',
-		'Reject_LowOfflineAnnualRevenue',
-		'Reject_LowOfflineQuarterRevenue',
-		'Reject_LateLastMonthsNum',
-		'Reject_NumOfLateAccounts',
-		'RejectionLastValidLate',
-		'Reject_Defaults_CompanyScore',
-		'Reject_Defaults_CompanyAccountsNum',
-		'Reject_Defaults_CompanyAmount'
-		
-	)
+	DECLARE @Reject_Defaults_AccountsNum INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_AccountsNum')
+	DECLARE @Reject_Defaults_Amount INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_Amount')
+	DECLARE @Reject_Defaults_CreditScore INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_CreditScore')
+	DECLARE @Reject_Defaults_MonthsNum INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_MonthsNum')
+	DECLARE @Reject_Minimal_Seniority INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Minimal_Seniority')
+	DECLARE @LowCreditScore INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'LowCreditScore')
+	DECLARE @TotalAnnualTurnover INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'TotalAnnualTurnover')
+	DECLARE @TotalThreeMonthTurnover INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'TotalThreeMonthTurnover')
+	DECLARE @AutoRejectionException_AnualTurnover INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'AutoRejectionException_AnualTurnover')
+	DECLARE @AutoRejectionException_CreditScore INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'AutoRejectionException_CreditScore')
+	DECLARE @RejectionExceptionMaxCompanyScore INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'RejectionExceptionMaxCompanyScore')
+	DECLARE @RejectionExceptionMaxConsumerScoreForMpError INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'RejectionExceptionMaxConsumerScoreForMpError')
+	DECLARE @RejectionExceptionMaxCompanyScoreForMpError INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'RejectionExceptionMaxCompanyScoreForMpError')
+	DECLARE @RejectionCompanyScore INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'RejectionCompanyScore')
+	DECLARE @Reject_Defaults_CompanyScore INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_CompanyScore')
+	DECLARE @Reject_Defaults_CompanyAccountsNum INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_CompanyAccountsNum')
+	DECLARE @Reject_Defaults_CompanyMonthsNum INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_CompanyMonthsNum')
+	DECLARE @Reject_Defaults_CompanyAmount INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_CompanyAmount')
+	DECLARE @Reject_LateLastMonthsNum INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_LateLastMonthsNum')
+	DECLARE @Reject_NumOfLateAccounts INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'Reject_NumOfLateAccounts')
+	DECLARE @RejectionLastValidLate INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'RejectionLastValidLate')
+	
+	SELECT
+		 @Reject_Defaults_AccountsNum AS Reject_Defaults_AccountsNum
+		,@Reject_Defaults_Amount AS Reject_Defaults_Amount
+		,@Reject_Defaults_CreditScore AS Reject_Defaults_CreditScore
+		,@Reject_Defaults_MonthsNum AS Reject_Defaults_MonthsNum
+		,@Reject_Minimal_Seniority AS Reject_Minimal_Seniority
+		,@LowCreditScore AS LowCreditScore
+		,@TotalAnnualTurnover AS TotalAnnualTurnover
+		,@TotalThreeMonthTurnover AS TotalThreeMonthTurnover
+		,@AutoRejectionException_AnualTurnover AS AutoRejectionException_AnualTurnover
+		,@AutoRejectionException_CreditScore AS AutoRejectionException_CreditScore
+		,@RejectionExceptionMaxCompanyScore AS RejectionExceptionMaxCompanyScore
+		,@RejectionExceptionMaxConsumerScoreForMpError AS RejectionExceptionMaxConsumerScoreForMpError
+		,@RejectionExceptionMaxCompanyScoreForMpError AS RejectionExceptionMaxCompanyScoreForMpError
+		,@RejectionCompanyScore AS RejectionCompanyScore
+		,@Reject_Defaults_CompanyScore AS Reject_Defaults_CompanyScore
+		,@Reject_Defaults_CompanyAccountsNum AS Reject_Defaults_CompanyAccountsNum
+		,@Reject_Defaults_CompanyMonthsNum AS Reject_Defaults_CompanyMonthsNum
+		,@Reject_Defaults_CompanyAmount AS Reject_Defaults_CompanyAmount
+		,@RejectionLastValidLate AS RejectionLastValidLate
+		,@Reject_NumOfLateAccounts AS Reject_NumOfLateAccounts
+		,@RejectionLastValidLate AS RejectionLastValidLate
+  
 END
+
 GO

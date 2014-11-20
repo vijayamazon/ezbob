@@ -1,32 +1,78 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection
 {
 	using System;
-	using AutomationCalculator.ProcessHistory.Trails;
+	using AutoApproval;
+	using ProcessHistory.Trails;
+	using Common;
 	using ProcessHistory;
 	using ProcessHistory.Common;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using ProcessHistory.Trails;
 
 	public class RejectionAgent
 	{
+		private readonly DbHelper _dbHelper;
+		private readonly MarketPlacesHelper _mpHelper;
+
 		#region public
 
 		#region constructor
 
-		public RejectionAgent(int nCustomerID, AConnection oDB, ASafeLog oLog)
+		public RejectionAgent(AConnection oDB, ASafeLog oLog, int nCustomerID, RejectionConfigs configs = null)
 		{
 			_customerId = nCustomerID;
 			_isAutoRejected = false;
-
+			m_oLog = oLog;
+			m_oDB = oDB;
+			_mpHelper = new MarketPlacesHelper(m_oLog);
+			_dbHelper = new DbHelper(oDB, oLog);
+			if (configs == null) {
+				configs = _dbHelper.GetRejectionConfigs();
+			}
+			_configs = configs;
 			Trail = new RejectionTrail(nCustomerID, oLog);
 		} // constructor
 
 		#endregion constructor
 
+		public RejectionInputData GetRejectionInputData(DateTime? dataAsOf) {
+			DateTime now = dataAsOf.HasValue ? dataAsOf.Value : DateTime.UtcNow;
+			var model = new RejectionInputData();
+			var dbData = _dbHelper.GetRejectionData(_customerId);
+			
+			var originationTime = new OriginationTime(m_oLog);
+			m_oDB.ForEachRowSafe(originationTime.Process, "LoadCustomerMarketplaceOriginationTimes",
+			                     CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", _customerId));
+			originationTime.FromExperian(dbData.IncorporationDate);
+
+			var days = originationTime.Since.HasValue ? (now - originationTime.Since.Value).TotalDays : 0;
+
+			_mpHelper.GetMarketPlacesSeniority(_dbHelper.GetCustomerMarketPlaces(_customerId));
+
+			var data = new RejectionInputData {
+				CustomerStatus = dbData.CustomerStatus,
+				ConsumerScore = dbData.ExperianScore,
+				BusinessScore = dbData.CompanyScore,
+				WasApproved = dbData.WasApproved,
+				NumOfDefaultConsumerAccounts = dbData.DefaultAccountsNum,
+				NumOfDefaultBusinessAccounts = dbData.DefaultCompanyAccountsNum,
+				DefaultAmountInConsumerAccounts = dbData.DefaultAccountAmount,
+				DefaultAmountInBusinessAccounts = dbData.DefaultCompanyAccountAmount,
+				HasMpError = dbData.HasErrorMp,
+				HasCompanyFiles = dbData.HasCompanyFiles,
+				BusinessSeniorityDays = (int)days,
+				AnnualTurnover = 0, //TODO
+				QuarterTurnover = 0, //TODO
+				NumOfLateConsumerAccounts = 0, //TODO
+			};
+		
+			model.Init(now, data, _configs);
+			return model;
+		}
+
 		#region method MakeDecision
 
-		public void MakeDecision()
+		public void MakeDecision(RejectionInputData data)
 		{
 			m_oLog.Debug("Checking if auto reject should take place for customer {0}...", _customerId);
 			try {
@@ -48,13 +94,16 @@
 			);
 		}
 
+		private void CheckRejectionExceptions()
+		{
+
+		}
+
 		private void CheckRejections() {
 			
 		}
 
-		private void CheckRejectionExceptions() {
-			throw new NotImplementedException();
-		}
+		
 
 // MakeDecision
 
@@ -104,6 +153,7 @@
 
 		private int _customerId;
 		private bool _isAutoRejected;
+		private RejectionConfigs _configs;
 
 		#endregion fields
 
