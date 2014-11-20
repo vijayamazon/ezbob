@@ -1289,6 +1289,19 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oServiceClient.UpdateGoogleAnalytics(oFrom, oTo);
 		} // UpdateGoogleAnalytics
 
+		[Activation]
+		private void VerifyReapproval() {
+			int nCustomerCount;
+
+			if (m_aryArgs.Length != 2 || !int.TryParse(m_aryArgs[1], out nCustomerCount)) {
+				m_oLog.Msg("Usage: VerifyReapproval <customer count>");
+				m_oLog.Msg("Specify customer count 0 or negative to run on all the customers.");
+				return;
+			} // if
+
+			m_oServiceClient.VerifyReapproval(nCustomerCount);
+		} // VerifyReapproval
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

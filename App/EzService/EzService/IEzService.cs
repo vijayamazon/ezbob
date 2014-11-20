@@ -48,6 +48,13 @@
 
 		#endregion AML and BWA
 
+		#region Automation verification
+
+		[OperationContract]
+		ActionMetaData VerifyReapproval(int nCustomerCount);
+
+		#endregion Automation verification
+
 		#region Broker
 
 		[OperationContract]

@@ -9,6 +9,15 @@ IF TYPE_ID('DecisionTraceList') IS NOT NULL
 	DROP TYPE DecisionTraceList
 GO
 
+IF TYPE_ID('LongStringList') IS NOT NULL
+	DROP TYPE LongStringList
+GO
+
+CREATE TYPE LongStringList AS TABLE (
+	Value NVARCHAR(4000) NULL
+)
+GO
+
 CREATE TYPE DecisionTraceList AS TABLE (
 	Position INT,
 	DecisionStatusID INT,

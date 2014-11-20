@@ -353,14 +353,45 @@
 			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
-				return
-					(CustomerID > 0) &&
-					(DecisionID > 0) &&
-					(UniqueID != Guid.Empty) &&
-					Enum.IsDefined(typeof(DecisionStatus), DecisionStatusID) &&
-					(Traces != null) &&
-					(Traces.Count > 0) &&
-					(Notes != null);
+				bool bResult = true;
+
+				if (CustomerID <= 0) {
+					Log.Debug("Invalid {0} parameter: customer id is {1}", this.GetName(), CustomerID);
+					bResult = false;
+				} // if
+
+				if (!Enum.IsDefined(typeof(DecisionActions), DecisionID)) {
+					Log.Debug("Invalid {0} parameter: decision id is {1}", this.GetName(), DecisionID);
+					bResult = false;
+				} // if
+
+				if (UniqueID == Guid.Empty) {
+					Log.Debug("Invalid {0} parameter: unique id is {1}", this.GetName(), UniqueID);
+					bResult = false;
+				} // if
+
+				if (!Enum.IsDefined(typeof (DecisionStatus), DecisionStatusID)) {
+					Log.Debug("Invalid {0} parameter: decision status id is {1}", this.GetName(), DecisionStatusID);
+					bResult = false;
+				} // if
+
+				if (Traces == null) {
+					Log.Debug("Invalid {0} parameter: Traces is null", this.GetName());
+					bResult = false;
+				}
+				else {
+					if (Traces.Count == 0) {
+						Log.Debug("Invalid {0} parameter: Traces is empty", this.GetName());
+						bResult = false;
+					} // if
+				} // if
+
+				if (Notes == null) {
+					Log.Debug("Invalid {0} parameter: Notes is null", this.GetName());
+					bResult = false;
+				} // if
+
+				return bResult;
 			} // HasValidParameters
 
 			#endregion method HasValidParameters

@@ -7,7 +7,8 @@
 		} // constructor
 
 		public void Init(List<string> oValidationErrors) {
-			ValidationErrors.AddRange(oValidationErrors);
+			if (oValidationErrors != null)
+				ValidationErrors.AddRange(oValidationErrors);
 
 			if (DecisionStatus == DecisionStatus.Affirmative)
 				Comment = string.Format("customer data has been fully loaded");

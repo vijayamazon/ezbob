@@ -1,11 +1,1 @@
-SET QUOTED_IDENTIFIER ON
-GO
-
-IF TYPE_ID('LongStringList') IS NOT NULL
-	DROP TYPE LongStringList
-GO
-
-CREATE TYPE LongStringList AS TABLE (
-	Value NVARCHAR(4000) NULL
-)
-GO
+-- Placeholder file, see SaveDecisionTrail stored procedure for type definition.

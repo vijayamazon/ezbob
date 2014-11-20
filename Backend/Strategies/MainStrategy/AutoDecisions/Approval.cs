@@ -13,7 +13,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Model.Experian;
 	using EzBob.Backend.Strategies.Experian;
 	using MedalCalculations;
 	using Misc;
@@ -52,7 +51,6 @@
 			loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
 			cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
-			experianDefaultAccountRepository = ObjectFactory.GetInstance<ExperianDefaultAccountRepository>();
 			loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
 
 			customer = _customers.ReallyTryGet(customerId);
@@ -75,6 +73,18 @@
 				m_oSecondaryImplementation.MakeDecision();
 
 				bool bSuccess = m_oTrail.EqualsTo(m_oSecondaryImplementation.Trail);
+
+				if (bSuccess && m_oTrail.HasDecided) {
+					if (autoApprovedAmount == m_oSecondaryImplementation.Result.ApprovedAmount) {
+						m_oTrail.Affirmative<SameAmount>(false).Init(autoApprovedAmount);
+						m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false).Init(m_oSecondaryImplementation.Result.ApprovedAmount);
+					}
+					else {
+						m_oTrail.Negative<SameAmount>(false).Init(autoApprovedAmount);
+						m_oSecondaryImplementation.Trail.Negative<SameAmount>(false).Init(m_oSecondaryImplementation.Result.ApprovedAmount);
+						bSuccess = false;
+					} // if
+				} // if
 
 				m_oTrail.Save(db, m_oSecondaryImplementation.Trail);
 
@@ -661,7 +671,6 @@
 
 		private readonly CustomerRepository _customers;
 		private readonly CashRequestsRepository cashRequestsRepository;
-		private readonly ExperianDefaultAccountRepository experianDefaultAccountRepository;
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly LoanRepository loanRepository;
 

@@ -25,11 +25,13 @@
 			m_oLog = oLog ?? new SafeLog();
 			m_oArgs = new Arguments(nCustomerID);
 
-			m_oTrail = new ReapprovalTrail(m_oArgs.CustomerID, m_oLog);
+			Trail = new ReapprovalTrail(m_oArgs.CustomerID, m_oLog);
 			m_oCfg = new Configuration(m_oDB, m_oLog);
 		} // constructor
 
 		#endregion constructor
+
+		public ReapprovalTrail Trail { get; private set; }
 
 		#region method MakeDecision
 
@@ -48,11 +50,7 @@
 
 				m_oMetaData.Validate();
 
-				if (m_oMetaData.ValidationErrors.Count == 0)
-					StepDone<InitialAssignment>().Init(m_oMetaData.ValidationErrors);
-				else
-					StepFailed<InitialAssignment>().Init(m_oMetaData.ValidationErrors);
-
+				CheckInit();
 				CheckIsFraud();
 				CheckLacrTooOld();
 				CheckRejectAfterLacr();
@@ -64,7 +62,7 @@
 				SetApprovedAmount();
 				CheckAvailableFunds();
 
-				if (m_oTrail.HasDecided) {
+				if (Trail.HasDecided) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.IsAutoApproval = true;
 					response.CreditResult = "Approved";
@@ -81,15 +79,11 @@
 				StepFailed<ExceptionThrown>().Init(e);
 			} // try
 
-			decimal nApprovedAmount = ApprovedAmount;
-			if (nApprovedAmount > 0)
-				StepDone<Complete>().Init(nApprovedAmount);
-			else
-				StepFailed<Complete>().Init(nApprovedAmount);
+			CheckComplete();
 
 			m_oLog.Debug("Checking if auto re-approval should take place for customer {0} complete.", m_oArgs.CustomerID);
 
-			m_oLog.Msg("Auto re-approved amount: {0}. {1}", ApprovedAmount, m_oTrail);
+			m_oLog.Msg("Auto re-approved amount: {0}. {1}", ApprovedAmount, Trail);
 		} // MakeDecision
 
 		#endregion method MakeDecision
@@ -101,6 +95,29 @@
 		#region private
 
 		#region steps
+
+		#region method CheckComplete
+
+		private void CheckComplete() {
+			decimal nApprovedAmount = ApprovedAmount;
+			if (nApprovedAmount > 0)
+				StepDone<Complete>().Init(nApprovedAmount);
+			else
+				StepFailed<Complete>().Init(nApprovedAmount);
+		} // CheckComplete
+
+		#endregion method CheckComplete
+
+		#region method CheckInit
+
+		private void CheckInit() {
+			if (m_oMetaData.ValidationErrors.Count == 0)
+				StepDone<InitialAssignment>().Init(m_oMetaData.ValidationErrors);
+			else
+				StepFailed<InitialAssignment>().Init(m_oMetaData.ValidationErrors);
+		} // CheckInit
+
+		#endregion method CheckInit
 
 		#region method CheckIsFraud
 
@@ -202,7 +219,7 @@
 		#region method SetApprovedAmount
 
 		private void SetApprovedAmount() {
-			if (m_oTrail.HasDecided)
+			if (Trail.HasDecided)
 				ApprovedAmount = m_oMetaData.ApprovedAmount;
 
 			if (ApprovedAmount > 0)
@@ -279,7 +296,7 @@
 
 		private T StepFailed<T>() where T : ATrace {
 			ApprovedAmount = 0;
-			return m_oTrail.Negative<T>(false);
+			return Trail.Negative<T>(false);
 		} // StepFailed
 
 		#endregion method StepFailed
@@ -287,7 +304,7 @@
 		#region method StepDone
 
 		private T StepDone<T>() where T : ATrace {
-			return m_oTrail.Affirmative<T>(false);
+			return Trail.Affirmative<T>(false);
 		} // StepFailed
 
 		#endregion method StepDone
@@ -304,8 +321,6 @@
 		private readonly List<Payment> m_oLatePayments;
 
 		private readonly List<Marketplace> m_oNewMarketplaces;
-
-		private readonly ReapprovalTrail m_oTrail;
 
 		#endregion fields
 

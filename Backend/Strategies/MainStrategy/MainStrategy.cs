@@ -3,7 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-
+	using AutomationCalculator.ProcessHistory.Common;
 	using ConfigManager;
 	using MailStrategies;
 	using MailStrategies.API;
@@ -288,16 +288,7 @@
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (dataGatherer.EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				new AutoDecisions.ReApproval.Agent(
-					customerId,
-					DB,
-					Log
-				).MakeDecision(autoDecisionResponse);
-
-				bContinue = string.IsNullOrWhiteSpace(autoDecisionResponse.SystemDecision);
-
-				if (!bContinue)
-					Log.Debug("Auto re-approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
+				bContinue = ProcessReApproval();
 			}
 			else
 				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
@@ -343,6 +334,42 @@
 				Log.Debug("Not approval has reached decision: setting it to be 'waiting for decision'.");
 			} // if
 		} // ProcessApprovals
+
+		private bool ProcessReApproval() {
+			var oReapprove = new AutoDecisions.ReApproval.Agent(
+				customerId,
+				DB,
+				Log
+			);
+			
+			oReapprove.MakeDecision(autoDecisionResponse);
+
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(Log, customerId, oReapprove.Trail.InputData.DataAsOf);
+			oSecondary.MakeDecision(oSecondary.GetInputData());
+
+			bool bSuccess = oReapprove.Trail.EqualsTo(oSecondary.Trail);
+
+			if (bSuccess && oReapprove.Trail.HasDecided) {
+				if (oReapprove.ApprovedAmount == oSecondary.Result.ReApproveAmount) {
+					oReapprove.Trail.Affirmative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
+					oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
+				}
+				else {
+					oReapprove.Trail.Negative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
+					oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
+					bSuccess = false;
+				} // if
+			} // if
+
+			oReapprove.Trail.Save(DB, oSecondary.Trail);
+
+			bool bContinue = bSuccess && string.IsNullOrWhiteSpace(autoDecisionResponse.SystemDecision);
+
+			if (!bContinue)
+				Log.Debug("Auto re-approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
+
+			return bContinue;
+		} // ProcessReApproval
 
 		private void GetLandRegistryDataIfNotRejected(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
 		{

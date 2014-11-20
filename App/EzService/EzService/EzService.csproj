@@ -110,6 +110,7 @@
     <Compile Include="ExecuteArguments.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\automation.verification.cs" />
     <Compile Include="EzServiceImplementation\customer.manual.annualized.revenue.cs" />
     <Compile Include="EzServiceImplementation\esign.cs" />
     <Compile Include="EzServiceImplementation\Funding.cs" />
