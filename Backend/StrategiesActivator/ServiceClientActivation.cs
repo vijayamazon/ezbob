@@ -1172,7 +1172,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oLog.Debug("Stress test with {0} requests of {1} seconds each...", nCount, nLength);
 
 			for (int i = 0; i < nCount; i++)
-				m_oAdminClient.StressTestAction(nLength, i.ToString());
+				m_oAdminClient.StressTestAction(nLength, i.ToString(CultureInfo.InvariantCulture));
 
 			m_oLog.Debug("Stress test with {0} requests of {1} seconds each is complete.", nCount, nLength);
 		} // StressTest
@@ -1291,15 +1291,33 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 		[Activation]
 		private void VerifyReapproval() {
-			int nCustomerCount;
+			int nCustomerCount = -1;
+			int nLastCheckedCustomerID = -1;
 
-			if (m_aryArgs.Length != 2 || !int.TryParse(m_aryArgs[1], out nCustomerCount)) {
-				m_oLog.Msg("Usage: VerifyReapproval <customer count>");
+			bool bGood = false;
+
+			if (m_aryArgs.Length == 1) {
+				nCustomerCount = -1;
+				nLastCheckedCustomerID = -1;
+				bGood = true;
+			}
+			else if (m_aryArgs.Length == 2) {
+				bGood = int.TryParse(m_aryArgs[1], out nCustomerCount);
+				nLastCheckedCustomerID = -1;
+			}
+			else if (m_aryArgs.Length == 3) {
+				bGood = int.TryParse(m_aryArgs[1], out nCustomerCount);
+				bGood = bGood && int.TryParse(m_aryArgs[2], out nLastCheckedCustomerID);
+			} // if
+
+			if (!bGood) {
+				m_oLog.Msg("Usage: VerifyReapproval [ <customer count>  [ <last checked customer id> ] ]");
 				m_oLog.Msg("Specify customer count 0 or negative to run on all the customers.");
+				m_oLog.Msg("Specify customer count 0 or negative to start from the beginning.");
 				return;
 			} // if
 
-			m_oServiceClient.VerifyReapproval(nCustomerCount);
+			m_oServiceClient.VerifyReapproval(nCustomerCount, nLastCheckedCustomerID);
 		} // VerifyReapproval
 
 		// ReSharper restore UnusedMember.Local

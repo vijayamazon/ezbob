@@ -11,8 +11,9 @@
 
 		#region constructor
 
-		public VerifyReapproval(int nTopCount, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public VerifyReapproval(int nTopCount, int nLastCheckedCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nTopCount = nTopCount;
+			m_nLastCheckedCustomerID = nLastCheckedCustomerID;
 		} // constructor
 
 		#endregion constructor
@@ -32,7 +33,7 @@
 			m_nMatchCount = 0;
 			m_nMismatchCount = 0;
 
-			List<AutoApproveInputRow> lst = AutoApproveInputRow.Load(DB, m_nTopCount);
+			List<AutoApproveInputRow> lst = AutoApproveInputRow.Load(DB, m_nTopCount, m_nLastCheckedCustomerID);
 
 			for (int i = 0; i < lst.Count; i++) {
 				AutoApproveInputRow oRow = lst[i];
@@ -60,7 +61,7 @@
 
 		private string VerifyOne(int nCustomerID) {
 			try {
-				string sResult = null;
+				string sResult;
 
 				var autoDecisionResponse = new AutoDecisionResponse {DecisionName = "Manual"};
 
@@ -82,19 +83,16 @@
 						if (oReapprove.ApprovedAmount == oSecondary.Result.ReApproveAmount) {
 							oReapprove.Trail.Affirmative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
 							oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
-
-							sResult = "match";
-							m_nMatchCount++;
 						}
 						else {
 							oReapprove.Trail.Negative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
 							oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
 							bSuccess = false;
-
-							sResult = "mismatch";
-							m_nMismatchCount++;
 						} // if
 					} // if
+
+					sResult = "match";
+					m_nMatchCount++;
 				}
 				else {
 					sResult = "mismatch";
@@ -107,11 +105,14 @@
 			}
 			catch (Exception e) {
 				Log.Debug(e, "Exception caught.");
+				m_nExceptionCount++;
 				return "exception";
 			} // try
 		} // VerifyOne
 
 		private readonly int m_nTopCount;
+		private readonly int m_nLastCheckedCustomerID;
+
 		private int m_nMatchCount;
 		private int m_nMismatchCount;
 		private int m_nExceptionCount;

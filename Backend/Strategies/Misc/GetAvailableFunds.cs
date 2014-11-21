@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
+	using System;
 	using System.Globalization;
 	using System.Threading;
 	using ConfigManager;
@@ -27,7 +28,20 @@
 		public static void LoadFromDB() {
 			ms_oLog.Debug("Loading available funds from DB...");
 
-			SafeReader sr = ms_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure);
+			SafeReader sr;
+
+			try {
+				sr = ms_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure);
+			}
+			catch (Exception e) {
+				ms_oLog.Alert(
+					e,
+					"Failed to load available funds from DB, continuing with the previous loaded values."
+				);
+
+				return;
+			} // try
+
 			decimal nAvailableFunds = sr["AvailableFunds"];
 			decimal nReservedAmount = sr["ReservedAmount"];
 

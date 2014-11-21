@@ -58,9 +58,6 @@
 
 			if (!LacrTime.HasValue)
 				ValidationErrors.Add("last approved cash request time not filled");
-
-			if (!OfferStart.HasValue || !OfferValidUntil.HasValue)
-				ValidationErrors.Add("last offer start time/length not filled");
 		} // Validate
 
 		public int? LacrAge {

@@ -274,15 +274,24 @@
 				cw = oDB.GetPersistent();
 				cw.BeginTransaction();
 
+				m_oLog.Debug("Transaction has been started, saving primary trail...");
+
 				SaveDecisionTrail sp = new SaveDecisionTrail(this, this.DiffID, true, oDB, this.m_oLog);
 				sp.ExecuteNonQuery(cw);
 
+				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
+
 				if (oTrail != null) {
+					m_oLog.Debug("Saving secondary trail...");
+
 					sp = new SaveDecisionTrail(oTrail, this.DiffID, false, oDB, this.m_oLog);
 					sp.ExecuteNonQuery(cw);
+
+					m_oLog.Debug("Saving secondary trail done (pending transaction commit).");
 				} // if
 
 				cw.Commit();
+				m_oLog.Debug("Decision trail has been saved, connection is closed.");
 			}
 			catch (Exception e) {
 				if (cw != null)

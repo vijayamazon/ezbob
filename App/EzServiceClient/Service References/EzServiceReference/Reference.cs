@@ -3074,10 +3074,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaCustomAsync(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount);
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
@@ -4301,12 +4301,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CheckBwaCustomAsync(userId, customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount) {
-            return base.Channel.VerifyReapproval(nCustomerCount);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReapproval(nCustomerCount, nLastCheckedCustomerID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount) {
-            return base.Channel.VerifyReapprovalAsync(nCustomerCount);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReapprovalAsync(nCustomerCount, nLastCheckedCustomerID);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {

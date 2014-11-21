@@ -51,7 +51,7 @@
 		#region Automation verification
 
 		[OperationContract]
-		ActionMetaData VerifyReapproval(int nCustomerCount);
+		ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID);
 
 		#endregion Automation verification
 

@@ -1,5 +1,6 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoReApproval {
 	using System;
+	using System.Collections.Generic;
 	using Common;
 	using ProcessHistory;
 	using ProcessHistory.Common;
@@ -54,7 +55,7 @@
 			try {
 				Trail.MyInputData.Init(Now, data);
 
-				CheckInit();
+				CheckInit(data);
 				CheckIsFraud();
 				CheckIsLACRTooOld();
 				CheckWasRejected();
@@ -107,16 +108,24 @@
 				StepNoReApprove<ApprovedAmount>().Init(m_nApprovedAmount);
 		} // SetApprovedAmount
 
-		private void CheckInit() {
-			StepDone<InitialAssignment>().Init(null);
+		private void CheckInit(ReApprovalInputData oData) {
+			var oErrors = new List<string>();
+
+			if (!oData.ManualApproveDate.HasValue)
+				oErrors.Add("last approved cash request time not filled");
+
+			if (oErrors.Count == 0)
+				StepDone<InitialAssignment>().Init(oErrors);
+			else
+				StepNoReApprove<InitialAssignment>().Init(oErrors);
 		} // CheckInit
 
 		private void CheckAvailableFunds()
 		{
-			if (Trail.MyInputData.AvaliableFunds <= Trail.MyInputData.ReApproveAmount)
-				StepDone<EnoughFunds>().Init(Trail.MyInputData.ReApproveAmount, Trail.MyInputData.AvaliableFunds);
+			if (m_nApprovedAmount < Trail.MyInputData.AvaliableFunds)
+				StepDone<EnoughFunds>().Init(m_nApprovedAmount, Trail.MyInputData.AvaliableFunds);
 			else
-				StepNoReApprove<EnoughFunds>().Init(Trail.MyInputData.ReApproveAmount, Trail.MyInputData.AvaliableFunds);
+				StepNoReApprove<EnoughFunds>().Init(m_nApprovedAmount, Trail.MyInputData.AvaliableFunds);
 		}
 
 		private void CheckHasLoanCharges()

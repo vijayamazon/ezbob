@@ -4,8 +4,8 @@
 	partial class EzServiceImplementation {
 		#region method VerifyReapproval
 
-		public ActionMetaData VerifyReapproval(int nCustomerCount) {
-			return Execute<VerifyReapproval>(null, null, nCustomerCount);
+		public ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID) {
+			return Execute<VerifyReapproval>(null, null, nCustomerCount, nLastCheckedCustomerID);
 		} // VerifyReapproval
 
 		#endregion method VerifyReapproval
