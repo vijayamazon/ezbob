@@ -6,6 +6,9 @@
 	using Common;
 	using Ezbob.Logger;
 
+	/// <summary>
+	/// Medal calculated for customers that have non limited company without score and have online market places (ebay,amazon,paypal)
+	/// </summary>
 	public class OnlineNonLimitedNoBusinessScoreMedalCalculator : MedalCalculator
 	{
 		public OnlineNonLimitedNoBusinessScoreMedalCalculator(ASafeLog log) : base(log) { }
@@ -19,23 +22,21 @@
 		
 		public override MedalOutputModel CalculateMedal(MedalInputModel model)
 		{
-			//Log.Debug(model.ToString());
-
 			var dict = new Dictionary<Parameter, Weight>
 				{
 					
-					{Parameter.BusinessScore,            GetBusinessScoreWeight(model.BusinessScore, model.FirstRepaymentDatePassed, model.UseHmrc)},
-					{Parameter.BusinessSeniority,        GetBusinessSeniorityWeight(model.BusinessSeniority, model.FirstRepaymentDatePassed, model.UseHmrc)},
-					{Parameter.ConsumerScore,            GetConsumerScoreWeight(model.ConsumerScore, model.FirstRepaymentDatePassed, model.UseHmrc)},
-					{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(model.EzbobSeniority, model.FirstRepaymentDatePassed)},
-					{Parameter.MaritalStatus,            GetMaritalStatusWeight(model.MaritalStatus)},
-					{Parameter.NumOfOnTimeLoans,         GetNumOfOnTimeLoansWeight(model.NumOfOnTimeLoans, model.FirstRepaymentDatePassed)},
-					{Parameter.NumOfLatePayments,        GetNumOfLatePaymentsWeight(model.NumOfLatePayments, model.FirstRepaymentDatePassed)},
-					{Parameter.NumOfEarlyPayments,       GetNumOfEarlyPaymentsWeight(model.NumOfEarlyPayments, model.FirstRepaymentDatePassed)},
-					{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(model.AnnualTurnover, model.UseHmrc)},
-					{Parameter.NetWorth,                 GetNetWorthWeight(model.NetWorth, model.FirstRepaymentDatePassed)},
-					{Parameter.NumOfStores,              GetNumOfStoresWeight(model.NumOfStores)},
-					{Parameter.PositiveFeedbacks,        GetPositiveFeedbacksWeight(model.PositiveFeedbacks)}
+					{Parameter.BusinessScore,      GetBusinessScoreWeight(model.BusinessScore, model.FirstRepaymentDatePassed, model.UseHmrc)},
+					{Parameter.BusinessSeniority,  GetBusinessSeniorityWeight(model.BusinessSeniority, model.FirstRepaymentDatePassed, model.UseHmrc)},
+					{Parameter.ConsumerScore,      GetConsumerScoreWeight(model.ConsumerScore, model.FirstRepaymentDatePassed, model.UseHmrc)},
+					{Parameter.EzbobSeniority,     GetEzbobSeniorityWeight(model.EzbobSeniority, model.FirstRepaymentDatePassed)},
+					{Parameter.MaritalStatus,      GetMaritalStatusWeight(model.MaritalStatus)},
+					{Parameter.NumOfOnTimeLoans,   GetNumOfOnTimeLoansWeight(model.NumOfOnTimeLoans, model.FirstRepaymentDatePassed)},
+					{Parameter.NumOfLatePayments,  GetNumOfLatePaymentsWeight(model.NumOfLatePayments, model.FirstRepaymentDatePassed)},
+					{Parameter.NumOfEarlyPayments, GetNumOfEarlyPaymentsWeight(model.NumOfEarlyPayments, model.FirstRepaymentDatePassed)},
+					{Parameter.AnnualTurnover,     GetAnnualTurnoverWeight(model.AnnualTurnover, model.UseHmrc)},
+					{Parameter.NetWorth,           GetNetWorthWeight(model.NetWorth, model.FirstRepaymentDatePassed)},
+					{Parameter.NumOfStores,        GetNumOfStoresWeight(model.NumOfStores)},
+					{Parameter.PositiveFeedbacks,  GetPositiveFeedbacksWeight(model.PositiveFeedbacks)}
 				};
 
 			CalcDelta(model, dict);

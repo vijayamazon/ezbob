@@ -6,12 +6,30 @@
 	using Common;
 	using Ezbob.Logger;
 
+	/// <summary>
+	/// Medal calcultor interface two method - get data to retrieve data from db (can be populated from another sources) and the Calculate medal method
+	/// </summary>
 	public interface IMedalCalulator
 	{
+		/// <summary>
+		/// Used to retrieve customer's input parameters for medal calculation
+		/// </summary>
+		/// <param name="customerId">Customer Id</param>
+		/// <param name="calculationDate">optional for historical data</param>
+		/// <returns>the medal input model</returns>
 		MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null);
+
+		/// <summary>
+		/// Calculates the medal score, medal classification
+		/// </summary>
+		/// <param name="model">Medal input model</param>
+		/// <returns>medal output model</returns>
 		MedalOutputModel CalculateMedal(MedalInputModel model);
 	}
 
+	/// <summary>
+	/// Medal weight constants interface containing all the medal weight constants overridden in each medal
+	/// </summary>
 	public interface IMedalWeightConstatns
 	{
 		#region Base Weight
@@ -62,6 +80,9 @@
 		#endregion
 	}
 
+	/// <summary>
+	/// Base medal calculator abstract class implements the 2 interfaces and the common for all medals method for weight calculation
+	/// </summary>
 	public abstract class MedalCalculator : IMedalCalulator, IMedalWeightConstatns
 	{
 		protected readonly ASafeLog Log;
@@ -118,6 +139,11 @@
 
 		public abstract MedalOutputModel CalculateMedal(MedalInputModel model);
 
+		/// <summary>
+		/// Delta calculation is used to redistribute weights in case customer have low score
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="dict"></param>
 		protected abstract void CalcDelta(MedalInputModel model, Dictionary<Parameter, Weight> dict);
 
 		/// <summary>
@@ -161,6 +187,14 @@
 			return intputModel;
 		}
 
+		/// <summary>
+		/// Score is calculated by sum of all Weight*Grade for each parameter
+		/// The normalized score is calculated by (scoreSum - minScoreSum) / (maxScoreSum - minScoreSum) 
+		/// </summary>
+		/// <param name="dict">Weight dictionary</param>
+		/// <param name="inputModel">Medal input model</param>
+		/// <param name="medalType">Medal type that is calculated</param>
+		/// <returns>Medal output model</returns>
 		protected MedalOutputModel CalcScoreMedalOffer(Dictionary<Parameter, Weight> dict, MedalInputModel inputModel, MedalType medalType = MedalType.NoMedal)
 		{
 			decimal minScoreSum = 0;
@@ -184,7 +218,7 @@
 					MedalType = medalType,
 					NormalizedScore = score,
 					Score = scoreSum,
-					Dict = dict,
+					WeightsDict = dict,
 					AnnualTurnover = inputModel.AnnualTurnover,
 					FreeCashflow = inputModel.FreeCashFlowValue,
 					FirstRepaymentDatePassed = inputModel.FirstRepaymentDatePassed,
@@ -194,8 +228,6 @@
 					CalculationDate = inputModel.CalculationDate,
 					UseHmrc = inputModel.UseHmrc,
 				};
-
-			//PrintDict(medalOutput, dict);
 			return medalOutput;
 		}
 

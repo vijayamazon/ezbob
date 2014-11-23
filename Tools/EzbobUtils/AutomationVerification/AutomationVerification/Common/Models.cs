@@ -16,8 +16,7 @@
 		public int CustomerId { get; set; }
 		public DateTime CalculationDate { get; set; }
 
-		public MedalComparisonModel MedalComparisonModel { get; set; } //todo remove
-		public Dictionary<Parameter, Weight> Dict { get; set; }
+		public Dictionary<Parameter, Weight> WeightsDict { get; set; }
 
 		public bool FirstRepaymentDatePassed { get; set; }
 		public int OfferedLoanAmount { get; set; }
@@ -41,7 +40,7 @@
 
 		public void PrintDict(ASafeLog log)
 		{
-			Dictionary<Parameter, Weight> dict = Dict ?? new Dictionary<Parameter, Weight>();
+			Dictionary<Parameter, Weight> dict = WeightsDict ?? new Dictionary<Parameter, Weight>();
 			var sb = new StringBuilder();
 			sb.AppendFormat("Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", Medal, ToPercent(NormalizedScore), MedalType, Score);
 			decimal s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;

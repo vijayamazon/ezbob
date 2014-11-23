@@ -356,31 +356,31 @@
 		#region big ugly insert
 		public void StoreMedalVerification(MedalOutputModel model)
 		{
-			if (model.Dict != null)
+			if (model.WeightsDict != null)
 			{
-				if (!model.Dict.ContainsKey(Parameter.BusinessScore))
+				if (!model.WeightsDict.ContainsKey(Parameter.BusinessScore))
 				{
-					model.Dict[Parameter.BusinessScore] = new Weight();
+					model.WeightsDict[Parameter.BusinessScore] = new Weight();
 				}
 
-				if (!model.Dict.ContainsKey(Parameter.NumOfStores))
+				if (!model.WeightsDict.ContainsKey(Parameter.NumOfStores))
 				{
-					model.Dict[Parameter.NumOfStores] = new Weight();
+					model.WeightsDict[Parameter.NumOfStores] = new Weight();
 				}
 
-				if (!model.Dict.ContainsKey(Parameter.PositiveFeedbacks))
+				if (!model.WeightsDict.ContainsKey(Parameter.PositiveFeedbacks))
 				{
-					model.Dict[Parameter.PositiveFeedbacks] = new Weight();
+					model.WeightsDict[Parameter.PositiveFeedbacks] = new Weight();
 				}
 
-				if (!model.Dict.ContainsKey(Parameter.TangibleEquity))
+				if (!model.WeightsDict.ContainsKey(Parameter.TangibleEquity))
 				{
-					model.Dict[Parameter.TangibleEquity] = new Weight();
+					model.WeightsDict[Parameter.TangibleEquity] = new Weight();
 				}
 
-				if (!model.Dict.ContainsKey(Parameter.FreeCashFlow))
+				if (!model.WeightsDict.ContainsKey(Parameter.FreeCashFlow))
 				{
-					model.Dict[Parameter.FreeCashFlow] = new Weight();
+					model.WeightsDict[Parameter.FreeCashFlow] = new Weight();
 				}
 
 				_db.ExecuteNonQuery("AV_StoreNewMedal", CommandSpecies.StoredProcedure,
@@ -388,66 +388,66 @@
 									 new QueryParameter("CalculationTime", DateTime.UtcNow),
 									 new QueryParameter("MedalType", model.MedalType.ToString()),
 									 new QueryParameter("FirstRepaymentDatePassed", model.FirstRepaymentDatePassed),
-									 new QueryParameter("BusinessScore", model.Dict[Parameter.BusinessScore].Value),
-									 new QueryParameter("BusinessScoreWeight", model.Dict[Parameter.BusinessScore].FinalWeight),
-									 new QueryParameter("BusinessScoreGrade", model.Dict[Parameter.BusinessScore].Grade),
-									 new QueryParameter("BusinessScoreScore", model.Dict[Parameter.BusinessScore].Score),
-									 new QueryParameter("FreeCashFlow", model.Dict[Parameter.FreeCashFlow].Value),
-									 new QueryParameter("FreeCashFlowWeight", model.Dict[Parameter.FreeCashFlow].FinalWeight),
-									 new QueryParameter("FreeCashFlowGrade", model.Dict[Parameter.FreeCashFlow].Grade),
-									 new QueryParameter("FreeCashFlowScore", model.Dict[Parameter.FreeCashFlow].Score),
-									 new QueryParameter("AnnualTurnover", model.Dict[Parameter.AnnualTurnover].Value),
-									 new QueryParameter("AnnualTurnoverWeight", model.Dict[Parameter.AnnualTurnover].FinalWeight),
-									 new QueryParameter("AnnualTurnoverGrade", model.Dict[Parameter.AnnualTurnover].Grade),
-									 new QueryParameter("AnnualTurnoverScore", model.Dict[Parameter.AnnualTurnover].Score),
-									 new QueryParameter("TangibleEquity", model.Dict[Parameter.TangibleEquity].Value),
-									 new QueryParameter("TangibleEquityWeight", model.Dict[Parameter.TangibleEquity].FinalWeight),
-									 new QueryParameter("TangibleEquityGrade", model.Dict[Parameter.TangibleEquity].Grade),
-									 new QueryParameter("TangibleEquityScore", model.Dict[Parameter.TangibleEquity].Score),
-									 new QueryParameter("BusinessSeniority", model.Dict[Parameter.BusinessSeniority].Value),
+									 new QueryParameter("BusinessScore", model.WeightsDict[Parameter.BusinessScore].Value),
+									 new QueryParameter("BusinessScoreWeight", model.WeightsDict[Parameter.BusinessScore].FinalWeight),
+									 new QueryParameter("BusinessScoreGrade", model.WeightsDict[Parameter.BusinessScore].Grade),
+									 new QueryParameter("BusinessScoreScore", model.WeightsDict[Parameter.BusinessScore].Score),
+									 new QueryParameter("FreeCashFlow", model.WeightsDict[Parameter.FreeCashFlow].Value),
+									 new QueryParameter("FreeCashFlowWeight", model.WeightsDict[Parameter.FreeCashFlow].FinalWeight),
+									 new QueryParameter("FreeCashFlowGrade", model.WeightsDict[Parameter.FreeCashFlow].Grade),
+									 new QueryParameter("FreeCashFlowScore", model.WeightsDict[Parameter.FreeCashFlow].Score),
+									 new QueryParameter("AnnualTurnover", model.WeightsDict[Parameter.AnnualTurnover].Value),
+									 new QueryParameter("AnnualTurnoverWeight", model.WeightsDict[Parameter.AnnualTurnover].FinalWeight),
+									 new QueryParameter("AnnualTurnoverGrade", model.WeightsDict[Parameter.AnnualTurnover].Grade),
+									 new QueryParameter("AnnualTurnoverScore", model.WeightsDict[Parameter.AnnualTurnover].Score),
+									 new QueryParameter("TangibleEquity", model.WeightsDict[Parameter.TangibleEquity].Value),
+									 new QueryParameter("TangibleEquityWeight", model.WeightsDict[Parameter.TangibleEquity].FinalWeight),
+									 new QueryParameter("TangibleEquityGrade", model.WeightsDict[Parameter.TangibleEquity].Grade),
+									 new QueryParameter("TangibleEquityScore", model.WeightsDict[Parameter.TangibleEquity].Score),
+									 new QueryParameter("BusinessSeniority", model.WeightsDict[Parameter.BusinessSeniority].Value),
 									 new QueryParameter("BusinessSeniorityWeight",
-														model.Dict[Parameter.BusinessSeniority].FinalWeight),
-									 new QueryParameter("BusinessSeniorityGrade", model.Dict[Parameter.BusinessSeniority].Grade),
-									 new QueryParameter("BusinessSeniorityScore", model.Dict[Parameter.BusinessSeniority].Score),
-									 new QueryParameter("ConsumerScore", model.Dict[Parameter.ConsumerScore].Value),
-									 new QueryParameter("ConsumerScoreWeight", model.Dict[Parameter.ConsumerScore].FinalWeight),
-									 new QueryParameter("ConsumerScoreGrade", model.Dict[Parameter.ConsumerScore].Grade),
-									 new QueryParameter("ConsumerScoreScore", model.Dict[Parameter.ConsumerScore].Score),
-									 new QueryParameter("NetWorth", model.Dict[Parameter.NetWorth].Value),
-									 new QueryParameter("NetWorthWeight", model.Dict[Parameter.NetWorth].FinalWeight),
-									 new QueryParameter("NetWorthGrade", model.Dict[Parameter.NetWorth].Grade),
-									 new QueryParameter("NetWorthScore", model.Dict[Parameter.NetWorth].Score),
-									 new QueryParameter("MaritalStatus", model.Dict[Parameter.MaritalStatus].Value),
-									 new QueryParameter("MaritalStatusWeight", model.Dict[Parameter.MaritalStatus].FinalWeight),
-									 new QueryParameter("MaritalStatusGrade", model.Dict[Parameter.MaritalStatus].Grade),
-									 new QueryParameter("MaritalStatusScore", model.Dict[Parameter.MaritalStatus].Score),
-									 new QueryParameter("NumberOfStores", model.Dict[Parameter.NumOfStores].Value),
-									 new QueryParameter("NumberOfStoresWeight", model.Dict[Parameter.NumOfStores].FinalWeight),
-									 new QueryParameter("NumberOfStoresGrade", model.Dict[Parameter.NumOfStores].Grade),
-									 new QueryParameter("NumberOfStoresScore", model.Dict[Parameter.NumOfStores].Score),
-									 new QueryParameter("PositiveFeedbacks", model.Dict[Parameter.PositiveFeedbacks].Value),
+														model.WeightsDict[Parameter.BusinessSeniority].FinalWeight),
+									 new QueryParameter("BusinessSeniorityGrade", model.WeightsDict[Parameter.BusinessSeniority].Grade),
+									 new QueryParameter("BusinessSeniorityScore", model.WeightsDict[Parameter.BusinessSeniority].Score),
+									 new QueryParameter("ConsumerScore", model.WeightsDict[Parameter.ConsumerScore].Value),
+									 new QueryParameter("ConsumerScoreWeight", model.WeightsDict[Parameter.ConsumerScore].FinalWeight),
+									 new QueryParameter("ConsumerScoreGrade", model.WeightsDict[Parameter.ConsumerScore].Grade),
+									 new QueryParameter("ConsumerScoreScore", model.WeightsDict[Parameter.ConsumerScore].Score),
+									 new QueryParameter("NetWorth", model.WeightsDict[Parameter.NetWorth].Value),
+									 new QueryParameter("NetWorthWeight", model.WeightsDict[Parameter.NetWorth].FinalWeight),
+									 new QueryParameter("NetWorthGrade", model.WeightsDict[Parameter.NetWorth].Grade),
+									 new QueryParameter("NetWorthScore", model.WeightsDict[Parameter.NetWorth].Score),
+									 new QueryParameter("MaritalStatus", model.WeightsDict[Parameter.MaritalStatus].Value),
+									 new QueryParameter("MaritalStatusWeight", model.WeightsDict[Parameter.MaritalStatus].FinalWeight),
+									 new QueryParameter("MaritalStatusGrade", model.WeightsDict[Parameter.MaritalStatus].Grade),
+									 new QueryParameter("MaritalStatusScore", model.WeightsDict[Parameter.MaritalStatus].Score),
+									 new QueryParameter("NumberOfStores", model.WeightsDict[Parameter.NumOfStores].Value),
+									 new QueryParameter("NumberOfStoresWeight", model.WeightsDict[Parameter.NumOfStores].FinalWeight),
+									 new QueryParameter("NumberOfStoresGrade", model.WeightsDict[Parameter.NumOfStores].Grade),
+									 new QueryParameter("NumberOfStoresScore", model.WeightsDict[Parameter.NumOfStores].Score),
+									 new QueryParameter("PositiveFeedbacks", model.WeightsDict[Parameter.PositiveFeedbacks].Value),
 									 new QueryParameter("PositiveFeedbacksWeight",
-														model.Dict[Parameter.PositiveFeedbacks].FinalWeight),
-									 new QueryParameter("PositiveFeedbacksGrade", model.Dict[Parameter.PositiveFeedbacks].Grade),
-									 new QueryParameter("PositiveFeedbacksScore", model.Dict[Parameter.PositiveFeedbacks].Score),
-									 new QueryParameter("EzbobSeniority", model.Dict[Parameter.EzbobSeniority].Value),
-									 new QueryParameter("EzbobSeniorityWeight", model.Dict[Parameter.EzbobSeniority].FinalWeight),
-									 new QueryParameter("EzbobSeniorityGrade", model.Dict[Parameter.EzbobSeniority].Grade),
-									 new QueryParameter("EzbobSeniorityScore", model.Dict[Parameter.EzbobSeniority].Score),
-									 new QueryParameter("NumOfLoans", model.Dict[Parameter.NumOfOnTimeLoans].Value),
-									 new QueryParameter("NumOfLoansWeight", model.Dict[Parameter.NumOfOnTimeLoans].FinalWeight),
-									 new QueryParameter("NumOfLoansGrade", model.Dict[Parameter.NumOfOnTimeLoans].Grade),
-									 new QueryParameter("NumOfLoansScore", model.Dict[Parameter.NumOfOnTimeLoans].Score),
-									 new QueryParameter("NumOfLateRepayments", model.Dict[Parameter.NumOfLatePayments].Value),
+														model.WeightsDict[Parameter.PositiveFeedbacks].FinalWeight),
+									 new QueryParameter("PositiveFeedbacksGrade", model.WeightsDict[Parameter.PositiveFeedbacks].Grade),
+									 new QueryParameter("PositiveFeedbacksScore", model.WeightsDict[Parameter.PositiveFeedbacks].Score),
+									 new QueryParameter("EzbobSeniority", model.WeightsDict[Parameter.EzbobSeniority].Value),
+									 new QueryParameter("EzbobSeniorityWeight", model.WeightsDict[Parameter.EzbobSeniority].FinalWeight),
+									 new QueryParameter("EzbobSeniorityGrade", model.WeightsDict[Parameter.EzbobSeniority].Grade),
+									 new QueryParameter("EzbobSeniorityScore", model.WeightsDict[Parameter.EzbobSeniority].Score),
+									 new QueryParameter("NumOfLoans", model.WeightsDict[Parameter.NumOfOnTimeLoans].Value),
+									 new QueryParameter("NumOfLoansWeight", model.WeightsDict[Parameter.NumOfOnTimeLoans].FinalWeight),
+									 new QueryParameter("NumOfLoansGrade", model.WeightsDict[Parameter.NumOfOnTimeLoans].Grade),
+									 new QueryParameter("NumOfLoansScore", model.WeightsDict[Parameter.NumOfOnTimeLoans].Score),
+									 new QueryParameter("NumOfLateRepayments", model.WeightsDict[Parameter.NumOfLatePayments].Value),
 									 new QueryParameter("NumOfLateRepaymentsWeight",
-														model.Dict[Parameter.NumOfLatePayments].FinalWeight),
-									 new QueryParameter("NumOfLateRepaymentsGrade", model.Dict[Parameter.NumOfLatePayments].Grade),
-									 new QueryParameter("NumOfLateRepaymentsScore", model.Dict[Parameter.NumOfLatePayments].Score),
-									 new QueryParameter("NumOfEarlyRepayments", model.Dict[Parameter.NumOfEarlyPayments].Value),
+														model.WeightsDict[Parameter.NumOfLatePayments].FinalWeight),
+									 new QueryParameter("NumOfLateRepaymentsGrade", model.WeightsDict[Parameter.NumOfLatePayments].Grade),
+									 new QueryParameter("NumOfLateRepaymentsScore", model.WeightsDict[Parameter.NumOfLatePayments].Score),
+									 new QueryParameter("NumOfEarlyRepayments", model.WeightsDict[Parameter.NumOfEarlyPayments].Value),
 									 new QueryParameter("NumOfEarlyRepaymentsWeight",
-														model.Dict[Parameter.NumOfEarlyPayments].FinalWeight),
-									 new QueryParameter("NumOfEarlyRepaymentsGrade", model.Dict[Parameter.NumOfEarlyPayments].Grade),
-									 new QueryParameter("NumOfEarlyRepaymentsScore", model.Dict[Parameter.NumOfEarlyPayments].Score),
+														model.WeightsDict[Parameter.NumOfEarlyPayments].FinalWeight),
+									 new QueryParameter("NumOfEarlyRepaymentsGrade", model.WeightsDict[Parameter.NumOfEarlyPayments].Grade),
+									 new QueryParameter("NumOfEarlyRepaymentsScore", model.WeightsDict[Parameter.NumOfEarlyPayments].Score),
 
 									 new QueryParameter("ValueAdded", model.ValueAdded),
 									 new QueryParameter("TotalScore", model.Score),
