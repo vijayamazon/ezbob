@@ -717,7 +717,7 @@ namespace TestApp {
 		private static void TestReapproval(AConnection oDB, ASafeLog oLog) {
 			var adr = new AutoDecisionResponse();
 
-			var ra = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(339, oDB, oLog);
+			var ra = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(339, oDB, oLog).Init();
 
 			ra.MakeDecision(adr);
 		} // TestReapproval

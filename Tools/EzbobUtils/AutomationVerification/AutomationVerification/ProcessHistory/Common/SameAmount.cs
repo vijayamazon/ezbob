@@ -2,7 +2,7 @@
 	public class SameAmount : ANumericTrace {
 		#region constructor
 
-		protected SameAmount(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
+		public SameAmount(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		#endregion constructor

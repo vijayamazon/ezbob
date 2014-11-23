@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.Database;
 
-	internal class MetaData {
+	public class MetaData {
 		public MetaData() {
 			ValidationErrors = new List<string>();
 		} // constructor

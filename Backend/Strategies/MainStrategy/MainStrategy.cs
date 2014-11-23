@@ -340,7 +340,7 @@
 				customerId,
 				DB,
 				Log
-			);
+			).Init();
 			
 			oReapprove.MakeDecision(autoDecisionResponse);
 

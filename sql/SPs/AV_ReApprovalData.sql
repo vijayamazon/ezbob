@@ -19,7 +19,7 @@ BEGIN
 
 	--last manual approve
 	DECLARE @ManualApproveDate DATETIME 
-	DECLARE @ApprovedAmount INT	
+	DECLARE @ApprovedAmount DECIMAL(18, 4)	
 	DECLARE @ManualApproveRequestId INT = (SELECT max(Id)
   										   FROM CashRequests 
   										   WHERE IdCustomer=@CustomerId 
@@ -60,6 +60,8 @@ BEGIN
 	INNER JOIN LoanSchedule ls ON ls.Id = lst.ScheduleID
 	WHERE l.CustomerId=@CustomerId 
 	AND lt.PostDate>@ManualApproveDate
+	AND lt.Status = 'Done'
+	AND lt.Type = 'PaypointTransaction'
 
 	--new data source was added
 	DECLARE @NewDataSourceAdded BIT = 0
@@ -82,7 +84,7 @@ BEGIN
 	END		   
 
 	--took a loan from last offer or later
-	DECLARE @TookLoanAmount INT = 0
+	DECLARE @TookLoanAmount DECIMAL(18,4) = 0
 	DECLARE @RepaidPrincipal DECIMAL(18,4) = 0 
 	DECLARE @SetupFee DECIMAL(18,4) = 0
 	
@@ -97,7 +99,7 @@ BEGIN
     AND lt.Type='PacnetTransaction' 
     AND lt.Status='Done'
 	
-	SELECT @RepaidPrincipal = isnull(sum(lt.Principal),0) FROM Loan l INNER JOIN LoanTransaction lt ON l.Id=lt.LoanId
+	SELECT @RepaidPrincipal = isnull(sum(lt.LoanRepayment),0) FROM Loan l INNER JOIN LoanTransaction lt ON l.Id=lt.LoanId
 	WHERE l.CustomerId=@CustomerId 
     AND l.RequestCashId>=@ManualApproveRequestId
     AND lt.Type='PaypointTransaction' 

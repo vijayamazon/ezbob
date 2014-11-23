@@ -15,7 +15,7 @@
 			string sTop = (nTopCount > 0) ? "TOP " + nTopCount : string.Empty;
 
 			string sCondition = (nLastCheckedCustomerID > 0)
-				? "AND mc.CustomerId > " + nLastCheckedCustomerID
+				? "AND mc.CustomerId < " + nLastCheckedCustomerID
 				: string.Empty;
 
 			const string sQueryFormat = @"
@@ -28,7 +28,7 @@ FROM
 WHERE
 	mc.IsActive = 1
 	{1}
-ORDER BY mc.CustomerId";
+ORDER BY mc.CustomerId DESC";
 
 			return oDB.Fill<AutoApproveInputRow>(
 				string.Format(sQueryFormat, sTop, sCondition),

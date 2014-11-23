@@ -61,13 +61,16 @@ BEGIN
 
 	DECLARE @LateLoanCount INT = ISNULL((
 		SELECT
-			COUNT(*)
+			COUNT(*) 
 		FROM
 			Loan l
+			LEFT JOIN LoanSchedule ls ON l.Id = ls.LoanId 
 		WHERE
-			CustomerId = @CustomerID
+			l.CustomerId = @CustomerId 
 			AND
-			Status = 'Late'
+			ls.[Date] > @LacrTime
+			AND
+			ls.Status IN ('Late', 'Paid')
 	), 0)
 
 	------------------------------------------------------------------------------

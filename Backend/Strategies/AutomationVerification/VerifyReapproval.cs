@@ -69,11 +69,12 @@
 					nCustomerID,
 					DB,
 					Log
-				);
-
+				).Init();
 				oReapprove.MakeDecision(autoDecisionResponse);
 
-				var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(Log, nCustomerID, oReapprove.Trail.InputData.DataAsOf);
+				var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(
+					Log, nCustomerID, oReapprove.Trail.InputData.DataAsOf
+				);
 				oSecondary.MakeDecision(oSecondary.GetInputData());
 
 				bool bSuccess = oReapprove.Trail.EqualsTo(oSecondary.Trail);

@@ -3,7 +3,7 @@
 	using AutomationCalculator.ProcessHistory.ReApproval;
 	using Ezbob.Database;
 
-	internal class Marketplace {
+	public class Marketplace {
 		[FieldName("MarketplaceID")]
 		public int ID { get; set; }
 

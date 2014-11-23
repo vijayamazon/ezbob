@@ -252,6 +252,23 @@
 					if (!bQuiet)
 						m_oLog.Warn("Trails are different: {0}", sMsg);
 				} // if
+				else if (oMy.HasLockedDecision != oOther.HasLockedDecision) {
+					bResult = false;
+
+					string sMsg = string.Format(
+						"Different conclusions for '{4}' decision lock have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
+						i,
+						oMy.GetType().Name,
+						oMy.HasLockedDecision ? "locked" : "not locked",
+						oOther.HasLockedDecision ? "locked" : "not locked",
+						this.Decision
+					);
+
+					m_oDiffNotes.Add(sMsg);
+
+					if (!bQuiet)
+						m_oLog.Warn("Trails are different: {0}", sMsg);
+				} // if
 			} // for
 
 			return bResult;
