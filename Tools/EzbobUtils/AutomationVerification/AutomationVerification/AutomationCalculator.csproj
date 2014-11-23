@@ -52,7 +52,7 @@
     <Compile Include="AutoDecision\AutoApproval\AvailableFunds.cs" />
     <Compile Include="AutoDecision\AutoApproval\Configuration.cs" />
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
-    <Compile Include="AutoDecision\AutoApproval\OriginationTime.cs" />
+    <Compile Include="Common\OriginationTime.cs" />
     <Compile Include="AutoDecision\AutoApproval\Payment.cs" />
     <Compile Include="AutoDecision\AutoApproval\CalculatedTurnover.cs" />
     <Compile Include="AutoDecision\AutoApproval\Result.cs" />

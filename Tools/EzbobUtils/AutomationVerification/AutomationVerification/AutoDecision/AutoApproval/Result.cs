@@ -1,6 +1,9 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
 	using Ezbob.Utils.Lingvo;
 
+	/// <summary>
+	/// Auto approval result.
+	/// </summary>
 	public class Result {
 		#region constructor
 
@@ -26,7 +29,12 @@
 		#endregion method ToString
 
 		public int ApprovedAmount { get; private set; }
+
+		/// <summary>
+		/// In days.
+		/// </summary>
 		public int OfferLength { get; private set; }
+
 		public bool IsEmailSendingBanned { get; private set; }
 	} // class Result
 } // namespace

@@ -4,6 +4,10 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Newtonsoft.Json;
 
+	/// <summary>
+	/// Customer data read from DB that is used for auto approval check.
+	/// One of the outputs of LoadAutoApprovalData sp.
+	/// </summary>
 	public class MetaData {
 		#region constructor
 

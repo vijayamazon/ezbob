@@ -6,6 +6,10 @@
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
+	/// <summary>
+	/// Contains customer turnover based on all customer marketplaces.
+	/// Turnover data is fed via Add method.
+	/// </summary>
 	public class CalculatedTurnover {
 		#region public
 
@@ -19,6 +23,11 @@
 
 		#region method Add
 
+		/// <summary>
+		/// Feeds turnover for one marketplace and one period.
+		/// </summary>
+		/// <param name="sr">Turnover data. See <see cref="Row"/> for row format.</param>
+		/// <param name="oLog">Log, to write turnover data for debugging.</param>
 		public void Add(SafeReader sr, ASafeLog oLog) {
 			Row r = sr.Fill<Row>();
 
@@ -37,50 +46,88 @@
 
 		#region indexer
 
+		/// <summary>
+		/// Gets customer turnover for specific period.
+		/// </summary>
+		/// <param name="nMonthCount">Number of months in the period.</param>
+		/// <returns>Turnover for requested period.</returns>
 		public decimal this[int nMonthCount] {
 			get { return m_oData.ContainsKey(nMonthCount) ? m_oData[nMonthCount].Value : 0; } // get
 		} // indexer
 
 		#endregion indexer
 
-		#endregion public
-
-		#region private
-
 		#region class Row
 
-		private class Row {
+		/// <summary>
+		/// Input turnover data for one marketplace and one period.
+		/// Requested period length is <see cref="MonthCount"/>.
+		/// Actual period is between <see cref="DateFrom"/> and <see cref="DateTo"/> inclusive.
+		/// </summary>
+		public class Row {
 			#region public
 
+			/// <summary>
+			/// Marketplace ID (MP_CustomerMarketplace.Id).
+			/// </summary>
 			[UsedImplicitly]
 			public int MpID { get; set; }
 
+			/// <summary>
+			/// Marketplace type (MP_MarketplaceType.InternalId).
+			/// </summary>
 			[UsedImplicitly]
 			public Guid MpTypeInternalID { get; set; }
 
+			/// <summary>
+			/// Turnover type, usually is 'Total'.
+			/// For eBay there can be other values which describe the 'Total' parts.
+			/// Only 'Total' is used for turnover calculation, others are for debug purposes.
+			/// </summary>
 			[UsedImplicitly]
 			public string TurnoverType { get; set; }
 
+			/// <summary>
+			/// Actual turnover value.
+			/// </summary>
 			[UsedImplicitly]
 			public decimal Turnover { get; set; }
 
+			/// <summary>
+			/// Annualized turnover value, calculated as <see cref="Turnover "/> / <see cref="DayCount"/> * 365.
+			/// </summary>
 			[UsedImplicitly]
 			public decimal Annualized { get; set; }
 
+			/// <summary>
+			/// Requested period length in months.
+			/// </summary>
 			[UsedImplicitly]
 			public int MonthCount { get; set; }
 
+			/// <summary>
+			/// Actual number of days having transactions.
+			/// </summary>
 			[UsedImplicitly]
 			public int DayCount { get; set; }
 
+			/// <summary>
+			/// The first day having a transaction in this period.
+			/// </summary>
 			[UsedImplicitly]
 			public DateTime DateFrom { get; set; }
 
+			/// <summary>
+			/// The last day having a transaction in this period.
+			/// </summary>
 			[UsedImplicitly]
 			public DateTime DateTo { get; set; }
 
 			#region property IsTotal
 
+			/// <summary>
+			/// Returns 'true' if this row should be included in total period calculation.
+			/// </summary>
 			public bool IsTotal {
 				get { return TurnoverType == Total; } // get
 			} // IsTotal
@@ -89,6 +136,10 @@
 
 			#region method WriteToLog
 
+			/// <summary>
+			/// Writes this instance to log.
+			/// </summary>
+			/// <param name="oLog"></param>
 			public void WriteToLog(ASafeLog oLog) {
 				if (oLog == null)
 					return;
@@ -121,6 +172,10 @@
 		} // Row
 
 		#endregion class Row
+
+		#endregion public
+
+		#region private
 
 		#region class OneValue
 

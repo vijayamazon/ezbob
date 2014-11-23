@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
+	using AutomationCalculator.Common;
 	using Newtonsoft.Json;
 
 	public class ApprovalInputData : ITrailInputData {

@@ -4,6 +4,9 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
+	/// <summary>
+	/// Contains auto approval configuration parameters (max and min amount to approve, silent mode, etc.).
+	/// </summary>
 	public class Configuration {
 		#region public
 

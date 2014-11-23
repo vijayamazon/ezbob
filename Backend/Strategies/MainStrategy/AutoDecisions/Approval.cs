@@ -57,7 +57,7 @@
 
 			m_oTrail = new ApprovalTrail(customerId, this.log);
 
-			m_oSecondaryImplementation = new Agent(customerId, offeredCreditLine, db, log);
+			m_oSecondaryImplementation = new Agent(customerId, offeredCreditLine, db, log).Init();
 		} // constructor
 
 		public void MakeDecision(AutoDecisionResponse response) {

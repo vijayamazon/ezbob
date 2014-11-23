@@ -11,6 +11,10 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
+	/// <summary>
+	/// Executes auto approval logic. Based on customer data and system calculated amount
+	/// decides whether this amount should be approved.
+	/// </summary>
 	public class Agent {
 		#region public
 
@@ -18,35 +22,41 @@
 
 		public Agent(int nCustomerID, decimal nSystemCalculatedAmount, AConnection oDB, ASafeLog oLog) {
 			Result = null;
-			Now = DateTime.UtcNow;
-			m_nApprovedAmount = 0;
 
-			m_oDB = oDB;
-			m_oLog = oLog ?? new SafeLog();
-			m_oArgs = new Arguments(nCustomerID, nSystemCalculatedAmount);
-
-			m_oMetaData = new MetaData();
-			m_oPayments = new List<Payment>();
-
-			m_oFunds = new AvailableFunds();
-			m_oWorstStatuses = new SortedSet<string>();
-
-			m_oTurnover = new CalculatedTurnover();
-
-			m_oOriginationTime = new OriginationTime(oLog);
-
-			Trail = new ApprovalTrail(m_oArgs.CustomerID, m_oLog);
-			m_oCfg = new Configuration(m_oDB, m_oLog);
+			DB = oDB;
+			Log = oLog ?? new SafeLog();
+			Args = new Arguments(nCustomerID, nSystemCalculatedAmount);
 		} // constructor
 
 		#endregion constructor
 
+		#region method Init
+
+		public virtual Agent Init() {
+			MetaData = new MetaData();
+			Payments = new List<Payment>();
+
+			Funds = new AvailableFunds();
+			WorstStatuses = new SortedSet<string>();
+
+			Turnover = new CalculatedTurnover();
+
+			OriginationTime = new OriginationTime(Log);
+
+			Trail = new ApprovalTrail(Args.CustomerID, Log);
+			Cfg = new Configuration(DB, Log);
+
+			return this;
+		} // Init
+
+		#endregion method Init
+
 		#region method MakeDecision
 
-		public void MakeDecision() {
-			m_oLog.Debug("Checking if auto approval should take place for customer {0}...", m_oArgs.CustomerID);
+		public virtual void MakeDecision() {
+			Log.Debug("Checking if auto approval should take place for customer {0}...", Args.CustomerID);
 
-			m_nApprovedAmount = m_oArgs.SystemCalculatedAmount;
+			ApprovedAmount = Args.SystemCalculatedAmount;
 
 			try {
 				GatherData();
@@ -71,9 +81,9 @@
 				CheckCompanyAge();
 				CheckDefaultAccounts();
 				CheckTotalLoanCount();
-				CheckCaisStatuses(m_oMetaData.TotalLoanCount > 0
-					? m_oCfg.GetAllowedCaisStatusesWithLoan()
-					: m_oCfg.GetAllowedCaisStatusesWithoutLoan()
+				CheckCaisStatuses(MetaData.TotalLoanCount > 0
+					? Cfg.GetAllowedCaisStatusesWithLoan()
+					: Cfg.GetAllowedCaisStatusesWithoutLoan()
 				);
 				CheckRollovers();
 				CheckLatePayments();
@@ -84,16 +94,16 @@
 				CheckComplete();
 			}
 			catch (Exception e) {
-				m_oLog.Error(e, "Exception during auto approval.");
+				Log.Error(e, "Exception during auto approval.");
 				StepFailed<ExceptionThrown>().Init(e);
 			} // try
 
 			if (Trail.HasDecided)
-				Result = new Result((int)m_nApprovedAmount, (int)m_oMetaData.OfferLength, m_oMetaData.IsEmailSendingBanned);
+				Result = new Result((int)ApprovedAmount, (int)MetaData.OfferLength, MetaData.IsEmailSendingBanned);
 
-			m_oLog.Debug(
+			Log.Debug(
 				"Checking if auto approval should take place for customer {0} complete; {1}\n{2}",
-				m_oArgs.CustomerID,
+				Args.CustomerID,
 				Trail,
 				Result == null ? string.Empty : "Approved " + Result + "."
 			);
@@ -101,57 +111,93 @@
 
 		#endregion method MakeDecision
 
-		public Result Result { get; private set; }
+		public virtual Result Result { get; private set; }
 
-		public ApprovalTrail Trail { get; private set; }
+		public virtual ApprovalTrail Trail { get; private set; }
 
 		#endregion public
 
-		#region private
+		#region protected
 
 		#region method GatherData
 
-		private void GatherData() {
-			m_oCfg.Load();
+		/// <summary>
+		/// Collects customer data from DB. Can be overridden to provide
+		/// specific customer data instead of the current one.
+		/// </summary>
+		protected virtual void GatherData() {
+			ApprovedAmount = 0;
+			Now = DateTime.UtcNow;
 
-			m_oDB.ForEachRowSafe(
+			Cfg.Load();
+
+			DB.ForEachRowSafe(
 				ProcessRow,
 				"LoadAutoApprovalData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", m_oArgs.CustomerID),
+				new QueryParameter("CustomerID", Args.CustomerID),
 				new QueryParameter("Now", Now)
 			);
 
-			m_oOriginationTime.FromExperian(m_oMetaData.IncorporationDate);
+			OriginationTime.FromExperian(MetaData.IncorporationDate);
 
-			m_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(m_oFunds);
+			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(Funds);
 
 			Trail.MyInputData.FullInit(
 				DateTime.UtcNow,
-				m_oCfg,
-				m_oArgs,
-				m_oMetaData,
-				m_oWorstStatuses,
-				m_oPayments,
-				m_oOriginationTime,
-				m_oTurnover,
-				m_oFunds
+				Cfg,
+				Args,
+				MetaData,
+				WorstStatuses,
+				Payments,
+				OriginationTime,
+				Turnover,
+				Funds
 			);
 
-			m_oMetaData.Validate();
+			MetaData.Validate();
 		} // GatherData
 
 		#endregion method GatherData
+
+		#region properties
+
+		protected virtual DateTime Now { get; set; }
+
+		protected virtual AConnection DB { get; private set;}
+		protected virtual ASafeLog Log { get; private set;}
+
+		protected virtual Configuration Cfg { get; private set;}
+		protected virtual Arguments Args { get; private set;}
+
+		protected virtual MetaData MetaData { get; private set;}
+		protected virtual List<Payment> Payments { get; private set;}
+
+		protected virtual SortedSet<string> WorstStatuses { get; private set;}
+
+		protected virtual OriginationTime OriginationTime { get; private set;}
+
+		protected virtual decimal ApprovedAmount { get; set;}
+
+		protected virtual CalculatedTurnover Turnover { get; private set;}
+
+		protected virtual AvailableFunds Funds { get; private set;}
+
+		#endregion properties
+
+		#endregion protected
+
+		#region private
 
 		#region steps
 
 		#region method CheckInit
 
 		private void CheckInit() {
-			if ((m_nApprovedAmount > 0) && (m_oMetaData.ValidationErrors.Count == 0))
-				StepDone<InitialAssignment>().Init(m_nApprovedAmount, m_oMetaData.ValidationErrors);
+			if ((ApprovedAmount > 0) && (MetaData.ValidationErrors.Count == 0))
+				StepDone<InitialAssignment>().Init(ApprovedAmount, MetaData.ValidationErrors);
 			else
-				StepFailed<InitialAssignment>().Init(m_nApprovedAmount, m_oMetaData.ValidationErrors);
+				StepFailed<InitialAssignment>().Init(ApprovedAmount, MetaData.ValidationErrors);
 		} // CheckInit
 
 		#endregion method CheckInit
@@ -159,10 +205,10 @@
 		#region method CheckIsFraud
 
 		private void CheckIsFraud() {
-			if (m_oMetaData.FraudStatus == FraudStatus.Ok)
-				StepDone<FraudSuspect>().Init(m_oMetaData.FraudStatus);
+			if (MetaData.FraudStatus == FraudStatus.Ok)
+				StepDone<FraudSuspect>().Init(MetaData.FraudStatus);
 			else
-				StepFailed<FraudSuspect>().Init(m_oMetaData.FraudStatus);
+				StepFailed<FraudSuspect>().Init(MetaData.FraudStatus);
 		} // CheckIsFraud
 
 		#endregion method CheckIsFraud
@@ -170,7 +216,7 @@
 		#region method CheckIsBrokerCustomer
 
 		private void CheckIsBrokerCustomer() {
-			if (m_oMetaData.IsBrokerCustomer)
+			if (MetaData.IsBrokerCustomer)
 				StepFailed<IsBrokerCustomer>().Init();
 			else
 				StepDone<IsBrokerCustomer>().Init();
@@ -181,10 +227,10 @@
 		#region method CheckTodayApprovedCount
 
 		private void CheckTodayApprovedCount() {
-			if (m_oMetaData.NumOfTodayAutoApproval > m_oCfg.MaxDailyApprovals)
-				StepFailed<TodayApprovalCount>().Init(m_oMetaData.NumOfTodayAutoApproval, m_oCfg.MaxDailyApprovals);
+			if (MetaData.NumOfTodayAutoApproval > Cfg.MaxDailyApprovals)
+				StepFailed<TodayApprovalCount>().Init(MetaData.NumOfTodayAutoApproval, Cfg.MaxDailyApprovals);
 			else
-				StepDone<TodayApprovalCount>().Init(m_oMetaData.NumOfTodayAutoApproval, m_oCfg.MaxDailyApprovals);
+				StepDone<TodayApprovalCount>().Init(MetaData.NumOfTodayAutoApproval, Cfg.MaxDailyApprovals);
 		} // CheckTodayApprovedCount
 
 		#endregion method CheckTodayApprovedCount
@@ -192,10 +238,10 @@
 		#region method CheckTodayOpenLoans
 
 		private void CheckTodayOpenLoans() {
-			if (m_oMetaData.TodayLoanSum > m_oCfg.MaxTodayLoans)
-				StepFailed<TodayLoans>().Init(m_oMetaData.TodayLoanSum, m_oCfg.MaxTodayLoans);
+			if (MetaData.TodayLoanSum > Cfg.MaxTodayLoans)
+				StepFailed<TodayLoans>().Init(MetaData.TodayLoanSum, Cfg.MaxTodayLoans);
 			else
-				StepDone<TodayLoans>().Init(m_oMetaData.TodayLoanSum, m_oCfg.MaxTodayLoans);
+				StepDone<TodayLoans>().Init(MetaData.TodayLoanSum, Cfg.MaxTodayLoans);
 		} // CheckTodayOpenLoans
 
 		#endregion method CheckTodayOpenLoans
@@ -203,10 +249,10 @@
 		#region method CheckOutstandingOffers
 
 		private void CheckOutstandingOffers() {
-			if (m_oFunds.Reserved > m_oCfg.MaxOutstandingOffers)
-				StepFailed<OutstandingOffers>().Init(m_oFunds.Reserved, m_oCfg.MaxOutstandingOffers);
+			if (Funds.Reserved > Cfg.MaxOutstandingOffers)
+				StepFailed<OutstandingOffers>().Init(Funds.Reserved, Cfg.MaxOutstandingOffers);
 			else
-				StepDone<OutstandingOffers>().Init(m_oFunds.Reserved, m_oCfg.MaxOutstandingOffers);
+				StepDone<OutstandingOffers>().Init(Funds.Reserved, Cfg.MaxOutstandingOffers);
 		} // CheckOutstandingOffers
 
 		#endregion method CheckOutstandingOffers
@@ -214,10 +260,10 @@
 		#region method CheckAml
 
 		private void CheckAml() {
-			if (0 == string.Compare(m_oMetaData.AmlResult, "passed", StringComparison.InvariantCultureIgnoreCase))
-				StepDone<AmlCheck>().Init(m_oMetaData.AmlResult);
+			if (0 == string.Compare(MetaData.AmlResult, "passed", StringComparison.InvariantCultureIgnoreCase))
+				StepDone<AmlCheck>().Init(MetaData.AmlResult);
 			else
-				StepFailed<AmlCheck>().Init(m_oMetaData.AmlResult);
+				StepFailed<AmlCheck>().Init(MetaData.AmlResult);
 		} // CheckAml
 
 		#endregion method CheckAml
@@ -225,10 +271,10 @@
 		#region method CheckCustomerStatus
 
 		private void CheckCustomerStatus() {
-			if (m_oMetaData.CustomerStatusEnabled)
-				StepDone<CustomerStatus>().Init(m_oMetaData.CustomerStatusName);
+			if (MetaData.CustomerStatusEnabled)
+				StepDone<CustomerStatus>().Init(MetaData.CustomerStatusName);
 			else
-				StepFailed<CustomerStatus>().Init(m_oMetaData.CustomerStatusName);
+				StepFailed<CustomerStatus>().Init(MetaData.CustomerStatusName);
 		} // CheckCustomerStatus
 
 		#endregion method CheckCustomerStatus
@@ -236,12 +282,12 @@
 		#region method CheckCompanyScore
 
 		private void CheckCompanyScore() {
-			if (m_oMetaData.CompanyScore <= 0)
-				StepDone<BusinessScore>().Init(m_oMetaData.CompanyScore, m_oCfg.BusinessScoreThreshold);
-			else if (m_oMetaData.CompanyScore > m_oCfg.BusinessScoreThreshold)
-				StepDone<BusinessScore>().Init(m_oMetaData.CompanyScore, m_oCfg.BusinessScoreThreshold);
+			if (MetaData.CompanyScore <= 0)
+				StepDone<BusinessScore>().Init(MetaData.CompanyScore, Cfg.BusinessScoreThreshold);
+			else if (MetaData.CompanyScore > Cfg.BusinessScoreThreshold)
+				StepDone<BusinessScore>().Init(MetaData.CompanyScore, Cfg.BusinessScoreThreshold);
 			else
-				StepFailed<BusinessScore>().Init(m_oMetaData.CompanyScore, m_oCfg.BusinessScoreThreshold);
+				StepFailed<BusinessScore>().Init(MetaData.CompanyScore, Cfg.BusinessScoreThreshold);
 		} // CheckCompayScore
 
 		#endregion method CheckCompanyScore
@@ -249,10 +295,10 @@
 		#region method CheckConsumerScore
 
 		private void CheckConsumerScore() {
-			if (m_oMetaData.ConsumerScore >= m_oCfg.ExperianScoreThreshold)
-				StepDone<ConsumerScore>().Init(m_oMetaData.ConsumerScore, m_oCfg.ExperianScoreThreshold);
+			if (MetaData.ConsumerScore >= Cfg.ExperianScoreThreshold)
+				StepDone<ConsumerScore>().Init(MetaData.ConsumerScore, Cfg.ExperianScoreThreshold);
 			else
-				StepFailed<ConsumerScore>().Init(m_oMetaData.ConsumerScore, m_oCfg.ExperianScoreThreshold);
+				StepFailed<ConsumerScore>().Init(MetaData.ConsumerScore, Cfg.ExperianScoreThreshold);
 		} // CheckConsumerScore
 
 		#endregion method CheckConsumerScore
@@ -261,15 +307,15 @@
 
 		private void CheckCustomerAge() {
 			// nAge: full number of years in customer's age.
-			int nAge = Now.Year - m_oMetaData.DateOfBirth.Year;
+			int nAge = Now.Year - MetaData.DateOfBirth.Year;
 
-			if (m_oMetaData.DateOfBirth.AddYears(nAge) < Now) // this happens if customer had no birthday this year.
+			if (MetaData.DateOfBirth.AddYears(nAge) < Now) // this happens if customer had no birthday this year.
 				nAge--;
 
-			if ((m_oCfg.CustomerMinAge <= nAge) && (nAge <= m_oCfg.CustomerMaxAge))
-				StepDone<Age>().Init(nAge, m_oCfg.CustomerMinAge, m_oCfg.CustomerMaxAge);
+			if ((Cfg.CustomerMinAge <= nAge) && (nAge <= Cfg.CustomerMaxAge))
+				StepDone<Age>().Init(nAge, Cfg.CustomerMinAge, Cfg.CustomerMaxAge);
 			else
-				StepFailed<Age>().Init(nAge, m_oCfg.CustomerMinAge, m_oCfg.CustomerMaxAge);
+				StepFailed<Age>().Init(nAge, Cfg.CustomerMinAge, Cfg.CustomerMaxAge);
 		} // CheckCustomerAge
 
 		#endregion method CheckCustomerAge
@@ -278,13 +324,13 @@
 
 		private void CheckTurnovers() {
 			var oThresholds = new SortedDictionary<int, Tuple<decimal, TimePeriodEnum>> {
-				{  1, new Tuple<decimal, TimePeriodEnum>(m_oCfg.MinTurnover1M, TimePeriodEnum.Month)  },
-				{  3, new Tuple<decimal, TimePeriodEnum>(m_oCfg.MinTurnover3M, TimePeriodEnum.Month3) },
-				{ 12, new Tuple<decimal, TimePeriodEnum>(m_oCfg.MinTurnover1Y, TimePeriodEnum.Year)   },
+				{  1, new Tuple<decimal, TimePeriodEnum>(Cfg.MinTurnover1M, TimePeriodEnum.Month)  },
+				{  3, new Tuple<decimal, TimePeriodEnum>(Cfg.MinTurnover3M, TimePeriodEnum.Month3) },
+				{ 12, new Tuple<decimal, TimePeriodEnum>(Cfg.MinTurnover1Y, TimePeriodEnum.Year)   },
 			};
 
 			foreach (var pair in oThresholds) {
-				decimal nTurnover = m_oTurnover[pair.Key];
+				decimal nTurnover = Turnover[pair.Key];
 				decimal nThreshold = pair.Value.Item1;
 				TimePeriodEnum nPeriod = pair.Value.Item2;
 
@@ -316,17 +362,17 @@
 		#region method CheckCompanyAge
 
 		private void CheckCompanyAge() {
-			m_oLog.Msg("Customer {0} business seniority: {1}.", m_oArgs.CustomerID, m_oOriginationTime);
+			Log.Msg("Customer {0} business seniority: {1}.", Args.CustomerID, OriginationTime);
 
-			if (m_oOriginationTime.Since == null)
-				StepFailed<MarketplaceSeniority>().Init(-1, m_oCfg.MinMPSeniorityDays);
+			if (OriginationTime.Since == null)
+				StepFailed<MarketplaceSeniority>().Init(-1, Cfg.MinMPSeniorityDays);
 			else {
-				int nAge = (int)(DateTime.UtcNow - m_oOriginationTime.Since.Value).TotalDays;
+				int nAge = (int)(DateTime.UtcNow - OriginationTime.Since.Value).TotalDays;
 
-				if (nAge >= m_oCfg.MinMPSeniorityDays)
-					StepDone<MarketplaceSeniority>().Init(nAge, m_oCfg.MinMPSeniorityDays);
+				if (nAge >= Cfg.MinMPSeniorityDays)
+					StepDone<MarketplaceSeniority>().Init(nAge, Cfg.MinMPSeniorityDays);
 				else
-					StepFailed<MarketplaceSeniority>().Init(nAge, m_oCfg.MinMPSeniorityDays);
+					StepFailed<MarketplaceSeniority>().Init(nAge, Cfg.MinMPSeniorityDays);
 			} // if
 		} // CheckCompanyAge
 
@@ -335,7 +381,7 @@
 		#region method CheckDefaultAccounts
 
 		private void CheckDefaultAccounts() {
-			if (m_oMetaData.NumOfDefaultAccounts > 0)
+			if (MetaData.NumOfDefaultAccounts > 0)
 				StepFailed<DefaultAccounts>().Init();
 			else
 				StepDone<DefaultAccounts>().Init();
@@ -346,7 +392,7 @@
 		#region method CheckTotalLoanCount
 
 		private void CheckTotalLoanCount() {
-			StepDone<TotalLoanCount>().Init(m_oMetaData.TotalLoanCount);
+			StepDone<TotalLoanCount>().Init(MetaData.TotalLoanCount);
 		} // CheckTotalLoanCount
 
 		#endregion method CheckTotalLoanCount
@@ -354,12 +400,12 @@
 		#region method CheckCaisStatuses
 
 		private void CheckCaisStatuses(List<string> oAllowedStatuses) {
-			List<string> diff = m_oWorstStatuses.Except(oAllowedStatuses).ToList();
+			List<string> diff = WorstStatuses.Except(oAllowedStatuses).ToList();
 
 			if (diff.Count > 1)
-				StepFailed<WorstCaisStatus>().Init(diff, m_oWorstStatuses.ToList(), oAllowedStatuses);
+				StepFailed<WorstCaisStatus>().Init(diff, WorstStatuses.ToList(), oAllowedStatuses);
 			else
-				StepDone<WorstCaisStatus>().Init(null, m_oWorstStatuses.ToList(), oAllowedStatuses);
+				StepDone<WorstCaisStatus>().Init(null, WorstStatuses.ToList(), oAllowedStatuses);
 		} // CheckCaisStatuses
 
 		#endregion method CheckCaisStatuses
@@ -367,7 +413,7 @@
 		#region method CheckRollovers
 
 		private void CheckRollovers() {
-			if (m_oMetaData.NumOfRollovers > 0)
+			if (MetaData.NumOfRollovers > 0)
 				StepFailed<Rollovers>().Init();
 			else
 				StepDone<Rollovers>().Init();
@@ -380,16 +426,16 @@
 		private void CheckLatePayments() {
 			bool bHasLatePayments = false;
 
-			foreach (Payment lp in m_oPayments) {
-				if (lp.IsLate(m_oCfg.MaxAllowedDaysLate)) {
+			foreach (Payment lp in Payments) {
+				if (lp.IsLate(Cfg.MaxAllowedDaysLate)) {
 					bHasLatePayments = true;
 
-					lp.Fill(StepFailed<LatePayment>(), m_oCfg.MaxAllowedDaysLate);
+					lp.Fill(StepFailed<LatePayment>(), Cfg.MaxAllowedDaysLate);
 				} // if
 			} // for each
 
 			if (!bHasLatePayments)
-				StepDone<LatePayment>().Init(0, 0, Now, 0, Now, m_oCfg.MaxAllowedDaysLate);
+				StepDone<LatePayment>().Init(0, 0, Now, 0, Now, Cfg.MaxAllowedDaysLate);
 		} // CheckLatePayments
 
 		#endregion method CheckLatePayments
@@ -397,10 +443,10 @@
 		#region method CheckCustomerOpenLoans
 
 		private void CheckCustomerOpenLoans() {
-			if (m_oMetaData.OpenLoanCount > m_oCfg.MaxNumOfOutstandingLoans)
-				StepFailed<OutstandingLoanCount>().Init(m_oMetaData.OpenLoanCount, m_oCfg.MaxNumOfOutstandingLoans);
+			if (MetaData.OpenLoanCount > Cfg.MaxNumOfOutstandingLoans)
+				StepFailed<OutstandingLoanCount>().Init(MetaData.OpenLoanCount, Cfg.MaxNumOfOutstandingLoans);
 			else
-				StepDone<OutstandingLoanCount>().Init(m_oMetaData.OpenLoanCount, m_oCfg.MaxNumOfOutstandingLoans);
+				StepDone<OutstandingLoanCount>().Init(MetaData.OpenLoanCount, Cfg.MaxNumOfOutstandingLoans);
 		} // CheckCustomerOpenLoans
 
 		#endregion method CheckCustomerOpenLoans
@@ -408,12 +454,12 @@
 		#region method CheckRepaidRatio
 
 		private void CheckRepaidRatio() {
-			decimal nRatio = m_oMetaData.RepaidRatio;
+			decimal nRatio = MetaData.RepaidRatio;
 
-			if (nRatio > m_oCfg.MinRepaidPortion)
-				StepDone<OutstandingRepayRatio>().Init(nRatio, m_oCfg.MinRepaidPortion);
+			if (nRatio > Cfg.MinRepaidPortion)
+				StepDone<OutstandingRepayRatio>().Init(nRatio, Cfg.MinRepaidPortion);
 			else
-				StepFailed<OutstandingRepayRatio>().Init(nRatio, m_oCfg.MinRepaidPortion);
+				StepFailed<OutstandingRepayRatio>().Init(nRatio, Cfg.MinRepaidPortion);
 		} // CheckRepaidRatio
 
 		#endregion method CheckRepaidRatio
@@ -421,9 +467,9 @@
 		#region method ReduceOutstandingPrincipal
 
 		private void ReduceOutstandingPrincipal() {
-			m_nApprovedAmount -= m_oMetaData.OutstandingPrincipal;
+			ApprovedAmount -= MetaData.OutstandingPrincipal;
 
-			StepDone<ReduceOutstandingPrincipal>().Init(m_oMetaData.OutstandingPrincipal, m_nApprovedAmount);
+			StepDone<ReduceOutstandingPrincipal>().Init(MetaData.OutstandingPrincipal, ApprovedAmount);
 		} // ReduceOutstandingPrincipal
 
 		#endregion method ReduceOutstandingPrincipal
@@ -431,12 +477,12 @@
 		#region method CheckAllowedRange
 
 		private void CheckAllowedRange() {
-			decimal nApprovedAmount = m_nApprovedAmount;
+			decimal nApprovedAmount = ApprovedAmount;
 
-			if ((m_oCfg.MinAmount <= nApprovedAmount) && (nApprovedAmount <= m_oCfg.MaxAmount))
-				StepDone<AmountOutOfRangle>().Init(nApprovedAmount, m_oCfg.MinAmount, m_oCfg.MaxAmount);
+			if ((Cfg.MinAmount <= nApprovedAmount) && (nApprovedAmount <= Cfg.MaxAmount))
+				StepDone<AmountOutOfRangle>().Init(nApprovedAmount, Cfg.MinAmount, Cfg.MaxAmount);
 			else
-				StepFailed<AmountOutOfRangle>().Init(nApprovedAmount, m_oCfg.MinAmount, m_oCfg.MaxAmount);
+				StepFailed<AmountOutOfRangle>().Init(nApprovedAmount, Cfg.MinAmount, Cfg.MaxAmount);
 		} // CheckAllowedRange
 
 		#endregion method CheckAllowedRange
@@ -444,7 +490,7 @@
 		#region method CheckComplete
 
 		private void CheckComplete() {
-			decimal nApprovedAmount = m_nApprovedAmount;
+			decimal nApprovedAmount = ApprovedAmount;
 
 			if (nApprovedAmount > 0)
 				StepDone<Complete>().Init(nApprovedAmount);
@@ -464,29 +510,29 @@
 			string sRowType = sr["RowType"];
 
 			if (!Enum.TryParse(sRowType, out nRowType)) {
-				m_oLog.Alert("Unsupported row type encountered: '{0}'.", sRowType);
+				Log.Alert("Unsupported row type encountered: '{0}'.", sRowType);
 				return;
 			} // if
 
 			switch (nRowType) {
 			case RowType.MetaData:
-				sr.Fill(m_oMetaData);
+				sr.Fill(MetaData);
 				break;
 
 			case RowType.Payment:
-				m_oPayments.Add(sr.Fill<Payment>());
+				Payments.Add(sr.Fill<Payment>());
 				break;
 
 			case RowType.Cais:
-				m_oWorstStatuses.Add(sr["WorstStatus"]);
+				WorstStatuses.Add(sr["WorstStatus"]);
 				break;
 
 			case RowType.OriginationTime:
-				m_oOriginationTime.Process(sr);
+				OriginationTime.Process(sr);
 				break;
 
 			case RowType.Turnover:
-				m_oTurnover.Add(sr, m_oLog);
+				Turnover.Add(sr, Log);
 				break;
 
 			default:
@@ -511,7 +557,7 @@
 		#region method StepFailed
 
 		private T StepFailed<T>() where T : ATrace {
-			m_nApprovedAmount = 0;
+			ApprovedAmount = 0;
 			return Trail.Negative<T>(false);
 		} // StepFailed
 
@@ -524,31 +570,6 @@
 		} // StepFailed
 
 		#endregion method StepDone
-
-		#region fields
-
-		private readonly DateTime Now;
-
-		private readonly AConnection m_oDB;
-		private readonly ASafeLog m_oLog;
-
-		private readonly Configuration m_oCfg;
-		private readonly Arguments m_oArgs;
-
-		private readonly MetaData m_oMetaData;
-		private readonly List<Payment> m_oPayments;
-
-		private readonly SortedSet<string> m_oWorstStatuses;
-
-		private readonly OriginationTime m_oOriginationTime;
-
-		private decimal m_nApprovedAmount;
-
-		private readonly CalculatedTurnover m_oTurnover;
-
-		private readonly AvailableFunds m_oFunds;
-
-		#endregion fields
 
 		#endregion private
 	} // class Agent

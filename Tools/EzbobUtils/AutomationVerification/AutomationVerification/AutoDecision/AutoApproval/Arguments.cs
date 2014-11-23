@@ -1,4 +1,7 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
+	/// <summary>
+	/// Contains input arguments for auto approval logic.
+	/// </summary>
 	public class Arguments {
 		#region constructor
 

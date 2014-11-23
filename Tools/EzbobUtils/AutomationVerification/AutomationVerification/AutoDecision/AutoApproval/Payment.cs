@@ -3,6 +3,10 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using Newtonsoft.Json;
 
+	/// <summary>
+	/// Customer late payment.
+	/// One of the outputs of LoadAutoApprovalData sp.
+	/// </summary>
 	public class Payment {
 		public int LoanID { get; set; }
 		public int ScheduleID { get; set;} 
