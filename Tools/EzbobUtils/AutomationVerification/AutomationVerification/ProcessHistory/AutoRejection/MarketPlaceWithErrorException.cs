@@ -9,7 +9,7 @@
 		public void Init(DataModel model) {
 			Model = model;
 			Comment = string.Format(
-				"customer has {0} error in MP and consumer score {1} > {2} or business score {3} > {4}",
+				"customer has {0} error in MP and (consumer score {1} > {2} or business score {3} > {4})",
 				model.HasMpError ? "an" : "no",
 				model.MaxConsumerScore,
 				model.MaxConsumerScoreThreshhold,

@@ -12,6 +12,7 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		public int ExperianScore { get; set; }
 		public int CompanyScore { get; set; }
 		public bool WasApproved { get; set; }
+		public bool IsBrokerClient { get; set; }
 		public int DefaultAccountsNum { get; set; }
 		public int DefaultAccountAmount { get; set; }
 		public int DefaultCompanyAccountsNum { get; set; }
@@ -53,6 +54,7 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		{
 			DataAsOf = dataAsOf;
 			WasApproved = data.WasApproved;
+			IsBrokerClient = data.IsBrokerClient;
 			AnnualTurnover = data.AnnualTurnover;
 			QuarterTurnover = data.QuarterTurnover;
 			ConsumerScore = data.ConsumerScore;
@@ -66,6 +68,8 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 			DefaultAmountInBusinessAccounts = data.DefaultAmountInBusinessAccounts;
 			CustomerStatus = data.CustomerStatus;
 			NumOfLateConsumerAccounts = data.NumOfLateConsumerAccounts;
+			ConsumerLateDays = data.ConsumerLateDays;
+
 			BusinessSeniorityDays = data.BusinessSeniorityDays;
 			
 			//configs
@@ -96,6 +100,7 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		public DateTime DataAsOf { get; private set; }
 
 		public bool WasApproved { get; set; }
+		public bool IsBrokerClient { get; set; }
 		public decimal AnnualTurnover { get; set; }
 		public decimal QuarterTurnover { get; set; }
 		public int ConsumerScore { get; set; }
@@ -109,6 +114,7 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		public int BusinessSeniorityDays { get; set; }
 		public string CustomerStatus { get; set; }
 		public int NumOfLateConsumerAccounts { get; set; }
+		public int ConsumerLateDays { get; set; }
 
 		//configs
 		public int AutoRejectionException_AnualTurnover { get; set; }

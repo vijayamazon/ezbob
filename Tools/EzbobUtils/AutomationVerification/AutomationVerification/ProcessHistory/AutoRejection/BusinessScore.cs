@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoRejection
 {
-	public class BusinessScore : AThresholdTrace {
+	public class BusinessScore : ARangeTrace {
 		public BusinessScore(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {} // constructor
 
 		protected override string ValueName {

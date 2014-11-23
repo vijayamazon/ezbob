@@ -13,11 +13,14 @@ BEGIN
 --Customer Status
 DECLARE @CustomerStatus NVARCHAR(30) 
 DECLARE @IsLimited BIT = 0
+DECLARE @IsBrokerClient BIT = 0
 
 SELECT @CustomerStatus=cs.Name, @IsLimited = CASE 
 	WHEN c.TypeOfBusiness='Limited' THEN 1
 	WHEN c.TypeOfBusiness='LLP' THEN 1
-	ELSE 0 END
+	ELSE 0 END,
+	@IsBrokerClient = CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END
+	
 FROM Customer c INNER JOIN CustomerStatuses cs ON cs.Id = c.CollectionStatus 
 WHERE c.Id = @CustomerId
 
@@ -64,7 +67,8 @@ DECLARE @IncorporationDate DATETIME
 
 IF @IsLimited = 1
 BEGIN
-	SELECT @DefaultCompanyAccountAmount = isnull(sum(c.DefaultBalance), 0), @DefaultCompanyAccountsNum = isnull(count(c.ExperianLtdDL97ID), 0) FROM ExperianLtdDL97 c
+	SELECT @DefaultCompanyAccountAmount = isnull(sum(c.DefaultBalance), 0), @DefaultCompanyAccountsNum = isnull(count(c.ExperianLtdDL97ID), 0) 
+	FROM ExperianLtdDL97 c
 	WHERE c.ExperianLtdID=@ExperianLtd AND c.AccountState='D'
 	
 	SELECT @CompanyScore = isnull(MaxScore,0), @IncorporationDate = IncorporationDate 
@@ -104,6 +108,7 @@ SELECT @CustomerStatus AS CustomerStatus,
 	   @ExperianScore AS ExperianScore, 
 	   @CompanyScore AS CompanyScore, 
 	   @WasApproved AS WasApproved, 
+	   @IsBrokerClient AS IsBrokerClient,
 	   @DefaultAccountsNum AS DefaultAccountsNum, 
 	   @DefaultAccountAmount AS DefaultAccountAmount,
 	   @DefaultCompanyAccountsNum AS DefaultCompanyAccountsNum,
@@ -114,5 +119,3 @@ SELECT @CustomerStatus AS CustomerStatus,
 END
 
 GO
-
-EXEC AV_GetRejectionData 21344
