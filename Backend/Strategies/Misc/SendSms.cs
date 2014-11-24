@@ -34,7 +34,6 @@
 		} // Name
 
 		public override void Execute() {
-
 			//Debug mode
 			if (m_sMobilePhone == "01111111111") {
 				Result = true;
@@ -46,8 +45,7 @@
 			_sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
 			_dateSent = DateTime.UtcNow;
 			twilio.SendSmsMessage(m_sFromNumber, _sendMobilePhone, m_sContent, SaveSms);
-			
-
+			Result = true;
 		}
 
 		private void SaveSms(SMSMessage smsResponse) {
@@ -61,7 +59,7 @@
 							DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
 			}
 			catch (Exception ex) {
-				Log.Error(string.Format("Failed saving twilio SMS send response to DB: {0}", message));
+				Log.Error("Failed saving twilio SMS send response to DB: {0}", ex.Message);
 			}
 
 			if (message.Status == null)
