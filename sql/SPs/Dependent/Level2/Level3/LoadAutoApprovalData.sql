@@ -205,6 +205,12 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	DECLARE @ServiceLogId BIGINT
+
+	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT
+
+	------------------------------------------------------------------------------
+
 	DECLARE @ConsumerScore INT = ISNULL((
 		SELECT
 			MIN(x.ExperianConsumerScore)
@@ -222,13 +228,6 @@ BEGIN
 			AND ExperianConsumerScore IS NOT NULL
 		) x
 	), 0)
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	DECLARE @ServiceLogId BIGINT
-
-	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT
 
 	------------------------------------------------------------------------------
 
