@@ -1,123 +1,74 @@
 ﻿namespace EzBob.Backend.Strategies.AutomationVerification {
-	using System;
-	using System.Collections.Generic;
 	using AutomationCalculator.ProcessHistory.Common;
 	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class VerifyReapproval : AStrategy {
+	public class VerifyReapproval : AApprovedVerificationBase {
 		#region public
 
-		#region constructor
-
-		public VerifyReapproval(int nTopCount, int nLastCheckedCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_nTopCount = nTopCount;
-			m_nLastCheckedCustomerID = nLastCheckedCustomerID;
+		public VerifyReapproval(
+			int nTopCount,
+			int nLastCheckedCustomerID,
+			AConnection oDB,
+			ASafeLog oLog
+		) : base(nTopCount, nLastCheckedCustomerID, oDB, oLog) {
 		} // constructor
-
-		#endregion constructor
-
-		#region property Name
-
-		public override string Name {
-			get { return "VerifyReapproval"; }
-		} // Name
-
-		#endregion property Name
-
-		#region method Execute
-
-		public override void Execute() {
-			m_nExceptionCount = 0;
-			m_nMatchCount = 0;
-			m_nMismatchCount = 0;
-
-			List<AutoApproveInputRow> lst = AutoApproveInputRow.Load(DB, m_nTopCount, m_nLastCheckedCustomerID);
-
-			for (int i = 0; i < lst.Count; i++) {
-				AutoApproveInputRow oRow = lst[i];
-
-				Log.Debug("Customer {0} out of {1}, id {2}...", i + 1, lst.Count, oRow.CustomerId);
-
-				string sResult = VerifyOne(oRow.CustomerId);
-
-				Log.Debug("Customer {0} out of {1}, id {2} complete, result: {3}.",
-					i + 1, lst.Count, oRow.CustomerId, sResult
-				);
-			} // for
-
-			Log.Debug(
-				"Auto re-approval: sent {0} = mismatch {1} + exception {2} + match {3}.",
-				lst.Count, m_nMismatchCount, m_nExceptionCount, m_nMatchCount
-			);
-		} // Execute
-
-		#endregion method Execute
 
 		#endregion public
 
-		#region private
+		#region protected
 
-		private string VerifyOne(int nCustomerID) {
-			try {
-				string sResult;
+		#region property DecisionName
 
-				var autoDecisionResponse = new AutoDecisionResponse {DecisionName = "Manual"};
+		protected override string DecisionName {
+			get { return "Auto Re-approval"; }
+		} // DecisionName
 
-				var oReapprove = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(
-					nCustomerID,
-					DB,
-					Log
-				).Init();
-				oReapprove.MakeDecision(autoDecisionResponse);
+		#endregion property DecisionName
 
-				var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(
-					Log, nCustomerID, oReapprove.Trail.InputData.DataAsOf
-				);
-				oSecondary.MakeDecision(oSecondary.GetInputData());
+		#region method MakeAndVerifyDecision
 
-				bool bSuccess = oReapprove.Trail.EqualsTo(oSecondary.Trail);
+		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
+			var autoDecisionResponse = new AutoDecisionResponse {DecisionName = "Manual"};
 
-				if (bSuccess) {
-					if (oReapprove.Trail.HasDecided) {
-						if (oReapprove.ApprovedAmount == oSecondary.Result.ReApproveAmount) {
-							oReapprove.Trail.Affirmative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
-							oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
-						}
-						else {
-							oReapprove.Trail.Negative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
-							oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
-							bSuccess = false;
-						} // if
+			var oReapprove = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(
+				oRow.CustomerId,
+				DB,
+				Log
+			).Init();
+			
+			oReapprove.MakeDecision(autoDecisionResponse);
+
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(
+				Log, oRow.CustomerId, oReapprove.Trail.InputData.DataAsOf
+			);
+
+			oSecondary.MakeDecision(oSecondary.GetInputData());
+
+			bool bSuccess = oReapprove.Trail.EqualsTo(oSecondary.Trail);
+
+			if (bSuccess) {
+				if (oReapprove.Trail.HasDecided) {
+					if (oReapprove.ApprovedAmount == oSecondary.Result.ReApproveAmount) {
+						oReapprove.Trail.Affirmative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
+						oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
+					}
+					else {
+						oReapprove.Trail.Negative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
+						oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
+						bSuccess = false;
 					} // if
-
-					sResult = "match";
-					m_nMatchCount++;
-				}
-				else {
-					sResult = "mismatch";
-					m_nMismatchCount++;
 				} // if
+			} // if
 
-				oReapprove.Trail.Save(DB, oSecondary.Trail);
+			oReapprove.Trail.Save(DB, oSecondary.Trail);
 
-				return sResult;
-			}
-			catch (Exception e) {
-				Log.Debug(e, "Exception caught.");
-				m_nExceptionCount++;
-				return "exception";
-			} // try
-		} // VerifyOne
+			return bSuccess;
+		} // MakeAndVerifyDecision
 
-		private readonly int m_nTopCount;
-		private readonly int m_nLastCheckedCustomerID;
+		#endregion method MakeAndVerifyDecision
 
-		private int m_nMatchCount;
-		private int m_nMismatchCount;
-		private int m_nExceptionCount;
-
-		#endregion private
+		#endregion protected
 	} // class VerifyReapproval
 } // namespace

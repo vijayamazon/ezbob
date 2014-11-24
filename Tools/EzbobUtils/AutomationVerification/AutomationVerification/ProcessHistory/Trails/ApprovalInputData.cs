@@ -4,6 +4,7 @@
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Common;
 	using Newtonsoft.Json;
+	using Newtonsoft.Json.Converters;
 
 	public class ApprovalInputData : ITrailInputData {
 		#region public
@@ -30,6 +31,9 @@
 		public MetaData MetaData { get; private set; }
 		public int CustomerID { get { return m_oArguments.CustomerID; } } // CustomerID
 		public decimal SystemCalculatedAmount { get { return m_oArguments.SystemCalculatedAmount; } } // SystemCalculatedAmount
+
+		[JsonConverter(typeof(StringEnumConverter))]
+		public Medal Medal { get { return m_oArguments.Medal; } } // Medal
 
 		public string WorstStatuses { get; private set; }
 
@@ -100,8 +104,8 @@
 
 		#region method SetArgs
 
-		public void SetArgs(int nCustomerID, decimal nAmount) {
-			m_oArguments = new Arguments(nCustomerID, nAmount);
+		public void SetArgs(int nCustomerID, decimal nAmount, Medal nMedal) {
+			m_oArguments = new Arguments(nCustomerID, nAmount, nMedal);
 		} // SetArgs
 
 		#endregion method SetArgs

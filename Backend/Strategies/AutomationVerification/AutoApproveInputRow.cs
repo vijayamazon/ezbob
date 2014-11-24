@@ -1,11 +1,22 @@
 ﻿namespace EzBob.Backend.Strategies.AutomationVerification {
+	using System;
 	using System.Collections.Generic;
+	using EzBob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 
-	internal class AutoApproveInputRow {
+	public class AutoApproveInputRow {
 		public int CustomerId { get; set; }
 		public string Medal { get; set; }
 		public int OfferedLoanAmount { get; set; }
+
+		public MedalClassification GetMedal() {
+			MedalClassification nMedal;
+
+			if (!Enum.TryParse(Medal, out nMedal))
+				nMedal = MedalClassification.NoClassification;
+
+			return nMedal;
+		} // GetMedal
 
 		public static List<AutoApproveInputRow> Load(
 			AConnection oDB,

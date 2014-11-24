@@ -84,6 +84,7 @@
     <Compile Include="ProcessHistory\ARangeTrace.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\MedalIsGood.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OneYearTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OneMonthTurnover.cs" />

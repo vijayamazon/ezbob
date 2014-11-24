@@ -80,6 +80,8 @@
   <ItemGroup>
     <Compile Include="Admin\Nop.cs" />
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />
+    <Compile Include="AutomationVerification\AApprovedVerificationBase.cs" />
+    <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />

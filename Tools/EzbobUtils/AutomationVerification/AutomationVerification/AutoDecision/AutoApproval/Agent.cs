@@ -20,12 +20,12 @@
 
 		#region constructor
 
-		public Agent(int nCustomerID, decimal nSystemCalculatedAmount, AConnection oDB, ASafeLog oLog) {
+		public Agent(int nCustomerID, decimal nSystemCalculatedAmount, AutomationCalculator.Common.Medal nMedal, AConnection oDB, ASafeLog oLog) {
 			Result = null;
 
 			DB = oDB;
 			Log = oLog ?? new SafeLog();
-			Args = new Arguments(nCustomerID, nSystemCalculatedAmount);
+			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal);
 		} // constructor
 
 		#endregion constructor
@@ -67,6 +67,7 @@
 
 				CheckInit();
 
+				CheckMedal();
 				CheckIsFraud();
 				CheckIsBrokerCustomer();
 				CheckTodayApprovedCount();
@@ -190,6 +191,17 @@
 		#region private
 
 		#region steps
+
+		#region method CheckMedal
+
+		private void CheckMedal() {
+			if (Args.Medal == AutomationCalculator.Common.Medal.NoClassification)
+				StepFailed<MedalIsGood>().Init(Args.Medal);
+			else
+				StepDone<MedalIsGood>().Init(Args.Medal);
+		} // CheckMedal
+
+		#endregion method CheckMedal
 
 		#region method CheckInit
 

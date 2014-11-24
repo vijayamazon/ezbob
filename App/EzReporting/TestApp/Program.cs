@@ -99,8 +99,6 @@ namespace TestApp {
 			// TestAddBrokers(oDB, log);
 
 			// TestReapproval(oDB, log);
-
-			TestAutoApproval(oDB, log);
 		} // Main
 
 		#endregion method Main
@@ -723,18 +721,6 @@ namespace TestApp {
 		} // TestReapproval
 
 		#endregion method TestReapproval
-
-		#region method TestAutoApproval
-
-		private static void TestAutoApproval(AConnection oDB, ASafeLog oLog) {
-			var adr = new AutoDecisionResponse();
-
-			var ra = new AutomationCalculator.AutoDecision.AutoApproval.Agent(339, 10000, oDB, oLog).Init();
-
-			ra.MakeDecision(); // adr);
-		} // TestAutoApproval
-
-		#endregion method TestAutoApproval
 	} // class Program
 
 	#region class BrokerData

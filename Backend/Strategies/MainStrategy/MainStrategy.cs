@@ -296,16 +296,11 @@
 			if (dataGatherer.EnableAutomaticApproval && bContinue) {
 				new Approval(
 					customerId,
-					isViaBroker,
-					dataGatherer.MinExperianConsumerScore,
-					dataGatherer.MinCompanyScore,
 					offeredCreditLine,
-					dataGatherer.ConsumerCaisDetailWorstStatuses,
-					dataGatherer.NumOfLoans > 0,
 					medalClassification,
 					DB,
 					Log
-				).MakeDecision(autoDecisionResponse);
+				).Init().MakeDecision(autoDecisionResponse);
 
 				bContinue = string.IsNullOrEmpty(autoDecisionResponse.SystemDecision);
 

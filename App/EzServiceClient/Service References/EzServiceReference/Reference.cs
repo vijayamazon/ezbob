@@ -2515,6 +2515,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianConsumer", ReplyAction="http://tempuri.org/IEzService/BackfillExperianConsumerResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianConsumer();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianConsumer", ReplyAction="http://tempuri.org/IEzService/BackfillExperianConsumerResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianConsumerAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianConsumer", ReplyAction="http://tempuri.org/IEzService/ParseExperianConsumerResponse")]
         ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId);
         
@@ -3079,6 +3085,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
         
@@ -3522,12 +3534,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckLtdCompanyCache", ReplyAction="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(int userId, string sCompanyRefNum);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianConsumer", ReplyAction="http://tempuri.org/IEzService/BackfillExperianConsumerResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianConsumer();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianConsumer", ReplyAction="http://tempuri.org/IEzService/BackfillExperianConsumerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianConsumerAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3555,6 +3561,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianConsumer() {
+            return base.Channel.BackfillExperianConsumer();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianConsumerAsync() {
+            return base.Channel.BackfillExperianConsumerAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId) {
@@ -4309,6 +4323,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.VerifyReapprovalAsync(nCustomerCount, nLastCheckedCustomerID);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyApproval(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyApprovalAsync(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
             return base.Channel.IsBroker(sContactEmail);
         }
@@ -4899,14 +4921,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(int userId, string sCompanyRefNum) {
             return base.Channel.CheckLtdCompanyCacheAsync(userId, sCompanyRefNum);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianConsumer() {
-            return base.Channel.BackfillExperianConsumer();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianConsumerAsync() {
-            return base.Channel.BackfillExperianConsumerAsync();
         }
     }
 }

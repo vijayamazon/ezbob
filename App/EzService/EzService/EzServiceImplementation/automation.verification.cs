@@ -9,5 +9,13 @@
 		} // VerifyReapproval
 
 		#endregion method VerifyReapproval
+
+		#region method VerifyApproval
+
+		public ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID) {
+			return Execute<VerifyApproval>(null, null, nCustomerCount, nLastCheckedCustomerID);
+		} // VerifyApproval
+
+		#endregion method VerifyApproval
 	} // class EzServiceImplementation
 } // namespace

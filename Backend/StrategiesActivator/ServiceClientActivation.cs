@@ -1320,6 +1320,37 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oServiceClient.VerifyReapproval(nCustomerCount, nLastCheckedCustomerID);
 		} // VerifyReapproval
 
+		[Activation]
+		private void VerifyApproval() {
+			int nCustomerCount = -1;
+			int nLastCheckedCustomerID = -1;
+
+			bool bGood = false;
+
+			if (m_aryArgs.Length == 1) {
+				nCustomerCount = -1;
+				nLastCheckedCustomerID = -1;
+				bGood = true;
+			}
+			else if (m_aryArgs.Length == 2) {
+				bGood = int.TryParse(m_aryArgs[1], out nCustomerCount);
+				nLastCheckedCustomerID = -1;
+			}
+			else if (m_aryArgs.Length == 3) {
+				bGood = int.TryParse(m_aryArgs[1], out nCustomerCount);
+				bGood = bGood && int.TryParse(m_aryArgs[2], out nLastCheckedCustomerID);
+			} // if
+
+			if (!bGood) {
+				m_oLog.Msg("Usage: VerifyApproval [ <customer count>  [ <last checked customer id> ] ]");
+				m_oLog.Msg("Specify customer count 0 or negative to run on all the customers.");
+				m_oLog.Msg("Specify customer count 0 or negative to start from the beginning.");
+				return;
+			} // if
+
+			m_oServiceClient.VerifyApproval(nCustomerCount, nLastCheckedCustomerID);
+		} // VerifyApproval
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

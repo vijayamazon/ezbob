@@ -132,6 +132,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BackfillExperianConsumer_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillExperianConsumer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillExperianConsumer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillExperianConsumerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_ParseExperianConsumer_InputMessage">
     <wsdl:part name="parameters" element="tns:ParseExperianConsumer" />
   </wsdl:message>
@@ -696,6 +702,12 @@
   <wsdl:message name="IEzService_VerifyReapproval_OutputMessage">
     <wsdl:part name="parameters" element="tns:VerifyReapprovalResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_VerifyApproval_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyApproval" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_VerifyApproval_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyApprovalResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_IsBroker_InputMessage">
     <wsdl:part name="parameters" element="tns:IsBroker" />
   </wsdl:message>
@@ -1140,12 +1152,6 @@
   <wsdl:message name="IEzService_CheckLtdCompanyCache_OutputMessage">
     <wsdl:part name="parameters" element="tns:CheckLtdCompanyCacheResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_BackfillExperianConsumer_InputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillExperianConsumer" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BackfillExperianConsumer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BackfillExperianConsumerResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1181,6 +1187,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="BackfillExperianConsumer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumer" message="tns:IEzService_BackfillExperianConsumer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumerResponse" message="tns:IEzService_BackfillExperianConsumer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ParseExperianConsumer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumer" message="tns:IEzService_ParseExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseExperianConsumerResponse" message="tns:IEzService_ParseExperianConsumer_OutputMessage" />
@@ -1557,6 +1567,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyReapproval" message="tns:IEzService_VerifyReapproval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyReapprovalResponse" message="tns:IEzService_VerifyReapproval_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="VerifyApproval">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyApproval" message="tns:IEzService_VerifyApproval_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyApprovalResponse" message="tns:IEzService_VerifyApproval_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="IsBroker">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
@@ -1853,10 +1867,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckLtdCompanyCache" message="tns:IEzService_CheckLtdCompanyCache_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse" message="tns:IEzService_CheckLtdCompanyCache_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="BackfillExperianConsumer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumer" message="tns:IEzService_BackfillExperianConsumer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumerResponse" message="tns:IEzService_BackfillExperianConsumer_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1939,6 +1949,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="BackfillExperianConsumer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianConsumer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ParseExperianConsumer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ParseExperianConsumer" style="document" />
       <wsdl:input>
@@ -2785,6 +2804,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="VerifyApproval">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyApproval" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="IsBroker">
       <soap12:operation soapAction="http://tempuri.org/IEzService/IsBroker" style="document" />
       <wsdl:input>
@@ -3444,15 +3472,6 @@
     </wsdl:operation>
     <wsdl:operation name="CheckLtdCompanyCache">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CheckLtdCompanyCache" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BackfillExperianConsumer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianConsumer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

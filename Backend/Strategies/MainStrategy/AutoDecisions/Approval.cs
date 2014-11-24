@@ -27,66 +27,113 @@
 	public class Approval {
 		public Approval(
 			int customerId,
-			bool bIsBrokerCustomer,
-			int minExperianScore,
-			int minCompanyScore,
 			int offeredCreditLine,
-			List<string> consumerCaisDetailWorstStatuses,
-			bool hasLoans,
 			MedalClassification medalClassification,
 			AConnection db,
 			ASafeLog log
 		) {
 			this.db = db;
 			this.log = log ?? new SafeLog();
-			this.minExperianScore = minExperianScore;
-			this.minCompanyScore = minCompanyScore;
-			this.autoApprovedAmount = offeredCreditLine;
-			this.customerId = customerId;
-			this.consumerCaisDetailWorstStatuses = consumerCaisDetailWorstStatuses;
-			this.isBrokerCustomer = bIsBrokerCustomer;
-			this.medalClassification = medalClassification;
-			this.hasLoans = hasLoans;
 
 			loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
 			cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 			loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
 
+			this.customerId = customerId;
+			this.autoApprovedAmount = offeredCreditLine;
+			this.medalClassification = medalClassification;
+
+			this.consumerCaisDetailWorstStatuses = new List<string>();
+
 			customer = _customers.ReallyTryGet(customerId);
 
 			m_oTrail = new ApprovalTrail(customerId, this.log);
 
-			m_oSecondaryImplementation = new Agent(customerId, offeredCreditLine, db, log).Init();
+			m_oSecondaryImplementation = new Agent(customerId, offeredCreditLine, (AutomationCalculator.Common.Medal)medalClassification, db, log).Init();
 		} // constructor
+
+		public Approval Init() {
+			if (customer == null) {
+				this.isBrokerCustomer = false;
+				this.hasLoans = false;
+			}
+			else {
+				this.isBrokerCustomer = customer.Broker != null;
+				this.hasLoans = customer.Loans.Any();
+			} // if
+
+			SafeReader sr = db.GetFirst(
+				"GetExperianMinMaxConsumerDirectorsScore",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			if (!sr.IsEmpty)
+				this.minExperianScore = sr["MinExperianScore"];
+
+			sr = db.GetFirst(
+				"GetCompanyScore",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			if (!sr.IsEmpty)
+				this.minCompanyScore = sr["MinScore"];
+
+			this.consumerCaisDetailWorstStatuses.Clear();
+			var oWorstStatuses = new SortedSet<string>();
+
+			db.ForEachRowSafe(
+				r => {
+					string worstStatus = r["WorstStatus"];
+
+					if (!string.IsNullOrWhiteSpace(worstStatus))
+						oWorstStatuses.Add(worstStatus);
+				},
+				"GetWorstCaisStatuses",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			this.consumerCaisDetailWorstStatuses.AddRange(oWorstStatuses);
+
+			return this;
+		} // Init
+
+		public bool MakeAndVerifyDecision() {
+			var availFunds = new GetAvailableFunds(db, log);
+			availFunds.Execute();
+
+			SaveTrailInputData(availFunds);
+
+			CheckAutoApprovalConformance(availFunds.ReservedAmount);
+			m_oSecondaryImplementation.MakeDecision();
+
+			bool bSuccess = m_oTrail.EqualsTo(m_oSecondaryImplementation.Trail);
+
+			if (bSuccess && m_oTrail.HasDecided) {
+				if (autoApprovedAmount == m_oSecondaryImplementation.Result.ApprovedAmount) {
+					m_oTrail.Affirmative<SameAmount>(false).Init(autoApprovedAmount);
+					m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false).Init(m_oSecondaryImplementation.Result.ApprovedAmount);
+				}
+				else {
+					m_oTrail.Negative<SameAmount>(false).Init(autoApprovedAmount);
+					m_oSecondaryImplementation.Trail.Negative<SameAmount>(false).Init(m_oSecondaryImplementation.Result.ApprovedAmount);
+					bSuccess = false;
+				} // if
+			} // if
+
+			m_oTrail.Save(db, m_oSecondaryImplementation.Trail);
+
+			return bSuccess;
+		} // MakeAndVerifyDecision
 
 		public void MakeDecision(AutoDecisionResponse response) {
 			try {
 				response.LoanOfferUnderwriterComment = "Checking auto approve...";
 
-				var availFunds = new GetAvailableFunds(db, log);
-				availFunds.Execute();
-
-				SaveTrailInputData(availFunds);
-
-				CheckAutoApprovalConformance(availFunds.ReservedAmount);
-				m_oSecondaryImplementation.MakeDecision();
-
-				bool bSuccess = m_oTrail.EqualsTo(m_oSecondaryImplementation.Trail);
-
-				if (bSuccess && m_oTrail.HasDecided) {
-					if (autoApprovedAmount == m_oSecondaryImplementation.Result.ApprovedAmount) {
-						m_oTrail.Affirmative<SameAmount>(false).Init(autoApprovedAmount);
-						m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false).Init(m_oSecondaryImplementation.Result.ApprovedAmount);
-					}
-					else {
-						m_oTrail.Negative<SameAmount>(false).Init(autoApprovedAmount);
-						m_oSecondaryImplementation.Trail.Negative<SameAmount>(false).Init(m_oSecondaryImplementation.Result.ApprovedAmount);
-						bSuccess = false;
-					} // if
-				} // if
-
-				m_oTrail.Save(db, m_oSecondaryImplementation.Trail);
+				bool bSuccess = MakeAndVerifyDecision();
 
 				if (bSuccess) {
 					log.Info("Both Auto Approval implementations have reached the same decision: {0}", m_oTrail.HasDecided ? "approved" : "not approved");
@@ -118,7 +165,7 @@
 				log.Info("Decided to auto approve rounded amount: {0}", response.AutoApproveAmount);
 
 				if (response.AutoApproveAmount != 0) {
-					if (availFunds.AvailableFunds > response.AutoApproveAmount) {
+					if (m_oTrail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
 						if (CurrentValues.Instance.AutoApproveIsSilent) {
 							NotifyAutoApproveSilentMode(
 								response.AutoApproveAmount,
@@ -200,7 +247,7 @@
 				AllowedCaisStatusesWithoutLoan = CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan,
 			});
 
-			m_oTrail.MyInputData.SetArgs(customerId, autoApprovedAmount);
+			m_oTrail.MyInputData.SetArgs(customerId, autoApprovedAmount, (AutomationCalculator.Common.Medal)medalClassification);
 
 			m_oTrail.MyInputData.SetMetaData(new MetaData {
 				RowType = "MetaData",
@@ -221,7 +268,6 @@
 
 				TotalLoanCount = loanRepository.ByCustomer(customerId).Count(),
 			});
-
 
 			FindOutstandingLoans();
 
@@ -250,6 +296,7 @@
 			try {
 				CheckInit();
 
+				CheckMedal();
 				CheckIsFraud();
 				CheckIsBroker();
 				CheckTodaysApprovals();
@@ -286,6 +333,13 @@
 
 			log.Msg("Auto approved amount: {0}. {1}", autoApprovedAmount, m_oTrail);
 		} // CheckAutoApprovalConformance
+
+		private void CheckMedal() {
+			if (medalClassification == MedalClassification.NoClassification)
+				StepFailed<MedalIsGood>().Init((AutomationCalculator.Common.Medal)medalClassification);
+			else
+				StepDone<MedalIsGood>().Init((AutomationCalculator.Common.Medal)medalClassification);
+		} // CheckMedal
 
 		private int FindNumOfDefaultAccounts() {
 			var stra = new LoadExperianConsumerData(customerId, null, null, db, log);
@@ -674,15 +728,17 @@
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly LoanRepository loanRepository;
 
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		private readonly bool isBrokerCustomer;
 		private readonly AConnection db;
 		private readonly Customer customer;
-		private readonly int minExperianScore;
-		private readonly int minCompanyScore;
-		private readonly int customerId;
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+
+		private bool isBrokerCustomer;
+		private int minExperianScore;
+		private int minCompanyScore;
+		private bool hasLoans;
+
 		private readonly List<string> consumerCaisDetailWorstStatuses;
-		private readonly bool hasLoans;
+		private readonly int customerId;
 		private readonly MedalClassification medalClassification;
 
 		private int autoApprovedAmount;
