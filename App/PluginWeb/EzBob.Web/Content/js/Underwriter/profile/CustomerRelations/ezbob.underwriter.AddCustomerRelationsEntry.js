@@ -36,8 +36,10 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
     onRender: function () {
         EzBob.Underwriter.AddCustomerRelationsEntry.__super__.onRender.apply(this, arguments);
 
+        this.ui.Form.get(0).reset();
         this.$el.find("input#Type_Out").prop('checked', true);
         this.ui.Action.prop('selectedIndex', 1);
+        
         var rank = this.model.get('CurrentRank');
         if (rank) {
             this.ui.Rank.val(rank.Id);
@@ -85,7 +87,8 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         RankSpan: '.rank-span',
         RankDiv: '.rank-div',
         Comment: '#Comment',
-        PhoneNumber: '#PhoneNumber'
+        PhoneNumber: '#PhoneNumber',
+        Form: 'form#customer-relations-form'
     }, // ui
 
     onSave: function () {
@@ -139,4 +142,5 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
 
         return false;
     }, // onSave
+    
 }); // EzBob.Underwriter.AddCustomerRelationsEntry
