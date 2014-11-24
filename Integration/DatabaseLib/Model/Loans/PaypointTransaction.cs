@@ -52,7 +52,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 			if (!string.IsNullOrWhiteSpace(PaypointId)) {
 				LoanTransactionMethod = (PaypointId == Manual)
 					? oRepo.FindOrDefault(sManualPaymentMethod, "Manual")
-					: oRepo.FindOrDefault("Auto");
+					: oRepo.FindOrDefault(sManualPaymentMethod, "Auto");
 
 				return;
 			} // if

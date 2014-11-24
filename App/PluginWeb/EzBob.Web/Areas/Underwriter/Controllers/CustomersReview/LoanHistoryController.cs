@@ -203,7 +203,7 @@
 					_paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
 				}
 
-				string description = string.Format("Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
+				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
 												   model.Description, Environment.NewLine);
 
 				_loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null,
@@ -215,7 +215,7 @@
 				if (model.SendEmail)
 					m_oServiceClient.Instance.PayEarly(_users.Get(customer.Id).Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
 
-				string requestType = string.Format("Manual payment for customer {0}, amount {1}",
+				string requestType = string.Format("UW Manual payment for customer {0}, amount {1}",
 												   customer.PersonalInfo.Fullname, realAmount);
 				_logRepository.Log(_context.UserId, date, requestType, "Successful", "");
 			}

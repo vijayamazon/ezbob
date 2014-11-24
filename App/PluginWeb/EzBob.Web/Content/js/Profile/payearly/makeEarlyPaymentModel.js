@@ -162,10 +162,10 @@ EzBob.Profile.MakeEarlyPaymentModel = Backbone.Model.extend({
 		});
 	}, // changed
 
-	getPaymentType: function() {
-		if (this.get('paymentType') === 'rollover')
-			this.get('rolloverPaymentType');
+	getPaymentType: function () {
+	    if (this.get('loanPaymentType') === 'rollover')
+			return this.get('rolloverPaymentType');
 		else
-			this.get('loanPaymentType');
+			return this.get('loanPaymentType');
 	}, // getPaymentType
 });

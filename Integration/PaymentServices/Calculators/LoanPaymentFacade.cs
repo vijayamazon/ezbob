@@ -186,6 +186,7 @@ namespace PaymentServices.Calculators
             decimal oldInterest;
             decimal newInterest;
             bool rolloverWasPaid = false;
+	        description = string.Format("{0} {1} {2}", description, type, paymentType);
 
             if (type == "total")
             {

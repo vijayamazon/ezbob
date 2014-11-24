@@ -237,7 +237,7 @@
 
 				_paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
 
-				var payFastModel = _loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "payment from customer", paymentType);
+				var payFastModel = _loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "manual payment from customer", paymentType, "CustomerAuto");
 				payFastModel.CardNo = card == null ? customer.CreditCardNo : card.CardNo;
 
 				SendEmails(loanId, realAmount, customer);
