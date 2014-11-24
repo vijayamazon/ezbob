@@ -28,7 +28,7 @@
 		public RejectionAgent(AConnection oDB, ASafeLog oLog, int nCustomerID, RejectionConfigs configs = null)
 		{
 			_customerId = nCustomerID;
-			_isAutoRejected = false;
+			IsAutoRejected = false;
 			m_oLog = oLog;
 			m_oDB = oDB;
 			_mpHelper = new MarketPlacesHelper(m_oLog);
@@ -59,7 +59,9 @@
 
 			var days = originationTime.Since.HasValue ? (now - originationTime.Since.Value).TotalDays : 0;
 
-			_mpHelper.GetMarketPlacesSeniority(_dbHelper.GetCustomerMarketPlaces(_customerId));
+			var consumerLates = new ConsumerLatesCalculation(m_oLog);
+			var lates = consumerLates.GetLates(_customerId, now, _configs.RejectionLastValidLate, _configs.Reject_LateLastMonthsNum);
+			var turnover = _mpHelper.GetTurnoverForRejection(_customerId);
 
 			var data = new RejectionInputData {
 				CustomerStatus = dbData.CustomerStatus,
@@ -73,10 +75,10 @@
 				HasMpError = dbData.HasErrorMp,
 				HasCompanyFiles = dbData.HasCompanyFiles,
 				BusinessSeniorityDays = (int)days,
-				AnnualTurnover = 0, //TODO
-				QuarterTurnover = 0, //TODO
-				NumOfLateConsumerAccounts = 0, //TODO
-				ConsumerLateDays = 0 //TODO
+				AnnualTurnover = turnover.Item1,
+				QuarterTurnover = turnover.Item2, 
+				NumOfLateConsumerAccounts = lates.NumOfLates,
+				ConsumerLateDays = lates.LateDays
 			};
 		
 			model.Init(now, data, _configs);
@@ -91,6 +93,8 @@
 		/// <param name="data">rejection input data</param>
 		public void MakeDecision(RejectionInputData data)
 		{
+			Trail.Init(data);
+
 			m_oLog.Debug("Checking if auto reject should take place for customer {0}...", _customerId);
 			try {
 				CheckRejectionExceptions();
@@ -104,14 +108,14 @@
 			} // try
 
 			if (Trail.HasDecided) {
-				_isAutoRejected = true;
+				IsAutoRejected = true;
 			}
 
 			m_oLog.Debug(
 				"Checking if auto rejection should take place for customer {0} complete; {1}\n{2}",
 				_customerId,
 				Trail,
-				_isAutoRejected ? "Auto rejected" : "Not auto rejected"
+				IsAutoRejected ? "Auto rejected" : "Not auto rejected"
 			);
 		}
 
@@ -399,12 +403,11 @@
 
 
 		#region fields
-
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 
 		private int _customerId;
-		private bool _isAutoRejected;
+		public bool IsAutoRejected { get; private set; }
 		private RejectionConfigs _configs;
 
 		#endregion fields

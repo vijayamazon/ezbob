@@ -64,11 +64,9 @@
 		/// </summary>
 		/// <param name="customerId">Customer Id</param>
 		/// <returns></returns>
-		public List<string> GetCustomerPaymentMarketPlaces(int customerId)
+		public List<MarketPlace> GetCustomerPaymentMarketPlaces(int customerId)
 		{
-			var srList = _db.ExecuteEnumerable("AV_GetCustomerPaymentMarketPlaces", new QueryParameter("@CustomerId", customerId));
-			var mps = (from SafeReader row in srList
-					   select row[0].ToString()).ToList();
+			var mps = _db.Fill<MarketPlace>("AV_GetCustomerPaymentMarketPlaces", new QueryParameter("@CustomerId", customerId));
 			return mps;
 
 		}
@@ -297,6 +295,12 @@
 			return model;
 		}
 
+		public decimal GetYodleeRevenuesQuerter(int customerMarketplaceId)
+		{
+			var model = _db.ExecuteScalar<decimal>("AV_GetYodleeRevenuesQuarter", CommandSpecies.StoredProcedure, new QueryParameter("CustomerMarketplaceId", customerMarketplaceId));
+			return model;
+		}
+
 		public List<MedalCoefficientsModelDb> GetMedalCoefficients() {
 			var model = new List<MedalCoefficientsModelDb>();
 			_db.ForEachRowSafe((sr, hren) =>
@@ -351,6 +355,19 @@
 			var model = _db.FillFirst<AutoReApprovalInputDataModelDb>("AV_ReApprovalData", CommandSpecies.StoredProcedure,
 			                                              new QueryParameter("CustomerId", customerId));
 			return model;
+		}
+
+		public List<CaisStatus> GetCustomerCaisStatuses(int customerId) {
+			return _db.Fill<CaisStatus>("AV_GetCaisStatuses", CommandSpecies.StoredProcedure,
+			                     new QueryParameter("CustomerId", customerId));
+		}
+
+		public void GetHmrcRevenuesForRejection(int customerId, out decimal hmrcRevenueAnnualized, out decimal hmrcRevenueQuarter)
+		{
+			var sr = _db.GetFirst("AV_GetHmrcTurnoverForRejection", CommandSpecies.StoredProcedure,
+								  new QueryParameter("CustomerId", customerId));
+			hmrcRevenueAnnualized = sr["HmrcRevenueAnnualized"];
+			hmrcRevenueQuarter = sr["HmrcRevenueQuarter"];
 		}
 
 		#region big ugly insert
@@ -473,5 +490,7 @@
 			}
 		}
 		#endregion
+
+		
 	}
 }

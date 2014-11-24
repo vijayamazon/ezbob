@@ -61,7 +61,8 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 			BusinessScore = data.BusinessScore;
 			HasMpError = data.HasMpError;
 			HasCompanyFiles = data.HasCompanyFiles;
-			
+			CustomerStatus = data.CustomerStatus;
+
 			NumOfDefaultConsumerAccounts = data.NumOfDefaultConsumerAccounts;
 			DefaultAmountInConsumerAccounts = data.DefaultAmountInConsumerAccounts;
 			NumOfDefaultBusinessAccounts = data.NumOfDefaultBusinessAccounts;

@@ -208,6 +208,13 @@
 				"TotalNetInPayments",
 				"TotalSumOfOrders"
 			};
+
+		public static string[] IncomeAnnualizedFunctions =
+			{
+				"TotalIncomeAnnualized",
+				"TotalNetInPaymentsAnnualized",
+				"TotalSumOfOrdersAnnualized"
+			};
 	}
 
 	public class ReRejectionData
@@ -415,5 +422,10 @@
 		public string LoanSizeName { get; set; }
 		public decimal MinSetupFee { get; set; }
 		public decimal MaxSetupFee { get; set; }
+	}
+
+	public class CaisStatus {
+		public DateTime LastUpdatedDate { get; set; }
+		public string AccountStatusCodes { get; set; }
 	}
 }
