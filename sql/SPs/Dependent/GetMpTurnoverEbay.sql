@@ -17,6 +17,7 @@ BEGIN
 	DECLARE @MinDate DATETIME
 
 	DECLARE @MaxOne INT
+	DECLARE @TwoID INT
 
 	DECLARE @DateFrom DATETIME
 
@@ -32,7 +33,86 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	DECLARE @eBay UNIQUEIDENTIFIER = CONVERT(UNIQUEIDENTIFIER, 'A7120CB7-4C93-459B-9901-0E95E7281B59')
+	DECLARE @Turnover NVARCHAR(8) = 'Turnover'
+
+	------------------------------------------------------------------------------
+
 	EXECUTE AdjustTurnoveDatesAndMonthCount @MpID, @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
+
+	------------------------------------------------------------------------------
+	
+	CREATE TABLE #out (
+		Pos INT,
+		Name NVARCHAR(32),
+		Turnover DECIMAL(18, 2),
+		DayCount DECIMAL(18, 2),
+		DateFrom DATETIME,
+		DateTo DATETIME
+	)
+
+	------------------------------------------------------------------------------
+
+	IF @MonthCount = 1
+	BEGIN
+		SELECT TOP 1
+			@TwoID = i.Id
+		FROM
+			MP_TeraPeakOrderItem i
+			INNER JOIN MP_TeraPeakOrder o
+				ON i.TeraPeakOrderId = o.Id
+				AND o.CustomerMarketPlaceId = @MpID
+		WHERE
+			i.RangeMarker = 2
+			AND
+			ABS(DATEDIFF(hour, i.EndDate, @DateTo)) <= 23
+		ORDER BY
+			i.Id DESC
+
+		-------------------------------------------------------------------------
+
+		IF @TwoID IS NOT NULL
+		BEGIN
+			INSERT INTO #out (Pos, Name, Turnover, DayCount, DateFrom, DateTo)
+			SELECT
+				1,
+				'Total',
+				ISNULL(i.Revenue, 0),
+				ISNULL(DATEDIFF(day, i.StartDate, i.EndDate), 0),
+				i.StartDate,
+				i.EndDate
+			FROM
+				MP_TeraPeakOrderItem i
+			WHERE
+				i.Id = @TwoID
+
+			--------------------------------------------------------------------
+
+			SELECT
+				RowType          = @Turnover,
+				MpID             = @MpID,
+				MpTypeInternalID = @eBay,
+				TurnoverType     = o.Name,
+				Turnover         = o.Turnover,
+				Annualized       = (CASE o.DayCount WHEN 0 THEN 0 ELSE o.Turnover / o.DayCount * 365.0 END),
+				MonthCount       = @MonthCount,
+				DayCount         = o.DayCount,
+				DateFrom         = o.DateFrom,
+				DateTo           = o.DateTo
+			FROM
+				#out o
+			ORDER BY
+				o.Pos
+
+			--------------------------------------------------------------------
+
+			DROP TABLE #out
+
+			--------------------------------------------------------------------
+
+			RETURN
+		END -- if found relevant RangeMarker = 2
+	END -- if month count = 1
 
 	------------------------------------------------------------------------------
 
@@ -125,7 +205,7 @@ BEGIN
 		ld.Id IS NULL
 
 	------------------------------------------------------------------------------
---
+
 	SELECT
 		@EbaySum = SUM(ISNULL(i.TotalAmount, 0)),
 		@EbayDayCount = ISNULL(COUNT(DISTINCT CONVERT(DATE, i.CreatedTime)), 0),
@@ -134,17 +214,6 @@ BEGIN
 	FROM
 		MP_EbayOrderItem i
 		INNER JOIN #ebay e ON i.Id = e.Id
-
-	------------------------------------------------------------------------------
-	
-	CREATE TABLE #out (
-		Pos INT,
-		Name NVARCHAR(32),
-		Turnover DECIMAL(18, 2),
-		DayCount DECIMAL(18, 2),
-		DateFrom DATETIME,
-		DateTo DATETIME
-	)
 
 	------------------------------------------------------------------------------
 
@@ -202,9 +271,9 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		RowType          = 'Turnover',
+		RowType          = @Turnover,
 		MpID             = @MpID,
-		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, 'A7120CB7-4C93-459B-9901-0E95E7281B59'),
+		MpTypeInternalID = @eBay,
 		TurnoverType     = o.Name,
 		Turnover         = o.Turnover,
 		Annualized       = (CASE o.DayCount WHEN 0 THEN 0 ELSE o.Turnover / o.DayCount * 365.0 END),

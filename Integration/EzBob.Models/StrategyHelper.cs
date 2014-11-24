@@ -401,7 +401,11 @@
 			if (customer == null)
 				return DateTime.UtcNow;
 
-			if (customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited) {
+			bool bIsLimited =
+				(customer.Company != null) &&
+				(customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited);
+
+			if (bIsLimited) {
 				CustomerAnalytics oAnalytics = _customerAnalytics.GetAll().FirstOrDefault(ca => ca.Id == customer.Id);
 
 				DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;

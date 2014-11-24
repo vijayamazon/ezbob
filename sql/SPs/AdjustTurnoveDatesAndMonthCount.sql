@@ -17,9 +17,12 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	IF @MonthCount IS NULL
-		SET @MonthCount = 0
+		SET @MonthCount = 1
 
 	SET @MonthCount = ABS(@MonthCount)
+
+	IF @MonthCount = 0
+		SET @MonthCount = 1
 
 	------------------------------------------------------------------------------
 
@@ -41,24 +44,9 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @MonthCount = 0
+	IF @MonthCount = 1
 	BEGIN
-		IF DATEPART(day, @DateTo) = 1
-			SET @DateTo = DATEADD(day, -1, @DateTo)
-
-		SET @DateFrom = DATEADD(month, DATEDIFF(month, 0, @DateTo), 0)
-	END
-	ELSE IF @MonthCount = 1
-	BEGIN
-		IF DATEPART(day, @DateTo) = 1
-		BEGIN
-			SET @DateTo = DATEADD(day, -1, @DateTo)
-			SET @DateFrom = DATEADD(month, DATEDIFF(month, 0, @DateTo), 0)
-		END
-		ELSE BEGIN
-			SET @DateFrom = DATEADD(month, -1, @DateTo)
-			SET @DateFrom = DATEADD(month, DATEDIFF(month, 0, @DateFrom), 0)
-		END
+		SET @DateFrom = DATEADD(month, -1, @DateTo)
 	END
 	ELSE BEGIN
 		IF DATEPART(day, @DateTo) = 1
