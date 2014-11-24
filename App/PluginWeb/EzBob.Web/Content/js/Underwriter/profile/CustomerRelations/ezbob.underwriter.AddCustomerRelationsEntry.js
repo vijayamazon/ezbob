@@ -36,6 +36,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
     onRender: function () {
         EzBob.Underwriter.AddCustomerRelationsEntry.__super__.onRender.apply(this, arguments);
 
+        this.$el.find("input#Type_Out").prop('checked', true);
         this.ui.Action.prop('selectedIndex', 1);
         var rank = this.model.get('CurrentRank');
         if (rank) {
