@@ -179,10 +179,10 @@
 		public Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> GetAnalysisValsForCustomer(
 			int customerId)
 		{
-			var mps = _marketPlaceRepository.GetAllByCustomer(customerId);
+			var mps = _marketPlaceRepository.GetAllByCustomer(customerId).Where(mp => mp.Disabled == false);
 			var mpAnalysis = new Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>>();
 			foreach (var mp in mps.Where(
-						mp => !mp.Disabled && (!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal")))
+						mp => !mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal"))
 			{
 				var analisysFunction = mp.GetRetrieveDataHelper().GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
@@ -197,9 +197,9 @@
 
 		public Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> GetOnlineAnalysisValsForCustomer(int customerId)
 		{
-			var mps = _marketPlaceRepository.GetAllByCustomer(customerId);
+			var mps = _marketPlaceRepository.GetAllByCustomer(customerId).Where(mp => mp.Disabled == false);
 			var mpAnalysis = new Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>>();
-			foreach (var mp in mps.Where(mp => !mp.Disabled && (mp.Marketplace.Name == "Pay Pal" || mp.Marketplace.Name == "eBay" || mp.Marketplace.Name == "Amazon")))
+			foreach (var mp in mps.Where(mp => mp.Marketplace.Name == "Pay Pal" || mp.Marketplace.Name == "eBay" || mp.Marketplace.Name == "Amazon"))
 			{
 				var analisysFunction = mp.GetRetrieveDataHelper().GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;

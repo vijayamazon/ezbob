@@ -2,6 +2,9 @@ IF OBJECT_ID('GetDataForMedalCalculation1') IS NULL
 	EXECUTE('CREATE PROCEDURE GetDataForMedalCalculation1 AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE GetDataForMedalCalculation1
 	(@CustomerId INT,
 	 @CalculationTime DATETIME)
@@ -108,7 +111,9 @@ BEGIN
 			MP_VatReturnRecords.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
 			MP_CustomerMarketPlace.CustomerId = @CustomerId AND
 			MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-			MP_MarketplaceType.Name = 'HMRC'
+			MP_MarketplaceType.Name = 'HMRC' AND
+			MP_CustomerMarketPlace.Disabled = 0
+			
 		
 		SELECT
 			@FirstYodleePostDate = MIN(MP_YodleeOrderItemBankTransaction.postDate), @FirstYodleeTransactionDate = MIN(MP_YodleeOrderItemBankTransaction.transactionDate)
@@ -124,7 +129,8 @@ BEGIN
 			MP_MarketplaceType.Name = 'Yodlee' AND
 			MP_YodleeOrder.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
 			MP_YodleeOrderItem.OrderId = MP_YodleeOrder.Id AND
-			MP_YodleeOrderItemBankTransaction.OrderItemId = MP_YodleeOrderItem.Id
+			MP_YodleeOrderItemBankTransaction.OrderItemId = MP_YodleeOrderItem.Id  AND
+			MP_CustomerMarketPlace.Disabled = 0
 			
 		IF @FirstYodleePostDate IS NULL
 			SELECT @FirstYodleeDate = @FirstYodleeTransactionDate
@@ -280,7 +286,8 @@ BEGIN
 	WHERE
 		MP_MarketplaceType.Name = 'HMRC' AND
 		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
+		MP_CustomerMarketPlace.Disabled = 0
 		
 	SELECT
 		@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
@@ -290,7 +297,8 @@ BEGIN
 	WHERE
 		MP_MarketplaceType.Name = 'Yodlee' AND
 		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId	
+		MP_CustomerMarketPlace.CustomerId = @CustomerId	AND
+		MP_CustomerMarketPlace.Disabled = 0
 	
 	SELECT TOP 1
 		@HmrcId = MP_CustomerMarketplace.Id
@@ -300,7 +308,8 @@ BEGIN
 	WHERE
 		CustomerId = @CustomerId AND
 		MP_CustomerMarketplace.MarketPlaceId = MP_MarketplaceType.Id AND
-		MP_MarketplaceType.Name = 'HMRC'
+		MP_MarketplaceType.Name = 'HMRC' AND
+		MP_CustomerMarketPlace.Disabled = 0
 		
 	IF @HmrcId IS NULL
 		SELECT @HmrcId = 0
@@ -323,7 +332,8 @@ BEGIN
 	WHERE
 		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
 		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
-		MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal')
+		MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal') AND
+		MP_CustomerMarketPlace.Disabled = 0
 			
 	SELECT
 		cmp.Id AS CustomerMarketPlaceId,
@@ -334,7 +344,8 @@ BEGIN
 		MP_AmazonFeedback fb
 		INNER JOIN MP_CustomerMarketPlace cmp ON fb.CustomerMarketPlaceId = cmp.Id
 	WHERE
-		cmp.CustomerId = @CustomerId
+		cmp.CustomerId = @CustomerId AND 
+		cmp.Disabled = 0
 	GROUP BY
 		cmp.Id
 
@@ -358,7 +369,8 @@ BEGIN
 		MP_EbayFeedback fb
 		INNER JOIN MP_CustomerMarketPlace cmp ON fb.CustomerMarketPlaceId = cmp.Id
 	WHERE
-		cmp.CustomerId = @CustomerId
+		cmp.CustomerId = @CustomerId AND
+		cmp.Disabled=0
 	GROUP BY
 		cmp.Id
 
@@ -389,7 +401,8 @@ BEGIN
 		MP_MarketplaceType.Name = 'Pay Pal' AND
 		MP_PayPalTransaction.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
 		MP_PayPalTransactionItem2.TransactionId = MP_PayPalTransaction.Id AND
-		MP_PayPalTransactionItem2.GrossAmount > 0
+		MP_PayPalTransactionItem2.GrossAmount > 0 AND
+		MP_CustomerMarketPlace.Disabled = 0
 				
 	SELECT
 		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
@@ -412,4 +425,6 @@ BEGIN
 		@EbayPositiveFeedbacks AS EbayPositiveFeedbacks,
 		@NumOfPaypalTransactions AS NumOfPaypalTransactions
 END
+
 GO
+

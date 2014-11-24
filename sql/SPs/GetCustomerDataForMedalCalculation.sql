@@ -77,7 +77,8 @@ BEGIN
 	WHERE
 		MP_MarketplaceType.Name = 'HMRC' AND
 		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
+		MP_CustomerMarketPlace.Disabled = 0
 	
 	SELECT
 		@NumOfYodleeMps = COUNT(1)
@@ -87,7 +88,8 @@ BEGIN
 	WHERE
 		MP_MarketplaceType.Name = 'Yodlee' AND
 		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
+		MP_CustomerMarketPlace.Disabled = 0
 		
 	SELECT
 		@NumOfEbayAmazonPayPalMps = COUNT(1) 
@@ -97,7 +99,8 @@ BEGIN
 	WHERE
 		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
 		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
-		MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal')
+		MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal') AND 
+		MP_CustomerMarketPlace.Disabled = 0
 		
 	SELECT
 		@EarliestHmrcLastUpdateDate = MIN(UpdatingEnd)
@@ -107,7 +110,8 @@ BEGIN
 	WHERE
 		MP_MarketplaceType.Name = 'HMRC' AND
 		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
+		MP_CustomerMarketPlace.Disabled = 0
 		
 	SELECT
 		@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
@@ -117,7 +121,8 @@ BEGIN
 	WHERE
 		MP_MarketplaceType.Name = 'Yodlee' AND
 		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
+		MP_CustomerMarketPlace.Disabled = 0
 
 	SELECT
 		@TypeOfBusiness AS TypeOfBusiness,
@@ -129,4 +134,6 @@ BEGIN
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
 		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate
 END
+
 GO
+
