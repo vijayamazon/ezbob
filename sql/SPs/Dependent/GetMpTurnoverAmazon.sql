@@ -27,8 +27,8 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@Turnover = SUM(i.OrderTotal),
-		@TurnoverDayCount = COUNT(DISTINCT CONVERT(DATE, i.LastUpdateDate)),
+		@Turnover = SUM(ISNULL(i.OrderTotal, 0)),
+		@TurnoverDayCount = ISNULL(COUNT(DISTINCT CONVERT(DATE, i.LastUpdateDate)), 0),
 		@TurnoverFrom = MIN(i.LastUpdateDate),
 		@TurnoverTo = MAX(i.LastUpdateDate)
 	FROM

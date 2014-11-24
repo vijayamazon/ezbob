@@ -14,6 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Backend.Strategies.Experian;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using MedalCalculations;
 	using Misc;
 	using CommonLib.TimePeriodLogic;
@@ -50,10 +51,21 @@
 
 			m_oTrail = new ApprovalTrail(customerId, this.log);
 
-			m_oSecondaryImplementation = new Agent(customerId, offeredCreditLine, (AutomationCalculator.Common.Medal)medalClassification, db, log).Init();
+			m_oSecondaryImplementation = new Agent(
+				customerId,
+				offeredCreditLine,
+				(AutomationCalculator.Common.Medal)medalClassification,
+				db,
+				log
+			);
 		} // constructor
 
 		public Approval Init() {
+			var stra = new LoadExperianConsumerData(customerId, null, null, db, log);
+			stra.Execute();
+
+			m_oConsumerData = stra.Result;
+
 			if (customer == null) {
 				this.isBrokerCustomer = false;
 				this.hasLoans = false;
@@ -84,19 +96,13 @@
 			this.consumerCaisDetailWorstStatuses.Clear();
 			var oWorstStatuses = new SortedSet<string>();
 
-			db.ForEachRowSafe(
-				r => {
-					string worstStatus = r["WorstStatus"];
-
-					if (!string.IsNullOrWhiteSpace(worstStatus))
-						oWorstStatuses.Add(worstStatus);
-				},
-				"GetWorstCaisStatuses",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
+			if (m_oConsumerData.Cais != null)
+				foreach (var c in m_oConsumerData.Cais)
+					oWorstStatuses.Add(c.WorstStatus.Trim());
 
 			this.consumerCaisDetailWorstStatuses.AddRange(oWorstStatuses);
+
+			m_oSecondaryImplementation.Init();
 
 			return this;
 		} // Init
@@ -217,6 +223,13 @@
 				response.LoanOfferUnderwriterComment = "Exception - " + m_oTrail.DiffID;
 			} // try
 		} // MakeDecision
+
+		private int FindNumOfDefaultAccounts() {
+			if (m_oConsumerData.Cais.Count == 0)
+				return 0;
+
+			return m_oConsumerData.Cais.Count(c => c.AccountStatus == "F");
+		} // FindNumOfDefaultAccounts
 
 		private void SaveTrailInputData(GetAvailableFunds availFunds) {
 			CalculateTurnovers();
@@ -341,16 +354,6 @@
 				StepDone<MedalIsGood>().Init((AutomationCalculator.Common.Medal)medalClassification);
 		} // CheckMedal
 
-		private int FindNumOfDefaultAccounts() {
-			var stra = new LoadExperianConsumerData(customerId, null, null, db, log);
-			stra.Execute();
-
-			if (stra.Result.Cais.Count == 0)
-				return 0;
-
-			return stra.Result.Cais.Count(c => c.AccountStatus == "F");
-		} // FindNumOfDefaultAccounts
-
 		private void CheckIsBroker() {
 			if (isBrokerCustomer)
 				StepFailed<IsBrokerCustomer>().Init();
@@ -360,9 +363,9 @@
 
 		private void CheckDefaultAccounts() {
 			if (m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts > 0)
-				StepFailed<DefaultAccounts>().Init();
+				StepFailed<DefaultAccounts>().Init(m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
 			else
-				StepDone<DefaultAccounts>().Init();
+				StepDone<DefaultAccounts>().Init(m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
 		} // CheckDefaultAccounts
 
 		private void CheckIsFraud() {
@@ -430,7 +433,8 @@
 		} // CheckAge
 
 		private void CalculateTurnovers() {
-			Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis = strategyHelper.GetAnalysisValsForCustomer(customerId);
+			Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis =
+				strategyHelper.GetAnalysisValsForCustomer(customerId);
 
 			CalcOneTurnover(mpAnalysis, TimePeriodEnum.Month);
 			CalcOneTurnover(mpAnalysis, TimePeriodEnum.Month3);
@@ -736,6 +740,8 @@
 		private int minExperianScore;
 		private int minCompanyScore;
 		private bool hasLoans;
+
+		private ExperianConsumerData m_oConsumerData;
 
 		private readonly List<string> consumerCaisDetailWorstStatuses;
 		private readonly int customerId;

@@ -33,6 +33,8 @@
 		#region method Init
 
 		public virtual Agent Init() {
+			ApprovedAmount = Args.SystemCalculatedAmount;
+
 			MetaData = new MetaData();
 			Payments = new List<Payment>();
 
@@ -55,8 +57,6 @@
 
 		public virtual void MakeDecision() {
 			Log.Debug("Checking if auto approval should take place for customer {0}...", Args.CustomerID);
-
-			ApprovedAmount = Args.SystemCalculatedAmount;
 
 			try {
 				GatherData();
@@ -127,7 +127,6 @@
 		/// specific customer data instead of the current one.
 		/// </summary>
 		protected virtual void GatherData() {
-			ApprovedAmount = 0;
 			Now = DateTime.UtcNow;
 
 			Cfg.Load();
@@ -394,9 +393,9 @@
 
 		private void CheckDefaultAccounts() {
 			if (MetaData.NumOfDefaultAccounts > 0)
-				StepFailed<DefaultAccounts>().Init();
+				StepFailed<DefaultAccounts>().Init(MetaData.NumOfDefaultAccounts);
 			else
-				StepDone<DefaultAccounts>().Init();
+				StepDone<DefaultAccounts>().Init(MetaData.NumOfDefaultAccounts);
 		} // CheckDefaultAccounts
 
 		#endregion method CheckDefaultAccounts

@@ -1,10 +1,12 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class DefaultAccounts : ABoolTrace {
+	using Ezbob.Utils.Lingvo;
+
+	public class DefaultAccounts : ANumericTrace {
 		public DefaultAccounts(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
-		protected override string PropertyName {
-			get { return "default accounts"; }
-		} // PropertyName
+		protected override string ValueStr {
+			get { return string.Format("{0}", Grammar.Number((int)Value, "default account")); }
+		} // ValueStr
 	}  // class DefaultAccounts
 } // namespace

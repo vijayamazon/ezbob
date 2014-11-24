@@ -13,6 +13,9 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @MaxDate DATETIME
+	DECLARE @MinDate DATETIME
+
 	DECLARE @MaxOne INT
 
 	DECLARE @DateFrom DATETIME
@@ -94,8 +97,8 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@TerapeakSum = SUM(i.Revenue),
-		@TerapeakDayCount = SUM(DATEDIFF(day, ld.StartDate, ld.EndDate) + 1),
+		@TerapeakSum = SUM(ISNULL(i.Revenue, 0)),
+		@TerapeakDayCount = SUM(ISNULL(DATEDIFF(day, ld.StartDate, ld.EndDate), 0) + 1),
 		@TerapeakFrom = MIN(ld.StartDate),
 		@TerapeakTo = MAX(ld.EndDate)
 	FROM
@@ -122,10 +125,10 @@ BEGIN
 		ld.Id IS NULL
 
 	------------------------------------------------------------------------------
-
+--
 	SELECT
-		@EbaySum = SUM(i.TotalAmount),
-		@EbayDayCount = COUNT(DISTINCT CONVERT(DATE, i.CreatedTime)),
+		@EbaySum = SUM(ISNULL(i.TotalAmount, 0)),
+		@EbayDayCount = ISNULL(COUNT(DISTINCT CONVERT(DATE, i.CreatedTime)), 0),
 		@EbayFrom = MIN(i.CreatedTime),
 		@EbayTo = MAX(i.CreatedTime)
 	FROM
@@ -167,14 +170,32 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	SELECT
+		@MinDate = MIN(DateFrom)
+	FROM
+		#out
+	WHERE
+		DateFrom IS NOT NULL
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@MaxDate = MAX(DateTo)
+	FROM
+		#out
+	WHERE
+		DateTo IS NOT NULL
+
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Pos, Name, Turnover, DayCount, DateFrom, DateTo)
 	SELECT
 		1,
 		'Total',
-		SUM(Turnover),
-		SUM(DayCount),
-		MIN(DateFrom),
-		MAX(DateTo)
+		SUM(ISNULL(Turnover, 0)),
+		SUM(ISNULL(DayCount, 0)),
+		@MinDate,
+		@MaxDate
 	FROM
 		#out
 

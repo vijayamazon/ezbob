@@ -263,19 +263,20 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
-	DECLARE @ExperianConsumerDataID BIGINT
+	DECLARE @ServiceLogId BIGINT
+
+	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT
 
 	------------------------------------------------------------------------------
 
-	SELECT TOP 1
+	DECLARE @ExperianConsumerDataID BIGINT
+
+	SELECT
 		@ExperianConsumerDataID = e.Id
 	FROM
-		MP_ServiceLog l
-		INNER JOIN ExperianConsumerData e ON l.Id = e.ServiceLogId
+		ExperianConsumerData e
 	WHERE
-		l.CustomerId = @CustomerID
-	ORDER BY
-		l.InsertDate DESC
+		e.ServiceLogId = @ServiceLogId
 
 	------------------------------------------------------------------------------
 

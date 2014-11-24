@@ -136,7 +136,7 @@ BEGIN
 	-- EKM
 	--
 	------------------------------------------------------------------------------
-
+--
 	SELECT
 		RowType          = @OriginationTime,
 		MarketplaceID    = cmp.Id,
@@ -404,8 +404,9 @@ BEGIN
 		MarketplaceType  = mt.Name,
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
-		OneTime          = MIN(t.postDate),
-		TwoTime          = MIN(t.transactionDate)
+		-- if at least one of dates exists - good enough
+		OneTime          = MIN(ISNULL(t.postDate, t.transactionDate)),
+		TwoTime          = MIN(ISNULL(t.transactionDate, t.postDate))
 	FROM
 		MP_YodleeOrder r
 		INNER JOIN MP_YodleeOrderItem i ON r.Id = i.OrderId

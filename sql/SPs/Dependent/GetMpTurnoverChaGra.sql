@@ -44,8 +44,8 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@Turnover = SUM(i.TotalCost),
-		@TurnoverDayCount = COUNT(DISTINCT CONVERT(DATE, i.PaymentDate)),
+		@Turnover = SUM(ISNULL(i.TotalCost, 0)),
+		@TurnoverDayCount = ISNULL(COUNT(DISTINCT CONVERT(DATE, i.PaymentDate)), 0),
 		@TurnoverFrom = MIN(i.PaymentDate),
 		@TurnoverTo = MAX(i.PaymentDate)
 	FROM
