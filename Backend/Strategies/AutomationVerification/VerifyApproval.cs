@@ -1,8 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.AutomationVerification {
-	using System;
-	using AutomationCalculator.ProcessHistory.Common;
 	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
-	using EzBob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

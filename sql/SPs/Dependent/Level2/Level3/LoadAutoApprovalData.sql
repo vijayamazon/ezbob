@@ -184,48 +184,11 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	DECLARE @TypeOfBusiness NVARCHAR(100) = ISNULL((
-		SELECT
-			c.TypeOfBusiness
-		FROM
-			Customer c
-		WHERE
-			c.Id = @CustomerID
-	), '')
-
-	------------------------------------------------------------------------------
-
-	IF @TypeOfBusiness IN ('Limited', 'LLP')
-	BEGIN
-		SELECT
-			@CompanyScore = (CASE
-				WHEN a.MaxScore IS     NULL AND a.Score IS     NULL THEN 0
-				WHEN a.MaxScore IS NOT NULL AND a.Score IS     NULL THEN a.MaxScore
-				WHEN a.MaxScore IS     NULL AND a.Score IS NOT NULL THEN a.Score
-				WHEN a.MaxScore < a.Score THEN a.MaxScore ELSE a.Score
-			END),
-			@IncorporationDate = a.IncorporationDate
-		FROM
-			CustomerAnalyticsCompany a
-		WHERE
-			a.CustomerID = @CustomerID
-			AND
-			a.IsActive = 1
-	END
-	ELSE BEGIN
-		SELECT
-			@CompanyScore = nl.CommercialDelphiScore,
-			@IncorporationDate = nl.IncorporationDate
-		FROM
-			Customer c
-			INNER JOIN Company co ON c.CompanyId = co.Id
-			INNER JOIN ExperianNonLimitedResults nl ON co.ExperianRefNum = nl.RefNumber
-		WHERE
-			c.Id = @CustomerID
-			AND
-			nl.IsActive = 1
-	END
-
+	EXECUTE GetCompanyScoreAndIncorporationDate
+		@CustomerId,
+		@CompanyScore OUTPUT,
+		@IncorporationDate OUTPUT
+	
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
@@ -348,7 +311,7 @@ BEGIN
 	WHERE
 		l.CustomerId = @CustomerID
 		AND
-		t.PostDate > s.[Date]
+		DATEDIFF(day, s.[Date], t.PostDate) > 1
 	ORDER BY
 		t.PostDate
 

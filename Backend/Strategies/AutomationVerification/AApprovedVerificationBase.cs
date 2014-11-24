@@ -34,12 +34,12 @@
 				Log.Debug("Customer {0} out of {1}, id {2} complete, result: {3}.",
 					i + 1, lst.Count, oRow.CustomerId, sResult
 				);
-			} // for
 
-			Log.Debug(
-				"{4}: sent {0} = mismatch {1} + exception {2} + match {3}.",
-				lst.Count, m_nMismatchCount, m_nExceptionCount, m_nMatchCount, DecisionName
-			);
+				Log.Debug(
+					"{4}: sent {0} = mismatch {1} + exception {2} + match {3}.",
+					lst.Count, m_nMismatchCount, m_nExceptionCount, m_nMatchCount, DecisionName
+				);
+			} // for
 		} // Execute
 
 		#endregion method Execute

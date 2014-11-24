@@ -293,9 +293,7 @@
 		#region method CheckCompanyScore
 
 		private void CheckCompanyScore() {
-			if (MetaData.CompanyScore <= 0)
-				StepDone<BusinessScore>().Init(MetaData.CompanyScore, Cfg.BusinessScoreThreshold);
-			else if (MetaData.CompanyScore > Cfg.BusinessScoreThreshold)
+			if ((MetaData.CompanyScore <= 0) || (MetaData.CompanyScore >= Cfg.BusinessScoreThreshold))
 				StepDone<BusinessScore>().Init(MetaData.CompanyScore, Cfg.BusinessScoreThreshold);
 			else
 				StepFailed<BusinessScore>().Init(MetaData.CompanyScore, Cfg.BusinessScoreThreshold);
@@ -320,7 +318,7 @@
 			// nAge: full number of years in customer's age.
 			int nAge = Now.Year - MetaData.DateOfBirth.Year;
 
-			if (MetaData.DateOfBirth.AddYears(nAge) < Now) // this happens if customer had no birthday this year.
+			if (MetaData.DateOfBirth.AddYears(nAge) > Now) // this happens if customer had no birthday this year.
 				nAge--;
 
 			if ((Cfg.CustomerMinAge <= nAge) && (nAge <= Cfg.CustomerMaxAge))

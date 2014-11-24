@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Globalization;
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
@@ -84,14 +85,27 @@
 			if (!sr.IsEmpty)
 				this.minExperianScore = sr["MinExperianScore"];
 
-			sr = db.GetFirst(
-				"GetCompanyScore",
+			var oScore = new QueryParameter("CompanyScore") {
+				Type = DbType.Int32,
+				Direction = ParameterDirection.Output,
+			};
+
+			var oDate = new QueryParameter("IncorporationDate") {
+				Type = DbType.DateTime2,
+				Direction = ParameterDirection.Output,
+			};
+
+			db.ExecuteNonQuery(
+				"GetCompanyScoreAndIncorporationDate",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
+				new QueryParameter("CustomerId", customerId),
+				oScore,
+				oDate
 			);
 
-			if (!sr.IsEmpty)
-				this.minCompanyScore = sr["MinScore"];
+			int nScore;
+			if (int.TryParse(oScore.SafeReturnedValue, out nScore))
+				this.minCompanyScore = nScore;
 
 			this.consumerCaisDetailWorstStatuses.Clear();
 			var oWorstStatuses = new SortedSet<string>();
@@ -577,7 +591,7 @@
 				StepFailed<LatePayment>().Init(
 					oPayment.LoanID,
 					oPayment.ScheduleID, oPayment.ScheduleDate,
-					oPayment.TransactionID, oPayment.ScheduleDate,
+					oPayment.TransactionID, oPayment.TransactionTime,
 					autoApproveMaxAllowedDaysLate
 				);
 			} // for
@@ -591,19 +605,26 @@
 			foreach (int loanId in customerLoanIds) {
 				int innerLoanId = loanId;
 
-				var backfilledMapping = loanScheduleTransactionRepository.GetAll().Where(x => x.Loan.Id == innerLoanId);
+				IQueryable<LoanScheduleTransaction> backfilledMapping =
+					loanScheduleTransactionRepository
+					.GetAll()
+					.Where(x =>
+						x.Loan.Id == innerLoanId &&
+						x.Schedule.Date.Date < x.Transaction.PostDate.Date &&
+						x.Transaction.Status == LoanTransactionStatus.Done
+					);
 
 				foreach (var paymentMapping in backfilledMapping) {
-					var scheduleDate = new DateTime(paymentMapping.Schedule.Date.Year, paymentMapping.Schedule.Date.Month, paymentMapping.Schedule.Date.Day);
+					DateTime scheduleDate = paymentMapping.Schedule.Date.Date;
 
-					var transactionDate = new DateTime(paymentMapping.Transaction.PostDate.Year, paymentMapping.Transaction.PostDate.Month, paymentMapping.Transaction.PostDate.Day);
+					DateTime transactionDate = paymentMapping.Transaction.PostDate.Date;
 
-					double nTotalLateDays = transactionDate.Subtract(scheduleDate).TotalDays;
+					double nTotalLateDays = (transactionDate - scheduleDate).TotalDays;
 
 					if (nTotalLateDays > autoApproveMaxAllowedDaysLate) {
 						m_oTrail.MyInputData.AddLatePayment(new Payment {
 							LoanID = innerLoanId,
-							ScheduleDate = paymentMapping.Schedule.Date,
+							ScheduleDate = paymentMapping.Schedule.Date.Date,
 							ScheduleID = paymentMapping.Schedule.Id,
 							TransactionID = paymentMapping.Transaction.Id,
 							TransactionTime = paymentMapping.Transaction.PostDate,

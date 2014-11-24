@@ -16,7 +16,7 @@
 
 		[JsonIgnore]
 		public int Delay {
-			get { return (int)(TransactionTime - ScheduleDate).TotalDays; } // get
+			get { return (int)(TransactionTime.Date - ScheduleDate.Date).TotalDays; } // get
 		} // Delay
 
 		public bool IsLate(int nDays) {
