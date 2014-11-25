@@ -50,7 +50,9 @@
 				CheckNewMarketPlaceAdded();
 				CheckLRDIsTooOld();
 				CheckHasNoLoans();
-				CheckOpenLoansRepayments();
+
+				if (m_oTrail.MyInputData.HasLoans)
+					CheckOpenLoansRepayments();
 
 				log.Debug("{0}", m_oTrail);
 				if (m_oTrail.HasDecided)
@@ -106,7 +108,7 @@
 		{
 			if (m_oTrail.MyInputData.LastManualRejectDate.HasValue && (decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastManualRejectDate.Value).TotalDays > m_oTrail.MyInputData.AutoReRejectMaxLRDAge)
 			{
-				StepNoReReject<LRDIsTooOld>(false).Init((decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastManualRejectDate.Value).TotalDays, m_oTrail.MyInputData.AutoReRejectMaxLRDAge);
+				StepNoReReject<LRDIsTooOld>(true).Init((decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastManualRejectDate.Value).TotalDays, m_oTrail.MyInputData.AutoReRejectMaxLRDAge);
 			}
 			else
 			{
@@ -118,21 +120,14 @@
 
 		private void CheckHasNoLoans()
 		{
-			if (!m_oTrail.MyInputData.HasLoans)
-			{
-				StepReReject<HasNoLoans>(false).Init(m_oTrail.MyInputData.HasLoans);
-			}
-			else
-			{
-				StepNoDecision<HasNoLoans>().Init(m_oTrail.MyInputData.HasLoans);
-			}
+			StepNoDecision<TotalLoanCount>().Init(m_oTrail.MyInputData.HasLoans ? 1 : 0);
 		}
 
 		private void CheckOpenLoansRepayments()
 		{
 			if (m_oTrail.MyInputData.PrincipalRepaymentAmount * m_oTrail.MyInputData.AutoReRejectMinRepaidPortion < m_oTrail.MyInputData.OpenLoansAmount)
 			{
-				StepReReject<OpenLoansRepayments>(false).Init(m_oTrail.MyInputData.OpenLoansAmount, m_oTrail.MyInputData.PrincipalRepaymentAmount,m_oTrail.MyInputData.AutoReRejectMinRepaidPortion);
+				StepReReject<OpenLoansRepayments>(true).Init(m_oTrail.MyInputData.OpenLoansAmount, m_oTrail.MyInputData.PrincipalRepaymentAmount,m_oTrail.MyInputData.AutoReRejectMinRepaidPortion);
 			}
 			else
 			{

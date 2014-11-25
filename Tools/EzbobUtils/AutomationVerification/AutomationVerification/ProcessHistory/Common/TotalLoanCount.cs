@@ -1,4 +1,4 @@
-﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
+﻿namespace AutomationCalculator.ProcessHistory.Common {
 	using Ezbob.Utils.Lingvo;
 
 	public class TotalLoanCount : ANumericTrace {

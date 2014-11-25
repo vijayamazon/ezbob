@@ -1,11 +1,7 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
 	public abstract class ABoolTrace : ATrace {
 		public virtual ATrace Init() {
-			HasProperty = DecisionStatus == DecisionStatus.Affirmative;
-
-			Comment = string.Format("customer has {0}{1}", HasProperty ? string.Empty : "no ", PropertyName);
-
-			return this;
+			return Init(DecisionStatus == DecisionStatus.Affirmative);
 		} // Init
 
 		public virtual ATrace Init(bool value)
