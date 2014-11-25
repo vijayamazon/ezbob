@@ -465,7 +465,7 @@
 		private void CheckRepaidRatio() {
 			decimal nRatio = MetaData.RepaidRatio;
 
-			if (nRatio > Cfg.MinRepaidPortion)
+			if (nRatio >= Cfg.MinRepaidPortion)
 				StepDone<OutstandingRepayRatio>().Init(nRatio, Cfg.MinRepaidPortion);
 			else
 				StepFailed<OutstandingRepayRatio>().Init(nRatio, Cfg.MinRepaidPortion);
