@@ -19,7 +19,7 @@
 		public string RowType { get; set; }
 
 		public int LmrID { get; set; }
-		public DateTime LmrTime { get; set; }
+		public DateTime? LmrTime { get; set; }
 
 		public int LoanCount { get; set; }
 

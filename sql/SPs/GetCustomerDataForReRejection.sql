@@ -20,6 +20,7 @@ BEGIN
 	DECLARE @HasLoans BIT = 0
 	DECLARE @OpenLoansAmount INT = 0
 	DECLARE @PrincipalRepaymentAmount DECIMAL(18,4) = 0
+	DECLARE @SetupFees DECIMAL(18,4) = 0
 	------------------------------------------------------------------------------
 	
 	-- last manual reject date
@@ -42,13 +43,20 @@ BEGIN
 	AND Status<>'PaidOff'
 	
 	--principal repayment of open loans
-	SELECT @PrincipalRepaymentAmount = isnull(sum(lt.Principal), 0) 
+	SELECT @PrincipalRepaymentAmount = isnull(sum(lt.LoanRepayment), 0) 
 	FROM Loan l INNER JOIN LoanTransaction lt ON l.Id=lt.LoanId
 	WHERE l.CustomerId=@CustomerId 
 	AND l.Status<>'PaidOff'
 	AND lt.Type='PaypointTransaction'
 	AND lt.Status='Done'
 	
+	SELECT @SetupFees = isnull(sum(lt.Fees), 0) 
+	FROM Loan l INNER JOIN LoanTransaction lt ON l.Id=lt.LoanId
+	WHERE l.CustomerId=@CustomerId 
+	AND l.Status<>'PaidOff'
+	AND lt.Type='PacnetTransaction'
+	AND lt.Status='Done'
+
 	
 	IF @LastManualRejectDate IS NOT NULL
 	BEGIN
@@ -71,7 +79,7 @@ BEGIN
 	   ,@LastManualRejectDate AS LastManualRejectDate
 	   ,@NewDataSourceAdded AS NewDataSourceAdded
 	   ,@OpenLoansAmount AS OpenLoansAmount
-	   ,@PrincipalRepaymentAmount AS PrincipalRepaymentAmount
+	   ,isnull(@PrincipalRepaymentAmount, 0) + isnull(@SetupFees, 0) AS PrincipalRepaymentAmount
 	   ,@HasLoans AS HasLoans
 END
 

@@ -40,7 +40,7 @@
 		#region method MakeDecision
 
 		public virtual void MakeDecision() {
-			Log.Debug("Checking if auto re-reject should take place for customer {0}...", Args.CustomerID);
+			Log.Debug("Secondary: checking if auto re-reject should take place for customer {0}...", Args.CustomerID);
 
 			try {
 				GatherData();
@@ -59,7 +59,7 @@
 			} // try
 
 			Log.Debug(
-				"Checking if auto re-reject should take place for customer {0} complete; {1}", Args.CustomerID, Trail
+				"Secondary: checking if auto re-reject should take place for customer {0} complete; {1}", Args.CustomerID, Trail
 			);
 		} // MakeDecision
 

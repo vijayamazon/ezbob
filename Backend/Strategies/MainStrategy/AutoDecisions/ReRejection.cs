@@ -26,6 +26,8 @@
 		public bool MakeAndVerifyDecision() {
 			#region primary
 
+			log.Debug("Primary: checking if auto re-reject should take place for customer {0}...", customerId);
+
 			SafeReader sr = Db.GetFirst("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
 			bool wasManuallyRejected = sr["WasManuallyRejected"];
@@ -53,6 +55,10 @@
 
 			if (m_oTrail.MyInputData.HasLoans)
 				CheckOpenLoansRepayments();
+
+			log.Debug(
+				"Primary: checking if auto re-reject should take place for customer {0} complete; {1}", customerId, m_oTrail
+			);
 
 			#endregion primary
 
@@ -145,15 +151,24 @@
 			StepNoDecision<TotalLoanCount>().Init(m_oTrail.MyInputData.HasLoans ? 1 : 0);
 		}
 
-		private void CheckOpenLoansRepayments()
-		{
-			if (m_oTrail.MyInputData.PrincipalRepaymentAmount * m_oTrail.MyInputData.AutoReRejectMinRepaidPortion < m_oTrail.MyInputData.OpenLoansAmount)
+		private void CheckOpenLoansRepayments() {
+			decimal ratio = m_oTrail.MyInputData.OpenLoansAmount == 0 ? 1 : m_oTrail.MyInputData.PrincipalRepaymentAmount / m_oTrail.MyInputData.OpenLoansAmount;
+
+			if (ratio < m_oTrail.MyInputData.AutoReRejectMinRepaidPortion)
 			{
-				StepReReject<OpenLoansRepayments>(true).Init(m_oTrail.MyInputData.OpenLoansAmount, m_oTrail.MyInputData.PrincipalRepaymentAmount,m_oTrail.MyInputData.AutoReRejectMinRepaidPortion);
+				StepReReject<OpenLoansRepayments>(true).Init(
+					m_oTrail.MyInputData.OpenLoansAmount,
+					m_oTrail.MyInputData.PrincipalRepaymentAmount,
+					m_oTrail.MyInputData.AutoReRejectMinRepaidPortion
+				);
 			}
 			else
 			{
-				StepNoDecision<OpenLoansRepayments>().Init(m_oTrail.MyInputData.OpenLoansAmount, m_oTrail.MyInputData.PrincipalRepaymentAmount, m_oTrail.MyInputData.AutoReRejectMinRepaidPortion);
+				StepNoDecision<OpenLoansRepayments>().Init(
+					m_oTrail.MyInputData.OpenLoansAmount,
+					m_oTrail.MyInputData.PrincipalRepaymentAmount,
+					m_oTrail.MyInputData.AutoReRejectMinRepaidPortion
+				);
 			}
 		}
 

@@ -35,7 +35,7 @@ BEGIN
 	DECLARE @LmrTime DATETIME
 
 	SELECT
-		@LmrTime = c.CreationDate
+		@LmrTime = c.UnderwriterDecisionDate
 	FROM
 		CashRequests c
 	WHERE
