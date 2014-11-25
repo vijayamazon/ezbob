@@ -429,9 +429,9 @@
 			int autoApproveCustomerMinAge = CurrentValues.Instance.AutoApproveCustomerMinAge;
 			int autoApproveCustomerMaxAge = CurrentValues.Instance.AutoApproveCustomerMaxAge;
 
-			if (customer == null)
+			if ((customer == null) || (customer.PersonalInfo == null) || (customer.PersonalInfo.DateOfBirth == null))
 				StepFailed<Age>().Init(-1, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
-			else if (customer.PersonalInfo.DateOfBirth != null) {
+			else {
 				DateTime now = DateTime.UtcNow;
 
 				int customerAge = now.Year - customer.PersonalInfo.DateOfBirth.Value.Year;
