@@ -16,7 +16,14 @@
 
 		public static DateTime ParseDateWithCurrentTime(string date) {
 			var now = DateTime.UtcNow;
-			DateTime parsed = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
+
+			DateTime parsed = DateTime.ParseExact(
+				date,
+				"dd/MM/yyyy",
+				CultureInfo.InvariantCulture,
+				DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal
+			);
+
 			return parsed.AddHours(now.Hour).AddMinutes(now.Minute);
 		}
 
