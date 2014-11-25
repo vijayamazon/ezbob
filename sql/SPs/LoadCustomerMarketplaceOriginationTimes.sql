@@ -17,6 +17,31 @@ BEGIN
 
 	------------------------------------------------------------------------------
 	--
+	-- Common
+	--
+	------------------------------------------------------------------------------
+
+	SELECT
+		RowType          = @OriginationTime,
+		MarketplaceID    = cmp.Id,
+		MarketplaceType  = mt.Name,
+		IsPaymentAccount = mt.IsPaymentAccount,
+		InternalID       = mt.InternalID,
+		OneTime          = cmp.OriginationDate,
+		TwoTime          = CONVERT(DATETIME, NULL)
+	FROM
+		MP_CustomerMarketPlace cmp
+		INNER JOIN MP_MarketplaceType mt
+			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		ISNULL(cmp.Disabled, 0) = 0
+		AND 
+		cmp.CustomerId = @CustomerID
+		AND
+		cmp.OriginationDate IS NOT NULL
+
+	------------------------------------------------------------------------------
+	--
 	-- HMRC
 	--
 	------------------------------------------------------------------------------

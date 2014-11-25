@@ -54,5 +54,7 @@ BEGIN
 			AND
 			nl.IsActive = 1
 	END
+
+	SELECT @CompanyScore = ISNULL(@CompanyScore, 0)
 END
 GO
