@@ -370,6 +370,24 @@
 			hmrcRevenueQuarter = sr["HmrcRevenueQuarter"];
 		}
 
+		public void SaveOffer(OfferOutputModel offerOutputModel, OfferCalculationType type)
+		{
+			_db.ExecuteNonQuery("AV_StoreOffer", CommandSpecies.StoredProcedure,
+			                    new QueryParameter("CustomerId", offerOutputModel.CustomerId),
+			                    new QueryParameter("CalculationTime", offerOutputModel.CalculationTime),
+			                    new QueryParameter("Amount", offerOutputModel.Amount),
+			                    new QueryParameter("Medal", offerOutputModel.Medal.ToString()),
+			                    new QueryParameter("ScenarioName", offerOutputModel.ScenarioName),
+			                    new QueryParameter("Period", offerOutputModel.RepaymentPeriod),
+			                    new QueryParameter("IsEu", offerOutputModel.IsEu),
+			                    new QueryParameter("LoanType", offerOutputModel.LoanType),
+			                    new QueryParameter("LoanSource", offerOutputModel.LoanSource),
+			                    new QueryParameter("InterestRate", offerOutputModel.InterestRate),
+			                    new QueryParameter("SetupFee", offerOutputModel.SetupFee),
+			                    new QueryParameter("Error", offerOutputModel.Error),
+			                    new QueryParameter("Type", type.ToString()));
+		}
+
 		#region big ugly insert
 		public void StoreMedalVerification(MedalOutputModel model)
 		{

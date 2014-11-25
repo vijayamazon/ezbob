@@ -196,15 +196,24 @@
 		public void TestOfferCalculator()
 		{
 			var offerCalculator = new OfferCalculator(Log);
-			var offer = offerCalculator.GetOffer(new OfferInputModel()
-			{
-				Amount = 1000,
-				HasLoans = false,
+			var input = new OfferInputModel {
+				Amount = 20000,
+				HasLoans = true,
 				AspireToMinSetupFee = true,
-				Medal = Medal.Gold
-			});
+				Medal = Medal.Platinum,
+				CustomerId = 16718,
+			};
 
-			Assert.GreaterOrEqual(offer.InterestRate, 0.03M);
+			var offer1 = offerCalculator.GetOfferBySeek(input);
+			var offer2 = offerCalculator.GetOfferByBoundaries(input);
+
+			Log.Debug("Offer1 is: {0}", offer1);
+			Log.Debug("Offer2 is: {0}", offer2);
+			Assert.AreEqual(offer1.InterestRate, offer2.InterestRate);
+			Assert.AreEqual(offer1.SetupFee, offer2.SetupFee);
+			var db = new SqlConnection(Log);
+			offer1.SaveToDb(Log, db, OfferCalculationType.Seek);
+			offer2.SaveToDb(Log, db, OfferCalculationType.Boundaries);
 		}
 
 		[Test]

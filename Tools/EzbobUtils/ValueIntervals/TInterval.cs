@@ -81,7 +81,7 @@
 
 		#region constructor
 
-		protected TInterval(AIntervalEdge<TFinite> oLeft, AIntervalEdge<TFinite> oRight) {
+		public TInterval(AIntervalEdge<TFinite> oLeft, AIntervalEdge<TFinite> oRight) {
 			if (ReferenceEquals(oLeft, null) || ReferenceEquals(oRight, null))
 				throw new ArgumentNullException();
 

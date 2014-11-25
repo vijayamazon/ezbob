@@ -2,6 +2,7 @@ namespace EzBobTest
 {
 	using System;
 	using System.Collections.Generic;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.Experian;
@@ -10,6 +11,7 @@ namespace EzBobTest
 	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
 	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzBob.Backend.Strategies.Misc;
+	using EzBob.Backend.Strategies.OfferCalculation;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using Ezbob.Backend.Models;
@@ -329,6 +331,42 @@ namespace EzBobTest
 			var s = new FraudChecker(21340, FraudMode.FullCheck, m_oDB, m_oLog);
 			s.Execute();
 		}
+
+		[Test]
+		public void TestOfferCalculation() {
+			var calc = new OfferDualCalculator(m_oDB, m_oLog);
+			int calculatedOffers = 0;
+			int failedVerificationOffers = 0;
+			m_oDB.ForEachRowSafe(sr => {
+				int customerId = sr["CustomerId"];
+				MedalClassification medal = (MedalClassification)Enum.Parse(typeof(MedalClassification), sr["Medal"]);
+				int offeredLoanAmount = sr["OfferedLoanAmount"];
+				int numOfLoans = sr["NumOfLoans"];
+				int zooplaValue = sr["ZooplaValue"];
+
+				int roundedAmount = (int)Math.Truncate((decimal)offeredLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
+				int cappedAmount = 0;
+
+				if (zooplaValue>0)
+				{
+					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapHomeOwner);
+				}
+				else
+				{
+					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapNotHomeOwner);
+				} // if
+
+				var offer = calc.CalculateOffer(customerId, DateTime.UtcNow, cappedAmount, numOfLoans>0, medal);
+				calculatedOffers++;
+				if (offer == null || !string.IsNullOrEmpty(offer.Error)) {
+					failedVerificationOffers++;
+				}
+			}, "SELECT CustomerId, Medal, OfferedLoanAmount, NumOfLoans, ZooplaValue FROM MedalCalculations WHERE IsActive=1 AND Medal<>'NoMedal' AND OfferedLoanAmount>0", CommandSpecies.Text);
+
+			m_oLog.Debug("Calculated offer for {0} customers failed {1}", calculatedOffers, failedVerificationOffers);
+			Assert.AreEqual(0, failedVerificationOffers);
+		}
+
 		[Test]
 		public void TestBrokerInstantOffer() {
 			var s = new BrokerInstantOffer(new BrokerInstantOfferRequest() {

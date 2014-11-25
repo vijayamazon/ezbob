@@ -185,6 +185,10 @@
       <Project>{805f29c1-d575-49c5-a95d-4d393e65481f}</Project>
       <Name>MiniResharper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ValueIntervals\ValueIntervals.csproj">
+      <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
+      <Name>ValueIntervals</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Trace_classes.cd" />

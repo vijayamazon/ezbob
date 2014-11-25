@@ -96,4 +96,9 @@
 		HalfWayLoanType,
 		AlibabaLoanType
 	}
+
+	public enum OfferCalculationType {
+		Seek,
+		Boundaries
+	}
 }

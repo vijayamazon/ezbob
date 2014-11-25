@@ -1,10 +1,11 @@
 ﻿namespace EzBob.Backend.Strategies.OfferCalculation
 {
 	using System;
+	using AutomationCalculator.Common;
 	using Ezbob.Database;
 	using MedalCalculations;
 
-	public class OfferResult
+	public class OfferResult : IEquatable<OfferOutputModel>
 	{
 		// Inputs
 		public int CustomerId { get; set; }
@@ -21,20 +22,11 @@
 		public decimal SetupFee { get; set; }
 		public string Error { get; set; }
 
-		public bool IsIdentical(OfferResult other)
+		public bool Equals(OfferOutputModel other)
 		{
-			if (CustomerId != other.CustomerId ||
-			    CalculationTime != other.CalculationTime ||
-			    Amount != other.Amount ||
-			    MedalClassification != other.MedalClassification ||
-			    ScenarioName != other.ScenarioName ||
-				Period != other.Period ||
-				IsEu != other.IsEu ||
-				LoanTypeId != other.LoanTypeId ||
-			    InterestRate != other.InterestRate ||
-			    SetupFee != other.SetupFee ||
-			    Error != other.Error)
+			if (Amount != other.Amount || ScenarioName != other.ScenarioName || InterestRate != other.InterestRate || SetupFee != other.SetupFee)
 			{
+				Error = Error == null ? "Mismatch in two offer calculations" : Error + ", Mismatch in two offer calculations";
 				return false;
 			}
 
@@ -56,5 +48,13 @@
 			                   new QueryParameter("SetupFee", SetupFee),
 			                   new QueryParameter("Error", Error));
 		}
+
+		public override string ToString()
+		{
+			return string.Format("InterestRate {0},SetupFee: {1},RepaymentPeriod: {2},LoanType: {3},IsEu: {4}{5}",
+				InterestRate, SetupFee, Period, LoanTypeId, IsEu, Error == null ? "" : "Error: " + Error);
+		}
+
+		
 	}
 }

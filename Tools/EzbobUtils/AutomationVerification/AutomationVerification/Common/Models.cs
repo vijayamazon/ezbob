@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Text;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class MedalOutputModel
@@ -90,7 +91,8 @@
 		}
 	}
 
-	public class MedalComparisonModel {
+	public class MedalComparisonModel
+	{
 		public int CustomerId { get; set; }
 		public MedalType MedalType { get; set; }
 		public Weight BusinessScore { get; set; }
@@ -192,12 +194,13 @@
 		public string MarketPlaceName { get; set; }
 	}
 
-	public class OnlineRevenues {
+	public class OnlineRevenues
+	{
 		public decimal AnnualizedRevenue1M { get; set; }
 		public decimal AnnualizedRevenue3M { get; set; }
 		public decimal AnnualizedRevenue6M { get; set; }
 		public decimal AnnualizedRevenue1Y { get; set; }
-		public decimal Revenue1Y{ get; set; }
+		public decimal Revenue1Y { get; set; }
 	}
 
 	public static class AnalysisFunctionIncome
@@ -226,7 +229,7 @@
 		public decimal RepaidAmount { get; set; }
 		public int LoanAmount { get; set; }
 	}
-	
+
 	public class RejectionData
 	{
 		//from sp
@@ -234,9 +237,9 @@
 
 		public int ExperianScore { get; set; }
 		public int CompanyScore { get; set; }
-		
+
 		public bool WasApproved { get; set; }
-		
+
 		public int DefaultAccountsNum { get; set; }
 		public int DefaultAccountAmount { get; set; }
 
@@ -268,14 +271,16 @@
 		public bool WasLate { get; set; }
 	}
 
-	public class PositiveFeedbacksModelDb {
+	public class PositiveFeedbacksModelDb
+	{
 		public int AmazonFeedbacks { get; set; }
 		public int EbayFeedbacks { get; set; }
 		public int PaypalFeedbacks { get; set; }
 		public int DefaultFeedbacks { get; set; }
 	}
 
-	public class MedalChooserInputModelDb {
+	public class MedalChooserInputModelDb
+	{
 		public bool IsLimited { get; set; }
 		public bool HasOnline { get; set; } //ebay/amazon/paypal mp
 		public bool HasHmrc { get; set; }
@@ -288,7 +293,8 @@
 		public int MinApprovalAmount { get; set; }
 	}
 
-	public class MedalInputModelDb {
+	public class MedalInputModelDb
+	{
 		public int BusinessScore { get; set; }
 		public DateTime? IncorporationDate { get; set; }
 		public decimal TangibleEquity { get; set; }
@@ -313,7 +319,8 @@
 		public decimal OnlineMedalTurnoverCutoff { get; set; }
 	}
 
-	public class MedalInputModel {
+	public class MedalInputModel
+	{
 		public int CustomerId { get; set; }
 		public DateTime CalculationDate { get; set; }
 		public int BusinessScore { get; set; }
@@ -333,7 +340,7 @@
 		public bool HasHmrc { get; set; }
 		public bool UseHmrc { get; set; }
 		public bool FirstRepaymentDatePassed { get; set; }
-		
+
 		/*online only*/
 		public int NumOfStores { get; set; }
 		public int PositiveFeedbacks { get; set; }
@@ -363,17 +370,19 @@
 				,
 				BusinessScore, TangibleEquity, BusinessSeniority, ConsumerScore, EzbobSeniority,
 				MaritalStatus, NumOfOnTimeLoans, NumOfLatePayments, NumOfEarlyPayments, AnnualTurnover,
-				FreeCashFlow, NetWorth, ValueAdded, FirstRepaymentDatePassed, NumOfStores, PositiveFeedbacks); 
+				FreeCashFlow, NetWorth, ValueAdded, FirstRepaymentDatePassed, NumOfStores, PositiveFeedbacks);
 		}
 	}
 
-	public class YodleeRevenuesModelDb {
+	public class YodleeRevenuesModelDb
+	{
 		public decimal YodleeRevenues { get; set; }
 		public DateTime? MinDate { get; set; }
 		public DateTime? MaxDate { get; set; }
 	}
 
-	public class MedalCoefficientsModelDb {
+	public class MedalCoefficientsModelDb
+	{
 		public Medal Medal { get; set; }
 		public decimal AnnualTurnover { get; set; }
 		public decimal ValueAdded { get; set; }
@@ -396,23 +405,53 @@
 		public decimal Cogs { get; set; }
 		public decimal BrokerSetupFee { get; set; }
 	}
-	public class OfferInputModel {
+
+	public class OfferInputModel
+	{
 		public int Amount { get; set; }
 		public bool HasLoans { get; set; }
 		public Medal Medal { get; set; }
 		public bool AspireToMinSetupFee { get; set; }
+		public int CustomerId { get; set; }
 	}
 
-	public class OfferOutputModel
+	public class OfferOutputModel: IEquatable<OfferOutputModel>
 	{
+		public int CustomerId { get; set; }
+		public Medal Medal { get; set; }
+		public DateTime CalculationTime { get; set; }
 		public int RepaymentPeriod { get { return 12; } } //Currently Hard coded
 		public LoanSource LoanSource { get { return LoanSource.Standard; } } //Currently Hard coded
 		public LoanType LoanType { get { return LoanType.StandardLoanType; } } //Currently Hard coded
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
+		public int Amount { get; set; }
+		public string ScenarioName { get; set; }
+		public bool IsEu { get { return false; } }
+		public string Error { get; set; }
+		public bool Equals(OfferOutputModel other) {
+			if (ScenarioName != other.ScenarioName || InterestRate != other.InterestRate || SetupFee != other.SetupFee)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("InterestRate {0},SetupFee: {1},RepaymentPeriod: {2},LoanType: {3},LoanSource: {4},IsEu: {5}{6}",
+				InterestRate, SetupFee, RepaymentPeriod, LoanType, LoanSource, IsEu, Error == null ? "" : "Error: " + Error);
+		}
+
+		public void SaveToDb(ASafeLog log, AConnection db, OfferCalculationType type)
+		{
+			var dbHelper = new DbHelper(db, log);
+			dbHelper.SaveOffer(this, type);
+		}
 	}
 
-	public class OfferInterestRateRangeModelDb {
+	public class OfferInterestRateRangeModelDb
+	{
 		public decimal MinInterestRate { get; set; }
 		public decimal MaxInterestRate { get; set; }
 	}
@@ -424,7 +463,8 @@
 		public decimal MaxSetupFee { get; set; }
 	}
 
-	public class CaisStatus {
+	public class CaisStatus
+	{
 		public DateTime LastUpdatedDate { get; set; }
 		public string AccountStatusCodes { get; set; }
 	}
