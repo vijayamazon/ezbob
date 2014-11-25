@@ -4,7 +4,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class VerifyReapproval : AApprovedVerificationBase {
+	public class VerifyReapproval : AVerificationBase {
 		#region public
 
 		public VerifyReapproval(

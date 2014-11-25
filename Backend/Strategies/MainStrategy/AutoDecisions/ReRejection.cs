@@ -23,39 +23,61 @@
 			m_oTrail = new ReRejectionTrail(customerId, oLog);
 		}
 
+		public bool MakeAndVerifyDecision() {
+			#region primary
+
+			SafeReader sr = Db.GetFirst("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+
+			bool wasManuallyRejected = sr["WasManuallyRejected"];
+			DateTime? lastManualRejectDate = sr["LastManualRejectDate"];
+			bool newDataSourceAdded = sr["NewDataSourceAdded"];
+			int openLoansAmount = sr["OpenLoansAmount"];
+			decimal principalRepaymentAmount = sr["PrincipalRepaymentAmount"];
+			bool hasLoans = sr["HasLoans"];
+
+			m_oTrail.MyInputData.Init(DateTime.UtcNow,
+				wasManuallyRejected,
+				lastManualRejectDate,
+				newDataSourceAdded,
+				openLoansAmount,
+				principalRepaymentAmount,
+				hasLoans,
+				ConfigManager.CurrentValues.Instance.AutoReRejectMinRepaidPortion,
+				ConfigManager.CurrentValues.Instance.AutoReRejectMaxLRDAge
+			);
+
+			CheckWasRejected();
+			CheckNewMarketPlaceAdded();
+			CheckLRDIsTooOld();
+			CheckHasNoLoans();
+
+			if (m_oTrail.MyInputData.HasLoans)
+				CheckOpenLoansRepayments();
+
+			#endregion primary
+
+			#region secondary
+
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
+				customerId, m_oTrail.InputData.DataAsOf, Db, log
+			).Init();
+
+			oSecondary.MakeDecision();
+
+			#endregion secondary
+
+			bool bSuccess = m_oTrail.EqualsTo(oSecondary.Trail);
+
+			m_oTrail.Save(Db, oSecondary.Trail);
+
+			return bSuccess;
+		} // MakeAndVerifyDecision
+
 		public bool MakeDecision(AutoDecisionRejectionResponse response)
 		{
 			try
 			{
-				SafeReader sr = Db.GetFirst("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-
-				bool wasManuallyRejected = sr["WasManuallyRejected"];
-				DateTime? lastManualRejectDate = sr["LastManualRejectDate"];
-				bool newDataSourceAdded = sr["NewDataSourceAdded"];
-				int openLoansAmount = sr["OpenLoansAmount"];
-				decimal principalRepaymentAmount = sr["PrincipalRepaymentAmount"];
-				bool hasLoans = sr["HasLoans"];
-
-				m_oTrail.MyInputData.Init(DateTime.UtcNow,
-					wasManuallyRejected,
-					lastManualRejectDate,
-					newDataSourceAdded,
-					openLoansAmount,
-					principalRepaymentAmount,
-					hasLoans,
-					ConfigManager.CurrentValues.Instance.AutoReRejectMinRepaidPortion,
-					ConfigManager.CurrentValues.Instance.AutoReRejectMaxLRDAge);
-
-				CheckWasRejected();
-				CheckNewMarketPlaceAdded();
-				CheckLRDIsTooOld();
-				CheckHasNoLoans();
-
-				if (m_oTrail.MyInputData.HasLoans)
-					CheckOpenLoansRepayments();
-
-				log.Debug("{0}", m_oTrail);
-				if (m_oTrail.HasDecided)
+				if (MakeAndVerifyDecision())
 				{
 					response.IsReRejected = true;
 					response.AutoRejectReason = "Auto Re-Reject";

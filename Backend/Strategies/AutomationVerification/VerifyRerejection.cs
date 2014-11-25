@@ -3,10 +3,10 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class VerifyApproval : AVerificationBase {
+	public class VerifyRerejection : AVerificationBase {
 		#region public
 
-		public VerifyApproval(
+		public VerifyRerejection(
 			int nTopCount,
 			int nLastCheckedCustomerID,
 			AConnection oDB,
@@ -21,7 +21,7 @@
 		#region property DecisionName
 
 		protected override string DecisionName {
-			get { return "Auto approval"; }
+			get { return "Auto re-rejection"; }
 		} // DecisionName
 
 		#endregion property DecisionName
@@ -29,17 +29,15 @@
 		#region method MakeAndVerifyDecision
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
-			return new Approval(
+			return new ReRejection(
 				oRow.CustomerId,
-				oRow.OfferedLoanAmount,
-				oRow.GetMedal(),
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision();
+			).MakeAndVerifyDecision();
 		} // MakeAndVerifyDecision
 
 		#endregion method MakeAndVerifyDecision
 
 		#endregion protected
-	} // class VerifyApproval
+	} // class VerifyRerejection
 } // namespace

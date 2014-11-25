@@ -4,7 +4,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public abstract class AApprovedVerificationBase : AStrategy {
+	public abstract class AVerificationBase : AStrategy {
 		#region public
 
 		#region property Name
@@ -36,8 +36,8 @@
 				);
 
 				Log.Debug(
-					"{4}: sent {0} = mismatch {1} + exception {2} + match {3}.",
-					lst.Count, m_nMismatchCount, m_nExceptionCount, m_nMatchCount, DecisionName
+					"{4}: total {0}, sent {5} = mismatch {1} + exception {2} + match {3}.",
+					lst.Count, m_nMismatchCount, m_nExceptionCount, m_nMatchCount, DecisionName, i + 1
 				);
 			} // for
 		} // Execute
@@ -50,7 +50,7 @@
 
 		#region constructor
 
-		protected AApprovedVerificationBase(int nTopCount, int nLastCheckedCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		protected AVerificationBase(int nTopCount, int nLastCheckedCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nTopCount = nTopCount;
 			m_nLastCheckedCustomerID = nLastCheckedCustomerID;
 		} // constructor
@@ -95,5 +95,5 @@
 		private int m_nExceptionCount;
 
 		#endregion private
-	} // class VerifyReapproval
+	} // class AVerificationBase
 } // namespace

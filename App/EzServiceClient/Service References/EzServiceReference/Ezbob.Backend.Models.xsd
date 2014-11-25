@@ -2,6 +2,21 @@
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfScoreAtDate">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfScoreAtDate" nillable="true" type="tns:ArrayOfScoreAtDate" />
+  <xs:complexType name="ScoreAtDate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Balance" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Score" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ServiceLogId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
   <xs:complexType name="CompanyData">
     <xs:sequence>
       <xs:element minOccurs="0" name="Address1" nillable="true" type="xs:string" />
@@ -174,21 +189,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PreviousSearch" nillable="true" type="tns:PreviousSearch" />
-  <xs:complexType name="ArrayOfScoreAtDate">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfScoreAtDate" nillable="true" type="tns:ArrayOfScoreAtDate" />
-  <xs:complexType name="ScoreAtDate">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Balance" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Score" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ServiceLogId" type="xs:long" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
   <xs:complexType name="CompanyDataForCreditBureau">
     <xs:sequence>
       <xs:element minOccurs="0" name="Errors" nillable="true" type="xs:string" />

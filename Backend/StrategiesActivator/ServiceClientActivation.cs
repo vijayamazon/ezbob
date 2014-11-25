@@ -1289,67 +1289,71 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oServiceClient.UpdateGoogleAnalytics(oFrom, oTo);
 		} // UpdateGoogleAnalytics
 
+		private class VerificationInput {
+			public bool IsGood { get; private set; }
+			public int CustomerCount { get; private set; }
+			public int LastCheckedCustomerID { get; private set; }
+
+			public VerificationInput(string sName, string[] args, ASafeLog oLog) {
+				CustomerCount = -1;
+				LastCheckedCustomerID = -1;
+
+				IsGood = false;
+				int n;
+
+				if (args.Length == 1) {
+					CustomerCount = -1;
+					LastCheckedCustomerID = -1;
+					IsGood = true;
+				}
+				else if (args.Length == 2) {
+					IsGood = int.TryParse(args[1], out n);
+					if (IsGood)
+						CustomerCount = n;
+
+					LastCheckedCustomerID = -1;
+				}
+				else if (args.Length == 3) {
+					IsGood = int.TryParse(args[1], out n);
+					if (IsGood)
+						CustomerCount = n;
+
+					IsGood = IsGood && int.TryParse(args[2], out n);
+					if (IsGood)
+						LastCheckedCustomerID = n;
+				} // if
+
+				if (!IsGood) {
+					oLog.Msg("Usage: {0} [ <customer count>  [ <last checked customer id> ] ]", sName);
+					oLog.Msg("Specify customer count 0 or negative to run on all the customers.");
+					oLog.Msg("Specify customer count 0 or negative to start from the beginning.");
+				} // if
+			} // constructor
+		} // class VerificationInput
+
 		[Activation]
 		private void VerifyReapproval() {
-			int nCustomerCount = -1;
-			int nLastCheckedCustomerID = -1;
+			var i = new VerificationInput("VerifyReapproval", m_aryArgs, m_oLog);
 
-			bool bGood = false;
-
-			if (m_aryArgs.Length == 1) {
-				nCustomerCount = -1;
-				nLastCheckedCustomerID = -1;
-				bGood = true;
-			}
-			else if (m_aryArgs.Length == 2) {
-				bGood = int.TryParse(m_aryArgs[1], out nCustomerCount);
-				nLastCheckedCustomerID = -1;
-			}
-			else if (m_aryArgs.Length == 3) {
-				bGood = int.TryParse(m_aryArgs[1], out nCustomerCount);
-				bGood = bGood && int.TryParse(m_aryArgs[2], out nLastCheckedCustomerID);
-			} // if
-
-			if (!bGood) {
-				m_oLog.Msg("Usage: VerifyReapproval [ <customer count>  [ <last checked customer id> ] ]");
-				m_oLog.Msg("Specify customer count 0 or negative to run on all the customers.");
-				m_oLog.Msg("Specify customer count 0 or negative to start from the beginning.");
-				return;
-			} // if
-
-			m_oServiceClient.VerifyReapproval(nCustomerCount, nLastCheckedCustomerID);
+			if (i.IsGood)
+				m_oServiceClient.VerifyReapproval(i.CustomerCount, i.LastCheckedCustomerID);
 		} // VerifyReapproval
 
 		[Activation]
 		private void VerifyApproval() {
-			int nCustomerCount = -1;
-			int nLastCheckedCustomerID = -1;
+			var i = new VerificationInput("VerifyApproval", m_aryArgs, m_oLog);
 
-			bool bGood = false;
-
-			if (m_aryArgs.Length == 1) {
-				nCustomerCount = -1;
-				nLastCheckedCustomerID = -1;
-				bGood = true;
-			}
-			else if (m_aryArgs.Length == 2) {
-				bGood = int.TryParse(m_aryArgs[1], out nCustomerCount);
-				nLastCheckedCustomerID = -1;
-			}
-			else if (m_aryArgs.Length == 3) {
-				bGood = int.TryParse(m_aryArgs[1], out nCustomerCount);
-				bGood = bGood && int.TryParse(m_aryArgs[2], out nLastCheckedCustomerID);
-			} // if
-
-			if (!bGood) {
-				m_oLog.Msg("Usage: VerifyApproval [ <customer count>  [ <last checked customer id> ] ]");
-				m_oLog.Msg("Specify customer count 0 or negative to run on all the customers.");
-				m_oLog.Msg("Specify customer count 0 or negative to start from the beginning.");
-				return;
-			} // if
-
-			m_oServiceClient.VerifyApproval(nCustomerCount, nLastCheckedCustomerID);
+			if (i.IsGood)
+				m_oServiceClient.VerifyApproval(i.CustomerCount, i.LastCheckedCustomerID);
 		} // VerifyApproval
+
+		[Activation]
+		private void VerifyRerejection() {
+			var i = new VerificationInput("VerifyRerejection", m_aryArgs, m_oLog);
+
+			if (i.IsGood)
+				m_oServiceClient.VerifyRerejection(i.CustomerCount, i.LastCheckedCustomerID);
+		} // VerifyRerejection
 
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators

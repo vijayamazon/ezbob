@@ -17,5 +17,13 @@
 		} // VerifyApproval
 
 		#endregion method VerifyApproval
+
+		#region method VerifyRerejection
+
+		public ActionMetaData VerifyRerejection(int nCustomerCount, int nLastCheckedCustomerID) {
+			return Execute<VerifyRerejection>(null, null, nCustomerCount, nLastCheckedCustomerID);
+		} // VerifyRerejection
+
+		#endregion method VerifyRerejection
 	} // class EzServiceImplementation
 } // namespace
