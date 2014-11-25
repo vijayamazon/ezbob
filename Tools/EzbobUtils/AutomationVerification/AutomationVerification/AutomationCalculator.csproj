@@ -52,6 +52,11 @@
     <Compile Include="AutoDecision\AutoApproval\AvailableFunds.cs" />
     <Compile Include="AutoDecision\AutoApproval\Configuration.cs" />
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
+    <Compile Include="AutoDecision\AutoReRejection\Agent.cs" />
+    <Compile Include="AutoDecision\AutoReRejection\Arguments.cs" />
+    <Compile Include="AutoDecision\AutoReRejection\Configuration.cs" />
+    <Compile Include="AutoDecision\AutoReRejection\Marketplace.cs" />
+    <Compile Include="AutoDecision\AutoReRejection\MetaData.cs" />
     <Compile Include="Common\OriginationTime.cs" />
     <Compile Include="AutoDecision\AutoApproval\Payment.cs" />
     <Compile Include="AutoDecision\AutoApproval\CalculatedTurnover.cs" />
@@ -62,7 +67,7 @@
     <Compile Include="AutoDecision\AutoRejection\Agent.cs" />
     <Compile Include="AutoDecision\AutoRejection\AutoRejectModels.cs" />
     <Compile Include="AutoDecision\AutoRejection\ConsumerLatesCalculation.cs" />
-    <Compile Include="AutoDecision\AutoReRejection\AutoReRejectionModels.cs" />
+    <Compile Include="AutoDecision\AutoReRejection\ReRejectInputData.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="AutoDecision\AutoReRejectionCalculator.cs" />
     <Compile Include="AutoDecision\AutoApprovalCalculator.cs" />

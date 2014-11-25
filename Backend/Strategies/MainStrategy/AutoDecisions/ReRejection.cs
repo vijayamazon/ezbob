@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions
 {
 	using System;
-	using AutomationCalculator.AutoDecision.AutoReRejection;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoReRejection;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -14,11 +13,12 @@
 		private readonly AConnection Db;
 		private readonly ASafeLog log;
 		private readonly int customerId;
-		private ReRejectionTrail m_oTrail;
+		private readonly ReRejectionTrail m_oTrail;
+
 		public ReRejection(int customerId, AConnection oDb, ASafeLog oLog)
 		{
 			Db = oDb;
-			log = oLog;
+			log = oLog ?? new SafeLog();
 			this.customerId = customerId;
 			m_oTrail = new ReRejectionTrail(customerId, oLog);
 		}
@@ -28,6 +28,7 @@
 			try
 			{
 				SafeReader sr = Db.GetFirst("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+
 				bool wasManuallyRejected = sr["WasManuallyRejected"];
 				DateTime? lastManualRejectDate = sr["LastManualRejectDate"];
 				bool newDataSourceAdded = sr["NewDataSourceAdded"];
@@ -52,7 +53,7 @@
 				CheckOpenLoansRepayments();
 
 				log.Debug("{0}", m_oTrail);
-				if (m_oTrail.DecisionStatus == DecisionStatus.Affirmative)
+				if (m_oTrail.HasDecided)
 				{
 					response.IsReRejected = true;
 					response.AutoRejectReason = "Auto Re-Reject";
@@ -72,8 +73,7 @@
 			catch (Exception ex)
 			{
 				StepNoReReject<ExceptionThrown>(true).Init(ex);
-				log.Error("Exception during rerejection {0}", m_oTrail);
-				//log.Error("Exception during rerejection:{0}", ex);
+				log.Error(ex, "Exception during re-rejection {0}", m_oTrail);
 				return false;
 			}
 		}
