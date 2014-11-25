@@ -160,11 +160,6 @@
 
 		#endregion method ExecuteEnumerable
 
-		[Obsolete]
-		public virtual DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			return (DataTable)Run(null, ExecMode.Reader, nSpecies, sQuery, aryParams);
-		} // ExecuteReader
-
 		#region method Fill
 
 		public List<T> Fill<T>(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) where T : new() {

@@ -93,7 +93,6 @@
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="TestMedal.cs" />
     <Compile Include="TestOffer.cs" />
-    <Compile Include="TestExecutes.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="TestClassToDb.cs" />
     <Compile Include="TestDbConnection.cs" />

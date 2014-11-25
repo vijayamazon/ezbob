@@ -566,6 +566,8 @@ namespace TestApp {
 
 		#endregion method TestLoanIntegrity
 
+		/*
+
 		#region method TestSpeed
 
 		private static void TestSpeed(AConnection oDB, ASafeLog oLog) {
@@ -673,6 +675,8 @@ namespace TestApp {
 		} // class SpBrokerLogin
 
 		#endregion method TestSpeed
+
+		*/
 
 		#region method TestDataSharing
 
