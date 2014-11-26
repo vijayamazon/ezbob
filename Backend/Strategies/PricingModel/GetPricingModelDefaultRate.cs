@@ -25,33 +25,13 @@
 		public override void Execute()
 		{
 			decimal customerShare = 1 - companyShare;
-			var scoreStrat = new GetExperianConsumerScore(customerId, DB, Log);
-			scoreStrat.Execute();
+			
+			var sr = DB.GetFirst("GetOfferConsumerBusinessDefaultRates", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
-			int consumerScore = scoreStrat.Score;
-
-			int companyScore = DB.ExecuteScalar<int>(
-				"GetCompanyScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-
-			decimal companyValue = GetDefaultRateCompany(companyScore);
-			decimal customerValue = GetDefaultRateCustomer(consumerScore);
+			decimal companyValue = sr["BusinessDefaultRate"];
+			decimal customerValue = sr["ConsumerDefaultRate"];
 
 			DefaultRate = companyShare * companyValue + customerShare * customerValue;
-		}
-
-		private decimal GetDefaultRateCompany(int key)
-		{
-			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "DefaultRateCompany"), new QueryParameter("Key", key));
-			return sr["Value"];
-		}
-
-		private decimal GetDefaultRateCustomer(int key)
-		{
-			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "DefaultRateCustomer"), new QueryParameter("Key", key));
-			return sr["Value"];
 		}
 	}
 }

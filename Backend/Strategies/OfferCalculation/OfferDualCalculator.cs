@@ -53,10 +53,14 @@
 					log.Warn("Main implementation of offer calculation result is null for customer {0}", customerId);
 				}
 
+				if (result1 != null) {
+					result1.SaveToDb(db);
+				}
+
 				if (result1 != null && result1.Equals(result2))
 				{
 					log.Debug("Main implementation of offer calculation result: \n{0}", result1);
-					result1.SaveToDb(db);
+					
 					return result1;
 				}
 

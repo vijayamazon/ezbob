@@ -2,6 +2,9 @@ IF OBJECT_ID('StoreOffer') IS NULL
 	EXECUTE('CREATE PROCEDURE StoreOffer AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE StoreOffer
 	(@CustomerId INT
 	,@CalculationTime DATETIME
@@ -16,7 +19,7 @@ ALTER PROCEDURE StoreOffer
 	,@Error NVARCHAR (500))
 AS
 BEGIN
-	UPDATE StoreOffer SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
+	UPDATE OfferCalculations SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
 
 	INSERT INTO OfferCalculations (
 	 CustomerId
@@ -45,4 +48,6 @@ BEGIN
 	,@SetupFee
 	,@Error)
 END
+
 GO
+

@@ -197,11 +197,11 @@
 		{
 			var offerCalculator = new OfferCalculator(Log);
 			var input = new OfferInputModel {
-				Amount = 20000,
-				HasLoans = true,
+				Amount = 17000,
+				HasLoans = false,
 				AspireToMinSetupFee = true,
-				Medal = Medal.Platinum,
-				CustomerId = 16718,
+				Medal = Medal.Gold,
+				CustomerId = 18263,
 			};
 
 			var offer1 = offerCalculator.GetOfferBySeek(input);

@@ -335,6 +335,11 @@ namespace EzBobTest
 		[Test]
 		public void TestOfferCalculation() {
 			var calc = new OfferDualCalculator(m_oDB, m_oLog);
+
+			//var offer1 = calc.CalculateOffer(18263, DateTime.UtcNow, 17000, false, MedalClassification.Gold);
+			//Assert.AreEqual(5M, offer1.SetupFee);
+			//Assert.AreEqual(4.1M, offer1.InterestRate);
+			//return;
 			int calculatedOffers = 0;
 			int failedVerificationOffers = 0;
 			m_oDB.ForEachRowSafe(sr => {
