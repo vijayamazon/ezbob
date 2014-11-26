@@ -186,6 +186,7 @@ BEGIN
 
 	EXECUTE GetCompanyScoreAndIncorporationDate
 		@CustomerId,
+		1,
 		@CompanyScore OUTPUT,
 		@IncorporationDate OUTPUT
 	
@@ -330,9 +331,9 @@ BEGIN
 	
 	------------------------------------------------------------------------------
 
-	EXECUTE GetCustomerTurnoverData @CustomerID, 1
-	EXECUTE GetCustomerTurnoverData @CustomerID, 3
-	EXECUTE GetCustomerTurnoverData @CustomerID, 12
+	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 1
+	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 3
+	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 12
 
 	------------------------------------------------------------------------------
 END

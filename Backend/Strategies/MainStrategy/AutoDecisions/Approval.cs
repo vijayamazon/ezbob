@@ -99,6 +99,7 @@
 				"GetCompanyScoreAndIncorporationDate",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("TakeMinScore", true),
 				oScore,
 				oDate
 			);

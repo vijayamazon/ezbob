@@ -60,7 +60,7 @@ BEGIN
 		MpTypeInternalID = mt.InternalId,
 		TurnoverType     = 'Total',
 		Turnover         = @Turnover,
-		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE @Turnover / @TurnoverDayCount * 365.0 END),
+		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE @Turnover / @MonthCount * 12.0 END),
 		MonthCount       = @MonthCount,
 		DayCount         = @TurnoverDayCount,
 		DateFrom         = @TurnoverFrom,

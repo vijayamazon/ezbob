@@ -1,11 +1,11 @@
-IF OBJECT_ID('GetMpTurnoverPayPal') IS NULL
-	EXECUTE('CREATE PROCEDURE GetMpTurnoverPayPal AS SELECT 1')
+IF OBJECT_ID('GetMpTurnoverHmrc') IS NULL
+	EXECUTE('CREATE PROCEDURE GetMpTurnoverHmrc AS SELECT 1')
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE GetMpTurnoverPayPal
+ALTER PROCEDURE GetMpTurnoverHmrc
 @MpID INT,
 @MonthCount INT,
 @DateTo DATETIME = NULL
@@ -22,42 +22,25 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT
-		o.Id
-	INTO
-		#trn
-	FROM
-		MP_PayPalTransaction o
-	WHERE
-		o.CustomerMarketPlaceId = @MpID
-
-	------------------------------------------------------------------------------
-
 	EXECUTE AdjustTurnoveDatesAndMonthCount @MpID, @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
 
 	------------------------------------------------------------------------------
 
+
+	------------------------------------------------------------------------------
+
 	SELECT
-		@Turnover = SUM(i.NetAmount),
-		@TurnoverDayCount = COUNT(DISTINCT CONVERT(DATE, i.Created)),
-		@TurnoverFrom = MIN(i.Created),
-		@TurnoverTo = MAX(i.Created)
-	FROM
-		#trn o
-		INNER JOIN MP_PayPalTransactionItem2 i
-			ON o.Id = i.TransactionId
-			AND i.Status = 'Completed'
-			AND i.Type = 'Payment'
-			AND i.NetAmount > 0
-	WHERE
-		@DateFrom <= i.Created AND i.Created <= @DateTo
+		@Turnover = SUM(i.TotalCost),
+		@TurnoverDayCount = COUNT(DISTINCT CONVERT(DATE, i.OrderDate)),
+		@TurnoverFrom = MIN(i.OrderDate),
+		@TurnoverTo = MAX(i.OrderDate)
 
 	------------------------------------------------------------------------------
 	
 	SELECT
 		RowType          = 'Turnover',
 		MpID             = @MpID,
-		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, '3FA5E327-FCFD-483B-BA5A-DC1815747A28'),
+		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'),
 		TurnoverType     = 'Total',
 		Turnover         = @Turnover,
 		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE @Turnover / @MonthCount * 12.0 END),
@@ -67,7 +50,5 @@ BEGIN
 		DateTo           = @TurnoverTo
 
 	------------------------------------------------------------------------------
-
-	DROP TABLE #trn
 END
 GO

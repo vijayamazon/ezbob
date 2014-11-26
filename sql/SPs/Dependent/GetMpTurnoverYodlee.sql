@@ -1,11 +1,11 @@
-IF OBJECT_ID('GetMpTurnoverPayPal') IS NULL
-	EXECUTE('CREATE PROCEDURE GetMpTurnoverPayPal AS SELECT 1')
+IF OBJECT_ID('GetMpTurnoverYodlee') IS NULL
+	EXECUTE('CREATE PROCEDURE GetMpTurnoverYodlee AS SELECT 1')
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE GetMpTurnoverPayPal
+ALTER PROCEDURE GetMpTurnoverYodlee
 @MpID INT,
 @MonthCount INT,
 @DateTo DATETIME = NULL
@@ -22,42 +22,24 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT
-		o.Id
-	INTO
-		#trn
-	FROM
-		MP_PayPalTransaction o
-	WHERE
-		o.CustomerMarketPlaceId = @MpID
+	DECLARE @IsParsedBank BIT = 0
 
 	------------------------------------------------------------------------------
 
-	EXECUTE AdjustTurnoveDatesAndMonthCount @MpID, @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
+	EXECUTE AdjustTurnoveDatesAndMonthCount	@MpID, @MonthCount OUTPUT, @DateTo OUTPUT, @DateFrom OUTPUT
 
 	------------------------------------------------------------------------------
 
-	SELECT
-		@Turnover = SUM(i.NetAmount),
-		@TurnoverDayCount = COUNT(DISTINCT CONVERT(DATE, i.Created)),
-		@TurnoverFrom = MIN(i.Created),
-		@TurnoverTo = MAX(i.Created)
-	FROM
-		#trn o
-		INNER JOIN MP_PayPalTransactionItem2 i
-			ON o.Id = i.TransactionId
-			AND i.Status = 'Completed'
-			AND i.Type = 'Payment'
-			AND i.NetAmount > 0
-	WHERE
-		@DateFrom <= i.Created AND i.Created <= @DateTo
+	EXECUTE GetYodleeRevenues
+		@MpID, @DateFrom, @DateTo,
+		@Turnover OUTPUT, @IsParsedBank OUTPUT, @TurnoverFrom OUTPUT, @TurnoverTo OUTPUT, @TurnoverDayCount OUTPUT
 
 	------------------------------------------------------------------------------
 	
 	SELECT
 		RowType          = 'Turnover',
 		MpID             = @MpID,
-		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, '3FA5E327-FCFD-483B-BA5A-DC1815747A28'),
+		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'),
 		TurnoverType     = 'Total',
 		Turnover         = @Turnover,
 		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE @Turnover / @MonthCount * 12.0 END),
@@ -67,7 +49,5 @@ BEGIN
 		DateTo           = @TurnoverTo
 
 	------------------------------------------------------------------------------
-
-	DROP TABLE #trn
 END
 GO
