@@ -89,7 +89,7 @@
 			} // if
 
 			if (!string.IsNullOrEmpty(experianError))
-				Log.Error("Error in experian company check. Customer:{0} RefNumber:{1} Errors: {2}", customerId, experianRefNum, experianError);
+				Log.Warn("Error in experian company check. Customer:{0} RefNumber:{1} Errors: {2}", customerId, experianRefNum, experianError);
 
 			Log.Info("Filling Analytics with Score: {0} & max score: {1}", Score, MaxScore);
 

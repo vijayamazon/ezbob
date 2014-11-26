@@ -40,7 +40,7 @@
 
 		public static IEnumerable<SimpleMarketPlaceModel> GetMarketPlaces(this Customer customer) {
 			return
-				customer.CustomerMarketPlaces.Select(
+				customer.CustomerMarketPlaces.Where(m => m.Disabled == false).Select(
 					m =>
 					new SimpleMarketPlaceModel {
 						displayName = m.DisplayName,

@@ -30,7 +30,13 @@ namespace EzBob.Web.Infrastructure
                 userName = HttpContext.Current.User.Identity.Name;
             }
 
-            _log.ErrorFormat("\nUser name:\n{0}\nException:\n{1}", userName, filterContext.Exception);
+			if (filterContext.Exception is HttpAntiForgeryException) {
+				_log.WarnFormat("\nUser name:\n{0}\nException:\n{1}", userName, filterContext.Exception);
+			}
+			else {
+				_log.ErrorFormat("\nUser name:\n{0}\nException:\n{1}", userName, filterContext.Exception);
+			}
+            
 
 
             if(filterContext.HttpContext.Request.IsAjaxRequest())

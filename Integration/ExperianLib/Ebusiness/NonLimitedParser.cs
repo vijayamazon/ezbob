@@ -228,22 +228,19 @@
 						new QueryParameter("Date", historyData.Item1));
 				}
 
-				if (sicCodes1992.Count == sicDescs1992.Count)
-				{
-					for (int i = 0; i < sicCodes1992.Count; i++)
-					{
-						db.ExecuteNonQuery(
-							"InsertNonLimitedResultSicCodes",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("ExperianNonLimitedResultId", newId),
-							new QueryParameter("Code", sicCodes1992[i]),
-							new QueryParameter("Description", sicDescs1992[i]));
-					}
+				
+				for (int i = 0; i < Math.Max(sicCodes1992.Count, sicDescs1992.Count); i++) {
+					var sicCode = i < sicCodes1992.Count ? sicCodes1992[i] : null;
+					var sicDesc = i < sicDescs1992.Count ? sicDescs1992[i] : null;
+
+					db.ExecuteNonQuery(
+						"InsertNonLimitedResultSicCodes",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("ExperianNonLimitedResultId", newId),
+						new QueryParameter("Code", sicCode),
+						new QueryParameter("Description", sicDesc));
 				}
-				else
-				{
-					log.Alert("Illegal data parsed: num of sic codes and sic descriptions is not the same");
-				}
+				
 
 				foreach (DN11 dn11 in bankruptcyDetails)
 				{

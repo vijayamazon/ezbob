@@ -248,19 +248,6 @@
 			return ExecuteSync(out instance, customerId, underwriterId, customerId, amount, hasLoans, medalClassification);
 		}
 
-		public StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId)
-		{
-			GetUnfetchedDataErrors instance;
-
-			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
-
-			return new StringListActionResult
-			{
-				MetaData = result,
-				Records = instance.Errors
-			};
-		}
-
 		public PropertyStatusesActionResult GetPropertyStatuses()
 		{
 			GetPropertyStatuses instance;

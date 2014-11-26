@@ -612,9 +612,6 @@
 		ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, MedalClassification medalClassification);
 
 		[OperationContract]
-		StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
-
-		[OperationContract]
 		PropertyStatusesActionResult GetPropertyStatuses();
 
 		[OperationContract]
