@@ -12,7 +12,7 @@
 		private readonly ASafeLog log;
 		private readonly AConnection db;
 
-		private const decimal SetupFeeStep = 0.005M;
+		private const decimal SetupFeeStep = 0.0005M;
 
 		public OfferCalculator1(AConnection db, ASafeLog log)
 		{
@@ -93,9 +93,7 @@
 			decimal maxInterestRate = sr["MaxInterestRate"];
 
 
-			if (
-				!CheckBounderies(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate,
-				                 minInterestRate)) {
+			if (!CheckBounderies(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate,minInterestRate)) {
 				return;
 			}
 
@@ -130,7 +128,7 @@
 			upperBoundaryModel.LoanTerm = result.Period;
 			upperBoundaryModel.LoanAmount = amount;
 			upperBoundaryModel.SetupFeePercents = upperBoundary / 100;
-			upperBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
+			upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
 			var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel, db, log);
 			if (!upperBoundaryPricingModelCalculator.CalculateInterestRate())
 			{
@@ -139,13 +137,14 @@
 			}
 			upperBoundaryModel = upperBoundaryPricingModelCalculator.Model;
 
-			if ((upperBoundaryModel.MonthlyInterestRate*100 < minInterestRate ||
-				 upperBoundaryModel.MonthlyInterestRate*100 > maxInterestRate) &&
-				upperBoundaryModel.MonthlyInterestRate*100 < minInterestRate ||
-				upperBoundaryModel.MonthlyInterestRate*100 > maxInterestRate)
+			if (
+				(upperBoundaryModel.MonthlyInterestRate*100 < minInterestRate || upperBoundaryModel.MonthlyInterestRate*100 > maxInterestRate) 
+				&&
+				(lowerBoundaryModel.MonthlyInterestRate * 100 < minInterestRate || lowerBoundaryModel.MonthlyInterestRate * 100 > maxInterestRate)
+				)
 			{
 				result.Error =
-					string.Format("No interest rate found in range (min max setup fee) [{0:N2} - {1:N2}] and [{2:N2} - {3:N2}]",
+					string.Format("No interest rate found in range (min max setup fee) [{0:N2} - {1:N2}] and [{2:N2} - {3:N2}] (config)",
 								  upperBoundaryModel.MonthlyInterestRate*100, lowerBoundaryModel.MonthlyInterestRate*100,
 								  minInterestRate, maxInterestRate);
 				return false;
@@ -172,7 +171,7 @@
 				}
 				lowerBoundaryModel = lowerBoundaryPricingModelCalculator.Model;
 
-				if (lowerBoundaryModel.SetupFeePercents > maxSetupFee) {
+				if (lowerBoundaryModel.SetupFeePercents*100 > maxSetupFee) {
 					result.Error = "No interest rate found";
 					return;
 				}
@@ -226,21 +225,21 @@
 
 		private void RoundSetupFeeAndRecalculateInterestRate(decimal setupFee, OfferResult result, PricingModelModel templateModel)
 		{
-			setupFee *= 100;
-			decimal roundedSetupFee = Math.Ceiling(setupFee * 2) /2;
-			result.SetupFee = roundedSetupFee;
-
 			PricingModelModel model = templateModel.Clone();
 			model.LoanTerm = result.Period;
 			model.LoanAmount = result.Amount;
-			model.SetupFeePercents = roundedSetupFee;
-			model.SetupFeePounds = roundedSetupFee / 100 * model.LoanAmount;
+			model.SetupFeePercents = setupFee;
+			model.SetupFeePounds = setupFee * model.LoanAmount;
 
 			var pricingModelCalculator = new PricingModelCalculator(result.CustomerId, model, db, log);
 			pricingModelCalculator.Calculate();
 			
 			decimal roundedInterestRate = Math.Ceiling(pricingModelCalculator.Model.MonthlyInterestRate * 2000)/20;
 			result.InterestRate = roundedInterestRate;
+
+			decimal roundedSetupFee = Math.Ceiling(setupFee * 200) / 2;
+			result.SetupFee = roundedSetupFee;
+
 		}
 	}
 }

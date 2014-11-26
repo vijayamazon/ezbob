@@ -49,13 +49,13 @@
 					var interest = pricingCalculator.GetInterestRate(input.Amount, outModel.RepaymentPeriod, outModel.CustomerId, pricingScenario);
 					if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate) {
 						outModel.InterestRate = RoundInterest(interest);
-						outModel.SetupFee = setupFee;
+						outModel.SetupFee = RoundSetupFee(setupFee/100);
 						return outModel;
 					}
 
 					if (interest > interestRateRange.MaxInterestRate && wasTooSmallInterest) {
 						outModel.InterestRate = RoundInterest(interest);
-						outModel.SetupFee = setupFee;
+						outModel.SetupFee = RoundSetupFee(setupFee/100);
 						return outModel;
 					}
 
@@ -81,14 +81,14 @@
 					if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate)
 					{
 						outModel.InterestRate = RoundInterest(interest);
-						outModel.SetupFee = setupFee;
+						outModel.SetupFee = RoundSetupFee(setupFee/100);
 						return outModel;
 					}
 
 					if (interest < interestRateRange.MinInterestRate && wasTooBigIneteres)
 					{
 						outModel.InterestRate = RoundInterest(interest);
-						outModel.SetupFee = setupFee;
+						outModel.SetupFee = RoundSetupFee(setupFee/100);
 						return outModel;
 					}
 
@@ -168,12 +168,12 @@
 
 		private decimal RoundInterest(decimal interest) 
 		{
-			return Math.Ceiling(interest * 2000)/20;
+			return Math.Ceiling(Math.Round(interest, 4, MidpointRounding.AwayFromZero) * 2000)/20;
 		}
 
 		private decimal RoundSetupFee(decimal setupFee)
 		{
-			return Math.Ceiling(setupFee * 2000) / 20;
+			return Math.Ceiling(setupFee * 200) / 2;
 		}
 	}
 }
