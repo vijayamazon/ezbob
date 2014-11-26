@@ -724,7 +724,7 @@
 				{
 					if (activeLoan.Approved.HasValue)
 					{
-						activeLoan.WidthPercent = maxLoan.Approved.HasValue ? activeLoan.Approved.Value/maxLoan.Approved.Value : 0;
+						activeLoan.WidthPercent = maxLoan.Approved.HasValue && maxLoan.Approved.Value > 0 ? activeLoan.Approved.Value/maxLoan.Approved.Value : 0;
 					}
 					activeLoan.BalanceWidthPercent *= (decimal) activeLoan.WidthPercent;
 					activeLoan.LoanAmountWidthPercent = activeLoan.LoanAmountPercent*(decimal) activeLoan.WidthPercent;
