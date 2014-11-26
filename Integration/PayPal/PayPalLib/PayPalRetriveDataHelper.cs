@@ -110,7 +110,8 @@ namespace EzBob.PayPal
 						EndDate = endDate,
 						ErrorRetryingInfo = errorRetryingInfo,
 						OpenTimeOutInMinutes = CurrentValues.Instance.PayPalOpenTimeoutInMinutes,
-						SendTimeoutInMinutes = CurrentValues.Instance.PayPalSendTimeoutInMinutes
+						SendTimeoutInMinutes = CurrentValues.Instance.PayPalSendTimeoutInMinutes,
+						DaysPerRequest = CurrentValues.Instance.PayPalDaysPerRequest
 					};
 
 					MP_PayPalTransaction mpTransaction = null;

@@ -17,6 +17,9 @@ namespace EzBob.PayPalServiceLib.Common
 		public int OpenTimeOutInMinutes { get; set; }
 
 		public int SendTimeoutInMinutes { get; set; }
+
+		public int DaysPerRequest { get; set; }
+
 	}
 	
 }

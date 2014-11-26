@@ -2205,6 +2205,12 @@ namespace ConfigManager {
 			get { return this[Variables.PayPalFirstTimeWait]; }
 		}
 
+		public virtual VariableValue PayPalDaysPerRequest
+		{
+			get { return this[Variables.PayPalDaysPerRequest]; }
+			
+		}
+
 		public virtual VariableValue YodleeSoapServer {
 			get { return this[Variables.YodleeSoapServer]; }
 		}

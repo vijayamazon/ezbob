@@ -52,11 +52,11 @@ namespace EzBob.PayPalServiceLib {
 			return new PayPalAPIInterfaceClient(binding, addr);
 		}
 
-		private List<Tuple<DateTime, DateTime>> GetDailyRanges(DateTime startDate, DateTime endDate) {
+		private List<Tuple<DateTime, DateTime>> GetDailyRanges(DateTime startDate, DateTime endDate, int daysPerRequest) {
 			var rez = new List<Tuple<DateTime, DateTime>>();
 
 			DateTime fromDate = startDate;
-			DateTime toDate = fromDate.AddDays(1);
+			DateTime toDate = fromDate.AddDays(daysPerRequest);
 			while (true) {
 				if (toDate >= endDate) {
 					rez.Add(new Tuple<DateTime, DateTime>(fromDate, endDate));
@@ -65,7 +65,7 @@ namespace EzBob.PayPalServiceLib {
 
 				rez.Add(new Tuple<DateTime, DateTime>(fromDate, toDate));
 				fromDate = toDate;
-				toDate = toDate.AddDays(1);
+				toDate = toDate.AddDays(daysPerRequest);
 				fromDate = fromDate.AddSeconds(1);
 			}
 
@@ -77,7 +77,7 @@ namespace EzBob.PayPalServiceLib {
 			DateTime endDate = reqInfo.EndDate;
 			var requestsCounter = new RequestsCounterData();
 
-			var ranges = GetDailyRanges(startDate, endDate);
+			var ranges = GetDailyRanges(startDate, endDate, reqInfo.DaysPerRequest);
 
 			int counter = 0;
 			int daysFailedSoFar = 0;
