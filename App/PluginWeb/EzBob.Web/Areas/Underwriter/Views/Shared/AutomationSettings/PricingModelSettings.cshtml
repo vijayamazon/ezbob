@@ -6,12 +6,14 @@
 
 @helper PricingModelSettings()
 {
+    <h3>Pricing model settings</h3>
     <div class="alert-block">
-        <select id="PricingModelScenarioSettings" class="selectheight">
+        <select id="PricingModelScenarioSettings" class="selectheight form-control">
             <% _.each(scenarios, function(scenario) { %>
-                <option value="<%- scenario%>"><%- scenario%></option>
+            <option value="<%- scenario%>"><%- scenario%></option>
             <%});%>
         </select>
+        <br/>
         <table class="table squeezed">
             <thead class="box">
                 <tr class="box-title">

@@ -67,6 +67,7 @@ EzBob.Underwriter.StrategySettingsView = Backbone.View.extend({
     });
 
     this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
+    this.pricingModelScenarios.fetch();
     this.pricingModelModel = new EzBob.Underwriter.SettingsPricingModelModel();
     this.pricingModelView = new EzBob.Underwriter.SettingsPricingModelView({
       el: pricingModel,
