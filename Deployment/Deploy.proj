@@ -43,6 +43,7 @@
 		<!-- Exec Command="unlocker.exe $(BuildBin) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
 				
 		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
+		<Copy SourceFiles="$(Src)\App\pluginweb\EzBob.Web\bin\Debug\*.pdb" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\bin" />
 		
 		<WebCopy CopyFrom="$(Src)\App\EzTvDashboard\EzTvDashboard\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzTvDashboard\"/>
 		
@@ -57,6 +58,7 @@
 		
 		<MultiCopy CopyFrom="$(Src)\Backend\StrategiesActivator\bin\debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\StrategiesActivator\" />
 		<MultiCopy CopyFrom="$(Src)\App\EzService\EzServiceHost\bin\Debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\EzServiceHost\" />
+		<Copy SourceFiles="$(Src)\App\EzService\EzServiceHost\bin\Debug\*.pdb" DestinationFolder="$(BuildBin)\%(Edition.Identity)\EzServiceHost\" />
 		
 		<ItemGroup><SqlRelatedFiles Include="$(Src)\sql\*.*"/></ItemGroup>
 		<Copy SourceFiles="@(SqlRelatedFiles)" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\" SkipUnchangedFiles="true" />
