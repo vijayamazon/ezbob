@@ -2515,12 +2515,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackFillMedals", ReplyAction="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackFillMedals();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackFillMedals", ReplyAction="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> Temp_BackFillMedalsAsync();
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckLtdCompanyCache", ReplyAction="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse")]
         ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
         
@@ -3001,12 +2995,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateOffer", ReplyAction="http://tempuri.org/IEzService/CalculateOfferResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
-        ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> GetUnfetchedDataErrorsAsync(int underwriterId, int customerId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPropertyStatuses", ReplyAction="http://tempuri.org/IEzService/GetPropertyStatusesResponse")]
         ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult GetPropertyStatuses();
         
@@ -3030,6 +3018,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendPendingMails", ReplyAction="http://tempuri.org/IEzService/SendPendingMailsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendPendingMailsAsync(int underwriterId, int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackFillMedals", ReplyAction="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackFillMedals();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackFillMedals", ReplyAction="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> Temp_BackFillMedalsAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
@@ -3567,14 +3561,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackFillMedals() {
-            return base.Channel.Temp_BackFillMedals();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> Temp_BackFillMedalsAsync() {
-            return base.Channel.Temp_BackFillMedalsAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum) {
@@ -4217,14 +4203,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateOfferAsync(underwriterId, customerId, amount, hasLoans, medalClassification);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId) {
-            return base.Channel.GetUnfetchedDataErrors(underwriterId, customerId);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> GetUnfetchedDataErrorsAsync(int underwriterId, int customerId) {
-            return base.Channel.GetUnfetchedDataErrorsAsync(underwriterId, customerId);
-        }
-        
         public ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult GetPropertyStatuses() {
             return base.Channel.GetPropertyStatuses();
         }
@@ -4255,6 +4233,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendPendingMailsAsync(int underwriterId, int customerId) {
             return base.Channel.SendPendingMailsAsync(underwriterId, customerId);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackFillMedals() {
+            return base.Channel.Temp_BackFillMedals();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> Temp_BackFillMedalsAsync() {
+            return base.Channel.Temp_BackFillMedalsAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2) {

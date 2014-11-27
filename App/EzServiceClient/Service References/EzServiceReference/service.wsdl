@@ -132,12 +132,6 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_Temp_BackFillMedals_InputMessage">
-    <wsdl:part name="parameters" element="tns:Temp_BackFillMedals" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_Temp_BackFillMedals_OutputMessage">
-    <wsdl:part name="parameters" element="tns:Temp_BackFillMedalsResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_CheckLtdCompanyCache_InputMessage">
     <wsdl:part name="parameters" element="tns:CheckLtdCompanyCache" />
   </wsdl:message>
@@ -618,12 +612,6 @@
   <wsdl:message name="IEzService_CalculateOffer_OutputMessage">
     <wsdl:part name="parameters" element="tns:CalculateOfferResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetUnfetchedDataErrors_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetUnfetchedDataErrors" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetUnfetchedDataErrors_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetUnfetchedDataErrorsResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_GetPropertyStatuses_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPropertyStatuses" />
   </wsdl:message>
@@ -647,6 +635,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_SendPendingMails_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendPendingMailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_Temp_BackFillMedals_InputMessage">
+    <wsdl:part name="parameters" element="tns:Temp_BackFillMedals" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_Temp_BackFillMedals_OutputMessage">
+    <wsdl:part name="parameters" element="tns:Temp_BackFillMedalsResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
@@ -1193,10 +1187,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
-    <wsdl:operation name="Temp_BackFillMedals">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/Temp_BackFillMedals" message="tns:IEzService_Temp_BackFillMedals_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse" message="tns:IEzService_Temp_BackFillMedals_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="CheckLtdCompanyCache">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckLtdCompanyCache" message="tns:IEzService_CheckLtdCompanyCache_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse" message="tns:IEzService_CheckLtdCompanyCache_OutputMessage" />
@@ -1517,10 +1507,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateOffer" message="tns:IEzService_CalculateOffer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateOfferResponse" message="tns:IEzService_CalculateOffer_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetUnfetchedDataErrors">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors" message="tns:IEzService_GetUnfetchedDataErrors_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse" message="tns:IEzService_GetUnfetchedDataErrors_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetPropertyStatuses">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatuses" message="tns:IEzService_GetPropertyStatuses_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatusesResponse" message="tns:IEzService_GetPropertyStatuses_OutputMessage" />
@@ -1536,6 +1522,10 @@
     <wsdl:operation name="SendPendingMails">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendPendingMails" message="tns:IEzService_SendPendingMails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SendPendingMailsResponse" message="tns:IEzService_SendPendingMails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Temp_BackFillMedals">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/Temp_BackFillMedals" message="tns:IEzService_Temp_BackFillMedals_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse" message="tns:IEzService_Temp_BackFillMedals_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
@@ -1959,15 +1949,6 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="Temp_BackFillMedals">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/Temp_BackFillMedals" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="CheckLtdCompanyCache">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CheckLtdCompanyCache" style="document" />
       <wsdl:input>
@@ -2688,15 +2669,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetUnfetchedDataErrors">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetUnfetchedDataErrors" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetPropertyStatuses">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetPropertyStatuses" style="document" />
       <wsdl:input>
@@ -2726,6 +2698,15 @@
     </wsdl:operation>
     <wsdl:operation name="SendPendingMails">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SendPendingMails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Temp_BackFillMedals">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/Temp_BackFillMedals" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

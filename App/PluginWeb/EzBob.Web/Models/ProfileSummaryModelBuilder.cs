@@ -363,9 +363,7 @@
 			}
 		}
 
-		private void BuildDataAlerts(Customer customer, ProfileSummaryModel summary, int userId)
-		{
-			var errorsList = serviceClient.Instance.GetUnfetchedDataErrors(userId, customer.Id).Records;
+		private void BuildDataAlerts(Customer customer, ProfileSummaryModel summary, int userId) {
 			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			var errors = new StringBuilder();
 			
@@ -405,11 +403,6 @@
 				{
 					AppendLi(errors, dirError);
 				}
-			}
-
-			foreach (string singleError in errorsList)
-			{
-				AppendLi(errors, singleError);
 			}
 
 			string errorStr = errors.ToString();
