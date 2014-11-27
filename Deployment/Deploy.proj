@@ -44,7 +44,7 @@
 				
 		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
 		<ItemGroup><WebPdbFiles Include="$(Src)\App\pluginweb\EzBob.Web\bin\*.pdb"/></ItemGroup>
-		<Copy SourceFiles="$(WebPdbFiles)" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\bin" />
+		<Copy SourceFiles="$(WebPdbFiles)" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\bin\" />
 		
 		<WebCopy CopyFrom="$(Src)\App\EzTvDashboard\EzTvDashboard\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzTvDashboard\"/>
 		
