@@ -22,15 +22,26 @@
 		public decimal SetupFee { get; set; }
 		public string Error { get; set; }
 
-		public bool Equals(OfferOutputModel other)
-		{
-			if (Amount != other.Amount || ScenarioName != other.ScenarioName || InterestRate != other.InterestRate || SetupFee != other.SetupFee)
+		public bool Equals(OfferOutputModel other) {
+			Error = Error ?? string.Empty;
+			if (ScenarioName != other.ScenarioName)
 			{
-				Error = Error == null ? "Mismatch in two offer calculations" : Error + ", Mismatch in two offer calculations";
+				Error += " Mismatch in pricing scenario";
 				return false;
 			}
 
-			return true;
+			if (Math.Abs(InterestRate - other.InterestRate) == 0.05M || Math.Abs(SetupFee - other.SetupFee) == 0.5M)
+			{
+				Error += " Mistmatch due to rounding issues";
+				return true;
+			}
+
+			if (InterestRate == other.InterestRate && SetupFee == other.SetupFee)
+			{
+				return true;
+			}
+
+			return false;
 		}
 
 		public void SaveToDb(AConnection db)

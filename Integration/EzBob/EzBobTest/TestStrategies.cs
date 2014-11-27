@@ -336,10 +336,10 @@ namespace EzBobTest
 		public void TestOfferCalculation() {
 			var calc = new OfferDualCalculator(m_oDB, m_oLog);
 
-			//var offer1 = calc.CalculateOffer(18643, DateTime.UtcNow, 20000, false, MedalClassification.Gold);
-			//Assert.AreEqual(5.5M, offer1.SetupFee);
-			//Assert.AreEqual(4.5M, offer1.InterestRate);
-			//return;
+			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, MedalClassification.Gold);
+			Assert.AreEqual(5.5M, offer1.SetupFee);
+			Assert.AreEqual(4.5M, offer1.InterestRate);
+			return;
 			int calculatedOffers = 0;
 			int failedVerificationOffers = 0;
 			m_oDB.ForEachRowSafe(sr => {

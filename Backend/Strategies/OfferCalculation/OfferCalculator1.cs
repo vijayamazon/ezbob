@@ -22,20 +22,17 @@
 
 		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, bool hasLoans, MedalClassification medalClassification)
 		{
-			var result = new OfferResult
-				{
-					CustomerId = customerId,
-					CalculationTime = calculationTime,
-					Amount = amount,
-					MedalClassification = medalClassification
-				};
+			var result = new OfferResult {
+				CustomerId = customerId,
+				CalculationTime = calculationTime,
+				Amount = amount,
+				MedalClassification = medalClassification,
+				Period = 12, // Period is always 12
+				IsEu = false
+			};
 
-			// Period is always 12
-			result.Period = 12;
-
+			
 			// We always use standard loan type
-			result.IsEu = false;
-
 			// We use standard loan type
 			SafeReader sr = db.GetFirst("GetStandardLoanTypeId", CommandSpecies.StoredProcedure);
 			if (sr.IsEmpty)
@@ -63,7 +60,9 @@
 			var getPricingModelModelInstance = new GetPricingModelModel(customerId, result.ScenarioName, db, log);
 			getPricingModelModelInstance.Execute();
 			PricingModelModel templateModel = getPricingModelModelInstance.Model;
-
+			templateModel.LoanAmount = amount;
+			templateModel.LoanTerm = result.Period;
+			templateModel.TenureMonths = result.Period*templateModel.TenurePercents;
 			CalculateInterestRateAndSetupFee(customerId, amount, medalClassification, result, templateModel);
 			
 			return result;
@@ -112,8 +111,6 @@
 			decimal upperBoundary = maxSetupFee;
 
 			PricingModelModel lowerBoundaryModel = templateModel.Clone();
-			lowerBoundaryModel.LoanTerm = result.Period;
-			lowerBoundaryModel.LoanAmount = amount;
 			lowerBoundaryModel.SetupFeePercents = lowerBoundary / 100;
 			lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
 			var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel, db, log);
@@ -125,8 +122,6 @@
 			lowerBoundaryModel = lowerBoundaryPricingModelCalculator.Model;
 
 			PricingModelModel upperBoundaryModel = templateModel.Clone();
-			upperBoundaryModel.LoanTerm = result.Period;
-			upperBoundaryModel.LoanAmount = amount;
 			upperBoundaryModel.SetupFeePercents = upperBoundary / 100;
 			upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
 			var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel, db, log);
@@ -158,8 +153,6 @@
 		                                      decimal minInterestRate)
 		{
 			PricingModelModel lowerBoundaryModel = templateModel.Clone();
-			lowerBoundaryModel.LoanTerm = result.Period;
-			lowerBoundaryModel.LoanAmount = amount;
 			lowerBoundaryModel.SetupFeePercents = minSetupFee / 100;
 			lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
 
@@ -192,8 +185,6 @@
 		                        decimal minSetupFee, decimal maxSetupFee, decimal maxInterestRate, decimal minInterestRate)
 		{
 			PricingModelModel upperBoundaryModel = templateModel.Clone();
-			upperBoundaryModel.LoanTerm = result.Period;
-			upperBoundaryModel.LoanAmount = amount;
 			upperBoundaryModel.SetupFeePercents = maxSetupFee / 100;
 			upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
 
@@ -226,8 +217,6 @@
 		private void RoundSetupFeeAndRecalculateInterestRate(decimal setupFee, OfferResult result, PricingModelModel templateModel)
 		{
 			PricingModelModel model = templateModel.Clone();
-			model.LoanTerm = result.Period;
-			model.LoanAmount = result.Amount;
 			model.SetupFeePercents = setupFee;
 			model.SetupFeePounds = setupFee * model.LoanAmount;
 
