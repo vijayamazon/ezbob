@@ -35,7 +35,17 @@ BEGIN
 		@Turnover OUTPUT, @IsParsedBank OUTPUT, @TurnoverFrom OUTPUT, @TurnoverTo OUTPUT, @TurnoverDayCount OUTPUT
 
 	------------------------------------------------------------------------------
+
+	-- Ugly patch: currently Yodlee CSV (@IsParsedBank = 1) contains up to 12 months of data
+	-- while Yodlee direct (@IsParsedBank = 0) contains up to 3 month of data: i.e. when
+	-- we request data for the last year from Yodlee direct we receive only 3 months of data.
+	-- Hence this multiplication by 4 if number of days is about 3 months.
 	
+	IF @IsParsedBank = 0 AND @MonthCount = 12 AND DATEDIFF(day, @TurnoverFrom, @TurnoverTo) < 100
+		SET @Turnover = @Turnover * 4.0
+
+	------------------------------------------------------------------------------
+
 	SELECT
 		RowType          = 'Turnover',
 		MpID             = @MpID,

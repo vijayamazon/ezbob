@@ -28,7 +28,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = cmp.OriginationDate,
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'common'
 	FROM
 		MP_CustomerMarketPlace cmp
 		INNER JOIN MP_MarketplaceType mt
@@ -53,7 +54,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(r.DateFrom),
-		TwoTime          = MIN(r.DateTo)
+		TwoTime          = MIN(r.DateTo),
+		Source           = 'hmrc'
 	FROM
 		MP_VatReturnRecords r
 		INNER JOIN MP_CustomerMarketPlace cmp
@@ -83,7 +85,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.PurchaseDate),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'amazon'
 	FROM
 		MP_AmazonOrder r
 		INNER JOIN MP_AmazonOrderItem i ON r.Id = i.AmazonOrderId
@@ -112,7 +115,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.PurchaseDate),
-		TwoTime          = MIN(i.PaymentDate)
+		TwoTime          = MIN(i.PaymentDate),
+		Source           = 'chagra'
 	FROM
 		MP_ChannelGrabberOrder r
 		INNER JOIN MP_ChannelGrabberOrderItem i ON r.Id = i.OrderId
@@ -141,7 +145,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(r.RegistrationDate),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'ebay'
 	FROM
 		MP_EbayUserData r
 		INNER JOIN MP_CustomerMarketPlace cmp
@@ -169,7 +174,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.OrderDate),
-		TwoTime          = MIN(i.OrderDateIso)
+		TwoTime          = MIN(i.OrderDateIso),
+		Source           = 'ekm'
 	FROM
 		MP_EkmOrder r
 		INNER JOIN MP_EkmOrderItem i ON r.Id = i.OrderId
@@ -198,7 +204,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.dated_on),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'free agent - invoices'
 	FROM
 		MP_FreeAgentRequest r
 		INNER JOIN MP_FreeAgentInvoice i ON r.Id = i.RequestId
@@ -216,7 +223,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 	--
-	-- FreeAgent - Expences
+	-- FreeAgent - Expenses
 	--
 	------------------------------------------------------------------------------
 
@@ -227,7 +234,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.dated_on),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'free agent - expenses'
 	FROM
 		MP_FreeAgentRequest r
 		INNER JOIN MP_FreeAgentExpense i ON r.Id = i.RequestId
@@ -256,7 +264,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.Created),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'pay pal'
 	FROM
 		MP_PayPalTransaction r
 		INNER JOIN MP_PayPalTransactionItem2 i ON r.Id = i.TransactionId
@@ -285,7 +294,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.[date]),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'paypoint'
 	FROM
 		MP_PayPointOrder r
 		INNER JOIN MP_PayPointOrderItem i ON r.Id = i.OrderId
@@ -314,7 +324,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.[date]),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'sage - invoices'
 	FROM
 		MP_SageRequest r
 		INNER JOIN MP_SageSalesInvoice i ON r.Id = i.RequestId
@@ -343,7 +354,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.[date]),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'sage - purchase'
 	FROM
 		MP_SageRequest r
 		INNER JOIN MP_SagePurchaseInvoice i ON r.Id = i.RequestId
@@ -372,7 +384,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.[date]),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'sage - incomes'
 	FROM
 		MP_SageRequest r
 		INNER JOIN MP_SageIncome i ON r.Id = i.RequestId
@@ -401,7 +414,8 @@ BEGIN
 		IsPaymentAccount = mt.IsPaymentAccount,
 		InternalID       = mt.InternalID,
 		OneTime          = MIN(i.[date]),
-		TwoTime          = CONVERT(DATETIME, NULL)
+		TwoTime          = CONVERT(DATETIME, NULL),
+		Source           = 'sage - exp'
 	FROM
 		MP_SageRequest r
 		INNER JOIN MP_SageExpenditure i ON r.Id = i.RequestId
@@ -431,7 +445,8 @@ BEGIN
 		InternalID       = mt.InternalID,
 		-- if at least one of dates exists - good enough
 		OneTime          = MIN(ISNULL(t.postDate, t.transactionDate)),
-		TwoTime          = MIN(ISNULL(t.transactionDate, t.postDate))
+		TwoTime          = MIN(ISNULL(t.transactionDate, t.postDate)),
+		Source           = 'yodlee'
 	FROM
 		MP_YodleeOrder r
 		INNER JOIN MP_YodleeOrderItem i ON r.Id = i.OrderId

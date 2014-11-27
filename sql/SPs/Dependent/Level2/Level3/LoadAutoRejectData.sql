@@ -36,7 +36,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@BrokerID              = c.BrokerID
+		@BrokerID              = c.BrokerID,
 		@FraudStatus           = c.FraudStatus,
 		@CustomerStatus        = s.Name,
 		@CustomerStatusEnabled = s.IsEnabled
@@ -100,7 +100,7 @@ BEGIN
 		ApprovedCrID          = @ApprovedCrID,
 		BrokerID              = ISNULL(@BrokerID, 0),
 		FraudStatus           = ISNULL(@FraudStatus, 3), -- under investigation
-		CustomerStatusName    = ISNULL(@CustomerStatus, 'Unknown')
+		CustomerStatusName    = ISNULL(@CustomerStatus, 'Unknown'),
 		CustomerStatusEnabled = ISNULL(@CustomerStatusEnabled, 0),
 		ConsumerScore         = @ConsumerScore,
 		BusinessScore         = @CompanyScore,

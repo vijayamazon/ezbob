@@ -26,14 +26,63 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	SELECT
+		n.Id
+	INTO
+		#boxes
+	FROM
+		MP_VatReturnEntryNames n
+	WHERE
+		n.Name LIKE '%(Box 6)%'
 
 	------------------------------------------------------------------------------
 
 	SELECT
-		@Turnover = SUM(i.TotalCost),
-		@TurnoverDayCount = COUNT(DISTINCT CONVERT(DATE, i.OrderDate)),
-		@TurnoverFrom = MIN(i.OrderDate),
-		@TurnoverTo = MAX(i.OrderDate)
+		o.DateFrom,
+		o.DateTo,
+		o.BusinessId,
+		MAX(o.Id) AS Id
+	INTO
+		#periods
+	FROM
+		MP_VatReturnRecords o
+	WHERE
+		ISNULL(o.IsDeleted, 0) = 0
+		AND o.CustomerMarketPlaceId = @MpID
+	GROUP BY
+		o.DateFrom,
+		o.DateTo,
+		o.BusinessId
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		DateFrom   = dbo.udfMinDate(o.DateFrom, o.DateTo),
+		DateTo     = dbo.udfMaxDate(o.DateFrom, o.DateTo),
+		BusinessID = o.BusinessId,
+		Amount     = i.Amount,
+		Ratio      = dbo.udfDateIntersectionRatio(o.DateFrom, dbo.udfJustBeforeMidnight(o.DateTo), @DateFrom, @DateTo)
+	INTO
+		#tuples
+	FROM
+		MP_VatReturnEntries i
+		INNER JOIN #periods o ON i.RecordId = o.Id
+		INNER JOIN #boxes b ON i.NameId = b.Id
+	WHERE
+		ISNULL(i.IsDeleted, 0) = 0
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@Turnover = SUM(i.Amount * i.Ratio),
+		@TurnoverFrom = MIN(i.DateFrom),
+		@TurnoverTo = MAX(i.DateTo)
+	FROM
+		#tuples i
+	WHERE
+		i.Ratio != 0
+
+	SET @TurnoverDayCount = DATEDIFF(day, ISNULL(@TurnoverFrom, @DateFrom), ISNULL(@TurnoverTo, @DateTo))
 
 	------------------------------------------------------------------------------
 	
@@ -42,13 +91,17 @@ BEGIN
 		MpID             = @MpID,
 		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'),
 		TurnoverType     = 'Total',
-		Turnover         = @Turnover,
-		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE @Turnover / @MonthCount * 12.0 END),
+		Turnover         = ISNULL(@Turnover, 0),
+		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE ISNULL(@Turnover, 0) / @MonthCount * 12.0 END),
 		MonthCount       = @MonthCount,
-		DayCount         = @TurnoverDayCount,
-		DateFrom         = @TurnoverFrom,
-		DateTo           = @TurnoverTo
+		DayCount         = ISNULL(@TurnoverDayCount, 0),
+		DateFrom         = ISNULL(@TurnoverFrom, @DateFrom),
+		DateTo           = ISNULL(@TurnoverTo, @DateTo)
 
 	------------------------------------------------------------------------------
+
+	DROP TABLE #tuples
+	DROP TABLE #periods
+	DROP TABLE #boxes
 END
 GO
