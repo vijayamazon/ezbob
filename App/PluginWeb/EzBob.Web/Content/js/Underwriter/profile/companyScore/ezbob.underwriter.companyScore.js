@@ -153,7 +153,7 @@ EzBob.Underwriter.ChangeCompanyView = Backbone.Marionette.ItemView.extend({
 		this.ui.addressCaption.hide();
 		this.modelBinder.bind(this.model, this.el, this.bindings);
 		this.ui.typeOfBusiness.focus();
-	},
+    },
 
 	bindings: {
 		CompanyName: "#CompanyName",
@@ -191,7 +191,7 @@ EzBob.Underwriter.ChangeCompanyView = Backbone.Marionette.ItemView.extend({
 
 		BlockUi("On");
 
-		$.get(window.gRootPath + "Account/CheckingCompany", { companyName: this.ui.companyName.val(), postcode: postcode, filter: filter, refNum: this.ui.companyNum.val() })
+	    $.get(window.gRootPath + "Account/CheckingCompany", { companyName: this.ui.companyName.val(), postcode: postcode, filter: filter, refNum: this.ui.companyNum.val(), customerId: this.model.get("CustomerId") })
 			.success(function (reqData) {
 				if (reqData == undefined || reqData.success === false)
 					EzBob.ShowMessage("Targeting service is not responding", "Error", null, "OK");

@@ -502,7 +502,9 @@ namespace EzBob.Web.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		public JsonResult CheckingCompany(string postcode, string companyName, string filter, string refNum) {
+		public JsonResult CheckingCompany(string postcode, string companyName, string filter, string refNum, int? customerId = null) {
+			ms_oLog.Debug("CheckingCompany cId:{0}, postcode:{1}, companuName:{2}, filter:{3}, refnum:{4}", customerId, postcode, companyName, filter, refNum);
+			
 			var nFilter = TargetResults.LegalStatus.DontCare;
 
 			switch (filter.ToUpper()) {
@@ -517,8 +519,13 @@ namespace EzBob.Web.Controllers {
 
 			try {
 				var service = new EBusinessService(m_oDB);
-
-				TargetResults result = service.TargetBusiness(companyName, postcode, m_oContext.UserId, nFilter, refNum);
+				if (customerId == null && m_oContext.Customer == null) {
+					throw new Exception("Customer id is not provided");
+				}
+				if (customerId == null) {
+					customerId = m_oContext.Customer.Id;
+				}
+				TargetResults result = service.TargetBusiness(companyName, postcode, customerId.Value, nFilter, refNum);
 				return Json(result.Targets, JsonRequestBehavior.AllowGet);
 			}
 			catch (WebException we) {
