@@ -120,10 +120,8 @@
 			{
 				if (data.Data != null && data.Data.Count > 0)
 				{
-					List<DateTime> keys = data.Data.Keys.ToList();
-					keys.Sort();
-
-					data.Data[keys[keys.Count - 1]].AddRange(feedBackParams);
+					DateTime lastDate = data.Data.Keys.Max();
+					data.Data[lastDate].AddRange(feedBackParams);
 				}
 				else
 				{

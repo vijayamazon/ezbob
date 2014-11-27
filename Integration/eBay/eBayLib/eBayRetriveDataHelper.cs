@@ -193,14 +193,22 @@
 					    }
 
 					    if ( feedBackParams.Count > 0 )
-					    {
-						    data.AddData( afDate.Value, feedBackParams );
-					    }
+						{
+							if (data.Data != null && data.Data.Count > 0)
+							{
+								DateTime lastDate = data.Data.Keys.Max();
+								data.Data[lastDate].AddRange(feedBackParams);
+							}
+							else
+							{
+								data.AddData(afDate.Value, feedBackParams);
+							}
+						}
                     }
 				} );
                     
 			}
-			#endregion					
+			#endregion
 		}
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
