@@ -380,38 +380,33 @@
 			}
 		}
 
-		private AutoDecisionRejectionResponse ProcessRejections()
-		{
+		private AutoDecisionRejectionResponse ProcessRejections() {
 			var autoDecisionRejectionResponse = new AutoDecisionRejectionResponse();
 
-			if (newCreditLineOption != NewCreditLineOption.UpdateEverythingAndGoToManualDecision &&
-			    avoidAutomaticDecision != 1)
-			{
-				if (dataGatherer.EnableAutomaticReRejection)
-				{
-					new ReRejection(customerId, DB, Log).MakeDecision(autoDecisionRejectionResponse);
-				}
+			if (newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision)
+				return autoDecisionRejectionResponse;
 
-				if (!autoDecisionRejectionResponse.IsReRejected &&
-				    dataGatherer.EnableAutomaticRejection &&
-				    !isViaBroker &&
-				    !dataGatherer.IsAlibaba)
-				{
-					var rejection = new Rejection(customerId, dataGatherer.TotalSumOfOrders1YTotalForRejection,
-					                              dataGatherer.TotalSumOfOrders3MTotalForRejection,
-					                              dataGatherer.Yodlee1YForRejection,
-					                              dataGatherer.Yodlee3MForRejection, dataGatherer.MarketplaceSeniorityDays,
-					                              dataGatherer.MaxExperianConsumerScore, dataGatherer.MaxCompanyScore,
-					                              dataGatherer.CustomerStatusIsEnabled,
-					                              dataGatherer.CustomerStatusIsWarning, isViaBroker,
-					                              Utils.IsLimitedCompany(dataGatherer.TypeOfBusiness), companySeniorityDays,
-					                              dataGatherer.IsOffline, dataGatherer.CustomerStatusName, DB, Log).MakeDecision(
-						                              autoDecisionRejectionResponse);
-					Log.Debug(rejection.ToString());
-				}
-			}
+			if (avoidAutomaticDecision == 1)
+				return autoDecisionRejectionResponse;
+
+			if (dataGatherer.EnableAutomaticReRejection)
+				new ReRejection(customerId, DB, Log).MakeDecision(autoDecisionRejectionResponse);
+
+			if (autoDecisionRejectionResponse.IsReRejected)
+				return autoDecisionRejectionResponse;
+
+			if (!dataGatherer.EnableAutomaticRejection)
+				return autoDecisionRejectionResponse;
+
+			if (dataGatherer.IsAlibaba)
+				return autoDecisionRejectionResponse;
+
+			new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(
+				customerId, DB, Log
+			).Init().MakeDecision(autoDecisionRejectionResponse);
+
 			return autoDecisionRejectionResponse;
-		}
+		} // ProcessRejections
 
 		private void GetLandRegistry()
 		{

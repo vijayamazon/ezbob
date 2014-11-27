@@ -60,11 +60,11 @@ BEGIN
 		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, '3FA5E327-FCFD-483B-BA5A-DC1815747A28'),
 		TurnoverType     = 'Total',
 		Turnover         = @Turnover,
-		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE @Turnover / @MonthCount * 12.0 END),
 		MonthCount       = @MonthCount,
 		DayCount         = @TurnoverDayCount,
 		DateFrom         = @TurnoverFrom,
-		DateTo           = @TurnoverTo
+		DateTo           = @TurnoverTo,
+		IsPaymentAccount = CONVERT(BIT, 1)
 
 	------------------------------------------------------------------------------
 

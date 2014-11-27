@@ -94,12 +94,6 @@
 			public decimal Turnover { get; set; }
 
 			/// <summary>
-			/// Annualized turnover value, calculated as <see cref="Turnover "/> / <see cref="DayCount"/> * 365.
-			/// </summary>
-			[UsedImplicitly]
-			public decimal Annualized { get; set; }
-
-			/// <summary>
 			/// Requested period length in months.
 			/// </summary>
 			[UsedImplicitly]
@@ -147,15 +141,13 @@
 				oLog.Debug(
 					"Turnover for customer marketplace:\n" +
 					"\tmarketplace: id {1}, type {2}\n" +
-					"\t{0} (because of type {5})\n" +
-					"\tturnover: {3}, annualized: {4}\n" +
-					"\tmonth count: {6}, day count: {7}\n" +
-					"\tdata from: {8} to {9} inclusive",
+					"\t{0} (because of type {4})\n" +
+					"\tturnover: {3}, month count: {5}, day count: {6}\n" +
+					"\tdata from: {7} to {8} inclusive",
 					IsTotal ? "Accepted" : "Ignored",
 					MpID,
 					MpTypeInternalID,
 					Turnover,
-					Annualized,
 					TurnoverType,
 					MonthCount,
 					DayCount,

@@ -60,11 +60,11 @@ BEGIN
 		MpTypeInternalID = mt.InternalId,
 		TurnoverType     = 'Total',
 		Turnover         = @Turnover,
-		Annualized       = (CASE @TurnoverDayCount WHEN 0 THEN 0 ELSE @Turnover / @MonthCount * 12.0 END),
 		MonthCount       = @MonthCount,
 		DayCount         = @TurnoverDayCount,
 		DateFrom         = @TurnoverFrom,
-		DateTo           = @TurnoverTo
+		DateTo           = @TurnoverTo,
+		IsPaymentAccount = mt.IsPaymentAccount
 	FROM
 		MP_CustomerMarketPlace cmp
 		INNER JOIN MP_MarketplaceType mt ON cmp.MarketPlaceId = mt.Id

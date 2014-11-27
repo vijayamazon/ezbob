@@ -6,8 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LoadAutoRejectData
-@CustomerID INT,
-@Now DATETIME
+@CustomerID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -130,7 +129,9 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 1
 	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 3
+	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 6
 	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 12
 
 	------------------------------------------------------------------------------

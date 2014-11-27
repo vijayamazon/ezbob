@@ -94,11 +94,11 @@ BEGIN
 				MpTypeInternalID = @eBay,
 				TurnoverType     = o.Name,
 				Turnover         = o.Turnover,
-				Annualized       = (CASE o.DayCount WHEN 0 THEN 0 ELSE o.Turnover / @MonthCount * 12.0 END),
 				MonthCount       = @MonthCount,
 				DayCount         = o.DayCount,
 				DateFrom         = o.DateFrom,
-				DateTo           = o.DateTo
+				DateTo           = o.DateTo,
+				IsPaymentAccount = CONVERT(BIT, 0)
 			FROM
 				#out o
 			ORDER BY
@@ -276,11 +276,11 @@ BEGIN
 		MpTypeInternalID = @eBay,
 		TurnoverType     = o.Name,
 		Turnover         = o.Turnover,
-		Annualized       = (CASE o.DayCount WHEN 0 THEN 0 ELSE o.Turnover / @MonthCount * 12.0 END),
 		MonthCount       = @MonthCount,
 		DayCount         = o.DayCount,
 		DateFrom         = o.DateFrom,
-		DateTo           = o.DateTo
+		DateTo           = o.DateTo,
+		IsPaymentAccount = CONVERT(BIT, 0)
 	FROM
 		#out o
 	ORDER BY
