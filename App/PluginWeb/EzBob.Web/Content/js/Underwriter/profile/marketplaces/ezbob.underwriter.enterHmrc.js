@@ -157,7 +157,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			var oContainer = $('<div class=date-holder>' + sCaption + ': </div>');
 
 			var oFld = $('<input type=date />')
-				.addClass('validatable date data' + sPeriodID + ' ' + this.dateId(sFieldName, sPeriodID))
+				.addClass('form-control validatable date data' + sPeriodID + ' ' + this.dateId(sFieldName, sPeriodID))
 				.attr({
 					'data-period-id': sPeriodID,
 					'data-field-name': sFieldName,

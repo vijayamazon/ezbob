@@ -41,7 +41,7 @@ div.hmrc-enter-data-holder .add-one-period {
 }
 
 .hmrc-enter-data input {
-	width: 145px;
+	width: 150px;
 }
 
 .hmrc-enter-data tfoot th,
@@ -49,4 +49,7 @@ div.hmrc-enter-data-holder .add-one-period {
 	text-align: center;
 }
 
-.hmrc-enter-data .value-container { padding-top: 13px; }
+.hmrc-enter-data .value-container {
+    padding-top: 13px;
+    text-align: left;
+}
