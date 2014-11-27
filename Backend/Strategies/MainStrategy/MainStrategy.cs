@@ -76,6 +76,8 @@
 
 		public override void Execute()
 		{
+			autoDecisionResponse = new AutoDecisionResponse { DecisionName = "Manual" };
+
 			if (newCreditLineOption == NewCreditLineOption.SkipEverything)
 			{
 				Log.Alert("MainStrategy was activated in SkipEverything mode. Nothing is done. Avoid such calls!");
@@ -282,7 +284,6 @@
 				return;
 			} // if
 
-			autoDecisionResponse = new AutoDecisionResponse { DecisionName = "Manual" };
 			bool bContinue = true;
 
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
