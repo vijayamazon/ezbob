@@ -230,6 +230,9 @@
 			DateTime oThen = Trail.MyInputData.MonthsNumAgo;
 
 			foreach (var cais in oData.Cais) {
+				if (cais.Balance == null)
+					continue;
+
 				if (cais.Balance <= Cfg.Values.Reject_Defaults_Amount)
 					continue;
 
@@ -331,11 +334,11 @@
 				if (dl97.DefaultBalance.Value <= Trail.MyInputData.Reject_Defaults_CompanyAmount)
 					continue;
 
-				if (string.IsNullOrWhiteSpace(dl97.AccountStatusLast12AccountStatuses))
-					return;
-
 				if (!dl97.CAISLastUpdatedDate.HasValue)
 					continue;
+
+				if (string.IsNullOrWhiteSpace(dl97.AccountStatusLast12AccountStatuses))
+					return;
 
 				DateTime cur = dl97.CAISLastUpdatedDate.Value;
 

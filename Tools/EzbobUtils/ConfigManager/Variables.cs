@@ -34,6 +34,8 @@ namespace ConfigManager {
 		AutoApproveSilentToAddress,
 		AutomaticTestBrokerMark,
 		AutomaticTestCustomerMark,
+		AutoReApproveMaxLacrAge,
+		AutoReApproveMaxLatePayment,
 		AutoReApproveMaxNumOfOutstandingLoans,
 		AutoRejectionException_AnualTurnover,
 		AutoRejectionException_CreditScore,

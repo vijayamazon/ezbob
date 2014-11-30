@@ -218,6 +218,22 @@ namespace ConfigManager {
 
 		#endregion property AutomaticTestCustomerMark
 
+		#region property AutoReApproveMaxLacrAge
+
+		public virtual VariableValue AutoReApproveMaxLacrAge {
+			get { return this[Variables.AutoReApproveMaxLacrAge]; } // get
+		} // AutoReApproveMaxLacrAge
+
+		#endregion property AutoReApproveMaxLacrAge
+
+		#region property AutoReApproveMaxLatePayment
+
+		public virtual VariableValue AutoReApproveMaxLatePayment {
+			get { return this[Variables.AutoReApproveMaxLatePayment]; } // get
+		} // AutoReApproveMaxLatePayment
+
+		#endregion property AutoReApproveMaxLatePayment
+
 		#region property AutoReApproveMaxNumOfOutstandingLoans
 
 		public virtual VariableValue AutoReApproveMaxNumOfOutstandingLoans {
