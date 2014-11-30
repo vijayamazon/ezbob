@@ -13,8 +13,9 @@ BEGIN
 	DECLARE @ConsumerServiceLogId BIGINT 
 	EXEC GetExperianConsumerServiceLog @CustomerId, @ConsumerServiceLogId OUTPUT
 	
-	SELECT cais.LastUpdatedDate, cais.AccountStatusCodes FROM ExperianConsumerData e INNER JOIN ExperianConsumerDataCais cais ON cais.ExperianConsumerDataId = e.Id
+	SELECT cais.LastUpdatedDate, cais.AccountStatusCodes, cais.Balance, cais.CurrentDefBalance FROM ExperianConsumerData e INNER JOIN ExperianConsumerDataCais cais ON cais.ExperianConsumerDataId = e.Id
 	WHERE e.ServiceLogId=@ConsumerServiceLogId AND cais.MatchTo=1 AND cais.LastUpdatedDate IS NOT NULL
 
 END
+
 GO

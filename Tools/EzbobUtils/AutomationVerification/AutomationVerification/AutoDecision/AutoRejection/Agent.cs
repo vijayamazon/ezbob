@@ -58,8 +58,23 @@
 
 			var days = originationTime.Since.HasValue ? (now - originationTime.Since.Value).TotalDays : 0;
 
-			var consumerLates = new ConsumerLatesCalculation(m_oLog);
-			var lates = consumerLates.GetLates(_customerId, now, _configs.RejectionLastValidLate, _configs.Reject_LateLastMonthsNum);
+			var consumerCaisStatusesCalculation = new CaisStatusesCalculation(m_oLog);
+			var consumerCais = consumerCaisStatusesCalculation.GetConsumerCaisStatuses(_customerId);
+			var lates = consumerCaisStatusesCalculation.GetLates(_customerId, now,
+			                                                     _configs.RejectionLastValidLate,
+			                                                     _configs.Reject_LateLastMonthsNum,
+			                                                     consumerCais);
+
+			var consumerDefaults = consumerCaisStatusesCalculation.GetDefaults(_customerId, now,
+			                                                                   _configs.Reject_Defaults_Amount,
+			                                                                   _configs.Reject_Defaults_MonthsNum, 
+																			   consumerCais);
+
+			var businessCais = _dbHelper.GetBusinessCaisStatuses(_customerId);
+			var businessDefaults = consumerCaisStatusesCalculation.GetDefaults(_customerId, now,
+			                                                                   _configs.Reject_Defaults_CompanyAmount,
+			                                                                   _configs.Reject_Defaults_CompanyMonthsNum,
+			                                                                   businessCais);
 			var turnover = _mpHelper.GetTurnoverForRejection(_customerId);
 
 			var data = new RejectionInputData {
@@ -68,10 +83,10 @@
 				ConsumerScore = dbData.ExperianScore,
 				BusinessScore = dbData.CompanyScore,
 				WasApproved = dbData.WasApproved,
-				NumOfDefaultConsumerAccounts = dbData.DefaultAccountsNum,
-				NumOfDefaultBusinessAccounts = dbData.DefaultCompanyAccountsNum,
-				DefaultAmountInConsumerAccounts = dbData.DefaultAccountAmount,
-				DefaultAmountInBusinessAccounts = dbData.DefaultCompanyAccountAmount,
+				NumOfDefaultConsumerAccounts = consumerDefaults.DefaultsAmount,
+				NumOfDefaultBusinessAccounts = businessDefaults.NumOfDefaults,
+				DefaultAmountInConsumerAccounts = consumerDefaults.DefaultsAmount,
+				DefaultAmountInBusinessAccounts = businessDefaults.DefaultsAmount,
 				HasMpError = dbData.HasErrorMp,
 				HasCompanyFiles = dbData.HasCompanyFiles,
 				BusinessSeniorityDays = (int)days,

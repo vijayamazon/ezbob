@@ -467,5 +467,7 @@
 	{
 		public DateTime LastUpdatedDate { get; set; }
 		public string AccountStatusCodes { get; set; }
+		public int Balance { get; set; }
+		public int CurrentDefBalance { get; set; }
 	}
 }

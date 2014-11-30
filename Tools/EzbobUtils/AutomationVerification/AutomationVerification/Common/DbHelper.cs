@@ -362,6 +362,12 @@
 			                     new QueryParameter("CustomerId", customerId));
 		}
 
+		public List<CaisStatus> GetBusinessCaisStatuses(int customerId)
+		{
+			return _db.Fill<CaisStatus>("AV_GetBusinessCaisStatuses", CommandSpecies.StoredProcedure,
+								 new QueryParameter("CustomerId", customerId));
+		}
+
 		public void GetHmrcRevenuesForRejection(int customerId, out decimal hmrcRevenueAnnualized, out decimal hmrcRevenueQuarter)
 		{
 			var sr = _db.GetFirst("AV_GetHmrcTurnoverForRejection", CommandSpecies.StoredProcedure,

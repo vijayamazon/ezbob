@@ -5,22 +5,28 @@
 	using Common;
 	using Ezbob.Logger;
 
-	public class ConsumerLatesCalculation
+	public class CaisStatusesCalculation
 	{
-		public ConsumerLatesCalculation(ASafeLog log)
+		public CaisStatusesCalculation(ASafeLog log)
 		{
 			Log = log;
 
 		}
 
-		public List<CaisStatus> GetCaisStatuses(int customerId) {
+		public List<CaisStatus> GetConsumerCaisStatuses(int customerId) {
 			var dbHelper = new DbHelper(Log);
 			return dbHelper.GetCustomerCaisStatuses(customerId);
 		}
 
+		public List<CaisStatus> GetBusinessCaisStatuses(int customerId)
+		{
+			var dbHelper = new DbHelper(Log);
+			return dbHelper.GetBusinessCaisStatuses(customerId);
+		}
+
 		public ConsumerLatesModel GetLates(int customerId, DateTime asOfDate, int minLateStatus, int lastMonthStatuses, List<CaisStatus> caisStatuses = null) {
 			if (caisStatuses == null) {
-				caisStatuses = GetCaisStatuses(customerId);
+				caisStatuses = GetConsumerCaisStatuses(customerId);
 			}
 			const decimal monthDays = 365.0M / 12.0M;
 
@@ -69,6 +75,58 @@
 
 		}
 
+		public DefaultsModel GetDefaults(int customerId, DateTime asOfDate, int minAmount, int lastMonthStatuses, List<CaisStatus> caisStatuses = null)
+		{
+			if (caisStatuses == null)
+			{
+				caisStatuses = GetConsumerCaisStatuses(customerId);
+			}
+			const decimal monthDays = 365.0M / 12.0M;
+
+			var numOfDefaults = 0;
+			var defaultsAmount = 0;
+
+			foreach (var caisStatus in caisStatuses)
+			{
+				var monthSinceUpdate = (decimal)(asOfDate - caisStatus.LastUpdatedDate).TotalDays / monthDays;
+				int useLastStatusMonths = 0;
+				if (monthSinceUpdate > lastMonthStatuses)
+				{
+					useLastStatusMonths = 0;
+				}
+				else {
+					useLastStatusMonths = lastMonthStatuses - (int)monthSinceUpdate;
+				}
+				bool isDefaultInAccount = false;
+				
+				for (int i = 0; i < useLastStatusMonths; ++i)
+				{
+					if (caisStatus.AccountStatusCodes.Length - i > 0)
+					{
+						string status = caisStatus.AccountStatusCodes[caisStatus.AccountStatusCodes.Length - i - 1].ToString();
+						var accountStatus = AccountStatusDictionary.GetAccountStatus(status);
+						if (accountStatus.IsDefault && caisStatus.Balance > minAmount)
+						{
+							isDefaultInAccount = true;
+						}
+					}
+				}
+
+				if (isDefaultInAccount)
+				{
+					numOfDefaults++;
+					defaultsAmount += caisStatus.Balance;
+				}
+			}
+
+			return new DefaultsModel
+			{
+				DefaultsAmount = defaultsAmount,
+				NumOfDefaults = numOfDefaults
+			};
+
+		}
+
 		protected readonly ASafeLog Log;
 	}
 
@@ -76,6 +134,12 @@
 	{
 		public int NumOfLates { get; set; }
 		public int LateDays { get; set; }
+	}
+
+	public class DefaultsModel
+	{
+		public int NumOfDefaults { get; set; }
+		public int DefaultsAmount { get; set; }
 	}
 
 	public class CaisAccountStatus

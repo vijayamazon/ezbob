@@ -13,10 +13,6 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		public int CompanyScore { get; set; }
 		public bool WasApproved { get; set; }
 		public bool IsBrokerClient { get; set; }
-		public int DefaultAccountsNum { get; set; }
-		public int DefaultAccountAmount { get; set; }
-		public int DefaultCompanyAccountsNum { get; set; }
-		public int DefaultCompanyAccountAmount { get; set; }
 		public bool HasErrorMp { get; set; }
 		public bool HasCompanyFiles { get; set; }
 		public DateTime? IncorporationDate { get; set; }

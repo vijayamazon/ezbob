@@ -251,7 +251,7 @@
 
 		[Test]
 		public void TestConsumerLates() {
-			var calc = new ConsumerLatesCalculation(Log);
+			var calc = new CaisStatusesCalculation(Log);
 
 			var caisStatuses = new List<CaisStatus> {
 				new CaisStatus { AccountStatusCodes = "00200", LastUpdatedDate = new DateTime(2014,11,23)}, //0month 1
