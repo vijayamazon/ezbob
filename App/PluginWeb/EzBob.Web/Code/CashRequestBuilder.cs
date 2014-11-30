@@ -39,8 +39,7 @@
 		{
 			LoanType loanType = customer.IsAlibaba ? _loanTypes.ByName("Alibaba Loan") : _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
-			var score = customer.ScoringResults.OrderByDescending(x => x.ScoreDate).FirstOrDefault();
-
+			
 			int? experianScore = customer.ExperianConsumerScore;
 
 			var cashRequest = new CashRequest
@@ -59,7 +58,6 @@
 					OfferStart = DateTime.UtcNow,
 					LoanSource = loanSource,
 					IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed,
-					ScorePoints = score != null ? score.ScorePoints : 0,
 					ExpirianRating = experianScore,
 					Originator = originator
 				};

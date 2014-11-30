@@ -1556,12 +1556,12 @@ td a.edit-loan {
 @media only screen and (max-width: 1400px) {
     #profileHead {
         position: relative !important;
-        width: 98% !important;
+        width: 100% !important;
     }
     
     .profile-content {
         margin-top: 0 !important;
-        width: 98% !important;
+        width: 100% !important;
     }
 }
 
@@ -1946,7 +1946,7 @@ td a.edit-loan {
     width: 100px;
     height: 100px;
     position: absolute;
-    top: 30%;
+    top: 20%;
     left: 0;
     text-align: center;
 }

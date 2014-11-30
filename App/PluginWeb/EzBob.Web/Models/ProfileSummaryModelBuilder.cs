@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Areas.Underwriter.Models;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
@@ -28,6 +29,7 @@
 		private readonly IDecisionHistoryRepository _decisions;
 		private readonly ServiceClient serviceClient;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
+		private MedalCalculationsRepository _medalCalculationsRepository;
 
 		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, CreditBureauModelBuilder creditBureauModelBuilder)
 		{
@@ -246,7 +248,8 @@
 				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Has mortgages but not a home owner", AlertType = AlertType.Warning.DescriptionAttr() });
 			}
 
-			MedalCalculations medalCalculationsRecord = customer.MedalCalculations.FirstOrDefault(x => x.IsActive);
+			_medalCalculationsRepository = ObjectFactory.GetInstance<MedalCalculationsRepository>();
+			MedalCalculations medalCalculationsRecord = _medalCalculationsRepository.GetActiveMedal(customer.Id);
 
 			if (customer.Company != null && (customer.Company.TypeOfBusiness == TypeOfBusiness.LLP || customer.Company.TypeOfBusiness == TypeOfBusiness.Limited) && customer.CustomerMarketPlaces.Count(x => x.Marketplace.Name == "HMRC") < 2)
 			{
@@ -422,8 +425,7 @@
 				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
 				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success).ToList();
 
-			if (customer.PropertyStatus != null) // TODO: remove this really ugly patch (applied because underwriter shows no data)
-			if (!lrs.Any() && customer.PropertyStatus.IsOwnerOfMainAddress) // TODO: should we have this alert when customer is owner of other addresses
+			if (customer.PropertyStatus != null && !lrs.Any() && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties))
 			{
 				summary.Alerts.Warnings.Add(new AlertModel
 					{
@@ -614,7 +616,7 @@
 
 		private double GetSeniority(Customer customer, bool isPaymentAccountOnly)
 		{
-			var marketplacesSeniority = customer.GetMarketplaceOriginationDate(isPaymentAccount: isPaymentAccountOnly);
+			var marketplacesSeniority = customer.GetMarketplaceOriginationDate(isPaymentAccountOnly);
 			var minAccountAge = DateTime.UtcNow - marketplacesSeniority;
 			var minAccountAgeTotalMonth = minAccountAge.TotalDays / 30;
 			return minAccountAgeTotalMonth;

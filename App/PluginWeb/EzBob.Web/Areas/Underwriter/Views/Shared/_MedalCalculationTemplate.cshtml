@@ -3,55 +3,131 @@
 <script id="medal-calculation-template" type="text/template">
     <div class="row">
         <div class="col-md-12">
+            <div class="box">
+                <div class="box-title">
+                    <h3>Medal Calculation Details</h3>
+                </div>
+                <div class="box-content">
+                    <div class="row">
+                        <label for="MedalDetailsHistory" class="col-lg-3 col-md-4">Medal </label>
+                        <select id="MedalDetailsHistory" class="selectheight col-lg-4 col-md-8">
+                            <%_.each(medals.DetailedHistory.MedalDetailsHistories, function(medal){ %>
+                                <option value="<%-medal.Score.Id%>" <%- (currentMedalId == medal.Score.Id ? selected="selected" : "")%> >
+                                    <%-EzBob.formatDate3(medal.Score.Date)%> <%-medal.Score.MedalType%> <%-medal.Score.Medal%>
+                                </option>
+                            <%});%>
+                        </select>
+                    </div>
+                    <!-- old medal details-->
+                    <%if(currentMedal && currentMedal.Score.MedalType == 'Old Medal') {%>
+                    <% currentMedal.Score = currentMedal.Score || {}; %>
+                    <table class="table box">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <th>Date</th>
+                                <th>Medal</th>
+                                <th>Medal Type</th>
+                                <th>Points</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody class="box-content">
+                            <tr>
+                                <td><%-EzBob.formatDate3(currentMedal.Score.Date)%></td>
+                                <td><%-currentMedal.Score.Medal%></td>
+                                <td><%-currentMedal.Score.MedalType%></td>
+                                <td><%-currentMedal.Score.Points%></td>
+                                <td><%- EzBob.formatPercents(currentMedal.Score.Result, 1) %></td>
+                            </tr>
+                        </tbody>
+                    </table>
 
+                    <table class="table box">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <th>Customer Characteristic</th>
+                                <th>Weight Used</th>
+                                <th>Points Obtained</th>
+                            </tr>
+                        </thead>
+                        <tbody class="box-content">
+                            <% _.each( currentMedal.MedalCharacteristics, function(medal, i){%> 
+                            <tr>
+                                <td><%-medal.CustomerCharacteristic%></td>
+                                <td><%-Math.round(medal.WeightUsed)%>%</td>
+                                <td><%-Math.round(medal.ACParameters)+' from ' + Math.round(medal.MaxPoss)%> (<%-EzBob.roundNumber(medal.PointsObtainedPercent, 1) %>%)</td>
+                            </tr>
+                            <%}); %>
+                            <tr>
+                                <td>Total (not normalized)</td>
+                                <td><%-currentMedal.TotalWeightUsed != undefined ? currentMedal.TotalWeightUsed : "-"%>%</td>
+                                <td><%-(currentMedal.TotalACParameters != undefined ? EzBob.roundNumber(currentMedal.TotalACParameters, 1) : "-") + ' from ' + (currentMedal.TotalMaxPoss != undefined ? EzBob.roundNumber(currentMedal.TotalMaxPoss, 1) : "-")%> 
+                                    (<%-(currentMedal.TotalPointsObtainedPercent != undefined ? EzBob.roundNumber(currentMedal.TotalPointsObtainedPercent, 1) : "-")%>%)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <%}%>
+            
+                    <!-- new medal details-->
+                    <%if(currentMedal && currentMedal.Score.MedalType != 'Old Medal') {%>
+                    <% currentMedal.Score = currentMedal.Score || {}; %>
+                    <table class="table box">
+                        <thead class="box">
+                    
+                            <tr class="box-title">
+                                <th>Date</th>
+                                <th>Medal</th>
+                                <th>MedalType</th>
+                                <th>Points</th>
+                                <th>Result</th>
+                                <th>Error</th>
+                            </tr>
+                        </thead>
+                        <tbody class="box-content">
+                            <tr>
+                                <td><%-EzBob.formatDate3(currentMedal.Score.Date)%></td>
+                                <td><%-currentMedal.Score.Medal%></td>
+                                <td><%-currentMedal.Score.MedalType%></td>
+                                <td><%-currentMedal.Score.Points%></td>
+                                <td><%-EzBob.formatPercents(currentMedal.Score.Result, 1) %></td>
+                                <td><%-currentMedal.Score.Error%></td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            <table class="table centered box">
-                <thead class="box">
-                    <%
-            medals.Score = medals.Score || {};
-            %>
-            <tr class="box-title">
-                <th>Medal</th>
-                <th>Points</th>
-                <th>Result</th>
-            </tr>
-                </thead>
-                <tbody class="box-content">
-                    <tr>
-                        <td><%-medals.Score.Medal%></td>
-                        <td><%-medals.Score.Points%></td>
-                        <td><%- EzBob.formatPercents(medals.Score.Result, 1) %></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table class="table centered box">
-                <thead class="box">
-                    <tr class="box-title">
-                        <th>Customer Characteristic</th>
-                        <th>Weight Used</th>
-                        <th>Points Obtained</th>
-                    </tr>
-                </thead>
-                <tbody class="box-content">
-                    <tr>
-                        <%
-                _.each( medals.MedalCharacteristics, function(medal, i){%> 
-                <td><%-medal.CustomerCharacteristic%></td>
-                        <td><%-Math.round(medal.WeightUsed)%>%</td>
-                        <td><%-Math.round(medal.ACParameters)+' from ' + Math.round(medal.MaxPoss)%> (<%-EzBob.roundNumber(medal.PointsObtainedPercent, 1) %>%)</td>
-                    </tr>
-                    <%}) %>
-            <tr>
-                <td>Total (not normalized)</td>
-                <td><%-medals.TotalWeightUsed != undefined ? medals.TotalWeightUsed : "-"%>%</td>
-                <td><%-(medals.TotalACParameters != undefined ? EzBob.roundNumber(medals.TotalACParameters, 1) : "-") + ' from ' + (medals.TotalMaxPoss != undefined ? EzBob.roundNumber(medals.TotalMaxPoss, 1) : "-")%> 
-                    (<%-(medals.TotalPointsObtainedPercent != undefined ? EzBob.roundNumber(medals.TotalPointsObtainedPercent, 1) : "-")%>%)
-                </td>
-            </tr>
-                </tbody>
-            </table>
-            @{Html.RenderPartial("_ExportToExcel");}
+                    <table class="table box">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <th>Customer Characteristic</th>
+                                <th>Value</th>
+                                <th>Weight Used</th>
+                                <th>Grade</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody class="box-content">
+                            <% _.each( currentMedal.MedalCharacteristics, function(medal, i){%> 
+                            <tr>
+                                <td><%-medal.CustomerCharacteristic%></td>
+                                <td><%-medal.Value%></td>
+                                <td><%-Math.round(medal.WeightUsed)%>%</td>
+                                <td><%-medal.Grade%></td>
+                                <td><%-medal.Score%></td>
+                            </tr>
+                            <%}); %>
+                            <tr>
+                                <td>Total (not normalized)</td>
+                                <td></td>
+                                <td><%-currentMedal.TotalWeightUsed != undefined ? currentMedal.TotalWeightUsed : "-"%>%</td>
+                                <td><%-currentMedal.TotalGrade%></td>
+                                <td><%-currentMedal.TotalScore%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <%}%>
+                </div>
+            </div>
         </div>
     </div>
 </script>

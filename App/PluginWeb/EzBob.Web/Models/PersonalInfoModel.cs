@@ -38,7 +38,6 @@
 		public List<string> IndustryFields { get; set; }
 		public string UserStatus { get; set; }
 		public string CreditResult { get; set; }
-		public double CreditScore { get; set; }
 		public int CustomerStatusId { get; set; }
 		public string CustomerStatusName { get; set; }
 		public List<string> TopCategories { get; set; }
@@ -245,7 +244,6 @@
 			IndustryFields.Add(string.Empty);
 			UserStatus = customer.Status.ToString();
 			CreditResult = customer.CreditResult.ToString();
-			CreditScore = customer.ScoringResults.Any() ? customer.ScoringResults.Last().ScoreResult : 0.00;
 
 			CustomerStatusId = customer.CollectionStatus.CurrentStatus.Id;
 			IsCustomerInEnabledStatus = customer.CollectionStatus.CurrentStatus.IsEnabled;

@@ -5,7 +5,9 @@ using EzBob.Web.Areas.Underwriter.Models;
 
 namespace EzBob.Web.Code
 {
-    public class MedalExcelReportGenerator
+	using System.Linq;
+
+	public class MedalExcelReportGenerator
     {
         private readonly Workbook _workbook;
 
@@ -25,21 +27,24 @@ namespace EzBob.Web.Code
             CreateXlsContentMedalResult(medalCalculators, row, worksheet);
             row = row + 3;
             CreateXlsHeaderMedalCharecteristic(row, worksheet);
-
-            foreach (var medal in medalCalculators.MedalCharacteristics)
-            {
-                row++;
-                worksheet.Cells[row, 0].PutValue(medal.CustomerCharacteristic);
-                worksheet.Cells[row, 1].PutValue(medal.WeightUsed.ToString(CultureInfo.InvariantCulture) + "%");
-                worksheet.Cells[row, 2].PutValue(medal.ACParameters.ToString(CultureInfo.InvariantCulture) + " from " + medal.MaxPoss + " ( " + medal.PointsObtainedPercent + "%) ");
-                SetCellStyle(worksheet, row, false);
-            }
-            row++;
-            worksheet.Cells[row, 0].PutValue("Total");
-            worksheet.Cells[row, 1].PutValue(medalCalculators.TotalWeightUsed.ToString(CultureInfo.InvariantCulture) + "%");
-            worksheet.Cells[row, 2].PutValue(medalCalculators.TotalACParameters.ToString(CultureInfo.InvariantCulture) + " from " + medalCalculators.TotalMaxPoss + " ( " + medalCalculators.TotalPointsObtainedPercent + "%) ");
-            SetCellStyle(worksheet, row, true);
-            return _workbook.SaveToStream().ToArray();
+	        var lastMedal = medalCalculators.DetailedHistory.MedalDetailsHistories.FirstOrDefault();
+	        if (lastMedal != null) {
+		        foreach (var medal in lastMedal.MedalCharacteristics) {
+			        row++;
+			        worksheet.Cells[row, 0].PutValue(medal.CustomerCharacteristic);
+			        worksheet.Cells[row, 1].PutValue(medal.WeightUsed.ToString(CultureInfo.InvariantCulture) + "%");
+			        worksheet.Cells[row, 2].PutValue(medal.ACParameters.ToString(CultureInfo.InvariantCulture) + " from " +
+			                                         medal.MaxPoss + " ( " + medal.PointsObtainedPercent + "%) ");
+			        SetCellStyle(worksheet, row, false);
+		        }
+		        row++;
+		        worksheet.Cells[row, 0].PutValue("Total");
+		        worksheet.Cells[row, 1].PutValue(lastMedal.TotalWeightUsed.ToString(CultureInfo.InvariantCulture) + "%");
+		        worksheet.Cells[row, 2].PutValue(lastMedal.TotalACParameters.ToString(CultureInfo.InvariantCulture) + " from " +
+		                                         lastMedal.TotalMaxPoss + " ( " + lastMedal.TotalPointsObtainedPercent + "%) ");
+		        SetCellStyle(worksheet, row, true);
+	        }
+	        return _workbook.SaveToStream().ToArray();
         }
 
         private static void CreateXlsContentMedalResult(MedalCalculators medalCalculators, int row, Worksheet worksheet)

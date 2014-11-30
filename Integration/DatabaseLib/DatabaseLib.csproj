@@ -105,7 +105,7 @@
     <Compile Include="Model\Database\CustomerPhone.cs" />
     <Compile Include="Model\Database\PropertyStatus.cs" />
     <Compile Include="Model\Experian\ExperianDirector.cs" />
-    <Compile Include="Model\Database\OfflineScoringMap.cs" />
+    <Compile Include="Model\Database\MedalCalculations.cs" />
     <Compile Include="Model\Database\LandRegistryOwner.cs" />
     <Compile Include="Model\Database\CustomerAnalytics.cs" />
     <Compile Include="Model\Database\Report\ReportArgumentsNames.cs" />
@@ -520,7 +520,7 @@
     <Compile Include="Repository\PerformencePerMedalReportRepository.cs" />
     <Compile Include="Repository\PerformencePerUnderwriterReportRepository.cs" />
     <Compile Include="Repository\PersonalInfoHistoryRepository.cs" />
-    <Compile Include="Model\Database\ScoringResultMap.cs" />
+    <Compile Include="Model\Database\ScoringResult.cs" />
     <Compile Include="Repository\ValueTypeRepository.cs" />
     <Compile Include="Model\Marketplaces\MP_ValueType.cs" />
     <Compile Include="Model\Marketplaces\MP_ValueTypeMap.cs" />

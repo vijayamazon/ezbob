@@ -10,17 +10,35 @@ EzBob.Underwriter.MedalCalculationView = Backbone.View.extend({
     initialize: function () {
         this.template = _.template($('#medal-calculation-template').html());
         this.model.on('change reset sync', this.render, this);
+        this.currentMedalId = 0;
     },
 
     events: {
-        'click .export-to-exel': 'exportExcel'
+        'click .export-to-exel': 'exportExcel',
+        'change #MedalDetailsHistory': 'changeHistory'
     },
 
+    changeHistory: function(el) {
+        this.currentMedalId = $(el.currentTarget).val();
+        this.render();
+    },
+    
     exportExcel: function () {
         location.href = window.gRootPath + 'Underwriter/Medal/ExportToExel?id=' + this.model.get('Id');
-    }, 
+    },
+    
     render: function () {
-        this.$el.html(this.template({ medals: this.model.toJSON() }));
+        var medals = this.model.toJSON();
+        var that = this;
+        var currentMedal = _.find(medals.DetailedHistory.MedalDetailsHistories, function(medalDetails) {
+             return medalDetails.Score.Id == that.currentMedalId;
+        });
+        
+        this.$el.html(this.template({
+            medals: medals,
+            currentMedal: currentMedal,
+            currentMedalId: this.currentMedalId
+        }));
         return this;
     }
 });

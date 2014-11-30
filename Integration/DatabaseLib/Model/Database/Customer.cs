@@ -274,36 +274,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	} // class AddressInfo
 
 	#endregion class AddressInfo
-
-	#region class ScoringResult
-
-	public class ScoringResult {
-		public virtual int Id { get; set; }
-		public virtual int CustomerId { get; set; }
-		public virtual string ACParameters { get; set; }
-		public virtual string ACDescription { get; set; }
-		public virtual string Weights { get; set; }
-		public virtual string MAXPossiblePoints { get; set; }
-		public virtual DateTime ScoreDate { get; set; }
-		public virtual string Medal { get; set; }
-		public virtual double ScorePoints { get; set; }
-		public virtual double ScoreResult { get; set; }
-	} // class ScoringResult
-
-	#endregion class ScoringResult
 	
-	public class MedalCalculations
-	{
-		public virtual int Id { get; set; }
-		public virtual bool IsActive { get; set; }
-		public virtual int CustomerId { get; set; }
-		public virtual string Medal { get; set; }
-		public virtual decimal TotalScore { get; set; }
-		public virtual decimal TotalScoreNormalized { get; set; }
-		public virtual DateTime CalculationTime { get; set; }
-		public virtual string Error { get; set; }
-	}
-
 	#region class CollectionStatus
 
 	[Serializable]
@@ -479,20 +450,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // ActiveLoans
 
 		public virtual decimal TotalBalance { get { return ActiveLoans.Sum(l => l.Balance); } }
-
-		private Iesi.Collections.Generic.ISet<ScoringResult> _scoringResults = new HashedSet<ScoringResult>();
-		public virtual Iesi.Collections.Generic.ISet<ScoringResult> ScoringResults {
-			get { return _scoringResults; }
-			set { _scoringResults = value; }
-		} // ScoringResults
-
-		private Iesi.Collections.Generic.ISet<MedalCalculations> _medalCalculations = new HashedSet<MedalCalculations>();
-		public virtual Iesi.Collections.Generic.ISet<MedalCalculations> MedalCalculations
-		{
-			get { return _medalCalculations; }
-			set { _medalCalculations = value; }
-		} // ScoringResults
-
+		
 		public virtual CashRequest LastCashRequest { get { return CashRequests.LastOrDefault(); } }
 
 		/// <summary>
@@ -522,7 +480,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		private CollectionStatus _collectionStatus;
 		public virtual CollectionStatus CollectionStatus {
-			get { return _collectionStatus ?? (_collectionStatus = new CollectionStatus() { CurrentStatus = new CustomerStatuses() }); }
+			get { return _collectionStatus ?? (_collectionStatus = new CollectionStatus { CurrentStatus = new CustomerStatuses() }); }
 			set { _collectionStatus = value; }
 		} // CollectionStatus
 

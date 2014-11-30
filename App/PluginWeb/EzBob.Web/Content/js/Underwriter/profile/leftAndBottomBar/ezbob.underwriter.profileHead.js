@@ -124,8 +124,9 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         var medalHistory = this.medalModel.get('History');
         if (medalHistory) {
             var histData = [];
+            //var medalLabels = [];
             _.each(medalHistory.MedalHistories, function (hist, i) {
-                histData.push([i + 1, hist.Result * 100]);
+                histData.push([i + 1, hist.Result * 100, hist.Medal, EzBob.formatDate3(hist.Date), hist.MedalType + (hist.Error ? " <span class='red_cell'>*</span>" : "") + "</p>"]);
             });
             if (histData.length > 0) {
                 $.jqplot('medalHistory', [histData], {
@@ -163,14 +164,21 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                                 style: "filledCircle",
                                 size: 7,
                                 shadow: false
-                            }
+                            },
                         },
                         highlighter: {
                             show: true,
                             showTooltip: true,
+                            showMarker: false,
                             tooltipAxes: 'y',
-                            useAxesFormatters: true,
-                            tooltipFormatString: '%.1f %'
+                            yvalues: 4,
+                            formatString:
+                                '<table class="jqplot-highlighter"> \
+                                    <tr><td>Score: </td><td>%s</td></tr> \
+                                    <tr><td>Medal: </td><td>%s</td></tr> \
+                                    <tr><td>Date: </td><td>%s</td></tr> \
+                                    <tr><td>Medal Type: </td><td>%s</td></tr> \
+                                </table>'
                         },
                         canvasOverlay: {
                             show: true,
@@ -225,8 +233,8 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         var medal = this.medalModel.get('Score');
         if (medal) {
             var fillColor = 'black';
-            var medalToUse = medal.OfflineResult == -1 ? medal.Medal : medal.OfflineMedal;
-            var resultToUse = medal.OfflineResult == -1 ? medal.Result : medal.OfflineResult;
+            var medalToUse = medal.Medal;
+            var resultToUse = medal.Result;
             
             switch (medalToUse) {
                 case 'Silver':

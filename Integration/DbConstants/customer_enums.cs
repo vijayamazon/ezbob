@@ -27,6 +27,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	#region enum Medal
 
 	public enum Medal {
+		NoClassification,
 		Silver,
 		Gold,
 		Platinum,

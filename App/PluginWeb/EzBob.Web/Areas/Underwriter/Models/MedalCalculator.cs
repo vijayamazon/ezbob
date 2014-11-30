@@ -7,14 +7,18 @@ using System.Globalization;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using StructureMap;
+
 	public class Score
 	{
+		public int Id { get; set; }
 		public DateTime Date { get; set; }
 		public string Medal { get; set; }
-		public string OfflineMedal { get; set; }
-		public double OfflineResult { get; set; }
+		public string MedalType { get; set; }
 		public double Points { get; set; }
 		public double Result { get; set; }
+		public string Error { get; set; }
 	}
 
 	public class MedalHistory
@@ -22,9 +26,27 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public IOrderedEnumerable<Score> MedalHistories { get; set; }
 	}
 
+	public class MedalDetailedHistory {
+		public IOrderedEnumerable<MedalDetail> MedalDetailsHistories { get; set; }
+	}
+
+	public class MedalDetail {
+		public Score Score { get; set; }
+		public IList<MedalCharacteristic> MedalCharacteristics = new List<MedalCharacteristic>();
+		public decimal TotalWeightUsed { get; set; }
+		public decimal TotalACParameters { get; set; }
+		public decimal TotalMaxPoss { get; set; }
+		public decimal TotalPointsObtainedPercent { get; set; }
+		public decimal TotalScore {get;set;}
+		public decimal TotalGrade { get; set; }
+	}
+
 	public class MedalCharacteristic
 	{
 		public string CustomerCharacteristic { get; set; }
+		public string Value { get; set; }
+		public decimal Score { get; set; }
+		public int Grade { get; set; } 
 		public decimal WeightUsed { get; set; }
 		public decimal ACParameters { get; set; }
 		public decimal MaxPoss { get; set; }
@@ -39,55 +61,63 @@ namespace EzBob.Web.Areas.Underwriter.Models
 	public class MedalCalculators
 	{
 		public Score Score = new Score();
-		public IList<MedalCharacteristic> MedalCharacteristics = new List<MedalCharacteristic>();
-		public decimal TotalWeightUsed { get; set; }
-		public decimal TotalACParameters { get; set; }
-		public decimal TotalMaxPoss { get; set; }
-		public decimal TotalPointsObtainedPercent { get; set; }
+		
 		public MedalHistory History = new MedalHistory();
 
-		public MedalCalculators(EZBob.DatabaseLib.Model.Database.Customer customer)
-		{
-			var scorRes = customer.ScoringResults.ToList();
-			var newScorRes = customer.MedalCalculations.ToList();
-			if (scorRes.Count == 0 && newScorRes.Count == 0) return;
+		public MedalDetailedHistory DetailedHistory = new MedalDetailedHistory();
 
-			var newMedalHistories = newScorRes.Select(BuildNewScore).ToList();
+		public MedalCalculators(EZBob.DatabaseLib.Model.Database.Customer customer) {
+			var newRepo = ObjectFactory.GetInstance<MedalCalculationsRepository>();
+			var oldRepo = ObjectFactory.GetInstance<ScoringResultRepository>();
+
+			var oldMedals = oldRepo.GetAllOldMedals(customer.Id).ToList();
+			var newMedals = newRepo.GetAllNewMedals(customer.Id).ToList();
+
+			if (oldMedals.Count == 0 && newMedals.Count == 0) return;
+
+			var newMedalHistories = newMedals.Select(BuildNewScore).ToList();
 
 			DateTime? firstNewMedalDate = null;
 			if (newMedalHistories.Any())
 			{
 				firstNewMedalDate = newMedalHistories.Min(x => x.Date);
 			}
-			var oldMedalHistories = scorRes.Where(x => firstNewMedalDate == null || x.ScoreDate < firstNewMedalDate).Select(BuildScore);
+			var oldMedalHistories = oldMedals.Where(x => firstNewMedalDate == null || x.ScoreDate < firstNewMedalDate).Select(BuildScore);
 
 			newMedalHistories.AddRange(oldMedalHistories);
 			History.MedalHistories = newMedalHistories.OrderBy(x => x.Date);
 			
-			var maxdate = scorRes.Max(s => s.ScoreDate);
-			var scoringResult = scorRes.FirstOrDefault(s => s.ScoreDate == maxdate);
-			Score = BuildScore(scoringResult);
-
-			var medalCalculations = customer.MedalCalculations.FirstOrDefault(x => x.IsActive);
-			if (medalCalculations != null)
-			{
-				Score.OfflineMedal = medalCalculations.Medal;
-				Score.OfflineResult = (double) medalCalculations.TotalScoreNormalized;
+			var activeMedal = newMedals.FirstOrDefault(x => x.IsActive);
+			if (activeMedal != null) {
+				Score = BuildNewScore(activeMedal);
 			}
 			else
 			{
-				Score.OfflineMedal = "N\\A";
-				Score.OfflineResult = -1;
+				var maxdate = oldMedals.Max(s => s.ScoreDate);
+				var scoringResult = oldMedals.FirstOrDefault(s => s.ScoreDate == maxdate);
+				Score = BuildScore(scoringResult);
 			}
 
-			BuildCharecteristic(scoringResult);
-			GetTotal();
+			var details = new MedalDetailedHistory();
+			var oldMedalDetails = oldMedals.Select(BuildCharecteristic).ToList();
+			var newMedalDetails = newMedals.Select(BuildNewCharecteristics).ToList();
+			oldMedalDetails.AddRange(newMedalDetails);
+			details.MedalDetailsHistories = oldMedalDetails.OrderByDescending(x => x.Score.Date);
+
+			int i = 0;
+			foreach (var medalDetail in details.MedalDetailsHistories) {
+				medalDetail.Score.Id = i;
+				i++;
+			}
+
+			DetailedHistory = details;
 		}
 
 		private Score BuildScore(ScoringResult scoringResult)
 		{
 			return new Score
 			{
+				MedalType = "Old Medal",
 				Medal = scoringResult.Medal,
 				Points = scoringResult.ScorePoints,
 				Result = scoringResult.ScoreResult,
@@ -99,27 +129,29 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		{
 			return new Score
 			{
+				MedalType = medalCalculation.MedalType,
 				Medal = medalCalculation.Medal,
 				Points = (double)medalCalculation.TotalScore,
 				Result = (double)medalCalculation.TotalScoreNormalized,
-				Date = medalCalculation.CalculationTime
+				Date = medalCalculation.CalculationTime,
+				Error = medalCalculation.Error
 			};
 		}
 
-		private void BuildCharecteristic(ScoringResult scoringResult)
-		{
+		private MedalDetail BuildCharecteristic(ScoringResult scoringResult) {
+			var medalDetail = new MedalDetail();
 			string[] splitACDescription = scoringResult.ACDescription.Split(';');
 			string[] splitWeight = scoringResult.Weights.Split(';');
 			string[] splitACParameters = scoringResult.ACParameters.Split(';');
 			string[] splitMaxPoss = scoringResult.MAXPossiblePoints.Split(';');
 
-			string pattern = @"([0-9]*\.[0-9]+|[0-9]+)";
+			const string pattern = @"([0-9]*\.[0-9]+|[0-9]+)";
 			var regex = new Regex(pattern);
 
-
+			medalDetail.MedalCharacteristics = new List<MedalCharacteristic>();
 			for (var i = 0; i <= splitACDescription.Length - 1; i++)
 			{
-				MedalCharacteristics.Add(new MedalCharacteristic
+				medalDetail.MedalCharacteristics.Add(new MedalCharacteristic
 				{
 					CustomerCharacteristic = splitACDescription[i],
 					WeightUsed = Convert.ToDecimal(splitWeight[i], CultureInfo.InvariantCulture),
@@ -127,14 +159,54 @@ namespace EzBob.Web.Areas.Underwriter.Models
 					MaxPoss = Convert.ToDecimal(splitMaxPoss[i], CultureInfo.InvariantCulture)
 				});
 			}
+
+			medalDetail.Score = BuildScore(scoringResult);
+			GetTotal(medalDetail);
+
+			return medalDetail;
+		}
+		
+		private void GetTotal(MedalDetail detail)
+		{
+			detail.TotalACParameters = detail.MedalCharacteristics.Sum(m => m.ACParameters);
+			detail.TotalMaxPoss = detail.MedalCharacteristics.Sum(m => m.MaxPoss);
+			detail.TotalWeightUsed = detail.MedalCharacteristics.Sum(m => m.WeightUsed);
+			detail.TotalPointsObtainedPercent = detail.TotalMaxPoss == 0 ? 0 : Math.Round((detail.TotalACParameters / detail.TotalMaxPoss * 100), 1);
+			detail.TotalGrade = detail.MedalCharacteristics.Sum(x => x.Grade);
+			detail.TotalScore = detail.MedalCharacteristics.Sum(x => x.Score);
 		}
 
-		private void GetTotal()
+		private MedalDetail BuildNewCharecteristics(MedalCalculations medal)
 		{
-			TotalACParameters = MedalCharacteristics.Sum(m => m.ACParameters);
-			TotalMaxPoss = MedalCharacteristics.Sum(m => m.MaxPoss);
-			TotalWeightUsed = MedalCharacteristics.Sum(m => m.WeightUsed);
-			TotalPointsObtainedPercent = TotalMaxPoss == 0 ? 0 : Math.Round((TotalACParameters / TotalMaxPoss * 100), 1);
+			var detail = new MedalDetail {
+				Score = BuildNewScore(medal),
+				MedalCharacteristics = new List<MedalCharacteristic>()
+			};
+
+			DateTime? businessSeniority = medal.BusinessSeniority;
+			string businessSeniorityStr = businessSeniority.HasValue ? businessSeniority.Value.ToString("yyyy-MM-dd") : null;
+
+			DateTime? regDate = medal.EzbobSeniority;
+			string ezbobSeniorityStr = regDate.HasValue ? regDate.Value.ToString("yyyy-MM-dd") : null;
+
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Business Score",          Value = medal.BusinessScore.ToString("N0"),        WeightUsed = medal.BusinessScoreWeight,        Score = medal.BusinessScoreScore,        Grade = (int)medal.BusinessScoreGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Free Cash Flow",          Value = medal.FreeCashFlow.ToString("N2"),         WeightUsed = medal.FreeCashFlowWeight,         Score = medal.FreeCashFlowScore,         Grade = (int)medal.FreeCashFlowGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Annual Turnover",         Value = medal.AnnualTurnover.ToString("N2"),       WeightUsed = medal.AnnualTurnoverWeight,       Score = medal.AnnualTurnoverScore,       Grade = (int)medal.AnnualTurnoverGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Tangible Equity",         Value = medal.TangibleEquity.ToString("N2"),       WeightUsed = medal.TangibleEquityWeight,       Score = medal.TangibleEquityScore,       Grade = (int)medal.TangibleEquityGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Business Seniority",      Value = businessSeniorityStr,                      WeightUsed = medal.BusinessSeniorityWeight,    Score = medal.BusinessSeniorityScore,    Grade = (int)medal.BusinessSeniorityGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Consumer Score",          Value = medal.ConsumerScore.ToString("N0"),        WeightUsed = medal.ConsumerScoreWeight,        Score = medal.ConsumerScoreScore,        Grade = (int)medal.ConsumerScoreGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Net Worth",               Value = medal.NetWorth.ToString("N2"),             WeightUsed = medal.NetWorthWeight,             Score = medal.NetWorthScore,             Grade = (int)medal.NetWorthGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Marital Status",          Value = medal.MaritalStatus,                       WeightUsed = medal.MaritalStatusWeight,        Score = medal.MaritalStatusScore,        Grade = (int)medal.MaritalStatusGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Num Of Loans",            Value = medal.NumOfLoans.ToString("N0"),           WeightUsed = medal.NumOfLoansWeight,           Score = medal.NumOfLoansScore,           Grade = (int)medal.NumOfLoansGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Num Of Early Repayments", Value = medal.NumOfEarlyRepayments.ToString("N0"), WeightUsed = medal.NumOfEarlyRepaymentsWeight, Score = medal.NumOfEarlyRepaymentsScore, Grade = (int)medal.NumOfEarlyRepaymentsGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Num Of Late Repayments",  Value = medal.NumOfLateRepayments.ToString("N0"),  WeightUsed = medal.NumOfLateRepaymentsWeight,  Score = medal.NumOfLateRepaymentsScore,  Grade = (int)medal.NumOfLateRepaymentsGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Num Of Stores",           Value = medal.NumberOfStores.ToString("N0"),       WeightUsed = medal.NumberOfStoresWeight,       Score = medal.NumberOfStoresScore,       Grade = (int)medal.NumberOfStoresGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Positive Feedbacks",      Value = medal.PositiveFeedbacks.ToString("N0"),    WeightUsed = medal.PositiveFeedbacksWeight,    Score = medal.PositiveFeedbacksScore,    Grade = (int)medal.PositiveFeedbacksGrade });
+			detail.MedalCharacteristics.Add(new MedalCharacteristic { CustomerCharacteristic = "Ezbob Seniority",         Value = ezbobSeniorityStr,                         WeightUsed = medal.EzbobSeniorityWeight,       Score = medal.EzbobSeniorityScore,       Grade = (int)medal.EzbobSeniorityGrade });
+
+			GetTotal(detail);
+
+			return detail;
 		}
 	}
 }

@@ -101,6 +101,8 @@
 		public virtual QuickOffer QuickOffer { get; set; }
 
 		public virtual int? ExpirianRating { get; set; }
+
+		[Obsolete]
 		public virtual double? ScorePoints { get; set; }
 
 		public virtual CashRequestOriginator? Originator { get; set; }
