@@ -38,6 +38,10 @@
 
 			BrokerProperties oProperties = sp.FillFirst<BrokerProperties>();
 
+			if (oProperties == null || oProperties.BrokerID == 0) {
+				throw new StrategyWarning(this, string.Format("No broker found with this phone number {0}.", m_sMobile));
+			}
+
 			Log.Debug("Broker properties search result for mobile phone {0}:\n{1}", m_sMobile, oProperties);
 
 			new BrokerPasswordRestored(oProperties.BrokerID, DB, Log).Execute();
