@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
@@ -322,13 +321,38 @@
 				return;
 
 			DateTime oThen = Trail.MyInputData.CompanyMonthsNumAgo;
-			
-			// Num of default company accounts
-			Trail.MyInputData.NumOfDefaultBusinessAccounts = ltd.Result.GetChildren<ExperianLtdDL97>().Count(x =>
-				(x.AccountState == "D") &&
-				(x.DefaultBalance.HasValue && (x.DefaultBalance.Value > Trail.MyInputData.Reject_Defaults_CompanyAmount)) &&
-				(x.DefaultDate.HasValue && (x.DefaultDate.Value >= oThen))
-			);
+
+			IEnumerable<ExperianLtdDL97> oDL97List = ltd.Result.GetChildren<ExperianLtdDL97>();
+
+			foreach (var dl97 in oDL97List) {
+				if (!dl97.DefaultBalance.HasValue)
+					continue;
+
+				if (dl97.DefaultBalance.Value <= Trail.MyInputData.Reject_Defaults_CompanyAmount)
+					continue;
+
+				if (string.IsNullOrWhiteSpace(dl97.AccountStatusLast12AccountStatuses))
+					return;
+
+				if (!dl97.CAISLastUpdatedDate.HasValue)
+					continue;
+
+				DateTime cur = dl97.CAISLastUpdatedDate.Value;
+
+				for (int i = 1; i <= dl97.AccountStatusLast12AccountStatuses.Length; i++) {
+					if (cur < oThen)
+						break;
+
+					char status = dl97.AccountStatusLast12AccountStatuses[dl97.AccountStatusLast12AccountStatuses.Length - i];
+
+					if ((status == '8') || (status == '9')) {
+						Trail.MyInputData.NumOfDefaultBusinessAccounts++;
+						break;
+					} // if
+
+					cur = cur.AddMonths(-1);
+				} // for
+			} // for each account
 		} // FillFromCompanyData
 
 		#endregion method FillFromCompanyData
