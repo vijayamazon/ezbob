@@ -67,7 +67,6 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 			DefaultAmountInConsumerAccounts = data.DefaultAmountInConsumerAccounts;
 			NumOfDefaultBusinessAccounts = data.NumOfDefaultBusinessAccounts;
 			DefaultAmountInBusinessAccounts = data.DefaultAmountInBusinessAccounts;
-			CustomerStatus = data.CustomerStatus;
 			NumOfLateConsumerAccounts = data.NumOfLateConsumerAccounts;
 			ConsumerLateDays = data.ConsumerLateDays;
 
@@ -95,9 +94,8 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 			Reject_LateLastMonthsNum = configs.Reject_LateLastMonthsNum;
 			Reject_NumOfLateAccounts = configs.Reject_NumOfLateAccounts;
 			RejectionLastValidLate = configs.RejectionLastValidLate;
+		} // Init
 
-
-		}
 		public DateTime DataAsOf { get; private set; }
 
 		public bool WasApproved { get; set; }
@@ -147,7 +145,17 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		{
 			return JsonConvert.SerializeObject(this);
 		}
-	}
+
+		[JsonIgnore]
+		public DateTime MonthsNumAgo {
+			get { return DataAsOf.AddMonths(-1 * Reject_Defaults_MonthsNum); }
+		} // MonthsNumAgo
+
+		[JsonIgnore]
+		public DateTime CompanyMonthsNumAgo {
+			get { return DataAsOf.AddMonths(-1 * Reject_Defaults_CompanyMonthsNum); }
+		} // CompanyMonthsNumAgo
+	} // RejectionInputData
 
 	public class RejectionResult
 	{

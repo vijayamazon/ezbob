@@ -1,7 +1,6 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection
 {
 	using System;
-	using AutoApproval;
 	using ProcessHistory.AutoRejection;
 	using ProcessHistory.Trails;
 	using Common;

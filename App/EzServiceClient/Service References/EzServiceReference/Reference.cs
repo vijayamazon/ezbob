@@ -2515,6 +2515,18 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackFillMedals", ReplyAction="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackFillMedals();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackFillMedals", ReplyAction="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> Temp_BackFillMedalsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianLtd", ReplyAction="http://tempuri.org/IEzService/LoadExperianLtdResponse")]
+        ServiceClientProxy.EzServiceReference.ExperianLtdActionResult LoadExperianLtd(long nServiceLogID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianLtd", ReplyAction="http://tempuri.org/IEzService/LoadExperianLtdResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> LoadExperianLtdAsync(long nServiceLogID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckLtdCompanyCache", ReplyAction="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse")]
         ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
         
@@ -3019,12 +3031,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendPendingMails", ReplyAction="http://tempuri.org/IEzService/SendPendingMailsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendPendingMailsAsync(int underwriterId, int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackFillMedals", ReplyAction="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackFillMedals();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackFillMedals", ReplyAction="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> Temp_BackFillMedalsAsync();
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
         
@@ -3096,6 +3102,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyRerejection", ReplyAction="http://tempuri.org/IEzService/VerifyRerejectionResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRerejectionAsync(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
@@ -3528,12 +3540,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianLtd", ReplyAction="http://tempuri.org/IEzService/BackfillExperianLtdResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianLtdAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianLtd", ReplyAction="http://tempuri.org/IEzService/LoadExperianLtdResponse")]
-        ServiceClientProxy.EzServiceReference.ExperianLtdActionResult LoadExperianLtd(long nServiceLogID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianLtd", ReplyAction="http://tempuri.org/IEzService/LoadExperianLtdResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> LoadExperianLtdAsync(long nServiceLogID);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3561,6 +3567,22 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackFillMedals() {
+            return base.Channel.Temp_BackFillMedals();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> Temp_BackFillMedalsAsync() {
+            return base.Channel.Temp_BackFillMedalsAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult LoadExperianLtd(long nServiceLogID) {
+            return base.Channel.LoadExperianLtd(nServiceLogID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> LoadExperianLtdAsync(long nServiceLogID) {
+            return base.Channel.LoadExperianLtdAsync(nServiceLogID);
         }
         
         public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum) {
@@ -4235,14 +4257,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SendPendingMailsAsync(underwriterId, customerId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackFillMedals() {
-            return base.Channel.Temp_BackFillMedals();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> Temp_BackFillMedalsAsync() {
-            return base.Channel.Temp_BackFillMedalsAsync();
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2) {
             return base.Channel.SaveAgreement(customerId, model, refNumber, name, template, path1, path2);
         }
@@ -4337,6 +4351,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRerejectionAsync(int nCustomerCount, int nLastCheckedCustomerID) {
             return base.Channel.VerifyRerejectionAsync(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReject(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyRejectAsync(nCustomerCount, nLastCheckedCustomerID);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
@@ -4913,14 +4935,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianLtdAsync() {
             return base.Channel.BackfillExperianLtdAsync();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult LoadExperianLtd(long nServiceLogID) {
-            return base.Channel.LoadExperianLtd(nServiceLogID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> LoadExperianLtdAsync(long nServiceLogID) {
-            return base.Channel.LoadExperianLtdAsync(nServiceLogID);
         }
     }
 }

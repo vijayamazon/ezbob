@@ -1,7 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover {
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	/// <summary>
 	/// Contains customer turnover based on all customer marketplaces.

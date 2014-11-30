@@ -1355,6 +1355,14 @@ GeneratePassword broker-contact-email@example.com password-itself
 				m_oServiceClient.VerifyRerejection(i.CustomerCount, i.LastCheckedCustomerID);
 		} // VerifyRerejection
 
+		[Activation]
+		private void VerifyReject() {
+			var i = new VerificationInput("VerifyReject", m_aryArgs, m_oLog);
+
+			if (i.IsGood)
+				m_oServiceClient.VerifyReject(i.CustomerCount, i.LastCheckedCustomerID);
+		} // VerifyReject
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

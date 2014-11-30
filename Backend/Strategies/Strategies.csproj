@@ -116,6 +116,8 @@
     <Compile Include="Broker\LimitedMedalCalculatorForInstantOffer.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Agent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Arguments.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\Reject\Checker.cs" />
+    <Compile Include="MainStrategy\AutoDecisions\Reject\MpError.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\AccountingPeriodValue.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\ASimplePeriodValue.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\CalculatedTurnover.cs" />

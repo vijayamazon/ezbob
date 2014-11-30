@@ -132,6 +132,18 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_Temp_BackFillMedals_InputMessage">
+    <wsdl:part name="parameters" element="tns:Temp_BackFillMedals" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_Temp_BackFillMedals_OutputMessage">
+    <wsdl:part name="parameters" element="tns:Temp_BackFillMedalsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianLtd_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianLtd" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianLtd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianLtdResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_CheckLtdCompanyCache_InputMessage">
     <wsdl:part name="parameters" element="tns:CheckLtdCompanyCache" />
   </wsdl:message>
@@ -636,12 +648,6 @@
   <wsdl:message name="IEzService_SendPendingMails_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendPendingMailsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_Temp_BackFillMedals_InputMessage">
-    <wsdl:part name="parameters" element="tns:Temp_BackFillMedals" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_Temp_BackFillMedals_OutputMessage">
-    <wsdl:part name="parameters" element="tns:Temp_BackFillMedalsResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
@@ -713,6 +719,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_VerifyRerejection_OutputMessage">
     <wsdl:part name="parameters" element="tns:VerifyRerejectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_VerifyReject_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyReject" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_VerifyReject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyRejectResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_IsBroker_InputMessage">
     <wsdl:part name="parameters" element="tns:IsBroker" />
@@ -1146,12 +1158,6 @@
   <wsdl:message name="IEzService_BackfillExperianLtd_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillExperianLtdResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoadExperianLtd_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoadExperianLtd" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoadExperianLtd_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoadExperianLtdResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1187,6 +1193,14 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="Temp_BackFillMedals">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/Temp_BackFillMedals" message="tns:IEzService_Temp_BackFillMedals_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse" message="tns:IEzService_Temp_BackFillMedals_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadExperianLtd">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianLtd" message="tns:IEzService_LoadExperianLtd_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianLtdResponse" message="tns:IEzService_LoadExperianLtd_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="CheckLtdCompanyCache">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckLtdCompanyCache" message="tns:IEzService_CheckLtdCompanyCache_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse" message="tns:IEzService_CheckLtdCompanyCache_OutputMessage" />
@@ -1523,10 +1537,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendPendingMails" message="tns:IEzService_SendPendingMails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SendPendingMailsResponse" message="tns:IEzService_SendPendingMails_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="Temp_BackFillMedals">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/Temp_BackFillMedals" message="tns:IEzService_Temp_BackFillMedals_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/Temp_BackFillMedalsResponse" message="tns:IEzService_Temp_BackFillMedals_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
@@ -1574,6 +1584,10 @@
     <wsdl:operation name="VerifyRerejection">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyRerejection" message="tns:IEzService_VerifyRerejection_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyRerejectionResponse" message="tns:IEzService_VerifyRerejection_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifyReject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyReject" message="tns:IEzService_VerifyReject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyRejectResponse" message="tns:IEzService_VerifyReject_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="IsBroker">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
@@ -1863,10 +1877,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtd" message="tns:IEzService_BackfillExperianLtd_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtdResponse" message="tns:IEzService_BackfillExperianLtd_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="LoadExperianLtd">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianLtd" message="tns:IEzService_LoadExperianLtd_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianLtdResponse" message="tns:IEzService_LoadExperianLtd_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1949,6 +1959,24 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="Temp_BackFillMedals">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/Temp_BackFillMedals" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadExperianLtd">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianLtd" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="CheckLtdCompanyCache">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CheckLtdCompanyCache" style="document" />
       <wsdl:input>
@@ -2705,15 +2733,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Temp_BackFillMedals">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/Temp_BackFillMedals" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SaveAgreement" style="document" />
       <wsdl:input>
@@ -2815,6 +2834,15 @@
     </wsdl:operation>
     <wsdl:operation name="VerifyRerejection">
       <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyRerejection" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyReject">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyReject" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3463,15 +3491,6 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillExperianLtd">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianLtd" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LoadExperianLtd">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianLtd" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

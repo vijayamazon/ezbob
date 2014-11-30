@@ -30,7 +30,9 @@ BEGIN
 		@BrokerID INT,
 		@FraudStatus INT,
 		@CustomerStatus NVARCHAR(100),
-		@CustomerStatusEnabled BIT
+		@CustomerStatusEnabled BIT,
+		@IsLtd BIT,
+		@CompanyRefNum NVARCHAR(50)
 
 	------------------------------------------------------------------------------
 
@@ -38,10 +40,13 @@ BEGIN
 		@BrokerID              = c.BrokerID,
 		@FraudStatus           = c.FraudStatus,
 		@CustomerStatus        = s.Name,
-		@CustomerStatusEnabled = s.IsEnabled
+		@CustomerStatusEnabled = s.IsEnabled,
+		@IsLtd                 = CASE WHEN c.TypeOfBusiness IN ('Limited', 'LLP') THEN 1 ELSE 0 END,
+		@CompanyRefNum         = co.ExperianRefNum
 	FROM
 		Customer c
 		INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id
+		LEFT JOIN Company co ON c.CompanyId = co.Id
 	WHERE
 		c.Id = @CustomerID
 
@@ -98,13 +103,15 @@ BEGIN
 		RowType               = 'MetaData',
 		ApprovedCrID          = @ApprovedCrID,
 		BrokerID              = ISNULL(@BrokerID, 0),
-		FraudStatus           = ISNULL(@FraudStatus, 3), -- under investigation
+		FraudStatusID         = ISNULL(@FraudStatus, 3), -- under investigation
 		CustomerStatusName    = ISNULL(@CustomerStatus, 'Unknown'),
 		CustomerStatusEnabled = ISNULL(@CustomerStatusEnabled, 0),
 		ConsumerScore         = @ConsumerScore,
 		BusinessScore         = @CompanyScore,
 		IncorporationDate     = @IncorporationDate,
-		CompanyFilesCount     = @CompanyFilesCount
+		CompanyFilesCount     = @CompanyFilesCount,
+		IsLtd                 = @IsLtd,
+		CompanyRefNum         = ISNULL(@CompanyRefNum, '')
 
 	------------------------------------------------------------------------------
 
