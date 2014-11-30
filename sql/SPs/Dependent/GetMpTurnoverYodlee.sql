@@ -19,6 +19,7 @@ BEGIN
 	DECLARE @TurnoverDayCount INT
 	DECLARE @TurnoverFrom DATETIME
 	DECLARE @TurnoverTo DATETIME
+	DECLARE @DayCount DECIMAL(18, 2)
 
 	------------------------------------------------------------------------------
 
@@ -40,9 +41,17 @@ BEGIN
 	-- while Yodlee direct (@IsParsedBank = 0) contains up to 3 month of data: i.e. when
 	-- we request data for the last year from Yodlee direct we receive only 3 months of data.
 	-- Hence this multiplication by 4 if number of days is about 3 months.
-	
-	IF @IsParsedBank = 0 AND @MonthCount = 12 AND DATEDIFF(day, @TurnoverFrom, @TurnoverTo) < 100
-		SET @Turnover = @Turnover * 4.0
+
+	IF @IsParsedBank = 0 AND @MonthCount = 12
+	BEGIN
+		SET @DayCount = CONVERT(DECIMAL(18, 2), DATEDIFF(day, @TurnoverFrom, @TurnoverTo))
+
+		IF 60 <= @DayCount AND @DayCount <= 90
+			SET @DayCount = 90.0
+
+		IF @DayCount != 0
+			SET @Turnover = @Turnover / @DayCount * 365.0
+	END
 
 	------------------------------------------------------------------------------
 

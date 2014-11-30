@@ -44,7 +44,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@Turnover = ISNULL(SUM(i.net_value * i.exchange_rate), 0),
+		@Turnover = SUM(ISNULL(i.net_value, 0) * ISNULL(i.exchange_rate, 0)),
 		@TurnoverDayCount = COUNT(DISTINCT CONVERT(DATE, i.dated_on)),
 		@TurnoverFrom = MIN(i.dated_on),
 		@TurnoverTo = MAX(i.dated_on)

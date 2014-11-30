@@ -63,6 +63,7 @@
 			var turnover = _mpHelper.GetTurnoverForRejection(_customerId);
 
 			var data = new RejectionInputData {
+				IsBrokerClient = dbData.IsBrokerClient,
 				CustomerStatus = dbData.CustomerStatus,
 				ConsumerScore = dbData.ExperianScore,
 				BusinessScore = dbData.CompanyScore,
@@ -111,10 +112,9 @@
 			}
 
 			m_oLog.Debug(
-				"Checking if auto rejection should take place for customer {0} complete; {1}\n{2}",
+				"Checking if auto reject should take place for customer {0} complete; {1}",
 				_customerId,
-				Trail,
-				IsAutoRejected ? "Auto rejected" : "Not auto rejected"
+				Trail
 			);
 		}
 
@@ -205,7 +205,7 @@
 
 		private void CheckMpError()
 		{
-			var data = new MarketPlaceWithErrorException.DataModel()
+			var data = new MarketPlaceWithErrorException.DataModel
 			{
 				HasMpError = Trail.MyInputData.HasMpError,
 				MaxBusinessScore = Trail.MyInputData.BusinessScore,
@@ -405,9 +405,9 @@
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 
-		private int _customerId;
+		private readonly int _customerId;
 		public bool IsAutoRejected { get; private set; }
-		private RejectionConfigs _configs;
+		private readonly RejectionConfigs _configs;
 
 		#endregion fields
 

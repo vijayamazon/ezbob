@@ -55,7 +55,7 @@ BEGIN
 				AND
 				tr.transactionBaseType = 'credit'
 				AND
-				(tr.isSeidMod = 0 OR tr.isSeidMod IS NULL)
+				ISNULL(tr.isSeidMod, 0) = 0
 				AND
 				g.MainGroup = 'Revenues'
 				AND (
@@ -67,7 +67,7 @@ BEGIN
 				)
 		)
 		SELECT
-			@YodleeRevenues = ISNULL(SUM(tr.transactionAmount), 0),
+			@YodleeRevenues = SUM(ISNULL(tr.transactionAmount, 0)),
 			@TranDayCount = COUNT(DISTINCT CONVERT(DATE, ISNULL(tr.transactionDate, tr.postDate)))
 		FROM
 			MP_YodleeOrderItemBankTransaction tr
@@ -75,8 +75,8 @@ BEGIN
 
 		SELECT
 			@MaxDate = MAX(i.asOfDate),
-			@MinTransDate = MIN(tr.transactionDate),
-			@MinPostDate = MIN(tr.postDate)
+			@MinTransDate = MIN(ISNULL(tr.transactionDate, tr.postDate)),
+			@MinPostDate = MIN(ISNULL(tr.postDate, tr.transactionDate))
 		FROM
 			MP_CustomerMarketPlace mp 
 			INNER JOIN MP_YodleeOrder o ON o.CustomerMarketPlaceId = mp.Id
@@ -107,7 +107,7 @@ BEGIN
 				mp.Disabled = 0
 		)
 		SELECT
-			@YodleeRevenues = ISNULL(SUM(tr.transactionAmount), 0),
+			@YodleeRevenues = SUM(ISNULL(tr.transactionAmount, 0)),
 			@TranDayCount = COUNT(DISTINCT CONVERT(DATE, tr.transactionDate))
 		FROM
 			MP_YodleeOrderItemBankTransaction tr 
@@ -151,5 +151,8 @@ BEGIN
 			OR
 			(tr.transactionDate BETWEEN @DateFrom AND @DateTo)
 	END
+
+	SET @YodleeRevenues = ISNULL(@YodleeRevenues, 0)
+	SET @TranDayCount = ISNULL(@TranDayCount, 0)
 END
 GO

@@ -65,8 +65,6 @@
 		#region method MakeDecision
 
 		public virtual void MakeDecision(AutoDecisionRejectionResponse response) {
-			Log.Debug("Checking if auto reject should take place for customer {0}...", Args.CustomerID);
-
 			try {
 				MakeAndVerifyDecision();
 
@@ -83,9 +81,6 @@
 				StepNoReject<ExceptionThrown>().Init(e);
 			} // try
 
-			Log.Debug("Checking if auto reject should take place for customer {0} complete.", Args.CustomerID);
-
-			Log.Msg("{0}", Trail);
 		} // MakeDecision
 
 		#endregion method MakeDecision
@@ -144,6 +139,8 @@
 		#region method RunPrimary
 
 		private void RunPrimary() {
+			Log.Debug("Checking if auto reject should take place for customer {0}...", Args.CustomerID);
+
 			GatherData();
 
 			Checker check = new Checker(this.Trail);
@@ -165,6 +162,8 @@
 			check.CustomerStatus();
 			check.CompanyFiles();
 			check.LateAccounts();
+
+			Log.Debug("Checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
 		} // RunPrimary
 
 		#endregion method RunPrimary

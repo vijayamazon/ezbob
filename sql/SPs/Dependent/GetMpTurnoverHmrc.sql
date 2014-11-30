@@ -74,7 +74,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@Turnover = SUM(i.Amount * i.Ratio),
+		@Turnover = SUM(ISNULL(i.Amount, 0) * ISNULL(i.Ratio, 0)),
 		@TurnoverFrom = MIN(i.DateFrom),
 		@TurnoverTo = MAX(i.DateTo)
 	FROM
