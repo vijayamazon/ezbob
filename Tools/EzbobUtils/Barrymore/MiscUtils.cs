@@ -74,8 +74,7 @@
 		#region method GetFullYearsAndMonths
 
 		public static void GetFullYearsAndMonths(DateTime? date, out int years, out int months) {
-			if (!date.HasValue)
-			{
+			if (!date.HasValue) {
 				years = 0;
 				months = 0;
 				return;
@@ -93,5 +92,44 @@
 		} // GetFullYearsAndMonths
 
 		#endregion method GetFullYearsAndMonths
+
+		#region method MonthDiff
+
+		/// <summary>
+		/// Returns number of full months between the dates a and b.
+		/// If a > b the result is negative.
+		/// </summary>
+		/// <param name="a">First date.</param>
+		/// <param name="b">Second date.</param>
+		/// <returns>Number of full months between the dates a and b.</returns>
+		public static int MonthDiff(DateTime a, DateTime b) {
+			if (a == b)
+				return 0;
+
+			bool bReverse = a > b;
+
+			if (bReverse) {
+				DateTime t = a;
+				a = b;
+				b = t;
+			} // if
+
+			int nCount = 0;
+
+			DateTime c = b;
+
+			while (a <= c) {
+				c = b.AddMonths(-nCount - 1);
+
+				if (a <= c)
+					nCount++;
+				else
+					break;
+			} // while
+
+			return bReverse ? -nCount : nCount;
+		} // MonthDiff
+
+		#endregion method MonthDiff
 	} // class MiscUtils
 } // namespace

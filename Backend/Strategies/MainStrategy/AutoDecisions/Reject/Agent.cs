@@ -12,6 +12,7 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 
 	public class Agent {
 		#region public
@@ -130,10 +131,6 @@
 		#endregion protected
 
 		#region private
-
-		#region steps
-
-		#endregion steps
 
 		#region method RunPrimary
 
@@ -272,25 +269,28 @@
 			if ((oData == null) || (oData.Cais == null) || (oData.Cais.Count < 1))
 				return;
 
-			DateTime oMonthAgo = Trail.MyInputData.DataAsOf.AddMonths(-1);
-
 			foreach (var cais in oData.Cais) {
 				if (!cais.LastUpdatedDate.HasValue)
+					continue;
+
+				if (cais.MatchTo != 1)
 					continue;
 
 				if (string.IsNullOrWhiteSpace(cais.AccountStatusCodes))
 					continue;
 
-				int nIdxToStartFrom = 1;
+				if (cais.LastUpdatedDate.Value > Trail.InputData.DataAsOf)
+					continue;
 
-				int nMonthCount = Math.Min(Trail.MyInputData.Reject_LateLastMonthsNum, cais.AccountStatusCodes.Length);
+				int nDistance = MiscUtils.MonthDiff(cais.LastUpdatedDate.Value, Trail.InputData.DataAsOf);
 
-				if (cais.LastUpdatedDate.Value > oMonthAgo) {
-					nIdxToStartFrom = 2;
-					nMonthCount = Math.Min(Trail.MyInputData.Reject_LateLastMonthsNum, cais.AccountStatusCodes.Length - 1);
-				} // if
+				int nMonthCount = nDistance <= 2
+					? Trail.MyInputData.Reject_LateLastMonthsNum
+					: Trail.MyInputData.Reject_LateLastMonthsNum - nDistance + 1;
 
-				for (int i = nIdxToStartFrom; i <= nMonthCount; i++) {
+				nMonthCount = Math.Min(nMonthCount, cais.AccountStatusCodes.Length);
+
+				for (int i = 1; i <= nMonthCount; i++) {
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
 					if (!ms_oLateStatuses.Contains(status))
