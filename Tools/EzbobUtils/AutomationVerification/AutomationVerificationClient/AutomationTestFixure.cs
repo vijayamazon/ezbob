@@ -254,29 +254,47 @@
 			var db = new SqlConnection(Log);
 			var calc = new CaisStatusesCalculation(db, Log);
 
-			var caisStatuses = new List<CaisStatus> {
-				new CaisStatus { AccountStatusCodes = "00200", LastUpdatedDate = new DateTime(2014,11,23)}, //0month 1
-				new CaisStatus { AccountStatusCodes = "00400", LastUpdatedDate = new DateTime(2014,10,23)}, //1month 1
-				new CaisStatus { AccountStatusCodes = "00020", LastUpdatedDate = new DateTime(2014,10,23)}, //1month 1
-				new CaisStatus { AccountStatusCodes = "00600", LastUpdatedDate = new DateTime(2014,09,23)}, //2month 0
-				new CaisStatus { AccountStatusCodes = "00050", LastUpdatedDate = new DateTime(2014,09,23)}, //2month 0
-				new CaisStatus { AccountStatusCodes = "00005", LastUpdatedDate = new DateTime(2014,09,23)}, //2month 1
-				new CaisStatus { AccountStatusCodes = "00300", LastUpdatedDate = new DateTime(2014,08,23)}, //3month 0
-				new CaisStatus { AccountStatusCodes = "00030", LastUpdatedDate = new DateTime(2014,08,23)}, //3month 0
-				new CaisStatus { AccountStatusCodes = "00003", LastUpdatedDate = new DateTime(2014,08,23)}, //3month 1
-				new CaisStatus { AccountStatusCodes = "00600", LastUpdatedDate = new DateTime(2014,07,23)}, //4month 0
-				new CaisStatus { AccountStatusCodes = "00060", LastUpdatedDate = new DateTime(2014,07,23)}, //4month 0
-				new CaisStatus { AccountStatusCodes = "00006", LastUpdatedDate = new DateTime(2014,07,23)}, //4month 0
-			};
-			var lates = calc.GetLates(1, new DateTime(2014, 11, 23), 1, 3, caisStatuses);
+			//var caisStatuses = new List<CaisStatus> {
+			//	new CaisStatus { AccountStatusCodes = "00200", LastUpdatedDate = new DateTime(2014,11,23)}, //0month 1
+			//	new CaisStatus { AccountStatusCodes = "00400", LastUpdatedDate = new DateTime(2014,10,23)}, //1month 1
+			//	new CaisStatus { AccountStatusCodes = "00020", LastUpdatedDate = new DateTime(2014,10,23)}, //1month 1
+			//	new CaisStatus { AccountStatusCodes = "00600", LastUpdatedDate = new DateTime(2014,09,23)}, //2month 0
+			//	new CaisStatus { AccountStatusCodes = "00050", LastUpdatedDate = new DateTime(2014,09,23)}, //2month 0
+			//	new CaisStatus { AccountStatusCodes = "00005", LastUpdatedDate = new DateTime(2014,09,23)}, //2month 1
+			//	new CaisStatus { AccountStatusCodes = "00300", LastUpdatedDate = new DateTime(2014,08,23)}, //3month 0
+			//	new CaisStatus { AccountStatusCodes = "00030", LastUpdatedDate = new DateTime(2014,08,23)}, //3month 0
+			//	new CaisStatus { AccountStatusCodes = "00003", LastUpdatedDate = new DateTime(2014,08,23)}, //3month 1
+			//	new CaisStatus { AccountStatusCodes = "00600", LastUpdatedDate = new DateTime(2014,07,23)}, //4month 0
+			//	new CaisStatus { AccountStatusCodes = "00060", LastUpdatedDate = new DateTime(2014,07,23)}, //4month 0
+			//	new CaisStatus { AccountStatusCodes = "00006", LastUpdatedDate = new DateTime(2014,07,23)}, //4month 0
+			//};
+			//var lates = calc.GetLates(1, new DateTime(2014, 11, 23), 1, 3, caisStatuses);
 			
-			Assert.AreEqual(150, lates.LateDays);
-			Assert.AreEqual(5, lates.NumOfLates);
+			//Assert.AreEqual(150, lates.LateDays);
+			//Assert.AreEqual(5, lates.NumOfLates);
 
-			lates = calc.GetLates(21370, new DateTime(2014, 11, 23), 1, 3);
-			Assert.AreEqual(60, lates.LateDays);
-			Assert.AreEqual(2, lates.NumOfLates);
+			//lates = calc.GetLates(21370, new DateTime(2014, 11, 23), 1, 3);
+			//Assert.AreEqual(60, lates.LateDays);
+			//Assert.AreEqual(2, lates.NumOfLates);
 
+
+
+			var caisStatuses = new List<CaisStatus> {
+				new CaisStatus { AccountStatusCodes = "8", LastUpdatedDate = new DateTime(2014,10,19)}, //0month 1
+				new CaisStatus { AccountStatusCodes = "666", LastUpdatedDate = new DateTime(2014,11,02)}, //1month 1
+				new CaisStatus { AccountStatusCodes = "666666666666", LastUpdatedDate = new DateTime(2014,10,05)}, //1month 1
+				new CaisStatus { AccountStatusCodes = "666666U66665", LastUpdatedDate = new DateTime(2014,10,19)}, //2month 0
+				new CaisStatus { AccountStatusCodes = "000000000000", LastUpdatedDate = new DateTime(2014,10,19)}, //2month 0
+				new CaisStatus { AccountStatusCodes = "832100", LastUpdatedDate = new DateTime(2014,10,05)}, //2month 1
+				new CaisStatus { AccountStatusCodes = "8", LastUpdatedDate = new DateTime(2014,10,05)}, //3month 0
+				new CaisStatus { AccountStatusCodes = "832100", LastUpdatedDate = new DateTime(2014,11,02)}, //3month 0
+				new CaisStatus { AccountStatusCodes = "832100110000", LastUpdatedDate = new DateTime(2014,10,05)}, //3month 1
+			};
+
+			var lates = calc.GetLates(1, new DateTime(2014, 12, 1), 1, 3, caisStatuses);
+
+			Assert.AreEqual(180, lates.LateDays);
+			Assert.AreEqual(3, lates.NumOfLates);
 		}
 
 		[Test]

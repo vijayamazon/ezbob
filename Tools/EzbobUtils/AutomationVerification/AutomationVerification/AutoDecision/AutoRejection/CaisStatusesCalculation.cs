@@ -106,7 +106,8 @@
 					{
 						string status = caisStatus.AccountStatusCodes[caisStatus.AccountStatusCodes.Length - i - 1].ToString();
 						var accountStatus = AccountStatusDictionary.GetAccountStatus(status);
-						if (accountStatus.IsDefault && caisStatus.Balance > minAmount)
+						var balance = Math.Max(caisStatus.Balance, caisStatus.CurrentDefBalance);
+						if (accountStatus.IsDefault && balance > minAmount)
 						{
 							isDefaultInAccount = true;
 						}

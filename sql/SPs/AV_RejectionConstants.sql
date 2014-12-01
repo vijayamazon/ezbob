@@ -34,7 +34,7 @@ BEGIN
 	DECLARE @TotalThreeMonthTurnover INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'TotalThreeMonthTurnover')
 	
 	SELECT
-		@AutoRejectionException_AnualTurnover AS AutoRejectionException_AnualTurnover
+		 @AutoRejectionException_AnualTurnover AS AutoRejectionException_AnualTurnover
 		,@AutoRejectionException_CreditScore AS AutoRejectionException_CreditScore
 		,@LowCreditScore AS LowCreditScore
 		,@Reject_Defaults_AccountsNum AS Reject_Defaults_AccountsNum
@@ -55,5 +55,6 @@ BEGIN
 		,@RejectionLastValidLate AS RejectionLastValidLate
 		,@TotalAnnualTurnover AS TotalAnnualTurnover
 		,@TotalThreeMonthTurnover AS TotalThreeMonthTurnover
+		,@Reject_LateLastMonthsNum AS Reject_LateLastMonthsNum
 END
 GO
