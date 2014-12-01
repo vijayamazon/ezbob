@@ -230,10 +230,9 @@
 			DateTime oThen = Trail.MyInputData.MonthsNumAgo;
 
 			foreach (var cais in oData.Cais) {
-				if (cais.Balance == null)
-					continue;
+				decimal nBalance = Math.Max(cais.CurrentDefBalance ?? 0, cais.Balance ?? 0);
 
-				if (cais.Balance <= Cfg.Values.Reject_Defaults_Amount)
+				if (nBalance <= Cfg.Values.Reject_Defaults_Amount)
 					continue;
 
 				if (cais.MatchTo != 1)
@@ -333,19 +332,19 @@
 
 			foreach (var dl97 in oDL97List) {
 				// Log.Debug(
-					// "DL97 entry: id '{0}', default balance '{1}', last updated '{2}', statuses '{3}'",
+					// "DL97 entry: id '{0}', default balance '{1}', current balance '{4}', last updated '{2}', statuses '{3}'",
 					// dl97.ID,
 					// dl97.DefaultBalance.HasValue ? dl97.DefaultBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
 					// dl97.CAISLastUpdatedDate.HasValue ? dl97.CAISLastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
-					// dl97.AccountStatusLast12AccountStatuses
+					// dl97.AccountStatusLast12AccountStatuses,
+					// dl97.CurrentBalance.HasValue ? dl97.CurrentBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --"
 				// );
 
-				if (!dl97.DefaultBalance.HasValue) {
-					// Log.Debug("DL97 id {0} ain't not default account: no balance.", dl97.ID);
-					continue;
-				} // if
+				decimal nBalance = Math.Max(dl97.DefaultBalance ?? 0, dl97.CurrentBalance ?? 0);
 
-				if (dl97.DefaultBalance.Value <= Trail.MyInputData.Reject_Defaults_CompanyAmount) {
+				// Log.Debug("DL97 id {0} balance is {1}.", dl97.ID, nBalance);
+
+				if (nBalance <= Trail.MyInputData.Reject_Defaults_CompanyAmount) {
 					// Log.Debug("DL97 id {0} ain't not default account: low balance.", dl97.ID);
 					continue;
 				} // if
