@@ -1,19 +1,22 @@
 ﻿namespace AutomationCalculator.AutoDecision
 {
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class AutoReRejectionCalculator
 	{
 		private static ASafeLog _log;
-		public AutoReRejectionCalculator(ASafeLog log)
-		{
+		private readonly AConnection m_oDB;
+
+		public AutoReRejectionCalculator(AConnection db, ASafeLog log) {
+			m_oDB = db;
 			_log = log;
 		}
 
 		public bool IsAutoReRejected(int customerId, int cashRequestId, out string reason)
 		{
-			var dbHelper = new DbHelper(_log);
+			var dbHelper = new DbHelper(m_oDB, _log);
 			var rerejectionData = dbHelper.GetReRejectionData(customerId, cashRequestId);
 
 			var days = rerejectionData.ManualRejectDate.HasValue ? (rerejectionData.AutomaticDecisionDate - rerejectionData.ManualRejectDate.Value).Days : 0;

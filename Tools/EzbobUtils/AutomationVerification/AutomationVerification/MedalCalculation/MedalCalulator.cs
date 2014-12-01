@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	/// <summary>
@@ -86,15 +87,16 @@
 	public abstract class MedalCalculator : IMedalCalulator, IMedalWeightConstatns
 	{
 		protected readonly ASafeLog Log;
+		protected readonly AConnection DB;
 
-		protected MedalCalculator(ASafeLog log)
-		{
+		protected MedalCalculator(AConnection db, ASafeLog log) {
+			DB = db;
 			Log = log;
 		}
 
 		public virtual MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null)
 		{
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var dbData = dbHelper.GetMedalInputModel(customerId);
 			var model = new MedalInputModel {MedalInputModelDb = dbData};
 
@@ -124,7 +126,7 @@
 
 			// This Logic is good only for OfflineLimited,SoleTrader,NonLimited Medals
 			var yodlees = dbHelper.GetCustomerYodlees(customerId);
-			var mpHelper = new MarketPlacesHelper(Log);
+			var mpHelper = new MarketPlacesHelper(DB, Log);
 			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, Log);
 			model.AnnualTurnover = dbData.HasHmrc ? dbData.HmrcRevenues : yodleeIncome;
 			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;
@@ -154,8 +156,8 @@
 		protected MedalInputModel GetOnlineInputParameters(int customerId, MedalInputModel intputModel)
 		{
 			var usingHmrc = false;
-			var dbHelper = new DbHelper(Log);
-			var mpHelper = new MarketPlacesHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
+			var mpHelper = new MarketPlacesHelper(DB, Log);
 			var yodlees = dbHelper.GetCustomerYodlees(customerId);
 			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, Log);
 			var onlineTurnover = mpHelper.GetOnlineTurnoverAnnualized(customerId);

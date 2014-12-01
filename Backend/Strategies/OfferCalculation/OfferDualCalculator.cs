@@ -20,7 +20,7 @@
 			this.db = db;
 
 			offerCalculator1 = new OfferCalculator1(db, log);
-			offerCalculator2 = new OfferCalculator(log);
+			offerCalculator2 = new OfferCalculator(db, log);
 		}
 
 		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, bool hasLoans, MedalClassification medalClassification)

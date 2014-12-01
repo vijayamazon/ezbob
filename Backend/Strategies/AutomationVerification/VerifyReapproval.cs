@@ -41,7 +41,7 @@
 			oReapprove.MakeDecision(autoDecisionResponse);
 
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(
-				Log, oRow.CustomerId, oReapprove.Trail.InputData.DataAsOf
+				DB, Log, oRow.CustomerId, oReapprove.Trail.InputData.DataAsOf
 			);
 
 			oSecondary.MakeDecision(oSecondary.GetInputData());

@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	/// <summary>
@@ -11,7 +12,7 @@
 	/// </summary>
 	public class OnlineNonLimitedWithBusinessScoreMedalCalculator : MedalCalculator
 	{
-		public OnlineNonLimitedWithBusinessScoreMedalCalculator(ASafeLog log) : base(log) { }
+		public OnlineNonLimitedWithBusinessScoreMedalCalculator(AConnection db, ASafeLog log) : base(db, log) { }
 
 		public override MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null)
 		{

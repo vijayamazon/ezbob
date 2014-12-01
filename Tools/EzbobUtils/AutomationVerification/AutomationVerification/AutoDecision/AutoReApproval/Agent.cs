@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using Common;
+	using Ezbob.Database;
 	using ProcessHistory;
 	using ProcessHistory.Common;
 	using ProcessHistory.ReApproval;
@@ -15,7 +16,8 @@
 
 		#region constructor
 
-		public Agent(ASafeLog oLog, int customerId, DateTime? dataAsOf = null) {
+		public Agent(AConnection oDB, ASafeLog oLog, int customerId, DateTime? dataAsOf = null) {
+			m_oDB = oDB;
 			m_oLog = oLog ?? new SafeLog();
 			CustomerId = customerId;
 			Now = dataAsOf.HasValue? dataAsOf.Value : DateTime.UtcNow;
@@ -26,7 +28,7 @@
 		#endregion constructor
 
 		public ReApprovalInputData GetInputData() {
-			DbHelper dbHelper = new DbHelper(m_oLog);
+			DbHelper dbHelper = new DbHelper(m_oDB, m_oLog);
 			AutoReApprovalInputDataModelDb dbData = dbHelper.GetAutoReApprovalInputData(CustomerId);
 			AvailableFunds availableFunds = dbHelper.GetAvailableFunds();
 
@@ -227,6 +229,7 @@
 		protected readonly int CustomerId;
 
 		private readonly ASafeLog m_oLog;
+		private readonly AConnection m_oDB;
 		private int m_nApprovedAmount;
 
 		#endregion fields

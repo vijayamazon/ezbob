@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoReApproval;
 	using AutomationCalculator.AutoDecision.AutoRejection;
@@ -17,12 +16,6 @@
 		{
 			_log = log;
 			_db = db;
-		}
-
-		public DbHelper(ASafeLog log)
-		{
-			_log = log;
-			_db = new SqlConnection(log);
 		}
 
 		public RejectionConfigs GetRejectionConfigs()

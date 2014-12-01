@@ -3,24 +3,25 @@
 	using System;
 	using System.Collections.Generic;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class CaisStatusesCalculation
 	{
-		public CaisStatusesCalculation(ASafeLog log)
+		public CaisStatusesCalculation(AConnection db, ASafeLog log)
 		{
 			Log = log;
-
+			DB = db;
 		}
 
 		public List<CaisStatus> GetConsumerCaisStatuses(int customerId) {
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			return dbHelper.GetCustomerCaisStatuses(customerId);
 		}
 
 		public List<CaisStatus> GetBusinessCaisStatuses(int customerId)
 		{
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			return dbHelper.GetBusinessCaisStatuses(customerId);
 		}
 
@@ -128,6 +129,7 @@
 		}
 
 		protected readonly ASafeLog Log;
+		protected readonly AConnection DB;
 	}
 
 	public class ConsumerLatesModel

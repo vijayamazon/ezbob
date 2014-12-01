@@ -314,6 +314,8 @@
 		#region method FillFromCompanyData
 
 		private void FillFromCompanyData() {
+			Trail.MyInputData.NumOfDefaultBusinessAccounts = 0;
+
 			if (!MetaData.IsLtd || string.IsNullOrWhiteSpace(MetaData.CompanyRefNum))
 				return;
 
@@ -338,7 +340,7 @@
 					continue;
 
 				if (string.IsNullOrWhiteSpace(dl97.AccountStatusLast12AccountStatuses))
-					return;
+					continue;
 
 				DateTime cur = dl97.CAISLastUpdatedDate.Value;
 

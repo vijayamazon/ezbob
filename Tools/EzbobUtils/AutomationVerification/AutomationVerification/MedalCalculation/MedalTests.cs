@@ -4,12 +4,15 @@
 	using System.Globalization;
 	using System.Text;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class MedalTests {
 		protected ASafeLog Log;
+		protected AConnection DB;
 
-		public MedalTests(ASafeLog log) {
+		public MedalTests(AConnection db, ASafeLog log) {
+			DB = db;
 			Log = log;
 		}
 
@@ -20,23 +23,23 @@
 			var numPassed = 0;
 			var numFailed = 0;
 
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(new SqlConnection(Log), Log);
 			List<MedalComparisonModel> testMedalData = dbHelper.GetMedalTestData();
 
 			foreach (var medalComparisonModel in testMedalData) {
 				IMedalCalulator calulator;
 				switch (medalComparisonModel.MedalType) {
 					case MedalType.Limited:
-						calulator = new OfflineLImitedMedalCalculator(Log);
+						calulator = new OfflineLImitedMedalCalculator(DB, Log);
 						break;
 					case MedalType.OnlineLimited:
-						calulator = new OnlineLImitedMedalCalculator(Log);
+						calulator = new OnlineLImitedMedalCalculator(DB, Log);
 						break;
 					case MedalType.NonLimited:
-						calulator = new NonLimitedMedalCalculator(Log);
+						calulator = new NonLimitedMedalCalculator(DB, Log);
 						break;
 					case MedalType.SoleTrader:
-						calulator = new SoleTraderMedalCalculator(Log);
+						calulator = new SoleTraderMedalCalculator(DB, Log);
 						break;
 					default:
 						Log.Debug("Skipping medal calc for {0} NoMedal", medalComparisonModel.CustomerId);
@@ -196,10 +199,11 @@
 		}
 
 		public void TestMedalDataGathering() {
-			var dbHelper = new DbHelper(Log);
+			var db = new SqlConnection(Log);
+			var dbHelper = new DbHelper(db, Log);
 			var customers = dbHelper.GetCustomersForMedalsCompare();
 				//new int[] { 25, 26, 28, 29, 30, 31, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 50, 51, 52, 53, 55, 56, 57, 58, 60, 61, 64, 65, 66, 69, 70, 71, 72, 74, 75, 76, 77, 78, 83, 84, 85, 105, 108, 2106, 4108, 4116, 4117, 4118, 4119, 5116, 5117, 5118, 5119, 5120, 5121, 5122, 5125, 5126, 5127, 5128, 5129, 5133, 5134, 5135, 7133, 10139, 10140, 10141, 10144, 10145, 10146, 11154, 11159, 11164, 14164, 14165, 14166, 14173, 14175, 14177, 14178, 14183, 14197, 14198, 14209, 14214, 14216, 14217, 14218, 14220, 14221, 14222, 14223, 14226, 15227, 15228, 15230, 15232, 16232, 16235, 16236, 16237, 16238, 16240, 16241, 16242, 16243, 16244, 16246, 16248, 16249, 17251, 17252, 17254, 17258, 17259, 17260, 17261, 17265, 17267, 18268, 18269, 18271, 18275, 18277, 18281, 18285, 18286, 18287, 18289, 18290, 20290, 20291, 20292, 20293, 20294, 20295, 20296, 20297, 20298, 20299, 20300, 20302, 20303, 20304, 20305, 20306, 20307, 20308, 20309, 20310, 20311, 20312, 20313, 20319, 20321, 21322, 21323, 21327, 21333, 21335, 21336, 21337, 21340, 21341, 21342, 21343, 21344, 21345, 21364, 21367, 21370, 21375, 21377, 21378, 21387, 21388, 21394, 21399, 21400, 21402, 21403 };
-			var medalChooser = new MedalChooser(Log);
+			var medalChooser = new MedalChooser(db, Log);
 			
 			foreach (var customer in customers) {
 				var medal = medalChooser.GetMedal(customer.Key, customer.Value);

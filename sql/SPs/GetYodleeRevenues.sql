@@ -18,6 +18,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @LongAgo DATETIME = 'April 5 1753'
+
 	IF @DateFrom IS NULL OR @DateTo IS NULL
 	BEGIN
 		SET @DateFrom = NULL
@@ -75,8 +77,8 @@ BEGIN
 
 		SELECT
 			@MaxDate = MAX(i.asOfDate),
-			@MinTransDate = MIN(ISNULL(tr.transactionDate, tr.postDate)),
-			@MinPostDate = MIN(ISNULL(tr.postDate, tr.transactionDate))
+			@MinTransDate = MIN(ISNULL(ISNULL(tr.transactionDate, tr.postDate), @LongAgo)),
+			@MinPostDate = MIN(ISNULL(ISNULL(tr.postDate, tr.transactionDate), @LongAgo))
 		FROM
 			MP_CustomerMarketPlace mp 
 			INNER JOIN MP_YodleeOrder o ON o.CustomerMarketPlaceId = mp.Id
@@ -92,7 +94,13 @@ BEGIN
 				(tr.postDate BETWEEN @DateFrom AND @DateTo)
 			)
 
-		SELECT @MinDate = dbo.udfMinDate(@MinPostDate, @MinTransDate)
+		IF @MinTransDate = @LongAgo
+		BEGIN
+			SET @MinTransDate = NULL
+			SET @MinPostDate = NULL
+		END
+
+		SET @MinDate = dbo.udfMinDate(@MinPostDate, @MinTransDate)
 	END
 	ELSE	BEGIN
 		;WITH lastOrder AS (
@@ -139,7 +147,7 @@ BEGIN
 				mp.Disabled = 0
 		)
 		SELECT
-			@MinDate = MIN(tr.transactionDate),
+			@MinDate = MIN(ISNULL(tr.transactionDate, @LongAgo)),
 			@MaxDate = MAX(i.asOfDate)
 		FROM
 			MP_YodleeOrderItemBankTransaction tr 
@@ -150,6 +158,9 @@ BEGIN
 			@DateFrom IS NULL
 			OR
 			(tr.transactionDate BETWEEN @DateFrom AND @DateTo)
+
+		IF @MinDate = @LongAgo
+			SET @MinDate = NULL
 	END
 
 	SET @YodleeRevenues = ISNULL(@YodleeRevenues, 0)

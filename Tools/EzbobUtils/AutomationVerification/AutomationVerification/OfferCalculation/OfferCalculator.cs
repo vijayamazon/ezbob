@@ -2,6 +2,7 @@
 {
 	using System;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.ValueIntervals;
 
@@ -10,9 +11,10 @@
 		protected decimal SetupFeeStep {get { return 0.05M; }}
 		protected decimal InterestRateStep {get { return 0.005M; }}
 		protected ASafeLog Log;
+		protected AConnection DB;
 
-		public OfferCalculator(ASafeLog log) 
-		{
+		public OfferCalculator(AConnection db, ASafeLog log) {
+			DB = db;
 			Log = log;
 		}
 
@@ -23,7 +25,7 @@
 		/// <returns></returns>
 		public OfferOutputModel GetOfferBySeek(OfferInputModel input)
 		{
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var setupFeeRange = dbHelper.GetOfferSetupFeeRange(input.Amount);
 			var interestRateRange = dbHelper.GetOfferIneterestRateRange(input.Medal);
 			interestRateRange.MaxInterestRate = interestRateRange.MaxInterestRate / 100;
@@ -116,7 +118,7 @@
 		/// <returns>Offer model : interest rate, setup fee, repayment period, loan type and source</returns>
 		public OfferOutputModel GetOfferByBoundaries(OfferInputModel input)
 		{
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var setupFeeRange = dbHelper.GetOfferSetupFeeRange(input.Amount);
 			var interestRateRange = dbHelper.GetOfferIneterestRateRange(input.Medal);
 			interestRateRange.MaxInterestRate = interestRateRange.MaxInterestRate / 100;

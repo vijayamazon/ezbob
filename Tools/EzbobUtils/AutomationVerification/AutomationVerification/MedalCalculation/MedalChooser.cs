@@ -3,6 +3,7 @@
 	using System;
 	using System.Linq;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	/// <summary>
@@ -11,12 +12,15 @@
 	public class MedalChooser
 	{
 		protected ASafeLog Log;
+		protected AConnection DB;
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
+		/// <param name="db">DB</param>
 		/// <param name="log">Log</param>
-		public MedalChooser(ASafeLog log)
-		{
+		public MedalChooser(AConnection db, ASafeLog log) {
+			DB = db;
 			Log = log;
 		}
 
@@ -43,7 +47,7 @@
 		/// <returns></returns>
 		public MedalOutputModel GetMedal(int customerId, DateTime? calculationDate = null)
 		{
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var medalChooserData = dbHelper.GetMedalChooserData(customerId);
 			DateTime today = calculationDate.HasValue ? calculationDate.Value : DateTime.Today;
 
@@ -96,22 +100,22 @@
 			switch (type)
 			{
 				case MedalType.Limited:
-					medalCalulator = new OfflineLImitedMedalCalculator(Log);
+					medalCalulator = new OfflineLImitedMedalCalculator(DB, Log);
 					break;
 				case MedalType.NonLimited:
-					medalCalulator = new NonLimitedMedalCalculator(Log);
+					medalCalulator = new NonLimitedMedalCalculator(DB, Log);
 					break;
 				case MedalType.OnlineLimited:
-					medalCalulator = new OnlineLImitedMedalCalculator(Log);
+					medalCalulator = new OnlineLImitedMedalCalculator(DB, Log);
 					break;
 				case MedalType.SoleTrader:
-					medalCalulator = new SoleTraderMedalCalculator(Log);
+					medalCalulator = new SoleTraderMedalCalculator(DB, Log);
 					break;
 				case MedalType.OnlineNonLimitedNoBusinessScore:
-					medalCalulator = new OnlineNonLimitedNoBusinessScoreMedalCalculator(Log);
+					medalCalulator = new OnlineNonLimitedNoBusinessScoreMedalCalculator(DB, Log);
 					break;
 				case MedalType.OnlineNonLimitedWithBusinessScore:
-					medalCalulator = new OnlineNonLimitedWithBusinessScoreMedalCalculator(Log);
+					medalCalulator = new OnlineNonLimitedWithBusinessScoreMedalCalculator(DB, Log);
 					break;
 				default:
 					return new MedalOutputModel
@@ -132,7 +136,7 @@
 
 		private int GetOfferedAmount(MedalOutputModel medal, int minApprovalAmount)
 		{
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var medalCoefficients = dbHelper.GetMedalCoefficients();
 			var coefficients = medalCoefficients.First(x => x.Medal == medal.Medal);
 			var annualTurnoverOffer = decimal.Parse(medal.WeightsDict[Parameter.AnnualTurnover].Value) * coefficients.AnnualTurnover / 100.0M;

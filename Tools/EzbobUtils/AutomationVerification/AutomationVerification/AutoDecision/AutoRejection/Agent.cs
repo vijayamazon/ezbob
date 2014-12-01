@@ -30,7 +30,7 @@
 			IsAutoRejected = false;
 			m_oLog = oLog;
 			m_oDB = oDB;
-			_mpHelper = new MarketPlacesHelper(m_oLog);
+			_mpHelper = new MarketPlacesHelper(oDB, m_oLog);
 			_dbHelper = new DbHelper(oDB, oLog);
 			if (configs == null) {
 				configs = _dbHelper.GetRejectionConfigs();
@@ -58,7 +58,7 @@
 
 			var days = originationTime.Since.HasValue ? (now - originationTime.Since.Value).TotalDays : 0;
 
-			var consumerCaisStatusesCalculation = new CaisStatusesCalculation(m_oLog);
+			var consumerCaisStatusesCalculation = new CaisStatusesCalculation(m_oDB, m_oLog);
 			var consumerCais = consumerCaisStatusesCalculation.GetConsumerCaisStatuses(_customerId);
 			var lates = consumerCaisStatusesCalculation.GetLates(_customerId, now,
 			                                                     _configs.RejectionLastValidLate,

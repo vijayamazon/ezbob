@@ -3,13 +3,16 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class MarketPlacesHelper
 	{
 		protected readonly ASafeLog Log;
+		protected readonly AConnection DB;
 
-		public MarketPlacesHelper(ASafeLog log) {
+		public MarketPlacesHelper(AConnection db, ASafeLog log) {
+			DB = db;
 			Log = log;
 		}
 
@@ -30,7 +33,7 @@
 			double paypal = 0;
 			double ebay = 0;
 			double sum = 0;
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 
 			foreach (var marketPlace in mps)
 			{
@@ -70,7 +73,7 @@
 		/// <returns></returns>
 		public decimal GetTurnoverAnnualizedForRejecetion(List<MarketPlace> mps)
 		{
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var dict = new Dictionary<MarketPlace, OnlineRevenues>();
 			foreach (var marketPlace in mps)
 			{
@@ -115,7 +118,7 @@
 		///Take the minimum between these 4. (The non-zero minimum)
 		/// </summary>
 		public decimal GetOnlineTurnoverAnnualized(int customerId) {
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
 			var dict = new Dictionary<MarketPlace, OnlineRevenues>();
 			foreach (var marketPlace in mps) {
@@ -212,7 +215,7 @@
 
 		public decimal GetYodleeAnnualized(List<MarketPlace> yodlees, ASafeLog log) {
 			decimal incomeAnnualized = 0;
-			var dbHelper = new DbHelper(log);
+			var dbHelper = new DbHelper(DB, log);
 			foreach (var yodlee in yodlees) {
 				var yodleeRevenues = dbHelper.GetYodleeRevenues(yodlee.Id);
 				if (yodleeRevenues.MinDate.HasValue && yodleeRevenues.MaxDate.HasValue) {
@@ -230,7 +233,7 @@
 		}
 
 		public int GetPositiveFeedbacks(int customerId) {
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var feedbacksDb = dbHelper.GetPositiveFeedbacks(customerId);
 
 			//ebay and amazon
@@ -256,7 +259,7 @@
 		/// <param name="customerId">CustomerId</param>
 		/// <returns>Item1=AnnualTurnover, Item2=QuarterTurnover</returns>
 		public Tuple<decimal, decimal> GetTurnoverForRejection(int customerId) {
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(DB, Log);
 			var yodlees = dbHelper.GetCustomerYodlees(customerId);
 			decimal yodleesAnnualized = GetYodleeAnnualized(yodlees, Log);
 			decimal yodleeQuarter = yodlees.Sum(yodlee => dbHelper.GetYodleeRevenuesQuerter(yodlee.Id));

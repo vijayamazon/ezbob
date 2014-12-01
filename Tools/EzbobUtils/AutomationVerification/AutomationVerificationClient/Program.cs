@@ -202,12 +202,13 @@
 		private static Dictionary<int, Dictionary<DecisionType,AutoDecision>> GetVerificationDecisions(Dictionary<int, AutoDecision> decisions)
 		{
 			var verificationDecisions = new Dictionary<int, Dictionary<DecisionType,AutoDecision>>();
-			var db = new DbHelper(Log);
+			var c = new SqlConnection(Log);
+			var db = new DbHelper(c, Log);
 			var rejectionConstants = db.GetRejectionConfigs();
-			var aj = new AutoRejectionCalculator(Log, rejectionConstants);
-			var arr = new AutoReRejectionCalculator(Log);
-			var ara = new AutoReApprovalCalculator(Log);
-			var aa = new AutoApprovalCalculator(Log);
+			var aj = new AutoRejectionCalculator(c, Log, rejectionConstants);
+			var arr = new AutoReRejectionCalculator(c, Log);
+			var ara = new AutoReApprovalCalculator(c, Log);
+			var aa = new AutoApprovalCalculator(c, Log);
 
 			foreach (var autoDecision in decisions.Values)
 			{
@@ -277,7 +278,7 @@
 
 		private static Dictionary<int, AutoDecision> GetAutomaticDecisions(DateTime from, DateTime to)
 		{
-			var db = new DbHelper(Log);
+			var db = new DbHelper(new SqlConnection(Log), Log);
 			var decisionsTable = db.GetAutoDecisions(from, to);
 			return decisionsTable.ToDictionary<SafeReader, int, AutoDecision>(row => row["CashRequestId"],
 				row => new AutoDecision {

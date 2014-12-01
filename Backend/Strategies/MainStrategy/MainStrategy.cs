@@ -42,7 +42,6 @@
 		private bool isHomeOwner;
 		private bool isFirstLoan;
 		private bool wasMainStrategyExecutedBefore;
-		private bool isViaBroker;
 		private int companySeniorityDays;
 
 		private AutoDecisionResponse autoDecisionResponse;
@@ -112,7 +111,6 @@
 			// Processing logic
 			isHomeOwner = dataGatherer.IsOwnerOfMainAddress || dataGatherer.IsOwnerOfOtherProperties;
 			isFirstLoan = dataGatherer.NumOfLoans == 0;
-			isViaBroker = dataGatherer.BrokerId.HasValue;
 			companySeniorityDays = dataGatherer.CompanyIncorporationDate.HasValue ? (DateTime.UtcNow - dataGatherer.CompanyIncorporationDate.Value).Days : 0;
 
 			// Calculate old medal
@@ -340,7 +338,7 @@
 			
 			oReapprove.MakeDecision(autoDecisionResponse);
 
-			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(Log, customerId, oReapprove.Trail.InputData.DataAsOf);
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(DB, Log, customerId, oReapprove.Trail.InputData.DataAsOf);
 			oSecondary.MakeDecision(oSecondary.GetInputData());
 
 			bool bSuccess = oReapprove.Trail.EqualsTo(oSecondary.Trail);

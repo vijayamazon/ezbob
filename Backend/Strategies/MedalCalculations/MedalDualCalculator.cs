@@ -20,7 +20,7 @@
 			this.db = db;
 
 			medalCalculator1 = new MedalCalculator1(db, log);
-			medalCalculatorVerification = new MedalChooser(log);
+			medalCalculatorVerification = new MedalChooser(db, log);
 		}
 
 		public MedalResult CalculateMedalScore(int customerId, DateTime calculationTime, string typeOfBusiness, int consumerScore, int companyScore, int numOfHmrcMps, int numOfYodleeMps, int numOfEbayAmazonPayPalMps, DateTime? earliestHmrcLastUpdateDate, DateTime? earliestYodleeLastUpdateDate)
@@ -30,7 +30,7 @@
 				MedalResult result1 = medalCalculator1.CalculateMedal(customerId, calculationTime, typeOfBusiness, consumerScore, companyScore, numOfHmrcMps, numOfYodleeMps, numOfEbayAmazonPayPalMps, earliestHmrcLastUpdateDate, earliestYodleeLastUpdateDate);
 				MedalOutputModel result2 = medalCalculatorVerification.GetMedal(customerId, calculationTime);
 				
-				result2.SaveToDb(log);
+				result2.SaveToDb(db, log);
 
 				if (result1 != null && result1.IsIdentical(result2)) {
 					result1.SaveToDb(db);

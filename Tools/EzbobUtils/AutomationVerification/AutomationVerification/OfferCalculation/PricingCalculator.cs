@@ -3,6 +3,7 @@ namespace AutomationCalculator.OfferCalculation
 {
 	using System;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class PricingCalculator {
@@ -86,7 +87,7 @@ namespace AutomationCalculator.OfferCalculation
 		/// </summary>
 		/// <returns>default rate</returns>
 		private decimal GetDefaultRate(int customerId, PricingScenarioModel pricingScenario) {
-			var dbHelper = new DbHelper(Log);
+			var dbHelper = new DbHelper(new SqlConnection(Log), Log);
 			var customerDefaultRate = dbHelper.GetOfferDefaultRate(customerId);
 			
 			var defaultRate = customerDefaultRate.Item1*(1 - pricingScenario.DefaultRateCompanyShare) + 

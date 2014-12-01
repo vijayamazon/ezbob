@@ -32,10 +32,10 @@
 		public decimal AnnualTurnover { get; set; }
 		public bool UseHmrc { get; set; }
 
-		public void SaveToDb(ASafeLog log)
+		public void SaveToDb(AConnection db, ASafeLog log)
 		{
 			PrintDict(log);
-			var dbHelper = new DbHelper(log);
+			var dbHelper = new DbHelper(db, log);
 			dbHelper.StoreMedalVerification(this);
 		}
 

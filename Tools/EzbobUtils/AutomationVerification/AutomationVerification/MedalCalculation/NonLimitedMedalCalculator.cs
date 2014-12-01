@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	/// <summary>
@@ -10,7 +11,7 @@
 	/// </summary>
 	public class NonLimitedMedalCalculator : MedalCalculator
 	{
-		public NonLimitedMedalCalculator(ASafeLog log) : base(log) { }
+		public NonLimitedMedalCalculator(AConnection db, ASafeLog log) : base(db, log) { }
 
 		public override MedalOutputModel CalculateMedal(MedalInputModel model)
 		{

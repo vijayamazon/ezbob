@@ -2,26 +2,29 @@
 {
 	using AutoRejection;
 	using Common;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class AutoRejectionCalculator
     {
 		private static ASafeLog _log ;
 		private static RejectionConfigs _config;
-		public AutoRejectionCalculator(ASafeLog log, RejectionConfigs configs)
-		{
+		private readonly AConnection m_oDB;
+
+		public AutoRejectionCalculator(AConnection db, ASafeLog log, RejectionConfigs configs) {
+			m_oDB = db;
 			_log = log;
 			_config = configs;
 		}
 
 		public bool IsAutoRejected(int customerId, out string reason)
 		{
-			var dbHelper = new DbHelper(_log);
+			var dbHelper = new DbHelper(m_oDB, _log);
 
 			var data = dbHelper.GetRejectionDataOld(customerId);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
 			var paymentMps = dbHelper.GetCustomerPaymentMarketPlaces(customerId);
-			var mpHelper = new MarketPlacesHelper(_log);
+			var mpHelper = new MarketPlacesHelper(m_oDB, _log);
 			var anualTurnover = mpHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year);
 			var threeMonthTurnover = mpHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3);
 			var seniority = mpHelper.GetMarketPlacesSeniority(mps);

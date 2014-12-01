@@ -126,7 +126,7 @@ BEGIN
 	WHERE
 		mp.CustomerId = @CustomerID
 		AND (
-			mp.UpdatingEnd IS NULL OR
+			(mp.UpdatingEnd IS NULL AND mp.UpdatingStart IS NOT NULL) OR
 			RTRIM(LTRIM(ISNULL(mp.UpdateError, ''))) != ''
 		)
 

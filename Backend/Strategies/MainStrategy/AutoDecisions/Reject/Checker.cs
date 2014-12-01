@@ -173,7 +173,7 @@
 				NumOfLatesThreshhold = Trail.MyInputData.Reject_NumOfLateAccounts,
 			};
 
-			if ((data.LateDays > data.LateDaysThreshhold) && (data.NumOfLates >= data.NumOfLatesThreshhold))
+			if (data.NumOfLates >= data.NumOfLatesThreshhold)
 				StepReject<ConsumerLates>().Init(data);
 			else
 				StepNoDecision<ConsumerLates>().Init(data);
