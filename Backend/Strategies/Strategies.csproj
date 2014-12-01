@@ -87,7 +87,6 @@
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\AutoDecisionCondition.cs" />
     <Compile Include="MainStrategy\AutoDecisions\AutoDecisionRejectionResponse.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
@@ -210,7 +209,6 @@
     <Compile Include="MainStrategy\AutoDecisions\Approval.cs" />
     <Compile Include="MainStrategy\AutoDecisions\AutoDecisionResponse.cs" />
     <Compile Include="MainStrategy\AutoDecisions\BankBasedApproval.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Rejection.cs" />
     <Compile Include="MainStrategy\AutoDecisions\ReApproval\Agent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\ReRejection.cs" />
     <Compile Include="Broker\BrokerBackFromCustomerWizard.cs" />

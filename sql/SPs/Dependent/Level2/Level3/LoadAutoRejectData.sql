@@ -69,20 +69,13 @@ BEGIN
 
 	DECLARE @ConsumerScore INT = ISNULL((
 		SELECT
-			MAX(x.ExperianConsumerScore)
-		FROM	(
-			SELECT ExperianConsumerScore
-			FROM Customer
-			WHERE Id = @CustomerID
-			AND ExperianConsumerScore IS NOT NULL
-			
-			UNION
-			
-			SELECT ExperianConsumerScore
-			FROM Director
-			WHERE CustomerId = @CustomerID
-			AND ExperianConsumerScore IS NOT NULL
-		) x
+			MAX(ISNULL(ExperianConsumerScore, 0))
+		FROM
+			Director
+		WHERE
+			CustomerId = @CustomerID
+			AND
+			ExperianConsumerScore IS NOT NULL
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -125,10 +118,8 @@ BEGIN
 		INNER JOIN MP_MarketplaceType mt ON mp.MarketPlaceId = mt.Id
 	WHERE
 		mp.CustomerId = @CustomerID
-		AND (
-			(mp.UpdatingEnd IS NULL AND mp.UpdatingStart IS NOT NULL) OR
-			RTRIM(LTRIM(ISNULL(mp.UpdateError, ''))) != ''
-		)
+		AND
+		RTRIM(LTRIM(ISNULL(mp.UpdateError, ''))) != ''
 
 	------------------------------------------------------------------------------
 

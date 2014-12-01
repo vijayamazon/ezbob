@@ -31,6 +31,7 @@
 			MyInputData = data;
 		}
 		#endregion
+
 		#region property PositiveDecisionName
 
 		public override string PositiveDecisionName

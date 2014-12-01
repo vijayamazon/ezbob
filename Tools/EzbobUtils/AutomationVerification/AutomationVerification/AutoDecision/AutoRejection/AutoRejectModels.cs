@@ -44,31 +44,15 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		public int RejectionLastValidLate { get; set; }
 	}
 
-	public class RejectionInputData : ITrailInputData
-	{
-		public void Init(DateTime dataAsOf, RejectionInputData data, RejectionConfigs configs)
-		{
+	public class RejectionInputData : ITrailInputData {
+		public void Init(DateTime dataAsOf, RejectionInputData data, RejectionConfigs configs) {
+			InitCfg(dataAsOf, configs);
+			InitData(data);
+		} // Init
+
+		public void InitCfg(DateTime dataAsOf, RejectionConfigs configs) {
 			DataAsOf = dataAsOf;
-			WasApproved = data.WasApproved;
-			IsBrokerClient = data.IsBrokerClient;
-			AnnualTurnover = data.AnnualTurnover;
-			QuarterTurnover = data.QuarterTurnover;
-			ConsumerScore = data.ConsumerScore;
-			BusinessScore = data.BusinessScore;
-			HasMpError = data.HasMpError;
-			HasCompanyFiles = data.HasCompanyFiles;
-			CustomerStatus = data.CustomerStatus;
 
-			NumOfDefaultConsumerAccounts = data.NumOfDefaultConsumerAccounts;
-			DefaultAmountInConsumerAccounts = data.DefaultAmountInConsumerAccounts;
-			NumOfDefaultBusinessAccounts = data.NumOfDefaultBusinessAccounts;
-			DefaultAmountInBusinessAccounts = data.DefaultAmountInBusinessAccounts;
-			NumOfLateConsumerAccounts = data.NumOfLateConsumerAccounts;
-			ConsumerLateDays = data.ConsumerLateDays;
-
-			BusinessSeniorityDays = data.BusinessSeniorityDays;
-			
-			//configs
 			AutoRejectionException_AnualTurnover = configs.AutoRejectionException_AnualTurnover;
 			AutoRejectionException_CreditScore = configs.AutoRejectionException_CreditScore;
 			RejectionExceptionMaxCompanyScore = configs.RejectionExceptionMaxCompanyScore;
@@ -90,7 +74,28 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 			Reject_LateLastMonthsNum = configs.Reject_LateLastMonthsNum;
 			Reject_NumOfLateAccounts = configs.Reject_NumOfLateAccounts;
 			RejectionLastValidLate = configs.RejectionLastValidLate;
-		} // Init
+		} // InitCfg
+
+		public void InitData(RejectionInputData data) {
+			WasApproved = data.WasApproved;
+			IsBrokerClient = data.IsBrokerClient;
+			AnnualTurnover = data.AnnualTurnover;
+			QuarterTurnover = data.QuarterTurnover;
+			ConsumerScore = data.ConsumerScore;
+			BusinessScore = data.BusinessScore;
+			HasMpError = data.HasMpError;
+			HasCompanyFiles = data.HasCompanyFiles;
+			CustomerStatus = data.CustomerStatus;
+
+			NumOfDefaultConsumerAccounts = data.NumOfDefaultConsumerAccounts;
+			DefaultAmountInConsumerAccounts = data.DefaultAmountInConsumerAccounts;
+			NumOfDefaultBusinessAccounts = data.NumOfDefaultBusinessAccounts;
+			DefaultAmountInBusinessAccounts = data.DefaultAmountInBusinessAccounts;
+			NumOfLateConsumerAccounts = data.NumOfLateConsumerAccounts;
+			ConsumerLateDays = data.ConsumerLateDays;
+
+			BusinessSeniorityDays = data.BusinessSeniorityDays;
+		} // InitData
 
 		public DateTime DataAsOf { get; private set; }
 

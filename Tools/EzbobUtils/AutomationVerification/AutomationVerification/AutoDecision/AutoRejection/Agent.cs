@@ -83,7 +83,7 @@
 				ConsumerScore = dbData.ExperianScore,
 				BusinessScore = dbData.CompanyScore,
 				WasApproved = dbData.WasApproved,
-				NumOfDefaultConsumerAccounts = consumerDefaults.DefaultsAmount,
+				NumOfDefaultConsumerAccounts = consumerDefaults.NumOfDefaults,
 				NumOfDefaultBusinessAccounts = businessDefaults.NumOfDefaults,
 				DefaultAmountInConsumerAccounts = consumerDefaults.DefaultsAmount,
 				DefaultAmountInBusinessAccounts = businessDefaults.DefaultsAmount,
@@ -296,7 +296,6 @@
 			};
 
 			if (Trail.MyInputData.NumOfDefaultConsumerAccounts >= Trail.MyInputData.Reject_Defaults_AccountsNum &&
-				Trail.MyInputData.DefaultAmountInConsumerAccounts > Trail.MyInputData.Reject_Defaults_Amount &&
 				Trail.MyInputData.ConsumerScore < Trail.MyInputData.Reject_Defaults_CreditScore)
 			{
 				StepReject<ConsumerDefaults>(true).Init(data);
@@ -320,7 +319,6 @@
 			};
 
 			if (Trail.MyInputData.NumOfDefaultBusinessAccounts >= Trail.MyInputData.Reject_Defaults_CompanyAccountsNum &&
-				Trail.MyInputData.DefaultAmountInBusinessAccounts > Trail.MyInputData.Reject_Defaults_CompanyAmount &&
 				Trail.MyInputData.BusinessScore < Trail.MyInputData.Reject_Defaults_CompanyScore)
 			{
 				StepReject<BusinessDefaults>(true).Init(data);

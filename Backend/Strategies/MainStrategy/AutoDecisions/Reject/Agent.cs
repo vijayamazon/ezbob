@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
@@ -13,6 +14,8 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
+	using Ezbob.Utils.Lingvo;
 
 	public class Agent {
 		#region public
@@ -103,12 +106,14 @@
 
 			MetaData.Validate();
 
-			OriginationTime.FromExperian(MetaData.IncorporationDate);
+			Trail.MyInputData.InitCfg(DateTime.UtcNow, Cfg.Values);
 
-			Trail.MyInputData.Init(DateTime.UtcNow, ToInputData(), Cfg.Values);
+			OriginationTime.FromExperian(MetaData.IncorporationDate);
 
 			FillFromConsumerData();
 			FillFromCompanyData();
+
+			Trail.MyInputData.InitData(ToInputData());
 		} // GatherData
 
 		#endregion method GatherData
@@ -191,11 +196,11 @@
 				HasCompanyFiles = MetaData.CompanyFilesCount > 0,
 				CustomerStatus = MetaData.CustomerStatusName,
 
-				NumOfDefaultConsumerAccounts = 0,
+				NumOfDefaultConsumerAccounts = m_nNumOfDefaultConsumerAccounts,
 				DefaultAmountInConsumerAccounts = 0,
-				NumOfDefaultBusinessAccounts = 0,
+				NumOfDefaultBusinessAccounts = m_nNumOfDefaultBusinessAccounts,
 				DefaultAmountInBusinessAccounts = 0,
-				NumOfLateConsumerAccounts = 0,
+				NumOfLateConsumerAccounts = m_nNumOfLateConsumerAccounts,
 				ConsumerLateDays = 0,
 
 				BusinessSeniorityDays = OriginationTime.Seniority,
@@ -212,6 +217,16 @@
 
 			FillNumOfPersonalDefaults(lcd.Result);
 			FillNumOfLateConsumerAccounts(lcd.Result);
+
+			if (lcd.Result == null)
+				return;
+
+			Log.Debug("Consumer score before: {0}, bureau score '{1}'", MetaData.ConsumerScore, lcd.Result.BureauScore);
+
+			if (lcd.Result.BureauScore != null)
+				MetaData.ConsumerScore = MetaData.ConsumerScore.Max(lcd.Result.BureauScore.Value);
+
+			Log.Debug("Consumer score after: {0}", MetaData.ConsumerScore);
 		} // FillFromConsumerData
 
 		#endregion method FillFromConsumerData
@@ -219,38 +234,53 @@
 		#region method FillNumOfPersonalDefaults
 
 		private void FillNumOfPersonalDefaults(ExperianConsumerData oData) {
-			Trail.MyInputData.NumOfDefaultConsumerAccounts = 0;
+			m_nNumOfDefaultConsumerAccounts = 0;
 
 			if ((oData == null) || (oData.Cais == null) || (oData.Cais.Count < 1))
 				return;
 
-			DateTime oThen = Trail.MyInputData.MonthsNumAgo;
-
-			foreach (var cais in oData.Cais) {
+			var lst = oData.Cais.Where(cais => {
 				decimal nBalance = Math.Max(cais.CurrentDefBalance ?? 0, cais.Balance ?? 0);
 
-				if (nBalance <= Cfg.Values.Reject_Defaults_Amount)
-					continue;
+				return
+					(nBalance > Cfg.Values.Reject_Defaults_Amount) &&
+					(cais.MatchTo == 1) &&
+					cais.LastUpdatedDate.HasValue &&
+					!string.IsNullOrWhiteSpace(cais.AccountStatusCodes);
+			}).ToList();
 
-				if (cais.MatchTo != 1)
-					continue;
-				
-				if (!cais.LastUpdatedDate.HasValue)
-					continue;
+			Log.Debug("Fill personal defaults: {0} found.", Grammar.Number(lst.Count, "relevant account"));
 
-				if (string.IsNullOrWhiteSpace(cais.AccountStatusCodes))
-					continue;
+			DateTime oThen = Trail.MyInputData.MonthsNumAgo;
+
+			Log.Debug("Fill personal defaults: interested in data after {0}.", oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
+			foreach (var cais in lst) {
+				// ReSharper disable PossibleInvalidOperationException
+				Log.Debug(
+					"Fill personal defaults cais {0}: updated on {1}, statuses is '{2}', now is {3}",
+					cais.Id,
+					cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+					cais.AccountStatusCodes,
+					Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				);
 
 				DateTime cur = cais.LastUpdatedDate.Value;
+				// ReSharper restore PossibleInvalidOperationException
 
 				for (int i = 1; i <= cais.AccountStatusCodes.Length; i++) {
-					if (cur < oThen)
+					if (cur < oThen) {
+						Log.Debug("Fill personal defaults cais {0} ain't no default: cur ({1}) is too early.", cais.Id, cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
 						break;
+					} // if
 
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
+					Log.Debug("Fill personal defaults cais {0} ain't no default: status[{1}] = '{2}' cur ({3}).", cais.Id, i, status, cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
 					if ((status == '8') || (status == '9')) {
-						Trail.MyInputData.NumOfDefaultConsumerAccounts++;
+						Log.Debug("Fill personal defaults cais {0} is default.", cais.Id);
+						m_nNumOfDefaultConsumerAccounts++;
 						break;
 					} // if
 
@@ -264,44 +294,88 @@
 		#region method FillNumOfLateConsumerAccounts
 
 		private void FillNumOfLateConsumerAccounts(ExperianConsumerData oData) {
-			Trail.MyInputData.NumOfLateConsumerAccounts = 0;
+			m_nNumOfLateConsumerAccounts = 0;
 
 			if ((oData == null) || (oData.Cais == null) || (oData.Cais.Count < 1))
 				return;
 
-			foreach (var cais in oData.Cais) {
-				if (!cais.LastUpdatedDate.HasValue)
-					continue;
+			List<ExperianConsumerDataCais> lst = oData.Cais.Where(cais =>
+				cais.LastUpdatedDate.HasValue &&
+				(cais.MatchTo == 1) &&
+				!string.IsNullOrWhiteSpace(cais.AccountStatusCodes) &&
+				(cais.LastUpdatedDate.Value <= Trail.InputData.DataAsOf)
+			).ToList();
 
-				if (cais.MatchTo != 1)
-					continue;
+			Log.Debug("Fill num of lates: {0} found.", Grammar.Number(lst.Count, "relevant account"));
 
-				if (string.IsNullOrWhiteSpace(cais.AccountStatusCodes))
-					continue;
+			foreach (var cais in lst) {
+				Log.Debug(
+					"Fill num of lates cais id {0}: last updated = '{1}', match to = '{2}', statues = '{3}', now = {4}",
+					cais.Id,
+					cais.LastUpdatedDate.HasValue ? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
+					cais.MatchTo.HasValue ? cais.MatchTo.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
+					cais.AccountStatusCodes,
+					Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				);
 
-				if (cais.LastUpdatedDate.Value > Trail.InputData.DataAsOf)
+				if (!cais.LastUpdatedDate.HasValue) {
+					Log.Debug("Fill num of lates cais id {0} ain't no late: no last update date.", cais.Id);
 					continue;
+				} // if
+
+				if (cais.MatchTo != 1) {
+					Log.Debug("Fill num of lates cais id {0} ain't no late: bad MatchTo.", cais.Id);
+					continue;
+				} // if
+
+				if (string.IsNullOrWhiteSpace(cais.AccountStatusCodes)) {
+					Log.Debug("Fill num of lates cais id {0} ain't no late: empty status list.", cais.Id);
+					continue;
+				} // if
+
+				if (cais.LastUpdatedDate.Value > Trail.InputData.DataAsOf) {
+					Log.Debug("Fill num of lates cais id {0} ain't no late: last updated is after data as of.", cais.Id);
+					continue;
+				} // if
 
 				int nDistance = MiscUtils.MonthDiff(cais.LastUpdatedDate.Value, Trail.InputData.DataAsOf);
 
-				int nMonthCount = nDistance <= 2
+				Log.Debug("Fill num of lates cais id {0}: distance is {1}, interesting months count is {2}.", cais.Id, nDistance, Trail.MyInputData.Reject_LateLastMonthsNum);
+
+				if (nDistance > Trail.MyInputData.Reject_LateLastMonthsNum) {
+					Log.Debug("Fill num of lates cais id {0} ain't no late: last updated is too long ago.", cais.Id);
+					continue;
+				} // if
+
+				int nMonthCount = nDistance <= 1
 					? Trail.MyInputData.Reject_LateLastMonthsNum
 					: Trail.MyInputData.Reject_LateLastMonthsNum - nDistance + 1;
 
+				Log.Debug("Fill num of lates cais id {0}: month count is {1}.", cais.Id, nMonthCount);
+
 				nMonthCount = Math.Min(nMonthCount, cais.AccountStatusCodes.Length);
+
+				Log.Debug("Fill num of lates cais id {0}: month count is {1}, status count is {2}.", cais.Id, nMonthCount, cais.AccountStatusCodes.Length);
 
 				for (int i = 1; i <= nMonthCount; i++) {
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
-					if (!ms_oLateStatuses.Contains(status))
+					Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, status);
+
+					if (!ms_oLateStatuses.Contains(status)) {
+						Log.Debug("Fill num of lates cais id {0} ain't no late: not a late status.", cais.Id);
 						continue;
+					} // if
 
 					int nStatus = 0;
 
 					int.TryParse(status.ToString(CultureInfo.InvariantCulture), out nStatus);
 
+					Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, nStatus);
+
 					if (nStatus > Trail.MyInputData.RejectionLastValidLate) {
-						Trail.MyInputData.NumOfLateConsumerAccounts++;
+						Log.Debug("Fill num of lates cais id {0} is late.", cais.Id);
+						m_nNumOfLateConsumerAccounts++;
 						break;
 					} // if
 				} // for i
@@ -313,7 +387,7 @@
 		#region method FillFromCompanyData
 
 		private void FillFromCompanyData() {
-			Trail.MyInputData.NumOfDefaultBusinessAccounts = 0;
+			m_nNumOfDefaultBusinessAccounts = 0;
 
 			if (!MetaData.IsLtd || string.IsNullOrWhiteSpace(MetaData.CompanyRefNum))
 				return;
@@ -375,7 +449,7 @@
 
 					if ((status == '8') || (status == '9')) {
 						// Log.Debug("DL97 id {0}: is a default account.", dl97.ID);
-						Trail.MyInputData.NumOfDefaultBusinessAccounts++;
+						m_nNumOfDefaultBusinessAccounts++;
 						break;
 					} // if
 
@@ -442,6 +516,10 @@
 		#endregion method StepNoReject
 
 		private static readonly SortedSet<char> ms_oLateStatuses = new SortedSet<char> { '1', '2', '3', '4', '5', '6', };
+
+		private int m_nNumOfDefaultConsumerAccounts;
+		private int m_nNumOfLateConsumerAccounts;
+		private int m_nNumOfDefaultBusinessAccounts;
 
 		#endregion private
 	} // class Agent

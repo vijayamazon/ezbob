@@ -73,37 +73,36 @@
 			dataGatherer = new DataGatherer(customerId, DB, Log);
 		}
 
-		public override void Execute()
-		{
+		public override void Execute() {
 			autoDecisionResponse = new AutoDecisionResponse { DecisionName = "Manual" };
 
-			if (newCreditLineOption == NewCreditLineOption.SkipEverything)
-			{
+			if (newCreditLineOption == NewCreditLineOption.SkipEverything) {
 				Log.Alert("MainStrategy was activated in SkipEverything mode. Nothing is done. Avoid such calls!");
 				return;
-			}
+			} // if
 
 			// Wait for data to be filled by other strategies
 			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
-			{
 				staller.Stall();
-			}
 
 			// Gather preliminary data that is required by AdditionalStrategiesCaller
 			dataGatherer.GatherPreliminaryData();
 			wasMainStrategyExecutedBefore = dataGatherer.LastStartedMainStrategyEndTime.HasValue;
 
 			// Trigger other strategies
-			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
-			{
-				var additionalStrategiesCaller = new AdditionalStrategiesCaller(customerId, wasMainStrategyExecutedBefore,
-				                                                                dataGatherer.TypeOfBusiness,
-				                                                                dataGatherer.BwaBusinessCheck,
-				                                                                dataGatherer.AppBankAccountType,
-				                                                                dataGatherer.AppAccountNumber,
-				                                                                dataGatherer.AppSortCode, DB, Log);
-				additionalStrategiesCaller.Call();
-			}
+			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
+				new AdditionalStrategiesCaller(
+					customerId,
+					wasMainStrategyExecutedBefore,
+					dataGatherer.TypeOfBusiness,
+					dataGatherer.BwaBusinessCheck,
+					dataGatherer.AppBankAccountType,
+					dataGatherer.AppAccountNumber,
+					dataGatherer.AppSortCode,
+					DB,
+					Log
+				).Call();
+			} // if
 
 			// Gather Raw Data - most data is gathered here
 			dataGatherer.Gather();
@@ -122,9 +121,7 @@
 
 			// Gather LR data - must be done after rejection decisions
 			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
-			{
 				GetLandRegistryDataIfNotRejected(autoDecisionRejectionResponse);
-			}
 
 			// Calculate new medal
 			CalculateNewMedal();
@@ -135,14 +132,15 @@
 			// Make approve decisions
 			ProcessApprovals(autoDecisionRejectionResponse);
 
-			// Log decision
-			LogDecision(autoDecisionRejectionResponse);
-
 			// process the decision - DB + mails
 			ProcessDecision(scoringResult, autoDecisionRejectionResponse);
 
 			// TODO: retire this
-			SetEndTimestamp();
+			DB.ExecuteNonQuery("Update_Main_Strat_Finish_Date",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UserId", customerId),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
 		}
 
 		private void CalculateNewMedal()
@@ -228,31 +226,6 @@
 				{
 					SendWaitingForDecisionMail();
 				}
-			}
-		}
-
-		private void LogDecision(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
-		{
-			string decisionName = autoDecisionRejectionResponse.DecidedToReject ? autoDecisionRejectionResponse.DecisionName : autoDecisionResponse.DecisionName;
-
-			int decisionId = DB.ExecuteScalar<int>(
-				"AutoDecisionRecord",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("DecisionName", decisionName),
-				new QueryParameter("Date", DateTime.UtcNow)
-			);
-
-			foreach (AutoDecisionCondition condition in autoDecisionRejectionResponse.RejectionConditions)
-			{
-				DB.ExecuteNonQuery(
-					"AutoDecisionConditionRecord",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("DecisionId", decisionId),
-					new QueryParameter("DecisionName", condition.DecisionName),
-					new QueryParameter("Satisfied", condition.Satisfied),
-					new QueryParameter("Description", condition.Description)
-				);
 			}
 		}
 
@@ -678,15 +651,6 @@
 			);
 		}
 
-		private void SetEndTimestamp()
-		{
-			DB.ExecuteNonQuery("Update_Main_Strat_Finish_Date",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("UserId", customerId),
-				new QueryParameter("Now", DateTime.UtcNow)
-			);
-		}
-
 		private ScoreMedalOffer CalculateScoreAndMedal()
 		{
 			Log.Info("Calculating score & medal");
@@ -794,5 +758,5 @@
 				{"SeniorityThreshold", dataGatherer.RejectMinimalSeniority.ToString(CultureInfo.InvariantCulture) + additionalValues}
 			});
 		}
-	}
-}
+	} // class MainStrategy
+} // namespace
