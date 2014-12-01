@@ -327,30 +327,55 @@
 
 			DateTime oThen = Trail.MyInputData.CompanyMonthsNumAgo;
 
+			// Log.Debug("DL97 searcher: then is '{0}'.", oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
 			IEnumerable<ExperianLtdDL97> oDL97List = ltd.Result.GetChildren<ExperianLtdDL97>();
 
 			foreach (var dl97 in oDL97List) {
-				if (!dl97.DefaultBalance.HasValue)
-					continue;
+				// Log.Debug(
+					// "DL97 entry: id '{0}', default balance '{1}', last updated '{2}', statuses '{3}'",
+					// dl97.ID,
+					// dl97.DefaultBalance.HasValue ? dl97.DefaultBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
+					// dl97.CAISLastUpdatedDate.HasValue ? dl97.CAISLastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
+					// dl97.AccountStatusLast12AccountStatuses
+				// );
 
-				if (dl97.DefaultBalance.Value <= Trail.MyInputData.Reject_Defaults_CompanyAmount)
+				if (!dl97.DefaultBalance.HasValue) {
+					// Log.Debug("DL97 id {0} ain't not default account: no balance.", dl97.ID);
 					continue;
+				} // if
 
-				if (!dl97.CAISLastUpdatedDate.HasValue)
+				if (dl97.DefaultBalance.Value <= Trail.MyInputData.Reject_Defaults_CompanyAmount) {
+					// Log.Debug("DL97 id {0} ain't not default account: low balance.", dl97.ID);
 					continue;
+				} // if
 
-				if (string.IsNullOrWhiteSpace(dl97.AccountStatusLast12AccountStatuses))
+				if (!dl97.CAISLastUpdatedDate.HasValue) {
+					// Log.Debug("DL97 id {0} ain't not default account: no updated time.", dl97.ID);
 					continue;
+				} // if
+
+				if (string.IsNullOrWhiteSpace(dl97.AccountStatusLast12AccountStatuses)) {
+					// Log.Debug("DL97 id {0} ain't not default account: no statuses.", dl97.ID);
+					continue;
+				} // if
 
 				DateTime cur = dl97.CAISLastUpdatedDate.Value;
 
 				for (int i = 1; i <= dl97.AccountStatusLast12AccountStatuses.Length; i++) {
-					if (cur < oThen)
+					// Log.Debug("DL97 id {0}: cur date is '{1}'.", dl97.ID, cur.ToString("d/MMM/yyy H:mm:ss", CultureInfo.InvariantCulture));
+
+					if (cur < oThen) {
+						// Log.Debug("DL97 id {0}: stopped looking for defaults - 'cur' is before 'then'.", dl97.ID);
 						break;
+					} // if
 
 					char status = dl97.AccountStatusLast12AccountStatuses[dl97.AccountStatusLast12AccountStatuses.Length - i];
 
+					// Log.Debug("DL97 id {0}: status[{1}] = '{2}'.", dl97.ID, i, status);
+
 					if ((status == '8') || (status == '9')) {
+						// Log.Debug("DL97 id {0}: is a default account.", dl97.ID);
 						Trail.MyInputData.NumOfDefaultBusinessAccounts++;
 						break;
 					} // if
