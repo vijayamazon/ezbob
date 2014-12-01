@@ -66,7 +66,7 @@
 			stra.Execute();
 
 			m_oConsumerData = stra.Result;
-
+			
 			if (customer == null) {
 				this.isBrokerCustomer = false;
 				this.hasLoans = false;
@@ -75,6 +75,35 @@
 				this.isBrokerCustomer = customer.Broker != null;
 				this.hasLoans = customer.Loans.Any();
 			} // if
+			
+			if (customer != null && customer.Company != null) {
+				this.companyName = customer.Company.ExperianCompanyName ?? customer.Company.CompanyName;
+				this.companyName = AdjustCompanyName(this.companyName);
+
+				if(customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited && customer.Company.ExperianRefNum != "NotFound") {
+					var limited = new LoadExperianLtd(customer.Company.ExperianRefNum, 0, db, log);
+					this.directors = new List<Name>();
+					foreach (var row in limited.Result.Children)
+					{
+						if (row.GetType() == typeof (ExperianLtdDL72)) {
+							var dataRow = (ExperianLtdDL72) row;
+							directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
+						}
+						if (row.GetType() == typeof (ExperianLtdDLB5)) {
+							var dataRow = (ExperianLtdDLB5) row;
+							directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
+						}
+					} // for each
+				}
+			}
+
+			this.hmrcNames = new List<string>();
+
+			db.ForEachRowSafe((names, hren) => {
+				string name = names["BusinessName"];
+				this.hmrcNames.Add(AdjustCompanyName(name));
+				return ActionResult.Continue;
+			}, "GetHmrcBusinessNames", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
 			SafeReader sr = db.GetFirst(
 				"GetExperianMinMaxConsumerDirectorsScore",
@@ -310,6 +339,13 @@
 			m_oTrail.MyInputData.MetaData.OfferStart = sr["OfferStart"];
 			m_oTrail.MyInputData.MetaData.OfferValidUntil = sr["OfferValidUntil"];
 
+			if (customer != null && customer.PersonalInfo != null) {
+				m_oTrail.MyInputData.MetaData.CustomerName = new Name(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname);
+			}
+			m_oTrail.MyInputData.MetaData.DirectorNames = this.directors;
+			m_oTrail.MyInputData.MetaData.CompanyName = this.companyName;
+			m_oTrail.MyInputData.MetaData.HmrcBusinessNames = this.hmrcNames;
+
 			m_oTrail.MyInputData.SetWorstStatuses(consumerCaisDetailWorstStatuses);
 			FindLatePayments();
 			m_oTrail.MyInputData.SetSeniority(CalculateSeniority());
@@ -338,6 +374,8 @@
 				CheckTurnovers(); // TODO: print to log or new step detailed turnover
 				CheckSeniority(); // TODO: print to log or new step detailed seniority
 				CheckDefaultAccounts();
+				CheckIsDirector();
+				CheckHmrcIsCompany();
 				CheckTotalLoanCount();
 				CheckWorstCaisStatus(
 					m_oTrail.MyInputData.MetaData.TotalLoanCount > 0
@@ -349,7 +387,11 @@
 				CheckCustomerOpenLoans();
 				CheckRepaidRatio();
 				ReduceOutstandingPrincipal();
-				CheckAllowedRange();
+
+
+				if (!CurrentValues.Instance.AutoApproveIsSilent) {
+					CheckAllowedRange();
+				}
 
 				CheckComplete();
 			}
@@ -360,7 +402,9 @@
 			log.Debug("Checking if auto approval should take place for customer {0} complete.", customerId);
 
 			log.Msg("Auto approved amount: {0}. {1}", autoApprovedAmount, m_oTrail);
-		} // CheckAutoApprovalConformance
+		}
+
+// CheckAutoApprovalConformance
 
 		private void CheckMedal() {
 			if (medalClassification == MedalClassification.NoClassification)
@@ -382,6 +426,47 @@
 			else
 				StepDone<DefaultAccounts>().Init(m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
 		} // CheckDefaultAccounts
+
+		private void CheckIsDirector() {
+			bool isDirector = false;
+			foreach (var directorName in m_oTrail.MyInputData.MetaData.DirectorNames) {
+				if (directorName.Equals(m_oTrail.MyInputData.MetaData.CustomerName)) {
+					isDirector = true;
+					break;
+				}
+			}
+			if (!isDirector) {
+				StepFailed<CustomerIsDirector>().Init(m_oTrail.MyInputData.MetaData.CustomerName.ToString(), 
+					m_oTrail.MyInputData.MetaData.DirectorNames.Select(x => x.ToString()).ToList());
+			}
+			else {
+				StepDone<CustomerIsDirector>().Init(m_oTrail.MyInputData.MetaData.CustomerName.ToString(), 
+					m_oTrail.MyInputData.MetaData.DirectorNames.Select(x => x.ToString()).ToList());
+			}
+		}
+		
+		private void CheckHmrcIsCompany() {
+			bool isCompany = false;
+			if (!m_oTrail.MyInputData.MetaData.HmrcBusinessNames.Any()) {
+				StepDone<HmrcIsOfBusiness>().Init();
+			}
+			else {
+				foreach (var hmrcName in m_oTrail.MyInputData.MetaData.HmrcBusinessNames)
+				{
+					if (hmrcName.Equals(m_oTrail.MyInputData.MetaData.CompanyName)) {
+						isCompany = true;
+						break;
+					}
+				}
+
+				if (!isCompany) {
+					StepFailed<HmrcIsOfBusiness>().Init(m_oTrail.MyInputData.MetaData.HmrcBusinessNames, m_oTrail.MyInputData.MetaData.CompanyName);
+				}
+				else {
+					StepDone<HmrcIsOfBusiness>().Init(m_oTrail.MyInputData.MetaData.HmrcBusinessNames, m_oTrail.MyInputData.MetaData.CompanyName);
+				}
+			}
+		}
 
 		private void CheckIsFraud() {
 			if (m_oTrail.MyInputData.MetaData.FraudStatus == FraudStatus.Ok)
@@ -749,6 +834,19 @@
 			} // try
 		} // NotifyAutoApproveSilentMode
 
+
+		private string AdjustCompanyName(string companyName) {
+			companyName = string.IsNullOrEmpty(companyName)
+				              ? companyName
+				              : companyName.Trim()
+				                           .ToLowerInvariant()
+				                           .Replace("limited", "ltd")
+				                           .Replace("the", string.Empty)
+				                           .Replace("&amp;", "&")
+				                           .Replace(".", string.Empty)
+				                           .Replace("#049;", "'");
+			return companyName;
+		}
 		private readonly CustomerRepository _customers;
 		private readonly CashRequestsRepository cashRequestsRepository;
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
@@ -776,5 +874,8 @@
 		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
 
 		private readonly ASafeLog log;
+		private string companyName;
+		private List<Name> directors;
+		private List<String> hmrcNames;
 	} // class Approval
 } // namespace

@@ -23,6 +23,12 @@
 		public string RowType { get; set; }
 
 		public bool IsBrokerCustomer { get; set; }
+		
+		public Name CustomerName { get; set; }
+		public List<Name> DirectorNames { get; set; }
+		public string CompanyName { get; set; }
+		public List<string> HmrcBusinessNames { get; set; }
+
 		public int NumOfTodayAutoApproval { get; set; }
 		public decimal TodayLoanSum { get; set; }
 

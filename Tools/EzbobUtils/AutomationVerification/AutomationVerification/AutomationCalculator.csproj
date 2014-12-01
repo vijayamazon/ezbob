@@ -52,6 +52,7 @@
     <Compile Include="AutoDecision\AutoApproval\AvailableFunds.cs" />
     <Compile Include="AutoDecision\AutoApproval\Configuration.cs" />
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
+    <Compile Include="AutoDecision\AutoApproval\Name.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Agent.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Arguments.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Configuration.cs" />
@@ -90,6 +91,8 @@
     <Compile Include="ProcessHistory\ARangeTrace.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\HmrcIsOfBusiness.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\CustomerIsDirector.cs" />
     <Compile Include="ProcessHistory\AutoApproval\MedalIsGood.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OneYearTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs" />
