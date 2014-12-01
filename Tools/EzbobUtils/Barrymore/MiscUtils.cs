@@ -131,5 +131,37 @@
 		} // MonthDiff
 
 		#endregion method MonthDiff
+
+		#region method CountMonthsBetween
+
+		/// <summary>
+		/// Calculates number of full calendar months between the months represented by arguments.
+		/// If a > b the result is negative.
+		/// </summary>
+		/// <example>If a is November 15th 2014 and b is July 16 2014 then result is 3 (August, September, October).</example>
+		/// <example>If a is November 15th 2012 and b is March 16 2014 then result is 15
+		/// (December 2012, entire 2013, January 2014, and February).</example>
+		/// <param name="a">First date.</param>
+		/// <param name="b">Second date.</param>
+		/// <returns>Number of months.</returns>
+		public static int CountMonthsBetween(DateTime a, DateTime b) {
+			if (a == b)
+				return 0;
+
+			int nReverse = a > b ? -1 : 1;
+
+			if (a > b) {
+				DateTime t = a;
+				a = b;
+				b = t;
+			} // if
+
+			if (a.Year == b.Year)
+				return nReverse * Math.Max(0, b.Month - a.Month - 1);
+
+			return nReverse * ((12 - a.Month) + (b.Month - 1) + 12 * (b.Year - a.Year - 1));
+		} // CountMonthsBetween
+
+		#endregion method CountMonthsBetween
 	} // class MiscUtils
 } // namespace

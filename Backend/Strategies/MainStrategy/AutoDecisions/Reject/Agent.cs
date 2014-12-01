@@ -338,18 +338,21 @@
 					continue;
 				} // if
 
-				int nDistance = MiscUtils.MonthDiff(cais.LastUpdatedDate.Value, Trail.InputData.DataAsOf);
+				int nBetween = MiscUtils.CountMonthsBetween(cais.LastUpdatedDate.Value, Trail.InputData.DataAsOf);
 
-				Log.Debug("Fill num of lates cais id {0}: distance is {1}, interesting months count is {2}.", cais.Id, nDistance, Trail.MyInputData.Reject_LateLastMonthsNum);
+				Log.Debug(
+					"Fill num of lates cais id {0}: width between dates {1}, interesting months count is {2}.",
+					cais.Id,
+					Grammar.Number(nBetween, "month"),
+					Trail.MyInputData.Reject_LateLastMonthsNum
+				);
 
-				if (nDistance > Trail.MyInputData.Reject_LateLastMonthsNum) {
+				if (nBetween >= Trail.MyInputData.Reject_LateLastMonthsNum) {
 					Log.Debug("Fill num of lates cais id {0} ain't no late: last updated is too long ago.", cais.Id);
 					continue;
 				} // if
 
-				int nMonthCount = nDistance <= 1
-					? Trail.MyInputData.Reject_LateLastMonthsNum
-					: Trail.MyInputData.Reject_LateLastMonthsNum - nDistance + 1;
+				int nMonthCount = Math.Max(0, Trail.MyInputData.Reject_LateLastMonthsNum - nBetween);
 
 				Log.Debug("Fill num of lates cais id {0}: month count is {1}.", cais.Id, nMonthCount);
 

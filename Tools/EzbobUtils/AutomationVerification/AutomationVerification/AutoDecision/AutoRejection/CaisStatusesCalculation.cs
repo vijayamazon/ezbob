@@ -25,10 +25,17 @@
 			return dbHelper.GetBusinessCaisStatuses(customerId);
 		}
 
-		public ConsumerLatesModel GetLates(int customerId, DateTime asOfDate, int minLateStatus, int lastMonthStatuses, List<CaisStatus> caisStatuses = null) {
+		public ConsumerLatesModel GetLates(
+			int customerId,
+			DateTime asOfDate,
+			int minLateStatus,
+			int lastMonthStatuses,
+			List<CaisStatus> caisStatuses = null
+		) {
 			if (caisStatuses == null) {
 				caisStatuses = GetConsumerCaisStatuses(customerId);
 			}
+
 			const decimal monthDays = 365.0M / 12.0M;
 
 			var numOfLates = 0;
@@ -36,7 +43,9 @@
 
 			foreach (var caisStatus in caisStatuses) {
 				var monthSinceUpdate = (decimal)(asOfDate - caisStatus.LastUpdatedDate).TotalDays / monthDays;
+
 				int useLastStatusMonths = 0;
+
 				if (monthSinceUpdate < 2) {
 					useLastStatusMonths = lastMonthStatuses;
 				}
@@ -51,11 +60,15 @@
 						useLastStatusMonths = lastMonthStatuses - (int)monthSinceUpdate;
 					}
 				}
+
 				bool isLateInAccount = false;
+
 				for (int i = 0; i < useLastStatusMonths; ++i) {
 					if (caisStatus.AccountStatusCodes.Length - i > 0) {
 						string status = caisStatus.AccountStatusCodes[caisStatus.AccountStatusCodes.Length - i - 1].ToString();
+
 						var accountStatus = AccountStatusDictionary.GetAccountStatus(status);
+
 						if (accountStatus.IsLate && accountStatus.LateStatus > minLateStatus) {
 							isLateInAccount = true;
 							lateDays = lateDays < accountStatus.LateDays ? accountStatus.LateDays : lateDays;
@@ -73,7 +86,6 @@
 				LateDays = lateDays,
 				NumOfLates = numOfLates
 			};
-
 		}
 
 		public DefaultsModel GetDefaults(int customerId, DateTime asOfDate, int minAmount, int lastMonthStatuses, List<CaisStatus> caisStatuses = null)
