@@ -51,6 +51,7 @@ LEFT JOIN ExperianLtd e ON co.ExperianRefNum = e.RegisteredNumber
 WHERE c.Id = @CustomerId)
 
 DECLARE @CompanyScore INT = 0
+DECLARE @CompanyMaxScore INT = 0
 
 --incorporation date
 DECLARE @IncorporationDate DATETIME
@@ -58,9 +59,12 @@ DECLARE @IncorporationDate DATETIME
 IF @IsLimited = 1
 BEGIN
 	
-	SELECT @CompanyScore = isnull(MaxScore,0), @IncorporationDate = IncorporationDate 
+	SELECT @CompanyMaxScore = isnull(MaxScore,0), @CompanyScore = isnull(Score,0), @IncorporationDate = IncorporationDate 
 	FROM CustomerAnalyticsCompany 
 	WHERE CustomerID=@CustomerId AND IsActive=1
+
+	IF @CompanyScore < @CompanyMaxScore
+		SET @CompanyScore = @CompanyMaxScore
 END  
 ELSE
 BEGIN
