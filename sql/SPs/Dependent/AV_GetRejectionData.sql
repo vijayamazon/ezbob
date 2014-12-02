@@ -44,11 +44,13 @@ BEGIN
 END	
 
 --Company Score
-DECLARE @ExperianLtd INT = (SELECT isnull(max(e.ExperianLtdID), 0) 
-FROM Customer c 
-LEFT JOIN Company co ON c.CompanyId = co.Id 
-LEFT JOIN ExperianLtd e ON co.ExperianRefNum = e.RegisteredNumber
-WHERE c.Id = @CustomerId)
+DECLARE @ExperianLtd INT = ISNULL((
+	SELECT MAX(ISNULL(e.ExperianLtdID, 0))
+	FROM Customer c
+	LEFT JOIN Company co ON c.CompanyId = co.Id
+	LEFT JOIN ExperianLtd e ON co.ExperianRefNum = e.RegisteredNumber
+	WHERE c.Id = @CustomerId
+), 0)
 
 DECLARE @CompanyScore INT = 0
 DECLARE @CompanyMaxScore INT = 0

@@ -10,11 +10,13 @@ ALTER PROCEDURE AV_GetBusinessCaisStatuses
 AS
 BEGIN
 
-	DECLARE @ExperianLtd INT = (SELECT isnull(max(e.ExperianLtdID), 0) 
-								FROM Customer c 
-								LEFT JOIN Company co ON c.CompanyId = co.Id 
-								LEFT JOIN ExperianLtd e ON co.ExperianRefNum = e.RegisteredNumber
-								WHERE c.Id = @CustomerId)
+	DECLARE @ExperianLtd INT = ISNULL((
+		SELECT max(isnull(e.ExperianLtdID, 0)) 
+		FROM Customer c 
+		LEFT JOIN Company co ON c.CompanyId = co.Id 
+		LEFT JOIN ExperianLtd e ON co.ExperianRefNum = e.RegisteredNumber
+		WHERE c.Id = @CustomerId
+	), 0)
 	
 	SELECT CAST(c.DefaultBalance AS INT) AS  CurrentDefBalance, CAST(c.CurrentBalance AS INT) Balance, c.CAISLastUpdatedDate LastUpdatedDate, c.AccountStatusLast12AccountStatuses AccountStatusCodes
 	FROM ExperianLtdDL97 c
