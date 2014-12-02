@@ -6,6 +6,7 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.ReApproval;
 	using AutomationCalculator.ProcessHistory.Trails;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Database;
@@ -32,7 +33,7 @@
 			NewMarketplaces = new List<Marketplace>();
 			ApprovedAmount = 0;
 
-			Trail = new ReapprovalTrail(Args.CustomerID, Log);
+			Trail = new ReapprovalTrail(Args.CustomerID, Log, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
 			Cfg = new Configuration(DB, Log);
 
 			return this;

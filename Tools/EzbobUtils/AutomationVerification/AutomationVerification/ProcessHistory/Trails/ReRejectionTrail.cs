@@ -6,7 +6,9 @@
 	public class ReRejectionTrail : ATrail {
 		#region constructor
 
-		public ReRejectionTrail(int nCustomerID, ASafeLog oLog) : base (nCustomerID, DecisionStatus.Negative, oLog) {
+		public ReRejectionTrail(int nCustomerID, ASafeLog oLog, string toExplanationMailAddress = null, string fromEmailAddress = null, string fromEmailName = null)
+			: base(nCustomerID, DecisionStatus.Negative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
+		{
 			MyInputData = new ReRejectInputData();
 		} // constructor
 
@@ -19,6 +21,10 @@
 		} // Decision
 
 		#endregion property Decision
+
+		#region property Name
+		public override string Name { get { return "Auto Re-Reject"; } }
+		#endregion property Name
 
 		#region method LockDecision
 

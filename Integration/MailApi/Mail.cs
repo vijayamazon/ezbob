@@ -19,6 +19,7 @@
 		//Api pathes
 		private const string BaseSecureUrl = "https://mandrillapp.com/api/1.0/";
 		private const string SendTemplatePath = "/messages/send-template.json";
+		private const string SendTemplatelessPath = "/messages/send.json";
 		private const string RenderTemplatePath = "/templates/render.json";
 
 		public Mail(string key = null) {
@@ -48,6 +49,31 @@
 			foreach (var var in variables) {
 				message.AddGlobalVariable(var.Key, var.Value);
 			}
+
+			return message;
+		}
+
+		private EmailModel PrepareTemplateLessEmail(string to, string subject, string messageText, string messageHtml, string fromEmail, string fromName, string cc = "", List<attachment> attachments = null)
+		{
+			var toList = PrepareRecipients(to);
+
+			var message = new EmailModel
+			{
+				key = key,
+				message = new EmailMessageModel
+				{
+					to = toList,
+					subject = subject,
+					bcc_address = cc,
+					attachments = attachments,
+					track_clicks = true,
+					track_opens = true,
+					html = messageHtml,
+					text = messageText,
+					from_email = fromEmail,
+					from_name = fromName
+				}
+			};
 
 			return message;
 		}
@@ -127,9 +153,21 @@
 			return retVal["html"];
 		}
 
+		/// <summary>
+		/// With template
+		/// </summary>
 		public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "", List<attachment> attachments = null) {
 			var message = PrepareEmail(templateName, to, parameters, subject, cc, attachments);
 			return Send(message, SendTemplatePath);
+		}
+
+		/// <summary>
+		/// Without template
+		/// </summary>
+		public string Send(string to, string messageText, string messageHtml, string fromEmail, string fromName, string subject = "", string cc = "", List<attachment> attachments = null)
+		{
+			var message = PrepareTemplateLessEmail(to, subject, messageText, messageHtml, fromEmail, fromName, cc, attachments);
+			return Send(message, SendTemplatelessPath);
 		}
 
 		public string GetRenderedTemplate(Dictionary<string, string> parameters, string templateName) {

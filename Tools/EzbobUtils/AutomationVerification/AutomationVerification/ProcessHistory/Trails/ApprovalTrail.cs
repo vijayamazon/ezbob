@@ -5,7 +5,9 @@
 	public class ApprovalTrail : ATrail {
 		#region constructor
 
-		public ApprovalTrail(int nCustomerID, ASafeLog oLog) : base (nCustomerID, DecisionStatus.Affirmative, oLog) {
+		public ApprovalTrail(int nCustomerID, ASafeLog oLog, string toExplanationMailAddress = null, string fromEmailAddress = null, string fromEmailName = null)
+			: base(nCustomerID, DecisionStatus.Affirmative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
+		{
 			MyInputData = new ApprovalInputData();
 		} // constructor
 
@@ -26,6 +28,10 @@
 		} // NegativeDecisionName
 
 		#endregion property NegativeDecisionName
+
+		#region property Name
+		public override string Name { get { return "Auto Approve"; } }
+		#endregion property Name
 
 		#region property Decision
 

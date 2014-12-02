@@ -276,6 +276,15 @@ namespace ConfigManager {
 
 		#endregion property AutoReRejectMinRepaidPortion
 
+		#region property AutomationExplanationMailReciever
+
+		public virtual VariableValue AutomationExplanationMailReciever
+		{
+			get { return this[Variables.AutomationExplanationMailReciever]; } // get
+		} // AutomationExplanationMailReciever
+
+		#endregion property AutoReRejectMinRepaidPortion
+		
 		#region property BankBasedApprovalBelowAverageRiskMaxBusinessScore
 
 		public virtual VariableValue BankBasedApprovalBelowAverageRiskMaxBusinessScore {
@@ -1271,6 +1280,24 @@ namespace ConfigManager {
 		} // LowCreditScore
 
 		#endregion property LowCreditScore
+
+		#region property MailSenderEmail
+
+		public virtual VariableValue MailSenderEmail
+		{
+			get { return this[Variables.MailSenderEmail]; } // get
+		} // MailSenderEmail
+
+		#endregion property MailSenderEmail
+
+		#region property MailSenderName
+
+		public virtual VariableValue MailSenderName
+		{
+			get { return this[Variables.MailSenderName]; } // get
+		} // MailSenderName
+
+		#endregion property MailSenderName
 
 		#region property MandrillEnable
 

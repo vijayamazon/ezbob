@@ -8,6 +8,7 @@
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
+	using ConfigManager;
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -33,7 +34,7 @@
 		#region method Init
 
 		public virtual Agent Init() {
-			Trail = new RejectionTrail(Args.CustomerID, Log);
+			Trail = new RejectionTrail(Args.CustomerID, Log, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
 
 			Cfg = new Configuration(DB, Log);
 			MetaData = new MetaData();

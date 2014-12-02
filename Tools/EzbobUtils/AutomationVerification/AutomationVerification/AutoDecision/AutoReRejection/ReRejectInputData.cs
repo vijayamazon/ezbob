@@ -64,7 +64,7 @@
 		public int AutoReRejectMaxLRDAge { get; private set; }
 
 		public string Serialize() {
-			return JsonConvert.SerializeObject(this);
+			return JsonConvert.SerializeObject(this, Formatting.Indented);
 		} // Serialize
 	} // class ReRejectInputData
 } // namespace

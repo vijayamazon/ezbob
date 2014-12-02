@@ -7,6 +7,8 @@
 	public class Arguments {
 		#region constructor
 
+		public Arguments() {}
+
 		public Arguments(int nCustomerID, decimal nSystemCalculatedAmount, Medal nMedal) {
 			CustomerID = nCustomerID;
 			SystemCalculatedAmount = nSystemCalculatedAmount;

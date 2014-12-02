@@ -50,7 +50,7 @@
 
 			customer = _customers.ReallyTryGet(customerId);
 
-			m_oTrail = new ApprovalTrail(customerId, this.log);
+			m_oTrail = new ApprovalTrail(customerId, this.log, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
 
 			m_oSecondaryImplementation = new Agent(
 				customerId,

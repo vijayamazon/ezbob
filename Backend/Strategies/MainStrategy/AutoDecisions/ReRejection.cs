@@ -5,6 +5,7 @@
 	using AutomationCalculator.ProcessHistory.AutoReRejection;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -20,7 +21,7 @@
 			Db = oDb;
 			log = oLog ?? new SafeLog();
 			this.customerId = customerId;
-			m_oTrail = new ReRejectionTrail(customerId, oLog);
+			m_oTrail = new ReRejectionTrail(customerId, oLog, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
 		}
 
 		public bool MakeAndVerifyDecision() {

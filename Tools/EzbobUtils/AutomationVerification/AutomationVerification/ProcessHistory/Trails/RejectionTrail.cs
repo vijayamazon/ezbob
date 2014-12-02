@@ -15,10 +15,8 @@
 		/// <summary>
 		/// Initial state is no decision is made (if in the end still no decision - then no auto reject is done
 		/// </summary>
-		/// <param name="nCustomerID"></param>
-		/// <param name="oLog"></param>
-		public RejectionTrail(int nCustomerID, ASafeLog oLog)
-			: base(nCustomerID, DecisionStatus.Dunno, oLog)
+		public RejectionTrail(int nCustomerID, ASafeLog oLog, string toExplanationMailAddress = null, string fromEmailAddress = null, string fromEmailName = null)
+			: base(nCustomerID, DecisionStatus.Dunno, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
 		{
 			MyInputData = new RejectionInputData();
 
@@ -49,6 +47,10 @@
 		} // NegativeDecisionName
 
 		#endregion property NegativeDecisionName
+
+		#region property Name
+		public override string Name { get { return "Auto Reject"; } }
+		#endregion property Name
 
 		#region property Decision
 

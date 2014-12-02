@@ -13,6 +13,7 @@
 
 		public ApprovalInputData() {
 			LatePayments = new List<Payment>();
+			m_oArguments = new Arguments();
 		} // constructor
 
 		#endregion constructor
@@ -20,7 +21,7 @@
 		#region method Serialize
 
 		public string Serialize() {
-			return JsonConvert.SerializeObject(this);
+			return JsonConvert.SerializeObject(this, Formatting.Indented);
 		} // Serialize
 
 		#endregion method Serialize
@@ -39,9 +40,9 @@
 
 		public int MarketplaceSeniority { get; private set; }
 		public List<Payment> LatePayments { get; private set; }
-		public decimal Turnover1M { get { return m_oTurnover[1]; } } // Turnover1M
-		public decimal Turnover3M { get { return m_oTurnover[3]; } } // Turnover3M
-		public decimal Turnover1Y { get { return m_oTurnover[12]; } } // Turnover1Y
+		public decimal Turnover1M { get { return m_oTurnover != null ? m_oTurnover[1] : 0; } } // Turnover1M
+		public decimal Turnover3M { get { return m_oTurnover != null ? m_oTurnover[3] : 0; } } // Turnover3M
+		public decimal Turnover1Y { get { return m_oTurnover != null ? m_oTurnover[12] : 0; } } // Turnover1Y
 
 		public decimal AvailableFunds { get; private set; }
 

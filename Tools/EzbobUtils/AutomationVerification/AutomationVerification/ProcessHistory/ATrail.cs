@@ -3,10 +3,12 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Text;
+	using System.Web;
 	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
+	using MailApi;
 
 	public abstract class ATrail {
 		#region public
@@ -47,6 +49,10 @@
 		public abstract ITrailInputData InputData { get; }
 
 		public abstract DecisionActions Decision { get; }
+
+		public abstract string Name { get; }
+
+		
 
 		#region property DecisionStatus
 
@@ -156,6 +162,7 @@
 		#region method EqualsTo
 
 		public virtual bool EqualsTo(ATrail oTrail, bool bQuiet = false) {
+			SendExplanationMail(oTrail, "always send for test"); //todo remove
 			DiffID = Guid.NewGuid();
 
 			if (oTrail == null) {
@@ -177,9 +184,10 @@
 
 				m_oDiffNotes.Add(sMsg);
 
-				if (!bQuiet)
+				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
-
+					SendExplanationMail(oTrail, sMsg);
+				}
 				return false;
 			} // if
 
@@ -197,8 +205,10 @@
 
 				m_oDiffNotes.Add(sMsg);
 
-				if (!bQuiet)
+				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
+					SendExplanationMail(oTrail, sMsg);
+				}
 			} // if
 
 			if (this.Length != oTrail.Length) {
@@ -209,8 +219,10 @@
 
 				m_oDiffNotes.Add(sMsg);
 
-				if (!bQuiet)
+				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
+					SendExplanationMail(oTrail, sMsg);
+				}
 
 				return false;
 			} // if
@@ -249,8 +261,10 @@
 
 					m_oDiffNotes.Add(sMsg);
 
-					if (!bQuiet)
+					if (!bQuiet) {
 						m_oLog.Warn("Trails are different: {0}", sMsg);
+						SendExplanationMail(oTrail, sMsg);
+					}
 				} // if
 				else if (oMy.HasLockedDecision != oOther.HasLockedDecision) {
 					bResult = false;
@@ -266,13 +280,37 @@
 
 					m_oDiffNotes.Add(sMsg);
 
-					if (!bQuiet)
+					if (!bQuiet) {
 						m_oLog.Warn("Trails are different: {0}", sMsg);
+						SendExplanationMail(oTrail, sMsg);
+					}
 				} // if
 			} // for
 
 			return bResult;
-		} // EqualsTo
+		}
+
+		private void SendExplanationMail(ATrail oTrail, string sMsg) {
+			var message =
+				string.Format(@"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b></u></h1><br>
+					<h2><b style='color:red'>{2}</b><br></h2>
+					<h2><b>main flow:</b></h2>
+					<pre><h3>{3}</h3></pre><br>
+					<h2><b>verification flow:</b></h2>
+					<pre><h3>{4}</h3></pre><br>
+					</b></h2>main data:
+					<pre><h3>{5}</h3></pre>
+					</b></h2>verification data:</b></h2>
+					<pre><h3>{6}</h3></pre>", Name, CustomerID, HttpUtility.HtmlEncode(sMsg),
+				              HttpUtility.HtmlEncode(this.ToString()),
+				              HttpUtility.HtmlEncode(oTrail.ToString()),
+				              HttpUtility.HtmlEncode(this.InputData.Serialize()),
+				              HttpUtility.HtmlEncode(oTrail.InputData.Serialize()));
+			
+			var result = new Mail().Send(toExplanationEmailAddress, null, message, fromEmailAddress, fromEmailName, "Mismatch in " + Name + " for customer " + CustomerID);
+		}
+
+// EqualsTo
 
 		#endregion method EqualsTo
 
@@ -326,13 +364,16 @@
 
 		#region constructor
 
-		protected ATrail(int nCustomerID, DecisionStatus nDecisionStatus, ASafeLog oLog) {
+		protected ATrail(int nCustomerID, DecisionStatus nDecisionStatus, ASafeLog oLog, string toExplanationEmailAddress, string fromEmailAddress, string fromEmailName) {
 			m_bIsDecisionLocked = false;
 			m_oDiffNotes = new List<string>();
 			m_oSteps = new List<ATrace>();
 
 			CustomerID = nCustomerID;
 			m_nDecisionStatus = nDecisionStatus;
+			this.toExplanationEmailAddress = toExplanationEmailAddress;
+			this.fromEmailAddress = fromEmailAddress;
+			this.fromEmailName = fromEmailName;
 			m_oLog = oLog ?? new SafeLog();
 		} // constructor
 
@@ -481,6 +522,10 @@
 		private readonly List<ATrace> m_oSteps;
 
 		private readonly ASafeLog m_oLog;
+
+		private string toExplanationEmailAddress;
+		private string fromEmailAddress;
+		private string fromEmailName;
 
 		#region method Add
 

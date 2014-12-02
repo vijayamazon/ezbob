@@ -225,9 +225,27 @@ namespace EzBobTest
 		public void TestAutoReRejection()
 		{
 			var rerejection = new ReRejection(21334, m_oDB, m_oLog);
-			var decision = new AutoDecisionRejectionResponse();
-			rerejection.MakeDecision(decision);
-			Assert.AreEqual(false, decision.IsReRejected);
+			var rejection = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, m_oDB, m_oLog);
+			var approve = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, MedalClassification.Gold, m_oDB, m_oLog);
+			var reapprove = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, m_oDB, m_oLog);
+			var rejectionDecision = new AutoDecisionRejectionResponse();
+			//rerejection.MakeDecision(rejectionDecision);
+			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
+
+			//rejection.Init().MakeDecision(rejectionDecision);
+			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
+
+			var decision = new AutoDecisionResponse();
+			//approve.Init().MakeDecision(decision);
+			//Assert.AreEqual(false, decision.IsAutoApproval);
+			reapprove.Init().MakeDecision(decision);
+
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(m_oDB, m_oLog, 21334, reapprove.Trail.InputData.DataAsOf);
+			oSecondary.MakeDecision(oSecondary.GetInputData());
+
+			bool bSuccess = reapprove.Trail.EqualsTo(oSecondary.Trail);
+
+			Assert.AreEqual(false, decision.IsAutoApproval);
 		} // TestCalculateModelsAndAffordability
 
 		[Test]

@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -167,6 +168,10 @@
     <ProjectReference Include="..\..\..\..\Integration\DbConstants\DbConstants.csproj">
       <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
       <Name>DbConstants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Integration\MailApi\MailApi.csproj">
+      <Project>{DE254378-4CF8-400C-BCC4-A9AF01550350}</Project>
+      <Name>MailApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
