@@ -59,6 +59,7 @@ namespace ConfigManager {
 		AutoApproveOnlineTurnoverDropQuarterRatio,
 		AutoApproveSilentTemplateName,
 		AutoApproveSilentToAddress,
+		AutomationExplanationMailReciever,
 		AutoReApproveMaxLacrAge,
 		AutoReApproveMaxLatePayment,
 		AutoReApproveMaxNumOfOutstandingLoans,
@@ -235,6 +236,8 @@ namespace ConfigManager {
 		LoginValidity,
 		LowCreditScore,
 
+		MailSenderEmail,
+		MailSenderName,
 		ManagerMaxLoan,
 		MandrillEnable,
 		MandrillKey,

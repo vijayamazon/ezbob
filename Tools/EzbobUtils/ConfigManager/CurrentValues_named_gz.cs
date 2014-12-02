@@ -176,6 +176,22 @@
 
 		#endregion property LowCreditScore
 
+		#region property MailSenderEmail
+
+		public virtual VariableValue MailSenderEmail {
+			get { return this[Variables.MailSenderEmail]; } // get
+		} // MailSenderEmail
+
+		#endregion property MailSenderEmail
+
+		#region property MailSenderName
+
+		public virtual VariableValue MailSenderName {
+			get { return this[Variables.MailSenderName]; } // get
+		} // MailSenderName
+
+		#endregion property MailSenderName
+
 		#region property MandrillEnable
 
 		public virtual VariableValue MandrillEnable {

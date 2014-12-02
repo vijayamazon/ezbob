@@ -264,6 +264,14 @@
 
 		#endregion property AutomaticTestCustomerMark
 
+		#region property AutomationExplanationMailReciever
+
+		public virtual VariableValue AutomationExplanationMailReciever {
+			get { return this[Variables.AutomationExplanationMailReciever]; } // get
+		} // AutomationExplanationMailReciever
+
+		#endregion property AutomationExplanationMailReciever
+
 		#region property AutoReApproveMaxLacrAge
 
 		public virtual VariableValue AutoReApproveMaxLacrAge {
