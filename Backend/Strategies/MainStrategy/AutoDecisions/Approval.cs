@@ -388,11 +388,8 @@
 				CheckRepaidRatio();
 				ReduceOutstandingPrincipal();
 
-
-				if (!CurrentValues.Instance.AutoApproveIsSilent) {
-					CheckAllowedRange();
-				}
-
+				CheckAllowedRange();
+				
 				CheckComplete();
 			}
 			catch (Exception ex) {
@@ -762,13 +759,19 @@
 		} // ReduceOutstandingPrincipal
 
 		private void CheckAllowedRange() {
-			int autoApproveMinAmount = CurrentValues.Instance.AutoApproveMinAmount;
-			int autoApproveMaxAmount = CurrentValues.Instance.AutoApproveMaxAmount;
 
-			if (autoApprovedAmount < autoApproveMinAmount || autoApprovedAmount > autoApproveMaxAmount)
-				StepFailed<AmountOutOfRangle>().Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
-			else
-				StepDone<AmountOutOfRangle>().Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
+			if (!m_oTrail.MyInputData.Configuration.IsSilent) {
+				StepDone<AmountOutOfRangle>().Init(autoApprovedAmount, m_oTrail.MyInputData.Configuration.IsSilent);
+			}
+			else {
+				int autoApproveMinAmount = m_oTrail.MyInputData.Configuration.MinAmount;
+				int autoApproveMaxAmount = m_oTrail.MyInputData.Configuration.MaxAmount;
+
+				if (autoApprovedAmount < autoApproveMinAmount || autoApprovedAmount > autoApproveMaxAmount)
+					StepFailed<AmountOutOfRangle>().Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
+				else
+					StepDone<AmountOutOfRangle>().Init(autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
+			}
 		} // CheckAllowedRange
 
 		private void CheckWorstCaisStatus(string allowedStatuses) {
