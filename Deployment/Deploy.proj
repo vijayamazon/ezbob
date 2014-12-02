@@ -90,6 +90,10 @@
 	<Target Name="WEBStop">
 		<Message Text="Stopping sites..."/>
 		<Exec Command="iisreset /stop" ContinueOnError="true"/>
+		
+	</Target>
+	
+	<Target Name="ServerStop">
 		<Message Text="Stopping share server..."/>
 		<Exec Command="net stop server /y" ContinueOnError="true"/>
 	</Target>
@@ -121,6 +125,11 @@
 	<Target Name="WEBStart">
 		<Message Text="Starting sites..."/>
 		<Exec Command="iisreset /start" ContinueOnError="true"/>
+		<Message Text="Starting share server..."/>
+		<Exec Command="net start server /y" ContinueOnError="true"/>
+	</Target>
+	
+	<Target Name="ServerStart">
 		<Message Text="Starting share server..."/>
 		<Exec Command="net start server /y" ContinueOnError="true"/>
 	</Target>
