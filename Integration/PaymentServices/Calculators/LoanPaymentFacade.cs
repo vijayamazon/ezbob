@@ -129,11 +129,7 @@ namespace PaymentServices.Calculators
         /// <summary>
         /// Оплатить все кредиты клиента.
         /// </summary>
-        /// <param name="customer"></param>
-        /// <param name="amount"></param>
-        /// <param name="transId"></param>
-        /// <param name="term"></param>
-        public void PayAllLoansForCustomer(Customer customer, decimal amount, string transId, DateTime? term = null)
+        public void PayAllLoansForCustomer(Customer customer, decimal amount, string transId, DateTime? term = null, string description = null, string sManualPaymentMethod = null)
         {
             var date = term ?? DateTime.Now;
             var loans = customer.ActiveLoans;
@@ -141,12 +137,12 @@ namespace PaymentServices.Calculators
             {
                 if (amount <= 0) break;
                 var money = Math.Min(amount, loan.TotalEarlyPayment(term));
-                PayLoan(loan, transId, money, null, date);
+				PayLoan(loan, transId, money, null, date, description, sManualPaymentMethod: sManualPaymentMethod);
                 amount = amount - money;
             }
         }
 
-        public void PayAllLateLoansForCustomer(Customer customer, decimal amount, string transId, DateTime? term = null)
+		public void PayAllLateLoansForCustomer(Customer customer, decimal amount, string transId, DateTime? term = null, string description = null, string sManualPaymentMethod = null)
         {
             var date = term ?? DateTime.Now;
             var loans = customer.ActiveLoans.Where(l => l.Status == LoanStatus.Late);
@@ -159,7 +155,7 @@ namespace PaymentServices.Calculators
                 var late = loan.Schedule.Where(s => s.Status == LoanScheduleStatus.Late).Sum(s => s.LoanRepayment) +
                            state.Interest + state.Fees + state.LateCharges;
                 var money = Math.Min(amount, late);
-                PayLoan(loan, transId, money, null, date);
+                PayLoan(loan, transId, money, null, date, description, sManualPaymentMethod: sManualPaymentMethod);
                 amount = amount - money;
             }
         }
@@ -198,7 +194,7 @@ namespace PaymentServices.Calculators
                      where r.Status == RolloverStatus.New
                      select r).Any();
 
-                PayAllLoansForCustomer(customer, amount, transId, date);
+				PayAllLoansForCustomer(customer, amount, transId, date, description, sManualPaymentMethod: sManualPaymentMethod);
                 newInterest = customer.Loans.Sum(l => l.Interest);
             }
             else if (type == "totalLate")
@@ -210,7 +206,7 @@ namespace PaymentServices.Calculators
                      where r.Status == RolloverStatus.New
                      select r).Any();
                 oldInterest = customer.Loans.Sum(l => l.Interest);
-                PayAllLateLoansForCustomer(customer, amount, transId, date);
+				PayAllLateLoansForCustomer(customer, amount, transId, date, description, sManualPaymentMethod: sManualPaymentMethod);
                 newInterest = customer.Loans.Sum(l => l.Interest);
             }
             else if (paymentType == "nextInterest")
