@@ -43,28 +43,41 @@
 
 		public virtual ReapprovalTrail Trail { get; private set; }
 
+		#region method MakeAndVerifyDecision
+
+		public virtual bool MakeAndVerifyException() {
+			RunPrimary();
+
+			AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();
+
+			bool bSuccess = Trail.EqualsTo(oSecondary.Trail);
+
+			if (bSuccess && Trail.HasDecided) {
+				if (ApprovedAmount == oSecondary.Result.ReApproveAmount) {
+					Trail.Affirmative<SameAmount>(false).Init(ApprovedAmount);
+					oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
+				}
+				else {
+					Trail.Negative<SameAmount>(false).Init(ApprovedAmount);
+					oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
+					bSuccess = false;
+				} // if
+			} // if
+
+			Trail.Save(DB, oSecondary.Trail);
+
+			return bSuccess && Trail.HasDecided;
+		} // MakeAndVerifyException
+
+		#endregion method MakeAndVerifyDecision
+
 		#region method MakeDecision
 
 		public virtual void MakeDecision(AutoDecisionResponse response) {
 			Log.Debug("Checking if auto re-approval should take place for customer {0}...", Args.CustomerID);
 
 			try {
-				GatherData();
-
-				CheckInit();
-				CheckIsFraud();
-				CheckLacrTooOld();
-				CheckRejectAfterLacr();
-				CheckLateLoans();
-				CheckLatePayments();
-				CheckNewMarketplaces();
-				CheckOutstandingLoans();
-				CheckLoanCharges();
-				SetApprovedAmount();
-				CheckAvailableFunds();
-				CheckComplete();
-
-				if (Trail.HasDecided) {
+				if (MakeAndVerifyException()) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.IsAutoApproval = true;
 					response.CreditResult = "Approved";
@@ -148,6 +161,38 @@
 		#endregion protected
 
 		#region private
+
+		#region method RunPrimary
+
+		private void RunPrimary() {
+			GatherData();
+
+			CheckInit();
+			CheckIsFraud();
+			CheckLacrTooOld();
+			CheckRejectAfterLacr();
+			CheckLateLoans();
+			CheckLatePayments();
+			CheckNewMarketplaces();
+			CheckOutstandingLoans();
+			CheckLoanCharges();
+			SetApprovedAmount();
+			CheckAvailableFunds();
+			CheckComplete();
+		} // RunPrimary
+
+		#endregion method RunPrimary
+
+		#region method RunSecondary
+
+		private AutomationCalculator.AutoDecision.AutoReApproval.Agent RunSecondary() {
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(DB, Log, Args.CustomerID, Trail.InputData.DataAsOf);
+			oSecondary.MakeDecision(oSecondary.GetInputData());
+
+			return oSecondary;
+		} // RunSecondary
+
+		#endregion method RunSecondary
 
 		#region steps
 

@@ -1,9 +1,7 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy
-{
+﻿namespace EzBob.Backend.Strategies.MainStrategy {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using AutomationCalculator.ProcessHistory.Common;
 	using ConfigManager;
 	using MailStrategies;
 	using MailStrategies.API;
@@ -17,42 +15,9 @@
 	using Ezbob.Logger;
 	using EzBob.Models;
 
-	public class MainStrategy : AStrategy
-	{
-		// Helpers
-		private readonly StrategiesMailer mailer;
-		private readonly Staller staller;
-		private readonly DataGatherer dataGatherer;
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		private readonly MedalScoreCalculator medalScoreCalculator;
-
-		// Inputs
-		private readonly int customerId;
-		private readonly NewCreditLineOption newCreditLineOption;
-		private readonly int avoidAutomaticDecision;
-
-		/// <summary>
-		/// Default: true. However when Main strategy is executed as a part of
-		/// Finish Wizard strategy and customer is already approved/rejected
-		/// then customer's status should not change.
-		/// </summary>
-		private bool overrideApprovedRejected;
-
-		// Calculated based on raw data
-		private bool isHomeOwner;
-		private bool isFirstLoan;
-		private bool wasMainStrategyExecutedBefore;
-		private int companySeniorityDays;
-
-		private AutoDecisionResponse autoDecisionResponse;
-		private MedalMultiplier medalType;
-		private decimal loanOfferReApprovalSum;
-		private int offeredCreditLine;
-		private int modelLoanOffer;
-		private MedalClassification medalClassification;
-		
+	public class MainStrategy : AStrategy {
 		public override string Name { get { return "Main strategy"; } }
-		
+
 		public MainStrategy(
 			int customerId,
 			NewCreditLineOption newCreditLine,
@@ -60,8 +25,7 @@
 			AConnection oDb,
 			ASafeLog oLog
 		)
-			: base(oDb, oLog)
-		{
+			: base(oDb, oLog) {
 			medalScoreCalculator = new MedalScoreCalculator(DB, Log);
 
 			mailer = new StrategiesMailer(DB, Log);
@@ -71,6 +35,11 @@
 			overrideApprovedRejected = true;
 			staller = new Staller(customerId, newCreditLineOption, mailer, DB, Log);
 			dataGatherer = new DataGatherer(customerId, DB, Log);
+		}
+
+		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
+			overrideApprovedRejected = bOverrideApprovedRejected;
+			return this;
 		}
 
 		public override void Execute() {
@@ -143,40 +112,33 @@
 			);
 		}
 
-		private void CalculateNewMedal()
-		{
+		private void CalculateNewMedal() {
 			var instance = new CalculateMedal(DB, Log, customerId, dataGatherer.TypeOfBusiness, dataGatherer.MaxExperianConsumerScore, dataGatherer.MaxCompanyScore, dataGatherer.NumOfHmrcMps,
 				dataGatherer.NumOfYodleeMps, dataGatherer.NumOfEbayAmazonPayPalMps, dataGatherer.EarliestHmrcLastUpdateDate, dataGatherer.EarliestYodleeLastUpdateDate);
 			instance.Execute();
 
 			medalClassification = instance.Result.MedalClassification;
 
-			modelLoanOffer = (int)Math.Truncate((decimal)instance.Result.OfferedLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep; 
+			modelLoanOffer = (int)Math.Truncate((decimal)instance.Result.OfferedLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
 		}
 
-		private void ProcessDecision(ScoreMedalOffer scoringResult, AutoDecisionRejectionResponse autoDecisionRejectionResponse)
-		{
-			if (autoDecisionResponse != null && autoDecisionResponse.IsAutoApproval)
-			{
+		private void ProcessDecision(ScoreMedalOffer scoringResult, AutoDecisionRejectionResponse autoDecisionRejectionResponse) {
+			if (autoDecisionResponse != null && autoDecisionResponse.IsAutoApproval) {
 				modelLoanOffer = autoDecisionResponse.AutoApproveAmount;
 
-				if (modelLoanOffer < offeredCreditLine)
-				{
+				if (modelLoanOffer < offeredCreditLine) {
 					offeredCreditLine = modelLoanOffer;
 				}
 			}
-			else if (autoDecisionResponse != null && autoDecisionResponse.IsAutoBankBasedApproval)
-			{
+			else if (autoDecisionResponse != null && autoDecisionResponse.IsAutoBankBasedApproval) {
 				modelLoanOffer = autoDecisionResponse.BankBasedAutoApproveAmount;
 
-				if (modelLoanOffer < offeredCreditLine)
-				{
+				if (modelLoanOffer < offeredCreditLine) {
 					offeredCreditLine = modelLoanOffer;
 				}
 			}
 
-			if (autoDecisionRejectionResponse.DecidedToReject)
-			{
+			if (autoDecisionRejectionResponse.DecidedToReject) {
 				modelLoanOffer = 0;
 				SendRejectionExplanationMail("Mandrill - User is rejected by the strategy", autoDecisionRejectionResponse.RejectionModel);
 
@@ -185,45 +147,38 @@
 				strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionRejectionResponse.AutoRejectReason);
 			}
 
-			if (autoDecisionResponse == null)
-			{
+			if (autoDecisionResponse == null) {
 				UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent, autoDecisionRejectionResponse.CreditResult,
 					autoDecisionRejectionResponse.SystemDecision, autoDecisionRejectionResponse.UserStatus, null, 0);
 			}
-			else
-			{
+			else {
 				UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent, autoDecisionResponse.CreditResult, autoDecisionResponse.SystemDecision,
 					autoDecisionResponse.UserStatus, autoDecisionResponse.AppValidFor, autoDecisionResponse.RepaymentPeriod);
 			}
 
 			if (autoDecisionResponse != null) // Means that wasn't rejected
 			{
-				if (autoDecisionResponse.UserStatus == "Approved")
-				{
-					if (autoDecisionResponse.IsAutoApproval)
-					{
+				if (autoDecisionResponse.UserStatus == "Approved") {
+					if (autoDecisionResponse.IsAutoApproval) {
 						UpdateApprovalData();
 						SendApprovalMails(scoringResult.MaxOfferPercent);
 
 						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
 					}
-					else if (autoDecisionResponse.IsAutoBankBasedApproval)
-					{
+					else if (autoDecisionResponse.IsAutoBankBasedApproval) {
 						UpdateBankBasedApprovalData();
 						SendBankBasedApprovalMails();
 
 						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto bank based approval");
 					}
-					else
-					{
+					else {
 						UpdateReApprovalData();
 						SendReApprovalMails();
 
 						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
 					}
 				}
-				else
-				{
+				else {
 					SendWaitingForDecisionMail();
 				}
 			}
@@ -260,7 +215,16 @@
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (dataGatherer.EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				bContinue = ProcessReApproval();
+				new AutoDecisions.ReApproval.Agent(
+					customerId,
+					DB,
+					Log
+				).Init().MakeDecision(autoDecisionResponse);
+
+				bContinue = string.IsNullOrWhiteSpace(autoDecisionResponse.SystemDecision);
+
+				if (!bContinue)
+					Log.Debug("Auto re-approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
 			}
 			else
 				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
@@ -302,51 +266,12 @@
 			} // if
 		} // ProcessApprovals
 
-		private bool ProcessReApproval() {
-			var oReapprove = new AutoDecisions.ReApproval.Agent(
-				customerId,
-				DB,
-				Log
-			).Init();
-			
-			oReapprove.MakeDecision(autoDecisionResponse);
-
-			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(DB, Log, customerId, oReapprove.Trail.InputData.DataAsOf);
-			oSecondary.MakeDecision(oSecondary.GetInputData());
-
-			bool bSuccess = oReapprove.Trail.EqualsTo(oSecondary.Trail);
-
-			if (bSuccess && oReapprove.Trail.HasDecided) {
-				if (oReapprove.ApprovedAmount == oSecondary.Result.ReApproveAmount) {
-					oReapprove.Trail.Affirmative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
-					oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
-				}
-				else {
-					oReapprove.Trail.Negative<SameAmount>(false).Init(oReapprove.ApprovedAmount);
-					oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
-					bSuccess = false;
-				} // if
-			} // if
-
-			oReapprove.Trail.Save(DB, oSecondary.Trail);
-
-			bool bContinue = bSuccess && string.IsNullOrWhiteSpace(autoDecisionResponse.SystemDecision);
-
-			if (!bContinue)
-				Log.Debug("Auto re-approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
-
-			return bContinue;
-		} // ProcessReApproval
-
-		private void GetLandRegistryDataIfNotRejected(AutoDecisionRejectionResponse autoDecisionRejectionResponse)
-		{
-			if (autoDecisionRejectionResponse.CreditResult != "Rejected" && !autoDecisionRejectionResponse.DecidedToReject && isHomeOwner)
-			{
+		private void GetLandRegistryDataIfNotRejected(AutoDecisionRejectionResponse autoDecisionRejectionResponse) {
+			if (autoDecisionRejectionResponse.CreditResult != "Rejected" && !autoDecisionRejectionResponse.DecidedToReject && isHomeOwner) {
 				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, dataGatherer.PropertyStatusDescription);
 				GetLandRegistry();
 			}
-			else
-			{
+			else {
 				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionRejectionResponse.SystemDecision, dataGatherer.PropertyStatusDescription);
 			}
 		}
@@ -379,24 +304,15 @@
 			return autoDecisionRejectionResponse;
 		} // ProcessRejections
 
-		private void GetLandRegistry()
-		{
+		private void GetLandRegistry() {
 			var customerAddressesHelper = new CustomerAddressHelper(customerId, DB, Log);
 			customerAddressesHelper.Execute();
-			try
-			{
+			try {
 				strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.OwnedAddresses);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Log.Error("Error while getting land registry data: {0}", e);
 			}
-		}
-
-		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected)
-		{
-			overrideApprovedRejected = bOverrideApprovedRejected;
-			return this;
 		}
 
 		private void CapOffer() {
@@ -410,22 +326,19 @@
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			if (isHomeOwnerAccordingToLandRegistry)
-			{
+			if (isHomeOwnerAccordingToLandRegistry) {
 				Log.Info("Capped for home owner according to land registry");
 				loanOfferReApprovalSum = Math.Min(loanOfferReApprovalSum, dataGatherer.MaxCapHomeOwner);
-				offeredCreditLine      = Math.Min(offeredCreditLine,      dataGatherer.MaxCapHomeOwner);
+				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapHomeOwner);
 			}
-			else
-			{
+			else {
 				Log.Info("Capped for not home owner");
 				loanOfferReApprovalSum = Math.Min(loanOfferReApprovalSum, dataGatherer.MaxCapNotHomeOwner);
-				offeredCreditLine      = Math.Min(offeredCreditLine,      dataGatherer.MaxCapNotHomeOwner);
+				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapNotHomeOwner);
 			} // if
 		} // CappOffer
-		
-		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase, string creditResult, string systemDecision, string userStatus, DateTime? appValidFor, int repaymentPeriod)
-		{
+
+		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase, string creditResult, string systemDecision, string userStatus, DateTime? appValidFor, int repaymentPeriod) {
 			DB.ExecuteNonQuery(
 				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
@@ -444,8 +357,7 @@
 			int repaymentPeriodToUse, loanTypeIdToUse;
 			bool isEuToUse;
 
-			if (autoDecisionResponse.IsAutoApproval)
-			{
+			if (autoDecisionResponse.IsAutoApproval) {
 				interestRateToUse = autoDecisionResponse.InterestRate;
 				setupFeePercentToUse = autoDecisionResponse.SetupFee;
 				setupFeeAmountToUse = setupFeePercentToUse * offeredCreditLine;
@@ -453,16 +365,14 @@
 				isEuToUse = autoDecisionResponse.IsEu;
 				loanTypeIdToUse = autoDecisionResponse.LoanTypeId;
 			}
-			else
-			{
+			else {
 				// Dont calculate interest if there was an auto approval (the interest was already calculated)
 				decimal interestAccordingToPast = -1;
 				DB.ForEachRowSafe(
-					(sr, bRowsetStart) =>
-						{
-							interestAccordingToPast = sr["InterestRate"];
-							return ActionResult.SkipAll;
-						},
+					(sr, bRowsetStart) => {
+						interestAccordingToPast = sr["InterestRate"];
+						return ActionResult.SkipAll;
+					},
 					"GetLatestInterestRate",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),
@@ -498,8 +408,7 @@
 			);
 		}
 
-		private void SendWaitingForDecisionMail()
-		{
+		private void SendWaitingForDecisionMail() {
 			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
 				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -512,8 +421,7 @@
 			});
 		}
 
-		private void SendReApprovalMails()
-		{
+		private void SendReApprovalMails() {
 			mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Re-Approved"},
 				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
@@ -543,8 +451,7 @@
 			mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
 
-		private void UpdateReApprovalData()
-		{
+		private void UpdateReApprovalData() {
 			DB.ExecuteNonQuery(
 				"UpdateCashRequestsReApproval",
 				CommandSpecies.StoredProcedure,
@@ -568,8 +475,7 @@
 			);
 		}
 
-		private void SendApprovalMails(decimal interestRate)
-		{
+		private void SendApprovalMails(decimal interestRate) {
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
 				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
@@ -599,8 +505,7 @@
 			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
 
-		private void UpdateApprovalData()
-		{
+		private void UpdateApprovalData() {
 			DB.ExecuteNonQuery(
 				"UpdateAutoApproval",
 				CommandSpecies.StoredProcedure,
@@ -609,8 +514,7 @@
 			);
 		}
 
-		private void SendBankBasedApprovalMails()
-		{
+		private void SendBankBasedApprovalMails() {
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
 				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
@@ -640,8 +544,7 @@
 			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
 
-		private void UpdateBankBasedApprovalData()
-		{
+		private void UpdateBankBasedApprovalData() {
 			DB.ExecuteNonQuery(
 				"UpdateBankBasedAutoApproval",
 				CommandSpecies.StoredProcedure,
@@ -651,8 +554,7 @@
 			);
 		}
 
-		private ScoreMedalOffer CalculateScoreAndMedal()
-		{
+		private ScoreMedalOffer CalculateScoreAndMedal() {
 			Log.Info("Calculating score & medal");
 
 			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(
@@ -705,16 +607,13 @@
 			);
 			return scoringResult;
 		}
-		
-		private void SendRejectionExplanationMail(string templateName, RejectionModel rejection)
-		{
+
+		private void SendRejectionExplanationMail(string templateName, RejectionModel rejection) {
 			string additionalValues = string.Empty;
-			if (rejection == null)
-			{
+			if (rejection == null) {
 				rejection = new RejectionModel();
 			}
-			else
-			{
+			else {
 				additionalValues =
 					string.Format(
 						"\n is offline: {8} \n company score: {0} \n company seniority: {9} \n {1} \n {2} \n {3} \n {4} \n {5} \n {6} \n num of late CAIS accounts: {7}",
@@ -730,7 +629,7 @@
 						companySeniorityDays
 					);
 			}
-			
+
 			mailer.Send(templateName, new Dictionary<string, string> {
 				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -758,5 +657,37 @@
 				{"SeniorityThreshold", dataGatherer.RejectMinimalSeniority.ToString(CultureInfo.InvariantCulture) + additionalValues}
 			});
 		}
+
+		// Helpers
+		private readonly StrategiesMailer mailer;
+		private readonly Staller staller;
+		private readonly DataGatherer dataGatherer;
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly MedalScoreCalculator medalScoreCalculator;
+
+		// Inputs
+		private readonly int customerId;
+		private readonly NewCreditLineOption newCreditLineOption;
+		private readonly int avoidAutomaticDecision;
+
+		/// <summary>
+		/// Default: true. However when Main strategy is executed as a part of
+		/// Finish Wizard strategy and customer is already approved/rejected
+		/// then customer's status should not change.
+		/// </summary>
+		private bool overrideApprovedRejected;
+
+		// Calculated based on raw data
+		private bool isHomeOwner;
+		private bool isFirstLoan;
+		private bool wasMainStrategyExecutedBefore;
+		private int companySeniorityDays;
+
+		private AutoDecisionResponse autoDecisionResponse;
+		private MedalMultiplier medalType;
+		private decimal loanOfferReApprovalSum;
+		private int offeredCreditLine;
+		private int modelLoanOffer;
+		private MedalClassification medalClassification;
 	} // class MainStrategy
 } // namespace

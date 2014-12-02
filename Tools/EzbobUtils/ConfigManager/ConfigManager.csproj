@@ -47,9 +47,12 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CurrentValues_named_properties.cs" />
+    <Compile Include="CurrentValues_named_gz.cs" />
+    <Compile Include="CurrentValues_named_cf.cs" />
+    <Compile Include="CurrentValues_named_unsorted.cs" />
     <Compile Include="CurrentValues.cs" />
     <Compile Include="Log4Net.cs" />
+    <Compile Include="CurrentValues_named_ab.cs" />
     <Compile Include="OneUploadLimitation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UploadLimitations.cs" />
