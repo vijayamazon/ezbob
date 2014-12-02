@@ -226,8 +226,8 @@ namespace EzBobTest
 		{
 			var rerejection = new ReRejection(21334, m_oDB, m_oLog);
 			var decision = new AutoDecisionRejectionResponse();
-			var isrerejected = rerejection.MakeDecision(decision);
-			Assert.AreEqual(false, isrerejected);
+			rerejection.MakeDecision(decision);
+			Assert.AreEqual(false, decision.IsReRejected);
 		} // TestCalculateModelsAndAffordability
 
 		[Test]
