@@ -53,9 +53,9 @@ BEGIN
 		INNER JOIN #fa ON i.Id = #fa.Id
 
 	------------------------------------------------------------------------------
-	
+
 	DECLARE @Rate NUMERIC(18, 8) = ISNULL((
-		SELECT
+		SELECT TOP 1
 			h.Price
 		FROM
 			MP_CurrencyRateHistory h
@@ -64,6 +64,8 @@ BEGIN
 			c.Name LIKE 'USD%'
 			AND
 			CONVERT(DATE, h.Updated) = CONVERT(DATE, @TurnoverTo)
+		ORDER BY
+			h.Updated DESC
 	), 1)
 
 	IF @Rate = 0
