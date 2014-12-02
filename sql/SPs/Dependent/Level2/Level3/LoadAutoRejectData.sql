@@ -120,6 +120,8 @@ BEGIN
 		mp.CustomerId = @CustomerID
 		AND
 		RTRIM(LTRIM(ISNULL(mp.UpdateError, ''))) != ''
+		AND
+		ISNULL(mp.Disabled, 0) = 0
 
 	------------------------------------------------------------------------------
 
