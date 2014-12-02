@@ -844,7 +844,7 @@
 				              : companyName.Trim()
 				                           .ToLowerInvariant()
 				                           .Replace("limited", "ltd")
-				                           .Replace("the", string.Empty)
+				                           .Replace("the ", string.Empty)
 				                           .Replace("&amp;", "&")
 				                           .Replace(".", string.Empty)
 				                           .Replace("#049;", "'");
