@@ -76,10 +76,16 @@
 
 			m_oTrail.Save(Db, oSecondary.Trail);
 
-			return bSuccess;
+			if(bSuccess){
+				return m_oTrail.HasDecided;
+			}
+
+			log.Error("Mismatch in re-rejection logic for customer {0}; main: {1}\n secondory: {2}", customerId, m_oTrail, oSecondary.Trail);
+			//not re-rejected if mismatch between two implementations
+			return false;
 		} // MakeAndVerifyDecision
 
-		public bool MakeDecision(AutoDecisionRejectionResponse response)
+		public void MakeDecision(AutoDecisionRejectionResponse response)
 		{
 			try
 			{
@@ -94,17 +100,12 @@
 					response.SystemDecision = "Reject";
 					response.DecidedToReject = true;
 					response.DecisionName = "Re-rejection";
-
-					return true;
 				}
-
-				return false;
 			}
 			catch (Exception ex)
 			{
 				StepNoReReject<ExceptionThrown>(true).Init(ex);
 				log.Error(ex, "Exception during re-rejection {0}", m_oTrail);
-				return false;
 			}
 		}
 
