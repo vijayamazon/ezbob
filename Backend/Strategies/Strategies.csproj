@@ -87,7 +87,6 @@
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\AutoDecisionRejectionResponse.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />

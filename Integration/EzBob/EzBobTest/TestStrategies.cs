@@ -228,7 +228,7 @@ namespace EzBobTest
 			var rejection = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, m_oDB, m_oLog);
 			var approve = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, MedalClassification.Gold, m_oDB, m_oLog);
 			var reapprove = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, m_oDB, m_oLog);
-			var rejectionDecision = new AutoDecisionRejectionResponse();
+			
 			//rerejection.MakeDecision(rejectionDecision);
 			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
 

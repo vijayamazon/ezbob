@@ -68,16 +68,16 @@
 
 		#region method MakeDecision
 
-		public virtual void MakeDecision(AutoDecisionRejectionResponse response) {
+		public virtual void MakeDecision(AutoDecisionResponse response) {
 			try {
 				MakeAndVerifyDecision();
 
 				if (Trail.HasDecided) {
+					response.DecidedToReject = true;
 					response.CreditResult = "Rejected";
 					response.UserStatus = "Rejected";
 					response.SystemDecision = "Reject";
 					response.DecisionName = "Rejection";
-					response.DecidedToReject = true;
 				} // if
 			}
 			catch (Exception e) {

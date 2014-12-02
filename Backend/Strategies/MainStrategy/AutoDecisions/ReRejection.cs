@@ -86,20 +86,19 @@
 			return false;
 		} // MakeAndVerifyDecision
 
-		public void MakeDecision(AutoDecisionRejectionResponse response)
+		public void MakeDecision(AutoDecisionResponse response)
 		{
 			try
 			{
 				if (MakeAndVerifyDecision())
 				{
+					response.DecidedToReject = true;
 					response.IsReRejected = true;
 					response.AutoRejectReason = "Auto Re-Reject";
 
 					response.CreditResult = "Rejected";
-
 					response.UserStatus = "Rejected";
 					response.SystemDecision = "Reject";
-					response.DecidedToReject = true;
 					response.DecisionName = "Re-rejection";
 				}
 			}

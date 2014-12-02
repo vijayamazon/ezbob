@@ -79,7 +79,7 @@
 			try {
 				if (MakeAndVerifyException()) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
-					response.IsAutoApproval = true;
+					response.IsAutoReApproval = true;
 					response.CreditResult = "Approved";
 					response.UserStatus = "Approved";
 					response.SystemDecision = "Approve";
