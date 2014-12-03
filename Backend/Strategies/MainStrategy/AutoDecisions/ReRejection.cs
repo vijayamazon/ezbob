@@ -74,31 +74,32 @@
 
 			SafeReader sr = Db.GetFirst("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
-			bool wasManuallyRejected = sr["WasManuallyRejected"];
-			DateTime? lastManualRejectDate = sr["LastManualRejectDate"];
+			bool lastDecisionWasReject = sr["LastDecisionWasReject"];
+			DateTime? lastRejectDate = sr["LastRejectDate"]; 
+			DateTime? lastDecisionDate = sr["LastDecisionDate"]; 
 			bool newDataSourceAdded = sr["NewDataSourceAdded"];
 			int openLoansAmount = sr["OpenLoansAmount"];
 			decimal principalRepaymentAmount = sr["PrincipalRepaymentAmount"];
-			bool hasLoans = sr["HasLoans"];
+			int numOfOpenLoans = sr["NumOfOpenLoans"];
 
 			m_oTrail.MyInputData.Init(DateTime.UtcNow,
-				wasManuallyRejected,
-				lastManualRejectDate,
+				lastDecisionWasReject,
+				lastRejectDate,
+				lastDecisionDate,
 				newDataSourceAdded,
 				openLoansAmount,
 				principalRepaymentAmount,
-				hasLoans,
-				ConfigManager.CurrentValues.Instance.AutoReRejectMinRepaidPortion,
-				ConfigManager.CurrentValues.Instance.AutoReRejectMaxLRDAge
+				numOfOpenLoans,
+				CurrentValues.Instance.AutoReRejectMinRepaidPortion,
+				CurrentValues.Instance.AutoReRejectMaxLRDAge,
+				CurrentValues.Instance.AutoReRejectMaxAllowedLoans
 			);
 
-			CheckWasRejected();
+			CheckNumOfOpenLoans();
+			CheckLastDecisionWasReject();
 			CheckNewMarketPlaceAdded();
 			CheckLRDIsTooOld();
-			CheckHasNoLoans();
-
-			if (m_oTrail.MyInputData.HasLoans)
-				CheckOpenLoansRepayments();
+			CheckOpenLoansRepayments();
 
 			log.Debug(
 				"Primary: checking if auto re-reject should take place for customer {0} complete; {1}", customerId, m_oTrail
@@ -115,23 +116,23 @@
 			return oSecondary;
 		} // RunSecondary
 
-		private void CheckWasRejected()
+		private void CheckLastDecisionWasReject()
 		{
-			if (!m_oTrail.MyInputData.WasManuallyRejected)
+			if (!m_oTrail.MyInputData.LastDecisionWasReject)
 			{
-				StepNoReReject<WasRejected>(true).Init(m_oTrail.MyInputData.WasManuallyRejected);
+				StepNoReReject<LastDecisionWasReject>(bLockDecisionAfterAddingAStep: true).Init(m_oTrail.MyInputData.LastDecisionWasReject);
 			}
 			else
 			{
-				StepNoDecision<WasRejected>().Init(m_oTrail.MyInputData.WasManuallyRejected);
+				StepNoDecision<LastDecisionWasReject>().Init(m_oTrail.MyInputData.LastDecisionWasReject);
 			}
 		}
 
 		private void CheckNewMarketPlaceAdded()
 		{
-			if (m_oTrail.MyInputData.LastManualRejectDate.HasValue && m_oTrail.MyInputData.NewDataSourceAdded)
+			if (m_oTrail.MyInputData.LastDecisionDate.HasValue && m_oTrail.MyInputData.NewDataSourceAdded)
 			{
-				StepNoReReject<MarketPlaceWasAdded>(true).Init(m_oTrail.MyInputData.NewDataSourceAdded);
+				StepNoReReject<MarketPlaceWasAdded>(bLockDecisionAfterAddingAStep: true).Init(m_oTrail.MyInputData.NewDataSourceAdded);
 			}
 			else
 			{
@@ -141,41 +142,51 @@
 
 		private void CheckLRDIsTooOld()
 		{
-			if (m_oTrail.MyInputData.LastManualRejectDate.HasValue && (decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastManualRejectDate.Value).TotalDays > m_oTrail.MyInputData.AutoReRejectMaxLRDAge)
+			if (m_oTrail.MyInputData.LastRejectDate.HasValue && (decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastRejectDate.Value).TotalDays > m_oTrail.MyInputData.AutoReRejectMaxLRDAge)
 			{
-				StepNoReReject<LRDIsTooOld>(true).Init((decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastManualRejectDate.Value).TotalDays, m_oTrail.MyInputData.AutoReRejectMaxLRDAge);
+				StepNoReReject<LRDIsTooOld>(bLockDecisionAfterAddingAStep: true).Init((decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastRejectDate.Value).TotalDays, m_oTrail.MyInputData.AutoReRejectMaxLRDAge);
 			}
 			else
 			{
-				var days = m_oTrail.MyInputData.LastManualRejectDate.HasValue ? (decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastManualRejectDate.Value).TotalDays : 0.0M;
+				var days = m_oTrail.MyInputData.LastRejectDate.HasValue ? (decimal)(m_oTrail.MyInputData.DataAsOf - m_oTrail.MyInputData.LastRejectDate.Value).TotalDays : 0.0M;
 				StepNoDecision<LRDIsTooOld>().Init(days, m_oTrail.MyInputData.AutoReRejectMaxLRDAge);
 			}
 
 		}
 
-		private void CheckHasNoLoans()
+		private void CheckNumOfOpenLoans()
 		{
-			StepNoDecision<TotalLoanCount>().Init(m_oTrail.MyInputData.HasLoans ? 1 : 0);
-		}
-
-		private void CheckOpenLoansRepayments() {
-			decimal ratio = m_oTrail.MyInputData.OpenLoansAmount == 0 ? 1 : m_oTrail.MyInputData.PrincipalRepaymentAmount / m_oTrail.MyInputData.OpenLoansAmount;
-
-			if (ratio < m_oTrail.MyInputData.AutoReRejectMinRepaidPortion)
+			if (m_oTrail.MyInputData.NumOfOpenLoans >= m_oTrail.MyInputData.AutoReRejectMaxAllowedLoans)
 			{
-				StepReReject<OpenLoansRepayments>(true).Init(
-					m_oTrail.MyInputData.OpenLoansAmount,
-					m_oTrail.MyInputData.PrincipalRepaymentAmount,
-					m_oTrail.MyInputData.AutoReRejectMinRepaidPortion
-				);
+				StepReReject<OpenLoans>(bLockDecisionAfterAddingAStep: true).Init(m_oTrail.MyInputData.NumOfOpenLoans, m_oTrail.MyInputData.AutoReRejectMaxAllowedLoans);
 			}
 			else
 			{
-				StepNoDecision<OpenLoansRepayments>().Init(
-					m_oTrail.MyInputData.OpenLoansAmount,
-					m_oTrail.MyInputData.PrincipalRepaymentAmount,
-					m_oTrail.MyInputData.AutoReRejectMinRepaidPortion
-				);
+				StepNoDecision<OpenLoans>().Init(m_oTrail.MyInputData.NumOfOpenLoans, m_oTrail.MyInputData.AutoReRejectMaxAllowedLoans);
+			}
+		}
+
+		private void CheckOpenLoansRepayments() {
+			decimal ratio = m_oTrail.MyInputData.OpenLoansAmount == 0 ? 0 : m_oTrail.MyInputData.PrincipalRepaymentAmount / m_oTrail.MyInputData.OpenLoansAmount;
+			//no open loans
+			if (m_oTrail.MyInputData.OpenLoansAmount == 0) {
+				StepNoDecision<OpenLoansRepayments>().Init(m_oTrail.MyInputData.OpenLoansAmount, 0, 0);
+			}
+			else {
+				if (ratio < m_oTrail.MyInputData.AutoReRejectMinRepaidPortion) {
+					StepReReject<OpenLoansRepayments>(true).Init(
+						m_oTrail.MyInputData.OpenLoansAmount,
+						m_oTrail.MyInputData.PrincipalRepaymentAmount,
+						m_oTrail.MyInputData.AutoReRejectMinRepaidPortion
+						);
+				}
+				else {
+					StepNoReReject<OpenLoansRepayments>(true).Init(
+						m_oTrail.MyInputData.OpenLoansAmount,
+						m_oTrail.MyInputData.PrincipalRepaymentAmount,
+						m_oTrail.MyInputData.AutoReRejectMinRepaidPortion
+						);
+				}
 			}
 		}
 

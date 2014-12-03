@@ -45,13 +45,11 @@
 			try {
 				GatherData();
 
-				CheckHasBeenRejected();
+				CheckNumOfLoans();
+				CheckLastDecisionWasReject();
 				CheckNewMarketplaces();
 				CheckRejectionAge();
-				CheckLoanCount();
-
-				if (Trail.MyInputData.HasLoans)
-					CheckReturnRatio();
+				CheckReturnRatio();
 			}
 			catch (Exception e) {
 				Log.Error(e, "Exception during auto re-rejection.");
@@ -61,7 +59,9 @@
 			Log.Debug(
 				"Secondary: checking if auto re-reject should take place for customer {0} complete; {1}", Args.CustomerID, Trail
 			);
-		} // MakeDecision
+		}
+
+// MakeDecision
 
 		#endregion method MakeDecision
 
@@ -118,12 +118,24 @@
 		#region steps
 
 		#region method CheckHasBeenRejected
-
-		private void CheckHasBeenRejected() {
-			if (Trail.MyInputData.WasManuallyRejected)
-				StepNoDecision<WasRejected>().Init(Trail.MyInputData.WasManuallyRejected);
+		
+		private void CheckNumOfLoans()
+		{
+			if (Trail.MyInputData.NumOfOpenLoans >= Trail.MyInputData.AutoReRejectMaxAllowedLoans)
+				StepReject<OpenLoans>().Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
 			else
-				StepNoReject<WasRejected>().Init(Trail.MyInputData.WasManuallyRejected);
+				StepNoDecision<OpenLoans>().Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
+		}//CheckNumOfLoans
+		
+		#endregion method CheckHasBeenRejected
+
+		#region method CheckHasBeenRejected
+
+		private void CheckLastDecisionWasReject() {
+			if (Trail.MyInputData.LastDecisionWasReject)
+				StepNoDecision<LastDecisionWasReject>().Init(Trail.MyInputData.LastDecisionWasReject);
+			else
+				StepNoReject<LastDecisionWasReject>().Init(Trail.MyInputData.LastDecisionWasReject);
 		} // CheckHasBeenRejected
 
 		#endregion method CheckHasBeenRejected
@@ -142,12 +154,12 @@
 		#region method CheckRejectionAge
 
 		private void CheckRejectionAge() {
-			if (Trail.MyInputData.LastManualRejectDate == null) {
+			if (Trail.MyInputData.LastRejectDate == null) {
 				StepNoDecision<LRDIsTooOld>().Init(-1, Trail.MyInputData.AutoReRejectMaxLRDAge);
 				return;
 			} // if
 
-			decimal nAge = (decimal)(Trail.InputData.DataAsOf - Trail.MyInputData.LastManualRejectDate.Value).TotalDays;
+			decimal nAge = (decimal)(Trail.InputData.DataAsOf - Trail.MyInputData.LastRejectDate.Value).TotalDays;
 
 			if (nAge > Trail.MyInputData.AutoReRejectMaxLRDAge)
 				StepNoReject<LRDIsTooOld>().Init(nAge, Trail.MyInputData.AutoReRejectMaxLRDAge);
@@ -157,34 +169,36 @@
 
 		#endregion method CheckRejectionAge
 
-		#region method CheckLoanCount
-
-		private void CheckLoanCount() {
-			StepNoDecision<TotalLoanCount>().Init(MetaData.LoanCount);
-		} // CheckLoanCount
-
-		#endregion method CheckLoanCount
-
 		#region method CheckReturnRatio
 
 		private void CheckReturnRatio() {
 			decimal nRatio = Trail.MyInputData.OpenLoansAmount < 0.00000000001m
-				? 1
+				? 0
 				: Trail.MyInputData.PrincipalRepaymentAmount / Trail.MyInputData.OpenLoansAmount;
 
-			if (nRatio < Trail.MyInputData.AutoReRejectMinRepaidPortion) {
-				StepReject<OpenLoansRepayments>().Init(
-					Trail.MyInputData.OpenLoansAmount,
-					Trail.MyInputData.PrincipalRepaymentAmount,
-					Trail.MyInputData.AutoReRejectMinRepaidPortion
-				);
-			}
-			else{
+			//don't have open loan
+			if (Trail.MyInputData.OpenLoansAmount < 0.00000000001m) {
 				StepNoDecision<OpenLoansRepayments>().Init(
 					Trail.MyInputData.OpenLoansAmount,
 					Trail.MyInputData.PrincipalRepaymentAmount,
 					Trail.MyInputData.AutoReRejectMinRepaidPortion
-				);
+					);
+			} 
+			else { //have open loan
+				if (nRatio < Trail.MyInputData.AutoReRejectMinRepaidPortion) {
+					StepReject<OpenLoansRepayments>().Init(
+						Trail.MyInputData.OpenLoansAmount,
+						Trail.MyInputData.PrincipalRepaymentAmount,
+						Trail.MyInputData.AutoReRejectMinRepaidPortion
+						);
+				}
+				else {
+					StepNoReject<OpenLoansRepayments>().Init(
+						Trail.MyInputData.OpenLoansAmount,
+						Trail.MyInputData.PrincipalRepaymentAmount,
+						Trail.MyInputData.AutoReRejectMinRepaidPortion
+						);
+				}
 			}
 		} // CheckReturnRatio
 

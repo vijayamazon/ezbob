@@ -63,6 +63,7 @@ namespace ConfigManager {
 		AutoReApproveMaxLacrAge,
 		AutoReApproveMaxLatePayment,
 		AutoReApproveMaxNumOfOutstandingLoans,
+		AutoReRejectMaxAllowedLoans,
 		AutoReRejectMaxLRDAge,
 		AutoReRejectMinRepaidPortion,
 		AutoRejectConsumerCheckAge,

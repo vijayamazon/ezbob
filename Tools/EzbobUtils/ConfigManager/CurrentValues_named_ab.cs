@@ -320,6 +320,15 @@
 
 		#endregion property AutoRejectionException_CreditScore
 
+		#region property AutoReRejectMaxAllowedLoans
+
+		public virtual VariableValue AutoReRejectMaxAllowedLoans
+		{
+			get { return this[Variables.AutoReRejectMaxAllowedLoans]; } // get
+		} // AutoReRejectMaxAllowedLoans
+
+		#endregion property AutoReRejectMaxAllowedLoans
+
 		#region property AutoReRejectMaxLRDAge
 
 		public virtual VariableValue AutoReRejectMaxLRDAge

@@ -7,7 +7,7 @@
 		#region constructor
 
 		public ReRejectionTrail(int nCustomerID, ASafeLog oLog, string toExplanationMailAddress = null, string fromEmailAddress = null, string fromEmailName = null)
-			: base(nCustomerID, DecisionStatus.Negative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
+			: base(nCustomerID, DecisionStatus.Affirmative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
 		{
 			MyInputData = new ReRejectInputData();
 		} // constructor

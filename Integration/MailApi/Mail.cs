@@ -166,6 +166,11 @@
 		/// </summary>
 		public string Send(string to, string messageText, string messageHtml, string fromEmail, string fromName, string subject = "", string cc = "", List<attachment> attachments = null)
 		{
+			if (string.IsNullOrEmpty(to)) {
+				Log.WarnFormat("receiver email not provided for {0}", subject);
+				return "No receiver email provided";
+			}
+
 			var message = PrepareTemplateLessEmail(to, subject, messageText, messageHtml, fromEmail, fromName, cc, attachments);
 			return Send(message, SendTemplatelessPath);
 		}

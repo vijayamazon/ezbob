@@ -14,36 +14,46 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @LastManualRejectDate DATETIME
+	DECLARE @LastRejectDate DATETIME
+	DECLARE @LastDecisionDate DATETIME
+	DECLARE @LastDecisionWasReject BIT = 0
 	DECLARE @NewDataSourceAdded BIT = 0
-	
-	DECLARE @OpenLoansCount INT = 0
+	DECLARE @NumOfOpenLoans INT = 0
 	DECLARE @OpenLoansAmount INT = 0
 	DECLARE @PrincipalRepaymentAmount DECIMAL(18,4) = 0
 	DECLARE @SetupFees DECIMAL(18,4) = 0
 
 	------------------------------------------------------------------------------
-	
-	-- last manual reject date
+	-- last reject date (automatic or manual)
 	SELECT
-		@LastManualRejectDate = MAX(cr.UnderwriterDecisionDate)
+		@LastRejectDate = MAX(cr.UnderwriterDecisionDate)
+	FROM
+		CashRequests cr LEFT JOIN Decisions d ON d.DecisionID = cr.AutoDecisionID
+	WHERE
+		cr.IdCustomer = @CustomerId 
+		AND 
+		((cr.IdUnderwriter IS NOT NULL AND cr.UnderwriterDecision='Rejected') OR (d.DecisionName = 'Reject'))
+		
+	-- last decision
+	SELECT
+		@LastDecisionDate = MAX(cr.UnderwriterDecisionDate)
 	FROM
 		CashRequests cr
 	WHERE
 		cr.IdCustomer = @CustomerId 
 		AND
-		cr.IdUnderwriter IS NOT NULL 
-		AND
-		cr.UnderwriterDecision = 'Rejected'
-	
-	-- has loans
-	IF EXISTS (SELECT * FROM Loan WHERE CustomerId=@CustomerId)
-	BEGIN
-		SET @HasLoans = 1
-	END
-	
+		cr.UnderwriterDecisionDate IS NOT NULL
+		
+	-- last decision was reject	
+	IF @LastDecisionDate IS NOT NULL
+	BEGIN 
+		SELECT @LastDecisionWasReject = CASE WHEN cr.UnderwriterDecision='Rejected' THEN 1 ELSE 0 END  
+		FROM CashRequests cr 
+		WHERE UnderwriterDecisionDate=@LastDecisionDate
+	END 
+			
 	-- open loans amount
-	SELECT @OpenLoansAmount = isnull(sum(LoanAmount), 0)  
+	SELECT @OpenLoansAmount = isnull(sum(LoanAmount), 0), @NumOfOpenLoans = count(*)
 	FROM Loan 
 	WHERE CustomerId=@CustomerId 
 	AND Status<>'PaidOff'
@@ -64,29 +74,26 @@ BEGIN
 	AND lt.Status='Done'
 
 	
-	IF @LastManualRejectDate IS NOT NULL
+	IF @LastDecisionDate IS NOT NULL
 	BEGIN
-	
-		--manual rejected
-		SET @WasManuallyRejected = 1
-		
-		-- added new mp after last reject
+		-- added new mp after last decision
 		IF EXISTS (SELECT * FROM MP_CustomerMarketPlace mp
 				   WHERE mp.CustomerId=@CustomerId 
 				   AND mp.Disabled=0 
-				   AND mp.Created > @LastManualRejectDate)
+				   AND mp.Created > @LastDecisionDate)
 		BEGIN
 			SET @NewDataSourceAdded = 1
 		END
 	END
 	
 	SELECT 
-		@WasManuallyRejected AS WasManuallyRejected
-	   ,@LastManualRejectDate AS LastManualRejectDate
+	    @LastRejectDate AS LastRejectDate
+	   ,@LastDecisionDate AS LastDecisionDate
+	   ,@LastDecisionWasReject AS LastDecisionWasReject
 	   ,@NewDataSourceAdded AS NewDataSourceAdded
+	   ,@NumOfOpenLoans AS NumOfOpenLoans
 	   ,@OpenLoansAmount AS OpenLoansAmount
 	   ,isnull(@PrincipalRepaymentAmount, 0) + isnull(@SetupFees, 0) AS PrincipalRepaymentAmount
-	   ,@HasLoans AS HasLoans
 END
 
 GO

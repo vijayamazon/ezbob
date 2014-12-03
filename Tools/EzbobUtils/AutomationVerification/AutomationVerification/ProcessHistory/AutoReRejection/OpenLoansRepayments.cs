@@ -8,7 +8,7 @@
 				Comment = "customer don't have open loans";
 			}
 			else {
-				Comment = string.Format("Customer re-payed {0} out of {1} in open loans which is {2}% shoud be {3}%",
+				Comment = string.Format("Customer re-payed {0} out of {1} in open loans which is {2}% should be {3}%",
 				                        repaymentsAmount, openLoansAmount, (repaymentsAmount/openLoansAmount*100).ToString("N2"), portion*100);
 			}
 		}
