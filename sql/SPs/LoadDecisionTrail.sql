@@ -94,6 +94,8 @@ BEGIN
 		PrimLocked   = prim.HasLockedDecision,
 		PrimComment  = prim.Comment,
 		--
+		SameName     = CASE WHEN prim.Name = sec.Name THEN 1 ELSE 0 END,
+		--
 		SecID        = sec.TraceID,
 		SecName      = sec.Name,
 		SecStatusID  = sec.DecisionStatusID,

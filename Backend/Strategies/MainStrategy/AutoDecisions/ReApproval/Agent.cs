@@ -46,19 +46,27 @@
 
 		#region method MakeAndVerifyDecision
 
-		public virtual bool MakeAndVerifyException() {
+		public virtual bool MakeAndVerifyDecision() {
 			RunPrimary();
 
 			AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();
 
 			bool bSuccess = Trail.EqualsTo(oSecondary.Trail);
 
+			Log.Debug("Status check result: {0}.", bSuccess ? "success" : "fail");
+
 			if (bSuccess && Trail.HasDecided) {
+				Log.Debug("Match and approved.");
+
 				if (ApprovedAmount == oSecondary.Result.ReApproveAmount) {
+					Log.Debug("Match and approved and same amount of {0}.", ApprovedAmount);
+
 					Trail.Affirmative<SameAmount>(false).Init(ApprovedAmount);
 					oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
 				}
 				else {
+					Log.Debug("Match and approved but different amount: {0} vs {1}.", ApprovedAmount, oSecondary.Result.ReApproveAmount);
+
 					Trail.Negative<SameAmount>(false).Init(ApprovedAmount);
 					oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
 					bSuccess = false;
@@ -68,7 +76,7 @@
 			Trail.Save(DB, oSecondary.Trail);
 
 			return bSuccess;
-		} // MakeAndVerifyException
+		} // MakeAndVerifyDecision
 
 		#endregion method MakeAndVerifyDecision
 
@@ -78,7 +86,7 @@
 			Log.Debug("Checking if auto re-approval should take place for customer {0}...", Args.CustomerID);
 
 			try {
-				if (MakeAndVerifyException() && Trail.HasDecided) {
+				if (MakeAndVerifyDecision() && Trail.HasDecided) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.Decision = DecisionActions.ReApprove;
 					response.CreditResult = "Approved";
