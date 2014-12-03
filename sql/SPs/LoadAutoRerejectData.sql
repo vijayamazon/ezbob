@@ -18,8 +18,8 @@ BEGIN
 	DECLARE @LastDecisionDate DATETIME = NULL
 
 	;WITH cid AS (
-		SELECT
-			MAX(Id) AS Id
+		SELECT TOP 1
+			r.Id
 		FROM
 			CashRequests r
 		WHERE
@@ -30,6 +30,8 @@ BEGIN
 			r.UnderwriterDecision != 'WaitingForDecision'
 			AND
 			r.UnderwriterDecisionDate < @Now
+		ORDER BY
+			r.UnderwriterDecisionDate DESC
 	), dec AS (
 		SELECT
 			ISNULL(r.UnderwriterDecision, '') UW,
@@ -49,8 +51,8 @@ BEGIN
 	DECLARE @LastRejectDate DATETIME = NULL
 
 	;WITH cid AS (
-		SELECT
-			MAX(Id) AS Id
+		SELECT TOP 1
+			r.Id
 		FROM
 			CashRequests r
 		WHERE
@@ -61,6 +63,8 @@ BEGIN
 			ISNULL(r.AutoDecisionID, 5) != 7 -- auto re-reject
 			AND
 			r.UnderwriterDecisionDate < @Now
+		ORDER BY
+			r.UnderwriterDecisionDate DESC
 	)
 	SELECT
 		@LastRejectDate = r.UnderwriterDecisionDate
