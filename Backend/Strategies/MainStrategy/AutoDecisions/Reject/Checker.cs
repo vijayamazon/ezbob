@@ -16,44 +16,111 @@
 
 		#endregion constructor
 
-		#region exceptions
+		#region method Run
 
-		public void WasApproved() {
+		public void Run() {
+			Preventers();
+
+			Trail.LockDecision();
+
+			Regulars();
+		} // Run
+
+		#endregion method Run
+
+		#endregion public
+
+		#region private
+
+		#region method Preventers
+
+		private void Preventers() {
+			WasApproved();
+			HighAnnualTurnover();
+			IsBroker();
+			HighConsumerScore();
+			HighBusinessScore();
+			MpErrors();
+			ConsumerDataAge();
+		} // Preventers
+
+		#endregion method Preventers
+
+		#region method Regulars
+
+		private void Regulars() {
+			LowConsumerScore();
+			LowBusinessScore();
+			PersonalDefauls();
+			BusinessDefaults();
+			CompanyAge();
+			CustomerStatus();
+			CompanyFiles();
+			LateAccounts();
+		} // Regulars
+
+		#endregion method Regulars
+
+		#region preventers (exceptions)
+
+		#region method WasApproved
+
+		private void WasApproved() {
 			if (Trail.MyInputData.WasApproved)
 				StepNoReject<WasApprovedPreventer>().Init(Trail.MyInputData.WasApproved);
 			else
 				StepNoDecision<WasApprovedPreventer>().Init(Trail.MyInputData.WasApproved);
 		} // WasApproved
 
-		public void HighAnnualTurnover() {
+		#endregion method WasApproved
+
+		#region method HighAnnualTurnover
+
+		private void HighAnnualTurnover() {
 			if (Trail.MyInputData.AnnualTurnover > Trail.MyInputData.AutoRejectionException_AnualTurnover)
 				StepNoReject<AnnualTurnoverPreventer>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
 			else
 				StepNoDecision<AnnualTurnoverPreventer>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
 		} // HighAnnualTurnover
 
-		public void IsBroker() {
+		#endregion method HighAnnualTurnover
+
+		#region method IsBroker
+
+		private void IsBroker() {
 			if (Trail.MyInputData.IsBrokerClient)
 				StepNoReject<BrokerClientPreventer>().Init(Trail.MyInputData.IsBrokerClient);
 			else
 				StepNoDecision<BrokerClientPreventer>().Init(Trail.MyInputData.IsBrokerClient);
 		} // IsBroker
 
-		public void HighConsumerScore() {
+		#endregion method IsBroker
+
+		#region method HighConsumerScore
+
+		private void HighConsumerScore() {
 			if (Trail.MyInputData.ConsumerScore > Trail.MyInputData.AutoRejectionException_CreditScore)
 				StepNoReject<ConsumerScorePreventer>().Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
 			else
 				StepNoDecision<ConsumerScorePreventer>().Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
 		} // HighConsumerScore
 
-		public void HighBusinessScore() {
+		#endregion method HighConsumerScore
+
+		#region method HighBusinessScore
+
+		private void HighBusinessScore() {
 			if (Trail.MyInputData.BusinessScore > Trail.MyInputData.RejectionExceptionMaxCompanyScore)
 				StepNoReject<BusinessScorePreventer>().Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
 			else
 				StepNoDecision<BusinessScorePreventer>().Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
 		} // HighBusinessScore
 
-		public void MpErrors() {
+		#endregion method HighBusinessScore
+
+		#region method MpErrors
+
+		private void MpErrors() {
 			var data = new MarketPlaceWithErrorPreventer.DataModel {
 				HasMpError = Trail.MyInputData.HasMpError,
 				MaxBusinessScore = Trail.MyInputData.BusinessScore,
@@ -73,25 +140,48 @@
 				StepNoDecision<MarketPlaceWithErrorPreventer>().Init(data);
 		} // MpErrors
 
-		#endregion exceptions
+		#endregion method MpErrors
+
+		#region method ConsumerDataAge
+
+		private void ConsumerDataAge() {
+			if (Trail.MyInputData.ConsumerDataIsTooOld)
+				StepNoReject<ConsumerDataTooOldPreventer>().Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
+			else
+				StepNoDecision<ConsumerDataTooOldPreventer>().Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
+		} // ConsumerDataAge
+
+		#endregion method ConsumerDataAge
+
+		#endregion preventers (exceptions)
 
 		#region regular checks
 
-		public void LowConsumerScore() {
+		#region method LowConsumerScore
+
+		private void LowConsumerScore() {
 			if ((0 < Trail.MyInputData.ConsumerScore) && (Trail.MyInputData.ConsumerScore < Trail.MyInputData.LowCreditScore))
 				StepReject<ConsumerScore>().Init(Trail.MyInputData.ConsumerScore, 0, Trail.MyInputData.LowCreditScore, false);
 			else
 				StepNoDecision<ConsumerScore>().Init(Trail.MyInputData.ConsumerScore, 0, Trail.MyInputData.LowCreditScore, false);
 		} // LowConsumerScore
 
-		public void LowBusinessScore() {
+		#endregion method LowConsumerScore
+
+		#region method LowBusinessScore
+
+		private void LowBusinessScore() {
 			if ((0 < Trail.MyInputData.BusinessScore) && (Trail.MyInputData.BusinessScore < Trail.MyInputData.RejectionCompanyScore))
 				StepReject<BusinessScore>().Init(Trail.MyInputData.BusinessScore, 0, Trail.MyInputData.RejectionCompanyScore, false);
 			else
 				StepNoDecision<BusinessScore>().Init(Trail.MyInputData.BusinessScore, 0, Trail.MyInputData.RejectionCompanyScore, false);
 		} // LowBusinessScore
 
-		public void PersonalDefauls() {
+		#endregion method LowBusinessScore
+
+		#region method PersonalDefauls
+
+		private void PersonalDefauls() {
 			var data = new ConsumerDefaults.DataModel {
 				MaxConsumerScore = Trail.MyInputData.ConsumerScore,
 				MaxConsumerScoreThreshhold = Trail.MyInputData.Reject_Defaults_CreditScore,
@@ -111,7 +201,11 @@
 				StepNoDecision<ConsumerDefaults>().Init(data);
 		} // PersonalDefaults
 
-		public void BusinessDefaults() {
+		#endregion method PersonalDefauls
+
+		#region method BusinessDefaults
+
+		private void BusinessDefaults() {
 			var data = new BusinessDefaults.DataModel {
 				MaxBusinessScore = Trail.MyInputData.BusinessScore,
 				MaxBusinessScoreThreshhold = Trail.MyInputData.Reject_Defaults_CompanyScore,
@@ -131,21 +225,33 @@
 				StepNoDecision<BusinessDefaults>().Init(data);
 		} // BusinessDefaults
 
-		public void CompanyAge() {
+		#endregion method BusinessDefaults
+
+		#region method CompanyAge
+
+		private void CompanyAge() {
 			if ((0 < Trail.MyInputData.BusinessSeniorityDays) && (Trail.MyInputData.BusinessSeniorityDays < Trail.MyInputData.Reject_Minimal_Seniority))
 				StepReject<Seniority>().Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
 			else
 				StepNoDecision<BusinessScore>().Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
 		} // CompanyAge
 
-		public void CustomerStatus() {
+		#endregion method CompanyAge
+
+		#region method CustomerStatus
+
+		private void CustomerStatus() {
 			if ((Trail.MyInputData.CustomerStatus == "Enabled") || (Trail.MyInputData.CustomerStatus == "Fraud Suspect"))
 				StepNoDecision<CustomerStatus>().Init(Trail.MyInputData.CustomerStatus);
 			else
 				StepReject<CustomerStatus>().Init(Trail.MyInputData.CustomerStatus);
 		} // CustomerStatus
 
-		public void CompanyFiles() {
+		#endregion method CustomerStatus
+
+		#region method CompanyFiles
+
+		private void CompanyFiles() {
 			var data = new AutomationCalculator.ProcessHistory.AutoRejection.Turnover.DataModel {
 				AnnualTurnover = (int)Trail.MyInputData.AnnualTurnover,
 				AnnualTurnoverThreshhold = Trail.MyInputData.TotalAnnualTurnover,
@@ -165,7 +271,11 @@
 				StepNoDecision<AutomationCalculator.ProcessHistory.AutoRejection.Turnover>().Init(data);
 		} // CompanyFiles
 
-		public void LateAccounts() {
+		#endregion method CompanyFiles
+
+		#region method LateAccounts
+
+		private void LateAccounts() {
 			var data = new ConsumerLates.DataModel {
 				LateDays = Trail.MyInputData.ConsumerLateDays,
 				LateDaysThreshhold = Trail.MyInputData.RejectionLastValidLate,
@@ -179,11 +289,9 @@
 				StepNoDecision<ConsumerLates>().Init(data);
 		} // LateAccounts
 
+		#endregion method LateAccounts
+
 		#endregion regular checks
-
-		#endregion public
-
-		#region private
 
 		#region method StepNoReject
 

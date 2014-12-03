@@ -92,6 +92,22 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
+	DECLARE @ServiceLogId BIGINT
+
+	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT
+
+	------------------------------------------------------------------------------
+
+	DECLARE @ConsumerDataTime DATETIME = (SELECT
+		l.InsertDate
+	FROM
+		MP_ServiceLog l
+	WHERE
+		l.Id = @ServiceLogId)
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
 	SELECT
 		RowType               = 'MetaData',
 		ApprovedCrID          = @ApprovedCrID,
@@ -104,7 +120,8 @@ BEGIN
 		IncorporationDate     = @IncorporationDate,
 		CompanyFilesCount     = @CompanyFilesCount,
 		IsLtd                 = @IsLtd,
-		CompanyRefNum         = ISNULL(@CompanyRefNum, '')
+		CompanyRefNum         = ISNULL(@CompanyRefNum, ''),
+		ConsumerDataTime      = @ConsumerDataTime
 
 	------------------------------------------------------------------------------
 

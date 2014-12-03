@@ -1,12 +1,9 @@
-﻿using System;
-
-namespace AutomationCalculator.AutoDecision.AutoRejection
-{
+﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
+	using System;
 	using Newtonsoft.Json;
 	using ProcessHistory;
 
-	public class AutoRejectionInputDataModelDb
-	{
+	public class AutoRejectionInputDataModelDb {
 		//from sp
 		public string CustomerStatus { get; set; }
 		public int ExperianScore { get; set; }
@@ -16,10 +13,11 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		public bool HasErrorMp { get; set; }
 		public bool HasCompanyFiles { get; set; }
 		public DateTime? IncorporationDate { get; set; }
-	}
+		public DateTime? ConsumerDataTime { get; set; }
+	} // class AutoRejectionInputDataModelDb
 
-	public class RejectionConfigs
-	{
+	public class RejectionConfigs {
+		public int AutoRejectConsumerCheckAge { get; set; }
 		public int AutoRejectionException_AnualTurnover { get; set; }
 		public int AutoRejectionException_CreditScore { get; set; }
 		public int RejectionExceptionMaxCompanyScore { get; set; }
@@ -42,13 +40,30 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		public int Reject_LateLastMonthsNum { get; set; }
 		public int Reject_NumOfLateAccounts { get; set; }
 		public int RejectionLastValidLate { get; set; }
-	}
+	} // class RejectionConfigs
 
-	public class RejectionInputData : ITrailInputData {
-		public void Init(DateTime dataAsOf, RejectionInputData data, RejectionConfigs configs) {
-			InitCfg(dataAsOf, configs);
-			InitData(data);
-		} // Init
+	public class RejectionInputData : RejectionConfigs, ITrailInputData {
+		public DateTime DataAsOf { get; private set; }
+
+		public bool WasApproved { get; set; }
+		public bool IsBrokerClient { get; set; }
+		public decimal AnnualTurnover { get; set; }
+		public decimal QuarterTurnover { get; set; }
+		public int ConsumerScore { get; set; }
+		public int BusinessScore { get; set; }
+		public bool HasMpError { get; set; }
+		public bool HasCompanyFiles { get; set; }
+		public int NumOfDefaultConsumerAccounts { get; set; }
+		public int DefaultAmountInConsumerAccounts { get; set; }
+		public int NumOfDefaultBusinessAccounts { get; set; }
+		public int DefaultAmountInBusinessAccounts { get; set; }
+		public int BusinessSeniorityDays { get; set; }
+		public string CustomerStatus { get; set; }
+		public int NumOfLateConsumerAccounts { get; set; }
+		public int ConsumerLateDays { get; set; }
+		public DateTime? ConsumerDataTime { get; set; }
+
+		#region method InitCfg
 
 		public void InitCfg(DateTime dataAsOf, RejectionConfigs configs) {
 			DataAsOf = dataAsOf;
@@ -76,6 +91,10 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 			RejectionLastValidLate = configs.RejectionLastValidLate;
 		} // InitCfg
 
+		#endregion method InitCfg
+
+		#region method InitData
+
 		public void InitData(RejectionInputData data) {
 			WasApproved = data.WasApproved;
 			IsBrokerClient = data.IsBrokerClient;
@@ -97,55 +116,20 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 			BusinessSeniorityDays = data.BusinessSeniorityDays;
 		} // InitData
 
-		public DateTime DataAsOf { get; private set; }
+		#endregion method InitData
 
-		public bool WasApproved { get; set; }
-		public bool IsBrokerClient { get; set; }
-		public decimal AnnualTurnover { get; set; }
-		public decimal QuarterTurnover { get; set; }
-		public int ConsumerScore { get; set; }
-		public int BusinessScore { get; set; }
-		public bool HasMpError { get; set; }
-		public bool HasCompanyFiles { get; set; }
-		public int NumOfDefaultConsumerAccounts { get; set; }
-		public int DefaultAmountInConsumerAccounts { get; set; }
-		public int NumOfDefaultBusinessAccounts { get; set; }
-		public int DefaultAmountInBusinessAccounts { get; set; }
-		public int BusinessSeniorityDays { get; set; }
-		public string CustomerStatus { get; set; }
-		public int NumOfLateConsumerAccounts { get; set; }
-		public int ConsumerLateDays { get; set; }
+		#region method Init
 
-		//configs
-		public int AutoRejectionException_AnualTurnover { get; set; }
-		public int AutoRejectionException_CreditScore { get; set; }
-		public int RejectionExceptionMaxCompanyScore { get; set; }
+		public void Init(DateTime dataAsOf, RejectionInputData data, RejectionConfigs configs) {
+			InitCfg(dataAsOf, configs);
+			InitData(data);
+		} // Init
 
-		public int RejectionExceptionMaxConsumerScoreForMpError { get; set; }
-		public int RejectionExceptionMaxCompanyScoreForMpError { get; set; }
-		public int LowCreditScore { get; set; }
-		public int RejectionCompanyScore { get; set; }
-		public int Reject_Defaults_CreditScore { get; set; }
-		public int Reject_Defaults_AccountsNum { get; set; }
-		public int Reject_Defaults_Amount { get; set; }
-		public int Reject_Defaults_MonthsNum { get; set; }
+		#endregion method Init
 
-		public int Reject_Defaults_CompanyScore { get; set; }
-		public int Reject_Defaults_CompanyAccountsNum { get; set; }
-		public int Reject_Defaults_CompanyMonthsNum { get; set; }
-		public int Reject_Defaults_CompanyAmount { get; set; }
-		public int Reject_Minimal_Seniority { get; set; }
-		public int TotalAnnualTurnover { get; set; }
-		public int TotalThreeMonthTurnover { get; set; }
-
-		public int Reject_LateLastMonthsNum { get; set; }
-		public int Reject_NumOfLateAccounts { get; set; }
-		public int RejectionLastValidLate { get; set; }
-
-		public string Serialize()
-		{
+		public string Serialize() {
 			return JsonConvert.SerializeObject(this, Formatting.Indented);
-		}
+		} // Serialize
 
 		[JsonIgnore]
 		public DateTime MonthsNumAgo {
@@ -156,20 +140,15 @@ namespace AutomationCalculator.AutoDecision.AutoRejection
 		public DateTime CompanyMonthsNumAgo {
 			get { return DataAsOf.AddMonths(-1 * Reject_Defaults_CompanyMonthsNum); }
 		} // CompanyMonthsNumAgo
+
+		[JsonIgnore]
+		public bool ConsumerDataIsTooOld {
+			get {
+				if (ConsumerDataTime == null)
+					return true;
+
+				return ConsumerDataTime.Value < DataAsOf.AddMonths(-AutoRejectConsumerCheckAge);
+			} // get
+		} // ConsumerDataIsTooOld
 	} // RejectionInputData
-
-	public class RejectionResult
-	{
-		public RejectionResult(bool isAutoRejected)
-		{
-			IsAutoRejected = isAutoRejected;
-		}
-
-		public bool IsAutoRejected { get; private set; }
-
-		public override string ToString()
-		{
-			return IsAutoRejected ? "Rejected" : "Not Rejected";
-		}
-	}
-}
+} // namespace

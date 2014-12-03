@@ -93,7 +93,8 @@
 				AnnualTurnover = turnover.Item1,
 				QuarterTurnover = turnover.Item2, 
 				NumOfLateConsumerAccounts = lates.NumOfLates,
-				ConsumerLateDays = lates.LateDays
+				ConsumerLateDays = lates.LateDays,
+				ConsumerDataTime = dbData.ConsumerDataTime,
 			};
 		
 			model.Init(now, data, _configs);
@@ -156,6 +157,7 @@
 			CheckHighConsumerScore();
 			CheckHighBusinessScore();
 			CheckMpError();
+			CheckConsumerDataTime();
 		}
 
 		private void CheckWasApproved()
@@ -239,6 +241,13 @@
 			{
 				StepNoDecision<MarketPlaceWithErrorPreventer>().Init(data);
 			}
+		}
+
+		private void CheckConsumerDataTime() {
+			if (Trail.MyInputData.ConsumerDataIsTooOld)
+				StepNoReject<ConsumerDataTooOldPreventer>(true).Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
+			else
+				StepNoDecision<ConsumerDataTooOldPreventer>().Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
 		}
 
 		#endregion

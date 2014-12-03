@@ -72,20 +72,19 @@
 		public virtual void MakeDecision(AutoDecisionResponse response) {
 			try {
 				MakeAndVerifyDecision();
-
-				if (Trail.HasDecided) {
-					response.CreditResult = "Rejected";
-					response.UserStatus = "Rejected";
-					response.SystemDecision = "Reject";
-					response.DecisionName = "Rejection";
-					response.Decision = DecisionActions.Reject;
-				} // if
 			}
 			catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
 				StepNoReject<ExceptionThrown>().Init(e);
 			} // try
 
+			if (Trail.HasDecided) {
+				response.CreditResult = "Rejected";
+				response.UserStatus = "Rejected";
+				response.SystemDecision = "Reject";
+				response.DecisionName = "Rejection";
+				response.Decision = DecisionActions.Reject;
+			} // if
 		} // MakeDecision
 
 		#endregion method MakeDecision
@@ -146,25 +145,7 @@
 
 			GatherData();
 
-			Checker check = new Checker(this.Trail);
-
-			check.WasApproved();
-			check.HighAnnualTurnover();
-			check.IsBroker();
-			check.HighConsumerScore();
-			check.HighBusinessScore();
-			check.MpErrors();
-
-			Trail.LockDecision();
-
-			check.LowConsumerScore();
-			check.LowBusinessScore();
-			check.PersonalDefauls();
-			check.BusinessDefaults();
-			check.CompanyAge();
-			check.CustomerStatus();
-			check.CompanyFiles();
-			check.LateAccounts();
+			new Checker(this.Trail).Run();
 
 			Log.Debug("Checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
 		} // RunPrimary
@@ -206,6 +187,8 @@
 				ConsumerLateDays = 0,
 
 				BusinessSeniorityDays = OriginationTime.Seniority,
+
+				ConsumerDataTime = MetaData.ConsumerDataTime,
 			};
 		} // ToInputData
 
@@ -305,7 +288,8 @@
 				cais.LastUpdatedDate.HasValue &&
 				(cais.MatchTo == 1) &&
 				!string.IsNullOrWhiteSpace(cais.AccountStatusCodes) &&
-				(cais.LastUpdatedDate.Value <= Trail.InputData.DataAsOf)
+				(cais.LastUpdatedDate.Value <= Trail.InputData.DataAsOf) &&
+				(MiscUtils.CountMonthsBetween(cais.LastUpdatedDate.Value, Trail.InputData.DataAsOf) < 1)
 			).ToList();
 
 			Log.Debug("Fill num of lates: {0} found.", Grammar.Number(lst.Count, "relevant account"));
@@ -320,45 +304,7 @@
 					Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
 				);
 
-				if (!cais.LastUpdatedDate.HasValue) {
-					Log.Debug("Fill num of lates cais id {0} ain't no late: no last update date.", cais.Id);
-					continue;
-				} // if
-
-				if (cais.MatchTo != 1) {
-					Log.Debug("Fill num of lates cais id {0} ain't no late: bad MatchTo.", cais.Id);
-					continue;
-				} // if
-
-				if (string.IsNullOrWhiteSpace(cais.AccountStatusCodes)) {
-					Log.Debug("Fill num of lates cais id {0} ain't no late: empty status list.", cais.Id);
-					continue;
-				} // if
-
-				if (cais.LastUpdatedDate.Value > Trail.InputData.DataAsOf) {
-					Log.Debug("Fill num of lates cais id {0} ain't no late: last updated is after data as of.", cais.Id);
-					continue;
-				} // if
-
-				int nBetween = MiscUtils.CountMonthsBetween(cais.LastUpdatedDate.Value, Trail.InputData.DataAsOf);
-
-				Log.Debug(
-					"Fill num of lates cais id {0}: width between dates {1}, interesting months count is {2}.",
-					cais.Id,
-					Grammar.Number(nBetween, "month"),
-					Trail.MyInputData.Reject_LateLastMonthsNum
-				);
-
-				if (nBetween >= Trail.MyInputData.Reject_LateLastMonthsNum) {
-					Log.Debug("Fill num of lates cais id {0} ain't no late: last updated is too long ago.", cais.Id);
-					continue;
-				} // if
-
-				int nMonthCount = Math.Max(0, Trail.MyInputData.Reject_LateLastMonthsNum - nBetween);
-
-				Log.Debug("Fill num of lates cais id {0}: month count is {1}.", cais.Id, nMonthCount);
-
-				nMonthCount = Math.Min(nMonthCount, cais.AccountStatusCodes.Length);
+				int nMonthCount = Math.Min(Trail.MyInputData.Reject_LateLastMonthsNum, cais.AccountStatusCodes.Length);
 
 				Log.Debug("Fill num of lates cais id {0}: month count is {1}, status count is {2}.", cais.Id, nMonthCount, cais.AccountStatusCodes.Length);
 

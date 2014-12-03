@@ -17,6 +17,7 @@ BEGIN
 		ConfigurationVariables v
 	WHERE
 		v.Name IN (
+			'AutoRejectConsumerCheckAge',
 			'AutoRejectionException_AnualTurnover',
 			'AutoRejectionException_CreditScore',
 			'LowCreditScore',

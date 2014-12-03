@@ -19,6 +19,7 @@
 		public int CompanyFilesCount { get; set; }
 		public bool IsLtd { get; set; }
 		public string CompanyRefNum { get; set; }
+		public DateTime? ConsumerDataTime { get; set; }
 
 		public List<string> ValidationErrors { get; private set; }
 

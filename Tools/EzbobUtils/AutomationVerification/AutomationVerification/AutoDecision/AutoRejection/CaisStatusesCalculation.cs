@@ -36,34 +36,19 @@
 				caisStatuses = GetConsumerCaisStatuses(customerId);
 			}
 
-			const decimal monthDays = 365.0M / 12.0M;
-
 			var numOfLates = 0;
 			var lateDays = 0;
 
+			DateTime prevMonth = asOfDate.AddMonths(-1);
+			DateTime prevMonthStart = prevMonth.AddDays(1 - prevMonth.Day).Date;
+
 			foreach (var caisStatus in caisStatuses) {
-				var monthSinceUpdate = (decimal)(asOfDate - caisStatus.LastUpdatedDate).TotalDays / monthDays;
-
-				int useLastStatusMonths = 0;
-
-				if (monthSinceUpdate < 2) {
-					useLastStatusMonths = lastMonthStatuses;
-				}
-				else {
-					if (monthSinceUpdate > lastMonthStatuses) {
-						useLastStatusMonths = 0;
-					}
-					if ((int) monthSinceUpdate == lastMonthStatuses) {
-						useLastStatusMonths = 1;
-					}
-					if (monthSinceUpdate < lastMonthStatuses) {
-						useLastStatusMonths = lastMonthStatuses - (int)monthSinceUpdate;
-					}
-				}
+				if (caisStatus.LastUpdatedDate < prevMonthStart)
+					continue;
 
 				bool isLateInAccount = false;
 
-				for (int i = 0; i < useLastStatusMonths; ++i) {
+				for (int i = 0; i < lastMonthStatuses; ++i) {
 					if (caisStatus.AccountStatusCodes.Length - i > 0) {
 						string status = caisStatus.AccountStatusCodes[caisStatus.AccountStatusCodes.Length - i - 1].ToString();
 

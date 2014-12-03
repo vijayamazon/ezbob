@@ -36,6 +36,15 @@ SELECT @ExperianScore = isnull(max(x.ExperianConsumerScore),0) FROM
 	SELECT BureauScore AS ExperianConsumerScore FROM ExperianConsumerData WHERE ServiceLogId = @ConsumerServiceLogId
 ) x
 
+
+-- Consumer data time
+	DECLARE @ConsumerDataTime DATETIME = (SELECT
+		l.InsertDate
+	FROM
+		MP_ServiceLog l
+	WHERE
+		l.Id = @ConsumerServiceLogId)
+
 --Was Approved For Loan
 DECLARE @WasApproved BIT = 0
 IF EXISTS (SELECT * FROM CashRequests WHERE IdCustomer = @CustomerId AND UnderwriterDecision='Approved')
@@ -104,7 +113,8 @@ SELECT @CustomerStatus AS CustomerStatus,
 	   @IsBrokerClient AS IsBrokerClient,
 	   @HasErrorMp AS HasErrorMp,
 	   @HasCompanyFiles AS HasCompanyFiles,
-	   @IncorporationDate AS IncorporationDate
+	   @IncorporationDate AS IncorporationDate,
+	   @ConsumerDataTime AS ConsumerDataTime
 END
 
 GO

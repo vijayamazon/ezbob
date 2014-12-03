@@ -11,6 +11,7 @@ GO
 ALTER PROCEDURE [dbo].[AV_RejectionConstants]
 AS
 BEGIN
+	DECLARE @AutoRejectConsumerCheckAge INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'AutoRejectConsumerCheckAge')
 	DECLARE @AutoRejectionException_AnualTurnover INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'AutoRejectionException_AnualTurnover')
 	DECLARE @AutoRejectionException_CreditScore INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'AutoRejectionException_CreditScore')
 	DECLARE @LowCreditScore INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'LowCreditScore')
@@ -34,7 +35,8 @@ BEGIN
 	DECLARE @TotalThreeMonthTurnover INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name = 'TotalThreeMonthTurnover')
 	
 	SELECT
-		 @AutoRejectionException_AnualTurnover AS AutoRejectionException_AnualTurnover
+		 @AutoRejectConsumerCheckAge AS AutoRejectConsumerCheckAge
+		,@AutoRejectionException_AnualTurnover AS AutoRejectionException_AnualTurnover
 		,@AutoRejectionException_CreditScore AS AutoRejectionException_CreditScore
 		,@LowCreditScore AS LowCreditScore
 		,@Reject_Defaults_AccountsNum AS Reject_Defaults_AccountsNum
