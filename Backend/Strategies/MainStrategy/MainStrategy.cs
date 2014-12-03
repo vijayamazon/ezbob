@@ -109,7 +109,7 @@
 			ProcessApprovals();
 
 			// process the decision - DB + mails
-			ProcessDecision(scoringResult);
+			ProcessDecision();
 
 			// TODO: retire this
 			DB.ExecuteNonQuery("Update_Main_Strat_Finish_Date",
@@ -126,11 +126,12 @@
 			instance.Execute();
 
 			medalClassification = instance.Result.MedalClassification;
+			medalScore = instance.Result.TotalScoreNormalized;
 
 			modelLoanOffer = (int)Math.Truncate((decimal)instance.Result.OfferedLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
 		}
 
-		private void ProcessDecision(ScoreMedalOffer scoringResult)
+		private void ProcessDecision()
 		{
 			if (autoDecisionResponse.IsAutoApproval || autoDecisionResponse.IsAutoReApproval)
 			{
@@ -162,14 +163,13 @@
 				strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
 			}
 
-			UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent, autoDecisionResponse.CreditResult, autoDecisionResponse.SystemDecision,
-					autoDecisionResponse.UserStatus, autoDecisionResponse.AppValidFor, autoDecisionResponse.RepaymentPeriod);
+			UpdateCustomerAndCashRequest();
 
 			
 			if (autoDecisionResponse.IsAutoApproval)
 			{
 				UpdateApprovalData();
-				SendApprovalMails(scoringResult.MaxOfferPercent);
+				SendApprovalMails();
 
 				strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
 			}
@@ -370,17 +370,17 @@
 			} // if
 		} // CappOffer
 
-		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase, string creditResult, string systemDecision, string userStatus, DateTime? appValidFor, int repaymentPeriod)
+		private void UpdateCustomerAndCashRequest()
 		{
 			DB.ExecuteNonQuery(
 				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("CreditResult", creditResult),
-				new QueryParameter("SystemDecision", systemDecision),
-				new QueryParameter("Status", userStatus),
-				new QueryParameter("Medal", medalType.ToString()),
-				new QueryParameter("ValidFor", appValidFor),
+				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
+				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
+				new QueryParameter("Status", autoDecisionResponse.UserStatus),
+				new QueryParameter("Medal", medalClassification.ToString()),
+				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor),
 				new QueryParameter("Now", DateTime.UtcNow),
 				new QueryParameter("OverrideApprovedRejected", overrideApprovedRejected)
 			);
@@ -415,10 +415,10 @@
 					new QueryParameter("Today", DateTime.UtcNow.Date)
 					);
 
-				interestRateToUse = interestAccordingToPast == -1 ? loanInterestBase : interestAccordingToPast;
+				interestRateToUse = interestAccordingToPast == -1 ? 0 : interestAccordingToPast;
 				setupFeePercentToUse = dataGatherer.ManualSetupFeePercent;
 				setupFeeAmountToUse = dataGatherer.ManualSetupFeeAmount;
-				repaymentPeriodToUse = repaymentPeriod;
+				repaymentPeriodToUse = autoDecisionResponse.RepaymentPeriod;
 				isEuToUse = false;
 				loanTypeIdToUse = 0;
 			}
@@ -429,9 +429,9 @@
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
 				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
-				new QueryParameter("SystemDecision", systemDecision),
-				new QueryParameter("MedalType", medalType.ToString()), // TODO: This is the classification of the old medal and should be replaced
-				new QueryParameter("ScorePoints", scoringResult), // TODO: this is the score of the old medal and should be replaced
+				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
+				new QueryParameter("MedalType", medalClassification.ToString()), 
+				new QueryParameter("ScorePoints", medalScore),
 				new QueryParameter("ExpirianRating", dataGatherer.ExperianConsumerScore),
 				new QueryParameter("AnnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
 				new QueryParameter("InterestRate", interestRateToUse),
@@ -453,7 +453,7 @@
 				{"FirstName", dataGatherer.AppFirstName},
 				{"Surname", dataGatherer.AppSurname},
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalType.ToString()},
+				{"MedalType", medalClassification.ToString()},
 				{"SystemDecision", "WaitingForDecision"}
 			});
 		}
@@ -468,7 +468,7 @@
 				{"FirstName", dataGatherer.AppFirstName},
 				{"Surname", dataGatherer.AppSurname},
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalType.ToString()},
+				{"MedalType", medalClassification.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
@@ -514,7 +514,7 @@
 			);
 		}
 
-		private void SendApprovalMails(decimal interestRate)
+		private void SendApprovalMails()
 		{
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
@@ -524,11 +524,11 @@
 				{"FirstName", dataGatherer.AppFirstName},
 				{"Surname", dataGatherer.AppSurname},
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalType.ToString()},
+				{"MedalType", medalClassification.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", interestRate.ToString(CultureInfo.InvariantCulture)},
+				{"InterestRate", autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture)},
 				{
 					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
 						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
@@ -565,7 +565,7 @@
 				{"FirstName", dataGatherer.AppFirstName},
 				{"Surname", dataGatherer.AppSurname},
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalType.ToString()},
+				{"MedalType", medalClassification.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ApprovalAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
@@ -615,9 +615,7 @@
 				dataGatherer.ModelLatePayments,
 				dataGatherer.ModelEarlyPayments
 			);
-
-			medalType = scoringResult.Medal;
-
+			
 			// Save online medal
 			DB.ExecuteNonQuery(
 				"CustomerScoringResult_Insert",
@@ -684,7 +682,7 @@
 				{"FirstName", dataGatherer.AppFirstName},
 				{"Surname", dataGatherer.AppSurname},
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalType.ToString()},
+				{"MedalType", medalClassification.ToString()},
 				{"SystemDecision", "Reject"},
 				{"ExperianConsumerScore", dataGatherer.ExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianConsumerScore", dataGatherer.LowCreditScore.ToString(CultureInfo.InvariantCulture)},
@@ -731,10 +729,10 @@
 		private int companySeniorityDays;
 
 		private AutoDecisionResponse autoDecisionResponse;
-		private MedalMultiplier medalType;
 		private decimal loanOfferReApprovalSum;
 		private int offeredCreditLine;
 		private int modelLoanOffer;
 		private MedalClassification medalClassification;
+		private decimal medalScore;
 	} // class MainStrategy
 } // namespace
