@@ -1,5 +1,7 @@
 ﻿namespace AutomationCalculator.Common
 {
+	using System.ComponentModel;
+
 	public enum Gender
 	{
 		M,
@@ -92,8 +94,11 @@
 	}
 
 	public enum LoanType {
+		[Description("Standard")]
 		StandardLoanType,
+		[Description("Half Way")]
 		HalfWayLoanType,
+		[Description("Alibaba")]
 		AlibabaLoanType
 	}
 

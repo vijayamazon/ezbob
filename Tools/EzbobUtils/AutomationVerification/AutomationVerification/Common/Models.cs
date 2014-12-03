@@ -6,6 +6,7 @@
 	using System.Text;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
 
 	public class MedalOutputModel
 	{
@@ -41,14 +42,28 @@
 
 		public void PrintDict(ASafeLog log)
 		{
+			log.Debug(this.ToString());
+		}
+
+		protected string ToPercent(decimal val)
+		{
+			return String.Format("{0:F2}", val * 100).PadRight(6);
+		}
+
+		protected string ToShort(decimal val)
+		{
+			return String.Format("{0:F2}", val).PadRight(6);
+		}
+
+		public override string ToString()
+		{
 			Dictionary<Parameter, Weight> dict = WeightsDict ?? new Dictionary<Parameter, Weight>();
 			var sb = new StringBuilder();
-			sb.AppendFormat("Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", Medal, ToPercent(NormalizedScore), MedalType, Score);
+			sb.AppendFormat("Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", Medal, ToPercent(NormalizedScore), MedalType, Score*100);
 			decimal s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
 			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8} \n", "Parameter".PadRight(25), "Weight".PadRight(10), "MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10), "Grade".PadRight(10), "Score".PadRight(10), "Value");
 			foreach (var weight in dict)
 			{
-
 				sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}\n",
 					weight.Key.ToString().PadRight(25),
 					ToPercent(weight.Value.FinalWeight).PadRight(10),
@@ -77,17 +92,7 @@
 				s11.ToString(CultureInfo.InvariantCulture).PadRight(10),
 				ToShort(s10 * 100).PadRight(10));
 
-			log.Debug(sb.ToString());
-		}
-
-		protected string ToPercent(decimal val)
-		{
-			return String.Format("{0:F2}", val * 100).PadRight(6);
-		}
-
-		protected string ToShort(decimal val)
-		{
-			return String.Format("{0:F2}", val).PadRight(6);
+			return sb.ToString();
 		}
 	}
 
@@ -439,8 +444,8 @@
 
 		public override string ToString()
 		{
-			return string.Format("InterestRate {0},SetupFee: {1},RepaymentPeriod: {2},LoanType: {3},LoanSource: {4},IsEu: {5}{6}",
-				InterestRate, SetupFee, RepaymentPeriod, LoanType, LoanSource, IsEu, Error == null ? "" : "Error: " + Error);
+			return string.Format("InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, LoanSource: {4}, IsEu: {5}{6}",
+				InterestRate, SetupFee, RepaymentPeriod, LoanType.DescriptionAttr(), LoanSource, IsEu, Error == null ? "" : ", Error: " + Error);
 		}
 
 		public void SaveToDb(ASafeLog log, AConnection db, OfferCalculationType type)

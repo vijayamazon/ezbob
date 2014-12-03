@@ -62,8 +62,8 @@
 
 		public override string ToString()
 		{
-			return string.Format("InterestRate {0},SetupFee: {1},RepaymentPeriod: {2},LoanType: {3},IsEu: {4}{5}",
-				InterestRate, SetupFee, Period, LoanTypeId, IsEu, Error == null ? "" : "Error: " + Error);
+			return string.Format("InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, IsEu: {4}{5}",
+				InterestRate, SetupFee, Period, LoanTypeId, IsEu, Error == null ? "" : ", Error: " + Error);
 		}
 
 		

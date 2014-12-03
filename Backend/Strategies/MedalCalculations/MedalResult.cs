@@ -219,7 +219,11 @@
 		}
 
 		public void PrintToLog(ASafeLog log) {
+			log.Debug(this.ToString());
+		}
 
+		public override string ToString()
+		{
 			var sb = new StringBuilder();
 			sb.AppendFormat("Calculation Num 1 .........Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", MedalClassification,
 							StringBuilderExtention.ToPercent(TotalScoreNormalized), MedalType, TotalScore);
@@ -231,61 +235,64 @@
 
 			Weight weight;
 
-			if (MedalType != MedalType.SoleTrader) {
-				weight = new Weight {Value = BusinessScore.ToString(CultureInfo.InvariantCulture), FinalWeight = BusinessScoreWeight,Grade = (int)BusinessScoreGrade,Score = BusinessScoreScore};
+			if (MedalType != MedalType.SoleTrader)
+			{
+				weight = new Weight { Value = BusinessScore.ToString(CultureInfo.InvariantCulture), FinalWeight = BusinessScoreWeight, Grade = (int)BusinessScoreGrade, Score = BusinessScoreScore };
 				sb.AddWeight(weight, "BusinessScore", ref summary);
 			}
 
 			if (MedalType == MedalType.Limited || MedalType == MedalType.OnlineLimited)
 			{
-				weight = new Weight {Value = TangibleEquity.ToString(CultureInfo.InvariantCulture), FinalWeight = TangibleEquityWeight,Grade = (int)TangibleEquityGrade,Score = TangibleEquityScore};
+				weight = new Weight { Value = TangibleEquity.ToString(CultureInfo.InvariantCulture), FinalWeight = TangibleEquityWeight, Grade = (int)TangibleEquityGrade, Score = TangibleEquityScore };
 				sb.AddWeight(weight, "TangibleEquity", ref summary);
 			}
 
 			DateTime calcTime = CalculationTime;
 			int businessSeniorityYears = 0;
 			decimal ezbobSeniorityMonth = 0;
-			if (BusinessSeniority.HasValue) {
+			if (BusinessSeniority.HasValue)
+			{
 				businessSeniorityYears = (int)(calcTime - BusinessSeniority.Value).TotalDays / 365;
 			}
 
-			if(EzbobSeniority.HasValue){
+			if (EzbobSeniority.HasValue)
+			{
 				ezbobSeniorityMonth = (decimal)(calcTime - EzbobSeniority.Value).TotalDays / (365.0M / 12.0M);
 			}
 
 			weight = new Weight { Value = businessSeniorityYears.ToString(CultureInfo.InvariantCulture), FinalWeight = BusinessSeniorityWeight, Grade = (int)BusinessSeniorityGrade, Score = BusinessSeniorityScore };
 			sb.AddWeight(weight, "BusinessSeniority", ref summary);
 
-			weight = new Weight {Value = ConsumerScore.ToString(CultureInfo.InvariantCulture), FinalWeight = ConsumerScoreWeight,Grade = (int)ConsumerScoreGrade,Score = ConsumerScoreScore};
+			weight = new Weight { Value = ConsumerScore.ToString(CultureInfo.InvariantCulture), FinalWeight = ConsumerScoreWeight, Grade = (int)ConsumerScoreGrade, Score = ConsumerScoreScore };
 			sb.AddWeight(weight, "ConsumerScore", ref summary);
 
 			weight = new Weight { Value = ezbobSeniorityMonth.ToString(CultureInfo.InvariantCulture), FinalWeight = EzbobSeniorityWeight, Grade = (int)EzbobSeniorityGrade, Score = EzbobSeniorityScore };
 			sb.AddWeight(weight, "EzbobSeniority", ref summary);
 
-			weight = new Weight {Value = MaritalStatus.ToString(CultureInfo.InvariantCulture), FinalWeight = MaritalStatusWeight,Grade = (int)MaritalStatusGrade,Score = MaritalStatusScore};
+			weight = new Weight { Value = MaritalStatus.ToString(CultureInfo.InvariantCulture), FinalWeight = MaritalStatusWeight, Grade = (int)MaritalStatusGrade, Score = MaritalStatusScore };
 			sb.AddWeight(weight, "MaritalStatus", ref summary);
 
-			weight = new Weight {Value = NumOfLoans.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfLoansWeight,Grade = (int)NumOfLoansGrade,Score = NumOfLoansScore};
+			weight = new Weight { Value = NumOfLoans.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfLoansWeight, Grade = (int)NumOfLoansGrade, Score = NumOfLoansScore };
 			sb.AddWeight(weight, "NumOfLoans", ref summary);
 
-			weight = new Weight {Value = NumOfLateRepayments.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfLateRepaymentsWeight,Grade = (int)NumOfLateRepaymentsGrade,Score = NumOfLateRepaymentsScore};
+			weight = new Weight { Value = NumOfLateRepayments.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfLateRepaymentsWeight, Grade = (int)NumOfLateRepaymentsGrade, Score = NumOfLateRepaymentsScore };
 			sb.AddWeight(weight, "NumOfLateRepayments", ref summary);
 
-			weight = new Weight {Value = NumOfEarlyRepayments.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfEarlyRepaymentsWeight,Grade = (int)NumOfEarlyRepaymentsGrade,Score = NumOfEarlyRepaymentsScore};
+			weight = new Weight { Value = NumOfEarlyRepayments.ToString(CultureInfo.InvariantCulture), FinalWeight = NumOfEarlyRepaymentsWeight, Grade = (int)NumOfEarlyRepaymentsGrade, Score = NumOfEarlyRepaymentsScore };
 			sb.AddWeight(weight, "NumOfEarlyRepayments", ref summary);
 
-			weight = new Weight {Value = AnnualTurnover.ToString(CultureInfo.InvariantCulture), FinalWeight = AnnualTurnoverWeight,Grade = (int)AnnualTurnoverGrade,Score = AnnualTurnoverScore};
+			weight = new Weight { Value = AnnualTurnover.ToString(CultureInfo.InvariantCulture), FinalWeight = AnnualTurnoverWeight, Grade = (int)AnnualTurnoverGrade, Score = AnnualTurnoverScore };
 			sb.AddWeight(weight, "AnnualTurnover", ref summary);
 
-			weight = new Weight {Value = FreeCashFlow.ToString(CultureInfo.InvariantCulture), FinalWeight = FreeCashFlowWeight,Grade = (int)FreeCashFlowGrade,Score = FreeCashFlowScore};
+			weight = new Weight { Value = FreeCashFlow.ToString(CultureInfo.InvariantCulture), FinalWeight = FreeCashFlowWeight, Grade = (int)FreeCashFlowGrade, Score = FreeCashFlowScore };
 			sb.AddWeight(weight, "FreeCashFlow", ref summary);
 
-			weight = new Weight {Value = NetWorth.ToString(CultureInfo.InvariantCulture), FinalWeight = NetWorthWeight,Grade = (int)NetWorthGrade,Score = NetWorthScore};
+			weight = new Weight { Value = NetWorth.ToString(CultureInfo.InvariantCulture), FinalWeight = NetWorthWeight, Grade = (int)NetWorthGrade, Score = NetWorthScore };
 			sb.AddWeight(weight, "NetWorth", ref summary);
 
 			if (MedalType == MedalType.OnlineLimited || MedalType == MedalType.OnlineNonLimitedNoBusinessScore || MedalType == MedalType.OnlineNonLimitedWithBusinessScore)
 			{
-				weight = new Weight {Value = NumberOfStores.ToString(CultureInfo.InvariantCulture), FinalWeight = NumberOfStoresWeight,Grade = (int)NumberOfStoresGrade,Score = NumberOfStoresScore};
+				weight = new Weight { Value = NumberOfStores.ToString(CultureInfo.InvariantCulture), FinalWeight = NumberOfStoresWeight, Grade = (int)NumberOfStoresGrade, Score = NumberOfStoresScore };
 				sb.AddWeight(weight, "NumOfStores", ref summary);
 
 				weight = new Weight { Value = PositiveFeedbacks.ToString(CultureInfo.InvariantCulture), FinalWeight = PositiveFeedbacksWeight, Grade = (int)PositiveFeedbacksGrade, Score = PositiveFeedbacksScore };
@@ -296,16 +303,14 @@
 			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}\n",
 							"Sum".PadRight(25),
 							StringBuilderExtention.ToShort(summary.FinalWeight).PadRight(10),
-							StringBuilderExtention.ToPercent(summary.MinimumScore / 100).PadRight(10),
-							StringBuilderExtention.ToPercent(summary.MaximumScore / 100).PadRight(10),
-							summary.MinimumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
-							summary.MaximumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
+							"-".PadRight(10),
+							"-".PadRight(10),
+							"-".PadRight(10),
+							"-".PadRight(10),
 							summary.Grade.ToString(CultureInfo.InvariantCulture).PadRight(10),
 							StringBuilderExtention.ToShort(summary.Score).PadRight(10), summary.Value);
 
-			log.Debug(sb.ToString());
-			
-
+			return sb.ToString();
 		}
 	}
 
@@ -316,10 +321,10 @@
 			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}\n",
 							name.PadRight(25),
 							ToShort(weight.FinalWeight).PadRight(10),
-							ToPercent(weight.MinimumScore / 100).PadRight(10),
-							ToPercent(weight.MaximumScore / 100).PadRight(10),
-							weight.MinimumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
-							weight.MaximumGrade.ToString(CultureInfo.InvariantCulture).PadRight(10),
+							"-".PadRight(10),
+							"-".PadRight(10),
+							"-".PadRight(10),
+							"-".PadRight(10),
 							weight.Grade.ToString(CultureInfo.InvariantCulture).PadRight(10),
 							ToShort(weight.Score).PadRight(10), weight.Value);
 
