@@ -2,6 +2,14 @@
 	public abstract class ATrace {
 		#region public
 
+		#region property AllowMismatch
+
+		public virtual bool AllowMismatch {
+			get { return false; }
+		} // AllowMismatch
+
+		#endregion property AllowMismatch
+
 		#region property HasLockedDecision
 
 		public virtual bool HasLockedDecision {

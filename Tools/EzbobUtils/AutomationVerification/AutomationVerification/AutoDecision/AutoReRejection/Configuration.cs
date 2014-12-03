@@ -25,6 +25,7 @@
 
 		public int MaxLRDAge { get; set; }
 		public decimal MinRepaidPortion { get; set; }
+		public int MaxAllowedLoans { get; set; }
 
 		#endregion public
 

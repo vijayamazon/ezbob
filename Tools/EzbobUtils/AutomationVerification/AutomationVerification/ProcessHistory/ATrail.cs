@@ -160,15 +160,16 @@
 		#region method EqualsTo
 
 		public virtual bool EqualsTo(ATrail oTrail, bool bQuiet = false) {
-			SendExplanationMail(oTrail, "always send for test"); //todo remove
 			DiffID = Guid.NewGuid();
 
 			if (oTrail == null) {
 				const string sMsg = "The second trail is not specified.";
 				m_oDiffNotes.Add(sMsg);
 
-				if (!bQuiet)
+				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
+					SendExplanationMail(oTrail, sMsg);
+				}
 
 				return false;
 			} // if
@@ -226,17 +227,17 @@
 			} // if
 
 			for (int i = 0; i < this.Length; i++) {
-				ATrace oMy = this.m_oSteps[i];
-				ATrace oOther = oTrail.m_oSteps[i];
+				ATrace oMyTrace = this.m_oSteps[i];
+				ATrace oOtherTrace = oTrail.m_oSteps[i];
 
-				if (oMy.GetType() != oOther.GetType()) {
+				if (oMyTrace.GetType() != oOtherTrace.GetType()) {
 					bResult = false;
 
 					string sMsg = string.Format(
 						"Different checks for '{3}' encountered on step {0}: {1} in this vs {2} in the second.",
 						i,
-						oMy.GetType().Name,
-						oOther.GetType().Name,
+						oMyTrace.GetType().Name,
+						oOtherTrace.GetType().Name,
 						this.Decision
 					);
 
@@ -245,15 +246,16 @@
 					if (!bQuiet)
 						m_oLog.Warn("Trails are different: {0}", sMsg);
 				}
-				else if (oMy.DecisionStatus != oOther.DecisionStatus) {
-					bResult = false;
+				else if (oMyTrace.DecisionStatus != oOtherTrace.DecisionStatus) {
+					if (!oMyTrace.AllowMismatch)
+						bResult = false;
 
 					string sMsg = string.Format(
 						"Different conclusions for '{4}' have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
 						i,
-						oMy.GetType().Name,
-						oMy.DecisionStatus,
-						oOther.DecisionStatus,
+						oMyTrace.GetType().Name,
+						oMyTrace.DecisionStatus,
+						oOtherTrace.DecisionStatus,
 						this.Decision
 					);
 
@@ -264,15 +266,16 @@
 						SendExplanationMail(oTrail, sMsg);
 					}
 				} // if
-				else if (oMy.HasLockedDecision != oOther.HasLockedDecision) {
-					bResult = false;
+				else if (oMyTrace.HasLockedDecision != oOtherTrace.HasLockedDecision) {
+					if (!oMyTrace.AllowMismatch)
+						bResult = false;
 
 					string sMsg = string.Format(
 						"Different conclusions for '{4}' decision lock have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
 						i,
-						oMy.GetType().Name,
-						oMy.HasLockedDecision ? "locked" : "not locked",
-						oOther.HasLockedDecision ? "locked" : "not locked",
+						oMyTrace.GetType().Name,
+						oMyTrace.HasLockedDecision ? "locked" : "not locked",
+						oOtherTrace.HasLockedDecision ? "locked" : "not locked",
 						this.Decision
 					);
 
@@ -286,29 +289,7 @@
 			} // for
 
 			return bResult;
-		}
-
-		private void SendExplanationMail(ATrail oTrail, string sMsg) {
-			var message =
-				string.Format(@"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b></u></h1><br>
-					<h2><b style='color:red'>{2}</b><br></h2>
-					<h2><b>main flow:</b></h2>
-					<pre><h3>{3}</h3></pre><br>
-					<h2><b>verification flow:</b></h2>
-					<pre><h3>{4}</h3></pre><br>
-					</b></h2>main data:
-					<pre><h3>{5}</h3></pre>
-					</b></h2>verification data:</b></h2>
-					<pre><h3>{6}</h3></pre>", Name, CustomerID, HttpUtility.HtmlEncode(sMsg),
-				              HttpUtility.HtmlEncode(this.ToString()),
-				              HttpUtility.HtmlEncode(oTrail.ToString()),
-				              HttpUtility.HtmlEncode(this.InputData.Serialize()),
-				              HttpUtility.HtmlEncode(oTrail.InputData.Serialize()));
-			
-			var result = new Mail().Send(toExplanationEmailAddress, null, message, fromEmailAddress, fromEmailName, "Mismatch in " + Name + " for customer " + CustomerID);
-		}
-
-// EqualsTo
+		} // EqualsTo
 
 		#endregion method EqualsTo
 
@@ -544,6 +525,30 @@
 		} // Add
 
 		#endregion method Add
+
+		private void SendExplanationMail(ATrail oTrail, string sMsg) {
+			var message = string.Format(
+					@"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b></u></h1><br>
+					<h2><b style='color:red'>{2}</b><br></h2>
+					<h2><b>main flow:</b></h2>
+					<pre><h3>{3}</h3></pre><br>
+					<h2><b>verification flow:</b></h2>
+					<pre><h3>{4}</h3></pre><br>
+					</b></h2>main data:
+					<pre><h3>{5}</h3></pre>
+					</b></h2>verification data:</b></h2>
+					<pre><h3>{6}</h3></pre>",
+					Name,
+					CustomerID,
+					HttpUtility.HtmlEncode(sMsg),
+					HttpUtility.HtmlEncode(this.ToString()),
+					HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.ToString()),
+					HttpUtility.HtmlEncode(this.InputData.Serialize()),
+					HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize())
+			);
+
+			var result = new Mail().Send(toExplanationEmailAddress, null, message, fromEmailAddress, fromEmailName, "#Mismatch in " + Name + " for customer " + CustomerID);
+		}
 
 		#endregion private
 	} // class Trail

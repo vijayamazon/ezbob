@@ -43,16 +43,14 @@
 
 			log.Error("Mismatch in re-rejection logic for customer {0}; main: {1}\n secondary: {2}", customerId, m_oTrail, oSecondary.Trail);
 
-			// not re-rejected if mismatch between two implementations
-
-			return bSuccess && m_oTrail.HasDecided;
+			return bSuccess;
 		} // MakeAndVerifyDecision
 
 		public void MakeDecision(AutoDecisionResponse response)
 		{
 			try
 			{
-				if (MakeAndVerifyDecision())
+				if (MakeAndVerifyDecision() && m_oTrail.HasDecided)
 				{
 					response.Decision = DecisionActions.ReReject;
 					response.AutoRejectReason = "Auto Re-Reject";

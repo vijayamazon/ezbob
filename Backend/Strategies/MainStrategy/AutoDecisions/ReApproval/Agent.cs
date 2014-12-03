@@ -67,7 +67,7 @@
 
 			Trail.Save(DB, oSecondary.Trail);
 
-			return bSuccess && Trail.HasDecided;
+			return bSuccess;
 		} // MakeAndVerifyException
 
 		#endregion method MakeAndVerifyDecision
@@ -78,7 +78,7 @@
 			Log.Debug("Checking if auto re-approval should take place for customer {0}...", Args.CustomerID);
 
 			try {
-				if (MakeAndVerifyException()) {
+				if (MakeAndVerifyException() && Trail.HasDecided) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.Decision = DecisionActions.ReApprove;
 					response.CreditResult = "Approved";

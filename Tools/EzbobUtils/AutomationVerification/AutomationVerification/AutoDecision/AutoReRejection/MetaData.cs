@@ -1,7 +1,6 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoReRejection {
 	using System;
 	using System.Collections.Generic;
-	using EZBob.DatabaseLib.Model.Database;
 	using Newtonsoft.Json;
 
 	public class MetaData {
@@ -18,8 +17,11 @@
 		[JsonIgnore]
 		public string RowType { get; set; }
 
-		public int LmrID { get; set; }
-		public DateTime? LmrTime { get; set; }
+		public bool LastDecisionWasReject { get; set; }
+		public DateTime? LastDecisionDate { get; set; }
+
+		public DateTime? LastRejectDate { get; set; }
+		public int NumOfOpenLoans { get; set; }
 
 		public int LoanCount { get; set; }
 

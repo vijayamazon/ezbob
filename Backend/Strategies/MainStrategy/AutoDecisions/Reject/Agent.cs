@@ -70,15 +70,17 @@
 		#region method MakeDecision
 
 		public virtual void MakeDecision(AutoDecisionResponse response) {
+			bool bSuccess = false;
+
 			try {
-				MakeAndVerifyDecision();
+				bSuccess = MakeAndVerifyDecision();
 			}
 			catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
 				StepNoReject<ExceptionThrown>().Init(e);
 			} // try
 
-			if (Trail.HasDecided) {
+			if (bSuccess && Trail.HasDecided) {
 				response.CreditResult = "Rejected";
 				response.UserStatus = "Rejected";
 				response.SystemDecision = "Reject";

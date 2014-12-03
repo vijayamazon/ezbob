@@ -117,28 +117,28 @@
 
 		#region steps
 
-		#region method CheckHasBeenRejected
-		
+		#region method CheckNumOfLoans
+
 		private void CheckNumOfLoans()
 		{
 			if (Trail.MyInputData.NumOfOpenLoans >= Trail.MyInputData.AutoReRejectMaxAllowedLoans)
 				StepReject<OpenLoans>().Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
 			else
 				StepNoDecision<OpenLoans>().Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
-		}//CheckNumOfLoans
-		
-		#endregion method CheckHasBeenRejected
+		} // CheckNumOfLoans
 
-		#region method CheckHasBeenRejected
+		#endregion method CheckNumOfLoans
+
+		#region method CheckLastDecisionWasReject
 
 		private void CheckLastDecisionWasReject() {
 			if (Trail.MyInputData.LastDecisionWasReject)
 				StepNoDecision<LastDecisionWasReject>().Init(Trail.MyInputData.LastDecisionWasReject);
 			else
 				StepNoReject<LastDecisionWasReject>().Init(Trail.MyInputData.LastDecisionWasReject);
-		} // CheckHasBeenRejected
+		} // CheckLastDecisionWasReject
 
-		#endregion method CheckHasBeenRejected
+		#endregion method CheckLastDecisionWasReject
 
 		#region method CheckNewMarketplaces
 

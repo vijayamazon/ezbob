@@ -32,10 +32,7 @@
 			AutoReRejectMaxLRDAge = autoReRejectMaxLRDAge;
 			AutoReRejectMinRepaidPortion = autoReRejectMinRepaidPortion;
 			AutoReRejectMaxAllowedLoans = autoReRejectMaxAllowedLoans;
-		}
-
-
-		// Init
+		} // Init
 
 		public void Init(
 			Arguments args,
@@ -45,12 +42,10 @@
 		) {
 			DataAsOf = args.DataAsOf;
 
-			//WasManuallyRejected = meta.LmrID > 0; 
-			//LastManualRejectDate = meta.LmrTime; 
-
-			//TODO: retrieve the following fields: 
-			//TODO: LastDecisionWasReject, LastRejectDate, LastDecisionDate, NumOfOpenLoans
-
+			LastDecisionWasReject =meta.LastDecisionWasReject;
+			LastRejectDate = meta.LastRejectDate;
+			LastDecisionDate = meta.LastDecisionDate;
+			NumOfOpenLoans = meta.NumOfOpenLoans;
 
 			NewDataSourceAdded = oNewMps.Count > 0;
 			OpenLoansAmount = meta.TakenLoanAmount;
@@ -59,6 +54,7 @@
 			//config
 			AutoReRejectMaxLRDAge = cfg.MaxLRDAge;
 			AutoReRejectMinRepaidPortion = cfg.MinRepaidPortion;
+			AutoReRejectMaxAllowedLoans = cfg.MaxAllowedLoans;
 		} // Init
 
 		public DateTime DataAsOf { get; private set; }

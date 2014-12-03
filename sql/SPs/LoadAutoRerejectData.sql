@@ -14,32 +14,74 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	DECLARE @LmrID INT = ISNULL((
+	DECLARE @LastDecisionWasReject BIT = 0
+	DECLARE @LastDecisionDate DATETIME = NULL
+
+	;WITH cid AS (
 		SELECT
-			MAX(c.Id)
+			MAX(Id) AS Id
 		FROM
-			CashRequests c
-			INNER JOIN DecisionHistory h ON c.Id = h.CashRequestId
+			CashRequests r
 		WHERE
-			c.IdCustomer = @CustomerID
+			r.IdCustomer = @CustomerID
 			AND
-			c.UnderwriterDecision = 'Rejected'
+			r.UnderwriterDecision IS NOT NULL
 			AND
-			h.UnderwriterId != 1
+			r.UnderwriterDecision != 'WaitingForDecision'
 			AND
-			c.CreationDate < @Now
-	), 0)
+			r.UnderwriterDecisionDate < @Now
+	), dec AS (
+		SELECT
+			ISNULL(r.UnderwriterDecision, '') UW,
+			r.UnderwriterDecisionDate AS UwDate
+		FROM
+			CashRequests r
+			INNER JOIN cid ON r.Id = cid.Id
+	)
+	SELECT
+		@LastDecisionWasReject = CASE UW WHEN 'Rejected' THEN 1 ELSE 0 END,
+		@LastDecisionDate = UwDate
+	FROM
+		dec
 
 	------------------------------------------------------------------------------
 
-	DECLARE @LmrTime DATETIME
+	DECLARE @LastRejectDate DATETIME = NULL
 
+	;WITH cid AS (
+		SELECT
+			MAX(Id) AS Id
+		FROM
+			CashRequests r
+		WHERE
+			r.IdCustomer = @CustomerID
+			AND
+			r.UnderwriterDecision = 'Rejected'
+			AND
+			ISNULL(r.AutoDecisionID, 5) != 7 -- auto re-reject
+			AND
+			r.UnderwriterDecisionDate < @Now
+	)
 	SELECT
-		@LmrTime = c.UnderwriterDecisionDate
+		@LastRejectDate = r.UnderwriterDecisionDate
 	FROM
-		CashRequests c
-	WHERE
-		c.Id = @LmrID
+		CashRequests r
+		INNER JOIN cid ON r.Id = cid.Id
+
+	------------------------------------------------------------------------------
+
+	DECLARE @NumOfOpenLoans INT = ISNULL((
+		SELECT
+			COUNT(*)
+		FROM
+			Loan l
+		WHERE
+			l.CustomerId = @CustomerID
+			AND
+			l.[Date] < @Now
+			AND
+			l.Status != 'PaidOff'
+	), 0)
 
 	------------------------------------------------------------------------------
 
@@ -112,13 +154,15 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		RowType         = 'MetaData',
-		LmrID           = @LmrID,
-		LmrTime         = @LmrTime,
-		LoanCount       = @LoanCount,
-		TakenLoanAmount = @TakenLoanAmount,
-		RepaidPrincipal = @RepaidPrincipal,
-		SetupFees       = @SetupFees
+		RowType               = 'MetaData',
+		LoanCount             = @LoanCount,
+		TakenLoanAmount       = @TakenLoanAmount,
+		RepaidPrincipal       = @RepaidPrincipal,
+		SetupFees             = @SetupFees,
+		LastDecisionWasReject = @LastDecisionWasReject,
+		LastDecisionDate      = @LastDecisionDate,
+		LastRejectDate        = @LastRejectDate,
+		NumOfOpenLoans        = @NumOfOpenLoans
 
 	------------------------------------------------------------------------------
 
@@ -134,7 +178,7 @@ BEGIN
 	WHERE
 		m.CustomerId = @CustomerID
 		AND
-		@LmrTime < m.Created AND	m.Created < @Now
+		@LastDecisionDate < m.Created AND m.Created < @Now
 	ORDER BY
 		m.Created
 
