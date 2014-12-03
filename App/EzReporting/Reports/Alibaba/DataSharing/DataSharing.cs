@@ -21,6 +21,8 @@
 
 			m_oLateLoans = new SortedSet<int>();
 			m_oData = new SortedDictionary<int, CustomerData>();
+
+			m_oAlibabaIDs = new SortedSet<string>();
 		} // constructor
 
 		#endregion constructor
@@ -41,6 +43,8 @@
 
 			if (oRandomCustomer != null)
 				oRandomCustomer.AddApprovalPhaseTotal(Report);
+
+			SaveAlibabaIDs();
 
 			Report.AutoFitColumns();
 		} // Generate
@@ -115,6 +119,10 @@
 				m_oLateLoans.Add(sr["LoanID"]);
 				break;
 
+			case RptAlibabaDataSharing.RowTypes.AlibabaID:
+				ExtractAlibabaID(sr["Source"]);
+				break;
+
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
@@ -122,10 +130,48 @@
 
 		#endregion method ProcessRow
 
+		#region method ExtractAlibabaID
+
+		private void ExtractAlibabaID(string sSource) {
+			if (string.IsNullOrWhiteSpace(sSource))
+				return;
+
+			int nPos = sSource.IndexOf(AlibabaID, StringComparison.InvariantCultureIgnoreCase);
+
+			if (nPos < 0)
+				return;
+
+			int nIDStart = nPos + AlibabaID.Length;
+
+			int nAmpPos = sSource.IndexOf("&", nIDStart, StringComparison.InvariantCultureIgnoreCase);
+
+			string sAlibabaID = (nAmpPos < 0) ? sSource.Substring(nIDStart) : sSource.Substring(nIDStart, nAmpPos - nIDStart);
+
+			m_oAlibabaIDs.Add(sAlibabaID);
+		} // ExtractAlibabaID
+
+		#endregion method ExtractAlibabaID
+
+		#region method SaveAlibabaIDs
+
+		private void SaveAlibabaIDs() {
+			ExcelWorksheet oSheet = Report.FindOrCreateSheet("Unique Alibaba ID on LP", false, "Alibaba ID");
+
+			int nRow = 2;
+
+			foreach (string sAlibabaID in m_oAlibabaIDs)
+				oSheet.SetCellValue(nRow++, 1, sAlibabaID);
+		} // SaveAlibabaIDs
+
+		#endregion method SaveAlibabaIDs
+
 		private readonly SortedDictionary<int, CustomerData> m_oData;
 		private readonly SortedSet<int> m_oLateLoans;
+		private readonly SortedSet<string> m_oAlibabaIDs;
 		private readonly ASafeLog m_oLog;
 		private readonly RptAlibabaDataSharing m_oSp;
+
+		private const string AlibabaID = "alibaba_id=";
 
 		#region class RptAlibabaDataSharing
 
@@ -136,6 +182,7 @@
 				IsLate,
 				Repayment,
 				Marketplace,
+				AlibabaID,
 			};
 
 			public RptAlibabaDataSharing(bool bIncludeTestCustomers, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {

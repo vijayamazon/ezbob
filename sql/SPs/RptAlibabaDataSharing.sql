@@ -190,6 +190,11 @@ BEGIN
 		CompanyDetails_IndustryType              = c.IndustryType,
 		CompanyDetails_CompanyRegistrationNumber = b.CompanyNumber,
 		CompanyDetails_CompanyName               = b.CompanyName,
+		CompanyDetails_MonthsOfOperation          = CASE
+			WHEN b.TypeOfBusiness IN ('Limited', 'LLP') THEN dbo.udfAgeInYM(cac.IncorporationDate)
+			WHEN b.TypeOfBusiness NOT IN ('Limited', 'LLP') THEN dbo.udfAgeInYM(nl.IncorporationDate)
+			ELSE ''
+		END,
 		--
 		--
 		FinancialDetails_TotalAnnualizedRevenue = muw.AnnualizedRevenue,
@@ -283,6 +288,9 @@ BEGIN
 		LEFT JOIN CustomerManualUwData muw
 			ON c.Id = muw.CustomerID
 			AND muw.IsActive = 1
+		LEFT JOIN ExperianNonLimitedResults nl
+			ON b.ExperianRefNum = nl.RefNumber
+			AND nl.IsActive = 1			
 	WHERE
 		c.AlibabaId IS NOT NULL
 		AND
@@ -378,6 +386,18 @@ BEGIN
 			OR
 			c.IsTest = 0
 		)
+
+	------------------------------------------------------------------------------
+
+	SELECT DISTINCT
+		RowType = 'AlibabaID',
+		Source  = a.Source
+	FROM
+		SiteAnalytics a
+	WHERE
+		a.Source LIKE '/alibaba%'
+		AND
+		a.Source LIKE '%alibaba_id=%'
 
 	------------------------------------------------------------------------------
 END
