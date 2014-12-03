@@ -162,11 +162,11 @@
 		{
 			if (Trail.MyInputData.WasApproved)
 			{
-				StepNoReject<WasApproved>(true).Init(Trail.MyInputData.WasApproved);
+				StepNoReject<WasApprovedPreventer>(true).Init(Trail.MyInputData.WasApproved);
 			}
 			else
 			{
-				StepNoDecision<WasApproved>().Init(Trail.MyInputData.WasApproved);
+				StepNoDecision<WasApprovedPreventer>().Init(Trail.MyInputData.WasApproved);
 			}
 		}
 
@@ -174,11 +174,11 @@
 		{
 			if (Trail.MyInputData.AnnualTurnover > Trail.MyInputData.AutoRejectionException_AnualTurnover)
 			{
-				StepNoReject<AnnualTurnoverException>(true).Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
+				StepNoReject<AnnualTurnoverPreventer>(true).Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
 			}
 			else
 			{
-				StepNoDecision<AnnualTurnoverException>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
+				StepNoDecision<AnnualTurnoverPreventer>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
 			}
 		}
 
@@ -186,11 +186,11 @@
 		{
 			if (Trail.MyInputData.IsBrokerClient)
 			{
-				StepNoReject<BrokerClientException>(true).Init(Trail.MyInputData.IsBrokerClient);
+				StepNoReject<BrokerClientPreventer>(true).Init(Trail.MyInputData.IsBrokerClient);
 			}
 			else
 			{
-				StepNoDecision<BrokerClientException>().Init(Trail.MyInputData.IsBrokerClient);
+				StepNoDecision<BrokerClientPreventer>().Init(Trail.MyInputData.IsBrokerClient);
 			}
 		}
 
@@ -198,11 +198,11 @@
 		{
 			if (Trail.MyInputData.ConsumerScore > Trail.MyInputData.AutoRejectionException_CreditScore)
 			{
-				StepNoReject<ConsumerScoreException>(true).Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
+				StepNoReject<ConsumerScorePreventer>(true).Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
 			}
 			else
 			{
-				StepNoDecision<ConsumerScoreException>().Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
+				StepNoDecision<ConsumerScorePreventer>().Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
 			}
 		}
 
@@ -210,17 +210,17 @@
 		{
 			if (Trail.MyInputData.BusinessScore > Trail.MyInputData.RejectionExceptionMaxCompanyScore)
 			{
-				StepNoReject<BusinessScoreException>(true).Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
+				StepNoReject<BusinessScorePreventer>(true).Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
 			}
 			else
 			{
-				StepNoDecision<BusinessScoreException>().Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
+				StepNoDecision<BusinessScorePreventer>().Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
 			}
 		}
 
 		private void CheckMpError()
 		{
-			var data = new MarketPlaceWithErrorException.DataModel
+			var data = new MarketPlaceWithErrorPreventer.DataModel
 			{
 				HasMpError = Trail.MyInputData.HasMpError,
 				MaxBusinessScore = Trail.MyInputData.BusinessScore,
@@ -233,11 +233,11 @@
 				(Trail.MyInputData.ConsumerScore > Trail.MyInputData.RejectionExceptionMaxConsumerScoreForMpError ||
 				 Trail.MyInputData.BusinessScore > Trail.MyInputData.RejectionExceptionMaxCompanyScoreForMpError))
 			{
-				StepNoReject<MarketPlaceWithErrorException>(true).Init(data);
+				StepNoReject<MarketPlaceWithErrorPreventer>(true).Init(data);
 			}
 			else
 			{
-				StepNoDecision<MarketPlaceWithErrorException>().Init(data);
+				StepNoDecision<MarketPlaceWithErrorPreventer>().Init(data);
 			}
 		}
 

@@ -1,8 +1,8 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoRejection
 {
-	public class MarketPlaceWithErrorException: ATrace
+	public class MarketPlaceWithErrorPreventer: ATrace
 	{
-		public MarketPlaceWithErrorException(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {}
+		public MarketPlaceWithErrorPreventer(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {}
 
 		public DataModel Model { get; private set; }
 

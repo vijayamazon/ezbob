@@ -99,9 +99,9 @@
     <Compile Include="ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OneMonthTurnover.cs" />
     <Compile Include="ProcessHistory\Common\TotalLoanCount.cs" />
-    <Compile Include="ProcessHistory\AutoRejection\BusinessScoreException.cs" />
-    <Compile Include="ProcessHistory\AutoRejection\ConsumerScoreException.cs" />
-    <Compile Include="ProcessHistory\AutoRejection\BrokerClientException.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\BusinessScorePreventer.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\ConsumerScorePreventer.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\BrokerClientPreventer.cs" />
     <Compile Include="ProcessHistory\AutoRejection\ConsumerScore.cs" />
     <Compile Include="ProcessHistory\AutoRejection\BusinessScore.cs" />
     <Compile Include="ProcessHistory\AutoRejection\ConsumerDefaults.cs" />
@@ -110,9 +110,9 @@
     <Compile Include="ProcessHistory\AutoRejection\ConsumerLates.cs" />
     <Compile Include="ProcessHistory\AutoRejection\CustomerStatus.cs" />
     <Compile Include="ProcessHistory\AutoRejection\Seniority.cs" />
-    <Compile Include="ProcessHistory\AutoRejection\MarketPlaceWithErrorException.cs" />
-    <Compile Include="ProcessHistory\AutoRejection\WasApprovedException.cs" />
-    <Compile Include="ProcessHistory\AutoRejection\AnnualTurnoverException.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\MarketPlaceWithErrorPreventer.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\WasApprovedPreventer.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\AnnualTurnoverPreventer.cs" />
     <Compile Include="ProcessHistory\AutoReRejection\OpenLoansRepayments.cs" />
     <Compile Include="ProcessHistory\AutoReRejection\LRDIsTooOld.cs" />
     <Compile Include="ProcessHistory\AutoReRejection\MarketPlaceWasAdded.cs" />
