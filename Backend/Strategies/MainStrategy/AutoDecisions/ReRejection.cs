@@ -7,6 +7,7 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -53,10 +54,8 @@
 			{
 				if (MakeAndVerifyDecision())
 				{
-					response.DecidedToReject = true;
-					response.IsReRejected = true;
+					response.Decision = DecisionActions.ReReject;
 					response.AutoRejectReason = "Auto Re-Reject";
-
 					response.CreditResult = "Rejected";
 					response.UserStatus = "Rejected";
 					response.SystemDecision = "Reject";

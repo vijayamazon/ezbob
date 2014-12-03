@@ -7,6 +7,7 @@
 	using AutomationCalculator.ProcessHistory.ReApproval;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
+	using DbConstants;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Database;
@@ -79,7 +80,7 @@
 			try {
 				if (MakeAndVerifyException()) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
-					response.IsAutoReApproval = true;
+					response.Decision = DecisionActions.ReApprove;
 					response.CreditResult = "Approved";
 					response.UserStatus = "Approved";
 					response.SystemDecision = "Approve";

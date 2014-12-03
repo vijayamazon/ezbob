@@ -9,6 +9,7 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
+	using DbConstants;
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -73,11 +74,11 @@
 				MakeAndVerifyDecision();
 
 				if (Trail.HasDecided) {
-					response.DecidedToReject = true;
 					response.CreditResult = "Rejected";
 					response.UserStatus = "Rejected";
 					response.SystemDecision = "Reject";
 					response.DecisionName = "Rejection";
+					response.Decision = DecisionActions.Reject;
 				} // if
 			}
 			catch (Exception e) {

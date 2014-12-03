@@ -52,8 +52,6 @@
 
 		public abstract string Name { get; }
 
-		
-
 		#region property DecisionStatus
 
 		public virtual DecisionStatus DecisionStatus {

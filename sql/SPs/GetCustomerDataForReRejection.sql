@@ -14,21 +14,27 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @WasManuallyRejected BIT = 0
 	DECLARE @LastManualRejectDate DATETIME
 	DECLARE @NewDataSourceAdded BIT = 0
-	DECLARE @HasLoans BIT = 0
+	
+	DECLARE @OpenLoansCount INT = 0
 	DECLARE @OpenLoansAmount INT = 0
 	DECLARE @PrincipalRepaymentAmount DECIMAL(18,4) = 0
 	DECLARE @SetupFees DECIMAL(18,4) = 0
+
 	------------------------------------------------------------------------------
 	
 	-- last manual reject date
-	SELECT @LastManualRejectDate = MAX(cr.UnderwriterDecisionDate)
-	FROM CashRequests cr
-	WHERE cr.IdCustomer = @CustomerId 
-	AND	cr.IdUnderwriter IS NOT NULL 
-	AND	cr.UnderwriterDecision = 'Rejected'
+	SELECT
+		@LastManualRejectDate = MAX(cr.UnderwriterDecisionDate)
+	FROM
+		CashRequests cr
+	WHERE
+		cr.IdCustomer = @CustomerId 
+		AND
+		cr.IdUnderwriter IS NOT NULL 
+		AND
+		cr.UnderwriterDecision = 'Rejected'
 	
 	-- has loans
 	IF EXISTS (SELECT * FROM Loan WHERE CustomerId=@CustomerId)

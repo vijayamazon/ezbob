@@ -10,6 +10,7 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
+	using DbConstants;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -248,7 +249,7 @@
 								response.LoanOfferUnderwriterComment = "Auto Approval";
 								response.DecisionName = "Approval";
 								response.AppValidFor = DateTime.UtcNow.AddDays(m_oTrail.MyInputData.MetaData.OfferLength);
-								response.IsAutoApproval = true;
+								response.Decision = DecisionActions.Approve;
 								response.LoanOfferEmailSendingBannedNew = m_oTrail.MyInputData.MetaData.IsEmailSendingBanned;
 
 								// Use offer calculated data
