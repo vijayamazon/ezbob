@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions
 {
 	using System;
+	using AutomationCalculator.AutoDecision.AutoReRejection;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoReRejection;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -21,12 +22,55 @@
 			Db = oDb;
 			log = oLog ?? new SafeLog();
 			this.customerId = customerId;
-			m_oTrail = new ReRejectionTrail(customerId, oLog, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
+			m_oTrail = new ReRejectionTrail(
+				customerId,
+				oLog,
+				CurrentValues.Instance.AutomationExplanationMailReciever,
+				CurrentValues.Instance.MailSenderEmail,
+				CurrentValues.Instance.MailSenderName
+			);
 		}
 
 		public bool MakeAndVerifyDecision() {
-			#region primary
+			RunPrimary();
 
+			Agent oSecondary = RunSecondary();
+
+			bool bSuccess = m_oTrail.EqualsTo(oSecondary.Trail);
+
+			m_oTrail.Save(Db, oSecondary.Trail);
+
+			log.Error("Mismatch in re-rejection logic for customer {0}; main: {1}\n secondary: {2}", customerId, m_oTrail, oSecondary.Trail);
+
+			// not re-rejected if mismatch between two implementations
+
+			return bSuccess && m_oTrail.HasDecided;
+		} // MakeAndVerifyDecision
+
+		public void MakeDecision(AutoDecisionResponse response)
+		{
+			try
+			{
+				if (MakeAndVerifyDecision())
+				{
+					response.DecidedToReject = true;
+					response.IsReRejected = true;
+					response.AutoRejectReason = "Auto Re-Reject";
+
+					response.CreditResult = "Rejected";
+					response.UserStatus = "Rejected";
+					response.SystemDecision = "Reject";
+					response.DecisionName = "Re-rejection";
+				}
+			}
+			catch (Exception ex)
+			{
+				StepNoReReject<ExceptionThrown>(true).Init(ex);
+				log.Error(ex, "Exception during re-rejection {0}", m_oTrail);
+			}
+		}
+
+		private void RunPrimary() {
 			log.Debug("Primary: checking if auto re-reject should take place for customer {0}...", customerId);
 
 			SafeReader sr = Db.GetFirst("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
@@ -60,54 +104,17 @@
 			log.Debug(
 				"Primary: checking if auto re-reject should take place for customer {0} complete; {1}", customerId, m_oTrail
 			);
+		} // RunPrimary
 
-			#endregion primary
-
-			#region secondary
-
+		private AutomationCalculator.AutoDecision.AutoReRejection.Agent RunSecondary() {
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
 				customerId, m_oTrail.InputData.DataAsOf, Db, log
 			).Init();
 
 			oSecondary.MakeDecision();
 
-			#endregion secondary
-
-			bool bSuccess = m_oTrail.EqualsTo(oSecondary.Trail);
-
-			m_oTrail.Save(Db, oSecondary.Trail);
-
-			if(bSuccess){
-				return m_oTrail.HasDecided;
-			}
-
-			log.Error("Mismatch in re-rejection logic for customer {0}; main: {1}\n secondory: {2}", customerId, m_oTrail, oSecondary.Trail);
-			//not re-rejected if mismatch between two implementations
-			return false;
-		} // MakeAndVerifyDecision
-
-		public void MakeDecision(AutoDecisionResponse response)
-		{
-			try
-			{
-				if (MakeAndVerifyDecision())
-				{
-					response.DecidedToReject = true;
-					response.IsReRejected = true;
-					response.AutoRejectReason = "Auto Re-Reject";
-
-					response.CreditResult = "Rejected";
-					response.UserStatus = "Rejected";
-					response.SystemDecision = "Reject";
-					response.DecisionName = "Re-rejection";
-				}
-			}
-			catch (Exception ex)
-			{
-				StepNoReReject<ExceptionThrown>(true).Init(ex);
-				log.Error(ex, "Exception during re-rejection {0}", m_oTrail);
-			}
-		}
+			return oSecondary;
+		} // RunSecondary
 
 		private void CheckWasRejected()
 		{
