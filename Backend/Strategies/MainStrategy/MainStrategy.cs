@@ -414,6 +414,8 @@
 				}
 			}
 
+			_customers.SaveOrUpdate(customer);
+
 			if (autoDecisionResponse.Decision.HasValue) {
 				_decisionHistory.LogAction(
 					autoDecisionResponse.Decision.Value, autoDecisionResponse.DecisionName, _session.Get<User>(1), customer
