@@ -66,7 +66,7 @@
 			AddCookie(sourceref, "sourceref", 3);
 			AddCookie(invite, "invite", 3);
 			AddCookie(ezbobab, "ezbobab", 3);
-			AddCookie(sourceref_time, "firstvisit", 3);
+			AddCookie(sourceref_time, "sourceref_time", 3);
 
 			AddCookie(alibaba_id, "alibaba_id", 6);
 			

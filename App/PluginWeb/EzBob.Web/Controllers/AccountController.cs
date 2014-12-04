@@ -877,8 +877,9 @@ namespace EzBob.Web.Controllers {
 			customer.CustomerInviteFriend.Add(customerInviteFriend);
 
 			customer.ABTesting = GetAndRemoveCookie("ezbobab");
-			customer.FirstVisitTime = GetAndRemoveCookie("firstvisit");
-
+			string visitTimes = GetAndRemoveCookie("sourceref_time");
+			customer.FirstVisitTime = HttpUtility.UrlDecode(visitTimes);
+			
 			if (Request.Cookies["istest"] != null)
 				customer.IsTest = true;
 
@@ -899,7 +900,7 @@ namespace EzBob.Web.Controllers {
 			});
 
 			try {
-				m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, customer.ReferenceSource, customer.FirstVisitTime, campaignSourceRef);
+				m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, customer.ReferenceSource, visitTimes, campaignSourceRef);
 			}
 			catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to save sourceref history.");
