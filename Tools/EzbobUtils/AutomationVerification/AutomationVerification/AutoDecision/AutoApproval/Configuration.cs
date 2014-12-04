@@ -111,7 +111,24 @@
 				return;
 			} // if
 
-			pi.SetValue(this, sr["Value"].ToType(pi.PropertyType));
+			if (pi.PropertyType == typeof (bool)) {
+				string sValue = sr["Value"];
+
+				switch (sValue.ToLowerInvariant()) {
+				case "1":
+				case "true":
+				case "yes":
+					pi.SetValue(this, true);
+					break;
+
+				default:
+					pi.SetValue(this, false);
+					break;
+				} // switch
+			}
+			else {
+				pi.SetValue(this, sr["Value"].ToType(pi.PropertyType));
+			} // if
 
 			m_oLog.Debug("Auto approval configuration: '{0}' was set to {1}.", sName, pi.GetValue(this));
 		} // SetValue
