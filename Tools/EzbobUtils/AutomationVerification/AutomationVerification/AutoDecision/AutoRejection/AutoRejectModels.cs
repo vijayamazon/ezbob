@@ -89,6 +89,7 @@
 			Reject_LateLastMonthsNum = configs.Reject_LateLastMonthsNum;
 			Reject_NumOfLateAccounts = configs.Reject_NumOfLateAccounts;
 			RejectionLastValidLate = configs.RejectionLastValidLate;
+			AutoRejectConsumerCheckAge = configs.AutoRejectConsumerCheckAge;
 		} // InitCfg
 
 		#endregion method InitCfg
