@@ -52,7 +52,9 @@
 		public decimal OnlineTurnover1Y { get { return GetTurnover(m_oOnlineTurnover, 12); } }
 
 		public DateTime? OnlineUpdateTime { get; private set; }
+		public bool HasOnline { get; private set; }
 
+		public bool HasHmrc { get; private set; }
 		public DateTime? HmrcUpdateTime { get; private set; }
 
 		public decimal HmrcTurnover3M { get { return GetTurnover(m_oHmrcTurnover, 3); } }
@@ -88,6 +90,8 @@
 			m_oArguments = new Arguments();
 			DirectorNames = new List<Name>();
 			HmrcBusinessNames = new List<string>();
+			HasHmrc = false;
+			HasOnline = false;
 		} // constructor
 
 		#endregion constructor
@@ -167,6 +171,9 @@
 			SetOnlineTurnover(12, oTurnover.GetOnline(12));
 
 			OnlineUpdateTime = oTurnover.OnlineUpdateTime;
+			HasOnline = oTurnover.HasOnline;
+
+			HasHmrc = oTurnover.HasHmrc;
 			HmrcUpdateTime = oTurnover.HmrcUpdateTime;
 
 			SetHmrcTurnover(1, oTurnover.GetHmrc(1));

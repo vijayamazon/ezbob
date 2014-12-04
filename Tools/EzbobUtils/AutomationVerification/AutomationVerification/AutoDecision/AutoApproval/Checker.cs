@@ -277,6 +277,11 @@
 		#region method OnlineTurnovers
 
 		private void OnlineTurnovers() {
+			if (!Trail.MyInputData.HasOnline && Trail.MyInputData.HasHmrc) {
+				StepDone<OnlineTurnoverAge>().Init(Trail.MyInputData.OnlineUpdateTime, Trail.MyInputData.DataAsOf);
+				return;
+			} // if
+
 			if (Trail.MyInputData.IsOnlineTurnoverTooOld())
 				StepFailed<OnlineTurnoverAge>().Init(Trail.MyInputData.OnlineUpdateTime, Trail.MyInputData.DataAsOf);
 			else
@@ -298,6 +303,11 @@
 		#region method HmrcTurnovers
 
 		private void HmrcTurnovers() {
+			if (!Trail.MyInputData.HasHmrc && Trail.MyInputData.HasOnline) {
+				StepDone<HmrcTurnoverAge>().Init(Trail.MyInputData.HmrcUpdateTime, Trail.MyInputData.DataAsOf);
+				return;
+			} // if
+
 			if (Trail.MyInputData.IsHmrcTurnoverTooOld())
 				StepFailed<HmrcTurnoverAge>().Init(Trail.MyInputData.HmrcUpdateTime, Trail.MyInputData.DataAsOf);
 			else

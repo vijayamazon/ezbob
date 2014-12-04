@@ -565,6 +565,11 @@
 		} // CalculateSeniority
 
 		private void CheckOnlineTurnovers() {
+			if (!m_oTrail.MyInputData.HasOnline && m_oTrail.MyInputData.HasHmrc) {
+				StepDone<OnlineTurnoverAge>().Init(m_oTrail.MyInputData.OnlineUpdateTime, m_oTrail.MyInputData.DataAsOf);
+				return;
+			} // if
+
 			if (m_oTrail.MyInputData.IsOnlineTurnoverTooOld())
 				StepFailed<OnlineTurnoverAge>().Init(m_oTrail.MyInputData.OnlineUpdateTime, m_oTrail.MyInputData.DataAsOf);
 			else
@@ -582,6 +587,11 @@
 		} // CheckOnlineTurnovers
 
 		private void CheckHmrcTurnovers() {
+			if (!m_oTrail.MyInputData.HasHmrc && m_oTrail.MyInputData.HasOnline) {
+				StepDone<HmrcTurnoverAge>().Init(m_oTrail.MyInputData.HmrcUpdateTime, m_oTrail.MyInputData.DataAsOf);
+				return;
+			} // if
+
 			if (m_oTrail.MyInputData.IsHmrcTurnoverTooOld())
 				StepFailed<HmrcTurnoverAge>().Init(m_oTrail.MyInputData.HmrcUpdateTime, m_oTrail.MyInputData.DataAsOf);
 			else

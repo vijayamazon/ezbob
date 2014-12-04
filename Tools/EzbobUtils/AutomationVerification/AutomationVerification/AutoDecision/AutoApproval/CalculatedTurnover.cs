@@ -16,9 +16,15 @@
 		public DateTime? HmrcUpdateTime { get; private set; }
 		public DateTime? OnlineUpdateTime { get; private set; }
 
+		public bool HasHmrc { get; private set; }
+		public bool HasOnline { get; private set; }
+
 		#region constructor
 
 		public CalculatedTurnover() {
+			HasHmrc = false;
+			HasOnline = false;
+
 			HmrcUpdateTime = null;
 			OnlineUpdateTime = null;
 
@@ -44,6 +50,8 @@
 				return;
 
 			if (r.MpTypeInternalID == Hmrc) {
+				HasHmrc = true;
+
 				m_oHmrc[r.MonthCount] = r.Turnover;
 
 				if (r.LastUpdateTime != null) {
@@ -54,6 +62,8 @@
 				} // if
 			}
 			else {
+				HasOnline = true;
+
 				if (r.LastUpdateTime != null) {
 					if (OnlineUpdateTime == null)
 						OnlineUpdateTime = r.LastUpdateTime;
