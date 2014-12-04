@@ -56,6 +56,10 @@
 		#region method UpdateDecision
 
 		protected override void UpdateDecision(DecisionStatus nDecisionStatus) {
+			if (nDecisionStatus == DecisionStatus.Dunno) {
+				return;
+			}
+
 			DecisionStatus = nDecisionStatus;
 		} // UpdateDecision
 
