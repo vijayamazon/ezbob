@@ -41,6 +41,7 @@ BEGIN
 		AND
 		cmp.OriginationDate IS NOT NULL
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- HMRC
@@ -72,6 +73,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Amazon
@@ -102,6 +104,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Channel Grabber
@@ -132,6 +135,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- eBay
@@ -161,12 +165,13 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- EKM
 	--
 	------------------------------------------------------------------------------
---
+
 	SELECT
 		RowType          = @OriginationTime,
 		MarketplaceID    = cmp.Id,
@@ -191,6 +196,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- FreeAgent - Invoices
@@ -221,6 +227,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- FreeAgent - Expenses
@@ -251,6 +258,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Pay Pal
@@ -281,6 +289,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Paypoint
@@ -311,6 +320,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Sage - Invoices
@@ -341,6 +351,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Sage - Purchase invoices
@@ -371,6 +382,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Sage - Incomes
@@ -401,6 +413,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Sage - Expenditure
@@ -431,6 +444,7 @@ BEGIN
 		mt.IsPaymentAccount,
 		mt.InternalID
 
+	UNION
 	------------------------------------------------------------------------------
 	--
 	-- Yodlee
