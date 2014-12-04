@@ -340,6 +340,7 @@ BEGIN
 
 	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 1
 	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 3
+	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 6
 	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 12
 
 	------------------------------------------------------------------------------

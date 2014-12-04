@@ -59,7 +59,7 @@ BEGIN
 		AND
 		mt.InternalId NOT IN (@PayPoint, @CompanyFiles)
 		AND (
-			(@OnlineOnly = 1 AND (mt.IsPaymentAccount = 0 OR mt.InternalId = @PayPal))
+			(@OnlineOnly = 1 AND mt.InternalId IN (@eBay, @Amazon, @PayPal, @HMRC))
 			OR
 			@OnlineOnly = 0
 		)
