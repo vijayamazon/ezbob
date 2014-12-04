@@ -233,7 +233,7 @@
 			if ((0 < Trail.MyInputData.BusinessSeniorityDays) && (Trail.MyInputData.BusinessSeniorityDays < Trail.MyInputData.Reject_Minimal_Seniority))
 				StepReject<Seniority>().Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
 			else
-				StepNoDecision<BusinessScore>().Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
+				StepNoDecision<Seniority>().Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
 		} // CompanyAge
 
 		#endregion method CompanyAge

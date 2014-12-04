@@ -114,6 +114,7 @@
 			ConsumerLateDays = data.ConsumerLateDays;
 
 			BusinessSeniorityDays = data.BusinessSeniorityDays;
+			ConsumerDataTime = data.ConsumerDataTime;
 		} // InitData
 
 		#endregion method InitData
