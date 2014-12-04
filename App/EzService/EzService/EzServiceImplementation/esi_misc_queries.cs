@@ -242,7 +242,7 @@
 			return ExecuteSync(out instance, customerId, underwriterId, customerId);
 		}
 
-		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, MedalClassification medalClassification)
+		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, EZBob.DatabaseLib.Model.Database.Medal medalClassification)
 		{
 			CalculateOffer instance;
 			return ExecuteSync(out instance, customerId, underwriterId, customerId, amount, hasLoans, medalClassification);

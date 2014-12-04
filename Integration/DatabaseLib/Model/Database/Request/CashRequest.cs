@@ -1,6 +1,7 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database
 {
 	using System.Collections.Generic;
+	using DbConstants;
 	using NHibernate.Type;
 	using System;
 	using ApplicationMng.Repository;
@@ -102,12 +103,13 @@
 
 		public virtual int? ExpirianRating { get; set; }
 
-		[Obsolete]
 		public virtual double? ScorePoints { get; set; }
 
 		public virtual CashRequestOriginator? Originator { get; set; }
 
 		public virtual Iesi.Collections.Generic.ISet<DecisionHistory> DecisionHistories { get; set; }
+
+		public virtual int? AutoDecisionID { get; set; }
 	} // class CashRequest
 
 	public class CashRequestOriginatorType : EnumStringType<CashRequestOriginator> { }

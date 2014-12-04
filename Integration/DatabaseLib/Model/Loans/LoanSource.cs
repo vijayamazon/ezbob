@@ -33,12 +33,19 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 
 	public interface ILoanSourceRepository : IRepository<LoanSource> {
 		LoanSource GetDefault();
+		LoanSource GetByName(string name);
 	} // interface ILoanSourceRepository
 
 	public class LoanSourceRepository : NHibernateRepositoryBase<LoanSource>, ILoanSourceRepository {
 		public LoanSourceRepository(ISession session) : base(session) {} // constructor
 
-		public LoanSource GetDefault() { return GetAll().FirstOrDefault(p => p.IsDefault) ?? GetAll().Single(p => p.ID == 1); } // GetDefault
+		public LoanSource GetDefault() { return GetAll().FirstOrDefault(p => p.IsDefault) ?? GetAll().Single(p => p.ID == 1); }
+		
+		public LoanSource GetByName(string name) {
+			return GetAll().FirstOrDefault(x => x.Name == name);
+		}
+
+// GetDefault
 	} // class LoanSourceRepository
 
 	#endregion LoanSourceRepository

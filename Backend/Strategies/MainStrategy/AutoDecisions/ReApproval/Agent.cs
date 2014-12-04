@@ -89,9 +89,9 @@
 				if (MakeAndVerifyDecision() && Trail.HasDecided) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.Decision = DecisionActions.ReApprove;
-					response.CreditResult = "Approved";
-					response.UserStatus = "Approved";
-					response.SystemDecision = "Approve";
+					response.CreditResult = CreditResultStatus.Approved;
+					response.UserStatus = Status.Approved;
+					response.SystemDecision = SystemDecision.Approve;
 					response.LoanOfferUnderwriterComment = "Auto Re-Approval";
 					response.DecisionName = "Re-Approval";
 					response.AppValidFor = DateTime.UtcNow.AddDays(MetaData.OfferLength);

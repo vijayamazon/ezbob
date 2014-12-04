@@ -1,19 +1,20 @@
 ﻿namespace EzBob.Backend.Strategies.AutomationVerification {
 	using System;
 	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 
 	public class AutoApproveInputRow {
 		public int CustomerId { get; set; }
-		public string Medal { get; set; }
+		public string MedalStr { get; set; }
 		public int OfferedLoanAmount { get; set; }
 
-		public MedalClassification GetMedal() {
-			MedalClassification nMedal;
+		public Medal GetMedal() {
+			Medal nMedal;
 
-			if (!Enum.TryParse(Medal, out nMedal))
-				nMedal = MedalClassification.NoClassification;
+			if (!Enum.TryParse(MedalStr, out nMedal))
+				nMedal = Medal.NoClassification;
 
 			return nMedal;
 		} // GetMedal

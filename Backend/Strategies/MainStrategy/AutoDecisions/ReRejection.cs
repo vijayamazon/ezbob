@@ -8,6 +8,7 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
 	using DbConstants;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -52,9 +53,9 @@
 				{
 					response.Decision = DecisionActions.ReReject;
 					response.AutoRejectReason = "Auto Re-Reject";
-					response.CreditResult = "Rejected";
-					response.UserStatus = "Rejected";
-					response.SystemDecision = "Reject";
+					response.CreditResult = CreditResultStatus.Rejected;
+					response.UserStatus = Status.Rejected;
+					response.SystemDecision = SystemDecision.Reject;
 					response.DecisionName = "Re-rejection";
 				}
 			}

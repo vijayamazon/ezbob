@@ -226,7 +226,7 @@ namespace EzBobTest
 		{
 			var rerejection = new ReRejection(21334, m_oDB, m_oLog);
 			var rejection = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, m_oDB, m_oLog);
-			var approve = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, MedalClassification.Gold, m_oDB, m_oLog);
+			var approve = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, m_oDB, m_oLog);
 			var reapprove = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, m_oDB, m_oLog);
 			
 			//rerejection.MakeDecision(rejectionDecision);
@@ -354,7 +354,7 @@ namespace EzBobTest
 		public void TestOfferCalculation() {
 			var calc = new OfferDualCalculator(m_oDB, m_oLog);
 
-			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, MedalClassification.Gold);
+			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
 			Assert.AreEqual(5.5M, offer1.SetupFee);
 			Assert.AreEqual(4.5M, offer1.InterestRate);
 			return;
@@ -362,7 +362,7 @@ namespace EzBobTest
 			int failedVerificationOffers = 0;
 			m_oDB.ForEachRowSafe(sr => {
 				int customerId = sr["CustomerId"];
-				MedalClassification medal = (MedalClassification)Enum.Parse(typeof(MedalClassification), sr["Medal"]);
+				EZBob.DatabaseLib.Model.Database.Medal medal = (EZBob.DatabaseLib.Model.Database.Medal)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Medal), sr["Medal"]);
 				int offeredLoanAmount = sr["OfferedLoanAmount"];
 				int numOfLoans = sr["NumOfLoans"];
 				int zooplaValue = sr["ZooplaValue"];

@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using ActionResults;
+	using EZBob.DatabaseLib.Model.Database;
 	using EchoSignLib;
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies.MedalCalculations;
@@ -612,7 +613,7 @@
 		ActionMetaData CalculateMedal(int underwriterId, int customerId);
 
 		[OperationContract]
-		ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, MedalClassification medalClassification);
+		ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, Medal medalClassification);
 
 		[OperationContract]
 		PropertyStatusesActionResult GetPropertyStatuses();

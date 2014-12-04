@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.OfferCalculation
 {
 	using ConfigManager;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
@@ -20,7 +21,7 @@
 			this.db = db;
 		}
 
-		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, bool hasLoans, MedalClassification medalClassification)
+		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, bool hasLoans, Medal medalClassification)
 		{
 			var result = new OfferResult {
 				CustomerId = customerId,
@@ -68,7 +69,7 @@
 			return result;
 		}
 
-		private void CalculateInterestRateAndSetupFee(int customerId, int amount, MedalClassification medalClassification, OfferResult result, PricingModelModel templateModel)
+		private void CalculateInterestRateAndSetupFee(int customerId, int amount, Medal medalClassification, OfferResult result, PricingModelModel templateModel)
 		{
 			bool aspireToMinSetupFee = CurrentValues.Instance.AspireToMinSetupFee;
 			SafeReader sr = db.GetFirst(

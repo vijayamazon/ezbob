@@ -43,7 +43,7 @@
 					result1 = new MedalResult{ CustomerId =  customerId};
 				}
 				result1.PrintToLog(log);
-				result1.MedalClassification = MedalClassification.NoClassification;
+				result1.MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification;
 				result1.Error = "Mismatch found in the 2 medal calculations";
 				result1.SaveToDb(db);
 

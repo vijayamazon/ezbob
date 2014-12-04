@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Models.Marketplaces.Yodlee;
 	using Ezbob.Database;
@@ -243,9 +244,9 @@
 					{
 						NotifyAutoApproveSilentMode();
 
-						response.CreditResult = "WaitingForDecision";
-						response.UserStatus = "Manual";
-						response.SystemDecision = "Manual";
+						response.CreditResult = CreditResultStatus.WaitingForDecision;
+						response.UserStatus = Status.Manual;
+						response.SystemDecision = SystemDecision.Manual;
 					}
 					else
 					{
@@ -255,9 +256,9 @@
 				else
 				{
 					log.Info("Not enough available funds for bank based approval. Available:{0} required:{1}. Will use manual decision", availableFunds, response.BankBasedAutoApproveAmount);
-					response.CreditResult = "WaitingForDecision";
-					response.UserStatus = "Manual";
-					response.SystemDecision = "Manual";
+					response.CreditResult = CreditResultStatus.WaitingForDecision;
+					response.UserStatus = Status.Manual;
+					response.SystemDecision = SystemDecision.Manual;
 				}
 
 				return true;
@@ -282,9 +283,9 @@
 
 		private void SetApproval(AutoDecisionResponse response)
 		{
-			response.CreditResult = "Approved";
-			response.UserStatus = "Approved";
-			response.SystemDecision = "Approve";
+			response.CreditResult = CreditResultStatus.Approved;
+			response.UserStatus = Status.Approved;
+			response.SystemDecision = SystemDecision.Approve;
 			response.LoanOfferUnderwriterComment = "Auto bank based approval";
 			response.DecisionName = "Bank Based Approval";
 			response.IsAutoBankBasedApproval = true;

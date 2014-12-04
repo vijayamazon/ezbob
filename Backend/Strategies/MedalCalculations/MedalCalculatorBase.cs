@@ -283,19 +283,19 @@
 		{
 			if (Results.TotalScoreNormalized <= 0.4m)
 			{
-				Results.MedalClassification = MedalClassification.Silver;
+				Results.MedalClassification = Medal.Silver;
 			}
 			else if (Results.TotalScoreNormalized <= 0.62m)
 			{
-				Results.MedalClassification = MedalClassification.Gold;
+				Results.MedalClassification = Medal.Gold;
 			}
 			else if (Results.TotalScoreNormalized <= 0.84m)
 			{
-				Results.MedalClassification = MedalClassification.Platinum;
+				Results.MedalClassification = Medal.Platinum;
 			}
 			else
 			{
-				Results.MedalClassification = MedalClassification.Diamond;
+				Results.MedalClassification = Medal.Diamond;
 			}
 		}
 

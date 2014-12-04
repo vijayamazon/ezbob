@@ -29,7 +29,7 @@
 		public Approval(
 			int customerId,
 			int offeredCreditLine,
-			MedalClassification medalClassification,
+			Medal medalClassification,
 			AConnection db,
 			ASafeLog log
 		) {
@@ -200,9 +200,9 @@
 
 					response.AutoApproveAmount = 0;
 
-					response.CreditResult = "WaitingForDecision";
-					response.UserStatus = "Manual";
-					response.SystemDecision = "Manual";
+					response.CreditResult = CreditResultStatus.WaitingForDecision;
+					response.UserStatus = Status.Manual;
+					response.SystemDecision = SystemDecision.Manual;
 				} // if
 
 				decimal minLoanAmount = CurrentValues.Instance.MinLoanAmount;
@@ -223,9 +223,9 @@
 							);
 
 							response.LoanOfferUnderwriterComment = "Silent Approve - " + m_oTrail.DiffID;
-							response.CreditResult = "WaitingForDecision";
-							response.UserStatus = "Manual";
-							response.SystemDecision = "Manual";
+							response.CreditResult = CreditResultStatus.WaitingForDecision;
+							response.UserStatus = Status.Manual;
+							response.SystemDecision = SystemDecision.Manual;
 						}
 						else
 						{
@@ -234,16 +234,16 @@
 							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error))
 							{
 								log.Alert("Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}", offerResult != null ? offerResult.Error : "", customerId);
-								response.CreditResult = "WaitingForDecision";
-								response.UserStatus = "Manual";
-								response.SystemDecision = "Manual";
+								response.CreditResult = CreditResultStatus.WaitingForDecision;
+								response.UserStatus = Status.Manual;
+								response.SystemDecision = SystemDecision.Manual;
 								response.LoanOfferUnderwriterComment = "Calculator failure - " + m_oTrail.DiffID;
 							}
 							else
 							{
-								response.CreditResult = "Approved";
-								response.UserStatus = "Approved";
-								response.SystemDecision = "Approve";
+								response.CreditResult = CreditResultStatus.Approved;
+								response.UserStatus = Status.Approved;
+								response.SystemDecision = SystemDecision.Approve;
 								response.LoanOfferUnderwriterComment = "Auto Approval";
 								response.DecisionName = "Approval";
 								response.AppValidFor = DateTime.UtcNow.AddDays(m_oTrail.MyInputData.MetaData.OfferLength);
@@ -421,7 +421,7 @@
 		} // CheckAutoApprovalConformance
 
 		private void CheckMedal() {
-			if (medalClassification == MedalClassification.NoClassification)
+			if (medalClassification == Medal.NoClassification)
 				StepFailed<MedalIsGood>().Init((AutomationCalculator.Common.Medal)medalClassification);
 			else
 				StepDone<MedalIsGood>().Init((AutomationCalculator.Common.Medal)medalClassification);
@@ -864,7 +864,7 @@
 
 		private readonly List<string> consumerCaisDetailWorstStatuses;
 		private readonly int customerId;
-		private readonly MedalClassification medalClassification;
+		private readonly Medal medalClassification;
 
 		private int autoApprovedAmount;
 

@@ -2,18 +2,26 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using ConfigManager;
+	using DbConstants;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using EZBob.DatabaseLib.Model.Loans;
 	using MailStrategies;
 	using MailStrategies.API;
 	using AutoDecisions;
 	using MedalCalculations;
 	using Misc;
+	using NHibernate;
 	using ScoreCalculation;
 	using Ezbob.Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EzBob.Models;
+	using StructureMap;
 
 	public class MainStrategy : AStrategy {
 		public override string Name { get { return "Main strategy"; } }
@@ -25,6 +33,14 @@
 			AConnection oDb,
 			ASafeLog oLog
 		) : base(oDb, oLog) {
+
+			_session = ObjectFactory.GetInstance<ISession>();
+			_customers = ObjectFactory.GetInstance<CustomerRepository>();
+			_decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
+			_loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
+			_loanTypeRepository = ObjectFactory.GetInstance<LoanTypeRepository>();
+			_discountPlanRepository = ObjectFactory.GetInstance<DiscountPlanRepository>();
+
 			medalScoreCalculator = new MedalScoreCalculator(DB, Log);
 
 			mailer = new StrategiesMailer(DB, Log);
@@ -118,26 +134,24 @@
 			medalClassification = instance.Result.MedalClassification;
 			medalScore = instance.Result.TotalScoreNormalized;
 
-			modelLoanOffer = (int)Math.Truncate((decimal)instance.Result.OfferedLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
+			modelLoanOffer = RoundOfferedAmount(instance.Result.OfferedLoanAmount);
+		}
+
+		private int RoundOfferedAmount(decimal amount) {
+			return (int)Math.Truncate(amount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
 		}
 
 		private void ProcessDecision() {
 			if (autoDecisionResponse.IsAutoReApproval || autoDecisionResponse.IsAutoApproval) {
-				modelLoanOffer = autoDecisionResponse.AutoApproveAmount;
-
-				if (modelLoanOffer < offeredCreditLine)
-					offeredCreditLine = modelLoanOffer;
+				offeredCreditLine = RoundOfferedAmount(autoDecisionResponse.AutoApproveAmount);
 			}
 
 			if (autoDecisionResponse.IsAutoBankBasedApproval) {
-				modelLoanOffer = autoDecisionResponse.BankBasedAutoApproveAmount;
-
-				if (modelLoanOffer < offeredCreditLine)
-					offeredCreditLine = modelLoanOffer;
+				offeredCreditLine = RoundOfferedAmount(autoDecisionResponse.BankBasedAutoApproveAmount);
 			}
 
 			if (autoDecisionResponse.DecidedToReject) {
-				modelLoanOffer = 0;
+				offeredCreditLine = 0;
 				new RejectUser(customerId, true, DB, Log).Execute();
 				strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
 			}
@@ -145,19 +159,16 @@
 			UpdateCustomerAndCashRequest();
 
 			if (autoDecisionResponse.IsAutoApproval) {
-				UpdateAutoApprovalData();
 				SendApprovalMails();
 				strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
 			}
 
 			if (autoDecisionResponse.IsAutoBankBasedApproval) {
-				UpdateBankBasedApprovalData();
 				SendBankBasedApprovalMails();
 				strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto bank based approval");
 			}
 
 			if (autoDecisionResponse.IsAutoReApproval) {
-				UpdateReApprovalData();
 				SendReApprovalMails();
 				strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
 			}
@@ -208,7 +219,7 @@
 					Log
 				).Init().MakeDecision(autoDecisionResponse);
 
-				bContinue = string.IsNullOrWhiteSpace(autoDecisionResponse.SystemDecision);
+				bContinue = !autoDecisionResponse.SystemDecision.HasValue;
 
 				if (!bContinue)
 					Log.Debug("Auto re-approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
@@ -225,7 +236,7 @@
 					Log
 				).Init().MakeDecision(autoDecisionResponse);
 
-				bContinue = string.IsNullOrEmpty(autoDecisionResponse.SystemDecision);
+				bContinue = !autoDecisionResponse.SystemDecision.HasValue;
 
 				if (!bContinue)
 					Log.Debug("Auto approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
@@ -236,7 +247,7 @@
 			if (CurrentValues.Instance.BankBasedApprovalIsEnabled && bContinue) {
 				new BankBasedApproval(customerId, DB, Log).MakeDecision(autoDecisionResponse);
 
-				bContinue = string.IsNullOrEmpty(autoDecisionResponse.SystemDecision);
+				bContinue = !autoDecisionResponse.SystemDecision.HasValue;
 
 				if (!bContinue)
 					Log.Debug("Bank based approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
@@ -245,9 +256,9 @@
 				Log.Debug("Not processed bank based approval: it is currently disabled in configuration or decision has already been made earlier.");
 
 			if (bContinue) { // No decision is made so far
-				autoDecisionResponse.CreditResult = "WaitingForDecision";
-				autoDecisionResponse.UserStatus = "Manual";
-				autoDecisionResponse.SystemDecision = "Manual";
+				autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
+				autoDecisionResponse.UserStatus = Status.Manual;
+				autoDecisionResponse.SystemDecision = SystemDecision.Manual;
 
 				Log.Debug("Not approval has reached decision: setting it to be 'waiting for decision'.");
 			} // if
@@ -311,46 +322,25 @@
 
 			if (isHomeOwnerAccordingToLandRegistry) {
 				Log.Info("Capped for home owner according to land registry");
-				loanOfferReApprovalSum = Math.Min(loanOfferReApprovalSum, dataGatherer.MaxCapHomeOwner);
 				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapHomeOwner);
 			}
 			else {
 				Log.Info("Capped for not home owner");
-				loanOfferReApprovalSum = Math.Min(loanOfferReApprovalSum, dataGatherer.MaxCapNotHomeOwner);
 				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapNotHomeOwner);
 			} // if
 		} // CappOffer
-
-		private void UpdateAutoApprovalData() {
-			DB.ExecuteNonQuery(
-				"UpdateAutoApproval",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("AutoApproveAmount", autoDecisionResponse.AutoApproveAmount),
-				new QueryParameter("AutoDecisionID", autoDecisionResponse.DecisionCode)
-			);
-		}
-
+		
 		private void UpdateCustomerAndCashRequest() {
-			DB.ExecuteNonQuery(
-				"UpdateScoringResultsNew",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
-				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
-				new QueryParameter("Status", autoDecisionResponse.UserStatus),
-				new QueryParameter("Medal", medalClassification.ToString()),
-				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor),
-				new QueryParameter("Now", DateTime.UtcNow),
-				new QueryParameter("OverrideApprovedRejected", overrideApprovedRejected)
-			);
+
+			var now = DateTime.UtcNow;
 
 			decimal interestRateToUse;
 			decimal setupFeePercentToUse, setupFeeAmountToUse;
 			int repaymentPeriodToUse, loanTypeIdToUse;
-			bool isEuToUse;
+			bool isEuToUse = false;
 
-			if (autoDecisionResponse.IsAutoApproval) {
+			if (autoDecisionResponse.IsAutoApproval)
+			{
 				interestRateToUse = autoDecisionResponse.InterestRate;
 				setupFeePercentToUse = autoDecisionResponse.SetupFee;
 				setupFeeAmountToUse = setupFeePercentToUse * offeredCreditLine;
@@ -358,11 +348,13 @@
 				isEuToUse = autoDecisionResponse.IsEu;
 				loanTypeIdToUse = autoDecisionResponse.LoanTypeId;
 			}
-			else {
+			else
+			{
 				// Don't calculate interest if there was an auto approval (the interest was already calculated)
 				decimal interestAccordingToPast = -1;
 				DB.ForEachRowSafe(
-					(sr, bRowsetStart) => {
+					(sr, bRowsetStart) =>
+					{
 						interestAccordingToPast = sr["InterestRate"];
 						return ActionResult.SkipAll;
 					},
@@ -376,30 +368,67 @@
 				setupFeePercentToUse = dataGatherer.ManualSetupFeePercent;
 				setupFeeAmountToUse = dataGatherer.ManualSetupFeeAmount;
 				repaymentPeriodToUse = autoDecisionResponse.RepaymentPeriod;
-				isEuToUse = false;
 				loanTypeIdToUse = 0;
 			}
 
-			DB.ExecuteNonQuery(
-				"UpdateCashRequestsNew",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
-				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
-				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
-				new QueryParameter("MedalType", medalClassification.ToString()),
-				new QueryParameter("ScorePoints", medalScore),
-				new QueryParameter("ExpirianRating", dataGatherer.ExperianConsumerScore),
-				new QueryParameter("AnnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
-				new QueryParameter("InterestRate", interestRateToUse),
-				new QueryParameter("ManualSetupFeeAmount", setupFeeAmountToUse),
-				new QueryParameter("ManualSetupFeePercent", setupFeePercentToUse),
-				new QueryParameter("RepaymentPeriod", repaymentPeriodToUse),
-				new QueryParameter("Now", DateTime.UtcNow),
-				new QueryParameter("IsEu", isEuToUse),
-				new QueryParameter("LoanTypeId", loanTypeIdToUse),
-				new QueryParameter("AutoDecisionID", autoDecisionResponse.DecisionCode)
-			);
+			var customer = _customers.Get(customerId);
+			if (overrideApprovedRejected) {
+				customer.CreditResult = autoDecisionResponse.CreditResult;
+				customer.Status = autoDecisionResponse.UserStatus;
+			}
+			customer.OfferStart = now;
+			customer.OfferValidUntil = now.AddHours(CurrentValues.Instance.OfferValidForHours);
+			customer.SystemDecision = autoDecisionResponse.SystemDecision;
+			customer.Medal = medalClassification;
+			customer.CreditSum = offeredCreditLine;
+			customer.LastStatus = autoDecisionResponse.CreditResult.HasValue ? autoDecisionResponse.CreditResult.ToString() : null ;
+			var cr = customer.LastCashRequest;
+
+			cr.SystemDecision = autoDecisionResponse.SystemDecision;
+			cr.SystemCalculatedSum = modelLoanOffer;
+			cr.SystemDecisionDate = now;
+			cr.ManagerApprovedSum = offeredCreditLine;
+			cr.UnderwriterDecision = autoDecisionResponse.CreditResult;
+			cr.UnderwriterDecisionDate = now;
+			cr.UnderwriterComment = autoDecisionResponse.DecisionName;
+			cr.AutoDecisionID = autoDecisionResponse.DecisionCode;
+			cr.MedalType = medalClassification;
+			cr.ScorePoints = (double)medalScore;
+			cr.ExpirianRating = dataGatherer.ExperianConsumerScore;
+			cr.AnnualTurnover = (int)dataGatherer.TotalSumOfOrders1YTotal;
+			cr.LoanType = _loanTypeRepository.GetDefault();
+			cr.LoanSource = isEuToUse ? _loanSourceRepository.GetByName("EU") : _loanSourceRepository.GetDefault();
+			cr.InterestRate = interestRateToUse;
+			cr.ApprovedRepaymentPeriod = repaymentPeriodToUse;
+			cr.RepaymentPeriod = repaymentPeriodToUse;
+			cr.ManualSetupFeeAmount = (int)setupFeeAmountToUse;
+			cr.ManualSetupFeePercent = setupFeePercentToUse;
+			cr.APR = dataGatherer.LoanOfferApr;
+
+			if (autoDecisionResponse.IsAutoReApproval) {
+				cr.UseSetupFee = dataGatherer.LoanOfferUseSetupFee != 0;
+				cr.EmailSendingBanned = autoDecisionResponse.LoanOfferEmailSendingBannedNew;
+				cr.IsCustomerRepaymentPeriodSelectionAllowed = dataGatherer.IsCustomerRepaymentPeriodSelectionAllowed != 0;
+				cr.DiscountPlan = _discountPlanRepository.Get(dataGatherer.LoanOfferDiscountPlanId);
+				cr.UseBrokerSetupFee = dataGatherer.UseBrokerSetupFee;
+			}
+
+			if (autoDecisionResponse.DecidedToReject) {
+				customer.DateRejected = now;
+				customer.RejectedReason = autoDecisionResponse.DecisionName;
+				customer.NumRejects++;
+			}
+
+			if (autoDecisionResponse.DecidedToApprove) {
+				customer.DateApproved = now;
+				customer.ApprovedReason = autoDecisionResponse.DecisionName;
+				customer.NumApproves++;
+			}
+			
+			if (autoDecisionResponse.Decision.HasValue) {
+				_decisionHistory.LogAction(autoDecisionResponse.Decision.Value, autoDecisionResponse.DecisionName,
+				                           _session.Get<User>(1), customer);
+			}
 		}
 
 		private void SendWaitingForDecisionMail() {
@@ -425,8 +454,8 @@
 				{"Surname", dataGatherer.AppSurname},
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision},
-				{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
+				{"ApprovalAmount", offeredCreditLine.ToString(CultureInfo.InvariantCulture)},
 				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 				{"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
 				{
@@ -438,38 +467,13 @@
 
 			var customerMailVariables = new Dictionary<string, string> {
 				{"FirstName", dataGatherer.AppFirstName},
-				{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+				{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 			};
 
 			mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
-
-		private void UpdateReApprovalData() {
-			DB.ExecuteNonQuery(
-				"UpdateCashRequestsReApproval",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("UnderwriterDecision", autoDecisionResponse.UserStatus),
-				new QueryParameter("ManagerApprovedSum", loanOfferReApprovalSum),
-				new QueryParameter("APR", dataGatherer.LoanOfferApr),
-				new QueryParameter("RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod),
-				new QueryParameter("InterestRate", dataGatherer.LoanOfferInterestRate),
-				new QueryParameter("UseSetupFee", dataGatherer.LoanOfferUseSetupFee),
-				new QueryParameter("EmailSendingBanned", autoDecisionResponse.LoanOfferEmailSendingBannedNew),
-				new QueryParameter("LoanTypeId", dataGatherer.LoanOfferLoanTypeId),
-				new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOfferUnderwriterComment),
-				new QueryParameter("IsLoanTypeSelectionAllowed", dataGatherer.LoanOfferIsLoanTypeSelectionAllowed),
-				new QueryParameter("DiscountPlanId", dataGatherer.LoanOfferDiscountPlanId),
-				new QueryParameter("ExperianRating", dataGatherer.ExperianConsumerScore),
-				new QueryParameter("LoanSourceId", dataGatherer.LoanSourceId),
-				new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", dataGatherer.IsCustomerRepaymentPeriodSelectionAllowed),
-				new QueryParameter("UseBrokerSetupFee", dataGatherer.UseBrokerSetupFee),
-				new QueryParameter("Now", DateTime.UtcNow),
-				new QueryParameter("AutoDecisionID", autoDecisionResponse.DecisionCode)
-			);
-		}
-
+		
 		private void SendApprovalMails() {
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
@@ -480,7 +484,7 @@
 				{"Surname", dataGatherer.AppSurname},
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision},
+				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
 				{"ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 				{"InterestRate", autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture)},
@@ -510,7 +514,7 @@
 				{"Surname", dataGatherer.AppSurname},
 				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision},
+				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
 				{"ApprovalAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 				{"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
@@ -528,17 +532,6 @@
 			};
 
 			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
-		}
-
-		private void UpdateBankBasedApprovalData() {
-			DB.ExecuteNonQuery(
-				"UpdateBankBasedAutoApproval",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("AutoApproveAmount", autoDecisionResponse.BankBasedAutoApproveAmount),
-				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod),
-				new QueryParameter("AutoDecisionID", autoDecisionResponse.DecisionCode)
-			);
 		}
 
 		private ScoreMedalOffer CalculateScoreAndMedal() {
@@ -618,10 +611,16 @@
 		private bool wasMainStrategyExecutedBefore;
 
 		private AutoDecisionResponse autoDecisionResponse;
-		private decimal loanOfferReApprovalSum;
 		private int offeredCreditLine;
 		private int modelLoanOffer;
-		private MedalClassification medalClassification;
+		private Medal medalClassification;
 		private decimal medalScore;
+
+		private readonly CustomerRepository _customers;
+		private readonly DecisionHistoryRepository _decisionHistory;
+		private readonly ISession _session;
+		private readonly LoanTypeRepository _loanTypeRepository;
+		private readonly LoanSourceRepository _loanSourceRepository;
+		private readonly DiscountPlanRepository _discountPlanRepository;
 	} // class MainStrategy
 } // namespace

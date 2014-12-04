@@ -109,7 +109,7 @@
 		// Output
 		public decimal TotalScore { get; set; }
 		public decimal TotalScoreNormalized { get; set; }
-		public MedalClassification MedalClassification { get; set; }
+		public EZBob.DatabaseLib.Model.Database.Medal MedalClassification { get; set; }
 		public string Error { get; set; }
 		public int OfferedLoanAmount { get; set; }
 

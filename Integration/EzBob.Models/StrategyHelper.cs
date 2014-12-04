@@ -352,6 +352,7 @@
 			return sum + Math.Max(payPalSum, ebaySum);
 		}
 
+
 		public void AddRejectIntoDecisionHistory(int customerId, string comment)
 		{
 			var customer = _customers.Get(customerId);

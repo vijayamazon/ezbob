@@ -25,7 +25,7 @@
 			offerCalculator2 = new OfferCalculator(db, log);
 		}
 
-		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, bool hasLoans, MedalClassification medalClassification)
+		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, bool hasLoans, EZBob.DatabaseLib.Model.Database.Medal medalClassification)
 		{
 			try
 			{

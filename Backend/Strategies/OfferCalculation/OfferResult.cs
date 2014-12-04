@@ -11,7 +11,7 @@
 		public int CustomerId { get; set; }
 		public DateTime CalculationTime { get; set; }
 		public int Amount { get; set; }
-		public MedalClassification MedalClassification { get; set; }
+		public EZBob.DatabaseLib.Model.Database.Medal MedalClassification { get; set; }
 
 		// Outputs
 		public string ScenarioName { get; set; }

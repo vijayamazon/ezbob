@@ -128,7 +128,6 @@
     <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\IPeriodValue.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\Row.cs" />
     <Compile Include="MedalCalculations\MedalCalculator1.cs" />
-    <Compile Include="MedalCalculations\MedalClassification.cs" />
     <Compile Include="MedalCalculations\MedalType.cs" />
     <Compile Include="MedalCalculations\OnlineNonLimitedNoBusinessScoreMedalCalculator1.cs" />
     <Compile Include="MedalCalculations\OnlineNonLimitedWithBusinessScoreMedalCalculator1.cs" />

@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.OfferCalculation 
 {
 	using System;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MedalCalculations;
@@ -11,9 +12,9 @@
 		private readonly int customerId;
 		private readonly int amount;
 		private readonly bool hasLoans;
-		private readonly MedalClassification medalClassification;
+		private readonly Medal medalClassification;
 
-		public CalculateOffer(int customerId, int amount, bool hasLoans, MedalClassification medalClassification, AConnection db, ASafeLog log)
+		public CalculateOffer(int customerId, int amount, bool hasLoans, Medal medalClassification, AConnection db, ASafeLog log)
 			: base(db, log)
 		{
 			offerDualCalculator = new OfferDualCalculator(db, log);

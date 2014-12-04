@@ -161,6 +161,10 @@
       <Project>{7E526927-9849-4E6E-BBFF-D0D780F81A05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EchoSign\EchoSignLib\EchoSignLib.csproj">
       <Project>{BADDE16C-DC34-4A2A-8B08-DA0D0CAE6FEC}</Project>
       <Name>EchoSignLib</Name>
