@@ -4,6 +4,7 @@
 	using System.Data;
 	using System.Globalization;
 	using System.Linq;
+	using System.Web;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
@@ -216,11 +217,7 @@
 				if (response.AutoApproveAmount != 0) {
 					if (m_oTrail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
 						if (CurrentValues.Instance.AutoApproveIsSilent) {
-							NotifyAutoApproveSilentMode(
-								response.AutoApproveAmount,
-								CurrentValues.Instance.AutoApproveSilentTemplateName,
-								CurrentValues.Instance.AutoApproveSilentToAddress
-							);
+							NotifyAutoApproveSilentMode(response);
 
 							response.LoanOfferUnderwriterComment = "Silent Approve - " + m_oTrail.DiffID;
 							response.CreditResult = CreditResultStatus.WaitingForDecision;
@@ -821,21 +818,36 @@
 			return m_oTrail.Affirmative<T>(false);
 		} // StepFailed
 
-		private void NotifyAutoApproveSilentMode(int autoApproveAmount, string autoApproveSilentTemplateName, string autoApproveSilentToAddress) {
+		private void NotifyAutoApproveSilentMode(AutoDecisionResponse data) {
 			try {
-				log.Info("Sending silent auto approval mail for: customerId={0} autoApproveAmount={1} autoApproveSilentTemplateName={2} autoApproveSilentToAddress={3}", customerId, autoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
+				var message = string.Format(
+					@"<h1><u>Silent auto approve for customer <b style='color:red'>{0}</b></u></h1><br>
+					<h2><b>Offer:</b></h2>
+					<pre><h3>Amount: {1}</h3></pre><br>
+					<pre><h3>Period: {2}</h3></pre><br>
+					<pre><h3>Interest rate: {3}</h3></pre><br>
+					<pre><h3>Setup fee: {4}</h3></pre><br>
+					<h2><b>Decision flow:</b></h2>
+					<pre><h3>{5}</h3></pre><br>
+					<h2><b>Decision data:</b></h2>
+					<pre><h3>{6}</h3></pre>",
+					customerId,
+					data.AutoApproveAmount,
+					data.RepaymentPeriod,
+					data.InterestRate,
+					data.SetupFee,
+					HttpUtility.HtmlEncode(m_oTrail.ToString()),
+					HttpUtility.HtmlEncode(m_oTrail.InputData.Serialize())
+				);
 
-				var vars = new Dictionary<string, string> {
-					{"customerId", customerId.ToString(CultureInfo.InvariantCulture)},
-					{"autoApproveAmount", autoApproveAmount.ToString(CultureInfo.InvariantCulture)}
-				};
-
-				var result = new Mail().Send(vars, autoApproveSilentToAddress, autoApproveSilentTemplateName);
-
-				if (result == "OK")
-					log.Info("Sent mail - silent auto approval");
-				else
-					log.Error("Failed sending alert mail - silent auto approval. Result: {0}", result);
+				new Mail().Send(
+					CurrentValues.Instance.AutoApproveSilentToAddress,
+					null,
+					message,
+					CurrentValues.Instance.MailSenderEmail,
+					CurrentValues.Instance.MailSenderName,
+					"#SilentApprove for customer " + customerId
+				);
 			}
 			catch (Exception e) {
 				log.Error(e, "Failed sending alert mail - silent auto approval.");
