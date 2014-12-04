@@ -26,7 +26,8 @@ BEGIN
 	FROM
 		Customer c
 		INNER JOIN Company co ON c.CompanyId = co.Id
-
+	WHERE c.Id=@CustomerID
+	
 	------------------------------------------------------------------------------
 
 	DECLARE @SrvLogID BIGINT = (

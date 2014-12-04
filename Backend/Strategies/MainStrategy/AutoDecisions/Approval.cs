@@ -79,6 +79,7 @@
 			if (customer != null && customer.Company != null) {
 				if(customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited && customer.Company.ExperianRefNum != "NotFound") {
 					var limited = new LoadExperianLtd(customer.Company.ExperianRefNum, 0, db, log);
+					limited.Execute();
 					this.directors = new List<Name>();
 					foreach (var row in limited.Result.Children)
 					{
