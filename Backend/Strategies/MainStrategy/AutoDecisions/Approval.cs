@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
-	using System.Globalization;
 	using System.Linq;
 	using System.Web;
 	using AutomationCalculator.AutoDecision.AutoApproval;
@@ -17,7 +16,6 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Backend.Strategies.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian;
-	using MedalCalculations;
 	using Misc;
 	using EzBob.Models;
 	using Ezbob.Database;
@@ -578,9 +576,9 @@
 				StepFailed<OneMonthTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover1M, m_oTrail.MyInputData.OnlineTurnover1Y);
 
 			if (m_oTrail.MyInputData.IsOnlineTurnoverGood(3))
-				StepDone<ThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y);
+				StepDone<OnlineThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y);
 			else
-				StepFailed<ThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y);
+				StepFailed<OnlineThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y);
 		} // CheckOnlineTurnovers
 
 		private void CheckHmrcTurnovers() {
@@ -590,9 +588,9 @@
 				StepDone<HmrcTurnoverAge>().Init(m_oTrail.MyInputData.HmrcUpdateTime, m_oTrail.MyInputData.DataAsOf);
 
 			if (m_oTrail.MyInputData.IsHmrcTurnoverGood(3))
-				StepDone<ThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y);
+				StepDone<HmrcThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y);
 			else
-				StepFailed<ThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y);
+				StepFailed<HmrcThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y);
 
 			if (m_oTrail.MyInputData.IsHmrcTurnoverGood(6))
 				StepDone<HalfYearTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover6M, m_oTrail.MyInputData.HmrcTurnover1Y);

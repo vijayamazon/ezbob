@@ -114,7 +114,7 @@
 			if (pi.PropertyType == typeof (bool)) {
 				string sValue = sr["Value"];
 
-				switch (sValue.ToLowerInvariant()) {
+				switch ((sValue ?? string.Empty).Trim().ToLowerInvariant()) {
 				case "1":
 				case "true":
 				case "yes":

@@ -288,9 +288,9 @@
 				StepFailed<OneMonthTurnover>().Init(Trail.MyInputData.OnlineTurnover1M, Trail.MyInputData.OnlineTurnover1Y);
 
 			if (Trail.MyInputData.IsOnlineTurnoverGood(3))
-				StepDone<ThreeMonthsTurnover>().Init(Trail.MyInputData.OnlineTurnover3M, Trail.MyInputData.OnlineTurnover1Y);
+				StepDone<OnlineThreeMonthsTurnover>().Init(Trail.MyInputData.OnlineTurnover3M, Trail.MyInputData.OnlineTurnover1Y);
 			else
-				StepFailed<ThreeMonthsTurnover>().Init(Trail.MyInputData.OnlineTurnover3M, Trail.MyInputData.OnlineTurnover1Y);
+				StepFailed<OnlineThreeMonthsTurnover>().Init(Trail.MyInputData.OnlineTurnover3M, Trail.MyInputData.OnlineTurnover1Y);
 		} // OnlineTurnovers
 
 		#endregion method OnlineTurnovers
@@ -304,9 +304,9 @@
 				StepDone<HmrcTurnoverAge>().Init(Trail.MyInputData.HmrcUpdateTime, Trail.MyInputData.DataAsOf);
 
 			if (Trail.MyInputData.IsHmrcTurnoverGood(3))
-				StepDone<ThreeMonthsTurnover>().Init(Trail.MyInputData.HmrcTurnover3M, Trail.MyInputData.HmrcTurnover1Y);
+				StepDone<HmrcThreeMonthsTurnover>().Init(Trail.MyInputData.HmrcTurnover3M, Trail.MyInputData.HmrcTurnover1Y);
 			else
-				StepFailed<ThreeMonthsTurnover>().Init(Trail.MyInputData.HmrcTurnover3M, Trail.MyInputData.HmrcTurnover1Y);
+				StepFailed<HmrcThreeMonthsTurnover>().Init(Trail.MyInputData.HmrcTurnover3M, Trail.MyInputData.HmrcTurnover1Y);
 
 			if (Trail.MyInputData.IsHmrcTurnoverGood(6))
 				StepDone<HalfYearTurnover>().Init(Trail.MyInputData.HmrcTurnover6M, Trail.MyInputData.HmrcTurnover1Y);
