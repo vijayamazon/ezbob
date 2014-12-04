@@ -41,8 +41,6 @@
 
 			m_oTrail.Save(Db, oSecondary.Trail);
 
-			log.Error("Mismatch in re-rejection logic for customer {0}; main: {1}\n secondary: {2}", customerId, m_oTrail, oSecondary.Trail);
-
 			return bSuccess;
 		} // MakeAndVerifyDecision
 
