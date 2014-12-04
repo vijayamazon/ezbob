@@ -344,10 +344,10 @@
 		#region method IsHmrcTurnoverTooOld
 
 		public bool IsHmrcTurnoverTooOld() {
-			return IsTurnoverTooOld(OnlineUpdateTime, Configuration.OnlineTurnoverAge);
+			return IsTurnoverTooOld(HmrcUpdateTime, Configuration.HmrcTurnoverAge);
 		} // IsHmrcTurnoverTooOld
 
-		#endregion method IsOnlineTurnoverTooOld
+		#endregion method IsHmrcTurnoverTooOld
 
 		#endregion public
 
