@@ -352,35 +352,6 @@
 			return sum + Math.Max(payPalSum, ebaySum);
 		}
 
-
-		public void AddRejectIntoDecisionHistory(int customerId, string comment)
-		{
-			var customer = _customers.Get(customerId);
-			var cr = customer.LastCashRequest;
-
-			cr.UnderwriterDecision = CreditResultStatus.Rejected;
-			cr.UnderwriterDecisionDate = DateTime.UtcNow;
-			cr.UnderwriterComment = comment;
-
-			customer.DateRejected = DateTime.UtcNow;
-			customer.RejectedReason = comment;
-
-			_decisionHistory.LogAction(DecisionActions.Reject, comment, _session.Get<User>(1), customer);
-		}
-
-		public void AddApproveIntoDecisionHistory(int customerId, string comment)
-		{
-			var customer = _customers.Get(customerId);
-			var cr = customer.LastCashRequest;
-
-			cr.UnderwriterComment = comment;
-
-			customer.DateApproved = DateTime.UtcNow;
-			customer.ApprovedReason = comment;
-
-			_decisionHistory.LogAction(DecisionActions.Approve, comment, _session.Get<User>(1), customer);
-		}
-
 		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
 

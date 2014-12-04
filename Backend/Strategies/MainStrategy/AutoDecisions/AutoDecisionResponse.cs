@@ -6,7 +6,6 @@
 	public class AutoDecisionResponse {
 		public bool IsAutoBankBasedApproval { get; set; } //flag that means automation decided to give bank based approval
 
-
 		public bool HasAutomaticDecision { get { return Decision != null; } } //auto reject re-reject approve re-approve (not silent mode)
 		public DecisionActions? Decision { get; set; }
 
