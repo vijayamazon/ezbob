@@ -56,7 +56,7 @@ BEGIN
 	
 	SELECT
 		RowType          = 'Turnover',
-		MpID             = @MpID,
+		MpID             = cmp.Id,
 		MpTypeInternalID = mt.InternalId,
 		TurnoverType     = 'Total',
 		Turnover         = @Turnover,
@@ -64,7 +64,8 @@ BEGIN
 		DayCount         = @TurnoverDayCount,
 		DateFrom         = @TurnoverFrom,
 		DateTo           = @TurnoverTo,
-		IsPaymentAccount = mt.IsPaymentAccount
+		IsPaymentAccount = mt.IsPaymentAccount,
+		LastUpdateTime   = cmp.UpdatingEnd
 	FROM
 		MP_CustomerMarketPlace cmp
 		INNER JOIN MP_MarketplaceType mt ON cmp.MarketPlaceId = mt.Id

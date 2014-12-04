@@ -52,6 +52,13 @@
 		public string SilentToAddress { get; set; }
 		public int BusinessScoreThreshold { get; set; }
 
+		public int OnlineTurnoverAge { get; set; }
+		public decimal OnlineTurnoverDropQuarterRatio { get; set; }
+		public decimal OnlineTurnoverDropMonthRatio { get; set; }
+		public int HmrcTurnoverAge { get; set; }
+		public decimal HmrcTurnoverDropQuarterRatio { get; set; }
+		public decimal HmrcTurnoverDropHalfYearRatio { get; set; }
+
 		#region property AllowedCaisStatusesWithLoan
 
 		public string AllowedCaisStatusesWithLoan {

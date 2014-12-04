@@ -46,9 +46,18 @@
 
 		public int MarketplaceSeniority { get; private set; }
 		public List<Payment> LatePayments { get; private set; }
-		public decimal Turnover1M { get { return m_oTurnover != null ? m_oTurnover[1] : 0; } } // Turnover1M
-		public decimal Turnover3M { get { return m_oTurnover != null ? m_oTurnover[3] : 0; } } // Turnover3M
-		public decimal Turnover1Y { get { return m_oTurnover != null ? m_oTurnover[12] : 0; } } // Turnover1Y
+
+		public decimal OnlineTurnover1M { get { return GetTurnover(m_oOnlineTurnover, 1); } }
+		public decimal OnlineTurnover3M { get { return GetTurnover(m_oOnlineTurnover, 3); } }
+		public decimal OnlineTurnover1Y { get { return GetTurnover(m_oOnlineTurnover, 12); } }
+
+		public DateTime? OnlineUpdateTime { get; private set; }
+
+		public DateTime? HmrcUpdateTime { get; private set; }
+
+		public decimal HmrcTurnover3M { get { return GetTurnover(m_oHmrcTurnover, 3); } }
+		public decimal HmrcTurnover6M { get { return GetTurnover(m_oHmrcTurnover, 6); } }
+		public decimal HmrcTurnover1Y { get { return GetTurnover(m_oHmrcTurnover, 12); } }
 
 		public decimal AvailableFunds { get; private set; }
 		public decimal ReservedFunds { get; private set; }
@@ -139,17 +148,34 @@
 
 			SetSeniority(oOriginationTime.Seniority);
 
-			SetTurnover(1, oTurnover[1]);
-			SetTurnover(3, oTurnover[3]);
-			SetTurnover(12, oTurnover[12]);
-
 			SetAvailableFunds(oFunds.Available, oFunds.Reserved);
 
 			SetDirectorNames(oDirectorNames);
 			SetHmrcBusinessNames(oHmrcBusinessNames);
+
+			SetTurnoverData(oTurnover);
 		} // FullInit
 
 		#endregion method FullInit
+
+		#region method SetTurnoverData
+
+		public void SetTurnoverData(CalculatedTurnover oTurnover) {
+			SetOnlineTurnover(1, oTurnover.GetOnline(1));
+			SetOnlineTurnover(3, oTurnover.GetOnline(3));
+			SetOnlineTurnover(6, oTurnover.GetOnline(6));
+			SetOnlineTurnover(12, oTurnover.GetOnline(12));
+
+			OnlineUpdateTime = oTurnover.OnlineUpdateTime;
+			HmrcUpdateTime = oTurnover.HmrcUpdateTime;
+
+			SetHmrcTurnover(1, oTurnover.GetHmrc(1));
+			SetHmrcTurnover(3, oTurnover.GetHmrc(3));
+			SetHmrcTurnover(6, oTurnover.GetHmrc(6));
+			SetHmrcTurnover(12, oTurnover.GetHmrc(12));
+		} // SetTurnoverData
+
+		#endregion method SetTurnoverData
 
 		#region method AddLatePayment
 
@@ -204,17 +230,6 @@
 
 		#endregion method SetAvailableFunds
 
-		#region method SetTurnover
-
-		public void SetTurnover(int nMonthCount, decimal nTurnover) {
-			if (m_oTurnover == null)
-				m_oTurnover = new SortedDictionary<int, decimal>();
-
-			m_oTurnover[nMonthCount] = nTurnover;
-		} // SetTurnover
-
-		#endregion method SetTurnover
-
 		#region method SetConfiguration
 
 		public void SetConfiguration(Configuration oCfg) {
@@ -253,13 +268,152 @@
 
 		#endregion method SetHmrcBusinessNames
 
+		#region method IsOnlineTurnoverTooOld
+
+		public bool IsOnlineTurnoverTooOld() {
+			return IsTurnoverTooOld(OnlineUpdateTime, Configuration.OnlineTurnoverAge);
+		} // IsOnlineTurnoverTooOld
+
+		#endregion method IsOnlineTurnoverTooOld
+
+		#region method IsOnlineTurnoverGood
+
+		public bool IsOnlineTurnoverGood(int nMonthCount) {
+			decimal nRatio;
+
+			switch (nMonthCount) {
+			case 1:
+				nRatio = Configuration.OnlineTurnoverDropMonthRatio;
+				break;
+
+			case 3:
+				nRatio = Configuration.OnlineTurnoverDropQuarterRatio;
+				break;
+
+			default:
+				return false;
+			} // switch
+
+			return IsTurnoverGood(
+				GetTurnover(m_oOnlineTurnover, nMonthCount),
+				nMonthCount,
+				GetTurnover(m_oOnlineTurnover, 12),
+				12,
+				nRatio
+			);
+		} // IsOnlineTurnoverGood
+
+		#endregion method IsOnlineTurnoverGood
+
+		#region method IsHmrcTurnoverGood
+
+		public bool IsHmrcTurnoverGood(int nMonthCount) {
+			decimal nRatio;
+
+			switch (nMonthCount) {
+			case 6:
+				nRatio = Configuration.HmrcTurnoverDropHalfYearRatio;
+				break;
+
+			case 3:
+				nRatio = Configuration.HmrcTurnoverDropQuarterRatio;
+				break;
+
+			default:
+				return false;
+			} // switch
+
+			return IsTurnoverGood(
+				GetTurnover(m_oHmrcTurnover, nMonthCount),
+				nMonthCount,
+				GetTurnover(m_oHmrcTurnover, 12),
+				12,
+				nRatio
+			);
+		} // IsHmrcTurnoverGood
+
+		#endregion method IsHmrcTurnoverGood
+
+		#region method IsHmrcTurnoverTooOld
+
+		public bool IsHmrcTurnoverTooOld() {
+			return IsTurnoverTooOld(OnlineUpdateTime, Configuration.OnlineTurnoverAge);
+		} // IsHmrcTurnoverTooOld
+
+		#endregion method IsOnlineTurnoverTooOld
+
 		#endregion public
 
 		#region private
 
 		private Arguments m_oArguments;
 
-		private SortedDictionary<int, decimal> m_oTurnover;
+		private SortedDictionary<int, decimal> m_oOnlineTurnover;
+		private SortedDictionary<int, decimal> m_oHmrcTurnover;
+
+		#region method GetTurnover
+
+		private static decimal GetTurnover(SortedDictionary<int, decimal> dic, int nMonthCount) {
+			if (dic == null)
+				return 0;
+
+			if (!dic.ContainsKey(nMonthCount))
+				return 0;
+
+			return dic[nMonthCount];
+		} // GetTurnover
+
+		#endregion method GetTurnover
+
+		#region method IsTurnoverTooOld
+
+		private bool IsTurnoverTooOld(DateTime? oDate, int nMonthCount) {
+			if (oDate == null)
+				return true;
+
+			return oDate.Value < DataAsOf.AddMonths(-nMonthCount);
+		} // IsTurnoverTooOld
+
+		#endregion method IsTurnoverTooOld
+
+		#region method IsTurnoverGood
+
+		private static bool IsTurnoverGood(
+			decimal nPeriodTurnover,
+			int nPeriodLength,
+			decimal nYearTurnover,
+			int nYearLength,
+			decimal nDropRatio
+		) {
+			if (nPeriodLength == 0)
+				return false;
+
+			return nPeriodTurnover / nPeriodLength * nYearLength > nYearTurnover * nDropRatio;
+		} // IsTurnoverGood
+
+		#endregion method IsTurnoverGood
+
+		#region method SetOnlineTurnover
+
+		private void SetOnlineTurnover(int nMonthCount, decimal nTurnover) {
+			if (m_oOnlineTurnover == null)
+				m_oOnlineTurnover = new SortedDictionary<int, decimal>();
+
+			m_oOnlineTurnover[nMonthCount] = nTurnover;
+		} // SetOnlineTurnover
+
+		#endregion method SetTurnover
+
+		#region method SetHmrcTurnover
+
+		private void SetHmrcTurnover(int nMonthCount, decimal nTurnover) {
+			if (m_oHmrcTurnover == null)
+				m_oHmrcTurnover = new SortedDictionary<int, decimal>();
+
+			m_oHmrcTurnover[nMonthCount] = nTurnover;
+		} // SetHmrcTurnover
+
+		#endregion method SetHmrcTurnover
 
 		#endregion private
 	} // class ApprovalInputData

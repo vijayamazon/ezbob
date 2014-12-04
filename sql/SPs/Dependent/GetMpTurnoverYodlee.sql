@@ -57,7 +57,7 @@ BEGIN
 
 	SELECT
 		RowType          = 'Turnover',
-		MpID             = @MpID,
+		MpID             = m.Id,
 		MpTypeInternalID = CONVERT(UNIQUEIDENTIFIER, '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'),
 		TurnoverType     = 'Total',
 		Turnover         = @Turnover,
@@ -65,7 +65,12 @@ BEGIN
 		DayCount         = @TurnoverDayCount,
 		DateFrom         = @TurnoverFrom,
 		DateTo           = @TurnoverTo,
-		IsPaymentAccount = CONVERT(BIT, 1)
+		IsPaymentAccount = CONVERT(BIT, 1),
+		LastUpdateTime   = m.UpdatingEnd
+	FROM
+		MP_CustomerMarketPlace m
+	WHERE
+		m.Id = @MpID
 
 	------------------------------------------------------------------------------
 END

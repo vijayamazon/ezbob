@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -40,7 +39,8 @@
 			CompanyScore();
 			ConsumerScore();
 			CustomerAge();
-			Turnovers();
+			OnlineTurnovers();
+			HmrcTurnovers();
 			CompanyAge();
 			DefaultAccounts();
 			IsDirector();
@@ -274,45 +274,47 @@
 
 		#endregion method CustomerAge
 
-		#region method Turnovers
+		#region method OnlineTurnovers
 
-		private void Turnovers() {
-			//                                     period               <threshold, turnover>
-			var oThresholds = new SortedDictionary<TimePeriodEnum, Tuple<decimal, decimal>> {
-				{ TimePeriodEnum.Month, new Tuple<decimal, decimal>(Trail.MyInputData.Configuration.MinTurnover1M, Trail.MyInputData.Turnover1M)  },
-				{ TimePeriodEnum.Month3, new Tuple<decimal, decimal>(Trail.MyInputData.Configuration.MinTurnover3M, Trail.MyInputData.Turnover3M) },
-				{ TimePeriodEnum.Year, new Tuple<decimal, decimal>(Trail.MyInputData.Configuration.MinTurnover1Y, Trail.MyInputData.Turnover1Y)   },
-			};
+		private void OnlineTurnovers() {
+			if (Trail.MyInputData.IsOnlineTurnoverTooOld())
+				StepFailed<OnlineTurnoverAge>().Init(Trail.MyInputData.OnlineUpdateTime, Trail.MyInputData.DataAsOf);
+			else
+				StepDone<OnlineTurnoverAge>().Init(Trail.MyInputData.OnlineUpdateTime, Trail.MyInputData.DataAsOf);
 
-			foreach (var pair in oThresholds) {
-				TimePeriodEnum nPeriod = pair.Key;
-				decimal nThreshold = pair.Value.Item1;
-				decimal nTurnover = pair.Value.Item2;
+			if (Trail.MyInputData.IsOnlineTurnoverGood(1))
+				StepDone<OneMonthTurnover>().Init(Trail.MyInputData.OnlineTurnover1M, Trail.MyInputData.OnlineTurnover1Y);
+			else
+				StepFailed<OneMonthTurnover>().Init(Trail.MyInputData.OnlineTurnover1M, Trail.MyInputData.OnlineTurnover1Y);
 
-				AThresholdTrace oTrace = null;
+			if (Trail.MyInputData.IsOnlineTurnoverGood(3))
+				StepDone<ThreeMonthsTurnover>().Init(Trail.MyInputData.OnlineTurnover3M, Trail.MyInputData.OnlineTurnover1Y);
+			else
+				StepFailed<ThreeMonthsTurnover>().Init(Trail.MyInputData.OnlineTurnover3M, Trail.MyInputData.OnlineTurnover1Y);
+		} // OnlineTurnovers
 
-				switch (nPeriod) {
-				case TimePeriodEnum.Month:
-					oTrace = (nTurnover > nThreshold) ? StepDone<OneMonthTurnover>() : StepFailed<OneMonthTurnover>();
-					break;
+		#endregion method OnlineTurnovers
 
-				case TimePeriodEnum.Month3:
-					oTrace = (nTurnover > nThreshold) ? StepDone<ThreeMonthsTurnover>() : StepFailed<ThreeMonthsTurnover>();
-					break;
+		#region method HmrcTurnovers
 
-				case TimePeriodEnum.Year:
-					oTrace = (nTurnover > nThreshold) ? StepDone<OneYearTurnover>() : StepFailed<OneYearTurnover>();
-					break;
+		private void HmrcTurnovers() {
+			if (Trail.MyInputData.IsHmrcTurnoverTooOld())
+				StepFailed<HmrcTurnoverAge>().Init(Trail.MyInputData.HmrcUpdateTime, Trail.MyInputData.DataAsOf);
+			else
+				StepDone<HmrcTurnoverAge>().Init(Trail.MyInputData.HmrcUpdateTime, Trail.MyInputData.DataAsOf);
 
-				default:
-					throw new ArgumentOutOfRangeException();
-				} // switch
+			if (Trail.MyInputData.IsHmrcTurnoverGood(3))
+				StepDone<ThreeMonthsTurnover>().Init(Trail.MyInputData.HmrcTurnover3M, Trail.MyInputData.HmrcTurnover1Y);
+			else
+				StepFailed<ThreeMonthsTurnover>().Init(Trail.MyInputData.HmrcTurnover3M, Trail.MyInputData.HmrcTurnover1Y);
 
-				oTrace.Init(nTurnover, nThreshold);
-			} // for each
-		} // Turnovers
+			if (Trail.MyInputData.IsHmrcTurnoverGood(6))
+				StepDone<HalfYearTurnover>().Init(Trail.MyInputData.HmrcTurnover6M, Trail.MyInputData.HmrcTurnover1Y);
+			else
+				StepFailed<HalfYearTurnover>().Init(Trail.MyInputData.HmrcTurnover6M, Trail.MyInputData.HmrcTurnover1Y);
+		} // HmrcTurnovers
 
-		#endregion method Turnovers
+		#endregion method HmrcTurnovers
 
 		#region method CompanyAge
 

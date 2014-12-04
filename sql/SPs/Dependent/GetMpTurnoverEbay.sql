@@ -90,7 +90,7 @@ BEGIN
 
 			SELECT
 				RowType          = @Turnover,
-				MpID             = @MpID,
+				MpID             = m.Id,
 				MpTypeInternalID = @eBay,
 				TurnoverType     = o.Name,
 				Turnover         = o.Turnover,
@@ -98,9 +98,13 @@ BEGIN
 				DayCount         = o.DayCount,
 				DateFrom         = o.DateFrom,
 				DateTo           = o.DateTo,
-				IsPaymentAccount = CONVERT(BIT, 0)
+				IsPaymentAccount = CONVERT(BIT, 0),
+				LastUpdateTime   = m.UpdatingEnd
 			FROM
-				#out o
+				#out o,
+				MP_CustomerMarketPlace m
+			WHERE
+				m.Id = @MpID
 			ORDER BY
 				o.Pos
 
@@ -272,7 +276,7 @@ BEGIN
 
 	SELECT
 		RowType          = @Turnover,
-		MpID             = @MpID,
+		MpID             = m.Id,
 		MpTypeInternalID = @eBay,
 		TurnoverType     = o.Name,
 		Turnover         = o.Turnover,
@@ -280,9 +284,14 @@ BEGIN
 		DayCount         = o.DayCount,
 		DateFrom         = o.DateFrom,
 		DateTo           = o.DateTo,
-		IsPaymentAccount = CONVERT(BIT, 0)
+		IsPaymentAccount = CONVERT(BIT, 0),
+		LastUpdateTime   = m.UpdatingEnd
 	FROM
-		#out o
+		#out o,
+		MP_CustomerMarketPlace m
+	WHERE
+		m.Id = @MpID
+
 	ORDER BY
 		o.Pos
 

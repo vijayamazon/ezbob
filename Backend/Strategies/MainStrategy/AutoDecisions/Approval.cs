@@ -11,7 +11,6 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
 	using DbConstants;
-	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -19,7 +18,6 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using MedalCalculations;
 	using Misc;
-	using CommonLib.TimePeriodLogic;
 	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -60,6 +58,8 @@
 				db,
 				log
 			);
+
+			m_oTurnover = new CalculatedTurnover();
 		} // constructor
 
 		public Approval Init() {
@@ -275,8 +275,6 @@
 		} // FindNumOfDefaultAccounts
 
 		private void SaveTrailInputData(GetAvailableFunds availFunds) {
-			CalculateTurnovers();
-
 			m_oTrail.MyInputData.SetDataAsOf(DateTime.UtcNow);
 
 			m_oTrail.MyInputData.SetConfiguration(new Configuration {
@@ -301,6 +299,12 @@
 				BusinessScoreThreshold = CurrentValues.Instance.AutoApproveBusinessScoreThreshold,
 				AllowedCaisStatusesWithLoan = CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithLoan,
 				AllowedCaisStatusesWithoutLoan = CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan,
+				OnlineTurnoverAge = CurrentValues.Instance.AutoApproveOnlineTurnoverAge,
+				OnlineTurnoverDropQuarterRatio = CurrentValues.Instance.AutoApproveOnlineTurnoverDropQuarterRatio,
+				OnlineTurnoverDropMonthRatio = CurrentValues.Instance.AutoApproveOnlineTurnoverDropMonthRatio,
+				HmrcTurnoverAge = CurrentValues.Instance.AutoApproveHmrcTurnoverAge,
+				HmrcTurnoverDropQuarterRatio = CurrentValues.Instance.AutoApproveHmrcTurnoverDropQuarterRatio,
+				HmrcTurnoverDropHalfYearRatio = CurrentValues.Instance.AutoApproveHmrcTurnoverDropHalfYearRatio,
 			});
 
 			m_oTrail.MyInputData.SetArgs(customerId, autoApprovedAmount, (AutomationCalculator.Common.Medal)medalClassification);
@@ -353,6 +357,18 @@
 			m_oTrail.MyInputData.SetSeniority(CalculateSeniority());
 			m_oTrail.MyInputData.SetAvailableFunds(availFunds.AvailableFunds, availFunds.ReservedAmount);
 
+			foreach (int nMonthCount in ms_oTurnoverMonths) {
+				this.db.ForEachRowSafe(
+					r => m_oTurnover.Add(r, this.log),
+					"GetCustomerTurnoverData",
+					new QueryParameter("OnlineOnly", true),
+					new QueryParameter("CustomerID", this.customerId),
+					new QueryParameter("MonthCount", nMonthCount)
+				);
+			} // for each
+
+			m_oTrail.MyInputData.SetTurnoverData(m_oTurnover);
+
 			m_oTrail.MyInputData.MetaData.Validate();
 		} // SaveTrailInputData
 
@@ -373,8 +389,9 @@
 				CheckBusinessScore();
 				CheckExperianScore();
 				CheckAge();
-				CheckTurnovers(); // TODO: print to log or new step detailed turnover
-				CheckSeniority(); // TODO: print to log or new step detailed seniority
+				CheckOnlineTurnovers();
+				CheckHmrcTurnovers();
+				CheckSeniority();
 				CheckDefaultAccounts();
 				CheckIsDirector();
 				CheckHmrcIsCompany();
@@ -548,73 +565,43 @@
 			} // if
 		} // CheckAge
 
-		private void CalculateTurnovers() {
-			Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis =
-				strategyHelper.GetAnalysisValsForCustomer(customerId);
-
-			CalcOneTurnover(mpAnalysis, TimePeriodEnum.Month);
-			CalcOneTurnover(mpAnalysis, TimePeriodEnum.Month3);
-			CalcOneTurnover(mpAnalysis, TimePeriodEnum.Year);
-		} // CalculateTurnovers
-
-		private void CalcOneTurnover(Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis, TimePeriodEnum nPeriod) {
-			m_oTrail.MyInputData.SetTurnover(
-				GetTurnoverPeriodLength(nPeriod),
-				(decimal)strategyHelper.GetTurnoverForPeriod(mpAnalysis, nPeriod)
-			);
-		} // CalcOneTurnover
-
-		private int GetTurnoverPeriodLength(TimePeriodEnum nPeriod) {
-			switch (nPeriod) {
-			case TimePeriodEnum.Month:
-				return 1;
-
-			case TimePeriodEnum.Month3:
-				return 3;
-
-			case TimePeriodEnum.Year:
-				return 12;
-				
-			default:
-				throw new ArgumentOutOfRangeException();
-			} // switch
-			
-		} // GetTurnoverPeriodLength
-
-		private void CheckTurnovers() {
-			CheckOnePeriodTurnover(CurrentValues.Instance.AutoApproveMinTurnover1M, TimePeriodEnum.Month);
-			CheckOnePeriodTurnover(CurrentValues.Instance.AutoApproveMinTurnover3M, TimePeriodEnum.Month3);
-			CheckOnePeriodTurnover(CurrentValues.Instance.AutoApproveMinTurnover1Y, TimePeriodEnum.Year);
-		} // CheckTurnovers
-
-		private void CheckOnePeriodTurnover(
-			int nThreshold,
-			TimePeriodEnum nPeriod
-		) {
-			switch (nPeriod) {
-			case TimePeriodEnum.Month:
-				(((int)m_oTrail.MyInputData.Turnover1M > nThreshold) ? StepDone<OneMonthTurnover>() : StepFailed<OneMonthTurnover>())
-					.Init(m_oTrail.MyInputData.Turnover1M, nThreshold);
-				break;
-
-			case TimePeriodEnum.Month3:
-				(((int)m_oTrail.MyInputData.Turnover3M > nThreshold) ? StepDone<ThreeMonthsTurnover>() : StepFailed<ThreeMonthsTurnover>())
-					.Init(m_oTrail.MyInputData.Turnover3M, nThreshold);
-				break;
-
-			case TimePeriodEnum.Year:
-				(((int)m_oTrail.MyInputData.Turnover1Y > nThreshold) ? StepDone<OneYearTurnover>() : StepFailed<OneYearTurnover>())
-					.Init(m_oTrail.MyInputData.Turnover1Y, nThreshold);
-				break;
-
-			default:
-				throw new ArgumentOutOfRangeException();
-			} // switch
-		} // CheckOnePeriodTurnover
-
 		private int CalculateSeniority() {
 			return customer == null ? -1 : strategyHelper.MarketplaceSeniority(customer);
 		} // CalculateSeniority
+
+		private void CheckOnlineTurnovers() {
+			if (m_oTrail.MyInputData.IsOnlineTurnoverTooOld())
+				StepFailed<OnlineTurnoverAge>().Init(m_oTrail.MyInputData.OnlineUpdateTime, m_oTrail.MyInputData.DataAsOf);
+			else
+				StepDone<OnlineTurnoverAge>().Init(m_oTrail.MyInputData.OnlineUpdateTime, m_oTrail.MyInputData.DataAsOf);
+
+			if (m_oTrail.MyInputData.IsOnlineTurnoverGood(1))
+				StepDone<OneMonthTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover1M, m_oTrail.MyInputData.OnlineTurnover1Y);
+			else
+				StepFailed<OneMonthTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover1M, m_oTrail.MyInputData.OnlineTurnover1Y);
+
+			if (m_oTrail.MyInputData.IsOnlineTurnoverGood(3))
+				StepDone<ThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y);
+			else
+				StepFailed<ThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y);
+		} // CheckOnlineTurnovers
+
+		private void CheckHmrcTurnovers() {
+			if (m_oTrail.MyInputData.IsHmrcTurnoverTooOld())
+				StepFailed<HmrcTurnoverAge>().Init(m_oTrail.MyInputData.HmrcUpdateTime, m_oTrail.MyInputData.DataAsOf);
+			else
+				StepDone<HmrcTurnoverAge>().Init(m_oTrail.MyInputData.HmrcUpdateTime, m_oTrail.MyInputData.DataAsOf);
+
+			if (m_oTrail.MyInputData.IsHmrcTurnoverGood(3))
+				StepDone<ThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y);
+			else
+				StepFailed<ThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y);
+
+			if (m_oTrail.MyInputData.IsHmrcTurnoverGood(6))
+				StepDone<HalfYearTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover6M, m_oTrail.MyInputData.HmrcTurnover1Y);
+			else
+				StepFailed<HalfYearTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover6M, m_oTrail.MyInputData.HmrcTurnover1Y);
+		} // CheckHmrcTurnovers
 
 		private void CheckSeniority() {
 			int autoApproveMinMpSeniorityDays = CurrentValues.Instance.AutoApproveMinMPSeniorityDays;
@@ -855,6 +842,9 @@
 			} // try
 		} // NotifyAutoApproveSilentMode
 
+		private static readonly SortedSet<int> ms_oTurnoverMonths = new SortedSet<int> { 1, 3, 6, 12, };
+
+		private readonly CalculatedTurnover m_oTurnover;
 
 		private readonly CustomerRepository _customers;
 		private readonly CashRequestsRepository cashRequestsRepository;

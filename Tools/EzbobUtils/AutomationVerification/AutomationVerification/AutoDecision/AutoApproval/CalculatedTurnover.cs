@@ -13,10 +13,17 @@
 	public class CalculatedTurnover {
 		#region public
 
+		public DateTime? HmrcUpdateTime { get; private set; }
+		public DateTime? OnlineUpdateTime { get; private set; }
+
 		#region constructor
 
 		public CalculatedTurnover() {
-			m_oData = new SortedDictionary<int, OneValue>();
+			HmrcUpdateTime = null;
+			OnlineUpdateTime = null;
+
+			m_oOnline = new SortedDictionary<int, OneValue>();
+			m_oHmrc = new SortedDictionary<int, decimal>();
 		} // constructor
 
 		#endregion constructor
@@ -36,26 +43,48 @@
 			if (!r.IsTotal)
 				return;
 
-			if (m_oData.ContainsKey(r.MonthCount))
-				m_oData[r.MonthCount].Add(r);
-			else
-				m_oData[r.MonthCount] = new OneValue(r);
+			if (r.MpTypeInternalID == Hmrc) {
+				m_oHmrc[r.MonthCount] = r.Turnover;
+
+				if (r.LastUpdateTime != null) {
+					if (HmrcUpdateTime == null)
+						HmrcUpdateTime = r.LastUpdateTime;
+					else if (r.LastUpdateTime.Value < HmrcUpdateTime.Value)
+						HmrcUpdateTime = r.LastUpdateTime;
+				} // if
+			}
+			else {
+				if (r.LastUpdateTime != null) {
+					if (OnlineUpdateTime == null)
+						OnlineUpdateTime = r.LastUpdateTime;
+					else if (r.LastUpdateTime.Value < OnlineUpdateTime.Value)
+						OnlineUpdateTime = r.LastUpdateTime;
+				} // if
+
+				if (m_oOnline.ContainsKey(r.MonthCount))
+					m_oOnline[r.MonthCount].Add(r);
+				else
+					m_oOnline[r.MonthCount] = new OneValue(r);
+			} // if
 		} // Add
 
 		#endregion method Add
 
-		#region indexer
+		#region method GetOnline
 
-		/// <summary>
-		/// Gets customer turnover for specific period.
-		/// </summary>
-		/// <param name="nMonthCount">Number of months in the period.</param>
-		/// <returns>Turnover for requested period.</returns>
-		public decimal this[int nMonthCount] {
-			get { return m_oData.ContainsKey(nMonthCount) ? m_oData[nMonthCount].Value : 0; } // get
+		public decimal GetOnline(int nMonthCount) {
+			return m_oOnline.ContainsKey(nMonthCount) ? m_oOnline[nMonthCount].Value : 0;
 		} // indexer
 
-		#endregion indexer
+		#endregion method GetOnline
+
+		#region method GetHmrc
+
+		public decimal GetHmrc(int nMonthCount) {
+			return m_oHmrc.ContainsKey(nMonthCount) ? m_oHmrc[nMonthCount] : 0;
+		} // indexer
+
+		#endregion method GetHmrc
 
 		#region class Row
 
@@ -117,6 +146,11 @@
 			[UsedImplicitly]
 			public DateTime DateTo { get; set; }
 
+			/// <summary>
+			/// Time when last marketplace update has completed.
+			/// </summary>
+			public DateTime? LastUpdateTime { get; set; }
+
 			#region property IsTotal
 
 			/// <summary>
@@ -139,7 +173,7 @@
 					return;
 
 				oLog.Debug(
-					"Turnover for customer marketplace:\n" +
+					"Turnover for customer marketplace (last updated on '{9}'):\n" +
 					"\tmarketplace: id {1}, type {2}\n" +
 					"\t{0} (because of type {4})\n" +
 					"\tturnover: {3}, month count: {5}, day count: {6}\n" +
@@ -152,7 +186,8 @@
 					MonthCount,
 					DayCount,
 					DateFrom.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
-					DateTo.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
+					DateTo.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
+					LastUpdateTime == null ? "never" : LastUpdateTime.Value.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
 				);
 			} // WriteToLog
 
@@ -223,7 +258,10 @@
 
 		#endregion class OneValue
 
-		private readonly SortedDictionary<int, OneValue> m_oData;
+		private readonly SortedDictionary<int, OneValue> m_oOnline;
+		private readonly SortedDictionary<int, decimal> m_oHmrc;
+
+		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
 
 		#endregion private
 	} // class CalculatedTurnover
