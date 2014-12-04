@@ -68,7 +68,7 @@
 		#region method MakeDecision
 
 		public virtual void MakeDecision() {
-			Log.Debug("Checking if auto approval should take place for customer {0}...", Args.CustomerID);
+			Log.Debug("Secondary: checking if auto approval should take place for customer {0}...", Args.CustomerID);
 
 			try {
 				GatherData();
@@ -83,7 +83,7 @@
 				Result = new Result((int)ApprovedAmount, (int)MetaData.OfferLength, MetaData.IsEmailSendingBanned);
 
 			Log.Debug(
-				"Checking if auto approval should take place for customer {0} complete; {1}\n{2}",
+				"Secondary: checking if auto approval should take place for customer {0} complete; {1}\n{2}",
 				Args.CustomerID,
 				Trail,
 				Result == null ? string.Empty : "Approved " + Result + "."

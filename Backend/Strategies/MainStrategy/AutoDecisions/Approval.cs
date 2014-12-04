@@ -373,7 +373,7 @@
 		} // SaveTrailInputData
 
 		private void CheckAutoApprovalConformance(decimal outstandingOffers) {
-			log.Debug("Checking if auto approval should take place for customer {0}...", customerId);
+			log.Debug("Primary: checking if auto approval should take place for customer {0}...", customerId);
 
 			try {
 				CheckInit();
@@ -415,9 +415,9 @@
 				StepFailed<ExceptionThrown>().Init(ex);
 			} // try
 
-			log.Debug("Checking if auto approval should take place for customer {0} complete.", customerId);
+			log.Debug("Primary: checking if auto approval should take place for customer {0} complete.", customerId);
 
-			log.Msg("Auto approved amount: {0}. {1}", autoApprovedAmount, m_oTrail);
+			log.Msg("Primary: auto approved amount: {0}. {1}", autoApprovedAmount, m_oTrail);
 		} // CheckAutoApprovalConformance
 
 		private void CheckMedal() {

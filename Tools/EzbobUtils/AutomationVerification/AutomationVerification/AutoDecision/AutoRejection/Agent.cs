@@ -111,7 +111,8 @@
 		{
 			Trail.Init(data);
 
-			m_oLog.Debug("Checking if auto reject should take place for customer {0}...", _customerId);
+			m_oLog.Debug("Secondary: checking if auto reject should take place for customer {0}...", _customerId);
+
 			try {
 				CheckRejectionExceptions();
 				Trail.LockDecision();
@@ -128,7 +129,7 @@
 			}
 
 			m_oLog.Debug(
-				"Checking if auto reject should take place for customer {0} complete; {1}",
+				"Secondary: checking if auto reject should take place for customer {0} complete; {1}",
 				_customerId,
 				Trail
 			);

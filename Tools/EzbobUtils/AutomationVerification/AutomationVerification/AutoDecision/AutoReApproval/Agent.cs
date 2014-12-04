@@ -57,7 +57,7 @@
 		#region method MakeDecision
 
 		public void MakeDecision(ReApprovalInputData data) {
-			m_oLog.Debug("Checking if auto re approval should take place for customer {0}...", CustomerId);
+			m_oLog.Debug("Secondary: checking if auto re-approval should take place for customer {0}...", CustomerId);
 
 			try {
 				Trail.MyInputData.Init(Now, data);
@@ -88,7 +88,7 @@
 				Result = new ReApprovalResult(true, m_nApprovedAmount);
 
 			m_oLog.Debug(
-				"Checking if auto re approval should take place for customer {0} complete; {1}\n{2}", CustomerId, Trail,
+				"Secondary: checking if auto re-approval should take place for customer {0} complete; {1}\n{2}", CustomerId, Trail,
 				Result == null ? string.Empty : Result + "."
 			);
 		} // MakeDecision

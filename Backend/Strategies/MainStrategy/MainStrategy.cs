@@ -334,15 +334,7 @@
 				loanTypeIdToUse = _loanTypeRepository.Get(autoDecisionResponse.LoanTypeId) ?? _loanTypeRepository.GetDefault();
 			}
 			else {
-				// Don't calculate interest if there was an auto approval (the interest was already calculated)
-				decimal interestAccordingToPast = DB.ExecuteScalar<decimal>(
-					"GetLatestInterestRate",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId),
-					new QueryParameter("Today", now.Date)
-				);
-
-				interestRateToUse = interestAccordingToPast == -1 ? 0 : interestAccordingToPast;
+				interestRateToUse = dataGatherer.LoanOfferInterestRate;
 				setupFeePercentToUse = dataGatherer.ManualSetupFeePercent;
 				setupFeeAmountToUse = dataGatherer.ManualSetupFeeAmount;
 				repaymentPeriodToUse = autoDecisionResponse.RepaymentPeriod;
@@ -399,7 +391,9 @@
 				cr.AnnualTurnover = (int)dataGatherer.TotalSumOfOrders1YTotal;
 				cr.LoanType = loanTypeIdToUse;
 				cr.LoanSource = isEuToUse ? _loanSourceRepository.GetByName("EU") : _loanSourceRepository.GetDefault();
-				cr.InterestRate = interestRateToUse;
+
+				if (autoDecisionResponse.DecidedToApprove)
+					cr.InterestRate = interestRateToUse;
 
 				if (repaymentPeriodToUse != 0) {
 					cr.ApprovedRepaymentPeriod = repaymentPeriodToUse;

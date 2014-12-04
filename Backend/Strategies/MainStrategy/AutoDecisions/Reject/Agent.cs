@@ -144,13 +144,13 @@
 		#region method RunPrimary
 
 		private void RunPrimary() {
-			Log.Debug("Checking if auto reject should take place for customer {0}...", Args.CustomerID);
+			Log.Debug("Primary: checking if auto reject should take place for customer {0}...", Args.CustomerID);
 
 			GatherData();
 
 			new Checker(this.Trail, this.Log).Run();
 
-			Log.Debug("Checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
+			Log.Debug("Primary: checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
 		} // RunPrimary
 
 		#endregion method RunPrimary

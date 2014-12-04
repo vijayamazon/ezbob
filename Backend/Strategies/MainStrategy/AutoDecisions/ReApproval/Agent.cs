@@ -83,8 +83,6 @@
 		#region method MakeDecision
 
 		public virtual void MakeDecision(AutoDecisionResponse response) {
-			Log.Debug("Checking if auto re-approval should take place for customer {0}...", Args.CustomerID);
-
 			try {
 				if (MakeAndVerifyDecision() && Trail.HasDecided) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
@@ -103,9 +101,7 @@
 				StepFailed<ExceptionThrown>().Init(e);
 			} // try
 
-			Log.Debug("Checking if auto re-approval should take place for customer {0} complete.", Args.CustomerID);
-
-			Log.Msg("Auto re-approved amount: {0}. {1}", ApprovedAmount, Trail);
+			Log.Msg("Auto re-approved amount: {0}.", ApprovedAmount);
 		} // MakeDecision
 
 		#endregion method MakeDecision
@@ -174,6 +170,8 @@
 		#region method RunPrimary
 
 		private void RunPrimary() {
+			Log.Debug("Primary: checking if auto re-approve should take place for customer {0}...", Args.CustomerID);
+
 			GatherData();
 
 			CheckInit();
@@ -188,6 +186,8 @@
 			SetApprovedAmount();
 			CheckAvailableFunds();
 			CheckComplete();
+
+			Log.Debug("Primary: checking if auto re-approve should take place for customer {0} complete.\n{1}", Args.CustomerID, Trail);
 		} // RunPrimary
 
 		#endregion method RunPrimary

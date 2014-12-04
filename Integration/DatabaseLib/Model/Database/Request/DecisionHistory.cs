@@ -51,19 +51,8 @@
 
 				customer.LastStatus = lastAction == null ? "N/A" : lastAction.Action.ToString();
 
-				if ((action == DecisionActions.Approve) || (action == DecisionActions.ReApprove)) {
-					customer.NumApproves++;
-
-					if (customer.LastCashRequest.SystemCalculatedSum.HasValue) {
-						customer.SystemCalculatedSum = (decimal)customer.LastCashRequest.SystemCalculatedSum;
-					}
-
-					if (customer.LastCashRequest.ManagerApprovedSum.HasValue) {
-						customer.ManagerApprovedSum = (decimal)customer.LastCashRequest.ManagerApprovedSum;
-					}
-				}
-
 				var cr = customer.LastCashRequest;
+
 				var item = new DecisionHistory {
 					Date = DateTime.UtcNow,
 					Action = action,
@@ -74,8 +63,10 @@
 					LoanType = cr.LoanType,
 					RejectReasons = new HashedSet<DecisionHistoryRejectReason>()
 				};
+
 				if (rejectionReasons != null) {
 					var repo = new RejectReasonRepository(_session);
+
 					foreach (var rejectionReason in rejectionReasons) {
 						var reason = repo.Get(rejectionReason);
 						item.RejectReasons.Add(new DecisionHistoryRejectReason {
@@ -86,7 +77,6 @@
 				}
 
 				if ((action == DecisionActions.Reject) || (action == DecisionActions.ReReject)) {
-					customer.NumRejects++;
 					string reasons = item.RejectReasons.Any() ? item.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b) : null;
 					customer.RejectedReason = string.IsNullOrEmpty(reasons) ? comment : string.Format("{0} ({1})", reasons, comment);
 				}
