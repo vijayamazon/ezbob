@@ -147,7 +147,7 @@
 
 			GatherData();
 
-			new Checker(this.Trail).Run();
+			new Checker(this.Trail, this.Log).Run();
 
 			Log.Debug("Checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
 		} // RunPrimary

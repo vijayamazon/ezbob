@@ -1,17 +1,22 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
+	using System.Globalization;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
 	using AutomationCalculator.ProcessHistory.Trails;
+	using Ezbob.Logger;
 
 	internal class Checker {
 		#region public
 
 		public RejectionTrail Trail { get; private set; }
 
+		public ASafeLog Log { get; private set; }
+
 		#region constructor
 
-		public Checker(RejectionTrail oTrail) {
+		public Checker(RejectionTrail oTrail, ASafeLog oLog) {
 			Trail = oTrail;
+			Log = oLog ?? new SafeLog();
 		} // constructor
 
 		#endregion constructor
@@ -145,6 +150,15 @@
 		#region method ConsumerDataAge
 
 		private void ConsumerDataAge() {
+			Log.Debug(
+				"Consumer data age status:\n\tdata time: {0}\n\tnow: {1}\n\tmonth count: {2}\n\tnow - month count: {3}\n\ttoo old: {4}",
+				Trail.MyInputData.ConsumerDataTime.HasValue ? Trail.MyInputData.ConsumerDataTime.Value.ToString("d/MMM/yyyy H:mm:ss z", CultureInfo.InvariantCulture) : "-- null --",
+				Trail.MyInputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss z", CultureInfo.InvariantCulture),
+				Trail.MyInputData.AutoRejectConsumerCheckAge,
+				Trail.MyInputData.DataAsOf.AddMonths(-Trail.MyInputData.AutoRejectConsumerCheckAge).ToString("d/MMM/yyyy H:mm:ss z", CultureInfo.InvariantCulture),
+				Trail.MyInputData.ConsumerDataIsTooOld ? "yes" : "no"
+			);
+
 			if (Trail.MyInputData.ConsumerDataIsTooOld)
 				StepNoReject<ConsumerDataTooOldPreventer>().Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
 			else
