@@ -612,7 +612,7 @@
 		{
 			int underwriterId = _context.User.Id;
 
-			new ServiceClient().Instance.MainStrategy1(underwriterId, customerId, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0);
+			new ServiceClient().Instance.MainStrategy1(underwriterId, customerId, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0);
 
 			return Json(true);
 		}
