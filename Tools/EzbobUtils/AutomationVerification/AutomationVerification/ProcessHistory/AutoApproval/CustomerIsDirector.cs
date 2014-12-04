@@ -11,6 +11,10 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 		{
 		} // constructor
 
+		public void Init(string customerName) {
+			Comment = string.Format("Customer name is '{0}', no directors received from Experian.", customerName);
+		} // Init
+
 		public void Init(string customerName, List<string> directorsNames) {
 			Comment = string.Format("Customer name is '{0}' director names:'{1}'", customerName, directorsNames.Aggregate((a,b) => string.Format("{0},{1}", a, b)));
 		} // Init

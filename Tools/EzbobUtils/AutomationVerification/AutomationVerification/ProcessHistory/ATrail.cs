@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using System.Text;
 	using System.Web;
+	using AutomationCalculator.ProcessHistory.Common;
 	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -479,7 +480,7 @@
 
 			[UsedImplicitly]
 			public List<string> Notes {
-				get { return IsPrimary ? m_oTrail.m_oDiffNotes : new List<string>(); }
+				get { return m_oTrail.m_oDiffNotes; }
 				// ReSharper disable ValueParameterNotUsed
 				set { }
 				// ReSharper restore ValueParameterNotUsed
@@ -520,6 +521,9 @@
 				LockDecision();
 				oTrace.HasLockedDecision = true;
 			} // if
+
+			if (oTrace.GetType() == typeof (ExceptionThrown))
+				(oTrace as ExceptionThrown).OnAfterInitEvent += step => m_oDiffNotes.Add(step.Comment);
 
 			return oTrace;
 		} // Add

@@ -260,6 +260,9 @@ BEGIN
 	SELECT
 		RowType                = 'MetaData',
 
+		FirstName              = c.FirstName,
+		LastName               = c.Surname,
+
 		IsBrokerCustomer       = CONVERT(BIT, (CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END)),
 		NumOfTodayAutoApproval = @TodayAutoApprovalCount,
 		TodayLoanSum           = @TodayLoanSum,
@@ -284,10 +287,14 @@ BEGIN
 
 		OfferValidUntil        = ValidFor,
 		OfferStart             = ApplyForLoan,
-		EmailSendingBanned     = @EmailSendingBanned
+		EmailSendingBanned     = @EmailSendingBanned,
+
+		ExperianCompanyName    = co.ExperianCompanyName,
+		EnteredCompanyName     = co.CompanyName
 	FROM
 		Customer c
 		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
+		LEFT JOIN Company co ON c.CompanyId = co.Id
 	WHERE
 		c.Id = @CustomerID
 
@@ -334,6 +341,25 @@ BEGIN
 	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 1
 	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 3
 	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 12
+
+	------------------------------------------------------------------------------
+
+	EXECUTE GetExperianDirectorsNamesForCustomer @CustomerID
+
+	------------------------------------------------------------------------------
+
+	SELECT DISTINCT
+		RowType = 'HmrcBusinessName',
+		b.Name
+	FROM
+		Business b
+		INNER JOIN MP_VatReturnRecords o
+			ON b.Id = o.BusinessId
+			AND ISNULL(o.IsDeleted, 0) = 0
+		INNER JOIN MP_CustomerMarketPlace m
+			ON o.CustomerMarketPlaceId = m.Id
+			AND m.CustomerId = @CustomerID
+			AND ISNULL(m.Disabled, 0) = 0
 
 	------------------------------------------------------------------------------
 END

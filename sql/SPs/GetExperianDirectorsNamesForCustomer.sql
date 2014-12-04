@@ -1,26 +1,79 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetExperianDirectorsNamesForCustomer]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetExperianDirectorsNamesForCustomer]
+IF OBJECT_ID('GetExperianDirectorsNamesForCustomer') IS NULL
+	EXECUTE('CREATE PROCEDURE GetExperianDirectorsNamesForCustomer AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetExperianDirectorsNamesForCustomer]
-	@CustomerId INT
+
+ALTER PROCEDURE GetExperianDirectorsNamesForCustomer
+@CustomerID INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @RefNum NVARCHAR(50)
+	DECLARE @CompanyID INT
+	DECLARE @ExperianLtdID BIGINT
+
+	------------------------------------------------------------------------------
+
 	SELECT 
-		ExperianLtdDL72.FirstName, 
-		ExperianLtdDL72.LastName 
-	FROM 
-		ExperianLtdDL72, 
-		ExperianLtd, 
-		Customer, 
-		Company
+		@RefNum = co.ExperianRefNum,
+		@CompanyID = co.Id
+	FROM
+		Customer c
+		INNER JOIN Company co ON c.CompanyId = co.Id
+
+	------------------------------------------------------------------------------
+
+	DECLARE @SrvLogID BIGINT = (
+		SELECT TOP 1
+			l.Id
+		FROM
+			MP_ServiceLog l
+		WHERE (
+				l.CompanyRefNum = @RefNum
+				OR
+				l.CompanyID = @CompanyID
+			)
+			AND
+			l.ServiceType = 'E-SeriesLimitedData'
+		ORDER BY
+			l.InsertDate DESC
+	)
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@ExperianLtdID = l.ExperianLtdID
+	FROM
+		ExperianLtd l
 	WHERE
-		Customer.Id = @CustomerId AND
-		Customer.CompanyId = Company.Id AND
-		Company.ExperianRefNum = ExperianLtd.RegisteredNumber AND 
-		ExperianLtdDL72.ExperianLtdID = ExperianLtd.ExperianLtdID
+		l.ServiceLogID = @SrvLogID
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		d.FirstName,
+		d.LastName,
+		RowType = 'DirectorName'
+	FROM
+		ExperianLtdDL72 d
+	WHERE
+		d.ExperianLtdID = @ExperianLtdID
+
+	UNION
+
+	SELECT
+		d.FirstName,
+		d.LastName,
+		RowType = 'DirectorName'
+	FROM
+		ExperianLtdDLB5 d
+	WHERE
+		d.ExperianLtdID = @ExperianLtdID
 END
 GO

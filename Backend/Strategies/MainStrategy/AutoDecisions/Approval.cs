@@ -78,9 +78,6 @@
 			} // if
 			
 			if (customer != null && customer.Company != null) {
-				this.companyName = customer.Company.ExperianCompanyName ?? customer.Company.CompanyName;
-				this.companyName = AdjustCompanyName(this.companyName);
-
 				if(customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited && customer.Company.ExperianRefNum != "NotFound") {
 					var limited = new LoadExperianLtd(customer.Company.ExperianRefNum, 0, db, log);
 					this.directors = new List<Name>();
@@ -101,8 +98,9 @@
 			this.hmrcNames = new List<string>();
 
 			db.ForEachRowSafe((names, hren) => {
-				string name = names["BusinessName"];
-				this.hmrcNames.Add(AdjustCompanyName(name));
+				string name = ApprovalInputData.AdjustCompanyName(names["BusinessName"]);
+				if (name != string.Empty)
+					this.hmrcNames.Add(name);
 				return ActionResult.Continue;
 			}, "GetHmrcBusinessNames", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
@@ -309,6 +307,10 @@
 
 			m_oTrail.MyInputData.SetMetaData(new MetaData {
 				RowType = "MetaData",
+
+				FirstName = (customer != null) && (customer.PersonalInfo != null) ? customer.PersonalInfo.FirstName : null,
+				LastName = (customer != null) && (customer.PersonalInfo != null) ? customer.PersonalInfo.Surname : null,
+
 				IsBrokerCustomer = isBrokerCustomer,
 				NumOfTodayAutoApproval = CalculateTodaysApprovals(),
 				TodayLoanSum = CalculateTodaysLoans(),
@@ -325,6 +327,9 @@
 				NumOfRollovers = CalculateRollovers(),
 
 				TotalLoanCount = loanRepository.ByCustomer(customerId).Count(),
+
+				ExperianCompanyName = (customer != null) && (customer.Company != null) ? customer.Company.ExperianCompanyName : null,
+				EnteredCompanyName = (customer != null) && (customer.Company != null) ? customer.Company.CompanyName : null,
 			});
 
 			FindOutstandingLoans();
@@ -340,12 +345,8 @@
 			m_oTrail.MyInputData.MetaData.OfferStart = sr["OfferStart"];
 			m_oTrail.MyInputData.MetaData.OfferValidUntil = sr["OfferValidUntil"];
 
-			if (customer != null && customer.PersonalInfo != null) {
-				m_oTrail.MyInputData.MetaData.CustomerName = new Name(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname);
-			}
-			m_oTrail.MyInputData.MetaData.DirectorNames = this.directors;
-			m_oTrail.MyInputData.MetaData.CompanyName = this.companyName;
-			m_oTrail.MyInputData.MetaData.HmrcBusinessNames = this.hmrcNames;
+			m_oTrail.MyInputData.SetDirectorNames(this.directors);
+			m_oTrail.MyInputData.SetHmrcBusinessNames(this.hmrcNames);
 
 			m_oTrail.MyInputData.SetWorstStatuses(consumerCaisDetailWorstStatuses);
 			FindLatePayments();
@@ -390,7 +391,7 @@
 				ReduceOutstandingPrincipal();
 
 				CheckAllowedRange();
-				
+
 				CheckComplete();
 			}
 			catch (Exception ex) {
@@ -400,9 +401,7 @@
 			log.Debug("Checking if auto approval should take place for customer {0} complete.", customerId);
 
 			log.Msg("Auto approved amount: {0}. {1}", autoApprovedAmount, m_oTrail);
-		}
-
-// CheckAutoApprovalConformance
+		} // CheckAutoApprovalConformance
 
 		private void CheckMedal() {
 			if (medalClassification == MedalClassification.NoClassification)
@@ -427,44 +426,63 @@
 
 		private void CheckIsDirector() {
 			bool isDirector = false;
-			foreach (var directorName in m_oTrail.MyInputData.MetaData.DirectorNames) {
-				if (directorName.Equals(m_oTrail.MyInputData.MetaData.CustomerName)) {
+
+			if (m_oTrail.MyInputData.DirectorNames.Count < 1) {
+				StepFailed<CustomerIsDirector>().Init(
+					m_oTrail.MyInputData.CustomerName.ToString() 
+				);
+				return;
+			} // if
+
+			foreach (Name directorName in m_oTrail.MyInputData.DirectorNames) {
+				if (directorName.Equals(m_oTrail.MyInputData.CustomerName)) {
 					isDirector = true;
 					break;
-				}
-			}
+				} // if
+			} // for
+
 			if (!isDirector) {
-				StepFailed<CustomerIsDirector>().Init(m_oTrail.MyInputData.MetaData.CustomerName.ToString(), 
-					m_oTrail.MyInputData.MetaData.DirectorNames.Select(x => x.ToString()).ToList());
+				StepFailed<CustomerIsDirector>().Init(
+					m_oTrail.MyInputData.CustomerName.ToString(), 
+					m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
+				);
 			}
 			else {
-				StepDone<CustomerIsDirector>().Init(m_oTrail.MyInputData.MetaData.CustomerName.ToString(), 
-					m_oTrail.MyInputData.MetaData.DirectorNames.Select(x => x.ToString()).ToList());
-			}
-		}
+				StepDone<CustomerIsDirector>().Init(
+					m_oTrail.MyInputData.CustomerName.ToString(), 
+					m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
+				);
+			} // if
+		} // CheckIsDirector
 		
 		private void CheckHmrcIsCompany() {
 			bool isCompany = false;
-			if (!m_oTrail.MyInputData.MetaData.HmrcBusinessNames.Any()) {
+
+			if (m_oTrail.MyInputData.HmrcBusinessNames.Count < 1) {
 				StepDone<HmrcIsOfBusiness>().Init();
+				return;
+			} // if
+
+			foreach (string hmrcName in m_oTrail.MyInputData.HmrcBusinessNames) {
+				if (hmrcName.Equals(m_oTrail.MyInputData.CompanyName)) {
+					isCompany = true;
+					break;
+				} // if
+			} // for
+
+			if (!isCompany) {
+				StepFailed<HmrcIsOfBusiness>().Init(
+					m_oTrail.MyInputData.HmrcBusinessNames,
+					m_oTrail.MyInputData.CompanyName
+				);
 			}
 			else {
-				foreach (var hmrcName in m_oTrail.MyInputData.MetaData.HmrcBusinessNames)
-				{
-					if (hmrcName.Equals(m_oTrail.MyInputData.MetaData.CompanyName)) {
-						isCompany = true;
-						break;
-					}
-				}
-
-				if (!isCompany) {
-					StepFailed<HmrcIsOfBusiness>().Init(m_oTrail.MyInputData.MetaData.HmrcBusinessNames, m_oTrail.MyInputData.MetaData.CompanyName);
-				}
-				else {
-					StepDone<HmrcIsOfBusiness>().Init(m_oTrail.MyInputData.MetaData.HmrcBusinessNames, m_oTrail.MyInputData.MetaData.CompanyName);
-				}
-			}
-		}
+				StepDone<HmrcIsOfBusiness>().Init(
+					m_oTrail.MyInputData.HmrcBusinessNames,
+					m_oTrail.MyInputData.CompanyName
+				);
+			} // if
+		} // CheckHmrcIsCompany
 
 		private void CheckIsFraud() {
 			if (m_oTrail.MyInputData.MetaData.FraudStatus == FraudStatus.Ok)
@@ -760,8 +778,7 @@
 		} // ReduceOutstandingPrincipal
 
 		private void CheckAllowedRange() {
-
-			if (!m_oTrail.MyInputData.Configuration.IsSilent) {
+			if (m_oTrail.MyInputData.Configuration.IsSilent) {
 				StepDone<AmountOutOfRangle>().Init(autoApprovedAmount, m_oTrail.MyInputData.Configuration.IsSilent);
 			}
 			else {
@@ -839,18 +856,6 @@
 		} // NotifyAutoApproveSilentMode
 
 
-		private string AdjustCompanyName(string companyName) {
-			companyName = string.IsNullOrEmpty(companyName)
-				              ? companyName
-				              : companyName.Trim()
-				                           .ToLowerInvariant()
-				                           .Replace("limited", "ltd")
-				                           .Replace("the ", string.Empty)
-				                           .Replace("&amp;", "&")
-				                           .Replace(".", string.Empty)
-				                           .Replace("#049;", "'");
-			return companyName;
-		}
 		private readonly CustomerRepository _customers;
 		private readonly CashRequestsRepository cashRequestsRepository;
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
@@ -878,7 +883,6 @@
 		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
 
 		private readonly ASafeLog log;
-		private string companyName;
 		private List<Name> directors;
 		private List<String> hmrcNames;
 	} // class Approval

@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Trails {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Common;
 	using Newtonsoft.Json;
@@ -9,11 +10,75 @@
 	public class ApprovalInputData : ITrailInputData {
 		#region public
 
+		#region method AdjustCompanyName
+
+		public static string AdjustCompanyName(string companyName) {
+			if (string.IsNullOrWhiteSpace(companyName))
+				return string.Empty;
+
+			return companyName.Trim()
+				.ToLowerInvariant()
+				.Replace("limited", "ltd")
+				.Replace("the ", string.Empty)
+				.Replace("&amp;", "&")
+				.Replace(".", string.Empty)
+				.Replace("#049;", "'");
+		} // AdjustCompanyName
+
+		#endregion method AdjustCompanyName
+
+		public DateTime DataAsOf { get; private set; }
+
+		public Configuration Configuration { get; private set; }
+		public MetaData MetaData { get; private set; }
+		public int CustomerID { get { return m_oArguments.CustomerID; } } // CustomerID
+		public decimal SystemCalculatedAmount { get { return m_oArguments.SystemCalculatedAmount; } } // SystemCalculatedAmount
+
+		[JsonConverter(typeof(StringEnumConverter))]
+		public Medal Medal { get { return m_oArguments.Medal; } } // Medal
+
+		public string WorstStatuses {
+			get { return string.Join(",", WorstStatusList); }
+		} // WorstStatuses
+
+		[JsonIgnore]
+		public List<string> WorstStatusList { get; private set; }
+
+		public int MarketplaceSeniority { get; private set; }
+		public List<Payment> LatePayments { get; private set; }
+		public decimal Turnover1M { get { return m_oTurnover != null ? m_oTurnover[1] : 0; } } // Turnover1M
+		public decimal Turnover3M { get { return m_oTurnover != null ? m_oTurnover[3] : 0; } } // Turnover3M
+		public decimal Turnover1Y { get { return m_oTurnover != null ? m_oTurnover[12] : 0; } } // Turnover1Y
+
+		public decimal AvailableFunds { get; private set; }
+		public decimal ReservedFunds { get; private set; }
+
+		#region property CustomerName
+
+		public Name CustomerName {
+			get {
+				if (m_oCustomerName == null)
+					m_oCustomerName = new Name(MetaData.FirstName, MetaData.LastName);
+
+				return m_oCustomerName;
+			} // get
+		} // CustomerName
+
+		private Name m_oCustomerName;
+		
+		#endregion property CustomerName
+
+		public List<Name> DirectorNames { get; set; }
+		public List<string> HmrcBusinessNames { get; set; }
+
 		#region constructor
 
 		public ApprovalInputData() {
+			m_bCompanyNameHasValue = false;
 			LatePayments = new List<Payment>();
 			m_oArguments = new Arguments();
+			DirectorNames = new List<Name>();
+			HmrcBusinessNames = new List<string>();
 		} // constructor
 
 		#endregion constructor
@@ -26,25 +91,27 @@
 
 		#endregion method Serialize
 
-		public DateTime DataAsOf { get; private set; }
+		#region method CompanyName
 
-		public Configuration Configuration { get; private set; }
-		public MetaData MetaData { get; private set; }
-		public int CustomerID { get { return m_oArguments.CustomerID; } } // CustomerID
-		public decimal SystemCalculatedAmount { get { return m_oArguments.SystemCalculatedAmount; } } // SystemCalculatedAmount
+		public string CompanyName {
+			get {
+				if (m_bCompanyNameHasValue)
+					return m_sCompanyName;
 
-		[JsonConverter(typeof(StringEnumConverter))]
-		public Medal Medal { get { return m_oArguments.Medal; } } // Medal
+				m_bCompanyNameHasValue = true;
 
-		public string WorstStatuses { get; private set; }
+				m_sCompanyName = AdjustCompanyName(MetaData.ExperianCompanyName);
+				if (m_sCompanyName == string.Empty)
+					m_sCompanyName = AdjustCompanyName(MetaData.EnteredCompanyName);
 
-		public int MarketplaceSeniority { get; private set; }
-		public List<Payment> LatePayments { get; private set; }
-		public decimal Turnover1M { get { return m_oTurnover != null ? m_oTurnover[1] : 0; } } // Turnover1M
-		public decimal Turnover3M { get { return m_oTurnover != null ? m_oTurnover[3] : 0; } } // Turnover3M
-		public decimal Turnover1Y { get { return m_oTurnover != null ? m_oTurnover[12] : 0; } } // Turnover1Y
+				return m_sCompanyName;
+			}
+		} // CompanyName
 
-		public decimal AvailableFunds { get; private set; }
+		private bool m_bCompanyNameHasValue;
+		private string m_sCompanyName;
+
+		#endregion method CompanyName
 
 		#region method FullInit
 
@@ -57,7 +124,9 @@
 			IEnumerable<Payment> oPayments,
 			OriginationTime oOriginationTime,
 			CalculatedTurnover oTurnover,
-			AvailableFunds oFunds
+			AvailableFunds oFunds,
+			List<Name> oDirectorNames,
+			List<string> oHmrcBusinessNames
 		) {
 			SetDataAsOf(oDataAsOf);
 			SetConfiguration(oCfg);
@@ -75,6 +144,9 @@
 			SetTurnover(12, oTurnover[12]);
 
 			SetAvailableFunds(oFunds.Available, oFunds.Reserved);
+
+			SetDirectorNames(oDirectorNames);
+			SetHmrcBusinessNames(oHmrcBusinessNames);
 		} // FullInit
 
 		#endregion method FullInit
@@ -90,7 +162,11 @@
 		#region method SetWorstStatuses
 
 		public void SetWorstStatuses(IEnumerable<string> oWorstStatuses) {
-			WorstStatuses = string.Join(",", oWorstStatuses);
+			if (WorstStatusList == null)
+				WorstStatusList = new List<string>();
+
+			if (oWorstStatuses != null)
+				WorstStatusList.AddRange(oWorstStatuses);
 		} // SetWorstStatuses
 
 		#endregion method SetWorstStatuses
@@ -121,8 +197,9 @@
 
 		#region method SetAvailableFunds
 
-		public void SetAvailableFunds(decimal nAvailable, decimal nReserved) {
-			AvailableFunds = nAvailable - nReserved;
+		public void SetAvailableFunds(decimal nTotalAvailable, decimal nReserved) {
+			AvailableFunds = nTotalAvailable - nReserved;
+			ReservedFunds = nReserved;
 		} // SetAvailableFunds
 
 		#endregion method SetAvailableFunds
@@ -137,14 +214,6 @@
 		} // SetTurnover
 
 		#endregion method SetTurnover
-
-		#region method SetWorstStatuses
-
-		public void SetWorstStatuses(string s) {
-			WorstStatuses = s ?? string.Empty;
-		} // SetWorstStatuses
-
-		#endregion method SetWorstStatuses
 
 		#region method SetConfiguration
 
@@ -161,6 +230,28 @@
 		} // SetMetaData
 
 		#endregion method SetMetaData
+
+		#region method SetDirectorNames
+
+		public void SetDirectorNames(List<Name> oDirectorNames) {
+			DirectorNames.Clear();
+
+			if (oDirectorNames != null)
+				DirectorNames.AddRange(oDirectorNames.Where(n => !n.IsEmpty));
+		} // SetDirectorNames
+
+		#endregion method SetDirectorNames
+
+		#region method SetHmrcBusinessNames
+
+		public void SetHmrcBusinessNames(List<string> oHmrcBusinessNames) {
+			HmrcBusinessNames.Clear();
+
+			if (oHmrcBusinessNames != null)
+				HmrcBusinessNames.AddRange(oHmrcBusinessNames.Where(n => n != string.Empty));
+		} // SetHmrcBusinessNames
+
+		#endregion method SetHmrcBusinessNames
 
 		#endregion public
 

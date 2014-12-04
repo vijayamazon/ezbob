@@ -51,6 +51,7 @@
     <Compile Include="AutoDecision\AutoApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoApproval\Arguments.cs" />
     <Compile Include="AutoDecision\AutoApproval\AvailableFunds.cs" />
+    <Compile Include="AutoDecision\AutoApproval\Checker.cs" />
     <Compile Include="AutoDecision\AutoApproval\Configuration.cs" />
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
     <Compile Include="AutoDecision\AutoApproval\Name.cs" />

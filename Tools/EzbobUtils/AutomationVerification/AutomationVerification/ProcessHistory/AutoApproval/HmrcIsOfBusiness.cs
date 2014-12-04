@@ -12,7 +12,7 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 		} // constructor
 		
 		/// <summary>
-		/// Init if have hmrc
+		/// Init if has HMRC.
 		/// </summary>
 		public void Init(List<string> hmrcBusinessName, string experianCompanyName) {
 			Comment = string.Format("HMRC business name: '{0}', experian business name: '{1}'", 
@@ -20,10 +20,10 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 		} // Init
 
 		/// <summary>
-		/// Init if don't have hmrc
+		/// Init if has no HMRC.
 		/// </summary>
 		public void Init() {
-			Comment = "Customer don't have hmrc";
+			Comment = "Customer has no HMRC.";
 		}
 	} // class
 } // namespace

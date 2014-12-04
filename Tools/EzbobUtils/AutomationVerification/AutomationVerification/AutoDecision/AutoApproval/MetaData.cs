@@ -22,13 +22,14 @@
 		[JsonIgnore]
 		public string RowType { get; set; }
 
+		[JsonIgnore]
+		public string FirstName { get; set; }
+
+		[JsonIgnore]
+		public string LastName { get; set; }
+
 		public bool IsBrokerCustomer { get; set; }
 		
-		public Name CustomerName { get; set; }
-		public List<Name> DirectorNames { get; set; }
-		public string CompanyName { get; set; }
-		public List<string> HmrcBusinessNames { get; set; }
-
 		public int NumOfTodayAutoApproval { get; set; }
 		public decimal TodayLoanSum { get; set; }
 
@@ -62,6 +63,12 @@
 		public DateTime? OfferValidUntil { get; set; }
 		public DateTime? OfferStart { get; set; }
 		public bool? EmailSendingBanned { get; set; }
+
+		[JsonIgnore]
+		public string ExperianCompanyName { get; set; }
+
+		[JsonIgnore]
+		public string EnteredCompanyName { get; set; }
 
 		#endregion properties read from DB
 
