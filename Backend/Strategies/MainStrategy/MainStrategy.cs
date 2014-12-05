@@ -403,6 +403,7 @@
 
 				cr.ManualSetupFeeAmount = (int)setupFeeAmountToUse;
 				cr.ManualSetupFeePercent = setupFeePercentToUse;
+				cr.UseSetupFee = setupFeeAmountToUse > 0 || setupFeePercentToUse > 0;
 				cr.APR = dataGatherer.LoanOfferApr;
 
 				if (autoDecisionResponse.IsAutoReApproval) {

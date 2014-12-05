@@ -15,14 +15,15 @@ namespace AutomationCalculator.OfferCalculation
 		/// Calculate interest rate for specific offer amount, setup fee, repayment period and pricing scenario
 		/// </summary>
 		/// <returns>interest rate</returns>
-		public decimal GetInterestRate(int loanAmount, int repaymentPeriod, int customerId, PricingScenarioModel pricingScenario) {
+		public decimal GetInterestRate(int loanAmount, int repaymentPeriod, int customerId, decimal defaultRate, PricingScenarioModel pricingScenario)
+		{
 			var setupFee = (pricingScenario.SetupFee/100) * loanAmount;                                                            //f
 			int realRepaymentPeriod = (int)Math.Floor(repaymentPeriod * pricingScenario.TenurePercents);                           //ñ
 			int realInterestOnlyPeriod = (int)Math.Ceiling(pricingScenario.InterestOnlyPeriod * pricingScenario.TenurePercents);   //õ
 			int realRestPeriod = realRepaymentPeriod - realInterestOnlyPeriod;                                                     //ḿ
 			var cost = GetTotalCost(loanAmount, repaymentPeriod, customerId, pricingScenario);                                     //C
 			var profit = pricingScenario.ProfitMarkupPercentsOfRevenue;                                                            //p
-			var defaultRate = GetDefaultRate(customerId, pricingScenario);                                                         //d
+			defaultRate = defaultRate;                                                                                             //d
 			loanAmount = loanAmount;                                                                                               //A
 
 
@@ -35,14 +36,14 @@ namespace AutomationCalculator.OfferCalculation
 		/// Calculate setup fee for specific offer amount, interest rate, repayment period and pricing scenario
 		/// </summary>
 		/// <returns>setup fee</returns>
-		public decimal GetSetupfee(int loanAmount, int repaymentPeriod, decimal interestRate, int customerId, PricingScenarioModel pricingScenario)
+		public decimal GetSetupfee(int loanAmount, int repaymentPeriod, decimal interestRate, int customerId, decimal defaultRate, PricingScenarioModel pricingScenario)
 		{
 			int realRepaymentPeriod = (int)Math.Floor(repaymentPeriod * pricingScenario.TenurePercents);                           //ñ
 			int realInterestOnlyPeriod = (int)Math.Ceiling(pricingScenario.InterestOnlyPeriod * pricingScenario.TenurePercents);   //õ
 			int realRestPeriod = realRepaymentPeriod - realInterestOnlyPeriod;                                                     //ḿ
 			var cost = GetTotalCost(loanAmount, repaymentPeriod, customerId, pricingScenario);                                     //C
 			var profit = pricingScenario.ProfitMarkupPercentsOfRevenue;                                                            //p
-			var defaultRate = GetDefaultRate(customerId, pricingScenario);                                                         //d
+			defaultRate = defaultRate;                                                                                             //d
 			interestRate = interestRate;                                                                                           //r
 			loanAmount = loanAmount;                                                                                               //A
 			
@@ -86,7 +87,7 @@ namespace AutomationCalculator.OfferCalculation
 		/// default rate = company default rate * company share + consumer default rate * (1 - company share)
 		/// </summary>
 		/// <returns>default rate</returns>
-		private decimal GetDefaultRate(int customerId, PricingScenarioModel pricingScenario) {
+		public decimal GetDefaultRate(int customerId, PricingScenarioModel pricingScenario) {
 			var dbHelper = new DbHelper(new SqlConnection(Log), Log);
 			var customerDefaultRate = dbHelper.GetOfferDefaultRate(customerId);
 			
