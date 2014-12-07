@@ -23,6 +23,8 @@
 	public class Agent {
 		#region public
 
+		public virtual RejectionTrail Trail { get; private set; }
+
 		#region constructor
 
 		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
@@ -38,7 +40,8 @@
 		public virtual Agent Init() {
 			Trail = new RejectionTrail(Args.CustomerID, Log, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
 
-			Cfg = new Configuration(DB, Log);
+			Now = DateTime.UtcNow;
+			Cfg = InitCfg();
 			MetaData = new MetaData();
 			Turnover = new CalculatedTurnover();
 			OriginationTime = new OriginationTime(Log);
@@ -48,8 +51,6 @@
 		} // Init
 
 		#endregion method Init
-
-		public virtual RejectionTrail Trail { get; private set; }
 
 		#region method MakeAndVerifyDecision
 
@@ -96,33 +97,9 @@
 
 		#region protected
 
-		#region method GatherData
+		#region properties
 
-		protected virtual void GatherData() {
-			Cfg.Load();
-
-			DB.ForEachRowSafe(
-				ProcessRow,
-				"LoadAutoRejectData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", Args.CustomerID)
-			);
-
-			MetaData.Validate();
-
-			Trail.MyInputData.InitCfg(DateTime.UtcNow, Cfg.Values);
-
-			OriginationTime.FromExperian(MetaData.IncorporationDate);
-
-			FillFromConsumerData();
-			FillFromCompanyData();
-
-			Trail.MyInputData.InitData(ToInputData());
-		} // GatherData
-
-		#endregion method GatherData
-
-		#region fields
+		protected virtual DateTime Now { get; set; }
 
 		protected virtual AConnection DB { get; private set; }
 		protected virtual ASafeLog Log { get; private set; }
@@ -135,15 +112,11 @@
 		protected virtual CalculatedTurnover Turnover { get; private set; }
 		protected virtual OriginationTime OriginationTime { get; private set; }
 
-		#endregion fields
-
-		#endregion protected
-
-		#region private
+		#endregion properties
 
 		#region method RunPrimary
 
-		private void RunPrimary() {
+		protected virtual void RunPrimary() {
 			Log.Debug("Primary: checking if auto reject should take place for customer {0}...", Args.CustomerID);
 
 			GatherData();
@@ -154,6 +127,206 @@
 		} // RunPrimary
 
 		#endregion method RunPrimary
+
+		#region method InitCfg
+
+		protected virtual Configuration InitCfg() {
+			return new Configuration(DB, Log);
+		} // InitCfg
+
+		#endregion method InitCfg
+
+		#region method LoadData
+
+		protected virtual void LoadData() {
+			DB.ForEachRowSafe(
+				ProcessRow,
+				"LoadAutoRejectData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", Args.CustomerID)
+			);
+
+			MetaData.Validate();
+		} // LoadData
+
+		#endregion method LoadMetaData
+
+		#region method LoadConsumerData
+
+		protected virtual ExperianConsumerData LoadConsumerData() {
+			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, null, DB, Log);
+			lcd.Execute();
+
+			return lcd.Result;
+		} // LoadConsumerData
+
+		#endregion method LoadConsumerData
+
+		#region method LoadCompanyData
+
+		protected virtual ExperianLtd LoadCompanyData() {
+			var ltd = new LoadExperianLtd(MetaData.CompanyRefNum, 0, DB, Log);
+			ltd.Execute();
+
+			return ltd.Result;
+		} // LoadCompanyData
+
+		#endregion method LoadCompanyData
+
+		#region method ProcessRow
+
+		protected  virtual void ProcessRow(SafeReader sr) {
+			RowType nRowType;
+
+			string sRowType = sr["RowType"];
+
+			if (!Enum.TryParse(sRowType, out nRowType)) {
+				Log.Alert("Unsupported row type encountered: '{0}'.", sRowType);
+				return;
+			} // if
+
+			switch (nRowType) {
+			case RowType.MetaData:
+				sr.Fill(MetaData);
+				break;
+
+			case RowType.MpError:
+				UpdateErrors.Add(sr.Fill<MpError>());
+				break;
+
+			case RowType.OriginationTime:
+				OriginationTime.Process(sr);
+				break;
+
+			case RowType.Turnover:
+				Turnover.Add(sr, Log);
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // ProcessRow
+
+		#endregion method ProcessRow
+
+		#endregion protected
+
+		#region private
+
+		#region method GatherData
+
+		private void GatherData() {
+			Cfg.Load();
+
+			LoadData();
+
+			Trail.MyInputData.InitCfg(@Now, Cfg.Values);
+
+			OriginationTime.FromExperian(MetaData.IncorporationDate);
+
+			FillFromConsumerData();
+			FillFromCompanyData();
+
+			Trail.MyInputData.InitData(ToInputData());
+		} // GatherData
+
+		#endregion method GatherData
+
+		#region method FillFromConsumerData
+
+		private void FillFromConsumerData() {
+			var lcd = LoadConsumerData();
+
+			FillNumOfPersonalDefaults(lcd);
+			FillNumOfLateConsumerAccounts(lcd);
+
+			if (lcd == null)
+				return;
+
+			Log.Debug("Consumer score before: {0}, bureau score '{1}'", MetaData.ConsumerScore, lcd.BureauScore);
+
+			if (lcd.BureauScore != null)
+				MetaData.ConsumerScore = MetaData.ConsumerScore.Max(lcd.BureauScore.Value);
+
+			Log.Debug("Consumer score after: {0}", MetaData.ConsumerScore);
+		} // FillFromConsumerData
+
+		#endregion method FillFromConsumerData
+
+		#region method FillFromCompanyData
+
+		private void FillFromCompanyData() {
+			m_nNumOfDefaultBusinessAccounts = 0;
+
+			if (!MetaData.IsLtd || string.IsNullOrWhiteSpace(MetaData.CompanyRefNum))
+				return;
+
+			var ltd = LoadCompanyData();
+
+			if (ltd == null)
+				return;
+
+			DateTime oThen = Trail.MyInputData.CompanyMonthsNumAgo;
+
+			// Log.Debug("DL97 searcher: then is '{0}'.", oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
+			IEnumerable<ExperianLtdDL97> oDL97List = ltd.GetChildren<ExperianLtdDL97>();
+
+			foreach (var dl97 in oDL97List) {
+				// Log.Debug(
+					// "DL97 entry: id '{0}', default balance '{1}', current balance '{4}', last updated '{2}', statuses '{3}'",
+					// dl97.ID,
+					// dl97.DefaultBalance.HasValue ? dl97.DefaultBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
+					// dl97.CAISLastUpdatedDate.HasValue ? dl97.CAISLastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
+					// dl97.AccountStatusLast12AccountStatuses,
+					// dl97.CurrentBalance.HasValue ? dl97.CurrentBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --"
+				// );
+
+				decimal nBalance = Math.Max(dl97.DefaultBalance ?? 0, dl97.CurrentBalance ?? 0);
+
+				// Log.Debug("DL97 id {0} balance is {1}.", dl97.ID, nBalance);
+
+				if (nBalance <= Trail.MyInputData.Reject_Defaults_CompanyAmount) {
+					// Log.Debug("DL97 id {0} ain't not default account: low balance.", dl97.ID);
+					continue;
+				} // if
+
+				if (!dl97.CAISLastUpdatedDate.HasValue) {
+					// Log.Debug("DL97 id {0} ain't not default account: no updated time.", dl97.ID);
+					continue;
+				} // if
+
+				if (string.IsNullOrWhiteSpace(dl97.AccountStatusLast12AccountStatuses)) {
+					// Log.Debug("DL97 id {0} ain't not default account: no statuses.", dl97.ID);
+					continue;
+				} // if
+
+				DateTime cur = dl97.CAISLastUpdatedDate.Value;
+
+				for (int i = 1; i <= dl97.AccountStatusLast12AccountStatuses.Length; i++) {
+					// Log.Debug("DL97 id {0}: cur date is '{1}'.", dl97.ID, cur.ToString("d/MMM/yyy H:mm:ss", CultureInfo.InvariantCulture));
+
+					if (cur < oThen) {
+						// Log.Debug("DL97 id {0}: stopped looking for defaults - 'cur' is before 'then'.", dl97.ID);
+						break;
+					} // if
+
+					char status = dl97.AccountStatusLast12AccountStatuses[dl97.AccountStatusLast12AccountStatuses.Length - i];
+
+					// Log.Debug("DL97 id {0}: status[{1}] = '{2}'.", dl97.ID, i, status);
+
+					if ((status == '8') || (status == '9')) {
+						// Log.Debug("DL97 id {0}: is a default account.", dl97.ID);
+						m_nNumOfDefaultBusinessAccounts++;
+						break;
+					} // if
+
+					cur = cur.AddMonths(-1);
+				} // for
+			} // for each account
+		} // FillFromCompanyData
+
+		#endregion method FillFromCompanyData
 
 		#region method RunSecondary
 
@@ -196,28 +369,6 @@
 		} // ToInputData
 
 		#endregion method ToInputData
-
-		#region method FillFromConsumerData
-
-		private void FillFromConsumerData() {
-			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, null, DB, Log);
-			lcd.Execute();
-
-			FillNumOfPersonalDefaults(lcd.Result);
-			FillNumOfLateConsumerAccounts(lcd.Result);
-
-			if (lcd.Result == null)
-				return;
-
-			Log.Debug("Consumer score before: {0}, bureau score '{1}'", MetaData.ConsumerScore, lcd.Result.BureauScore);
-
-			if (lcd.Result.BureauScore != null)
-				MetaData.ConsumerScore = MetaData.ConsumerScore.Max(lcd.Result.BureauScore.Value);
-
-			Log.Debug("Consumer score after: {0}", MetaData.ConsumerScore);
-		} // FillFromConsumerData
-
-		#endregion method FillFromConsumerData
 
 		#region method FillNumOfPersonalDefaults
 
@@ -337,118 +488,6 @@
 		} // FillLateConsumerAccounts
 
 		#endregion method FillNumOfLateConsumerAccounts
-
-		#region method FillFromCompanyData
-
-		private void FillFromCompanyData() {
-			m_nNumOfDefaultBusinessAccounts = 0;
-
-			if (!MetaData.IsLtd || string.IsNullOrWhiteSpace(MetaData.CompanyRefNum))
-				return;
-
-			var ltd = new LoadExperianLtd(MetaData.CompanyRefNum, 0, DB, Log);
-			ltd.Execute();
-
-			if (ltd.Result == null)
-				return;
-
-			DateTime oThen = Trail.MyInputData.CompanyMonthsNumAgo;
-
-			// Log.Debug("DL97 searcher: then is '{0}'.", oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
-
-			IEnumerable<ExperianLtdDL97> oDL97List = ltd.Result.GetChildren<ExperianLtdDL97>();
-
-			foreach (var dl97 in oDL97List) {
-				// Log.Debug(
-					// "DL97 entry: id '{0}', default balance '{1}', current balance '{4}', last updated '{2}', statuses '{3}'",
-					// dl97.ID,
-					// dl97.DefaultBalance.HasValue ? dl97.DefaultBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
-					// dl97.CAISLastUpdatedDate.HasValue ? dl97.CAISLastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
-					// dl97.AccountStatusLast12AccountStatuses,
-					// dl97.CurrentBalance.HasValue ? dl97.CurrentBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --"
-				// );
-
-				decimal nBalance = Math.Max(dl97.DefaultBalance ?? 0, dl97.CurrentBalance ?? 0);
-
-				// Log.Debug("DL97 id {0} balance is {1}.", dl97.ID, nBalance);
-
-				if (nBalance <= Trail.MyInputData.Reject_Defaults_CompanyAmount) {
-					// Log.Debug("DL97 id {0} ain't not default account: low balance.", dl97.ID);
-					continue;
-				} // if
-
-				if (!dl97.CAISLastUpdatedDate.HasValue) {
-					// Log.Debug("DL97 id {0} ain't not default account: no updated time.", dl97.ID);
-					continue;
-				} // if
-
-				if (string.IsNullOrWhiteSpace(dl97.AccountStatusLast12AccountStatuses)) {
-					// Log.Debug("DL97 id {0} ain't not default account: no statuses.", dl97.ID);
-					continue;
-				} // if
-
-				DateTime cur = dl97.CAISLastUpdatedDate.Value;
-
-				for (int i = 1; i <= dl97.AccountStatusLast12AccountStatuses.Length; i++) {
-					// Log.Debug("DL97 id {0}: cur date is '{1}'.", dl97.ID, cur.ToString("d/MMM/yyy H:mm:ss", CultureInfo.InvariantCulture));
-
-					if (cur < oThen) {
-						// Log.Debug("DL97 id {0}: stopped looking for defaults - 'cur' is before 'then'.", dl97.ID);
-						break;
-					} // if
-
-					char status = dl97.AccountStatusLast12AccountStatuses[dl97.AccountStatusLast12AccountStatuses.Length - i];
-
-					// Log.Debug("DL97 id {0}: status[{1}] = '{2}'.", dl97.ID, i, status);
-
-					if ((status == '8') || (status == '9')) {
-						// Log.Debug("DL97 id {0}: is a default account.", dl97.ID);
-						m_nNumOfDefaultBusinessAccounts++;
-						break;
-					} // if
-
-					cur = cur.AddMonths(-1);
-				} // for
-			} // for each account
-		} // FillFromCompanyData
-
-		#endregion method FillFromCompanyData
-
-		#region method ProcessRow
-
-		private void ProcessRow(SafeReader sr) {
-			RowType nRowType;
-
-			string sRowType = sr["RowType"];
-
-			if (!Enum.TryParse(sRowType, out nRowType)) {
-				Log.Alert("Unsupported row type encountered: '{0}'.", sRowType);
-				return;
-			} // if
-
-			switch (nRowType) {
-			case RowType.MetaData:
-				sr.Fill(MetaData);
-				break;
-
-			case RowType.MpError:
-				UpdateErrors.Add(sr.Fill<MpError>());
-				break;
-
-			case RowType.OriginationTime:
-				OriginationTime.Process(sr);
-				break;
-
-			case RowType.Turnover:
-				Turnover.Add(sr, Log);
-				break;
-
-			default:
-				throw new ArgumentOutOfRangeException();
-			} // switch
-		} // ProcessRow
-
-		#endregion method ProcessRow
 
 		#region enum RowType
 

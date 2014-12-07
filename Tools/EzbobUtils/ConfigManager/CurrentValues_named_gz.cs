@@ -176,6 +176,14 @@
 
 		#endregion property LowCreditScore
 
+		#region property MaamEmailReceiver
+
+		public virtual VariableValue MaamEmailReceiver {
+			get { return this[Variables.MaamEmailReceiver]; } // get
+		} // MaamEmailReceiver
+
+		#endregion property MaamEmailReceiver
+
 		#region property MailSenderEmail
 
 		public virtual VariableValue MailSenderEmail {

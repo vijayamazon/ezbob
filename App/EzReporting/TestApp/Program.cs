@@ -18,7 +18,7 @@ namespace TestApp {
 	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
 	using Ezbob.ValueIntervals;
-	using Html;
+	using Ezbob.Utils.Html;
 	using JetBrains.Annotations;
 	using Reports;
 	using Reports.Alibaba.DataSharing;

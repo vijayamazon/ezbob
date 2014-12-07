@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-
-namespace Html {
-	#region class AAttribute
+﻿namespace Ezbob.Utils.Html {
+	using System.Collections.Generic;
 
 	public abstract class AAttribute {
 		#region public
@@ -64,6 +62,4 @@ namespace Html {
 
 		#endregion protected
 	} // class AAttribute
-
-	#endregion class AAttribute
 } // namespace Html

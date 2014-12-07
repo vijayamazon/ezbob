@@ -26,6 +26,18 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	IF @DateTo IS NOT NULL
+	BEGIN
+		SELECT
+			@DateTo = MAX(m.UpdatingEnd)
+		FROM
+			MP_CustomerMarketPlace m
+		WHERE
+			m.Id = @MpID
+			AND
+			m.UpdatingEnd < @DateTo
+	END
+
 	IF @DateTo IS NULL
 	BEGIN
 		SELECT

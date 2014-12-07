@@ -19,7 +19,7 @@
 
 		#region method Load
 
-		public void Load() {
+		public virtual void Load() {
 			m_oDB.ForEachRowSafe(SetValue, "LoadAutoRejectionConfigs", CommandSpecies.StoredProcedure);
 		} // Load
 

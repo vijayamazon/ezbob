@@ -32,7 +32,6 @@
 		#region method Execute
 
 		public override void Execute() {
-
 			switch (m_nWorkMode) {
 			case WorkMode.LoadFull:
 				Result = ExperianLtd.Load(m_nServiceLogID, DB, Log);
@@ -49,9 +48,10 @@
 
 			if (Result != null && !string.IsNullOrEmpty(Result.RegisteredNumber)) {
 				var scoreHistory = DB.Fill<ScoreAtDate>(
-							"GetCompanyHistory",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("RefNumber", Result.RegisteredNumber));
+					"GetCompanyHistory",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("RefNumber", Result.RegisteredNumber)
+				);
 
 				History = scoreHistory;
 			}

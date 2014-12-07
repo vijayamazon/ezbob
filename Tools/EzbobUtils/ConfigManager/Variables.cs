@@ -237,6 +237,7 @@ namespace ConfigManager {
 		LoginValidity,
 		LowCreditScore,
 
+		MaamEmailReceiver,
 		MailSenderEmail,
 		MailSenderName,
 		ManagerMaxLoan,

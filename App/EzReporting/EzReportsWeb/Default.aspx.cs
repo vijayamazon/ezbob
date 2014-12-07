@@ -1,7 +1,6 @@
 ﻿namespace EzReportsWeb {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -11,7 +10,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
-	using Html;
+	using Ezbob.Utils.Html;
 	using Reports;
 	using System.Web.Script.Serialization;
 

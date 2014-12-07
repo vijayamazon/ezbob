@@ -2,7 +2,7 @@
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Html;
+	using Ezbob.Utils.Html;
 	using OfficeOpenXml;
 	using Reports;
 

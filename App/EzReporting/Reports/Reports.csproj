@@ -73,7 +73,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AAttribute.cs" />
     <Compile Include="Alibaba\DataSharing\CustomerData.cs" />
     <Compile Include="Alibaba\DataSharing\DataSharing.cs" />
     <Compile Include="Alibaba\ExcelPackageExt.cs" />
@@ -84,8 +83,6 @@
     <Compile Include="Alibaba\Funnel\RejectReasonRow.cs" />
     <Compile Include="Alibaba\Funnel\StrInt.cs" />
     <Compile Include="Alibaba\IAlibaba.cs" />
-    <Compile Include="ATag.cs" />
-    <Compile Include="attributes.cs" />
     <Compile Include="BaseReportHandler\brh.cs" />
     <Compile Include="BaseReportHandler\brh_AccountingLoanBalance.cs" />
     <Compile Include="BaseReportHandler\brh_dispatch.cs" />
@@ -131,7 +128,6 @@
     <Compile Include="StrategyRunningTime\Stat.cs" />
     <Compile Include="StrategyRunningTime\StrategyData.cs" />
     <Compile Include="StrategyRunningTime\StrategyRunningTime.cs" />
-    <Compile Include="tags.cs" />
     <Compile Include="TraficReport\AnalyticsData.cs" />
     <Compile Include="TraficReport\CustomersData.cs" />
     <Compile Include="TraficReport\Source.cs" />

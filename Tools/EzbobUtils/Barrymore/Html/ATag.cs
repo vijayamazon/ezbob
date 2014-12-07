@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using Html.Attributes;
-
-namespace Html {
-	#region class ATag
+﻿namespace Ezbob.Utils.Html {
+	using System.Collections.Generic;
+	using System.Reflection;
+	using System.Text;
+	using Ezbob.Utils.Html.Attributes;
 
 	public abstract class ATag {
 		#region public
@@ -149,6 +146,4 @@ namespace Html {
 
 		#endregion protected
 	} // class ATag
-
-	#endregion class ATag
-} // namespace Html
+} // namespace

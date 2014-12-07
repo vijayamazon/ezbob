@@ -10,7 +10,7 @@
 	using AutomationCalculator.Common;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Html.Tags;
+	using Ezbob.Utils.Html.Tags;
 	using Reports;
 
 	public class Program

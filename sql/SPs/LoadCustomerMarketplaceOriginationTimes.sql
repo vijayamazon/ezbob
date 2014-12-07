@@ -6,7 +6,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LoadCustomerMarketplaceOriginationTimes
-@CustomerID INT
+@CustomerID INT,
+@Now DATETIME = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -40,6 +41,8 @@ BEGIN
 		cmp.CustomerId = @CustomerID
 		AND
 		cmp.OriginationDate IS NOT NULL
+		AND
+		(@Now IS NULL OR cmp.Created < @Now)
 
 	UNION
 	------------------------------------------------------------------------------
@@ -66,7 +69,20 @@ BEGIN
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
 	WHERE
-		ISNULL(r.IsDeleted, 0) = 0
+		(@Now IS NULL OR r.Created < @Now)
+		AND
+		(@Now IS NULL AND ISNULL(r.IsDeleted, 0) = 0)
+		AND
+		(@Now IS NOT NULL AND (
+			ISNULL(r.IsDeleted, 0) = 0
+			OR
+			NOT EXISTS (
+				SELECT h.HistoryItemID
+				FROM MP_VatReturnRecordDeleteHistory h
+				WHERE h.DeletedRecordID = r.Id
+				AND h.DeletedTime < @Now
+			)
+		))
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -98,6 +114,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -129,6 +147,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -159,6 +179,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR cmp.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -190,6 +212,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -221,6 +245,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -252,6 +278,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -283,6 +311,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR cmp.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -314,6 +344,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -345,6 +377,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -376,6 +410,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -407,6 +443,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -438,6 +476,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,
@@ -471,6 +511,8 @@ BEGIN
 			AND cmp.CustomerId = @CustomerID
 		INNER JOIN MP_MarketplaceType mt
 			ON cmp.MarketPlaceId = mt.Id
+	WHERE
+		(@Now IS NULL OR r.Created < @Now)
 	GROUP BY
 		cmp.Id,
 		mt.Name,

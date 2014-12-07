@@ -107,11 +107,51 @@ BEGIN
 		s.Id = @CustomerStatusID
 
 	------------------------------------------------------------------------------
+	--
+	-- Select customer fraud status.
+	--
+	------------------------------------------------------------------------------
+
+	DECLARE @FraudRqID INT
+
+	IF @Now IS NOT NULL
+	BEGIN
+		SELECT TOP 1
+			@FraudRqID = r.Id
+		FROM
+			FraudRequest r
+		WHERE
+			r.CustomerId = @CustomerID
+			AND
+			r.CheckDate < @Now
+		ORDER BY
+			r.CheckDate DESC
+
+		IF EXISTS (SELECT * FROM FraudDetection WHERE FraudRequestId = @FraudRqID)
+			SET @FraudStatus = 2 -- Fraud suspect
+	END
+
+	------------------------------------------------------------------------------
+
+	IF @FraudStatus IS NULL
+	BEGIN
+		SELECT
+			@FraudStatus = c.FraudStatus
+		FROM
+			Customer c
+		WHERE
+			c.Id = @CustomerID
+	END
+
+	------------------------------------------------------------------------------
+	--
+	-- Select broker id, company type and Experian refnum.
+	-- There is no history these items.
+	--
 	------------------------------------------------------------------------------
 
 	SELECT
 		@BrokerID      = c.BrokerID,
-		@FraudStatus   = c.FraudStatus,
 		@IsLtd         = CASE WHEN c.TypeOfBusiness IN ('Limited', 'LLP') THEN 1 ELSE 0 END,
 		@CompanyRefNum = co.ExperianRefNum
 	FROM
@@ -121,6 +161,9 @@ BEGIN
 		c.Id = @CustomerID
 
 	------------------------------------------------------------------------------
+	--
+	-- Select company score and incorporation date.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @CompanyScore INT = 0
@@ -128,26 +171,57 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	EXECUTE GetCompanyScoreAndIncorporationDate
-		@CustomerId,
-		0,
-		@CompanyScore OUTPUT,
-		@IncorporationDate OUTPUT
+	IF @Now IS NULL
+	BEGIN
+		EXECUTE GetCompanyScoreAndIncorporationDate
+			@CustomerId,
+			0,
+			@CompanyScore OUTPUT,
+			@IncorporationDate OUTPUT
+	END
+	ELSE BEGIN
+		EXECUTE GetCompanyHistoricalScoreAndIncorporationDate
+			@CustomerId,
+			0,
+			@Now,
+			@CompanyScore OUTPUT,
+			@IncorporationDate OUTPUT
+	END
 	
 	------------------------------------------------------------------------------
+	--
+	-- Select "director part" of consumer score.
+	--
 	------------------------------------------------------------------------------
 
-	DECLARE @ConsumerScore INT = ISNULL((
+	DECLARE @ConsumerScore INT
+
+	IF @Now IS NULL
+	BEGIN
 		SELECT
-			MAX(ISNULL(ExperianConsumerScore, 0))
+			@ConsumerScore = MAX(ISNULL(ExperianConsumerScore, 0))
 		FROM
 			Director
 		WHERE
 			CustomerId = @CustomerID
 			AND
 			ExperianConsumerScore IS NOT NULL
-	), 0)
+	END
+	ELSE BEGIN
+		SELECT
+			@ConsumerScore = MAX(ISNULL(d.MaxScore, 0))
+		FROM
+			CustomerAnalyticsDirector d
+		WHERE
+			d.CustomerID = @CustomerID
+			AND
+			d.AnalyticsDate < @Now
+	END
 
+	------------------------------------------------------------------------------
+	--
+	-- Select number of files uploaded via Company Files marketplace.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @CompanyFilesCount INT = ISNULL((
@@ -157,14 +231,18 @@ BEGIN
 			MP_CompanyFilesMetaData f
 		WHERE
 			f.CustomerId = @CustomerID
+			AND
+			(@Now IS NULL OR f.Created < @Now)
 	), 0)
 
 	------------------------------------------------------------------------------
+	--
+	-- Select time of last Experian consumer request.
+	--
 	------------------------------------------------------------------------------
 
-	DECLARE @ServiceLogId BIGINT
-
-	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT
+	DECLARE @ConsumerServiceLogID BIGINT
+	EXEC GetExperianConsumerServiceLog @CustomerID, @ConsumerServiceLogID OUTPUT, @Now
 
 	------------------------------------------------------------------------------
 
@@ -173,9 +251,21 @@ BEGIN
 	FROM
 		MP_ServiceLog l
 	WHERE
-		l.Id = @ServiceLogId)
+		l.Id = @ConsumerServiceLogID)
 
 	------------------------------------------------------------------------------
+	--
+	-- Select last company Experian check.
+	--
+	------------------------------------------------------------------------------
+
+	DECLARE @CompanyServiceLogID BIGINT
+	EXECUTE GetExperianCompanyServiceLog @CustomerID, @CompanyServiceLogID OUTPUT, @Now
+	
+	------------------------------------------------------------------------------
+	--
+	-- Output: meta data.
+	--
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -185,14 +275,20 @@ BEGIN
 		FraudStatusID         = ISNULL(@FraudStatus, 3), -- under investigation
 		CustomerStatusName    = ISNULL(@CustomerStatus, 'Unknown'),
 		CustomerStatusEnabled = ISNULL(@CustomerStatusEnabled, 0),
-		ConsumerScore         = @ConsumerScore,
+		ConsumerScore         = ISNULL(@ConsumerScore, 0),
 		BusinessScore         = @CompanyScore,
 		IncorporationDate     = @IncorporationDate,
 		CompanyFilesCount     = @CompanyFilesCount,
 		IsLtd                 = @IsLtd,
 		CompanyRefNum         = ISNULL(@CompanyRefNum, ''),
-		ConsumerDataTime      = @ConsumerDataTime
+		ConsumerDataTime      = @ConsumerDataTime,
+		ConsumerServiceLogID  = @ConsumerServiceLogID,
+		CompanyServiceLogID   = @CompanyServiceLogID
 
+	------------------------------------------------------------------------------
+	--
+	-- Output: marketplace errors.
+	--
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -209,18 +305,32 @@ BEGIN
 		RTRIM(LTRIM(ISNULL(mp.UpdateError, ''))) != ''
 		AND
 		ISNULL(mp.Disabled, 0) = 0
+		AND
+		(@Now IS NULL OR mp.UpdatingEnd < @Now)
 
 	------------------------------------------------------------------------------
-
-	EXECUTE LoadCustomerMarketplaceOriginationTimes @CustomerID
-
+	--
+	-- Output: marketplace origination data.
+	--
 	------------------------------------------------------------------------------
 
-	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 1
-	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 3
-	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 6
-	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 12
+	EXECUTE LoadCustomerMarketplaceOriginationTimes @CustomerID, @Now
 
+	------------------------------------------------------------------------------
+	--
+	-- Output: marketplace turnover data.
+	--
+	------------------------------------------------------------------------------
+
+	EXECUTE GetCustomerTurnoverData 0, @CustomerID,  1, @Now
+	EXECUTE GetCustomerTurnoverData 0, @CustomerID,  3, @Now
+	EXECUTE GetCustomerTurnoverData 0, @CustomerID,  6, @Now
+	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 12, @Now
+
+	------------------------------------------------------------------------------
+	--
+	-- This is the end...
+	--
 	------------------------------------------------------------------------------
 END
 GO

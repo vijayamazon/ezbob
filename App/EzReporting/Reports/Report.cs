@@ -8,7 +8,8 @@
 	using System.Text;
 	using System.Text.RegularExpressions;
 	using Ezbob.Database;
-	using Html;
+	using Ezbob.Utils.Html;
+	using Ezbob.Utils.Html.Tags;
 	using JetBrains.Annotations;
 
 	public class Report {
@@ -209,7 +210,7 @@
 		#region style related
 
 		public static ATag GetStyle() {
-			return new global::Html.Tags.Style(ReadStyle());
+			return new Style(ReadStyle());
 		} // GetStyle
 
 		public static Dictionary<string, string> ParseStyle() {

@@ -37,11 +37,7 @@
 
 		#endregion method GetDecisionName
 
-		#region property CustomerID
-
 		public virtual int CustomerID { get; private set; }
-
-		#endregion property CustomerID
 
 		public abstract string PositiveDecisionName { get; }
 
@@ -161,16 +157,16 @@
 		#region method EqualsTo
 
 		public virtual bool EqualsTo(ATrail oTrail, bool bQuiet = false) {
-			DiffID = Guid.NewGuid();
-
 			if (oTrail == null) {
 				const string sMsg = "The second trail is not specified.";
 				m_oDiffNotes.Add(sMsg);
 
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
-					SendExplanationMail(oTrail, sMsg);
-				}
+					// ReSharper disable ExpressionIsAlwaysNull
+					SendExplanationMail(oTrail, sMsg: sMsg);
+					// ReSharper restore ExpressionIsAlwaysNull
+				} // if
 
 				return false;
 			} // if
@@ -187,7 +183,8 @@
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
 					SendExplanationMail(oTrail, sMsg);
-				}
+				} // if
+
 				return false;
 			} // if
 
@@ -208,21 +205,21 @@
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
 					SendExplanationMail(oTrail, sMsg);
-				}
+				} // if
 			} // if
 
 			if (this.Length != oTrail.Length) {
 				string sMsg = string.Format(
 					"Different number of steps in the trail: {0} in this vs {1} in the second.",
 					this.Length, oTrail.Length
-					);
+				);
 
 				m_oDiffNotes.Add(sMsg);
 
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
 					SendExplanationMail(oTrail, sMsg);
-				}
+				} // if
 
 				return false;
 			} // if
@@ -265,7 +262,7 @@
 					if (!bQuiet) {
 						m_oLog.Warn("Trails are different: {0}", sMsg);
 						SendExplanationMail(oTrail, sMsg);
-					}
+					} // if
 				} // if
 				else if (oMyTrace.HasLockedDecision != oOtherTrace.HasLockedDecision) {
 					if (!oMyTrace.AllowMismatch)
@@ -285,7 +282,7 @@
 					if (!bQuiet) {
 						m_oLog.Warn("Trails are different: {0}", sMsg);
 						SendExplanationMail(oTrail, sMsg);
-					}
+					} // if
 				} // if
 			} // for
 
@@ -294,11 +291,20 @@
 
 		#endregion method EqualsTo
 
-		#region property DiffID
+		#region property UniqueID
 
-		public virtual Guid DiffID { get; private set; } // DiffID
+		public virtual Guid UniqueID {
+			get {
+				if (m_oUniqueID == null)
+					m_oUniqueID = Guid.NewGuid();
 
-		#endregion property DiffID
+				return m_oUniqueID.Value;
+			} // get
+		} // UniqueID
+
+		private Guid? m_oUniqueID;
+
+		#endregion property UniqueID
 
 		#region method Save
 
@@ -311,7 +317,7 @@
 
 				m_oLog.Debug("Transaction has been started, saving primary trail...");
 
-				SaveDecisionTrail sp = new SaveDecisionTrail(this, this.DiffID, true, oDB, this.m_oLog);
+				SaveDecisionTrail sp = new SaveDecisionTrail(this, this.UniqueID, true, oDB, this.m_oLog);
 				sp.ExecuteNonQuery(cw);
 
 				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
@@ -319,7 +325,7 @@
 				if (oTrail != null) {
 					m_oLog.Debug("Saving secondary trail...");
 
-					sp = new SaveDecisionTrail(oTrail, this.DiffID, false, oDB, this.m_oLog);
+					sp = new SaveDecisionTrail(oTrail, this.UniqueID, false, oDB, this.m_oLog);
 					sp.ExecuteNonQuery(cw);
 
 					m_oLog.Debug("Saving secondary trail done (pending transaction commit).");
@@ -344,16 +350,23 @@
 
 		#region constructor
 
-		protected ATrail(int nCustomerID, DecisionStatus nDecisionStatus, ASafeLog oLog, string toExplanationEmailAddress, string fromEmailAddress, string fromEmailName) {
+		protected ATrail(
+			int nCustomerID,
+			DecisionStatus nDecisionStatus,
+			ASafeLog oLog,
+			string toExplanationEmailAddress,
+			string fromEmailAddress,
+			string fromEmailName
+		) {
 			m_bIsDecisionLocked = false;
 			m_oDiffNotes = new List<string>();
 			m_oSteps = new List<ATrace>();
 
 			CustomerID = nCustomerID;
 			m_nDecisionStatus = nDecisionStatus;
-			this.toExplanationEmailAddress = toExplanationEmailAddress;
-			this.fromEmailAddress = fromEmailAddress;
-			this.fromEmailName = fromEmailName;
+			m_sToExplanationEmailAddress = toExplanationEmailAddress;
+			m_sFromEmailAddress = fromEmailAddress;
+			m_sFromEmailName = fromEmailName;
 			m_oLog = oLog ?? new SafeLog();
 		} // constructor
 
@@ -503,9 +516,9 @@
 
 		private readonly ASafeLog m_oLog;
 
-		private string toExplanationEmailAddress;
-		private string fromEmailAddress;
-		private string fromEmailName;
+		private readonly string m_sToExplanationEmailAddress;
+		private readonly string m_sFromEmailAddress;
+		private readonly string m_sFromEmailName;
 
 		#region method Add
 
@@ -522,37 +535,50 @@
 				oTrace.HasLockedDecision = true;
 			} // if
 
+			// ReSharper disable PossibleNullReferenceException
 			if (oTrace.GetType() == typeof (ExceptionThrown))
 				(oTrace as ExceptionThrown).OnAfterInitEvent += step => m_oDiffNotes.Add(step.Comment);
+			// ReSharper restore PossibleNullReferenceException
 
 			return oTrace;
 		} // Add
 
 		#endregion method Add
 
+		#region method SendExplanationMail
+
 		private void SendExplanationMail(ATrail oTrail, string sMsg) {
 			var message = string.Format(
-					@"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b></u></h1><br>
-					<h2><b style='color:red'>{2}</b><br></h2>
-					<h2><b>main flow:</b></h2>
-					<pre><h3>{3}</h3></pre><br>
-					<h2><b>verification flow:</b></h2>
-					<pre><h3>{4}</h3></pre><br>
-					</b></h2>main data:
-					<pre><h3>{5}</h3></pre>
-					</b></h2>verification data:</b></h2>
-					<pre><h3>{6}</h3></pre>",
-					Name,
-					CustomerID,
-					HttpUtility.HtmlEncode(sMsg),
-					HttpUtility.HtmlEncode(this.ToString()),
-					HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.ToString()),
-					HttpUtility.HtmlEncode(this.InputData.Serialize()),
-					HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize())
+				EmailFormat,
+				Name,
+				CustomerID,
+				HttpUtility.HtmlEncode(sMsg),
+				HttpUtility.HtmlEncode(this.ToString()),
+				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.ToString()),
+				HttpUtility.HtmlEncode(this.InputData.Serialize()),
+				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize())
 			);
 
-			var result = new Mail().Send(toExplanationEmailAddress, null, message, fromEmailAddress, fromEmailName, "#Mismatch in " + Name + " for customer " + CustomerID);
-		}
+			new Mail().Send(m_sToExplanationEmailAddress, null, message, m_sFromEmailAddress, m_sFromEmailName, "#Mismatch in " + Name + " for customer " + CustomerID);
+		} // SendExplanationMail
+
+		#endregion method SendExplanationMail
+
+		#region const EmailFormat
+
+		private const string EmailFormat =
+			"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b></u></h1><br>" +
+			"<h2><b style='color:red'>{2}</b><br></h2>" +
+			"<h2><b>main flow:</b></h2>" +
+			"<pre><h3>{3}</h3></pre><br>" +
+			"<h2><b>verification flow:</b></h2>" +
+			"<pre><h3>{4}</h3></pre><br>" +
+			"</b></h2>main data:" +
+			"<pre><h3>{5}</h3></pre>" +
+			"</b></h2>verification data:</b></h2>" +
+			"<pre><h3>{6}</h3></pre>";
+
+		#endregion const EmailFormat
 
 		#endregion private
 	} // class Trail

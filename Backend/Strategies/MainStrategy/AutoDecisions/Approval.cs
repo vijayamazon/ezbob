@@ -193,10 +193,10 @@
 						"Switching to manual decision: Auto Approval implementations " +
 						"have not reached the same decision for customer {0}, diff id is {1}.",
 						customerId,
-						m_oTrail.DiffID.ToString("N")
+						m_oTrail.UniqueID.ToString("N")
 					);
 
-					response.LoanOfferUnderwriterComment = "Mismatch - " + m_oTrail.DiffID;
+					response.LoanOfferUnderwriterComment = "Mismatch - " + m_oTrail.UniqueID;
 
 					response.AutoApproveAmount = 0;
 
@@ -218,7 +218,7 @@
 						if (CurrentValues.Instance.AutoApproveIsSilent) {
 							NotifyAutoApproveSilentMode(response);
 
-							response.LoanOfferUnderwriterComment = "Silent Approve - " + m_oTrail.DiffID;
+							response.LoanOfferUnderwriterComment = "Silent Approve - " + m_oTrail.UniqueID;
 							response.CreditResult = CreditResultStatus.WaitingForDecision;
 							response.UserStatus = Status.Manual;
 							response.SystemDecision = SystemDecision.Manual;
@@ -233,7 +233,7 @@
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
 								response.UserStatus = Status.Manual;
 								response.SystemDecision = SystemDecision.Manual;
-								response.LoanOfferUnderwriterComment = "Calculator failure - " + m_oTrail.DiffID;
+								response.LoanOfferUnderwriterComment = "Calculator failure - " + m_oTrail.UniqueID;
 							}
 							else
 							{
@@ -259,7 +259,7 @@
 			}
 			catch (Exception e) {
 				log.Error(e, "Exception during auto approval.");
-				response.LoanOfferUnderwriterComment = "Exception - " + m_oTrail.DiffID;
+				response.LoanOfferUnderwriterComment = "Exception - " + m_oTrail.UniqueID;
 			} // try
 		} // MakeDecision
 

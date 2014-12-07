@@ -7,7 +7,7 @@
 	using EZBob.DatabaseLib.Model.Database.Report;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
-	using Html;
+	using Ezbob.Utils.Html;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models.Reports;

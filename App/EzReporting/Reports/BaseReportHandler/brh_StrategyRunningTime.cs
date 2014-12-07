@@ -3,9 +3,9 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using Ezbob.Logger;
-	using Html;
-	using Html.Attributes;
-	using Html.Tags;
+	using Ezbob.Utils.Html;
+	using Ezbob.Utils.Html.Attributes;
+	using Ezbob.Utils.Html.Tags;
 	using OfficeOpenXml;
 
 	public partial class BaseReportHandler : SafeLog {

@@ -1,11 +1,11 @@
-﻿using System;
-using System.IO;
-using Ezbob.Database;
-using Ezbob.Logger;
-using Html;
-using OfficeOpenXml;
+﻿namespace Reports {
+	using System;
+	using System.IO;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils.Html;
+	using OfficeOpenXml;
 
-namespace Reports {
 	#region class ReportDispatcher
 
 	public class ReportDispatcher : SafeLog {

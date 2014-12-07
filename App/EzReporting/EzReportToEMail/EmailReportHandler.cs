@@ -1,17 +1,14 @@
-﻿using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using Html.Tags;
-using Reports;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzReportToEMail {
-	using System.Data;
-	using Html;
-	using Html.Attributes;
+﻿namespace EzReportToEMail {
+	using System.Threading.Tasks;
+	using System;
+	using System.Collections.Generic;
+	using Ezbob.Utils.Html.Tags;
+	using Reports;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils.Html;
+	using Ezbob.Utils.Html.Attributes;
 	using OfficeOpenXml;
-	using Reports.TraficReport;
 
 	#region class EmailReportHandler
 
@@ -118,7 +115,7 @@ namespace EzReportToEMail {
 
 						sender.Dispatch("Report to mail tool: error generating report",
 							DateTime.UtcNow,
-							new Html.Tags.Body()
+							new Body()
 								.Add<Class>("Body")
 								.Append(new H1()
 								.Append(new Text(string.Format("Error Generating/Sending report {0}", report.Title)))),

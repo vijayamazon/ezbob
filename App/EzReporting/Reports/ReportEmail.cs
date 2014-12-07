@@ -1,8 +1,8 @@
-﻿using Html;
-using Html.Attributes;
-using Html.Tags;
+﻿namespace Reports {
+	using Ezbob.Utils.Html;
+	using Ezbob.Utils.Html.Attributes;
+	using Ezbob.Utils.Html.Tags;
 
-namespace Reports {
 	#region class ReportEmail
 
 	public class ReportEmail {
@@ -25,7 +25,7 @@ namespace Reports {
 				.Add<Class>("logo_ezbob")
 				.Add<Class>("indent_text")
 				.Add<ID>("ezbob_logo")
-				.Add<Html.Attributes.Title>("Fast business loans for Ebay and Amazon merchants")
+				.Add<Title>("Fast business loans for Ebay and Amazon merchants")
 				.Add<Alt>("Fast business loans for Ebay and Amazon merchants")
 				.Append(oImgLogo);
 

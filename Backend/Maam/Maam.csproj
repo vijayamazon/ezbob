@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2195D5E3-1077-474B-9BB6-2E5C51E71789}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ezbob.Maam</RootNamespace>
+    <AssemblyName>Ezbob.Maam</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YesMaam.cs" />
+    <Compile Include="YesMaamInputRow.cs" />
+    <Compile Include="YesMaamResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
+      <Project>{DE254378-4CF8-400C-BCC4-A9AF01550350}</Project>
+      <Name>MailApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj">
+      <Project>{D7B3530E-4038-446D-A25A-45D6DF5B6D45}</Project>
+      <Name>AutomationCalculator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Strategies\Strategies.csproj">
+      <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
+      <Name>Strategies</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

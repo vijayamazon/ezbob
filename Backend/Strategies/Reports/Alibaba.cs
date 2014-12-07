@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Html.Tags;
+	using Ezbob.Utils.Html.Tags;
 	using global::Reports;
 	using global::Reports.Alibaba;
 	using global::Reports.Alibaba.DataSharing;

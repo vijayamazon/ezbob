@@ -20,6 +20,8 @@
 		public bool IsLtd { get; set; }
 		public string CompanyRefNum { get; set; }
 		public DateTime? ConsumerDataTime { get; set; }
+		public long ConsumerServiceLogID { get; set; }
+		public long CompanyServiceLogID { get; set; }
 
 		public List<string> ValidationErrors { get; private set; }
 

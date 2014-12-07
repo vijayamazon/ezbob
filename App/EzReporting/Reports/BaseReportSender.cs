@@ -1,8 +1,8 @@
 ﻿namespace Reports {
 	using System.Net.Mail;
 	using Ezbob.Logger;
-	using Html;
-	using Html.Tags;
+	using Ezbob.Utils.Html;
+	using Ezbob.Utils.Html.Tags;
 	using OfficeOpenXml;
 
 	public class BaseReportSender : SafeLog {

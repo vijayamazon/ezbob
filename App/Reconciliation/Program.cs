@@ -1,12 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Text;
-using Ezbob.Database;
-using Ezbob.Logger;
-using Html.Tags;
-using Reports;
+﻿namespace Reconciliation {
+	using System;
+	using System.Globalization;
+	using System.Text;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils.Html.Tags;
+	using Reports;
 
-namespace Reconciliation {
 	public class Program {
 		public static void Main(string[] args) {
 			ms_oLog = new LegacyLog();
