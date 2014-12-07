@@ -44,7 +44,7 @@
 
 			m_oLog.Debug("Loading relevant cash requests complete, {0} loaded.", Grammar.Number(lst.Count, "row"));
 
-			var pc = new ProgressCounter("{0} of " + lst.Count + " cash requests processed.", m_oLog, 1);
+			var pc = new ProgressCounter("{0} of " + lst.Count + " cash requests processed.", m_oLog, 10);
 
 			var oResult = new List<YesMaamResult>();
 
@@ -62,15 +62,17 @@
 
 			pc.Log();
 
-			string sEmail = CurrentValues.Instance.MailSenderEmail;
+			string sEmail = CurrentValues.Instance.MaamEmailReceiver;
+
+			ATag rpt = ToEmail(oResult);
 
 			if (string.IsNullOrWhiteSpace(sEmail))
-				m_oLog.Debug("Not sending:\n{0}", ToEmail(oResult));
+				m_oLog.Debug("Not sending:\n{0}", rpt);
 			else {
 				new Mail().Send(
 					sEmail,
 					null,
-					ToEmail(oResult).ToString(),
+					rpt.ToString(),
 					CurrentValues.Instance.MailSenderEmail,
 					CurrentValues.Instance.MailSenderName,
 					"Man Against A Machine Result"
@@ -105,13 +107,13 @@
 
 				agent.Init();
 
-				ymr.AutoReject.SameData = (agent.Decide() ? "Rejected" : "Not rejected") + " " + agent.Trail.UniqueID;
+				ymr.AutoReject.SameData = (agent.Decide() ? "Rejected" : "Not rejected") + "<br>" + agent.Trail.UniqueID;
 			}
 			catch (Exception e) {
 				ymr.AutoReject.SameData = "Exception";
 
 				if ((agent != null) && (agent.Trail != null))
-					ymr.AutoReject.SameData += " " + agent.Trail.UniqueID.ToString();
+					ymr.AutoReject.SameData += "<br>" + agent.Trail.UniqueID.ToString();
 
 				m_oLog.Alert(
 					e,
@@ -140,13 +142,13 @@
 
 				agent.MakeAndVerifyDecision();
 
-				ymr.AutoReject.CurrentData = (agent.Trail.HasDecided ? "Rejected" : "Not rejected") + " " + agent.Trail.UniqueID;
+				ymr.AutoReject.CurrentData = (agent.Trail.HasDecided ? "Rejected" : "Not rejected") + "<br>" + agent.Trail.UniqueID;
 			}
 			catch (Exception e) {
 				ymr.AutoReject.CurrentData = "Exception";
 
 				if ((agent != null) && (agent.Trail != null))
-					ymr.AutoReject.CurrentData += " " + agent.Trail.UniqueID.ToString();
+					ymr.AutoReject.CurrentData += "<br>" + agent.Trail.UniqueID.ToString();
 
 				m_oLog.Alert(
 					e,
@@ -177,7 +179,7 @@
 
 				agent.MakeDecision();
 
-				ymr.AutoApprove.CurrentData = (agent.Trail.HasDecided ? "Approved" : "Not approved") + " " + agent.Trail.UniqueID;
+				ymr.AutoApprove.CurrentData = (agent.Trail.HasDecided ? "Approved" : "Not approved") + "<br>" + agent.Trail.UniqueID;
 
 				if (agent.Result != null)
 					ymr.AutoApprove.CurrentAmount = agent.Result.ApprovedAmount;
@@ -186,7 +188,7 @@
 				ymr.AutoApprove.CurrentData = "Exception";
 
 				if ((agent != null) && (agent.Trail != null))
-					ymr.AutoApprove.CurrentData += " " + agent.Trail.UniqueID.ToString();
+					ymr.AutoApprove.CurrentData += "<br>" + agent.Trail.UniqueID.ToString();
 
 				m_oLog.Alert(
 					e,
@@ -202,7 +204,7 @@
 		#region method ToEmail
 
 		private ATag ToEmail(IEnumerable<YesMaamResult> lst) {
-			var tbl = new Table();
+			ATag tbl = new Table().Add<Ezbob.Utils.Html.Attributes.Style>("border-collapse:collapse;");
 
 			tbl.Append(CreateEmailTableHeader());
 
@@ -212,7 +214,7 @@
 			foreach (YesMaamResult res in lst)
 				tbody.Append(CreateDatumRow(res));
 
-			return tbl;
+			return new Body().Append(tbl);
 		} // ToEmail
 
 		#endregion method ToEmail
@@ -225,32 +227,33 @@
 			var tr = new Tr();
 			thead.Append(tr);
 
-			tr.Append(new Th().Append(new Text("Customer ID").Add<Rowspan>("2")));
-			tr.Append(new Th().Append(new Text("Underwriter").Add<Colspan>("2")));
-			tr.Append(new Th().Append(new Text("Manual Decision").Add<Colspan>("2")));
-			tr.Append(new Th().Append(new Text("Auto reject").Add<Colspan>("2")));
-			tr.Append(new Th().Append(new Text("Auto approve").Add<Colspan>("4")));
+			tr.Append(CreateCell<Th>("CustomerID").Add<Rowspan>("2"));
+			tr.Append(CreateCell<Th>("Underwriter").Add<Colspan>("2"));
+			tr.Append(CreateCell<Th>("Manual decision").Add<Colspan>("3"));
+			tr.Append(CreateCell<Th>("Auto reject").Add<Colspan>("2"));
+			tr.Append(CreateCell<Th>("Auto approve").Add<Colspan>("4"));
 
 			var tr2 = new Tr();
 			thead.Append(tr2);
 
 			// Underwriter
-			tr2.Append(new Th().Append(new Text("Name")));
-			tr2.Append(new Th().Append(new Text("ID")));
+			tr2.Append(CreateCell<Th>("Name"));
+			tr2.Append(CreateCell<Th>("ID"));
 
 			// Manual decision
-			tr2.Append(new Th().Append(new Text("Result")));
-			tr2.Append(new Th().Append(new Text("Time")));
+			tr2.Append(CreateCell<Th>("Result"));
+			tr2.Append(CreateCell<Th>("Time"));
+			tr2.Append(CreateCell<Th>("Amount"));
 
 			// Auto reject
-			tr2.Append(new Th().Append(new Text("Same data")));
-			tr2.Append(new Th().Append(new Text("Current data")));
+			tr2.Append(CreateCell<Th>("Same data"));
+			tr2.Append(CreateCell<Th>("Current data"));
 
 			// Auto approve
-			tr2.Append(new Th().Append(new Text("Same data")));
-			tr2.Append(new Th().Append(new Text("Amount")));
-			tr2.Append(new Th().Append(new Text("Current data")));
-			tr2.Append(new Th().Append(new Text("Amount")));
+			tr2.Append(CreateCell<Th>("Same data"));
+			tr2.Append(CreateCell<Th>("Amount"));
+			tr2.Append(CreateCell<Th>("Current data"));
+			tr2.Append(CreateCell<Th>("Amount"));
 
 			return thead;
 		} // CreateEmailTableHeader
@@ -262,48 +265,77 @@
 		private Tr CreateDatumRow(YesMaamResult row) {
 			var tr = new Tr();
 
-			tr.Append(new Td().Append(new Text(
+			tr.Append(CreateCell<Td>(
 				row.Input.CustomerID.ToString(CultureInfo.InvariantCulture)
-			)));
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
-			tr.Append(new Td().Append(new Text(
+			tr.Append(CreateCell<Td>(
 				row.Input.UnderwriterName
-			)));
-			tr.Append(new Td().Append(new Text(
+			));
+			tr.Append(CreateCell<Td>(
 				row.Input.UnderwriterID.ToString(CultureInfo.InvariantCulture)
-			)));
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
-			tr.Append(new Td().Append(new Text(
+			tr.Append(CreateCell<Td>(
 				row.Input.Decision
-			)));
-			tr.Append(new Td().Append(new Text(
-				row.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss z", CultureInfo.InvariantCulture)
-			)));
+			));
+			tr.Append(CreateCell<Td>(
+				row.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
+			tr.Append(CreateCell<Td>(
+				row.Input.Amount.ToString("C0", CultureInfo.InvariantCulture)
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
-			tr.Append(new Td().Append(new Text(
-				row.AutoReject.SameData
-			)));
-			tr.Append(new Td().Append(new Text(
-				row.AutoReject.CurrentData
-			)));
+			tr.Append(CreateCell<Td>(
+				row.AutoReject.SameData, !row.AutoReject.SameData.StartsWith(row.Input.Decision)
+			));
+			tr.Append(CreateCell<Td>(
+				row.AutoReject.CurrentData, !row.AutoReject.CurrentData.StartsWith(row.Input.Decision)
+			));
 
-			tr.Append(new Td().Append(new Text(
-				row.AutoApprove.SameData
-			)));
-			tr.Append(new Td().Append(new Text(
-				row.AutoApprove.SameAmount.ToString(CultureInfo.InvariantCulture)
-			)));
-			tr.Append(new Td().Append(new Text(
-				row.AutoApprove.CurrentData
-			)));
-			tr.Append(new Td().Append(new Text(
-				row.AutoApprove.CurrentAmount.ToString(CultureInfo.InvariantCulture)
-			)));
+			tr.Append(CreateCell<Td>(
+				row.AutoApprove.SameData, !row.AutoApprove.SameData.StartsWith(row.Input.Decision)
+			));
+			tr.Append(CreateCell<Td>(
+				row.AutoApprove.SameAmount.ToString("C0", CultureInfo.InvariantCulture), row.AutoApprove.SameAmount != row.Input.Amount
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
+			tr.Append(CreateCell<Td>(
+				row.AutoApprove.CurrentData, !row.AutoApprove.CurrentData.StartsWith(row.Input.Decision)
+			));
+			tr.Append(CreateCell<Td>(
+				row.AutoApprove.CurrentAmount.ToString("C0", CultureInfo.InvariantCulture), row.AutoApprove.CurrentAmount != row.Input.Amount
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
 			return tr;
 		} // CreateDatumRow
 
 		#endregion method CreateDatumRow
+
+		private T CreateCell<T>(string sText, bool? bMismatch = null) where T : ATag, new() {
+			T cell = new T();
+
+			cell.Add<Ezbob.Utils.Html.Attributes.Style>(
+				"border:1px solid black;" +
+				"padding:3px;"
+			);
+
+			if (typeof (T) == typeof (Th)) {
+				cell.Add<Ezbob.Utils.Html.Attributes.Style>(
+					"background-color:darkmagenta;" +
+					"color:white;"
+				);
+			} // if
+
+			if (bMismatch.HasValue && bMismatch.Value) {
+				cell.Add<Ezbob.Utils.Html.Attributes.Style>(
+					"color:red;"
+				);
+			} // if)
+
+			cell.Append(new Text(sText));
+
+			return cell;
+		} // CreateCell
 
 		#endregion private
 	} // class YesMaam

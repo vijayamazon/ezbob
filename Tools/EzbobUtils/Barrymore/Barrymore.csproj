@@ -54,6 +54,7 @@
     <Compile Include="Html\Attributes\attributes.cs" />
     <Compile Include="Html\Attributes\Class.cs" />
     <Compile Include="Html\Tags\A.cs" />
+    <Compile Include="Html\Tags\ATableCell.cs" />
     <Compile Include="Html\Tags\Img.cs" />
     <Compile Include="Html\Tags\Style.cs" />
     <Compile Include="Html\Tags\tags.cs" />

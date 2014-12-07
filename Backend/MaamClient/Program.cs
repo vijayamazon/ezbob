@@ -7,8 +7,9 @@
 
 	class Program {
 		static void Main(string[] args) {
-			string sAppName = Assembly.GetExecutingAssembly().FullName;
-			ASafeLog oLog = new ConsoleLog(new FileLog(sAppName));
+			string sAppName = Assembly.GetExecutingAssembly().GetName().Name;
+
+			ASafeLog oLog = new FileLog(sAppName);
 
 			var oArgs = new Args(sAppName, args, oLog);
 

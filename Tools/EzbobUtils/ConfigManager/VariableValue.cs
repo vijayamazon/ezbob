@@ -1,5 +1,6 @@
 ﻿namespace ConfigManager {
 	using System;
+	using System.Diagnostics;
 	using System.Globalization;
 	using Ezbob.Logger;
 
@@ -43,7 +44,7 @@
 
 		public static implicit operator string(VariableValue oValue) {
 			if (oValue == null)
-				throw new NullReferenceException("String configuration variable not specified.");
+				throw new NullReferenceException("String configuration variable not specified that is used at " + GetPosition());
 
 			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
 				oValue.m_oLog.Debug("VariableValue {0} requested as string: '{1}'", oValue.Name, oValue.Value);
@@ -57,7 +58,7 @@
 
 		public static implicit operator int(VariableValue oValue) {
 			if (oValue == null)
-				throw new NullReferenceException("Integer configuration variable not specified.");
+				throw new NullReferenceException("Integer configuration variable not specified that is used at " + GetPosition());
 
 			int nValue = Convert.ToInt32(oValue.Value, CultureInfo.InvariantCulture);
 
@@ -73,7 +74,7 @@
 
 		public static implicit operator long(VariableValue oValue) {
 			if (oValue == null)
-				throw new NullReferenceException("Long configuration variable not specified.");
+				throw new NullReferenceException("Long configuration variable not specified that is used at " + GetPosition());
 
 			long nValue = Convert.ToInt64(oValue.Value, CultureInfo.InvariantCulture);
 
@@ -89,7 +90,7 @@
 
 		public static implicit operator ulong(VariableValue oValue) {
 			if (oValue == null)
-				throw new NullReferenceException("Long configuration variable not specified.");
+				throw new NullReferenceException("Long configuration variable not specified that is used at " + GetPosition());
 
 			ulong nValue = Convert.ToUInt64(oValue.Value, CultureInfo.InvariantCulture);
 
@@ -105,7 +106,7 @@
 
 		public static implicit operator double(VariableValue oValue) {
 			if (oValue == null)
-				throw new NullReferenceException("Double configuration variable not specified.");
+				throw new NullReferenceException("Double configuration variable not specified that is used at " + GetPosition());
 
 			double nValue = Convert.ToDouble(oValue.Value, CultureInfo.InvariantCulture);
 
@@ -121,7 +122,7 @@
 
 		public static implicit operator decimal(VariableValue oValue) {
 			if (oValue == null)
-				throw new NullReferenceException("Decimal configuration variable not specified.");
+				throw new NullReferenceException("Decimal configuration variable not specified that is used at " + GetPosition());
 
 			decimal nValue = Convert.ToDecimal(oValue.Value, CultureInfo.InvariantCulture);
 
@@ -137,7 +138,7 @@
 
 		public static implicit operator bool(VariableValue oValue) {
 			if (oValue == null)
-				throw new NullReferenceException("Boolean configuration variable not specified.");
+				throw new NullReferenceException("Boolean configuration variable not specified that is used at " + GetPosition());
 
 			bool bValue = false;
 
@@ -215,6 +216,25 @@
 		private readonly ASafeLog m_oLog;
 
 		private static readonly object ms_oLock;
+
+		#region method GetPosition
+
+		private static string GetPosition() {
+			var oStack = new StackTrace(true);
+
+			if (oStack.FrameCount <= 2)
+				return "unknown location";
+
+			StackFrame oFrame = oStack.GetFrame(2);
+
+			var oMethod = oFrame.GetMethod();
+
+			string sMethodName = oMethod == null ? string.Empty : " in " + oMethod.Name;
+
+			return string.Format("{0}:{1},{2}{3}", oFrame.GetFileName(), oFrame.GetFileLineNumber(), oFrame.GetFileColumnNumber(), sMethodName);
+		} // GetPosition
+
+		#endregion method GetPosition
 
 		#endregion private
 	} // class VariableValue

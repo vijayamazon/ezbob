@@ -18,6 +18,7 @@
 	public class Thead : ATag { public override string Tag { get { return "thead"; } } }
 	public class Tbody : ATag { public override string Tag { get { return "tbody"; } } }
 	public class Tr : ATag { public override string Tag { get { return "tr"; } } }
-	public class Th : ATag { public override string Tag { get { return "th"; } } }
-	public class Td : ATag { public override string Tag { get { return "td"; } } }
+
+	public class Th : ATableCell { public override string Tag { get { return "th"; } } }
+	public class Td : ATableCell { public override string Tag { get { return "td"; } } }
 } // namespace
