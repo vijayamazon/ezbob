@@ -66,7 +66,7 @@
 			}
 			catch (Exception e) {
 				string sXml = System.Text.Encoding.Default.GetString(oSecData);
-				new SafeILog(this).Error(e, "Failed to de-serialise security data. Marketplace ID = {0}, Security data: {1}", nMpID, sXml);
+				new SafeILog(this).Warn(e, "Failed to de-serialise security data. Marketplace ID = {0}, Security data: {1}", nMpID, sXml);
 				return false;
 			}
 		} // IsSameMarketPlace
