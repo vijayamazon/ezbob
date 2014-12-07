@@ -824,8 +824,8 @@
 													   address.PostCode);
 				}
 
-				if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success &&
-					model.Enquery.Titles.Any() && model.Enquery.Titles.Count == 1)
+				if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success && model.Enquery.Titles != null &&
+					model.Enquery.Titles.Count == 1)
 				{
 					LandRegistry dbLandRegistry;
 					LandRegistryDataModel landRegistryDataModel = GetLandRegistryData(customerId, model.Enquery.Titles[0].TitleNumber, out dbLandRegistry);
@@ -850,7 +850,7 @@
 				else
 				{
 					int num = 0;
-					if (model != null && model.Enquery != null && model.Enquery.Titles.Any())
+					if (model != null && model.Enquery != null && model.Enquery.Titles != null)
 					{
 						num = model.Enquery.Titles.Count;
 					}
