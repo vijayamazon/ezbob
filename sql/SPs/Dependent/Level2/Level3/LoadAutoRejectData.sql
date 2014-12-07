@@ -6,11 +6,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LoadAutoRejectData
-@CustomerID INT
+@CustomerID INT,
+@Now DATETIME = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
 
+	------------------------------------------------------------------------------
+	--
+	-- Find last approval time.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @ApprovedCrID INT = ISNULL((
@@ -22,6 +27,8 @@ BEGIN
 			cr.IdCustomer = @CustomerID
 			AND
 			cr.UnderwriterDecision = 'Approved'
+			AND
+			(@Now IS NULL OR cr.UnderwriterDecisionDate < @Now)
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -29,23 +36,86 @@ BEGIN
 	DECLARE
 		@BrokerID INT,
 		@FraudStatus INT,
+		@CustomerStatusID INT,
 		@CustomerStatus NVARCHAR(100),
 		@CustomerStatusEnabled BIT,
 		@IsLtd BIT,
 		@CompanyRefNum NVARCHAR(50)
 
 	------------------------------------------------------------------------------
+	--
+	-- Find customer status.
+	--
+	------------------------------------------------------------------------------
+
+	-- Step 1. Find last new status before the requested date.
+
+	IF @Now IS NOT NULL
+	BEGIN
+		SELECT TOP 1
+			@CustomerStatusID = h.NewStatus
+		FROM
+			CustomerStatusHistory h
+		WHERE
+			h.TimeStamp < @Now
+			AND
+			h.CustomerId = @CustomerID
+		ORDER BY
+			h.TimeStamp DESC
+	END
+
+	------------------------------------------------------------------------------
+
+	-- Step 2. Find first old status before the requested date.
+
+	IF @Now IS NOT NULL AND @CustomerStatusID IS NULL
+	BEGIN
+		SELECT TOP 1
+			@CustomerStatusID = h.PreviousStatus
+		FROM
+			CustomerStatusHistory h
+		WHERE
+			h.TimeStamp >= @Now
+			AND
+			h.CustomerId = @CustomerID
+		ORDER BY
+			h.TimeStamp ASC
+	END
+
+	------------------------------------------------------------------------------
+
+	-- Step 3. Take current status.
+
+	IF @CustomerStatusID IS NULL
+	BEGIN
+		SELECT
+			@CustomerStatusID = c.CollectionStatus
+		FROM
+			Customer c
+		WHERE
+			c.Id = @CustomerID
+	END
+
+	------------------------------------------------------------------------------
 
 	SELECT
-		@BrokerID              = c.BrokerID,
-		@FraudStatus           = c.FraudStatus,
 		@CustomerStatus        = s.Name,
-		@CustomerStatusEnabled = s.IsEnabled,
-		@IsLtd                 = CASE WHEN c.TypeOfBusiness IN ('Limited', 'LLP') THEN 1 ELSE 0 END,
-		@CompanyRefNum         = co.ExperianRefNum
+		@CustomerStatusEnabled = s.IsEnabled
+	FROM
+		CustomerStatuses s
+	WHERE
+		s.Id = @CustomerStatusID
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	SELECT
+		@BrokerID      = c.BrokerID,
+		@FraudStatus   = c.FraudStatus,
+		@IsLtd         = CASE WHEN c.TypeOfBusiness IN ('Limited', 'LLP') THEN 1 ELSE 0 END,
+		@CompanyRefNum = co.ExperianRefNum
 	FROM
 		Customer c
-		INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id
 		LEFT JOIN Company co ON c.CompanyId = co.Id
 	WHERE
 		c.Id = @CustomerID
