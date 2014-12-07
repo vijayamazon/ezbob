@@ -5,6 +5,7 @@
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Html;
 	using Ezbob.Utils.Html.Attributes;
 	using Ezbob.Utils.Html.Tags;
@@ -43,6 +44,8 @@
 
 			m_oLog.Debug("Loading relevant cash requests complete, {0} loaded.", Grammar.Number(lst.Count, "row"));
 
+			var pc = new ProgressCounter("{0} of " + lst.Count + " cash requests processed.", m_oLog, 1);
+
 			var oResult = new List<YesMaamResult>();
 
 			foreach (YesMaamInputRow row in lst) {
@@ -53,7 +56,11 @@
 				DoCurrentDataReject(ymr);
 				// TODO: DoSameDataApprove(ymr);
 				DoCurrentDataApprove(ymr);
+
+				pc++;
 			} // for each
+
+			pc.Log();
 
 			string sEmail = CurrentValues.Instance.MailSenderEmail;
 
