@@ -1,11 +1,12 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetPersonalInfo]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetPersonalInfo]
+IF OBJECT_ID('GetPersonalInfo') IS NULL 
+	EXECUTE('CREATE PROCEDURE GetPersonalInfo AS SELECT 1')
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetPersonalInfo] 
+
+ALTER PROCEDURE [dbo].[GetPersonalInfo] 
 	(@CustomerId INT)
 AS
 BEGIN
@@ -95,7 +96,8 @@ BEGIN
 		Customer.LastStartedMainStrategyEndTime,
 		@NumOfYodleeMps AS NumOfYodleeMps,
 		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
-		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate
+		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
+		Customer.IsTest
 	FROM
 		CustomerPropertyStatuses,
 		Customer
@@ -104,4 +106,5 @@ BEGIN
 		Customer.Id = @CustomerId AND
 		Customer.PropertyStatusId = CustomerPropertyStatuses.Id
 END
+
 GO
