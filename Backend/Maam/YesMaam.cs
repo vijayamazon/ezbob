@@ -198,7 +198,7 @@
 				"padding:3px;"
 			);
 
-			if (typeof (T) == typeof (Th)) {
+			if (typeof(T) == typeof(Th)) {
 				cell.Add<Ezbob.Utils.Html.Attributes.Style>(
 					"background-color:darkmagenta;" +
 					"color:white;"

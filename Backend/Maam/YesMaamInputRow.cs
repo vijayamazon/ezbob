@@ -7,7 +7,7 @@
 	public class YesMaamInputRow {
 		public int CashRequestID { get; set; }
 		public int CustomerID { get; set; }
-		
+
 		[FieldName("UnderwriterDecisionDate")]
 		public DateTime DecisionTime { get; set; }
 
