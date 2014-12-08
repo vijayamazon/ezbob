@@ -2346,9 +2346,8 @@ namespace ServiceClientProxy.EzServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="MedalClassification", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.MedalCalculation" +
-        "s")]
-    public enum MedalClassification : int {
+    [System.Runtime.Serialization.DataContractAttribute(Name="Medal", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
+    public enum Medal : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NoClassification = 0,
@@ -2852,10 +2851,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzService/MarkSessionEndedResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID);
+        ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> nCustomerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzService/MarkSessionEndedResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID, string sComment, System.Nullable<int> nCustomerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadCustomerByCreatePasswordToken", ReplyAction="http://tempuri.org/IEzService/LoadCustomerByCreatePasswordTokenResponse")]
         ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(System.Guid oToken);
@@ -3002,10 +3001,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateOffer", ReplyAction="http://tempuri.org/IEzService/CalculateOfferResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.Medal medalClassification);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateOffer", ReplyAction="http://tempuri.org/IEzService/CalculateOfferResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.Medal medalClassification);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPropertyStatuses", ReplyAction="http://tempuri.org/IEzService/GetPropertyStatusesResponse")]
         ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult GetPropertyStatuses();
@@ -4017,12 +4016,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UserChangeEmailAsync(underwriterId, nUserID, sNewEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID) {
-            return base.Channel.MarkSessionEnded(nSessionID);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> nCustomerId) {
+            return base.Channel.MarkSessionEnded(nSessionID, sComment, nCustomerId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID) {
-            return base.Channel.MarkSessionEndedAsync(nSessionID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID, string sComment, System.Nullable<int> nCustomerId) {
+            return base.Channel.MarkSessionEndedAsync(nSessionID, sComment, nCustomerId);
         }
         
         public ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(System.Guid oToken) {
@@ -4217,11 +4216,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateMedalAsync(underwriterId, customerId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification) {
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.Medal medalClassification) {
             return base.Channel.CalculateOffer(underwriterId, customerId, amount, hasLoans, medalClassification);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.MedalClassification medalClassification) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateOfferAsync(int underwriterId, int customerId, int amount, bool hasLoans, ServiceClientProxy.EzServiceReference.Medal medalClassification) {
             return base.Channel.CalculateOfferAsync(underwriterId, customerId, amount, hasLoans, medalClassification);
         }
         

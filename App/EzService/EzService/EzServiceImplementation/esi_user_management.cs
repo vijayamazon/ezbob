@@ -131,8 +131,9 @@
 
 		#region method MarkSessionEnded
 
-		public ActionMetaData MarkSessionEnded(int nSessionID) {
-			return Execute<MarkSessionEnded>(null, null, nSessionID);
+		public ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId)
+		{
+			return Execute<MarkSessionEnded>(nCustomerId, null, nSessionID, sComment);
 		} // MarkSessionEnded
 
 		#endregion method MarkSessionEnded

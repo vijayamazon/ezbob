@@ -9,8 +9,8 @@
 
 		#region constructor
 
-		public MarkSessionEnded(int nSessionID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_oSp = new SpMarkSessionEnded(nSessionID, DB, Log);
+		public MarkSessionEnded(int nSessionID, string sComment, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_oSp = new SpMarkSessionEnded(nSessionID, sComment, DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -40,8 +40,9 @@
 		#region class SpMarkSessionEnded
 
 		private class SpMarkSessionEnded : AStoredProc {
-			public SpMarkSessionEnded(int nSessionID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			public SpMarkSessionEnded(int nSessionID, string sComment, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				SessionID = nSessionID;
+				Comment = sComment;
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -50,6 +51,9 @@
 
 			[UsedImplicitly]
 			public int SessionID { get; set; }
+
+			[UsedImplicitly]
+			public string Comment { get; set; }
 
 			[UsedImplicitly]
 			public DateTime Now {

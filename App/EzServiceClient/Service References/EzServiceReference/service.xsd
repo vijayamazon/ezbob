@@ -7,7 +7,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.UserManagement" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.MedalCalculations" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
@@ -961,6 +961,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nSessionID" type="xs:int" />
+        <xs:element minOccurs="0" name="sComment" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nCustomerId" nillable="true" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1330,7 +1332,7 @@
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="amount" type="xs:int" />
         <xs:element minOccurs="0" name="hasLoans" type="xs:boolean" />
-        <xs:element xmlns:q114="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.MedalCalculations" minOccurs="0" name="medalClassification" type="q114:MedalClassification" />
+        <xs:element xmlns:q114="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="medalClassification" type="q114:Medal" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

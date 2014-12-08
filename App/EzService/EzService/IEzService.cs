@@ -522,7 +522,7 @@
 		StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
 
 		[OperationContract]
-		ActionMetaData MarkSessionEnded(int nSessionID);
+		ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId);
 
 		[OperationContract]
 		CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken);

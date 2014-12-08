@@ -243,13 +243,16 @@ namespace EzBob.Web.Controllers {
 			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
 				const string sDisabledError = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";
 
-				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
+				var session = new CustomerSession {
 					CustomerId = user.Id,
 					StartSession = DateTime.Now,
 					Ip = customerIp,
 					IsPasswdOk = false,
 					ErrorMessage = sDisabledError,
-				});
+				};
+
+				m_oSessionIpLog.AddSessionIpLog(session);
+				Session["UserSessionId"] = session.Id;
 
 				ms_oLog.Warn(
 					"Customer log on attempt from remote IP {0} with user name '{1}': the customer is disabled.",
@@ -294,7 +297,7 @@ namespace EzBob.Web.Controllers {
 		#region action LogOff
 
 		public ActionResult LogOff() {
-			EndSession();
+			EndSession("LogOff customer");
 
 			switch (m_oLogOffMode) {
 			case LogOffMode.SignUpOfEnv:
@@ -311,7 +314,7 @@ namespace EzBob.Web.Controllers {
 		#region action LogOffUnderwriter
 
 		public ActionResult LogOffUnderwriter() {
-			EndSession();
+			EndSession("LogOff UW");
 
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		} // LogOffUnderwriter
@@ -721,14 +724,15 @@ namespace EzBob.Web.Controllers {
 
 			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
 				const string sDisabledError = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";
-
-				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
+				var session = new CustomerSession {
 					CustomerId = nUserID,
 					StartSession = DateTime.Now,
 					Ip = customerIp,
 					IsPasswdOk = false,
 					ErrorMessage = sDisabledError,
-				});
+				};
+				m_oSessionIpLog.AddSessionIpLog(session);
+				Session["UserSessionId"] = session.Id;
 
 				ms_oLog.Warn(
 					"Customer log on attempt from remote IP {0} with user name '{1}': the customer is disabled.",
@@ -891,14 +895,15 @@ namespace EzBob.Web.Controllers {
 				Created = DateTime.UtcNow,
 			}};
 
-			m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
+			var session = new CustomerSession {
 				CustomerId = user.Id,
 				StartSession = DateTime.UtcNow,
 				Ip = RemoteIp(),
 				IsPasswdOk = true,
 				ErrorMessage = "Registration"
-			});
-
+			};
+			m_oSessionIpLog.AddSessionIpLog(session);
+			Session["UserSessionId"] = session.Id;
 			try {
 				m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, customer.ReferenceSource, visitTimes, campaignSourceRef);
 			}
@@ -1065,13 +1070,15 @@ namespace EzBob.Web.Controllers {
 
 		#region method EndSession
 
-		private void EndSession() {
+		private void EndSession(string comment) {
 			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId)) {
 				int nSessionID;
 
 				if (int.TryParse(m_oContext.SessionId, out nSessionID)) {
 					try {
-						m_oServiceClient.Instance.MarkSessionEnded(nSessionID);
+						if (nSessionID > 0) {
+							m_oServiceClient.Instance.MarkSessionEnded(nSessionID, comment, m_oContext.Customer != null ? m_oContext.Customer.Id : (int?)null);
+						}
 					}
 					catch (Exception e) {
 						ms_oLog.Debug(e, "Failed to mark customer session as ended.");

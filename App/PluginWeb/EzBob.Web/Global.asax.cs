@@ -22,6 +22,7 @@
 	using Infrastructure;
 	using Infrastructure.Filters;
 	using Models;
+	using ServiceClientProxy;
 	using SquishIt.Less;
 	using SquishIt.MsIeCoffeeScript;
 	using SquishIt.Framework;
@@ -169,6 +170,15 @@
 		protected void Application_End() {
 			Log.NotifyStop();
 		} // Application_End
+
+		protected void Session_End(object sender, EventArgs e) {
+			string userSessionIdStr = Session["UserSessionId"] == null ? null : Session["UserSessionId"].ToString();
+			int sessionId = 0;
+			if (int.TryParse(userSessionIdStr, out sessionId) && sessionId > 0)
+			{
+				new ServiceClient().Instance.MarkSessionEnded(sessionId, "Session time out", null);
+			}
+		}
 
 		private static void ConfigureSquishIt() {
 			if (HttpContext.Current.IsDebuggingEnabled) {
