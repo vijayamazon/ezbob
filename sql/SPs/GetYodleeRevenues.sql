@@ -76,9 +76,21 @@ BEGIN
 			INNER JOIN trns ON tr.Id = trns.Id
 
 		SELECT
-			@MaxDate = MAX(i.asOfDate),
-			@MinTransDate = MIN(ISNULL(ISNULL(tr.transactionDate, tr.postDate), @LongAgo)),
-			@MinPostDate = MIN(ISNULL(ISNULL(tr.postDate, tr.transactionDate), @LongAgo))
+			@MaxDate = MAX(i.asOfDate)
+		FROM
+			MP_CustomerMarketPlace mp 
+			INNER JOIN MP_YodleeOrder o ON o.CustomerMarketPlaceId = mp.Id
+			INNER JOIN MP_YodleeOrderItem i ON i.OrderId = o.Id
+		WHERE
+			mp.Id = @CustomerMarketplaceId
+			AND (
+				@DateFrom IS NULL
+				OR
+				(i.asOfDate BETWEEN @DateFrom AND @DateTo)
+			)
+			
+		SELECT
+			@MinTransDate = MIN(tr.transactionDate)
 		FROM
 			MP_CustomerMarketPlace mp 
 			INNER JOIN MP_YodleeOrder o ON o.CustomerMarketPlaceId = mp.Id
@@ -86,19 +98,28 @@ BEGIN
 			LEFT JOIN MP_YodleeOrderItemBankTransaction tr ON tr.OrderItemId = i.Id
 		WHERE
 			mp.Id = @CustomerMarketplaceId
+			AND tr.transactionDate IS NOT NULL
 			AND (
 				@DateFrom IS NULL
 				OR
 				(tr.transactionDate BETWEEN @DateFrom AND @DateTo)
+			)
+			
+		SELECT
+			@MinPostDate = MIN(tr.postDate)
+		FROM
+			MP_CustomerMarketPlace mp 
+			INNER JOIN MP_YodleeOrder o ON o.CustomerMarketPlaceId = mp.Id
+			INNER JOIN MP_YodleeOrderItem i ON i.OrderId = o.Id
+			LEFT JOIN MP_YodleeOrderItemBankTransaction tr ON tr.OrderItemId = i.Id
+		WHERE
+			mp.Id = @CustomerMarketplaceId
+			AND tr.postDate IS NOT NULL
+			AND (
+				@DateFrom IS NULL
 				OR
 				(tr.postDate BETWEEN @DateFrom AND @DateTo)
-			)
-
-		IF @MinTransDate = @LongAgo
-		BEGIN
-			SET @MinTransDate = NULL
-			SET @MinPostDate = NULL
-		END
+			)		
 
 		SET @MinDate = dbo.udfMinDate(@MinPostDate, @MinTransDate)
 	END
