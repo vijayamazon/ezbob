@@ -26,42 +26,42 @@
 
 		#region method Load
 
-		public void Load() {
+		public virtual void Load() {
 			m_oDB.ForEachRowSafe(SetValue, "LoadApprovalConfigs", CommandSpecies.StoredProcedure);
 		} // Load
 
 		#endregion method Load
 
-		public int ExperianScoreThreshold { get; set; }
-		public int CustomerMinAge { get; set; }
-		public int CustomerMaxAge { get; set; }
-		public int MinTurnover1M { get; set; }
-		public int MinTurnover3M { get; set; }
-		public int MinTurnover1Y { get; set; }
-		public int MinMPSeniorityDays { get; set; }
-		public int MaxOutstandingOffers { get; set; }
-		public int MaxTodayLoans { get; set; }
-		public int MaxDailyApprovals { get; set; }
-		public int MaxAllowedDaysLate { get; set; }
-		public int MaxNumOfOutstandingLoans { get; set; }
-		public decimal MinRepaidPortion { get; set; }
-		public int MinAmount { get; set; }
-		public int MaxAmount { get; set; }
-		public bool IsSilent { get; set; }
-		public string SilentTemplateName { get; set; }
-		public string SilentToAddress { get; set; }
-		public int BusinessScoreThreshold { get; set; }
+		public virtual int ExperianScoreThreshold { get; set; }
+		public virtual int CustomerMinAge { get; set; }
+		public virtual int CustomerMaxAge { get; set; }
+		public virtual int MinTurnover1M { get; set; }
+		public virtual int MinTurnover3M { get; set; }
+		public virtual int MinTurnover1Y { get; set; }
+		public virtual int MinMPSeniorityDays { get; set; }
+		public virtual int MaxOutstandingOffers { get; set; }
+		public virtual int MaxTodayLoans { get; set; }
+		public virtual int MaxDailyApprovals { get; set; }
+		public virtual int MaxAllowedDaysLate { get; set; }
+		public virtual int MaxNumOfOutstandingLoans { get; set; }
+		public virtual decimal MinRepaidPortion { get; set; }
+		public virtual int MinAmount { get; set; }
+		public virtual int MaxAmount { get; set; }
+		public virtual bool IsSilent { get; set; }
+		public virtual string SilentTemplateName { get; set; }
+		public virtual string SilentToAddress { get; set; }
+		public virtual int BusinessScoreThreshold { get; set; }
 
-		public int OnlineTurnoverAge { get; set; }
-		public decimal OnlineTurnoverDropQuarterRatio { get; set; }
-		public decimal OnlineTurnoverDropMonthRatio { get; set; }
-		public int HmrcTurnoverAge { get; set; }
-		public decimal HmrcTurnoverDropQuarterRatio { get; set; }
-		public decimal HmrcTurnoverDropHalfYearRatio { get; set; }
+		public virtual int OnlineTurnoverAge { get; set; }
+		public virtual decimal OnlineTurnoverDropQuarterRatio { get; set; }
+		public virtual decimal OnlineTurnoverDropMonthRatio { get; set; }
+		public virtual int HmrcTurnoverAge { get; set; }
+		public virtual decimal HmrcTurnoverDropQuarterRatio { get; set; }
+		public virtual decimal HmrcTurnoverDropHalfYearRatio { get; set; }
 
 		#region property AllowedCaisStatusesWithLoan
 
-		public string AllowedCaisStatusesWithLoan {
+		public virtual string AllowedCaisStatusesWithLoan {
 			get { return string.Join(", ", m_oAllowedCaisStatusesWithLoan); } // get
 			set { SaveCaisStatuses(value, m_oAllowedCaisStatusesWithLoan); } // set
 		} // AllowedCaisStatusesWithLoan
@@ -72,7 +72,7 @@
 
 		#region property AllowedCaisStatusesWithoutLoan
 
-		public string AllowedCaisStatusesWithoutLoan {
+		public virtual string AllowedCaisStatusesWithoutLoan {
 			get { return string.Join(", ", m_oAllowedCaisStatusesWithoutLoan); } // get
 			set { SaveCaisStatuses(value, m_oAllowedCaisStatusesWithoutLoan); } // set
 		} // AllowedCaisStatusesWithoutLoan
@@ -81,11 +81,11 @@
 
 		#endregion property AllowedCaisStatusesWithoutLoan
 
-		public List<string> GetAllowedCaisStatusesWithLoan() {
+		public virtual List<string> GetAllowedCaisStatusesWithLoan() {
 			return m_oAllowedCaisStatusesWithLoan;
 		} // GetAllowedCaisStatusesWithLoan
 
-		public List<string> GetAllowedCaisStatusesWithoutLoan() {
+		public virtual List<string> GetAllowedCaisStatusesWithoutLoan() {
 			return m_oAllowedCaisStatusesWithoutLoan;
 		} // GetAllowedCaisStatusesWithoutLoan
 

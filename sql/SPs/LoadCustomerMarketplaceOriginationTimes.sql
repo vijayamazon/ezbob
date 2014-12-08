@@ -70,19 +70,16 @@ BEGIN
 			ON cmp.MarketPlaceId = mt.Id
 	WHERE
 		(@Now IS NULL OR r.Created < @Now)
-		AND
-		(@Now IS NULL AND ISNULL(r.IsDeleted, 0) = 0)
-		AND
-		(@Now IS NOT NULL AND (
+		AND (
 			ISNULL(r.IsDeleted, 0) = 0
 			OR
-			NOT EXISTS (
+			(@Now IS NOT NULL AND NOT EXISTS (
 				SELECT h.HistoryItemID
 				FROM MP_VatReturnRecordDeleteHistory h
 				WHERE h.DeletedRecordID = r.Id
 				AND h.DeletedTime < @Now
-			)
-		))
+			))
+		)
 	GROUP BY
 		cmp.Id,
 		mt.Name,

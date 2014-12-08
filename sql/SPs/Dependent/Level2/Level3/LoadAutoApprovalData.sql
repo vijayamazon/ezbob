@@ -15,6 +15,9 @@ BEGIN
 	DECLARE @Today DATE = CONVERT(DATE, @Now)
 
 	------------------------------------------------------------------------------
+	--
+	-- Select offer start time and length.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE
@@ -53,19 +56,38 @@ BEGIN
 	END	
 	
 	------------------------------------------------------------------------------
+	--
+	-- Select number of customer open loans.
+	-- Calculate how much money customer took.
+	--
 	------------------------------------------------------------------------------
 
-	DECLARE @OpenLoanCount INT = ISNULL((
-		SELECT
-			COUNT(*)
-		FROM
-			Loan l
-		WHERE
-			l.CustomerId = @CustomerID
-			AND
-			l.Status != 'PaidOff'
-	), 0)
+	DECLARE @TakenLoanAmount DECIMAL(18, 0)
+	DECLARE @OpenLoanCount INT
 
+	SELECT
+		@OpenLoanCount = COUNT(*),
+		@TakenLoanAmount = SUM(l.LoanAmount)
+	FROM
+		Loan l
+	WHERE
+		l.CustomerId = @CustomerID
+		AND (
+			(@Now IS NULL AND l.Status != 'PaidOff')
+			OR
+			(
+				@Now IS NOT NULL
+				AND
+				l.[Date] < @Now
+				AND
+				l.DateClosed > @Now
+			)
+		)
+
+	------------------------------------------------------------------------------
+	--
+	-- Select total number of loans that customer took.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @TotalLoanCount INT = ISNULL((
@@ -75,21 +97,14 @@ BEGIN
 			Loan l
 		WHERE
 			l.CustomerId = @CustomerID
+			AND
+			(@Now IS NULL OR l.[Date] < @Now)
 	), 0)
 
 	------------------------------------------------------------------------------
-
-	DECLARE @TakenLoanAmount DECIMAL(18, 0) = ISNULL((
-		SELECT
-			SUM(l.LoanAmount)
-		FROM
-			Loan l
-		WHERE
-			l.CustomerId = @CustomerID
-			AND
-			l.Status != 'PaidOff'
-	), 0)
-
+	--
+	-- Select principal repaid for open loans.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @RepaidPrincipal DECIMAL(18, 4) = ISNULL((
@@ -100,14 +115,29 @@ BEGIN
 			INNER JOIN Loan l ON t.LoanId = l.Id
 		WHERE
 			l.CustomerId = @CustomerID
-			AND
-			l.Status != 'PaidOff'
+			AND (
+				(@Now IS NULL AND l.Status != 'PaidOff')
+				OR
+				(
+					@Now IS NOT NULL
+					AND
+					l.[Date] < @Now
+					AND
+					l.DateClosed > @Now
+				)
+			)
 			AND
 			t.Status = 'Done'
 			AND
 			t.Type LIKE 'Paypoint%'
+			AND
+			(@Now IS NULL OR t.PostDate < @Now)
 	), 0)
 
+	------------------------------------------------------------------------------
+	--
+	-- Select setup fees for open loans.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @SetupFees DECIMAL(18, 2) = ISNULL((
@@ -118,12 +148,23 @@ BEGIN
 			INNER JOIN Loan l ON t.LoanId = l.Id
 		WHERE
 			l.CustomerId = @CustomerID
-			AND
-			l.Status != 'PaidOff'
+			AND (
+				(@Now IS NULL AND l.Status != 'PaidOff')
+				OR
+				(
+					@Now IS NOT NULL
+					AND
+					l.[Date] < @Now
+					AND
+					l.DateClosed > @Now
+				)
+			)
 			AND
 			t.Status = 'Done'
 			AND
 			t.Type LIKE 'Pacnet%'
+			AND
+			(@Now IS NULL OR t.PostDate < @Now)
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -135,6 +176,8 @@ BEGIN
 			CashRequests cr
 		WHERE
 			cr.IdCustomer = @CustomerID
+			AND
+			(@Now IS NULL OR cr.CreationDate < @Now)
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -149,6 +192,9 @@ BEGIN
 	), 1)
 
 	------------------------------------------------------------------------------
+	--
+	-- Select number of loans auto approved today.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @TodayAutoApprovalCount INT = ISNULL((
@@ -160,11 +206,15 @@ BEGIN
 				ON cr.IdCustomer = c.Id
 				AND c.IsTest = 0
 		WHERE
-			cr.UnderwriterComment = 'Auto Approval'
+			cr.AutoDecisionID = 1 -- Auto Approval
 			AND
 			CONVERT(DATE, cr.CreationDate) = @Today
 	), 0)
 
+	------------------------------------------------------------------------------
+	--
+	-- Select amount of loans auto approved today.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @TodayLoanSum DECIMAL(18, 0) = ISNULL((
@@ -184,13 +234,17 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	EXECUTE GetCompanyScoreAndIncorporationDate
+	EXECUTE GetCompanyHistoricalScoreAndIncorporationDate
 		@CustomerId,
 		1,
+		@Now,
 		@CompanyScore OUTPUT,
 		@IncorporationDate OUTPUT
 	
 	------------------------------------------------------------------------------
+	--
+	-- Select number of rollovers.
+	--
 	------------------------------------------------------------------------------
 
 	DECLARE @NumOfRollovers INT = ISNULL((
@@ -202,33 +256,15 @@ BEGIN
 			INNER JOIN Loan l ON s.LoanId = l.Id
 		WHERE
 			l.CustomerId = @CustomerID
+			AND
+			(@Now IS NULL OR r.Created < @Now)
 	), 0)
 
 	------------------------------------------------------------------------------
 
 	DECLARE @ServiceLogId BIGINT
 
-	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT
-
-	------------------------------------------------------------------------------
-
-	DECLARE @ConsumerScore INT = ISNULL((
-		SELECT
-			MIN(x.ExperianConsumerScore)
-		FROM	(
-			SELECT ExperianConsumerScore
-			FROM Customer
-			WHERE Id = @CustomerID
-			AND ExperianConsumerScore IS NOT NULL
-			
-			UNION
-			
-			SELECT ExperianConsumerScore
-			FROM Director
-			WHERE CustomerId = @CustomerID
-			AND ExperianConsumerScore IS NOT NULL
-		) x
-	), 0)
+	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT, @Now
 
 	------------------------------------------------------------------------------
 
@@ -255,6 +291,132 @@ BEGIN
 	), 0)
 
 	------------------------------------------------------------------------------
+
+	DECLARE @ConsumerScore INT = ISNULL((
+		SELECT
+			MIN(x.ExperianConsumerScore)
+		FROM	(
+			SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
+			FROM ExperianConsumerData d
+			WHERE d.Id = @ExperianConsumerDataID
+
+			UNION
+
+			SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
+			FROM CustomerAnalyticsDirector d
+			WHERE d.CustomerID = @CustomerID
+			AND d.AnalyticsDate < @Now
+		) x
+	), 0)
+
+	------------------------------------------------------------------------------
+	--
+	-- Find customer status.
+	--
+	------------------------------------------------------------------------------
+
+	DECLARE
+		@CustomerStatusID INT,
+		@CustomerStatus NVARCHAR(100),
+		@CustomerStatusEnabled BIT
+
+	-- Step 1. Find last new status before the requested date.
+
+	IF @Now IS NOT NULL
+	BEGIN
+		SELECT TOP 1
+			@CustomerStatusID = h.NewStatus
+		FROM
+			CustomerStatusHistory h
+		WHERE
+			h.TimeStamp < @Now
+			AND
+			h.CustomerId = @CustomerID
+		ORDER BY
+			h.TimeStamp DESC
+	END
+
+	------------------------------------------------------------------------------
+
+	-- Step 2. Find first old status before the requested date.
+
+	IF @Now IS NOT NULL AND @CustomerStatusID IS NULL
+	BEGIN
+		SELECT TOP 1
+			@CustomerStatusID = h.PreviousStatus
+		FROM
+			CustomerStatusHistory h
+		WHERE
+			h.TimeStamp >= @Now
+			AND
+			h.CustomerId = @CustomerID
+		ORDER BY
+			h.TimeStamp ASC
+	END
+
+	------------------------------------------------------------------------------
+
+	-- Step 3. Take current status.
+
+	IF @CustomerStatusID IS NULL
+	BEGIN
+		SELECT
+			@CustomerStatusID = c.CollectionStatus
+		FROM
+			Customer c
+		WHERE
+			c.Id = @CustomerID
+	END
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@CustomerStatus        = s.Name,
+		@CustomerStatusEnabled = s.IsEnabled
+	FROM
+		CustomerStatuses s
+	WHERE
+		s.Id = @CustomerStatusID
+
+	------------------------------------------------------------------------------
+	--
+	-- Select customer fraud status.
+	--
+	------------------------------------------------------------------------------
+
+	DECLARE @FraudStatus INT
+	DECLARE @FraudRqID INT
+
+	IF @Now IS NOT NULL
+	BEGIN
+		SELECT TOP 1
+			@FraudRqID = r.Id
+		FROM
+			FraudRequest r
+		WHERE
+			r.CustomerId = @CustomerID
+			AND
+			r.CheckDate < @Now
+		ORDER BY
+			r.CheckDate DESC
+
+		IF EXISTS (SELECT * FROM FraudDetection WHERE FraudRequestId = @FraudRqID)
+			SET @FraudStatus = 2 -- Fraud suspect
+	END
+
+	------------------------------------------------------------------------------
+
+	IF @FraudStatus IS NULL
+	BEGIN
+		SELECT
+			@FraudStatus = c.FraudStatus
+		FROM
+			Customer c
+		WHERE
+			c.Id = @CustomerID
+	END
+
+	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -267,10 +429,10 @@ BEGIN
 		NumOfTodayAutoApproval = @TodayAutoApprovalCount,
 		TodayLoanSum           = @TodayLoanSum,
 
-		FraudStatusValue       = c.FraudStatus,
+		FraudStatusValue       = @FraudStatus,
 		AmlResult              = c.AMLResult,
-		CustomerStatusName     = cs.Name,
-		CustomerStatusEnabled  = cs.IsEnabled,
+		CustomerStatusName     = @CustomerStatus,
+		CustomerStatusEnabled  = @CustomerStatusEnabled,
 		CompanyScore           = ISNULL(@CompanyScore, 0),
 		ConsumerScore          = @ConsumerScore,
 		IncorporationDate      = @IncorporationDate,
@@ -280,20 +442,19 @@ BEGIN
 		NumOfRollovers         = @NumOfRollovers,
 
 		TotalLoanCount         = @TotalLoanCount,
-		OpenLoanCount          = @OpenLoanCount,
-		TakenLoanAmount        = @TakenLoanAmount,
+		OpenLoanCount          = ISNULL(@OpenLoanCount, 0),
+		TakenLoanAmount        = ISNULL(@TakenLoanAmount, 0),
 		RepaidPrincipal        = @RepaidPrincipal,
 		SetupFees              = @SetupFees,
 
-		OfferValidUntil        = ValidFor,
-		OfferStart             = ApplyForLoan,
+		OfferValidUntil        = @OfferValidUntil,
+		OfferStart             = @OfferStart,
 		EmailSendingBanned     = @EmailSendingBanned,
 
 		ExperianCompanyName    = co.ExperianCompanyName,
 		EnteredCompanyName     = co.CompanyName
 	FROM
 		Customer c
-		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 		LEFT JOIN Company co ON c.CompanyId = co.Id
 	WHERE
 		c.Id = @CustomerID
@@ -319,6 +480,8 @@ BEGIN
 		l.CustomerId = @CustomerID
 		AND
 		DATEDIFF(day, s.[Date], t.PostDate) > 1
+		AND
+		(@Now IS NULL OR t.PostDate < @Now)
 	ORDER BY
 		t.PostDate
 
@@ -334,18 +497,18 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	EXECUTE LoadCustomerMarketplaceOriginationTimes @CustomerID
+	EXECUTE LoadCustomerMarketplaceOriginationTimes @CustomerID, @Now
 	
 	------------------------------------------------------------------------------
 
-	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 1
-	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 3
-	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 6
-	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 12
+	EXECUTE GetCustomerTurnoverData 1, @CustomerID,  1, @Now
+	EXECUTE GetCustomerTurnoverData 1, @CustomerID,  3, @Now
+	EXECUTE GetCustomerTurnoverData 1, @CustomerID,  6, @Now
+	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 12, @Now
 
 	------------------------------------------------------------------------------
 
-	EXECUTE GetExperianDirectorsNamesForCustomer @CustomerID
+	EXECUTE GetExperianDirectorsNamesForCustomer @CustomerID -- TODO
 
 	------------------------------------------------------------------------------
 
@@ -356,11 +519,22 @@ BEGIN
 		Business b
 		INNER JOIN MP_VatReturnRecords o
 			ON b.Id = o.BusinessId
-			AND ISNULL(o.IsDeleted, 0) = 0
+			AND (@Now IS NULL OR o.Created < @Now)
+			AND (
+				ISNULL(o.IsDeleted, 0) = 0
+				OR
+				(@Now IS NOT NULL AND NOT EXISTS (
+					SELECT h.HistoryItemID
+					FROM MP_VatReturnRecordDeleteHistory h
+					WHERE h.DeletedRecordID = o.Id
+					AND h.DeletedTime < @Now
+				))
+			)
 		INNER JOIN MP_CustomerMarketPlace m
 			ON o.CustomerMarketPlaceId = m.Id
 			AND m.CustomerId = @CustomerID
 			AND ISNULL(m.Disabled, 0) = 0
+			AND (@Now IS NULL OR m.Created < @Now)
 
 	------------------------------------------------------------------------------
 END

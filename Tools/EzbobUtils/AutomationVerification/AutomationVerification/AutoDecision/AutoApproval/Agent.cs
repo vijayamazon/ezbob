@@ -12,10 +12,6 @@
 	/// decides whether this amount should be approved.
 	/// </summary>
 	public class Agent {
-		#region public
-
-		#region properties
-
 		public virtual decimal ApprovedAmount { get; set; }
 
 		public virtual DateTime Now { get; set; }
@@ -23,10 +19,6 @@
 		public virtual Result Result { get; private set; }
 
 		public virtual ApprovalTrail Trail { get; private set; }
-
-		#endregion properties
-
-		#region constructor
 
 		public Agent(int nCustomerID, decimal nSystemCalculatedAmount, AutomationCalculator.Common.Medal nMedal, AConnection oDB, ASafeLog oLog) {
 			Result = null;
@@ -37,11 +29,9 @@
 			m_oCheck = new Checker(this);
 		} // constructor
 
-		#endregion constructor
-
-		#region method Init
-
 		public virtual Agent Init() {
+			Now = DateTime.UtcNow;
+
 			ApprovedAmount = Args.SystemCalculatedAmount;
 
 			MetaData = new MetaData();
@@ -62,10 +52,6 @@
 
 			return this;
 		} // Init
-
-		#endregion method Init
-
-		#region method MakeDecision
 
 		public virtual void MakeDecision() {
 			Log.Debug("Secondary: checking if auto approval should take place for customer {0}...", Args.CustomerID);
@@ -90,14 +76,6 @@
 			);
 		} // MakeDecision
 
-		#endregion method MakeDecision
-
-		#endregion public
-
-		#region protected
-
-		#region properties
-
 		protected virtual AConnection DB { get; private set; }
 		protected virtual ASafeLog Log { get; private set; }
 
@@ -118,17 +96,11 @@
 		protected virtual List<Name> DirectorNames { get; private set; }
 		protected virtual List<string> HmrcBusinessNames { get; private set; }
 
-		#endregion properties
-
-		#region method GatherData
-
 		/// <summary>
 		/// Collects customer data from DB. Can be overridden to provide
 		/// specific customer data instead of the current one.
 		/// </summary>
 		protected virtual void GatherData() {
-			Now = DateTime.UtcNow;
-
 			Cfg.Load();
 
 			DB.ForEachRowSafe(
@@ -144,7 +116,7 @@
 			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(Funds);
 
 			Trail.MyInputData.FullInit(
-				DateTime.UtcNow,
+				Now,
 				Cfg,
 				Args,
 				MetaData,
@@ -160,14 +132,6 @@
 			MetaData.Validate();
 		} // GatherData
 
-		#endregion method GatherData
-
-		#endregion protected
-
-		#region private
-
-		#region enum RowType
-
 		private enum RowType {
 			MetaData,
 			Payment,
@@ -177,10 +141,6 @@
 			DirectorName,
 			HmrcBusinessName,
 		} // enum RowType
-
-		#endregion enum RowType
-
-		#region method ProcessRow
 
 		private void ProcessRow(SafeReader sr) {
 			RowType nRowType;
@@ -226,10 +186,6 @@
 			} // switch
 		} // ProcessRow
 
-		#endregion method ProcessRow
-
 		private readonly Checker m_oCheck;
-
-		#endregion private
 	} // class Agent
 } // namespace
