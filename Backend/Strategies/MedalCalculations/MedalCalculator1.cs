@@ -77,8 +77,7 @@
 		private MedalResult SetNoMedal(int customerId, DateTime calculationTime, string errorMessage)
 		{
 			log.Warn("No medal was calculated for customer:{0}", customerId);
-			var result = new MedalResult();
-			result.CustomerId = customerId;
+			var result = new MedalResult(customerId);
 			result.CalculationTime = calculationTime;
 			result.MedalType = MedalType.NoMedal;
 			result.Error = errorMessage;
