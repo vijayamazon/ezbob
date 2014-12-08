@@ -46,6 +46,7 @@
 		public bool CustomerStatusIsWarning { get; private set; }
 		public string CustomerStatusName { get; private set; }
 		public bool IsOffline { get; private set; }
+		public bool IsTest { get; private set; }
 		public string AppEmail { get; private set; }
 		public string AppFirstName { get; private set; }
 		public string AppSurname { get; private set; }
@@ -203,6 +204,7 @@
 			NumOfYodleeMps = results["NumOfYodleeMps"];
 			EarliestHmrcLastUpdateDate = results["EarliestHmrcLastUpdateDate"];
 			EarliestYodleeLastUpdateDate = results["EarliestYodleeLastUpdateDate"];
+			IsTest = results["IsTest"];
 		}
 
 		private void GetCompanySeniorityDays()

@@ -37,15 +37,6 @@
 					Log
 				).SetOverrideApprovedRejected(false).Execute();
 			} // if
-
-			if (m_oArgs.DoFraud) {
-				new FraudChecker(
-					m_oArgs.CustomerID,
-					m_oArgs.FraudMode,
-					DB,
-					Log
-				).Execute();
-			} // if
 		} // Execute
 
 		private readonly FinishWizardArgs m_oArgs;

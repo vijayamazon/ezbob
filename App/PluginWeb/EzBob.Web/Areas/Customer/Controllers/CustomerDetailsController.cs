@@ -888,10 +888,6 @@
 
 			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 
-			if (!customer.IsTest) {
-				m_oServiceClient.Instance.FraudChecker(m_oContext.User.Id, FraudMode.FullCheck);
-				ms_oLog.Debug("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
-			} // if
 		} // WizardComplete
 
 		#endregion method WizardComplete

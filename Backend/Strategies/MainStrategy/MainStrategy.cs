@@ -66,7 +66,7 @@
 			// Wait for data to be filled by other strategies
 			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
 				staller.Stall();
-
+			
 			// Gather preliminary data that is required by AdditionalStrategiesCaller
 			dataGatherer.GatherPreliminaryData();
 			wasMainStrategyExecutedBefore = dataGatherer.LastStartedMainStrategyEndTime.HasValue;
@@ -88,6 +88,12 @@
 
 			// Gather Raw Data - most data is gathered here
 			dataGatherer.Gather();
+
+			//check for fraud
+			if (!dataGatherer.IsTest) {
+				var fraudChecker = new FraudChecker(customerId, FraudMode.FullCheck, DB, Log);
+				fraudChecker.Execute();
+			}
 
 			// Processing logic
 			isHomeOwner = dataGatherer.IsOwnerOfMainAddress || dataGatherer.IsOwnerOfOtherProperties;

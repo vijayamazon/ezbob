@@ -137,7 +137,6 @@
 		#region method ForceEvaluate
 
 		public void ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isSync) {
-			m_oServiceClient.Instance.FraudCheckerAsync(customer.Id, FraudMode.FullCheck);
 			bool bUpdateMarketplaces =
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
