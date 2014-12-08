@@ -7,26 +7,24 @@
 
 	class Program {
 		static void Main(string[] args) {
-			string sAppName = Assembly.GetExecutingAssembly().GetName().Name;
+			string AppName = Assembly.GetExecutingAssembly().GetName().Name;
 
-			ASafeLog oLog = new FileLog(sAppName);
+			ASafeLog log = new FileLog(AppName);
 
-			var oArgs = new Args(sAppName, args, oLog);
+			var oArgs = new Args(AppName, args, log);
 
-			oLog.NotifyStart();
+			log.NotifyStart();
 
 			if (oArgs.IsGood) {
-				var oEnv = new Ezbob.Context.Environment(oLog);
+				var db = new SqlConnection(new Ezbob.Context.Environment(log), log);
 
-				var oDB = new SqlConnection(oEnv, oLog);
+				CurrentValues.Init(db, log);
 
-				CurrentValues.Init(oDB, oLog);
-
-				var stra = new YesMaam(oArgs.Count, oArgs.LastCheckedID, oDB, oLog);
+				var stra = new YesMaam(oArgs.Count, oArgs.LastCheckedID, db, log);
 				stra.Execute();
 			} // if
 
-			oLog.NotifyStop();
+			log.NotifyStop();
 		} // Main
 	} // class Program
 } // namespace

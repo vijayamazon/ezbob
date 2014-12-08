@@ -15,8 +15,8 @@
 		public OneResult AutoReject { get; set; }
 		public OneResult AutoApprove { get; set; }
 
-		public YesMaamResult(YesMaamInputRow oRow) {
-			Input = oRow;
+		public YesMaamResult(YesMaamInputRow row) {
+			Input = row;
 			AutoApprove = new OneResult();
 			AutoReject = new OneResult();
 		} // constructor

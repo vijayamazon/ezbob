@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -22,21 +23,21 @@
 			AConnection oDB,
 			ASafeLog oLog
 		) {
-			m_nTopCount = nTopCount;
-			m_nLastCheckedID = nLastCheckedID;
+			this.topCount = nTopCount;
+			this.lastCheckedID = nLastCheckedID;
 
-			m_oDB = oDB;
-			m_oLog = oLog ?? new SafeLog();
+			this.DB = oDB;
+			this.Log = oLog ?? new SafeLog();
 		} // constructor
 
 		public void Execute() {
-			m_oLog.Debug("Loading relevant cash requests...");
+			this.Log.Debug("Loading relevant cash requests...");
 
-			List<YesMaamInputRow> lst = YesMaamInputRow.Load(m_oDB, m_nTopCount, m_nLastCheckedID);
+			List<YesMaamInputRow> lst = YesMaamInputRow.Load(this.DB, this.topCount, this.lastCheckedID);
 
-			m_oLog.Debug("Loading relevant cash requests complete, {0} loaded.", Grammar.Number(lst.Count, "row"));
+			this.Log.Debug("Loading relevant cash requests complete, {0} loaded.", Grammar.Number(lst.Count, "row"));
 
-			var pc = new ProgressCounter("{0} of " + lst.Count + " cash requests processed.", m_oLog, 10);
+			var pc = new ProgressCounter("{0} of " + lst.Count + " cash requests processed.", this.Log, 10);
 
 			var oResult = new List<YesMaamResult>();
 
@@ -45,7 +46,7 @@
 				oResult.Add(ymr);
 
 				DoReject(ymr);
-				// TODO: DoApprove(ymr);
+				DoApprove(ymr);
 
 				pc++;
 			} // for each
@@ -57,7 +58,7 @@
 			ATag rpt = ToEmail(oResult);
 
 			if (string.IsNullOrWhiteSpace(sEmail))
-				m_oLog.Debug("Not sending:\n{0}", rpt);
+				this.Log.Debug("Not sending:\n{0}", rpt);
 			else {
 				new Mail().Send(
 					sEmail,
@@ -77,8 +78,8 @@
 				agent = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.ManAgainstAMachine.SameDataAgent(
 					ymr.Input.CustomerID,
 					ymr.Input.DecisionTime,
-					m_oDB,
-					m_oLog
+					this.DB,
+					this.Log
 				);
 
 				agent.Init();
@@ -91,7 +92,7 @@
 				if ((agent != null) && (agent.Trail != null))
 					ymr.AutoReject.Data += "<br>" + agent.Trail.UniqueID.ToString();
 
-				m_oLog.Alert(
+				this.Log.Alert(
 					e,
 					"Exception thrown while executing Reject(customer {0}, time {1}).",
 					ymr.Input.CustomerID,
@@ -99,6 +100,42 @@
 				);
 			} // try
 		} // DoReject
+
+		private void DoApprove(YesMaamResult ymr) {
+			AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent agent = null;
+
+			try {
+				agent = new SameDataAgent(
+					ymr.Input.CustomerID,
+					ymr.Input.Amount,
+					ymr.Input.Medal,
+					ymr.Input.DecisionTime,
+					this.DB,
+					this.Log
+				);
+
+				agent.Init();
+
+				agent.MakeDecision();
+
+				ymr.AutoApprove.Data = (agent.Trail.HasDecided ? "Approved" : "Not approved") + "<br>" + agent.Trail.UniqueID;
+
+				ymr.AutoApprove.Amount = agent.Result == null ? 0 : agent.Result.ApprovedAmount;
+			}
+			catch (Exception e) {
+				ymr.AutoApprove.Data = "Exception";
+
+				if ((agent != null) && (agent.Trail != null))
+					ymr.AutoApprove.Data += "<br>" + agent.Trail.UniqueID.ToString();
+
+				this.Log.Alert(
+					e,
+					"Exception thrown while executing Approve(customer {0}, time {1}).",
+					ymr.Input.CustomerID,
+					ymr.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss z", CultureInfo.InvariantCulture)
+				);
+			} // try
+		} // DoApprove
 
 		private ATag ToEmail(IEnumerable<YesMaamResult> lst) {
 			ATag tbl = new Table().Add<Ezbob.Utils.Html.Attributes.Style>("border-collapse:collapse;");
@@ -173,7 +210,7 @@
 				row.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
 			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 			tr.Append(CreateCell<Td>(
-				row.Input.Amount.ToString("C0", CultureInfo.InvariantCulture)
+				row.Input.ApprovedAmount.ToString("C0", CultureInfo.InvariantCulture)
 			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
 			tr.Append(CreateCell<Td>(
@@ -184,7 +221,7 @@
 				row.AutoApprove.Data, !row.AutoApprove.Data.StartsWith(row.Input.Decision)
 			));
 			tr.Append(CreateCell<Td>(
-				row.AutoApprove.Amount.ToString("C0", CultureInfo.InvariantCulture), row.AutoApprove.Amount != row.Input.Amount
+				row.AutoApprove.Amount.ToString("C0", CultureInfo.InvariantCulture), row.AutoApprove.Amount != row.Input.ApprovedAmount
 			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
 			return tr;
@@ -216,10 +253,10 @@
 			return cell;
 		} // CreateCell
 
-		private readonly AConnection m_oDB;
-		private readonly ASafeLog m_oLog;
+		private AConnection DB { get; set; }
+		private ASafeLog Log { get; set; }
 
-		private readonly int m_nTopCount;
-		private readonly int m_nLastCheckedID;
+		private readonly int topCount;
+		private readonly int lastCheckedID;
 	} // class YesMaam
 } // namespace

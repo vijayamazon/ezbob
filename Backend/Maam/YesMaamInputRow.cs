@@ -23,30 +23,32 @@
 
 		public int Amount { get; set; }
 
+		public int ApprovedAmount { get; set; }
+
 		public Medal Medal {
 			get {
-				if (m_nMedal == Medal.NoClassification)
-					Enum.TryParse(MedalType, out m_nMedal);
+				if (this.medal == Medal.NoClassification)
+					Enum.TryParse(MedalType, out this.medal);
 
-				return m_nMedal;
+				return this.medal;
 			} // get
 		} // Medal
 
-		private Medal m_nMedal;
+		private Medal medal;
 
 		public YesMaamInputRow() {
-			m_nMedal = Medal.NoClassification;
+			this.medal = Medal.NoClassification;
 		} // constructor
 
 		public static List<YesMaamInputRow> Load(
 			AConnection oDB,
-			int nTopCount,
-			int nLastCheckedID
+			int topCount,
+			int lastCheckedID
 		) {
-			string sTop = (nTopCount > 0) ? "TOP " + nTopCount : string.Empty;
+			string top = (topCount > 0) ? "TOP " + topCount : string.Empty;
 
-			string sCondition = (nLastCheckedID > 0)
-				? "AND r.Id < " + nLastCheckedID
+			string condition = (lastCheckedID > 0)
+				? "AND r.Id < " + lastCheckedID
 				: string.Empty;
 
 			const string sQueryFormat = @"
@@ -59,7 +61,8 @@ SELECT {0}
 	r.IdUnderwriter AS UnderwriterID,
 	u.UserName AS UnderwriterName,
 	r.MedalType,
-	ISNULL(dbo.udfMaxInt(r.SystemCalculatedSum, r.ManagerApprovedSum), 100000) AS Amount
+	ISNULL(dbo.udfMaxInt(r.SystemCalculatedSum, r.ManagerApprovedSum), 100000) AS Amount,
+	ISNULL(r.ManagerApprovedSum, 0) AS ApprovedAmount
 FROM
 	CashRequests r
 	INNER JOIN Customer c ON r.IdCustomer = c.Id
@@ -79,7 +82,7 @@ ORDER BY
 ";
 
 			return oDB.Fill<YesMaamInputRow>(
-				string.Format(sQueryFormat, sTop, sCondition),
+				string.Format(sQueryFormat, top, condition),
 				CommandSpecies.Text
 			);
 		} // Load

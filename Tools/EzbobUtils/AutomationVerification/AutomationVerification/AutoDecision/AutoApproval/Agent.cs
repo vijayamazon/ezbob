@@ -14,7 +14,7 @@
 	public class Agent {
 		public virtual decimal ApprovedAmount { get; set; }
 
-		public virtual DateTime Now { get; set; }
+		public virtual DateTime Now { get; protected set; }
 
 		public virtual Result Result { get; private set; }
 
@@ -45,7 +45,7 @@
 			OriginationTime = new OriginationTime(Log);
 
 			Trail = new ApprovalTrail(Args.CustomerID, Log);
-			Cfg = new Configuration(DB, Log);
+			Cfg = InitCfg();
 
 			DirectorNames = new List<Name>();
 			HmrcBusinessNames = new List<string>();
@@ -96,6 +96,14 @@
 		protected virtual List<Name> DirectorNames { get; private set; }
 		protected virtual List<string> HmrcBusinessNames { get; private set; }
 
+		protected virtual Configuration InitCfg() {
+			return new Configuration(DB, Log);
+		} // InitCfg
+
+		protected virtual void GatherAvailableFunds() {
+			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(Funds);
+		} // GatherAvailableFunds
+
 		/// <summary>
 		/// Collects customer data from DB. Can be overridden to provide
 		/// specific customer data instead of the current one.
@@ -113,7 +121,7 @@
 
 			OriginationTime.FromExperian(MetaData.IncorporationDate);
 
-			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(Funds);
+			GatherAvailableFunds();
 
 			Trail.MyInputData.FullInit(
 				Now,

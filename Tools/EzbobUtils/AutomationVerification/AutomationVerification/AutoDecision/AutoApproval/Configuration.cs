@@ -8,29 +8,19 @@
 	/// Contains auto approval configuration parameters (max and min amount to approve, silent mode, etc.).
 	/// </summary>
 	public class Configuration {
-		#region public
-
-		#region constructor
-
 		public Configuration() {
 			m_oAllowedCaisStatusesWithLoan = new List<string>();
 			m_oAllowedCaisStatusesWithoutLoan = new List<string>();
 		} // constructor
 
 		public Configuration(AConnection oDB, ASafeLog oLog) : this() {
-			m_oDB = oDB;
-			m_oLog = oLog;
+			this.DB = oDB;
+			this.Log = oLog;
 		} // constructor
 
-		#endregion constructor
-
-		#region method Load
-
 		public virtual void Load() {
-			m_oDB.ForEachRowSafe(SetValue, "LoadApprovalConfigs", CommandSpecies.StoredProcedure);
+			this.DB.ForEachRowSafe(SetValue, "LoadApprovalConfigs", CommandSpecies.StoredProcedure);
 		} // Load
-
-		#endregion method Load
 
 		public virtual int ExperianScoreThreshold { get; set; }
 		public virtual int CustomerMinAge { get; set; }
@@ -59,18 +49,12 @@
 		public virtual decimal HmrcTurnoverDropQuarterRatio { get; set; }
 		public virtual decimal HmrcTurnoverDropHalfYearRatio { get; set; }
 
-		#region property AllowedCaisStatusesWithLoan
-
 		public virtual string AllowedCaisStatusesWithLoan {
 			get { return string.Join(", ", m_oAllowedCaisStatusesWithLoan); } // get
 			set { SaveCaisStatuses(value, m_oAllowedCaisStatusesWithLoan); } // set
 		} // AllowedCaisStatusesWithLoan
 
 		private readonly List<string> m_oAllowedCaisStatusesWithLoan;
-
-		#endregion property AllowedCaisStatusesWithLoan
-
-		#region property AllowedCaisStatusesWithoutLoan
 
 		public virtual string AllowedCaisStatusesWithoutLoan {
 			get { return string.Join(", ", m_oAllowedCaisStatusesWithoutLoan); } // get
@@ -79,8 +63,6 @@
 
 		private readonly List<string> m_oAllowedCaisStatusesWithoutLoan;
 
-		#endregion property AllowedCaisStatusesWithoutLoan
-
 		public virtual List<string> GetAllowedCaisStatusesWithLoan() {
 			return m_oAllowedCaisStatusesWithLoan;
 		} // GetAllowedCaisStatusesWithLoan
@@ -88,12 +70,6 @@
 		public virtual List<string> GetAllowedCaisStatusesWithoutLoan() {
 			return m_oAllowedCaisStatusesWithoutLoan;
 		} // GetAllowedCaisStatusesWithoutLoan
-
-		#endregion public
-
-		#region private
-
-		#region method SetValue
 
 		private void SetValue(SafeReader sr) {
 			string sName = sr["Name"];
@@ -107,11 +83,11 @@
 			);
 
 			if (pi == null) {
-				m_oLog.Alert("Auto approval configuration: unsupported parameter found '{0}'.", sName);
+				this.Log.Alert("Auto approval configuration: unsupported parameter found '{0}'.", sName);
 				return;
 			} // if
 
-			if (pi.PropertyType == typeof (bool)) {
+			if (pi.PropertyType == typeof(bool)) {
 				string sValue = sr["Value"];
 
 				switch ((sValue ?? string.Empty).Trim().ToLowerInvariant()) {
@@ -130,17 +106,13 @@
 				pi.SetValue(this, sr["Value"].ToType(pi.PropertyType));
 			} // if
 
-			m_oLog.Debug("Auto approval configuration: '{0}' was set to {1}.", sName, pi.GetValue(this));
+			this.Log.Debug("Auto approval configuration: '{0}' was set to {1}.", sName, pi.GetValue(this));
 		} // SetValue
 
-		#endregion method SetValue
-
-		private readonly ASafeLog m_oLog;
-		private readonly AConnection m_oDB;
+		private ASafeLog Log { get; set; }
+		private AConnection DB { get; set; }
 
 		private const string StandardPrefix = "AutoApprove";
-
-		#region method SaveCaisStatuses
 
 		private void SaveCaisStatuses(string sList, List<string> oList) {
 			oList.Clear();
@@ -150,9 +122,5 @@
 
 			oList.AddRange(sList.Split(','));
 		} // SaveCaisStatuses
-
-		#endregion method SaveCaisStatuses
-
-		#endregion private
 	} // class Configuration
 } // namespace

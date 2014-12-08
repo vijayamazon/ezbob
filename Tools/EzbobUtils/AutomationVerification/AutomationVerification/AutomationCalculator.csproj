@@ -53,6 +53,8 @@
     <Compile Include="AutoDecision\AutoApproval\AvailableFunds.cs" />
     <Compile Include="AutoDecision\AutoApproval\Checker.cs" />
     <Compile Include="AutoDecision\AutoApproval\Configuration.cs" />
+    <Compile Include="AutoDecision\AutoApproval\ManAgainstAMachine\SameDataConfiguration.cs" />
+    <Compile Include="AutoDecision\AutoApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
     <Compile Include="AutoDecision\AutoApproval\Name.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Agent.cs" />
