@@ -14,7 +14,7 @@
 		[FieldName("UnderwriterDecision")]
 		public string Decision { get; set; }
 
-		public int CollectionStatus { get; set; }
+		public string CollectionStatus { get; set; }
 
 		public int UnderwriterID { get; set; }
 		public string UnderwriterName { get; set; }
@@ -55,7 +55,7 @@ SELECT {0}
 	r.IdCustomer AS CustomerID,
 	r.UnderwriterDecisionDate,
 	r.UnderwriterDecision,
-	c.CollectionStatus,
+	cs.Name AS CollectionStatus,
 	r.IdUnderwriter AS UnderwriterID,
 	u.UserName AS UnderwriterName,
 	r.MedalType,
@@ -64,6 +64,7 @@ FROM
 	CashRequests r
 	INNER JOIN Customer c ON r.IdCustomer = c.Id
 	INNER JOIN Security_User u ON r.IdUnderwriter = u.UserId
+	INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 WHERE
 	r.IdUnderwriter IS NOT NULL
 	AND
