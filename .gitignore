@@ -1,6 +1,4 @@
-*.DotSettings
 *.ReSharper.user
-*.coffee.squishit.debug.js
 *.csproj.DotSettings.user
 *.csproj.user
 *.less.squishit.debug.css
@@ -15,12 +13,15 @@ App/EzReporting/EzReportToEMail/bin
 App/EzReporting/EzReportToEMail/obj
 App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml
 App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml.user
+App/EzReporting/EzReportsWeb/Properties/PublishProfiles/LocalPublish.pubxml.user
 App/EzReporting/EzReportsWeb/bin
+App/EzReporting/EzReportsWeb/connection-strings.xml
 App/EzReporting/ReportAuthenticationLib/bin
 App/EzReporting/ReportAuthenticationLib/obj
 App/EzReporting/Reports/bin
 App/EzReporting/Reports/obj
 App/EzReporting/~$ReportingDoc.docx
+App/EzTvDashboard/EzTvDashboard/Properties/PublishProfiles/TvDashboard.pubxml.user
 App/PluginWeb/EzBob.Web/Content/css/combined_*.css
 App/PluginWeb/EzBob.Web/Content/css/min/*.css
 App/PluginWeb/EzBob.Web/Content/js/min/*.js
@@ -28,6 +29,7 @@ App/PluginWeb/EzBob.Web/Content/js/min/jslib_*.js
 App/PluginWeb/EzBob.Web/Properties/PublishProfiles/EzBob.Release.pubxml.user
 App/PluginWeb/EzBob.Web/Properties/PublishProfiles/EzBob.Test.pubxml.user
 App/PluginWeb/EzBob.Web/bin/
+App/PluginWeb/EzBob.Web/connection-strings.xml
 App/PluginWeb/PluginWebApp/CSS/combined_*.css
 App/PluginWeb/PluginWebApp/Scripts/min/*.js
 App/PluginWeb/PluginWebApp/bin/
@@ -47,7 +49,3 @@ drop-create*.bat
 ezTest/img/*
 obj/
 packages/
-App/EzReporting/EzReportsWeb/connection-strings.xml
-App/PluginWeb/EzBob.Web/connection-strings.xml
-App/EzReporting/EzReportsWeb/Properties/PublishProfiles/LocalPublish.pubxml.user
-App/EzTvDashboard/EzTvDashboard/Properties/PublishProfiles/TvDashboard.pubxml.user
