@@ -34,7 +34,7 @@
 
 		public MedalResult CalculateMedalScore(int customerId, DateTime calculationTime)
 		{
-			Results = new MedalResult { CustomerId = customerId, CalculationTime = calculationTime };
+			Results = new MedalResult(customerId) { CalculationTime = calculationTime };
 			SetMedalType();
 
 			try

@@ -45,8 +45,7 @@ namespace EzBobTest
 			DateTime calculationTime = new DateTime(2014, 11, 06);
 			int customerId = 18112;
 
-			MedalResult resultsInput = new MedalResult();
-			resultsInput.CustomerId = customerId;
+			MedalResult resultsInput = new MedalResult(customerId);
 			resultsInput.CalculationTime = calculationTime;
 			resultsInput.MedalType = MedalType.Limited;
 			resultsInput.BusinessScore = 0;

@@ -7,9 +7,17 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MaritalStatus = EZBob.DatabaseLib.Model.Database.MaritalStatus;
+	using Medal = EZBob.DatabaseLib.Model.Database.Medal;
 
 	public class MedalResult
 	{
+		public MedalResult(int customerID) {
+			MedalClassification = Medal.NoClassification;
+			OfferedLoanAmount = 0;
+			TotalScoreNormalized = 0;
+			CustomerId = customerID;
+		}
+
 		// Inputs
 		public int CustomerId { get; set; }
 		public DateTime CalculationTime { get; set; }

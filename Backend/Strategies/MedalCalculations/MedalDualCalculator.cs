@@ -25,22 +25,20 @@
 			medalCalculatorVerification = new MedalChooser(db, log);
 		}
 
-		public MedalResult CalculateMedalScore(int customerId, DateTime calculationTime, string typeOfBusiness, int consumerScore, int companyScore, int numOfHmrcMps, int numOfYodleeMps, int numOfEbayAmazonPayPalMps, DateTime? earliestHmrcLastUpdateDate, DateTime? earliestYodleeLastUpdateDate)
-		{
-			try
-			{
+		public MedalResult CalculateMedalScore(int customerId, DateTime calculationTime, string typeOfBusiness, int consumerScore, int companyScore, int numOfHmrcMps, int numOfYodleeMps, int numOfEbayAmazonPayPalMps, DateTime? earliestHmrcLastUpdateDate, DateTime? earliestYodleeLastUpdateDate) {
+			try {
 				MedalResult result1 = medalCalculator1.CalculateMedal(customerId, calculationTime, typeOfBusiness, consumerScore, companyScore, numOfHmrcMps, numOfYodleeMps, numOfEbayAmazonPayPalMps, earliestHmrcLastUpdateDate, earliestYodleeLastUpdateDate);
 				MedalOutputModel result2 = medalCalculatorVerification.GetMedal(customerId, calculationTime);
-				
+
 				result2.SaveToDb(db, log);
 				if (result1 != null && result1.IsIdentical(result2)) {
 					result1.SaveToDb(db);
 					return result1;
 				}
-				
+
 				//Mismatch in medal calculations
 				if (result1 == null) {
-					result1 = new MedalResult{ CustomerId =  customerId};
+					result1 = new MedalResult(customerId);
 				}
 				result1.PrintToLog(log);
 				result1.MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification;
@@ -49,14 +47,15 @@
 
 				SendExplanationMail(customerId, result1, result2);
 				log.Error("Mismatch found in the 2 medal calculations of customer: {0}", customerId);
-				return null;
+				return result1;
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				log.Warn("Medal calculation for customer {0} failed with exception:{1}", customerId, e);
-			}
 
-			return null;
+				return new MedalResult(customerId) {
+					Error = "Exception thrown: " + e.Message,
+				};
+			}
 		}
 
 		private void SendExplanationMail(int customerId, MedalResult result1, MedalOutputModel result2) {
