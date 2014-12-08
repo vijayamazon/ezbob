@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Controllers {
+	using System;
 	using System.Collections.Generic;
 	using System.Web.Mvc;
 	using Code.ServerLog;
@@ -13,8 +14,15 @@
 
 		[HttpPost]
 		public JsonResult Say(string version, string history) {
-			Dictionary<string, ServerLogCachePkgModel> oHistory = JsonConvert.DeserializeObject<Dictionary<string, ServerLogCachePkgModel>>(history);
+			Dictionary<string, ServerLogCachePkgModel> oHistory = null;
 
+			try {
+				oHistory = JsonConvert.DeserializeObject<Dictionary<string, ServerLogCachePkgModel>>(history);
+			}
+			catch (Exception ex) {
+				ms_oLog.Warn(ex, "Failed to deserialize history: {0}", history);
+			}
+			
 			ms_oLog.Debug("Client package for logging from remote address '{0}' - begin", RemoteIp());
 
 			var oSavedPackages = new List<string>();

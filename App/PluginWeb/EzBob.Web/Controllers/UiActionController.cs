@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Controllers {
+	using System;
 	using System.Collections.Generic;
 	using System.Web.Mvc;
 	using Code;
@@ -14,7 +15,14 @@
 
 		[HttpPost]
 		public JsonResult Save(string version, string history) {
-			Dictionary<string, UiCachePkgModel> oHistory = JsonConvert.DeserializeObject<Dictionary<string, UiCachePkgModel>>(history);
+			Dictionary<string, UiCachePkgModel> oHistory = null;
+			try {
+				oHistory = JsonConvert.DeserializeObject<Dictionary<string, UiCachePkgModel>>(history);
+			}
+			catch (Exception ex) {
+				ms_oLog.Warn(ex, "Failed to deserialize history: {0}", history);
+			}
+			
 
 			if ((oHistory == null) || (oHistory.Count < 1)) {
 				ms_oLog.Warn("No data received, nothing done.");

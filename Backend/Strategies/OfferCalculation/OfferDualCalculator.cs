@@ -7,7 +7,6 @@
 	using Ezbob.Logger;
 	using System;
 	using MailApi;
-	using MedalCalculations;
 
 	public class OfferDualCalculator
 	{
