@@ -9,7 +9,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE GetExperianDirectorsNamesForCustomer
-@CustomerID INT
+@CustomerID INT,
+@Now DATETIME = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -26,7 +27,8 @@ BEGIN
 	FROM
 		Customer c
 		INNER JOIN Company co ON c.CompanyId = co.Id
-	WHERE c.Id=@CustomerID
+	WHERE
+		c.Id = @CustomerID
 	
 	------------------------------------------------------------------------------
 
@@ -42,6 +44,8 @@ BEGIN
 			)
 			AND
 			l.ServiceType = 'E-SeriesLimitedData'
+			AND
+			(@Now IS NULL OR l.InsertDate < @Now)
 		ORDER BY
 			l.InsertDate DESC
 	)

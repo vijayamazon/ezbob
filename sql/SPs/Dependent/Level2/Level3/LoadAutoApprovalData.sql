@@ -509,7 +509,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	EXECUTE GetExperianDirectorsNamesForCustomer @CustomerID -- TODO
+	EXECUTE GetExperianDirectorsNamesForCustomer @CustomerID, @Now
 
 	------------------------------------------------------------------------------
 
