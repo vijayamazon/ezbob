@@ -155,10 +155,12 @@
 		#region method Init
 
 		private void Init() {
-			if ((ApprovedAmount > 0) && (Trail.MyInputData.MetaData.ValidationErrors.Count == 0))
-				StepDone<InitialAssignment>().Init(ApprovedAmount, Trail.MyInputData.MetaData.ValidationErrors);
+			decimal approvedAmount = ApprovedAmount;
+
+			if ((approvedAmount > 0) && (Trail.MyInputData.MetaData.ValidationErrors.Count == 0))
+				StepDone<InitialAssignment>().Init(approvedAmount, Trail.MyInputData.MetaData.ValidationErrors);
 			else
-				StepFailed<InitialAssignment>().Init(ApprovedAmount, Trail.MyInputData.MetaData.ValidationErrors);
+				StepFailed<InitialAssignment>().Init(approvedAmount, Trail.MyInputData.MetaData.ValidationErrors);
 		} // Init
 
 		#endregion method Init
