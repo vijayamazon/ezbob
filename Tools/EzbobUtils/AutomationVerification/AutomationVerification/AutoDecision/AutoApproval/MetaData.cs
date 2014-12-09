@@ -24,6 +24,7 @@
 		public string LastName { get; set; }
 
 		public bool IsBrokerCustomer { get; set; }
+		public bool IsLimitedCompanyType { get; set; }
 
 		public int NumOfTodayAutoApproval { get; set; }
 		public decimal TodayLoanSum { get; set; }

@@ -58,6 +58,11 @@
 		} // StepFailed
 
 		private void IsDirector() {
+			if (!Trail.MyInputData.MetaData.IsLimitedCompanyType) {
+				StepDone<CustomerIsDirector>().Init(Trail.MyInputData.MetaData.IsLimitedCompanyType);
+				return;
+			}
+
 			bool bIsDirector = false;
 
 			if (Trail.MyInputData.DirectorNames.Count < 1) {
