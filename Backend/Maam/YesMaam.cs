@@ -3,6 +3,8 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine;
+	using AutomationCalculator.Common;
+	using AutomationCalculator.MedalCalculation;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -28,6 +30,8 @@
 
 			this.DB = oDB;
 			this.Log = oLog ?? new SafeLog();
+
+			medalChooser = new MedalChooser(DB, Log);
 		} // constructor
 
 		public void Execute() {
@@ -105,10 +109,12 @@
 			AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent agent = null;
 
 			try {
+				MedalOutputModel medal = medalChooser.GetMedal(ymr.Input.CustomerID, ymr.Input.DecisionTime);
+
 				agent = new SameDataAgent(
 					ymr.Input.CustomerID,
-					ymr.Input.Amount,
-					ymr.Input.Medal,
+					CapOffer(ymr.Input.CustomerID, medal.OfferedLoanAmount),
+					medal.Medal,
 					ymr.Input.DecisionTime,
 					this.DB,
 					this.Log
@@ -120,7 +126,15 @@
 
 				ymr.AutoApprove.Data = (agent.Trail.HasDecided ? "Approved" : "Not approved") + "<br>" + agent.Trail.UniqueID;
 
+				agent.Trail.Save(DB, null);
+
 				ymr.AutoApprove.Amount = agent.Result == null ? 0 : agent.Result.ApprovedAmount;
+
+				decimal minLoanAmount = CurrentValues.Instance.MinLoanAmount;
+
+				ymr.AutoApprove.Amount = (int)(
+					Math.Round(ymr.AutoApprove.Amount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
+				);
 			}
 			catch (Exception e) {
 				ymr.AutoApprove.Data = "Exception";
@@ -136,6 +150,29 @@
 				);
 			} // try
 		} // DoApprove
+
+		private int CapOffer(int customerID, int modelLoanOffer) {
+			Log.Info("Finalizing and capping offer");
+
+			int offeredCreditLine = modelLoanOffer;
+
+			bool isHomeOwnerAccordingToLandRegistry = DB.ExecuteScalar<bool>(
+				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerID)
+			);
+
+			if (isHomeOwnerAccordingToLandRegistry) {
+				Log.Info("Capped for home owner according to land registry");
+				offeredCreditLine = Math.Min(offeredCreditLine, CurrentValues.Instance.MaxCapHomeOwner);
+			}
+			else {
+				Log.Info("Capped for not home owner");
+				offeredCreditLine = Math.Min(offeredCreditLine, CurrentValues.Instance.MaxCapNotHomeOwner);
+			} // if
+
+			return offeredCreditLine;
+		} // CappOffer
 
 		private ATag ToEmail(IEnumerable<YesMaamResult> lst) {
 			ATag tbl = new Table().Add<Ezbob.Utils.Html.Attributes.Style>("border-collapse:collapse;");
@@ -258,5 +295,6 @@
 
 		private readonly int topCount;
 		private readonly int lastCheckedID;
+		private readonly MedalChooser medalChooser;
 	} // class YesMaam
 } // namespace

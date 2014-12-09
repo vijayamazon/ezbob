@@ -30,7 +30,8 @@
 			int avoidAutoDecision,
 			AConnection oDb,
 			ASafeLog oLog
-		) : base(oDb, oLog) {
+		)
+			: base(oDb, oLog) {
 
 			_session = ObjectFactory.GetInstance<ISession>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -66,7 +67,7 @@
 			// Wait for data to be filled by other strategies
 			if (newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
 				staller.Stall();
-			
+
 			// Gather preliminary data that is required by AdditionalStrategiesCaller
 			dataGatherer.GatherPreliminaryData();
 			wasMainStrategyExecutedBefore = dataGatherer.LastStartedMainStrategyEndTime.HasValue;
@@ -321,7 +322,7 @@
 				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapNotHomeOwner);
 			} // if
 		} // CappOffer
-		
+
 		private void UpdateCustomerAndCashRequest() {
 			var now = DateTime.UtcNow;
 
@@ -362,7 +363,7 @@
 			customer.SystemDecision = autoDecisionResponse.SystemDecision;
 			customer.Medal = medalClassification;
 			customer.CreditSum = offeredCreditLine;
-			customer.LastStatus = autoDecisionResponse.CreditResult.HasValue ? autoDecisionResponse.CreditResult.ToString() : null ;
+			customer.LastStatus = autoDecisionResponse.CreditResult.HasValue ? autoDecisionResponse.CreditResult.ToString() : null;
 			customer.SystemCalculatedSum = modelLoanOffer;
 
 			if (autoDecisionResponse.DecidedToReject) {
@@ -472,7 +473,7 @@
 
 			mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
-		
+
 		private void SendApprovalMails() {
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
