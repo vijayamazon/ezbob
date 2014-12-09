@@ -7,27 +7,15 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class ParseExperianLtd : AStrategy {
-		#region public
-
-		#region constructor
-
 		public ParseExperianLtd(long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Result = new ExperianLtd();
 
 			m_nServiceLogID = nServiceLogID;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "ParseExperianLtd"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Log.Info("Parsing Experian Ltd for service log entry {0}...", m_nServiceLogID);
@@ -40,17 +28,7 @@
 			Log.Info("Parsing Experian Ltd for service log entry {0} complete.", m_nServiceLogID);
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public ExperianLtd Result { get; private set; }
-
-		#endregion property Result
-
-		#endregion public
-
-		#region private
 
 		private readonly long m_nServiceLogID;
 
@@ -125,10 +103,6 @@
 			return oMainTable;
 		} // Parse
 
-		#endregion method ParseAndSave
-
-		#region method Save
-
 		private ExperianLtd Save(ExperianLtd oMainTable) {
 			if (oMainTable == null)
 				return null;
@@ -150,10 +124,6 @@
 			return oMainTable;
 		} // Save
 
-		#endregion method Save
-
-		#region method CleanInvalidChars
-
 		// Source of this code: http://stackoverflow.com/questions/730133/invalid-characters-in-xml
 		private static string CleanInvalidChars(string sXml) {
 			// From XML spec valid chars: 
@@ -161,9 +131,5 @@
 			// any Unicode character, excluding the surrogate blocks, FFFE, and FFFF.
 			return Regex.Replace(sXml ?? string.Empty, @"[^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]", string.Empty); 
 		} // CleanInvalidChars
-
-		#endregion method CleanInvalidChars
-
-		#endregion private
 	} // class ParseExperianLtd
 } // namespace
