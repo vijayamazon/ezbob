@@ -54,9 +54,8 @@
 
 		private readonly long m_nServiceLogID;
 
-		#region method Load
+		private Tuple<XmlDocument, DateTime, string> Load() {
 
-		private Tuple<XmlDocument, DateTime> Load() {
 			SafeReader sr = DB.GetFirst(
 				"LoadServiceLogEntry",
 				CommandSpecies.StoredProcedure,
@@ -83,14 +82,10 @@
 				return null;
 			} // try
 
-			return new Tuple<XmlDocument, DateTime>(oXml, sr["InsertDate"]);
+			return new Tuple<XmlDocument, DateTime, string>(oXml, sr["InsertDate"], sr["CompanyRefNum"]);
 		} // Load
 
-		#endregion method Load
-
-		#region method Parse
-
-		private ExperianLtd Parse(Tuple<XmlDocument, DateTime> oDoc) {
+		private ExperianLtd Parse(Tuple<XmlDocument, DateTime, string> oDoc) {
 			if (oDoc == null)
 				return null;
 
@@ -104,6 +99,15 @@
 			};
 
 			oMainTable.LoadFromXml(oDoc.Item1.DocumentElement);
+
+			if (!oMainTable.ShouldBeSaved()) {
+				Log.Warn(
+					"Parsing Experian company data failed: no main company data loaded for service log entry {0}, using requested company ref num '{1}'.",
+					m_nServiceLogID, oDoc.Item3
+				);
+
+				oMainTable.RegisteredNumber = oDoc.Item3;
+			} // if
 
 			if (!oMainTable.ShouldBeSaved()) {
 				Log.Warn(
