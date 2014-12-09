@@ -4,9 +4,6 @@
 	using Exceptions;
 
 	public class Cache<TKey, TValue> where TValue : class {
-		#region public
-
-		#region constructor
 
 		public Cache(TimeSpan oAge, Func<TKey, TValue> oUpdater) {
 			m_oData = new SortedDictionary<TKey, StoredValue<TValue>>();
@@ -15,10 +12,6 @@
 			m_oAge = oAge;
 			m_oValueUpdater = oUpdater;
 		} // constructor
-
-		#endregion constructor
-
-		#region indexer
 
 		public TValue this[TKey idx] {
 			get {
@@ -35,14 +28,6 @@
 				SetOrUpdate(idx, value);
 			} // set
 		} // indexer
-
-		#endregion indexer
-
-		#endregion public
-
-		#region private
-
-		#region method Retrieve
 
 		private TValue Retrieve(TKey sKey, out bool bContains) {
 			bContains = false;
@@ -62,10 +47,6 @@
 			return oResult;
 		} // Retrieve
 
-		#endregion method Retrieve
-
-		#region method SetOrUpdate
-
 		private TValue SetOrUpdate(TKey sKey, TValue oValue) {
 			lock (m_oDataLock) {
 				if (m_oData.ContainsKey(sKey))
@@ -77,20 +58,12 @@
 			return oValue;
 		} // SetOrUpdate
 
-		#endregion method SetOrUpdate
-
-		#region method UpdateValue
-
 		private TValue UpdateValue(TKey idx) {
 			if (m_oValueUpdater == null)
 				throw new NullSeldenException("Cache value updater not specified.");
 
 			return m_oValueUpdater(idx);
 		} // UpdateValue
-
-		#endregion method UpdateValue
-
-		#region class StoredValue
 
 		private class StoredValue<T> where T : class {
 			public T Value { get; private set; }
@@ -113,17 +86,10 @@
 			private DateTime StoredTime { get; set; }
 		} // StoredValue
 
-		#endregion class StoredValue
-
-		#region fields
-
 		private readonly SortedDictionary<TKey, StoredValue<TValue>> m_oData;
 		private readonly object m_oDataLock;
 		private readonly TimeSpan m_oAge;
 		private readonly Func<TKey, TValue> m_oValueUpdater;
 
-		#endregion fields
-
-		#endregion private
 	} // class Cache
 } // namespace

@@ -16,7 +16,6 @@
 			Log = log;
 		}
 
-		
 		public int GetMarketPlacesSeniority(List<MarketPlace> mps)
 		{
 			if (mps.Any() && mps.Any(m => m.OriginationDate.HasValue))
@@ -110,7 +109,6 @@
 			return posRevenues.Any() ? posRevenues.Max() : 0;
 		}
 
-
 		/// <summary>
 		/// Calculate online turnover: use this formula:
 		///Amazon + Max(ebay,paypal)
@@ -188,7 +186,6 @@
 						break;
 				}
 
-				
 				switch (marketPlace.Key.Type)
 				{
 					case "eBay":
@@ -238,7 +235,7 @@
 
 			//ebay and amazon
 			int feedbacks = feedbacksDb.AmazonFeedbacks + feedbacksDb.EbayFeedbacks;
-			
+
 			//if not - paypal transactions
 			if (feedbacks == 0) {
 				feedbacks = feedbacksDb.PaypalFeedbacks;
@@ -274,7 +271,7 @@
 			decimal paymentRevenueQuarter = (decimal)GetTurnoverForPeriod(paymentMps, TimePeriodEnum.Month3);
 
 			var onlineMps = dbHelper.GetCustomerMarketPlaces(customerId);
-			
+
 			decimal onlineRevenueAnnualized = GetTurnoverAnnualizedForRejecetion(onlineMps);
 			decimal onlineRevenueQuarter = (decimal)GetTurnoverForPeriod(onlineMps, TimePeriodEnum.Month3);
 
@@ -283,7 +280,7 @@
 
 			Log.Debug("Turnovers annual: hmrc: {0} yodlee: {1} online: {2} payment: {3} max: {4}", hmrcRevenueAnnualized, yodleesAnnualized, onlineRevenueAnnualized, paymentRevenueAnnualized, annual.Max());
 			Log.Debug("Turnovers quarter: hmrc: {0} yodlee: {1} online: {2} payment: {3} max: {4}", hmrcRevenueQuarter, yodleeQuarter, onlineRevenueQuarter, paymentRevenueQuarter, quarter.Max());
-			
+
 			return new Tuple<decimal, decimal>(annual.Max(), quarter.Max());
 		}
 	}

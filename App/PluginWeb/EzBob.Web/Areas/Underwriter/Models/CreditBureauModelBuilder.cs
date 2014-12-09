@@ -119,7 +119,7 @@
 			}
 
 			var scorePosColor = GetScorePositionAndColor(eInfo.BureauScore.HasValue ? eInfo.BureauScore.Value : 0, ConsumerScoreMax, ConsumerScoreMin);
-			
+
 			model.ServiceLogId = eInfo.ServiceLogId;
 			model.HasExperianError = eInfo.HasExperianError;
 			model.ModelType = "Consumer";
@@ -161,7 +161,6 @@
 				Errors.Add("More than one locations specified");
 			}
 
-
 			model.CII = eInfo.CII;
 			if (!string.IsNullOrEmpty(eInfo.Error))
 			{
@@ -183,7 +182,6 @@
 			model.SatisfiedJudgements = eInfo.SatisfiedJudgement;
 			model.AgeOfMostRecentCCJ = eInfo.CCJLast2Years;
 			model.CAISSpecialInstructionFlag = eInfo.CAISSpecialInstructionFlag;
-
 
 			model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
 			var accList = new List<AccountInfo>();
@@ -370,7 +368,7 @@
 			model.NOCs = eInfo.Nocs.Select(nocDetails => new NOCInfo { NOCReference = nocDetails.Reference, NOCLines = nocDetails.TextLine }).ToArray();
 
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
-			
+
 			model.ConsumerHistory = GetConsumerHistoryModel(customer, director);
 			return model;
 		}
@@ -599,7 +597,7 @@
 					{
 						return status + " days";
 					}
-					
+
 					return status;
 			}
 		}

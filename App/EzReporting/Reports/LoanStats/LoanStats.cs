@@ -8,9 +8,6 @@
 	using System.Collections.Generic;
 
 	public class LoanStats : SafeLog {
-		#region public
-
-		#region constructor
 
 		public LoanStats(AConnection oDB, ASafeLog oLog = null) : base(oLog) {
 			if (oDB == null)
@@ -23,10 +20,6 @@
 			LoadCustomerMarketplaces();
 			LoadPaypalTotals();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Generate
 
 		public List<LoanStatsReportEntry> Generate() {
 			var oResult = new List<LoanStatsReportEntry>();
@@ -167,10 +160,6 @@
 			return oResult;
 		} // Generate
 
-		#endregion method Generate
-
-		#region method Xls
-
 		public ExcelPackage Xls() {
 			var wb = new ExcelPackage();
 
@@ -193,14 +182,6 @@
 
 			return wb;
 		} // Xls
-
-		#endregion method Xls
-
-		#endregion public
-
-		#region private
-
-		#region method FillRow
 
 		private void FillRow(ExcelWorksheet sheet, int nRowNumber, LoanStatsReportEntry lre) {
 			sheet.Cells["A"  + nRowNumber].Value = lre.IsFirstLoan;
@@ -272,10 +253,6 @@
 			sheet.Cells["AK" + nRowNumber].Style.Numberformat.Format = "#,##0";
 		} // FillRow
 
-		#endregion method FillRow
-
-		#region method FillTitle
-
 		private void FillTitle(ExcelWorksheet sheet, int nRowNumber) {
 			sheet.Cells["A"  + nRowNumber].Value = "Is this 'a first' loan?";
 			sheet.Cells["B"  + nRowNumber].Value = "Client loan order #";
@@ -334,10 +311,6 @@
 			} // for
 		} // FillTitle
 
-		#endregion method FillTitle
-
-		#region method LoadCashRequests
-
 		private void LoadCashRequests() {
 			Msg("Loan Stats: loading cash requests...");
 
@@ -389,10 +362,6 @@
 			Msg("Loan Stats: loading cash requests complete.");
 		} // LoadCashRequests
 
-		#endregion method LoadCashRequests
-
-		#region method CreateEntry
-
 		private LoanStatsDataEntry CreateEntry(SafeReader sr) {
 			var lse = new LoanStatsDataEntry(sr);
 
@@ -403,10 +372,6 @@
 
 			return lse;
 		} // CreateEntry
-
-		#endregion method CreateEntry
-
-		#region method LoadCustomerRegions
 
 		private void LoadCustomerRegions() {
 			Msg("Loan Stats: loading customer regions...");
@@ -422,7 +387,7 @@
 
 					if (string.IsNullOrWhiteSpace(sRawpostcode))
 						return ActionResult.Continue;
-					
+
 						string sPostcode = "";
 
 						for (int i = 0; i < sRawpostcode.Length; ++i) {
@@ -448,10 +413,6 @@
 			Msg("Loan Stats: loading customer regions complete.");
 		} // LoadCustomerRegions
 
-		#endregion method LoadCustomerRegions
-
-		#region method LoadCustomerMarketplaces
-
 		private void LoadCustomerMarketplaces() {
 			Msg("Loans stats: loading customer marketplaces...");
 
@@ -473,10 +434,6 @@
 
 			Msg("Loans stats: loading customer marketplaces complete.");
 		} // LoadCustomerMarketplaces
-
-		#endregion method LoadCustomerMarketplaces
-
-		#region method LoadPaypalTotals
 
 		private void LoadPaypalTotals() {
 			Msg("Loans stats: loading customer PayPal totals...");
@@ -504,10 +461,6 @@
 			Msg("Loans stats: loading customer PayPal totals complete.");
 		} // LoadPaypalTotals
 
-		#endregion method LoadPaypalTotals
-
-		#region fields
-
 		private AConnection m_oDB;
 
 		private SortedDictionary<int, List<LoanStatsDataEntry>> Data { get; set; }
@@ -515,8 +468,5 @@
 		private SortedDictionary<int, LoanStatsMarketplaces> CustomerMarketplaces { get; set; }
 		private SortedDictionary<int, LoanStatsPaypalTotal> CustomerPaypalTotals { get; set; }
 
-		#endregion fields
-
-		#endregion private
 	} // class LoanStats
 } // namespace

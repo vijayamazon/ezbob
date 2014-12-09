@@ -6,8 +6,6 @@
 namespace JetBrains.Annotations {
 	using System;
 
-	#region enum ImplicitUseKindFlags
-
 	[Flags]
 	public enum ImplicitUseKindFlags {
 		Default = 7,
@@ -30,10 +28,6 @@ namespace JetBrains.Annotations {
 		InstantiatedNoFixedConstructorSignature = 8
 	} // enum ImplicitUseKindFlags
 
-	#endregion enum ImplicitUseKindFlags
-
-	#region enum ImplicitUseTargetFlags {
-
 	/// <summary>
 	/// Specify what is considered used implicitly when marked with <see cref="T:JetBrains.Annotations.MeansImplicitUseAttribute" /> or <see cref="T:JetBrains.Annotations.UsedImplicitlyAttribute" />
 	/// </summary>
@@ -50,10 +44,6 @@ namespace JetBrains.Annotations {
 		/// </summary>
 		WithMembers = 3
 	} // enum ImplicitUseTargetFlags {
-
-	#endregion enum ImplicitUseTargetFlags {
-
-	#region class UsedImplicitlyAttribute
 
 	/// <summary>
 	/// Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
@@ -88,9 +78,6 @@ namespace JetBrains.Annotations {
 		public UsedImplicitlyAttribute(ImplicitUseTargetFlags targetFlags) : this(ImplicitUseKindFlags.Default, targetFlags) {
 		} // constructor
 	} // class UsedImplicitlyAttribute
-	#endregion class UsedImplicitlyAttribute
-
-	#region class StringFormatMethodAttribute
 
 	/// <summary>
 	/// Indicates that the marked method builds string by format pattern and (optional) arguments. 
@@ -127,5 +114,4 @@ namespace JetBrains.Annotations {
 		} // constructor
 	} // class StringFormatMethodAttribute
 
-	#endregion class StringFormatMethodAttribute
 } // namespace

@@ -96,7 +96,7 @@
 					useLastStatusMonths = lastMonthStatuses - (int)monthSinceUpdate;
 				}
 				bool isDefaultInAccount = false;
-				
+
 				for (int i = 0; i < useLastStatusMonths; ++i)
 				{
 					if (caisStatus.AccountStatusCodes.Length - i > 0)
@@ -178,7 +178,6 @@
 			return LookFor(accStatusIndicator, ms_oAccountStatuses);
 		} // GetAccountStatusString
 
-
 		private static CaisAccountStatus LookFor(string sNeedle, SortedDictionary<string, CaisAccountStatus> oHaystack)
 		{
 			if (string.IsNullOrEmpty(sNeedle))
@@ -187,7 +186,6 @@
 			}
 			return oHaystack.ContainsKey(sNeedle) ? oHaystack[sNeedle] : new CaisAccountStatus { ShortDescription = string.Format("Status: ({0}) not found", sNeedle) };
 		} // LookFor
-
 
 		private static readonly SortedDictionary<string, CaisAccountStatus> ms_oAccountStatuses;
 

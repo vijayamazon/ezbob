@@ -60,6 +60,5 @@
 			Serialized.Serialize(@"d:\attach1.xml", attach);
 		}
 
-
 	}
 }

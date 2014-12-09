@@ -6,9 +6,6 @@
 	using Ezbob.Logger;
 
 	public class LoadExperianLtd : AStrategy {
-		#region public
-
-		#region constructor
 
 		public LoadExperianLtd(string sCompanyRefNum, long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Result = new ExperianLtd();
@@ -19,17 +16,9 @@
 			m_nServiceLogID = nServiceLogID;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "LoadExperianLtd"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			switch (m_nWorkMode) {
@@ -57,18 +46,8 @@
 			}
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public ExperianLtd Result { get; private set; }
 		public List<ScoreAtDate> History { get; private set; }
-
-		#endregion property Result
-
-		#endregion public
-
-		#region private
 
 		private enum WorkMode {
 			LoadFull,
@@ -80,6 +59,5 @@
 		private readonly long m_nServiceLogID;
 		private readonly string m_sCompanyRefNum;
 
-		#endregion private
 	} // class LoadExperianLtd
 } // namespace

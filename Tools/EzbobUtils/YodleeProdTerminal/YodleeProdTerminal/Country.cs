@@ -41,13 +41,12 @@ namespace com.yodlee.sampleapps.helper
      * Represents Canada.
      */
     public static  Country CA = new Country(7, "CA");
-    
+
     /**
      * Represents Spain.
      */
     public static  Country ES = new Country(8, "ES");
-    
-    
+
     protected static  Country[] countryArray = {US, GB, AU, BE, CN ,IN, CA, ES};
     protected static Hashtable countries = new Hashtable();
     protected static Hashtable countriesByCountryId = new Hashtable();

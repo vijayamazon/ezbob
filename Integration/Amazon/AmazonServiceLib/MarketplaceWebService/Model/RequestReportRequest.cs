@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Text;
 using MarketplaceWebService.Attributes;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
@@ -29,7 +28,7 @@ namespace MarketplaceWebService.Model
     [MarketplaceWebServiceAttribute(RequestType = RequestType.DEFAULT, ResponseType = ResponseType.DEFAULT)]
     public class RequestReportRequest
     {
-    
+
         private String marketplaceField;
         private IdList marketplaceIdListField;
 
@@ -42,7 +41,6 @@ namespace MarketplaceWebService.Model
         private DateTime? endDateField;
 
         private String reportOptionsField;
-
 
         /// <summary>
         /// Gets and sets the Marketplace property.
@@ -88,7 +86,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
         /// <summary>
         /// Checks if Marketplace property is set
         /// </summary>
@@ -109,7 +106,6 @@ namespace MarketplaceWebService.Model
             return this.marketplaceIdListField != null;
         }
 
-
         /// <summary>
         /// Gets and sets the Merchant property.
         /// </summary>
@@ -119,8 +115,6 @@ namespace MarketplaceWebService.Model
             get { return this.merchantField ; }
             set { this.merchantField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Merchant property
@@ -133,8 +127,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Merchant property is set
         /// </summary>
@@ -145,7 +137,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ReportType property.
         /// </summary>
@@ -155,8 +146,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportTypeField ; }
             set { this.reportTypeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportType property
@@ -169,8 +158,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportType property is set
         /// </summary>
@@ -181,7 +168,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the StartDate property.
         /// </summary>
@@ -191,8 +177,6 @@ namespace MarketplaceWebService.Model
             get { return this.startDateField.GetValueOrDefault() ; }
             set { this.startDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the StartDate property
@@ -205,8 +189,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if StartDate property is set
         /// </summary>
@@ -216,7 +198,6 @@ namespace MarketplaceWebService.Model
             return  this.startDateField.HasValue;
 
         }
-
 
         /// <summary>
         /// Gets and sets the EndDate property.
@@ -228,8 +209,6 @@ namespace MarketplaceWebService.Model
             set { this.endDateField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the EndDate property
         /// </summary>
@@ -240,8 +219,6 @@ namespace MarketplaceWebService.Model
             this.endDateField = endDate;
             return this;
         }
-
-
 
         /// <summary>
         /// Checks if EndDate property is set
@@ -282,8 +259,6 @@ namespace MarketplaceWebService.Model
         {
             return this.reportOptionsField != null;
         }
-        
-
 
     }
 

@@ -1,7 +1,5 @@
-using System;
+﻿using System;
 using PayPal.Services.Private.Permissions;
-
-
 
 namespace PayPal.Platform.SDK
 {
@@ -77,7 +75,6 @@ namespace PayPal.Platform.SDK
                 }
                 res = CallAPI();
 
-
                 if (APIProfile.RequestDataformat == "JSON")
                 {
                     object obj = JSONSerializer.JsonDecode(res.ToString(), typeof(PayPal.Services.Private.Permissions.RequestPermissionsResponse));
@@ -115,7 +112,6 @@ namespace PayPal.Platform.SDK
                         this.lastError = tranactionEx;
                     }
 
-
                 }
                 else
                 {
@@ -152,14 +148,6 @@ namespace PayPal.Platform.SDK
             return PResponse;
         }
 
-
-
-
-
-
-
-
-
         public CancelPermissionsResponse cancelPermissions(CancelPermissionsRequest request)
         {
 
@@ -182,7 +170,6 @@ namespace PayPal.Platform.SDK
                     PayLoad = PayPal.Platform.SDK.JSONSerializer.ToJavaScriptObjectNotation(request);
                 }
                 res = CallAPI();
-
 
                 if (APIProfile.RequestDataformat == "JSON")
                 {
@@ -221,7 +208,6 @@ namespace PayPal.Platform.SDK
                         this.lastError = tranactionEx;
                     }
 
-
                 }
                 else
                 {
@@ -258,9 +244,6 @@ namespace PayPal.Platform.SDK
             return PResponse;
         }
 
-
-
-
         public GetAccessTokenResponse getAccessToken(GetAccessTokenRequest request)
         {
 
@@ -284,14 +267,13 @@ namespace PayPal.Platform.SDK
                 }
                 res = CallAPI();
 
-
                 if (APIProfile.RequestDataformat == "JSON")
                 {
                     object obj = JSONSerializer.JsonDecode(res.ToString(), typeof(PayPal.Services.Private.Permissions.GetAccessTokenResponse));
                     if (obj.GetType() == typeof(PayPal.Services.Private.Permissions.GetAccessTokenResponse))
                     {
                         PResponse = (PayPal.Services.Private.Permissions.GetAccessTokenResponse)obj;
-                        
+
                     }
                     string name = Enum.GetName(PResponse.responseEnvelope.ack.GetType(), PResponse.responseEnvelope.ack);
 
@@ -322,7 +304,6 @@ namespace PayPal.Platform.SDK
                         TransactionException tranactionEx = new TransactionException(PayLoadFromat.JSON, res.ToString());
                         this.lastError = tranactionEx;
                     }
-
 
                 }
                 else
@@ -360,7 +341,6 @@ namespace PayPal.Platform.SDK
             return PResponse;
         }
 
-
         public GetPermissionsResponse getPermissions(GetPermissionsRequest request)
         {
 
@@ -383,7 +363,6 @@ namespace PayPal.Platform.SDK
                     PayLoad = PayPal.Platform.SDK.JSONSerializer.ToJavaScriptObjectNotation(request);
                 }
                 res = CallAPI();
-
 
                 if (APIProfile.RequestDataformat == "JSON")
                 {
@@ -421,7 +400,6 @@ namespace PayPal.Platform.SDK
                         TransactionException tranactionEx = new TransactionException(PayLoadFromat.JSON, res.ToString());
                         this.lastError = tranactionEx;
                     }
-
 
                 }
                 else
@@ -482,7 +460,6 @@ namespace PayPal.Platform.SDK
                 }
                 res = CallAPI();
 
-
                 if (APIProfile.RequestDataformat == "JSON")
                 {
                     object obj = JSONSerializer.JsonDecode(res.ToString(), typeof(PayPal.Services.Private.Permissions.GetBasicPersonalDataResponse));
@@ -519,7 +496,6 @@ namespace PayPal.Platform.SDK
                         TransactionException tranactionEx = new TransactionException(PayLoadFromat.JSON, res.ToString());
                         this.lastError = tranactionEx;
                     }
-
 
                 }
                 else
@@ -580,7 +556,6 @@ namespace PayPal.Platform.SDK
                 }
                 res = CallAPI();
 
-
                 if (APIProfile.RequestDataformat == "JSON")
                 {
                     object obj = JSONSerializer.JsonDecode(res.ToString(), typeof(PayPal.Services.Private.Permissions.GetAdvancedPersonalDataResponse));
@@ -617,7 +592,6 @@ namespace PayPal.Platform.SDK
                         TransactionException tranactionEx = new TransactionException(PayLoadFromat.JSON, res.ToString());
                         this.lastError = tranactionEx;
                     }
-
 
                 }
                 else

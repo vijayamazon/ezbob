@@ -13,16 +13,11 @@
 	using ServiceClientProxy.EzServiceReference;
 
 	public class EsignaturesController : Controller {
-		#region constructor
 
 		public EsignaturesController(IEzbobWorkplaceContext oContext) {
 			m_oContext = oContext;
 			m_oServiceClient = new ServiceClient();
 		} // constructor
-
-		#endregion constructor
-
-		#region action Load
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -48,10 +43,6 @@
 
 			return Json(new { signatures = oSignatures, signers = oPotentialSigners, }, JsonRequestBehavior.AllowGet);
 		} // Load
-
-		#endregion action Load
-
-		#region action Send
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -92,10 +83,6 @@
 			return Json(new { success = string.IsNullOrWhiteSpace(sResult), error = sResult, });
 		} // Send
 
-		#endregion action Send
-
-		#region action Download
-
 		[HttpGet]
 		public FileResult Download(long nEsignatureID) {
 			ms_oLog.Debug("Loading e-signature file for id {0}...", nEsignatureID);
@@ -114,10 +101,6 @@
 				throw new Exception("Failed to download requested file.");
 			} // try
 		} // Download
-
-		#endregion action Download
-
-		#region action SaveExperianDirector
 
 		[Ajax]
 		[HttpPost]
@@ -173,10 +156,6 @@
 			return Json(new { success = true, error = string.Empty, });
 		} // SaveExperianDirector
 
-		#endregion action SaveExperianDirector
-
-		#region action DeleteExperianDirector
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -196,8 +175,6 @@
 
 			return Json(new { success = true, error = string.Empty, });
 		} // DeleteExperianDirector
-
-		#endregion action DeleteExperianDirector
 
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext m_oContext;

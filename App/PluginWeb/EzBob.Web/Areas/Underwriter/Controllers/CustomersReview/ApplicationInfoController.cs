@@ -84,7 +84,6 @@
 			this.loanScheduleRepository = loanScheduleRepository;
 		}
 
-
 		// Here we get VA\FCF\Turnover
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -317,7 +316,7 @@
 			cr.UseSetupFee = enabled;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).UseSetupFee = {1}", id, enabled);
-			
+
 			return Json(new { error = (string)null });
 		}
 
@@ -525,7 +524,6 @@
 			cr.OfferStart = dt;
 			cr.OfferValidUntil = offerValidUntil;
 		}
-
 
 		[HttpPost]
 		[Ajax]

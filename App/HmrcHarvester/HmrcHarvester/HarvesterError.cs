@@ -1,7 +1,6 @@
 ﻿using System.Net;
 
 namespace Ezbob.HmrcHarvester {
-	#region struct HarvesterError
 
 	/// <summary>
 	/// Harvester error.
@@ -18,5 +17,4 @@ namespace Ezbob.HmrcHarvester {
 		public string Message;
 	} // HarvesterError
 
-	#endregion struct HarvesterError
 } // namespace Ezbob.HmrcHarvester

@@ -47,7 +47,6 @@ namespace EzBob.Tests.LoanCreatorTests
                                    }
             };
 
-
             var loan = _loanBuilder.CreateLoan(cr, 3000, DateTime.UtcNow);
 
             Assert.That(loan.Schedule[0].InterestRate * 100m, Is.EqualTo(6m));

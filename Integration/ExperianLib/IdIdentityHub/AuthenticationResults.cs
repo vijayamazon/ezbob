@@ -1,4 +1,4 @@
-namespace ExperianLib.IdIdentityHub
+﻿namespace ExperianLib.IdIdentityHub
 {
 	using System;
 	using System.Text;
@@ -15,7 +15,6 @@ namespace ExperianLib.IdIdentityHub
         public string StartDateOldestSec { get; set; }
         public decimal ReturnedHRPCount { get; set; }
         public ReturnedHRPType[] ReturnedHRP { get; set; }
-
 
         public override void Parse(ProcessConfigResponseType response)
         {

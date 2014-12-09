@@ -43,7 +43,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             };
             _loan.Schedule[0].Rollovers.Add(rolloverRemoved);
             _loan.Schedule[0].Rollovers.Add(rolloverActive);
-            
+
             MakePayment(394 + rolloverAmount, rolloverCreateDate);
 
             payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, rolloverCreateDate);
@@ -61,7 +61,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var calculator = new LoanScheduleCalculator { Interest = 0.06M };
             calculator.Calculate(1000, _loan, Parse("2013-01-15 10:10:10.000"));
-
 
             var rollover = new PaymentRollover
             {
@@ -85,7 +84,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var calculator = new LoanScheduleCalculator { Interest = 0.06M };
             calculator.Calculate(1000, _loan, Parse("2012-12-05 00:00:00.000"));
-
 
             var rollover = new PaymentRollover
             {
@@ -189,14 +187,14 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             _loan.Schedule[1].Rollovers.Add(rollover);
 
             Console.WriteLine(_loan);
-             
+
             //pay installment, and rollover
             MakePayment(394 + 100, Parse("2012-02-01 10:00:04.000"));
 
             Console.WriteLine(_loan);
 
             Assert.That(_loan.Schedule[1].Date.Date, Is.EqualTo(new DateTime(2012, 4, 1)));
-            
+
             //interest is calculated for 2 moths
             Assert.That(_loan.Schedule[1].Interest, Is.EqualTo(82.68M));
         }
@@ -246,7 +244,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             _loan.Schedule[1].Rollovers.Add(rollover);
 
             Console.WriteLine(_loan);
-             
+
             var state = _facade.GetStateAt(_loan, Parse("2012-02-01 12:29:35.000"));
 
             Assert.That(state.AmountDue, Is.EqualTo(394+100));
@@ -272,7 +270,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             _loan.Schedule[1].Rollovers.Add(rollover);
 
             Console.WriteLine(_loan);
-             
+
             var state = _facade.GetStateAt(_loan, Parse("2012-02-11 12:29:35.000"));
 
             Assert.That(rollover.Status, Is.EqualTo(RolloverStatus.Expired));

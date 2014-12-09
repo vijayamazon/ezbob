@@ -12,9 +12,6 @@
 	using Ezbob.Logger;
 
 	public class Agent {
-		#region public
-
-		#region constructor
 
 		public Agent(AConnection oDB, ASafeLog oLog, int customerId, DateTime? dataAsOf = null) {
 			m_oDB = oDB;
@@ -24,8 +21,6 @@
 			Trail = new ReapprovalTrail(customerId, m_oLog);
 			Result = new ReApprovalResult(false, 0);
 		} // constructor
-
-		#endregion constructor
 
 		public ReApprovalInputData GetInputData() {
 			DbHelper dbHelper = new DbHelper(m_oDB, m_oLog);
@@ -53,8 +48,6 @@
 
 			return model;
 		}
-
-		#region method MakeDecision
 
 		public void MakeDecision(ReApprovalInputData data) {
 			m_oLog.Debug("Secondary: checking if auto re-approval should take place for customer {0}...", CustomerId);
@@ -93,17 +86,9 @@
 			);
 		} // MakeDecision
 
-		#endregion method MakeDecision
-
 		public ReApprovalResult Result { get; private set; }
 
 		public ReapprovalTrail Trail { get; private set; }
-
-		#endregion public
-
-		#region private
-
-		#region steps
 
 		private void SetApprovedAmount(int nApprovedAmount) {
 			if (Trail.HasDecided)
@@ -201,8 +186,6 @@
 				StepFailed<FraudSuspect>().Init(Trail.MyInputData.FraudStatus);
 		} // CheckIsFraud
 
-		#endregion steps
-
 		/// <summary>
 		/// If the step was the only step then overall decision would be 'approved'.
 		/// </summary>
@@ -223,8 +206,6 @@
 			return Trail.Negative<T>(true);
 		} 
 
-		#region fields
-
 		protected readonly DateTime Now;
 		protected readonly int CustomerId;
 
@@ -232,8 +213,5 @@
 		private readonly AConnection m_oDB;
 		private int m_nApprovedAmount;
 
-		#endregion fields
-
-		#endregion private
 	} // class Agent
 } // namespace

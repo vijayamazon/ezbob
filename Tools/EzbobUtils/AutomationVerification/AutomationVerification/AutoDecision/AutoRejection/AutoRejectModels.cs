@@ -63,8 +63,6 @@
 		public int ConsumerLateDays { get; set; }
 		public DateTime? ConsumerDataTime { get; set; }
 
-		#region method InitCfg
-
 		public void InitCfg(DateTime dataAsOf, RejectionConfigs configs) {
 			DataAsOf = dataAsOf;
 
@@ -92,10 +90,6 @@
 			AutoRejectConsumerCheckAge = configs.AutoRejectConsumerCheckAge;
 		} // InitCfg
 
-		#endregion method InitCfg
-
-		#region method InitData
-
 		public void InitData(RejectionInputData data) {
 			WasApproved = data.WasApproved;
 			IsBrokerClient = data.IsBrokerClient;
@@ -118,16 +112,10 @@
 			ConsumerDataTime = data.ConsumerDataTime;
 		} // InitData
 
-		#endregion method InitData
-
-		#region method Init
-
 		public void Init(DateTime dataAsOf, RejectionInputData data, RejectionConfigs configs) {
 			InitCfg(dataAsOf, configs);
 			InitData(data);
 		} // Init
-
-		#endregion method Init
 
 		public string Serialize() {
 			return JsonConvert.SerializeObject(this, Formatting.Indented);

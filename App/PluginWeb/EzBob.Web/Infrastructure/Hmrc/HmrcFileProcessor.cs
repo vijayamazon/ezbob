@@ -11,9 +11,6 @@
 	using Ezbob.ValueIntervals;
 
 	internal class HmrcFileProcessor {
-		#region public
-
-		#region constructor
 
 		public HmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles, string sControllerName, string sActionName) {
 			CustomerID = nCustomerID;
@@ -22,10 +19,6 @@
 			ErrorMsg = null;
 			m_oLimitations = CurrentValues.Instance.GetUploadLimitations(sControllerName, sActionName);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Run
 
 		public void Run() {
 			FileCache.ErrorMsg = string.Empty;
@@ -105,10 +98,6 @@
 			} // for
 		} // Run
 
-		#endregion method Run
-
-		#region property ErrorMsg
-
 		public string ErrorMsg {
 			get { return FileCache.ErrorMsg; }
 			private set { m_sErrorMsg = string.IsNullOrWhiteSpace(value) ? string.Empty : value; }
@@ -116,27 +105,13 @@
 
 		private string m_sErrorMsg;
 
-		#endregion property ErrorMsg
-
-		#region property Hopper
-
 		public Hopper Hopper {
 			get { return FileCache.Hopper; }
 		} // Hopper
 
-		#endregion property Hopper
-
-		#region property AddedCount
-
 		public int AddedCount {
 			get { return FileCache.AddedCount; }
 		} // AddedCount
-
-		#endregion property AddedCount
-
-		#endregion public
-
-		#region private
 
 		private HttpFileCollectionBase FileList { get; set; } // FileList
 		private int CustomerID { get; set; } // CustomerID
@@ -145,8 +120,6 @@
 		private readonly OneUploadLimitation m_oLimitations;
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcFileProcessor));
-
-		#region method SaveToDisc
 
 		private static void SaveToDisc(int nCustomerID, string sFileOriginalName, byte[] oFileContents) {
 			try {
@@ -182,14 +155,7 @@
 			} // try
 		} // SaveToDisc
 
-		#endregion method SaveToDisc
-
-		#region class HmrcFileCache
-
 		private class HmrcFileCache {
-			#region public
-
-			#region constructor
 
 			public HmrcFileCache() {
 				ErrorMsg = string.Empty;
@@ -198,10 +164,6 @@
 				AddedCount = 0;
 			} // HmrcFileCache
 
-			#endregion constructor
-
-			#region property ErrorMsg
-
 			public string ErrorMsg {
 				get { return m_sErrorMsg; } // get
 				set { m_sErrorMsg = string.IsNullOrWhiteSpace(value) ? string.Empty : value; }
@@ -209,21 +171,9 @@
 
 			private string m_sErrorMsg;
 
-			#endregion property ErrorMsg
-
-			#region property Hopper
-
 			public Hopper Hopper { get; private set; } // Hopper
 
-			#endregion property Hopper
-
-			#region property AddedCount
-
 			public int AddedCount { get; private set; } // AddedCount
-
-			#endregion property AddedCount
-
-			#region method Add
 
 			public void Add(SheafMetaData smd, byte[] oFileContents) {
 				Hopper.Add(smd, oFileContents);
@@ -239,10 +189,6 @@
 
 				AddedCount++;
 			} // Add
-
-			#endregion method Add
-
-			#region method Intersects
 
 			public bool Intersects(long nRegistrationNo, DateInterval di) {
 				if (!m_oDateIntervals.ContainsKey(nRegistrationNo))
@@ -260,10 +206,6 @@
 
 				return false;
 			} // Intersects
-
-			#endregion method Intersects
-
-			#region method ToString
 
 			public override string ToString() {
 				var os = new StringBuilder();
@@ -283,19 +225,9 @@
 				return os.ToString();
 			} // ToString
 
-			#endregion method ToString
-
-			#endregion public
-
-			#region private
-
 			private readonly SortedDictionary<long, List<DateInterval>> m_oDateIntervals;
 
-			#endregion private
 		} // HmrcFileCache
 
-		#endregion class HmrcFileCache
-
-		#endregion private
 	} // class HmrcFileProcessor
 } // namespace EzBob.Web.Areas.Customer.Controllers

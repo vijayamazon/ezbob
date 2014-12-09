@@ -1,4 +1,4 @@
-// ReSharper disable ValueParameterNotUsed
+﻿// ReSharper disable ValueParameterNotUsed
 namespace Ezbob.Backend.Models {
 	using System;
 	using System.Globalization;
@@ -7,22 +7,15 @@ namespace Ezbob.Backend.Models {
 
 	[DataContract]
 	public class RtiTaxMonthRawData : IComparable<RtiTaxMonthRawData> {
-		#region constructor
 
 		public RtiTaxMonthRawData() {
 			AmountPaid = new Coin();
 			AmountDue = new Coin();
 		} // constructor
 
-		#endregion constructor
-
-		#region method CompareTo
-
 		public int CompareTo(RtiTaxMonthRawData a) {
 			return a.DateCode.CompareTo(a.DateCode);
 		} // CompareTo
-
-		#endregion method CompareTo
 
 		[DataMember]
 		[NonTraversable]
@@ -31,8 +24,6 @@ namespace Ezbob.Backend.Models {
 		[DataMember]
 		[NonTraversable]
 		public Coin AmountDue { get; set; }
-
-		#region property DateCode
 
 		[NonTraversable]
 		public int DateCode {
@@ -47,12 +38,6 @@ namespace Ezbob.Backend.Models {
 
 		private int? m_nDateCode;
 
-		#endregion property DateCode
-
-		#region DB properties
-
-		#region property DateStart
-
 		[DataMember]
 		public DateTime DateStart {
 			get { return m_oDateStart; }
@@ -63,8 +48,6 @@ namespace Ezbob.Backend.Models {
 		} // DateStart
 
 		private DateTime m_oDateStart;
-
-		#endregion property DateStart
 
 		[DataMember]
 		public DateTime DateEnd { get; set; }
@@ -89,10 +72,6 @@ namespace Ezbob.Backend.Models {
 			set { AmountDue.CurrencyCode = value; }
 		} // DueCurrencyCode
 
-		#endregion DB properties
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format("{0} - {1}: {2} {3}, {4} {5}",
 				DateStart.ToString("MMM d yyyy", CultureInfo.InvariantCulture),
@@ -102,15 +81,10 @@ namespace Ezbob.Backend.Models {
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#region method GetDateCode
-
 		private int GetDateCode() {
 			return DateStart.Year * 100 + DateStart.Month;
 		} // GetDateCode
 
-		#endregion method GetDateCode
 	} // class ChannelGrabberOrderItem
 } // namespace
 // ReSharper restore ValueParameterNotUsed

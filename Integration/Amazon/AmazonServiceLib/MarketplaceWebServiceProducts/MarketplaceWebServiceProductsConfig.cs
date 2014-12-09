@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,7 +14,6 @@
  * 
  */
 
-
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,7 +26,7 @@ namespace MarketplaceWebServiceProducts
     /// </summary>
     public class MarketplaceWebServiceProductsConfig
     {
-    
+
         private String serviceVersion = "2011-10-01";
         private String serviceURL = null;
         private String userAgent = null;
@@ -67,7 +66,6 @@ namespace MarketplaceWebServiceProducts
             return this;
         }
 
-
         /// <summary>
         /// Checks if SignatureMethod property is set
         /// </summary>
@@ -104,7 +102,7 @@ namespace MarketplaceWebServiceProducts
         {
             return this.signatureVersion != null;
         }
-    
+
         /// <summary>
         /// Gets the UserAgent property.
         /// </summary>
@@ -368,6 +366,6 @@ namespace MarketplaceWebServiceProducts
         {
             return Clean(s).Replace(@"\", @"\\").Replace(@";", @"\;").Replace(@")", @"\)");
         }
-        
+
     }
 }

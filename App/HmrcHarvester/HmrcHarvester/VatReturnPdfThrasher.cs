@@ -5,19 +5,11 @@ using Ezbob.Logger;
 using iTextSharp.text.pdf;
 
 namespace Ezbob.HmrcHarvester {
-	#region class VatReturnPdfThrasher
 
 	public class VatReturnPdfThrasher : AThrasher {
-		#region public
-
-		#region constructor
 
 		public VatReturnPdfThrasher(bool bVerboseLogging = false, ASafeLog oLog = null) : base(bVerboseLogging, oLog) {
 		} // constructor
-
-		#endregion constructor
-
-		#region method Run
 
 		public override ISeeds Run(SheafMetaData oFileID, byte[] oFile) {
 			Info("Parsing {0}...", oFileID);
@@ -40,19 +32,7 @@ namespace Ezbob.HmrcHarvester {
 			return Seeds;
 		} // Run
 
-		#endregion method Run
-
-		#region property Seeds
-
 		public override ISeeds Seeds { get; protected set; }
-
-		#endregion property Seeds
-
-		#endregion public
-
-		#region private
-
-		#region method VatPeriod
 
 		private bool VatPeriod() {
 			var oSeeds = (VatReturnSeeds)Seeds;
@@ -76,10 +56,6 @@ namespace Ezbob.HmrcHarvester {
 			return oSeeds.IsPeriodValid();
 		} // VatPeriod
 
-		#endregion method VatPeriod
-
-		#region method BusinessDetails
-
 		private bool BusinessDetails() {
 			var oSeeds = (VatReturnSeeds)Seeds;
 
@@ -102,10 +78,6 @@ namespace Ezbob.HmrcHarvester {
 			return oSeeds.AreBusinessDetailsValid();
 		} // BusinessDetails
 
-		#endregion method BusinessDetails
-
-		#region method ReturnDetails
-
 		private bool ReturnDetails() {
 			var oSeeds = (VatReturnSeeds)Seeds;
 
@@ -124,24 +96,12 @@ namespace Ezbob.HmrcHarvester {
 			return true;
 		} // ReturnDetails
 
-		#endregion method ReturnDetails
-
-		#region method Read
-
 		private string Read(string sFieldName) {
 			return m_oReader.AcroFields.GetField(sFieldName);
 		} // Read
 
-		#endregion method Read
-
-		#region fields
-
 		private PdfReader m_oReader;
 
-		#endregion fields
-
-		#endregion private
 	} // class VatReturnPdfThrasher
 
-	#endregion class VatReturnPdfThrasher
 } // namespace Ezbob.HmrcHarvester

@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Text;
 using MarketplaceWebService.Attributes;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
@@ -29,7 +28,7 @@ namespace MarketplaceWebService.Model
     [MarketplaceWebServiceAttribute(RequestType = RequestType.DEFAULT, ResponseType = ResponseType.DEFAULT)]
     public class ManageReportScheduleRequest
     {
-    
+
         private String marketplaceField;
 
         private String merchantField;
@@ -39,7 +38,6 @@ namespace MarketplaceWebService.Model
         private String scheduleField;
 
         private DateTime? scheduledDateField;
-
 
         /// <summary>
         /// Gets and sets the Marketplace property.
@@ -51,8 +49,6 @@ namespace MarketplaceWebService.Model
             get { return this.marketplaceField ; }
             set { this.marketplaceField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Marketplace property
@@ -66,8 +62,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Marketplace property is set
         /// </summary>
@@ -79,7 +73,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Merchant property.
         /// </summary>
@@ -89,8 +82,6 @@ namespace MarketplaceWebService.Model
             get { return this.merchantField ; }
             set { this.merchantField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Merchant property
@@ -103,8 +94,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Merchant property is set
         /// </summary>
@@ -115,7 +104,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ReportType property.
         /// </summary>
@@ -125,8 +113,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportTypeField ; }
             set { this.reportTypeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportType property
@@ -139,8 +125,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportType property is set
         /// </summary>
@@ -151,7 +135,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Schedule property.
         /// </summary>
@@ -161,8 +144,6 @@ namespace MarketplaceWebService.Model
             get { return this.scheduleField ; }
             set { this.scheduleField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Schedule property
@@ -175,8 +156,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Schedule property is set
         /// </summary>
@@ -187,7 +166,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ScheduledDate property.
         /// </summary>
@@ -197,8 +175,6 @@ namespace MarketplaceWebService.Model
             get { return this.scheduledDateField.GetValueOrDefault() ; }
             set { this.scheduledDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ScheduledDate property
@@ -211,8 +187,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ScheduledDate property is set
         /// </summary>
@@ -222,10 +196,6 @@ namespace MarketplaceWebService.Model
             return  this.scheduledDateField.HasValue;
 
         }
-
-
-
-
 
     }
 

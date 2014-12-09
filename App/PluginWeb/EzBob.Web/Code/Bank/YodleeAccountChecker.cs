@@ -31,7 +31,6 @@
 				return;
 			}
 
-
 			var yodleeServiceInfo = new YodleeServiceInfo();
 			var yodleeMps = customer.CustomerMarketPlaces
 				.Where(m => m.Marketplace.InternalId == yodleeServiceInfo.InternalId && m.DisplayName != "ParsedBank").ToList();
@@ -40,7 +39,7 @@
 			{
 				return;
 			}
-			
+
 			var yodleeAcounts = yodleeMps
 				.SelectMany(x => x.YodleeOrders)
 				.SelectMany(o => o.OrderItems)
@@ -53,7 +52,7 @@
 			{
 				Log.DebugFormat("AccountNumber {0} SortCode {1} Yodlee Account {2} Yodlee Routing Number {3}", 
 					accountNumber, sortcode, account.AccountNumber, account.RoutingNumber);
-				
+
 				if (string.IsNullOrEmpty(account.AccountNumber)) continue;
 
 				var number = account.AccountNumber.Replace("x", "").Replace(" ", "");

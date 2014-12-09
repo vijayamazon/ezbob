@@ -9,9 +9,6 @@
 	using Ezbob.Logger;
 
 	public class Agent {
-		#region public
-
-		#region constructor
 
 		public Agent(int nCustomerID, DateTime? dataAsOf, AConnection oDB, ASafeLog oLog) {
 			Log = oLog ?? new SafeLog();
@@ -19,10 +16,6 @@
 
 			Args = new Arguments(nCustomerID, dataAsOf);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Init
 
 		public virtual Agent Init() {
 			Trail = new ReRejectionTrail(Args.CustomerID, Log);
@@ -34,10 +27,6 @@
 
 			return this;
 		} // Init
-
-		#endregion method Init
-
-		#region method MakeDecision
 
 		public virtual void MakeDecision() {
 			Log.Debug("Secondary: checking if auto re-reject should take place for customer {0}...", Args.CustomerID);
@@ -61,35 +50,19 @@
 			);
 		} // MakeDecision
 
-		#endregion method MakeDecision
-
 		public virtual ReRejectionTrail Trail { get; private set; }
-
-		#endregion public
-
-		#region protected
-
-		#region properties
 
 		protected virtual Arguments Args { get; private set; }
 		protected virtual Configuration Cfg { get; private set; }
 		protected virtual MetaData MetaData { get; private set; }
 		protected virtual List<Marketplace> NewMarketplaces { get; private set; }
 
-		#region property Now
-
 		protected virtual DateTime Now {
 			get { return Trail.InputData.DataAsOf; }
 		} // Now
 
-		#endregion property Now
-
 		protected virtual AConnection DB { get; private set; }
 		protected virtual ASafeLog Log { get; private set; }
-
-		#endregion properties
-
-		#region method GatherData
 
 		protected virtual void GatherData() {
 			Cfg.Load();
@@ -107,27 +80,12 @@
 			Trail.MyInputData.Init(Args, Cfg, MetaData, NewMarketplaces);
 		} // GatherData
 
-		#endregion method GatherData
-
-		#endregion protected
-
-		#region private
-
-		#region steps
-
-		#region method CheckNumOfLoans
-
-		private void CheckNumOfLoans()
-		{
+		private void CheckNumOfLoans() {
 			if (Trail.MyInputData.NumOfOpenLoans >= Trail.MyInputData.AutoReRejectMaxAllowedLoans)
 				StepReject<OpenLoans>().Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
 			else
 				StepNoDecision<OpenLoans>().Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
 		} // CheckNumOfLoans
-
-		#endregion method CheckNumOfLoans
-
-		#region method CheckLastDecisionWasReject
 
 		private void CheckLastDecisionWasReject() {
 			if (Trail.MyInputData.LastDecisionWasReject)
@@ -136,20 +94,12 @@
 				StepNoReject<LastDecisionWasReject>().Init(Trail.MyInputData.LastDecisionWasReject);
 		} // CheckLastDecisionWasReject
 
-		#endregion method CheckLastDecisionWasReject
-
-		#region method CheckNewMarketplaces
-
 		private void CheckNewMarketplaces() {
 			if (Trail.MyInputData.NewDataSourceAdded)
 				StepNoReject<MarketPlaceWasAdded>().Init(Trail.MyInputData.NewDataSourceAdded);
 			else
 				StepNoDecision<MarketPlaceWasAdded>().Init(Trail.MyInputData.NewDataSourceAdded);
 		} // CheckNewMarketplaces
-
-		#endregion method CheckNewMarketplaces
-
-		#region method CheckRejectionAge
 
 		private void CheckRejectionAge() {
 			if (Trail.MyInputData.LastRejectDate == null) {
@@ -165,10 +115,6 @@
 				StepNoDecision<LRDIsTooOld>().Init(nAge, Trail.MyInputData.AutoReRejectMaxLRDAge);
 		} // CheckRejectionAge
 
-		#endregion method CheckRejectionAge
-
-		#region method CheckReturnRatio
-
 		private void CheckReturnRatio() {
 			decimal nRatio = Trail.MyInputData.OpenLoansAmount < 0.00000000001m
 				? 0
@@ -181,7 +127,7 @@
 					Trail.MyInputData.PrincipalRepaymentAmount,
 					Trail.MyInputData.AutoReRejectMinRepaidPortion
 					);
-			} 
+			}
 			else { //have open loan
 				if (nRatio < Trail.MyInputData.AutoReRejectMinRepaidPortion) {
 					StepReject<OpenLoansRepayments>().Init(
@@ -199,12 +145,6 @@
 				}
 			}
 		} // CheckReturnRatio
-
-		#endregion method CheckReturnRatio
-
-		#endregion steps
-
-		#region method ProcessRow
 
 		private void ProcessRow(SafeReader sr) {
 			RowType nRowType;
@@ -230,41 +170,22 @@
 			} // switch
 		} // ProcessRow
 
-		#endregion method ProcessRow
-
-		#region enum RowType
-
 		private enum RowType {
 			MetaData,
 			Marketplace,
 		} // enum RowType
 
-		#endregion enum RowType
-
-		#region method StepReject
-
 		private T StepReject<T>() where T : ATrace {
 			return Trail.Affirmative<T>(true);
 		} // StepReject
-
-		#endregion method StepReject
-
-		#region method StepNoReject
 
 		private T StepNoReject<T>() where T : ATrace {
 			return Trail.Negative<T>(true);
 		} // StepNoReject
 
-		#endregion method StepNoReject
-
-		#region method StepNoDecision
-
 		private T StepNoDecision<T>() where T : ATrace {
 			return Trail.Dunno<T>();
 		} // StepNoDecision
 
-		#endregion method StepNoDecision
-
-		#endregion private
 	} // class Agent
 } // namespace

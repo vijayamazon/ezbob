@@ -4,8 +4,6 @@
 	internal class Moneyish : AType<decimal?> {
 		public Moneyish() : base("decimal") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			decimal nResult;
 
@@ -15,6 +13,5 @@
 			return Activator.CreateInstance(UnderlyingType);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class Moneyish
 } // namespace

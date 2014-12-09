@@ -40,8 +40,6 @@
 		[DataMember]
 		public virtual decimal? FreeCashFlow { get; set; }
 
-		#region method ToString
-
 		protected virtual void ToString(StringBuilder os, string sPrefix) {
 			os.AppendFormat("\n{0}% of annual revenues: {1}", sPrefix, PctOfAnnualRevenues);
 			os.AppendFormat("\n{0}Revenues: {1}", sPrefix, Revenues);
@@ -56,6 +54,5 @@
 			os.AppendFormat("\n{0}Free cash flow: {1}", sPrefix, FreeCashFlow);
 		} // ToString
 
-		#endregion method ToString
 	} // class VatReturnSummaryBase
 } // namespace Ezbob.Backend.Models

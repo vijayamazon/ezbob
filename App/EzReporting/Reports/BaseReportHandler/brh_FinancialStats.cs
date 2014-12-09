@@ -11,9 +11,6 @@
 	using OfficeOpenXml;
 
 	public partial class BaseReportHandler : SafeLog {
-		#region public
-
-		#region method BuildFinancialStatsReport
 
 		public ATag BuildFinancialStatsReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateFinancialStatsReport(report, today, tomorrow);
@@ -23,23 +20,11 @@
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildFinancialStatsReport
 
-		#endregion method BuildFinancialStatsReport
-
-		#region method BuildFinancialStatsXls
-
 		public ExcelPackage BuildFinancialStatsXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateFinancialStatsReport(report, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
 		} // BuildFinancialStatsXls
-
-		#endregion method BuildFinancialStatsXls
-
-		#endregion public
-
-		#region private
-
-		#region method CreateFinancialStatsReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateFinancialStatsReport(Report report, DateTime today, DateTime tomorrow) {
 			var rpt = new ReportQuery(report) {
@@ -66,8 +51,5 @@
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
 		} // CreateFinancialStatsReport
 
-		#endregion method CreateFinancialStatsReport
-
-		#endregion private
 	} // class BaseReportHandler
 } // namespace Reports

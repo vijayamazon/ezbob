@@ -10,41 +10,22 @@
 	using Ezbob.Backend.ModelsWithDB;
 
 	partial class EzServiceImplementation {
-		#region async
-
-		#region method BrokerLeadAcquireCustomer
 
 		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sEmailConfirmationLink) {
 			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID, sFirstName, bBrokerFillsForCustomer, sEmailConfirmationLink);
 		} // BrokerLeadAcquireCustomer
 
-		#endregion method BrokerLeadAcquireCustomer
-
-		#region method BrokerCustomerWizardComplete
-
 		public ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {
 			return Execute<BrokerCustomerWizardComplete>(nCustomerID, null, nCustomerID);
 		} // BrokerCustomerWizardComplete
-
-		#endregion method BrokerCustomerWizardComplete
-
-		#region method BrokerCheckCustomerRelevance
 
 		public ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, bool isAlibaba, string sSourceRef, string sConfirmEmailLink) {
 			return Execute<BrokerCheckCustomerRelevance>(nCustomerID, nCustomerID, nCustomerID, sCustomerEmail, isAlibaba, sSourceRef, sConfirmEmailLink);
 		} // BrokerCheckCustomerRelevance
 
-		#endregion method BrokerCheckCustomerRelevance
-
-		#region method BrokerAcceptTerms
-
 		public ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {
 			return Execute<BrokerAcceptTerms>(null, null, nTermsID, sContactEmail);
 		} // BrokerAcceptTerms
-
-		#endregion method BrokerAcceptTerms
-
-		#region method BrokerApproveAndResetCustomerPassword
 
 		public ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst) {
 			return Execute(new ExecuteArguments(nCustomerID, nLoanAmount, nValidHours, isFirst) {
@@ -54,14 +35,6 @@
 				OnInit = (stra, amd) => { ((ApprovedUser)stra).SendToCustomer = false; },
 			});
 		} // BrokerApproveAndResetCustomerPassword
-
-		#endregion method BrokerApproveAndResetCustomerPassword
-
-		#endregion async
-
-		#region sync
-
-		#region method IsBroker
 
 		public BoolActionResult IsBroker(string sContactEmail) {
 			BrokerIsBroker oInstance;
@@ -73,10 +46,6 @@
 				Value = oInstance.IsBroker,
 			};
 		} // IsBroker
-
-		#endregion method IsBroker
-
-		#region method BrokerSignup
 
 		public BrokerPropertiesActionResult BrokerSignup(
 			string sFirmName,
@@ -129,10 +98,6 @@
 			};
 		} // BrokerSignup
 
-		#endregion method BrokerSignup
-
-		#region method BrokerLogin
-
 		public BrokerPropertiesActionResult BrokerLogin(string sEmail, Password oPassword) {
 			BrokerLogin oInstance;
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword);
@@ -143,17 +108,9 @@
 			};
 		} // BrokerLogin
 
-		#endregion method BrokerLogin
-
-		#region method BrokerRestorePassword
-
 		public ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
 			return ExecuteSync<BrokerRestorePassword>(null, null, sMobile, sCode);
 		} // BrokerRestorePassword
-
-		#endregion method BrokerRestorePassword
-
-		#region method BrokerLoadCustomersByID
 
 		public BrokerCustomersActionResult BrokerLoadCustomersByID(int nBrokerID) {
 			BrokerLoadCustomerList oIntstance;
@@ -166,10 +123,6 @@
 			};
 		} // BrokerLoadCustomersByID
 
-		#endregion method BrokerLoadCustomersByID
-
-		#region method BrokerLoadCustomerList
-
 		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
 			BrokerLoadCustomerList oIntstance;
 
@@ -180,10 +133,6 @@
 				Customers = oIntstance.Customers,
 			};
 		} // BrokerLoadCustomerList
-
-		#endregion method BrokerLoadCustomerList
-
-		#region method BrokerLoadCustomerDetails
 
 		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail) {
 			BrokerLoadCustomerDetails oIntstance;
@@ -196,10 +145,6 @@
 				PotentialSigners = oIntstance.PotentialEsigners,
 			};
 		} // BrokerLoadCustomerDetails
-
-		#endregion method BrokerLoadCustomerDetails
-
-		#region method BrokerSaveCrmEntry
 
 		public StringActionResult BrokerSaveCrmEntry(string sType, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
 			BrokerSaveCrmEntry oInstance;
@@ -222,10 +167,6 @@
 			};
 		} // BrokerSaveCrmEntry
 
-		#endregion method BrokerSaveCrmEntry
-
-		#region method BrokerLoadCustomerFiles
-
 		public BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail) {
 			BrokerLoadCustomerFiles oInstance;
 
@@ -242,10 +183,6 @@
 				Files = oInstance.Files,
 			};
 		} // BrokerLoadCustomerFiles
-
-		#endregion method BrokerLoadCustomerFiles
-
-		#region method BrokerDownloadCustomerFile
 
 		public BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID) {
 			BrokerDownloadCustomerFile oInstance;
@@ -266,33 +203,17 @@
 			};
 		} // BrokerLoadCustomerFiles
 
-		#endregion method BrokerDownloadCustomerFile
-
-		#region method BrokerSaveUploadedCustomerFile
-
 		public ActionMetaData BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName) {
 			return ExecuteSync<BrokerSaveUploadedCustomerFile>(null, null, sCustomerRefNum, sContactEmail, oFileContents, sFileName);
 		} // BrokerSaveUploadedCustomerFile
-
-		#endregion method BrokerSaveUploadedCustomerFile
-
-		#region method BrokerDeleteCustomerFiles
 
 		public ActionMetaData BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs) {
 			return ExecuteSync<BrokerDeleteCustomerFiles>(null, null, sCustomerRefNum, sContactEmail, aryFileIDs);
 		} // BrokerDeleteCustomerFiles
 
-		#endregion method BrokerDeleteCustomerFiles
-
-		#region method BrokerAddCustomerLead
-
 		public ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail) {
 			return ExecuteSync<BrokerAddCustomerLead>(null, null, sLeadFirstName, sLeadLastName, sLeadEmail, sLeadAddMode, sContactEmail);
 		} // BrokerAddCustomerLead
-
-		#endregion method BrokerAddCustomerLead
-
-		#region method BrokerLeadCanFillWizard
 
 		public BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
 			BrokerLeadCanFillWizard oInstance;
@@ -316,10 +237,6 @@
 			};
 		} // BrokerLeadCanFillWizard
 
-		#endregion method BrokerLeadCanFillWizard
-
-		#region method BrokerBackFromCustomerWizard
-
 		public StringActionResult BrokerBackFromCustomerWizard(int nLeadID) {
 			BrokerBackFromCustomerWizard oInstance;
 
@@ -330,10 +247,6 @@
 				MetaData = oResult,
 			};
 		} // BrokerBackFromCustomerWizard
-
-		#endregion method BrokerBackFromCustomerWizard
-
-		#region method BrokerLeadCheckToken
 
 		public BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken) {
 			BrokerLeadCheckToken oInstance;
@@ -350,10 +263,6 @@
 			};
 		} // BrokerLeadCheckToken
 
-		#endregion method BrokerLeadCheckToken
-
-		#region method BrokerLoadOwnProperties
-
 		public BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail) {
 			BrokerLoadOwnProperties oInstance;
 
@@ -364,10 +273,6 @@
 				Properties = oInstance.Properties,
 			};
 		} // BrokerLoadOwnProperties
-
-		#endregion method BrokerLoadOwnProperties
-
-		#region method BrokerLoadPropertiesByID
 
 		public BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID) {
 			BrokerLoadOwnProperties oInstance;
@@ -380,10 +285,6 @@
 			};
 		} // BrokerLoadPropertiesByID
 
-		#endregion method BrokerLoadPropertiesByID
-
-		#region method BrokerUpdatePassword
-
 		public ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword) {
 			BrokerUpdatePassword oInstance;
 
@@ -394,10 +295,6 @@
 
 			return oMetaData;
 		} // BrokerUpdatePassword
-
-		#endregion method BrokerUpdatePassword
-
-		#region method BrokerLoadStaticData
 
 		public BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly) {
 			var oResult = new BrokerStaticDataActionResult {
@@ -471,17 +368,9 @@
 			return oResult;
 		} // BrokerLoadStaticData
 
-		#endregion method BrokerLoadStaticData
-
-		#region method BrokerAttachCustomer
-
 		public ActionMetaData BrokerAttachCustomer(int nCustomerID, int? nBrokerID, int nUnderwriterID) {
 			return ExecuteSync<BrokerAttachCustomer>(nCustomerID, nUnderwriterID, nCustomerID, nBrokerID, nUnderwriterID);
 		} // BrokerAttachCustomer
-
-		#endregion method BrokerAttachCustomer
-
-		#region method BrokerLoadSignedTerms
 
 		public StringListActionResult BrokerLoadSignedTerms(string sContactEmail) {
 			BrokerLoadSignedTerms oInstance;
@@ -494,10 +383,6 @@
 			};
 		} // BrokerLoadSignedTerms
 
-		#endregion method BrokerLoadSignedTerms
-
-		#region method BrokerInstantOffer
-
 		public BrokerInstantOfferResponseActionResult BrokerInstantOffer(BrokerInstantOfferRequest request) {
 			BrokerInstantOffer oInstance;
 
@@ -509,7 +394,5 @@
 			};
 		}
 
-		#endregion method BrokerInstantOffer
-		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

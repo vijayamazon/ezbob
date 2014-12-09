@@ -3,8 +3,6 @@
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 
-	#region class HmrcData
-
 	[Serializable]
 	public class HmrcData {
 		public IEnumerable<VatReturnRawData> VatReturn { get; set; }
@@ -15,10 +13,6 @@
 		public VatReturnSummary[] VatReturnSummary { get; set; }
 		public VatReturnSummaryDates[] VatReturnSummaryDates { get; set; }
 	} // class HmrcData
-
-	#endregion class HmrcData
-
-	#region class VatReturnSummaryDates
 
 	[Serializable]
 	public class VatReturnSummaryDates {
@@ -33,5 +27,4 @@
 		public int TotalSummaryDays { get; set; }
 	} // class VatReturnSummaryDates
 
-	#endregion class VatReturnSummaryDates
 } // namespace EzBob.Models.Marketplaces

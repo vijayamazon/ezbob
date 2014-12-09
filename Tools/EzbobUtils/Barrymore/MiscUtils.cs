@@ -3,15 +3,10 @@
 	using System.Globalization;
 
 	public static class MiscUtils {
-		#region method MD5
 
 		public static string MD5(string input) {
 			return Security.SecurityUtils.MD5(input);
 		} // MD5
-
-		#endregion method MD5
-
-		#region method Validate
 
 		public static string ValidateStringArg(string sValue, string sArgName, bool bThrow = true, int nMaxAllowedLength = 255) {
 			sValue = (sValue ?? string.Empty).Trim();
@@ -33,10 +28,6 @@
 			return sValue;
 		} // Validate
 
-		#endregion method Validate
-
-		#region method WeekStart
-
 		public static DateTime WeekStart(DateTime oDate, CultureInfo oCulture = null) {
 			if (oCulture == null)
 				oCulture = CultureInfo.CurrentCulture;
@@ -57,10 +48,6 @@
 			return WeekStart(DateTime.UtcNow, oCulture);
 		} // FirstDayOfWeek
 
-		#endregion method WeekStart
-
-		#region method GetFullYears
-
 		public static int GetFullYears(DateTime date) {
 			int years = DateTime.UtcNow.Year - date.Year;
 			if (date > DateTime.UtcNow.AddYears(-years))
@@ -68,10 +55,6 @@
 
 			return years;
 		} // GetFullYears
-
-		#endregion method GetFullYears
-
-		#region method GetFullYearsAndMonths
 
 		public static void GetFullYearsAndMonths(DateTime? date, out int years, out int months) {
 			if (!date.HasValue) {
@@ -90,10 +73,6 @@
 			else if (months == 0 && DateTime.UtcNow.Day < date.Value.Day)
 				months = 11;
 		} // GetFullYearsAndMonths
-
-		#endregion method GetFullYearsAndMonths
-
-		#region method MonthDiff
 
 		/// <summary>
 		/// Returns number of full months between the dates a and b.
@@ -130,10 +109,6 @@
 			return bReverse ? -nCount : nCount;
 		} // MonthDiff
 
-		#endregion method MonthDiff
-
-		#region method CountMonthsBetween
-
 		/// <summary>
 		/// Calculates number of full calendar months between the months represented by arguments.
 		/// If a > b the result is negative.
@@ -162,6 +137,5 @@
 			return nReverse * ((12 - a.Month) + (b.Month - 1) + 12 * (b.Year - a.Year - 1));
 		} // CountMonthsBetween
 
-		#endregion method CountMonthsBetween
 	} // class MiscUtils
 } // namespace

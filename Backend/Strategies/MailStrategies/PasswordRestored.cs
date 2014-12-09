@@ -10,16 +10,11 @@
 	using UserManagement.EmailConfirmation;
 
 	public class PasswordRestored : AMailStrategyBase {
-		#region constructor
 
 		public PasswordRestored(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "Password Restored"; } } // Name
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			var oNewPassGenerator = new UserResetPassword(CustomerData.Mail, DB, Log);
@@ -66,14 +61,9 @@
 			}
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
-
-		#region property Salutation
-
 		protected virtual string Salutation {
 			get { return "Dear customer"; }
 		} // Salutation
 
-		#endregion property Salutation
 	} // class PasswordRestored
 } // namespace

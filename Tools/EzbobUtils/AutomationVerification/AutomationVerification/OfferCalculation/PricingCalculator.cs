@@ -26,7 +26,6 @@ namespace AutomationCalculator.OfferCalculation
 			defaultRate = defaultRate;                                                                                             //d
 			loanAmount = loanAmount;                                                                                               //A
 
-
 			//formula is r = 2(C/(1-p) - f)/(A(1-d)(2õ + ḿ + 1))
 			decimal interestRate = (2*(cost/(1 - profit) - setupFee))/(loanAmount*(1 - defaultRate)*(2*realInterestOnlyPeriod + realRestPeriod + 1));
 			return interestRate;
@@ -46,7 +45,7 @@ namespace AutomationCalculator.OfferCalculation
 			defaultRate = defaultRate;                                                                                             //d
 			interestRate = interestRate;                                                                                           //r
 			loanAmount = loanAmount;                                                                                               //A
-			
+
 			//formula is f = C/(1-p) - rA(1-d)(2õ + ḿ + 1)/2
 			decimal setupFee =  (cost / (1 - profit)) - ((interestRate * loanAmount * (1 - defaultRate) * (2 * realInterestOnlyPeriod + realRestPeriod + 1)) / 2);
 			return setupFee / loanAmount;
@@ -90,7 +89,7 @@ namespace AutomationCalculator.OfferCalculation
 		public decimal GetDefaultRate(int customerId, PricingScenarioModel pricingScenario) {
 			var dbHelper = new DbHelper(new SqlConnection(Log), Log);
 			var customerDefaultRate = dbHelper.GetOfferDefaultRate(customerId);
-			
+
 			var defaultRate = customerDefaultRate.Item1*(1 - pricingScenario.DefaultRateCompanyShare) + 
 				customerDefaultRate.Item2*pricingScenario.DefaultRateCompanyShare;
 

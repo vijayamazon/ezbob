@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.AmazonServiceLib;
@@ -44,7 +44,7 @@ namespace EzBob.AmazonLib
 			{
 				AmazonRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo( databaseCustomer, amazonSecurityInfo, "Real Amazon Account" );	
 			}
-			
+
 		}
 
 		private static AmazonRetriveDataHelper AmazonRetriveDataHelper
@@ -66,7 +66,7 @@ namespace EzBob.AmazonLib
 		public static void TestRetrieveAmazonOrdersData(int customerId)
 		{
             var databaseCustomer = GetCustomerInfo(customerId);
-						
+
 			UpdateClientOrdersInfo( databaseCustomer);
 		}
 
@@ -110,7 +110,6 @@ namespace EzBob.AmazonLib
             IDatabaseCustomer databaseCustomer = GetCustomerInfo(customerId);
 
 			var amazonSecurityInfo = new AmazonSecurityInfo( "A26O6R3HT824TS" );
-
 
             AmazonRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo(databaseCustomer, amazonSecurityInfo, "Test3");
 		}*/

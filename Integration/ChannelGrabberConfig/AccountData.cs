@@ -5,18 +5,11 @@ using System.Xml;
 
 namespace Integration.ChannelGrabberConfig {
 	public class AccountData : IJsonable {
-		#region public
-
-		#region constructor
 
 		public AccountData(VendorInfo oVendorInfo) {
 			VendorInfo = oVendorInfo;
 			m_nAccountID = 0;
 		} // constructor
-
-		#endregion constructor
-
-		#region method AccountTypeName
 
 		/// <summary>
 		/// Gets account type name ( V o l u s i o n, P l a y.com, etc).
@@ -24,10 +17,6 @@ namespace Integration.ChannelGrabberConfig {
 		/// </summary>
 		/// <returns>Account type name.</returns>
 		public virtual string AccountTypeName() { return VendorInfo.Name; } // AccountTypeName
-
-		#endregion method AccountTypeName
-
-		#region method VerifyRegistrationInProgresss
 
 		/// <summary>
 		/// Verifies that Channel Grabber service returned valid data as a reply for
@@ -52,10 +41,6 @@ namespace Integration.ChannelGrabberConfig {
 				throw new ConfigException("Wrong id in the server response.");
 		} // VerifyRegistrationInProgress
 
-		#endregion method VerifyRegistrationInProgresss
-
-		#region method VerifyNotExist
-
 		/// <summary>
 		/// Verifies that this account does not exist in the list. Completes successfully if
 		/// account not found.
@@ -65,10 +50,6 @@ namespace Integration.ChannelGrabberConfig {
 		public void VerifyNotExist(XmlDocument doc) {
 			ScanAccounts(doc, ThrowAlreadyExists);
 		} // VerifyNotExist
-
-		#endregion method VerifyNotExist
-
-		#region method VerifyAccountID
 
 		/// <summary>
 		/// Verifies that this account exists in the list. Stores account id internally if
@@ -85,10 +66,6 @@ namespace Integration.ChannelGrabberConfig {
 				throw new ConfigException("Shop is not registered.");
 		} // VerifyAccountID
 
-		#endregion method VerifyAccountID
-
-		#region method Id
-
 		/// <summary>
 		/// Returns account id retrieved by the last VerifyRegistationInProgress call.
 		/// </summary>
@@ -96,10 +73,6 @@ namespace Integration.ChannelGrabberConfig {
 		public int Id() {
 			return m_nAccountID; 
 		} // Id
-
-		#endregion method Id
-
-		#region method Validate
 
 		/// <summary>
 		/// Checks that supplied credentials are ok and shop has been registered successfully.
@@ -119,10 +92,6 @@ namespace Integration.ChannelGrabberConfig {
 				throw new InvalidCredentialsException(AccountTypeName() + ": " + VendorInfo.ClientSide.ErrorMessage(ClientSide.SupportedErrorMessages.CannotValidate));
 		} // Validate
 
-		#endregion method Validate
-
-		#region method ToJson
-
 		public virtual object ToJson() {
 			var oOutput = new Dictionary<string, string>();
 
@@ -131,10 +100,6 @@ namespace Integration.ChannelGrabberConfig {
 
 			return oOutput;
 		} // ToJson
-
-		#endregion method ToJson
-
-		#region method ToString
 
 		public override string ToString() {
 			var args = new List<object>();
@@ -145,10 +110,6 @@ namespace Integration.ChannelGrabberConfig {
 			return string.Format(VendorInfo.SecurityData.ToStringArguments[0], args.ToArray());
 		} // ToString
 
-		#endregion method ToString
-
-		#region properties - login fields
-
 		public string Name { get; set; }
 		public string URL { get; set; }
 		public string Login { get; set; }
@@ -158,15 +119,7 @@ namespace Integration.ChannelGrabberConfig {
 		public string AuxPassword { get; set; }
 		public int RealmID { get; set; }
 
-		#endregion properties - login fields
-
-		#region property VendorInfo
-
 		public VendorInfo VendorInfo { get; private set; }
-
-		#endregion property VendorInfo
-
-		#region method UniqueID
 
 		public string UniqueID() {
 			var oUniqueID = new SortedDictionary<int, string>();
@@ -178,14 +131,6 @@ namespace Integration.ChannelGrabberConfig {
 
 			return string.Join(":|:", oUniqueID.Values);
 		} // UniqueID
-
-		#endregion method UniqueID
-
-		#endregion public
-
-		#region private
-
-		#region method IsMe
 
 		private bool IsMe(XmlNode oNode, bool bThrowIfNot) {
 			bool bResult = true;
@@ -210,10 +155,6 @@ namespace Integration.ChannelGrabberConfig {
 			return bResult;
 		} // IsMe
 
-		#endregion method IsMe
-
-		#region method ScanAccounts
-
 		private void ScanAccounts(XmlDocument doc, Func<XmlNode, bool> onFound) {
 			if (null == doc)
 				throw new ConfigException("Service response is not defined.");
@@ -232,26 +173,14 @@ namespace Integration.ChannelGrabberConfig {
 			} // foreach
 		} // ScanAccounts
 
-		#endregion method ScanAccounts
-
-		#region method ThrowAlreadyExists
-
 		private bool ThrowAlreadyExists(XmlNode oNode) {
 			throw new ConfigException("Shop already registered.");
 		} // ThrowAlreadyExists
-
-		#endregion method ThrowAlreadyExists
-
-		#region method SaveAccountID
 
 		private bool SaveAccountID(XmlNode oNode) {
 			m_nAccountID = XmlUtil.GetInt(oNode, IdNode);
 			return true;
 		} // SaveAccountID
-
-		#endregion method SaveAccountID
-
-		#region method GetPropertyValue
 
 		private string GetPropertyValue(FieldInfo fi) {
 			return GetPropertyValue(fi.PropertyName);
@@ -262,12 +191,9 @@ namespace Integration.ChannelGrabberConfig {
 			return prop.GetGetMethod().Invoke(this, null).ToString();
 		} // GetPropertyValue
 
-		#endregion method GetPropertyValue
-
 		private int m_nAccountID;
 
 		private const string IdNode = "id";
 
-		#endregion private
 	} // class AccountData
 } // namespace Integration.ChannelGrabberConfig

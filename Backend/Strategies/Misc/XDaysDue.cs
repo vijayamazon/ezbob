@@ -8,23 +8,14 @@
 	using Ezbob.Logger;
 
 	public class XDaysDue : AStrategy {
-		#region constructor
 
 		public XDaysDue(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "XDays Due"; }
 		} // Name
-
-		#endregion property Name
-
-		#region property Execute
 
 		public override void Execute() {
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
@@ -83,8 +74,6 @@
 				return ActionResult.Continue;
 			}, "GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
 		} // Execute
-
-		#endregion property Execute
 
 		private readonly StrategiesMailer mailer;
 	} // class XDaysDue

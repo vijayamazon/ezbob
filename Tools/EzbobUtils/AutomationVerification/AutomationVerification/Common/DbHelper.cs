@@ -40,7 +40,6 @@
 			return mps;
 		}
 
-
 		/// <summary>
 		/// Retrieve all yodlee accounts
 		/// </summary>
@@ -97,7 +96,7 @@
 			var onlineRevenue = _db.FillFirst<OnlineRevenues>("AV_GetAnnualizedRevenueForPeriod", new QueryParameter("@CustomerMarketPlaceId", mpId));
 			return onlineRevenue;
 		}
-		
+
 		public int GetExperianScore(int customerId)
 		{
 			var sr = _db.GetFirst("AV_GetExperianScore", new QueryParameter("@CustomerId", customerId));
@@ -135,7 +134,7 @@
 			return _db.FillFirst<AutoRejectionInputDataModelDb>(
 				"AV_GetRejectionData", CommandSpecies.StoredProcedure,new QueryParameter("@CustomerId", customerId));
 		}
-		
+
 		public ReRejectionData GetReRejectionData(int customerId, int cashRequestId)
 		{
 			var sqlData = _db.GetFirst("AV_ReRejectionData",
@@ -282,7 +281,7 @@
 			}, "SELECT CustomerId, CalculationTime FROM MedalCalculations", CommandSpecies.Text);
 			return customers;
 		}
-		
+
 		public YodleeRevenuesModelDb GetYodleeRevenues(int customerMarketplaceId) {
 			var model = _db.FillFirst<YodleeRevenuesModelDb>("AV_GetYodleeRevenues", CommandSpecies.StoredProcedure, new QueryParameter("CustomerMarketplaceId", customerMarketplaceId));
 			return model;
@@ -402,7 +401,6 @@
 			return customerConsumerBusinessDefaultRate;
 		}
 
-		#region big ugly insert
 		public void StoreMedalVerification(MedalOutputModel model)
 		{
 			if (model.WeightsDict != null)
@@ -521,8 +519,6 @@
 									 new QueryParameter("NumOfHmrcMps", model.NumOfHmrcMps));
 			}
 		}
-		#endregion
 
-		
 	}
 }

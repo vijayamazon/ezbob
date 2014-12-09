@@ -8,18 +8,11 @@
 
 	[DataContract]
 	public class SortedTable<TRowKey, TColumnKey, TData> {
-		#region public
-
-		#region constructor
 
 		public SortedTable() {
 			m_oData = new SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>>();
 			ColumnKeys = new SortedSet<TColumnKey>();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Contains
 
 		public bool Contains(TRowKey oRowKey) {
 			return m_oData.ContainsKey(oRowKey);
@@ -34,10 +27,6 @@
 
 			return false;
 		} // Contains
-
-		#endregion method Contains
-
-		#region indexer
 
 		public SortedDictionary<TColumnKey, TData> this[TRowKey oRowKey] {
 			get { 
@@ -74,10 +63,6 @@
 			} // set
 		} // indexer
 
-		#endregion indexer
-
-		#region method ForEach
-
 		public void ForEach(Action<TRowKey, TColumnKey, TData> oAction) {
 			if (ReferenceEquals(oAction, null))
 				throw new ArgumentNullException("oAction", "Action not specified.");
@@ -95,40 +80,20 @@
 				oAction(pair.Key, pair.Value);
 		} // ForEach
 
-		#endregion method ForEach
-
-		#region property RowKeys
-
 		public SortedSet<TRowKey> RowKeys {
 			get { return new SortedSet<TRowKey>(m_oData.Keys); }
 		} // RowKeys
 
-		#endregion property RowKeys
-
-		#region property ColumnKeys
-
 		[DataMember]
 		public SortedSet<TColumnKey> ColumnKeys { get; private set; }
-
-		#endregion property ColumnKeys
-
-		#region method Clear
 
 		public void Clear() {
 			m_oData.Clear();
 		} // Clear
 
-		#endregion method Clear
-
-		#region property IsEmpty
-
 		public bool IsEmpty {
 			get { return m_oData.Count < 1; }
 		} // IsEmpty
-
-		#endregion property IsEmpty
-
-		#region method ToFormattedString
 
 		public string ToFormattedString(
 			string sTitle = null,
@@ -222,15 +187,8 @@
 			return os.ToString();
 		} // ToFormattedString
 
-		#endregion method ToFormattedString
-
-		#endregion public
-
-		#region private
-
 		[DataMember]
 		private readonly SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>> m_oData;
 
-		#endregion private
 	} // class SortedTable
 } // namespace Ezbob.Utils

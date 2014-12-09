@@ -25,15 +25,14 @@ namespace MWSClientCsRuntime
     {
 
         protected XmlWriter writer {get; set;}
-               
+
         // Chars that must be escaped for XML. 
         private static readonly string ESCAPED_CHARS = "&<>'\"";
-        
+
         // Escape sequences for escaped chars, in order.
         private static readonly String[] ESCAPE_SEQ = new String[] { "&amp;", "&lt;", "&gt;", "&#039;", "&quot;" };
 
         private static readonly TypeCode[] numericTypes = { TypeCode.Double, TypeCode.Int16, TypeCode.Int32, TypeCode.Int64, TypeCode.Decimal};
-        
 
         public MwsXmlWriter()
         {
@@ -53,7 +52,7 @@ namespace MWSClientCsRuntime
                     throw new SystemException("Error closing the writer",ex.InnerException);
                 }
             }
-            
+
         }
 
         public void BeginObject(string name)
@@ -81,7 +80,6 @@ namespace MWSClientCsRuntime
             else
                 writer.WriteStartElement(name,namespc);
         }
-
 
         private void EndObject(string name,bool writingAttr)
         {
@@ -173,9 +171,9 @@ namespace MWSClientCsRuntime
                     throw new ArgumentException("Unexpected object type: " + type);
                 }
             }
-             
+
         }
-        
+
         public void WriteAttribute(string name, object value)
         {
             if (value != null)
@@ -185,7 +183,7 @@ namespace MWSClientCsRuntime
                 EndObject(name, true);
             }
         }
-        
+
         public void WriteValue(object value)
         {
             if(value != null)
@@ -214,13 +212,11 @@ namespace MWSClientCsRuntime
                 writer.WriteChars(value.ToCharArray(), i, n-i);
             }
         }
-        
+
         private bool IsNumeric(Type type)
         {
             return numericTypes.Contains(Type.GetTypeCode(type));
         }
-
-
 
         public void Write(string namespc, string name, IMwsObject mwsObject)
         {

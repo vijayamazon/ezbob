@@ -66,6 +66,5 @@
 				InterestRate, SetupFee, Period, LoanTypeId, IsEu, Error == null ? "" : ", Error: " + Error);
 		}
 
-		
 	}
 }

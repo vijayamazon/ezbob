@@ -10,19 +10,12 @@
 	using Ezbob.Logger;
 
 	public class QuickOfferConfiguration : EzServiceConfiguration.QuickOfferConfigurationData {
-		#region public
-
-		#region method GetEnabledStatus
 
 		public static QuickOfferEnabledStatus GetEnabledStatus(int nEnabled) {
 			return Enum.GetValues(typeof (QuickOfferEnabledStatus)).Cast<int>().Any(x => x == nEnabled)
 				? (QuickOfferEnabledStatus)nEnabled
 				: QuickOfferEnabledStatus.Disabled;
 		} // GetEnabledStatus
-
-		#endregion method GetEnabledStatus
-
-		#region constructor
 
 		public QuickOfferConfiguration(AConnection oDB, ASafeLog oLog) {
 			m_oDB = oDB;
@@ -32,10 +25,6 @@
 			m_oPriceCalculator = new SortedTable<int, int, decimal>();
 		} // constructor
 
-		#endregion constructor
-
-		#region method OfferAmountPct
-
 		public override decimal OfferAmountPct(int nBusinessScore) {
 			foreach (var oPct in m_oOfferAmountPct)
 				if (nBusinessScore <= oPct.Item1)
@@ -43,10 +32,6 @@
 
 			return 0;
 		} // OfferAmountPct
-
-		#endregion method OfferAmountPct
-
-		#region method LoanPct
 
 		public override decimal LoanPct(int nBusinessScore, decimal nRequestedAmount) {
 			var oScores = m_oPriceCalculator.ColumnKeys;
@@ -77,14 +62,6 @@
 
 			return m_oPriceCalculator[nAmount, nScore];
 		} // LoanPct
-
-		#endregion method LoanPct
-
-		#endregion public
-
-		#region protected
-
-		#region method LoadFromDB
 
 		protected override void LoadFromDB() {
 			m_oLog.Debug("Loading quick offer configuration from DB...");
@@ -124,10 +101,6 @@
 			m_oLog.Debug("Loading quick offer configuration from DB complete.");
 		} // LoadFromDB
 
-		#endregion method LoadFromDB
-
-		#region method Adjust
-
 		protected override void Adjust() {
 			m_oOfferAmountPct.Clear();
 
@@ -152,17 +125,9 @@
 				throw new Exception(InvalidExceptionMessage, new Exception("Price calculator table is empty."));
 		} // Adjust
 
-		#endregion method Adjust
-
-		#region method IsValid
-
 		protected override bool IsValid() {
 			return m_bIsLoaded && base.IsValid();
 		} // IsValid
-
-		#endregion method IsValid
-
-		#region method WriteToLog
 
 		protected override void WriteToLog() {
 			m_oLog.Debug("Quick offer configuration:");
@@ -195,14 +160,6 @@
 			m_oLog.Debug("End of quick offer configuration.");
 		} // WriteToLog
 
-		#endregion method WriteToLog
-
-		#endregion protected
-
-		#region private
-
-		#region method LogPriceCalculator
-
 		private void LogPriceCalculator() {
 			var ci = new CultureInfo("en-GB", false);
 
@@ -215,10 +172,6 @@
 
 			m_oLog.Debug("Price calculator:\n{0}", sOutput);
 		} // LogPriceCalculator
-
-		#endregion method LogPriceCalculator
-
-		#region method LogOfferAmountPct
 
 		private void LogOfferAmountPct() {
 			var oKeys = new List<string>();
@@ -257,8 +210,6 @@
 			m_oLog.Debug("Offer amount calculator:\n{0}", sOutput);
 		} // LogOfferAmountPct
 
-		#endregion method LogOfferAmountPct
-
 		private readonly AConnection m_oDB;
 		private readonly SafeLog m_oLog;
 		private bool m_bIsLoaded;
@@ -270,6 +221,5 @@
 		/// </summary>
 		private readonly SortedTable<int, int, decimal> m_oPriceCalculator;
 
-		#endregion private
 	} // class Configuration
 } // namespace EzServiceConfigurationLoader

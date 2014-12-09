@@ -48,8 +48,6 @@
 		[DataMember]
 		public bool IsAnnualized { get; set; }
 
-		#region method ToString
-
 		public override string ToString() {
 			var os = new StringBuilder();
 
@@ -72,10 +70,6 @@
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
-
-		#region method Fill
-
 		public void Fill() {
 			Revenues = Revenues ?? 0;
 			Opex = Opex ?? 0;
@@ -92,18 +86,13 @@
 			FreeCashFlow = Ebitda - LoanRepayment;
 		} // Fill
 
-		#endregion method Fill
-
 		// TODO: annualized trend
 
 		// TODO: quarter trend
-
-		#region method CompareTo
 
 		public int CompareTo(AffordabilityData other) {
 			return Type.CompareTo(other.Type);
 		} // CompareTo
 
-		#endregion method CompareTo
 	} // class AffordabilityData
 } // namespace

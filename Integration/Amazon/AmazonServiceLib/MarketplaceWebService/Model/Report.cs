@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008 Amazon Technologies, Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -24,14 +24,13 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
     [XmlRootAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/", IsNullable = false)]
     public class Report
     {
-    
+
         private String reportIdField;
 
         private String reportTypeField;
@@ -44,7 +43,6 @@ namespace MarketplaceWebService.Model
 
         private DateTime? ackowledgedDateField;
 
-
         /// <summary>
         /// Gets and sets the ReportId property.
         /// </summary>
@@ -54,8 +52,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportIdField ; }
             set { this.reportIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportId property
@@ -68,8 +64,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportId property is set
         /// </summary>
@@ -80,7 +74,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ReportType property.
         /// </summary>
@@ -90,8 +83,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportTypeField ; }
             set { this.reportTypeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportType property
@@ -104,8 +95,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportType property is set
         /// </summary>
@@ -116,7 +105,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ReportRequestId property.
         /// </summary>
@@ -126,8 +114,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportRequestIdField ; }
             set { this.reportRequestIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportRequestId property
@@ -140,8 +126,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportRequestId property is set
         /// </summary>
@@ -152,7 +136,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the AvailableDate property.
         /// </summary>
@@ -162,8 +145,6 @@ namespace MarketplaceWebService.Model
             get { return this.availableDateField.GetValueOrDefault() ; }
             set { this.availableDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the AvailableDate property
@@ -176,8 +157,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if AvailableDate property is set
         /// </summary>
@@ -188,7 +167,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Acknowledged property.
         /// </summary>
@@ -198,8 +176,6 @@ namespace MarketplaceWebService.Model
             get { return this.acknowledgedField.GetValueOrDefault() ; }
             set { this.acknowledgedField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Acknowledged property
@@ -212,8 +188,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Acknowledged property is set
         /// </summary>
@@ -224,7 +198,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the AckowledgedDate property.
         /// </summary>
@@ -234,8 +207,6 @@ namespace MarketplaceWebService.Model
             get { return this.ackowledgedDateField.GetValueOrDefault() ; }
             set { this.ackowledgedDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the AckowledgedDate property
@@ -248,8 +219,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if AckowledgedDate property is set
         /// </summary>
@@ -260,9 +229,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -271,7 +237,6 @@ namespace MarketplaceWebService.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -339,8 +304,6 @@ namespace MarketplaceWebService.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

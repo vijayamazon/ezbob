@@ -3,7 +3,6 @@
 	using Ezbob.Database;
 
 	public class CustomerData {
-		#region constructor
 
 		public CustomerData(AStrategy oStrategy, int nCustomerID, AConnection oDB) {
 			Strategy = oStrategy;
@@ -11,25 +10,13 @@
 			DB = oDB;
 		} // constructor
 
-		#endregion constructor
-
-		#region method Load
-
 		public virtual void Load() {
 			LoadFromSp("GetBasicCustomerData");
 		} // Load
 
-		#endregion method Load
-
-		#region method LoadCustomerOrBroker
-
 		public virtual void LoadCustomerOrBroker() {
 			LoadFromSp("GetBasicCustomerOrBrokerData");
 		} // LoadCustomerOrBroker
-
-		#endregion method LoadCustomerOrBroker
-
-		#region method ToString
 
 		public override string ToString() {
 			return string.Format(
@@ -50,10 +37,6 @@
 				IsFilledByBroker ? "yes" : "no"
 			);
 		} // ToString
-
-		#endregion method ToString
-
-		#region properties
 
 		public virtual int Id { get; protected set; }
 		public virtual string FirstName { get; protected set; }
@@ -78,13 +61,9 @@
 		public virtual int RequestedLoanAmount { get; protected set; }
 		public virtual int ReportedAnnualTurnover { get; protected set; }
 
-		#endregion properties
-
 		protected AStrategy Strategy { get; private set; }
 		protected AConnection DB { get; private set; }
 		protected int RequestedID { get; private set; }
-
-		#region private
 
 		private void LoadFromSp(string sSpName) {
 			SafeReader sr = DB.GetFirst(
@@ -121,6 +100,5 @@
 			ReportedAnnualTurnover = sr["ReportedAnnualTurnover"];
 		} // Load
 
-		#endregion private
 	} // class CustomerData
 } // namespace

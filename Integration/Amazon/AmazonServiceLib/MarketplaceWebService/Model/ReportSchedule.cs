@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -20,20 +20,18 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
     [XmlRootAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/", IsNullable = false)]
     public class ReportSchedule
     {
-    
+
         private String reportTypeField;
 
         private String scheduleField;
 
         private DateTime? scheduledDateField;
-
 
         /// <summary>
         /// Gets and sets the ReportType property.
@@ -44,8 +42,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportTypeField ; }
             set { this.reportTypeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportType property
@@ -58,8 +54,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportType property is set
         /// </summary>
@@ -70,7 +64,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Schedule property.
         /// </summary>
@@ -80,8 +73,6 @@ namespace MarketplaceWebService.Model
             get { return this.scheduleField ; }
             set { this.scheduleField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Schedule property
@@ -94,8 +85,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Schedule property is set
         /// </summary>
@@ -106,7 +95,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ScheduledDate property.
         /// </summary>
@@ -116,8 +104,6 @@ namespace MarketplaceWebService.Model
             get { return this.scheduledDateField.GetValueOrDefault() ; }
             set { this.scheduledDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ScheduledDate property
@@ -130,8 +116,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ScheduledDate property is set
         /// </summary>
@@ -142,9 +126,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -153,7 +134,6 @@ namespace MarketplaceWebService.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -206,8 +186,6 @@ namespace MarketplaceWebService.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

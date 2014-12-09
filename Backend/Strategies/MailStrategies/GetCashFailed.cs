@@ -4,16 +4,11 @@
 	using Ezbob.Logger;
 
 	public class GetCashFailed : AMailStrategyBase {
-		#region constructor
 
 		public GetCashFailed(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "Get Cash Failed"; } } // Name
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Debit card authorization problem";
@@ -24,6 +19,5 @@
 			};
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
 	} // class GetCashFailed
 } // namespace

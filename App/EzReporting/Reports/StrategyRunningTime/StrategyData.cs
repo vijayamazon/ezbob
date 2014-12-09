@@ -4,9 +4,6 @@
 	using Ezbob.Database;
 
 	class StrategyData {
-		#region public
-
-		#region constructor
 
 		public StrategyData(int nActionID, SafeReader sr) {
 			m_oData = new SortedDictionary<Guid, ActionData>();
@@ -23,8 +20,6 @@
 			} // if
 		} // constructor
 
-		#endregion constructor
-
 		public int ID { get; private set; }
 
 		[FieldName("ActionName")]
@@ -34,8 +29,6 @@
 
 		public int UnknownCount { get; private set; }
 
-		#region method AddAction
-
 		public void AddAction(SafeReader sr) {
 			Guid oActionID = sr["ActionID"];
 
@@ -44,10 +37,6 @@
 			else
 				m_oData[oActionID] = new ActionData(oActionID, sr);
 		} // AddAction
-
-		#endregion method AddAction
-
-		#region method CalculateTimes
 
 		public void CalculateTimes() {
 			var oSuccess = new SortedDictionary<double, int>();
@@ -101,10 +90,6 @@
 			m_oTotalStat.Pct90 = GetPercentile(oTotal, m_oTotalStat.Count, 90);
 		} // CalculateTimes
 
-		#endregion method CalculateTimes
-
-		#region method ToRow
-
 		public void ToRow(List<object> row) {
 			m_oSuccessStat.ToRow(row);
 			m_oFailStat.ToRow(row);
@@ -116,18 +101,10 @@
 				row.Add(DBNull.Value);
 		} // ToRow
 
-		#endregion method ToRow
-
-		#endregion public
-
-		#region private
-
 		private readonly SortedDictionary<Guid, ActionData> m_oData;
 		private readonly Stat m_oSuccessStat;
 		private readonly Stat m_oFailStat;
 		private readonly Stat m_oTotalStat;
-
-		#region method GetPercentile
 
 		private static double GetPercentile(SortedDictionary<double, int> oInstances, int nTotalCount, int nPercentile) {
 			double nMedian = 0;
@@ -148,8 +125,5 @@
 			return nMedian;
 		} // GetPercentile
 
-		#endregion method GetPercentile
-
-		#endregion private
 	} // class StrategyData
 } // namespace

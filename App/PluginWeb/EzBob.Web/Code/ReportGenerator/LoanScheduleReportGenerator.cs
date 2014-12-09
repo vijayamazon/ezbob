@@ -27,9 +27,8 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Name = "Payment Schedule";
             HeaderReportGenerator.CreateHeader(worksheet, header, column, column, 9);
 
-
             CreateXlsHeader(worksheet, row, column, isExcell);
-            
+
             var filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/payment-to-customer.png");
             foreach (var transaction in loanDetails.PacnetTransactions)
             {
@@ -44,7 +43,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 6].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Amount));
                 worksheet.Cells[row, column + 7].PutValue(transaction.StatusDescription);
                 worksheet.Cells[row, column + 8].PutValue(transaction.Description);
-                
+
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
             filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/wizard-mark-completed.png");
@@ -63,7 +62,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 6].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Amount));
                 worksheet.Cells[row, column + 7].PutValue(transaction.StatusDescription);
                 worksheet.Cells[row, column + 8].PutValue(transaction.Description);
-                
+
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
             filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/two_arrows.png");
@@ -79,10 +78,10 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 6].PutValue("-");
                 worksheet.Cells[row, column + 7].PutValue("Roll over");
                 worksheet.Cells[row, column + 8].PutValue("");
-                
+
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
-            
+
             foreach (var transaction in loanDetails.Charges.Where(transaction => transaction.State != "Paid"))
             {
                 row++;
@@ -117,7 +116,7 @@ namespace EzBob.Web.Code.ReportGenerator
 
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
-            
+
             worksheet.Cells.SetColumnWidth(column -1, 1);
             worksheet.Cells.SetColumnWidth(column, 6);
             worksheet.Cells.SetColumnWidth(column + 1, 16);
@@ -135,7 +134,7 @@ namespace EzBob.Web.Code.ReportGenerator
             {
                 workbook.Worksheets[0].PageSetup.Orientation = PageOrientationType.Landscape;
             }
-            
+
             using (var streamForDoc = new MemoryStream())
             {
                 try
@@ -164,11 +163,10 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Cells[row, column + 6].PutValue("Total");
             worksheet.Cells[row, column + 7].PutValue("Status");
             worksheet.Cells[row, column + 8].PutValue("Description");
-           
+
             SetHeaderBackgroundColor(worksheet, row, column, isExcell);
             worksheet.AutoFitRow(row);
 
-            
         }
 
         private void SetHeaderBackgroundColor(Worksheet worksheet, int row, int column, bool isExcell)
@@ -178,7 +176,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + i].Style.BackgroundColor = Color.Blue;
                 worksheet.Cells[row, column + i].Style.Font.Color = Color.Black;
             }
-            
+
         }
 
         private static void SetCellStyle(Worksheet worksheet, int row, int column, bool isBold, bool isExcell)

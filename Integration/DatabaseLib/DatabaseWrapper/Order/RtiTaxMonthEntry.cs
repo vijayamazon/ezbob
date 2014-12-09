@@ -1,20 +1,13 @@
-namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
+﻿namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
 	using System;
 	using EZBob.DatabaseLib.Common;
 
 	[Serializable]
 	public class RtiTaxMonthEntry : AInternalOrderItem {
-		#region public
-
-		#region method CompareForSort
 
 		public static int CompareForSort(RtiTaxMonthEntry a, RtiTaxMonthEntry b) {
 			return string.Compare(a.NativeOrderId, b.NativeOrderId, StringComparison.Ordinal);
 		} // CompareForSort
-
-		#endregion method CompareForSort
-
-		#region property NativeOrderId
 
 		public override string NativeOrderId {
 			get {
@@ -30,8 +23,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
 
 		private string m_sNativeOrderId;
 
-		#endregion property NativeOrderId
-
 		public virtual DateTime DateStart { get; set; }
 		public virtual DateTime DateEnd { get; set; }
 
@@ -42,6 +33,5 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
 
 		public override DateTime RecordTime { get { return DateStart; }} // RecordTime
 
-		#endregion public
 	} // class ChannelGrabberOrderItem
 } // namespace

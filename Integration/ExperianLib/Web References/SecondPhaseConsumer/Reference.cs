@@ -23,19 +23,18 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     using System.Web.Services.Protocols;
     using System.ComponentModel;
     using System.Xml.Serialization;
-    
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="InteractiveWSSoap", Namespace="http://www.uk.experian.com/experian/wbsv/peinteractive/v100")]
     public partial class InteractiveWS : System.Web.Services.Protocols.SoapHttpClientProtocol {
-        
+
         private System.Threading.SendOrPostCallback InteractiveOperationCompleted;
-        
+
         private bool useDefaultCredentialsSetExplicitly;
-        
+
         /// <remarks/>
         public InteractiveWS() {
             this.Url = "http://scems.uat.uk.experian.com/experian/wbsv/v100/interactive.asmx";
@@ -47,7 +46,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         public new string Url {
             get {
                 return base.Url;
@@ -61,7 +60,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 base.Url = value;
             }
         }
-        
+
         public new bool UseDefaultCredentials {
             get {
                 return base.UseDefaultCredentials;
@@ -71,10 +70,10 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         /// <remarks/>
         public event InteractiveCompletedEventHandler InteractiveCompleted;
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://www.uk.experian.com/experian/wbsv/peinteractive/interactive", RequestNamespace="http://www.uk.experian.com/experian/wbsv/peinteractive/v100", ResponseNamespace="http://www.uk.experian.com/experian/wbsv/peinteractive/v100", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("OutputRoot", Namespace="http://schemas.microsoft.com/BizTalk/2003/Any")]
@@ -83,12 +82,12 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                         Root});
             return ((OutputRoot)(results[0]));
         }
-        
+
         /// <remarks/>
         public void InteractiveAsync(Root Root) {
             this.InteractiveAsync(Root, null);
         }
-        
+
         /// <remarks/>
         public void InteractiveAsync(Root Root, object userState) {
             if ((this.InteractiveOperationCompleted == null)) {
@@ -97,19 +96,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             this.InvokeAsync("Interactive", new object[] {
                         Root}, this.InteractiveOperationCompleted, userState);
         }
-        
+
         private void OnInteractiveOperationCompleted(object arg) {
             if ((this.InteractiveCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.InteractiveCompleted(this, new InteractiveCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
-        
+
         private bool IsLocalFileSystemWebService(string url) {
             if (((url == null) 
                         || (url == string.Empty))) {
@@ -123,7 +122,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             return false;
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -131,9 +130,9 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class Root {
-        
+
         private Input inputField;
-        
+
         /// <remarks/>
         public Input Input {
             get {
@@ -144,7 +143,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -152,9 +151,9 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class Input {
-        
+
         private InputControl controlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public InputControl Control {
@@ -166,7 +165,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -174,25 +173,25 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class InputControl {
-        
+
         private string experianReferenceField;
-        
+
         private string clientAccountNumberField;
-        
+
         private string clientBranchNumberField;
-        
+
         private string userIdentityField;
-        
+
         private string testDatabaseField;
-        
+
         private string reprocessFlagField;
-        
+
         private string clientRefField;
-        
+
         private string jobNumberField;
-        
+
         private InputControlParameters parametersField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ExperianReference {
@@ -203,7 +202,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.experianReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientAccountNumber {
@@ -214,7 +213,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.clientAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientBranchNumber {
@@ -225,7 +224,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.clientBranchNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string UserIdentity {
@@ -236,7 +235,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.userIdentityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TestDatabase {
@@ -247,7 +246,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.testDatabaseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ReprocessFlag {
@@ -258,7 +257,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.reprocessFlagField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientRef {
@@ -269,7 +268,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.clientRefField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JobNumber {
@@ -280,7 +279,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.jobNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public InputControlParameters Parameters {
@@ -292,7 +291,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -300,29 +299,29 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class InputControlParameters {
-        
+
         private string interactiveModeField;
-        
+
         private string fullFBLRequiredField;
-        
+
         private string authPlusRequiredField;
-        
+
         private string detectRequiredField;
-        
+
         private string testModeField;
-        
+
         private string showConsumerField;
-        
+
         private string showDetectField;
-        
+
         private string showAuthenticateField;
-        
+
         private string showAddressField;
-        
+
         private string showCaseHistoryField;
-        
+
         private string showHHOField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InteractiveMode {
@@ -333,7 +332,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.interactiveModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FullFBLRequired {
@@ -344,7 +343,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.fullFBLRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPlusRequired {
@@ -355,7 +354,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.authPlusRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DetectRequired {
@@ -366,7 +365,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.detectRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TestMode {
@@ -377,7 +376,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.testModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowConsumer {
@@ -388,7 +387,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showConsumerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowDetect {
@@ -399,7 +398,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showDetectField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAuthenticate {
@@ -410,7 +409,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showAuthenticateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAddress {
@@ -421,7 +420,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowCaseHistory {
@@ -432,7 +431,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showCaseHistoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowHHO {
@@ -444,7 +443,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -452,13 +451,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class Output {
-        
+
         private OutputError errorField;
-        
+
         private OutputFullConsumerData fullConsumerDataField;
-        
+
         private OutputControl controlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputError Error {
@@ -469,7 +468,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.errorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerData FullConsumerData {
@@ -480,7 +479,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.fullConsumerDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputControl Control {
@@ -492,7 +491,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -500,13 +499,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputError {
-        
+
         private string errorCodeField;
-        
+
         private string messageField;
-        
+
         private string severityField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ErrorCode {
@@ -517,7 +516,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Message {
@@ -528,7 +527,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Severity {
@@ -540,7 +539,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -548,13 +547,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerData {
-        
+
         private OutputFullConsumerDataConsumerDataSummary consumerDataSummaryField;
-        
+
         private OutputFullConsumerDataConsumerData consumerDataField;
-        
+
         private OutputFullConsumerDataControlDetails controlDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummary ConsumerDataSummary {
@@ -565,7 +564,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.consumerDataSummaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerData ConsumerData {
@@ -576,7 +575,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.consumerDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataControlDetails ControlDetails {
@@ -588,7 +587,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -596,13 +595,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSummary {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetails summaryDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -613,7 +612,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -624,7 +623,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetails SummaryDetails {
@@ -636,7 +635,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -644,27 +643,27 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetails {
-        
+
         private string dataOverflowField;
-        
+
         private string delphiScoreField;
-        
+
         private string delphiTextField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsPublicInfoSummary publicInfoSummaryField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummary cAISSummaryField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsSummaryFlags summaryFlagsField;
-        
+
         private string noCCountField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsNoCReferences[] noCReferencesField;
-        
+
         private string locationConfirmCntField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsLocationConfirm[] locationConfirmField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DataOverflow {
@@ -675,7 +674,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dataOverflowField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DelphiScore {
@@ -686,7 +685,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.delphiScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DelphiText {
@@ -697,7 +696,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.delphiTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsPublicInfoSummary PublicInfoSummary {
@@ -708,7 +707,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.publicInfoSummaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummary CAISSummary {
@@ -719,7 +718,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cAISSummaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsSummaryFlags SummaryFlags {
@@ -730,7 +729,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.summaryFlagsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCCount {
@@ -741,7 +740,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NoCReferences", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsNoCReferences[] NoCReferences {
@@ -752,7 +751,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferencesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationConfirmCnt {
@@ -763,7 +762,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationConfirmCntField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("LocationConfirm", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsLocationConfirm[] LocationConfirm {
@@ -775,7 +774,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -783,13 +782,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsPublicInfoSummary {
-        
+
         private string numberField;
-        
+
         private string totalAmountField;
-        
+
         private string dateOfLatestField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Number {
@@ -800,7 +799,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TotalAmount {
@@ -811,7 +810,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.totalAmountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DateOfLatest {
@@ -823,7 +822,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -831,19 +830,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummary {
-        
+
         private string numberField;
-        
+
         private string worstCurrentField;
-        
+
         private string worstHistoricalField;
-        
+
         private string totalBalanceField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummaryCAISPrevSearches cAISPrevSearchesField;
-        
+
         private string goneAwayField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Number {
@@ -854,7 +853,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string WorstCurrent {
@@ -865,7 +864,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.worstCurrentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string WorstHistorical {
@@ -876,7 +875,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.worstHistoricalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TotalBalance {
@@ -887,7 +886,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.totalBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummaryCAISPrevSearches CAISPrevSearches {
@@ -898,7 +897,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cAISPrevSearchesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string GoneAway {
@@ -910,7 +909,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -918,15 +917,15 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummaryCAISPrevSearches {
-        
+
         private string numberUpTo3MonthsField;
-        
+
         private string num3To6MonthsField;
-        
+
         private string num6To12MonthsField;
-        
+
         private string totalNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumberUpTo3Months {
@@ -937,7 +936,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numberUpTo3MonthsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Num3To6Months {
@@ -948,7 +947,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.num3To6MonthsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Num6To12Months {
@@ -959,7 +958,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.num6To12MonthsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TotalNumber {
@@ -971,7 +970,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -979,45 +978,45 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsSummaryFlags {
-        
+
         private string cIFASField;
-        
+
         private string cMLField;
-        
+
         private string previousOccupantField;
-        
+
         private string noConfirmAtPrevLocField;
-        
+
         private string arrangementField;
-        
+
         private string reportedDeceasedField;
-        
+
         private string reportedGoneAwayField;
-        
+
         private string claimedOnCreditInsField;
-        
+
         private string debtManagementField;
-        
+
         private string accountQueryField;
-        
+
         private string recourseField;
-        
+
         private string voluntaryTermField;
-        
+
         private string partSettleField;
-        
+
         private string debtAssignField;
-        
+
         private string ownAccountField;
-        
+
         private string ownSearchField;
-        
+
         private string previousLocationField;
-        
+
         private string additionalLocationField;
-        
+
         private string forwardLocationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CIFAS {
@@ -1028,7 +1027,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cIFASField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CML {
@@ -1039,7 +1038,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cMLField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PreviousOccupant {
@@ -1050,7 +1049,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.previousOccupantField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoConfirmAtPrevLoc {
@@ -1061,7 +1060,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noConfirmAtPrevLocField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Arrangement {
@@ -1072,7 +1071,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.arrangementField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ReportedDeceased {
@@ -1083,7 +1082,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.reportedDeceasedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ReportedGoneAway {
@@ -1094,7 +1093,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.reportedGoneAwayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClaimedOnCreditIns {
@@ -1105,7 +1104,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.claimedOnCreditInsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DebtManagement {
@@ -1116,7 +1115,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.debtManagementField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountQuery {
@@ -1127,7 +1126,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountQueryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Recourse {
@@ -1138,7 +1137,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.recourseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string VoluntaryTerm {
@@ -1149,7 +1148,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.voluntaryTermField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PartSettle {
@@ -1160,7 +1159,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.partSettleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DebtAssign {
@@ -1171,7 +1170,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.debtAssignField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnAccount {
@@ -1182,7 +1181,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ownAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnSearch {
@@ -1193,7 +1192,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ownSearchField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PreviousLocation {
@@ -1204,7 +1203,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.previousLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AdditionalLocation {
@@ -1215,7 +1214,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.additionalLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ForwardLocation {
@@ -1227,7 +1226,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1235,9 +1234,9 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsNoCReferences {
-        
+
         private string referenceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Reference {
@@ -1249,7 +1248,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1257,13 +1256,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsLocationConfirm {
-        
+
         private string locationField;
-        
+
         private string levelField;
-        
+
         private string sourceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Location {
@@ -1274,7 +1273,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Level {
@@ -1285,7 +1284,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.levelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Source {
@@ -1297,7 +1296,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1305,33 +1304,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerData {
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollLocation[] votersRollLocationField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPerson[] votersRollPersonField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociation[] associationField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformation[] publicInformationField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFAS[] cIFASField;
-        
+
         private OutputFullConsumerDataConsumerDataCAIS[] cAISField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplication[] previousApplicationField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousApp[] extendedPreviousAppField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLink locationLinkField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAway[] goneAwayField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTrace[] successfulTraceField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectors[] directorsField;
-        
+
         private OutputFullConsumerDataConsumerDataNOC[] nOCField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VotersRollLocation", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollLocation[] VotersRollLocation {
@@ -1342,7 +1341,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.votersRollLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VotersRollPerson", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPerson[] VotersRollPerson {
@@ -1353,7 +1352,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.votersRollPersonField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Association", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociation[] Association {
@@ -1364,7 +1363,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.associationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PublicInformation", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformation[] PublicInformation {
@@ -1375,7 +1374,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.publicInformationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CIFAS", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFAS[] CIFAS {
@@ -1386,7 +1385,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cIFASField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CAIS", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAIS[] CAIS {
@@ -1397,7 +1396,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cAISField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PreviousApplication", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplication[] PreviousApplication {
@@ -1408,7 +1407,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.previousApplicationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ExtendedPreviousApp", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousApp[] ExtendedPreviousApp {
@@ -1419,7 +1418,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.extendedPreviousAppField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLink LocationLink {
@@ -1430,7 +1429,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationLinkField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("GoneAway", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAway[] GoneAway {
@@ -1441,7 +1440,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.goneAwayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SuccessfulTrace", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTrace[] SuccessfulTrace {
@@ -1452,7 +1451,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.successfulTraceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Directors", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectors[] Directors {
@@ -1463,7 +1462,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.directorsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NOC", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataNOC[] NOC {
@@ -1475,7 +1474,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1483,13 +1482,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollLocation {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetails[] vRollStreetDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -1500,7 +1499,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -1511,7 +1510,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VRollStreetDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetails[] VRollStreetDetails {
@@ -1523,7 +1522,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1531,27 +1530,27 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetails {
-        
+
         private string searchLevelField;
-        
+
         private string streetMatchLevelField;
-        
+
         private string informationSourceField;
-        
+
         private string mOSCAICCodeField;
-        
+
         private string pAFDistrictNumberField;
-        
+
         private string segmentIDNumberField;
-        
+
         private string aCORNCodeField;
-        
+
         private string locationConfirmMsgField;
-        
+
         private string batchNumberField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetailsLocation locationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchLevel {
@@ -1562,7 +1561,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.searchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -1573,7 +1572,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -1584,7 +1583,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MOSCAICCode {
@@ -1595,7 +1594,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mOSCAICCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PAFDistrictNumber {
@@ -1606,7 +1605,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pAFDistrictNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SegmentIDNumber {
@@ -1617,7 +1616,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.segmentIDNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ACORNCode {
@@ -1628,7 +1627,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.aCORNCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationConfirmMsg {
@@ -1639,7 +1638,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationConfirmMsgField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BatchNumber {
@@ -1650,7 +1649,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.batchNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetailsLocation Location {
@@ -1662,7 +1661,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1670,33 +1669,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -1707,7 +1706,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -1718,7 +1717,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -1729,7 +1728,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -1740,7 +1739,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -1751,7 +1750,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -1762,7 +1761,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -1773,7 +1772,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -1784,7 +1783,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -1795,7 +1794,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -1806,7 +1805,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -1817,7 +1816,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -1828,7 +1827,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -1840,7 +1839,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1848,13 +1847,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPerson {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetails[] vRollPersonDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -1865,7 +1864,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -1876,7 +1875,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VRollPersonDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetails[] VRollPersonDetails {
@@ -1888,7 +1887,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1896,37 +1895,37 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetails {
-        
+
         private string searchLevelField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string sexField;
-        
+
         private string segmentIDNumberField;
-        
+
         private string surnameRegField;
-        
+
         private string pOCCYearField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsDateOfBirth dateOfBirthField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsComingOfAge comingOfAgeField;
-        
+
         private string datesRegLeftField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsName nameField;
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchLevel {
@@ -1937,7 +1936,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.searchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsMatchDetails MatchDetails {
@@ -1948,7 +1947,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -1959,7 +1958,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Sex {
@@ -1970,7 +1969,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SegmentIDNumber {
@@ -1981,7 +1980,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.segmentIDNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SurnameReg {
@@ -1992,7 +1991,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameRegField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POCCYear {
@@ -2003,7 +2002,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOCCYearField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsDateOfBirth DateOfBirth {
@@ -2014,7 +2013,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsComingOfAge ComingOfAge {
@@ -2025,7 +2024,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.comingOfAgeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DatesRegLeft {
@@ -2036,7 +2035,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.datesRegLeftField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -2047,7 +2046,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsName Name {
@@ -2058,7 +2057,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -2069,7 +2068,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -2080,7 +2079,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -2092,7 +2091,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2100,17 +2099,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -2121,7 +2120,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -2132,7 +2131,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -2143,7 +2142,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -2154,7 +2153,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -2166,7 +2165,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2174,19 +2173,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -2197,7 +2196,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -2208,7 +2207,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -2219,7 +2218,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -2230,7 +2229,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -2241,7 +2240,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -2253,7 +2252,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2261,19 +2260,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsComingOfAge {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -2284,7 +2283,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -2295,7 +2294,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -2306,7 +2305,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -2317,7 +2316,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -2328,7 +2327,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -2340,7 +2339,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2348,19 +2347,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -2371,7 +2370,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -2382,7 +2381,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -2393,7 +2392,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -2404,7 +2403,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -2415,7 +2414,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -2427,7 +2426,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2435,13 +2434,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociation {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetails[] associationDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -2452,7 +2451,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -2463,7 +2462,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AssociationDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetails[] AssociationDetails {
@@ -2475,7 +2474,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2483,39 +2482,39 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetails {
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsMatchDetails matchDetailsField;
-        
+
         private string sourceField;
-        
+
         private string cAISAccountNumbersField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDateOfBirth dateOfBirthField;
-        
+
         private string noCReferenceField;
-        
+
         private string informationTypeField;
-        
+
         private string companyTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsInformationDate informationDateField;
-        
+
         private string informationSourceField;
-        
+
         private string informationSupplierField;
-        
+
         private string supplierBranchField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDoBAssociateOrAlias doBAssociateOrAliasField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsAssociateName associateNameField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsLocation locationField;
-        
+
         private string supplyCompanyNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsMatchDetails MatchDetails {
@@ -2526,7 +2525,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Source {
@@ -2537,7 +2536,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CAISAccountNumbers {
@@ -2548,7 +2547,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cAISAccountNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDateOfBirth DateOfBirth {
@@ -2559,7 +2558,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -2570,7 +2569,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationType {
@@ -2581,7 +2580,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyType {
@@ -2592,7 +2591,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.companyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsInformationDate InformationDate {
@@ -2603,7 +2602,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -2614,7 +2613,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSupplier {
@@ -2625,7 +2624,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSupplierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplierBranch {
@@ -2636,7 +2635,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.supplierBranchField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDoBAssociateOrAlias DoBAssociateOrAlias {
@@ -2647,7 +2646,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.doBAssociateOrAliasField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsAssociateName AssociateName {
@@ -2658,7 +2657,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.associateNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsName Name {
@@ -2669,7 +2668,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsLocation Location {
@@ -2680,7 +2679,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -2692,7 +2691,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2700,17 +2699,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -2721,7 +2720,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -2732,7 +2731,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -2743,7 +2742,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -2754,7 +2753,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -2766,7 +2765,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2774,19 +2773,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -2797,7 +2796,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -2808,7 +2807,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -2819,7 +2818,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -2830,7 +2829,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -2841,7 +2840,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -2853,7 +2852,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2861,19 +2860,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsInformationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -2884,7 +2883,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -2895,7 +2894,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -2906,7 +2905,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -2917,7 +2916,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -2928,7 +2927,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -2940,7 +2939,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2948,19 +2947,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDoBAssociateOrAlias {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -2971,7 +2970,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -2982,7 +2981,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -2993,7 +2992,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -3004,7 +3003,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -3015,7 +3014,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -3027,7 +3026,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3035,17 +3034,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsAssociateName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -3056,7 +3055,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -3067,7 +3066,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -3078,7 +3077,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -3089,7 +3088,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -3101,7 +3100,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3109,19 +3108,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -3132,7 +3131,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -3143,7 +3142,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -3154,7 +3153,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -3165,7 +3164,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -3176,7 +3175,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -3188,7 +3187,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3196,33 +3195,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -3233,7 +3232,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -3244,7 +3243,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -3255,7 +3254,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -3266,7 +3265,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -3277,7 +3276,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -3288,7 +3287,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -3299,7 +3298,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -3310,7 +3309,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -3321,7 +3320,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -3332,7 +3331,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -3343,7 +3342,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -3354,7 +3353,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -3366,7 +3365,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3374,13 +3373,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformation {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetails[] publicInfoDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -3391,7 +3390,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -3402,7 +3401,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PublicInfoDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetails[] PublicInfoDetails {
@@ -3414,7 +3413,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3422,39 +3421,39 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetails {
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsInformationDate informationDateField;
-        
+
         private string informationTypeField;
-        
+
         private string jointAccountField;
-        
+
         private string amountPoundsField;
-        
+
         private string amountPenceField;
-        
+
         private string courtPlaintiffField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsSatisfactionDate satisfactionDateField;
-        
+
         private string cameraNumberField;
-        
+
         private string dataSourceField;
-        
+
         private string tradingNameField;
-        
+
         private string sexField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsLocation locationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsMatchDetails MatchDetails {
@@ -3465,7 +3464,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -3476,7 +3475,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsInformationDate InformationDate {
@@ -3487,7 +3486,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationType {
@@ -3498,7 +3497,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JointAccount {
@@ -3509,7 +3508,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.jointAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AmountPounds {
@@ -3520,7 +3519,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amountPoundsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AmountPence {
@@ -3531,7 +3530,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amountPenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CourtPlaintiff {
@@ -3542,7 +3541,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.courtPlaintiffField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsSatisfactionDate SatisfactionDate {
@@ -3553,7 +3552,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.satisfactionDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CameraNumber {
@@ -3564,7 +3563,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cameraNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DataSource {
@@ -3575,7 +3574,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dataSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TradingName {
@@ -3586,7 +3585,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.tradingNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Sex {
@@ -3597,7 +3596,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -3608,7 +3607,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsName Name {
@@ -3619,7 +3618,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsLocation Location {
@@ -3631,7 +3630,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3639,17 +3638,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -3660,7 +3659,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -3671,7 +3670,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -3682,7 +3681,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -3693,7 +3692,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -3705,7 +3704,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3713,19 +3712,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsInformationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -3736,7 +3735,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -3747,7 +3746,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -3758,7 +3757,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -3769,7 +3768,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -3780,7 +3779,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -3792,7 +3791,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3800,19 +3799,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsSatisfactionDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -3823,7 +3822,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -3834,7 +3833,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -3845,7 +3844,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -3856,7 +3855,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -3867,7 +3866,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -3879,7 +3878,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3887,19 +3886,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -3910,7 +3909,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -3921,7 +3920,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -3932,7 +3931,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -3943,7 +3942,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -3954,7 +3953,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -3966,7 +3965,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3974,33 +3973,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -4011,7 +4010,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -4022,7 +4021,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -4033,7 +4032,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -4044,7 +4043,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -4055,7 +4054,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -4066,7 +4065,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -4077,7 +4076,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -4088,7 +4087,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -4099,7 +4098,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -4110,7 +4109,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -4121,7 +4120,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -4132,7 +4131,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -4144,7 +4143,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4152,13 +4151,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCIFAS {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetails[] cIFASDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -4169,7 +4168,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -4180,7 +4179,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CIFASDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetails[] CIFASDetails {
@@ -4192,7 +4191,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4200,37 +4199,37 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetails {
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string cIFASReferenceField;
-        
+
         private string fraudCategoryField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsSupplyDate supplyDateField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsExpiryDate expiryDateField;
-        
+
         private string andOtherLocationesField;
-        
+
         private string supplyCompanyNameField;
-        
+
         private string companyCodeField;
-        
+
         private string subCategoriesField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsDateOfBirth dateOfBirthField;
-        
+
         private string productField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsLocation locationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsMatchDetails MatchDetails {
@@ -4241,7 +4240,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -4252,7 +4251,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CIFASReference {
@@ -4263,7 +4262,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cIFASReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FraudCategory {
@@ -4274,7 +4273,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.fraudCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsSupplyDate SupplyDate {
@@ -4285,7 +4284,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.supplyDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsExpiryDate ExpiryDate {
@@ -4296,7 +4295,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.expiryDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AndOtherLocationes {
@@ -4307,7 +4306,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.andOtherLocationesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -4318,7 +4317,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.supplyCompanyNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyCode {
@@ -4329,7 +4328,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.companyCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SubCategories {
@@ -4340,7 +4339,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.subCategoriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -4351,7 +4350,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsDateOfBirth DateOfBirth {
@@ -4362,7 +4361,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Product {
@@ -4373,7 +4372,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.productField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsName Name {
@@ -4384,7 +4383,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsLocation Location {
@@ -4396,7 +4395,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4404,17 +4403,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -4425,7 +4424,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -4436,7 +4435,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -4447,7 +4446,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -4458,7 +4457,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -4470,7 +4469,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4478,19 +4477,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsSupplyDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -4501,7 +4500,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -4512,7 +4511,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -4523,7 +4522,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -4534,7 +4533,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -4545,7 +4544,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -4557,7 +4556,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4565,19 +4564,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsExpiryDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -4588,7 +4587,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -4599,7 +4598,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -4610,7 +4609,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -4621,7 +4620,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -4632,7 +4631,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -4644,7 +4643,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4652,19 +4651,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -4675,7 +4674,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -4686,7 +4685,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -4697,7 +4696,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -4708,7 +4707,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -4719,7 +4718,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -4731,7 +4730,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4739,19 +4738,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -4762,7 +4761,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -4773,7 +4772,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -4784,7 +4783,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -4795,7 +4794,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -4806,7 +4805,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -4818,7 +4817,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4826,33 +4825,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -4863,7 +4862,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -4874,7 +4873,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -4885,7 +4884,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -4896,7 +4895,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -4907,7 +4906,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -4918,7 +4917,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -4929,7 +4928,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -4940,7 +4939,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -4951,7 +4950,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -4962,7 +4961,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -4973,7 +4972,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -4984,7 +4983,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -4996,7 +4995,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5004,13 +5003,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAIS {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetails[] cAISDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -5021,7 +5020,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -5032,7 +5031,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CAISDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetails[] CAISDetails {
@@ -5044,7 +5043,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5052,109 +5051,109 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetails {
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string jointAccountField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCreditLimit creditLimitField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsBalance balanceField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCurrentDefBalance currentDefBalanceField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsDelinquentBalance delinquentBalanceField;
-        
+
         private string accountStatusCodesField;
-        
+
         private string status1To2Field;
-        
+
         private string statusTo3Field;
-        
+
         private string numOfMonthsHistoryField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCAISAccStartDate cAISAccStartDateField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsSettlementDate settlementDateField;
-        
+
         private string settleDateCaptionField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsLastUpdatedDate lastUpdatedDateField;
-        
+
         private string cMLLocationTypeField;
-        
+
         private string bankFlagField;
-        
+
         private string worstStatusField;
-        
+
         private string ownDataField;
-        
+
         private string specialInstrIndField;
-        
+
         private string repaymentPeriodField;
-        
+
         private string paymentField;
-        
+
         private string noOfRepaymntPeriodField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriods[] repaymentPeriodsField;
-        
+
         private string noOfPaymentsField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepayment[] mnthlyRepaymentField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsDateOfBirth dateOfBirthField;
-        
+
         private string sexField;
-        
+
         private string fSCCUGIndicatorField;
-        
+
         private string paymentFrequencyField;
-        
+
         private string accountStatusField;
-        
+
         private string numAddInfoBlocksField;
-        
+
         private string numAccountBalancesField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsAccountBalances[] accountBalancesField;
-        
+
         private string numCardHistoriesField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCardHistories[] cardHistoriesField;
-        
+
         private string numCreditLimChngsField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistories[] credLimitHistoriesField;
-        
+
         private string numStatusesField;
-        
+
         private string companyTypeField;
-        
+
         private string accountTypeField;
-        
+
         private string sourceCodeField;
-        
+
         private string accountNumberField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDet specialInstrDetField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsLocation locationField;
-        
+
         private string[] additionlInfoBlocksField;
-        
+
         private string supplyCompanyNameField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsDefaultSatisfyDate defaultSatisfyDateField;
-        
+
         private string transColnAcntFlagField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsMatchDetails MatchDetails {
@@ -5165,7 +5164,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -5176,7 +5175,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JointAccount {
@@ -5187,7 +5186,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.jointAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCreditLimit CreditLimit {
@@ -5198,7 +5197,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.creditLimitField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsBalance Balance {
@@ -5209,7 +5208,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.balanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCurrentDefBalance CurrentDefBalance {
@@ -5220,7 +5219,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.currentDefBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsDelinquentBalance DelinquentBalance {
@@ -5231,7 +5230,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.delinquentBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountStatusCodes {
@@ -5242,7 +5241,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountStatusCodesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Status1To2 {
@@ -5253,7 +5252,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.status1To2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StatusTo3 {
@@ -5264,7 +5263,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.statusTo3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumOfMonthsHistory {
@@ -5275,7 +5274,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numOfMonthsHistoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCAISAccStartDate CAISAccStartDate {
@@ -5286,7 +5285,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cAISAccStartDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsSettlementDate SettlementDate {
@@ -5297,7 +5296,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.settlementDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SettleDateCaption {
@@ -5308,7 +5307,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.settleDateCaptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsLastUpdatedDate LastUpdatedDate {
@@ -5319,7 +5318,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.lastUpdatedDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CMLLocationType {
@@ -5330,7 +5329,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cMLLocationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BankFlag {
@@ -5341,7 +5340,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bankFlagField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string WorstStatus {
@@ -5352,7 +5351,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.worstStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnData {
@@ -5363,7 +5362,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ownDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SpecialInstrInd {
@@ -5374,7 +5373,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.specialInstrIndField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RepaymentPeriod {
@@ -5385,7 +5384,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.repaymentPeriodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Payment {
@@ -5396,7 +5395,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.paymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoOfRepaymntPeriod {
@@ -5407,7 +5406,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noOfRepaymntPeriodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RepaymentPeriods", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriods[] RepaymentPeriods {
@@ -5418,7 +5417,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.repaymentPeriodsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoOfPayments {
@@ -5429,7 +5428,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noOfPaymentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("MnthlyRepayment", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepayment[] MnthlyRepayment {
@@ -5440,7 +5439,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mnthlyRepaymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsDateOfBirth DateOfBirth {
@@ -5451,7 +5450,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Sex {
@@ -5462,7 +5461,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FSCCUGIndicator {
@@ -5473,7 +5472,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.fSCCUGIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PaymentFrequency {
@@ -5484,7 +5483,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.paymentFrequencyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountStatus {
@@ -5495,7 +5494,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumAddInfoBlocks {
@@ -5506,7 +5505,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numAddInfoBlocksField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumAccountBalances {
@@ -5517,7 +5516,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numAccountBalancesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AccountBalances", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsAccountBalances[] AccountBalances {
@@ -5528,7 +5527,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountBalancesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumCardHistories {
@@ -5539,7 +5538,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numCardHistoriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CardHistories", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCardHistories[] CardHistories {
@@ -5550,7 +5549,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cardHistoriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumCreditLimChngs {
@@ -5561,7 +5560,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numCreditLimChngsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CredLimitHistories", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistories[] CredLimitHistories {
@@ -5572,7 +5571,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.credLimitHistoriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumStatuses {
@@ -5583,7 +5582,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numStatusesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyType {
@@ -5594,7 +5593,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.companyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountType {
@@ -5605,7 +5604,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SourceCode {
@@ -5616,7 +5615,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sourceCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountNumber {
@@ -5627,7 +5626,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDet SpecialInstrDet {
@@ -5638,7 +5637,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.specialInstrDetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -5649,7 +5648,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsName Name {
@@ -5660,7 +5659,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsLocation Location {
@@ -5671,7 +5670,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("Info", Form=XmlSchemaForm.Unqualified, IsNullable=false)]
@@ -5683,7 +5682,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.additionlInfoBlocksField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -5694,7 +5693,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.supplyCompanyNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsDefaultSatisfyDate DefaultSatisfyDate {
@@ -5705,7 +5704,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.defaultSatisfyDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TransColnAcntFlag {
@@ -5717,7 +5716,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5725,21 +5724,21 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string forenameMatchLevelField;
-        
+
         private string surnameMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -5750,7 +5749,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -5761,7 +5760,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ForenameMatchLevel {
@@ -5772,7 +5771,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SurnameMatchLevel {
@@ -5783,7 +5782,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -5794,7 +5793,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -5805,7 +5804,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -5817,7 +5816,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5825,13 +5824,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCreditLimit {
-        
+
         private string amountField;
-        
+
         private string narrativeField;
-        
+
         private string captionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -5842,7 +5841,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Narrative {
@@ -5853,7 +5852,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.narrativeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Caption {
@@ -5865,7 +5864,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5873,13 +5872,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsBalance {
-        
+
         private string amountField;
-        
+
         private string narrativeField;
-        
+
         private string captionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -5890,7 +5889,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Narrative {
@@ -5901,7 +5900,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.narrativeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Caption {
@@ -5913,7 +5912,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5921,11 +5920,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCurrentDefBalance {
-        
+
         private string amountField;
-        
+
         private string narrativeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -5936,7 +5935,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Narrative {
@@ -5948,7 +5947,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5956,11 +5955,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsDelinquentBalance {
-        
+
         private string amountField;
-        
+
         private string narrativeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -5971,7 +5970,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Narrative {
@@ -5983,7 +5982,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5991,19 +5990,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCAISAccStartDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -6014,7 +6013,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -6025,7 +6024,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -6036,7 +6035,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -6047,7 +6046,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -6058,7 +6057,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -6070,7 +6069,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6078,19 +6077,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsSettlementDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -6101,7 +6100,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -6112,7 +6111,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -6123,7 +6122,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -6134,7 +6133,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -6145,7 +6144,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -6157,7 +6156,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6165,19 +6164,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsLastUpdatedDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -6188,7 +6187,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -6199,7 +6198,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -6210,7 +6209,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -6221,7 +6220,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -6232,7 +6231,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -6244,7 +6243,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6252,11 +6251,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriods {
-        
+
         private string repaymentPeriodField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriodsRepayPdChangeDate repayPdChangeDateField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RepaymentPeriod {
@@ -6267,7 +6266,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.repaymentPeriodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriodsRepayPdChangeDate RepayPdChangeDate {
@@ -6279,7 +6278,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6287,11 +6286,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriodsRepayPdChangeDate {
-        
+
         private string repyPdChangeDateMMField;
-        
+
         private string repyPdChangeDateYYField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RepyPdChangeDateMM {
@@ -6302,7 +6301,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.repyPdChangeDateMMField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RepyPdChangeDateYY {
@@ -6314,7 +6313,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6322,11 +6321,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepayment {
-        
+
         private string mnthlyRepaymentField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepaymentMnthlyRepyChngDate mnthlyRepyChngDateField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MnthlyRepayment {
@@ -6337,7 +6336,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mnthlyRepaymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepaymentMnthlyRepyChngDate MnthlyRepyChngDate {
@@ -6349,7 +6348,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6357,11 +6356,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepaymentMnthlyRepyChngDate {
-        
+
         private string mnthRepyChngDateMMField;
-        
+
         private string mnthRepyChngDateYYField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MnthRepyChngDateMM {
@@ -6372,7 +6371,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mnthRepyChngDateMMField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MnthRepyChngDateYY {
@@ -6384,7 +6383,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6392,19 +6391,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -6415,7 +6414,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -6426,7 +6425,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -6437,7 +6436,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -6448,7 +6447,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -6459,7 +6458,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -6471,7 +6470,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6479,11 +6478,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsAccountBalances {
-        
+
         private string accountBalanceField;
-        
+
         private string statusField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountBalance {
@@ -6494,7 +6493,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Status {
@@ -6506,7 +6505,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6514,19 +6513,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCardHistories {
-        
+
         private string prevStatementBalField;
-        
+
         private string promotionalRateField;
-        
+
         private string paymentAmountField;
-        
+
         private string numCashAdvancesField;
-        
+
         private string cashAdvanceAmountField;
-        
+
         private string paymentCodeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PrevStatementBal {
@@ -6537,7 +6536,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.prevStatementBalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PromotionalRate {
@@ -6548,7 +6547,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.promotionalRateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PaymentAmount {
@@ -6559,7 +6558,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.paymentAmountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumCashAdvances {
@@ -6570,7 +6569,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numCashAdvancesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CashAdvanceAmount {
@@ -6581,7 +6580,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cashAdvanceAmountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PaymentCode {
@@ -6593,7 +6592,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6601,11 +6600,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistories {
-        
+
         private string creditLimitChangeField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistoriesCreditLimitDate creditLimitDateField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CreditLimitChange {
@@ -6616,7 +6615,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.creditLimitChangeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistoriesCreditLimitDate CreditLimitDate {
@@ -6628,7 +6627,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6636,11 +6635,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistoriesCreditLimitDate {
-        
+
         private string creditLimitDateMMField;
-        
+
         private string creditLimitDateYYField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CreditLimitDateMM {
@@ -6651,7 +6650,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.creditLimitDateMMField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CreditLimitDateYY {
@@ -6663,7 +6662,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6671,13 +6670,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDet {
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetStartDate startDateField;
-        
+
         private string revisedPaymentField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetEndDate endDateField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetStartDate StartDate {
@@ -6688,7 +6687,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.startDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RevisedPayment {
@@ -6699,7 +6698,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.revisedPaymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetEndDate EndDate {
@@ -6711,7 +6710,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6719,19 +6718,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetStartDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -6742,7 +6741,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -6753,7 +6752,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -6764,7 +6763,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -6775,7 +6774,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -6786,7 +6785,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -6798,7 +6797,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6806,19 +6805,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetEndDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -6829,7 +6828,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -6840,7 +6839,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -6851,7 +6850,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -6862,7 +6861,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -6873,7 +6872,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -6885,7 +6884,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6893,19 +6892,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -6916,7 +6915,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -6927,7 +6926,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -6938,7 +6937,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -6949,7 +6948,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -6960,7 +6959,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -6972,7 +6971,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6980,33 +6979,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -7017,7 +7016,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -7028,7 +7027,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -7039,7 +7038,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -7050,7 +7049,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -7061,7 +7060,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -7072,7 +7071,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -7083,7 +7082,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -7094,7 +7093,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -7105,7 +7104,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -7116,7 +7115,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -7127,7 +7126,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -7138,7 +7137,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -7150,7 +7149,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7158,13 +7157,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsDefaultSatisfyDate {
-        
+
         private string cCYYField;
-        
+
         private string mmField;
-        
+
         private string ddField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CCYY {
@@ -7175,7 +7174,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MM {
@@ -7186,7 +7185,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DD {
@@ -7198,7 +7197,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7206,13 +7205,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplication {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetails[] prevApplnDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -7223,7 +7222,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -7234,7 +7233,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PrevApplnDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetails[] PrevApplnDetails {
@@ -7246,7 +7245,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7254,41 +7253,41 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetails {
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsMatchDetails matchDetailsField;
-        
+
         private string applicationTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsApplicationDate applicationDateField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsDateOfBirth dateOfBirthField;
-        
+
         private string jointApplicantField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsTimeAtLocation timeAtLocationField;
-        
+
         private string ownAccountIDField;
-        
+
         private string companyTypeField;
-        
+
         private string accountNumberField;
-        
+
         private string amountField;
-        
+
         private string termField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsLocation locationField;
-        
+
         private string optOutField;
-        
+
         private string searcherNameField;
-        
+
         private string supplyCompanyNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsMatchDetails MatchDetails {
@@ -7299,7 +7298,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicationType {
@@ -7310,7 +7309,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsApplicationDate ApplicationDate {
@@ -7321,7 +7320,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsDateOfBirth DateOfBirth {
@@ -7332,7 +7331,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JointApplicant {
@@ -7343,7 +7342,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.jointApplicantField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsTimeAtLocation TimeAtLocation {
@@ -7354,7 +7353,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.timeAtLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnAccountID {
@@ -7365,7 +7364,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ownAccountIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyType {
@@ -7376,7 +7375,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.companyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountNumber {
@@ -7387,7 +7386,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -7398,7 +7397,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Term {
@@ -7409,7 +7408,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.termField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -7420,7 +7419,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsName Name {
@@ -7431,7 +7430,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsLocation Location {
@@ -7442,7 +7441,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OptOut {
@@ -7453,7 +7452,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.optOutField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearcherName {
@@ -7464,7 +7463,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.searcherNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -7476,7 +7475,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7484,17 +7483,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -7505,7 +7504,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -7516,7 +7515,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -7527,7 +7526,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -7538,7 +7537,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -7550,7 +7549,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7558,19 +7557,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsApplicationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -7581,7 +7580,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -7592,7 +7591,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -7603,7 +7602,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -7614,7 +7613,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -7625,7 +7624,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -7637,7 +7636,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7645,19 +7644,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -7668,7 +7667,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -7679,7 +7678,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -7690,7 +7689,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -7701,7 +7700,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -7712,7 +7711,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -7724,7 +7723,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7732,11 +7731,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsTimeAtLocation {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -7747,7 +7746,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -7759,7 +7758,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7767,19 +7766,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -7790,7 +7789,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -7801,7 +7800,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -7812,7 +7811,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -7823,7 +7822,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -7834,7 +7833,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -7846,7 +7845,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7854,33 +7853,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -7891,7 +7890,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -7902,7 +7901,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -7913,7 +7912,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -7924,7 +7923,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -7935,7 +7934,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -7946,7 +7945,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -7957,7 +7956,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -7968,7 +7967,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -7979,7 +7978,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -7990,7 +7989,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -8001,7 +8000,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -8012,7 +8011,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -8024,7 +8023,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -8032,13 +8031,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousApp {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetails[] prevApplnDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -8049,7 +8048,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -8060,7 +8059,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PrevApplnDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetails[] PrevApplnDetails {
@@ -8072,7 +8071,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -8080,109 +8079,109 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetails {
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsMatchDetails matchDetailsField;
-        
+
         private string applicationTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsDateOfBirth dateOfBirthField;
-        
+
         private string jointApplicantField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtLocation timeAtLocationField;
-        
+
         private string enquiryTypeField;
-        
+
         private string maritalStatusField;
-        
+
         private string dependantsField;
-        
+
         private string accommodationField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsHomeTelephoneNumber homeTelephoneNumberField;
-        
+
         private string employmentStatusField;
-        
+
         private string employmentTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeInEmployment timeInEmploymentField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsWorkTelephoneNum workTelephoneNumField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeWithBank timeWithBankField;
-        
+
         private string bankSortcodeField;
-        
+
         private string bankAccountNumberField;
-        
+
         private string currentAccountField;
-        
+
         private string chequeCardField;
-        
+
         private string debitCardField;
-        
+
         private string accessCardField;
-        
+
         private string visaCardField;
-        
+
         private string amexCardField;
-        
+
         private string dinersCardField;
-        
+
         private string storeCardField;
-        
+
         private string otherCardField;
-        
+
         private string numberOfCardsField;
-        
+
         private string grossIncomeField;
-        
+
         private string fraudScoreField;
-        
+
         private string scoreCardField;
-        
+
         private string numInconsistenciesField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtPrevLocation timeAtPrevLocationField;
-        
+
         private string ownApplicationIdField;
-        
+
         private string companyTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsApplicationDate applicationDateField;
-        
+
         private string accountNumberField;
-        
+
         private string retailerCodeField;
-        
+
         private string searchTypeField;
-        
+
         private string amountField;
-        
+
         private string termField;
-        
+
         private string optoutField;
-        
+
         private string infoSourceField;
-        
+
         private string previousRMCField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsLocation locationField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsPreviousLocation previousLocationField;
-        
+
         private string applicationType1Field;
-        
+
         private string applicationType2Field;
-        
+
         private string supplyCompnyOfficerField;
-        
+
         private string supplyCompanyNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsMatchDetails MatchDetails {
@@ -8193,7 +8192,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicationType {
@@ -8204,7 +8203,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsDateOfBirth DateOfBirth {
@@ -8215,7 +8214,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JointApplicant {
@@ -8226,7 +8225,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.jointApplicantField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtLocation TimeAtLocation {
@@ -8237,7 +8236,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.timeAtLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EnquiryType {
@@ -8248,7 +8247,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.enquiryTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MaritalStatus {
@@ -8259,7 +8258,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.maritalStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Dependants {
@@ -8270,7 +8269,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dependantsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Accommodation {
@@ -8281,7 +8280,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accommodationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsHomeTelephoneNumber HomeTelephoneNumber {
@@ -8292,7 +8291,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.homeTelephoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EmploymentStatus {
@@ -8303,7 +8302,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.employmentStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EmploymentType {
@@ -8314,7 +8313,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.employmentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeInEmployment TimeInEmployment {
@@ -8325,7 +8324,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.timeInEmploymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsWorkTelephoneNum WorkTelephoneNum {
@@ -8336,7 +8335,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.workTelephoneNumField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeWithBank TimeWithBank {
@@ -8347,7 +8346,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.timeWithBankField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BankSortcode {
@@ -8358,7 +8357,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bankSortcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BankAccountNumber {
@@ -8369,7 +8368,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bankAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CurrentAccount {
@@ -8380,7 +8379,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.currentAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ChequeCard {
@@ -8391,7 +8390,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.chequeCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DebitCard {
@@ -8402,7 +8401,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.debitCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccessCard {
@@ -8413,7 +8412,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accessCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string VisaCard {
@@ -8424,7 +8423,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.visaCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AmexCard {
@@ -8435,7 +8434,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amexCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DinersCard {
@@ -8446,7 +8445,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dinersCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StoreCard {
@@ -8457,7 +8456,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.storeCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OtherCard {
@@ -8468,7 +8467,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.otherCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumberOfCards {
@@ -8479,7 +8478,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numberOfCardsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string GrossIncome {
@@ -8490,7 +8489,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.grossIncomeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FraudScore {
@@ -8501,7 +8500,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.fraudScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ScoreCard {
@@ -8512,7 +8511,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.scoreCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumInconsistencies {
@@ -8523,7 +8522,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numInconsistenciesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtPrevLocation TimeAtPrevLocation {
@@ -8534,7 +8533,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.timeAtPrevLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnApplicationId {
@@ -8545,7 +8544,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ownApplicationIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyType {
@@ -8556,7 +8555,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.companyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsApplicationDate ApplicationDate {
@@ -8567,7 +8566,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountNumber {
@@ -8578,7 +8577,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RetailerCode {
@@ -8589,7 +8588,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.retailerCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchType {
@@ -8600,7 +8599,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.searchTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -8611,7 +8610,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Term {
@@ -8622,7 +8621,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.termField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Optout {
@@ -8633,7 +8632,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.optoutField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InfoSource {
@@ -8644,7 +8643,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.infoSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PreviousRMC {
@@ -8655,7 +8654,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.previousRMCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -8666,7 +8665,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsName Name {
@@ -8677,7 +8676,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsLocation Location {
@@ -8688,7 +8687,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsPreviousLocation PreviousLocation {
@@ -8699,7 +8698,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.previousLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicationType1 {
@@ -8710,7 +8709,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicationType1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicationType2 {
@@ -8721,7 +8720,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicationType2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompnyOfficer {
@@ -8732,7 +8731,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.supplyCompnyOfficerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -8744,7 +8743,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -8752,17 +8751,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -8773,7 +8772,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -8784,7 +8783,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -8795,7 +8794,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -8806,7 +8805,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -8818,7 +8817,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -8826,19 +8825,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -8849,7 +8848,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -8860,7 +8859,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -8871,7 +8870,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -8882,7 +8881,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -8893,7 +8892,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -8905,7 +8904,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -8913,11 +8912,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtLocation {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -8928,7 +8927,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -8940,7 +8939,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -8948,11 +8947,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsHomeTelephoneNumber {
-        
+
         private string sTDCodeField;
-        
+
         private string localNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string STDCode {
@@ -8963,7 +8962,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sTDCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocalNumber {
@@ -8975,7 +8974,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -8983,11 +8982,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeInEmployment {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -8998,7 +8997,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -9010,7 +9009,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9018,11 +9017,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsWorkTelephoneNum {
-        
+
         private string sTDCodeField;
-        
+
         private string localNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string STDCode {
@@ -9033,7 +9032,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sTDCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocalNumber {
@@ -9045,7 +9044,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9053,11 +9052,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeWithBank {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -9068,7 +9067,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -9080,7 +9079,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9088,11 +9087,11 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtPrevLocation {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -9103,7 +9102,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -9115,7 +9114,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9123,19 +9122,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsApplicationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -9146,7 +9145,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -9157,7 +9156,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -9168,7 +9167,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -9179,7 +9178,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -9190,7 +9189,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -9202,7 +9201,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9210,19 +9209,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -9233,7 +9232,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -9244,7 +9243,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -9255,7 +9254,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -9266,7 +9265,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -9277,7 +9276,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -9289,7 +9288,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9297,33 +9296,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -9334,7 +9333,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -9345,7 +9344,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -9356,7 +9355,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -9367,7 +9366,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -9378,7 +9377,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -9389,7 +9388,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -9400,7 +9399,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -9411,7 +9410,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -9422,7 +9421,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -9433,7 +9432,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -9444,7 +9443,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -9455,7 +9454,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -9467,7 +9466,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9475,33 +9474,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsPreviousLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -9512,7 +9511,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -9523,7 +9522,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -9534,7 +9533,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -9545,7 +9544,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -9556,7 +9555,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -9567,7 +9566,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -9578,7 +9577,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -9589,7 +9588,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -9600,7 +9599,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -9611,7 +9610,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -9622,7 +9621,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -9633,7 +9632,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -9645,7 +9644,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9653,13 +9652,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataLocationLink {
-        
+
         private string locationCodeField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetails[] locationLinkDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationCode {
@@ -9670,7 +9669,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -9681,7 +9680,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("LocationLinkDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetails[] LocationLinkDetails {
@@ -9693,7 +9692,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9701,43 +9700,43 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetails {
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsMatchDetails matchDetailsField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocationLinkDate locationLinkDateField;
-        
+
         private string locationLinkIndField;
-        
+
         private string relatedSegmentNumField;
-        
+
         private string locationKeyField;
-        
+
         private string rMCField;
-        
+
         private string regionField;
-        
+
         private string levelNumberField;
-        
+
         private string locationLinkNumberField;
-        
+
         private string locationLinkCaptionField;
-        
+
         private string informationSourceField;
-        
+
         private string sourceOfDataField;
-        
+
         private string sourceIdentField;
-        
+
         private string cAISAccountNumberField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocation locationField;
-        
+
         private string superSearchFlagField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsMatchDetails MatchDetails {
@@ -9748,7 +9747,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocationLinkDate LocationLinkDate {
@@ -9759,7 +9758,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationLinkDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLinkInd {
@@ -9770,7 +9769,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationLinkIndField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RelatedSegmentNum {
@@ -9781,7 +9780,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.relatedSegmentNumField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationKey {
@@ -9792,7 +9791,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RMC {
@@ -9803,7 +9802,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.rMCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Region {
@@ -9814,7 +9813,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.regionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LevelNumber {
@@ -9825,7 +9824,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.levelNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLinkNumber {
@@ -9836,7 +9835,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationLinkNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLinkCaption {
@@ -9847,7 +9846,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationLinkCaptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -9858,7 +9857,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SourceOfData {
@@ -9869,7 +9868,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sourceOfDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SourceIdent {
@@ -9880,7 +9879,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sourceIdentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CAISAccountNumber {
@@ -9891,7 +9890,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cAISAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -9902,7 +9901,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsName Name {
@@ -9913,7 +9912,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocation Location {
@@ -9924,7 +9923,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SuperSearchFlag {
@@ -9936,7 +9935,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9944,17 +9943,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -9965,7 +9964,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -9976,7 +9975,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -9987,7 +9986,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -9998,7 +9997,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -10010,7 +10009,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10018,19 +10017,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocationLinkDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -10041,7 +10040,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -10052,7 +10051,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -10063,7 +10062,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -10074,7 +10073,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -10085,7 +10084,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -10097,7 +10096,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10105,19 +10104,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -10128,7 +10127,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -10139,7 +10138,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -10150,7 +10149,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -10161,7 +10160,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -10172,7 +10171,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -10184,7 +10183,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10192,33 +10191,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -10229,7 +10228,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -10240,7 +10239,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -10251,7 +10250,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -10262,7 +10261,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -10273,7 +10272,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -10284,7 +10283,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -10295,7 +10294,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -10306,7 +10305,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -10317,7 +10316,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -10328,7 +10327,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -10339,7 +10338,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -10350,7 +10349,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -10362,7 +10361,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10370,13 +10369,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataGoneAway {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetails[] goneAwayDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -10387,7 +10386,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -10398,7 +10397,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("GoneAwayDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetails[] GoneAwayDetails {
@@ -10410,7 +10409,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10418,25 +10417,25 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetails {
-        
+
         private string searchTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string nameIDField;
-        
+
         private string membersCountField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembers[] membersField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsLocation locationField;
-        
+
         private string goneAwayCaptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchType {
@@ -10447,7 +10446,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.searchTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMatchDetails MatchDetails {
@@ -10458,7 +10457,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -10469,7 +10468,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NameID {
@@ -10480,7 +10479,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MembersCount {
@@ -10491,7 +10490,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.membersCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Members", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembers[] Members {
@@ -10502,7 +10501,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.membersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsName Name {
@@ -10513,7 +10512,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsLocation Location {
@@ -10524,7 +10523,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string GoneAwayCaption {
@@ -10536,7 +10535,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10544,17 +10543,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -10565,7 +10564,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -10576,7 +10575,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -10587,7 +10586,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -10598,7 +10597,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -10610,7 +10609,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10618,19 +10617,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembers {
-        
+
         private string iDCodeField;
-        
+
         private string iDNumberField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersInformationDate informationDateField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersDateOfBirth dateOfBirthField;
-        
+
         private string furtherDetailsField;
-        
+
         private string noCReferenceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDCode {
@@ -10641,7 +10640,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.iDCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDNumber {
@@ -10652,7 +10651,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.iDNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersInformationDate InformationDate {
@@ -10663,7 +10662,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersDateOfBirth DateOfBirth {
@@ -10674,7 +10673,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FurtherDetails {
@@ -10685,7 +10684,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.furtherDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -10697,7 +10696,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10705,19 +10704,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersInformationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -10728,7 +10727,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -10739,7 +10738,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -10750,7 +10749,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -10761,7 +10760,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -10772,7 +10771,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -10784,7 +10783,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10792,19 +10791,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -10815,7 +10814,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -10826,7 +10825,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -10837,7 +10836,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -10848,7 +10847,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -10859,7 +10858,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -10871,7 +10870,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10879,19 +10878,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -10902,7 +10901,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -10913,7 +10912,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -10924,7 +10923,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -10935,7 +10934,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -10946,7 +10945,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -10958,7 +10957,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10966,33 +10965,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -11003,7 +11002,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -11014,7 +11013,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -11025,7 +11024,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -11036,7 +11035,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -11047,7 +11046,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -11058,7 +11057,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -11069,7 +11068,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -11080,7 +11079,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -11091,7 +11090,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -11102,7 +11101,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -11113,7 +11112,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -11124,7 +11123,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -11136,7 +11135,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11144,13 +11143,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTrace {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetails[] successTraceDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -11161,7 +11160,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -11172,7 +11171,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SuccessTraceDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetails[] SuccessTraceDetails {
@@ -11184,7 +11183,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11192,31 +11191,31 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetails {
-        
+
         private string searchTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string nameIDField;
-        
+
         private string linkRecordKeyField;
-        
+
         private string membersCountField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembers[] membersField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsLocation locationField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToName toNameField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToLocation toLocationField;
-        
+
         private string traceCaptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchType {
@@ -11227,7 +11226,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.searchTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMatchDetails MatchDetails {
@@ -11238,7 +11237,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -11249,7 +11248,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NameID {
@@ -11260,7 +11259,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LinkRecordKey {
@@ -11271,7 +11270,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.linkRecordKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MembersCount {
@@ -11282,7 +11281,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.membersCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Members", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembers[] Members {
@@ -11293,7 +11292,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.membersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsName Name {
@@ -11304,7 +11303,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsLocation Location {
@@ -11315,7 +11314,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToName ToName {
@@ -11326,7 +11325,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.toNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToLocation ToLocation {
@@ -11337,7 +11336,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.toLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TraceCaption {
@@ -11349,7 +11348,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11357,17 +11356,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -11378,7 +11377,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -11389,7 +11388,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -11400,7 +11399,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -11411,7 +11410,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -11423,7 +11422,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11431,19 +11430,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembers {
-        
+
         private string iDCodeField;
-        
+
         private string iDNumberField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersInformationDate informationDateField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersDateOfBirth dateOfBirthField;
-        
+
         private string furtherDetailsField;
-        
+
         private string noCReferenceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDCode {
@@ -11454,7 +11453,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.iDCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDNumber {
@@ -11465,7 +11464,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.iDNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersInformationDate InformationDate {
@@ -11476,7 +11475,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersDateOfBirth DateOfBirth {
@@ -11487,7 +11486,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FurtherDetails {
@@ -11498,7 +11497,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.furtherDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -11510,7 +11509,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11518,19 +11517,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersInformationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -11541,7 +11540,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -11552,7 +11551,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -11563,7 +11562,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -11574,7 +11573,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -11585,7 +11584,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -11597,7 +11596,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11605,19 +11604,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -11628,7 +11627,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -11639,7 +11638,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -11650,7 +11649,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -11661,7 +11660,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -11672,7 +11671,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -11684,7 +11683,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11692,19 +11691,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -11715,7 +11714,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -11726,7 +11725,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -11737,7 +11736,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -11748,7 +11747,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -11759,7 +11758,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -11771,7 +11770,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11779,33 +11778,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -11816,7 +11815,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -11827,7 +11826,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -11838,7 +11837,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -11849,7 +11848,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -11860,7 +11859,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -11871,7 +11870,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -11882,7 +11881,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -11893,7 +11892,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -11904,7 +11903,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -11915,7 +11914,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -11926,7 +11925,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -11937,7 +11936,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -11949,7 +11948,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11957,19 +11956,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -11980,7 +11979,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -11991,7 +11990,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -12002,7 +12001,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -12013,7 +12012,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -12024,7 +12023,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -12036,7 +12035,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12044,33 +12043,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -12081,7 +12080,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -12092,7 +12091,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -12103,7 +12102,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -12114,7 +12113,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -12125,7 +12124,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -12136,7 +12135,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -12147,7 +12146,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -12158,7 +12157,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -12169,7 +12168,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -12180,7 +12179,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -12191,7 +12190,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -12202,7 +12201,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -12214,7 +12213,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12222,13 +12221,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataDirectors {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetails[] directorsDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -12239,7 +12238,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -12250,7 +12249,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DirectorsDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetails[] DirectorsDetails {
@@ -12262,7 +12261,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12270,35 +12269,35 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetails {
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string companyNumberField;
-        
+
         private string directorCountField;
-        
+
         private string directorNumberField;
-        
+
         private string deceasedField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsCreationDate creationDateField;
-        
+
         private string sexField;
-        
+
         private string traderCountField;
-        
+
         private string directorshipsField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsLocation locationField;
-        
+
         private string uniqueRefField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsMatchDetails MatchDetails {
@@ -12309,7 +12308,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -12320,7 +12319,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyNumber {
@@ -12331,7 +12330,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.companyNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DirectorCount {
@@ -12342,7 +12341,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.directorCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DirectorNumber {
@@ -12353,7 +12352,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.directorNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Deceased {
@@ -12364,7 +12363,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.deceasedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsCreationDate CreationDate {
@@ -12375,7 +12374,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.creationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Sex {
@@ -12386,7 +12385,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.sexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TraderCount {
@@ -12397,7 +12396,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.traderCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Directorships {
@@ -12408,7 +12407,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.directorshipsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -12419,7 +12418,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsName Name {
@@ -12430,7 +12429,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsLocation Location {
@@ -12441,7 +12440,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string UniqueRef {
@@ -12453,7 +12452,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12461,17 +12460,17 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -12482,7 +12481,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -12493,7 +12492,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -12504,7 +12503,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -12515,7 +12514,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -12527,7 +12526,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12535,19 +12534,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsCreationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -12558,7 +12557,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -12569,7 +12568,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -12580,7 +12579,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -12591,7 +12590,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -12602,7 +12601,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -12614,7 +12613,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12622,19 +12621,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -12645,7 +12644,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -12656,7 +12655,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -12667,7 +12666,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -12678,7 +12677,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -12689,7 +12688,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -12701,7 +12700,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12709,33 +12708,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -12746,7 +12745,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -12757,7 +12756,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -12768,7 +12767,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -12779,7 +12778,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -12790,7 +12789,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -12801,7 +12800,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -12812,7 +12811,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -12823,7 +12822,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -12834,7 +12833,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -12845,7 +12844,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -12856,7 +12855,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -12867,7 +12866,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -12879,7 +12878,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12887,13 +12886,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataNOC {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataNOCNoCDetails[] noCDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -12904,7 +12903,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -12915,7 +12914,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NoCDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataNOCNoCDetails[] NoCDetails {
@@ -12927,7 +12926,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12935,13 +12934,13 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataConsumerDataNOCNoCDetails {
-        
+
         private string referenceField;
-        
+
         private string numberOfLinesField;
-        
+
         private string[] textLineField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Reference {
@@ -12952,7 +12951,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.referenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumberOfLines {
@@ -12963,7 +12962,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.numberOfLinesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("TextLine", Form=XmlSchemaForm.Unqualified)]
         public string[] TextLine {
@@ -12975,7 +12974,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12983,39 +12982,39 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataControlDetails {
-        
+
         private string accountNumberField;
-        
+
         private string cAISSourceField;
-        
+
         private string cMLCodeField;
-        
+
         private string seeVotersField;
-        
+
         private string seeAssociationsField;
-        
+
         private string seePublicInfoField;
-        
+
         private string seeCIFASField;
-        
+
         private string seeCAISField;
-        
+
         private string seeCMLField;
-        
+
         private string seeCAPSField;
-        
+
         private string seeAddrLinksField;
-        
+
         private OutputFullConsumerDataControlDetailsSearchDate searchDateField;
-        
+
         private string searchTimeField;
-        
+
         private string systemField;
-        
+
         private string seeGAINField;
-        
+
         private string seeDirectorsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountNumber {
@@ -13026,7 +13025,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CAISSource {
@@ -13037,7 +13036,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cAISSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CMLCode {
@@ -13048,7 +13047,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cMLCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeVoters {
@@ -13059,7 +13058,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seeVotersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeAssociations {
@@ -13070,7 +13069,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seeAssociationsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeePublicInfo {
@@ -13081,7 +13080,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seePublicInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeCIFAS {
@@ -13092,7 +13091,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seeCIFASField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeCAIS {
@@ -13103,7 +13102,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seeCAISField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeCML {
@@ -13114,7 +13113,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seeCMLField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeCAPS {
@@ -13125,7 +13124,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seeCAPSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeAddrLinks {
@@ -13136,7 +13135,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seeAddrLinksField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataControlDetailsSearchDate SearchDate {
@@ -13147,7 +13146,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.searchDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchTime {
@@ -13158,7 +13157,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.searchTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string System {
@@ -13169,7 +13168,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.systemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeGAIN {
@@ -13180,7 +13179,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.seeGAINField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeDirectors {
@@ -13192,7 +13191,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13200,19 +13199,19 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputFullConsumerDataControlDetailsSearchDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -13223,7 +13222,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -13234,7 +13233,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -13245,7 +13244,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -13256,7 +13255,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -13267,7 +13266,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -13279,7 +13278,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13287,25 +13286,25 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputControl {
-        
+
         private string experianReferenceField;
-        
+
         private string clientAccountNumberField;
-        
+
         private string clientBranchNumberField;
-        
+
         private string userIdentityField;
-        
+
         private string testDatabaseField;
-        
+
         private string reprocessFlagField;
-        
+
         private string clientRefField;
-        
+
         private string jobNumberField;
-        
+
         private OutputControlParameters parametersField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ExperianReference {
@@ -13316,7 +13315,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.experianReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientAccountNumber {
@@ -13327,7 +13326,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.clientAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientBranchNumber {
@@ -13338,7 +13337,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.clientBranchNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string UserIdentity {
@@ -13349,7 +13348,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.userIdentityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TestDatabase {
@@ -13360,7 +13359,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.testDatabaseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ReprocessFlag {
@@ -13371,7 +13370,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.reprocessFlagField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientRef {
@@ -13382,7 +13381,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.clientRefField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JobNumber {
@@ -13393,7 +13392,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.jobNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputControlParameters Parameters {
@@ -13405,7 +13404,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13413,33 +13412,33 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputControlParameters {
-        
+
         private string interactiveModeField;
-        
+
         private string fullFBLRequiredField;
-        
+
         private string authPlusRequiredField;
-        
+
         private string authPSRequiredField;
-        
+
         private string detectRequiredField;
-        
+
         private string testModeField;
-        
+
         private string showConsumerField;
-        
+
         private string showDetectField;
-        
+
         private string showAuthenticateField;
-        
+
         private string showAuthPSv2Field;
-        
+
         private string showAddressField;
-        
+
         private string showCaseHistoryField;
-        
+
         private string showHHOField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InteractiveMode {
@@ -13450,7 +13449,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.interactiveModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FullFBLRequired {
@@ -13461,7 +13460,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.fullFBLRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPlusRequired {
@@ -13472,7 +13471,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.authPlusRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPSRequired {
@@ -13483,7 +13482,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.authPSRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DetectRequired {
@@ -13494,7 +13493,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.detectRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TestMode {
@@ -13505,7 +13504,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.testModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowConsumer {
@@ -13516,7 +13515,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showConsumerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowDetect {
@@ -13527,7 +13526,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showDetectField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAuthenticate {
@@ -13538,7 +13537,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showAuthenticateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAuthPSv2 {
@@ -13549,7 +13548,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showAuthPSv2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAddress {
@@ -13560,7 +13559,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowCaseHistory {
@@ -13571,7 +13570,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
                 this.showCaseHistoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowHHO {
@@ -13583,7 +13582,7 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13591,9 +13590,9 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/SecondPhaseConsData")]
     public partial class OutputRoot {
-        
+
         private Output outputField;
-        
+
         /// <remarks/>
         public Output Output {
             get {
@@ -13604,24 +13603,24 @@ namespace EzBobIntegration.Web_References.SecondPhaseConsumer {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void InteractiveCompletedEventHandler(object sender, InteractiveCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class InteractiveCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal InteractiveCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public OutputRoot Result {
             get {

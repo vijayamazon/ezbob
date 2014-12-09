@@ -16,8 +16,6 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using StructureMap;
 
-	#region class Harvester
-
 	/// <summary>
 	/// A Harvester harvests from the Field (http://hmrc.gov.uk) and stores the harvest (VAT return etc) in the Hopper.
 	/// Uses UserName and Password to gain access the Field.
@@ -37,13 +35,6 @@
 	/// </example>
 	/// </summary>
 	public class Harvester : SafeILog, Integration.ChannelGrabberAPI.IHarvester {
-		#region public
-
-		#region static
-
-		#region backdoor data
-
-		#region method SetBackdoorData
 
 		public static void SetBackdoorData(int nCustomerMarketplaceID, Hopper oHopper) {
 			if (oHopper == null)
@@ -58,10 +49,6 @@
 		} // SetBackdoorData
 
 		private static SortedDictionary<int, Hopper> ms_oBackdoorData;
-
-		#endregion method SetBackdoorData
-
-		#region method FetchBackdoorData
 
 		private static Hopper FetchBackdoorData(int nCustomerMarketplaceID, ASafeLog log) {
 			log.Debug("Harvester: fetching backdoor data for marketplace {0}...", nCustomerMarketplaceID);
@@ -84,18 +71,6 @@
 			return oBackdoorData;
 		} // FetchBackdoorData
 
-		#endregion method FetchBackdoorData
-
-		#endregion backdoor data
-
-		#region environment notification flag
-
-		#endregion environment notification flag
-
-		#endregion static
-
-		#region constructor
-
 		/// <summary>
 		/// Constructs the Harvester object. The object is not ready to harvest. Call to Init() first.
 		/// </summary>
@@ -108,26 +83,14 @@
 			IsLoggedIn = false;
 		} // constructor
 
-		#endregion constructor
-
-		#region property SourceID
-
 		public int SourceID {
 			get { return (int)Hopper.Source;}
 		} // SourceID
-
-		#endregion property SourceID
-
-		#region property Hopper
 
 		/// <summary>
 		/// Output storage.
 		/// </summary>
 		public virtual Hopper Hopper { get; private set; } // Hopper
-
-		#endregion property Hopper
-
-		#region method Init
 
 		/// <summary>
 		/// Initialises the Harvester.
@@ -140,10 +103,6 @@
 
 			return true;
 		} // Init
-
-		#endregion method Init
-
-		#region method Run
 
 		public virtual void Run(bool bValidateCredentialsOnly) {
 			Run(bValidateCredentialsOnly, 0);
@@ -216,10 +175,6 @@
 			} // try
 		} // Run
 
-		#endregion method Run
-
-		#region method Done
-
 		/// <summary>
 		/// Performs cleanup.
 		/// </summary>
@@ -227,36 +182,14 @@
 			Session.Dispose();
 		} // Done
 
-		#endregion method Done
-
-		#region property ErrorsToEmail
-
 		public SortedDictionary<string, string> ErrorsToEmail { get; private set; }
 
-		#endregion property ErrorsToEmail
-
-		#endregion public
-
-		#region private
-
-		#region infrastructure
-
-		#region property AccountData
-
 		private AccountData AccountData { get; set; }
-
-		#endregion property AccountData
-
-		#region property VerboseLogging
 
 		/// <summary>
 		/// Log verbose logging on (true) or off (false).
 		/// </summary>
 		private bool VerboseLogging { get; set; }
-
-		#endregion property VerboseLogging
-
-		#region property UserName
 
 		/// <summary>
 		/// User name for hmrc.gov.uk
@@ -265,10 +198,6 @@
 			get { return (((AccountData == null) ? null : AccountData.Login) ?? "").Trim(); }
 		} // UserName
 
-		#endregion property UserName
-
-		#region property Password
-
 		/// <summary>
 		/// Password for hmrc.gov.uk
 		/// </summary>
@@ -276,15 +205,7 @@
 			get { return (((AccountData == null) ? null : AccountData.Password) ?? "").Trim(); }
 		} // Password
 
-		#endregion property Password
-
-		#region property IsLoggedIn
-
 		private bool IsLoggedIn { get; set; }
-
-		#endregion property IsLoggedIn
-
-		#region struct LoginRequestDetails
 
 		/// <summary>
 		/// Stores login request details (method, URL, form field names).
@@ -339,10 +260,6 @@
 			} // ToString
 		} // LoginRequestDetails
 
-		#endregion struct LoginRequestDetails
-
-		#region method GetUserVatID
-
 		private string GetUserVatID() {
 			Info("Retrieving user VAT id...");
 
@@ -372,10 +289,6 @@
 
 			return sID;
 		} // GetUserVatID
-
-		#endregion method GetUserVatID
-
-		#region method Login
 
 		/// <summary>
 		/// Logs in to the Field.
@@ -470,10 +383,6 @@
 			} // try
 		} // Login
 
-		#endregion method Login
-
-		#region method GetLoginRequestDetails
-
 		/// <summary>
 		/// Extracts login form details from the login page.
 		/// </summary>
@@ -521,10 +430,6 @@
 			return oOutput;
 		} // GetLoginRequestDetails
 
-		#endregion method GetLoginRequestDetails
-
-		#region method GetPage
-
 		/// <summary>
 		/// Fetches a page from the Field (https://online.hmrc.gov.uk).
 		/// Throws exception on error.
@@ -558,28 +463,12 @@
 			return doc;
 		} // GetPage
 
-		#endregion method GetPage
-
-		#region property Session
-
 		/// <summary>
 		/// HTTP session.
 		/// </summary>
 		private HttpClient Session { get; set; }
 
-		#endregion property Session
-
-		#endregion infrastructure
-
-		#region VAT Return
-
-		#region field VatReturnsMetaData
-
 		private SortedDictionary<string, SheafMetaData> m_oVatReturnsMetaData;
-
-		#endregion field VatReturnsMetaData
-
-		#region method VatReturns
 
 		/// <summary>
 		/// Fetches "VAT return" data and stores it in the Hopper.
@@ -631,10 +520,6 @@
 				Task.WaitAll(oTasks.ToArray());
 			} // if
 		} // VatReturns
-
-		#endregion method VatReturns
-
-		#region method LoadSubmittedReturnsList
 
 		private Dictionary<string, string> LoadSubmittedReturnsList(string sUserVatID) {
 			Info("Loading list of submitted VAT returns...");
@@ -690,10 +575,6 @@
 
 			return oRes;
 		} // Load
-
-		#endregion method LoadSubmittedReturnsList
-
-		#region method GetFile
 
 		/// <summary>
 		/// Fetches one file from the Field and stores it in the Hopper as byte[].
@@ -764,19 +645,7 @@
 			} // if
 		} // GetFile
 
-		#endregion method GetFile
-
-		#endregion VAT Return
-
-		#region PAYE
-
-		#region property TaxOfficeNumber
-
 		private string TaxOfficeNumber { get; set; }
-
-		#endregion property TaxOfficeNumber
-
-		#region method ExtractTaxOfficeNumber
 
 		private void ExtractTaxOfficeNumber(HtmlDocument doc) {
 			const string sBaseXPath = "//dl[contains(@class, 'known-facts')]";
@@ -796,7 +665,7 @@
 
 				if (oDT.InnerText != "Tax Office Number:")
 					continue;
-				
+
 				HtmlNode oDD = oDL.SelectSingleNode("./dd");
 
 				if (oDD == null)
@@ -813,10 +682,6 @@
 
 			Warn("Tax Office Number location not found.");
 		} // ExtractTaxOfficeNumber
-
-		#endregion method ExtractTaxOfficeNumber
-
-		#region method FetchRtiTaxYears
 
 		private void FetchRtiTaxYears() {
 			if (string.IsNullOrWhiteSpace(TaxOfficeNumber)) {
@@ -972,12 +837,6 @@
 			Debug("Fetching RTI Tax Years complete.");
 		} // FetchRtiTaxYears
 
-		#endregion method FetchRtiTaxYears
-
-		#endregion PAYE
-
-		#endregion private
 	} // class Harvester
 
-	#endregion class Harvester
 } // namespace Ezbob.HmrcHarvester

@@ -3,7 +3,6 @@
 	using Models;
 
 	internal class ValueStorage {
-		#region property Instance
 
 		public static ValueStorage Instance {
 			get {
@@ -15,8 +14,6 @@
 		} // Instance
 
 		private static ValueStorage ms_oInstance;
-
-		#endregion property Instance
 
 		public static ValueStorage operator +(ValueStorage oStorage, ValueModel oValue) {
 			oValue.ID = ms_nIDGen++;
@@ -69,13 +66,10 @@
 			return false;
 		} // Remove
 
-		#region private
-
 		private ValueStorage() {} // constructor
 
 		private static readonly SortedDictionary<int, ValueModel> ms_oValues = new SortedDictionary<int, ValueModel>();
 		private static int ms_nIDGen = 1;
 
-		#endregion private
 	} // class ValueStorage
 } // namespace

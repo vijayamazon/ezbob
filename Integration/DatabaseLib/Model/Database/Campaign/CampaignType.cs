@@ -8,7 +8,6 @@
 	}
 }
 
-
 namespace EZBob.DatabaseLib.Model.DataMapping
 {
 	using Database;
@@ -34,7 +33,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 	public interface ICampaignTypeRepository : IRepository<CampaignType>
 	{
-		
+
 	}
 
 	public class CampaignTypeRepository : NHibernateRepositoryBase<CampaignType>, ICampaignTypeRepository

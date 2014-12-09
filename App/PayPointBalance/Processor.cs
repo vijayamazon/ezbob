@@ -8,12 +8,8 @@ using Ezbob.Logger;
 using PayPoint;
 
 namespace PayPointBalance {
-	#region class Processor
 
 	public class Processor : SafeLog {
-		#region public
-
-		#region constructor
 
 		public Processor(Conf cfg, DateTime oDate, ASafeLog oLog = null) : base(oLog) {
 			m_oDate = oDate;
@@ -35,10 +31,6 @@ namespace PayPointBalance {
 			Debug("\n\n***\n*** End of PayPointBalance.Processor configuration\n***\n");
 		} // constructor
 
-		#endregion constructor
-
-		#region method Init
-
 		public bool Init() {
 			Debug("PayPointBalance.Init() started...");
 
@@ -51,10 +43,6 @@ namespace PayPointBalance {
 			Debug("PayPointBalance.Init() complete.");
 			return true;
 		} // Init
-
-		#endregion method Init
-
-		#region method Run
 
 		public void Run() {
 			Debug("PayPointBalance.Run() started...");
@@ -75,10 +63,6 @@ namespace PayPointBalance {
 			Debug("PayPointBalance.Run() complete.");
 		} // Run
 
-		#endregion method Run
-
-		#region method Done
-
 		public void Done() {
 			Debug("PayPointBalance.Done() started...");
 
@@ -86,14 +70,6 @@ namespace PayPointBalance {
 
 			Debug("PayPointBalance.Done() complete.");
 		} // Done
-
-		#endregion method Done
-
-		#endregion public
-
-		#region private
-
-		#region method DeleteOldData
 
 		private void DeleteOldData(AConnection oDB, DateTime oDate) {
 			Debug("PayPointBalance.DeleteOldData started...");
@@ -106,10 +82,6 @@ namespace PayPointBalance {
 
 			Debug("PayPointBalance.DeleteOldData complete.");
 		} // DeleteOldData
-
-		#endregion method DeleteOldData
-
-		#region method Fetch
 
 		private PayPointDataSet.TransactionDataTable Fetch(string sCondition, string sMid, string sVpnPassword, string sRemotePassword) {
 			Debug("PayPointBalance.Fetch started...");
@@ -135,10 +107,6 @@ namespace PayPointBalance {
 
 			return tbl;
 		} // Fetch
-
-		#endregion method Fetch
-
-		#region method Save
 
 		private void Save(AConnection oDB, PayPointDataSet.TransactionDataTable tbl, List<string> aryColumns) {
 			Debug("PayPointBalance.Save started...");
@@ -167,10 +135,6 @@ namespace PayPointBalance {
 			Debug("PayPointBalance.Save complete.");
 		} // Save
 
-		#endregion method Save
-
-		#region method LoadColumns
-
 		private List<string> LoadColumns(AConnection oDB) {
 			Debug("PayPointBalance.LoadColumns started...");
 
@@ -197,10 +161,6 @@ namespace PayPointBalance {
 			return oRes;
 		} // LoadColumns
 
-		#endregion method LoadColumns
-
-		#region class DeleteOldDataStoredProc
-
 		private static class DeleteOldDataStoredProc {
 			public const string Name = "DeleteOldPayPointBalanceData";
 
@@ -209,25 +169,13 @@ namespace PayPointBalance {
 			} // Arg
 		} // DeleteOldDataStoredProc
 
-		#endregion class DeleteOldDataStoredProc
-
-		#region class InsertDataStoredProc
-
 		private static class InsertDataStoredProc {
 			public const string Name = "InsertPayPointData";
 		} // InsertDataStoredProc
 
-		#endregion class InsertDataStoredProc
-
-		#region class LoadColumnsStoredProc
-
 		private static class LoadColumnsStoredProc {
 			public const string Name = "LoadPayPointBalanceColumns";
 		} // LoadColumnsStoredProc
-
-		#endregion class LoadColumnsStoredProc
-
-		#region fields
 
 		private string m_sPaypointCondition;
 		private DateTime m_oDate;
@@ -239,16 +187,8 @@ namespace PayPointBalance {
 		private readonly int m_nRetryCount;
 		private readonly int m_nSleepInterval;
 
-		#endregion fields
-
-		#region const
-
 		private const string DateFormat = "yyyyMMdd";
 
-		#endregion const
-
-		#endregion private
 	} // class Processor
 
-	#endregion class Processor
 } // namespace PayPointBalance

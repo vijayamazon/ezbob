@@ -5,7 +5,6 @@
 	using Ezbob.Logger;
 
 	public class PayPointAddedByUnderwriter : AMailStrategyBase {
-		#region constructor
 
 		public PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
 			this.underwriterId = underwriterId;
@@ -13,11 +12,7 @@
 			this.underwriterName = underwriterName;
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "PayPoint Added By Underwriter"; } } // Name
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Underwriter added a debit card";
@@ -31,8 +26,6 @@
 				{"CardNo", cardno}
 			};
 		} // SetTemplateAndVariables
-
-		#endregion method SetTemplateAndVariables
 
 		private readonly int underwriterId;
 		private readonly string cardno;

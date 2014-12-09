@@ -43,19 +43,11 @@
 			//AddServiceEndpoint(typeof(IEzService), oHttpBinding, m_oCfg.ClientEndpointAddress);
 		} // constructor
 
-		#region protected
-
 		protected override void OnOpening() {
 			Description.Behaviors.Add(new EzInstanceProviderBehaviour(m_oData));
 			Expose();
 			base.OnOpening();
 		} // OnOpening
-
-		#endregion protected
-
-		#region private
-
-		#region method Expose
 
 		private void Expose() {
 			Description.Behaviors.Add(new ServiceDiscoveryBehavior());
@@ -79,11 +71,8 @@
 			AddServiceEndpoint(new UdpDiscoveryEndpoint());
 		} // Expose
 
-		#endregion method Expose
- 
 		private readonly EzServiceInstanceRuntimeData m_oData;
 		private readonly Configuration m_oCfg;
 
-		#endregion private
 	} // class EzServiceHost
 } // namespace EzServiceHost

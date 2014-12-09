@@ -74,8 +74,6 @@
 			return Execute<UpdateConfigurationVariables>(null, userId);
 		} //UpdateConfigurationVariables
 
-		#region method PostcodeSaveLog
-
 		public ActionMetaData PostcodeSaveLog(
 			string sRequestType,
 			string sUrl,
@@ -97,33 +95,17 @@
 		} 
 		// PostcodeSaveLog
 
-		#endregion method PostcodeSaveLog
-
-		#region method MarketplaceInstantUpdate
-
 		public ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {
 			return ExecuteSync<MarketplaceInstantUpdate>(null, null, nMarketplaceID);
 		} // MarketplaceInstantUpdate
-
-		#endregion method MarketplaceInstantUpdate
-
-		#region method EncryptChannelGrabberMarketplaces
 
 		public ActionMetaData EncryptChannelGrabberMarketplaces() {
 			return Execute<EncryptChannelGrabberMarketplaces>(null, null);
 		} // EncryptChannelGrabberMarketplaces
 
-		#endregion method EncryptChannelGrabberMarketplaces
-
-		#region method DisplayMarketplaceSecurityData
-
 		public ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID) {
 			return ExecuteSync<DisplayMarketplaceSecurityData>(nCustomerID, null, nCustomerID);
 		} // DisplayMarketplaceSecurityData
-
-		#endregion method DisplayMarketplaceSecurityData
-
-		#region method FindAccountsToUpdate
 
 		public AccountsToUpdateActionResult FindAccountsToUpdate(int nCustomerID) {
 			FindAccountsToUpdate oInstance;
@@ -136,17 +118,9 @@
 			};
 		} // FindAccountsToUpdate
 
-		#endregion method FindAccountsToUpdate
-
-		#region method UpdateLinkedHmrcPassword
-
 		public ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
 			return ExecuteSync<UpdateLinkedHmrcPassword>(null, null, sCustomerID, sDisplayName, sPassword, sHash);
 		} // UpdateLinkedHmrcPassword
-
-		#endregion method UpdateLinkedHmrcPassword
-
-		#region method ValidateAndUpdateLinkedHmrcPassword
 
 		public StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
 			ValidateAndUpdateLinkedHmrcPassword oInstanse;
@@ -158,10 +132,6 @@
 				Value = oInstanse.ErrorMessage,
 			};
 		} // ValidateAndUpdateLinkedHmrcPassword
-
-		#endregion method UpdateLinkedHmrcPassword
-
-		#region method CalculateModelsAndAffordability
 
 		public MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory) {
 			CalculateModelsAndAffordability oInstance;
@@ -175,17 +145,9 @@
 			};
 		} // CalculateModelsAndAffordability
 
-		#endregion method CalculateModelsAndAffordability
-
-		#region method SaveSourceRefHistory
-
 		public ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, CampaignSourceRef campaignSourceRef) {
 			return Execute<SaveSourceRefHistory>(nUserID, null, nUserID, sSourceRefList, sVisitTimeList, campaignSourceRef);
 		} // SaveSourceRefHistory
-
-		#endregion method SaveSourceRefHistory
-
-		#region method LoadCustomerLeadFieldNames
 
 		public StringStringMapActionResult LoadCustomerLeadFieldNames() {
 			LoadCustomerLeadFieldNames oInstance;
@@ -198,14 +160,9 @@
 			};
 		} // LoadCustomerLeadFieldNames
 
-		#endregion method LoadCustomerLeadFieldNames
-
-		#region method UpdateGoogleAnalytics
-
 		public ActionMetaData UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate) {
 			return Execute<UpdateGoogleAnalytics>(null, null, oBackfillStartDate, oBackfillEndDate);
 		} // UpdateGoogleAnalytics
 
-		#endregion method UpdateGoogleAnalytics
 	} // class EzServiceImplementation
 } // namespace EzService

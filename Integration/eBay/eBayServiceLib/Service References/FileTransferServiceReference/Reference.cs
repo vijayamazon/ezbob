@@ -9,19 +9,18 @@
 //------------------------------------------------------------------------------
 
 namespace EzBob.eBayServiceLib.FileTransferServiceReference {
-    
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://www.ebay.com/marketplace/services", ConfigurationName="FileTransferServiceReference.FileTransferServicePort")]
     public interface FileTransferServicePort {
-        
+
         // CODEGEN: Generating message contract since the operation uploadFile is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="urn:uploadFile", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BaseServiceResponse))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BaseServiceRequest))]
         EzBob.eBayServiceLib.FileTransferServiceReference.uploadFileResponse1 uploadFile(EzBob.eBayServiceLib.FileTransferServiceReference.uploadFileRequest1 request);
-        
+
         // CODEGEN: Generating message contract since the operation downloadFile is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="urn:downloadFile", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -29,7 +28,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BaseServiceRequest))]
         EzBob.eBayServiceLib.FileTransferServiceReference.downloadFileResponse1 downloadFile(EzBob.eBayServiceLib.FileTransferServiceReference.downloadFileRequest1 request);
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -37,15 +36,15 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class UploadFileRequest : BaseServiceRequest {
-        
+
         private string taskReferenceIdField;
-        
+
         private string fileReferenceIdField;
-        
+
         private string fileFormatField;
-        
+
         private FileAttachment fileAttachmentField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string taskReferenceId {
@@ -57,7 +56,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("taskReferenceId");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string fileReferenceId {
@@ -69,7 +68,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("fileReferenceId");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token", Order=2)]
         public string fileFormat {
@@ -81,7 +80,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("fileFormat");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public FileAttachment fileAttachment {
@@ -94,7 +93,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -102,15 +101,15 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class FileAttachment : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private long sizeField;
-        
+
         private bool sizeFieldSpecified;
-        
+
         private byte[] dataField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public long Size {
@@ -122,7 +121,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("Size");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SizeSpecified {
@@ -134,7 +133,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("SizeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", Order=1)]
         public byte[] Data {
@@ -146,7 +145,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("Data");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -158,9 +157,9 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -168,7 +167,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -176,11 +175,11 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class ErrorParameter : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string nameField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string name {
@@ -192,7 +191,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("name");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -204,9 +203,9 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -214,7 +213,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -222,23 +221,23 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class ErrorData : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private long errorIdField;
-        
+
         private string domainField;
-        
+
         private ErrorSeverity severityField;
-        
+
         private ErrorCategory categoryField;
-        
+
         private string messageField;
-        
+
         private string subdomainField;
-        
+
         private string exceptionIdField;
-        
+
         private ErrorParameter[] parameterField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public long errorId {
@@ -250,7 +249,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("errorId");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string domain {
@@ -262,7 +261,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("domain");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public ErrorSeverity severity {
@@ -274,7 +273,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("severity");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public ErrorCategory category {
@@ -286,7 +285,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("category");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string message {
@@ -298,7 +297,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("message");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string subdomain {
@@ -310,7 +309,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("subdomain");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token", Order=6)]
         public string exceptionId {
@@ -322,7 +321,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("exceptionId");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("parameter", IsNullable=true, Order=7)]
         public ErrorParameter[] parameter {
@@ -334,9 +333,9 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("parameter");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -344,36 +343,36 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum ErrorSeverity {
-        
+
         /// <remarks/>
         Error,
-        
+
         /// <remarks/>
         Warning,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum ErrorCategory {
-        
+
         /// <remarks/>
         System,
-        
+
         /// <remarks/>
         Application,
-        
+
         /// <remarks/>
         Request,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DownloadFileResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UploadFileResponse))]
@@ -383,17 +382,17 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public abstract partial class BaseServiceResponse : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private AckValue ackField;
-        
+
         private ErrorData[] errorMessageField;
-        
+
         private string versionField;
-        
+
         private System.DateTime timestampField;
-        
+
         private bool timestampFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AckValue ack {
@@ -405,7 +404,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("ack");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
         [System.Xml.Serialization.XmlArrayItemAttribute("error")]
@@ -418,7 +417,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("errorMessage");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string version {
@@ -430,7 +429,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("version");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public System.DateTime timestamp {
@@ -442,7 +441,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("timestamp");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool timestampSpecified {
@@ -454,9 +453,9 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("timestampSpecified");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -464,26 +463,26 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum AckValue {
-        
+
         /// <remarks/>
         Success,
-        
+
         /// <remarks/>
         Failure,
-        
+
         /// <remarks/>
         Warning,
-        
+
         /// <remarks/>
         PartialFailure,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -491,9 +490,9 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class DownloadFileResponse : BaseServiceResponse {
-        
+
         private FileAttachment fileAttachmentField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public FileAttachment fileAttachment {
@@ -506,7 +505,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -515,7 +514,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class UploadFileResponse : BaseServiceResponse {
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DownloadFileRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UploadFileRequest))]
@@ -525,9 +524,9 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public abstract partial class BaseServiceRequest : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=0)]
         public System.Xml.XmlElement[] Any {
@@ -539,9 +538,9 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -549,7 +548,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -557,11 +556,11 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class DownloadFileRequest : BaseServiceRequest {
-        
+
         private string taskReferenceIdField;
-        
+
         private string fileReferenceIdField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string taskReferenceId {
@@ -573,7 +572,7 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
                 this.RaisePropertyChanged("taskReferenceId");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string fileReferenceId {
@@ -586,123 +585,123 @@ namespace EzBob.eBayServiceLib.FileTransferServiceReference {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class uploadFileRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://www.ebay.com/marketplace/services", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public EzBob.eBayServiceLib.FileTransferServiceReference.UploadFileRequest uploadFileRequest;
-        
+
         public uploadFileRequest1() {
         }
-        
+
         public uploadFileRequest1(EzBob.eBayServiceLib.FileTransferServiceReference.UploadFileRequest uploadFileRequest) {
             this.uploadFileRequest = uploadFileRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class uploadFileResponse1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://www.ebay.com/marketplace/services", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public EzBob.eBayServiceLib.FileTransferServiceReference.UploadFileResponse uploadFileResponse;
-        
+
         public uploadFileResponse1() {
         }
-        
+
         public uploadFileResponse1(EzBob.eBayServiceLib.FileTransferServiceReference.UploadFileResponse uploadFileResponse) {
             this.uploadFileResponse = uploadFileResponse;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class downloadFileRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://www.ebay.com/marketplace/services", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public EzBob.eBayServiceLib.FileTransferServiceReference.DownloadFileRequest downloadFileRequest;
-        
+
         public downloadFileRequest1() {
         }
-        
+
         public downloadFileRequest1(EzBob.eBayServiceLib.FileTransferServiceReference.DownloadFileRequest downloadFileRequest) {
             this.downloadFileRequest = downloadFileRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class downloadFileResponse1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://www.ebay.com/marketplace/services", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public EzBob.eBayServiceLib.FileTransferServiceReference.DownloadFileResponse downloadFileResponse;
-        
+
         public downloadFileResponse1() {
         }
-        
+
         public downloadFileResponse1(EzBob.eBayServiceLib.FileTransferServiceReference.DownloadFileResponse downloadFileResponse) {
             this.downloadFileResponse = downloadFileResponse;
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface FileTransferServicePortChannel : EzBob.eBayServiceLib.FileTransferServiceReference.FileTransferServicePort, System.ServiceModel.IClientChannel {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class FileTransferServicePortClient : System.ServiceModel.ClientBase<EzBob.eBayServiceLib.FileTransferServiceReference.FileTransferServicePort>, EzBob.eBayServiceLib.FileTransferServiceReference.FileTransferServicePort {
-        
+
         public FileTransferServicePortClient() {
         }
-        
+
         public FileTransferServicePortClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
-        
+
         public FileTransferServicePortClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public FileTransferServicePortClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public FileTransferServicePortClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.FileTransferServiceReference.uploadFileResponse1 EzBob.eBayServiceLib.FileTransferServiceReference.FileTransferServicePort.uploadFile(EzBob.eBayServiceLib.FileTransferServiceReference.uploadFileRequest1 request) {
             return base.Channel.uploadFile(request);
         }
-        
+
         public EzBob.eBayServiceLib.FileTransferServiceReference.UploadFileResponse uploadFile(EzBob.eBayServiceLib.FileTransferServiceReference.UploadFileRequest uploadFileRequest) {
             EzBob.eBayServiceLib.FileTransferServiceReference.uploadFileRequest1 inValue = new EzBob.eBayServiceLib.FileTransferServiceReference.uploadFileRequest1();
             inValue.uploadFileRequest = uploadFileRequest;
             EzBob.eBayServiceLib.FileTransferServiceReference.uploadFileResponse1 retVal = ((EzBob.eBayServiceLib.FileTransferServiceReference.FileTransferServicePort)(this)).uploadFile(inValue);
             return retVal.uploadFileResponse;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.FileTransferServiceReference.downloadFileResponse1 EzBob.eBayServiceLib.FileTransferServiceReference.FileTransferServicePort.downloadFile(EzBob.eBayServiceLib.FileTransferServiceReference.downloadFileRequest1 request) {
             return base.Channel.downloadFile(request);
         }
-        
+
         public EzBob.eBayServiceLib.FileTransferServiceReference.DownloadFileResponse downloadFile(EzBob.eBayServiceLib.FileTransferServiceReference.DownloadFileRequest downloadFileRequest) {
             EzBob.eBayServiceLib.FileTransferServiceReference.downloadFileRequest1 inValue = new EzBob.eBayServiceLib.FileTransferServiceReference.downloadFileRequest1();
             inValue.downloadFileRequest = downloadFileRequest;

@@ -4,7 +4,6 @@
 
 	[DataContract]
 	public class Password {
-		#region constructor
 
 		public Password() : this(null, null) {
 		} // constructor
@@ -23,10 +22,6 @@
 				m_sConfirmation = new Encrypted(sConfirmation);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Primary
-
 		public string Primary {
 			get {
 				return string.IsNullOrWhiteSpace(m_sPrimary) ? string.Empty : Encrypted.Decrypt(m_sPrimary);
@@ -36,10 +31,6 @@
 		[DataMember]
 		private string m_sPrimary;
 
-		#endregion property Primary
-
-		#region property Confirmation
-
 		public string Confirmation {
 			get {
 				return string.IsNullOrWhiteSpace(m_sConfirmation) ? string.Empty : Encrypted.Decrypt(m_sConfirmation);
@@ -48,10 +39,6 @@
 
 		[DataMember]
 		private string m_sConfirmation;
-
-		#endregion property Confirmation
-
-		#region method ToString
 
 		public override string ToString() {
 			bool bHasPrimary = !string.IsNullOrWhiteSpace(Primary);
@@ -66,6 +53,5 @@
 			return bHasPrimary ? "*" : "";
 		} // ToString
 
-		#endregion method ToString
 	} // class Password
 } // namespace

@@ -7,10 +7,8 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
 namespace Ezbob.Logger {
-	#region class LegacyLog
 
 	public class LegacyLog : ASafeLog {
-		#region static constructor
 
 		static LegacyLog() {
 			var hierarchy = (Hierarchy)LogManager.GetRepository();
@@ -41,17 +39,7 @@ namespace Ezbob.Logger {
 			ms_oLog.Info("Initialized Logger");
 		} // static constructor
 
-		#endregion static constructor
-
-		#region public
-
-		#region constructor
-
 		public LegacyLog(ASafeLog oLog = null) : base(oLog) { } // constructor
-
-		#endregion constructor
-
-		#region method OwnSay
 
 		public override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
 			switch (nSeverity) {
@@ -80,16 +68,8 @@ namespace Ezbob.Logger {
 			} // switch
 		} // OwnSay
 
-		#endregion method OwnSay
-
-		#endregion public
-
-		#region private
-
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(ASafeLog));
 
-		#endregion private
 	} // class LegacyLog
 
-	#endregion class LegacyLog
 } // namespace Ezbob.Logger

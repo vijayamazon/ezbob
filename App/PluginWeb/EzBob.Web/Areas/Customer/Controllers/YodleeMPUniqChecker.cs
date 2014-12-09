@@ -14,7 +14,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
 	public class YodleeMpUniqChecker : MPUniqChecker
 	{
-		#region constructor
 
 		public YodleeMpUniqChecker(ICustomerMarketPlaceRepository customerMarketPlaceRepository,
 								   IMP_WhiteListRepository whiteList)
@@ -22,18 +21,10 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		{
 		} // constructor
 
-		#endregion constructor
-
-		#region method Check
-
 		public override void Check(Guid marketplaceType, Customer customer, string token)
 		{
 			throw new NotImplementedException("YodleeMPUniqChecker does not support Check(market place, customer, token");
 		} // Check
-
-		#endregion method Check
-
-		#region method Check
 
 		public void Check(Guid marketplaceType, Customer customer, long csId, ISession _session)
 		{
@@ -57,6 +48,5 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			}
 		}
 
-		#endregion method Check
 	} // YodleeMPUniqChecker
 } // namespace

@@ -8,8 +8,6 @@
 	using NHibernate;
 	using Ezbob.Utils.Security;
 
-	#region class YodleeAccounts
-
 	public class YodleeAccounts {
 		public YodleeAccounts() {
 			Customer = new Customer();
@@ -25,17 +23,9 @@
 		public virtual DateTime? CreationDate { get; set; }
 	} // class YodleeAccounts
 
-	#endregion class YodleeAccounts
-
-	#region interface IYodleeAccountsRepository
-
 	public interface IYodleeAccountsRepository : IRepository<YodleeAccounts> {
 		YodleeAccounts Search(int customerId);
 	} // interface IYodleeAccountsRepository
-
-	#endregion interface IYodleeAccountsRepository
-
-	#region class YodleeAccountsRepository 
 
 	public class YodleeAccountsRepository : NHibernateRepositoryBase<YodleeAccounts>, IYodleeAccountsRepository {
 		private readonly string accountPrefix;
@@ -67,5 +57,4 @@
 		} // CreateAccount
 	} // class YodleeAccountsRepository 
 
-	#endregion class YodleeAccountsRepository 
 } // namespace

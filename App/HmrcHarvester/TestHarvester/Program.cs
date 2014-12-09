@@ -14,8 +14,6 @@ namespace TestHarvester {
 			FullTest(oLog);
 		} // Main
 
-		#region method FullTest
-
 		private static void FullTest(LegacyLog oLog) {
 			var ad = new AccountData(Configuration.GetInstance(oLog.UnderlyingLog).GetVendorInfo("HMRC")) {
 				Login = "829144784260",
@@ -123,6 +121,5 @@ namespace TestHarvester {
 			harvester.Done();
 		} // FullTest
 
-		#endregion method FullTest
 	} // class Program
 } // namespace TestHarvester

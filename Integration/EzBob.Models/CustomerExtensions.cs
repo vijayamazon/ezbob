@@ -21,7 +21,6 @@
 			return customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == paypal.InternalId);
 		}
 
-
 		public static List<PaymentAccountsModel> GetPaymentAccounts(this Customer customer) {
 			return
 				customer.CustomerMarketPlaces.Where(m => m.Marketplace.IsPaymentAccount)
@@ -29,14 +28,12 @@
 					.ToList();
 		}
 
-
 		public static IEnumerable<SimpleMarketPlaceModel> GetYodleeAccounts(this Customer customer) {
 			var yodleeServiceInfo = new YodleeServiceInfo();
 			var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == yodleeServiceInfo.InternalId);
 			var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName, MpId = m.Marketplace.Id, MpName = m.Marketplace.Name });
 			return simpleMarketPlaceModels;
 		}
-
 
 		public static IEnumerable<SimpleMarketPlaceModel> GetMarketPlaces(this Customer customer) {
 			return

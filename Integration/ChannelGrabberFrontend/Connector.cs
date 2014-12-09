@@ -7,7 +7,6 @@
 	using Integration.ChannelGrabberConfig;
 
 	public class Connector : IHarvester {
-		#region method SetBackdoorData
 
 		public static void SetBackdoorData(string sAccountTypeName, int nCustomerMarketplaceID, Hopper oHopper) {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(sAccountTypeName);
@@ -29,10 +28,6 @@
 			} // switch
 		} // SetBackdoorData
 
-		#endregion method SetBackdoorData
-
-		#region constructor
-
 		public Connector(AccountData oAccountData, ASafeLog log, int nCustomerID, string sCustomerEmail) {
 			if (oAccountData == null)
 				throw new ApiException("Account data not specified.");
@@ -51,10 +46,6 @@
 			} // switch
 		} // constructor
 
-		#endregion constructor
-
-		#region method Init
-
 		public virtual bool Init() {
 			try {
 				return DataHarvester.Init();
@@ -66,10 +57,6 @@
 				throw new ApiException(ae.Message, ae);
 			} // try
 		} // Init
-
-		#endregion method Init
-
-		#region method Run
 
 		public virtual void Run(bool bValidateCredentialsOnly) {
 			try {
@@ -95,10 +82,6 @@
 			} // try
 		} // Run
 
-		#endregion method Run
-
-		#region method Done
-
 		public virtual void Done() {
 			try {
 				DataHarvester.Done();
@@ -111,29 +94,16 @@
 			} // try
 		} // Done
 
-		#endregion method Done
-
-		#region property DataHarvester
-
 		public IHarvester DataHarvester { get; private set; }
-
-		#endregion property DataHarvester
-
-		#region property SourceID
 
 		public int SourceID {
 			get { return DataHarvester.SourceID; } // get
 		} // SourceID
-
-		#endregion property SourceID
-
-		#region property ErrorsToEmail
 
 		public SortedDictionary<string, string> ErrorsToEmail {
 			get { return DataHarvester.ErrorsToEmail; }
 			private set { }
 		} // ErrorsToEmail
 
-		#endregion property ErrorsToEmail
 	} // class Connector
 } // namespace Integration.ChannelGrabberFrontend

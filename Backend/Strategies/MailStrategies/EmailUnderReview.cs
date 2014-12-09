@@ -4,15 +4,10 @@
 	using Ezbob.Logger;
 
 	public class EmailUnderReview : ABrokerMailToo {
-		#region constructor
 
 		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "Email Under Review"; } }
-
-		#region method LoadRecipientData
 
 		protected override void LoadRecipientData() {
 			base.LoadRecipientData();
@@ -20,10 +15,6 @@
 			if (CustomerData.IsFilledByBroker)
 				SendToCustomer = false;
 		} // LoadRecipientData
-
-		#endregion method LoadRecipientData
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			TemplateName = CustomerData.IsAlibaba ? "Mandrill - Alibaba application completed under review" : "Mandrill - Application completed under review";
@@ -33,6 +24,5 @@
 			};
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
 	} // class EmailUnderReview
 } // namespace

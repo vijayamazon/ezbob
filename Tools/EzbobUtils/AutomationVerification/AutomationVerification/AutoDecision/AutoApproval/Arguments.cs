@@ -5,7 +5,6 @@
 	/// Contains input arguments for auto approval logic.
 	/// </summary>
 	public class Arguments {
-		#region constructor
 
 		public Arguments() {}
 
@@ -14,8 +13,6 @@
 			SystemCalculatedAmount = nSystemCalculatedAmount;
 			Medal = nMedal;
 		} // constructor
-
-		#endregion constructor
 
 		public int CustomerID { get; private set; }
 		public decimal SystemCalculatedAmount { get; private set; }

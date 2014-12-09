@@ -15,7 +15,6 @@ namespace WinFormTestApp
         public static Color HC_COMMENT = Color.GreenYellow;
         public static Color HC_INNERTEXT = Color.Black;
 
-
         public static void HighlightRTF(RichTextBox rtb)
         {
             int k = 0;
@@ -52,7 +51,6 @@ namespace WinFormTestApp
 
                 }
                 String nodeText = str.Substring(st + 1, en - st - 1);
-
 
                 bool inString = false;
 
@@ -117,7 +115,6 @@ namespace WinFormTestApp
                                 state = 2;
                             break;
 
-
                     }
 
                 }
@@ -126,7 +123,6 @@ namespace WinFormTestApp
                     rtb.Select(st + 1, nodeText.Length);
                     rtb.SelectionColor = HighlightColors.HC_NODE;
                 }
-
 
             }
         }

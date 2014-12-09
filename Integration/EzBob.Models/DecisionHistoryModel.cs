@@ -68,7 +68,6 @@
 
 		public string DiscountPlan { get; set; }
 
-
 		private static string GetDiscountPlanName(DecisionHistory item)
 		{
 			if (item.CashRequest == null || item.CashRequest.DiscountPlan == null) return "";

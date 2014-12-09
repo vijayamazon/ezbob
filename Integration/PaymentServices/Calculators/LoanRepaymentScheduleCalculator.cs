@@ -16,7 +16,6 @@
         private readonly List<PaypointTransaction> _payments;
         private readonly List<LoanCharge> _charges;
 
-
         //state variables
 
         //деньги, которые реально находятся у клиента на руках. баланс кредита без процентов и fee
@@ -47,7 +46,6 @@
         //Сколько всего клиент заплатил процентов
         private decimal _paidInterest = 0;
 
-
         //Штрафы, которые надо было заплатить
         private decimal _totalFeesToPay = 0;
 
@@ -77,7 +75,6 @@
         private DateTime _prevInstallmentDate = DateTime.MinValue;
 
         private readonly decimal _amountToChargeFrom = 0;
-        
 
         public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term)
         {
@@ -428,7 +425,6 @@
             var interestToPay = Math.Max(0, _totalInterestToPay - _paidInterest);
             var feestToPay = _totalFeesToPay - _paidFees;
             _lastPaymentDate = payment.PostDate;
-
 
             //Paying Fees
             var amount = Math.Min(money, Math.Round(feestToPay, 2));

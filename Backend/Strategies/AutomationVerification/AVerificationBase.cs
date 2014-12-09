@@ -5,17 +5,10 @@
 	using Ezbob.Logger;
 
 	public abstract class AVerificationBase : AStrategy {
-		#region public
-
-		#region property Name
 
 		public override string Name {
 			get { return "Verify " + DecisionName; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_nExceptionCount = 0;
@@ -42,28 +35,14 @@
 			} // for
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
 		protected AVerificationBase(int nTopCount, int nLastCheckedCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nTopCount = nTopCount;
 			m_nLastCheckedCustomerID = nLastCheckedCustomerID;
 		} // constructor
 
-		#endregion constructor
-
 		protected abstract string DecisionName { get; }
 
 		protected abstract bool MakeAndVerifyDecision(AutoApproveInputRow oRow);
-
-		#endregion protected
-
-		#region private
 
 		private string VerifyOne(AutoApproveInputRow oRow) {
 			try {
@@ -94,6 +73,5 @@
 		private int m_nMismatchCount;
 		private int m_nExceptionCount;
 
-		#endregion private
 	} // class AVerificationBase
 } // namespace

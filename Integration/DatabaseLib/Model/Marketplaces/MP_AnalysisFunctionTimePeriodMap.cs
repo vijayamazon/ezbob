@@ -1,10 +1,9 @@
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Database {
-    
-    
+
     public class MP_AnalysisFunctionTimePeriodMap : ClassMap<MP_AnalysisFunctionTimePeriod> {
-        
+
         public MP_AnalysisFunctionTimePeriodMap() {
 			Table("MP_AnalysisFunctionTimePeriod");
 			Id(x => x.Id).GeneratedBy.Identity().Column("Id");

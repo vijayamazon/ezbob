@@ -47,7 +47,6 @@
 		[Obsolete]
 		public virtual decimal InterestPaid { get; set; }
 
-
 		/// <summary>
 		/// Fees that have to be paid
 		/// Комиссии которые надо заплатить

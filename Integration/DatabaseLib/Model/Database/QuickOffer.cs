@@ -3,10 +3,7 @@
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 
-	#region class QuickOffer
-
 	public class QuickOffer {
-		#region public
 
 		public virtual int ID { get; set; }
 		public virtual decimal Amount { get; set; }
@@ -25,12 +22,7 @@
 		public virtual decimal PotentialInterestRate { get; set; }
 		public virtual decimal PotentialSetupFee { get; set; }
 
-		#endregion public
 	} // class QuickOffer
-
-	#endregion class QuickOffer
-
-	#region class QuickOfferMap
 
 	public class QuickOfferMap : ClassMap<QuickOffer> {
 		public QuickOfferMap() {
@@ -57,5 +49,4 @@
 		} // constructor
 	} // class QuickOfferMap
 
-	#endregion class QuickOfferMap
 } // namespace EZBob.DatabaseLib.Model.Database

@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 
 	public class ParsedValue : IConvertible {
-		#region static constructor
 
 		static ParsedValue() {
 			ms_oTypeConvertors = new SortedDictionary<string, Convertor>();
@@ -45,12 +44,6 @@
 			ms_oTypeConvertors[typeof (string[]).ToString()] = ParsedValue.ToStringArray; 
 		} // static constructor
 
-		#endregion static constructor
-
-		#region public
-
-		#region constructor
-
 		public ParsedValue(object oVal, object oDefault = null) {
 			if (!ReferenceEquals(oVal, null) && (oVal.GetType() == typeof (ParsedValue))) {
 				// ReSharper disable PossibleNullReferenceException
@@ -66,25 +59,11 @@
 			}
 		} // constructor
 
-		#endregion constructor
-
-		#region property Raw
-
 		public object Raw { get { return m_oValue ?? m_oDefault; } } // Raw
-
-		#endregion property Raw
-
-		#region interface IConvertible and type cast operators
-
-		#region GetTypeCode
 
 		public TypeCode GetTypeCode() {
 			return Type.GetTypeCode(m_oValue.GetType());
 		} // GetTypeCode
-
-		#endregion GetTypeCode
-
-		#region to boolean
 
 		public static implicit operator bool(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(bool) : val.ToBoolean();
@@ -106,10 +85,6 @@
 			return parsedValue;
 		} // ToBoolean
 
-		#endregion to boolean
-
-		#region to char
-
 		public static implicit operator char(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(char) : val.ToChar();
 		} // operator char
@@ -129,10 +104,6 @@
 
 			return parsedValue;
 		} // ToChar
-
-		#endregion to char
-
-		#region to sbyte
 
 		public static implicit operator sbyte(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(sbyte) : val.ToSByte();
@@ -154,10 +125,6 @@
 			return parsedValue;
 		} // ToSByte
 
-		#endregion to sbyte
-
-		#region to byte
-
 		public static implicit operator byte(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(byte) : val.ToByte();
 		} // operator byte
@@ -177,10 +144,6 @@
 
 			return parsedValue;
 		} // ToByte
-
-		#endregion to byte
-
-		#region to short
 
 		public static implicit operator short(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(short) : val.ToInt16();
@@ -202,10 +165,6 @@
 			return parsedValue;
 		} // ToInt16
 
-		#endregion to short
-
-		#region to ushort
-
 		public static implicit operator ushort(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(ushort) : val.ToUInt16();
 		} // operator ushort
@@ -225,10 +184,6 @@
 
 			return parsedValue;
 		} // ToUInt16
-
-		#endregion to ushort
-
-		#region to int
 
 		public static implicit operator int(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(int) : val.ToInt32();
@@ -250,10 +205,6 @@
 			return parsedValue;
 		} // ToInt32
 
-		#endregion to int
-
-		#region to uint
-
 		public static implicit operator uint(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(uint) : val.ToUInt32();
 		} // operator uint
@@ -273,10 +224,6 @@
 
 			return parsedValue;
 		} // ToUInt32
-
-		#endregion to uint
-
-		#region to long
 
 		public static implicit operator long(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(long) : val.ToInt64();
@@ -298,10 +245,6 @@
 			return parsedValue;
 		} // ToInt64
 
-		#endregion to long
-
-		#region to ulong
-
 		public static implicit operator ulong(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(ulong) : val.ToUInt64();
 		} // operator ulong
@@ -321,10 +264,6 @@
 
 			return parsedValue;
 		} // ToUInt64
-
-		#endregion to ulong
-
-		#region to float
 
 		public static implicit operator float(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(float) : val.ToSingle();
@@ -346,10 +285,6 @@
 			return parsedValue;
 		} // ToSingle
 
-		#endregion to float
-
-		#region to double
-
 		public static implicit operator double(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(double) : val.ToDouble();
 		} // operator double
@@ -370,10 +305,6 @@
 			return parsedValue;
 		} // ToDouble
 
-		#endregion to double
-
-		#region to decimal
-
 		public static implicit operator decimal(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(decimal) : val.ToDecimal();
 		} // operator decimal
@@ -393,10 +324,6 @@
 
 			return parsedValue;
 		} // ToDecimal
-
-		#endregion to decimal
-
-		#region to datetime
 
 		public static implicit operator DateTime(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(DateTime) : val.ToDateTime();
@@ -428,10 +355,6 @@
 			return default(DateTime);
 		} // ToDateTime
 
-		#endregion to datetime
-
-		#region to string
-
 		public static implicit operator string(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(string) : val.ToString();
 		} // operator string
@@ -454,10 +377,6 @@
 			return ReferenceEquals(m_oValue, null) || m_oValue == DBNull.Value ? null : m_oValue.ToString();
 		} // ToNullString
 
-		#endregion to string
-
-		#region method ToType
-
 		public object ToType(Type conversionType, IFormatProvider provider = null) {
 			if (ReferenceEquals(conversionType, null))
 				throw new NotImplementedException("Cannot convert " + GetType() + " to undefined type.");
@@ -475,12 +394,6 @@
 			throw new NotImplementedException("Cannot convert " + GetType() + " to " + sTypeName + ".");
 		} // ToType
 
-		#endregion method ToType
-
-		#endregion interface IConvertible and type cast operators
-
-		#region to Guid
-
 		public static implicit operator Guid(ParsedValue val) {
 			return ReferenceEquals(val, null) ? Guid.Empty : val.ToGuid();
 		} // operator Guid
@@ -492,12 +405,6 @@
 		public Guid ToGuid(IFormatProvider provider = null) {
 			return (Guid)m_oValue;
 		} // ToGuid
-
-		#endregion to Guid
-
-		#region Nullable types
-
-		#region to boolean?
 
 		public static implicit operator bool?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToBooleanOrNull();
@@ -511,10 +418,6 @@
 			return new NullableValue<bool>(m_oValue, m_oDefault, provider);
 		} // ToBooleanOrNull
 
-		#endregion to boolean?
-
-		#region to char?
-
 		public static implicit operator char?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToCharOrNull();
 		} // operator char?
@@ -526,10 +429,6 @@
 		public char? ToCharOrNull(IFormatProvider provider = null) {
 			return new NullableValue<char>(m_oValue, m_oDefault, provider);
 		} // ToCharOrNull
-
-		#endregion to char?
-
-		#region to sbyte?
 
 		public static implicit operator sbyte?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToSByteOrNull();
@@ -543,10 +442,6 @@
 			return new NullableValue<sbyte>(m_oValue, m_oDefault, provider);
 		} // ToSByteOrNull
 
-		#endregion to sbyte?
-
-		#region to byte?
-
 		public static implicit operator byte?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToByteOrNull();
 		} // operator byte?
@@ -558,10 +453,6 @@
 		public byte? ToByteOrNull(IFormatProvider provider = null) {
 			return new NullableValue<byte>(m_oValue, m_oDefault, provider);
 		} // ToByteOrNull
-
-		#endregion to byte?
-
-		#region to short?
 
 		public static implicit operator short?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToInt16OrNull();
@@ -575,10 +466,6 @@
 			return new NullableValue<short>(m_oValue, m_oDefault, provider);
 		} // ToInt16OrNull
 
-		#endregion to short?
-
-		#region to ushort?
-
 		public static implicit operator ushort?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToUInt16OrNull();
 		} // operator ushort?
@@ -590,10 +477,6 @@
 		public ushort? ToUInt16OrNull(IFormatProvider provider = null) {
 			return new NullableValue<ushort>(m_oValue, m_oDefault, provider);
 		} // ToUInt16OrNull
-
-		#endregion to ushort?
-
-		#region to int?
 
 		public static implicit operator int?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToInt32OrNull();
@@ -607,10 +490,6 @@
 			return new NullableValue<int>(m_oValue, m_oDefault, provider);
 		} // ToInt32OrNull
 
-		#endregion to int?
-
-		#region to uint?
-
 		public static implicit operator uint?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToUInt32OrNull();
 		} // operator uint?
@@ -622,10 +501,6 @@
 		public uint? ToUInt32OrNull(IFormatProvider provider = null) {
 			return new NullableValue<uint>(m_oValue, m_oDefault, provider);
 		} // ToUInt32OrNull
-
-		#endregion to uint?
-
-		#region to long?
 
 		public static implicit operator long?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToInt64OrNull();
@@ -639,10 +514,6 @@
 			return new NullableValue<long>(m_oValue, m_oDefault, provider);
 		} // ToInt64OrNull
 
-		#endregion to long?
-
-		#region to ulong?
-
 		public static implicit operator ulong?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToUInt64OrNull();
 		} // operator ulong?
@@ -654,10 +525,6 @@
 		public ulong? ToUInt64OrNull(IFormatProvider provider = null) {
 			return new NullableValue<ulong>(m_oValue, m_oDefault, provider);
 		} // ToUInt64OrNull
-
-		#endregion to ulong?
-
-		#region to float?
 
 		public static implicit operator float?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToSingleOrNull();
@@ -671,10 +538,6 @@
 			return new NullableValue<float>(m_oValue, m_oDefault, provider);
 		} // ToSingleOrNull
 
-		#endregion to float?
-
-		#region to double?
-
 		public static implicit operator double?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToDoubleOrNull();
 		} // operator double?
@@ -686,10 +549,6 @@
 		public double? ToDoubleOrNull(IFormatProvider provider = null) {
 			return new NullableValue<double>(m_oValue, m_oDefault, provider);
 		} // ToDoubleOrNull
-
-		#endregion to double?
-
-		#region to decimal?
 
 		public static implicit operator decimal?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToDecimalOrNull();
@@ -703,10 +562,6 @@
 			return new NullableValue<decimal>(m_oValue, m_oDefault, provider);
 		} // ToDecimalOrNull
 
-		#endregion to decimal?
-
-		#region to DateTime?
-
 		public static implicit operator DateTime?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToDateTimeOrNull();
 		} // operator DateTime?
@@ -718,10 +573,6 @@
 		public DateTime? ToDateTimeOrNull(IFormatProvider provider = null) {
 			return new NullableValue<DateTime>(m_oValue, m_oDefault, provider);
 		} // ToDateTimeOrNull
-
-		#endregion to DateTime?
-
-		#region to byte[]
 
 		public static implicit operator byte[](ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToByteArray();
@@ -735,10 +586,6 @@
 			return (byte[])m_oValue;
 		} // ToByteArray
 
-		#endregion to byte[]
-
-		#region to string[]
-
 		public static implicit operator string[](ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToStringArray();
 		} // operator string[]
@@ -750,12 +597,6 @@
 		public string[] ToStringArray(IFormatProvider provider = null) {
 			return (string[])m_oValue;
 		} // ToStringArray
-
-		#endregion to string[]
-
-		#endregion Nullable types
-
-		#region to Guid?
 
 		public static implicit operator Guid?(ParsedValue val) {
 			return ReferenceEquals(val, null) ? null : val.ToGuidOrNull();
@@ -769,12 +610,6 @@
 			return new NullableValue<Guid>(m_oValue, m_oDefault, provider);
 		} // ToGuidOrNull
 
-		#endregion to Guid?
-
-		#endregion public
-
-		#region private
-
 		private readonly object m_oValue;
 		private readonly object m_oDefault;
 
@@ -782,18 +617,11 @@
 
 		private static readonly SortedDictionary<string, Convertor> ms_oTypeConvertors;
 
-		#region class NullableValue
-
 		private class NullableValue<T> where T: struct {
-			#region operator to T?
 
 			public static implicit operator T?(NullableValue<T> val) {
 				return val.m_oParsedValue;
 			} // to T?
-
-			#endregion operator to T?
-
-			#region constructor
 
 			public NullableValue(object oValue, object oDefault, IFormatProvider provider = null) {
 				m_oParsedValue = null;
@@ -808,10 +636,6 @@
 				if (!ReferenceEquals(oDefault, null))
 					TryParse(oDefault);
 			} // constructor
-
-			#endregion constructor
-
-			#region method TryParse
 
 			private void TryParse(object oValue) {
 				string sValue = oValue.ToString();
@@ -920,13 +744,8 @@
 					m_oParsedValue = (T?)oParsed;
 			} // TryParse
 
-			#endregion method TryParse
-
 			private T? m_oParsedValue;
 		} // class NullableValue
 
-		#endregion class NullableValue
-
-		#endregion private
 	} // class ParsedValue
 } // namespace Ezbob.Utils.ParsedValue

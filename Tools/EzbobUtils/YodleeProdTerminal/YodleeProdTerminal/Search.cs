@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Web.Services.Protocols;
@@ -130,7 +130,7 @@ namespace com.yodlee.sampleapps
                         }
                         if (found == 2) break;
                         //cs.contentServiceId
-                       
+
                     }
                     System.Console.WriteLine(i + ".) " + csname + " csId=" + csid);                  
                 }
@@ -182,7 +182,6 @@ namespace com.yodlee.sampleapps
             //System.Console.WriteLine("search key=" + sb);
             return sb;
         }
-
 
     }
 }

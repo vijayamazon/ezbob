@@ -15,7 +15,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var calculator = new LoanScheduleCalculator() { Interest = 0.06M };
             calculator.Calculate(5000, _loan, Parse("2012-09-23 23:29:35.000"));
 
-
             var charge = new LoanCharge() { Amount = 60, Loan = _loan, Date = new DateTime(2012, 10, 25) };
             _loan.Charges.Add(charge);
 
@@ -32,7 +31,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(state.Fees, Is.EqualTo(0));
 
             Console.WriteLine(_loan);
-            
+
             // installment #1
             state = _facade.GetStateAt(_loan, new DateTime(2012, 10, 23));
             Console.WriteLine(_loan);

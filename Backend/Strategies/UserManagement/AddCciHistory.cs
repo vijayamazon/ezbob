@@ -4,9 +4,6 @@
 	using Ezbob.Logger;
 
 	public class AddCciHistory : AStrategy {
-		#region public
-
-		#region constructor
 
 		public AddCciHistory(
 			int nCustomerID,
@@ -20,17 +17,9 @@
 			m_nUnderwriterID = nUnderwriterID;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "AddCciHistory"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			DB.ExecuteNonQuery(
@@ -43,16 +32,9 @@
 			);
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly int m_nCustomerID;
 		private readonly int m_nUnderwriterID;
 		private readonly bool m_bCciMark;
 
-		#endregion private
 	} // class AddCciHistory
 } // namespace

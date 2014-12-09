@@ -19,8 +19,6 @@
 		[NonTraversable]
 		public long ExperianLtdDL65ID { get; set; }
 
-		#region properties loaded from XML
-
 		[DataMember]
 		[DL65("CHARGENUMBER", "Charge Number")]
 		public string ChargeNumber { get; set; }
@@ -119,22 +117,12 @@
 		[DL65("NUMPARTIALSATNDATAITEMS", "Number of partial satisfaction data items")]
 		public int? NumberOfPartialSatisfactionDataItems { get; set; }
 
-		#endregion properties loaded from XML
-
-		#region property ID
-
 		[DataMember]
 		[NonTraversable]
 		public override long ID {
 			get { return ExperianLtdDL65ID; }
 			set { ExperianLtdDL65ID = value; }
 		} // ID
-
-		#endregion property GetID
-
-		#region protected
-
-		#region method DoBeforeTheMainInsert
 
 		protected override void DoBeforeTheMainInsert(List<string> oProcSql) {
 			oProcSql.Add("\tDECLARE @ExperianLtdDL65ID INT");
@@ -145,18 +133,10 @@
 			oProcSql.Add("\t\tRAISERROR('Invalid argument: no/too much data to insert into ExperianLtdDL65 table.', 11, 1)\n");
 		} // DoBeforeTheMainInsert
 
-		#endregion method DoBeforeTheMainInsert
-
-		#region method DoAfterTheMainInsert
-
 		protected override void DoAfterTheMainInsert(List<string> oProcSql) {
 			oProcSql.Add("\n\tSET @ExperianLtdDL65ID = SCOPE_IDENTITY()\n");
 			oProcSql.Add("\tSELECT @ExperianLtdDL65ID AS ExperianLtdID");
 		} // DoAfterTheMainInsert
-
-		#endregion method DoAfterTheMainInsert
-
-		#region method SelfSave
 
 		protected override bool SelfSave(AConnection oDB, ConnectionWrapper oPersistent) {
 			try {
@@ -181,16 +161,9 @@
 			return ExperianLtdDL65ID > 0;
 		} // SelfSave
 
-		#endregion method SelfSave
-
-		#region method LoadChildrenFromXml
-
 		protected override void LoadChildrenFromXml(XmlNode oRoot) {
 			LoadOneChildFromXml(oRoot, typeof(ExperianLtdLenderDetails), null);
 		} // LoadChildrenFromXml
 
-		#endregion method LoadChildrenFromXml
-
-		#endregion protected
 	} // class ExperianLtdDL65
 } // namespace

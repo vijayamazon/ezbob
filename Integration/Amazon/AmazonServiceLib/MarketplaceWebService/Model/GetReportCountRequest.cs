@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Text;
 using MarketplaceWebService.Attributes;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
@@ -29,7 +28,7 @@ namespace MarketplaceWebService.Model
     [MarketplaceWebServiceAttribute(RequestType = RequestType.DEFAULT, ResponseType = ResponseType.DEFAULT)]
     public class GetReportCountRequest
     {
-    
+
         private String marketplaceField;
 
         private String merchantField;
@@ -41,7 +40,6 @@ namespace MarketplaceWebService.Model
 
         private DateTime? availableToDateField;
 
-
         /// <summary>
         /// Gets and sets the Marketplace property.
         /// </summary>
@@ -52,8 +50,6 @@ namespace MarketplaceWebService.Model
             get { return this.marketplaceField ; }
             set { this.marketplaceField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Marketplace property
@@ -67,8 +63,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Marketplace property is set
         /// </summary>
@@ -80,7 +74,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Merchant property.
         /// </summary>
@@ -90,8 +83,6 @@ namespace MarketplaceWebService.Model
             get { return this.merchantField ; }
             set { this.merchantField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Merchant property
@@ -104,8 +95,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Merchant property is set
         /// </summary>
@@ -116,7 +105,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ReportTypeList property.
         /// </summary>
@@ -126,8 +114,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportTypeListField ; }
             set { this.reportTypeListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportTypeList property
@@ -140,8 +126,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportTypeList property is set
         /// </summary>
@@ -150,9 +134,6 @@ namespace MarketplaceWebService.Model
         {
             return this.reportTypeListField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the Acknowledged property.
@@ -163,8 +144,6 @@ namespace MarketplaceWebService.Model
             get { return this.acknowledgedField.GetValueOrDefault() ; }
             set { this.acknowledgedField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Acknowledged property
@@ -177,8 +156,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Acknowledged property is set
         /// </summary>
@@ -189,7 +166,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the AvailableFromDate property.
         /// </summary>
@@ -199,8 +175,6 @@ namespace MarketplaceWebService.Model
             get { return this.availableFromDateField.GetValueOrDefault() ; }
             set { this.availableFromDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the AvailableFromDate property
@@ -213,8 +187,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if AvailableFromDate property is set
         /// </summary>
@@ -225,7 +197,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the AvailableToDate property.
         /// </summary>
@@ -235,8 +206,6 @@ namespace MarketplaceWebService.Model
             get { return this.availableToDateField.GetValueOrDefault() ; }
             set { this.availableToDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the AvailableToDate property
@@ -249,8 +218,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if AvailableToDate property is set
         /// </summary>
@@ -260,10 +227,6 @@ namespace MarketplaceWebService.Model
             return  this.availableToDateField.HasValue;
 
         }
-
-
-
-
 
     }
 

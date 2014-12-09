@@ -7,7 +7,6 @@
 	using Ezbob.Logger;
 
 	public class GetAvailableFunds : AStrategy {
-		#region static constructor
 
 		static GetAvailableFunds() {
 			ms_bStopBackgroundThread = false;
@@ -20,10 +19,6 @@
 			ms_oDataLock = new object();
 			ms_oProcLock = new object();
 		} // GetAvailableFunds
-
-		#endregion static constructor
-
-		#region method LoadFromDB
 
 		public static void LoadFromDB() {
 			ms_oLog.Debug("Loading available funds from DB...");
@@ -57,10 +52,6 @@
 			);
 		} // LoadFromDB
 
-		#endregion method LoadFromDB
-
-		#region constructor
-
 		public GetAvailableFunds(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			if (ms_oDB == null) {
 				lock (ms_oProcLock) {
@@ -78,21 +69,13 @@
 			} // if
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Get Available Funds"; }
 		} // Name
 
-		#endregion property Name
-
 		public decimal AvailableFunds { get; private set; }
 
 		public decimal ReservedAmount { get; private set; }
-
-		#region method Execute
 
 		public override void Execute() {
 			lock (ms_oDataLock) {
@@ -100,10 +83,6 @@
 				ReservedAmount = ms_nReservedAmount;
 			} // lock
 		} // Execute
-
-		#endregion method Execute
-
-		#region property StopBackgroundThread
 
 		public static bool StopBackgroundThread {
 			get {
@@ -120,10 +99,6 @@
 
 		private static bool ms_bStopBackgroundThread;
 
-		#endregion property StopBackgroundThread
-
-		#region private
-
 		private static decimal ms_nAvailableFunds;
 		private static decimal ms_nReservedAmount;
 		private static volatile AConnection ms_oDB;
@@ -133,8 +108,6 @@
 
 		private static readonly object ms_oDataLock;
 		private static readonly object ms_oProcLock;
-
-		#region method LoadFromDBThread
 
 		private static void LoadFromDBThread() {
 			bool bStop = false;
@@ -161,8 +134,5 @@
 			} // forever
 		} // LoadFromDBThread
 
-		#endregion method LoadFromDBThread
-
-		#endregion private
 	} // class GetAvailableFunds
 } // namespace

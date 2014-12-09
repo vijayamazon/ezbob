@@ -33,7 +33,7 @@ namespace TeraPeakStandaloneApp
                 }
 
                 var requestInfo = TerapeakRequestInfoBuilder.CreateRequestInfo(displayName, months);
-				
+
                 var data = TeraPeakService.SearchBySeller(requestInfo);
             }
 
@@ -43,7 +43,6 @@ namespace TeraPeakStandaloneApp
                 return int.TryParse(umiOrShop, out umi) ? Session.Get<MP_CustomerMarketPlace>(umi).DisplayName : umiOrShop;
             }
         }
-
 
         public void Init()
         {

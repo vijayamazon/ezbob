@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
@@ -27,7 +27,7 @@ namespace EzBob.TeraPeakServiceLib.Requests.SellerResearch
 		public SearchQueryDatesRange()
 			:this(RangeMarkerType.Temporary)
 		{
-			
+
 		}
 
 		private SearchQueryDatesRange(RangeMarkerType rangeMarker)
@@ -60,6 +60,5 @@ namespace EzBob.TeraPeakServiceLib.Requests.SellerResearch
 			return string.Format( "[ {0} - {1} ]", StartDate, EndDate );
 		}
 
-		
 	}
 }

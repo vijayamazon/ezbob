@@ -7,7 +7,6 @@
 
 	public partial class CalculateVatReturnSummary : AStrategy {
 		private class BusinessData : BusinessDataOutput {
-			#region constructor
 
 			public BusinessData(LoadDataForVatReturnSummary.ResultRow oRaw) {
 				Periods = new SortedDictionary<DateTime, BusinessDataEntry>();
@@ -18,20 +17,12 @@
 				Add(oRaw);
 			} // constructor
 
-			#endregion constructor
-
-			#region method Add
-
 			public void Add(LoadDataForVatReturnSummary.ResultRow oRaw) {
 				if (Periods.ContainsKey(oRaw.DateFrom))
 					Periods[oRaw.DateFrom].Add(oRaw);
 				else
 					Periods[oRaw.DateFrom] = new BusinessDataEntry(oRaw);
 			} // Add
-
-			#endregion method Add
-
-			#region method ToString
 
 			public override string ToString() {
 				var os = new StringBuilder();
@@ -57,10 +48,6 @@
 
 				return os.ToString();
 			} // ToString
-
-			#endregion method ToString
-
-			#region method Calculate
 
 			public void Calculate(decimal? nOneMonthSalary, SortedDictionary<DateTime, decimal> oRtiSalary) {
 				Quarters = Periods.Values.ToArray();
@@ -91,10 +78,6 @@
 				CalculateAnnualized();
 			} // Calculate
 
-			#endregion method Calculate
-
-			#region properties saved in DB
-
 			[UsedImplicitly]
 			public int BusinessID { get; set; }
 
@@ -123,10 +106,6 @@
 
 			// ReSharper restore ValueParameterNotUsed
 
-			#endregion properties saved in DB
-
-			#region method QuartersToSave
-
 			public IEnumerable<BusinessDataEntry> QuartersToSave() {
 				if (Quarters.Length <= 5)
 					return Quarters;
@@ -138,19 +117,9 @@
 				return slice;
 			} // QuartersToSave
 
-			#endregion method QuartersToSave
-
-			#region private
-
-			#region properties
-
 			private SortedDictionary<DateTime, BusinessDataEntry> Periods { get; set; }
 			private BusinessDataEntry[] Quarters { get; set; }
 			private SortedDictionary<int, decimal> BoxTotals { get; set; }
-
-			#endregion properties
-
-			#region method CalculateOutput
 
 			private void CalculateOutput() {
 				PctOfAnnualRevenues = 1m;
@@ -173,10 +142,6 @@
 
 				FreeCashFlow = Ebida - ActualLoanRepayment;
 			} // CalculateOutput
-
-			#endregion method CalculateOutput
-
-			#region method CalculateAnnualized
 
 			private void CalculateAnnualized() {
 				Annualized = new AnnualizedData();
@@ -203,11 +168,8 @@
 				Annualized.FreeCashFlow = FreeCashFlow.HasValue ? FreeCashFlow.Value * nFactor : (decimal?)null;
 			} // CalculateAnnualized
 
-			#endregion method CalculateAnnualized
-
 			private AnnualizedData Annualized { get; set; }
 
-			#endregion private
 		} // class BusinessData
 	} // class CalculateVatReturnSummary
 } // namespace

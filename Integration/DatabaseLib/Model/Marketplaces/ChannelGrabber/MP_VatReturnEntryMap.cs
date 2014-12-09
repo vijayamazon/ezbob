@@ -1,12 +1,8 @@
 ﻿using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Database {
-	#region class MP_VatReturnEntryMap
 
 	public class MP_VatReturnEntryMap : ClassMap<MP_VatReturnEntry> {
-		#region public
-
-		#region constructor
 
 		public MP_VatReturnEntryMap() {
 			Table("MP_VatReturnEntries");
@@ -17,10 +13,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.CurrencyCode).Length(3);
 		} // constructor
 
-		#endregion constructor
-
-		#endregion public
 	} // class MP_VatReturnEntryMap
 
-	#endregion class MP_VatReturnEntryMap
 } // namespace

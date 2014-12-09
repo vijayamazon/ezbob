@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using com.yodlee.sampleapps.datatypes;
 using System.Xml;
 
@@ -10,7 +10,6 @@ namespace com.yodlee.sampleapps
 	public class DisplayBankData : ApplicationSuper
 	{
 		DataServiceService dataService;
-		
 
 		public DisplayBankData()
 		{
@@ -33,7 +32,7 @@ namespace com.yodlee.sampleapps
 			ContainerCriteria cc = new ContainerCriteria();
 			cc.dataExtent = dataExtent;
 			cc.containerType = ContainerTypes.BANK;
-			
+
 			// Create a list of Container Criteria
 			object[] list = {cc};
 
@@ -44,8 +43,7 @@ namespace com.yodlee.sampleapps
 			sr.historyNeeded = isHistoryNeeded;
 
 			object[] itemSummaries = dataService.getItemSummaries1(userContext, sr);
-			
-		
+
 			if(itemSummaries == null || itemSummaries.Length == 0) 
 			{
 				System.Console.WriteLine("No bank data available");
@@ -126,7 +124,6 @@ namespace com.yodlee.sampleapps
 							bankData.acctType);
 						System.Console.WriteLine("\t\tBank Current As of Date: {0}",
 							bankData.asOfDate.date );
-						
 
 						// BankTransactionData
 						object[] bankTransactions = bankData.bankTransactions;
@@ -158,9 +155,9 @@ namespace com.yodlee.sampleapps
 					}
 				}
 			}
-			
+
 			// Get AccountHistory
-            
+
 			object[] acctHistories = itemData.accountHistory;
 			if(acctHistories == null || acctHistories.Length == 0)
 			{
@@ -209,6 +206,5 @@ namespace com.yodlee.sampleapps
 			}
 		}
 	}
-
 
 }

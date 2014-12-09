@@ -5,14 +5,9 @@
 	using Ezbob.Logger;
 
 	internal class SpSaveEsignSent : AStoredProc {
-		#region constructor
 
 		public SpSaveEsignSent(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 		} // constructor
-
-		#endregion constructor
-
-		#region method HasValidParameters
 
 		public override bool HasValidParameters() {
 			return
@@ -20,8 +15,6 @@
 				(TemplateID > 0) &&
 				!string.IsNullOrWhiteSpace(DocumentKey);
 		} // HasValidParameters
-
-		#endregion method HasValidParameters
 
 		public int CustomerID { get; set; }
 

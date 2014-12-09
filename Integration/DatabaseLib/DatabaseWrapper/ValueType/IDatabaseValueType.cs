@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.ValueType
 {
@@ -22,6 +22,5 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.ValueType
 		string Name { get;  }
 		string DisplayName { get; }
 	}
-
 
 }

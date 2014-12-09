@@ -5,24 +5,15 @@
 	using Ezbob.Logger;
 
 	public class InsertOrUpdateSiteAnalytics : AStoredProcedure {
-		#region constructor
 
 		public InsertOrUpdateSiteAnalytics(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			lst = new List<InputRow>();
 		} // constructor
 
-		#endregion constructor
-
-		#region method HasValidParameters
-
 		public override bool HasValidParameters() {
 			// If the class is used properly this should never return false, but just in case
 			return AreParametersValid(Severity.Alert);
 		} // HasValidParameters
-
-		#endregion method HasValidParameters
-
-		#region method AreParametersValid
 
 		public bool AreParametersValid(Severity nSeverity) {
 			if (lst == null) {
@@ -42,11 +33,7 @@
 			return true;
 		} // AreParameterValids
 
-		#endregion method AreParametersValid
-
 		public List<InputRow> lst { get; set; }
-
-		#region class InputRow
 
 		public class InputRow : StatsModel {
 			public InputRow(DateTime oDate, string sCodeName, int nValue) {
@@ -75,6 +62,5 @@
 			} // IsValid
 		} // InputRow
 
-		#endregion class InputRow
 	} // class InsertOrUpdateSiteAnalytics
 } // namespace

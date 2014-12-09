@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using com.yodlee.sampleapps.datatypes;
 
@@ -10,7 +10,7 @@ namespace com.yodlee.sampleapps
 	public class DisplayBillsData : ApplicationSuper
 	{
 		DataServiceService dataService;
-		
+
 		public DisplayBillsData()
 		{
 			dataService = new DataServiceService();
@@ -33,7 +33,7 @@ namespace com.yodlee.sampleapps
 			ContainerCriteria cc = new ContainerCriteria();
 			cc.dataExtent = dataExtent;
 			cc.containerType = ContainerTypes.BILL;
-			
+
 			// Create a list of Container Criteria
 			object[] list = {cc};
 
@@ -45,7 +45,7 @@ namespace com.yodlee.sampleapps
 
 			// Get ItemSummary
 			object[] itemSummaries = dataService.getItemSummaries1(userContext, sr);
-			
+
 			// Verify that there is an ItemSummary
 			if(itemSummaries == null || itemSummaries.Length == 0) 
 			{
@@ -158,15 +158,14 @@ namespace com.yodlee.sampleapps
 							}
 						}
 						// End Bills
-					
+
 					}
 				}
 				// End BillsData
 			}
 
 		}
-		
-	}
 
+	}
 
 }

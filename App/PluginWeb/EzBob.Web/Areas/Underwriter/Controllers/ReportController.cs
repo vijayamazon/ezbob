@@ -83,7 +83,6 @@
 		private Report GetReport(int reportId) {
 			var dbReport = _reportRepository.Get(reportId);
 
-
 			ReportType type;
 			if (!Enum.TryParse(dbReport.Type, out type)) {
 				type = ReportType.RPT_GENERIC;

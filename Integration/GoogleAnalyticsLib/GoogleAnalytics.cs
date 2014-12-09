@@ -12,16 +12,10 @@
 
 	public class GoogleAnalytics {
 
-		#region constructor
-
 		public GoogleAnalytics(ASafeLog oLog = null)
 		{
 			Log = new SafeLog(oLog);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Init
 
 		public bool Init(DateTime oDate, string thumb) {
 			Log.Debug("Program.Init started...");
@@ -29,9 +23,9 @@
 			m_oReportDate = oDate;
 
 			Log.Debug("Processing analytics for {0}", m_oReportDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
-			
+
 			Log.Debug("Creating authentication data...");
-			
+
 			var objAuth = ObjGetOAuth2(thumb, GoogleDataFetcher.ServiceAccountUser, GoogleDataFetcher.Scope); //Authentication data returned
 
 			Log.Debug("Creating initialser...");
@@ -43,21 +37,17 @@
 			Log.Debug("Creating service client...");
 
 			m_oService = new AnalyticsService(initializer);
-			
+
 			Log.Debug("Program.Init complete.");
 
 			return true;
 		} // Init
 
-		#endregion method Init
-		
 		public void SetDate(DateTime date)
 		{
 			m_oReportDate = date;
 			Log.Debug("Processing analytics for {0}", m_oReportDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
 		}
-
-		#region method ProcessByCountry
 
 		public void ProcessByCountry(SortedDictionary<string, CountryData> oRawByCountry, SortedDictionary<string, int> oRes) {
 			int nAllUsers = oRawByCountry.Select(x => x.Value.Users).Sum();
@@ -86,18 +76,10 @@
 
 		} // ProcessByCountry
 
-		#endregion method ProcessByCountry
-
-		#region method ProcessByPage
-
 		public void ProcessByPage(SortedDictionary<PageID, int> oRawByPage, SortedDictionary<string, int> oRes) {
 			foreach (KeyValuePair<PageID, int> pair in oRawByPage)
 				oRes[DbConsts.Page + pair.Key.ToString()] = pair.Value;
 		} // ProcessByPage
-
-		#endregion method ProcessByPage
-
-		#region method Users
 
 		private int Users(SortedDictionary<string, CountryData> oRawStats, string sCountry) {
 			if (oRawStats.ContainsKey(sCountry))
@@ -106,10 +88,6 @@
 			return 0;
 		} // Users
 
-		#endregion method Users
-
-		#region method NewUsers
-
 		private int NewUsers(SortedDictionary<string, CountryData> oRawStats, string sCountry)
 		{
 			if (oRawStats.ContainsKey(sCountry))
@@ -117,10 +95,6 @@
 
 			return 0;
 		} // NewUsers
-
-		#endregion method NewUsers
-
-		#region method FetchByCountry
 
 		public SortedDictionary<string, CountryData> FetchByCountry(DateTime startDate, DateTime endDate) {
 			Log.Debug("Fetching by country started...");
@@ -162,10 +136,6 @@
 
 			return oByCountry;
 		} // FetchByCountry
-
-		#endregion method FetchByCountry
-
-		#region method FetchByPage
 
 		public SortedDictionary<PageID, int> FetchByPage() {
 			Log.Debug("Fetching by page started...");
@@ -213,10 +183,6 @@
 			return oByPage;
 		} // FetchByPage
 
-		#endregion method FetchByPage
-
-		#region method FetchBySource
-
 		public List<StatsModel> FetchBySource()
 		{
 			Log.Debug("Fetching by source started...");
@@ -259,7 +225,7 @@
 					Source = source,
 					Value = nNewUsers
 				});
-					
+
 				Log.Debug("source: {0}, Users: {1}, new Users: {2}", source, nUsers, nNewUsers);
 			} // for each item
 
@@ -267,10 +233,6 @@
 
 			return model;
 		} // FetchByPage
-
-		#endregion method FetchBySource
-
-		#region method FetchByLandingPage
 
 		public List<StatsModel> FetchByLandingPage()
 		{
@@ -316,10 +278,6 @@
 			return model;
 		} // FetchByPage
 
-		#endregion method FetchBySource
-
-		#region method GetPageID
-
 		private PageID GetPageID(string sPagePath) {
 			if (sPagePath == "/Account/LogOn")
 				return PageID.Logon;
@@ -336,22 +294,14 @@
 			return PageID.Other;
 		} // GetPageID
 
-		#endregion method GetPageID
-
-		#region property Log
-
 		public ASafeLog Log { get; set; }
-
-		#endregion property Log
-
-		#region method ObjGetOAuth2
 
 		private OAuth2Authenticator<AssertionFlowClient> ObjGetOAuth2(string thumb, string strServiceAccEmailId, string strScope) {
 			string scopeUrl = "https://www.googleapis.com/auth/" + strScope;
 			string strSrvAccEmailId = strServiceAccEmailId;
-			
+
 			AuthorizationServerDescription objAuthServerDesc = GoogleAuthenticationServer.Description;
-			
+
 			var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
 			store.Open(OpenFlags.ReadOnly);
 			var cert = store.Certificates.Find(X509FindType.FindByThumbprint, thumb, false);
@@ -368,8 +318,6 @@
 			var objAuth = new OAuth2Authenticator<AssertionFlowClient>(objClient, AssertionFlowClient.GetState);
 			return objAuth;
 		} // ObjGetOAuth2
-
-		#endregion method ObjGetOAuth2
 
 		private DateTime m_oReportDate;
 		private AnalyticsService m_oService;

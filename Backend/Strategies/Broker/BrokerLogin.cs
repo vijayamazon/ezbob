@@ -7,12 +7,7 @@
 	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
 
-	#region class BrokerLogin
-
 	public class BrokerLogin : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerLogin(string sEmail, Password oPassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpBrokerLogin(DB, Log) {
@@ -23,21 +18,9 @@
 			Properties = new BrokerProperties();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name { get { return "Broker login"; } } // Name
 
-		#endregion property Name
-
-		#region property Properties
-
 		public BrokerProperties Properties { get; private set; }
-
-		#endregion property Properties
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oSp.FillFirst(Properties);
@@ -46,24 +29,11 @@
 				throw new StrategyWarning(this, Properties.ErrorMsg);
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly SpBrokerLogin m_oSp;
 
-		#region class SpBrokerLogin
-
 		private class SpBrokerLogin : AStoredProc {
-			#region constructor
 
 			public SpBrokerLogin(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
 				Email = MiscUtils.ValidateStringArg(Email, "Email");
@@ -72,16 +42,8 @@
 				return true;
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
-			#region property Email
-
 			[UsedImplicitly]
 			public string Email { get; set; }
-
-			#endregion property Email
-
-			#region property Password
 
 			public string Password {
 				[UsedImplicitly]
@@ -91,13 +53,8 @@
 
 			private string m_sPassword;
 
-			#endregion property Password
 		} // class SpBrokerLogin
 
-		#endregion class SpBrokerLogin
-
-		#endregion private
 	} // class BrokerLogin
 
-	#endregion class BrokerLogin
 } // namespace EzBob.Backend.Strategies.Broker

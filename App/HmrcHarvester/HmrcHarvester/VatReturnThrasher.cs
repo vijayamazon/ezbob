@@ -6,26 +6,14 @@ using Ezbob.Logger;
 using HtmlAgilityPack;
 
 namespace Ezbob.HmrcHarvester {
-	#region class VatReturnThrasher
 
 	public class VatReturnThrasher : AThrasher {
-		#region public
-
-		#region constructor
 
 		public VatReturnThrasher(bool bVerboseLogging = false, ASafeLog oLog = null) : base(bVerboseLogging, oLog) {
 			Seeds = new VatReturnSeeds(this);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Seeds
-
 		public override ISeeds Seeds { get; protected set; }
-
-		#endregion property Seeds
-
-		#region method Run
 
 		public override ISeeds Run(SheafMetaData oFileID, byte[] oFile) {
 			Info("Parsing {0}...", oFileID);
@@ -59,14 +47,6 @@ namespace Ezbob.HmrcHarvester {
 
 			return seeds;
 		} // Run
-
-		#endregion method Run
-
-		#endregion public
-
-		#region private
-
-		#region method VatPeriod
 
 		private bool VatPeriod(HtmlNode oNode, VatReturnSeeds seeds) {
 			HtmlNode oDL = oNode.SelectSingleNode("dl");
@@ -103,10 +83,6 @@ namespace Ezbob.HmrcHarvester {
 
 			return seeds.IsPeriodValid();
 		} // VatPeriod
-
-		#endregion method VatPeriod
-
-		#region method BusinessDetails
 
 		private bool BusinessDetails(HtmlNode oNode, VatReturnSeeds seeds) {
 			HtmlNode oDL = oNode.SelectSingleNode("dl");
@@ -146,10 +122,6 @@ namespace Ezbob.HmrcHarvester {
 			return seeds.AreBusinessDetailsValid();
 		} // BusinessDetails
 
-		#endregion method BusinessDetails
-
-		#region method ReturnDetails
-
 		private bool ReturnDetails(HtmlNode oNode, VatReturnSeeds seeds) {
 			HtmlNode oDL = oNode.SelectSingleNode("dl");
 
@@ -176,10 +148,6 @@ namespace Ezbob.HmrcHarvester {
 			return true;
 		} // ReturnDetails
 
-		#endregion method ReturnDetails
-
-		#endregion private
 	} // class VatReturnThrasher
 
-	#endregion class VatReturnThrasher
 } // namespace Ezbob.HmrcHarvester

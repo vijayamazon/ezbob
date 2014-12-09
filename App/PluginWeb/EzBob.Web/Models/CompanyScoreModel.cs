@@ -5,7 +5,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.CompanyScore;
 
-	
 	public class CompanyHistory {
 		public long ServiceLogId { get; set; }
 		public int? Score { get; set; }
@@ -21,16 +20,10 @@
 		public List<CustomerAddress> CompanyAddress { get; set; }
 	}
 
-	#region class FinDataModel
-
 	public class FinDataModel {
 		public decimal TangibleEquity { get; set; }
 		public decimal AdjustedProfit { get; set; }
 	} // class FinDataModel
-
-	#endregion class FinDataModel
-
-	#region class CompanyScoreModel
 
 	public class CompanyScoreModel {
 		public CompanyDetails CompanyDetails { get;set; }
@@ -69,10 +62,6 @@
 		private List<CompanyScoreModel> m_oOwners;
 	} // class CompanyScoreModel
 
-	#endregion class CompanyScoreModel
-
-	#region class ComapanyDashboardModel
-
 	public class ComapanyDashboardModel {
 		public bool IsLimited { get; set; }
 		public string CompanyName { get; set; }
@@ -93,5 +82,4 @@
 		public string Error { get; set; }
 	} // class ComapanyDashboardModel
 
-	#endregion class ComapanyDashboardModel
 } // namespace

@@ -18,9 +18,6 @@
 	using YodleeLib.connector;
 
 	public class CalculateModelsAndAffordability : AStrategy {
-		#region public
-
-		#region constructor
 
 		public CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oTimeCounter = new TimeCounter("CalculateModelsAndAffordability elapsed times");
@@ -34,17 +31,9 @@
 			} // using
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Calculate Models And Affordability"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			using (m_oTimeCounter.AddStep("Total mp and affordability strategy execute time")) {
@@ -138,10 +127,6 @@
 			m_oTimeCounter.Log(Log);
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Models
-
 		public string Models {
 			get {
 				return JsonConvert.SerializeObject(
@@ -150,19 +135,7 @@
 			} // get
 		} // Models
 
-		#endregion property Models
-
-		#region property Affordability
-
 		public SortedSet<AffordabilityData> Affordability { get; private set; }
-
-		#endregion property Affordability
-
-		#endregion public
-
-		#region private
-
-		#region method HmrcBank
 
 		private void HmrcBank(MarketPlaceModel oModel) {
 			if (oModel.HmrcData == null) {
@@ -210,10 +183,6 @@
 				});
 			} // if
 		} // HmrcBank
-
-		#endregion method HmrcBank
-
-		#region method Psp
 
 		private void Psp(List<LocalMp> oPayPals) {
 			if ((oPayPals == null) || (oPayPals.Count < 1))
@@ -278,10 +247,6 @@
 			Affordability.Add(oRes);
 		} // Psp
 
-		#endregion method Psp
-
-		#region method ExtractValue
-
 		private Tuple<decimal /*value*/, bool /*isAnnualized*/> ExtractValue(Dictionary<string, string> oValues, string sKeyBase, bool isAnnualized = false) {
 			if ((oValues == null) || (oValues.Count < 1))
 				return new Tuple<decimal, bool>(0, false);
@@ -314,10 +279,6 @@
 
 			return new Tuple<decimal, bool>(nValue * nFactor, nFactor != 1 || isAnnualized);
 		} // ExtractValue
-
-		#endregion method ExtractValue
-
-		#region method EcommAccounting
 
 		private void EcommAccounting(List<LocalMp> oModels, AffordabilityType nType) {
 			if ((oModels == null) || (oModels.Count < 1))
@@ -373,10 +334,6 @@
 			} // if
 		} // EcommAccounting
 
-		#endregion method EcommAccounting
-
-		#region method SaveBankStatement
-
 		private void SaveBankStatement(List<LocalMp> yodlees) {
 			var affordability = new AffordabilityData {
 				Type = AffordabilityType.Bank,
@@ -405,17 +362,13 @@
 					affordability.ValueAdded += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.TotalValueAdded;
 				}
 			}
-			
+
 			if (yodlees.Count() > 1) {
 				affordability.ErrorMsgs = "More than one bank data";
 			}
 
 			Affordability.Add(affordability);
 		} // SaveBankStatement
-
-		#endregion method SaveBankStatement
-
-		#region method GetAllModels
 
 		private void GetAllModels() {
 			List<MP_CustomerMarketPlace> marketplaces = m_oHistory.HasValue
@@ -517,10 +470,6 @@
 			};
 		}
 
-		#endregion method GetAllModels
-
-		#region class LocalMp
-
 		private class LocalMp {
 			public LocalMp(MarketPlaceModel oModel, MP_CustomerMarketPlace mp) {
 				Model = oModel;
@@ -531,10 +480,6 @@
 			public MP_CustomerMarketPlace Marketplace { get; private set; }
 		} // LocalMp
 
-		#endregion class LocalMp
-
-		#region fields
-
 		private readonly CustomerMarketPlaceRepository m_oRepo;
 		private readonly int m_nCustomerID;
 		private readonly DateTime? m_oHistory;
@@ -542,10 +487,6 @@
 		private readonly List<LocalMp> m_oMundMs;
 
 		private readonly TimeCounter m_oTimeCounter;
-
-		#endregion fields
-
-		#region constants
 
 		private const string PaypalRevenues = "TotalNetRevenues";
 		private const string PaypalOpex = "TotalNetExpenses";
@@ -565,8 +506,5 @@
 		private static readonly Guid ms_oYodleeID = new YodleeServiceInfo().InternalId;
 		private static readonly Guid ms_oCompanyFilesID = new CompanyFilesServiceInfo().InternalId;
 
-		#endregion constants
-
-		#endregion private
 	} // class CalculateModelsAndAffordability
 } // namespace

@@ -2,12 +2,8 @@
 using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database {
-	#region class MP_RtiTaxMonthEntryMap
 
 	public class MP_RtiTaxMonthEntryMap : ClassMap<MP_RtiTaxMonthEntry> {
-		#region public
-
-		#region constructor
 
 		public MP_RtiTaxMonthEntryMap() {
 			Table("MP_RtiTaxMonthEntries");
@@ -20,10 +16,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.CurrencyCode).Length(3);
 		} // constructor
 
-		#endregion constructor
-
-		#endregion public
 	} // class MP_RtiTaxMonthEntryMap
 
-	#endregion class MP_RtiTaxMonthEntryMap
 } // namespace

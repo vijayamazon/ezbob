@@ -21,9 +21,6 @@
 	using Configuration = EzServiceConfigurationLoader.Configuration;
 
 	public class ServiceClientActivation {
-		#region public
-
-		#region constructor
 
 		public ServiceClientActivation(string[] args) {
 			m_oLog = new ConsoleLog(new SafeILog(LogManager.GetLogger(typeof(ServiceClientActivation))));
@@ -77,10 +74,6 @@
 			);
 		} // constructor
 
-		#endregion constructor
-
-		#region method Execute
-
 		public void Execute() {
 			string strategyName = m_aryArgs[0];
 
@@ -96,21 +89,9 @@
 			m_oLog.NotifyStop();
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
-		#region method ListSupported
-
 		private void ListSupported() {
 			m_oLog.Msg("Supported strategies are (case insensitive):\n\t{0}", string.Join("\n\t", m_oMethods.Keys));
 		} // ListSupported
-
-		#endregion method ListSupported
-
-		#region method InitMethods
 
 		private void InitMethods() {
 			MethodInfo[] aryMethods = GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
@@ -125,9 +106,6 @@
 			} // foreach
 		} // InitMethods
 
-		#endregion method InitMethods
-
-		#region strategy activators
 		// ReSharper disable UnusedMember.Local
 
 		[Activation]
@@ -1364,9 +1342,6 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // VerifyReject
 
 		// ReSharper restore UnusedMember.Local
-		#endregion strategy activators
-
-		#region fields
 
 		private readonly string[] m_aryArgs;
 		private readonly EzServiceClient m_oServiceClient;
@@ -1375,8 +1350,5 @@ GeneratePassword broker-contact-email@example.com password-itself
 		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
 
-		#endregion fields
-
-		#endregion private
 	} // class ServiceClientActivation
 } // namespace

@@ -5,17 +5,12 @@
 	using Ezbob.Logger;
 
 	public class PayPointNameValidationFailed : AMailStrategyBase {
-		#region constructor
 
 		public PayPointNameValidationFailed(int customerId, string cardHodlerName, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
 			this.cardHodlerName = cardHodlerName;
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "PayPoint Name Validation Failed"; } } // Name
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - PayPoint data differs";
@@ -28,8 +23,6 @@
 				{"PayPointName", cardHodlerName}
 			};
 		} // SetTemplateAndVariables
-
-		#endregion method SetTemplateAndVariables
 
 		private readonly string cardHodlerName;
 	} // class PayPointNameValidationFailed

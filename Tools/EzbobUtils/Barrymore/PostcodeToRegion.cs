@@ -5,9 +5,6 @@
 	using System.Reflection;
 
 	public class PostcodeToRegion : SafeLog {
-		#region public
-
-		#region constructor
 
 		public PostcodeToRegion(ASafeLog oLog = null) : base(oLog) {
 			if (ms_oPostcodeToRegion != null)
@@ -15,10 +12,6 @@
 
 			Init(this);
 		} // constructor
-
-		#endregion constructor
-
-		#region indexer
 
 		public string this[string sPostCode] {
 			get {
@@ -35,14 +28,6 @@
 				return string.Empty;
 			} // get
 		} // indexer
-
-		#endregion indexer
-
-		#endregion public
-
-		#region private
-
-		#region method Init
 
 		private static void Init(SafeLog oLog) {
 			lock (typeof(PostcodeToRegion)) {
@@ -84,10 +69,7 @@
 			} // lock
 		} // Init
 
-		#endregion method Init
-
 		private static SortedDictionary<string, string> ms_oPostcodeToRegion;
 
-		#endregion private
 	} // class PostcodeToRegion
 } // namespace

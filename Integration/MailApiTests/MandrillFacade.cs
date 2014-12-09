@@ -10,17 +10,12 @@
 	using RestSharp;
 
 	class MandrillFacade {
-		#region public
-
-		#region constructor
 
 		public MandrillFacade(ASafeLog oLog) {
 			m_oLog = oLog ?? new SafeLog();
 
 			m_oClient = new RestClient(BaseSecureUrl);
 		} // constructor
-
-		#endregion constructor
 
 		public string SendEmail(
 			string to,
@@ -35,10 +30,6 @@
 				PrepareEmail(templateName, to, parameters, subject, cc, attachments)
 			);
 		} // SendEmail
-
-		#endregion public
-
-		#region private
 
 		private string ProcessRequest(string sPath, EmailModel oModel) {
 			try {
@@ -126,6 +117,5 @@
 
 		private readonly ASafeLog m_oLog;
 
-		#endregion private
 	} // class MandrillFacade
 } // namespace

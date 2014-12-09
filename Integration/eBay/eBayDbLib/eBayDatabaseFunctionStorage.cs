@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 using EzBob.CommonLib;
@@ -63,7 +63,7 @@ namespace EzBob.eBayDbLib
 		UniqueNegativeFeedbackCount,
 		UniquePositiveFeedbackCount,
 		UniqueNeutralFeedbackCount,
-		
+
 		NegativeFeedbackByPeriod,
 		PositiveFeedbackByPeriod,
 		NeutralFeedbackByPeriod,
@@ -107,7 +107,7 @@ namespace EzBob.eBayDbLib
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.InventoryTotalItems, DatabaseValueTypeEnum.Integer, "{4D8E5159-5001-4DD8-8B25-EB86C9D1F891}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.InventoryTotalValue, DatabaseValueTypeEnum.Double, "{E612A31D-C9F8-4636-BDC9-E7671BA29A48}" );
             CreateFunctionAndAddToCollection(eBayDatabaseFunctionType.TopCategories, DatabaseValueTypeEnum.String, "{0E0D49A5-0C37-4820-BC02-0E884059666A}");
-			
+
 			// user info
 			/*
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.UserBillingEmail, DatabaseValueTypeEnum.String, "{A9F3069E-26CA-4EAD-B39C-10B4995D409D}" );
@@ -150,7 +150,7 @@ namespace EzBob.eBayDbLib
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.AccountSummaryPaymentMethod, DatabaseValueTypeEnum.String, "{DF1EF5F1-E80B-454E-8B07-EA1A5455FA1E}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.AccountSummaryAdditionalAccount, DatabaseValueTypeEnum.String, "{D08287AB-D025-4E1B-9EC5-4F58D4F8AD70}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.AccountCurrency, DatabaseValueTypeEnum.String, "{49579DCA-1EBF-418E-82AC-6E5BBB9BA4DC}" );
-			
+
 			// feedback info
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.FeedbackRepeatBuyerCount, DatabaseValueTypeEnum.Integer, "{2EA18686-F314-4F7F-AFA8-31815256A597}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.FeedbackRepeatBuyerPercent, DatabaseValueTypeEnum.Double, "{89267204-7BFE-4C7F-8DDE-F96FFDDA79EC}" );
@@ -394,7 +394,6 @@ namespace EzBob.eBayDbLib
 				case eBayDatabaseFunctionType.AccountCurrency:
 					name = "AccountCurrency";
 					break;
-				
 
 				// feedback info
 				case eBayDatabaseFunctionType.FeedbackRepeatBuyerCount:
@@ -436,7 +435,7 @@ namespace EzBob.eBayDbLib
 				case eBayDatabaseFunctionType.NeutralFeedbackByPeriod:
 					name = "NeutralFeedbackByPeriod";
 					break;
-				
+
 				//rating
 				case eBayDatabaseFunctionType.RatingCountItemAsDescribed:
 					name = "RatingCountItemAsDescribed";

@@ -98,14 +98,13 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             CreateLoan(Parse("2012-01-01 12:00:00.000"), 1000);
 
             Console.WriteLine(_loan);
-            
+
             MakePayment(350, Parse("2012-02-02 12:00:00.000"));
 
             Console.WriteLine(_loan);
 
             Assert.That(_loan.Status, Is.EqualTo(LoanStatus.Late));
         }
-
 
         [Test]
         public void if_payment_is_late_only_for_10_pounds_do_not_set_iswaslate()

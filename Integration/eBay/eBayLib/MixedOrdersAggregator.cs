@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using EZBob.DatabaseLib;
@@ -21,13 +21,13 @@ namespace EzBob.eBayLib
 	internal class MixedOrdersAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<MixedReceivedDataItem>, MixedReceivedDataItem, eBayDatabaseFunctionType>
 	{
 		private readonly DataAggregatorBase<ReceivedDataListTimeDependentInfo<EbayDatabaseOrderItem>, EbayDatabaseOrderItem, eBayDatabaseFunctionType> _EbayAggregator;
-		
+
 		public MixedOrdersAggregator( ReceivedDataListTimeDependentInfo<MixedReceivedDataItem> data, ICurrencyConvertor currencyConverter )
 			: base( data, currencyConverter )
 		{
 			var factory = new EBayOrdersAgregatorFactory();
 			_EbayAggregator = factory.CreateDataAggregator( null, currencyConverter );
-			
+
 		}
 
 		protected override object InternalCalculateAggregatorValue( eBayDatabaseFunctionType functionType, IEnumerable<MixedReceivedDataItem> orders )
@@ -39,29 +39,29 @@ namespace EzBob.eBayLib
 				case eBayDatabaseFunctionType.TopCategories:
 			        var agg = new TopCategoriesAggregator();
                     return agg.GetTopCategories(GetTeraPeakOrders(orders));
-                
+
                 case eBayDatabaseFunctionType.NumOfOrders:
                     return GetNumOfOrders(orders, ordersTeraPeak);
-				
+
 				case eBayDatabaseFunctionType.AverageItemsPerOrder:
 
 					int totalOrdersCount = (int)InternalCalculateAggregatorValue( eBayDatabaseFunctionType.TotalItemsOrdered, orders );
 					int shipedOrdersCount = (int)InternalCalculateAggregatorValue( eBayDatabaseFunctionType.NumOfOrders, orders );
-					
+
 					var newValueAverageItemsPerOrder = shipedOrdersCount == 0? 0: (int)Math.Round( totalOrdersCount/ (double)shipedOrdersCount, 0, MidpointRounding.AwayFromZero);;
 					return newValueAverageItemsPerOrder;
-					
+
 				case eBayDatabaseFunctionType.AverageSumOfOrder:
 
 					int shipedOrdersCount2 = (int)InternalCalculateAggregatorValue( eBayDatabaseFunctionType.NumOfOrders, orders );
 					double totalSum = (double)InternalCalculateAggregatorValue( eBayDatabaseFunctionType.TotalSumOfOrders, orders );
-					
+
 					var newValueAverageSum = shipedOrdersCount2 == 0 ? 0 : totalSum / shipedOrdersCount2;
 					return newValueAverageSum;
 
 				case eBayDatabaseFunctionType.CancelledOrdersCount:
 					return GetCancelledOrdersCount(orders, ordersTeraPeak);
-					
+
 				case eBayDatabaseFunctionType.OrdersCancellationRate:
                     var canceled = GetCancelledOrdersCount(orders, ordersTeraPeak);
                     var numOfOrder = GetNumOfOrders(orders, ordersTeraPeak);
@@ -83,8 +83,6 @@ namespace EzBob.eBayLib
 					throw new NotImplementedException();
 			}
 		}
-
-
 
 	    private int GetNumOfOrders(IEnumerable<MixedReceivedDataItem> orders, IEnumerable<TeraPeakDatabaseSellerDataItem> ordersTeraPeak)
 	    {
@@ -171,7 +169,6 @@ namespace EzBob.eBayLib
 			//					});
 			return 0;
 		}
-		
-		
+
 	}
 }

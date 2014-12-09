@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using PayPal.Services.Private.AA;
 
 namespace PayPal.Platform.SDK
@@ -112,7 +112,6 @@ namespace PayPal.Platform.SDK
                         this.lastError = tranactionEx;
                     }
 
-
                 }
                 else
                 {
@@ -149,7 +148,6 @@ namespace PayPal.Platform.SDK
             return CAResponse;
 
         }
-
 
         public GetVerifiedStatusResponse GetVerifiedStatus(GetVerifiedStatusRequest request)
         {
@@ -211,7 +209,6 @@ namespace PayPal.Platform.SDK
                         this.lastError = tranactionEx;
                     }
 
-
                 }
                 else
                 {
@@ -248,7 +245,6 @@ namespace PayPal.Platform.SDK
             return GetVerifiedStatusResponse;
 
         }
-
 
         public AddBankAccountResponse AddBankAccount(AddBankAccountRequest request)
         {
@@ -310,7 +306,6 @@ namespace PayPal.Platform.SDK
                         this.lastError = tranactionEx;
                     }
 
-
                 }
                 else
                 {
@@ -347,8 +342,6 @@ namespace PayPal.Platform.SDK
             return AddBankAccountResponse;
 
         }
-
-
 
         public AddPaymentCardResponse AddPaymentCard(AddPaymentCardRequest request)
         {
@@ -409,7 +402,6 @@ namespace PayPal.Platform.SDK
                         TransactionException tranactionEx = new TransactionException(PayLoadFromat.JSON, res.ToString());
                         this.lastError = tranactionEx;
                     }
-
 
                 }
                 else
@@ -506,7 +498,6 @@ namespace PayPal.Platform.SDK
                         TransactionException tranactionEx = new TransactionException(PayLoadFromat.JSON, res.ToString());
                         this.lastError = tranactionEx;
                     }
-
 
                 }
                 else
@@ -608,7 +599,6 @@ namespace PayPal.Platform.SDK
                         TransactionException tranactionEx = new TransactionException(PayLoadFromat.JSON, res.ToString());
                         this.lastError = tranactionEx;
                     }
-
 
                 }
                 else

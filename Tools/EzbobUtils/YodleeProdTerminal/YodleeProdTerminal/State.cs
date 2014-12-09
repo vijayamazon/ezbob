@@ -509,7 +509,6 @@ namespace com.yodlee.sampleapps
 
         public static State_US WYOMING;
 
-
     }
 
 }

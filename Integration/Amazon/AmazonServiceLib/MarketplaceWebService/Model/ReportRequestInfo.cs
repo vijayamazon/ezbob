@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -20,14 +20,13 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
     [XmlRootAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/", IsNullable = false)]
     public class ReportRequestInfo
     {
-    
+
         private String reportRequestIdField;
 
         private String reportTypeField;
@@ -42,7 +41,6 @@ namespace MarketplaceWebService.Model
 
         private String generatedReportIdField;
 
-
         /// <summary>
         /// Gets and sets the ReportRequestId property.
         /// </summary>
@@ -52,8 +50,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportRequestIdField ; }
             set { this.reportRequestIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportRequestId property
@@ -66,8 +62,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportRequestId property is set
         /// </summary>
@@ -78,7 +72,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ReportType property.
         /// </summary>
@@ -88,8 +81,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportTypeField ; }
             set { this.reportTypeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportType property
@@ -102,8 +93,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportType property is set
         /// </summary>
@@ -114,7 +103,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the StartDate property.
         /// </summary>
@@ -124,8 +112,6 @@ namespace MarketplaceWebService.Model
             get { return this.startDateField.GetValueOrDefault() ; }
             set { this.startDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the StartDate property
@@ -138,8 +124,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if StartDate property is set
         /// </summary>
@@ -150,7 +134,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the EndDate property.
         /// </summary>
@@ -160,8 +143,6 @@ namespace MarketplaceWebService.Model
             get { return this.endDateField.GetValueOrDefault() ; }
             set { this.endDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the EndDate property
@@ -174,8 +155,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if EndDate property is set
         /// </summary>
@@ -186,7 +165,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the SubmittedDate property.
         /// </summary>
@@ -196,8 +174,6 @@ namespace MarketplaceWebService.Model
             get { return this.submittedDateField.GetValueOrDefault() ; }
             set { this.submittedDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SubmittedDate property
@@ -210,8 +186,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SubmittedDate property is set
         /// </summary>
@@ -221,7 +195,6 @@ namespace MarketplaceWebService.Model
             return  this.submittedDateField.HasValue;
 
         }
-
 
         /// <summary>
         /// Gets and sets the ReportProcessingStatus property.
@@ -233,8 +206,6 @@ namespace MarketplaceWebService.Model
             set { this.reportProcessingStatusField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the ReportProcessingStatus property
         /// </summary>
@@ -245,8 +216,6 @@ namespace MarketplaceWebService.Model
             this.reportProcessingStatusField = reportProcessingStatus;
             return this;
         }
-
-
 
         /// <summary>
         /// Checks if ReportProcessingStatus property is set
@@ -268,8 +237,6 @@ namespace MarketplaceWebService.Model
             set { this.generatedReportIdField = value; }
         }
 
-
-
         /// <summary>
         /// Sets the GeneratedReportId property
         /// </summary>
@@ -281,7 +248,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
         /// <summary>
         /// Checks if GeneratedReportId property is set
         /// </summary>
@@ -292,9 +258,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -303,7 +266,6 @@ namespace MarketplaceWebService.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -371,8 +333,6 @@ namespace MarketplaceWebService.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

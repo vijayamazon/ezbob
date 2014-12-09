@@ -3,7 +3,6 @@
 	using EzBob.Backend.Strategies.MailStrategies;
 
 	partial class EzServiceImplementation {
-		#region async
 
 		public ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst) {
 			return Execute<ApprovedUser>(customerId, userId, customerId, loanAmount, nValidHours, isFirst);
@@ -93,14 +92,9 @@
 			return Execute<EmailHmrcParsingErrors>(nCustomerID, null, nCustomerID, nCustomerMarketplaceID, oErrorsToEmail);
 		} // EmailHmrcParsingErrors
 
-		#endregion async
-
-		#region sync
-
 		public ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail) {
 			return ExecuteSync<BrokerLeadSendInvitation>(null, null, nLeadID, sBrokerContactEmail);
 		} // BrokerLeadSendInvitation
 
-		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

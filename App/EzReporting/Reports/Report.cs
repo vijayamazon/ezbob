@@ -13,17 +13,10 @@
 	using JetBrains.Annotations;
 
 	public class Report {
-		#region public const
 
 		public const string DateRangeArg = "DateRange";
 		public const string CustomerArg = "Customer";
 		public const string ShowNonCashArg = "ShowNonCashTransactions";
-
-		#endregion public const
-
-		#region public static
-
-		#region method GetScheduledReportsList
 
 		public static SortedDictionary<string, Report> GetScheduledReportsList(AConnection oDB) {
 			return FillReportArgs(oDB, 
@@ -31,10 +24,6 @@
 				new QueryParameter("@RptType", "")
 			);
 		} // GetScheduledReportsList
-
-		#endregion method GetScheduledReportsList
-
-		#region method GetUserReportList
 
 		public static SortedDictionary<string, Report> GetUserReportsList(AConnection oDB, string userName = null) {
 			var users = new List<QueryParameter>();
@@ -46,12 +35,6 @@
 
 			return FillReportArgs(oDB, "RptGetUserReports", users.ToArray());
 		} // GetUserReportsList
-
-		#endregion method GetUserReportList
-
-		#endregion public static
-
-		#region constructor
 
 		public Report() {
 			Arguments = new SortedDictionary<string, string>();
@@ -92,10 +75,6 @@
 				AddArgument(row.ArgumentName);
 		} // constructor
 
-		#endregion constructor
-
-		#region method Init
-
 		private void Init(SafeReader row) {
 			ReportType type;
 
@@ -115,18 +94,10 @@
 			IsMonthToDate = row["IsMonthToDate"];
 		} // Init
 
-		#endregion method Init
-
-		#region method AddArgument
-
 		public void AddArgument(string sArgument) {
 			sArgument = (sArgument ?? "").Trim();
 			Arguments[sArgument] = sArgument;
 		} // AddArgument
-
-		#endregion method AddArgument
-
-		#region properties
 
 		public string Title { get; set; }
 		public ReportType Type { get; set; }
@@ -140,10 +111,6 @@
 		public bool IsMonthToDate { get; set; }
 
 		public SortedDictionary<string, string> Arguments { get; private set; }
-
-		#endregion properties
-
-		#region title related
 
 		public string GetTitle(DateTime oDate, string sSeparator = " ", DateTime? oToDate = null) {
 			return GetTitle(sSeparator, DateToString(oDate), " - ", oToDate);
@@ -168,10 +135,6 @@
 			return os.ToString();
 		} // GetTitle
 
-		#endregion title related
-
-		#region date conversion
-
 		public static string DateToString(DateTime oDate) {
 			return oDate.ToString("MMMM d yyyy", CultureInfo.InvariantCulture);
 		} // DateToString
@@ -179,10 +142,6 @@
 		public static string DateToMonth(DateTime oDate) {
 			return oDate.ToString("MMMM yyyy", CultureInfo.InvariantCulture);
 		} // DateToMonth
-
-		#endregion date conversion
-
-		#region method ParseHeaderAndFields
 
 		public static ColumnInfo[] ParseHeaderAndFields(string sHeader, string sFields) {
 			var columns = new List<ColumnInfo>();
@@ -205,10 +164,6 @@
 			return columns.ToArray();
 		} // ParseHeadersAndFields
 
-		#endregion method ParseHeaderAndFields
-
-		#region style related
-
 		public static ATag GetStyle() {
 			return new Style(ReadStyle());
 		} // GetStyle
@@ -217,7 +172,7 @@
 			string sStyle = Regex.Replace(ReadStyle().Trim().Replace("\n", " ").Replace("\r", " ").Trim(), @"\s+", " ");
 
 			sStyle = Regex.Replace(sStyle, @"\/\*.*?\*\/", "").Trim();
-			
+
 			sStyle = Regex.Replace(sStyle, @"\s+", " ");
 
 			string[] ary = Regex.Split(sStyle, @"\s*[\{\}]\s*").Where(s => s != string.Empty).ToArray();
@@ -257,16 +212,8 @@
 			return sr.ReadToEnd();
 		} // ReadStyle
 
-		#endregion style related
-
-		#region private const
-
 		private const string ReportListStoredProc = "RptScheduler_GetReportList";
 		private const string ReportArgsStoredProc = "RptScheduler_GetReportArgs";
-
-		#endregion private const
-
-		#region class ReportArg
 
 		private class ReportArg {
 			[UsedImplicitly]
@@ -282,12 +229,6 @@
 			public string ArgumentName { get; set; }
 		} // ReportArg
 
-		#endregion class ReportArg
-
-		#region private static
-
-		#region method LoadReportArgs
-
 		private static List<ReportArg> LoadReportArgs(AConnection oDB, string sReportTypeName = null) {
 			var oParams = new List<QueryParameter>();
 
@@ -300,10 +241,6 @@
 				oParams.ToArray()
 			);
 		} // LoadReportArgs
-
-		#endregion method LoadReportArgs
-
-		#region method FillReportArgs
 
 		private static SortedDictionary<string, Report> FillReportArgs(AConnection oDB, string sSpName, params QueryParameter[] arySpArgs) {
 			var reportList = new SortedDictionary<string, Report>();
@@ -339,8 +276,5 @@
 			return reportList;
 		} // FillReportArgs 
 
-		#endregion method FillReportArgs
-
-		#endregion private static
 	} // class Report
 } // namespace Reports

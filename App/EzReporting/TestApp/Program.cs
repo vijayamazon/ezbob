@@ -41,8 +41,6 @@ namespace TestApp {
 			public virtual int V4 { get; private set; }
 		} // class B
 
-		#region method Main
-
 		private static ASafeLog ms_oLog;
 
 		static void Main(string[] args) {
@@ -101,10 +99,6 @@ namespace TestApp {
 			// TestReapproval(oDB, log);
 		} // Main
 
-		#endregion method Main
-
-		#region method TestBadPeriods
-
 		private static void TestBadPeriods(AConnection oDB, ASafeLog oLog) {
 			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
 
@@ -117,10 +111,6 @@ namespace TestApp {
 
 			oLog.Debug("{0}", bp);
 		} // TestBadPeriods
-
-		#endregion method TestBadPeriods
-
-		#region method UpdateBrokerPasswords
 
 		private static void UpdateBrokerPasswords(AConnection oDB, ASafeLog oLog) {
 			var oQueries = new List<string>();
@@ -140,10 +130,6 @@ namespace TestApp {
 
 			oQueries.ForEach(sQuery => oDB.ExecuteNonQuery(sQuery, CommandSpecies.Text));
 		} // UpdateBrokerPasswords
-
-		#endregion method UpdateBrokerPasswords
-
-		#region method TestTableSpArgument
 
 		private static void TestTableSpArgument(AConnection oDB, ASafeLog oLog) {
 			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
@@ -175,10 +161,6 @@ namespace TestApp {
 			oLog.Debug("Results - end");
 		} // TestTableSpArgument
 
-		#endregion method TestTableSpArgument
-
-		#region method TestVectorSpArgument
-
 		private static void TestVectorSpArgument(AConnection oDB, ASafeLog oLog) {
 			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
 
@@ -196,10 +178,6 @@ namespace TestApp {
 
 			oLog.Debug("Results - end");
 		} // TestVectorSpArgument
-
-		#endregion method TestVectorSpArgument
-
-		#region method TestRetryerWithArguments
 
 		private static void TestRetryerWithArguments(AConnection oDB, ASafeLog log) {
 			var oRetryer = new SqlRetryer(nRetryCount: 8, nSleepBeforeRetryMilliseconds: 1000, oLog: log) {
@@ -296,10 +274,6 @@ namespace TestApp {
 			} // class ResultRow
 		} // BrokerLoadCustomerList
 
-		#endregion method TestRetryerWithArguments
-
-		#region method TestEarnedInterestForAudit
-
 		private static void TestEarnedInterestForAudit(AConnection oDB, ASafeLog log) {
 			var ea = new EarnedInterest(
 				oDB,
@@ -314,10 +288,6 @@ namespace TestApp {
 
 			ea.Run();
 		} // TestEarnedInterestForAudit
-
-		#endregion method TestEarnedInterest
-
-		#region method TestHashPassword
 
 		private static void TestHashPassword(AConnection oDB, ASafeLog oLog) {
 			var aryPasswords = new string[] {
@@ -335,10 +305,6 @@ namespace TestApp {
 				oLog.Msg("Password: '{0}', hash size: {1}, hash: {2}\n", sPassword, sHash.Length, sHash);
 			} // for each password
 		} // TestHashPassword
-
-		#endregion method TestHashPassword
-
-		#region method TestParsedValues
 
 		private static void TestParsedValues(AConnection oDB, ASafeLog oLog) {
 			oLog.Info("Using row - begin");
@@ -374,10 +340,6 @@ namespace TestApp {
 			return ActionResult.Continue;
 		} // TestParsedValuesPrint
 
-		#endregion method TestParsedValues
-
-		#region method TestUiReportExt
-
 		private static void TestUiReportExt(AConnection oDB, ASafeLog log) {
 			var rpt = new UiReportExt(oDB, new DateTime(2013, 12, 23), new DateTime(2013, 12, 31), log) { VerboseLogging = true };
 
@@ -387,10 +349,6 @@ namespace TestApp {
 
 			log.Debug("Report end");
 		} // TestUiReportExt
-
-		#endregion method TestUiReportExt
-
-		#region method TestLoanDateScore
 
 		private static void TestLoanDateScore(AConnection oDB, ASafeLog log) {
 			var rpt = new LoanDateScore(oDB, log) { VerboseLogging = true };
@@ -403,10 +361,6 @@ namespace TestApp {
 
 			log.Debug("Report end");
 		} // TestLoanDateScore
-
-		#endregion method TestExperianLimitedCompanyData
-
-		#region method TestExperianLimitedCompanyData
 
 		private static void TestExperianLimitedCompanyData(AConnection oDB, ASafeLog log) {
 			var rpt = new ExperianLimitedCompanyData(oDB, log);
@@ -421,10 +375,6 @@ namespace TestApp {
 			log.Debug("Report end");
 		} // TestExperianLimitedCompanyData
 
-		#endregion method TestExperianLimitedCompanyData
-
-		#region method TestUiReport
-
 		private static void TestUiReport(AConnection oDB, ASafeLog log) {
 			var rpt = new UiReport(oDB, new DateTime(2013, 12, 1), new DateTime(2013, 12, 10), log);
 			rpt.VerboseLogging = true;
@@ -438,10 +388,6 @@ namespace TestApp {
 
 			log.Debug("Report end");
 		} // TestUiReport
-
-		#endregion method TestUiReport
-
-		#region method TestInterestFreeze
 
 		private static void TestInterestFreeze(AConnection oDB, ASafeLog log) {
 			var oPeriods = new SortedDictionary<int, InterestFreezePeriods>();
@@ -473,10 +419,6 @@ namespace TestApp {
 				log.Msg("LoanID: {0} Freeze Periods: {1}", pair.Key, pair.Value);
 		} // TestInerestFreeze
 
-		#endregion method TestInterestFreeze
-
-		#region method TestIntervalsOperations
-
 		private static void TestIntervalsOperations() {
 			TestIntervalsOperations(
 				new FreezeInterval(new DateTime(1976, 7, 1), null, 0.3m),
@@ -494,10 +436,6 @@ namespace TestApp {
 			);
 		} // TestIntervalOperations
 
-		#endregion method TestIntervalsOperations
-
-		#region method TestIntervalsOperations
-
 		private static void TestIntervalsOperations(FreezeInterval di, FreezeInterval di2) {
 			Console.WriteLine("\n***\n\n");
 
@@ -512,18 +450,10 @@ namespace TestApp {
 			Console.WriteLine("\n***\n\n");
 		} // TestIntervalOperations
 
-		#endregion method TestIntervalsOperations
-
-		#region method TestLoanStats
-
 		private static void TestLoanStats(AConnection oDB, ASafeLog log) {
 			var sender = new ReportDispatcher(oDB, log);
 			sender.Dispatch("loan_stats", DateTime.Today, null, new LoanStats(oDB, log).Xls(), ReportDispatcher.ToDropbox);
 		} // TestLoanStats
-
-		#endregion method TestLoanStats
-
-		#region method TestLoansIssuedReport
 
 		private static void TestLoansIssuedReport(AConnection oDB, ASafeLog log) {
 			var brh = new BaseReportHandler(oDB, log);
@@ -532,10 +462,6 @@ namespace TestApp {
 
 			ATag oTag = brh.BuildLoansIssuedReport(rpt, new DateTime(2013, 7, 1), new DateTime(2013, 7, 15));
 		} // TestLoansIssuedReport
-
-		#endregion method TestLoansIssuedReport
-
-		#region method TestEarnedInterest
 
 		private static void TestEarnedInterest(AConnection oDB, ASafeLog log) {
 			var ea = new EarnedInterest(
@@ -552,10 +478,6 @@ namespace TestApp {
 			ea.Run();
 		} // TestEarnedInterest
 
-		#endregion method TestEarnedInterest
-
-		#region method TestLoanIntegrity
-
 		private static void TestLoanIntegrity(AConnection oDB, ASafeLog log) {
 			var ea = new LoanIntegrity(oDB, log) {
 				VerboseLogging = true
@@ -564,11 +486,7 @@ namespace TestApp {
 			ea.Run();
 		} // TestLoanIntegrity
 
-		#endregion method TestLoanIntegrity
-
 		/*
-
-		#region method TestSpeed
 
 		private static void TestSpeed(AConnection oDB, ASafeLog oLog) {
 			const int nCount = 1000;
@@ -637,13 +555,8 @@ namespace TestApp {
 		} // TestSpeed
 
 		private class SpBrokerLogin : AStoredProc {
-			#region constructor
 
 			public SpBrokerLogin(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
 				Email = MiscUtils.ValidateStringArg(Email, "Email");
@@ -652,16 +565,8 @@ namespace TestApp {
 				return true;
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
-			#region property Email
-
 			[UsedImplicitly]
 			public string Email { get; set; }
-
-			#endregion property Email
-
-			#region property Password
 
 			public string Password {
 				[UsedImplicitly]
@@ -671,14 +576,9 @@ namespace TestApp {
 
 			private string m_sPassword;
 
-			#endregion property Password
 		} // class SpBrokerLogin
 
-		#endregion method TestSpeed
-
 		*/
-
-		#region method TestDataSharing
 
 		private static void TestDataSharing(AConnection oDB, ASafeLog oLog) {
 			DataSharing ds = new DataSharing(false, oDB, oLog);
@@ -691,10 +591,6 @@ namespace TestApp {
 
 			f.Report.SaveAs(new FileInfo(@".\data\funnel_test.xlsx"));
 		} // TestDataSharing
-
-		#endregion method TestDataSharing
-
-		#region method TestAddBrokers
 
 		private static void TestAddBrokers(AConnection oDB, ASafeLog oLog) {
 			var oBrokers = new List<BrokerData> {
@@ -712,10 +608,6 @@ namespace TestApp {
 			} // for each
 		} // TestAddBrokers
 
-		#endregion method TestAddBrokers
-
-		#region method TestReapproval
-
 		private static void TestReapproval(AConnection oDB, ASafeLog oLog) {
 			var adr = new AutoDecisionResponse();
 
@@ -724,10 +616,7 @@ namespace TestApp {
 			ra.MakeDecision(adr);
 		} // TestReapproval
 
-		#endregion method TestReapproval
 	} // class Program
-
-	#region class BrokerData
 
 	internal class BrokerData {
 		public BrokerData(string sEmail, string sFirstName, string sLastName, string sCompany, string sPrimaryPhone, string sOtherPhone) {
@@ -776,7 +665,6 @@ namespace TestApp {
 		} // Signup
 	} // class BrokerData
 
-	#endregion class BrokerData
 } // namespace
 
 // ReSharper restore UnusedMember.Local

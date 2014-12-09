@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -30,14 +30,13 @@ namespace MarketplaceWebService
     /// </summary>
     public class MarketplaceWebServiceException : Exception 
     {
-    
+
         private String message = null;
         private HttpStatusCode statusCode = default(HttpStatusCode);
         private String errorCode = null;
         private String errorType = null;
         private String requestId = null;
         private String xml = null;
-    
 
         /// <summary>
         /// Constructs MarketplaceWebServiceException with message
@@ -46,7 +45,7 @@ namespace MarketplaceWebService
         public MarketplaceWebServiceException(String message) {
             this.message = message;
         }
-    
+
         /// <summary>
         /// Constructs MarketplaceWebServiceException with message and status code
         /// </summary>
@@ -56,7 +55,6 @@ namespace MarketplaceWebService
         {
             this.statusCode = statusCode;
         }
-    
 
         /// <summary>
         /// Constructs MarketplaceWebServiceException with wrapped exception
@@ -65,7 +63,7 @@ namespace MarketplaceWebService
         public MarketplaceWebServiceException(Exception t) : this (t.Message, t) {
 
         }
-    
+
         /// <summary>
         /// Constructs MarketplaceWebServiceException with message and wrapped exception
         /// </summary>
@@ -83,7 +81,6 @@ namespace MarketplaceWebService
                 this.xml = ex.XML;
             }
         }
-    
 
         /// <summary>
         /// Constructs MarketplaceWebServiceException with information available from service
@@ -101,7 +98,7 @@ namespace MarketplaceWebService
             this.requestId = requestId;
             this.xml = xml;
         }
-    
+
         /// <summary>
         /// Gets and sets of the ErrorCode property.
         /// </summary>
@@ -125,8 +122,7 @@ namespace MarketplaceWebService
         {
             get { return this.message; }
         }
-    
- 
+
         /// <summary>
         /// Gets status code returned by the service if available. If status
         /// code is set to -1, it means that status code was unavailable at the
@@ -144,7 +140,7 @@ namespace MarketplaceWebService
         {
             get { return this.xml; }
         }
- 
+
         /// <summary>
         /// Gets Request ID returned by the service if available.
         /// </summary>
@@ -152,6 +148,6 @@ namespace MarketplaceWebService
         {
             get { return this.requestId; }
         }
-    
+
     }
 }

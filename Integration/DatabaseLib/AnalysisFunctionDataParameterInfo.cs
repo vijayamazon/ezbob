@@ -1,4 +1,4 @@
-using EZBob.DatabaseLib.DatabaseWrapper.Functions;
+﻿using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 using EzBob.CommonLib.TimePeriodLogic;
 
@@ -17,7 +17,6 @@ namespace EZBob.DatabaseLib
 			_TimePeriod = timePeriod;
 		}
 
-
 		public override ITimePeriod TimePeriod
 		{
 			get { return _TimePeriod; }
@@ -28,7 +27,6 @@ namespace EZBob.DatabaseLib
 			get { return _Function.FunctionValueType; }
 		}
 
-		
 		public override object Value
 		{
 			get { return _Value; }
@@ -37,7 +35,7 @@ namespace EZBob.DatabaseLib
 		public override string ParameterName
 		{
 			get { return _Function == null ? null : _Function.DisplayName; }
-			
+
 		}
 	}
 }

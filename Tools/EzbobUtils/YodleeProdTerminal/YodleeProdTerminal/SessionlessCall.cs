@@ -35,7 +35,6 @@ namespace com.yodlee.sampleapps
                     System.Console.Write("Enter Choice : ");
                     choice = int.Parse(System.Console.ReadLine());
 
-
                     if (choice == NAV_SESSIONLESS_VIEW_ITEMS)
                     {
                         sessionlessViewItems();
@@ -58,7 +57,7 @@ namespace com.yodlee.sampleapps
 
             String input = System.Console.ReadLine();
             String userName = null;
-            
+
             if (input != null) {
                 userName = input;
             }
@@ -81,7 +80,6 @@ namespace com.yodlee.sampleapps
             sessionlessUserContext.cobrandConversationCredentials = cobrandContext.cobrandConversationCredentials;
             sessionlessUserContext.conversationCredentials = passwordCredentials;
 
-
             sessionlessUserContext.applicationId = cobrandContext.applicationId;
             sessionlessUserContext.channelId = cobrandContext.channelId;
             sessionlessUserContext.channelIdSpecified = true;
@@ -95,7 +93,6 @@ namespace com.yodlee.sampleapps
             sessionlessUserContext.tncVersionSpecified = true;
             sessionlessUserContext.valid = true;
             sessionlessUserContext.validationHandler = cobrandContext.validationHandler;
-
 
             Object[] itemSummaries = (Object[])dataService.getItemSummaries(sessionlessUserContext);
             if (itemSummaries == null || itemSummaries.Length == 0)

@@ -11,9 +11,6 @@
 	using OfficeOpenXml;
 
 	public partial class BaseReportHandler : SafeLog {
-		#region report generators
-
-		#region method BuildAccountingLoanBalanceReport
 
 		public ATag BuildAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateAccountingLoanBalanceReport(report, today, tomorrow);
@@ -23,19 +20,11 @@
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildAccountingLoanBalanceReport
 
-		#endregion method BuildAccountingLoanBalanceReport
-
-		#region method BuildAccountingLoanBalanceXls
-
 		public ExcelPackage BuildAccountingLoanBalanceXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateAccountingLoanBalanceReport(report, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
 		} // BuildAccountingLoanBalanceXls
-
-		#endregion method BuildAccountingLoanBalanceXls
-
-		#region method CreateAccountingLoanBalanceReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow) {
 			Debug("Creating accounting loan balance report...");
@@ -100,14 +89,6 @@
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
 		} // CreateAccountingLoanBalanceReport
 
-		#endregion method CreateAccountingLoanBalanceReport
-
-		#endregion report generators
-
-		#region helper classes
-
-		#region class AccountingLoanBalanceRawUpdate
-
 		private class AccountingLoanBalanceRawUpdate {
 			[UsedImplicitly]
 			public string LoanTranMethod { get; set; }
@@ -133,10 +114,6 @@
 			[UsedImplicitly]
 			public decimal FeesEarned { get; set; }
 		} // AccountingLoanBalanceRawUpdate
-
-		#endregion class AccountingLoanBalanceRawUpdate
-
-		#region class AccountingLoanBalanceRawData
 
 		private class AccountingLoanBalanceRawData : AccountingLoanBalanceRawUpdate {
 			[UsedImplicitly]
@@ -167,14 +144,7 @@
 			public decimal FeesRepaid { get; set; }
 		} // AccountingLoanBalanceRawData
 
-		#endregion class AccountingLoanBalanceRawData
-
-		#region class AccountingLoanBalanceRow
-
 		private class AccountingLoanBalanceRow {
-			#region public
-
-			#region constructor
 
 			public AccountingLoanBalanceRow() {
 				EarnedFees = 0;
@@ -236,10 +206,6 @@
 				Update(raw);
 			} // constructor
 
-			#endregion constructor
-
-			#region method UpdateTotal
-
 			public void UpdateTotal(AccountingLoanBalanceRow row) {
 				LoanID++;
 
@@ -262,10 +228,6 @@
 				CashPaid += row.CashPaid;
 				NonCashPaid += row.NonCashPaid;
 			} // UpdateTotal
-
-			#endregion method UpdateTotal
-
-			#region method Update
 
 			public void Update(SafeReader sr) {
 				Update(sr.Fill<AccountingLoanBalanceRawUpdate>());
@@ -301,10 +263,6 @@
 				} // if
 			} // Update
 
-			#endregion method Update
-
-			#region method ToTable
-
 			public static DataTable ToTable() {
 				var oOutput = new DataTable();
 
@@ -329,10 +287,6 @@
 
 				return oOutput;
 			} // ToTable
-
-			#endregion method ToTable
-
-			#region method ToRow
 
 			public void ToRow(DataTable tbl) {
 				if (IsTotal) {
@@ -381,33 +335,15 @@
 				} // if
 			} // ToRow
 
-			#endregion method ToRow
-
-			#endregion public
-
-			#region private
-
-			#region property WriteOffBalance
-
 			private decimal WriteOffBalance {
 				get { return IssuedAmount + SetupFee + EarnedInterest + WriteOffEarnedFees - WriteOffCashPaid; } // get
 			} // WriteOffBalance
 
-			#endregion property WriteOffBalance
-
-			#region property WriteOffTotalBalance
-
 			private decimal WriteOffTotalBalance { get; set; } // WriteOffBalance
-
-			#endregion property WriteOffTotalBalance
-
-			#region property Balance
 
 			private decimal Balance {
 				get { return LastInPeriodCustomerStatus == CustomerStatus.WriteOff ? 0 : IssuedAmount + SetupFee + EarnedInterest + EarnedFees - CashPaid; } // get
 			} // Balance
-
-			#endregion property WriteOffBalance
 
 			private SortedSet<int> Transactions { get; set; }
 			private SortedSet<int> LoanCharges { get; set; }
@@ -433,11 +369,7 @@
 
 			private bool IsTotal { get; set; }
 
-			#endregion private
 		} // class AccountingLoanBalanceRow
 
-		#endregion class AccountingLoanBalanceRow
-
-		#endregion helper classes
 	} // class BaseReportHandler
 } // namespace

@@ -19,9 +19,6 @@
 
 	public class Utils
 	{
-		#region public
-
-		#region generic method WriteLog
 
 		public static WriteToLogPackage.OutputData WriteLog<TX, TY>(
 			TX input,
@@ -54,10 +51,6 @@
 			return pkg.Out;
 
 		} // WriteLog
-
-		#endregion generic method WriteLog
-
-		#region method WriteLog
 
 		public static void WriteLog(WriteToLogPackage oPackage)
 		{
@@ -176,10 +169,6 @@
 			} // try
 		} // WriteToLog
 
-		#endregion method WriteLog
-
-		#region method TryRead
-
 		public static void TryRead(Action a, string key, StringBuilder errors)
 		{
 			try
@@ -192,8 +181,6 @@
 			} // try
 		} // TryRead
 
-		#endregion method TryRead
-
 		public static decimal? GetConsumerCaisBalance(List<ExperianConsumerDataCais> cais)
 		{
 			if (cais != null)
@@ -202,8 +189,6 @@
 			}
 			return null;
 		}
-
-		#region method GetLimitedCaisBalance
 
 		public static decimal? GetLimitedCaisBalance(ExperianLtd oExperianLtd)
 		{
@@ -229,14 +214,7 @@
 			return nFoundCount == 0 ? (decimal?)null : balance;
 		} // GetLimitedCaisBalance
 
-		#endregion method GetLimitedCaisBalance
-
-		#endregion public
-
-		#region private
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(Utils));
 
-		#endregion private
 	} // class Utils
 } // namespace

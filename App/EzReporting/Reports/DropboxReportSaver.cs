@@ -7,20 +7,11 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class DropboxReportSaver
-
 	class DropboxReportSaver : SafeLog {
-		#region public
-
-		#region constructor
 
 		public DropboxReportSaver(AConnection oDB, ASafeLog log = null) : base(log) {
 			DB = oDB;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Init
 
 		public virtual bool Init() {
 			Info("Loading Dropbox configuration...");
@@ -92,10 +83,6 @@
 			return true;
 		} // Init
 
-		#endregion method Init
-
-		#region method Send
-
 		public virtual void Send(string sReportName, DateTime oReportDate, string sFileExtension, byte[] oReportBody) {
 			const int nRetryCount = 5;
 
@@ -157,17 +144,7 @@
 			Debug("Sending {0} report to Dropbox complete.", sReportName);
 		} // Send
 
-		#endregion method Send
-
-		#endregion public
-
-		#region protected
-
 		protected virtual AConnection DB { get; private set; }
-
-		#endregion protected
-
-		#region private
 
 		private string m_sAppKey;
 		private string m_sAppSecret;
@@ -181,8 +158,6 @@
 			ReportDaemonDropboxRootPath,
 		} // enum ConfigurationVariables
 
-		#endregion private
 	} // class DropboxReportSaver
 
-	#endregion class DropboxReportSaver
 } // namespace Reports

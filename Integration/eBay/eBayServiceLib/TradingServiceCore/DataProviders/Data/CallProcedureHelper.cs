@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Data
 {
@@ -44,7 +44,6 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Data
 				case CallProcedureTypeEnum.GetOrders:
 					serviceName = "GetOrders";
 					break;
-
 
                 case CallProcedureTypeEnum.GetFeedBack:
                     serviceName = "GetFeedBack";

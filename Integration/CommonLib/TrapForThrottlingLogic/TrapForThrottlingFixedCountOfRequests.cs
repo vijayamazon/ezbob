@@ -5,7 +5,7 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 {
 	internal class TrapForThrottlingFixedCountOfRequests : TrapForThrottlingBase
 	{
-		
+
 		private readonly string _Name;
 		private readonly int _RequestQuota;
 		private readonly int _RestoreRateInSeconds;
@@ -49,9 +49,7 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 				int timeFoFree = 0;
 				lock ( _Locker )
 				{
-					#region try to restore items
 
-					
 					if ( _CurrentRequestInProgress > 0 )
 					{
 						var elapsedSeconds = (int)( now - _LastRequestTime.Value ).TotalSeconds;
@@ -65,14 +63,14 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 							_LastRequestTime = now;
 							WriteToLog( string.Format( "{0} [{1}: {2}] last restore cells time", _Name, actionName, now ) );
 							_CurrentRequestInProgress -= canCellsForFreeCount;
-							
+
 							if ( _CurrentRequestInProgress < 0 )
 							{
 								_CurrentRequestInProgress = 0;
 							}
 
 							WriteToLog( string.Format( "{0} [{1}: {2}] Total buzzy cells: {3} of {4}", _Name, actionName, now, _CurrentRequestInProgress, requestQuota ) );
-							
+
 							if ( _CurrentRequestInProgress == 0 )
 							{
 								WriteToLog( string.Format( "{0} [{1}: {2}] All cells free", _Name, actionName, now ) );
@@ -80,10 +78,8 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 							}
 						}						
 					}
-					#endregion
 
 					hasFree = requestQuota - _CurrentRequestInProgress > 0;
-					
 
 					if ( hasFree )
 					{
@@ -92,7 +88,7 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 							WriteToLog( string.Format( "{0} [{1}: {2}] Getting First cells", _Name, actionName, now ) );
 							_LastRequestTime = now;
 						}
-					
+
 						++_CurrentRequestInProgress;
 						WriteToLog( string.Format( "{0} [{1}: {2}] Total buzy cells: {3} of {4}", _Name, actionName, now, _CurrentRequestInProgress, requestQuota ) );
 					}
@@ -154,6 +150,5 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 			WriteToLog( string.Format( "TrapForThrottlingFixedCountOfRequests::Exit - Finish ({0})", _Name ), WriteLogType.Info );
 		}
 
-		
 	}
 }

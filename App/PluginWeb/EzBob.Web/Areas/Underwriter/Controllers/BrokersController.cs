@@ -13,16 +13,11 @@
 	using StructureMap;
 
 	public class BrokersController : Controller {
-		#region constructor
 
 		public BrokersController(IEzbobWorkplaceContext context) {
 			m_oServiceClient = new ServiceClient();
 			m_oContext = context;
 		} // constructor
-
-		#endregion constructor
-
-		#region action LoadCustomers
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -43,10 +38,6 @@
 			ms_oLog.Debug("Load broker customers request for broker {0} complete.", nBrokerID);
 			return Json(new { aaData = oResult.Customers, }, JsonRequestBehavior.AllowGet);
 		} // LoadCustomers
-
-		#endregion action LoadCustomers
-
-		#region action LoadProperties
 
 		[HttpGet]
 		[Ajax]
@@ -69,10 +60,6 @@
 			return Json(oResult.Properties, JsonRequestBehavior.AllowGet);
 		} // LoadProperties
 
-		#endregion action LoadProperties
-
-		#region action ResetPassword123456
-
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ResetPassword123456(int nBrokerID) {
 			try {
@@ -85,10 +72,6 @@
 			return Json(true);
 		} // ResetPassword123456
 
-		#endregion action ResetPassword123456
-
-		#region action AttachCustomer
-
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult AttachCustomer(int nCustomerID, int nBrokerID) {
 			try {
@@ -100,10 +83,6 @@
 				return Json(new { success = false, error = e.Message, });
 			} // try
 		} // AttachCustomer
-
-		#endregion action AttachCustomer
-
-		#region White Label
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -128,13 +107,13 @@
 			ms_oLog.Debug("Save broker white label request for broker {0}...", brokerId);
 
 			var whiteLabelRepo = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
-			
+
 			if (whiteLabelRepo.GetByName(whiteLabel.Name) != null) {
 				return Json(new { error = "white label with such name already exists" });
 			}
 
 			var brokerRepo = ObjectFactory.GetInstance<BrokerRepository>();
-			
+
 			var broker = brokerRepo.Get(brokerId);
 			if (broker != null) {
 
@@ -174,7 +153,7 @@
 			whiteLabelRepo.Update(wl);
 			return Json(new { success = true });
 		} 
-		
+
 		[HttpPost]
 		public JsonResult UploadLogo() {
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
@@ -193,14 +172,9 @@
 			return Json(new { error = "broker not found" });
 		} 
 
-		#endregion White Label
-
-		#region private
-
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(BrokersController));
 
-		#endregion private
 	} // class BrokersController
 } // namespace

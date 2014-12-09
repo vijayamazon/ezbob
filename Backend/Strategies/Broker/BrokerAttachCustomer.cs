@@ -5,9 +5,6 @@
 	using JetBrains.Annotations;
 
 	public class BrokerAttachCustomer : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerAttachCustomer(
 			int nCustomerID,
@@ -23,31 +20,15 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "BrokerAttachCustomer"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly AttachCustomerToBroker m_oSp;
-
-		#region class AttachCustomerToBroker
 
 		private class AttachCustomerToBroker : AStoredProcedure {
 			public AttachCustomerToBroker(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -80,8 +61,5 @@
 			} // Now
 		} // class AttachCustomerToBroker
 
-		#endregion class AttachCustomerToBroker
-
-		#endregion private
 	} // class BrokerAttachCustomer
 } // namespace

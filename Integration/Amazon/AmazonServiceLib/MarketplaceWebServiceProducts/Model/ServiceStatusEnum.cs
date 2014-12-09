@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -28,14 +26,12 @@ namespace MarketplaceWebServiceProducts.Model
     public enum ServiceStatusEnum
     {
     GREEN,
-            
+
             GREEN_I,
-            
+
             YELLOW,
-            
+
             RED,
-            
-        
 
     }
 

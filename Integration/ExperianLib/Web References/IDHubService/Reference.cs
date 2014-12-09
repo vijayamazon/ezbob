@@ -20,8 +20,7 @@ namespace ExperianLib.Web_References.IDHubService {
     using System.Web.Services.Protocols;
     using System.ComponentModel;
     using System.Xml.Serialization;
-    
-    
+
     /// <remarks/>
     // CODEGEN: The optional WSDL extension element 'PolicyReference' from namespace 'http://schemas.xmlsoap.org/ws/2004/09/policy' was not handled.
     // CODEGEN: The optional WSDL extension element 'PolicyReference' from namespace 'http://schemas.xmlsoap.org/ws/2004/09/policy' was not handled.
@@ -63,37 +62,37 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ExecuteQASearchType))]
     public partial class EndpointService : Microsoft.Web.Services3.WebServicesClientProtocol
     {
-        
+
         private System.Threading.SendOrPostCallback FindProcessConfigurationOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback ExecuteQASearchOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback ExecuteQAGetAddressOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback ListFieldOptionalityOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback ExecuteRequestOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWGetAdditionalDataOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWGetCountriesOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWGetCountryInputOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWGetBranchDataOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWGetSWIFTDataOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWGetSEPADataOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWGetFasterPaymentsDataOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWValidateIBANOperationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BWValidateOperationOperationCompleted;
-        
+
         private bool useDefaultCredentialsSetExplicitly;
-        
+
         /// <remarks/>
         public EndpointService() {
             this.Url = "https://ukid.uat.uk.experian.com/EIHEndpoint";
@@ -105,7 +104,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         public new string Url {
             get {
                 return base.Url;
@@ -119,7 +118,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 base.Url = value;
             }
         }
-        
+
         public new bool UseDefaultCredentials {
             get {
                 return base.UseDefaultCredentials;
@@ -129,49 +128,49 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         /// <remarks/>
         public event FindProcessConfigurationOperationCompletedEventHandler FindProcessConfigurationOperationCompleted;
-        
+
         /// <remarks/>
         public event ExecuteQASearchOperationCompletedEventHandler ExecuteQASearchOperationCompleted;
-        
+
         /// <remarks/>
         public event ExecuteQAGetAddressOperationCompletedEventHandler ExecuteQAGetAddressOperationCompleted;
-        
+
         /// <remarks/>
         public event ListFieldOptionalityOperationCompletedEventHandler ListFieldOptionalityOperationCompleted;
-        
+
         /// <remarks/>
         public event ExecuteRequestOperationCompletedEventHandler ExecuteRequestOperationCompleted;
-        
+
         /// <remarks/>
         public event BWGetAdditionalDataOperationCompletedEventHandler BWGetAdditionalDataOperationCompleted;
-        
+
         /// <remarks/>
         public event BWGetCountriesOperationCompletedEventHandler BWGetCountriesOperationCompleted;
-        
+
         /// <remarks/>
         public event BWGetCountryInputOperationCompletedEventHandler BWGetCountryInputOperationCompleted;
-        
+
         /// <remarks/>
         public event BWGetBranchDataOperationCompletedEventHandler BWGetBranchDataOperationCompleted;
-        
+
         /// <remarks/>
         public event BWGetSWIFTDataOperationCompletedEventHandler BWGetSWIFTDataOperationCompleted;
-        
+
         /// <remarks/>
         public event BWGetSEPADataOperationCompletedEventHandler BWGetSEPADataOperationCompleted;
-        
+
         /// <remarks/>
         public event BWGetFasterPaymentsDataOperationCompletedEventHandler BWGetFasterPaymentsDataOperationCompleted;
-        
+
         /// <remarks/>
         public event BWValidateIBANOperationCompletedEventHandler BWValidateIBANOperationCompleted;
-        
+
         /// <remarks/>
         public event BWValidateOperationCompletedEventHandler BWValidateOperationCompleted;
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("FindProcessConfigResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -180,12 +179,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         FindProcessConfiguration});
             return ((FindProcessConfigResponseType)(results[0]));
         }
-        
+
         /// <remarks/>
         public void FindProcessConfigurationOperationAsync(FindProcessConfigurationType FindProcessConfiguration) {
             this.FindProcessConfigurationOperationAsync(FindProcessConfiguration, null);
         }
-        
+
         /// <remarks/>
         public void FindProcessConfigurationOperationAsync(FindProcessConfigurationType FindProcessConfiguration, object userState) {
             if ((this.FindProcessConfigurationOperationOperationCompleted == null)) {
@@ -194,14 +193,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("FindProcessConfigurationOperation", new object[] {
                         FindProcessConfiguration}, this.FindProcessConfigurationOperationOperationCompleted, userState);
         }
-        
+
         private void OnFindProcessConfigurationOperationOperationCompleted(object arg) {
             if ((this.FindProcessConfigurationOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.FindProcessConfigurationOperationCompleted(this, new FindProcessConfigurationOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("QASearchResult", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -210,12 +209,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         ExecuteQASearch});
             return ((QASearchResultType)(results[0]));
         }
-        
+
         /// <remarks/>
         public void ExecuteQASearchOperationAsync(ExecuteQASearchType1 ExecuteQASearch) {
             this.ExecuteQASearchOperationAsync(ExecuteQASearch, null);
         }
-        
+
         /// <remarks/>
         public void ExecuteQASearchOperationAsync(ExecuteQASearchType1 ExecuteQASearch, object userState) {
             if ((this.ExecuteQASearchOperationOperationCompleted == null)) {
@@ -224,14 +223,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("ExecuteQASearchOperation", new object[] {
                         ExecuteQASearch}, this.ExecuteQASearchOperationOperationCompleted, userState);
         }
-        
+
         private void OnExecuteQASearchOperationOperationCompleted(object arg) {
             if ((this.ExecuteQASearchOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.ExecuteQASearchOperationCompleted(this, new ExecuteQASearchOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetQAAddressResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -240,12 +239,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         ExecuteQAGetAddress});
             return ((GetQAAddressResponseType)(results[0]));
         }
-        
+
         /// <remarks/>
         public void ExecuteQAGetAddressOperationAsync(ExecuteQAGetAddressType1 ExecuteQAGetAddress) {
             this.ExecuteQAGetAddressOperationAsync(ExecuteQAGetAddress, null);
         }
-        
+
         /// <remarks/>
         public void ExecuteQAGetAddressOperationAsync(ExecuteQAGetAddressType1 ExecuteQAGetAddress, object userState) {
             if ((this.ExecuteQAGetAddressOperationOperationCompleted == null)) {
@@ -254,14 +253,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("ExecuteQAGetAddressOperation", new object[] {
                         ExecuteQAGetAddress}, this.ExecuteQAGetAddressOperationOperationCompleted, userState);
         }
-        
+
         private void OnExecuteQAGetAddressOperationOperationCompleted(object arg) {
             if ((this.ExecuteQAGetAddressOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.ExecuteQAGetAddressOperationCompleted(this, new ExecuteQAGetAddressOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("ListOptionalityResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -270,12 +269,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         ListFieldOptionality});
             return ((ListOptionalityResponseType)(results[0]));
         }
-        
+
         /// <remarks/>
         public void ListFieldOptionalityOperationAsync(ListFieldOptionalityType ListFieldOptionality) {
             this.ListFieldOptionalityOperationAsync(ListFieldOptionality, null);
         }
-        
+
         /// <remarks/>
         public void ListFieldOptionalityOperationAsync(ListFieldOptionalityType ListFieldOptionality, object userState) {
             if ((this.ListFieldOptionalityOperationOperationCompleted == null)) {
@@ -284,14 +283,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("ListFieldOptionalityOperation", new object[] {
                         ListFieldOptionality}, this.ListFieldOptionalityOperationOperationCompleted, userState);
         }
-        
+
         private void OnListFieldOptionalityOperationOperationCompleted(object arg) {
             if ((this.ListFieldOptionalityOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.ListFieldOptionalityOperationCompleted(this, new ListFieldOptionalityOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("ProcessConfigResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -300,12 +299,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         ExecuteRequest});
             return ((ProcessConfigResponseType)(results[0]));
         }
-        
+
         /// <remarks/>
         public void ExecuteRequestOperationAsync(ExecuteRequestType ExecuteRequest) {
             this.ExecuteRequestOperationAsync(ExecuteRequest, null);
         }
-        
+
         /// <remarks/>
         public void ExecuteRequestOperationAsync(ExecuteRequestType ExecuteRequest, object userState) {
             if ((this.ExecuteRequestOperationOperationCompleted == null)) {
@@ -314,14 +313,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("ExecuteRequestOperation", new object[] {
                         ExecuteRequest}, this.ExecuteRequestOperationOperationCompleted, userState);
         }
-        
+
         private void OnExecuteRequestOperationOperationCompleted(object arg) {
             if ((this.ExecuteRequestOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.ExecuteRequestOperationCompleted(this, new ExecuteRequestOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWGetAdditionalDataResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -330,12 +329,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWGetAdditionalDataRequest});
             return ((GetAdditionalDataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWGetAdditionalDataOperationAsync(BWGetAdditionalData BWGetAdditionalDataRequest) {
             this.BWGetAdditionalDataOperationAsync(BWGetAdditionalDataRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWGetAdditionalDataOperationAsync(BWGetAdditionalData BWGetAdditionalDataRequest, object userState) {
             if ((this.BWGetAdditionalDataOperationOperationCompleted == null)) {
@@ -344,14 +343,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWGetAdditionalDataOperation", new object[] {
                         BWGetAdditionalDataRequest}, this.BWGetAdditionalDataOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWGetAdditionalDataOperationOperationCompleted(object arg) {
             if ((this.BWGetAdditionalDataOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWGetAdditionalDataOperationCompleted(this, new BWGetAdditionalDataOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWGetCountriesResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -360,12 +359,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWGetCountriesRequest});
             return ((GetCountriesResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWGetCountriesOperationAsync(BWGetCountries BWGetCountriesRequest) {
             this.BWGetCountriesOperationAsync(BWGetCountriesRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWGetCountriesOperationAsync(BWGetCountries BWGetCountriesRequest, object userState) {
             if ((this.BWGetCountriesOperationOperationCompleted == null)) {
@@ -374,14 +373,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWGetCountriesOperation", new object[] {
                         BWGetCountriesRequest}, this.BWGetCountriesOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWGetCountriesOperationOperationCompleted(object arg) {
             if ((this.BWGetCountriesOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWGetCountriesOperationCompleted(this, new BWGetCountriesOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWGetCountryInputResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -390,12 +389,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWGetCountryInputRequest});
             return ((GetCountryInputResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWGetCountryInputOperationAsync(BWGetCountryInput BWGetCountryInputRequest) {
             this.BWGetCountryInputOperationAsync(BWGetCountryInputRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWGetCountryInputOperationAsync(BWGetCountryInput BWGetCountryInputRequest, object userState) {
             if ((this.BWGetCountryInputOperationOperationCompleted == null)) {
@@ -404,14 +403,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWGetCountryInputOperation", new object[] {
                         BWGetCountryInputRequest}, this.BWGetCountryInputOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWGetCountryInputOperationOperationCompleted(object arg) {
             if ((this.BWGetCountryInputOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWGetCountryInputOperationCompleted(this, new BWGetCountryInputOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWGetBranchDataResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -420,12 +419,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWGetBranchDataRequest});
             return ((GetBranchDataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWGetBranchDataOperationAsync(BWGetBranchData BWGetBranchDataRequest) {
             this.BWGetBranchDataOperationAsync(BWGetBranchDataRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWGetBranchDataOperationAsync(BWGetBranchData BWGetBranchDataRequest, object userState) {
             if ((this.BWGetBranchDataOperationOperationCompleted == null)) {
@@ -434,14 +433,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWGetBranchDataOperation", new object[] {
                         BWGetBranchDataRequest}, this.BWGetBranchDataOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWGetBranchDataOperationOperationCompleted(object arg) {
             if ((this.BWGetBranchDataOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWGetBranchDataOperationCompleted(this, new BWGetBranchDataOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWGetSWIFTDataResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -450,12 +449,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWGetSWIFTDataRequest});
             return ((GetSWIFTDataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWGetSWIFTDataOperationAsync(BWGetSWIFTData BWGetSWIFTDataRequest) {
             this.BWGetSWIFTDataOperationAsync(BWGetSWIFTDataRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWGetSWIFTDataOperationAsync(BWGetSWIFTData BWGetSWIFTDataRequest, object userState) {
             if ((this.BWGetSWIFTDataOperationOperationCompleted == null)) {
@@ -464,14 +463,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWGetSWIFTDataOperation", new object[] {
                         BWGetSWIFTDataRequest}, this.BWGetSWIFTDataOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWGetSWIFTDataOperationOperationCompleted(object arg) {
             if ((this.BWGetSWIFTDataOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWGetSWIFTDataOperationCompleted(this, new BWGetSWIFTDataOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWGetSEPADataResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -480,12 +479,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWGetSEPADataRequest});
             return ((GetSEPADataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWGetSEPADataOperationAsync(BWGetSEPAData BWGetSEPADataRequest) {
             this.BWGetSEPADataOperationAsync(BWGetSEPADataRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWGetSEPADataOperationAsync(BWGetSEPAData BWGetSEPADataRequest, object userState) {
             if ((this.BWGetSEPADataOperationOperationCompleted == null)) {
@@ -494,14 +493,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWGetSEPADataOperation", new object[] {
                         BWGetSEPADataRequest}, this.BWGetSEPADataOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWGetSEPADataOperationOperationCompleted(object arg) {
             if ((this.BWGetSEPADataOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWGetSEPADataOperationCompleted(this, new BWGetSEPADataOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWGetFasterPaymentsDataResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -510,12 +509,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWGetFasterPaymentsDataRequest});
             return ((GetFasterPaymentsDataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWGetFasterPaymentsDataOperationAsync(BWGetFasterPaymentsData BWGetFasterPaymentsDataRequest) {
             this.BWGetFasterPaymentsDataOperationAsync(BWGetFasterPaymentsDataRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWGetFasterPaymentsDataOperationAsync(BWGetFasterPaymentsData BWGetFasterPaymentsDataRequest, object userState) {
             if ((this.BWGetFasterPaymentsDataOperationOperationCompleted == null)) {
@@ -524,14 +523,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWGetFasterPaymentsDataOperation", new object[] {
                         BWGetFasterPaymentsDataRequest}, this.BWGetFasterPaymentsDataOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWGetFasterPaymentsDataOperationOperationCompleted(object arg) {
             if ((this.BWGetFasterPaymentsDataOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWGetFasterPaymentsDataOperationCompleted(this, new BWGetFasterPaymentsDataOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWValidateIBANResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -540,12 +539,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWValidateIBANRequest});
             return ((ValidateIBANResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWValidateIBANOperationAsync(BWValidateIBAN BWValidateIBANRequest) {
             this.BWValidateIBANOperationAsync(BWValidateIBANRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWValidateIBANOperationAsync(BWValidateIBAN BWValidateIBANRequest, object userState) {
             if ((this.BWValidateIBANOperationOperationCompleted == null)) {
@@ -554,14 +553,14 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWValidateIBANOperation", new object[] {
                         BWValidateIBANRequest}, this.BWValidateIBANOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWValidateIBANOperationOperationCompleted(object arg) {
             if ((this.BWValidateIBANOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWValidateIBANOperationCompleted(this, new BWValidateIBANOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("BWValidateResponse", Namespace="http://schema.uk.experian.com/eih/2011/03")]
@@ -570,12 +569,12 @@ namespace ExperianLib.Web_References.IDHubService {
                         BWValidateRequest});
             return ((ValidateResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void BWValidateOperationAsync(BWValidate BWValidateRequest) {
             this.BWValidateOperationAsync(BWValidateRequest, null);
         }
-        
+
         /// <remarks/>
         public void BWValidateOperationAsync(BWValidate BWValidateRequest, object userState) {
             if ((this.BWValidateOperationOperationCompleted == null)) {
@@ -584,19 +583,19 @@ namespace ExperianLib.Web_References.IDHubService {
             this.InvokeAsync("BWValidateOperation", new object[] {
                         BWValidateRequest}, this.BWValidateOperationOperationCompleted, userState);
         }
-        
+
         private void OnBWValidateOperationOperationCompleted(object arg) {
             if ((this.BWValidateOperationCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.BWValidateOperationCompleted(this, new BWValidateOperationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
-        
+
         private bool IsLocalFileSystemWebService(string url) {
             if (((url == null) 
                         || (url == string.Empty))) {
@@ -610,7 +609,7 @@ namespace ExperianLib.Web_References.IDHubService {
             return false;
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -618,11 +617,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class FindProcessConfigurationType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private ProcessConfigurationDetailsType processConfigurationDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -633,7 +632,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public ProcessConfigurationDetailsType ProcessConfigurationDetails {
             get {
@@ -644,7 +643,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -652,11 +651,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
     public partial class EIHHeaderType {
-        
+
         private string clientUserField;
-        
+
         private string referenceIdField;
-        
+
         /// <remarks/>
         public string ClientUser {
             get {
@@ -666,7 +665,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.clientUserField = value;
             }
         }
-        
+
         /// <remarks/>
         public string ReferenceId {
             get {
@@ -677,7 +676,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -685,17 +684,17 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class ValidateResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private BBANBaseType[] bBANField;
-        
+
         private string iBANField;
-        
+
         private string dataAccessKeyField;
-        
+
         private Condition[] conditionsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -706,7 +705,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BBAN")]
         public BBANBaseType[] BBAN {
@@ -717,7 +716,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.bBANField = value;
             }
         }
-        
+
         /// <remarks/>
         public string IBAN {
             get {
@@ -727,7 +726,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.iBANField = value;
             }
         }
-        
+
         /// <remarks/>
         public string dataAccessKey {
             get {
@@ -737,7 +736,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dataAccessKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("condition", IsNullable=false)]
         public Condition[] conditions {
@@ -749,7 +748,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BBANResponseType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
@@ -758,11 +757,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class BBANBaseType {
-        
+
         private string indexField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string index {
@@ -773,7 +772,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.indexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -785,7 +784,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -793,11 +792,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class BBANResponseType : BBANBaseType {
-        
+
         private string descriptionField;
-        
+
         private string maxSizeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string description {
@@ -808,7 +807,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string maxSize {
@@ -820,7 +819,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -828,13 +827,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class Condition {
-        
+
         private ConditionSeverity severityField;
-        
+
         private string codeField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public ConditionSeverity severity {
@@ -845,7 +844,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.severityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string code {
@@ -856,7 +855,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.codeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -868,23 +867,23 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public enum ConditionSeverity {
-        
+
         /// <remarks/>
         error,
-        
+
         /// <remarks/>
         warning,
-        
+
         /// <remarks/>
         information,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ValidateRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWValidate))]
@@ -894,15 +893,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class ValidationBBANRequestType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private BBANBaseType[] bBANField;
-        
+
         private string iSOCountryField;
-        
+
         private CheckingLevel checkingLevelField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -913,7 +912,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BBAN")]
         public BBANBaseType[] BBAN {
@@ -924,7 +923,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.bBANField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string ISOCountry {
@@ -935,7 +934,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.iSOCountryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public CheckingLevel checkingLevel {
@@ -947,26 +946,26 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public enum CheckingLevel {
-        
+
         /// <remarks/>
         Branch,
-        
+
         /// <remarks/>
         Account,
-        
+
         /// <remarks/>
         Domestic,
-        
+
         /// <remarks/>
         BIC,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWValidate))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
@@ -975,17 +974,17 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class ValidateRequest : ValidationBBANRequestType {
-        
+
         private string languageField;
-        
+
         private string reportStringField;
-        
+
         private string itemisationIDField;
-        
+
         public ValidateRequest() {
             this.languageField = "en";
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         [System.ComponentModel.DefaultValueAttribute("en")]
@@ -997,7 +996,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.languageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string reportString {
@@ -1008,7 +1007,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.reportStringField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string itemisationID {
@@ -1020,7 +1019,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1029,7 +1028,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWValidate : ValidateRequest {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1037,17 +1036,17 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class ValidateIBANResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private BBANResponseType[] bBANField;
-        
+
         private string dataAccessKeyField;
-        
+
         private Condition[] conditionsField;
-        
+
         private string iSOcountryField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -1058,7 +1057,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BBAN")]
         public BBANResponseType[] BBAN {
@@ -1069,7 +1068,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.bBANField = value;
             }
         }
-        
+
         /// <remarks/>
         public string dataAccessKey {
             get {
@@ -1079,7 +1078,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dataAccessKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("condition", IsNullable=false)]
         public Condition[] conditions {
@@ -1090,7 +1089,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.conditionsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string ISOcountry {
@@ -1102,7 +1101,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1110,19 +1109,19 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class ValidateIBANRequest {
-        
+
         private string languageField;
-        
+
         private string reportStringField;
-        
+
         private string itemisationIDField;
-        
+
         private string valueField;
-        
+
         public ValidateIBANRequest() {
             this.languageField = "en";
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         [System.ComponentModel.DefaultValueAttribute("en")]
@@ -1134,7 +1133,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.languageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string reportString {
@@ -1145,7 +1144,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.reportStringField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string itemisationID {
@@ -1156,7 +1155,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.itemisationIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -1168,7 +1167,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1176,11 +1175,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWValidateIBAN {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private ValidateIBANRequest validateIBANRequestField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -1191,7 +1190,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public ValidateIBANRequest ValidateIBANRequest {
             get {
@@ -1202,7 +1201,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1210,37 +1209,37 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class FasterPaymentDataType {
-        
+
         private string statusField;
-        
+
         private string agencyTypeField;
-        
+
         private System.DateTime lastChangeDateField;
-        
+
         private bool lastChangeDateFieldSpecified;
-        
+
         private bool redirectedToBranchField;
-        
+
         private bool redirectedToBranchFieldSpecified;
-        
+
         private string redirectingSortcodeField;
-        
+
         private System.DateTime clearingClosedDateField;
-        
+
         private bool clearingClosedDateFieldSpecified;
-        
+
         private string handlingBankConnTypeField;
-        
+
         private string handlingBankCodeField;
-        
+
         private string accountsNumberedFlagField;
-        
+
         private string settlementBankConnectionField;
-        
+
         private string settlementBankcodeField;
-        
+
         private string subBranchNumberField;
-        
+
         /// <remarks/>
         public string status {
             get {
@@ -1250,7 +1249,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
         public string agencyType {
             get {
@@ -1260,7 +1259,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.agencyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime lastChangeDate {
@@ -1271,7 +1270,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.lastChangeDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool lastChangeDateSpecified {
@@ -1282,7 +1281,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.lastChangeDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool redirectedToBranch {
             get {
@@ -1292,7 +1291,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.redirectedToBranchField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool redirectedToBranchSpecified {
@@ -1303,7 +1302,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.redirectedToBranchFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public string redirectingSortcode {
             get {
@@ -1313,7 +1312,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.redirectingSortcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime clearingClosedDate {
@@ -1324,7 +1323,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.clearingClosedDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool clearingClosedDateSpecified {
@@ -1335,7 +1334,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.clearingClosedDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public string handlingBankConnType {
             get {
@@ -1345,7 +1344,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.handlingBankConnTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string handlingBankCode {
             get {
@@ -1355,7 +1354,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.handlingBankCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string accountsNumberedFlag {
             get {
@@ -1365,7 +1364,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.accountsNumberedFlagField = value;
             }
         }
-        
+
         /// <remarks/>
         public string settlementBankConnection {
             get {
@@ -1375,7 +1374,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.settlementBankConnectionField = value;
             }
         }
-        
+
         /// <remarks/>
         public string settlementBankcode {
             get {
@@ -1385,7 +1384,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.settlementBankcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string subBranchNumber {
@@ -1397,7 +1396,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1405,15 +1404,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetFasterPaymentsDataResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private FasterPaymentDataType[] fasterPaymentsDataField;
-        
+
         private bool subBranchesAvailableField;
-        
+
         private bool subBranchesAvailableFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -1424,7 +1423,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("fasterPaymentsData")]
         public FasterPaymentDataType[] fasterPaymentsData {
@@ -1435,7 +1434,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.fasterPaymentsDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool subBranchesAvailable {
@@ -1446,7 +1445,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.subBranchesAvailableField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool subBranchesAvailableSpecified {
@@ -1458,7 +1457,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1466,37 +1465,37 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class SEPADataType {
-        
+
         private string ibanBICField;
-        
+
         private string sSIBICField;
-        
+
         private System.DateTime creditTransferAdherenceDateField;
-        
+
         private bool creditTransferAdherenceDateFieldSpecified;
-        
+
         private System.DateTime creditTransferNonComplianceDateField;
-        
+
         private bool creditTransferNonComplianceDateFieldSpecified;
-        
+
         private System.DateTime directDebitAdherenceDateField;
-        
+
         private bool directDebitAdherenceDateFieldSpecified;
-        
+
         private System.DateTime directDebitNonComplianceDateField;
-        
+
         private bool directDebitNonComplianceDateFieldSpecified;
-        
+
         private System.DateTime priorityPaymentAdherenceDateField;
-        
+
         private bool priorityPaymentAdherenceDateFieldSpecified;
-        
+
         private System.DateTime priorityPaymentNonComplianceDateField;
-        
+
         private bool priorityPaymentNonComplianceDateFieldSpecified;
-        
+
         private string subBranchNumberField;
-        
+
         /// <remarks/>
         public string ibanBIC {
             get {
@@ -1506,7 +1505,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.ibanBICField = value;
             }
         }
-        
+
         /// <remarks/>
         public string SSIBIC {
             get {
@@ -1516,7 +1515,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.sSIBICField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime creditTransferAdherenceDate {
@@ -1527,7 +1526,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.creditTransferAdherenceDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool creditTransferAdherenceDateSpecified {
@@ -1538,7 +1537,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.creditTransferAdherenceDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime creditTransferNonComplianceDate {
@@ -1549,7 +1548,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.creditTransferNonComplianceDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool creditTransferNonComplianceDateSpecified {
@@ -1560,7 +1559,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.creditTransferNonComplianceDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime directDebitAdherenceDate {
@@ -1571,7 +1570,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.directDebitAdherenceDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool directDebitAdherenceDateSpecified {
@@ -1582,7 +1581,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.directDebitAdherenceDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime directDebitNonComplianceDate {
@@ -1593,7 +1592,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.directDebitNonComplianceDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool directDebitNonComplianceDateSpecified {
@@ -1604,7 +1603,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.directDebitNonComplianceDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime priorityPaymentAdherenceDate {
@@ -1615,7 +1614,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.priorityPaymentAdherenceDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool priorityPaymentAdherenceDateSpecified {
@@ -1626,7 +1625,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.priorityPaymentAdherenceDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime priorityPaymentNonComplianceDate {
@@ -1637,7 +1636,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.priorityPaymentNonComplianceDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool priorityPaymentNonComplianceDateSpecified {
@@ -1648,7 +1647,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.priorityPaymentNonComplianceDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string subBranchNumber {
@@ -1660,7 +1659,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1668,15 +1667,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetSEPADataResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private SEPADataType[] sepaDataField;
-        
+
         private bool subBranchesAvailableField;
-        
+
         private bool subBranchesAvailableFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -1687,7 +1686,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("sepaData")]
         public SEPADataType[] sepaData {
@@ -1698,7 +1697,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.sepaDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool subBranchesAvailable {
@@ -1709,7 +1708,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.subBranchesAvailableField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool subBranchesAvailableSpecified {
@@ -1721,7 +1720,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1729,29 +1728,29 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class SWIFTDataType {
-        
+
         private string swiftBranchBICField;
-        
+
         private string chipsUIDField;
-        
+
         private string swiftCategoryField;
-        
+
         private string swiftServiceField;
-        
+
         private string paymentRoutingBICField;
-        
+
         private string institutionPOBoxNumberField;
-        
+
         private string institutionPOBoxPostcodeField;
-        
+
         private string institutionPOBoxLocationField;
-        
+
         private string institutionPOBoxCountryField;
-        
+
         private string swiftExtraInformationField;
-        
+
         private string subBranchNumberField;
-        
+
         /// <remarks/>
         public string swiftBranchBIC {
             get {
@@ -1761,7 +1760,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.swiftBranchBICField = value;
             }
         }
-        
+
         /// <remarks/>
         public string chipsUID {
             get {
@@ -1771,7 +1770,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.chipsUIDField = value;
             }
         }
-        
+
         /// <remarks/>
         public string swiftCategory {
             get {
@@ -1781,7 +1780,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.swiftCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         public string swiftService {
             get {
@@ -1791,7 +1790,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.swiftServiceField = value;
             }
         }
-        
+
         /// <remarks/>
         public string paymentRoutingBIC {
             get {
@@ -1801,7 +1800,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.paymentRoutingBICField = value;
             }
         }
-        
+
         /// <remarks/>
         public string institutionPOBoxNumber {
             get {
@@ -1811,7 +1810,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.institutionPOBoxNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         public string institutionPOBoxPostcode {
             get {
@@ -1821,7 +1820,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.institutionPOBoxPostcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string institutionPOBoxLocation {
             get {
@@ -1831,7 +1830,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.institutionPOBoxLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         public string institutionPOBoxCountry {
             get {
@@ -1841,7 +1840,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.institutionPOBoxCountryField = value;
             }
         }
-        
+
         /// <remarks/>
         public string swiftExtraInformation {
             get {
@@ -1851,7 +1850,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.swiftExtraInformationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string subBranchNumber {
@@ -1863,7 +1862,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1871,15 +1870,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetSWIFTDataResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private SWIFTDataType[] swiftDataField;
-        
+
         private bool subBranchesAvailableField;
-        
+
         private bool subBranchesAvailableFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -1890,7 +1889,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("swiftData")]
         public SWIFTDataType[] swiftData {
@@ -1901,7 +1900,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.swiftDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool subBranchesAvailable {
@@ -1912,7 +1911,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.subBranchesAvailableField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool subBranchesAvailableSpecified {
@@ -1924,7 +1923,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1932,11 +1931,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(TypeName="AddressLineType", Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class AddressLineType1 {
-        
+
         private string lineField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string line {
@@ -1947,7 +1946,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.lineField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -1959,7 +1958,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1967,11 +1966,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class BranchAddressType {
-        
+
         private AddressLineType1[] addressLineField;
-        
+
         private string postOrZipCodeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("addressLine")]
         public AddressLineType1[] addressLine {
@@ -1982,7 +1981,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.addressLineField = value;
             }
         }
-        
+
         /// <remarks/>
         public string postOrZipCode {
             get {
@@ -1993,7 +1992,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2001,25 +2000,25 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class BranchDataType {
-        
+
         private string institutionNameField;
-        
+
         private string branchNameField;
-        
+
         private BranchAddressType addressField;
-        
+
         private string telephoneNumberField;
-        
+
         private string faxNumberField;
-        
+
         private System.DateTime closureDateField;
-        
+
         private bool closureDateFieldSpecified;
-        
+
         private string redirectedToField;
-        
+
         private string subBranchNumberField;
-        
+
         /// <remarks/>
         public string institutionName {
             get {
@@ -2029,7 +2028,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.institutionNameField = value;
             }
         }
-        
+
         /// <remarks/>
         public string branchName {
             get {
@@ -2039,7 +2038,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.branchNameField = value;
             }
         }
-        
+
         /// <remarks/>
         public BranchAddressType address {
             get {
@@ -2049,7 +2048,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.addressField = value;
             }
         }
-        
+
         /// <remarks/>
         public string telephoneNumber {
             get {
@@ -2059,7 +2058,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.telephoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         public string faxNumber {
             get {
@@ -2069,7 +2068,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.faxNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime closureDate {
@@ -2080,7 +2079,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.closureDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool closureDateSpecified {
@@ -2091,7 +2090,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.closureDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public string redirectedTo {
             get {
@@ -2101,7 +2100,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.redirectedToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string subBranchNumber {
@@ -2113,7 +2112,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2121,15 +2120,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetBranchDataResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private BranchDataType[] branchDataField;
-        
+
         private bool subBranchesAvailableField;
-        
+
         private bool subBranchesAvailableFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -2140,7 +2139,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("branchData")]
         public BranchDataType[] branchData {
@@ -2151,7 +2150,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.branchDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool subBranchesAvailable {
@@ -2162,7 +2161,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.subBranchesAvailableField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool subBranchesAvailableSpecified {
@@ -2174,7 +2173,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2182,15 +2181,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class BankWizardCheckType {
-        
+
         private BBANResponseType[] bBANField;
-        
+
         private CheckingLevel checkingLevelField;
-        
+
         private bool checkingLevelFieldSpecified;
-        
+
         private string descriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BBAN")]
         public BBANResponseType[] BBAN {
@@ -2201,7 +2200,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.bBANField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public CheckingLevel checkingLevel {
@@ -2212,7 +2211,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.checkingLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool checkingLevelSpecified {
@@ -2223,7 +2222,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.checkingLevelFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string description {
@@ -2235,7 +2234,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2243,11 +2242,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetCountryInputResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private BankWizardCheckType[] validationCheckField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -2258,7 +2257,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("validationCheck")]
         public BankWizardCheckType[] validationCheck {
@@ -2270,7 +2269,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2278,15 +2277,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetCountryInputRequest {
-        
+
         private string languageField;
-        
+
         private string valueField;
-        
+
         public GetCountryInputRequest() {
             this.languageField = "en";
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         [System.ComponentModel.DefaultValueAttribute("en")]
@@ -2298,7 +2297,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.languageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -2310,7 +2309,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2318,11 +2317,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWGetCountryInput {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private GetCountryInputRequest bWGetCountryInput1Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -2333,7 +2332,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BWGetCountryInput")]
         public GetCountryInputRequest BWGetCountryInput1 {
@@ -2345,7 +2344,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2353,13 +2352,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class CountryInformation {
-        
+
         private string iSOCountryField;
-        
+
         private bool licensedField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string ISOCountry {
@@ -2370,7 +2369,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.iSOCountryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool licensed {
@@ -2381,7 +2380,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.licensedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -2393,7 +2392,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2401,11 +2400,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetCountriesResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private CountryInformation[] countryField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -2416,7 +2415,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("country")]
         public CountryInformation[] country {
@@ -2428,7 +2427,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWGetCountries))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
@@ -2437,15 +2436,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetCountriesRequest {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private string languageField;
-        
+
         public GetCountriesRequest() {
             this.languageField = "en";
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -2456,7 +2455,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         [System.ComponentModel.DefaultValueAttribute("en")]
@@ -2469,7 +2468,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2478,7 +2477,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWGetCountries : GetCountriesRequest {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2486,13 +2485,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class AdditionalBranchElement {
-        
+
         private string codeField;
-        
+
         private string descriptionField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string code {
@@ -2503,7 +2502,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.codeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string description {
@@ -2514,7 +2513,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -2526,7 +2525,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2534,11 +2533,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class AdditionalBranchDataType {
-        
+
         private AdditionalBranchElement[] branchInfoField;
-        
+
         private string subBranchNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("branchInfo")]
         public AdditionalBranchElement[] branchInfo {
@@ -2549,7 +2548,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.branchInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string subBranchNumber {
@@ -2561,7 +2560,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2569,15 +2568,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetAdditionalDataResponse {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private AdditionalBranchDataType[] additionalBranchDataField;
-        
+
         private bool subBranchesAvailableField;
-        
+
         private bool subBranchesAvailableFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -2588,7 +2587,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("additionalBranchData")]
         public AdditionalBranchDataType[] additionalBranchData {
@@ -2599,7 +2598,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.additionalBranchDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool subBranchesAvailable {
@@ -2610,7 +2609,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.subBranchesAvailableField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool subBranchesAvailableSpecified {
@@ -2622,7 +2621,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetAdditionalDataRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWGetAdditionalData))]
@@ -2640,17 +2639,17 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class DataAccessKeyType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private string dataAccessKeyField;
-        
+
         private string languageField;
-        
+
         public DataAccessKeyType() {
             this.languageField = "en";
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -2661,7 +2660,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public string dataAccessKey {
             get {
@@ -2671,7 +2670,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dataAccessKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
         [System.ComponentModel.DefaultValueAttribute("en")]
@@ -2684,7 +2683,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWGetAdditionalData))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
@@ -2693,13 +2692,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetAdditionalDataRequest : DataAccessKeyType {
-        
+
         private bool returnSubBranchesField;
-        
+
         public GetAdditionalDataRequest() {
             this.returnSubBranchesField = false;
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -2712,7 +2711,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2721,7 +2720,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWGetAdditionalData : GetAdditionalDataRequest {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2729,13 +2728,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetFasterPaymentsDataRequest : DataAccessKeyType {
-        
+
         private bool returnSubBranchesField;
-        
+
         public GetFasterPaymentsDataRequest() {
             this.returnSubBranchesField = false;
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -2748,7 +2747,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWGetSEPAData))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWGetFasterPaymentsData))]
@@ -2758,13 +2757,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetSEPADataRequest : DataAccessKeyType {
-        
+
         private bool returnSubBranchesField;
-        
+
         public GetSEPADataRequest() {
             this.returnSubBranchesField = false;
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -2777,7 +2776,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2786,7 +2785,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWGetSEPAData : GetSEPADataRequest {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2795,7 +2794,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWGetFasterPaymentsData : GetSEPADataRequest {
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWGetSWIFTData))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
@@ -2804,13 +2803,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetSWIFTDataRequest : DataAccessKeyType {
-        
+
         private bool returnSubBranchesField;
-        
+
         public GetSWIFTDataRequest() {
             this.returnSubBranchesField = false;
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -2823,7 +2822,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2832,7 +2831,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWGetSWIFTData : GetSWIFTDataRequest {
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BWGetBranchData))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
@@ -2841,13 +2840,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class GetBranchDataRequest : DataAccessKeyType {
-        
+
         private bool returnSubBranchesField;
-        
+
         public GetBranchDataRequest() {
             this.returnSubBranchesField = false;
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -2860,7 +2859,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2869,7 +2868,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWGetBranchData : GetBranchDataRequest {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2877,17 +2876,17 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class DrivingLicenceResultBlockType {
-        
+
         private OverallResultType overallResultField;
-        
+
         private string lengthField;
-        
+
         private string surnameField;
-        
+
         private string dateOfBirthField;
-        
+
         private string initialsField;
-        
+
         /// <remarks/>
         public OverallResultType OverallResult {
             get {
@@ -2897,7 +2896,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.overallResultField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Length {
             get {
@@ -2907,7 +2906,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.lengthField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Surname {
             get {
@@ -2917,7 +2916,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         public string DateOfBirth {
             get {
@@ -2927,7 +2926,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Initials {
             get {
@@ -2938,20 +2937,20 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum OverallResultType {
-        
+
         /// <remarks/>
         Pass,
-        
+
         /// <remarks/>
         Fail,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2959,21 +2958,21 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class PassportResultBlockType {
-        
+
         private OverallResultType overallResultField;
-        
+
         private string lengthField;
-        
+
         private string nationalityField;
-        
+
         private string documentNumberField;
-        
+
         private string dateOfBirthField;
-        
+
         private string genderField;
-        
+
         private string expiryDateField;
-        
+
         /// <remarks/>
         public OverallResultType OverallResult {
             get {
@@ -2983,7 +2982,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.overallResultField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Length {
             get {
@@ -2993,7 +2992,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.lengthField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Nationality {
             get {
@@ -3003,7 +3002,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.nationalityField = value;
             }
         }
-        
+
         /// <remarks/>
         public string DocumentNumber {
             get {
@@ -3013,7 +3012,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.documentNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         public string DateOfBirth {
             get {
@@ -3023,7 +3022,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Gender {
             get {
@@ -3033,7 +3032,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.genderField = value;
             }
         }
-        
+
         /// <remarks/>
         public string ExpiryDate {
             get {
@@ -3044,7 +3043,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3052,17 +3051,17 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class AVSCVVResultBlockType {
-        
+
         private string overallResultField;
-        
+
         private string aVSAddressResultField;
-        
+
         private string aVSPostcodeResultField;
-        
+
         private string cVVResultField;
-        
+
         private string conditionField;
-        
+
         /// <remarks/>
         public string OverallResult {
             get {
@@ -3072,7 +3071,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.overallResultField = value;
             }
         }
-        
+
         /// <remarks/>
         public string AVSAddressResult {
             get {
@@ -3082,7 +3081,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.aVSAddressResultField = value;
             }
         }
-        
+
         /// <remarks/>
         public string AVSPostcodeResult {
             get {
@@ -3092,7 +3091,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.aVSPostcodeResultField = value;
             }
         }
-        
+
         /// <remarks/>
         public string CVVResult {
             get {
@@ -3102,7 +3101,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.cVVResultField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Condition {
             get {
@@ -3113,7 +3112,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3121,11 +3120,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public partial class BacsCodeType {
-        
+
         private string codeField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string code {
@@ -3136,7 +3135,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.codeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -3148,7 +3147,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3156,19 +3155,19 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BWAResultBlockType {
-        
+
         private string nameScoreField;
-        
+
         private string addressScoreField;
-        
+
         private string accountOpenDateScoreField;
-        
+
         private string ownerTypeResultField;
-        
+
         private string accountStatusField;
-        
+
         private BacsCodeType bacsCodeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NameScore {
@@ -3179,7 +3178,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.nameScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string AddressScore {
@@ -3190,7 +3189,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.addressScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string AccountOpenDateScore {
@@ -3201,7 +3200,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.accountOpenDateScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         public string OwnerTypeResult {
             get {
@@ -3211,7 +3210,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.ownerTypeResultField = value;
             }
         }
-        
+
         /// <remarks/>
         public string AccountStatus {
             get {
@@ -3221,7 +3220,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.accountStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         public BacsCodeType BacsCode {
             get {
@@ -3232,7 +3231,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3240,13 +3239,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class EIAResultBlockType {
-        
+
         private string authenticationIndexField;
-        
+
         private string authIndexTextField;
-        
+
         private EIAAndEIVCommonResultsBlockType eIAResultsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string AuthenticationIndex {
@@ -3257,7 +3256,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.authenticationIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         public string AuthIndexText {
             get {
@@ -3267,7 +3266,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.authIndexTextField = value;
             }
         }
-        
+
         /// <remarks/>
         public EIAAndEIVCommonResultsBlockType EIAResults {
             get {
@@ -3278,7 +3277,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3286,21 +3285,21 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class EIAAndEIVCommonResultsBlockType {
-        
+
         private DataMatchesType iDandLocDataAtCLField;
-        
+
         private DataMatchesType locDataOnlyAtCLocField;
-        
+
         private DataMatchesType iDandLocDataAtPLField;
-        
+
         private DataMatchesType locDataOnlyAtPLocField;
-        
+
         private DataMatchCountsType dataMatchCountsField;
-        
+
         private string returnedHRPCountField;
-        
+
         private ReturnedHRPType[] returnedHRPField;
-        
+
         /// <remarks/>
         public DataMatchesType IDandLocDataAtCL {
             get {
@@ -3310,7 +3309,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.iDandLocDataAtCLField = value;
             }
         }
-        
+
         /// <remarks/>
         public DataMatchesType LocDataOnlyAtCLoc {
             get {
@@ -3320,7 +3319,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.locDataOnlyAtCLocField = value;
             }
         }
-        
+
         /// <remarks/>
         public DataMatchesType IDandLocDataAtPL {
             get {
@@ -3330,7 +3329,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.iDandLocDataAtPLField = value;
             }
         }
-        
+
         /// <remarks/>
         public DataMatchesType LocDataOnlyAtPLoc {
             get {
@@ -3340,7 +3339,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.locDataOnlyAtPLocField = value;
             }
         }
-        
+
         /// <remarks/>
         public DataMatchCountsType DataMatchCounts {
             get {
@@ -3350,7 +3349,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dataMatchCountsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string ReturnedHRPCount {
@@ -3361,7 +3360,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.returnedHRPCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ReturnedHRP")]
         public ReturnedHRPType[] ReturnedHRP {
@@ -3373,7 +3372,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3381,19 +3380,19 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class DataMatchesType {
-        
+
         private string numPrimDataItemsField;
-        
+
         private string numPrimDataSourcesField;
-        
+
         private string startDateOldestPrimField;
-        
+
         private string numSecDataItemsField;
-        
+
         private string numSecDataSourcesField;
-        
+
         private string startDateOldestSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NumPrimDataItems {
@@ -3404,7 +3403,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numPrimDataItemsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NumPrimDataSources {
@@ -3415,7 +3414,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numPrimDataSourcesField = value;
             }
         }
-        
+
         /// <remarks/>
         public string StartDateOldestPrim {
             get {
@@ -3425,7 +3424,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.startDateOldestPrimField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NumSecDataItems {
@@ -3436,7 +3435,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numSecDataItemsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NumSecDataSources {
@@ -3447,7 +3446,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numSecDataSourcesField = value;
             }
         }
-        
+
         /// <remarks/>
         public string StartDateOldestSec {
             get {
@@ -3458,7 +3457,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3466,15 +3465,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class DataMatchCountsType {
-        
+
         private string numAgeMatchesToPrimSourceField;
-        
+
         private string numAgeMatchToSecSourceField;
-        
+
         private string numTimeAtCLMtchPrimSourceField;
-        
+
         private string numTimeAtCLMatchSecSourceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NumAgeMatchesToPrimSource {
@@ -3485,7 +3484,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numAgeMatchesToPrimSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NumAgeMatchToSecSource {
@@ -3496,7 +3495,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numAgeMatchToSecSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NumTimeAtCLMtchPrimSource {
@@ -3507,7 +3506,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numTimeAtCLMtchPrimSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string NumTimeAtCLMatchSecSource {
@@ -3519,7 +3518,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3527,11 +3526,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ReturnedHRPType {
-        
+
         private string highRiskPolRuleIDField;
-        
+
         private string highRiskPolRuleTextField;
-        
+
         /// <remarks/>
         public string HighRiskPolRuleID {
             get {
@@ -3541,7 +3540,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.highRiskPolRuleIDField = value;
             }
         }
-        
+
         /// <remarks/>
         public string HighRiskPolRuleText {
             get {
@@ -3552,7 +3551,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3560,11 +3559,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class MessageType {
-        
+
         private string codeField;
-        
+
         private string descriptionField;
-        
+
         /// <remarks/>
         public string Code {
             get {
@@ -3574,7 +3573,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.codeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Description {
             get {
@@ -3585,7 +3584,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3593,31 +3592,31 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ProcessConfigResultsBlockType {
-        
+
         private EIAAndEIVCommonResultsBlockType eIVResultBlockField;
-        
+
         private MessageType[] eIVMessageBlockField;
-        
+
         private EIAResultBlockType eIAResultBlockField;
-        
+
         private MessageType[] eIAMessageBlockField;
-        
+
         private BWAResultBlockType bWAResultBlockField;
-        
+
         private MessageType[] bWAMessageBlockField;
-        
+
         private AVSCVVResultBlockType aVSCVVResultBlockField;
-        
+
         private MessageType[] aVSCVVMessageBlockField;
-        
+
         private PassportResultBlockType passportResultBlockField;
-        
+
         private MessageType[] passportMessageBlockField;
-        
+
         private DrivingLicenceResultBlockType drivingLicenceResultBlockField;
-        
+
         private MessageType[] drivingLicenceMessageBlockField;
-        
+
         /// <remarks/>
         public EIAAndEIVCommonResultsBlockType EIVResultBlock {
             get {
@@ -3627,7 +3626,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIVResultBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("EIVMessageBlock")]
         public MessageType[] EIVMessageBlock {
@@ -3638,7 +3637,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIVMessageBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         public EIAResultBlockType EIAResultBlock {
             get {
@@ -3648,7 +3647,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIAResultBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("EIAMessageBlock")]
         public MessageType[] EIAMessageBlock {
@@ -3659,7 +3658,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIAMessageBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         public BWAResultBlockType BWAResultBlock {
             get {
@@ -3669,7 +3668,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.bWAResultBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BWAMessageBlock")]
         public MessageType[] BWAMessageBlock {
@@ -3680,7 +3679,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.bWAMessageBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         public AVSCVVResultBlockType AVSCVVResultBlock {
             get {
@@ -3690,7 +3689,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.aVSCVVResultBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AVSCVVMessageBlock")]
         public MessageType[] AVSCVVMessageBlock {
@@ -3701,7 +3700,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.aVSCVVMessageBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         public PassportResultBlockType PassportResultBlock {
             get {
@@ -3711,7 +3710,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.passportResultBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PassportMessageBlock")]
         public MessageType[] PassportMessageBlock {
@@ -3722,7 +3721,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.passportMessageBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         public DrivingLicenceResultBlockType DrivingLicenceResultBlock {
             get {
@@ -3732,7 +3731,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.drivingLicenceResultBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DrivingLicenceMessageBlock")]
         public MessageType[] DrivingLicenceMessageBlock {
@@ -3744,7 +3743,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3752,15 +3751,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class DecisionHeaderType {
-        
+
         private string processConfigurationIdField;
-        
+
         private string uniqueReferenceNoField;
-        
+
         private AuthenticationDecisionType authenticationDecisionField;
-        
+
         private string authenticationTextField;
-        
+
         /// <remarks/>
         public string ProcessConfigurationId {
             get {
@@ -3770,7 +3769,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.processConfigurationIdField = value;
             }
         }
-        
+
         /// <remarks/>
         public string UniqueReferenceNo {
             get {
@@ -3780,7 +3779,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.uniqueReferenceNoField = value;
             }
         }
-        
+
         /// <remarks/>
         public AuthenticationDecisionType AuthenticationDecision {
             get {
@@ -3790,7 +3789,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.authenticationDecisionField = value;
             }
         }
-        
+
         /// <remarks/>
         public string AuthenticationText {
             get {
@@ -3801,28 +3800,28 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum AuthenticationDecisionType {
-        
+
         /// <remarks/>
         Authenticated,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Not Authenticated")]
         NotAuthenticated,
-        
+
         /// <remarks/>
         Refer,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("No Decision")]
         NoDecision,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3830,13 +3829,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ProcessConfigResponseType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private DecisionHeaderType decisionHeaderField;
-        
+
         private ProcessConfigResultsBlockType processConfigResultsBlockField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -3847,7 +3846,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public DecisionHeaderType DecisionHeader {
             get {
@@ -3857,7 +3856,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.decisionHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public ProcessConfigResultsBlockType ProcessConfigResultsBlock {
             get {
@@ -3868,7 +3867,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3876,19 +3875,19 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class CardType {
-        
+
         private string cardNumberField;
-        
+
         private string cardStartDateField;
-        
+
         private string cardExpireDateField;
-        
+
         private string cardSecurityCodeField;
-        
+
         private TypeOfCardType typeOfCardTypeField;
-        
+
         private string cardIssueNumberField;
-        
+
         /// <remarks/>
         public string CardNumber {
             get {
@@ -3898,7 +3897,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.cardNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         public string CardStartDate {
             get {
@@ -3908,7 +3907,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.cardStartDateField = value;
             }
         }
-        
+
         /// <remarks/>
         public string CardExpireDate {
             get {
@@ -3918,7 +3917,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.cardExpireDateField = value;
             }
         }
-        
+
         /// <remarks/>
         public string CardSecurityCode {
             get {
@@ -3928,7 +3927,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.cardSecurityCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         public TypeOfCardType TypeOfCardType {
             get {
@@ -3938,7 +3937,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.typeOfCardTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string CardIssueNumber {
             get {
@@ -3949,55 +3948,55 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum TypeOfCardType {
-        
+
         /// <remarks/>
         VISA,
-        
+
         /// <remarks/>
         Mastercard,
-        
+
         /// <remarks/>
         Discover,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Diners Club")]
         DinersClub,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Carte Blanche")]
         CarteBlanche,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("JCB JCL")]
         JCBJCL,
-        
+
         /// <remarks/>
         Enroute,
-        
+
         /// <remarks/>
         AmEx,
-        
+
         /// <remarks/>
         Electron,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("US Check")]
         USCheck,
-        
+
         /// <remarks/>
         PAYPAL,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Bill Me Later")]
         BillMeLater,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4005,25 +4004,25 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class OtherType {
-        
+
         private string emailField;
-        
+
         private string iPAddressField;
-        
+
         private string deviceIdField;
-        
+
         private string channelOfCaptureField;
-        
+
         private string channelOfProductField;
-        
+
         private string valueOfProductField;
-        
+
         private string descriptionOfCaptureField;
-        
+
         private string ownCustomerIdNumberField;
-        
+
         private string professionField;
-        
+
         /// <remarks/>
         public string Email {
             get {
@@ -4033,7 +4032,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         public string IPAddress {
             get {
@@ -4043,7 +4042,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.iPAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         public string DeviceId {
             get {
@@ -4053,7 +4052,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.deviceIdField = value;
             }
         }
-        
+
         /// <remarks/>
         public string ChannelOfCapture {
             get {
@@ -4063,7 +4062,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.channelOfCaptureField = value;
             }
         }
-        
+
         /// <remarks/>
         public string ChannelOfProduct {
             get {
@@ -4073,7 +4072,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.channelOfProductField = value;
             }
         }
-        
+
         /// <remarks/>
         public string ValueOfProduct {
             get {
@@ -4083,7 +4082,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.valueOfProductField = value;
             }
         }
-        
+
         /// <remarks/>
         public string DescriptionOfCapture {
             get {
@@ -4093,7 +4092,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.descriptionOfCaptureField = value;
             }
         }
-        
+
         /// <remarks/>
         public string OwnCustomerIdNumber {
             get {
@@ -4103,7 +4102,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.ownCustomerIdNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Profession {
             get {
@@ -4114,7 +4113,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4122,11 +4121,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ReferenceNumberType {
-        
+
         private string numberField;
-        
+
         private ReferenceNumberSourceType referenceNumberSourceField;
-        
+
         /// <remarks/>
         public string Number {
             get {
@@ -4136,7 +4135,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
         public ReferenceNumberSourceType ReferenceNumberSource {
             get {
@@ -4147,25 +4146,25 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum ReferenceNumberSourceType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Drivers Licence")]
         DriversLicence,
-        
+
         /// <remarks/>
         Passport,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Bill Reference")]
         BillReference,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4173,13 +4172,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class AccountReferenceType {
-        
+
         private string referenceIndexField;
-        
+
         private string referenceField;
-        
+
         private TypeOfReferenceType typeOfReferenceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
         public string ReferenceIndex {
@@ -4190,7 +4189,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.referenceIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Reference {
             get {
@@ -4200,7 +4199,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.referenceField = value;
             }
         }
-        
+
         /// <remarks/>
         public TypeOfReferenceType TypeOfReference {
             get {
@@ -4211,41 +4210,41 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum TypeOfReferenceType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Bank Branch Code")]
         BankBranchCode,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Bank Code")]
         BankCode,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Branch Code")]
         BranchCode,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Account Number")]
         AccountNumber,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Check Digit")]
         CheckDigit,
-        
+
         /// <remarks/>
         IBAN,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Roll Number")]
         RollNumber,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4253,25 +4252,25 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class BankInformationType {
-        
+
         private AccountReferenceType[] accountReferenceField;
-        
+
         private System.DateTime accountSetupDateField;
-        
+
         private bool accountSetupDateFieldSpecified;
-        
+
         private CheckContextType checkContextField;
-        
+
         private bool checkContextFieldSpecified;
-        
+
         private AccountType accountTypeField;
-        
+
         private bool accountTypeFieldSpecified;
-        
+
         private OwnerType ownerTypeField;
-        
+
         private bool ownerTypeFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AccountReference")]
         public AccountReferenceType[] AccountReference {
@@ -4282,7 +4281,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.accountReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime AccountSetupDate {
@@ -4293,7 +4292,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.accountSetupDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AccountSetupDateSpecified {
@@ -4304,7 +4303,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.accountSetupDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public CheckContextType CheckContext {
             get {
@@ -4314,7 +4313,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.checkContextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CheckContextSpecified {
@@ -4325,7 +4324,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.checkContextFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public AccountType AccountType {
             get {
@@ -4335,7 +4334,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.accountTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AccountTypeSpecified {
@@ -4346,7 +4345,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.accountTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public OwnerType OwnerType {
             get {
@@ -4356,7 +4355,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.ownerTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool OwnerTypeSpecified {
@@ -4368,57 +4367,57 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public enum CheckContextType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Direct Debit")]
         DirectDebit,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Direct Credit")]
         DirectCredit,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public enum AccountType {
-        
+
         /// <remarks/>
         Current,
-        
+
         /// <remarks/>
         ISA,
-        
+
         /// <remarks/>
         Mortgage,
-        
+
         /// <remarks/>
         Basic,
-        
+
         /// <remarks/>
         Savings,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard")]
     public enum OwnerType {
-        
+
         /// <remarks/>
         Joint,
-        
+
         /// <remarks/>
         Single,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4426,15 +4425,15 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class TelephoneType {
-        
+
         private string codeField;
-        
+
         private string numberField;
-        
+
         private TypeOfTelephoneType typeOfTelephoneField;
-        
+
         private bool typeOfTelephoneFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
         public string Code {
@@ -4445,7 +4444,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.codeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
         public string Number {
@@ -4456,7 +4455,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
         public TypeOfTelephoneType TypeOfTelephone {
             get {
@@ -4466,7 +4465,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.typeOfTelephoneField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TypeOfTelephoneSpecified {
@@ -4478,23 +4477,23 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum TypeOfTelephoneType {
-        
+
         /// <remarks/>
         Home,
-        
+
         /// <remarks/>
         Mobile,
-        
+
         /// <remarks/>
         Work,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4502,11 +4501,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class DurationType {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         public string Years {
             get {
@@ -4516,7 +4515,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Months {
             get {
@@ -4527,7 +4526,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4535,9 +4534,9 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class EmployerInformationType {
-        
+
         private DurationType timeWithEmployerField;
-        
+
         /// <remarks/>
         public DurationType TimeWithEmployer {
             get {
@@ -4548,7 +4547,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4556,31 +4555,31 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class AddressDetailType {
-        
+
         private string flatOrApartmentNumberField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string address1Field;
-        
+
         private string address2Field;
-        
+
         private string address3Field;
-        
+
         private string address4Field;
-        
+
         private string address5Field;
-        
+
         private string address6Field;
-        
+
         private string postCodeField;
-        
+
         private string countryField;
-        
+
         private string pOBoxField;
-        
+
         /// <remarks/>
         public string FlatOrApartmentNumber {
             get {
@@ -4590,7 +4589,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.flatOrApartmentNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         public string HouseName {
             get {
@@ -4600,7 +4599,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         public string HouseNumber {
             get {
@@ -4610,7 +4609,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Address1 {
             get {
@@ -4620,7 +4619,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.address1Field = value;
             }
         }
-        
+
         /// <remarks/>
         public string Address2 {
             get {
@@ -4630,7 +4629,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.address2Field = value;
             }
         }
-        
+
         /// <remarks/>
         public string Address3 {
             get {
@@ -4640,7 +4639,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.address3Field = value;
             }
         }
-        
+
         /// <remarks/>
         public string Address4 {
             get {
@@ -4650,7 +4649,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.address4Field = value;
             }
         }
-        
+
         /// <remarks/>
         public string Address5 {
             get {
@@ -4660,7 +4659,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.address5Field = value;
             }
         }
-        
+
         /// <remarks/>
         public string Address6 {
             get {
@@ -4670,7 +4669,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.address6Field = value;
             }
         }
-        
+
         /// <remarks/>
         public string PostCode {
             get {
@@ -4680,7 +4679,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.postCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Country {
             get {
@@ -4690,7 +4689,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         public string POBox {
             get {
@@ -4701,7 +4700,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4709,21 +4708,21 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class AddressType {
-        
+
         private AddressDetailType addressDetailField;
-        
+
         private TypeOfAddressType typeOfAddressField;
-        
+
         private AddressStatusType addressStatusField;
-        
+
         private System.DateTime residentFromField;
-        
+
         private bool residentFromFieldSpecified;
-        
+
         private System.DateTime residentToField;
-        
+
         private bool residentToFieldSpecified;
-        
+
         /// <remarks/>
         public AddressDetailType AddressDetail {
             get {
@@ -4733,7 +4732,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.addressDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         public TypeOfAddressType TypeOfAddress {
             get {
@@ -4743,7 +4742,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.typeOfAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         public AddressStatusType AddressStatus {
             get {
@@ -4753,7 +4752,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.addressStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime ResidentFrom {
@@ -4764,7 +4763,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.residentFromField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ResidentFromSpecified {
@@ -4775,7 +4774,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.residentFromFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime ResidentTo {
@@ -4786,7 +4785,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.residentToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ResidentToSpecified {
@@ -4798,43 +4797,43 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum TypeOfAddressType {
-        
+
         /// <remarks/>
         UK,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum AddressStatusType {
-        
+
         /// <remarks/>
         Current,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("First Previous")]
         FirstPrevious,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Second Previous")]
         SecondPrevious,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Third Previous")]
         ThirdPrevious,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Fourth Previous")]
         FourthPrevious,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4842,21 +4841,21 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class NameType {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string surnameAtBirthField;
-        
+
         private string maidenNameField;
-        
+
         private string suffixField;
-        
+
         /// <remarks/>
         public string Title {
             get {
@@ -4866,7 +4865,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Forename {
             get {
@@ -4876,7 +4875,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         public string MiddleName {
             get {
@@ -4886,7 +4885,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Surname {
             get {
@@ -4896,7 +4895,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         public string SurnameAtBirth {
             get {
@@ -4906,7 +4905,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.surnameAtBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         public string MaidenName {
             get {
@@ -4916,7 +4915,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.maidenNameField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Suffix {
             get {
@@ -4927,7 +4926,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4935,35 +4934,35 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class PersonalDataType {
-        
+
         private NameType nameField;
-        
+
         private NameType aliasField;
-        
+
         private GenderType genderField;
-        
+
         private bool genderFieldSpecified;
-        
+
         private System.DateTime birthDateField;
-        
+
         private bool birthDateFieldSpecified;
-        
+
         private string mothersMaidenNameField;
-        
+
         private MaritalStatusType maritalStatusField;
-        
+
         private bool maritalStatusFieldSpecified;
-        
+
         private ResidentialStatusType residentialStatusField;
-        
+
         private bool residentialStatusFieldSpecified;
-        
+
         private string countryOfBirthField;
-        
+
         private string numberOfDependantsField;
-        
+
         private string placeOfBirthField;
-        
+
         /// <remarks/>
         public NameType Name {
             get {
@@ -4973,7 +4972,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         public NameType Alias {
             get {
@@ -4983,7 +4982,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.aliasField = value;
             }
         }
-        
+
         /// <remarks/>
         public GenderType Gender {
             get {
@@ -4993,7 +4992,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.genderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool GenderSpecified {
@@ -5004,7 +5003,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.genderFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime BirthDate {
@@ -5015,7 +5014,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.birthDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BirthDateSpecified {
@@ -5026,7 +5025,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.birthDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public string MothersMaidenName {
             get {
@@ -5036,7 +5035,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.mothersMaidenNameField = value;
             }
         }
-        
+
         /// <remarks/>
         public MaritalStatusType MaritalStatus {
             get {
@@ -5046,7 +5045,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.maritalStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MaritalStatusSpecified {
@@ -5057,7 +5056,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.maritalStatusFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public ResidentialStatusType ResidentialStatus {
             get {
@@ -5067,7 +5066,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.residentialStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ResidentialStatusSpecified {
@@ -5078,7 +5077,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.residentialStatusFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public string CountryOfBirth {
             get {
@@ -5088,7 +5087,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.countryOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
         public string NumberOfDependants {
@@ -5099,7 +5098,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.numberOfDependantsField = value;
             }
         }
-        
+
         /// <remarks/>
         public string PlaceOfBirth {
             get {
@@ -5110,105 +5109,105 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum GenderType {
-        
+
         /// <remarks/>
         Male,
-        
+
         /// <remarks/>
         Female,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum MaritalStatusType {
-        
+
         /// <remarks/>
         Married,
-        
+
         /// <remarks/>
         Single,
-        
+
         /// <remarks/>
         Divorced,
-        
+
         /// <remarks/>
         Widowed,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("To be Married")]
         TobeMarried,
-        
+
         /// <remarks/>
         Cohabiting,
-        
+
         /// <remarks/>
         Separated,
-        
+
         /// <remarks/>
         Other,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Not Asken")]
         NotAsken,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Not Given")]
         NotGiven,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum ResidentialStatusType {
-        
+
         /// <remarks/>
         Owner,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Living with Parents")]
         LivingwithParents,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Tenant-Furnished")]
         TenantFurnished,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Tenant-Unfurnished")]
         TenantUnfurnished,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Council Tenant")]
         CouncilTenant,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Other Tenant")]
         OtherTenant,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Joint Owner")]
         JointOwner,
-        
+
         /// <remarks/>
         Other,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Not Given")]
         NotGiven,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Not Asked")]
         NotAsked,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5216,31 +5215,31 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ExecuteRequestType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private ProcessConfigReferenceType processConfigReferenceField;
-        
+
         private ResponseType responseTypeField;
-        
+
         private ConsentType consentField;
-        
+
         private PersonalDataType personalDataField;
-        
+
         private AddressType[] addressesField;
-        
+
         private EmployerInformationType employerInformationField;
-        
+
         private TelephoneType[] telephonesField;
-        
+
         private BankInformationType bankInformationField;
-        
+
         private ReferenceNumberType[] referenceNumbersField;
-        
+
         private OtherType otherField;
-        
+
         private CardType cardField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -5251,7 +5250,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public ProcessConfigReferenceType ProcessConfigReference {
             get {
@@ -5261,7 +5260,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.processConfigReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         public ResponseType ResponseType {
             get {
@@ -5271,7 +5270,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.responseTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public ConsentType Consent {
             get {
@@ -5281,7 +5280,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.consentField = value;
             }
         }
-        
+
         /// <remarks/>
         public PersonalDataType PersonalData {
             get {
@@ -5291,7 +5290,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.personalDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("Address", IsNullable=false)]
         public AddressType[] Addresses {
@@ -5302,7 +5301,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.addressesField = value;
             }
         }
-        
+
         /// <remarks/>
         public EmployerInformationType EmployerInformation {
             get {
@@ -5312,7 +5311,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.employerInformationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("Telephone", IsNullable=false)]
         public TelephoneType[] Telephones {
@@ -5323,7 +5322,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.telephonesField = value;
             }
         }
-        
+
         /// <remarks/>
         public BankInformationType BankInformation {
             get {
@@ -5333,7 +5332,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.bankInformationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("ReferenceNumber", IsNullable=false)]
         public ReferenceNumberType[] ReferenceNumbers {
@@ -5344,7 +5343,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.referenceNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
         public OtherType Other {
             get {
@@ -5354,7 +5353,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.otherField = value;
             }
         }
-        
+
         /// <remarks/>
         public CardType Card {
             get {
@@ -5365,7 +5364,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5373,11 +5372,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ProcessConfigReferenceType {
-        
+
         private string itemField;
-        
+
         private ItemChoiceType itemElementNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ProcessConfigId", typeof(string))]
         [System.Xml.Serialization.XmlElementAttribute("ProcessConfigName", typeof(string))]
@@ -5390,7 +5389,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.itemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public ItemChoiceType ItemElementName {
@@ -5402,50 +5401,50 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03", IncludeInSchema=false)]
     public enum ItemChoiceType {
-        
+
         /// <remarks/>
         ProcessConfigId,
-        
+
         /// <remarks/>
         ProcessConfigName,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum ResponseType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Decision Only")]
         DecisionOnly,
-        
+
         /// <remarks/>
         Summary,
-        
+
         /// <remarks/>
         Detail,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum ConsentType {
-        
+
         /// <remarks/>
         Yes,
-        
+
         /// <remarks/>
         No,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(OptionalityGroupType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(OptionalityFieldType))]
@@ -5455,13 +5454,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class baseOptionality {
-        
+
         private string nameField;
-        
+
         private OptionalityType optionalityField;
-        
+
         private bool optionalityFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string name {
@@ -5472,7 +5471,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public OptionalityType optionality {
@@ -5483,7 +5482,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.optionalityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool optionalitySpecified {
@@ -5495,24 +5494,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum OptionalityType {
-        
+
         /// <remarks/>
         Mandatory,
-        
+
         /// <remarks/>
         Optional,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Not Used")]
         NotUsed,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5520,11 +5519,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class OptionalityGroupType : baseOptionality {
-        
+
         private OptionalityFieldType[] fieldField;
-        
+
         private OptionalityGroupType[] groupField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("field")]
         public OptionalityFieldType[] field {
@@ -5535,7 +5534,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.fieldField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("group")]
         public OptionalityGroupType[] group {
@@ -5547,7 +5546,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5555,9 +5554,9 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class OptionalityFieldType : baseOptionality {
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string value {
@@ -5569,7 +5568,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5577,11 +5576,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ListOptionalityResponseType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private OptionalityGroupType[] returnField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -5592,7 +5591,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("return")]
         public OptionalityGroupType[] @return {
@@ -5604,7 +5603,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5612,11 +5611,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ListFieldOptionalityType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private ProcessConfigReferenceType processConfigReferenceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -5627,7 +5626,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public ProcessConfigReferenceType ProcessConfigReference {
             get {
@@ -5638,7 +5637,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5646,11 +5645,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class GetQAAddressResponseType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private QAAddressType qAAddressField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -5661,7 +5660,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public QAAddressType QAAddress {
             get {
@@ -5672,7 +5671,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5680,18 +5679,18 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class QAAddressType {
-        
+
         private AddressLineType[] addressLineField;
-        
+
         private bool overflowField;
-        
+
         private bool truncatedField;
-        
+
         public QAAddressType() {
             this.overflowField = false;
             this.truncatedField = false;
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
         public AddressLineType[] AddressLine {
@@ -5702,7 +5701,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.addressLineField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -5714,7 +5713,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.overflowField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -5727,7 +5726,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5735,25 +5734,25 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class AddressLineType {
-        
+
         private string labelField;
-        
+
         private string lineField;
-        
+
         private DataplusGroupType[] dataplusGroupField;
-        
+
         private LineContentType lineContentField;
-        
+
         private bool overflowField;
-        
+
         private bool truncatedField;
-        
+
         public AddressLineType() {
             this.lineContentField = LineContentType.Address;
             this.overflowField = false;
             this.truncatedField = false;
         }
-        
+
         /// <remarks/>
         public string Label {
             get {
@@ -5763,7 +5762,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.labelField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Line {
             get {
@@ -5773,7 +5772,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.lineField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DataplusGroup")]
         public DataplusGroupType[] DataplusGroup {
@@ -5784,7 +5783,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dataplusGroupField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(LineContentType.Address)]
@@ -5796,7 +5795,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.lineContentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -5808,7 +5807,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.overflowField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -5821,7 +5820,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5829,11 +5828,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class DataplusGroupType {
-        
+
         private string[] dataplusGroupItemField;
-        
+
         private string groupNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DataplusGroupItem")]
         public string[] DataplusGroupItem {
@@ -5844,7 +5843,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dataplusGroupItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string GroupName {
@@ -5856,29 +5855,29 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public enum LineContentType {
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         Address,
-        
+
         /// <remarks/>
         Name,
-        
+
         /// <remarks/>
         Ancillary,
-        
+
         /// <remarks/>
         DataPlus,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5886,13 +5885,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class QAGetAddress {
-        
+
         private string layoutField;
-        
+
         private string monikerField;
-        
+
         private string languageField;
-        
+
         /// <remarks/>
         public string Layout {
             get {
@@ -5902,7 +5901,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.layoutField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Moniker {
             get {
@@ -5912,7 +5911,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.monikerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string Language {
@@ -5924,7 +5923,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ExecuteQAGetAddressType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
@@ -5933,11 +5932,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class ExecuteQAGetAddressType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private QAGetAddress qAGetAddressField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -5948,7 +5947,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public QAGetAddress QAGetAddress {
             get {
@@ -5959,7 +5958,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5968,7 +5967,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(TypeName="ExecuteQAGetAddressType", Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ExecuteQAGetAddressType1 : ExecuteQAGetAddressType {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5976,49 +5975,49 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class PicklistEntryType {
-        
+
         private string monikerField;
-        
+
         private string partialAddressField;
-        
+
         private string picklistField;
-        
+
         private string postcodeField;
-        
+
         private string scoreField;
-        
+
         private bool fullAddressField;
-        
+
         private bool multiplesField;
-        
+
         private bool canStepField;
-        
+
         private bool aliasMatchField;
-        
+
         private bool postcodeRecodedField;
-        
+
         private bool crossBorderMatchField;
-        
+
         private bool dummyPOBoxField;
-        
+
         private bool nameField;
-        
+
         private bool informationField;
-        
+
         private bool warnInformationField;
-        
+
         private bool incompleteAddrField;
-        
+
         private bool unresolvableRangeField;
-        
+
         private bool phantomPrimaryPointField;
-        
+
         private bool subsidiaryDataField;
-        
+
         private bool extendedDataField;
-        
+
         private bool enhancedDataField;
-        
+
         public PicklistEntryType() {
             this.fullAddressField = false;
             this.multiplesField = false;
@@ -6037,7 +6036,7 @@ namespace ExperianLib.Web_References.IDHubService {
             this.extendedDataField = false;
             this.enhancedDataField = false;
         }
-        
+
         /// <remarks/>
         public string Moniker {
             get {
@@ -6047,7 +6046,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.monikerField = value;
             }
         }
-        
+
         /// <remarks/>
         public string PartialAddress {
             get {
@@ -6057,7 +6056,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.partialAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Picklist {
             get {
@@ -6067,7 +6066,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.picklistField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Postcode {
             get {
@@ -6077,7 +6076,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
         public string Score {
@@ -6088,7 +6087,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.scoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6100,7 +6099,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.fullAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6112,7 +6111,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.multiplesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6124,7 +6123,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.canStepField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6136,7 +6135,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.aliasMatchField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6148,7 +6147,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.postcodeRecodedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6160,7 +6159,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.crossBorderMatchField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6172,7 +6171,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.dummyPOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6184,7 +6183,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6196,7 +6195,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.informationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6208,7 +6207,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.warnInformationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6220,7 +6219,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.incompleteAddrField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6232,7 +6231,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.unresolvableRangeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6244,7 +6243,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.phantomPrimaryPointField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6256,7 +6255,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.subsidiaryDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6268,7 +6267,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.extendedDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6281,7 +6280,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6289,33 +6288,33 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class QAPicklistType {
-        
+
         private string fullPicklistMonikerField;
-        
+
         private PicklistEntryType[] picklistEntryField;
-        
+
         private string promptField;
-        
+
         private string totalField;
-        
+
         private bool autoFormatSafeField;
-        
+
         private bool autoFormatPastCloseField;
-        
+
         private bool autoStepinSafeField;
-        
+
         private bool autoStepinPastCloseField;
-        
+
         private bool largePotentialField;
-        
+
         private bool maxMatchesField;
-        
+
         private bool moreOtherMatchesField;
-        
+
         private bool overThresholdField;
-        
+
         private bool timeoutField;
-        
+
         public QAPicklistType() {
             this.autoFormatSafeField = false;
             this.autoFormatPastCloseField = false;
@@ -6327,7 +6326,7 @@ namespace ExperianLib.Web_References.IDHubService {
             this.overThresholdField = false;
             this.timeoutField = false;
         }
-        
+
         /// <remarks/>
         public string FullPicklistMoniker {
             get {
@@ -6337,7 +6336,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.fullPicklistMonikerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PicklistEntry")]
         public PicklistEntryType[] PicklistEntry {
@@ -6348,7 +6347,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.picklistEntryField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Prompt {
             get {
@@ -6358,7 +6357,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.promptField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
         public string Total {
@@ -6369,7 +6368,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.totalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6381,7 +6380,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.autoFormatSafeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6393,7 +6392,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.autoFormatPastCloseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6405,7 +6404,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.autoStepinSafeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6417,7 +6416,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.autoStepinPastCloseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6429,7 +6428,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.largePotentialField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6441,7 +6440,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.maxMatchesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6453,7 +6452,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.moreOtherMatchesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6465,7 +6464,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.overThresholdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -6478,7 +6477,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6486,19 +6485,19 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class QASearchResultType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private QAPicklistType qAPicklistField;
-        
+
         private QAAddressType qAAddressField;
-        
+
         private VerifyLevelType verifyLevelField;
-        
+
         public QASearchResultType() {
             this.verifyLevelField = VerifyLevelType.None;
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -6509,7 +6508,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public QAPicklistType QAPicklist {
             get {
@@ -6519,7 +6518,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.qAPicklistField = value;
             }
         }
-        
+
         /// <remarks/>
         public QAAddressType QAAddress {
             get {
@@ -6529,7 +6528,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.qAAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(VerifyLevelType.None)]
@@ -6542,38 +6541,38 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public enum VerifyLevelType {
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         Verified,
-        
+
         /// <remarks/>
         InteractionRequired,
-        
+
         /// <remarks/>
         PremisesPartial,
-        
+
         /// <remarks/>
         StreetPartial,
-        
+
         /// <remarks/>
         Multiple,
-        
+
         /// <remarks/>
         VerifiedPlace,
-        
+
         /// <remarks/>
         VerifiedStreet,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6581,25 +6580,25 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class EngineType {
-        
+
         private bool flattenField;
-        
+
         private bool flattenFieldSpecified;
-        
+
         private EngineIntensityType intensityField;
-        
+
         private bool intensityFieldSpecified;
-        
+
         private PromptSetType promptSetField;
-        
+
         private bool promptSetFieldSpecified;
-        
+
         private string thresholdField;
-        
+
         private string timeoutField;
-        
+
         private EngineEnumType valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool Flatten {
@@ -6610,7 +6609,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.flattenField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FlattenSpecified {
@@ -6621,7 +6620,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.flattenFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public EngineIntensityType Intensity {
@@ -6632,7 +6631,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.intensityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool IntensitySpecified {
@@ -6643,7 +6642,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.intensityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public PromptSetType PromptSet {
@@ -6654,7 +6653,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.promptSetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PromptSetSpecified {
@@ -6665,7 +6664,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.promptSetFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="positiveInteger")]
         public string Threshold {
@@ -6676,7 +6675,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.thresholdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(DataType="nonNegativeInteger")]
         public string Timeout {
@@ -6687,7 +6686,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.timeoutField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public EngineEnumType Value {
@@ -6699,70 +6698,70 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public enum EngineIntensityType {
-        
+
         /// <remarks/>
         Exact,
-        
+
         /// <remarks/>
         Close,
-        
+
         /// <remarks/>
         Extensive,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public enum PromptSetType {
-        
+
         /// <remarks/>
         OneLine,
-        
+
         /// <remarks/>
         Default,
-        
+
         /// <remarks/>
         Generic,
-        
+
         /// <remarks/>
         Optimal,
-        
+
         /// <remarks/>
         Alternate,
-        
+
         /// <remarks/>
         Alternate2,
-        
+
         /// <remarks/>
         Alternate3,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public enum EngineEnumType {
-        
+
         /// <remarks/>
         Singleline,
-        
+
         /// <remarks/>
         Typedown,
-        
+
         /// <remarks/>
         Verification,
-        
+
         /// <remarks/>
         Keyfinder,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6770,17 +6769,17 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class QASearch {
-        
+
         private string countryField;
-        
+
         private EngineType engineField;
-        
+
         private string layoutField;
-        
+
         private string searchField;
-        
+
         private string languageField;
-        
+
         /// <remarks/>
         public string Country {
             get {
@@ -6790,7 +6789,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         public EngineType Engine {
             get {
@@ -6800,7 +6799,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.engineField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Layout {
             get {
@@ -6810,7 +6809,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.layoutField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Search {
             get {
@@ -6820,7 +6819,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.searchField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string Language {
@@ -6832,7 +6831,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ExecuteQASearchType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
@@ -6841,11 +6840,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/QAS")]
     public partial class ExecuteQASearchType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private QASearch qASearchField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -6856,7 +6855,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         public QASearch QASearch {
             get {
@@ -6867,7 +6866,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6876,7 +6875,7 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.Xml.Serialization.XmlTypeAttribute(TypeName="ExecuteQASearchType", Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ExecuteQASearchType1 : ExecuteQASearchType {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6884,13 +6883,13 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ProcessConfigResponseDetailsType {
-        
+
         private string identifierField;
-        
+
         private bool activeField;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
         public string Identifier {
             get {
@@ -6900,7 +6899,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.identifierField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool Active {
             get {
@@ -6910,7 +6909,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.activeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string Name {
             get {
@@ -6921,7 +6920,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6929,11 +6928,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class FindProcessConfigResponseType {
-        
+
         private EIHHeaderType eIHHeaderField;
-        
+
         private ProcessConfigResponseDetailsType[] processConfigResponseDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader")]
         public EIHHeaderType EIHHeader {
@@ -6944,7 +6943,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.eIHHeaderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ProcessConfigResponseDetails")]
         public ProcessConfigResponseDetailsType[] ProcessConfigResponseDetails {
@@ -6956,7 +6955,7 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6964,11 +6963,11 @@ namespace ExperianLib.Web_References.IDHubService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public partial class ProcessConfigurationDetailsType {
-        
+
         private ProcessConfigReferenceType processConfigReferenceField;
-        
+
         private ProcessConfigStatusType processConfigStatusField;
-        
+
         /// <remarks/>
         public ProcessConfigReferenceType ProcessConfigReference {
             get {
@@ -6978,7 +6977,7 @@ namespace ExperianLib.Web_References.IDHubService {
                 this.processConfigReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         public ProcessConfigStatusType ProcessConfigStatus {
             get {
@@ -6989,40 +6988,40 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/eih/2011/03")]
     public enum ProcessConfigStatusType {
-        
+
         /// <remarks/>
         Active,
-        
+
         /// <remarks/>
         Inactive,
-        
+
         /// <remarks/>
         All,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void FindProcessConfigurationOperationCompletedEventHandler(object sender, FindProcessConfigurationOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class FindProcessConfigurationOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal FindProcessConfigurationOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public FindProcessConfigResponseType Result {
             get {
@@ -7031,24 +7030,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void ExecuteQASearchOperationCompletedEventHandler(object sender, ExecuteQASearchOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class ExecuteQASearchOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal ExecuteQASearchOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public QASearchResultType Result {
             get {
@@ -7057,24 +7056,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void ExecuteQAGetAddressOperationCompletedEventHandler(object sender, ExecuteQAGetAddressOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class ExecuteQAGetAddressOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal ExecuteQAGetAddressOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetQAAddressResponseType Result {
             get {
@@ -7083,24 +7082,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void ListFieldOptionalityOperationCompletedEventHandler(object sender, ListFieldOptionalityOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class ListFieldOptionalityOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal ListFieldOptionalityOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public ListOptionalityResponseType Result {
             get {
@@ -7109,24 +7108,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void ExecuteRequestOperationCompletedEventHandler(object sender, ExecuteRequestOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class ExecuteRequestOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal ExecuteRequestOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public ProcessConfigResponseType Result {
             get {
@@ -7135,24 +7134,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWGetAdditionalDataOperationCompletedEventHandler(object sender, BWGetAdditionalDataOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWGetAdditionalDataOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWGetAdditionalDataOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetAdditionalDataResponse Result {
             get {
@@ -7161,24 +7160,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWGetCountriesOperationCompletedEventHandler(object sender, BWGetCountriesOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWGetCountriesOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWGetCountriesOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetCountriesResponse Result {
             get {
@@ -7187,24 +7186,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWGetCountryInputOperationCompletedEventHandler(object sender, BWGetCountryInputOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWGetCountryInputOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWGetCountryInputOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetCountryInputResponse Result {
             get {
@@ -7213,24 +7212,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWGetBranchDataOperationCompletedEventHandler(object sender, BWGetBranchDataOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWGetBranchDataOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWGetBranchDataOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetBranchDataResponse Result {
             get {
@@ -7239,24 +7238,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWGetSWIFTDataOperationCompletedEventHandler(object sender, BWGetSWIFTDataOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWGetSWIFTDataOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWGetSWIFTDataOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetSWIFTDataResponse Result {
             get {
@@ -7265,24 +7264,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWGetSEPADataOperationCompletedEventHandler(object sender, BWGetSEPADataOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWGetSEPADataOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWGetSEPADataOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetSEPADataResponse Result {
             get {
@@ -7291,24 +7290,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWGetFasterPaymentsDataOperationCompletedEventHandler(object sender, BWGetFasterPaymentsDataOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWGetFasterPaymentsDataOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWGetFasterPaymentsDataOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetFasterPaymentsDataResponse Result {
             get {
@@ -7317,24 +7316,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWValidateIBANOperationCompletedEventHandler(object sender, BWValidateIBANOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWValidateIBANOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWValidateIBANOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public ValidateIBANResponse Result {
             get {
@@ -7343,24 +7342,24 @@ namespace ExperianLib.Web_References.IDHubService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void BWValidateOperationCompletedEventHandler(object sender, BWValidateOperationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BWValidateOperationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal BWValidateOperationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public ValidateResponse Result {
             get {

@@ -1,7 +1,6 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Text;
-
 
 namespace com.yodlee.sampleapps
 {
@@ -15,7 +14,7 @@ namespace com.yodlee.sampleapps
 		private ArrayList tokens;
 		private string StrSource;
 		private string StrDelimiter;
-		
+
 		/// <summary>
 		/// Constructor for StringTokenizer Class.
 		/// </summary>
@@ -69,7 +68,7 @@ namespace com.yodlee.sampleapps
 			this.NumTokens = 0;
 			this.tokens.Clear();
 			this.CurrIndex = 0;
-			
+
 			if(TempSource.IndexOf(this.StrDelimiter) < 0 && TempSource.Length > 0)
 			{
 				this.NumTokens = 1;

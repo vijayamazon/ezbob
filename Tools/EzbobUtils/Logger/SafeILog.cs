@@ -3,12 +3,7 @@
 	using log4net;
 	using JetBrains.Annotations;
 
-	#region class SafeILog
-
 	public class SafeILog : ASafeLog {
-		#region public
-
-		#region constructor
 
 		public SafeILog(object oCaller, ASafeLog oLog = null) : base(oLog) {
 			if (ReferenceEquals(oCaller, null))
@@ -27,21 +22,9 @@
 			m_oiLog = LogManager.GetLogger(oCaller.GetType());
 		} // constructor
 
-		#endregion constructor
-
-		#region property InternalLog
-
 		public virtual ILog InternalLog {
 			get { return m_oiLog; }
 		} // InternalLog
-
-		#endregion property InternalLog
-
-		#endregion public
-
-		#region protected
-
-		#region method OwnSay
 
 		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
@@ -159,16 +142,8 @@
 			} // switch
 		} // OwnSay
 
-		#endregion method OwnSay
-
-		#endregion protected
-
-		#region private
-
 		private readonly ILog m_oiLog;
 
-		#endregion private
 	} // class SafeILog
 
-	#endregion class SafeILog
 } // namespace Ezbob.Logger

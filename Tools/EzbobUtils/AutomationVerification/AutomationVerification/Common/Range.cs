@@ -16,7 +16,6 @@
 		}
 
 		public Range(): this(false,true) { }
-		
 
 		public bool IsInRange(decimal value)
 		{
@@ -71,7 +70,6 @@
 	{
 		public decimal OfferPercent { get; set; }
 	}
-
 
 	public static class RangeExtension
 	{

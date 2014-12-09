@@ -6,18 +6,11 @@
 
 	[DataContract(IsReference = true)]
 	public class BrokerCustomerEntry {
-		#region public
-
-		#region constructor
 
 		public BrokerCustomerEntry() {
 			m_oMps = new SortedDictionary<string, int>();
 			LoanDate = ms_oLongTimeAgo;
 		} // constructor
-
-		#endregion constructor
-
-		#region properties
 
 		[DataMember]
 		public int CustomerID { get; set; }
@@ -64,10 +57,6 @@
 		[DataMember]
 		public DateTime LastInvitationSent { get; set; }
 
-		#endregion properties
-
-		#region method AddMpLoan
-
 		public void AddMpLoan(string sMpTypeName, decimal nLoanAmount, DateTime? oLoanDate, decimal nSetupFee) {
 			if (nLoanAmount > 0) {
 				if (LoanDate == ms_oLongTimeAgo) {
@@ -92,10 +81,6 @@
 			Marketplaces = string.Join(", ", m_oMps.Select(kv => string.Format("{0} {1}", kv.Value, kv.Key)));
 		} // AddMpLoan
 
-		#endregion method AddMpLoan
-
-		#region method SetLead
-
 		public BrokerCustomerEntry SetLead(int nLeadID, bool bIsLeadDeleted, DateTime oLastInvitationSent, string sFirstName, string sLastName) {
 			LeadID = nLeadID;
 			IsLeadDeleted = bIsLeadDeleted;
@@ -110,16 +95,9 @@
 			return this;
 		} // SetLead
 
-		#endregion method SetLead
-
-		#endregion public
-
-		#region private
-
 		private static readonly DateTime ms_oLongTimeAgo = new DateTime(1976, 7, 1).Date;
 
 		private readonly SortedDictionary<string, int> m_oMps;
 
-		#endregion private
 	} // class BrokerCustomerEntry
 } // namespace EzBob.Backend.Strategies.Broker

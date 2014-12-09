@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -20,18 +20,16 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
     [XmlRootAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/", IsNullable = false)]
     public class ErrorResponse
     {
-    
+
         private  List<Error> errorField;
 
         private String requestIdField;
-
 
         /// <summary>
         /// Gets and sets the Error property.
@@ -50,8 +48,6 @@ namespace MarketplaceWebService.Model
             set { this.errorField =  value; }
         }
 
-
-
         /// <summary>
         /// Sets the Error property
         /// </summary>
@@ -65,8 +61,6 @@ namespace MarketplaceWebService.Model
             }
             return this;
         }          
- 
-
 
         /// <summary>
         /// Checks if Error property is set
@@ -77,7 +71,6 @@ namespace MarketplaceWebService.Model
             return (Error.Count > 0);
         }
 
-
         /// <summary>
         /// Gets and sets the RequestId property.
         /// </summary>
@@ -87,8 +80,6 @@ namespace MarketplaceWebService.Model
             get { return this.requestIdField ; }
             set { this.requestIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the RequestId property
@@ -101,8 +92,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if RequestId property is set
         /// </summary>
@@ -112,9 +101,6 @@ namespace MarketplaceWebService.Model
             return  this.requestIdField != null;
 
         }
-
-
-
 
         /// <summary>
         /// XML Representation for this object
@@ -170,8 +156,6 @@ namespace MarketplaceWebService.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

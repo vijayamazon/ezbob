@@ -11,7 +11,6 @@
 	using StructureMap;
 
 	public class CashTransferred : ABrokerMailToo {
-		#region constructor
 
 		public CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog, true) {
 			this.amount = amount;
@@ -21,11 +20,7 @@
 			amountInUsd = CalculateLoanAmountInUsd();
 		} // constructor
 
-		#endregion consturctor
-
 		public override string Name { get { return "Cash Transferred"; } }
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			Variables = new Dictionary<string, string> {
@@ -38,7 +33,7 @@
 				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
 				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) }
 			};
-			
+
 			if (CustomerData.IsAlibaba)
 			{
 				TemplateName = "Mandrill - Alibaba - Took Loan";
@@ -56,8 +51,6 @@
 				TemplateName = "Mandrill - Took Loan (not 1st loan)";
 			}
 		} // SetTemplateAndVariables
-
-		#endregion method SetTemplateAndVariables
 
 		protected override void ActionAtEnd()
 		{

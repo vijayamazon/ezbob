@@ -33,7 +33,7 @@
 	/// </summary>
 	public interface IMedalWeightConstatns
 	{
-		#region Base Weight
+
 		decimal BusinessScoreBaseWeight { get; }
 		decimal FreeCashFlowBaseWeight { get; }
 		decimal AnnualTurnoverBaseWeight { get; }
@@ -48,17 +48,12 @@
 		decimal NumOfOnTimeLoansBaseWeight { get; }
 		decimal NumOfLateRepaymentsBaseWeight { get; }
 		decimal NumOfEarlyRepaymentsBaseWeight { get; }
-		#endregion
 
-		#region No HMRC Weight
 		decimal FreeCashFlowNoHmrcWeight { get; }
 		decimal AnnualTurnoverNoHmrcWeightChange { get; }
 		decimal BusinessScoreNoHmrcWeightChange { get; }
 		decimal ConsumerScoreNoHmrcWeightChange { get; }
 		decimal BusinessSeniorityNoHmrcWeightChange { get; }
-		#endregion
-
-		#region Low Score Weight
 
 		int LowBusinessScore { get; }
 		int LowConsumerScore { get; }
@@ -66,9 +61,6 @@
 		decimal BusinessScoreLowScoreWeight { get; }
 		decimal ConsumerScoreLowScoreWeight { get; }
 
-		#endregion
-
-		#region First Repayment Passed Weight
 		decimal EzbobSeniorityFirstRepaymentWeight { get; }
 		decimal NumOfOnTimeLoansFirstRepaymentWeight { get; }
 		decimal NumOfLateRepaymentsFirstRepaymentWeight { get; }
@@ -78,7 +70,7 @@
 		decimal BusinessScoreFirstRepaymentWeightChange { get; }
 		decimal BusinessSeniorityFirstRepaymentWeightChange { get; }
 		decimal NetWorthFirstRepaymentWeightChange { get; }
-		#endregion
+
 	}
 
 	/// <summary>
@@ -177,7 +169,7 @@
 			}
 
 			intputModel.FreeCashFlow = intputModel.AnnualTurnover == 0 || !intputModel.HasHmrc ? 0 : intputModel.FreeCashFlowValue / intputModel.AnnualTurnover;
-			
+
 			intputModel.TangibleEquity = intputModel.AnnualTurnover == 0 ? 0 : intputModel.MedalInputModelDb.TangibleEquity / intputModel.AnnualTurnover;
 			intputModel.NumOfStores = intputModel.MedalInputModelDb.NumOfStores;
 
@@ -270,9 +262,6 @@
 			return 0;
 		}
 
-		
-
-		#region GetWeight Methods
 		protected virtual Weight GetNumOfEarlyPaymentsWeight(int ezbobNumOfEarlyReayments, bool firstRepaymentDatePassed)
 		{
 			return GetBaseWeight(ezbobNumOfEarlyReayments, NumOfEarlyRepaymentsBaseWeight, MedalRangesConstats.NumOfEarlyRepaymentsRanges,
@@ -454,10 +443,7 @@
 
 			return consumerScoreWeight;
 		}
-		#endregion
 
-
-		#region Weights
 		public abstract decimal BusinessScoreBaseWeight { get; }
 		public abstract decimal FreeCashFlowBaseWeight { get; }
 		public abstract decimal AnnualTurnoverBaseWeight { get; }
@@ -486,11 +472,11 @@
 		public virtual decimal NumOfOnTimeLoansFirstRepaymentWeight { get { return 0.0333M; } }
 		public virtual decimal NumOfLateRepaymentsFirstRepaymentWeight { get { return 0.0267M; } }
 		public virtual decimal NumOfEarlyRepaymentsFirstRepaymentWeight { get { return 0.02M; } }
-		
+
 		public abstract decimal ConsumerScoreFirstRepaymentWeightChange { get; }
 		public abstract decimal BusinessScoreFirstRepaymentWeightChange { get; }
 		public abstract decimal BusinessSeniorityFirstRepaymentWeightChange { get; }
 		public virtual decimal NetWorthFirstRepaymentWeightChange { get { return 0; } }
-		#endregion
+
 	}
 }

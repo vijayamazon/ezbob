@@ -1,4 +1,4 @@
-namespace Ezbob.Backend.Models {
+﻿namespace Ezbob.Backend.Models {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -9,22 +9,15 @@ namespace Ezbob.Backend.Models {
 
 	[DataContract]
 	public class VatReturnRawData : IComparable<VatReturnRawData> {
-		#region constructor
 
 		public VatReturnRawData() {
 			InternalID = Guid.NewGuid();
 			Data = new SortedDictionary<string, Coin>();
 		} // constructor
 
-		#endregion constructor
-
-		#region method CompareTo
-
 		public int CompareTo(VatReturnRawData a) {
 			return DateFrom.CompareTo(a.DateFrom);
 		} // CompareTo
-
-		#endregion method CompareTo
 
 		[DataMember]
 		public DateTime DateFrom { get; set; }
@@ -71,8 +64,6 @@ namespace Ezbob.Backend.Models {
 		[NonTraversable]
 		public SortedDictionary<string, Coin> Data { get; set; }
 
-		#region property DateInterval
-
 		[NonTraversable]
 		public DateInterval Interval {
 			get {
@@ -84,10 +75,6 @@ namespace Ezbob.Backend.Models {
 		} // Interval
 
 		private DateInterval m_oInterval;
-
-		#endregion property DateInterval
-
-		#region method ToString
 
 		public override string ToString() {
 			return string.Format(
@@ -108,17 +95,9 @@ namespace Ezbob.Backend.Models {
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#region method Overlaps
-
 		public bool Overlaps(VatReturnRawData oOther) {
 			return !oOther.IsDeleted && (RegistrationNo == oOther.RegistrationNo) && Interval.Intersects(oOther.Interval);
 		} // Overlaps
-
-		#endregion method Overlaps
-
-		#region method SameAs
 
 		public bool SameAs(VatReturnRawData oOther) {
 			if (DateFrom != oOther.DateFrom)
@@ -159,10 +138,6 @@ namespace Ezbob.Backend.Models {
 			return true;
 		} // SameAs
 
-		#endregion method SameAs
-
-		#region method BoxData
-
 		private SortedDictionary<int, Coin> BoxData() {
 			var oResult = new SortedDictionary<int, Coin>();
 
@@ -178,6 +153,5 @@ namespace Ezbob.Backend.Models {
 			return oResult;
 		} // BoxData
 
-		#endregion method BoxData
 	} // class VatReturnRawData
 } // namespace

@@ -1,16 +1,10 @@
-namespace EZBob.DatabaseLib.Model.Database {
+﻿namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
-
-	#region enum Gender
 
 	public enum Gender {
 		M,
 		F
 	} // enum Gender
-
-	#endregion enum Gender
-
-	#region enum MaritalStatus
 
 	public enum MaritalStatus {
 		Married,
@@ -22,10 +16,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		Other
 	} // enum MaritalStatus
 
-	#endregion enum MaritalStatus
-
-	#region enum Medal
-
 	public enum Medal {
 		NoClassification,
 		Silver,
@@ -33,10 +23,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		Platinum,
 		Diamond,
 	} // enum Medal
-
-	#endregion enum Medal
-
-	#region enum TypeOfBusiness
 
 	public enum TypeOfBusiness {
 		Entrepreneur = 0, //consumer
@@ -46,10 +32,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		SoleTrader = 4,   //consumer
 		Limited = 5       //company
 	} // enum TypeOfBusiness
-
-	#endregion enum TypeOfBusiness
-
-	#region enum IndustryType
 
 	public enum IndustryType {
 		[Description("Accommodation / food")]
@@ -75,10 +57,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		Other = 15
 	} // enum IndustryType
 
-	#endregion enum IndustryType
-
-	#region enum VatReporting
-
 	public enum VatReporting {
 		[Description("The company is not VAT registered")]
 		NotVatRegistered = 0,
@@ -94,9 +72,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		CompanyEmployee = 5,
 	} // enum VatReporting
 
-	#endregion enum VatReporting
-
-	#region enum CashRequestOriginator
 	public enum CashRequestOriginator
 	{
 		[Description("Finished wizard")]
@@ -110,9 +85,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		[Description("Other")]
 		Other = 4,
 	} // enum CashRequestOriginator
-	#endregion
-
-	#region enum FraudStatus
 
 	public enum FraudStatus {
 		[Description("Ok")]
@@ -129,5 +101,4 @@ namespace EZBob.DatabaseLib.Model.Database {
 		IdentityOrDetailsTheft = 5
 	} // enum FraudStatus
 
-	#endregion enum FraudStatus
 } // namespace

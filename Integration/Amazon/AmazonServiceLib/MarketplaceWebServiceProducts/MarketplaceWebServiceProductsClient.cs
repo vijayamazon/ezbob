@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -13,10 +13,6 @@
  *  API Version: 2011-10-01
  * 
  */
-
-
-
-
 
 namespace MarketplaceWebServiceProducts
 {
@@ -66,10 +62,8 @@ namespace MarketplaceWebServiceProducts
             config.SetUserAgent(applicationName, applicationVersion);
         }
 
-
         // Public API ------------------------------------------------------------//
 
-        
         /// <summary>
         /// Get Matching Product 
         /// </summary>
@@ -85,7 +79,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetMatchingProductResponse>(ConvertGetMatchingProduct(request));
         }
 
-        
         /// <summary>
         /// Get Lowest Offer Listings For ASIN 
         /// </summary>
@@ -101,7 +94,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetLowestOfferListingsForASINResponse>(ConvertGetLowestOfferListingsForASIN(request));
         }
 
-        
         /// <summary>
         /// Get Service Status 
         /// </summary>
@@ -118,7 +110,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetServiceStatusResponse>(ConvertGetServiceStatus(request));
         }
 
-        
         /// <summary>
         /// Get Matching Product For Id 
         /// </summary>
@@ -134,7 +125,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetMatchingProductForIdResponse>(ConvertGetMatchingProductForId(request));
         }
 
-        
         /// <summary>
         /// Get My Price For SKU 
         /// </summary>
@@ -150,7 +140,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetMyPriceForSKUResponse>(ConvertGetMyPriceForSKU(request));
         }
 
-        
         /// <summary>
         /// List Matching Products 
         /// </summary>
@@ -166,7 +155,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<ListMatchingProductsResponse>(ConvertListMatchingProducts(request));
         }
 
-        
         /// <summary>
         /// Get Competitive Pricing For SKU 
         /// </summary>
@@ -182,7 +170,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetCompetitivePricingForSKUResponse>(ConvertGetCompetitivePricingForSKU(request));
         }
 
-        
         /// <summary>
         /// Get Competitive Pricing For ASIN 
         /// </summary>
@@ -198,7 +185,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetCompetitivePricingForASINResponse>(ConvertGetCompetitivePricingForASIN(request));
         }
 
-        
         /// <summary>
         /// Get Product Categories For SKU 
         /// </summary>
@@ -214,7 +200,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetProductCategoriesForSKUResponse>(ConvertGetProductCategoriesForSKU(request));
         }
 
-        
         /// <summary>
         /// Get My Price For ASIN 
         /// </summary>
@@ -230,7 +215,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetMyPriceForASINResponse>(ConvertGetMyPriceForASIN(request));
         }
 
-        
         /// <summary>
         /// Get Lowest Offer Listings For SKU 
         /// </summary>
@@ -246,7 +230,6 @@ namespace MarketplaceWebServiceProducts
             return Invoke<GetLowestOfferListingsForSKUResponse>(ConvertGetLowestOfferListingsForSKU(request));
         }
 
-        
         /// <summary>
         /// Get Product Categories For ASIN 
         /// </summary>
@@ -321,7 +304,6 @@ namespace MarketplaceWebServiceProducts
 				{
 					statusCode = httpResponse.StatusCode;
 
-
 					rhm = new ResponseHeaderMetadata(
 					  httpResponse.GetResponseHeader( "x-mws-request-id" ),
 					  httpResponse.GetResponseHeader( "x-mws-response-context" ),
@@ -395,7 +377,6 @@ namespace MarketplaceWebServiceProducts
 
             return response;
         }
-
 
         /**
          * Look for additional error strings in the response and return formatted exception
@@ -628,7 +609,6 @@ namespace MarketplaceWebServiceProducts
                 encoding.GetBytes(data.ToCharArray())));
         }
 
-
         /**
          * Formats date as ISO 8601 timestamp
          */
@@ -643,13 +623,12 @@ namespace MarketplaceWebServiceProducts
                                 CultureInfo.InvariantCulture);
         }
 
-                                                
         /**
          * Convert GetMatchingProductRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetMatchingProduct(GetMatchingProductRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetMatchingProduct");
             if (request.IsSetSellerId())
@@ -674,14 +653,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetLowestOfferListingsForASINRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetLowestOfferListingsForASIN(GetLowestOfferListingsForASINRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetLowestOfferListingsForASIN");
             if (request.IsSetSellerId())
@@ -714,14 +692,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetServiceStatusRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetServiceStatus(GetServiceStatusRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetServiceStatus");
             if (request.IsSetSellerId())
@@ -731,14 +708,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetMatchingProductForIdRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetMatchingProductForId(GetMatchingProductForIdRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetMatchingProductForId");
             if (request.IsSetSellerId())
@@ -767,14 +743,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetMyPriceForSKURequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetMyPriceForSKU(GetMyPriceForSKURequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetMyPriceForSKU");
             if (request.IsSetSellerId())
@@ -799,14 +774,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert ListMatchingProductsRequest to name value pairs
          */
         private IDictionary<String, String> ConvertListMatchingProducts(ListMatchingProductsRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "ListMatchingProducts");
             if (request.IsSetSellerId())
@@ -828,14 +802,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetCompetitivePricingForSKURequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetCompetitivePricingForSKU(GetCompetitivePricingForSKURequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetCompetitivePricingForSKU");
             if (request.IsSetSellerId())
@@ -860,14 +833,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetCompetitivePricingForASINRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetCompetitivePricingForASIN(GetCompetitivePricingForASINRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetCompetitivePricingForASIN");
             if (request.IsSetSellerId())
@@ -892,14 +864,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetProductCategoriesForSKURequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetProductCategoriesForSKU(GetProductCategoriesForSKURequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetProductCategoriesForSKU");
             if (request.IsSetSellerId())
@@ -917,14 +888,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetMyPriceForASINRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetMyPriceForASIN(GetMyPriceForASINRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetMyPriceForASIN");
             if (request.IsSetSellerId())
@@ -949,14 +919,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetLowestOfferListingsForSKURequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetLowestOfferListingsForSKU(GetLowestOfferListingsForSKURequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetLowestOfferListingsForSKU");
             if (request.IsSetSellerId())
@@ -989,14 +958,13 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                
+
         /**
          * Convert GetProductCategoriesForASINRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetProductCategoriesForASIN(GetProductCategoriesForASINRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetProductCategoriesForASIN");
             if (request.IsSetSellerId())
@@ -1014,8 +982,6 @@ namespace MarketplaceWebServiceProducts
 
             return parameters;
         }
-        
-                                                                                                                                                                                                                                                                
 
     }
 }

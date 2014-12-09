@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class GetLowestOfferListingsForSKURequest
     {
-    
+
         private String sellerIdField;
 
         private String marketplaceIdField;
@@ -36,7 +34,6 @@ namespace MarketplaceWebServiceProducts.Model
         private String itemConditionField;
 
         private Boolean? excludeMeField;
-
 
         /// <summary>
         /// Gets and sets the SellerId property.
@@ -47,8 +44,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.sellerIdField ; }
             set { this.sellerIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SellerId property
@@ -61,8 +56,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SellerId property is set
         /// </summary>
@@ -73,7 +66,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the MarketplaceId property.
         /// </summary>
@@ -83,8 +75,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.marketplaceIdField ; }
             set { this.marketplaceIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the MarketplaceId property
@@ -97,8 +87,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if MarketplaceId property is set
         /// </summary>
@@ -109,7 +97,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the SellerSKUList property.
         /// </summary>
@@ -119,8 +106,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.sellerSKUListField ; }
             set { this.sellerSKUListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the SellerSKUList property
@@ -133,8 +118,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SellerSKUList property is set
         /// </summary>
@@ -143,9 +126,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.sellerSKUListField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the ItemCondition property.
@@ -156,8 +136,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.itemConditionField ; }
             set { this.itemConditionField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ItemCondition property
@@ -170,8 +148,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ItemCondition property is set
         /// </summary>
@@ -182,7 +158,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ExcludeMe property.
         /// </summary>
@@ -192,8 +167,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.excludeMeField.GetValueOrDefault() ; }
             set { this.excludeMeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ExcludeMe property
@@ -206,8 +179,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ExcludeMe property is set
         /// </summary>
@@ -217,10 +188,6 @@ namespace MarketplaceWebServiceProducts.Model
             return  this.excludeMeField.HasValue;
 
         }
-
-
-
-
 
     }
 

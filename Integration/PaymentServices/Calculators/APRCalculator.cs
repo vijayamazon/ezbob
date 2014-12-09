@@ -42,12 +42,11 @@ namespace PaymentServices.Calculators
 			return Math.Round(x * 100, 2);
 		}
 
-
 		public double CalculateMonthly(decimal amount, List<LoanScheduleItem> monthlyRepayments, int month, decimal setupFee = 0M,
 									   DateTime? date = null)
 		{
 			decimal monthlyRate = monthlyRepayments[month].InterestRate;
-			
+
 			var monthlyRepaimentsCalculatedForMonthlyRate = monthlyRepayments.Select(monthlyRepayment => new LoanScheduleItem
 				{
 					Interest = monthlyRepayment.BalanceBeforeRepayment*monthlyRate,

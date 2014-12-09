@@ -7,24 +7,15 @@
 	using JetBrains.Annotations;
 
 	public partial class CurrentValues {
-		#region static constructor
 
 		static CurrentValues() {
 			ms_oInstance = null;
 			ms_oInstanceLock = new object();
 		} // static constructor
 
-		#endregion static constructor
-
 		public delegate void ReloadOnTimer();
 
 		public static event ReloadOnTimer OnReloadByTimer;
-
-		#region public
-
-		#region singleton
-
-		#region method Init
 
 		public static void Init(AConnection oDB, ASafeLog oLog, UploadLimitations.OnLoadDelegate oUploadLimitationsOnLoad = null) {
 			if (ms_oInstance != null)
@@ -39,29 +30,15 @@
 			} // lock
 		} // Init
 
-		#endregion method Init
-
-		#region method ReInit
-
 		public static void ReInit() {
 			lock (ms_oInstanceLock) {
 				ms_oInstance.ReLoad();
 			} // lock
 		} // ReInit
 
-		#endregion method ReInit
-
-		#region property Instance
-
 		public static CurrentValues Instance {
 			get { return ms_oInstance; }
 		} // Instance
-
-		#endregion property Instance
-
-		#endregion singleton
-
-		#region method GetUploadLimitations
 
 		public virtual UploadLimitations GetUploadLimitations() {
 			bool bReloaded;
@@ -93,10 +70,6 @@
 			return oResult;
 		} // GetUploadLimitations
 
-		#endregion method GetUploadLimitations
-
-		#region method GetByID
-
 		public virtual VariableValue GetByID(int nID) {
 			bool bReloaded;
 			VariableValue oResult;
@@ -111,10 +84,6 @@
 
 			return oResult;
 		} // GetByID
-
-		#endregion method GetByID
-
-		#region indexer
 
 		public virtual VariableValue this[Variables nIdx] {
 			get {
@@ -133,10 +102,6 @@
 			} // get
 		} // indexer
 
-		#endregion indexer
-
-		#region property RefreshIntervalMinutes
-
 		public virtual int RefreshIntervalMinutes {
 			get {
 				lock (ms_oInstanceLock) {
@@ -153,10 +118,6 @@
 
 		private int m_nRefreshIntervalMinutes;
 
-		#endregion property RefreshInterval
-
-		#region method SetDefault
-
 		public virtual CurrentValues SetDefault(Variables nName, object oValue) {
 			lock (ms_oInstanceLock) {
 				m_oDefaults[nName] = new VariableValue(0, nName, (oValue ?? "").ToString(), "", Log);
@@ -164,10 +125,6 @@
 
 			return this;
 		} // SetDefault
-
-		#endregion method SetDefault
-
-		#region method Update
 
 		public void Update(SortedDictionary<Variables, string> oPackage) {
 			if (oPackage == null)
@@ -190,14 +147,6 @@
 			sp.ExecuteNonQuery();
 		} // SetByName
 
-		#endregion method Update
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
 		protected CurrentValues(AConnection oDB, ASafeLog oLog, UploadLimitations.OnLoadDelegate oUploadLimitationsOnLoad) {
 			m_oLastReloadTime = new DateTime();
 			m_nRefreshIntervalMinutes = 0;
@@ -214,10 +163,6 @@
 			if (oUploadLimitationsOnLoad != null)
 				m_oUploadLimitations.OnLoad += oUploadLimitationsOnLoad;
 		} // constructor
-
-		#endregion constructor
-
-		#region method ReLoad
 
 		protected virtual void ReLoad() {
 			m_oData.Clear();
@@ -263,25 +208,9 @@
 			m_oUploadLimitations.Load();
 		} // ReLoad
 
-		#endregion method ReLoad
-
-		#region property DB
-
 		protected virtual AConnection DB { get; private set; }
 
-		#endregion property DB
-
-		#region property Log
-
 		protected ASafeLog Log { get; private set; }
-
-		#endregion property Log
-
-		#endregion protected
-
-		#region private
-
-		#region method UpdateOne
 
 		public virtual VariableValue UpdateOne(Variables nName, string sValue) {
 			bool bReloaded;
@@ -304,10 +233,6 @@
 			return oResult;
 		} // UpdateOne
 
-		#endregion method UpdateOne
-
-		#region method ReloadIfNeeded
-
 		private bool ReloadIfNeeded() {
 			if (m_nRefreshIntervalMinutes <= 0)
 				return false;
@@ -327,20 +252,12 @@
 			return false;
 		} // ReloadIfNeeded
 
-		#endregion method ReloadIfNeeded
-
-		#region method UnsafeGet
-
 		private VariableValue UnsafeGet(Variables nIdx) {
 			if (m_oData.ContainsKey(nIdx))
 				return m_oData[nIdx];
 
 			return m_oDefaults.ContainsKey(nIdx) ? m_oDefaults[nIdx] : null;
 		} // UnsafeGet
-
-		#endregion method UnsafeGet
-
-		#region fields
 
 		private readonly SortedDictionary<int, VariableValue> m_oByID;
 		private readonly SortedDictionary<Variables, VariableValue> m_oData;
@@ -353,10 +270,6 @@
 		private static CurrentValues ms_oInstance;
 		private static readonly object ms_oInstanceLock;
 
-		#endregion fields
-
-		#region class CfgValueUpdate
-
 		private class CfgValueUpdate {
 			[UsedImplicitly]
 			public int ID { get; set; }
@@ -364,10 +277,6 @@
 			[UsedImplicitly]
 			public string Value { get; set; }
 		} // CfgValueUpdate
-
-		#endregion class CfgValueUpdate
-
-		#region class SpUpdateConfigurationVariables
 
 		private class SpUpdateConfigurationVariables : AStoredProc {
 			public SpUpdateConfigurationVariables(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -380,8 +289,5 @@
 			public List<CfgValueUpdate> UpdatePackage { get; set; }
 		} // class SpUpdateConfigurationVariables
 
-		#endregion class SpUpdateConfigurationVariables
-
-		#endregion private
 	} // class CurrentValues
 } // namespace ConfigManager

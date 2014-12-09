@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class LowestOfferListingType
     {
-    
+
         private  QualifiersType qualifiersField;
         private Decimal? numberOfOfferListingsConsideredField;
 
@@ -35,7 +33,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         private  PriceType priceField;
         private String multipleOffersAtLowestPriceField;
-
 
         /// <summary>
         /// Gets and sets the Qualifiers property.
@@ -46,8 +43,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.qualifiersField ; }
             set { this.qualifiersField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Qualifiers property
@@ -60,8 +55,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Qualifiers property is set
         /// </summary>
@@ -70,9 +63,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.qualifiersField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the NumberOfOfferListingsConsidered property.
@@ -83,8 +73,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.numberOfOfferListingsConsideredField.GetValueOrDefault() ; }
             set { this.numberOfOfferListingsConsideredField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the NumberOfOfferListingsConsidered property
@@ -97,8 +85,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if NumberOfOfferListingsConsidered property is set
         /// </summary>
@@ -109,7 +95,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the SellerFeedbackCount property.
         /// </summary>
@@ -119,8 +104,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.sellerFeedbackCountField.GetValueOrDefault() ; }
             set { this.sellerFeedbackCountField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SellerFeedbackCount property
@@ -133,8 +116,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SellerFeedbackCount property is set
         /// </summary>
@@ -145,7 +126,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Price property.
         /// </summary>
@@ -155,8 +135,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.priceField ; }
             set { this.priceField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Price property
@@ -169,8 +147,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Price property is set
         /// </summary>
@@ -179,9 +155,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.priceField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the MultipleOffersAtLowestPrice property.
@@ -192,8 +165,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.multipleOffersAtLowestPriceField ; }
             set { this.multipleOffersAtLowestPriceField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the MultipleOffersAtLowestPrice property
@@ -206,8 +177,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if MultipleOffersAtLowestPrice property is set
         /// </summary>
@@ -218,9 +187,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -229,7 +195,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -296,8 +261,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

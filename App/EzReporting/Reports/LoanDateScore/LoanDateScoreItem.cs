@@ -7,12 +7,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class LoanDateScoreItem
-
 	public class LoanDateScoreItem {
-		#region public
-
-		#region constructor
 
 		public LoanDateScoreItem(SafeReader oRow, ASafeLog oLog) {
 			m_oLog = oLog ?? new SafeLog();
@@ -27,11 +22,7 @@
 			m_oLog.Debug("Customer {0} took last loan on {1}", CustomerID, m_oLastLoanDate);
 		} // constructor
 
-		#endregion constructor
-
 		public int CustomerID { get; set; }
-
-		#region method Add
 
 		public void Add(SafeReader oRow, AConnection oDB) {
 			DateTime oInsertDate = oRow["InsertDate"];
@@ -59,10 +50,6 @@
 			} // switch
 		} // Add
 
-		#endregion method Add
-
-		#region method LoadLastScore
-
 		public void LoadLastScore(AConnection oDB) {
 			if (!ReferenceEquals(m_sCompanyName, null) && !ReferenceEquals(m_sCompanyNumber, null) && m_oIncorporationDate.HasValue && m_nCompanyScore.HasValue && !ReferenceEquals(m_sCreditLimit, null))
 				return;
@@ -78,10 +65,6 @@
 			AddCompanyData(oDB);
 		} // LoadLastScore
 
-		#endregion method LoadLastScore
-
-		#region method ToOutput
-
 		public void ToOutput(StreamWriter fout) {
 			fout.WriteLine(string.Join(",", new string[] {
 				CustomerID.ToString(), m_oLastLoanDate.ToString("yyyy-MM-dd"),
@@ -91,12 +74,6 @@
 				m_sCompanyNumber, m_sCompanyName, m_sCreditLimit, m_sNonLimDelphiScore, m_sNonLimDefaultChance, m_sNonLimStabilityOdds
 			}));
 		} // ToOutput
-
-		#endregion method ToOutput
-
-		#endregion public
-
-		#region private
 
 		private readonly DateTime m_oLastLoanDate;
 		private readonly string m_sCompanyRefNum;
@@ -118,8 +95,6 @@
 		private string m_sNonLimDefaultChance;
 		private string m_sNonLimStabilityOdds;
 
-		#region method ExtractXml
-
 		private XmlDocument ExtractXml(string sXml) {
 			var doc = new XmlDocument();
 
@@ -139,10 +114,6 @@
 			return doc;
 		} // ExtractXml
 
-		#endregion method ExtractXml
-
-		#region method DateFits
-
 		private bool DateFits(ref DateTime? oSavedDate, DateTime oInsertDate) {
 			if (oInsertDate > m_oLastLoanDate)
 				return false;
@@ -155,17 +126,9 @@
 			return b;
 		} // DateFits
 
-		#endregion method DateFits
-
-		#region method AddNdspciiData
-
 		private void AddNdspciiData(int? ndspcii) {
 			m_nNdspcii = ndspcii;
 		} // AddNdspciiDAta
-
-		#endregion method AddNdspciiData
-
-		#region method AddLtdData
 
 		private void AddLtdData(ExperianLtd oExperianLtd) {
 			if (m_sCompanyNumber == null)
@@ -188,10 +151,6 @@
 			} // if
 		} // AddLtdData
 
-		#endregion method AddLtdData
-
-		#region method AddCompanyData
-
 		private void AddCompanyData(AConnection oDB)
 		{
 			SafeReader sr = oDB.GetFirst(
@@ -207,10 +166,6 @@
 			}
 		} // AddCompanyData
 
-		#endregion method AddCompanyData
-
-		#region method ExtractDate
-
 		private static DateTime? ExtractDate(XmlNode oNode, string sFieldNamePrefix) {
 			XmlNode oYear = oNode.SelectSingleNode(sFieldNamePrefix + "-YYYY");
 			if (oYear == null)
@@ -219,7 +174,7 @@
 			XmlNode oMonth = oNode.SelectSingleNode(sFieldNamePrefix + "-MM");
 			if (oMonth == null)
 				return null;
-			
+
 			XmlNode oDay = oNode.SelectSingleNode(sFieldNamePrefix + "-DD");
 			if (oDay == null)
 				return null;
@@ -232,10 +187,6 @@
 			return oDate;
 		} // ExtractDate
 
-		#endregion method ExtractDate
-
-		#region method MD
-
 		private static string MD(XmlNode oNode) {
 			string s = oNode.InnerText;
 
@@ -245,10 +196,6 @@
 			return s;
 		} // MD
 
-		#endregion method MD
-
-		#endregion private
 	} // class LoanDateScoreItem
 
-	#endregion class LoanDateScoreItem
 } // namespace Reports

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 namespace Ezbob.ValueIntervals {
-	#region interface IOrdinal
 
 	public interface IOrdinal<T> {
 		/// <summary>
@@ -22,5 +21,4 @@ namespace Ezbob.ValueIntervals {
 		T Next();
 	} // interface IOrdinal
 
-	#endregion interface IOrdinal
 } // namespace Ezbob.ValueIntervals

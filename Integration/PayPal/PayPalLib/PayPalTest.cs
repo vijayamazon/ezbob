@@ -1,4 +1,4 @@
-using EZBob.DatabaseLib;
+﻿using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.PayPalDbLib.Models;
@@ -45,7 +45,6 @@ namespace EzBob.PayPal
 				return marketPlace.GetRetrieveDataHelper( helper ) as PayPalRetriveDataHelper;
 			}
 		}
-
 
 		public static void StoreTestData( int customerId )
 		{

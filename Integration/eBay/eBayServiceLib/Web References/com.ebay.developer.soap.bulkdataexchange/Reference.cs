@@ -20,8 +20,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     using System.Web.Services.Protocols;
     using System.ComponentModel;
     using System.Xml.Serialization;
-    
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -30,37 +29,37 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BaseServiceResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BaseServiceRequest))]
     public partial class BulkDataExchangeService : System.Web.Services.Protocols.SoapHttpClientProtocol {
-        
+
         private System.Threading.SendOrPostCallback createUploadJobOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback startUploadJobOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback abortJobOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getJobsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getJobStatusOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback startDownloadJobOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createRecurringJobOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback deleteRecurringJobOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getRecurringJobsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getRecurringJobExecutionStatusOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getRecurringJobExecutionHistoryOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback activateRecurringJobOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback suspendRecurringJobOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback abortRecurringJobExecutionOperationCompleted;
-        
+
         private bool useDefaultCredentialsSetExplicitly;
-        
+
         /// <remarks/>
         public BulkDataExchangeService() {
             this.SoapVersion = System.Web.Services.Protocols.SoapProtocolVersion.Soap12;
@@ -73,7 +72,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         public new string Url {
             get {
                 return base.Url;
@@ -87,7 +86,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 base.Url = value;
             }
         }
-        
+
         public new bool UseDefaultCredentials {
             get {
                 return base.UseDefaultCredentials;
@@ -97,49 +96,49 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         /// <remarks/>
         public event createUploadJobCompletedEventHandler createUploadJobCompleted;
-        
+
         /// <remarks/>
         public event startUploadJobCompletedEventHandler startUploadJobCompleted;
-        
+
         /// <remarks/>
         public event abortJobCompletedEventHandler abortJobCompleted;
-        
+
         /// <remarks/>
         public event getJobsCompletedEventHandler getJobsCompleted;
-        
+
         /// <remarks/>
         public event getJobStatusCompletedEventHandler getJobStatusCompleted;
-        
+
         /// <remarks/>
         public event startDownloadJobCompletedEventHandler startDownloadJobCompleted;
-        
+
         /// <remarks/>
         public event createRecurringJobCompletedEventHandler createRecurringJobCompleted;
-        
+
         /// <remarks/>
         public event deleteRecurringJobCompletedEventHandler deleteRecurringJobCompleted;
-        
+
         /// <remarks/>
         public event getRecurringJobsCompletedEventHandler getRecurringJobsCompleted;
-        
+
         /// <remarks/>
         public event getRecurringJobExecutionStatusCompletedEventHandler getRecurringJobExecutionStatusCompleted;
-        
+
         /// <remarks/>
         public event getRecurringJobExecutionHistoryCompletedEventHandler getRecurringJobExecutionHistoryCompleted;
-        
+
         /// <remarks/>
         public event activateRecurringJobCompletedEventHandler activateRecurringJobCompleted;
-        
+
         /// <remarks/>
         public event suspendRecurringJobCompletedEventHandler suspendRecurringJobCompleted;
-        
+
         /// <remarks/>
         public event abortRecurringJobExecutionCompletedEventHandler abortRecurringJobExecutionCompleted;
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:createUploadJob", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("createUploadJobResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -148,12 +147,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         createUploadJobRequest});
             return ((CreateUploadJobResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createUploadJobAsync(CreateUploadJobRequest createUploadJobRequest) {
             this.createUploadJobAsync(createUploadJobRequest, null);
         }
-        
+
         /// <remarks/>
         public void createUploadJobAsync(CreateUploadJobRequest createUploadJobRequest, object userState) {
             if ((this.createUploadJobOperationCompleted == null)) {
@@ -162,14 +161,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("createUploadJob", new object[] {
                         createUploadJobRequest}, this.createUploadJobOperationCompleted, userState);
         }
-        
+
         private void OncreateUploadJobOperationCompleted(object arg) {
             if ((this.createUploadJobCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createUploadJobCompleted(this, new createUploadJobCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:startUploadJob", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("startUploadJobResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -178,12 +177,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         startUploadJobRequest});
             return ((StartUploadJobResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void startUploadJobAsync(StartUploadJobRequest startUploadJobRequest) {
             this.startUploadJobAsync(startUploadJobRequest, null);
         }
-        
+
         /// <remarks/>
         public void startUploadJobAsync(StartUploadJobRequest startUploadJobRequest, object userState) {
             if ((this.startUploadJobOperationCompleted == null)) {
@@ -192,14 +191,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("startUploadJob", new object[] {
                         startUploadJobRequest}, this.startUploadJobOperationCompleted, userState);
         }
-        
+
         private void OnstartUploadJobOperationCompleted(object arg) {
             if ((this.startUploadJobCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.startUploadJobCompleted(this, new startUploadJobCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:abortJob", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("abortJobResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -208,12 +207,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         abortJobRequest});
             return ((AbortJobResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void abortJobAsync(AbortJobRequest abortJobRequest) {
             this.abortJobAsync(abortJobRequest, null);
         }
-        
+
         /// <remarks/>
         public void abortJobAsync(AbortJobRequest abortJobRequest, object userState) {
             if ((this.abortJobOperationCompleted == null)) {
@@ -222,14 +221,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("abortJob", new object[] {
                         abortJobRequest}, this.abortJobOperationCompleted, userState);
         }
-        
+
         private void OnabortJobOperationCompleted(object arg) {
             if ((this.abortJobCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.abortJobCompleted(this, new abortJobCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getJobs", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("getJobsResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -238,12 +237,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         getJobsRequest});
             return ((GetJobsResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getJobsAsync(GetJobsRequest getJobsRequest) {
             this.getJobsAsync(getJobsRequest, null);
         }
-        
+
         /// <remarks/>
         public void getJobsAsync(GetJobsRequest getJobsRequest, object userState) {
             if ((this.getJobsOperationCompleted == null)) {
@@ -252,14 +251,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("getJobs", new object[] {
                         getJobsRequest}, this.getJobsOperationCompleted, userState);
         }
-        
+
         private void OngetJobsOperationCompleted(object arg) {
             if ((this.getJobsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getJobsCompleted(this, new getJobsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getJobStatus", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("getJobStatusResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -268,12 +267,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         getJobStatusRequest});
             return ((GetJobStatusResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getJobStatusAsync(GetJobStatusRequest getJobStatusRequest) {
             this.getJobStatusAsync(getJobStatusRequest, null);
         }
-        
+
         /// <remarks/>
         public void getJobStatusAsync(GetJobStatusRequest getJobStatusRequest, object userState) {
             if ((this.getJobStatusOperationCompleted == null)) {
@@ -282,14 +281,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("getJobStatus", new object[] {
                         getJobStatusRequest}, this.getJobStatusOperationCompleted, userState);
         }
-        
+
         private void OngetJobStatusOperationCompleted(object arg) {
             if ((this.getJobStatusCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getJobStatusCompleted(this, new getJobStatusCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:startDownloadJob", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("startDownloadJobResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -298,12 +297,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         startDownloadJobRequest});
             return ((StartDownloadJobResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void startDownloadJobAsync(StartDownloadJobRequest startDownloadJobRequest) {
             this.startDownloadJobAsync(startDownloadJobRequest, null);
         }
-        
+
         /// <remarks/>
         public void startDownloadJobAsync(StartDownloadJobRequest startDownloadJobRequest, object userState) {
             if ((this.startDownloadJobOperationCompleted == null)) {
@@ -312,14 +311,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("startDownloadJob", new object[] {
                         startDownloadJobRequest}, this.startDownloadJobOperationCompleted, userState);
         }
-        
+
         private void OnstartDownloadJobOperationCompleted(object arg) {
             if ((this.startDownloadJobCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.startDownloadJobCompleted(this, new startDownloadJobCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:createRecurringJob", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("createRecurringJobResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -328,12 +327,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         createRecurringJobRequest});
             return ((CreateRecurringJobResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createRecurringJobAsync(CreateRecurringJobRequest createRecurringJobRequest) {
             this.createRecurringJobAsync(createRecurringJobRequest, null);
         }
-        
+
         /// <remarks/>
         public void createRecurringJobAsync(CreateRecurringJobRequest createRecurringJobRequest, object userState) {
             if ((this.createRecurringJobOperationCompleted == null)) {
@@ -342,14 +341,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("createRecurringJob", new object[] {
                         createRecurringJobRequest}, this.createRecurringJobOperationCompleted, userState);
         }
-        
+
         private void OncreateRecurringJobOperationCompleted(object arg) {
             if ((this.createRecurringJobCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createRecurringJobCompleted(this, new createRecurringJobCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:deleteRecurringJob", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("deleteRecurringJobResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -358,12 +357,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         deleteRecurringJobRequest});
             return ((DeleteRecurringJobResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void deleteRecurringJobAsync(DeleteRecurringJobRequest deleteRecurringJobRequest) {
             this.deleteRecurringJobAsync(deleteRecurringJobRequest, null);
         }
-        
+
         /// <remarks/>
         public void deleteRecurringJobAsync(DeleteRecurringJobRequest deleteRecurringJobRequest, object userState) {
             if ((this.deleteRecurringJobOperationCompleted == null)) {
@@ -372,14 +371,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("deleteRecurringJob", new object[] {
                         deleteRecurringJobRequest}, this.deleteRecurringJobOperationCompleted, userState);
         }
-        
+
         private void OndeleteRecurringJobOperationCompleted(object arg) {
             if ((this.deleteRecurringJobCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.deleteRecurringJobCompleted(this, new deleteRecurringJobCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getRecurringJobs", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("getRecurringJobsResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -388,12 +387,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         getRecurringJobsRequest});
             return ((GetRecurringJobsResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getRecurringJobsAsync(GetRecurringJobsRequest getRecurringJobsRequest) {
             this.getRecurringJobsAsync(getRecurringJobsRequest, null);
         }
-        
+
         /// <remarks/>
         public void getRecurringJobsAsync(GetRecurringJobsRequest getRecurringJobsRequest, object userState) {
             if ((this.getRecurringJobsOperationCompleted == null)) {
@@ -402,14 +401,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("getRecurringJobs", new object[] {
                         getRecurringJobsRequest}, this.getRecurringJobsOperationCompleted, userState);
         }
-        
+
         private void OngetRecurringJobsOperationCompleted(object arg) {
             if ((this.getRecurringJobsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getRecurringJobsCompleted(this, new getRecurringJobsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getRecurringJobExecutionStatus", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("getRecurringJobExecutionStatusResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -418,12 +417,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         getRecurringJobExecutionStatusRequest});
             return ((GetRecurringJobExecutionStatusResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getRecurringJobExecutionStatusAsync(GetRecurringJobExecutionStatusRequest getRecurringJobExecutionStatusRequest) {
             this.getRecurringJobExecutionStatusAsync(getRecurringJobExecutionStatusRequest, null);
         }
-        
+
         /// <remarks/>
         public void getRecurringJobExecutionStatusAsync(GetRecurringJobExecutionStatusRequest getRecurringJobExecutionStatusRequest, object userState) {
             if ((this.getRecurringJobExecutionStatusOperationCompleted == null)) {
@@ -432,14 +431,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("getRecurringJobExecutionStatus", new object[] {
                         getRecurringJobExecutionStatusRequest}, this.getRecurringJobExecutionStatusOperationCompleted, userState);
         }
-        
+
         private void OngetRecurringJobExecutionStatusOperationCompleted(object arg) {
             if ((this.getRecurringJobExecutionStatusCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getRecurringJobExecutionStatusCompleted(this, new getRecurringJobExecutionStatusCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getRecurringJobExecutionHistory", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("getRecurringJobExecutionHistoryResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -448,12 +447,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         getRecurringJobExecutionHistoryRequest});
             return ((GetRecurringJobExecutionHistoryResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getRecurringJobExecutionHistoryAsync(GetRecurringJobExecutionHistoryRequest getRecurringJobExecutionHistoryRequest) {
             this.getRecurringJobExecutionHistoryAsync(getRecurringJobExecutionHistoryRequest, null);
         }
-        
+
         /// <remarks/>
         public void getRecurringJobExecutionHistoryAsync(GetRecurringJobExecutionHistoryRequest getRecurringJobExecutionHistoryRequest, object userState) {
             if ((this.getRecurringJobExecutionHistoryOperationCompleted == null)) {
@@ -462,14 +461,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("getRecurringJobExecutionHistory", new object[] {
                         getRecurringJobExecutionHistoryRequest}, this.getRecurringJobExecutionHistoryOperationCompleted, userState);
         }
-        
+
         private void OngetRecurringJobExecutionHistoryOperationCompleted(object arg) {
             if ((this.getRecurringJobExecutionHistoryCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getRecurringJobExecutionHistoryCompleted(this, new getRecurringJobExecutionHistoryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:activateRecurringJob", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("activateRecurringJobResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -478,12 +477,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         activateRecurringJobRequest});
             return ((ActivateRecurringJobResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void activateRecurringJobAsync(ActivateRecurringJobRequest activateRecurringJobRequest) {
             this.activateRecurringJobAsync(activateRecurringJobRequest, null);
         }
-        
+
         /// <remarks/>
         public void activateRecurringJobAsync(ActivateRecurringJobRequest activateRecurringJobRequest, object userState) {
             if ((this.activateRecurringJobOperationCompleted == null)) {
@@ -492,14 +491,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("activateRecurringJob", new object[] {
                         activateRecurringJobRequest}, this.activateRecurringJobOperationCompleted, userState);
         }
-        
+
         private void OnactivateRecurringJobOperationCompleted(object arg) {
             if ((this.activateRecurringJobCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.activateRecurringJobCompleted(this, new activateRecurringJobCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:suspendRecurringJob", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("suspendRecurringJobResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -508,12 +507,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         suspendRecurringJobRequest});
             return ((SuspendRecurringJobResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void suspendRecurringJobAsync(SuspendRecurringJobRequest suspendRecurringJobRequest) {
             this.suspendRecurringJobAsync(suspendRecurringJobRequest, null);
         }
-        
+
         /// <remarks/>
         public void suspendRecurringJobAsync(SuspendRecurringJobRequest suspendRecurringJobRequest, object userState) {
             if ((this.suspendRecurringJobOperationCompleted == null)) {
@@ -522,14 +521,14 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("suspendRecurringJob", new object[] {
                         suspendRecurringJobRequest}, this.suspendRecurringJobOperationCompleted, userState);
         }
-        
+
         private void OnsuspendRecurringJobOperationCompleted(object arg) {
             if ((this.suspendRecurringJobCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.suspendRecurringJobCompleted(this, new suspendRecurringJobCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:abortRecurringJobExecution", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("abortRecurringJobExecutionResponse", Namespace="http://www.ebay.com/marketplace/services", IsNullable=true)]
@@ -538,12 +537,12 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                         abortRecurringJobExecutionRequest});
             return ((AbortRecurringJobExecutionResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void abortRecurringJobExecutionAsync(AbortRecurringJobExecutionRequest abortRecurringJobExecutionRequest) {
             this.abortRecurringJobExecutionAsync(abortRecurringJobExecutionRequest, null);
         }
-        
+
         /// <remarks/>
         public void abortRecurringJobExecutionAsync(AbortRecurringJobExecutionRequest abortRecurringJobExecutionRequest, object userState) {
             if ((this.abortRecurringJobExecutionOperationCompleted == null)) {
@@ -552,19 +551,19 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             this.InvokeAsync("abortRecurringJobExecution", new object[] {
                         abortRecurringJobExecutionRequest}, this.abortRecurringJobExecutionOperationCompleted, userState);
         }
-        
+
         private void OnabortRecurringJobExecutionOperationCompleted(object arg) {
             if ((this.abortRecurringJobExecutionCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.abortRecurringJobExecutionCompleted(this, new abortRecurringJobExecutionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
-        
+
         private bool IsLocalFileSystemWebService(string url) {
             if (((url == null) 
                         || (url == string.Empty))) {
@@ -578,7 +577,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             return false;
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -586,15 +585,15 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class CreateUploadJobRequest : BaseServiceRequest {
-        
+
         private string uploadJobTypeField;
-        
+
         private string uUIDField;
-        
+
         private FileType fileTypeField;
-        
+
         private bool fileTypeFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string uploadJobType {
@@ -605,7 +604,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.uploadJobTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string UUID {
             get {
@@ -615,7 +614,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.uUIDField = value;
             }
         }
-        
+
         /// <remarks/>
         public FileType fileType {
             get {
@@ -625,7 +624,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.fileTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool fileTypeSpecified {
@@ -637,17 +636,17 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum FileType {
-        
+
         /// <remarks/>
         XML,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbortRecurringJobExecutionRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SuspendRecurringJobRequest))]
@@ -669,9 +668,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public abstract partial class BaseServiceRequest {
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -683,7 +682,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -691,27 +690,27 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class RecurringJobDetail {
-        
+
         private string recurringJobIdField;
-        
+
         private System.DateTime creationTimeField;
-        
+
         private int frequencyInMinutesField;
-        
+
         private bool frequencyInMinutesFieldSpecified;
-        
+
         private string downloadJobTypeField;
-        
+
         private RecurringJobStatus jobStatusField;
-        
+
         private MonthlyRecurrence monthlyRecurrenceField;
-        
+
         private WeeklyRecurrence weeklyRecurrenceField;
-        
+
         private DailyRecurrence dailyRecurrenceField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         public string recurringJobId {
             get {
@@ -721,7 +720,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.recurringJobIdField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime creationTime {
             get {
@@ -731,7 +730,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.creationTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         public int frequencyInMinutes {
             get {
@@ -741,7 +740,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.frequencyInMinutesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool frequencyInMinutesSpecified {
@@ -752,7 +751,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.frequencyInMinutesFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string downloadJobType {
@@ -763,7 +762,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.downloadJobTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public RecurringJobStatus jobStatus {
             get {
@@ -773,7 +772,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.jobStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         public MonthlyRecurrence monthlyRecurrence {
             get {
@@ -783,7 +782,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.monthlyRecurrenceField = value;
             }
         }
-        
+
         /// <remarks/>
         public WeeklyRecurrence weeklyRecurrence {
             get {
@@ -793,7 +792,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.weeklyRecurrenceField = value;
             }
         }
-        
+
         /// <remarks/>
         public DailyRecurrence dailyRecurrence {
             get {
@@ -803,7 +802,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.dailyRecurrenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -815,20 +814,20 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum RecurringJobStatus {
-        
+
         /// <remarks/>
         Active,
-        
+
         /// <remarks/>
         Suspended,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -836,13 +835,13 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class MonthlyRecurrence {
-        
+
         private string dayOfMonthField;
-        
+
         private System.DateTime timeOfDayField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string dayOfMonth {
@@ -853,7 +852,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.dayOfMonthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="time")]
         public System.DateTime timeOfDay {
@@ -864,7 +863,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.timeOfDayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -876,7 +875,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -884,13 +883,13 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class WeeklyRecurrence {
-        
+
         private string dayOfWeekField;
-        
+
         private System.DateTime timeOfDayField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string dayOfWeek {
@@ -901,7 +900,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.dayOfWeekField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="time")]
         public System.DateTime timeOfDay {
@@ -912,7 +911,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.timeOfDayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -924,7 +923,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -932,11 +931,11 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class DailyRecurrence {
-        
+
         private System.DateTime timeOfDayField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="time")]
         public System.DateTime timeOfDay {
@@ -947,7 +946,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.timeOfDayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -959,7 +958,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -967,33 +966,33 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class JobProfile {
-        
+
         private string jobIdField;
-        
+
         private string jobTypeField;
-        
+
         private JobStatus jobStatusField;
-        
+
         private System.DateTime creationTimeField;
-        
+
         private System.DateTime completionTimeField;
-        
+
         private bool completionTimeFieldSpecified;
-        
+
         private int errorCountField;
-        
+
         private bool errorCountFieldSpecified;
-        
+
         private double percentCompleteField;
-        
+
         private bool percentCompleteFieldSpecified;
-        
+
         private string fileReferenceIdField;
-        
+
         private string inputFileReferenceIdField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         public string jobId {
             get {
@@ -1003,7 +1002,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.jobIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string jobType {
@@ -1014,7 +1013,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.jobTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public JobStatus jobStatus {
             get {
@@ -1024,7 +1023,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.jobStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime creationTime {
             get {
@@ -1034,7 +1033,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.creationTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime completionTime {
             get {
@@ -1044,7 +1043,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.completionTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool completionTimeSpecified {
@@ -1055,7 +1054,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.completionTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public int errorCount {
             get {
@@ -1065,7 +1064,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.errorCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCountSpecified {
@@ -1076,7 +1075,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.errorCountFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public double percentComplete {
             get {
@@ -1086,7 +1085,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.percentCompleteField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool percentCompleteSpecified {
@@ -1097,7 +1096,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.percentCompleteFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public string fileReferenceId {
             get {
@@ -1107,7 +1106,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.fileReferenceIdField = value;
             }
         }
-        
+
         /// <remarks/>
         public string inputFileReferenceId {
             get {
@@ -1117,7 +1116,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.inputFileReferenceIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -1129,32 +1128,32 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum JobStatus {
-        
+
         /// <remarks/>
         Created,
-        
+
         /// <remarks/>
         Scheduled,
-        
+
         /// <remarks/>
         InProcess,
-        
+
         /// <remarks/>
         Completed,
-        
+
         /// <remarks/>
         Aborted,
-        
+
         /// <remarks/>
         Failed,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1162,11 +1161,11 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class ErrorParameter {
-        
+
         private string nameField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string name {
@@ -1177,7 +1176,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -1189,7 +1188,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1197,23 +1196,23 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class ErrorData {
-        
+
         private long errorIdField;
-        
+
         private string domainField;
-        
+
         private ErrorSeverity severityField;
-        
+
         private ErrorCategory categoryField;
-        
+
         private string messageField;
-        
+
         private string subdomainField;
-        
+
         private string exceptionIdField;
-        
+
         private ErrorParameter[] parameterField;
-        
+
         /// <remarks/>
         public long errorId {
             get {
@@ -1223,7 +1222,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.errorIdField = value;
             }
         }
-        
+
         /// <remarks/>
         public string domain {
             get {
@@ -1233,7 +1232,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.domainField = value;
             }
         }
-        
+
         /// <remarks/>
         public ErrorSeverity severity {
             get {
@@ -1243,7 +1242,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.severityField = value;
             }
         }
-        
+
         /// <remarks/>
         public ErrorCategory category {
             get {
@@ -1253,7 +1252,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.categoryField = value;
             }
         }
-        
+
         /// <remarks/>
         public string message {
             get {
@@ -1263,7 +1262,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         public string subdomain {
             get {
@@ -1273,7 +1272,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.subdomainField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string exceptionId {
@@ -1284,7 +1283,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.exceptionIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("parameter", IsNullable=true)]
         public ErrorParameter[] parameter {
@@ -1296,36 +1295,36 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum ErrorSeverity {
-        
+
         /// <remarks/>
         Error,
-        
+
         /// <remarks/>
         Warning,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum ErrorCategory {
-        
+
         /// <remarks/>
         System,
-        
+
         /// <remarks/>
         Application,
-        
+
         /// <remarks/>
         Request,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbortRecurringJobExecutionResponse))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SuspendRecurringJobResponse))]
@@ -1347,17 +1346,17 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public abstract partial class BaseServiceResponse {
-        
+
         private AckValue ackField;
-        
+
         private ErrorData[] errorMessageField;
-        
+
         private string versionField;
-        
+
         private System.DateTime timestampField;
-        
+
         private bool timestampFieldSpecified;
-        
+
         /// <remarks/>
         public AckValue ack {
             get {
@@ -1367,7 +1366,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.ackField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("error")]
         public ErrorData[] errorMessage {
@@ -1378,7 +1377,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public string version {
             get {
@@ -1388,7 +1387,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.versionField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime timestamp {
             get {
@@ -1398,7 +1397,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.timestampField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool timestampSpecified {
@@ -1410,26 +1409,26 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum AckValue {
-        
+
         /// <remarks/>
         Success,
-        
+
         /// <remarks/>
         Failure,
-        
+
         /// <remarks/>
         Warning,
-        
+
         /// <remarks/>
         PartialFailure,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1438,7 +1437,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class AbortRecurringJobExecutionResponse : BaseServiceResponse {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1447,7 +1446,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class SuspendRecurringJobResponse : BaseServiceResponse {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1456,7 +1455,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class ActivateRecurringJobResponse : BaseServiceResponse {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1464,9 +1463,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetRecurringJobExecutionHistoryResponse : BaseServiceResponse {
-        
+
         private JobProfile[] jobProfileField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("jobProfile")]
         public JobProfile[] jobProfile {
@@ -1478,7 +1477,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1486,9 +1485,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetRecurringJobExecutionStatusResponse : BaseServiceResponse {
-        
+
         private JobProfile jobProfileField;
-        
+
         /// <remarks/>
         public JobProfile jobProfile {
             get {
@@ -1499,7 +1498,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1507,9 +1506,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetRecurringJobsResponse : BaseServiceResponse {
-        
+
         private RecurringJobDetail[] recurringJobDetailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("recurringJobDetail")]
         public RecurringJobDetail[] recurringJobDetail {
@@ -1521,7 +1520,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1530,7 +1529,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class DeleteRecurringJobResponse : BaseServiceResponse {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1538,9 +1537,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class CreateRecurringJobResponse : BaseServiceResponse {
-        
+
         private string recurringJobIdField;
-        
+
         /// <remarks/>
         public string recurringJobId {
             get {
@@ -1551,7 +1550,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1559,9 +1558,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class StartDownloadJobResponse : BaseServiceResponse {
-        
+
         private string jobIdField;
-        
+
         /// <remarks/>
         public string jobId {
             get {
@@ -1572,7 +1571,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1580,9 +1579,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetJobStatusResponse : BaseServiceResponse {
-        
+
         private JobProfile[] jobProfileField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("jobProfile")]
         public JobProfile[] jobProfile {
@@ -1594,7 +1593,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1602,9 +1601,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetJobsResponse : BaseServiceResponse {
-        
+
         private JobProfile[] jobProfileField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("jobProfile")]
         public JobProfile[] jobProfile {
@@ -1616,7 +1615,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1625,7 +1624,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class AbortJobResponse : BaseServiceResponse {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1634,7 +1633,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class StartUploadJobResponse : BaseServiceResponse {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1642,13 +1641,13 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class CreateUploadJobResponse : BaseServiceResponse {
-        
+
         private string jobIdField;
-        
+
         private string fileReferenceIdField;
-        
+
         private string maxFileSizeField;
-        
+
         /// <remarks/>
         public string jobId {
             get {
@@ -1658,7 +1657,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.jobIdField = value;
             }
         }
-        
+
         /// <remarks/>
         public string fileReferenceId {
             get {
@@ -1668,7 +1667,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.fileReferenceIdField = value;
             }
         }
-        
+
         /// <remarks/>
         public string maxFileSize {
             get {
@@ -1679,7 +1678,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1687,17 +1686,17 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class AuctionItemDetails {
-        
+
         private bool includeBidCountField;
-        
+
         private bool includeBidCountFieldSpecified;
-        
+
         private bool includeReservePriceMetField;
-        
+
         private bool includeReservePriceMetFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         public bool includeBidCount {
             get {
@@ -1707,7 +1706,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeBidCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool includeBidCountSpecified {
@@ -1718,7 +1717,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeBidCountFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool includeReservePriceMet {
             get {
@@ -1728,7 +1727,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeReservePriceMetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool includeReservePriceMetSpecified {
@@ -1739,7 +1738,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeReservePriceMetFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -1751,7 +1750,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1759,13 +1758,13 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class FixedPriceItemDetails {
-        
+
         private bool includeVariationsField;
-        
+
         private bool includeVariationsFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         public bool includeVariations {
             get {
@@ -1775,7 +1774,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeVariationsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool includeVariationsSpecified {
@@ -1786,7 +1785,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeVariationsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -1798,7 +1797,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1806,17 +1805,17 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class ActiveInventoryReportFilter {
-        
+
         private IncludeListingType includeListingTypeField;
-        
+
         private bool includeListingTypeFieldSpecified;
-        
+
         private FixedPriceItemDetails fixedPriceItemDetailsField;
-        
+
         private AuctionItemDetails auctionItemDetailsField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         public IncludeListingType includeListingType {
             get {
@@ -1826,7 +1825,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeListingTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool includeListingTypeSpecified {
@@ -1837,7 +1836,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeListingTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public FixedPriceItemDetails fixedPriceItemDetails {
             get {
@@ -1847,7 +1846,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.fixedPriceItemDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         public AuctionItemDetails auctionItemDetails {
             get {
@@ -1857,7 +1856,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.auctionItemDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -1869,23 +1868,23 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum IncludeListingType {
-        
+
         /// <remarks/>
         Auction,
-        
+
         /// <remarks/>
         FixedPrice,
-        
+
         /// <remarks/>
         AuctionAndFixedPrice,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1893,11 +1892,11 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class SiteFilter {
-        
+
         private string[] globalIdField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("globalId", DataType="token")]
         public string[] globalId {
@@ -1908,7 +1907,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.globalIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -1920,7 +1919,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1928,11 +1927,11 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetItemJobActionType {
-        
+
         private string actionField;
-        
+
         private string jobIdField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string action {
@@ -1943,7 +1942,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.actionField = value;
             }
         }
-        
+
         /// <remarks/>
         public string jobId {
             get {
@@ -1954,7 +1953,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1962,33 +1961,33 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetItemInfoReportFilter {
-        
+
         private GetItemJobActionType jobActionField;
-        
+
         private ItemEventType filterTypeField;
-        
+
         private bool includeAttributesField;
-        
+
         private bool includeAttributesFieldSpecified;
-        
+
         private bool includeDescriptionField;
-        
+
         private bool includeDescriptionFieldSpecified;
-        
+
         private System.DateTime reportDateFromField;
-        
+
         private bool reportDateFromFieldSpecified;
-        
+
         private System.DateTime reportDateToField;
-        
+
         private bool reportDateToFieldSpecified;
-        
+
         private string[] timeFrameField;
-        
+
         private string[] changedFieldSelectorField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         public GetItemJobActionType jobAction {
             get {
@@ -1998,7 +1997,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.jobActionField = value;
             }
         }
-        
+
         /// <remarks/>
         public ItemEventType filterType {
             get {
@@ -2008,7 +2007,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.filterTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool includeAttributes {
             get {
@@ -2018,7 +2017,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeAttributesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool includeAttributesSpecified {
@@ -2029,7 +2028,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeAttributesFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool includeDescription {
             get {
@@ -2039,7 +2038,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool includeDescriptionSpecified {
@@ -2050,7 +2049,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.includeDescriptionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime reportDateFrom {
             get {
@@ -2060,7 +2059,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.reportDateFromField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool reportDateFromSpecified {
@@ -2071,7 +2070,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.reportDateFromFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime reportDateTo {
             get {
@@ -2081,7 +2080,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.reportDateToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool reportDateToSpecified {
@@ -2092,7 +2091,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.reportDateToFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("timeFrame", DataType="token")]
         public string[] timeFrame {
@@ -2103,7 +2102,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.timeFrameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("changedFieldSelector", DataType="token")]
         public string[] changedFieldSelector {
@@ -2114,7 +2113,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.changedFieldSelectorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -2126,20 +2125,20 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public enum ItemEventType {
-        
+
         /// <remarks/>
         New,
-        
+
         /// <remarks/>
         Changed,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2147,11 +2146,11 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class FeeSettlementReportFilter {
-        
+
         private System.DateTime startTimeField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         public System.DateTime startTime {
             get {
@@ -2161,7 +2160,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.startTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -2173,7 +2172,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2181,17 +2180,17 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class DownloadRequestFilter {
-        
+
         private FeeSettlementReportFilter feeSettlementReportFilterField;
-        
+
         private GetItemInfoReportFilter getItemInfoReportFilterField;
-        
+
         private SiteFilter siteFilterField;
-        
+
         private ActiveInventoryReportFilter activeInventoryReportFilterField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         public FeeSettlementReportFilter feeSettlementReportFilter {
             get {
@@ -2201,7 +2200,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.feeSettlementReportFilterField = value;
             }
         }
-        
+
         /// <remarks/>
         public GetItemInfoReportFilter getItemInfoReportFilter {
             get {
@@ -2211,7 +2210,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.getItemInfoReportFilterField = value;
             }
         }
-        
+
         /// <remarks/>
         public SiteFilter siteFilter {
             get {
@@ -2221,7 +2220,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.siteFilterField = value;
             }
         }
-        
+
         /// <remarks/>
         public ActiveInventoryReportFilter activeInventoryReportFilter {
             get {
@@ -2231,7 +2230,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.activeInventoryReportFilterField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -2243,7 +2242,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2251,9 +2250,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class AbortRecurringJobExecutionRequest : BaseServiceRequest {
-        
+
         private string recurringJobIdField;
-        
+
         /// <remarks/>
         public string recurringJobId {
             get {
@@ -2264,7 +2263,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2272,9 +2271,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class SuspendRecurringJobRequest : BaseServiceRequest {
-        
+
         private string recurringJobIdField;
-        
+
         /// <remarks/>
         public string recurringJobId {
             get {
@@ -2285,7 +2284,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2293,9 +2292,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class ActivateRecurringJobRequest : BaseServiceRequest {
-        
+
         private string recurringJobIdField;
-        
+
         /// <remarks/>
         public string recurringJobId {
             get {
@@ -2306,7 +2305,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2314,19 +2313,19 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetRecurringJobExecutionHistoryRequest : BaseServiceRequest {
-        
+
         private System.DateTime startTimeField;
-        
+
         private bool startTimeFieldSpecified;
-        
+
         private System.DateTime endTimeField;
-        
+
         private bool endTimeFieldSpecified;
-        
+
         private string recurringJobIdField;
-        
+
         private JobStatus[] jobStatusField;
-        
+
         /// <remarks/>
         public System.DateTime startTime {
             get {
@@ -2336,7 +2335,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.startTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool startTimeSpecified {
@@ -2347,7 +2346,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.startTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime endTime {
             get {
@@ -2357,7 +2356,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.endTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool endTimeSpecified {
@@ -2368,7 +2367,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.endTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public string recurringJobId {
             get {
@@ -2378,7 +2377,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.recurringJobIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("jobStatus")]
         public JobStatus[] jobStatus {
@@ -2390,7 +2389,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2398,9 +2397,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetRecurringJobExecutionStatusRequest : BaseServiceRequest {
-        
+
         private string recurringJobIdField;
-        
+
         /// <remarks/>
         public string recurringJobId {
             get {
@@ -2411,7 +2410,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2420,7 +2419,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetRecurringJobsRequest : BaseServiceRequest {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2428,9 +2427,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class DeleteRecurringJobRequest : BaseServiceRequest {
-        
+
         private string recurringJobIdField;
-        
+
         /// <remarks/>
         public string recurringJobId {
             get {
@@ -2441,7 +2440,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2449,21 +2448,21 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class CreateRecurringJobRequest : BaseServiceRequest {
-        
+
         private string uUIDField;
-        
+
         private int frequencyInMinutesField;
-        
+
         private bool frequencyInMinutesFieldSpecified;
-        
+
         private string downloadJobTypeField;
-        
+
         private MonthlyRecurrence monthlyRecurrenceField;
-        
+
         private WeeklyRecurrence weeklyRecurrenceField;
-        
+
         private DailyRecurrence dailyRecurrenceField;
-        
+
         /// <remarks/>
         public string UUID {
             get {
@@ -2473,7 +2472,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.uUIDField = value;
             }
         }
-        
+
         /// <remarks/>
         public int frequencyInMinutes {
             get {
@@ -2483,7 +2482,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.frequencyInMinutesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool frequencyInMinutesSpecified {
@@ -2494,7 +2493,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.frequencyInMinutesFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string downloadJobType {
@@ -2505,7 +2504,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.downloadJobTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public MonthlyRecurrence monthlyRecurrence {
             get {
@@ -2515,7 +2514,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.monthlyRecurrenceField = value;
             }
         }
-        
+
         /// <remarks/>
         public WeeklyRecurrence weeklyRecurrence {
             get {
@@ -2525,7 +2524,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.weeklyRecurrenceField = value;
             }
         }
-        
+
         /// <remarks/>
         public DailyRecurrence dailyRecurrence {
             get {
@@ -2536,7 +2535,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2544,17 +2543,17 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class StartDownloadJobRequest : BaseServiceRequest {
-        
+
         private string downloadJobTypeField;
-        
+
         private string uUIDField;
-        
+
         private DownloadRequestFilter downloadRequestFilterField;
-        
+
         private bool recurringJobField;
-        
+
         private bool recurringJobFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
         public string downloadJobType {
@@ -2565,7 +2564,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.downloadJobTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         public string UUID {
             get {
@@ -2575,7 +2574,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.uUIDField = value;
             }
         }
-        
+
         /// <remarks/>
         public DownloadRequestFilter downloadRequestFilter {
             get {
@@ -2585,7 +2584,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.downloadRequestFilterField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool recurringJob {
             get {
@@ -2595,7 +2594,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.recurringJobField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool recurringJobSpecified {
@@ -2607,7 +2606,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2615,9 +2614,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetJobStatusRequest : BaseServiceRequest {
-        
+
         private string jobIdField;
-        
+
         /// <remarks/>
         public string jobId {
             get {
@@ -2628,7 +2627,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2636,19 +2635,19 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class GetJobsRequest : BaseServiceRequest {
-        
+
         private System.DateTime creationTimeFromField;
-        
+
         private bool creationTimeFromFieldSpecified;
-        
+
         private System.DateTime creationTimeToField;
-        
+
         private bool creationTimeToFieldSpecified;
-        
+
         private string[] jobTypeField;
-        
+
         private JobStatus[] jobStatusField;
-        
+
         /// <remarks/>
         public System.DateTime creationTimeFrom {
             get {
@@ -2658,7 +2657,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.creationTimeFromField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool creationTimeFromSpecified {
@@ -2669,7 +2668,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.creationTimeFromFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime creationTimeTo {
             get {
@@ -2679,7 +2678,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.creationTimeToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool creationTimeToSpecified {
@@ -2690,7 +2689,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.creationTimeToFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("jobType", DataType="token")]
         public string[] jobType {
@@ -2701,7 +2700,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
                 this.jobTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("jobStatus")]
         public JobStatus[] jobStatus {
@@ -2713,7 +2712,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2721,9 +2720,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class AbortJobRequest : BaseServiceRequest {
-        
+
         private string jobIdField;
-        
+
         /// <remarks/>
         public string jobId {
             get {
@@ -2734,7 +2733,7 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2742,9 +2741,9 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ebay.com/marketplace/services")]
     public partial class StartUploadJobRequest : BaseServiceRequest {
-        
+
         private string jobIdField;
-        
+
         /// <remarks/>
         public string jobId {
             get {
@@ -2755,24 +2754,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createUploadJobCompletedEventHandler(object sender, createUploadJobCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createUploadJobCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createUploadJobCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public CreateUploadJobResponse Result {
             get {
@@ -2781,24 +2780,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void startUploadJobCompletedEventHandler(object sender, startUploadJobCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class startUploadJobCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal startUploadJobCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public StartUploadJobResponse Result {
             get {
@@ -2807,24 +2806,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void abortJobCompletedEventHandler(object sender, abortJobCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class abortJobCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal abortJobCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public AbortJobResponse Result {
             get {
@@ -2833,24 +2832,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getJobsCompletedEventHandler(object sender, getJobsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getJobsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getJobsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetJobsResponse Result {
             get {
@@ -2859,24 +2858,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getJobStatusCompletedEventHandler(object sender, getJobStatusCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getJobStatusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getJobStatusCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetJobStatusResponse Result {
             get {
@@ -2885,24 +2884,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void startDownloadJobCompletedEventHandler(object sender, startDownloadJobCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class startDownloadJobCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal startDownloadJobCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public StartDownloadJobResponse Result {
             get {
@@ -2911,24 +2910,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createRecurringJobCompletedEventHandler(object sender, createRecurringJobCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createRecurringJobCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createRecurringJobCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public CreateRecurringJobResponse Result {
             get {
@@ -2937,24 +2936,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void deleteRecurringJobCompletedEventHandler(object sender, deleteRecurringJobCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class deleteRecurringJobCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal deleteRecurringJobCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DeleteRecurringJobResponse Result {
             get {
@@ -2963,24 +2962,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getRecurringJobsCompletedEventHandler(object sender, getRecurringJobsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getRecurringJobsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getRecurringJobsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetRecurringJobsResponse Result {
             get {
@@ -2989,24 +2988,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getRecurringJobExecutionStatusCompletedEventHandler(object sender, getRecurringJobExecutionStatusCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getRecurringJobExecutionStatusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getRecurringJobExecutionStatusCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetRecurringJobExecutionStatusResponse Result {
             get {
@@ -3015,24 +3014,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getRecurringJobExecutionHistoryCompletedEventHandler(object sender, getRecurringJobExecutionHistoryCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getRecurringJobExecutionHistoryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getRecurringJobExecutionHistoryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetRecurringJobExecutionHistoryResponse Result {
             get {
@@ -3041,24 +3040,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void activateRecurringJobCompletedEventHandler(object sender, activateRecurringJobCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class activateRecurringJobCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal activateRecurringJobCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public ActivateRecurringJobResponse Result {
             get {
@@ -3067,24 +3066,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void suspendRecurringJobCompletedEventHandler(object sender, suspendRecurringJobCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class suspendRecurringJobCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal suspendRecurringJobCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public SuspendRecurringJobResponse Result {
             get {
@@ -3093,24 +3092,24 @@ namespace EzBob.eBayServiceLib.com.ebay.developer.soap.bulkdataexchange {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void abortRecurringJobExecutionCompletedEventHandler(object sender, abortRecurringJobExecutionCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class abortRecurringJobExecutionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal abortRecurringJobExecutionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public AbortRecurringJobExecutionResponse Result {
             get {

@@ -16,7 +16,6 @@ namespace MarketplaceWebService.Attributes
        AttributeTargets.Property,
        AllowMultiple = true)]
 
-
     public class MarketplaceWebServiceAttribute : System.Attribute
     {
 

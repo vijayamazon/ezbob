@@ -22,7 +22,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 
         private const string SendUrl = "https://www.amazon.co.uk/gp/help/contact/contact.html?qsfp_sellerID={0}&qsfp_marketplaceID={1}";
 
-
 		public AmazonServiceAskville(string askvilleAmazonLogin, string askvilleAmazonPass)
 		{
 			this.askvilleAmazonLogin = askvilleAmazonLogin;
@@ -50,7 +49,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
                 };
 
                 var response = MakeRequest("https://www.amazon.co.uk/ap/signin", "GET", null, urlParams, null, null);
-                
+
                 var html = new HtmlDocument();
                 html.Load(response.GetResponseStream());
                 var action = html.DocumentNode.QuerySelector("form[name=\"signIn\"]").Attributes["action"].Value;

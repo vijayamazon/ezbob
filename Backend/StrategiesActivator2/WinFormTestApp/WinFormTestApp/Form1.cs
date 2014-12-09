@@ -11,7 +11,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-
 namespace WinFormTestApp
 {
 	using StasEzService;
@@ -25,8 +24,6 @@ namespace WinFormTestApp
 		private const string DEFAULT_ENDPOINT_IP_TEXT = "EndPoint IP: ";
 		private static bool isLoaded = false;
 		// private string connectionString=
-
-
 
 		DataTable summaryDataTable;//= new DataTable();
 		private string SelectedEndpoint;
@@ -44,7 +41,6 @@ namespace WinFormTestApp
 			//summaryGrid.DataSource = summaryDataTable;
 		}
 
-
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			var service = new EzServiceClient();
@@ -54,7 +50,6 @@ namespace WinFormTestApp
 			methodsStr.AddRange(methods.Select(method => method.Name));
 			methodsStr.Sort();
 			ddlMethods.DataSource = methodsStr;
-
 
 			//  ddlMethods.Text = "Name";
 			//  ddlMethods.ValueMember = "Name";
@@ -82,7 +77,6 @@ namespace WinFormTestApp
 			EndPoint.Text = DEFAULT_ENDPOINT_IP_TEXT + endpoints[0].EndPointPath.Host;
 		}
 
-
 		private string getConnectionString(string server)
 		{
 
@@ -94,7 +88,6 @@ namespace WinFormTestApp
 			}
 		}
 
-
 		private void ddlMethods_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			SelectedMethod = ddlMethods.SelectedValue.ToString();
@@ -103,7 +96,7 @@ namespace WinFormTestApp
 
 		private void AddControl(Control ctl)
 		{
-			
+
 			tableLayoutPanel6.RowCount += 1;
 			tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 			ctl.Dock = DockStyle.Top;
@@ -151,7 +144,6 @@ namespace WinFormTestApp
 					AddControl(new TextBox() { Name = "param" + pPos, Text = pName });
 				}
 
-
 				HighlightColors.HighlightRTF(txtReq);
 
 			}
@@ -184,8 +176,6 @@ namespace WinFormTestApp
 				Progress("Finished");
 			}
 		}
-
-
 
 		private void btnTestCustom_Click(object sender, EventArgs e)
 		{
@@ -272,7 +262,6 @@ namespace WinFormTestApp
 
 			dlg.Title = "Open Request";
 			dlg.Filter = "xml files (*.xml)|*.xml";
-
 
 			if (dlg.ShowDialog() == DialogResult.OK)
 			{
@@ -372,10 +361,8 @@ namespace WinFormTestApp
 			{
 				treeRes.Nodes.Clear();
 
-
 			}
 		}
-
 
 		private void btnSearch_Click(object sender, EventArgs e)
 		{
@@ -412,7 +399,6 @@ namespace WinFormTestApp
 			return numOfResults;
 		}
 
-		#region Updaters Async
 		public void UpdateList(string name, Status status)
 		{
 			if (_lvMethods.InvokeRequired)
@@ -586,7 +572,7 @@ namespace WinFormTestApp
 				HighlightColors.HighlightRTF(txtRes);
 			}
 		}
-		#endregion
+
 		private void _cbEndpoints_Validating(object sender, CancelEventArgs e)
 		{
 			string error = null;

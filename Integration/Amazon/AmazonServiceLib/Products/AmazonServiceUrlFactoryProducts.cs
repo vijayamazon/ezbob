@@ -40,8 +40,6 @@ namespace EzBob.AmazonServiceLib.Products
 					url = "https://mws-eu.amazonservices.com/Products/" + apiVersion;
 					break;
 
-				
-
 				default:
 					throw new NotImplementedException();
 			}

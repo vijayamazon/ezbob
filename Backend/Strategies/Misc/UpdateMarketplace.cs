@@ -18,9 +18,6 @@
 	using YodleeLib.connector;
 
 	public class UpdateMarketplace : AStrategy {
-		#region public
-
-		#region constructor
 
 		public UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
@@ -29,17 +26,9 @@
 			m_bDoUpdateWizardStep = doUpdateWizardStep;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Update Marketplace"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			string errorMessage = string.Empty;
@@ -171,17 +160,10 @@
 			} // try
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly StrategiesMailer mailer;
 		private readonly int customerId;
 		private readonly int marketplaceId;
 		private readonly bool m_bDoUpdateWizardStep;
 
-		#endregion private
 	} // class UpdateMarketplace
 } // namespace

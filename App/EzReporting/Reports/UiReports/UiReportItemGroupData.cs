@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 
 namespace Reports {
-	#region class UiReportItemGroupData
 
 	public class UiReportItemGroupData {
-		#region public
-
-		#region constructor
 
 		public UiReportItemGroupData(CustomerInfo oCustomerInfo, UiItemGroups nItemGroup, SortedDictionary<int, string> oRelevantControls) {
 			m_oCustomerInfo = oCustomerInfo;
@@ -17,17 +13,9 @@ namespace Reports {
 			m_nCount = 0;
 		} // constructor
 
-		#endregion constructor
-
-		#region properties
-
 		public UiReportItemGroupAction Action { get; set; }
 		public DateTime? StartTime { get; set; }
 		public DateTime? EndTime { get; set; }
-
-		#endregion properties
-
-		#region method Generate
 
 		public void Generate() {
 			if (m_oCustomerInfo.HasAllData(m_nItemGroup))
@@ -38,10 +26,6 @@ namespace Reports {
 				Action = UiReportItemGroupAction.NeverStarted;
 		} // Generate
 
-		#endregion method Generate
-
-		#region method AddEvent
-
 		public void AddEvent(UiEvent oEvent) {
 			if (!m_oRelevantControls.ContainsKey(oEvent.ControlID))
 				return;
@@ -51,10 +35,6 @@ namespace Reports {
 			StartTime = (!StartTime.HasValue || (oEvent.EventTime < StartTime.Value)) ? oEvent.EventTime : StartTime;
 			EndTime = (!EndTime.HasValue || (oEvent.EventTime > EndTime.Value)) ? oEvent.EventTime : EndTime;
 		} // AddEvent
-
-		#endregion method AddEvent
-
-		#region method ToRow
 
 		public void ToRow(List<object> oRow) {
 			string sPrefix = string.Empty;
@@ -92,27 +72,15 @@ namespace Reports {
 			oRow.Add(sPrefix + " " + sTime);
 		} // ToRow
 
-		#endregion method ToRow
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format("{0} {1} {2} {3}", m_nItemGroup, Action, StartTime, EndTime);
 		} // ToString
-
-		#endregion method ToString
-
-		#endregion public
-
-		#region private
 
 		private readonly SortedDictionary<int, string> m_oRelevantControls;
 		private int m_nCount;
 		private readonly CustomerInfo m_oCustomerInfo;
 		private readonly UiItemGroups m_nItemGroup;
 
-		#endregion private
 	} // class UiReportItemGroupData
 
-	#endregion class UiReportItemGroupData
 } // namespace Reports

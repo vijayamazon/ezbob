@@ -10,9 +10,6 @@
 	using global::Reports.Alibaba.Funnel;
 
 	public class Alibaba : AStrategy {
-		#region public
-
-		#region constructor
 
 		public Alibaba(DateTime? oDateEnd, bool bIncludeTestCustomers, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oDateEnd = oDateEnd;
@@ -24,17 +21,9 @@
 			m_oSender = new BaseReportSender(Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Alibaba"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			var lst = new List<Tuple<string, Report, IAlibaba>> {
@@ -51,14 +40,6 @@
 				} // try
 			} // for each
 		} // Execute
-
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
-		#region method GenerateAndSend
 
 		private void GenerateAndSend(string sReportName, Report oRptDef, IAlibaba oGenerator) {
 			if (oRptDef == null) {
@@ -80,8 +61,6 @@
 			m_oSender.Send(sTitle, oBody, oGenerator.Report, oRptDef.ToEmail);
 		} // GenerateAndSend
 
-		#endregion method GenerateAndSend
-
 		private readonly Report m_oDataSharing;
 		private readonly Report m_oFunnel;
 
@@ -90,6 +69,5 @@
 
 		private readonly BaseReportSender m_oSender;
 
-		#endregion private
 	} // class Alibaba
 } // namespace

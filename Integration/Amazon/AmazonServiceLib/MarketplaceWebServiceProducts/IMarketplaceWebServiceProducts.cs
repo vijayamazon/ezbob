@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,7 +14,6 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
@@ -23,16 +22,13 @@ using MarketplaceWebServiceProducts.Model;
 namespace MarketplaceWebServiceProducts
 {
 
-
-
-
     /// <summary>
     /// This is the Products API section of the Marketplace Web Service.
     /// 
     /// </summary>
     public interface IMarketplaceWebServiceProducts
     {
-                
+
         /// <summary>
         /// Get Matching Product 
         /// </summary>
@@ -45,7 +41,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetMatchingProductResponse GetMatchingProduct(GetMatchingProductRequest request);
 
-                
         /// <summary>
         /// Get Lowest Offer Listings For ASIN 
         /// </summary>
@@ -58,7 +53,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetLowestOfferListingsForASINResponse GetLowestOfferListingsForASIN(GetLowestOfferListingsForASINRequest request);
 
-                
         /// <summary>
         /// Get Service Status 
         /// </summary>
@@ -72,7 +66,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetServiceStatusResponse GetServiceStatus(GetServiceStatusRequest request);
 
-                
         /// <summary>
         /// Get Matching Product For Id 
         /// </summary>
@@ -85,7 +78,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetMatchingProductForIdResponse GetMatchingProductForId(GetMatchingProductForIdRequest request);
 
-                
         /// <summary>
         /// Get My Price For SKU 
         /// </summary>
@@ -96,7 +88,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetMyPriceForSKUResponse GetMyPriceForSKU(GetMyPriceForSKURequest request);
 
-                
         /// <summary>
         /// List Matching Products 
         /// </summary>
@@ -109,7 +100,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         ListMatchingProductsResponse ListMatchingProducts(ListMatchingProductsRequest request);
 
-                
         /// <summary>
         /// Get Competitive Pricing For SKU 
         /// </summary>
@@ -122,7 +112,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetCompetitivePricingForSKUResponse GetCompetitivePricingForSKU(GetCompetitivePricingForSKURequest request);
 
-                
         /// <summary>
         /// Get Competitive Pricing For ASIN 
         /// </summary>
@@ -135,7 +124,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetCompetitivePricingForASINResponse GetCompetitivePricingForASIN(GetCompetitivePricingForASINRequest request);
 
-                
         /// <summary>
         /// Get Product Categories For SKU 
         /// </summary>
@@ -148,7 +136,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetProductCategoriesForSKUResponse GetProductCategoriesForSKU(GetProductCategoriesForSKURequest request);
 
-                
         /// <summary>
         /// Get My Price For ASIN 
         /// </summary>
@@ -161,7 +148,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetMyPriceForASINResponse GetMyPriceForASIN(GetMyPriceForASINRequest request);
 
-                
         /// <summary>
         /// Get Lowest Offer Listings For SKU 
         /// </summary>
@@ -174,7 +160,6 @@ namespace MarketplaceWebServiceProducts
         /// </remarks>
         GetLowestOfferListingsForSKUResponse GetLowestOfferListingsForSKU(GetLowestOfferListingsForSKURequest request);
 
-                
         /// <summary>
         /// Get Product Categories For ASIN 
         /// </summary>

@@ -7,25 +7,14 @@
 	using Ezbob.Logger;
 
 	public class GetBankModel : AStrategy {
-		#region public
-
-		#region constructor
 
 		public GetBankModel(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Get bank model"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Log.Debug("Getting a bank model for customer {0}...", m_nCustomerID);
@@ -62,17 +51,10 @@
 			} // try
 		} // Execute
 
-		#endregion method Execute
-
 		public MarketPlaceModel Result { get; private set; }
-
-		#endregion public
-
-		#region private
 
 		private readonly int m_nCustomerID;
 		private static readonly Guid ms_oYodleeID = new Guid("107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF");
 
-		#endregion private
 	} // class GetBankModel
 } // namespace

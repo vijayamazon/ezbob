@@ -7,7 +7,6 @@
 	using OfficeOpenXml.Style;
 
 	internal static class ExcelWorksheetExt {
-		#region method SetCellTitle
 
 		public static int SetCellTitle(this ExcelWorksheet oSheet, int nRow, int nColumn, object oRaw) {
 			return SetCellValue(
@@ -22,10 +21,6 @@
 			);
 		} // SetCellTitle
 
-		#endregion method SetCellTitle
-
-		#region method SetRowTitles
-
 		public static int SetRowTitles(this ExcelWorksheet oSheet, int nRow, params object[] aryRaw) {
 			int nColumn = 1;
 
@@ -34,10 +29,6 @@
 
 			return nColumn;
 		} // SetRowTitles
-
-		#endregion method SetRowValues
-
-		#region method SetCellValue
 
 		public static int SetCellValue(
 			this ExcelWorksheet oSheet,
@@ -94,10 +85,6 @@
 			return nColumn;
 		} // SetCellValue
 
-		#endregion method SetCellValue
-
-		#region method SetRowValues
-
 		public static int SetRowValues(this ExcelWorksheet oSheet, int nRow, bool bSetZebra, params object[] aryRaw) {
 			int nColumn = 1;
 
@@ -107,6 +94,5 @@
 			return nColumn;
 		} // SetRowValues
 
-		#endregion method SetRowValues
 	} // class ExcelWorksheetExt
 } // namespace

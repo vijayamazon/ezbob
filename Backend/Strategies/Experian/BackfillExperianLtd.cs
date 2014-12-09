@@ -9,9 +9,6 @@
 	using StructureMap;
 
 	public class BackfillExperianLtd : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BackfillExperianLtd(AConnection oDB, ASafeLog oLog)
 			: base(oDB, oLog) {
@@ -19,17 +16,9 @@
 			_serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "BackfillExperianLtd"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			IEnumerable<SafeReader> lst = DB.ExecuteEnumerable("LoadServiceLogForLtdBackfill", CommandSpecies.StoredProcedure);
@@ -63,13 +52,8 @@
 			} // for each
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
 		private readonly ExperianHistoryRepository _experianHistoryRepository;
 		private readonly ServiceLogRepository _serviceLogRepository;
-		#endregion private
+
 	} // class BackfillExperianLtd
 } // namespace

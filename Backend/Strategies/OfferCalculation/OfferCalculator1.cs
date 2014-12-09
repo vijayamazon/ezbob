@@ -32,7 +32,6 @@
 				IsEu = false
 			};
 
-			
 			// We always use standard loan type
 			// We use standard loan type
 			SafeReader sr = db.GetFirst("GetStandardLoanTypeId", CommandSpecies.StoredProcedure);
@@ -65,7 +64,7 @@
 			templateModel.LoanTerm = result.Period;
 			templateModel.TenureMonths = result.Period*templateModel.TenurePercents;
 			CalculateInterestRateAndSetupFee(customerId, amount, medalClassification, result, templateModel);
-			
+
 			return result;
 		}
 
@@ -86,12 +85,11 @@
 				result.Error = errorMessage;
 				return;
 			}
-			
+
 			decimal minSetupFee = sr["MinSetupFee"];
 			decimal maxSetupFee = sr["MaxSetupFee"];
 			decimal minInterestRate = sr["MinInterestRate"];
 			decimal maxInterestRate = sr["MaxInterestRate"];
-
 
 			if (!CheckBounderies(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate,minInterestRate)) {
 				return;
@@ -223,7 +221,7 @@
 
 			var pricingModelCalculator = new PricingModelCalculator(result.CustomerId, model, db, log);
 			pricingModelCalculator.Calculate();
-			
+
 			decimal roundedInterestRate = Math.Ceiling(pricingModelCalculator.Model.MonthlyInterestRate * 2000)/20;
 			result.InterestRate = roundedInterestRate;
 

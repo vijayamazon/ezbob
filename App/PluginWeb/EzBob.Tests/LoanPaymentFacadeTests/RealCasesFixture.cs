@@ -147,7 +147,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(_loan.Schedule[2].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
 
             Assert.That(_loan.DateClosed, Is.Null);
-            
+
             MakePayment(12665, new DateTime(2012, 11, 19, 09, 04, 18));
 
             Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.PaidEarly));
@@ -198,7 +198,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(100, Parse("2012-11-14 19:33:30.000"));
             MakePayment(142, Parse("2012-11-14 19:35:05.000"));
 
-
             Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.PaidEarly));
             Assert.That(_loan.Schedule[1].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
             Assert.That(_loan.Schedule[2].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
@@ -224,7 +223,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(521, Parse("2012-11-23 22:31:21.000"));
             MakePayment(500, Parse("2012-11-24 10:21:15.000"));
             MakePayment(238, Parse("2012-11-25 12:16:00.000"));
-
 
             Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.PaidEarly));
             Assert.That(_loan.Schedule[1].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
@@ -375,7 +373,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.Late));
             Assert.That(_loan.Schedule[1].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
             Assert.That(_loan.Schedule[2].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
-            
+
             Assert.That(_loan.DateClosed, Is.Null);
         }
 
@@ -396,7 +394,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.PaidEarly));
             Assert.That(_loan.Schedule[1].Status, Is.EqualTo(LoanScheduleStatus.PaidEarly));
             Assert.That(_loan.Schedule[2].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
-            
+
             Assert.That(_loan.DateClosed, Is.Null);
             Assert.That(_loan.Status, Is.EqualTo(LoanStatus.Live));
         }
@@ -425,7 +423,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(payment, Is.EqualTo(8.64m));
             Assert.That(next, Is.EqualTo(8.64m));
         }
-
 
         [Test]
         [Description("loan 173. trello card 130.")]
@@ -515,9 +512,9 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             MakePayment(54.00m, Parse("2012-12-22 15:00:15.000"));
             MakePayment(36.00m, Parse("2012-12-22 15:01:21.000"));
-            
+
             Assert.That(_loan.TransactionsWithPaypoint[0].Interest, Is.EqualTo(54m));
-            
+
             Assert.That(rollover.PaidPaymentAmount, Is.EqualTo(36m));
             Assert.That(_loan.TransactionsWithPaypoint[1].Rollover, Is.EqualTo(36m));
         }
@@ -547,7 +544,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(54.00m, Parse("2012-12-24 15:26:17.000"));
             MakePayment(36.00m, Parse("2012-12-24 15:26:53.000"));
             MakePayment(30.00m, Parse("2012-12-24 15:27:41.000"));
-            
+
             Assert.That(rollover.PaidPaymentAmount, Is.EqualTo(50m));
             Assert.That(_loan.TransactionsWithPaypoint[2].Rollover, Is.EqualTo(27.74m));
         }
@@ -577,7 +574,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2012-12-26 16:03:42.000"));
             var state = payEarlyCalc.GetState();
-            
+
             Assert.That(rollover.PaidPaymentAmount, Is.EqualTo(50m));
             Assert.That(_loan.TransactionsWithPaypoint[0].Rollover, Is.EqualTo(50m));
             Assert.That(_loan.TransactionsWithPaypoint[0].Interest, Is.EqualTo(120m));
@@ -713,7 +710,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var payment = payEarlyCalc.TotalEarlyPayment();
 
             Assert.That(payment, Is.EqualTo(666m));
-            
+
             MakePayment(666m, Parse("2012-12-28 09:26:50.000"));
 
             Console.WriteLine(_loan);
@@ -804,7 +801,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(1000.00m, Parse("2012-12-26 10:57:31.000"));
 
             Assert.That(_loan.Status, Is.EqualTo(LoanStatus.PaidOff));
-            
+
             Assert.That(rollover1.PaidPaymentAmount, Is.EqualTo(50));
             Assert.That(rollover2.PaidPaymentAmount, Is.EqualTo(50));
 
@@ -875,7 +872,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(model.TotalEarlyPayment, Is.EqualTo(0));
         }
 
-
         [Test]
         [Description("loan 187")]
         public void loan_187()
@@ -888,7 +884,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             _loan.Status = LoanStatus.Live;
 
             Console.WriteLine(_loan);
-           
+
             MakePayment(94.0m, Parse("2013-01-14 20:00:04.000"));
 
             Console.WriteLine(_loan);
@@ -941,12 +937,12 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var state = payEarlyCalc.GetState();
 
             Assert.That(state.AmountDue, Is.EqualTo(1.08m));
-            
+
             //Assert.That(state.AmountDue, Is.EqualTo(0.04m));
             //Assert.That(_loan.Status, Is.EqualTo(LoanStatus.PaidOff));
             //Assert.That(_loan.Schedule.All(s => s.Status == LoanScheduleStatus.PaidEarly), Is.True);
         }
-        
+
         [Test]
         [Description("loan 85")]
         public void loan_85()
@@ -988,7 +984,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var state = payEarlyCalc.GetState();
 
             //Assert.That(state.AmountDue, Is.EqualTo(0m));
-            
+
             //Assert.That(_loan.Balance, Is.EqualTo(0));
             //Assert.That(_loan.Principal, Is.EqualTo(0));
         }

@@ -7,7 +7,6 @@
 	using Ezbob.Logger;
 
 	public static class ControllerExt {
-		#region method GetRemoteIP
 
 		public static string GetRemoteIP(this Controller oController) {
 			string ip = oController.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
@@ -23,10 +22,6 @@
 			return ip;
 		} // GetRemoteIP
 
-		#endregion method GetRemoteIP
-
-		#region method GetSessionID
-
 		public static string GetSessionID(this Controller oController) {
 			string sSessionID = oController.Request.Cookies[SessionCookieName] == null
 				? "NO SESSION COOKIE"
@@ -37,10 +32,6 @@
 
 			return sSessionID;
 		} // GetSessionID
-
-		#endregion method GetSessionID
-
-		#region method GetBrowserVersionID
 
 		public static int GetBrowserVersionID(this Controller oController, string sUserAgent, AConnection oDB, ASafeLog oLog) {
 			int nBrowserVersionID = 0;
@@ -57,10 +48,6 @@
 
 			return nBrowserVersionID;
 		} // GetBrowserVersionID
-
-		#endregion method GetBrowserVersionID
-
-		#region property SessionCookieName
 
 		private static string SessionCookieName {
 			get {
@@ -82,6 +69,5 @@
 		private static string ms_sSessionCookieName;
 		private static readonly object ms_oSessionCookieNameLock = new object();
 
-		#endregion property SessionCookieName
 	} // class ControllerExt
 } // namespace

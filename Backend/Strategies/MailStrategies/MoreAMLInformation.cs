@@ -21,8 +21,6 @@
 			}
 		}
 
-		#region method SetTemplateAndSubjectAndVariables
-
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Application incompleted AML";
 
@@ -31,6 +29,5 @@
 			};
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
 	} // class MoreAMLInformation
 } // namespace

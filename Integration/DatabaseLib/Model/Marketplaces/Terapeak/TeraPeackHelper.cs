@@ -34,7 +34,6 @@ namespace EZBob.DatabaseLib.Model.Database
                 data.ForEach(o => order.OrderItems.Add(CreateOrderItem(order, o)));
             }
 
-
             order.LastOrderItemEndDate = lastItemEndDate;
             customerMarketPlace.TeraPeakOrders.Add(order);
         }
@@ -85,7 +84,7 @@ namespace EZBob.DatabaseLib.Model.Database
         private MP_TeraPeakCategory GetOrCreateCategory(TeraPeakCategory category)
         {
             var tpCategory = _session.Get<MP_TeraPeakCategory>(category.Id);
-            
+
             if (tpCategory != null) return tpCategory;
 
             tpCategory = new MP_TeraPeakCategory

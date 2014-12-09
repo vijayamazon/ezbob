@@ -11,15 +11,12 @@
 	/// Turnover data is fed via Add method.
 	/// </summary>
 	public class CalculatedTurnover {
-		#region public
 
 		public DateTime? HmrcUpdateTime { get; private set; }
 		public DateTime? OnlineUpdateTime { get; private set; }
 
 		public bool HasHmrc { get; private set; }
 		public bool HasOnline { get; private set; }
-
-		#region constructor
 
 		public CalculatedTurnover() {
 			HasHmrc = false;
@@ -31,10 +28,6 @@
 			m_oOnline = new SortedDictionary<int, OneValue>();
 			m_oHmrc = new SortedDictionary<int, decimal>();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Add
 
 		/// <summary>
 		/// Feeds turnover for one marketplace and one period.
@@ -78,25 +71,13 @@
 			} // if
 		} // Add
 
-		#endregion method Add
-
-		#region method GetOnline
-
 		public decimal GetOnline(int nMonthCount) {
 			return m_oOnline.ContainsKey(nMonthCount) ? m_oOnline[nMonthCount].Value : 0;
 		} // indexer
 
-		#endregion method GetOnline
-
-		#region method GetHmrc
-
 		public decimal GetHmrc(int nMonthCount) {
 			return m_oHmrc.ContainsKey(nMonthCount) ? m_oHmrc[nMonthCount] : 0;
 		} // indexer
-
-		#endregion method GetHmrc
-
-		#region class Row
 
 		/// <summary>
 		/// Input turnover data for one marketplace and one period.
@@ -104,7 +85,6 @@
 		/// Actual period is between <see cref="DateFrom"/> and <see cref="DateTo"/> inclusive.
 		/// </summary>
 		public class Row {
-			#region public
 
 			/// <summary>
 			/// Marketplace ID (MP_CustomerMarketplace.Id).
@@ -161,18 +141,12 @@
 			/// </summary>
 			public DateTime? LastUpdateTime { get; set; }
 
-			#region property IsTotal
-
 			/// <summary>
 			/// Returns 'true' if this row should be included in total period calculation.
 			/// </summary>
 			public bool IsTotal {
 				get { return TurnoverType == Total; } // get
 			} // IsTotal
-
-			#endregion property IsTotal
-
-			#region method WriteToLog
 
 			/// <summary>
 			/// Writes this instance to log.
@@ -201,25 +175,10 @@
 				);
 			} // WriteToLog
 
-			#endregion method WriteToLog
-
-			#endregion public
-
 			private const string Total = "Total";
 		} // Row
 
-		#endregion class Row
-
-		#endregion public
-
-		#region private
-
-		#region class OneValue
-
 		private class OneValue {
-			#region public
-
-			#region constructor
 
 			public OneValue(Row r) {
 				m_nEbay = 0;
@@ -228,10 +187,6 @@
 
 				Add(r);
 			} // constructor
-
-			#endregion constructor
-
-			#region method Add
 
 			public void Add(Row r) {
 				if (r.MpTypeInternalID == Ebay)
@@ -242,19 +197,9 @@
 					m_nOther += r.Turnover;
 			} // Add
 
-			#endregion method Add
-
-			#region property Value
-
 			public decimal Value {
 				get { return Math.Max(m_nEbay, m_nPayPal) + m_nOther; } // get
 			} // Value
-
-			#endregion property Value
-
-			#endregion public
-
-			#region private
 
 			private decimal m_nEbay;
 			private decimal m_nPayPal;
@@ -263,16 +208,12 @@
 			private static readonly Guid Ebay   = new Guid("A7120CB7-4C93-459B-9901-0E95E7281B59");
 			private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
 
-			#endregion private
 		} // OneValue
-
-		#endregion class OneValue
 
 		private readonly SortedDictionary<int, OneValue> m_oOnline;
 		private readonly SortedDictionary<int, decimal> m_oHmrc;
 
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
 
-		#endregion private
 	} // class CalculatedTurnover
 } // namespace

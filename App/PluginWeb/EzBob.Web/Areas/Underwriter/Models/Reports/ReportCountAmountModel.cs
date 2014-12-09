@@ -37,7 +37,6 @@ namespace EzBob.Web.Areas.Underwriter.Models.Reports
         }
     }
 
-
     public class ReportModelDay<T> : ReportModelDayBase
     {
         public ReportTableModel<T> Model { get; set; }

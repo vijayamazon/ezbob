@@ -3,20 +3,12 @@ using System.Data;
 using System.Globalization;
 
 namespace Reports {
-	#region class Extractor
 
 	public abstract class Extractor {
-		#region protected
-
-		#region constructor
 
 		protected Extractor(IDataRecord oRow) {
 			m_oRow = oRow;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Retrieve
 
 		protected string Retrieve(string sFieldName) {
 			string sVal = Convert.ToString(Get(sFieldName)).Trim();
@@ -36,10 +28,6 @@ namespace Reports {
 			return (T)Convert.ChangeType(val, typeof (T));
 		} // Retrieve
 
-		#endregion method Retrieve
-
-		#region method Value
-
 		protected static string Value<T>(T sVal) where T: class {
 			return ReferenceEquals(sVal, null) ? "-- null --" : sVal.ToString();
 		} // Value
@@ -56,14 +44,6 @@ namespace Reports {
 			return oVal.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture);
 		} // Value
 
-		#endregion method Value
-
-		#endregion protected
-
-		#region private
-
-		#region method Get
-
 		private object Get(string sFieldName) {
 			object val = m_oRow[sFieldName];
 
@@ -73,12 +53,8 @@ namespace Reports {
 			return val;
 		} // Get
 
-		#endregion method Get
-
 		private readonly IDataRecord m_oRow;
 
-		#endregion private
 	} // class Extractor
 
-	#endregion class Extractor
 } // namespace Reports

@@ -7,9 +7,6 @@
 	using MailStrategies;
 
 	public class ValidateAndUpdateLinkedHmrcPassword : UpdateLinkedHmrcPassword {
-		#region public
-
-		#region constructor
 
 		public ValidateAndUpdateLinkedHmrcPassword(
 			string sCustomerID,
@@ -22,17 +19,9 @@
 			ErrorMessage = null;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "ValidateAndUpdateLinkedHmrcPassword"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			AccountData data = ValidateInput();
@@ -56,21 +45,9 @@
 				UpdatePassword(data);
 		} // Execute
 
-		#endregion method Execute
-
-		#region property ErrorMessage
-
 		public string ErrorMessage { get; private set; }
 
-		#endregion property ErrorMessage
-
-		#endregion public
-
-		#region private
-
 		private CustomerData m_oCustomerData;
-
-		#region method CheckHmrc
 
 		private bool CheckHmrc(AccountData data) {
 			if ((data.SecInfo.login == m_oCustomerData.Mail) && (data.SecInfo.password == VendorInfo.TopSecret)) {
@@ -102,8 +79,5 @@
 			return true;
 		} // CheckHmrc
 
-		#endregion method CheckHmrc
-
-		#endregion private
 	} // class ValidateAndUpdateLinkedHmrcPassword
 } // namespace

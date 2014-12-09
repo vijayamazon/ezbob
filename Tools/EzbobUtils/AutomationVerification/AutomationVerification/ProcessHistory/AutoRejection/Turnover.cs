@@ -4,16 +4,12 @@
 	{
 		public Turnover(DecisionStatus nDecisionStatus) : base(nDecisionStatus) { }
 
-		#region property AllowMismatch
-
 		/// <summary>
 		/// Mismatch is allowed because currently turnovers are match only if it is a miracle (different implementations).
 		/// </summary>
 		public override bool AllowMismatch {
 			get { return true; }
 		} // AllowMismatch
-
-		#endregion property AllowMismatch
 
 		public DataModel Model { get; private set; }
 

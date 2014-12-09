@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class OfferType
     {
-    
+
         private  PriceType buyingPriceField;
         private  MoneyType regularPriceField;
         private String fulfillmentChannelField;
@@ -40,7 +38,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         private String sellerSKUField;
 
-
         /// <summary>
         /// Gets and sets the BuyingPrice property.
         /// </summary>
@@ -50,8 +47,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.buyingPriceField ; }
             set { this.buyingPriceField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the BuyingPrice property
@@ -64,8 +59,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if BuyingPrice property is set
         /// </summary>
@@ -74,9 +67,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.buyingPriceField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the RegularPrice property.
@@ -87,8 +77,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.regularPriceField ; }
             set { this.regularPriceField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the RegularPrice property
@@ -101,8 +89,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if RegularPrice property is set
         /// </summary>
@@ -111,9 +97,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.regularPriceField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the FulfillmentChannel property.
@@ -124,8 +107,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.fulfillmentChannelField ; }
             set { this.fulfillmentChannelField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the FulfillmentChannel property
@@ -138,8 +119,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FulfillmentChannel property is set
         /// </summary>
@@ -150,7 +129,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ItemCondition property.
         /// </summary>
@@ -160,8 +138,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.itemConditionField ; }
             set { this.itemConditionField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ItemCondition property
@@ -174,8 +150,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ItemCondition property is set
         /// </summary>
@@ -186,7 +160,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ItemSubCondition property.
         /// </summary>
@@ -196,8 +169,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.itemSubConditionField ; }
             set { this.itemSubConditionField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ItemSubCondition property
@@ -210,8 +181,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ItemSubCondition property is set
         /// </summary>
@@ -222,7 +191,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the SellerId property.
         /// </summary>
@@ -232,8 +200,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.sellerIdField ; }
             set { this.sellerIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SellerId property
@@ -246,8 +212,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SellerId property is set
         /// </summary>
@@ -258,7 +222,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the SellerSKU property.
         /// </summary>
@@ -268,8 +231,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.sellerSKUField ; }
             set { this.sellerSKUField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SellerSKU property
@@ -282,8 +243,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SellerSKU property is set
         /// </summary>
@@ -294,9 +253,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -305,7 +261,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -382,8 +337,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

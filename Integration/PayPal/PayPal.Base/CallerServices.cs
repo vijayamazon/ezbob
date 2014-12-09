@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -56,7 +56,6 @@ namespace PayPal.Platform.SDK
             set { this.payLoad = value; }
         }
 
-
         public object CallAPI()
         {
             string url, responseString = string.Empty;
@@ -65,7 +64,6 @@ namespace PayPal.Platform.SDK
                     throw new NullReferenceException(BaseConstants.ErrorMessages.PROFILE_NULL);
                 if (this.payLoad == string.Empty)
                     throw new NullReferenceException(BaseConstants.ErrorMessages.PAYLOAD_NULL);
-
 
                 /// Constructing the URL to be called from Profile settings
                 url = this.apiProfile.Environment + this.apiProfile.EndPointAppend;
@@ -97,7 +95,6 @@ namespace PayPal.Platform.SDK
                 {
                     objRequest.Headers.Add(BaseConstants.XPAYPALSECURITYSIGNATURE, this.apiProfile.APISignature);
                 }
-
 
                 if (this.apiProfile.SandboxMailAddress != null && this.apiProfile.SandboxMailAddress.Length>0)
                     objRequest.Headers.Add(BaseConstants.XPAYPALSANDBOXEMAILADDRESS, this.apiProfile.SandboxMailAddress);
@@ -154,7 +151,7 @@ namespace PayPal.Platform.SDK
             }
             //
             //
-            
+
             // Adding Credential and payload request/resposne information to the HttpWebRequest obejct's header
             objRequest.Headers.Add(BaseConstants.XPAYPALSECURITYUSERID, this.apiProfile.APIUsername);
             objRequest.Headers.Add(BaseConstants.XPAYPALSECURITYPASSWORD, this.apiProfile.APIPassword);

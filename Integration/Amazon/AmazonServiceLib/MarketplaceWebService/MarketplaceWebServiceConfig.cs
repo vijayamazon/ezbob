@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -28,7 +28,7 @@ namespace MarketplaceWebService
     /// </summary>
     public class MarketplaceWebServiceConfig
     {
-    
+
         private String serviceVersion = "2009-01-01";
         private String serviceURL = null;
         private String userAgent = null;
@@ -75,7 +75,6 @@ namespace MarketplaceWebService
             return this;
         }
 
-
         /// <summary>
         /// Checks if SignatureMethod property is set
         /// </summary>
@@ -112,7 +111,7 @@ namespace MarketplaceWebService
         {
             return this.signatureVersion != null;
         }
-    
+
         /// <summary>
         /// Gets and sets of the UserAgent property.
         /// </summary>

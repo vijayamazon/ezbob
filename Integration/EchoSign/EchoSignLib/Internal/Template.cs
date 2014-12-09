@@ -5,8 +5,6 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.MimeTypes;
 
-	#region enum TemplateType
-
 	internal enum TemplateType {
 		Other = 0,
 		BoardResolution = 1,
@@ -14,14 +12,7 @@
 		Max,
 	} // enum TemplateType
 
-	#endregion enum TemplateType
-
-	#region class Template
-
 	internal class Template {
-		#region public
-
-		#region constructor
 
 		public Template() {
 			m_oMime = new MimeTypeResolver();
@@ -29,11 +20,7 @@
 			TemplateType = TemplateType.Other;
 		} // Template
 
-		#endregion constructor
-
 		public int ID { get; set; }
-
-		#region property TypeID
 
 		public int TypeID {
 			get { return m_nTypeID; }
@@ -48,15 +35,11 @@
 
 		private int m_nTypeID;
 
-		#endregion property TypeID
-
 		public TemplateType TemplateType { get; private set; } // TemplateType
 
 		public bool IsOfKnownType { get { return (TemplateType != TemplateType.Other) && (TemplateType != TemplateType.Max); } }
 
 		public string DocumentName { get; set; }
-
-		#region property FileNameBase
 
 		public string FileNameBase {
 			get { return m_sFileNameBase ?? string.Empty; }
@@ -70,10 +53,6 @@
 		} // FileNameBase
 
 		private string m_sFileNameBase;
-
-		#endregion property FileNameBase
-
-		#region property FileExtension
 
 		public string FileExtension {
 			get { return m_sFileExtension ?? string.Empty; }
@@ -93,11 +72,7 @@
 
 		private string m_sFileExtension;
 
-		#endregion property FileExtension
-
 		public byte[] FileContent { get; set; }
-
-		#region property FileName
 
 		public string FileName {
 			get {
@@ -110,11 +85,7 @@
 
 		private string m_sFileName;
 
-		#endregion property FileName
-
 		public string MimeType { get; private set; }
-
-		#region method FillCommonDetails
 
 		public void FillCommonDetails(Person oCustomer, Company oCompany) {
 			string sTemplate = System.Text.Encoding.UTF8.GetString(FileContent);
@@ -125,10 +96,6 @@
 
 			FileContent = Encoding.UTF8.GetBytes(sTemplate);
 		} // FillCommonDetails
-
-		#endregion method FillCommonDetails
-
-		#region method PersonalGuarantee
 
 		public byte[] PersonalGuarantee(Person oSigner, int nApprovedSum) {
 			if ((nApprovedSum <= 0) || (nApprovedSum > 50000))
@@ -142,17 +109,9 @@
 			return Encoding.UTF8.GetBytes(sTemplate);
 		} // PersonalGuarantee
 
-		#endregion method PersonalGuarantee
-
-		#endregion public
-
-		#region private
-
 		private readonly MimeTypeResolver m_oMime;
 		private static readonly CultureInfo ms_oCulture = new CultureInfo("en-GB", false);
 
-		#endregion private
 	} // class Template
 
-	#endregion class Template
 } // namespace

@@ -145,7 +145,6 @@
 					requestReportRequest.EndDate = reportRequestList.EndDate.Value.ToUniversalTime();
 				}
 
-
 				RequestInfo info = requestInfo;
 
 				var resp = AmazonWaitBeforeRetryHelper.DoServiceAction(
@@ -161,7 +160,6 @@
 					info.SetId(resp.RequestReportResult.ReportRequestInfo.ReportRequestId);
 				}
 			}
-
 
 		}
 
@@ -220,7 +218,7 @@
 					item.LastUpdateDate = ConvertToDate(GetData(list, AmazonOrderDataEnum.PaymentsDate));
 					item.PurchaseDate = ConvertToDate(GetData(list, AmazonOrderDataEnum.PurchaseDate));
 					item.NumberOfItemsShipped = ConvertToInt(GetData(list, AmazonOrderDataEnum.QuantityPurchased));
-					
+
 					item.OrderTotal = new AmountInfo {
 						Value = ConvertToDouble(GetData(list, AmazonOrderDataEnum.ItemPrice)),
 						CurrencyCode = GetData(list, AmazonOrderDataEnum.Currency)
@@ -292,8 +290,6 @@
 		public DateTime? EndDate { get; set; }
 		public DateTime? StartDate { get; set; }
 		public List<string> MarketPlaceId { get; private set; }
-
-
 
 		public RequestsListInfo(AmazonRequestInfoBase amazonRequestInfo, string actionName, ActionAccessType access, ErrorRetryingInfo errorRetryingInfo, int timeOutInMinutes = 10) {
 			UserId = amazonRequestInfo.MerchantId;
@@ -423,7 +419,6 @@
 
 			UpdateStatus(ReportData.ReportProcessingStatus);
 		}
-
 
 	}
 

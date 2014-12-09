@@ -4,7 +4,6 @@
 	using Ezbob.Logger;
 
 	public class SendEmailVerification : AMailStrategyBase {
-		#region constructor
 
 		public SendEmailVerification(
 			int nCustomerID,
@@ -15,11 +14,7 @@
 			m_sAddress = sAddress;
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "SendEmailVerification"; } } // Name
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Confirm your email";
@@ -31,10 +26,6 @@
 			};
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
-
-		#region method LoadRecipientData
-
 		protected override void LoadRecipientData() {
 			Log.Debug("Loading customer data...");
 
@@ -43,8 +34,6 @@
 
 			Log.Debug("Loading customer data complete.");
 		} // LoadRecipientData
-
-		#endregion method LoadRecipientData
 
 		private readonly string m_sAddress;
 	} // class SendEmailVerification

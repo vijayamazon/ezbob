@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using log4net;
 
 namespace PayPal.Platform.SDK
@@ -8,7 +8,7 @@ namespace PayPal.Platform.SDK
 	/// </summary>
 	public class FATALException : Exception
 	{
-		#region Priavte Members
+
         private static readonly ILog log = LogManager.GetLogger("PAYPALLOGFILE");
 		/// <summary>
 		/// Short message
@@ -19,10 +19,6 @@ namespace PayPal.Platform.SDK
 		/// </summary>
 		private string FATALExpLongMessage ;
 
-		#endregion 
-
-		#region Constructors
-
 		public FATALException(string FATALExceptionMessage, Exception exception)
 		{
 			/// Logging the exception.
@@ -30,15 +26,11 @@ namespace PayPal.Platform.SDK
 			{	
 				log.Info(FATALExceptionMessage, exception);
 			}
-				
+
 			this.FATALExMessage = FATALExceptionMessage;
 			this.FATALExpLongMessage = exception.Message ;
 		}
 
-		#endregion
-			
-		#region Public Properties
-		
 		/// <summary>
 		/// Short message.
 		/// </summary>
@@ -53,7 +45,7 @@ namespace PayPal.Platform.SDK
 				FATALExMessage = value;
 			}
 		}
-		
+
 		/// <summary>
 		/// Long message
 		/// </summary>
@@ -73,10 +65,6 @@ namespace PayPal.Platform.SDK
 	    {
             return string.Format("FATALExceptionMessage: {1}, FATALExceptionLongMessage: {2}{3}{0}", base.ToString(), FATALExceptionMessage, FATALExceptionLongMessage, Environment.NewLine);
 	    }
-
-	    #endregion
-
-
 
 	}
 

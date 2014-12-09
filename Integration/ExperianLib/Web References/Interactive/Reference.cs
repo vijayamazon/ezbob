@@ -23,19 +23,18 @@ namespace EzBobIntegration.Web_References.Interactive {
     using System.Web.Services.Protocols;
     using System.ComponentModel;
     using System.Xml.Serialization;
-    
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="InteractiveWSSoap", Namespace="http://www.uk.experian.com/experian/wbsv/peinteractive/v100")]
     public partial class InteractiveWS : System.Web.Services.Protocols.SoapHttpClientProtocol {
-        
+
         private System.Threading.SendOrPostCallback InteractiveOperationCompleted;
-        
+
         private bool useDefaultCredentialsSetExplicitly;
-        
+
         /// <remarks/>
         public InteractiveWS() {
             this.Url = "http://scems.uat.uk.experian.com/experian/wbsv/v100/interactive.asmx";
@@ -47,7 +46,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         public new string Url {
             get {
                 return base.Url;
@@ -61,7 +60,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 base.Url = value;
             }
         }
-        
+
         public new bool UseDefaultCredentials {
             get {
                 return base.UseDefaultCredentials;
@@ -71,10 +70,10 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         /// <remarks/>
         public event InteractiveCompletedEventHandler InteractiveCompleted;
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://www.uk.experian.com/experian/wbsv/peinteractive/interactive", RequestNamespace="http://www.uk.experian.com/experian/wbsv/peinteractive/v100", ResponseNamespace="http://www.uk.experian.com/experian/wbsv/peinteractive/v100", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("OutputRoot", Namespace="http://schemas.microsoft.com/BizTalk/2003/Any")]
@@ -83,12 +82,12 @@ namespace EzBobIntegration.Web_References.Interactive {
                         Root});
             return ((OutputRoot)(results[0]));
         }
-        
+
         /// <remarks/>
         public void InteractiveAsync(Root Root) {
             this.InteractiveAsync(Root, null);
         }
-        
+
         /// <remarks/>
         public void InteractiveAsync(Root Root, object userState) {
             if ((this.InteractiveOperationCompleted == null)) {
@@ -97,19 +96,19 @@ namespace EzBobIntegration.Web_References.Interactive {
             this.InvokeAsync("Interactive", new object[] {
                         Root}, this.InteractiveOperationCompleted, userState);
         }
-        
+
         private void OnInteractiveOperationCompleted(object arg) {
             if ((this.InteractiveCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.InteractiveCompleted(this, new InteractiveCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
-        
+
         private bool IsLocalFileSystemWebService(string url) {
             if (((url == null) 
                         || (url == string.Empty))) {
@@ -123,7 +122,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             return false;
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -131,9 +130,9 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class Root {
-        
+
         private Input inputField;
-        
+
         /// <remarks/>
         public Input Input {
             get {
@@ -144,7 +143,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -152,11 +151,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class Input {
-        
+
         private InputControl controlField;
-        
+
         private InputLocationDetails[] locationDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public InputControl Control {
@@ -167,7 +166,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.controlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("LocationDetails", Form=XmlSchemaForm.Unqualified)]
         public InputLocationDetails[] LocationDetails {
@@ -179,7 +178,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -187,25 +186,25 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class InputControl {
-        
+
         private string experianReferenceField;
-        
+
         private string clientAccountNumberField;
-        
+
         private string clientBranchNumberField;
-        
+
         private string userIdentityField;
-        
+
         private string testDatabaseField;
-        
+
         private string reprocessFlagField;
-        
+
         private string clientRefField;
-        
+
         private string jobNumberField;
-        
+
         private InputControlParameters parametersField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ExperianReference {
@@ -216,7 +215,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.experianReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientAccountNumber {
@@ -227,7 +226,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientBranchNumber {
@@ -238,7 +237,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientBranchNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string UserIdentity {
@@ -249,7 +248,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.userIdentityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TestDatabase {
@@ -260,7 +259,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.testDatabaseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ReprocessFlag {
@@ -271,7 +270,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.reprocessFlagField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientRef {
@@ -282,7 +281,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientRefField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JobNumber {
@@ -293,7 +292,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.jobNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public InputControlParameters Parameters {
@@ -305,7 +304,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -313,31 +312,31 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class InputControlParameters {
-        
+
         private string interactiveModeField;
-        
+
         private string fullFBLRequiredField;
-        
+
         private string authPlusRequiredField;
-        
+
         private string authPSRequiredField;
-        
+
         private string detectRequiredField;
-        
+
         private string testModeField;
-        
+
         private string showConsumerField;
-        
+
         private string showDetectField;
-        
+
         private string showAuthenticateField;
-        
+
         private string showAddressField;
-        
+
         private string showCaseHistoryField;
-        
+
         private string showHHOField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InteractiveMode {
@@ -348,7 +347,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.interactiveModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FullFBLRequired {
@@ -359,7 +358,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.fullFBLRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPlusRequired {
@@ -370,7 +369,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authPlusRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPSRequired {
@@ -381,7 +380,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authPSRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DetectRequired {
@@ -392,7 +391,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.detectRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TestMode {
@@ -403,7 +402,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.testModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowConsumer {
@@ -414,7 +413,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showConsumerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowDetect {
@@ -425,7 +424,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showDetectField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAuthenticate {
@@ -436,7 +435,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showAuthenticateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAddress {
@@ -447,7 +446,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowCaseHistory {
@@ -458,7 +457,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showCaseHistoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowHHO {
@@ -470,7 +469,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -478,37 +477,37 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class Output {
-        
+
         private OutputApplicant[] applicantField;
-        
+
         private OutputAssociation[] associationField;
-        
+
         private OutputAuthPlus[] authPlusField;
-        
+
         private OutputAuthPS[] authPSField;
-        
+
         private OutputCheckDetails[] checkDetailsField;
-        
+
         private OutputConsumerSummary consumerSummaryField;
-        
+
         private OutputControl controlField;
-        
+
         private OutputDetect detectField;
-        
+
         private OutputError errorField;
-        
+
         private OutputFullConsumerData fullConsumerDataField;
-        
+
         private OutputLocationDetails[] locationDetailsField;
-        
+
         private OutputMultipleLocations[] multipleLocationsField;
-        
+
         private OutputOneShotFailure[] oneShotFailureField;
-        
+
         private OutputResidency[] residencyField;
-        
+
         private OutputThirdPartyData thirdPartyDataField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Applicant", Form=XmlSchemaForm.Unqualified)]
         public OutputApplicant[] Applicant {
@@ -519,7 +518,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Association", Form=XmlSchemaForm.Unqualified)]
         public OutputAssociation[] Association {
@@ -530,7 +529,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.associationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AuthPlus", Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPlus[] AuthPlus {
@@ -541,7 +540,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authPlusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AuthPS", Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPS[] AuthPS {
@@ -552,7 +551,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authPSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CheckDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputCheckDetails[] CheckDetails {
@@ -563,7 +562,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.checkDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummary ConsumerSummary {
@@ -574,7 +573,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.consumerSummaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputControl Control {
@@ -585,7 +584,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.controlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputDetect Detect {
@@ -596,7 +595,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.detectField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputError Error {
@@ -607,7 +606,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.errorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerData FullConsumerData {
@@ -618,7 +617,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.fullConsumerDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("LocationDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputLocationDetails[] LocationDetails {
@@ -629,7 +628,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("MultipleLocations", Form=XmlSchemaForm.Unqualified)]
         public OutputMultipleLocations[] MultipleLocations {
@@ -640,7 +639,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.multipleLocationsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("OneShotFailure", Form=XmlSchemaForm.Unqualified)]
         public OutputOneShotFailure[] OneShotFailure {
@@ -651,7 +650,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.oneShotFailureField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Residency", Form=XmlSchemaForm.Unqualified)]
         public OutputResidency[] Residency {
@@ -662,7 +661,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.residencyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputThirdPartyData ThirdPartyData {
@@ -674,7 +673,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -682,27 +681,27 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputApplicant {
-        
+
         private string applicantIdentifierField;
-        
+
         private OutputApplicantName nameField;
-        
+
         private OutputApplicantAlias[] aliasField;
-        
+
         private string genderField;
-        
+
         private OutputApplicantDateOfBirth dateOfBirthField;
-        
+
         private string formattedNameField;
-        
+
         private string formattedDOBField;
-        
+
         private OutputApplicantAge ageField;
-        
+
         private string cVPPersonIDField;
-        
+
         private string clientPersonIDField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIdentifier {
@@ -713,7 +712,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputApplicantName Name {
@@ -724,7 +723,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Alias", Form=XmlSchemaForm.Unqualified)]
         public OutputApplicantAlias[] Alias {
@@ -735,7 +734,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.aliasField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Gender {
@@ -746,7 +745,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.genderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputApplicantDateOfBirth DateOfBirth {
@@ -757,7 +756,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FormattedName {
@@ -768,7 +767,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.formattedNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FormattedDOB {
@@ -779,7 +778,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.formattedDOBField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputApplicantAge Age {
@@ -790,7 +789,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CVPPersonID {
@@ -801,7 +800,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cVPPersonIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientPersonID {
@@ -813,7 +812,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -821,17 +820,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputApplicantName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -842,7 +841,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -853,7 +852,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -864,7 +863,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -875,7 +874,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -887,7 +886,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -895,21 +894,21 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputApplicantAlias {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string sourceField;
-        
+
         private string genderField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -920,7 +919,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -931,7 +930,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -942,7 +941,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -953,7 +952,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -964,7 +963,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Source {
@@ -975,7 +974,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Gender {
@@ -987,7 +986,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -995,19 +994,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputApplicantDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -1018,7 +1017,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -1029,7 +1028,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -1040,7 +1039,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -1051,7 +1050,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -1062,7 +1061,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -1074,7 +1073,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1082,15 +1081,15 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputApplicantAge {
-        
+
         private int yearsField;
-        
+
         private bool yearsFieldSpecified;
-        
+
         private int monthsField;
-        
+
         private bool monthsFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int Years {
@@ -1101,7 +1100,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool YearsSpecified {
@@ -1112,7 +1111,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int Months {
@@ -1123,7 +1122,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.monthsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MonthsSpecified {
@@ -1135,7 +1134,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1143,29 +1142,29 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAssociation {
-        
+
         private OutputAssociationName nameField;
-        
+
         private string genderField;
-        
+
         private OutputAssociationDateOfBirth dateOfBirthField;
-        
+
         private string formattedNameField;
-        
+
         private string formattedDOBField;
-        
+
         private OutputAssociationAge ageField;
-        
+
         private string cVPPersonIDField;
-        
+
         private string clientPersonIDField;
-        
+
         private string applicantLinkToField;
-        
+
         private OutputAssociationAssociatedDateFrom associatedDateFromField;
-        
+
         private OutputAssociationAssociatedDateTo associatedDateToField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAssociationName Name {
@@ -1176,7 +1175,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Gender {
@@ -1187,7 +1186,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.genderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAssociationDateOfBirth DateOfBirth {
@@ -1198,7 +1197,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FormattedName {
@@ -1209,7 +1208,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.formattedNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FormattedDOB {
@@ -1220,7 +1219,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.formattedDOBField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAssociationAge Age {
@@ -1231,7 +1230,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CVPPersonID {
@@ -1242,7 +1241,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cVPPersonIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientPersonID {
@@ -1253,7 +1252,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientPersonIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantLinkTo {
@@ -1264,7 +1263,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantLinkToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAssociationAssociatedDateFrom AssociatedDateFrom {
@@ -1275,7 +1274,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.associatedDateFromField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAssociationAssociatedDateTo AssociatedDateTo {
@@ -1287,7 +1286,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1295,17 +1294,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAssociationName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -1316,7 +1315,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -1327,7 +1326,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -1338,7 +1337,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -1349,7 +1348,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -1361,7 +1360,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1369,19 +1368,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAssociationDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -1392,7 +1391,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -1403,7 +1402,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -1414,7 +1413,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -1425,7 +1424,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -1436,7 +1435,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -1448,7 +1447,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1456,15 +1455,15 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAssociationAge {
-        
+
         private int yearsField;
-        
+
         private bool yearsFieldSpecified;
-        
+
         private int monthsField;
-        
+
         private bool monthsFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int Years {
@@ -1475,7 +1474,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool YearsSpecified {
@@ -1486,7 +1485,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int Months {
@@ -1497,7 +1496,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.monthsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MonthsSpecified {
@@ -1509,7 +1508,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1517,19 +1516,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAssociationAssociatedDateFrom {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -1540,7 +1539,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -1551,7 +1550,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -1562,7 +1561,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -1573,7 +1572,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -1584,7 +1583,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -1596,7 +1595,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1604,19 +1603,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAssociationAssociatedDateTo {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -1627,7 +1626,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -1638,7 +1637,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -1649,7 +1648,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -1660,7 +1659,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -1671,7 +1670,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -1683,7 +1682,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1691,23 +1690,23 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPlus {
-        
+
         private string applicantIdentifierField;
-        
+
         private string authPlusRefField;
-        
+
         private OutputAuthPlusIACA iACAField;
-        
+
         private OutputAuthPlusAOCA aOCAField;
-        
+
         private OutputAuthPlusIAPA iAPAField;
-        
+
         private OutputAuthPlusAOPA aOPAField;
-        
+
         private OutputAuthPlusDataMatches dataMatchesField;
-        
+
         private OutputAuthPlusDecision decisionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIdentifier {
@@ -1718,7 +1717,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPlusRef {
@@ -1729,7 +1728,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authPlusRefField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPlusIACA IACA {
@@ -1740,7 +1739,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iACAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPlusAOCA AOCA {
@@ -1751,7 +1750,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.aOCAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPlusIAPA IAPA {
@@ -1762,7 +1761,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iAPAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPlusAOPA AOPA {
@@ -1773,7 +1772,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.aOPAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPlusDataMatches DataMatches {
@@ -1784,7 +1783,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dataMatchesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPlusDecision Decision {
@@ -1796,7 +1795,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1804,19 +1803,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPlusIACA {
-        
+
         private string noPriItemField;
-        
+
         private string noPrimSrcField;
-        
+
         private string strtOldPriField;
-        
+
         private string noSecItemField;
-        
+
         private string noSecSrcField;
-        
+
         private string strtOldSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPriItem {
@@ -1827,7 +1826,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPriItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPrimSrc {
@@ -1838,7 +1837,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPrimSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldPri {
@@ -1849,7 +1848,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecItem {
@@ -1860,7 +1859,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecSrc {
@@ -1871,7 +1870,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldSec {
@@ -1883,7 +1882,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1891,19 +1890,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPlusAOCA {
-        
+
         private string noPriItemField;
-        
+
         private string noPrimSrcField;
-        
+
         private string strtOldPriField;
-        
+
         private string noSecItemField;
-        
+
         private string noSecSrcField;
-        
+
         private string strtOldSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPriItem {
@@ -1914,7 +1913,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPriItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPrimSrc {
@@ -1925,7 +1924,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPrimSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldPri {
@@ -1936,7 +1935,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecItem {
@@ -1947,7 +1946,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecSrc {
@@ -1958,7 +1957,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldSec {
@@ -1970,7 +1969,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1978,19 +1977,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPlusIAPA {
-        
+
         private string noPriItemField;
-        
+
         private string noPrimSrcField;
-        
+
         private string strtOldPriField;
-        
+
         private string noSecItemField;
-        
+
         private string noSecSrcField;
-        
+
         private string strtOldSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPriItem {
@@ -2001,7 +2000,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPriItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPrimSrc {
@@ -2012,7 +2011,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPrimSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldPri {
@@ -2023,7 +2022,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecItem {
@@ -2034,7 +2033,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecSrc {
@@ -2045,7 +2044,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldSec {
@@ -2057,7 +2056,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2065,19 +2064,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPlusAOPA {
-        
+
         private string noPriItemField;
-        
+
         private string noPrimSrcField;
-        
+
         private string strtOldPriField;
-        
+
         private string noSecItemField;
-        
+
         private string noSecSrcField;
-        
+
         private string strtOldSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPriItem {
@@ -2088,7 +2087,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPriItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPrimSrc {
@@ -2099,7 +2098,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPrimSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldPri {
@@ -2110,7 +2109,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecItem {
@@ -2121,7 +2120,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecSrc {
@@ -2132,7 +2131,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldSec {
@@ -2144,7 +2143,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2152,15 +2151,15 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPlusDataMatches {
-        
+
         private string noAgePriField;
-        
+
         private string noAgeSecField;
-        
+
         private string noTACAPriField;
-        
+
         private string noTACASecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoAgePri {
@@ -2171,7 +2170,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noAgePriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoAgeSec {
@@ -2182,7 +2181,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noAgeSecField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoTACAPri {
@@ -2193,7 +2192,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noTACAPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoTACASec {
@@ -2205,7 +2204,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2213,27 +2212,27 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPlusDecision {
-        
+
         private string decCodeField;
-        
+
         private string decTextField;
-        
+
         private string authIndexField;
-        
+
         private string authTextField;
-        
+
         private string iDConfLvlField;
-        
+
         private string iDConfTextField;
-        
+
         private string cIFASRefField;
-        
+
         private int highRiskCountField;
-        
+
         private bool highRiskCountFieldSpecified;
-        
+
         private OutputAuthPlusDecisionHighRisk[] highRiskField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DecCode {
@@ -2244,7 +2243,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.decCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DecText {
@@ -2255,7 +2254,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.decTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthIndex {
@@ -2266,7 +2265,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthText {
@@ -2277,7 +2276,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDConfLvl {
@@ -2288,7 +2287,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iDConfLvlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDConfText {
@@ -2299,7 +2298,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iDConfTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CIFASRef {
@@ -2310,7 +2309,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cIFASRefField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int HighRiskCount {
@@ -2321,7 +2320,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.highRiskCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool HighRiskCountSpecified {
@@ -2332,7 +2331,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.highRiskCountFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("HighRisk", Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPlusDecisionHighRisk[] HighRisk {
@@ -2344,7 +2343,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2352,11 +2351,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPlusDecisionHighRisk {
-        
+
         private string ruleField;
-        
+
         private string textField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Rule {
@@ -2367,7 +2366,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ruleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Text {
@@ -2379,7 +2378,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2387,23 +2386,23 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPS {
-        
+
         private string applicantIdentifierField;
-        
+
         private string authPlusRefField;
-        
+
         private OutputAuthPSIACA iACAField;
-        
+
         private OutputAuthPSAOCA aOCAField;
-        
+
         private OutputAuthPSIAPA iAPAField;
-        
+
         private OutputAuthPSAOPA aOPAField;
-        
+
         private OutputAuthPSDataMatches dataMatchesField;
-        
+
         private OutputAuthPSDecision decisionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIdentifier {
@@ -2414,7 +2413,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPlusRef {
@@ -2425,7 +2424,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authPlusRefField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPSIACA IACA {
@@ -2436,7 +2435,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iACAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPSAOCA AOCA {
@@ -2447,7 +2446,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.aOCAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPSIAPA IAPA {
@@ -2458,7 +2457,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iAPAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPSAOPA AOPA {
@@ -2469,7 +2468,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.aOPAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPSDataMatches DataMatches {
@@ -2480,7 +2479,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dataMatchesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPSDecision Decision {
@@ -2492,7 +2491,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2500,23 +2499,23 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPSIACA {
-        
+
         private string noPriItemField;
-        
+
         private string noPrimSrcField;
-        
+
         private string strtOldPriField;
-        
+
         private string noSecItemField;
-        
+
         private string noSecSrcField;
-        
+
         private string strtOldSecField;
-        
+
         private string strtLatPriField;
-        
+
         private string strtLatSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPriItem {
@@ -2527,7 +2526,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPriItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPrimSrc {
@@ -2538,7 +2537,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPrimSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldPri {
@@ -2549,7 +2548,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecItem {
@@ -2560,7 +2559,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecSrc {
@@ -2571,7 +2570,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldSec {
@@ -2582,7 +2581,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldSecField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtLatPri {
@@ -2593,7 +2592,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtLatPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtLatSec {
@@ -2605,7 +2604,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2613,23 +2612,23 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPSAOCA {
-        
+
         private string noPriItemField;
-        
+
         private string noPrimSrcField;
-        
+
         private string strtOldPriField;
-        
+
         private string noSecItemField;
-        
+
         private string noSecSrcField;
-        
+
         private string strtOldSecField;
-        
+
         private string strtLatPriField;
-        
+
         private string strtLatSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPriItem {
@@ -2640,7 +2639,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPriItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPrimSrc {
@@ -2651,7 +2650,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPrimSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldPri {
@@ -2662,7 +2661,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecItem {
@@ -2673,7 +2672,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecSrc {
@@ -2684,7 +2683,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldSec {
@@ -2695,7 +2694,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldSecField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtLatPri {
@@ -2706,7 +2705,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtLatPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtLatSec {
@@ -2718,7 +2717,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2726,23 +2725,23 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPSIAPA {
-        
+
         private string noPriItemField;
-        
+
         private string noPrimSrcField;
-        
+
         private string strtOldPriField;
-        
+
         private string noSecItemField;
-        
+
         private string noSecSrcField;
-        
+
         private string strtOldSecField;
-        
+
         private string strtLatPriField;
-        
+
         private string strtLatSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPriItem {
@@ -2753,7 +2752,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPriItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPrimSrc {
@@ -2764,7 +2763,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPrimSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldPri {
@@ -2775,7 +2774,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecItem {
@@ -2786,7 +2785,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecSrc {
@@ -2797,7 +2796,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldSec {
@@ -2808,7 +2807,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldSecField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtLatPri {
@@ -2819,7 +2818,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtLatPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtLatSec {
@@ -2831,7 +2830,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2839,23 +2838,23 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPSAOPA {
-        
+
         private string noPriItemField;
-        
+
         private string noPrimSrcField;
-        
+
         private string strtOldPriField;
-        
+
         private string noSecItemField;
-        
+
         private string noSecSrcField;
-        
+
         private string strtOldSecField;
-        
+
         private string strtLatPriField;
-        
+
         private string strtLatSecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPriItem {
@@ -2866,7 +2865,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPriItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoPrimSrc {
@@ -2877,7 +2876,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noPrimSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldPri {
@@ -2888,7 +2887,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecItem {
@@ -2899,7 +2898,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoSecSrc {
@@ -2910,7 +2909,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noSecSrcField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtOldSec {
@@ -2921,7 +2920,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtOldSecField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtLatPri {
@@ -2932,7 +2931,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.strtLatPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StrtLatSec {
@@ -2944,7 +2943,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2952,15 +2951,15 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPSDataMatches {
-        
+
         private string noAgePriField;
-        
+
         private string noAgeSecField;
-        
+
         private string noTACAPriField;
-        
+
         private string noTACASecField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoAgePri {
@@ -2971,7 +2970,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noAgePriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoAgeSec {
@@ -2982,7 +2981,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noAgeSecField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoTACAPri {
@@ -2993,7 +2992,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noTACAPriField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoTACASec {
@@ -3005,7 +3004,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3013,47 +3012,47 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPSDecision {
-        
+
         private string decCodeField;
-        
+
         private string decTextField;
-        
+
         private string authIndexField;
-        
+
         private string authTextField;
-        
+
         private string iDConfLvlField;
-        
+
         private string iDConfTextField;
-        
+
         private string cIFASRefField;
-        
+
         private int highRiskCountField;
-        
+
         private bool highRiskCountFieldSpecified;
-        
+
         private OutputAuthPSDecisionHighRisk[] highRiskField;
-        
+
         private string varDataLenField;
-        
+
         private string bannerTextField;
-        
+
         private int bannerTextColourField;
-        
+
         private bool bannerTextColourFieldSpecified;
-        
+
         private int validationScoreField;
-        
+
         private bool validationScoreFieldSpecified;
-        
+
         private string validationScoreTextField;
-        
+
         private int verificationScoreField;
-        
+
         private bool verificationScoreFieldSpecified;
-        
+
         private string verificationScoreTxtField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DecCode {
@@ -3064,7 +3063,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.decCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DecText {
@@ -3075,7 +3074,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.decTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthIndex {
@@ -3086,7 +3085,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthText {
@@ -3097,7 +3096,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDConfLvl {
@@ -3108,7 +3107,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iDConfLvlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDConfText {
@@ -3119,7 +3118,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iDConfTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CIFASRef {
@@ -3130,7 +3129,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cIFASRefField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int HighRiskCount {
@@ -3141,7 +3140,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.highRiskCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool HighRiskCountSpecified {
@@ -3152,7 +3151,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.highRiskCountFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("HighRisk", Form=XmlSchemaForm.Unqualified)]
         public OutputAuthPSDecisionHighRisk[] HighRisk {
@@ -3163,7 +3162,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.highRiskField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string VarDataLen {
@@ -3174,7 +3173,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.varDataLenField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BannerText {
@@ -3185,7 +3184,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bannerTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int BannerTextColour {
@@ -3196,7 +3195,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bannerTextColourField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BannerTextColourSpecified {
@@ -3207,7 +3206,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bannerTextColourFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int ValidationScore {
@@ -3218,7 +3217,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.validationScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ValidationScoreSpecified {
@@ -3229,7 +3228,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.validationScoreFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ValidationScoreText {
@@ -3240,7 +3239,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.validationScoreTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int VerificationScore {
@@ -3251,7 +3250,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.verificationScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool VerificationScoreSpecified {
@@ -3262,7 +3261,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.verificationScoreFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string VerificationScoreTxt {
@@ -3274,7 +3273,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3282,11 +3281,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputAuthPSDecisionHighRisk {
-        
+
         private string ruleField;
-        
+
         private string textField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Rule {
@@ -3297,7 +3296,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ruleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Text {
@@ -3309,7 +3308,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3317,25 +3316,25 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputCheckDetails {
-        
+
         private string locationIdentifierField;
-        
+
         private string flatCheckField;
-        
+
         private string houseNameCheckField;
-        
+
         private string houseNumberCheckField;
-        
+
         private string streetCheckField;
-        
+
         private string districtCheckField;
-        
+
         private string townCheckField;
-        
+
         private string countyCheckField;
-        
+
         private string postCodeCheckField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIdentifier {
@@ -3346,7 +3345,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FlatCheck {
@@ -3357,7 +3356,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatCheckField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNameCheck {
@@ -3368,7 +3367,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameCheckField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumberCheck {
@@ -3379,7 +3378,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberCheckField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetCheck {
@@ -3390,7 +3389,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetCheckField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DistrictCheck {
@@ -3401,7 +3400,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtCheckField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TownCheck {
@@ -3412,7 +3411,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.townCheckField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CountyCheck {
@@ -3423,7 +3422,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyCheckField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostCodeCheck {
@@ -3435,7 +3434,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3443,15 +3442,15 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummary {
-        
+
         private OutputConsumerSummaryCATO cATOField;
-        
+
         private OutputConsumerSummaryPremiumValueData premiumValueDataField;
-        
+
         private OutputConsumerSummarySummary summaryField;
-        
+
         private string hHOScoreField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryCATO CATO {
@@ -3462,7 +3461,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cATOField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueData PremiumValueData {
@@ -3473,7 +3472,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.premiumValueDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummary Summary {
@@ -3484,7 +3483,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.summaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HHOScore {
@@ -3496,7 +3495,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3504,107 +3503,107 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryCATO {
-        
+
         private string sPI42Field;
-        
+
         private string sPI43Field;
-        
+
         private string sPI44Field;
-        
+
         private string sPI45Field;
-        
+
         private string sPI46Field;
-        
+
         private string sPI47Field;
-        
+
         private string sPI48Field;
-        
+
         private string sPI49Field;
-        
+
         private string sPI50Field;
-        
+
         private string sPI51Field;
-        
+
         private string sPI52Field;
-        
+
         private string sPI53Field;
-        
+
         private string sPJ54Field;
-        
+
         private string sPJ55Field;
-        
+
         private string sPJ56Field;
-        
+
         private string sPJ57Field;
-        
+
         private string sPJ58Field;
-        
+
         private string sPJ59Field;
-        
+
         private string sPJ60Field;
-        
+
         private string sPJ61Field;
-        
+
         private string sPJ62Field;
-        
+
         private string sPJ63Field;
-        
+
         private string sPJ64Field;
-        
+
         private string sPJ65Field;
-        
+
         private string sPJ66Field;
-        
+
         private string sPJ67Field;
-        
+
         private string sPJ68Field;
-        
+
         private string sPK69Field;
-        
+
         private string sPK70Field;
-        
+
         private string sPK71Field;
-        
+
         private string sPK72Field;
-        
+
         private string sPK73Field;
-        
+
         private string sPK74Field;
-        
+
         private string sPK75Field;
-        
+
         private string sPK76Field;
-        
+
         private string sPK77Field;
-        
+
         private string sPL78Field;
-        
+
         private string sPL79Field;
-        
+
         private string sPL80Field;
-        
+
         private string sPL81Field;
-        
+
         private string sPL82Field;
-        
+
         private string sPL83Field;
-        
+
         private string sPL84Field;
-        
+
         private string sPL85Field;
-        
+
         private string sPM86Field;
-        
+
         private string sPM87Field;
-        
+
         private string sPM88Field;
-        
+
         private string sPN89Field;
-        
+
         private string sPN90Field;
-        
+
         private string sPN91Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI42 {
@@ -3615,7 +3614,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI42Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI43 {
@@ -3626,7 +3625,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI43Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI44 {
@@ -3637,7 +3636,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI44Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI45 {
@@ -3648,7 +3647,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI45Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI46 {
@@ -3659,7 +3658,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI46Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI47 {
@@ -3670,7 +3669,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI47Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI48 {
@@ -3681,7 +3680,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI48Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI49 {
@@ -3692,7 +3691,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI49Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI50 {
@@ -3703,7 +3702,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI50Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI51 {
@@ -3714,7 +3713,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI51Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI52 {
@@ -3725,7 +3724,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI52Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPI53 {
@@ -3736,7 +3735,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPI53Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ54 {
@@ -3747,7 +3746,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ54Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ55 {
@@ -3758,7 +3757,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ55Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ56 {
@@ -3769,7 +3768,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ56Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ57 {
@@ -3780,7 +3779,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ57Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ58 {
@@ -3791,7 +3790,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ58Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ59 {
@@ -3802,7 +3801,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ59Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ60 {
@@ -3813,7 +3812,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ60Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ61 {
@@ -3824,7 +3823,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ61Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ62 {
@@ -3835,7 +3834,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ62Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ63 {
@@ -3846,7 +3845,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ63Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ64 {
@@ -3857,7 +3856,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ64Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ65 {
@@ -3868,7 +3867,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ65Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ66 {
@@ -3879,7 +3878,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ66Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ67 {
@@ -3890,7 +3889,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ67Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPJ68 {
@@ -3901,7 +3900,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPJ68Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK69 {
@@ -3912,7 +3911,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK69Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK70 {
@@ -3923,7 +3922,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK70Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK71 {
@@ -3934,7 +3933,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK71Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK72 {
@@ -3945,7 +3944,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK72Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK73 {
@@ -3956,7 +3955,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK73Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK74 {
@@ -3967,7 +3966,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK74Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK75 {
@@ -3978,7 +3977,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK75Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK76 {
@@ -3989,7 +3988,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK76Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPK77 {
@@ -4000,7 +3999,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPK77Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPL78 {
@@ -4011,7 +4010,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPL78Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPL79 {
@@ -4022,7 +4021,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPL79Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPL80 {
@@ -4033,7 +4032,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPL80Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPL81 {
@@ -4044,7 +4043,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPL81Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPL82 {
@@ -4055,7 +4054,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPL82Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPL83 {
@@ -4066,7 +4065,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPL83Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPL84 {
@@ -4077,7 +4076,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPL84Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPL85 {
@@ -4088,7 +4087,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPL85Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPM86 {
@@ -4099,7 +4098,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPM86Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPM87 {
@@ -4110,7 +4109,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPM87Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPM88 {
@@ -4121,7 +4120,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPM88Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPN89 {
@@ -4132,7 +4131,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPN89Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPN90 {
@@ -4143,7 +4142,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPN90Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPN91 {
@@ -4155,7 +4154,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4163,27 +4162,27 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueData {
-        
+
         private OutputConsumerSummaryPremiumValueDataTPD tPDField;
-        
+
         private OutputConsumerSummaryPremiumValueDataCII cIIField;
-        
+
         private OutputConsumerSummaryPremiumValueDataMosaic mosaicField;
-        
+
         private OutputConsumerSummaryPremiumValueDataScoring scoringField;
-        
+
         private OutputConsumerSummaryPremiumValueDataAddrLink addrLinkField;
-        
+
         private OutputConsumerSummaryPremiumValueDataDirector directorField;
-        
+
         private OutputConsumerSummaryPremiumValueDataAgeDoB ageDoBField;
-        
+
         private OutputConsumerSummaryPremiumValueDataImpairedCH impairedCHField;
-        
+
         private string[] bespokeField;
-        
+
         private OutputConsumerSummaryPremiumValueDataAdditDelphiBlocks additDelphiBlocksField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataTPD TPD {
@@ -4194,7 +4193,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.tPDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataCII CII {
@@ -4205,7 +4204,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cIIField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataMosaic Mosaic {
@@ -4216,7 +4215,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mosaicField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataScoring Scoring {
@@ -4227,7 +4226,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.scoringField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAddrLink AddrLink {
@@ -4238,7 +4237,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.addrLinkField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataDirector Director {
@@ -4249,7 +4248,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.directorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAgeDoB AgeDoB {
@@ -4260,7 +4259,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ageDoBField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataImpairedCH ImpairedCH {
@@ -4271,7 +4270,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.impairedCHField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Bespoke", Form=XmlSchemaForm.Unqualified)]
         public string[] Bespoke {
@@ -4282,7 +4281,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bespokeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAdditDelphiBlocks AdditDelphiBlocks {
@@ -4294,7 +4293,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4302,13 +4301,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataTPD {
-        
+
         private string nDPAField;
-        
+
         private string nDHHOField;
-        
+
         private string nDOPTOUTVALIDField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPA {
@@ -4319,7 +4318,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHHO {
@@ -4330,7 +4329,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHHOField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDOPTOUTVALID {
@@ -4342,7 +4341,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4350,11 +4349,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataCII {
-        
+
         private string nDSPCIIField;
-        
+
         private string nDSPACIIField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDSPCII {
@@ -4365,7 +4364,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDSPCIIField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDSPACII {
@@ -4377,7 +4376,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4385,73 +4384,73 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataMosaic {
-        
+
         private string eA4M01Field;
-        
+
         private string eA4M02Field;
-        
+
         private string eA4M03Field;
-        
+
         private string eA4M04Field;
-        
+
         private string eA4M05Field;
-        
+
         private string eA4M06Field;
-        
+
         private string eA4M07Field;
-        
+
         private string eA4M08Field;
-        
+
         private string eA4M09Field;
-        
+
         private string eA4M10Field;
-        
+
         private string eA4M11Field;
-        
+
         private string eA4M12Field;
-        
+
         private string eA4T01Field;
-        
+
         private string eA5T01Field;
-        
+
         private string eA5T02Field;
-        
+
         private string nDG01Field;
-        
+
         private string eA4N01Field;
-        
+
         private string eA4N02Field;
-        
+
         private string eA4N03Field;
-        
+
         private string eA4N04Field;
-        
+
         private string eA4N05Field;
-        
+
         private string nDG02Field;
-        
+
         private string nDG03Field;
-        
+
         private string nDG04Field;
-        
+
         private string nDG05Field;
-        
+
         private string nDG06Field;
-        
+
         private string nDG07Field;
-        
+
         private string nDG08Field;
-        
+
         private string nDG09Field;
-        
+
         private string nDG10Field;
-        
+
         private string nDG11Field;
-        
+
         private string nDG12Field;
-        
+
         private string uKMOSAICField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M01 {
@@ -4462,7 +4461,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M02 {
@@ -4473,7 +4472,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M03 {
@@ -4484,7 +4483,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M04 {
@@ -4495,7 +4494,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M05 {
@@ -4506,7 +4505,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M06 {
@@ -4517,7 +4516,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M07 {
@@ -4528,7 +4527,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M08 {
@@ -4539,7 +4538,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M09 {
@@ -4550,7 +4549,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M10 {
@@ -4561,7 +4560,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M11 {
@@ -4572,7 +4571,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4M12 {
@@ -4583,7 +4582,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4M12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4T01 {
@@ -4594,7 +4593,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4T01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA5T01 {
@@ -4605,7 +4604,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA5T01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA5T02 {
@@ -4616,7 +4615,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA5T02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG01 {
@@ -4627,7 +4626,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4N01 {
@@ -4638,7 +4637,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4N01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4N02 {
@@ -4649,7 +4648,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4N02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4N03 {
@@ -4660,7 +4659,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4N03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4N04 {
@@ -4671,7 +4670,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4N04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4N05 {
@@ -4682,7 +4681,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4N05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG02 {
@@ -4693,7 +4692,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG03 {
@@ -4704,7 +4703,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG04 {
@@ -4715,7 +4714,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG05 {
@@ -4726,7 +4725,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG06 {
@@ -4737,7 +4736,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG07 {
@@ -4748,7 +4747,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG08 {
@@ -4759,7 +4758,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG09 {
@@ -4770,7 +4769,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG10 {
@@ -4781,7 +4780,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG11 {
@@ -4792,7 +4791,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDG12 {
@@ -4803,7 +4802,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDG12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string UKMOSAIC {
@@ -4815,7 +4814,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4823,33 +4822,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataScoring {
-        
+
         private string nDSI21Field;
-        
+
         private string nDSI22Field;
-        
+
         private string nDSI23Field;
-        
+
         private string e5S01Field;
-        
+
         private string e5S02Field;
-        
+
         private string e5S041Field;
-        
+
         private string e5S051Field;
-        
+
         private string e5S042Field;
-        
+
         private string e5S052Field;
-        
+
         private string e5S043Field;
-        
+
         private string e5S053Field;
-        
+
         private string nDHHOSCOREField;
-        
+
         private string nDVALSCOREField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDSI21 {
@@ -4860,7 +4859,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDSI21Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDSI22 {
@@ -4871,7 +4870,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDSI22Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDSI23 {
@@ -4882,7 +4881,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDSI23Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E5S01 {
@@ -4893,7 +4892,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e5S01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E5S02 {
@@ -4904,7 +4903,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e5S02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E5S041 {
@@ -4915,7 +4914,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e5S041Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E5S051 {
@@ -4926,7 +4925,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e5S051Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E5S042 {
@@ -4937,7 +4936,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e5S042Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E5S052 {
@@ -4948,7 +4947,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e5S052Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E5S043 {
@@ -4959,7 +4958,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e5S043Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E5S053 {
@@ -4970,7 +4969,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e5S053Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHHOSCORE {
@@ -4981,7 +4980,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHHOSCOREField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDVALSCORE {
@@ -4993,7 +4992,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5001,9 +5000,9 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAddrLink {
-        
+
         private string nDLNK01Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDLNK01 {
@@ -5015,7 +5014,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5023,11 +5022,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataDirector {
-        
+
         private string nDDIRSPField;
-        
+
         private string nDDIRSPAField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDDIRSP {
@@ -5038,7 +5037,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDDIRSPField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDDIRSPA {
@@ -5050,7 +5049,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5058,27 +5057,27 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAgeDoB {
-        
+
         private OutputConsumerSummaryPremiumValueDataAgeDoBNDDOB nDDOBField;
-        
+
         private string eA5S01Field;
-        
+
         private string eA4S01Field;
-        
+
         private OutputConsumerSummaryPremiumValueDataAgeDoBEA4S02 eA4S02Field;
-        
+
         private string eA4S03Field;
-        
+
         private OutputConsumerSummaryPremiumValueDataAgeDoBEA4S04 eA4S04Field;
-        
+
         private string eA4S05Field;
-        
+
         private OutputConsumerSummaryPremiumValueDataAgeDoBEA4S06 eA4S06Field;
-        
+
         private string eA4S07Field;
-        
+
         private OutputConsumerSummaryPremiumValueDataAgeDoBEA4S08 eA4S08Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAgeDoBNDDOB NDDOB {
@@ -5089,7 +5088,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDDOBField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA5S01 {
@@ -5100,7 +5099,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA5S01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4S01 {
@@ -5111,7 +5110,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4S01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAgeDoBEA4S02 EA4S02 {
@@ -5122,7 +5121,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4S02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4S03 {
@@ -5133,7 +5132,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4S03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAgeDoBEA4S04 EA4S04 {
@@ -5144,7 +5143,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4S04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4S05 {
@@ -5155,7 +5154,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4S05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAgeDoBEA4S06 EA4S06 {
@@ -5166,7 +5165,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4S06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4S07 {
@@ -5177,7 +5176,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4S07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAgeDoBEA4S08 EA4S08 {
@@ -5189,7 +5188,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5197,19 +5196,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAgeDoBNDDOB {
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int yyField;
-        
+
         private bool yyFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -5220,7 +5219,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -5231,7 +5230,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -5242,7 +5241,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -5253,7 +5252,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int YY {
@@ -5264,7 +5263,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool YYSpecified {
@@ -5276,7 +5275,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5284,19 +5283,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAgeDoBEA4S02 {
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int yyField;
-        
+
         private bool yyFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -5307,7 +5306,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -5318,7 +5317,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -5329,7 +5328,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -5340,7 +5339,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int YY {
@@ -5351,7 +5350,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool YYSpecified {
@@ -5363,7 +5362,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5371,19 +5370,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAgeDoBEA4S04 {
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int yyField;
-        
+
         private bool yyFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -5394,7 +5393,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -5405,7 +5404,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -5416,7 +5415,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -5427,7 +5426,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int YY {
@@ -5438,7 +5437,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool YYSpecified {
@@ -5450,7 +5449,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5458,19 +5457,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAgeDoBEA4S06 {
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int yyField;
-        
+
         private bool yyFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -5481,7 +5480,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -5492,7 +5491,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -5503,7 +5502,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -5514,7 +5513,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int YY {
@@ -5525,7 +5524,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool YYSpecified {
@@ -5537,7 +5536,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5545,19 +5544,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAgeDoBEA4S08 {
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int yyField;
-        
+
         private bool yyFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -5568,7 +5567,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -5579,7 +5578,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -5590,7 +5589,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -5601,7 +5600,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int YY {
@@ -5612,7 +5611,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool YYSpecified {
@@ -5624,7 +5623,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5632,43 +5631,43 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataImpairedCH {
-        
+
         private string nDICHField;
-        
+
         private string nDSECARRField;
-        
+
         private string nDUNSECARRField;
-        
+
         private string nDCCJField;
-        
+
         private string nDIVAField;
-        
+
         private string nDBANKRUPTField;
-        
+
         private string nDMAICHField;
-        
+
         private string nDMASECARRField;
-        
+
         private string nDMAUNSECARRField;
-        
+
         private string nDMACCJField;
-        
+
         private string nDMAIVAField;
-        
+
         private string nDMABANKRUPTField;
-        
+
         private string nDJAICHField;
-        
+
         private string nDJASECARRField;
-        
+
         private string nDJAUNSECARRField;
-        
+
         private string nDJACCJField;
-        
+
         private string nDJAIVAField;
-        
+
         private string nDJABANKRUPTField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDICH {
@@ -5679,7 +5678,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDICHField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDSECARR {
@@ -5690,7 +5689,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDSECARRField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDUNSECARR {
@@ -5701,7 +5700,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDUNSECARRField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDCCJ {
@@ -5712,7 +5711,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDCCJField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDIVA {
@@ -5723,7 +5722,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDIVAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDBANKRUPT {
@@ -5734,7 +5733,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDBANKRUPTField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDMAICH {
@@ -5745,7 +5744,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDMAICHField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDMASECARR {
@@ -5756,7 +5755,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDMASECARRField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDMAUNSECARR {
@@ -5767,7 +5766,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDMAUNSECARRField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDMACCJ {
@@ -5778,7 +5777,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDMACCJField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDMAIVA {
@@ -5789,7 +5788,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDMAIVAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDMABANKRUPT {
@@ -5800,7 +5799,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDMABANKRUPTField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDJAICH {
@@ -5811,7 +5810,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDJAICHField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDJASECARR {
@@ -5822,7 +5821,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDJASECARRField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDJAUNSECARR {
@@ -5833,7 +5832,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDJAUNSECARRField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDJACCJ {
@@ -5844,7 +5843,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDJACCJField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDJAIVA {
@@ -5855,7 +5854,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDJAIVAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDJABANKRUPT {
@@ -5867,7 +5866,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5875,17 +5874,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAdditDelphiBlocks {
-        
+
         private OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksAPACSCCBehavrlData aPACSCCBehavrlDataField;
-        
+
         private OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksUtilisationblock utilisationblockField;
-        
+
         private OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksNeverPaidDefsBlock neverPaidDefsBlockField;
-        
+
         private OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksTelecommsBlock telecommsBlockField;
-        
+
         private OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksBespokeBlock bespokeBlockField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksAPACSCCBehavrlData APACSCCBehavrlData {
@@ -5896,7 +5895,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.aPACSCCBehavrlDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksUtilisationblock Utilisationblock {
@@ -5907,7 +5906,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.utilisationblockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksNeverPaidDefsBlock NeverPaidDefsBlock {
@@ -5918,7 +5917,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.neverPaidDefsBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksTelecommsBlock TelecommsBlock {
@@ -5929,7 +5928,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.telecommsBlockField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksBespokeBlock BespokeBlock {
@@ -5941,7 +5940,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5949,37 +5948,37 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksAPACSCCBehavrlData {
-        
+
         private string cCDATASUPPLIEDField;
-        
+
         private string nOMPMNPRL3MField;
-        
+
         private string pTBRL3MNPRL3MField;
-        
+
         private string pTBRL6MNPRL6MField;
-        
+
         private string pTSBRL3MNPRL3MField;
-        
+
         private string pTSBRL6MNPRL6MField;
-        
+
         private string nOCAL1MField;
-        
+
         private string nOCAL3MField;
-        
+
         private string nOMLVCAL1MField;
-        
+
         private string nOMLVCAL3MField;
-        
+
         private string cLUCLIL6MField;
-        
+
         private string cLUCLIL6MNPRL6MField;
-        
+
         private string cLUNPRL1MField;
-        
+
         private string nOCLDL3MField;
-        
+
         private string nOASBNPRL1MField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CCDATASUPPLIED {
@@ -5990,7 +5989,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCDATASUPPLIEDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NOMPMNPRL3M {
@@ -6001,7 +6000,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nOMPMNPRL3MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PTBRL3MNPRL3M {
@@ -6012,7 +6011,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pTBRL3MNPRL3MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PTBRL6MNPRL6M {
@@ -6023,7 +6022,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pTBRL6MNPRL6MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PTSBRL3MNPRL3M {
@@ -6034,7 +6033,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pTSBRL3MNPRL3MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PTSBRL6MNPRL6M {
@@ -6045,7 +6044,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pTSBRL6MNPRL6MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NOCAL1M {
@@ -6056,7 +6055,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nOCAL1MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NOCAL3M {
@@ -6067,7 +6066,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nOCAL3MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NOMLVCAL1M {
@@ -6078,7 +6077,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nOMLVCAL1MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NOMLVCAL3M {
@@ -6089,7 +6088,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nOMLVCAL3MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CLUCLIL6M {
@@ -6100,7 +6099,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cLUCLIL6MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CLUCLIL6MNPRL6M {
@@ -6111,7 +6110,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cLUCLIL6MNPRL6MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CLUNPRL1M {
@@ -6122,7 +6121,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cLUNPRL1MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NOCLDL3M {
@@ -6133,7 +6132,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nOCLDL3MField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NOASBNPRL1M {
@@ -6145,7 +6144,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6153,175 +6152,175 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksUtilisationblock {
-        
+
         private string sPA01Field;
-        
+
         private string sPA02Field;
-        
+
         private string sPA03Field;
-        
+
         private string sPA04Field;
-        
+
         private string sPA05Field;
-        
+
         private string sPA06Field;
-        
+
         private string sPA07Field;
-        
+
         private string sPA08Field;
-        
+
         private string sPA09Field;
-        
+
         private string sPA10Field;
-        
+
         private string sPB111Field;
-        
+
         private string sPB112Field;
-        
+
         private string sPB113Field;
-        
+
         private string sPB114Field;
-        
+
         private string sPB115Field;
-        
+
         private string sPB116Field;
-        
+
         private string sPB117Field;
-        
+
         private string sPB218Field;
-        
+
         private string sPB219Field;
-        
+
         private string sPB220Field;
-        
+
         private string sPB221Field;
-        
+
         private string sPB322Field;
-        
+
         private string sPB323Field;
-        
+
         private string sPC24Field;
-        
+
         private string sPD25Field;
-        
+
         private string sPE126Field;
-        
+
         private string sPE127Field;
-        
+
         private string sPE128Field;
-        
+
         private string sPF129Field;
-        
+
         private string sPF130Field;
-        
+
         private string sPF131Field;
-        
+
         private string sPF232Field;
-        
+
         private string sPF233Field;
-        
+
         private string sPF334Field;
-        
+
         private string sPF335Field;
-        
+
         private string sPF336Field;
-        
+
         private string sPG37Field;
-        
+
         private string sPG38Field;
-        
+
         private string sPH39Field;
-        
+
         private string sPH40Field;
-        
+
         private string sPH41Field;
-        
+
         private string sPCIICHECKDIGITField;
-        
+
         private string sPAA01Field;
-        
+
         private string sPAA02Field;
-        
+
         private string sPAA03Field;
-        
+
         private string sPAA04Field;
-        
+
         private string sPAA05Field;
-        
+
         private string sPAA06Field;
-        
+
         private string sPAA07Field;
-        
+
         private string sPAA08Field;
-        
+
         private string sPAA09Field;
-        
+
         private string sPAA10Field;
-        
+
         private string sPAB111Field;
-        
+
         private string sPAB112Field;
-        
+
         private string sPAB113Field;
-        
+
         private string sPAB114Field;
-        
+
         private string sPAB115Field;
-        
+
         private string sPAB116Field;
-        
+
         private string sPAB117Field;
-        
+
         private string sPAB218Field;
-        
+
         private string sPAB219Field;
-        
+
         private string sPAB220Field;
-        
+
         private string sPAB221Field;
-        
+
         private string sPAB322Field;
-        
+
         private string sPAB323Field;
-        
+
         private string sPAC24Field;
-        
+
         private string sPAD25Field;
-        
+
         private string sPAE126Field;
-        
+
         private string sPAE127Field;
-        
+
         private string sPAE128Field;
-        
+
         private string sPAF129Field;
-        
+
         private string sPAF130Field;
-        
+
         private string sPAF131Field;
-        
+
         private string sPAF232Field;
-        
+
         private string sPAF233Field;
-        
+
         private string sPAF334Field;
-        
+
         private string sPAF335Field;
-        
+
         private string sPAF336Field;
-        
+
         private string sPAG37Field;
-        
+
         private string sPAG38Field;
-        
+
         private string sPAH39Field;
-        
+
         private string sPAH40Field;
-        
+
         private string sPAH41Field;
-        
+
         private string sPACIICHECKDIGITField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA01 {
@@ -6332,7 +6331,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA02 {
@@ -6343,7 +6342,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA03 {
@@ -6354,7 +6353,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA04 {
@@ -6365,7 +6364,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA05 {
@@ -6376,7 +6375,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA06 {
@@ -6387,7 +6386,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA07 {
@@ -6398,7 +6397,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA08 {
@@ -6409,7 +6408,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA09 {
@@ -6420,7 +6419,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPA10 {
@@ -6431,7 +6430,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPA10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB111 {
@@ -6442,7 +6441,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB111Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB112 {
@@ -6453,7 +6452,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB112Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB113 {
@@ -6464,7 +6463,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB113Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB114 {
@@ -6475,7 +6474,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB114Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB115 {
@@ -6486,7 +6485,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB115Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB116 {
@@ -6497,7 +6496,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB116Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB117 {
@@ -6508,7 +6507,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB117Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB218 {
@@ -6519,7 +6518,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB218Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB219 {
@@ -6530,7 +6529,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB219Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB220 {
@@ -6541,7 +6540,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB220Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB221 {
@@ -6552,7 +6551,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB221Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB322 {
@@ -6563,7 +6562,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB322Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPB323 {
@@ -6574,7 +6573,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPB323Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPC24 {
@@ -6585,7 +6584,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPC24Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPD25 {
@@ -6596,7 +6595,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPD25Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPE126 {
@@ -6607,7 +6606,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPE126Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPE127 {
@@ -6618,7 +6617,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPE127Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPE128 {
@@ -6629,7 +6628,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPE128Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPF129 {
@@ -6640,7 +6639,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPF129Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPF130 {
@@ -6651,7 +6650,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPF130Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPF131 {
@@ -6662,7 +6661,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPF131Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPF232 {
@@ -6673,7 +6672,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPF232Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPF233 {
@@ -6684,7 +6683,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPF233Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPF334 {
@@ -6695,7 +6694,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPF334Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPF335 {
@@ -6706,7 +6705,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPF335Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPF336 {
@@ -6717,7 +6716,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPF336Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPG37 {
@@ -6728,7 +6727,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPG37Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPG38 {
@@ -6739,7 +6738,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPG38Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPH39 {
@@ -6750,7 +6749,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPH39Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPH40 {
@@ -6761,7 +6760,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPH40Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPH41 {
@@ -6772,7 +6771,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPH41Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPCIICHECKDIGIT {
@@ -6783,7 +6782,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPCIICHECKDIGITField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA01 {
@@ -6794,7 +6793,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA02 {
@@ -6805,7 +6804,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA03 {
@@ -6816,7 +6815,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA04 {
@@ -6827,7 +6826,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA05 {
@@ -6838,7 +6837,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA06 {
@@ -6849,7 +6848,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA07 {
@@ -6860,7 +6859,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA08 {
@@ -6871,7 +6870,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA09 {
@@ -6882,7 +6881,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAA10 {
@@ -6893,7 +6892,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAA10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB111 {
@@ -6904,7 +6903,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB111Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB112 {
@@ -6915,7 +6914,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB112Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB113 {
@@ -6926,7 +6925,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB113Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB114 {
@@ -6937,7 +6936,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB114Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB115 {
@@ -6948,7 +6947,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB115Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB116 {
@@ -6959,7 +6958,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB116Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB117 {
@@ -6970,7 +6969,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB117Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB218 {
@@ -6981,7 +6980,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB218Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB219 {
@@ -6992,7 +6991,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB219Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB220 {
@@ -7003,7 +7002,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB220Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB221 {
@@ -7014,7 +7013,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB221Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB322 {
@@ -7025,7 +7024,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB322Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAB323 {
@@ -7036,7 +7035,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAB323Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAC24 {
@@ -7047,7 +7046,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAC24Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAD25 {
@@ -7058,7 +7057,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAD25Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAE126 {
@@ -7069,7 +7068,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAE126Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAE127 {
@@ -7080,7 +7079,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAE127Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAE128 {
@@ -7091,7 +7090,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAE128Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAF129 {
@@ -7102,7 +7101,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAF129Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAF130 {
@@ -7113,7 +7112,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAF130Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAF131 {
@@ -7124,7 +7123,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAF131Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAF232 {
@@ -7135,7 +7134,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAF232Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAF233 {
@@ -7146,7 +7145,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAF233Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAF334 {
@@ -7157,7 +7156,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAF334Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAF335 {
@@ -7168,7 +7167,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAF335Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAF336 {
@@ -7179,7 +7178,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAF336Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAG37 {
@@ -7190,7 +7189,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAG37Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAG38 {
@@ -7201,7 +7200,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAG38Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAH39 {
@@ -7212,7 +7211,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAH39Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAH40 {
@@ -7223,7 +7222,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAH40Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAH41 {
@@ -7234,7 +7233,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPAH41Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPACIICHECKDIGIT {
@@ -7246,7 +7245,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7254,51 +7253,51 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksNeverPaidDefsBlock {
-        
+
         private string sPNONPDL12Field;
-        
+
         private string sPBALNPDL12Field;
-        
+
         private string sPNONPDField;
-        
+
         private string sPBALNPDField;
-        
+
         private string sPTSMRNPDField;
-        
+
         private string sPNOEBADSL12Field;
-        
+
         private string sPBALEBADSL12Field;
-        
+
         private string sPNOEBADSField;
-        
+
         private string sPBALEBADSField;
-        
+
         private string sPTSMREBADField;
-        
+
         private string sPMTHFSTEBADField;
-        
+
         private string sPANONPDL12Field;
-        
+
         private string sPABALNPDL12Field;
-        
+
         private string sPANONPDField;
-        
+
         private string sPABALNPDField;
-        
+
         private string sPATSMRNPDField;
-        
+
         private string sPANOEBADSL12Field;
-        
+
         private string sPABALEBADSL12Field;
-        
+
         private string sPANOEBADSField;
-        
+
         private string sPABALEBADSField;
-        
+
         private string sPATSMREBADField;
-        
+
         private string sPAMTHFSTEBADField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNONPDL12 {
@@ -7309,7 +7308,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNONPDL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPBALNPDL12 {
@@ -7320,7 +7319,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPBALNPDL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNONPD {
@@ -7331,7 +7330,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNONPDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPBALNPD {
@@ -7342,7 +7341,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPBALNPDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTSMRNPD {
@@ -7353,7 +7352,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTSMRNPDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNOEBADSL12 {
@@ -7364,7 +7363,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNOEBADSL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPBALEBADSL12 {
@@ -7375,7 +7374,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPBALEBADSL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNOEBADS {
@@ -7386,7 +7385,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNOEBADSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPBALEBADS {
@@ -7397,7 +7396,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPBALEBADSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTSMREBAD {
@@ -7408,7 +7407,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTSMREBADField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPMTHFSTEBAD {
@@ -7419,7 +7418,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPMTHFSTEBADField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPANONPDL12 {
@@ -7430,7 +7429,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPANONPDL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPABALNPDL12 {
@@ -7441,7 +7440,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPABALNPDL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPANONPD {
@@ -7452,7 +7451,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPANONPDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPABALNPD {
@@ -7463,7 +7462,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPABALNPDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPATSMRNPD {
@@ -7474,7 +7473,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPATSMRNPDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPANOEBADSL12 {
@@ -7485,7 +7484,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPANOEBADSL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPABALEBADSL12 {
@@ -7496,7 +7495,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPABALEBADSL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPANOEBADS {
@@ -7507,7 +7506,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPANOEBADSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPABALEBADS {
@@ -7518,7 +7517,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPABALEBADSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPATSMREBAD {
@@ -7529,7 +7528,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPATSMREBADField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPAMTHFSTEBAD {
@@ -7541,7 +7540,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7549,37 +7548,37 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksTelecommsBlock {
-        
+
         private string sPNODELField;
-        
+
         private string sPVALDELField;
-        
+
         private string sPTSMRTELDELField;
-        
+
         private string sPNOACTTELField;
-        
+
         private string sPBALACTTELField;
-        
+
         private string sPTSMRTELField;
-        
+
         private string sPTOTNOACTTELField;
-        
+
         private string sPNOINACTTELL12Field;
-        
+
         private string sPNOINACTTELL24Field;
-        
+
         private string sPNOINACTTEL36Field;
-        
+
         private string sPTOTNOSETField;
-        
+
         private string sPTOTNOSETL12Field;
-        
+
         private string sPTOTNOSETL24Field;
-        
+
         private string sPTOTNOSETL36Field;
-        
+
         private string sPTSMRSETTELField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNODEL {
@@ -7590,7 +7589,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNODELField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPVALDEL {
@@ -7601,7 +7600,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPVALDELField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTSMRTELDEL {
@@ -7612,7 +7611,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTSMRTELDELField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNOACTTEL {
@@ -7623,7 +7622,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNOACTTELField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPBALACTTEL {
@@ -7634,7 +7633,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPBALACTTELField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTSMRTEL {
@@ -7645,7 +7644,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTSMRTELField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTOTNOACTTEL {
@@ -7656,7 +7655,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTOTNOACTTELField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNOINACTTELL12 {
@@ -7667,7 +7666,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNOINACTTELL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNOINACTTELL24 {
@@ -7678,7 +7677,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNOINACTTELL24Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPNOINACTTEL36 {
@@ -7689,7 +7688,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPNOINACTTEL36Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTOTNOSET {
@@ -7700,7 +7699,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTOTNOSETField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTOTNOSETL12 {
@@ -7711,7 +7710,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTOTNOSETL12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTOTNOSETL24 {
@@ -7722,7 +7721,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTOTNOSETL24Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTOTNOSETL36 {
@@ -7733,7 +7732,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPTOTNOSETL36Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPTSMRSETTEL {
@@ -7745,7 +7744,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -7753,307 +7752,307 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummaryPremiumValueDataAdditDelphiBlocksBespokeBlock {
-        
+
         private string b1Field;
-        
+
         private string b2Field;
-        
+
         private string b3Field;
-        
+
         private string b4Field;
-        
+
         private string b5Field;
-        
+
         private string b6Field;
-        
+
         private string b7Field;
-        
+
         private string b8Field;
-        
+
         private string b9Field;
-        
+
         private string b10Field;
-        
+
         private string b11Field;
-        
+
         private string b12Field;
-        
+
         private string b13Field;
-        
+
         private string b14Field;
-        
+
         private string b15Field;
-        
+
         private string b16Field;
-        
+
         private string b17Field;
-        
+
         private string b18Field;
-        
+
         private string b19Field;
-        
+
         private string b20Field;
-        
+
         private string b21Field;
-        
+
         private string b22Field;
-        
+
         private string b23Field;
-        
+
         private string b24Field;
-        
+
         private string b25Field;
-        
+
         private string b26Field;
-        
+
         private string b27Field;
-        
+
         private string b28Field;
-        
+
         private string b29Field;
-        
+
         private string b30Field;
-        
+
         private string b31Field;
-        
+
         private string b32Field;
-        
+
         private string b33Field;
-        
+
         private string b34Field;
-        
+
         private string b35Field;
-        
+
         private string b36Field;
-        
+
         private string b37Field;
-        
+
         private string b38Field;
-        
+
         private string b39Field;
-        
+
         private string b40Field;
-        
+
         private string b41Field;
-        
+
         private string b42Field;
-        
+
         private string b43Field;
-        
+
         private string b44Field;
-        
+
         private string b45Field;
-        
+
         private string b46Field;
-        
+
         private string b47Field;
-        
+
         private string b48Field;
-        
+
         private string b49Field;
-        
+
         private string b50Field;
-        
+
         private string b51Field;
-        
+
         private string b52Field;
-        
+
         private string b53Field;
-        
+
         private string b54Field;
-        
+
         private string b55Field;
-        
+
         private string b56Field;
-        
+
         private string b57Field;
-        
+
         private string b58Field;
-        
+
         private string b59Field;
-        
+
         private string b60Field;
-        
+
         private string b61Field;
-        
+
         private string b62Field;
-        
+
         private string b63Field;
-        
+
         private string b64Field;
-        
+
         private string b65Field;
-        
+
         private string b66Field;
-        
+
         private string b67Field;
-        
+
         private string b68Field;
-        
+
         private string b69Field;
-        
+
         private string b70Field;
-        
+
         private string b71Field;
-        
+
         private string b72Field;
-        
+
         private string b73Field;
-        
+
         private string b74Field;
-        
+
         private string b75Field;
-        
+
         private string b76Field;
-        
+
         private string b77Field;
-        
+
         private string b78Field;
-        
+
         private string b79Field;
-        
+
         private string b80Field;
-        
+
         private string b81Field;
-        
+
         private string b82Field;
-        
+
         private string b83Field;
-        
+
         private string b84Field;
-        
+
         private string b85Field;
-        
+
         private string b86Field;
-        
+
         private string b87Field;
-        
+
         private string b88Field;
-        
+
         private string b89Field;
-        
+
         private string b90Field;
-        
+
         private string b91Field;
-        
+
         private string b92Field;
-        
+
         private string b93Field;
-        
+
         private string b94Field;
-        
+
         private string b95Field;
-        
+
         private string b96Field;
-        
+
         private string b97Field;
-        
+
         private string b98Field;
-        
+
         private string b99Field;
-        
+
         private string b100Field;
-        
+
         private string b101Field;
-        
+
         private string b102Field;
-        
+
         private string b103Field;
-        
+
         private string b104Field;
-        
+
         private string b105Field;
-        
+
         private string b106Field;
-        
+
         private string b107Field;
-        
+
         private string b108Field;
-        
+
         private string b109Field;
-        
+
         private string b110Field;
-        
+
         private string b111Field;
-        
+
         private string b112Field;
-        
+
         private string b113Field;
-        
+
         private string b114Field;
-        
+
         private string b115Field;
-        
+
         private string b116Field;
-        
+
         private string b117Field;
-        
+
         private string b118Field;
-        
+
         private string b119Field;
-        
+
         private string b120Field;
-        
+
         private string b121Field;
-        
+
         private string b122Field;
-        
+
         private string b123Field;
-        
+
         private string b124Field;
-        
+
         private string b125Field;
-        
+
         private string b126Field;
-        
+
         private string b127Field;
-        
+
         private string b128Field;
-        
+
         private string b129Field;
-        
+
         private string b130Field;
-        
+
         private string b131Field;
-        
+
         private string b132Field;
-        
+
         private string b133Field;
-        
+
         private string b134Field;
-        
+
         private string b135Field;
-        
+
         private string b136Field;
-        
+
         private string b137Field;
-        
+
         private string b138Field;
-        
+
         private string b139Field;
-        
+
         private string b140Field;
-        
+
         private string b141Field;
-        
+
         private string b142Field;
-        
+
         private string b143Field;
-        
+
         private string b144Field;
-        
+
         private string b145Field;
-        
+
         private string b146Field;
-        
+
         private string b147Field;
-        
+
         private string b148Field;
-        
+
         private string b149Field;
-        
+
         private string b150Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B1 {
@@ -8064,7 +8063,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B2 {
@@ -8075,7 +8074,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B3 {
@@ -8086,7 +8085,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B4 {
@@ -8097,7 +8096,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B5 {
@@ -8108,7 +8107,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B6 {
@@ -8119,7 +8118,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b6Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B7 {
@@ -8130,7 +8129,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b7Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B8 {
@@ -8141,7 +8140,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b8Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B9 {
@@ -8152,7 +8151,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b9Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B10 {
@@ -8163,7 +8162,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B11 {
@@ -8174,7 +8173,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B12 {
@@ -8185,7 +8184,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B13 {
@@ -8196,7 +8195,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b13Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B14 {
@@ -8207,7 +8206,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b14Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B15 {
@@ -8218,7 +8217,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b15Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B16 {
@@ -8229,7 +8228,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b16Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B17 {
@@ -8240,7 +8239,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b17Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B18 {
@@ -8251,7 +8250,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b18Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B19 {
@@ -8262,7 +8261,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b19Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B20 {
@@ -8273,7 +8272,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b20Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B21 {
@@ -8284,7 +8283,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b21Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B22 {
@@ -8295,7 +8294,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b22Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B23 {
@@ -8306,7 +8305,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b23Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B24 {
@@ -8317,7 +8316,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b24Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B25 {
@@ -8328,7 +8327,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b25Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B26 {
@@ -8339,7 +8338,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b26Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B27 {
@@ -8350,7 +8349,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b27Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B28 {
@@ -8361,7 +8360,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b28Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B29 {
@@ -8372,7 +8371,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b29Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B30 {
@@ -8383,7 +8382,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b30Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B31 {
@@ -8394,7 +8393,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b31Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B32 {
@@ -8405,7 +8404,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b32Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B33 {
@@ -8416,7 +8415,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b33Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B34 {
@@ -8427,7 +8426,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b34Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B35 {
@@ -8438,7 +8437,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b35Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B36 {
@@ -8449,7 +8448,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b36Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B37 {
@@ -8460,7 +8459,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b37Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B38 {
@@ -8471,7 +8470,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b38Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B39 {
@@ -8482,7 +8481,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b39Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B40 {
@@ -8493,7 +8492,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b40Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B41 {
@@ -8504,7 +8503,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b41Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B42 {
@@ -8515,7 +8514,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b42Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B43 {
@@ -8526,7 +8525,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b43Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B44 {
@@ -8537,7 +8536,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b44Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B45 {
@@ -8548,7 +8547,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b45Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B46 {
@@ -8559,7 +8558,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b46Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B47 {
@@ -8570,7 +8569,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b47Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B48 {
@@ -8581,7 +8580,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b48Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B49 {
@@ -8592,7 +8591,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b49Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B50 {
@@ -8603,7 +8602,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b50Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B51 {
@@ -8614,7 +8613,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b51Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B52 {
@@ -8625,7 +8624,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b52Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B53 {
@@ -8636,7 +8635,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b53Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B54 {
@@ -8647,7 +8646,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b54Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B55 {
@@ -8658,7 +8657,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b55Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B56 {
@@ -8669,7 +8668,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b56Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B57 {
@@ -8680,7 +8679,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b57Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B58 {
@@ -8691,7 +8690,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b58Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B59 {
@@ -8702,7 +8701,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b59Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B60 {
@@ -8713,7 +8712,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b60Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B61 {
@@ -8724,7 +8723,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b61Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B62 {
@@ -8735,7 +8734,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b62Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B63 {
@@ -8746,7 +8745,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b63Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B64 {
@@ -8757,7 +8756,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b64Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B65 {
@@ -8768,7 +8767,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b65Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B66 {
@@ -8779,7 +8778,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b66Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B67 {
@@ -8790,7 +8789,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b67Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B68 {
@@ -8801,7 +8800,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b68Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B69 {
@@ -8812,7 +8811,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b69Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B70 {
@@ -8823,7 +8822,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b70Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B71 {
@@ -8834,7 +8833,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b71Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B72 {
@@ -8845,7 +8844,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b72Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B73 {
@@ -8856,7 +8855,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b73Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B74 {
@@ -8867,7 +8866,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b74Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B75 {
@@ -8878,7 +8877,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b75Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B76 {
@@ -8889,7 +8888,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b76Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B77 {
@@ -8900,7 +8899,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b77Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B78 {
@@ -8911,7 +8910,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b78Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B79 {
@@ -8922,7 +8921,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b79Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B80 {
@@ -8933,7 +8932,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b80Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B81 {
@@ -8944,7 +8943,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b81Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B82 {
@@ -8955,7 +8954,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b82Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B83 {
@@ -8966,7 +8965,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b83Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B84 {
@@ -8977,7 +8976,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b84Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B85 {
@@ -8988,7 +8987,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b85Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B86 {
@@ -8999,7 +8998,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b86Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B87 {
@@ -9010,7 +9009,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b87Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B88 {
@@ -9021,7 +9020,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b88Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B89 {
@@ -9032,7 +9031,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b89Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B90 {
@@ -9043,7 +9042,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b90Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B91 {
@@ -9054,7 +9053,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b91Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B92 {
@@ -9065,7 +9064,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b92Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B93 {
@@ -9076,7 +9075,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b93Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B94 {
@@ -9087,7 +9086,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b94Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B95 {
@@ -9098,7 +9097,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b95Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B96 {
@@ -9109,7 +9108,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b96Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B97 {
@@ -9120,7 +9119,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b97Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B98 {
@@ -9131,7 +9130,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b98Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B99 {
@@ -9142,7 +9141,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b99Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B100 {
@@ -9153,7 +9152,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b100Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B101 {
@@ -9164,7 +9163,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b101Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B102 {
@@ -9175,7 +9174,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b102Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B103 {
@@ -9186,7 +9185,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b103Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B104 {
@@ -9197,7 +9196,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b104Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B105 {
@@ -9208,7 +9207,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b105Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B106 {
@@ -9219,7 +9218,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b106Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B107 {
@@ -9230,7 +9229,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b107Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B108 {
@@ -9241,7 +9240,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b108Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B109 {
@@ -9252,7 +9251,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b109Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B110 {
@@ -9263,7 +9262,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b110Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B111 {
@@ -9274,7 +9273,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b111Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B112 {
@@ -9285,7 +9284,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b112Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B113 {
@@ -9296,7 +9295,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b113Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B114 {
@@ -9307,7 +9306,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b114Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B115 {
@@ -9318,7 +9317,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b115Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B116 {
@@ -9329,7 +9328,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b116Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B117 {
@@ -9340,7 +9339,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b117Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B118 {
@@ -9351,7 +9350,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b118Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B119 {
@@ -9362,7 +9361,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b119Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B120 {
@@ -9373,7 +9372,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b120Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B121 {
@@ -9384,7 +9383,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b121Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B122 {
@@ -9395,7 +9394,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b122Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B123 {
@@ -9406,7 +9405,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b123Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B124 {
@@ -9417,7 +9416,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b124Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B125 {
@@ -9428,7 +9427,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b125Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B126 {
@@ -9439,7 +9438,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b126Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B127 {
@@ -9450,7 +9449,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b127Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B128 {
@@ -9461,7 +9460,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b128Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B129 {
@@ -9472,7 +9471,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b129Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B130 {
@@ -9483,7 +9482,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b130Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B131 {
@@ -9494,7 +9493,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b131Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B132 {
@@ -9505,7 +9504,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b132Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B133 {
@@ -9516,7 +9515,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b133Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B134 {
@@ -9527,7 +9526,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b134Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B135 {
@@ -9538,7 +9537,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b135Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B136 {
@@ -9549,7 +9548,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b136Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B137 {
@@ -9560,7 +9559,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b137Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B138 {
@@ -9571,7 +9570,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b138Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B139 {
@@ -9582,7 +9581,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b139Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B140 {
@@ -9593,7 +9592,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b140Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B141 {
@@ -9604,7 +9603,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b141Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B142 {
@@ -9615,7 +9614,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b142Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B143 {
@@ -9626,7 +9625,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b143Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B144 {
@@ -9637,7 +9636,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b144Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B145 {
@@ -9648,7 +9647,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b145Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B146 {
@@ -9659,7 +9658,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b146Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B147 {
@@ -9670,7 +9669,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b147Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B148 {
@@ -9681,7 +9680,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b148Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B149 {
@@ -9692,7 +9691,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.b149Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string B150 {
@@ -9704,7 +9703,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9712,25 +9711,25 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummary {
-        
+
         private OutputConsumerSummarySummaryElectoralRoll electoralRollField;
-        
+
         private OutputConsumerSummarySummaryPublicInfo publicInfoField;
-        
+
         private OutputConsumerSummarySummaryCAIS cAISField;
-        
+
         private OutputConsumerSummarySummaryCAPS cAPSField;
-        
+
         private OutputConsumerSummarySummaryCIFAS cIFASField;
-        
+
         private OutputConsumerSummarySummaryCML cMLField;
-        
+
         private OutputConsumerSummarySummaryGAIN gAINField;
-        
+
         private OutputConsumerSummarySummaryNOC nOCField;
-        
+
         private OutputConsumerSummarySummaryTPD tPDField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryElectoralRoll ElectoralRoll {
@@ -9741,7 +9740,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.electoralRollField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryPublicInfo PublicInfo {
@@ -9752,7 +9751,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.publicInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryCAIS CAIS {
@@ -9763,7 +9762,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAISField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryCAPS CAPS {
@@ -9774,7 +9773,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAPSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryCIFAS CIFAS {
@@ -9785,7 +9784,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cIFASField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryCML CML {
@@ -9796,7 +9795,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cMLField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryGAIN GAIN {
@@ -9807,7 +9806,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.gAINField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryNOC NOC {
@@ -9818,7 +9817,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nOCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputConsumerSummarySummaryTPD TPD {
@@ -9830,7 +9829,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9838,75 +9837,75 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryElectoralRoll {
-        
+
         private string e4Q01Field;
-        
+
         private string e4Q02Field;
-        
+
         private string e4Q03Field;
-        
+
         private string e4Q04Field;
-        
+
         private string e4Q05Field;
-        
+
         private string e4Q06Field;
-        
+
         private string e4Q07Field;
-        
+
         private string e4Q08Field;
-        
+
         private string e4Q09Field;
-        
+
         private string e4Q10Field;
-        
+
         private string e4Q11Field;
-        
+
         private string e4Q12Field;
-        
+
         private string e4Q13Field;
-        
+
         private string e4Q14Field;
-        
+
         private string e4Q15Field;
-        
+
         private string e4Q16Field;
-        
+
         private string e4Q17Field;
-        
+
         private string e4Q18Field;
-        
+
         private string e4R01Field;
-        
+
         private string e4R02Field;
-        
+
         private string e4R03Field;
-        
+
         private string eA4R01PMField;
-        
+
         private string eA4R01CJField;
-        
+
         private string eA4R01PJField;
-        
+
         private string nDERL01Field;
-        
+
         private string nDERL02Field;
-        
+
         private string eA2Q01Field;
-        
+
         private string eA2Q02Field;
-        
+
         private string nDERLMACAField;
-        
+
         private string nDERLMAPAField;
-        
+
         private string nDERLJACAField;
-        
+
         private string nDERLJAPAField;
-        
+
         private string eA5U01Field;
-        
+
         private string eA5U02Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q01 {
@@ -9917,7 +9916,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q02 {
@@ -9928,7 +9927,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q03 {
@@ -9939,7 +9938,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q04 {
@@ -9950,7 +9949,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q05 {
@@ -9961,7 +9960,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q06 {
@@ -9972,7 +9971,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q07 {
@@ -9983,7 +9982,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q08 {
@@ -9994,7 +9993,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q09 {
@@ -10005,7 +10004,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q10 {
@@ -10016,7 +10015,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q11 {
@@ -10027,7 +10026,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q12 {
@@ -10038,7 +10037,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q13 {
@@ -10049,7 +10048,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q13Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q14 {
@@ -10060,7 +10059,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q14Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q15 {
@@ -10071,7 +10070,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q15Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q16 {
@@ -10082,7 +10081,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q16Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q17 {
@@ -10093,7 +10092,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q17Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4Q18 {
@@ -10104,7 +10103,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4Q18Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4R01 {
@@ -10115,7 +10114,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4R01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4R02 {
@@ -10126,7 +10125,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4R02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E4R03 {
@@ -10137,7 +10136,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e4R03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4R01PM {
@@ -10148,7 +10147,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4R01PMField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4R01CJ {
@@ -10159,7 +10158,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4R01CJField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4R01PJ {
@@ -10170,7 +10169,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4R01PJField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDERL01 {
@@ -10181,7 +10180,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDERL01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDERL02 {
@@ -10192,7 +10191,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDERL02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2Q01 {
@@ -10203,7 +10202,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2Q01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2Q02 {
@@ -10214,7 +10213,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2Q02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDERLMACA {
@@ -10225,7 +10224,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDERLMACAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDERLMAPA {
@@ -10236,7 +10235,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDERLMAPAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDERLJACA {
@@ -10247,7 +10246,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDERLJACAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDERLJAPA {
@@ -10258,7 +10257,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDERLJAPAField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA5U01 {
@@ -10269,7 +10268,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA5U01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA5U02 {
@@ -10281,7 +10280,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10289,41 +10288,41 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryPublicInfo {
-        
+
         private string e1A01Field;
-        
+
         private string e1A02Field;
-        
+
         private string e1A03Field;
-        
+
         private string eA1C01Field;
-        
+
         private string eA1D01Field;
-        
+
         private string eA1D02Field;
-        
+
         private string eA1D03Field;
-        
+
         private string e2G01Field;
-        
+
         private string e2G02Field;
-        
+
         private string e2G03Field;
-        
+
         private string eA2I01Field;
-        
+
         private string eA2J01Field;
-        
+
         private string eA2J02Field;
-        
+
         private string eA2J03Field;
-        
+
         private string eA4Q06Field;
-        
+
         private string sPBRPRESENTField;
-        
+
         private string sPABRPRESENTField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A01 {
@@ -10334,7 +10333,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A02 {
@@ -10345,7 +10344,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A03 {
@@ -10356,7 +10355,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1C01 {
@@ -10367,7 +10366,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1C01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1D01 {
@@ -10378,7 +10377,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1D01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1D02 {
@@ -10389,7 +10388,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1D02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1D03 {
@@ -10400,7 +10399,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1D03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G01 {
@@ -10411,7 +10410,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G02 {
@@ -10422,7 +10421,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G03 {
@@ -10433,7 +10432,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2I01 {
@@ -10444,7 +10443,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2I01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2J01 {
@@ -10455,7 +10454,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2J01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2J02 {
@@ -10466,7 +10465,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2J02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2J03 {
@@ -10477,7 +10476,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2J03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q06 {
@@ -10488,7 +10487,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPBRPRESENT {
@@ -10499,7 +10498,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sPBRPRESENTField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SPABRPRESENT {
@@ -10511,7 +10510,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10519,201 +10518,201 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryCAIS {
-        
+
         private string e1A04Field;
-        
+
         private string e1A05Field;
-        
+
         private string e1A06Field;
-        
+
         private string e1A07Field;
-        
+
         private string e1A08Field;
-        
+
         private string e1A09Field;
-        
+
         private string e1A10Field;
-        
+
         private string e1A11Field;
-        
+
         private string e1B01Field;
-        
+
         private string e1B02Field;
-        
+
         private string e1B03Field;
-        
+
         private string e1B04Field;
-        
+
         private string e1B05Field;
-        
+
         private string e1B06Field;
-        
+
         private string e1B07Field;
-        
+
         private string e1B08Field;
-        
+
         private string e1B09Field;
-        
+
         private string e1B10Field;
-        
+
         private string e1B11Field;
-        
+
         private string e1B12Field;
-        
+
         private string e1B13Field;
-        
+
         private string nDECC01Field;
-        
+
         private string nDECC02Field;
-        
+
         private string nDECC03Field;
-        
+
         private string nDECC04Field;
-        
+
         private string nDECC07Field;
-        
+
         private string nDECC08Field;
-        
+
         private string e1C01Field;
-        
+
         private string e1C02Field;
-        
+
         private string e1C03Field;
-        
+
         private string e1C04Field;
-        
+
         private string e1C05Field;
-        
+
         private string e1C06Field;
-        
+
         private string eA1B02Field;
-        
+
         private string e1D01Field;
-        
+
         private string e1D02Field;
-        
+
         private string e1D03Field;
-        
+
         private string e1D04Field;
-        
+
         private string nDHAC01Field;
-        
+
         private string nDHAC02Field;
-        
+
         private string nDHAC03Field;
-        
+
         private string nDHAC04Field;
-        
+
         private string nDHAC05Field;
-        
+
         private string nDHAC09Field;
-        
+
         private string nDINC01Field;
-        
+
         private string eA1F01Field;
-        
+
         private string eA1F02Field;
-        
+
         private string eA1F03Field;
-        
+
         private string nDFCS01Field;
-        
+
         private string eA1F04Field;
-        
+
         private string e2G04Field;
-        
+
         private string e2G05Field;
-        
+
         private string e2G06Field;
-        
+
         private string e2G07Field;
-        
+
         private string e2G08Field;
-        
+
         private string e2G09Field;
-        
+
         private string e2G10Field;
-        
+
         private string e2G11Field;
-        
+
         private string e2H01Field;
-        
+
         private string e2H02Field;
-        
+
         private string e2H03Field;
-        
+
         private string e2H04Field;
-        
+
         private string e2H05Field;
-        
+
         private string e2H06Field;
-        
+
         private string e2H07Field;
-        
+
         private string e2H08Field;
-        
+
         private string e2H09Field;
-        
+
         private string e2H10Field;
-        
+
         private string e2H11Field;
-        
+
         private string e2H12Field;
-        
+
         private string e2H13Field;
-        
+
         private string nDECC05Field;
-        
+
         private string nDECC09Field;
-        
+
         private string nDECC10Field;
-        
+
         private string e2I01Field;
-        
+
         private string e2I02Field;
-        
+
         private string e2I03Field;
-        
+
         private string e2I04Field;
-        
+
         private string e2I05Field;
-        
+
         private string e2I06Field;
-        
+
         private string eA2H02Field;
-        
+
         private string e2J01Field;
-        
+
         private string e2J02Field;
-        
+
         private string e2J03Field;
-        
+
         private string e2J04Field;
-        
+
         private string nDHAC10Field;
-        
+
         private string nDHAC06Field;
-        
+
         private string nDHAC07Field;
-        
+
         private string nDHAC08Field;
-        
+
         private string nDINC02Field;
-        
+
         private string eA2L01Field;
-        
+
         private string eA2L02Field;
-        
+
         private string eA2L03Field;
-        
+
         private string nDFCS02Field;
-        
+
         private string eA2L04Field;
-        
+
         private string nDECC06Field;
-        
+
         private string nDINC03Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A04 {
@@ -10724,7 +10723,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A05 {
@@ -10735,7 +10734,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A06 {
@@ -10746,7 +10745,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A07 {
@@ -10757,7 +10756,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A08 {
@@ -10768,7 +10767,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A09 {
@@ -10779,7 +10778,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A10 {
@@ -10790,7 +10789,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1A11 {
@@ -10801,7 +10800,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1A11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B01 {
@@ -10812,7 +10811,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B02 {
@@ -10823,7 +10822,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B03 {
@@ -10834,7 +10833,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B04 {
@@ -10845,7 +10844,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B05 {
@@ -10856,7 +10855,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B06 {
@@ -10867,7 +10866,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B07 {
@@ -10878,7 +10877,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B08 {
@@ -10889,7 +10888,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B09 {
@@ -10900,7 +10899,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B10 {
@@ -10911,7 +10910,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B11 {
@@ -10922,7 +10921,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B12 {
@@ -10933,7 +10932,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1B13 {
@@ -10944,7 +10943,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1B13Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC01 {
@@ -10955,7 +10954,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC02 {
@@ -10966,7 +10965,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC03 {
@@ -10977,7 +10976,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC04 {
@@ -10988,7 +10987,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC07 {
@@ -10999,7 +10998,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC08 {
@@ -11010,7 +11009,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1C01 {
@@ -11021,7 +11020,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1C01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1C02 {
@@ -11032,7 +11031,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1C02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1C03 {
@@ -11043,7 +11042,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1C03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1C04 {
@@ -11054,7 +11053,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1C04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1C05 {
@@ -11065,7 +11064,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1C05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1C06 {
@@ -11076,7 +11075,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1C06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1B02 {
@@ -11087,7 +11086,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1B02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1D01 {
@@ -11098,7 +11097,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1D01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1D02 {
@@ -11109,7 +11108,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1D02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1D03 {
@@ -11120,7 +11119,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1D03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1D04 {
@@ -11131,7 +11130,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1D04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC01 {
@@ -11142,7 +11141,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC02 {
@@ -11153,7 +11152,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC03 {
@@ -11164,7 +11163,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC04 {
@@ -11175,7 +11174,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC05 {
@@ -11186,7 +11185,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC09 {
@@ -11197,7 +11196,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDINC01 {
@@ -11208,7 +11207,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDINC01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1F01 {
@@ -11219,7 +11218,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1F01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1F02 {
@@ -11230,7 +11229,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1F02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1F03 {
@@ -11241,7 +11240,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1F03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDFCS01 {
@@ -11252,7 +11251,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDFCS01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1F04 {
@@ -11263,7 +11262,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1F04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G04 {
@@ -11274,7 +11273,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G05 {
@@ -11285,7 +11284,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G06 {
@@ -11296,7 +11295,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G07 {
@@ -11307,7 +11306,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G08 {
@@ -11318,7 +11317,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G09 {
@@ -11329,7 +11328,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G10 {
@@ -11340,7 +11339,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2G11 {
@@ -11351,7 +11350,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2G11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H01 {
@@ -11362,7 +11361,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H02 {
@@ -11373,7 +11372,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H03 {
@@ -11384,7 +11383,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H04 {
@@ -11395,7 +11394,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H05 {
@@ -11406,7 +11405,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H06 {
@@ -11417,7 +11416,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H07 {
@@ -11428,7 +11427,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H08 {
@@ -11439,7 +11438,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H09 {
@@ -11450,7 +11449,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H10 {
@@ -11461,7 +11460,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H11 {
@@ -11472,7 +11471,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H12 {
@@ -11483,7 +11482,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H12Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2H13 {
@@ -11494,7 +11493,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2H13Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC05 {
@@ -11505,7 +11504,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC09 {
@@ -11516,7 +11515,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC10 {
@@ -11527,7 +11526,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2I01 {
@@ -11538,7 +11537,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2I01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2I02 {
@@ -11549,7 +11548,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2I02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2I03 {
@@ -11560,7 +11559,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2I03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2I04 {
@@ -11571,7 +11570,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2I04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2I05 {
@@ -11582,7 +11581,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2I05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2I06 {
@@ -11593,7 +11592,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2I06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2H02 {
@@ -11604,7 +11603,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2H02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2J01 {
@@ -11615,7 +11614,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2J01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2J02 {
@@ -11626,7 +11625,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2J02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2J03 {
@@ -11637,7 +11636,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2J03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2J04 {
@@ -11648,7 +11647,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2J04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC10 {
@@ -11659,7 +11658,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC06 {
@@ -11670,7 +11669,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC07 {
@@ -11681,7 +11680,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDHAC08 {
@@ -11692,7 +11691,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDHAC08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDINC02 {
@@ -11703,7 +11702,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDINC02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2L01 {
@@ -11714,7 +11713,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2L01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2L02 {
@@ -11725,7 +11724,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2L02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2L03 {
@@ -11736,7 +11735,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2L03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDFCS02 {
@@ -11747,7 +11746,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDFCS02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2L04 {
@@ -11758,7 +11757,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2L04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDECC06 {
@@ -11769,7 +11768,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDECC06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDINC03 {
@@ -11781,7 +11780,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11789,57 +11788,57 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryCAPS {
-        
+
         private string e1E01Field;
-        
+
         private string e1E02Field;
-        
+
         private string eA1B01Field;
-        
+
         private string nDPSD01Field;
-        
+
         private string nDPSD02Field;
-        
+
         private string nDPSD03Field;
-        
+
         private string nDPSD04Field;
-        
+
         private string nDPSD05Field;
-        
+
         private string nDPSD06Field;
-        
+
         private string eA1E01Field;
-        
+
         private string eA1E02Field;
-        
+
         private string eA1E03Field;
-        
+
         private string eA1E04Field;
-        
+
         private string e2K01Field;
-        
+
         private string e2K02Field;
-        
+
         private string eA2H01Field;
-        
+
         private string nDPSD07Field;
-        
+
         private string nDPSD08Field;
-        
+
         private string nDPSD09Field;
-        
+
         private string nDPSD10Field;
-        
+
         private string eA2K01Field;
-        
+
         private string eA2K02Field;
-        
+
         private string eA2K03Field;
-        
+
         private string eA2K04Field;
-        
+
         private string nDPSD11Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1E01 {
@@ -11850,7 +11849,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1E01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E1E02 {
@@ -11861,7 +11860,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e1E02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1B01 {
@@ -11872,7 +11871,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1B01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD01 {
@@ -11883,7 +11882,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD02 {
@@ -11894,7 +11893,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD03 {
@@ -11905,7 +11904,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD04 {
@@ -11916,7 +11915,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD05 {
@@ -11927,7 +11926,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD05Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD06 {
@@ -11938,7 +11937,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD06Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1E01 {
@@ -11949,7 +11948,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1E01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1E02 {
@@ -11960,7 +11959,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1E02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1E03 {
@@ -11971,7 +11970,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1E03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1E04 {
@@ -11982,7 +11981,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1E04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2K01 {
@@ -11993,7 +11992,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2K01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string E2K02 {
@@ -12004,7 +12003,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.e2K02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2H01 {
@@ -12015,7 +12014,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2H01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD07 {
@@ -12026,7 +12025,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD08 {
@@ -12037,7 +12036,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD09 {
@@ -12048,7 +12047,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD10 {
@@ -12059,7 +12058,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nDPSD10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2K01 {
@@ -12070,7 +12069,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2K01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2K02 {
@@ -12081,7 +12080,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2K02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2K03 {
@@ -12092,7 +12091,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2K03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2K04 {
@@ -12103,7 +12102,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2K04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDPSD11 {
@@ -12115,7 +12114,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12123,13 +12122,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryCIFAS {
-        
+
         private string eA1A01Field;
-        
+
         private string eA2G01Field;
-        
+
         private string eA4P01Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1A01 {
@@ -12140,7 +12139,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1A01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2G01 {
@@ -12151,7 +12150,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2G01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4P01 {
@@ -12163,7 +12162,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12171,11 +12170,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryCML {
-        
+
         private string eA1C02Field;
-        
+
         private string eA2I02Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1C02 {
@@ -12186,7 +12185,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1C02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2I02 {
@@ -12198,7 +12197,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12206,15 +12205,15 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryGAIN {
-        
+
         private string eA1G01Field;
-        
+
         private string eA1G02Field;
-        
+
         private string eA2M01Field;
-        
+
         private string eA2M02Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1G01 {
@@ -12225,7 +12224,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1G01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA1G02 {
@@ -12236,7 +12235,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA1G02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2M01 {
@@ -12247,7 +12246,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA2M01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA2M02 {
@@ -12259,7 +12258,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12267,27 +12266,27 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryNOC {
-        
+
         private string eA4Q07Field;
-        
+
         private string eA4Q08Field;
-        
+
         private string eA4Q09Field;
-        
+
         private string eA4Q10Field;
-        
+
         private string eA4Q11Field;
-        
+
         private string eA4Q01Field;
-        
+
         private string eA4Q02Field;
-        
+
         private string eA4Q03Field;
-        
+
         private string eA4Q04Field;
-        
+
         private string eA4Q05Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q07 {
@@ -12298,7 +12297,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q07Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q08 {
@@ -12309,7 +12308,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q08Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q09 {
@@ -12320,7 +12319,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q09Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q10 {
@@ -12331,7 +12330,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q10Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q11 {
@@ -12342,7 +12341,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q11Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q01 {
@@ -12353,7 +12352,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q01Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q02 {
@@ -12364,7 +12363,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q02Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q03 {
@@ -12375,7 +12374,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q03Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q04 {
@@ -12386,7 +12385,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.eA4Q04Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EA4Q05 {
@@ -12398,7 +12397,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12406,9 +12405,9 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputConsumerSummarySummaryTPD {
-        
+
         private string nDOPTOUTField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NDOPTOUT {
@@ -12420,7 +12419,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12428,25 +12427,25 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputControl {
-        
+
         private string experianReferenceField;
-        
+
         private string clientAccountNumberField;
-        
+
         private string clientBranchNumberField;
-        
+
         private string userIdentityField;
-        
+
         private string testDatabaseField;
-        
+
         private string reprocessFlagField;
-        
+
         private string clientRefField;
-        
+
         private string jobNumberField;
-        
+
         private OutputControlParameters parametersField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ExperianReference {
@@ -12457,7 +12456,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.experianReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientAccountNumber {
@@ -12468,7 +12467,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientBranchNumber {
@@ -12479,7 +12478,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientBranchNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string UserIdentity {
@@ -12490,7 +12489,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.userIdentityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TestDatabase {
@@ -12501,7 +12500,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.testDatabaseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ReprocessFlag {
@@ -12512,7 +12511,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.reprocessFlagField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientRef {
@@ -12523,7 +12522,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientRefField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JobNumber {
@@ -12534,7 +12533,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.jobNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputControlParameters Parameters {
@@ -12546,7 +12545,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12554,33 +12553,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputControlParameters {
-        
+
         private string interactiveModeField;
-        
+
         private string fullFBLRequiredField;
-        
+
         private string authPlusRequiredField;
-        
+
         private string authPSRequiredField;
-        
+
         private string detectRequiredField;
-        
+
         private string testModeField;
-        
+
         private string showConsumerField;
-        
+
         private string showDetectField;
-        
+
         private string showAuthenticateField;
-        
+
         private string showAuthPSv2Field;
-        
+
         private string showAddressField;
-        
+
         private string showCaseHistoryField;
-        
+
         private string showHHOField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InteractiveMode {
@@ -12591,7 +12590,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.interactiveModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FullFBLRequired {
@@ -12602,7 +12601,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.fullFBLRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPlusRequired {
@@ -12613,7 +12612,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authPlusRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthPSRequired {
@@ -12624,7 +12623,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authPSRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DetectRequired {
@@ -12635,7 +12634,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.detectRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TestMode {
@@ -12646,7 +12645,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.testModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowConsumer {
@@ -12657,7 +12656,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showConsumerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowDetect {
@@ -12668,7 +12667,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showDetectField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAuthenticate {
@@ -12679,7 +12678,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showAuthenticateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAuthPSv2 {
@@ -12690,7 +12689,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showAuthPSv2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowAddress {
@@ -12701,7 +12700,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowCaseHistory {
@@ -12712,7 +12711,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.showCaseHistoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ShowHHO {
@@ -12724,7 +12723,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12732,17 +12731,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputDetect {
-        
+
         private string creditScoreField;
-        
+
         private string fraudIndexField;
-        
+
         private string authenticateIndexField;
-        
+
         private string appScoreField;
-        
+
         private OutputDetectRules[] rulesField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CreditScore {
@@ -12753,7 +12752,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.creditScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FraudIndex {
@@ -12764,7 +12763,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.fraudIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AuthenticateIndex {
@@ -12775,7 +12774,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.authenticateIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AppScore {
@@ -12786,7 +12785,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.appScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Rules", Form=XmlSchemaForm.Unqualified)]
         public OutputDetectRules[] Rules {
@@ -12798,7 +12797,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12806,11 +12805,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputDetectRules {
-        
+
         private string numberOfRulesField;
-        
+
         private string[] ruleIndicatorField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumberOfRules {
@@ -12821,7 +12820,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numberOfRulesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RuleIndicator", Form=XmlSchemaForm.Unqualified)]
         public string[] RuleIndicator {
@@ -12833,7 +12832,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12841,13 +12840,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputError {
-        
+
         private string errorCodeField;
-        
+
         private string messageField;
-        
+
         private string severityField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ErrorCode {
@@ -12858,7 +12857,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Message {
@@ -12869,7 +12868,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Severity {
@@ -12881,7 +12880,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12889,13 +12888,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerData {
-        
+
         private OutputFullConsumerDataConsumerDataSummary consumerDataSummaryField;
-        
+
         private OutputFullConsumerDataConsumerData consumerDataField;
-        
+
         private OutputFullConsumerDataControlDetails controlDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummary ConsumerDataSummary {
@@ -12906,7 +12905,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.consumerDataSummaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerData ConsumerData {
@@ -12917,7 +12916,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.consumerDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataControlDetails ControlDetails {
@@ -12929,7 +12928,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12937,13 +12936,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSummary {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetails summaryDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -12954,7 +12953,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -12965,7 +12964,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetails SummaryDetails {
@@ -12977,7 +12976,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12985,27 +12984,27 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetails {
-        
+
         private string dataOverflowField;
-        
+
         private string delphiScoreField;
-        
+
         private string delphiTextField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsPublicInfoSummary publicInfoSummaryField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummary cAISSummaryField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsSummaryFlags summaryFlagsField;
-        
+
         private string noCCountField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsNoCReferences[] noCReferencesField;
-        
+
         private string locationConfirmCntField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsLocationConfirm[] locationConfirmField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DataOverflow {
@@ -13016,7 +13015,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dataOverflowField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DelphiScore {
@@ -13027,7 +13026,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.delphiScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DelphiText {
@@ -13038,7 +13037,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.delphiTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsPublicInfoSummary PublicInfoSummary {
@@ -13049,7 +13048,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.publicInfoSummaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummary CAISSummary {
@@ -13060,7 +13059,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAISSummaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsSummaryFlags SummaryFlags {
@@ -13071,7 +13070,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.summaryFlagsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCCount {
@@ -13082,7 +13081,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NoCReferences", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsNoCReferences[] NoCReferences {
@@ -13093,7 +13092,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferencesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationConfirmCnt {
@@ -13104,7 +13103,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationConfirmCntField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("LocationConfirm", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsLocationConfirm[] LocationConfirm {
@@ -13116,7 +13115,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13124,13 +13123,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsPublicInfoSummary {
-        
+
         private string numberField;
-        
+
         private string totalAmountField;
-        
+
         private string dateOfLatestField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Number {
@@ -13141,7 +13140,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TotalAmount {
@@ -13152,7 +13151,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.totalAmountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DateOfLatest {
@@ -13164,7 +13163,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13172,19 +13171,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummary {
-        
+
         private string numberField;
-        
+
         private string worstCurrentField;
-        
+
         private string worstHistoricalField;
-        
+
         private string totalBalanceField;
-        
+
         private OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummaryCAISPrevSearches cAISPrevSearchesField;
-        
+
         private string goneAwayField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Number {
@@ -13195,7 +13194,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string WorstCurrent {
@@ -13206,7 +13205,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.worstCurrentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string WorstHistorical {
@@ -13217,7 +13216,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.worstHistoricalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TotalBalance {
@@ -13228,7 +13227,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.totalBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummaryCAISPrevSearches CAISPrevSearches {
@@ -13239,7 +13238,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAISPrevSearchesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string GoneAway {
@@ -13251,7 +13250,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13259,15 +13258,15 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsCAISSummaryCAISPrevSearches {
-        
+
         private string numberUpTo3MonthsField;
-        
+
         private string num3To6MonthsField;
-        
+
         private string num6To12MonthsField;
-        
+
         private string totalNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumberUpTo3Months {
@@ -13278,7 +13277,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numberUpTo3MonthsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Num3To6Months {
@@ -13289,7 +13288,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.num3To6MonthsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Num6To12Months {
@@ -13300,7 +13299,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.num6To12MonthsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TotalNumber {
@@ -13312,7 +13311,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13320,45 +13319,45 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsSummaryFlags {
-        
+
         private string cIFASField;
-        
+
         private string cMLField;
-        
+
         private string previousOccupantField;
-        
+
         private string noConfirmAtPrevLocField;
-        
+
         private string arrangementField;
-        
+
         private string reportedDeceasedField;
-        
+
         private string reportedGoneAwayField;
-        
+
         private string claimedOnCreditInsField;
-        
+
         private string debtManagementField;
-        
+
         private string accountQueryField;
-        
+
         private string recourseField;
-        
+
         private string voluntaryTermField;
-        
+
         private string partSettleField;
-        
+
         private string debtAssignField;
-        
+
         private string ownAccountField;
-        
+
         private string ownSearchField;
-        
+
         private string previousLocationField;
-        
+
         private string additionalLocationField;
-        
+
         private string forwardLocationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CIFAS {
@@ -13369,7 +13368,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cIFASField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CML {
@@ -13380,7 +13379,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cMLField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PreviousOccupant {
@@ -13391,7 +13390,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.previousOccupantField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoConfirmAtPrevLoc {
@@ -13402,7 +13401,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noConfirmAtPrevLocField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Arrangement {
@@ -13413,7 +13412,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.arrangementField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ReportedDeceased {
@@ -13424,7 +13423,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.reportedDeceasedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ReportedGoneAway {
@@ -13435,7 +13434,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.reportedGoneAwayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClaimedOnCreditIns {
@@ -13446,7 +13445,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.claimedOnCreditInsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DebtManagement {
@@ -13457,7 +13456,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.debtManagementField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountQuery {
@@ -13468,7 +13467,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountQueryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Recourse {
@@ -13479,7 +13478,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.recourseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string VoluntaryTerm {
@@ -13490,7 +13489,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.voluntaryTermField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PartSettle {
@@ -13501,7 +13500,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.partSettleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DebtAssign {
@@ -13512,7 +13511,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.debtAssignField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnAccount {
@@ -13523,7 +13522,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ownAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnSearch {
@@ -13534,7 +13533,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ownSearchField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PreviousLocation {
@@ -13545,7 +13544,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.previousLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AdditionalLocation {
@@ -13556,7 +13555,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.additionalLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ForwardLocation {
@@ -13568,7 +13567,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13576,9 +13575,9 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsNoCReferences {
-        
+
         private string referenceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Reference {
@@ -13590,7 +13589,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13598,13 +13597,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSummarySummaryDetailsLocationConfirm {
-        
+
         private string locationField;
-        
+
         private string levelField;
-        
+
         private string sourceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Location {
@@ -13615,7 +13614,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Level {
@@ -13626,7 +13625,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.levelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Source {
@@ -13638,7 +13637,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13646,33 +13645,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerData {
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollLocation[] votersRollLocationField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPerson[] votersRollPersonField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociation[] associationField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformation[] publicInformationField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFAS[] cIFASField;
-        
+
         private OutputFullConsumerDataConsumerDataCAIS[] cAISField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplication[] previousApplicationField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousApp[] extendedPreviousAppField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLink locationLinkField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAway[] goneAwayField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTrace[] successfulTraceField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectors[] directorsField;
-        
+
         private OutputFullConsumerDataConsumerDataNOC[] nOCField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VotersRollLocation", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollLocation[] VotersRollLocation {
@@ -13683,7 +13682,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.votersRollLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VotersRollPerson", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPerson[] VotersRollPerson {
@@ -13694,7 +13693,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.votersRollPersonField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Association", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociation[] Association {
@@ -13705,7 +13704,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.associationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PublicInformation", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformation[] PublicInformation {
@@ -13716,7 +13715,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.publicInformationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CIFAS", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFAS[] CIFAS {
@@ -13727,7 +13726,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cIFASField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CAIS", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAIS[] CAIS {
@@ -13738,7 +13737,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAISField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PreviousApplication", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplication[] PreviousApplication {
@@ -13749,7 +13748,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.previousApplicationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ExtendedPreviousApp", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousApp[] ExtendedPreviousApp {
@@ -13760,7 +13759,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.extendedPreviousAppField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLink LocationLink {
@@ -13771,7 +13770,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLinkField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("GoneAway", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAway[] GoneAway {
@@ -13782,7 +13781,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.goneAwayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SuccessfulTrace", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTrace[] SuccessfulTrace {
@@ -13793,7 +13792,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.successfulTraceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Directors", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectors[] Directors {
@@ -13804,7 +13803,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.directorsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NOC", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataNOC[] NOC {
@@ -13816,7 +13815,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13824,13 +13823,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollLocation {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetails[] vRollStreetDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -13841,7 +13840,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -13852,7 +13851,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VRollStreetDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetails[] VRollStreetDetails {
@@ -13864,7 +13863,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -13872,27 +13871,27 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetails {
-        
+
         private string searchLevelField;
-        
+
         private string streetMatchLevelField;
-        
+
         private string informationSourceField;
-        
+
         private string mOSCAICCodeField;
-        
+
         private string pAFDistrictNumberField;
-        
+
         private string segmentIDNumberField;
-        
+
         private string aCORNCodeField;
-        
+
         private string locationConfirmMsgField;
-        
+
         private string batchNumberField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetailsLocation locationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchLevel {
@@ -13903,7 +13902,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -13914,7 +13913,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -13925,7 +13924,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MOSCAICCode {
@@ -13936,7 +13935,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mOSCAICCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PAFDistrictNumber {
@@ -13947,7 +13946,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pAFDistrictNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SegmentIDNumber {
@@ -13958,7 +13957,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.segmentIDNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ACORNCode {
@@ -13969,7 +13968,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.aCORNCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationConfirmMsg {
@@ -13980,7 +13979,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationConfirmMsgField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BatchNumber {
@@ -13991,7 +13990,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.batchNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetailsLocation Location {
@@ -14003,7 +14002,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14011,33 +14010,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollLocationVRollStreetDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -14048,7 +14047,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -14059,7 +14058,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -14070,7 +14069,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -14081,7 +14080,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -14092,7 +14091,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -14103,7 +14102,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -14114,7 +14113,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -14125,7 +14124,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -14136,7 +14135,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -14147,7 +14146,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -14158,7 +14157,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -14169,7 +14168,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -14181,7 +14180,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14189,13 +14188,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPerson {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetails[] vRollPersonDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -14206,7 +14205,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -14217,7 +14216,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VRollPersonDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetails[] VRollPersonDetails {
@@ -14229,7 +14228,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14237,37 +14236,37 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetails {
-        
+
         private string searchLevelField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string sexField;
-        
+
         private string segmentIDNumberField;
-        
+
         private string surnameRegField;
-        
+
         private string pOCCYearField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsDateOfBirth dateOfBirthField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsComingOfAge comingOfAgeField;
-        
+
         private string datesRegLeftField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsName nameField;
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchLevel {
@@ -14278,7 +14277,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsMatchDetails MatchDetails {
@@ -14289,7 +14288,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -14300,7 +14299,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Sex {
@@ -14311,7 +14310,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SegmentIDNumber {
@@ -14322,7 +14321,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.segmentIDNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SurnameReg {
@@ -14333,7 +14332,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameRegField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POCCYear {
@@ -14344,7 +14343,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOCCYearField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsDateOfBirth DateOfBirth {
@@ -14355,7 +14354,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsComingOfAge ComingOfAge {
@@ -14366,7 +14365,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.comingOfAgeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DatesRegLeft {
@@ -14377,7 +14376,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.datesRegLeftField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -14388,7 +14387,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsName Name {
@@ -14399,7 +14398,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -14410,7 +14409,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -14421,7 +14420,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -14433,7 +14432,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14441,17 +14440,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -14462,7 +14461,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -14473,7 +14472,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -14484,7 +14483,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -14495,7 +14494,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -14507,7 +14506,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14515,19 +14514,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -14538,7 +14537,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -14549,7 +14548,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -14560,7 +14559,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -14571,7 +14570,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -14582,7 +14581,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -14594,7 +14593,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14602,19 +14601,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsComingOfAge {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -14625,7 +14624,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -14636,7 +14635,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -14647,7 +14646,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -14658,7 +14657,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -14669,7 +14668,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -14681,7 +14680,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14689,19 +14688,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataVotersRollPersonVRollPersonDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -14712,7 +14711,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -14723,7 +14722,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -14734,7 +14733,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -14745,7 +14744,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -14756,7 +14755,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -14768,7 +14767,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14776,13 +14775,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociation {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetails[] associationDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -14793,7 +14792,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -14804,7 +14803,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AssociationDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetails[] AssociationDetails {
@@ -14816,7 +14815,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -14824,39 +14823,39 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetails {
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsMatchDetails matchDetailsField;
-        
+
         private string sourceField;
-        
+
         private string cAISAccountNumbersField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDateOfBirth dateOfBirthField;
-        
+
         private string noCReferenceField;
-        
+
         private string informationTypeField;
-        
+
         private string companyTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsInformationDate informationDateField;
-        
+
         private string informationSourceField;
-        
+
         private string informationSupplierField;
-        
+
         private string supplierBranchField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDoBAssociateOrAlias doBAssociateOrAliasField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsAssociateName associateNameField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataAssociationAssociationDetailsLocation locationField;
-        
+
         private string supplyCompanyNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsMatchDetails MatchDetails {
@@ -14867,7 +14866,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Source {
@@ -14878,7 +14877,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CAISAccountNumbers {
@@ -14889,7 +14888,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAISAccountNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDateOfBirth DateOfBirth {
@@ -14900,7 +14899,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -14911,7 +14910,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationType {
@@ -14922,7 +14921,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyType {
@@ -14933,7 +14932,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.companyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsInformationDate InformationDate {
@@ -14944,7 +14943,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -14955,7 +14954,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSupplier {
@@ -14966,7 +14965,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSupplierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplierBranch {
@@ -14977,7 +14976,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.supplierBranchField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDoBAssociateOrAlias DoBAssociateOrAlias {
@@ -14988,7 +14987,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.doBAssociateOrAliasField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsAssociateName AssociateName {
@@ -14999,7 +14998,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.associateNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsName Name {
@@ -15010,7 +15009,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataAssociationAssociationDetailsLocation Location {
@@ -15021,7 +15020,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -15033,7 +15032,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15041,17 +15040,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -15062,7 +15061,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -15073,7 +15072,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -15084,7 +15083,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -15095,7 +15094,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -15107,7 +15106,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15115,19 +15114,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -15138,7 +15137,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -15149,7 +15148,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -15160,7 +15159,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -15171,7 +15170,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -15182,7 +15181,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -15194,7 +15193,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15202,19 +15201,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsInformationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -15225,7 +15224,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -15236,7 +15235,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -15247,7 +15246,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -15258,7 +15257,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -15269,7 +15268,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -15281,7 +15280,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15289,19 +15288,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsDoBAssociateOrAlias {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -15312,7 +15311,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -15323,7 +15322,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -15334,7 +15333,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -15345,7 +15344,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -15356,7 +15355,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -15368,7 +15367,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15376,17 +15375,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsAssociateName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -15397,7 +15396,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -15408,7 +15407,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -15419,7 +15418,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -15430,7 +15429,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -15442,7 +15441,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15450,19 +15449,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -15473,7 +15472,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -15484,7 +15483,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -15495,7 +15494,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -15506,7 +15505,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -15517,7 +15516,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -15529,7 +15528,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15537,33 +15536,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataAssociationAssociationDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -15574,7 +15573,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -15585,7 +15584,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -15596,7 +15595,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -15607,7 +15606,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -15618,7 +15617,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -15629,7 +15628,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -15640,7 +15639,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -15651,7 +15650,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -15662,7 +15661,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -15673,7 +15672,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -15684,7 +15683,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -15695,7 +15694,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -15707,7 +15706,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15715,13 +15714,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformation {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetails[] publicInfoDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -15732,7 +15731,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -15743,7 +15742,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PublicInfoDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetails[] PublicInfoDetails {
@@ -15755,7 +15754,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15763,39 +15762,39 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetails {
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsInformationDate informationDateField;
-        
+
         private string informationTypeField;
-        
+
         private string jointAccountField;
-        
+
         private string amountPoundsField;
-        
+
         private string amountPenceField;
-        
+
         private string courtPlaintiffField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsSatisfactionDate satisfactionDateField;
-        
+
         private string cameraNumberField;
-        
+
         private string dataSourceField;
-        
+
         private string tradingNameField;
-        
+
         private string sexField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsLocation locationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsMatchDetails MatchDetails {
@@ -15806,7 +15805,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -15817,7 +15816,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsInformationDate InformationDate {
@@ -15828,7 +15827,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationType {
@@ -15839,7 +15838,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JointAccount {
@@ -15850,7 +15849,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.jointAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AmountPounds {
@@ -15861,7 +15860,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amountPoundsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AmountPence {
@@ -15872,7 +15871,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amountPenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CourtPlaintiff {
@@ -15883,7 +15882,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.courtPlaintiffField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsSatisfactionDate SatisfactionDate {
@@ -15894,7 +15893,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.satisfactionDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CameraNumber {
@@ -15905,7 +15904,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cameraNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DataSource {
@@ -15916,7 +15915,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dataSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TradingName {
@@ -15927,7 +15926,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.tradingNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Sex {
@@ -15938,7 +15937,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -15949,7 +15948,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsName Name {
@@ -15960,7 +15959,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsLocation Location {
@@ -15972,7 +15971,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -15980,17 +15979,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -16001,7 +16000,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -16012,7 +16011,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -16023,7 +16022,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -16034,7 +16033,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -16046,7 +16045,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16054,19 +16053,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsInformationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -16077,7 +16076,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -16088,7 +16087,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -16099,7 +16098,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -16110,7 +16109,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -16121,7 +16120,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -16133,7 +16132,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16141,19 +16140,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsSatisfactionDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -16164,7 +16163,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -16175,7 +16174,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -16186,7 +16185,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -16197,7 +16196,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -16208,7 +16207,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -16220,7 +16219,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16228,19 +16227,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -16251,7 +16250,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -16262,7 +16261,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -16273,7 +16272,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -16284,7 +16283,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -16295,7 +16294,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -16307,7 +16306,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16315,33 +16314,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPublicInformationPublicInfoDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -16352,7 +16351,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -16363,7 +16362,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -16374,7 +16373,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -16385,7 +16384,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -16396,7 +16395,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -16407,7 +16406,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -16418,7 +16417,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -16429,7 +16428,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -16440,7 +16439,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -16451,7 +16450,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -16462,7 +16461,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -16473,7 +16472,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -16485,7 +16484,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16493,13 +16492,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCIFAS {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetails[] cIFASDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -16510,7 +16509,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -16521,7 +16520,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CIFASDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetails[] CIFASDetails {
@@ -16533,7 +16532,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16541,37 +16540,37 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetails {
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string cIFASReferenceField;
-        
+
         private string fraudCategoryField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsSupplyDate supplyDateField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsExpiryDate expiryDateField;
-        
+
         private string andOtherLocationesField;
-        
+
         private string supplyCompanyNameField;
-        
+
         private string companyCodeField;
-        
+
         private string subCategoriesField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsDateOfBirth dateOfBirthField;
-        
+
         private string productField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataCIFASCIFASDetailsLocation locationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsMatchDetails MatchDetails {
@@ -16582,7 +16581,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -16593,7 +16592,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CIFASReference {
@@ -16604,7 +16603,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cIFASReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FraudCategory {
@@ -16615,7 +16614,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.fraudCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsSupplyDate SupplyDate {
@@ -16626,7 +16625,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.supplyDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsExpiryDate ExpiryDate {
@@ -16637,7 +16636,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.expiryDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AndOtherLocationes {
@@ -16648,7 +16647,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.andOtherLocationesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -16659,7 +16658,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.supplyCompanyNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyCode {
@@ -16670,7 +16669,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.companyCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SubCategories {
@@ -16681,7 +16680,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.subCategoriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -16692,7 +16691,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsDateOfBirth DateOfBirth {
@@ -16703,7 +16702,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Product {
@@ -16714,7 +16713,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.productField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsName Name {
@@ -16725,7 +16724,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCIFASCIFASDetailsLocation Location {
@@ -16737,7 +16736,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16745,17 +16744,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -16766,7 +16765,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -16777,7 +16776,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -16788,7 +16787,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -16799,7 +16798,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -16811,7 +16810,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16819,19 +16818,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsSupplyDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -16842,7 +16841,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -16853,7 +16852,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -16864,7 +16863,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -16875,7 +16874,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -16886,7 +16885,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -16898,7 +16897,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16906,19 +16905,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsExpiryDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -16929,7 +16928,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -16940,7 +16939,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -16951,7 +16950,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -16962,7 +16961,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -16973,7 +16972,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -16985,7 +16984,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -16993,19 +16992,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -17016,7 +17015,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -17027,7 +17026,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -17038,7 +17037,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -17049,7 +17048,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -17060,7 +17059,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -17072,7 +17071,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -17080,19 +17079,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -17103,7 +17102,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -17114,7 +17113,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -17125,7 +17124,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -17136,7 +17135,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -17147,7 +17146,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -17159,7 +17158,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -17167,33 +17166,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCIFASCIFASDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -17204,7 +17203,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -17215,7 +17214,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -17226,7 +17225,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -17237,7 +17236,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -17248,7 +17247,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -17259,7 +17258,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -17270,7 +17269,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -17281,7 +17280,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -17292,7 +17291,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -17303,7 +17302,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -17314,7 +17313,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -17325,7 +17324,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -17337,7 +17336,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -17345,13 +17344,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAIS {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetails[] cAISDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -17362,7 +17361,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -17373,7 +17372,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CAISDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetails[] CAISDetails {
@@ -17385,7 +17384,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -17393,109 +17392,109 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetails {
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string jointAccountField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCreditLimit creditLimitField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsBalance balanceField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCurrentDefBalance currentDefBalanceField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsDelinquentBalance delinquentBalanceField;
-        
+
         private string accountStatusCodesField;
-        
+
         private string status1To2Field;
-        
+
         private string statusTo3Field;
-        
+
         private string numOfMonthsHistoryField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCAISAccStartDate cAISAccStartDateField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsSettlementDate settlementDateField;
-        
+
         private string settleDateCaptionField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsLastUpdatedDate lastUpdatedDateField;
-        
+
         private string cMLLocationTypeField;
-        
+
         private string bankFlagField;
-        
+
         private string worstStatusField;
-        
+
         private string ownDataField;
-        
+
         private string specialInstrIndField;
-        
+
         private string repaymentPeriodField;
-        
+
         private string paymentField;
-        
+
         private string noOfRepaymntPeriodField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriods[] repaymentPeriodsField;
-        
+
         private string noOfPaymentsField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepayment[] mnthlyRepaymentField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsDateOfBirth dateOfBirthField;
-        
+
         private string sexField;
-        
+
         private string fSCCUGIndicatorField;
-        
+
         private string paymentFrequencyField;
-        
+
         private string accountStatusField;
-        
+
         private string numAddInfoBlocksField;
-        
+
         private string numAccountBalancesField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsAccountBalances[] accountBalancesField;
-        
+
         private string numCardHistoriesField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCardHistories[] cardHistoriesField;
-        
+
         private string numCreditLimChngsField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistories[] credLimitHistoriesField;
-        
+
         private string numStatusesField;
-        
+
         private string companyTypeField;
-        
+
         private string accountTypeField;
-        
+
         private string sourceCodeField;
-        
+
         private string accountNumberField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDet specialInstrDetField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsLocation locationField;
-        
+
         private string[] additionlInfoBlocksField;
-        
+
         private string supplyCompanyNameField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsDefaultSatisfyDate defaultSatisfyDateField;
-        
+
         private string transColnAcntFlagField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsMatchDetails MatchDetails {
@@ -17506,7 +17505,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -17517,7 +17516,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JointAccount {
@@ -17528,7 +17527,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.jointAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCreditLimit CreditLimit {
@@ -17539,7 +17538,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.creditLimitField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsBalance Balance {
@@ -17550,7 +17549,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.balanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCurrentDefBalance CurrentDefBalance {
@@ -17561,7 +17560,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.currentDefBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsDelinquentBalance DelinquentBalance {
@@ -17572,7 +17571,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.delinquentBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountStatusCodes {
@@ -17583,7 +17582,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountStatusCodesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Status1To2 {
@@ -17594,7 +17593,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.status1To2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StatusTo3 {
@@ -17605,7 +17604,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.statusTo3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumOfMonthsHistory {
@@ -17616,7 +17615,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numOfMonthsHistoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCAISAccStartDate CAISAccStartDate {
@@ -17627,7 +17626,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAISAccStartDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsSettlementDate SettlementDate {
@@ -17638,7 +17637,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.settlementDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SettleDateCaption {
@@ -17649,7 +17648,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.settleDateCaptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsLastUpdatedDate LastUpdatedDate {
@@ -17660,7 +17659,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.lastUpdatedDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CMLLocationType {
@@ -17671,7 +17670,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cMLLocationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BankFlag {
@@ -17682,7 +17681,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bankFlagField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string WorstStatus {
@@ -17693,7 +17692,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.worstStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnData {
@@ -17704,7 +17703,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ownDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SpecialInstrInd {
@@ -17715,7 +17714,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.specialInstrIndField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RepaymentPeriod {
@@ -17726,7 +17725,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.repaymentPeriodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Payment {
@@ -17737,7 +17736,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.paymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoOfRepaymntPeriod {
@@ -17748,7 +17747,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noOfRepaymntPeriodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RepaymentPeriods", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriods[] RepaymentPeriods {
@@ -17759,7 +17758,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.repaymentPeriodsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoOfPayments {
@@ -17770,7 +17769,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noOfPaymentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("MnthlyRepayment", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepayment[] MnthlyRepayment {
@@ -17781,7 +17780,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mnthlyRepaymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsDateOfBirth DateOfBirth {
@@ -17792,7 +17791,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Sex {
@@ -17803,7 +17802,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FSCCUGIndicator {
@@ -17814,7 +17813,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.fSCCUGIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PaymentFrequency {
@@ -17825,7 +17824,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.paymentFrequencyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountStatus {
@@ -17836,7 +17835,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumAddInfoBlocks {
@@ -17847,7 +17846,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numAddInfoBlocksField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumAccountBalances {
@@ -17858,7 +17857,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numAccountBalancesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AccountBalances", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsAccountBalances[] AccountBalances {
@@ -17869,7 +17868,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountBalancesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumCardHistories {
@@ -17880,7 +17879,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numCardHistoriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CardHistories", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCardHistories[] CardHistories {
@@ -17891,7 +17890,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cardHistoriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumCreditLimChngs {
@@ -17902,7 +17901,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numCreditLimChngsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CredLimitHistories", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistories[] CredLimitHistories {
@@ -17913,7 +17912,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.credLimitHistoriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumStatuses {
@@ -17924,7 +17923,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numStatusesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyType {
@@ -17935,7 +17934,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.companyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountType {
@@ -17946,7 +17945,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SourceCode {
@@ -17957,7 +17956,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sourceCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountNumber {
@@ -17968,7 +17967,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDet SpecialInstrDet {
@@ -17979,7 +17978,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.specialInstrDetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -17990,7 +17989,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsName Name {
@@ -18001,7 +18000,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsLocation Location {
@@ -18012,7 +18011,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("Info", Form=XmlSchemaForm.Unqualified, IsNullable=false)]
@@ -18024,7 +18023,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.additionlInfoBlocksField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -18035,7 +18034,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.supplyCompanyNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsDefaultSatisfyDate DefaultSatisfyDate {
@@ -18046,7 +18045,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.defaultSatisfyDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TransColnAcntFlag {
@@ -18058,7 +18057,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18066,21 +18065,21 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string forenameMatchLevelField;
-        
+
         private string surnameMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -18091,7 +18090,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -18102,7 +18101,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ForenameMatchLevel {
@@ -18113,7 +18112,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SurnameMatchLevel {
@@ -18124,7 +18123,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -18135,7 +18134,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -18146,7 +18145,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -18158,7 +18157,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18166,13 +18165,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCreditLimit {
-        
+
         private string amountField;
-        
+
         private string narrativeField;
-        
+
         private string captionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -18183,7 +18182,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Narrative {
@@ -18194,7 +18193,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.narrativeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Caption {
@@ -18206,7 +18205,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18214,13 +18213,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsBalance {
-        
+
         private string amountField;
-        
+
         private string narrativeField;
-        
+
         private string captionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -18231,7 +18230,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Narrative {
@@ -18242,7 +18241,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.narrativeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Caption {
@@ -18254,7 +18253,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18262,11 +18261,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCurrentDefBalance {
-        
+
         private string amountField;
-        
+
         private string narrativeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -18277,7 +18276,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Narrative {
@@ -18289,7 +18288,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18297,11 +18296,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsDelinquentBalance {
-        
+
         private string amountField;
-        
+
         private string narrativeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -18312,7 +18311,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Narrative {
@@ -18324,7 +18323,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18332,19 +18331,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCAISAccStartDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -18355,7 +18354,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -18366,7 +18365,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -18377,7 +18376,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -18388,7 +18387,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -18399,7 +18398,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -18411,7 +18410,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18419,19 +18418,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsSettlementDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -18442,7 +18441,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -18453,7 +18452,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -18464,7 +18463,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -18475,7 +18474,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -18486,7 +18485,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -18498,7 +18497,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18506,19 +18505,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsLastUpdatedDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -18529,7 +18528,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -18540,7 +18539,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -18551,7 +18550,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -18562,7 +18561,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -18573,7 +18572,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -18585,7 +18584,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18593,11 +18592,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriods {
-        
+
         private string repaymentPeriodField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriodsRepayPdChangeDate repayPdChangeDateField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RepaymentPeriod {
@@ -18608,7 +18607,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.repaymentPeriodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriodsRepayPdChangeDate RepayPdChangeDate {
@@ -18620,7 +18619,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18628,11 +18627,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsRepaymentPeriodsRepayPdChangeDate {
-        
+
         private string repyPdChangeDateMMField;
-        
+
         private string repyPdChangeDateYYField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RepyPdChangeDateMM {
@@ -18643,7 +18642,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.repyPdChangeDateMMField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RepyPdChangeDateYY {
@@ -18655,7 +18654,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18663,11 +18662,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepayment {
-        
+
         private string mnthlyRepaymentField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepaymentMnthlyRepyChngDate mnthlyRepyChngDateField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MnthlyRepayment {
@@ -18678,7 +18677,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mnthlyRepaymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepaymentMnthlyRepyChngDate MnthlyRepyChngDate {
@@ -18690,7 +18689,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18698,11 +18697,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsMnthlyRepaymentMnthlyRepyChngDate {
-        
+
         private string mnthRepyChngDateMMField;
-        
+
         private string mnthRepyChngDateYYField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MnthRepyChngDateMM {
@@ -18713,7 +18712,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mnthRepyChngDateMMField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MnthRepyChngDateYY {
@@ -18725,7 +18724,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18733,19 +18732,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -18756,7 +18755,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -18767,7 +18766,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -18778,7 +18777,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -18789,7 +18788,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -18800,7 +18799,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -18812,7 +18811,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18820,11 +18819,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsAccountBalances {
-        
+
         private string accountBalanceField;
-        
+
         private string statusField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountBalance {
@@ -18835,7 +18834,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Status {
@@ -18847,7 +18846,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18855,19 +18854,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCardHistories {
-        
+
         private string prevStatementBalField;
-        
+
         private string promotionalRateField;
-        
+
         private string paymentAmountField;
-        
+
         private string numCashAdvancesField;
-        
+
         private string cashAdvanceAmountField;
-        
+
         private string paymentCodeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PrevStatementBal {
@@ -18878,7 +18877,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.prevStatementBalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PromotionalRate {
@@ -18889,7 +18888,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.promotionalRateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PaymentAmount {
@@ -18900,7 +18899,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.paymentAmountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumCashAdvances {
@@ -18911,7 +18910,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numCashAdvancesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CashAdvanceAmount {
@@ -18922,7 +18921,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cashAdvanceAmountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PaymentCode {
@@ -18934,7 +18933,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18942,11 +18941,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistories {
-        
+
         private string creditLimitChangeField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistoriesCreditLimitDate creditLimitDateField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CreditLimitChange {
@@ -18957,7 +18956,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.creditLimitChangeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistoriesCreditLimitDate CreditLimitDate {
@@ -18969,7 +18968,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -18977,11 +18976,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsCredLimitHistoriesCreditLimitDate {
-        
+
         private string creditLimitDateMMField;
-        
+
         private string creditLimitDateYYField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CreditLimitDateMM {
@@ -18992,7 +18991,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.creditLimitDateMMField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CreditLimitDateYY {
@@ -19004,7 +19003,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19012,13 +19011,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDet {
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetStartDate startDateField;
-        
+
         private string revisedPaymentField;
-        
+
         private OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetEndDate endDateField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetStartDate StartDate {
@@ -19029,7 +19028,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.startDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RevisedPayment {
@@ -19040,7 +19039,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.revisedPaymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetEndDate EndDate {
@@ -19052,7 +19051,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19060,19 +19059,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetStartDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -19083,7 +19082,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -19094,7 +19093,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -19105,7 +19104,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -19116,7 +19115,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -19127,7 +19126,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -19139,7 +19138,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19147,19 +19146,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsSpecialInstrDetEndDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -19170,7 +19169,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -19181,7 +19180,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -19192,7 +19191,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -19203,7 +19202,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -19214,7 +19213,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -19226,7 +19225,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19234,19 +19233,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -19257,7 +19256,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -19268,7 +19267,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -19279,7 +19278,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -19290,7 +19289,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -19301,7 +19300,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -19313,7 +19312,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19321,33 +19320,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -19358,7 +19357,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -19369,7 +19368,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -19380,7 +19379,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -19391,7 +19390,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -19402,7 +19401,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -19413,7 +19412,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -19424,7 +19423,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -19435,7 +19434,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -19446,7 +19445,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -19457,7 +19456,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -19468,7 +19467,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -19479,7 +19478,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -19491,7 +19490,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19499,13 +19498,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataCAISCAISDetailsDefaultSatisfyDate {
-        
+
         private string cCYYField;
-        
+
         private string mmField;
-        
+
         private string ddField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CCYY {
@@ -19516,7 +19515,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MM {
@@ -19527,7 +19526,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DD {
@@ -19539,7 +19538,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19547,13 +19546,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplication {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetails[] prevApplnDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -19564,7 +19563,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -19575,7 +19574,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PrevApplnDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetails[] PrevApplnDetails {
@@ -19587,7 +19586,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19595,41 +19594,41 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetails {
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsMatchDetails matchDetailsField;
-        
+
         private string applicationTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsApplicationDate applicationDateField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsDateOfBirth dateOfBirthField;
-        
+
         private string jointApplicantField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsTimeAtLocation timeAtLocationField;
-        
+
         private string ownAccountIDField;
-        
+
         private string companyTypeField;
-        
+
         private string accountNumberField;
-        
+
         private string amountField;
-        
+
         private string termField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsLocation locationField;
-        
+
         private string optOutField;
-        
+
         private string searcherNameField;
-        
+
         private string supplyCompanyNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsMatchDetails MatchDetails {
@@ -19640,7 +19639,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicationType {
@@ -19651,7 +19650,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsApplicationDate ApplicationDate {
@@ -19662,7 +19661,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsDateOfBirth DateOfBirth {
@@ -19673,7 +19672,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JointApplicant {
@@ -19684,7 +19683,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.jointApplicantField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsTimeAtLocation TimeAtLocation {
@@ -19695,7 +19694,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.timeAtLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnAccountID {
@@ -19706,7 +19705,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ownAccountIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyType {
@@ -19717,7 +19716,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.companyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountNumber {
@@ -19728,7 +19727,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -19739,7 +19738,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Term {
@@ -19750,7 +19749,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.termField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -19761,7 +19760,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsName Name {
@@ -19772,7 +19771,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsLocation Location {
@@ -19783,7 +19782,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OptOut {
@@ -19794,7 +19793,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.optOutField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearcherName {
@@ -19805,7 +19804,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searcherNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -19817,7 +19816,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19825,17 +19824,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -19846,7 +19845,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -19857,7 +19856,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -19868,7 +19867,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -19879,7 +19878,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -19891,7 +19890,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19899,19 +19898,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsApplicationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -19922,7 +19921,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -19933,7 +19932,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -19944,7 +19943,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -19955,7 +19954,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -19966,7 +19965,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -19978,7 +19977,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -19986,19 +19985,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -20009,7 +20008,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -20020,7 +20019,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -20031,7 +20030,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -20042,7 +20041,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -20053,7 +20052,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -20065,7 +20064,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -20073,11 +20072,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsTimeAtLocation {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -20088,7 +20087,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -20100,7 +20099,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -20108,19 +20107,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -20131,7 +20130,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -20142,7 +20141,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -20153,7 +20152,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -20164,7 +20163,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -20175,7 +20174,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -20187,7 +20186,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -20195,33 +20194,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataPreviousApplicationPrevApplnDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -20232,7 +20231,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -20243,7 +20242,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -20254,7 +20253,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -20265,7 +20264,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -20276,7 +20275,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -20287,7 +20286,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -20298,7 +20297,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -20309,7 +20308,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -20320,7 +20319,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -20331,7 +20330,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -20342,7 +20341,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -20353,7 +20352,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -20365,7 +20364,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -20373,13 +20372,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousApp {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetails[] prevApplnDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -20390,7 +20389,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -20401,7 +20400,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PrevApplnDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetails[] PrevApplnDetails {
@@ -20413,7 +20412,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -20421,109 +20420,109 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetails {
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsMatchDetails matchDetailsField;
-        
+
         private string applicationTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsDateOfBirth dateOfBirthField;
-        
+
         private string jointApplicantField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtLocation timeAtLocationField;
-        
+
         private string enquiryTypeField;
-        
+
         private string maritalStatusField;
-        
+
         private string dependantsField;
-        
+
         private string accommodationField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsHomeTelephoneNumber homeTelephoneNumberField;
-        
+
         private string employmentStatusField;
-        
+
         private string employmentTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeInEmployment timeInEmploymentField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsWorkTelephoneNum workTelephoneNumField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeWithBank timeWithBankField;
-        
+
         private string bankSortcodeField;
-        
+
         private string bankAccountNumberField;
-        
+
         private string currentAccountField;
-        
+
         private string chequeCardField;
-        
+
         private string debitCardField;
-        
+
         private string accessCardField;
-        
+
         private string visaCardField;
-        
+
         private string amexCardField;
-        
+
         private string dinersCardField;
-        
+
         private string storeCardField;
-        
+
         private string otherCardField;
-        
+
         private string numberOfCardsField;
-        
+
         private string grossIncomeField;
-        
+
         private string fraudScoreField;
-        
+
         private string scoreCardField;
-        
+
         private string numInconsistenciesField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtPrevLocation timeAtPrevLocationField;
-        
+
         private string ownApplicationIdField;
-        
+
         private string companyTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsApplicationDate applicationDateField;
-        
+
         private string accountNumberField;
-        
+
         private string retailerCodeField;
-        
+
         private string searchTypeField;
-        
+
         private string amountField;
-        
+
         private string termField;
-        
+
         private string optoutField;
-        
+
         private string infoSourceField;
-        
+
         private string previousRMCField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsLocation locationField;
-        
+
         private OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsPreviousLocation previousLocationField;
-        
+
         private string applicationType1Field;
-        
+
         private string applicationType2Field;
-        
+
         private string supplyCompnyOfficerField;
-        
+
         private string supplyCompanyNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsMatchDetails MatchDetails {
@@ -20534,7 +20533,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicationType {
@@ -20545,7 +20544,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsDateOfBirth DateOfBirth {
@@ -20556,7 +20555,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string JointApplicant {
@@ -20567,7 +20566,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.jointApplicantField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtLocation TimeAtLocation {
@@ -20578,7 +20577,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.timeAtLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EnquiryType {
@@ -20589,7 +20588,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.enquiryTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MaritalStatus {
@@ -20600,7 +20599,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.maritalStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Dependants {
@@ -20611,7 +20610,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dependantsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Accommodation {
@@ -20622,7 +20621,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accommodationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsHomeTelephoneNumber HomeTelephoneNumber {
@@ -20633,7 +20632,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.homeTelephoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EmploymentStatus {
@@ -20644,7 +20643,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.employmentStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string EmploymentType {
@@ -20655,7 +20654,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.employmentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeInEmployment TimeInEmployment {
@@ -20666,7 +20665,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.timeInEmploymentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsWorkTelephoneNum WorkTelephoneNum {
@@ -20677,7 +20676,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.workTelephoneNumField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeWithBank TimeWithBank {
@@ -20688,7 +20687,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.timeWithBankField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BankSortcode {
@@ -20699,7 +20698,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bankSortcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BankAccountNumber {
@@ -20710,7 +20709,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bankAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CurrentAccount {
@@ -20721,7 +20720,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.currentAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ChequeCard {
@@ -20732,7 +20731,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.chequeCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DebitCard {
@@ -20743,7 +20742,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.debitCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccessCard {
@@ -20754,7 +20753,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accessCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string VisaCard {
@@ -20765,7 +20764,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.visaCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AmexCard {
@@ -20776,7 +20775,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amexCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DinersCard {
@@ -20787,7 +20786,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dinersCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StoreCard {
@@ -20798,7 +20797,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.storeCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OtherCard {
@@ -20809,7 +20808,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.otherCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumberOfCards {
@@ -20820,7 +20819,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numberOfCardsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string GrossIncome {
@@ -20831,7 +20830,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.grossIncomeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FraudScore {
@@ -20842,7 +20841,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.fraudScoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ScoreCard {
@@ -20853,7 +20852,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.scoreCardField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumInconsistencies {
@@ -20864,7 +20863,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numInconsistenciesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtPrevLocation TimeAtPrevLocation {
@@ -20875,7 +20874,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.timeAtPrevLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OwnApplicationId {
@@ -20886,7 +20885,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ownApplicationIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyType {
@@ -20897,7 +20896,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.companyTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsApplicationDate ApplicationDate {
@@ -20908,7 +20907,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountNumber {
@@ -20919,7 +20918,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RetailerCode {
@@ -20930,7 +20929,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.retailerCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchType {
@@ -20941,7 +20940,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searchTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Amount {
@@ -20952,7 +20951,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Term {
@@ -20963,7 +20962,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.termField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Optout {
@@ -20974,7 +20973,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.optoutField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InfoSource {
@@ -20985,7 +20984,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.infoSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PreviousRMC {
@@ -20996,7 +20995,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.previousRMCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -21007,7 +21006,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsName Name {
@@ -21018,7 +21017,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsLocation Location {
@@ -21029,7 +21028,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsPreviousLocation PreviousLocation {
@@ -21040,7 +21039,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.previousLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicationType1 {
@@ -21051,7 +21050,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicationType1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicationType2 {
@@ -21062,7 +21061,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicationType2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompnyOfficer {
@@ -21073,7 +21072,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.supplyCompnyOfficerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SupplyCompanyName {
@@ -21085,7 +21084,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21093,17 +21092,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -21114,7 +21113,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -21125,7 +21124,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -21136,7 +21135,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -21147,7 +21146,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -21159,7 +21158,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21167,19 +21166,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -21190,7 +21189,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -21201,7 +21200,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -21212,7 +21211,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -21223,7 +21222,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -21234,7 +21233,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -21246,7 +21245,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21254,11 +21253,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtLocation {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -21269,7 +21268,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -21281,7 +21280,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21289,11 +21288,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsHomeTelephoneNumber {
-        
+
         private string sTDCodeField;
-        
+
         private string localNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string STDCode {
@@ -21304,7 +21303,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sTDCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocalNumber {
@@ -21316,7 +21315,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21324,11 +21323,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeInEmployment {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -21339,7 +21338,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -21351,7 +21350,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21359,11 +21358,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsWorkTelephoneNum {
-        
+
         private string sTDCodeField;
-        
+
         private string localNumberField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string STDCode {
@@ -21374,7 +21373,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sTDCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocalNumber {
@@ -21386,7 +21385,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21394,11 +21393,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeWithBank {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -21409,7 +21408,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -21421,7 +21420,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21429,11 +21428,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsTimeAtPrevLocation {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -21444,7 +21443,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -21456,7 +21455,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21464,19 +21463,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsApplicationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -21487,7 +21486,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -21498,7 +21497,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -21509,7 +21508,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -21520,7 +21519,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -21531,7 +21530,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -21543,7 +21542,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21551,19 +21550,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -21574,7 +21573,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -21585,7 +21584,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -21596,7 +21595,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -21607,7 +21606,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -21618,7 +21617,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -21630,7 +21629,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21638,33 +21637,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -21675,7 +21674,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -21686,7 +21685,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -21697,7 +21696,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -21708,7 +21707,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -21719,7 +21718,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -21730,7 +21729,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -21741,7 +21740,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -21752,7 +21751,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -21763,7 +21762,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -21774,7 +21773,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -21785,7 +21784,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -21796,7 +21795,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -21808,7 +21807,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21816,33 +21815,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataExtendedPreviousAppPrevApplnDetailsPreviousLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -21853,7 +21852,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -21864,7 +21863,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -21875,7 +21874,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -21886,7 +21885,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -21897,7 +21896,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -21908,7 +21907,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -21919,7 +21918,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -21930,7 +21929,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -21941,7 +21940,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -21952,7 +21951,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -21963,7 +21962,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -21974,7 +21973,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -21986,7 +21985,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -21994,13 +21993,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataLocationLink {
-        
+
         private string locationCodeField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetails[] locationLinkDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationCode {
@@ -22011,7 +22010,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -22022,7 +22021,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("LocationLinkDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetails[] LocationLinkDetails {
@@ -22034,7 +22033,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22042,43 +22041,43 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetails {
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsMatchDetails matchDetailsField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocationLinkDate locationLinkDateField;
-        
+
         private string locationLinkIndField;
-        
+
         private string relatedSegmentNumField;
-        
+
         private string locationKeyField;
-        
+
         private string rMCField;
-        
+
         private string regionField;
-        
+
         private string levelNumberField;
-        
+
         private string locationLinkNumberField;
-        
+
         private string locationLinkCaptionField;
-        
+
         private string informationSourceField;
-        
+
         private string sourceOfDataField;
-        
+
         private string sourceIdentField;
-        
+
         private string cAISAccountNumberField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocation locationField;
-        
+
         private string superSearchFlagField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsMatchDetails MatchDetails {
@@ -22089,7 +22088,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocationLinkDate LocationLinkDate {
@@ -22100,7 +22099,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLinkDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLinkInd {
@@ -22111,7 +22110,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLinkIndField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RelatedSegmentNum {
@@ -22122,7 +22121,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.relatedSegmentNumField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationKey {
@@ -22133,7 +22132,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RMC {
@@ -22144,7 +22143,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.rMCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Region {
@@ -22155,7 +22154,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.regionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LevelNumber {
@@ -22166,7 +22165,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.levelNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLinkNumber {
@@ -22177,7 +22176,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLinkNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLinkCaption {
@@ -22188,7 +22187,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLinkCaptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -22199,7 +22198,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SourceOfData {
@@ -22210,7 +22209,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sourceOfDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SourceIdent {
@@ -22221,7 +22220,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sourceIdentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CAISAccountNumber {
@@ -22232,7 +22231,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAISAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -22243,7 +22242,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsName Name {
@@ -22254,7 +22253,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocation Location {
@@ -22265,7 +22264,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SuperSearchFlag {
@@ -22277,7 +22276,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22285,17 +22284,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -22306,7 +22305,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -22317,7 +22316,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -22328,7 +22327,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -22339,7 +22338,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -22351,7 +22350,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22359,19 +22358,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocationLinkDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -22382,7 +22381,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -22393,7 +22392,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -22404,7 +22403,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -22415,7 +22414,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -22426,7 +22425,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -22438,7 +22437,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22446,19 +22445,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -22469,7 +22468,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -22480,7 +22479,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -22491,7 +22490,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -22502,7 +22501,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -22513,7 +22512,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -22525,7 +22524,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22533,33 +22532,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataLocationLinkLocationLinkDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -22570,7 +22569,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -22581,7 +22580,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -22592,7 +22591,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -22603,7 +22602,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -22614,7 +22613,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -22625,7 +22624,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -22636,7 +22635,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -22647,7 +22646,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -22658,7 +22657,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -22669,7 +22668,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -22680,7 +22679,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -22691,7 +22690,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -22703,7 +22702,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22711,13 +22710,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataGoneAway {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetails[] goneAwayDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -22728,7 +22727,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -22739,7 +22738,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("GoneAwayDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetails[] GoneAwayDetails {
@@ -22751,7 +22750,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22759,25 +22758,25 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetails {
-        
+
         private string searchTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string nameIDField;
-        
+
         private string membersCountField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembers[] membersField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsLocation locationField;
-        
+
         private string goneAwayCaptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchType {
@@ -22788,7 +22787,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searchTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMatchDetails MatchDetails {
@@ -22799,7 +22798,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -22810,7 +22809,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NameID {
@@ -22821,7 +22820,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MembersCount {
@@ -22832,7 +22831,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.membersCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Members", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembers[] Members {
@@ -22843,7 +22842,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.membersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsName Name {
@@ -22854,7 +22853,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsLocation Location {
@@ -22865,7 +22864,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string GoneAwayCaption {
@@ -22877,7 +22876,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22885,17 +22884,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -22906,7 +22905,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -22917,7 +22916,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -22928,7 +22927,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -22939,7 +22938,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -22951,7 +22950,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -22959,19 +22958,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembers {
-        
+
         private string iDCodeField;
-        
+
         private string iDNumberField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersInformationDate informationDateField;
-        
+
         private OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersDateOfBirth dateOfBirthField;
-        
+
         private string furtherDetailsField;
-        
+
         private string noCReferenceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDCode {
@@ -22982,7 +22981,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iDCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDNumber {
@@ -22993,7 +22992,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iDNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersInformationDate InformationDate {
@@ -23004,7 +23003,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersDateOfBirth DateOfBirth {
@@ -23015,7 +23014,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FurtherDetails {
@@ -23026,7 +23025,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.furtherDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -23038,7 +23037,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23046,19 +23045,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersInformationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -23069,7 +23068,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -23080,7 +23079,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -23091,7 +23090,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -23102,7 +23101,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -23113,7 +23112,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -23125,7 +23124,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23133,19 +23132,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsMembersDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -23156,7 +23155,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -23167,7 +23166,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -23178,7 +23177,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -23189,7 +23188,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -23200,7 +23199,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -23212,7 +23211,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23220,19 +23219,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -23243,7 +23242,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -23254,7 +23253,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -23265,7 +23264,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -23276,7 +23275,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -23287,7 +23286,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -23299,7 +23298,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23307,33 +23306,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataGoneAwayGoneAwayDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -23344,7 +23343,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -23355,7 +23354,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -23366,7 +23365,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -23377,7 +23376,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -23388,7 +23387,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -23399,7 +23398,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -23410,7 +23409,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -23421,7 +23420,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -23432,7 +23431,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -23443,7 +23442,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -23454,7 +23453,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -23465,7 +23464,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -23477,7 +23476,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23485,13 +23484,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTrace {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetails[] successTraceDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -23502,7 +23501,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -23513,7 +23512,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SuccessTraceDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetails[] SuccessTraceDetails {
@@ -23525,7 +23524,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23533,31 +23532,31 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetails {
-        
+
         private string searchTypeField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string nameIDField;
-        
+
         private string linkRecordKeyField;
-        
+
         private string membersCountField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembers[] membersField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsLocation locationField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToName toNameField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToLocation toLocationField;
-        
+
         private string traceCaptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchType {
@@ -23568,7 +23567,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searchTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMatchDetails MatchDetails {
@@ -23579,7 +23578,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -23590,7 +23589,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NameID {
@@ -23601,7 +23600,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LinkRecordKey {
@@ -23612,7 +23611,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.linkRecordKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MembersCount {
@@ -23623,7 +23622,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.membersCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Members", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembers[] Members {
@@ -23634,7 +23633,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.membersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsName Name {
@@ -23645,7 +23644,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsLocation Location {
@@ -23656,7 +23655,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToName ToName {
@@ -23667,7 +23666,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.toNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToLocation ToLocation {
@@ -23678,7 +23677,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.toLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TraceCaption {
@@ -23690,7 +23689,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23698,17 +23697,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -23719,7 +23718,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -23730,7 +23729,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -23741,7 +23740,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -23752,7 +23751,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -23764,7 +23763,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23772,19 +23771,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembers {
-        
+
         private string iDCodeField;
-        
+
         private string iDNumberField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersInformationDate informationDateField;
-        
+
         private OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersDateOfBirth dateOfBirthField;
-        
+
         private string furtherDetailsField;
-        
+
         private string noCReferenceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDCode {
@@ -23795,7 +23794,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iDCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string IDNumber {
@@ -23806,7 +23805,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.iDNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersInformationDate InformationDate {
@@ -23817,7 +23816,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersDateOfBirth DateOfBirth {
@@ -23828,7 +23827,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.dateOfBirthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FurtherDetails {
@@ -23839,7 +23838,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.furtherDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -23851,7 +23850,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23859,19 +23858,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersInformationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -23882,7 +23881,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -23893,7 +23892,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -23904,7 +23903,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -23915,7 +23914,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -23926,7 +23925,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -23938,7 +23937,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -23946,19 +23945,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsMembersDateOfBirth {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -23969,7 +23968,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -23980,7 +23979,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -23991,7 +23990,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -24002,7 +24001,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -24013,7 +24012,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -24025,7 +24024,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24033,19 +24032,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -24056,7 +24055,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -24067,7 +24066,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -24078,7 +24077,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -24089,7 +24088,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -24100,7 +24099,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -24112,7 +24111,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24120,33 +24119,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -24157,7 +24156,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -24168,7 +24167,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -24179,7 +24178,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -24190,7 +24189,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -24201,7 +24200,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -24212,7 +24211,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -24223,7 +24222,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -24234,7 +24233,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -24245,7 +24244,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -24256,7 +24255,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -24267,7 +24266,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -24278,7 +24277,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -24290,7 +24289,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24298,19 +24297,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -24321,7 +24320,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -24332,7 +24331,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -24343,7 +24342,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -24354,7 +24353,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -24365,7 +24364,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -24377,7 +24376,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24385,33 +24384,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataSuccessfulTraceSuccessTraceDetailsToLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -24422,7 +24421,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -24433,7 +24432,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -24444,7 +24443,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -24455,7 +24454,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -24466,7 +24465,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -24477,7 +24476,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -24488,7 +24487,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -24499,7 +24498,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -24510,7 +24509,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -24521,7 +24520,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -24532,7 +24531,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -24543,7 +24542,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -24555,7 +24554,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24563,13 +24562,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataDirectors {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetails[] directorsDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -24580,7 +24579,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -24591,7 +24590,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DirectorsDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetails[] DirectorsDetails {
@@ -24603,7 +24602,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24611,35 +24610,35 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetails {
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsMatchDetails matchDetailsField;
-        
+
         private string informationSourceField;
-        
+
         private string companyNumberField;
-        
+
         private string directorCountField;
-        
+
         private string directorNumberField;
-        
+
         private string deceasedField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsCreationDate creationDateField;
-        
+
         private string sexField;
-        
+
         private string traderCountField;
-        
+
         private string directorshipsField;
-        
+
         private string noCReferenceField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsName nameField;
-        
+
         private OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsLocation locationField;
-        
+
         private string uniqueRefField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsMatchDetails MatchDetails {
@@ -24650,7 +24649,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string InformationSource {
@@ -24661,7 +24660,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.informationSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CompanyNumber {
@@ -24672,7 +24671,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.companyNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DirectorCount {
@@ -24683,7 +24682,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.directorCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string DirectorNumber {
@@ -24694,7 +24693,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.directorNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Deceased {
@@ -24705,7 +24704,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.deceasedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsCreationDate CreationDate {
@@ -24716,7 +24715,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.creationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Sex {
@@ -24727,7 +24726,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.sexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TraderCount {
@@ -24738,7 +24737,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.traderCountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Directorships {
@@ -24749,7 +24748,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.directorshipsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NoCReference {
@@ -24760,7 +24759,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.noCReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsName Name {
@@ -24771,7 +24770,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsLocation Location {
@@ -24782,7 +24781,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string UniqueRef {
@@ -24794,7 +24793,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24802,17 +24801,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsMatchDetails {
-        
+
         private string streetMatchLevelField;
-        
+
         private string houseMatchLevelField;
-        
+
         private string bureauRefCategoryField;
-        
+
         private string matchToField;
-        
+
         private string matchTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string StreetMatchLevel {
@@ -24823,7 +24822,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseMatchLevel {
@@ -24834,7 +24833,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseMatchLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string BureauRefCategory {
@@ -24845,7 +24844,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bureauRefCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchTo {
@@ -24856,7 +24855,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.matchToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MatchType {
@@ -24868,7 +24867,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24876,19 +24875,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsCreationDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -24899,7 +24898,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -24910,7 +24909,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -24921,7 +24920,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -24932,7 +24931,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -24943,7 +24942,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -24955,7 +24954,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -24963,19 +24962,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsName {
-        
+
         private string titleField;
-        
+
         private string forenameField;
-        
+
         private string middleNameField;
-        
+
         private string surnameField;
-        
+
         private string suffixField;
-        
+
         private string prefixField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Title {
@@ -24986,7 +24985,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -24997,7 +24996,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string MiddleName {
@@ -25008,7 +25007,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -25019,7 +25018,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Suffix {
@@ -25030,7 +25029,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.suffixField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Prefix {
@@ -25042,7 +25041,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -25050,33 +25049,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataDirectorsDirectorsDetailsLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -25087,7 +25086,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -25098,7 +25097,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -25109,7 +25108,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -25120,7 +25119,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -25131,7 +25130,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -25142,7 +25141,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -25153,7 +25152,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -25164,7 +25163,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -25175,7 +25174,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -25186,7 +25185,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -25197,7 +25196,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -25208,7 +25207,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -25220,7 +25219,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -25228,13 +25227,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataNOC {
-        
+
         private string locationIndicatorField;
-        
+
         private string applicantIndicatorField;
-        
+
         private OutputFullConsumerDataConsumerDataNOCNoCDetails[] noCDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIndicator {
@@ -25245,7 +25244,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIndicator {
@@ -25256,7 +25255,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NoCDetails", Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataConsumerDataNOCNoCDetails[] NoCDetails {
@@ -25268,7 +25267,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -25276,13 +25275,13 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataConsumerDataNOCNoCDetails {
-        
+
         private string referenceField;
-        
+
         private string numberOfLinesField;
-        
+
         private string[] textLineField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Reference {
@@ -25293,7 +25292,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.referenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string NumberOfLines {
@@ -25304,7 +25303,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.numberOfLinesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("TextLine", Form=XmlSchemaForm.Unqualified)]
         public string[] TextLine {
@@ -25316,7 +25315,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -25324,39 +25323,39 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataControlDetails {
-        
+
         private string accountNumberField;
-        
+
         private string cAISSourceField;
-        
+
         private string cMLCodeField;
-        
+
         private string seeVotersField;
-        
+
         private string seeAssociationsField;
-        
+
         private string seePublicInfoField;
-        
+
         private string seeCIFASField;
-        
+
         private string seeCAISField;
-        
+
         private string seeCMLField;
-        
+
         private string seeCAPSField;
-        
+
         private string seeAddrLinksField;
-        
+
         private OutputFullConsumerDataControlDetailsSearchDate searchDateField;
-        
+
         private string searchTimeField;
-        
+
         private string systemField;
-        
+
         private string seeGAINField;
-        
+
         private string seeDirectorsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string AccountNumber {
@@ -25367,7 +25366,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CAISSource {
@@ -25378,7 +25377,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cAISSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CMLCode {
@@ -25389,7 +25388,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cMLCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeVoters {
@@ -25400,7 +25399,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seeVotersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeAssociations {
@@ -25411,7 +25410,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seeAssociationsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeePublicInfo {
@@ -25422,7 +25421,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seePublicInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeCIFAS {
@@ -25433,7 +25432,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seeCIFASField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeCAIS {
@@ -25444,7 +25443,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seeCAISField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeCML {
@@ -25455,7 +25454,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seeCMLField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeCAPS {
@@ -25466,7 +25465,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seeCAPSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeAddrLinks {
@@ -25477,7 +25476,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seeAddrLinksField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputFullConsumerDataControlDetailsSearchDate SearchDate {
@@ -25488,7 +25487,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searchDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchTime {
@@ -25499,7 +25498,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searchTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string System {
@@ -25510,7 +25509,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.systemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeGAIN {
@@ -25521,7 +25520,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.seeGAINField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SeeDirectors {
@@ -25533,7 +25532,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -25541,19 +25540,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputFullConsumerDataControlDetailsSearchDate {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -25564,7 +25563,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -25575,7 +25574,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -25586,7 +25585,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -25597,7 +25596,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -25608,7 +25607,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -25620,7 +25619,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -25628,29 +25627,29 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputLocationDetails {
-        
+
         private int locationIdentifierField;
-        
+
         private bool locationIdentifierFieldSpecified;
-        
+
         private OutputLocationDetailsUKLocation uKLocationField;
-        
+
         private OutputLocationDetailsBFPOLocation bFPOLocationField;
-        
+
         private OutputLocationDetailsOverseasLocation overseasLocationField;
-        
+
         private string rMCField;
-        
+
         private string regionNumberField;
-        
+
         private string cVPLocationIDField;
-        
+
         private string clientLocationIDField;
-        
+
         private OutputLocationDetailsMultiLineLocation multiLineLocationField;
-        
+
         private string formattedLocationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int LocationIdentifier {
@@ -25661,7 +25660,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool LocationIdentifierSpecified {
@@ -25672,7 +25671,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIdentifierFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputLocationDetailsUKLocation UKLocation {
@@ -25683,7 +25682,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.uKLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputLocationDetailsBFPOLocation BFPOLocation {
@@ -25694,7 +25693,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bFPOLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputLocationDetailsOverseasLocation OverseasLocation {
@@ -25705,7 +25704,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.overseasLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RMC {
@@ -25716,7 +25715,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.rMCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RegionNumber {
@@ -25727,7 +25726,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.regionNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CVPLocationID {
@@ -25738,7 +25737,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cVPLocationIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientLocationID {
@@ -25749,7 +25748,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientLocationIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputLocationDetailsMultiLineLocation MultiLineLocation {
@@ -25760,7 +25759,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.multiLineLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FormattedLocation {
@@ -25772,7 +25771,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -25780,33 +25779,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputLocationDetailsUKLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -25817,7 +25816,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -25828,7 +25827,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -25839,7 +25838,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -25850,7 +25849,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -25861,7 +25860,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -25872,7 +25871,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -25883,7 +25882,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -25894,7 +25893,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -25905,7 +25904,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -25916,7 +25915,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -25927,7 +25926,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -25938,7 +25937,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -25950,7 +25949,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -25958,21 +25957,21 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputLocationDetailsBFPOLocation {
-        
+
         private string locationLine1Field;
-        
+
         private string locationLine2Field;
-        
+
         private string locationLine3Field;
-        
+
         private string locationLine4Field;
-        
+
         private string locationLine5Field;
-        
+
         private string locationLine6Field;
-        
+
         private string postcodeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine1 {
@@ -25983,7 +25982,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine2 {
@@ -25994,7 +25993,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine3 {
@@ -26005,7 +26004,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine4 {
@@ -26016,7 +26015,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine5 {
@@ -26027,7 +26026,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine6 {
@@ -26038,7 +26037,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine6Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -26050,7 +26049,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26058,19 +26057,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputLocationDetailsOverseasLocation {
-        
+
         private string locationLine1Field;
-        
+
         private string locationLine2Field;
-        
+
         private string locationLine3Field;
-        
+
         private string locationLine4Field;
-        
+
         private string locationLine5Field;
-        
+
         private string locationLine6Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine1 {
@@ -26081,7 +26080,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine2 {
@@ -26092,7 +26091,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine3 {
@@ -26103,7 +26102,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine4 {
@@ -26114,7 +26113,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine5 {
@@ -26125,7 +26124,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine6 {
@@ -26137,7 +26136,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26145,19 +26144,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputLocationDetailsMultiLineLocation {
-        
+
         private string locationLine1Field;
-        
+
         private string locationLine2Field;
-        
+
         private string locationLine3Field;
-        
+
         private string locationLine4Field;
-        
+
         private string locationLine5Field;
-        
+
         private string locationLine6Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine1 {
@@ -26168,7 +26167,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine2 {
@@ -26179,7 +26178,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine3 {
@@ -26190,7 +26189,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine4 {
@@ -26201,7 +26200,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine5 {
@@ -26212,7 +26211,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine6 {
@@ -26224,7 +26223,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26232,11 +26231,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputMultipleLocations {
-        
+
         private string locationIdentifierField;
-        
+
         private OutputMultipleLocationsUKLocation[] uKLocationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIdentifier {
@@ -26247,7 +26246,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("UKLocation", Form=XmlSchemaForm.Unqualified)]
         public OutputMultipleLocationsUKLocation[] UKLocation {
@@ -26259,7 +26258,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26267,33 +26266,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputMultipleLocationsUKLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -26304,7 +26303,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -26315,7 +26314,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -26326,7 +26325,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -26337,7 +26336,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -26348,7 +26347,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -26359,7 +26358,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -26370,7 +26369,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -26381,7 +26380,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -26392,7 +26391,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -26403,7 +26402,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -26414,7 +26413,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -26425,7 +26424,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -26437,7 +26436,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26445,11 +26444,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputOneShotFailure {
-        
+
         private string failedLocationField;
-        
+
         private string reasonField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FailedLocation {
@@ -26460,7 +26459,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.failedLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Reason {
@@ -26472,7 +26471,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26480,25 +26479,25 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputResidency {
-        
+
         private string applicantIdentifierField;
-        
+
         private string locationIdentifierField;
-        
+
         private string locationCodeField;
-        
+
         private OutputResidencyTimeAt timeAtField;
-        
+
         private OutputResidencyResidencyDateFrom residencyDateFromField;
-        
+
         private OutputResidencyResidencyDateTo residencyDateToField;
-        
+
         private string truvueIDField;
-        
+
         private string searchFlagField;
-        
+
         private OutputResidencyVRConfirmation vRConfirmationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ApplicantIdentifier {
@@ -26509,7 +26508,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.applicantIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationIdentifier {
@@ -26520,7 +26519,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationCode {
@@ -26531,7 +26530,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputResidencyTimeAt TimeAt {
@@ -26542,7 +26541,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.timeAtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputResidencyResidencyDateFrom ResidencyDateFrom {
@@ -26553,7 +26552,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.residencyDateFromField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputResidencyResidencyDateTo ResidencyDateTo {
@@ -26564,7 +26563,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.residencyDateToField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TruvueID {
@@ -26575,7 +26574,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.truvueIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SearchFlag {
@@ -26586,7 +26585,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.searchFlagField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public OutputResidencyVRConfirmation VRConfirmation {
@@ -26598,7 +26597,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26606,11 +26605,11 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputResidencyTimeAt {
-        
+
         private string yearsField;
-        
+
         private string monthsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Years {
@@ -26621,7 +26620,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yearsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Months {
@@ -26633,7 +26632,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26641,19 +26640,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputResidencyResidencyDateFrom {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -26664,7 +26663,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -26675,7 +26674,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -26686,7 +26685,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -26697,7 +26696,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -26708,7 +26707,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -26720,7 +26719,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26728,19 +26727,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputResidencyResidencyDateTo {
-        
+
         private int cCYYField;
-        
+
         private bool cCYYFieldSpecified;
-        
+
         private int mmField;
-        
+
         private bool mmFieldSpecified;
-        
+
         private int ddField;
-        
+
         private bool ddFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int CCYY {
@@ -26751,7 +26750,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CCYYSpecified {
@@ -26762,7 +26761,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cCYYFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int MM {
@@ -26773,7 +26772,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MMSpecified {
@@ -26784,7 +26783,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.mmFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int DD {
@@ -26795,7 +26794,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.ddField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DDSpecified {
@@ -26807,7 +26806,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26815,17 +26814,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputResidencyVRConfirmation {
-        
+
         private string confirmedField;
-        
+
         private string surnameField;
-        
+
         private string forenameField;
-        
+
         private string yrsERSPField;
-        
+
         private string yrsERSFField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Confirmed {
@@ -26836,7 +26835,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.confirmedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Surname {
@@ -26847,7 +26846,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.surnameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Forename {
@@ -26858,7 +26857,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.forenameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string YrsERSP {
@@ -26869,7 +26868,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.yrsERSPField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string YrsERSF {
@@ -26881,7 +26880,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26889,17 +26888,17 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputThirdPartyData {
-        
+
         private string outcomeCodeField;
-        
+
         private string optOutField;
-        
+
         private string transientAssocsField;
-        
+
         private string hHOAllowedField;
-        
+
         private string optoutValidCutOffField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OutcomeCode {
@@ -26910,7 +26909,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.outcomeCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OptOut {
@@ -26921,7 +26920,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.optOutField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string TransientAssocs {
@@ -26932,7 +26931,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.transientAssocsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HHOAllowed {
@@ -26943,7 +26942,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.hHOAllowedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string OptoutValidCutOff {
@@ -26955,7 +26954,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26963,9 +26962,9 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class OutputRoot {
-        
+
         private Output outputField;
-        
+
         /// <remarks/>
         public Output Output {
             get {
@@ -26976,7 +26975,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -26984,29 +26983,29 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class InputLocationDetails {
-        
+
         private int locationIdentifierField;
-        
+
         private bool locationIdentifierFieldSpecified;
-        
+
         private InputLocationDetailsUKLocation uKLocationField;
-        
+
         private InputLocationDetailsBFPOLocation bFPOLocationField;
-        
+
         private InputLocationDetailsOverseasLocation overseasLocationField;
-        
+
         private string rMCField;
-        
+
         private string regionNumberField;
-        
+
         private string cVPLocationIDField;
-        
+
         private string clientLocationIDField;
-        
+
         private InputLocationDetailsMultiLineLocation multiLineLocationField;
-        
+
         private string formattedLocationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public int LocationIdentifier {
@@ -27017,7 +27016,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool LocationIdentifierSpecified {
@@ -27028,7 +27027,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationIdentifierFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public InputLocationDetailsUKLocation UKLocation {
@@ -27039,7 +27038,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.uKLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public InputLocationDetailsBFPOLocation BFPOLocation {
@@ -27050,7 +27049,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.bFPOLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public InputLocationDetailsOverseasLocation OverseasLocation {
@@ -27061,7 +27060,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.overseasLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RMC {
@@ -27072,7 +27071,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.rMCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string RegionNumber {
@@ -27083,7 +27082,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.regionNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string CVPLocationID {
@@ -27094,7 +27093,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.cVPLocationIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string ClientLocationID {
@@ -27105,7 +27104,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.clientLocationIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public InputLocationDetailsMultiLineLocation MultiLineLocation {
@@ -27116,7 +27115,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.multiLineLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string FormattedLocation {
@@ -27128,7 +27127,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -27136,33 +27135,33 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class InputLocationDetailsUKLocation {
-        
+
         private string flatField;
-        
+
         private string houseNameField;
-        
+
         private string houseNumberField;
-        
+
         private string streetField;
-        
+
         private string street2Field;
-        
+
         private string districtField;
-        
+
         private string district2Field;
-        
+
         private string postTownField;
-        
+
         private string countyField;
-        
+
         private string postcodeField;
-        
+
         private string pOBoxField;
-        
+
         private string countryField;
-        
+
         private string sharedLetterboxField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Flat {
@@ -27173,7 +27172,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.flatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseName {
@@ -27184,7 +27183,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string HouseNumber {
@@ -27195,7 +27194,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.houseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street {
@@ -27206,7 +27205,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Street2 {
@@ -27217,7 +27216,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.street2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District {
@@ -27228,7 +27227,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.districtField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string District2 {
@@ -27239,7 +27238,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.district2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string PostTown {
@@ -27250,7 +27249,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postTownField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string County {
@@ -27261,7 +27260,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -27272,7 +27271,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.postcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string POBox {
@@ -27283,7 +27282,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.pOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Country {
@@ -27294,7 +27293,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.countryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string SharedLetterbox {
@@ -27306,7 +27305,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -27314,21 +27313,21 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class InputLocationDetailsBFPOLocation {
-        
+
         private string locationLine1Field;
-        
+
         private string locationLine2Field;
-        
+
         private string locationLine3Field;
-        
+
         private string locationLine4Field;
-        
+
         private string locationLine5Field;
-        
+
         private string locationLine6Field;
-        
+
         private string postcodeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine1 {
@@ -27339,7 +27338,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine2 {
@@ -27350,7 +27349,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine3 {
@@ -27361,7 +27360,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine4 {
@@ -27372,7 +27371,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine5 {
@@ -27383,7 +27382,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine6 {
@@ -27394,7 +27393,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine6Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string Postcode {
@@ -27406,7 +27405,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -27414,19 +27413,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class InputLocationDetailsOverseasLocation {
-        
+
         private string locationLine1Field;
-        
+
         private string locationLine2Field;
-        
+
         private string locationLine3Field;
-        
+
         private string locationLine4Field;
-        
+
         private string locationLine5Field;
-        
+
         private string locationLine6Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine1 {
@@ -27437,7 +27436,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine2 {
@@ -27448,7 +27447,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine3 {
@@ -27459,7 +27458,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine4 {
@@ -27470,7 +27469,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine5 {
@@ -27481,7 +27480,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine6 {
@@ -27493,7 +27492,7 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -27501,19 +27500,19 @@ namespace EzBobIntegration.Web_References.Interactive {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://schema.uk.experian.com/experian/cems/msgs/v1.2/InteractiveTarget")]
     public partial class InputLocationDetailsMultiLineLocation {
-        
+
         private string locationLine1Field;
-        
+
         private string locationLine2Field;
-        
+
         private string locationLine3Field;
-        
+
         private string locationLine4Field;
-        
+
         private string locationLine5Field;
-        
+
         private string locationLine6Field;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine1 {
@@ -27524,7 +27523,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine2 {
@@ -27535,7 +27534,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine3 {
@@ -27546,7 +27545,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine4 {
@@ -27557,7 +27556,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine5 {
@@ -27568,7 +27567,7 @@ namespace EzBobIntegration.Web_References.Interactive {
                 this.locationLine5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=XmlSchemaForm.Unqualified)]
         public string LocationLine6 {
@@ -27580,24 +27579,24 @@ namespace EzBobIntegration.Web_References.Interactive {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void InteractiveCompletedEventHandler(object sender, InteractiveCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class InteractiveCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal InteractiveCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public OutputRoot Result {
             get {

@@ -184,7 +184,6 @@
 				log.InfoFormat("Fetching amazon orders for customer:{0} marketplace:{1}",
 											  databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.Id);
 
-
 				MP_AmazonOrder amazonOrder = null;
 
 				RequestsCounterData requestsCounter = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
@@ -195,7 +194,6 @@
 									amazonOrder = Helper.StoreAmazonOrdersData(databaseCustomerMarketPlace, data, historyRecord, amazonOrder);
 									return true;
 								}));
-
 
 				var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									databaseCustomerMarketPlace.Id,
@@ -234,7 +232,6 @@
 								ElapsedDataMemberType.StoreDataToDatabase,
 								() => Helper.StoreAmazonOrdersDetailsData(databaseCustomerMarketPlace, bestSaledOrderItemList));
 				}
-
 
 				var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 								databaseCustomerMarketPlace.Id,
@@ -305,7 +302,6 @@
 										  Counter = group.Count()
 									  }).OrderByDescending(x => x.Counter).Take(maxNumberOfItems);
 
-
 			return rez.Select(x => shippedOrders.First(oi => oi.OrderTotal.Value == x.Price &&
 														oi.NumberOfItemsShipped == x.NumberOfItemsShipped &&
 														oi.OrderTotal.CurrencyCode == x.CurrencyCode)).ToList();
@@ -318,7 +314,6 @@
 												ElapsedTimeInfo elapsedTimeInfo)
 		{
 			MP_EbayAmazonCategory[] categories = null;
-
 
 			AmazonProductItemBase productItem = null;
 			try
@@ -445,7 +440,6 @@
 				var negativePercent = ratingInfo.GetFeedbackValue(amazonTimePeriod, FeedbackType.Negative);
 				var neutralPercent = ratingInfo.GetFeedbackValue(amazonTimePeriod, FeedbackType.Neutral);
 				var positivePercent = ratingInfo.GetFeedbackValue(amazonTimePeriod, FeedbackType.Positive);
-
 
 				var negativeNumber = ConvertToNumber(negativePercent, count);
 				var neutralNumber = ConvertToNumber(neutralPercent, count);

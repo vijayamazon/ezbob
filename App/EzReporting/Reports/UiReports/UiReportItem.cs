@@ -4,12 +4,8 @@ using System.Data;
 using System.Text;
 
 namespace Reports {
-	#region class UiReportItem
 
 	public class UiReportItem : IComparable<UiReportItem> {
-		#region public
-
-		#region method CreateTable
 
 		public static DataTable CreateTable() {
 			var oOutput = new DataTable();
@@ -26,9 +22,6 @@ namespace Reports {
 
 			return oOutput;
 		} // CreateTable
-		#endregion method CreateTable
-
-		#region constructor
 
 		public UiReportItem(CustomerInfo oInfo, SortedDictionary<UiItemGroups, SortedDictionary<int, string>> oRelevantControlGroups) {
 			CustomerInfo = oInfo;
@@ -37,10 +30,6 @@ namespace Reports {
 			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
 				m_oData[nItemType] = new UiReportItemGroupData(CustomerInfo, nItemType, oRelevantControlGroups[nItemType]);
 		} // constructor
-
-		#endregion constructor
-
-		#region properties
 
 		public CustomerInfo CustomerInfo { get; private set; }
 
@@ -52,27 +41,15 @@ namespace Reports {
 		public UiReportItemGroupData AdditionalDirectors { get { return m_oData[UiItemGroups.AdditionalDirectors]; } }
 		public UiReportItemGroupData LinkAccounts { get { return m_oData[UiItemGroups.LinkAccounts]; } }
 
-		#endregion properties
-
-		#region method Generate
-
 		public void Generate() {
 			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
 				m_oData[nItemType].Generate();	
 		} // Generate
 
-		#endregion method Generate
-
-		#region method AddEvent
-
 		public void AddEvent(UiEvent oEvent) {
 			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
 				m_oData[nItemType].AddEvent(oEvent);	
 		} // AddEvent
-
-		#endregion method AddEvent
-
-		#region method ToRow
 
 		public void ToRow(DataTable tbl) {
 			var oRow = new List<object> {
@@ -87,10 +64,6 @@ namespace Reports {
 			tbl.Rows.Add(oRow.ToArray());
 		} // ToRow
 
-		#endregion method ToRow
-
-		#region method ToString
-
 		public override string ToString() {
 			var os = new StringBuilder();
 
@@ -101,10 +74,6 @@ namespace Reports {
 
 			return os.ToString();
 		} // ToString
-
-		#endregion method ToString
-
-		#region method CompareTo
 
 		public int CompareTo(UiReportItem y) {
 			if (ReferenceEquals(y, null))
@@ -119,16 +88,8 @@ namespace Reports {
 			return this.CustomerInfo.WizardStepIsLast ? -1 : 1;
 		} // Compare
 
-		#endregion method CompareTo
-
-		#endregion public
-
-		#region private
-
 		private readonly SortedDictionary<UiItemGroups, UiReportItemGroupData> m_oData; 
 
-		#endregion private
 	} // class UiReportItem
 
-	#endregion class UiReportItem
 } // namespace Reports

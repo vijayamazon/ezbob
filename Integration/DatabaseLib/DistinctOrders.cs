@@ -6,8 +6,6 @@
 	using Model.Marketplaces.Sage;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 
-	#region class AOrderComparer
-
 	public abstract class AOrderComparer<T> : EqualityComparer<T> where T : class {
 		public override bool Equals(T a, T b) {
 			if (object.ReferenceEquals(a, b))
@@ -27,10 +25,6 @@
 		public abstract int HashCode(T a);
 	} // class AOrderComparer
 
-	#endregion class AOrderComparer
-
-	#region class EkmOrderComparer
-
 	class EkmOrderComparer : AOrderComparer<EkmOrderItem> {
 		public override bool AreEqual(EkmOrderItem a, EkmOrderItem b) {
 			return a.OrderNumber == b.OrderNumber;
@@ -40,10 +34,6 @@
 			return a.OrderNumber.GetHashCode();
 		} // HashCode
 	} // class EkmOrderComparer
-
-	#endregion class EkmOrderComparer
-
-	#region class FreeAgentInvoiceComparer
 
 	public class FreeAgentInvoiceComparer : AOrderComparer<MP_FreeAgentInvoice>
 	{
@@ -58,10 +48,6 @@
 		} // HashCode
 	} // class FreeAgentInvoiceComparer
 
-	#endregion class FreeAgentInvoiceComparer
-
-	#region class SageSalesInvoiceComparer
-
 	public class SageSalesInvoiceComparer : AOrderComparer<MP_SageSalesInvoice>
 	{
 		public override bool AreEqual(MP_SageSalesInvoice a, MP_SageSalesInvoice b)
@@ -74,10 +60,6 @@
 			return a.SageId.GetHashCode();
 		} // HashCode
 	} // class SageSalesInvoiceComparer
-
-	#endregion class SageSalesInvoiceComparer
-
-	#region class SagePurchaseInvoiceComparer
 
 	public class SagePurchaseInvoiceComparer : AOrderComparer<MP_SagePurchaseInvoice>
 	{
@@ -92,10 +74,6 @@
 		} // HashCode
 	} // class SagePurchaseInvoiceComparer
 
-	#endregion class SagePurchaseInvoiceComparer
-
-	#region class SageIncomeComparer
-
 	public class SageIncomeComparer : AOrderComparer<MP_SageIncome>
 	{
 		public override bool AreEqual(MP_SageIncome a, MP_SageIncome b)
@@ -108,10 +86,6 @@
 			return a.SageId.GetHashCode();
 		} // HashCode
 	} // class SageIncomeComparer
-
-	#endregion class SageIncomeComparer
-
-	#region class SageExpenditureComparer
 
 	public class SageExpenditureComparer : AOrderComparer<MP_SageExpenditure>
 	{
@@ -126,10 +100,6 @@
 		} // HashCode
 	} // class SageExpenditureComparer
 
-	#endregion class SageExpenditureComparer
-
-	#region class FreeAgentExpenseComparer
-
 	public class FreeAgentExpenseComparer : AOrderComparer<MP_FreeAgentExpense> {
 		public override bool AreEqual(MP_FreeAgentExpense a, MP_FreeAgentExpense b) {
 			return a.url == b.url;
@@ -139,10 +109,6 @@
 			return a.url.GetHashCode();
 		} // HashCode
 	} // class FreeAgentExpenseComparer
-
-	#endregion class FreeAgentExpenseComparer
-
-	#region class InternalOrderComparer
 
 	public class InternalOrderComparer : AOrderComparer<AInternalOrderItem> {
 		public override bool AreEqual(AInternalOrderItem a, AInternalOrderItem b) {
@@ -154,10 +120,6 @@
 		} // HashCode
 	} // class InternalOrderComparer
 
-	#endregion class InternalOrderComparer
-
-	#region class PayPointOrderComparer
-
 	class PayPointOrderComparer : AOrderComparer<PayPointOrderItem> {
 		public override bool AreEqual(PayPointOrderItem a, PayPointOrderItem b) {
 			return (a.trans_id == b.trans_id) && (a.date == b.date);
@@ -167,10 +129,6 @@
 			return a.trans_id.GetHashCode() ^ a.date.GetHashCode();
 		} // HashCode
 	} // class PayPointOrderComparer
-	
-	#endregion class PayPointOrderComparer
-
-	#region class YodleeOrderComparer
 
 	class YodleeOrderComparer : AOrderComparer<BankTransactionData>
 	{
@@ -211,9 +169,6 @@
 			return a.srcElementId.GetHashCode();
 		}
 	}
-	#endregion class YodleeOrderComparer
-
-	#region class AmazonOrderComparer
 
 	class AmazonOrderComparer : AOrderComparer<MP_AmazonOrderItem> {
 		public override bool AreEqual(MP_AmazonOrderItem a, MP_AmazonOrderItem b) {
@@ -228,5 +183,4 @@
 		} // HashCode
 	} // class AmazonOrderComparer
 
-	#endregion class AmazonOrderComparer
 } // namespace EZBob.DatabaseLib

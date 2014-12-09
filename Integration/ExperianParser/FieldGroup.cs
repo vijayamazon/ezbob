@@ -4,20 +4,12 @@ using System.Xml;
 using Ezbob.Logger;
 
 namespace Ezbob.ExperianParser {
-	#region class FieldGroup
 
 	public class FieldGroup {
-		#region public
-
-		#region constructor
 
 		public FieldGroup() {
 			OutputFieldBuilders = new SortedDictionary<string, OutputFieldBuilder>();
 		} // constructor
-
-		#endregion constructor
-
-		#region configuration
 
 		public string Name { get; set; }
 		public string PathToParent { get; set; }
@@ -28,17 +20,9 @@ namespace Ezbob.ExperianParser {
 
 		public SortedDictionary<string, OutputFieldBuilder> OutputFieldBuilders { get; private set; }
 
-		#endregion configuration
-
-		#region method HasChildren
-
 		public bool HasChildren() {
 			return !ReferenceEquals(Children, null) && (Children.Count > 0);
 		} // HasChildren
-
-		#endregion method HasChildren
-
-		#region method Validate
 
 		public void Validate(ASafeLog log) {
 			if (string.IsNullOrWhiteSpace(Name))
@@ -54,10 +38,6 @@ namespace Ezbob.ExperianParser {
 				Children.ForEach(c => c.Validate(log));
 		} // Validate
 
-		#endregion method Validate
-
-		#region method Log
-
 		public void Log(ASafeLog log) {
 			if (log == null)
 				return;
@@ -71,10 +51,6 @@ namespace Ezbob.ExperianParser {
 			log.Debug(sb.ToString());
 		} // Log
 
-		#endregion method Log
-
-		#region method AddOutputFieldBuilder
-
 		public void AddOutputFieldBuilder(Target oTarget) {
 			if (OutputFieldBuilders.ContainsKey(oTarget.Name))
 				OutputFieldBuilders[oTarget.Name].Add(oTarget);
@@ -82,10 +58,6 @@ namespace Ezbob.ExperianParser {
 				OutputFieldBuilders[oTarget.Name] = new OutputFieldBuilder(oTarget);
 		} // AddOutputFieldBuilder
 
-		#endregion method AddOutputFieldBuilder
-
-		#endregion public
 	} // class FieldGroup
 
-	#endregion class FieldGroup
 } // namespace Ezbob.ExperianParser

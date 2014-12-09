@@ -30,7 +30,6 @@
 		 */
 		public static int REFRESH_PRIORITY_LOW = 2;
 
-
 		/**
 		 * Indicates the stop_refresh reason as "refresh timedout".
 		 */
@@ -40,7 +39,6 @@
 		 * Indicates the stop_refresh reason as "refresh aborted by the user".
 		 */
 		public static int STOP_REFRESH_REASON_USER_ABORTED = 101;
-
 
 		public RefreshNotMFAItem()
 		{

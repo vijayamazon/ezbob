@@ -6,9 +6,6 @@
 	using JetBrains.Annotations;
 
 	public class UserChangePassword : AStrategy {
-		#region public
-
-		#region constructor
 
 		public UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_bForceChangePassword = bForceChangePassword;
@@ -27,17 +24,9 @@
 			m_oSpResult = new SpUserChangePassword(DB, Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "User change password"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			ErrorMessage = null;
@@ -91,17 +80,7 @@
 			);
 		} // Execute
 
-		#endregion method Execute
-
-		#region property ErrorMessage
-
 		public string ErrorMessage { get; private set; } // ErrorMessage
-
-		#endregion property ErrorMessage
-
-		#endregion public
-
-		#region protected
 
 		protected int UserID { get; private set; } // UserID
 
@@ -109,16 +88,10 @@
 			get { return m_oData.NewPassword; }
 		} // Password
 
-		#endregion protected
-
-		#region private
-
 		private readonly UserSecurityData m_oData;
 		private readonly bool m_bForceChangePassword;
 		private readonly UserDataForLogin m_oSpLoad;
 		private readonly SpUserChangePassword m_oSpResult;
-
-		#region class SpUserChangePassword
 
 		private class SpUserChangePassword : AStoredProc {
 			public SpUserChangePassword(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -140,8 +113,5 @@
 			} // Now
 		} // class SpUserChangePassword
 
-		#endregion class SpUserChangePassword
-
-		#endregion private
 	} // class UserChangePassword
 } // namespace EzBob.Backend.Strategies.UserManagement

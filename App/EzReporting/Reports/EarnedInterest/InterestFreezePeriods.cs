@@ -3,17 +3,10 @@
 	using Ezbob.ValueIntervals;
 
 	public class InterestFreezePeriods {
-		#region public
-
-		#region constructor
 
 		public InterestFreezePeriods() {
 			m_oPeriods = null;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Add
 
 		public void Add(DateTime? oStart, DateTime? oEnd, decimal nInterestRate) {
 			var fi = new FreezeInterval(oStart, oEnd, nInterestRate);
@@ -48,10 +41,6 @@
 			m_oPeriods = oNew + oDiff;
 		} // Add
 
-		#endregion method Add
-
-		#region method ForEach
-
 		public void ForEach(Action<FreezeInterval> it) {
 			if (it == null)
 				return;
@@ -62,10 +51,6 @@
 			foreach (TInterval<DateTime> i in m_oPeriods)
 				it.Invoke(i as FreezeInterval);
 		} // ForEach
-
-		#endregion method ForEach
-
-		#region method GetInterest
 
 		public decimal? GetInterest(DateTime oDate) {
 			var d = new DateIntervalEdge(oDate, AIntervalEdge<DateTime>.EdgeType.Finite);
@@ -81,28 +66,13 @@
 			return null;
 		} // GetInterest
 
-		#endregion method GetInterest
-
-		#region method ToString
-
 		public override string ToString() {
 			return m_oPeriods.ToString();
 		} // ToString
 
-		#endregion method ToString
-
-		#region property Count
-
 		public int Count { get { return m_oPeriods.Count; } } // Count
-
-		#endregion property Count
-
-		#endregion public
-
-		#region private
 
 		private TDisjointIntervals<DateTime> m_oPeriods;
 
-		#endregion private
 	} // class InterestFreezePeriods
 } // namespace

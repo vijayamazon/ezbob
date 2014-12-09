@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using com.yodlee.sampleapps.datatypes;
 using System.Configuration;
@@ -11,13 +11,12 @@ namespace com.yodlee.sampleapps
 	public class AccountSummary : ApplicationSuper
 	{
 		DataServiceService dataService;
-		
+
 		public AccountSummary()
 		{
 			dataService = new DataServiceService();
             dataService.Url = ConfigurationManager.AppSettings.Get("soapServer") + "/" + "DataService";
 		}
-
 
 		public void displayAccountSummary (UserContext userContext, bool isHistoryNeeded)
 		{
@@ -55,7 +54,7 @@ namespace com.yodlee.sampleapps
             //ContainerCriteria bill = new ContainerCriteria();
             //bill.dataExtent = dataExtent;
             //bill.containerType = ContainerTypes.BILL;
-			
+
 			// Create a list of Container Criteria
             object[] list = { bank/*, cc, invest, loan, insur, bill*/ };
 
@@ -67,7 +66,7 @@ namespace com.yodlee.sampleapps
 
 			// Get ItemSummary
 			object[] itemSummaries = dataService.getItemSummaries1(userContext, sr);
-			
+
 			// Verify that there is an ItemSummary
 			if(itemSummaries == null || itemSummaries.Length == 0) 
 			{
@@ -80,7 +79,7 @@ namespace com.yodlee.sampleapps
 				ItemSummary itemSummary = (ItemSummary)itemSummaries[i];
                 //String containerName =
                 //    itemSummary.contentServiceInfo.containerInfo.containerName;
-				
+
                 //if(containerName.Equals(ContainerTypes.CREDIT_CARD))
                 //{
                 //    DisplayCardData displayCard = new DisplayCardData();
@@ -118,7 +117,6 @@ namespace com.yodlee.sampleapps
 				System.Console.WriteLine("");
 			}
 		}
-		
 
 	public void displayItemSummary (UserContext userContext, long itemId)
 		{
@@ -170,8 +168,8 @@ namespace com.yodlee.sampleapps
 				System.Console.WriteLine("Unsupported Container: "+ containerName );
 			}
 			System.Console.WriteLine("");
-			
+
 		}
 	}	
-		
+
 }

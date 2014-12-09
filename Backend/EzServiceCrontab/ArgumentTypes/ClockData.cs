@@ -5,8 +5,6 @@
 	internal class ClockData : AType<DateTime> {
 		public ClockData() : base("DateTime") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			DateTime nResult;
 
@@ -16,6 +14,5 @@
 			throw GetError(sValue);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class ClockData
 } // namespace

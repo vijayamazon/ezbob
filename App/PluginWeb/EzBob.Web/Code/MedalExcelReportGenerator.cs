@@ -62,7 +62,6 @@ namespace EzBob.Web.Code
             worksheet.Cells[0, 0].PutValue(headText);
         }
 
-
         public void CreateXlsHeaderMedalResult(Worksheet worksheet, int row)
         {
             SetCellStyle(worksheet, row, true);

@@ -20,9 +20,6 @@
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CrossCheckController : Controller {
-		#region public
-
-		#region constructor
 
 		public CrossCheckController(
 			CustomerRepository customerRepository,
@@ -35,20 +32,12 @@
 			_context = context;
 		} // constructor
 
-		#endregion constructor
-
-		#region action Index
-
 		[Ajax]
 		[HttpGet]
 		public ActionResult Index(int id) {
 			var model = new CrossCheckModel(_context.UserId, _customerRepository.Get(id));
 			return View(model);
 		} // Index
-
-		#endregion action Index
-
-		#region action Zoopla
 
 		// TODO: this method should be removed after testing is done
 		[Ajax]
@@ -73,12 +62,6 @@
 
 			return Json(zoopla, JsonRequestBehavior.AllowGet);
 		} // Zoopla
-
-		#endregion action Zoopla
-
-		#region Land Registry related
-
-		#region action LandRegistryEnquiry
 
 		[Ajax]
 		[HttpPost]
@@ -112,8 +95,6 @@
 			}
 		} // LandRegistryEnquiry
 
-		#endregion action LandRegistryEnquiry
-
 		// TODO: method should be removed after testing
 		[Ajax]
 		[HttpPost]
@@ -133,15 +114,13 @@
 				}
 				catch (Exception ex)
 				{
-					
+
 				}
 			}
 
 			landRegistryEnquiries = landRegistryEnquiries.DistinctBy(x => x.TitleNumber).ToList();
 			return Json(new {titles = landRegistryEnquiries});
 		}
-
-		#region action LandRegistry
 
 		[Ajax]
 		[HttpPost]
@@ -150,12 +129,6 @@
 			m_oServiceClient.Instance.LandRegistryRes(_context.UserId, customerId, titleNumber);
 			return Json(new {},JsonRequestBehavior.AllowGet);
 		} // LandRegistry
-
-		#endregion action LandRegistry
-
-		#endregion Land Registry related
-
-		#region action SaveTargetingData
 
 		[Ajax]
 		[Transactional]
@@ -195,10 +168,6 @@
 			_customerRepository.Update(customer);
 		} // SaveTargetingData
 
-		#endregion action SaveTargetingData
-
-		#region action AddDirector
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -212,12 +181,6 @@
 			return Json(CustomerDetailsController.AddDirectorToCustomer(director, customer, m_oSession, false));
 		} // AddDirector
 
-		#endregion method AddDirector
-
-		#endregion public
-
-		#region private
-
 		private readonly ServiceClient m_oServiceClient;
 		private readonly CustomerRepository _customerRepository;
 		private readonly CustomerAddressRepository _customerAddressRepository;
@@ -226,6 +189,5 @@
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (CrossCheckController));
 
-		#endregion private
 	} // class CrossCheckController
 } // namespace

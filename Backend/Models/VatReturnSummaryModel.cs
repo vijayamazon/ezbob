@@ -42,8 +42,6 @@
 		[NonTraversable]
 		public List<VatReturnQuarter> Quarters { get; set; }
 
-		#region method ToString
-
 		public override string ToString() {
 			var os = new StringBuilder();
 
@@ -68,6 +66,5 @@
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
 	} // class VatReturnSummary
 } // namespace Ezbob.Backend.Models

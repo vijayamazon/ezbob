@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.HmrcHarvester {
-	#region enum DataType
 
 	/// <summary>
 	/// Data types fetched from the Field (VAT return, etc).
@@ -8,10 +7,6 @@
 		VatReturn,
 		PayeRtiTaxYears,
 	} // enum DataType
-
-	#endregion enum DataType
-
-	#region enum FileType
 
 	/// <summary>
 	/// File types fetched from the Field.
@@ -30,15 +25,10 @@
 		Pdf,
 	} // enum FileType
 
-	#endregion enum FileType
-
-	#region class SheafMetaData
-
 	/// <summary>
 	/// File identifier class (data type, file type, file name).
 	/// </summary>
 	public class SheafMetaData {
-		#region public
 
 		/// <summary>
 		/// Data type.
@@ -63,8 +53,7 @@
 		public override string ToString() {
 			return string.Format("{0} {1} file named {2} with{3} thrasher", DataType, FileType, BaseFileName, Thrasher == null ? "out" : "");
 		} // ToString
-		#endregion public
+
 	} // class SheafMetaData
 
-	#endregion class SheafMetaData
 } // namespace Ezbob.HmrcHarvester

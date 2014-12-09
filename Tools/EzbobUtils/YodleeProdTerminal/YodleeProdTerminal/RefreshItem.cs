@@ -1,8 +1,7 @@
-using System;
+﻿using System;
 using System.Web.Services.Protocols;
 using System.Threading;
 using com.yodlee.sampleapps.util;
-
 
 namespace com.yodlee.sampleapps
 {
@@ -29,7 +28,6 @@ namespace com.yodlee.sampleapps
 		 */
 		public static int REFRESH_PRIORITY_LOW   = 2;
 
-
 		/**
 		 * Indicates the stop_refresh reason as "refresh timedout".
 		 */
@@ -39,7 +37,6 @@ namespace com.yodlee.sampleapps
 		 * Indicates the stop_refresh reason as "refresh aborted by the user".
 		 */
 		public static int STOP_REFRESH_REASON_USER_ABORTED   = 101;
-
 
 		public RefreshItem()
 		{
@@ -72,7 +69,7 @@ namespace com.yodlee.sampleapps
                 refreshParameters.refreshPriority = REFRESH_PRIORITY_HIGH;
                 refreshParameters.refreshPrioritySpecified = true;
                 refreshParameters.forceRefresh = false;
-                                
+
                 bool itemIdspecified = true;
                 bool startRefresh7ReturnSpecified;
                 RefreshStatus? status;
@@ -175,8 +172,6 @@ namespace com.yodlee.sampleapps
             ContentServiceHelper csh = new ContentServiceHelper(userContext);
             return csh.getMfATypeId(contentserviceId);
         }
-
-
 
 	}
 }

@@ -9,7 +9,6 @@
 	using StructureMap;
 
 	public static class CustomerExt {
-		#region method AddAlibabaDefaultBankAccount
 
 		public static void AddAlibabaDefaultBankAccount(this Customer customer, ISortCodeChecker sortCodeChecker = null) {
 			const string bankAccount = "00000000";
@@ -39,10 +38,6 @@
 				accountType
 			);
 		} // AddAlibabaDefaultBankAccount
-
-		#endregion method AddAlibabaDefaultBankAccount
-
-		#region method AddBankAccount
 
 		public static int AddBankAccount(this Customer customer, string bankAccount, string sortCode, BankAccountType accountType, ISortCodeChecker sortCodeChecker = null) {
 			if (customer == null) { // can happen for Alibaba call only
@@ -135,8 +130,6 @@
 
 			return card.Id;
 		} // AddBankAccount
-
-		#endregion method AddBankAccount
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (CustomerExt));
 	} // class CustomerExt

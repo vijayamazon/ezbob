@@ -35,8 +35,6 @@
 			} // lock
 		} // Execute
 
-
-
 		private static readonly object updateConfigurationVariablesLock = new object();
 		private static bool isExecuting;
 	} // UpdateCurrencyRates

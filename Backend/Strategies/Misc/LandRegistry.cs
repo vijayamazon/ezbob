@@ -6,12 +6,7 @@
 	using Ezbob.Utils.Serialization;
 	using LandRegistryLib;
 
-	#region class LandRegistryEnquiry
-
 	public class LandRegistryEnquiry : AStrategy {
-		#region public
-
-		#region constructor
 
 		public LandRegistryEnquiry(
 			int customerId,
@@ -31,21 +26,9 @@
 			m_sPostCode  = postCode;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name { get { return "Land Registry Enquiry"; } } // Name
 
-		#endregion property Name
-
-		#region property Result
-
 		public string Result { get; set; }
-
-		#endregion property Result
-
-		#region method Execute
 
 		public override void Execute() {
 			var helper = new StrategyHelper();
@@ -55,12 +38,6 @@
 			Result = new Serialized(response);
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly int m_nCustomerID;
 		private readonly string m_sBuildingNumber;
 		private readonly string m_sBuildingName;
@@ -68,38 +45,18 @@
 		private readonly string m_sCityName;
 		private readonly string m_sPostCode;
 
-		#endregion private
 	} // LandRegistryEnquiry
 
-	#endregion class LandRegistryEnquiry
-
-	#region class LandRegistryRes
-
 	public class LandRegistryRes : AStrategy {
-		#region public
-
-		#region constructor
 
 		public LandRegistryRes(int customerId, string titleNumber, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = customerId;
 			m_sTitleNumber = titleNumber;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name { get { return "Land Registry RES"; } } // Name
 
-		#endregion property Name
-
-		#region property Result
-
 		public string Result { get; set; }
-
-		#endregion property Result
-
-		#region method Execute
 
 		public override void Execute() {
 			var helper = new StrategyHelper();
@@ -110,17 +67,9 @@
 			Result = new Serialized(response);
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly int m_nCustomerID;
 		private readonly string m_sTitleNumber;
 
-		#endregion private
 	} // class LandRegistryRes
 
-	#endregion class LandRegistryRes
 } // namespace EzBob.Backend.Strategies.Broker

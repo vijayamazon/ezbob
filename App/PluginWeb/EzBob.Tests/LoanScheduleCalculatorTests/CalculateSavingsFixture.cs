@@ -52,7 +52,6 @@ namespace EzBob.Tests
             customer.Loans.Add(loan);
             customer.Loans.Add(loan2);
 
-
             var saved = _facade.CalculateSavings(customer, _term);
 
             Assert.That(saved, Is.EqualTo(loan.Schedule.Sum(i => i.Interest) + loan2.Schedule.Sum(i => i.Interest)));

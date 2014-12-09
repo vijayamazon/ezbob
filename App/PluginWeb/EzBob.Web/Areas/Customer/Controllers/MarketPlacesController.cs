@@ -6,17 +6,10 @@
 	using Infrastructure.csrf;
 
 	public class MarketPlacesController : Controller {
-		#region public
-
-		#region constructor
 
 		public MarketPlacesController(IEzbobWorkplaceContext context) {
 			_context = context;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Accounts (account list by type)
 
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet, Ajax]
@@ -25,18 +18,7 @@
 			return Json(new { mpAccounts = _context.Customer.GetMarketPlaces() }, JsonRequestBehavior.AllowGet);
 		} // Accounts
 
-		#endregion method Accounts (account list by type)
-		
-		#endregion public
-
-		#region private
-
-		#region fields
-
 		private readonly IEzbobWorkplaceContext _context;
 
-		#endregion fields
-
-		#endregion private
 	} // class MarketPlacesController
 } // namespace

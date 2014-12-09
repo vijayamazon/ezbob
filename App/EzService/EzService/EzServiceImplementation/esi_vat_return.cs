@@ -4,29 +4,14 @@
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
-		#region async
-
-		#region method CalculateVatReturnSummary
 
 		public ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID) {
 			return Execute<CalculateVatReturnSummary>(null, null, nCustomerMarketplaceID);
 		} // CalculateVatReturnSummary
 
-		#endregion method CalculateVatReturnSummary
-
-		#region method AndRecalculateVatReturnSummaryForAll
-
 		public ActionMetaData AndRecalculateVatReturnSummaryForAll() {
 			return Execute<AndRecalculateVatReturnSummaryForAll>(null, null);
 		} // AndRecalculateVatReturnSummaryForAll
-
-		#endregion method AndRecalculateVatReturnSummaryForAll
-
-		#endregion async
-
-		#region sync
-
-		#region method LoadVatReturnSummary
 
 		public VatReturnDataActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID) {
 			LoadVatReturnSummary oInstance;
@@ -39,10 +24,6 @@
 			};
 		} // LoadVatReturnSummary
 
-		#endregion method LoadVatReturnSummary
-
-		#region method LoadManualVatReturnPeriods
-
 		public VatReturnPeriodsActionResult LoadManualVatReturnPeriods(int nCustomerID) {
 			LoadManualVatReturnPeriods oInstance;
 
@@ -53,10 +34,6 @@
 				Periods = oInstance.Periods.ToArray(),
 			};
 		} // LoadManualVatReturnPeriods
-
-		#endregion method LoadManualVatReturnPeriods
-
-		#region method SaveVatReturnData
 
 		public ElapsedTimeInfoActionResult SaveVatReturnData(
 			int nCustomerMarketplaceID,
@@ -75,10 +52,6 @@
 			};
 		} // SaveVatReturnData
 
-		#endregion method SaveVatReturnData
-
-		#region method LoadVatReturnRawData
-
 		public VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID) {
 			LoadVatReturnRawData oInstance;
 
@@ -90,10 +63,6 @@
 				VatReturnRawData = oInstance.VatReturnRawData,
 			};
 		} // LoadVatReturnRawData
-
-		#endregion method LoadVatReturnRawData
-
-		#region method LoadVatReturnFullData
 
 		public VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
 			LoadVatReturnFullData oInstance;
@@ -110,16 +79,9 @@
 			};
 		} // LoadVatReturnFullData
 
-		#endregion method LoadVatReturnFullData
-
-		#region method RemoveManualVatReturnPeriod
-
 		public ActionMetaData RemoveManualVatReturnPeriod(Guid oPeriodID) {
 			return ExecuteSync<RemoveManualVatReturnPeriod>(null, null, oPeriodID);
 		} // /RemoveManualVatReturnPeriod
 
-		#endregion method RemoveManualVatReturnPeriod
-
-		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -4,15 +4,10 @@
 	using Newtonsoft.Json;
 
 	public class MetaData {
-		#region constructor
 
 		public MetaData() {
 			ValidationErrors = new List<string>();
 		} // constructor
-
-		#endregion constructor
-
-		#region properties read from DB
 
 		[JsonIgnore]
 		public string RowType { get; set; }
@@ -29,11 +24,7 @@
 		public decimal RepaidPrincipal { get; set; }
 		public decimal SetupFees { get; set; }
 
-		#endregion properties read from DB
-
 		public List<string> ValidationErrors { get; private set; }
-
-		#region property RepaidRatio
 
 		[JsonIgnore]
 		public decimal RepaidRatio {
@@ -45,15 +36,10 @@
 			} // get
 		} // RepaidRatio
 
-		#endregion property RepaidRatio
-
-		#region method Validate
-
 		public void Validate() {
 			if (string.IsNullOrWhiteSpace(RowType))
 				throw new Exception("Meta data was not loaded.");
 		} // Validate
 
-		#endregion method Validate
 	} // class MetaData
 } // namespace

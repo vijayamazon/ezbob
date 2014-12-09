@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Text;
 using MarketplaceWebService.Attributes;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
@@ -29,7 +28,7 @@ namespace MarketplaceWebService.Model
     [MarketplaceWebServiceAttribute(RequestType = RequestType.DEFAULT, ResponseType = ResponseType.DEFAULT)]
     public class GetReportRequestCountRequest
     {
-    
+
         private String marketplaceField;
 
         private String merchantField;
@@ -39,7 +38,6 @@ namespace MarketplaceWebService.Model
         private DateTime? requestedFromDateField;
 
         private DateTime? requestedToDateField;
-
 
         /// <summary>
         /// Gets and sets the Marketplace property.
@@ -51,8 +49,6 @@ namespace MarketplaceWebService.Model
             get { return this.marketplaceField ; }
             set { this.marketplaceField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Marketplace property
@@ -66,8 +62,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Marketplace property is set
         /// </summary>
@@ -79,7 +73,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Merchant property.
         /// </summary>
@@ -89,8 +82,6 @@ namespace MarketplaceWebService.Model
             get { return this.merchantField ; }
             set { this.merchantField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Merchant property
@@ -103,8 +94,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Merchant property is set
         /// </summary>
@@ -115,7 +104,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ReportTypeList property.
         /// </summary>
@@ -125,8 +113,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportTypeListField ; }
             set { this.reportTypeListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportTypeList property
@@ -139,8 +125,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportTypeList property is set
         /// </summary>
@@ -149,9 +133,6 @@ namespace MarketplaceWebService.Model
         {
             return this.reportTypeListField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the ReportProcessingStatusList property.
@@ -162,8 +143,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportProcessingStatusListField ; }
             set { this.reportProcessingStatusListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportProcessingStatusList property
@@ -176,8 +155,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportProcessingStatusList property is set
         /// </summary>
@@ -186,9 +163,6 @@ namespace MarketplaceWebService.Model
         {
             return this.reportProcessingStatusListField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the RequestedFromDate property.
@@ -199,8 +173,6 @@ namespace MarketplaceWebService.Model
             get { return this.requestedFromDateField.GetValueOrDefault() ; }
             set { this.requestedFromDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the RequestedFromDate property
@@ -213,8 +185,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if RequestedFromDate property is set
         /// </summary>
@@ -225,7 +195,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the RequestedToDate property.
         /// </summary>
@@ -235,8 +204,6 @@ namespace MarketplaceWebService.Model
             get { return this.requestedToDateField.GetValueOrDefault() ; }
             set { this.requestedToDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the RequestedToDate property
@@ -249,8 +216,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if RequestedToDate property is set
         /// </summary>
@@ -260,10 +225,6 @@ namespace MarketplaceWebService.Model
             return  this.requestedToDateField.HasValue;
 
         }
-
-
-
-
 
     }
 

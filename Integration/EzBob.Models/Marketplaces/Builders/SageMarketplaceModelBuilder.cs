@@ -1,4 +1,4 @@
-namespace EzBob.Models.Marketplaces.Builders
+﻿namespace EzBob.Models.Marketplaces.Builders
 {
 	using System;
 	using NHibernate;
@@ -38,7 +38,6 @@ namespace EzBob.Models.Marketplaces.Builders
 			MP_AnalyisisFunctionValue earliestSumOfExpenditures = GetEarliestValueFor(mp, "TotalSumOfExpenditures");
 			MP_AnalyisisFunctionValue monthSumOfSalesInvoices = GetMonthValueFor(mp, "TotalSumOfOrders");
 			MP_AnalyisisFunctionValue monthSumOfIncomes = GetMonthValueFor(mp, "TotalSumOfIncomes");
-
 
 			paymentAccountModel.MonthInPayments = 0;
 			if (monthSumOfSalesInvoices != null && monthSumOfSalesInvoices.ValueFloat.HasValue)
@@ -102,7 +101,6 @@ namespace EzBob.Models.Marketplaces.Builders
 			var dbPurchaseInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.PurchaseInvoices).OrderByDescending(purchaseInvoice => purchaseInvoice.Request.Id).Distinct(new SagePurchaseInvoiceComparer()).OrderByDescending(purchaseInvoice => purchaseInvoice.date);
 			var dbIncomes = mp.SageRequests.SelectMany(sageRequest => sageRequest.Incomes).OrderByDescending(income => income.Request.Id).Distinct(new SageIncomeComparer()).OrderByDescending(income => income.date);
 			var dbExpenditures = mp.SageRequests.SelectMany(sageRequest => sageRequest.Expenditures).OrderByDescending(expenditure => expenditure.Request.Id).Distinct(new SageExpenditureComparer()).OrderByDescending(expenditure => expenditure.date);
-
 
 			var model = new SageModel
 			{

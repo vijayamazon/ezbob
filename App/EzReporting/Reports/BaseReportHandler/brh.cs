@@ -15,20 +15,11 @@
 	using TraficReport;
 
 	public partial class BaseReportHandler : SafeLog {
-		#region public
-
-		#region constructor
 
 		public BaseReportHandler(AConnection oDB, ASafeLog log = null)
 			: base(log) {
 			DB = oDB;
 		} // constructor
-
-		#endregion constructor
-
-		#region HTML generators
-
-		#region method TableReport
 
 		public ATag TableReport(ReportQuery rptDef, bool isSharones = false, string sRptTitle = "", List<string> oColumnTypes = null) {
 			return TableReport(rptDef, null, isSharones, sRptTitle, oColumnTypes);
@@ -118,10 +109,6 @@
 			return tbl;
 		} // TableReport
 
-		#endregion method TableReport
-
-		#region method BuildTraficReport
-
 		public ATag BuildTrafficReport(Report report, DateTime from, DateTime to, List<string> oColumnTypes = null) {
 			var trafficReport = new TrafficReport(DB, this);
 			KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, from, to);
@@ -130,10 +117,6 @@
 				.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildTrafficReport
-
-		#endregion method BuildTraficReport
-
-		#region method BuildMarketingChannelsSummaryReport
 
 		public ATag BuildMarketingChannelsSummaryReport(Report report, DateTime from, DateTime to, List<string> oColumnTypes = null) {
 			var rpt = new MarketingChannelsSummary.MarketingChannelsSummary(DB, this);
@@ -160,10 +143,6 @@
 			return oBody;
 		} // BuildMarketingChannelsSummaryReport
 
-		#endregion method BuildMarketingChannelsSummaryReport
-
-		#region method BuildLoanIntegrityReport
-
 		public ATag BuildLoanIntegrityReport(Report report, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateLoanIntegrityReport(report);
 
@@ -175,10 +154,6 @@
 			return body;
 		} // BuildLoanIntegrityReport
 
-		#endregion method BuildLoanIntegrityReport
-
-		#region method BuildLoansIssuedReport
-
 		public ATag BuildLoansIssuedReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> pair = CreateLoansIssuedReport(report, today, tomorrow);
 
@@ -186,10 +161,6 @@
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
 				.Append(new P().Append(TableReport(pair.Key, pair.Value, oColumnTypes: oColumnTypes)));
 		} // BuildLoansIssuedReport
-
-		#endregion method BuildLoansIssuedReport
-
-		#region method BuildCciReport
 
 		public ATag BuildCciReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateCciReport(report, today, tomorrow);
@@ -199,10 +170,6 @@
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildCciReport
 
-		#endregion method BuildCciReport
-
-		#region method BuildUiReport
-
 		public ATag BuildUiReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateUiReport(report, today, tomorrow);
 
@@ -210,10 +177,6 @@
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildUiReport
-
-		#endregion method BuildUiReport
-
-		#region method BuildUiExtReport
 
 		public ATag BuildUiExtReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateUiExtReport(report, today, tomorrow);
@@ -223,23 +186,11 @@
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, isSharones: true, oColumnTypes: oColumnTypes)));
 		} // BuildUiExtReport
 
-		#endregion method BuildUiExtReport
-
-		#endregion HTML generators
-
-		#region Excel generators
-
-		#region method BuildLoansIssuedXls
-
 		public ExcelPackage BuildLoansIssuedXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> pair = CreateLoansIssuedReport(report, today, tomorrow);
 
 			return AddSheetToExcel(pair.Value, report.GetTitle(today, oToDate: tomorrow), "RptLoansIssued");
 		} // BuildLoansIssuedXls
-
-		#endregion method BuildLoansIssuedXls
-
-		#region method XlsReport
 
 		public ExcelPackage XlsReport(ReportQuery rptDef, string sRptTitle = "") {
 			try {
@@ -259,19 +210,11 @@
 			return errBook;
 		} // ErrorXlsReport
 
-		#endregion method XlsReport
-
-		#region method BuildCciXls
-
 		public ExcelPackage BuildCciXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateCciReport(report, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
 		} // BuildCciXls
-
-		#endregion method BuildCciXls
-
-		#region method BuildUiXls
 
 		public ExcelPackage BuildUiXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateUiReport(report, today, tomorrow);
@@ -279,19 +222,11 @@
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptUiExt");
 		} // BuildUiXls
 
-		#endregion method BuildUiXls
-
-		#region method BuildUiExtXls
-
 		public ExcelPackage BuildUiExtXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateUiExtReport(report, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptUiExtReport");
 		} // BuildUiExtXls
-
-		#endregion method BuildUiExtXls
-
-		#region method BuildTraficXls
 
 		public ExcelPackage BuildTrafficReportXls(Report report, DateTime from, DateTime to) {
 			var trafficReport = new TrafficReport(DB, this);
@@ -299,10 +234,6 @@
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
 		} // BuildTrafficReportXls
-
-		#endregion method BuildTraficXls
-
-		#region method BuildMarketingChannelsSummaryXls
 
 		public ExcelPackage BuildMarketingChannelsSummaryXls(Report report, DateTime from, DateTime to) {
 			var rpt = new MarketingChannelsSummary.MarketingChannelsSummary(DB, this);
@@ -324,21 +255,7 @@
 			return wb;
 		} // BuildMarketingChannelsSummarXls
 
-		#endregion method BuildMarketingChannelsSummaryXls
-
-		#endregion Excel generators
-
-		#endregion public
-
-		#region protected
-
 		protected AConnection DB { get; private set; }
-
-		#endregion protected
-
-		#region private
-
-		#region property UnderwriterSite
 
 		private string UnderwriterSite {
 			get {
@@ -359,14 +276,6 @@
 		} // UnderwriterSite
 
 		private string m_sUnderwriterSite;
-
-		#endregion property UnderwriterSite
-
-		#region report generators
-
-		#region LoanIntegrity
-
-		#region class LoanIntegrityRow
 
 		private class LoanIntegrityRow {
 			[UsedImplicitly]
@@ -390,10 +299,6 @@
 				tbl.Rows.Add(row);
 			} // ToRow
 		} // class LoanIntegrityRow
-
-		#endregion class LoanIntegrityRow
-
-		#region method CreateLoanIntegrityReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateLoanIntegrityReport(Report report) {
 			var loanIntegrity = new LoanIntegrity(DB, this);
@@ -422,18 +327,7 @@
 			return new KeyValuePair<ReportQuery, DataTable>(new ReportQuery(report), oOutput); // qqq - the new repoerQuery here is wrong
 		} // CreateLoanIntegrityReport
 
-		#endregion method CreateLoanIntegrityReport
-
-		#endregion LoanIntegrity
-
-		#region Loans Issued
-
-		#region class LoansIssuedRow
-
 		private class LoansIssuedRow {
-			#region public
-
-			#region constructor
 
 			public LoansIssuedRow(SafeReader row) {
 				m_oData = new SortedDictionary<string, dynamic>();
@@ -457,10 +351,6 @@
 				} // if
 			} // constructor
 
-			#endregion constructor
-
-			#region method SetInterests
-
 			public void SetInterests(SortedDictionary<int, decimal> oEarnedInterest) {
 				if (oEarnedInterest.ContainsKey(LoanID))
 					m_oData[FldEarnedInterest] = oEarnedInterest[LoanID];
@@ -481,10 +371,6 @@
 				} // for each
 			} // SetInterests
 
-			#endregion method SetInterests
-
-			#region method AccumulateTotals
-
 			public void AccumulateTotals(LoansIssuedRow row) {
 				foreach (KeyValuePair<string, dynamic> pair in ms_oFieldNames) {
 					if (ms_oTotalIgnored.ContainsKey(pair.Key))
@@ -494,17 +380,9 @@
 				} // for each field name
 			} // AccumulateTotals
 
-			#endregion method AccumulateTotals
-
-			#region method SetLoanCount
-
 			public void SetLoanCount(int nLoanCount) {
 				m_oData[FldLoanID] = nLoanCount;
 			} // SetLoanCount
-
-			#endregion method SetLoanCount
-
-			#region method AddClient
 
 			public void AddClient(LoansIssuedRow lir) {
 				if (m_oClients.ContainsKey(lir.ClientID))
@@ -512,10 +390,6 @@
 				else
 					m_oClients[lir.ClientID] = 1;
 			} // AddClient
-
-			#endregion method AddClient
-
-			#region method ToTable
 
 			public DataTable ToTable() {
 				var tbl = new DataTable();
@@ -527,10 +401,6 @@
 
 				return tbl;
 			} // ToTable
-
-			#endregion method ToTable
-
-			#region method ToRow
 
 			public void ToRow(DataTable tbl) {
 				DataRow row = tbl.NewRow();
@@ -559,32 +429,14 @@
 				tbl.Rows.Add(row);
 			} // ToRow
 
-			#endregion method ToRow
-
-			#endregion public
-
-			#region private
-
 			private readonly SortedDictionary<string, dynamic> m_oData;
 			private readonly bool m_bIsTotal;
 
 			private readonly SortedDictionary<int, int> m_oClients;
 
-			#region property ClientID
-
 			private int ClientID { get { return m_oData[FldClientID]; } } // ClientID
 
-			#endregion property ClientID
-
-			#region property LoanID
-
 			private int LoanID { get { return m_oData[FldLoanID]; } } // LoanID
-
-			#endregion property LoanID
-
-			#region private static
-
-			#region field name constants
 
 			private const string FldLoanID = "LoanID";
 			private const string FldDate = "Date";
@@ -610,10 +462,6 @@
 			private const string FldDiscountPlan = "DiscountPlan";
 			private const string FldCustomerStatus = "CustomerStatus";
 			private const string FldRowLevel = "RowLevel";
-
-			#endregion field name constants
-
-			#region static constructor
 
 			static LoansIssuedRow() {
 				ms_oFieldNames = new SortedDictionary<string, dynamic>();
@@ -655,10 +503,6 @@
 				ms_oTotalIgnored[FldRowLevel] = 0;
 			} // static constructor
 
-			#endregion static constructor
-
-			#region method FieldType
-
 			private static Type FieldType(string sFldName) {
 				var oFldType = typeof(decimal);
 
@@ -682,19 +526,10 @@
 				return oFldType;
 			} // FieldType
 
-			#endregion method FieldType
-
 			private static readonly SortedDictionary<string, int> ms_oTotalIgnored;
 			private static readonly SortedDictionary<string, dynamic> ms_oFieldNames;
 
-			#endregion private static
-
-			#endregion private
 		} // class LoansIssuedRow
-
-		#endregion class LoansIssuedRow
-
-		#region method CreateLoansIssuedReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateLoansIssuedReport(Report report, DateTime today, DateTime tomorrow) {
 			var rpt = new ReportQuery(report) {
@@ -734,12 +569,6 @@
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
 		} // CreateLoansIssuedReport
 
-		#endregion method CreateLoansIssuedReport
-
-		#endregion Loans Issued
-
-		#region method CreateCciReport
-
 		private KeyValuePair<ReportQuery, DataTable> CreateCciReport(Report report, DateTime today, DateTime tomorrow) {
 			var cc = new CciReport(DB, this);
 			List<CciReportItem> oItems = cc.Run();
@@ -755,10 +584,6 @@
 
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
 		} // CreateCciReport
-
-		#endregion method CreateCciReport
-
-		#region method CreateUiReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateUiReport(Report report, DateTime today, DateTime tomorrow) {
 			var cc = new UiReport(DB, today, tomorrow, this);
@@ -777,10 +602,6 @@
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
 		} // CreateUiReport
 
-		#endregion method CreateUiReport
-
-		#region method CreateUiExtReport
-
 		private KeyValuePair<ReportQuery, DataTable> CreateUiExtReport(Report report, DateTime today, DateTime tomorrow) {
 			var cc = new UiReportExt(DB, today, tomorrow, this);
 
@@ -795,12 +616,6 @@
 
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput.Item1);
 		} // CreateUiExtReport
-
-		#endregion method CreateUiExtReport
-
-		#endregion report generators
-
-		#region method ProcessTableReportRow
 
 		private void ProcessTableReportRow(ReportQuery rptDef, SafeReader sr, Tbody oTbody, int lineCounter, List<string> oColumnTypes) {
 			var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Odd" : "Even");
@@ -866,19 +681,9 @@
 				oTr.ApplyToChildren<Class>(string.Join(" ", oClassesToApply.ToArray()));
 		} // ProcessTableReportRow
 
-		#endregion method ProcessTableReportRow
-
-		#region private static
-
-		#region method IsNumber
-
 		private static bool IsNumber(object value) {
 			return IsInt(value) || IsFloat(value);
 		} // IsNumber
-
-		#endregion method IsNumber
-
-		#region method IsInt
 
 		private static bool IsInt(object value) {
 			return value is sbyte
@@ -891,19 +696,11 @@
 				|| value is ulong;
 		} // IsInt
 
-		#endregion method IsInt
-
-		#region method IsFloat
-
 		private static bool IsFloat(object value) {
 			return value is float
 				|| value is double
 				|| value is decimal;
 		} // IsFloat
-
-		#endregion method IsFloat
-
-		#region method NumStr
 
 		private static string NumStr(object oNumber, string sFormat) {
 			if (oNumber is sbyte)
@@ -931,10 +728,6 @@
 
 			throw new Exception(string.Format("Unsupported type: {0}", oNumber.GetType()));
 		} // NumStr
-
-		#endregion method NumStr
-
-		#region method AddSheetToExcel
 
 		private static ExcelPackage AddSheetToExcel(DataTable dt, string title, string sheetName = "", string someText = "", ExcelPackage wb = null) {
 			if (wb == null) // first initialization, if we will use it multiple times.
@@ -999,10 +792,6 @@
 			return wb;
 		} // AddSheetToExcel
 
-		#endregion method AddSheetToExcel
-
-		#region method AddSheetToExcel
-
 		private ExcelPackage AddSheetToExcel(ReportQuery rptDef, string title, ExcelPackage wb = null) {
 			if (wb == null) // first initialization, if we will use it multiple times.
 				wb = new ExcelPackage();
@@ -1060,12 +849,7 @@
 			return wb;
 		} // AddSheetToExcel
 
-		#endregion method AddSheetToExcel
-
 		private static readonly CultureInfo ms_oFormatInfo = new CultureInfo("en-GB");
 
-		#endregion private static
-
-		#endregion private
 	} // class BaseReportHandler
 } // namespace Reports

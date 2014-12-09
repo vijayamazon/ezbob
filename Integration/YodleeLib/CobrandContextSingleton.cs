@@ -1,4 +1,4 @@
-namespace YodleeLib
+﻿namespace YodleeLib
 {
 	using System;
 	using ConfigManager;
@@ -39,7 +39,6 @@ namespace YodleeLib
 			DateTime now = DateTime.Now;
 			DateTime expired = created.AddMinutes(COBRAND_CONTEXT_TIME_OUT);
 
-
 			if (now >= expired)
 			{
 				// Cobrand Context expired, create new one
@@ -77,7 +76,7 @@ namespace YodleeLib
 				created = DateTime.Now;
 				return cobrandContext;
 			}
-	
+
 			return cobrandContext;
 		}
 	}

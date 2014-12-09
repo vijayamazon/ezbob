@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using EzBob.CommonLib;
 using EzBob.eBayServiceLib.Common;
 using EzBob.eBayServiceLib.TradingServiceCore.DataInfos.Orders;
@@ -37,7 +37,6 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDepen
 				WriteToLog( "page {0,3} of {1,3}: {2}", 1, response.PaginationResult.TotalNumberOfPages, countOrders );
 			}
 
-
 			if ( response.HasMoreOrdersSpecified && response.HasMoreOrders )
 			{
 				var pages = response.PaginationResult.TotalNumberOfPages;
@@ -69,6 +68,5 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDepen
 			return GetOrders(req, requestsCounter);
 		}
 
-		
 	}
 }

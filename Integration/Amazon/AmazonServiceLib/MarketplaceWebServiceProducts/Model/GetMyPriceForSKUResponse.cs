@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class GetMyPriceForSKUResponse
     {
-    
+
         private  List<GetMyPriceForSKUResult> getMyPriceForSKUResultField;
 
         private  ResponseMetadata responseMetadataField;
@@ -49,8 +47,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.getMyPriceForSKUResultField =  value; }
         }
 
-
-
         /// <summary>
         /// Sets the GetMyPriceForSKUResult property
         /// </summary>
@@ -64,8 +60,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return this;
         }          
- 
-
 
         /// <summary>
         /// Checks if GetMyPriceForSKUResult property is set
@@ -76,7 +70,6 @@ namespace MarketplaceWebServiceProducts.Model
             return (GetMyPriceForSKUResult.Count > 0);
         }
 
-
         /// <summary>
         /// Gets and sets the ResponseMetadata property.
         /// </summary>
@@ -86,8 +79,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.responseMetadataField ; }
             set { this.responseMetadataField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ResponseMetadata property
@@ -100,8 +91,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ResponseMetadata property is set
         /// </summary>
@@ -110,11 +99,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.responseMetadataField != null;
         }
-
-
-
-
-
 
         /// <summary>
         /// XML Representation for this object
@@ -180,8 +164,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return responseHeaderMetadata; }
             set { this.responseHeaderMetadata = value; }
         }
-
-
 
     }
 

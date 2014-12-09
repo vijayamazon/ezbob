@@ -9,38 +9,23 @@
 	using Ezbob.Utils;
 	using Ezbob.Logger;
 
-	#region class DirectionAttribute
-
 	[System.AttributeUsage(
 		System.AttributeTargets.Property,
 		AllowMultiple = false
 	)]
 	public class DirectionAttribute : Attribute {
-		#region constructor
 
 		public DirectionAttribute(ParameterDirection nDirection = ParameterDirection.Input) {
 			Direction = nDirection;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Direction
-
 		public ParameterDirection Direction { get; private set; } // Direction
 
-		#endregion property Direction
 	} // class DirectionAttribute
 
-	#endregion class DirectionAttribute
-
-	#region class AStoredProcedure
-
 	public abstract class AStoredProcedure {
-		#region public
 
 		public abstract bool HasValidParameters();
-
-		#region method ExecuteScalar
 
 		public virtual T ExecuteScalar<T>(ConnectionWrapper oConnectionToUse = null) {
 			if (!IsReadyToGo())
@@ -49,20 +34,12 @@
 			return DB.ExecuteScalar<T>(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // ExecuteScalar
 
-		#endregion method ExecuteScalar
-
-		#region method ExecuteNonQuery
-
 		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse = null) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.ExecuteNonQuery(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // ExecuteNonQuery
-
-		#endregion method ExecuteNonQuery
-
-		#region method ForEachRow
 
 		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction) {
 			ForEachRow(null, oAction);
@@ -74,10 +51,6 @@
 
 			DB.ForEachRow(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
 		} // ForEachRow
-
-		#endregion method ForEachRow
-
-		#region method ForEachRowSafe
 
 		public virtual void ForEachRowSafe(Action<SafeReader> oAction) {
 			ForEachRowSafe((sr, bRowsetStart) => {
@@ -103,10 +76,6 @@
 
 			DB.ForEachRowSafe(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
 		} // ForEachRowSafe
-
-		#endregion method ForEachRowSafe
-
-		#region method ForEachResult
 
 		public virtual void ForEachResult(Func<IResultRow, ActionResult> oAction) {
 			ForEachResult(null, oAction);
@@ -159,20 +128,12 @@
 			DB.ForEachResult(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
 		} // ForEachResult
 
-		#endregion method ForEachResult
-
-		#region method Fill
-
 		public virtual List<T> Fill<T>(ConnectionWrapper oConnectionToUse = null) where T : new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.Fill<T>(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // Fill
-
-		#endregion method Fill
-
-		#region method FillFirst
 
 		public virtual T FillFirst<T>(ConnectionWrapper oConnectionToUse = null) where T : new() {
 			if (!IsReadyToGo())
@@ -191,7 +152,7 @@
 				// Assignment to temp variable is a workaround to suppress the warning.
 				// And if we are already here then T is not a value type so it can be null.
 				object obj = oInstance;
-				
+
 				if (obj == null)
 					throw new NullReferenceException("Cannot FillFirst of type " + typeof (T) + ": no instance specified.");
 			} // if
@@ -202,20 +163,12 @@
 			DB.FillFirst(oConnectionToUse, oInstance, GetName(), Species, PrepareParameters());
 		} // FillFirst
 
-		#endregion method FillFirst
-
-		#region method ExecuteEnumerable
-
 		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse = null) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.ExecuteEnumerable(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // ExecuteEnumerable
-
-		#endregion method ExecuteEnumerable
-
-		#region method GetFirst
 
 		public virtual SafeReader GetFirst(ConnectionWrapper oConnectionToUse = null) {
 			if (!IsReadyToGo())
@@ -224,21 +177,9 @@
 			return DB.GetFirst(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // GetFirst
 
-		#endregion method GetFirst
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format("{0} {1}", Species, GetName());
 		} // ToString
-
-		#endregion method ToString
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
 
 		protected AStoredProcedure(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) {
 			m_aryArgs = null;
@@ -250,20 +191,12 @@
 			DB = oDB;
 		} // constructor
 
-		#endregion constructor
-
-		#region method IsReadyToGo
-
 		protected virtual bool IsReadyToGo() {
 			if (DB == null)
 				throw new ArgumentNullException("Database connection not specified for " + this, (Exception)null);
 
 			return HasValidParameters();
 		} // IsReadyToGo
-
-		#endregion method IsReadyToGo
-
-		#region method CheckDirection
 
 		protected virtual void CheckDirection() {
 			bool bReturnFound = false;
@@ -285,36 +218,16 @@
 			});
 		} // CheckDirection
 
-		#endregion method CheckDirection
-
-		#region property DB
-
 		protected virtual AConnection DB { get; set; } // DB
-
-		#endregion property DB
-
-		#region property Log
 
 		protected virtual ASafeLog Log { get; private set; } // Log
 
-		#endregion property Log
-
-		#region property Species
-
 		protected virtual CommandSpecies Species { get; private set; }
-
-		#endregion property Species
-
-		#region method PrepareCustomParameters
 
 		protected virtual void PrepareCustomParameters(List<QueryParameter> args) {
 			// Nothing here.
 			// In derived class: manipulate the args list: add, remove, do something non-standard.
 		} // PrepareCustomParameters
-
-		#endregion method PrepareCustomParameters
-
-		#region method PrepareParameters
 
 		protected virtual QueryParameter[] PrepareParameters() {
 			if (m_aryArgs == null) {
@@ -375,10 +288,6 @@
 			return m_aryArgs;
 		} // PrepareParameters
 
-		#endregion method PrepareParameters
-
-		#region method GetName
-
 		/// <summary>
 		/// Returns the name of the stored procedure.
 		/// Stored procedure name is current class name.
@@ -388,30 +297,14 @@
 			return this.GetType().Name;
 		} // GetName
 
-		#endregion method GetName
-
-		#endregion protected
-
-		#region private
-
 		private QueryParameter[] m_aryArgs;
 
-		#endregion private
 	} // class AStoredProcedure
 
-	#endregion class AStoredProcedure
-
-	#region class AStoredProc
-
 	public abstract class AStoredProc : AStoredProcedure {
-		#region constructor
 
 		protected AStoredProc(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) : base(oDB, oLog, nSpecies) {
 		} // constructor
-
-		#endregion constructor
-
-		#region method GetName
 
 		/// <summary>
 		/// Returns the name of the stored procedure.
@@ -433,8 +326,6 @@
 			return sName;
 		} // GetName
 
-		#endregion method GetName
 	} // class AStoredProc
 
-	#endregion class AStoredProc
 } // namespace Ezbob.Database

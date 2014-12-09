@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace Reports {
-	#region enum UiItemGroups
 
 	// Values of the enum members are used to order data in the output table.
 	// New enum member can be inserted in the middle.
@@ -19,10 +18,6 @@ namespace Reports {
 		AdditionalDirectors = 6,
 	} // enum UiItemGroups
 
-	#endregion enum UiItemGroups
-
-	#region class UiItemGroupsSequence
-
 	public static class UiItemGroupsSequence {
 		static UiItemGroupsSequence() {
 			ms_SortedGroups = new List<UiItemGroups>();
@@ -38,5 +33,4 @@ namespace Reports {
 		private static readonly List<UiItemGroups> ms_SortedGroups;
 	} // class UiItemGroupsSequence
 
-	#endregion class UiItemGroupsSequence
 } // namespace Reports

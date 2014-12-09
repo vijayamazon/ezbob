@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -22,7 +22,6 @@ using System.Text;
 using System.IO;
 using MarketplaceWebService.Attributes;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
@@ -30,7 +29,7 @@ namespace MarketplaceWebService.Model
     [MarketplaceWebService(RequestType = RequestType.STREAMING, ResponseType = ResponseType.DEFAULT)]
     public class SubmitFeedRequest
     {
-    
+
         private String marketplaceField;
 
         private IdList marketplaceIdListField;
@@ -71,7 +70,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
         /// <summary>
         /// Gets and sets the Marketplace property.
         /// </summary>
@@ -92,8 +90,6 @@ namespace MarketplaceWebService.Model
             get { return this.marketplaceIdListField; }
             set { this.marketplaceIdListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Marketplace property
@@ -118,7 +114,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
         /// <summary>
         /// Checks if Marketplace property is set
         /// </summary>
@@ -139,7 +134,6 @@ namespace MarketplaceWebService.Model
             return this.marketplaceIdListField != null;
         }
 
-
         /// <summary>
         /// Gets and sets the Merchant property.
         /// </summary>
@@ -149,8 +143,6 @@ namespace MarketplaceWebService.Model
             get { return this.merchantField ; }
             set { this.merchantField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Merchant property
@@ -163,8 +155,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Merchant property is set
         /// </summary>
@@ -175,7 +165,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-        
         /// <summary>
         /// Gets and sets the FeedContent property.
         /// </summary>
@@ -185,8 +174,6 @@ namespace MarketplaceWebService.Model
             get { return this.feedContentField ; }
             set { this.feedContentField= value; }
         }
-        
-
 
         /// <summary>
         /// Sets the FeedContent property
@@ -199,8 +186,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FeedContent property is set
         /// </summary>
@@ -211,7 +196,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the FeedType property.
         /// </summary>
@@ -221,8 +205,6 @@ namespace MarketplaceWebService.Model
             get { return this.feedTypeField ; }
             set { this.feedTypeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the FeedType property
@@ -235,8 +217,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FeedType property is set
         /// </summary>
@@ -246,7 +226,6 @@ namespace MarketplaceWebService.Model
             return  this.feedTypeField != null;
 
         }
-
 
         /// <summary>
         /// Gets and sets the PurgeAndReplace property.
@@ -258,8 +237,6 @@ namespace MarketplaceWebService.Model
             set { this.purgeAndReplaceField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the PurgeAndReplace property
         /// </summary>
@@ -270,8 +247,6 @@ namespace MarketplaceWebService.Model
             this.purgeAndReplaceField = purgeAndReplace;
             return this;
         }
-
-
 
         /// <summary>
         /// Checks if PurgeAndReplace property is set

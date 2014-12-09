@@ -45,7 +45,6 @@
 					}
 					break;
 
-
 				case PayPalServiceType.AdaptiveAccounts:
 					{
 						switch ( endPointType )
@@ -99,8 +98,6 @@
 				default:
 					throw new NotImplementedException();
 			}
-
-			
 
 			return new ServiceUrlsInfo(endPoint, redirect );
 		}

@@ -4,14 +4,10 @@
 	using Ezbob.Utils.Lingvo;
 
 	public class LatePayment : ATrace {
-		#region constructor
 
 		public LatePayment(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
-		#endregion constructor
-
-		#region method Init
 		public void Init(int delay, int threshhold) {
 			if (DecisionStatus == DecisionStatus.Affirmative)
 			{
@@ -29,7 +25,6 @@
 				);
 			} // if
 		}
-
 
 		public void Init(
 			int nLoanID,
@@ -67,8 +62,6 @@
 				);
 			} // if
 		} // Init
-
-		#endregion method Init
 
 		public int LoanID { get; private set; }
 		public int ScheduleID { get; private set; }

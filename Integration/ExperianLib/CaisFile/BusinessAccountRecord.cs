@@ -79,7 +79,6 @@ namespace ExperianLib.CaisFile
             PreviousNameandAddress = new BusinessAddressData();
         }
 
-
         //-----------------------------------------------------------------------------------
         public string Serialize()
         {

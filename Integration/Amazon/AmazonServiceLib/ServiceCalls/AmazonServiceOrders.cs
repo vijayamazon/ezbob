@@ -1,4 +1,4 @@
-namespace EzBob.AmazonServiceLib.ServiceCalls {
+﻿namespace EzBob.AmazonServiceLib.ServiceCalls {
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
@@ -63,7 +63,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls {
 			}
 
 			var result = response.ListOrdersResult;
-
 
 			if (result.IsSetOrders()) {
 				var ordersList = ParceOrdersInfo(result.Orders, request.SellerId, access, requestInfo.CustomerId);
@@ -240,7 +239,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls {
 									requestCounter,
 									() => _Service.ListOrderItems(req));
 
-
 				var list = new AmazonOrderItemDetailsList(DateTime.UtcNow) {
 					RequestsCounter = requestCounter
 				};
@@ -250,8 +248,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls {
 				}
 				var result = response.ListOrderItemsResult;
 
-
-
 				if (result.IsSetOrderItems()) {
 					ParseOrderItems(list, result.OrderItems);
 				}
@@ -259,7 +255,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls {
 				if (result.IsSetNextToken()) {
 					GetOrderItemsByNextToken(list, requestInfo, result.NextToken, access, requestCounter);
 				}
-
 
 				return list;
 			} catch (MarketplaceWebServiceOrdersException) {

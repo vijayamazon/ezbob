@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Web.Services.Protocols;
 using EzBob.CommonLib;
 
@@ -18,7 +18,6 @@ namespace EZBob.DatabaseLib
 		public Exception BaseException { get; protected set; }
 	}
 
-
 	public class ServiceErrorType
 	{
 		public string LongMessage { get; set; }
@@ -29,7 +28,6 @@ namespace EZBob.DatabaseLib
 	public class ServiceRequestException : Exception, IServiceRequestException
 	{
 		public ServiceFaultDetail Fault { get; private set; }
-
 
 		internal ServiceRequestException( ServiceFaultDetail fault, Exception ex )
 			:base(fault.DetailedMessage, ex)
@@ -61,7 +59,7 @@ namespace EZBob.DatabaseLib
 		{
 			return string.Equals( Fault.ErrorCode, code, StringComparison.InvariantCultureIgnoreCase );
 		}
-		
+
 	}
 
 	public interface IServiceRequestException

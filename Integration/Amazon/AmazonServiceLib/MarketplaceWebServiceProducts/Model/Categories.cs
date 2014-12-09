@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class Categories
     {
-    
+
         private String productCategoryIdField;
 
         private String productCategoryNameField;
@@ -44,8 +42,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.productCategoryIdField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the ProductCategoryId property
         /// </summary>
@@ -57,8 +53,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ProductCategoryId property is set
         /// </summary>
@@ -69,7 +63,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ProductCategoryName property.
         /// </summary>
@@ -79,8 +72,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.productCategoryNameField ; }
             set { this.productCategoryNameField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ProductCategoryName property
@@ -93,8 +84,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ProductCategoryName property is set
         /// </summary>
@@ -105,7 +94,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Parent property.
         /// </summary>
@@ -115,8 +103,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.parentField ; }
             set { this.parentField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Parent property
@@ -129,8 +115,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Parent property is set
         /// </summary>
@@ -140,11 +124,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this.parentField != null;
         }
 
-
-
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -153,7 +132,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -209,8 +187,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

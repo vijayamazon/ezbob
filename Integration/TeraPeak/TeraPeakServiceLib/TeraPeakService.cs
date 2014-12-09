@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -28,7 +28,7 @@ namespace EzBob.TeraPeakServiceLib
 			//var webRequest = WebRequest.Create( new Uri( "http://api.terapeak.com" ) );
 			//var webRequest = WebRequest.Create( new Uri( "http://api.datavision.com" ) );
 			//var webRequest = WebRequest.Create( new Uri( "http://api.dataunison.com" ) );
-			
+
 			var webRequest = WebRequest.Create( CreateUrl() );
 			webRequest.ContentType = "application/x-www-form-urlencoded";
 			//req.ContentLength = 500;
@@ -77,9 +77,8 @@ namespace EzBob.TeraPeakServiceLib
 			var requestString = CreateRequestString( req );
 
 			return DoRequest( requestString );
-			
-		}*/
 
+		}*/
 
 		private string CreateRequestString<T>( T req ) where T : ServiceRequestDataBase {
 			return new Serialized( req );
@@ -156,6 +155,5 @@ namespace EzBob.TeraPeakServiceLib
 		public int CountSteps { get; set; }
 	}
 
-	
 }
 

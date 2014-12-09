@@ -3,15 +3,10 @@
 	using Ezbob.Database;
 
 	public class BrokerLeadData : CustomerData {
-		#region constructor
 
 		public BrokerLeadData(string sBrokerContactEmail, AStrategy oStrategy, int nLeadID, AConnection oDB) : base(oStrategy, nLeadID, oDB) {
 			m_sBrokerContactEmail = sBrokerContactEmail;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Load
 
 		public override void Load() {
 			LeadID = 0;
@@ -38,10 +33,6 @@
 				throw new StrategyWarning(Strategy, "Failed to find a lead by id " + RequestedID + " and contact email " + m_sBrokerContactEmail);
 		} // Load
 
-		#endregion method Load
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format(
 				"broker lead {0}: {1} {2} ({3})",
@@ -51,10 +42,6 @@
 				Email
 			);
 		} // ToString
-
-		#endregion method ToString
-
-		#region properties
 
 		public virtual int LeadID {
 			get { return Id; } // get
@@ -73,12 +60,7 @@
 
 		public virtual string FirmName { get; protected set; } // FirmName
 
-		#endregion properties
-
-		#region private
-
 		private readonly string m_sBrokerContactEmail;
 
-		#endregion private
 	} // class CustomerData
 } // namespace

@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,6 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class AttributeSetList
     {
-    
 
         private  List<Object> anyField;
 
@@ -49,8 +46,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.anyField =  value; }
         }
 
-
-
         /// <summary>
         /// Sets the Any property
         /// </summary>
@@ -64,8 +59,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return this;
         }          
- 
-
 
         /// <summary>
         /// Checks if Any property is set
@@ -76,7 +69,6 @@ namespace MarketplaceWebServiceProducts.Model
             return (Any.Count > 0);
         }
 
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -85,7 +77,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -125,8 +116,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

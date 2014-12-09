@@ -8,9 +8,6 @@
 	using System.Collections.Generic;
 
 	public class GenerateMobileCode : AStrategy {
-		#region public
-
-		#region constructor
 
 		public GenerateMobileCode(string sMobilePhone, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			m_sMobilePhone = sMobilePhone;
@@ -30,23 +27,11 @@
 			);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Generate mobile code"; }
 		} // Name
 
-		#endregion property Name
-
-		#region property IsError
-
 		public bool IsError { get; private set; }
-
-		#endregion property IsError
-
-		#region method Execute
 
 		public override void Execute() {
 			if (m_sSkipCodeGenerationNumber == m_sMobilePhone) {
@@ -83,14 +68,6 @@
 			GenerateCodeAndSend();
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
-		#region method GenerateCodeAndSend
-
 		private void GenerateCodeAndSend() {
 			var random = new Random();
 			string code = (100000 + random.Next(899999)).ToString(CultureInfo.InvariantCulture);
@@ -124,7 +101,6 @@
 			catch (Exception ex) {
 				Log.Error(string.Format("Failed saving twilio SMS send response to DB: {0}", message));
 			}
-			
 
 			if (message.Status == null)
 			{
@@ -138,8 +114,6 @@
 
 // GenerateCodeAndSend
 
-		#endregion method GenerateCodeAndSend
-
 		private readonly string m_sMobilePhone;
 		private const string UkMobilePrefix = "+44";
 
@@ -152,6 +126,5 @@
 		private string _sendMobilePhone;
 		private DateTime _dateSent;
 
-		#endregion private
 	} // class GenerateMobileCode
 } // namespace

@@ -1,6 +1,5 @@
 ﻿namespace GoogleAnalyticsLib
 {
-	#region enum GoogleReportDimensions
 
 	enum GoogleReportDimensions {
 		country,
@@ -10,5 +9,4 @@
 		landingPagePath
 	} // enum GoogleReportDimensions
 
-	#endregion enum GoogleReportDimensions
 } // namespace EzAnalyticsConsoleClient

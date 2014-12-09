@@ -3,12 +3,9 @@
 	using System.Globalization;
 
 	public abstract class ATurnoverAge : ATrace {
-		#region public
 
 		public virtual DateTime? UpdateTime { get; private set; }
 		public virtual DateTime Now { get; private set; }
-
-		#region method Init
 
 		public virtual void Init(DateTime? oUpdateTime, DateTime oNow) {
 			UpdateTime = oUpdateTime;
@@ -31,21 +28,10 @@
 			}
 		} // Init
 
-		#endregion method Init
-
-		#endregion public
-
-		#region protected
-
 		protected abstract string TurnoverName { get; }
-
-		#region constructor
 
 		protected ATurnoverAge(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
-		#endregion constructor
-
-		#endregion protected
 	} // class ATurnoverAge
 } // namespace

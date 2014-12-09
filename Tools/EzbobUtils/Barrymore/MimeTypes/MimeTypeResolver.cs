@@ -4,10 +4,8 @@
 	using System.Runtime.InteropServices;
 
 	public class MimeTypeResolver {
-		#region static constructor
 
 		static MimeTypeResolver() {
-			#region init file extension map
 
 			ms_oFileExtMap = new SortedDictionary<string, MimeType> {
 				{ ".323", new MimeType { FileExtension = ".323", IsText = true, PrimaryMimeType = "text/h323", SecondaryMimeTypes = "" } },
@@ -573,8 +571,6 @@
 				{ ".zip", new MimeType { FileExtension = ".zip", IsText = false, PrimaryMimeType = "application/x-zip-compressed", SecondaryMimeTypes = "zip" } },
 			};
 
-			#endregion init file extension map
-
 			ms_oMimeTypeMap = new SortedDictionary<string, MimeType>();
 
 			foreach (KeyValuePair<string, MimeType> pair in ms_oFileExtMap) {
@@ -587,24 +583,14 @@
 			} // for each
 		} // static constructor
 
-		#endregion static constructor
-
-		#region public
-
 		public const string BinaryMimeTypeName = "application/octet-stream";
 		public const string TextMimeTypeName = "text/plain";
-
-		#region method Find
 
 		public MimeType Find(string sMimeType) {
 			MimeType oType = null;
 			ms_oMimeTypeMap.TryGetValue(sMimeType, out oType);
 			return oType;
 		} // Find
-
-		#endregion method Find
-
-		#region method Get
 
 		public MimeType Get(string sFileName) {
 			string sExtension = null;
@@ -629,10 +615,6 @@
 			return null;
 		} // Get
 
-		#endregion method Get
-
-		#region indexer
-
 		public string this[string sExtension] {
 			get {
 				sExtension = (sExtension ?? string.Empty).Trim();
@@ -645,10 +627,6 @@
 				return ms_oFileExtMap.TryGetValue(sExtension.ToLowerInvariant(), out oMimeType) ? oMimeType.PrimaryMimeType : BinaryMimeTypeName;
 			} // get
 		} // indexer
-
-		#endregion indexer
-
-		#region method GetFromFile
 
 		public string GetFromFile(byte[] oBuffer, int? nBufferLength = 256) {
 			try {
@@ -674,12 +652,6 @@
 			} // try
 		} // GetFromFile
 
-		#endregion method GetFromFile
-
-		#endregion public
-
-		#region private
-
 		private static readonly SortedDictionary<string, MimeType> ms_oFileExtMap;
 		private static readonly SortedDictionary<string, MimeType> ms_oMimeTypeMap;
 
@@ -695,6 +667,5 @@
 			System.UInt32 dwReserverd
 		);
 
-		#endregion private
 	} // class MimeTypeResolver
 } // namespace

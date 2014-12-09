@@ -4,12 +4,8 @@ using System.Globalization;
 using Ezbob.Logger;
 
 namespace LoanScheduleTransactionBackFill {
-	#region class Schedule
 
 	class Schedule : SafeLog {
-		#region public
-
-		#region property Culture
 
 		public static CultureInfo Culture {
 			get {
@@ -21,10 +17,6 @@ namespace LoanScheduleTransactionBackFill {
 		} // Culture
 
 		private static CultureInfo ms_oCulture;
-
-		#endregion property Culture
-
-		#region constructor
 
 		public Schedule(ASafeLog log = null) : base(log) {
 		} // constructor
@@ -49,15 +41,11 @@ namespace LoanScheduleTransactionBackFill {
 			Principal = sm.LoanRepayment;
 		} // constructor
 
-		#endregion constructor
-
 		public int ID { get; set; }
 		public DateTime Date { get; set; }
 		public decimal Principal { get; set; }
 
 		public bool IsAlreadyProcessed { get; set; }
-
-		#region method ToString
 
 		public override string ToString() {
 			return string.Format(
@@ -67,10 +55,6 @@ namespace LoanScheduleTransactionBackFill {
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
 	} // class Schedule
 
-	#endregion class Schedule
 } // namespace LoanScheduleTransactionBackFill

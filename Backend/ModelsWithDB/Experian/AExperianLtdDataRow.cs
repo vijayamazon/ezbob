@@ -1,4 +1,4 @@
-namespace Ezbob.Backend.ModelsWithDB.Experian {
+﻿namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -34,9 +34,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 	[KnownType(typeof(ExperianLtdPrevCompanyNames))]
 	[KnownType(typeof(ExperianLtdShareholders))]
 	public abstract class AExperianLtdDataRow : IParametrisable {
-		#region public
-
-		#region property ExperianLtdID
 
 		[DataMember]
 		public virtual long ExperianLtdID {
@@ -45,10 +42,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		} // ExperianLtdID
 
 		private long m_nExperianLtdID;
-
-		#endregion property ExperianLtdID
-
-		#region method Stringify
 
 		public virtual string Stringify() {
 			var oFields = new List<string>();
@@ -78,10 +71,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				"\n\tEnd of " + this.GetType().Name;
 		} // Stringify
 
-		#endregion method Stringify
-
-		#region method StringifyAll
-
 		public virtual string StringifyAll(StringBuilder os = null) {
 			bool bReturnData = os == null;
 
@@ -99,21 +88,9 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			return bReturnData ? os.ToString() : string.Empty;
 		} // StringifyAll
 
-		#endregion method StringifyAll
-
-		#region property DBTableName
-
 		public virtual string DBTableName { get { return this.GetType().Name; } } // DBTableName
 
-		#endregion property DBTableName
-
-		#region property DBSaveProcName
-
 		public virtual string DBSaveProcName { get { return "Save" + DBTableName; } } // DBSaveProcName
-
-		#endregion property DBSaveProcName
-
-		#region method LoadFromXml
 
 		public virtual void LoadFromXml(XmlNode oRoot) {
 			if (oRoot == null)
@@ -146,15 +123,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			LoadChildrenFromXml(oRoot);
 		} // LoadFromXml
 
-		#endregion method LoadFromXml
-
-		#region property LoadedCount
-
 		public virtual int LoadedCount { get; private set; } // LoadedCount
-
-		#endregion property LoadedCount
-
-		#region method Save
 
 		public virtual bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
 			Log.Debug("Saving {0} to DB with data:\n{1}.", this.GetType().Name, Stringify());
@@ -172,10 +141,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			return true;
 		} // Save
 
-		#endregion method Save
-
-		#region method ToParameter
-
 		public object[] ToParameter() {
 			var oResult = new List<object>();
 
@@ -189,10 +154,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			return oResult.ToArray();
 		} // ToParameter
 
-		#endregion method ToParameter
-
-		#region property ParentID
-
 		[DataMember]
 		[NonTraversable]
 		public virtual long ParentID {
@@ -200,49 +161,25 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			set { ExperianLtdID = value; }
 		} // ParentID
 
-		#endregion property ParentID
-
-		#region method ShouldBeSaved
-
 		public virtual bool ShouldBeSaved() {
 			return (LoadedCount > 0) || (Children.Count > 0);
 		} // ShouldBeSaved
 
-		#endregion method ShouldBeSaved
-
-		#region property Children
-
 		[DataMember]
 		public List<AExperianLtdDataRow> Children { get; private set; }
-
-		#endregion property Children
-
-		#region property ID
 
 		[DataMember]
 		[NonTraversable]
 		public virtual long ID { get; set; } // ID
-
-		#endregion property ID
-
-		#region method AddChild
 
 		public virtual void AddChild(AExperianLtdDataRow oKid) {
 			if (oKid != null)
 				Children.Add(oKid);
 		} // AddChild
 
-		#endregion method AddChild
-
-		#region method GetChildren
-
 		public virtual IEnumerable<T> GetChildren<T>() where T : AExperianLtdDataRow {
 			return Children.Where(oKid => oKid.GetType() == typeof (T)).Cast<T>();
 		} // GetChildren
-
-		#endregion method GetChildren
-
-		#region method ToCompanyScoreModel
 
 		public virtual CompanyScoreModelDataset ToCompanyScoreModel(CompanyScoreModelDataset oModel = null) {
 			if (oModel == null)
@@ -281,7 +218,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 					sDisplayName = oPropertyInfo.Name;
 
 				string sValue = string.Empty;
-				
+
 				if (oValue != null) {
 					if (oPropertyInfo.PropertyType == typeof (DateTime?))
 						sValue = ((DateTime?)oValue).Value.ToString("MMMM d yyyy", ms_oCulture);
@@ -404,14 +341,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			return oModel;
 		} // ToCompanyScoreModel
 
-		#endregion method ToCompanyScoreModel
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
 		protected AExperianLtdDataRow(ASafeLog oLog = null) {
 			LoadedCount = 0;
 			m_nExperianLtdID = 0;
@@ -420,27 +349,11 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			Log = oLog ?? new SafeLog();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Log
-
 		protected virtual ASafeLog Log { get; private set; } // Log
-
-		#endregion property Log
-
-		#region method DoBeforeTheMainInsert
 
 		protected virtual void DoBeforeTheMainInsert(List<string> oProcSql) {} // DoBeforeTheMainInsert
 
-		#endregion method DoBeforeTheMainInsert
-
-		#region method DoAfterTheMainInsert
-
 		protected virtual void DoAfterTheMainInsert(List<string> oProcSql) {} // DoAfterTheMainInsert
-
-		#endregion method DoAfterTheMainInsert
-
-		#region method GetDBColumnTypes
 
 		protected virtual List<Type> GetDBColumnTypes() {
 			var oDBColumns = new List<Type>();
@@ -455,17 +368,9 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			return oDBColumns;
 		} // GetDBColumnTypes
 
-		#endregion method GetDBColumnTypes
-
-		#region method LoadChildrenFromXml
-
 		protected virtual void LoadChildrenFromXml(XmlNode oRoot) {
 			// Nothing here.
 		} // LoadChildrenFromXml
-
-		#endregion method LoadChildrenFromXml
-
-		#region method SelfSave
 
 		protected virtual bool SelfSave(AConnection oDB, ConnectionWrapper oPersistent) {
 			try {
@@ -489,10 +394,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				return false;
 			} // try
 		} // SelfSave
-
-		#endregion method SelfSave
-
-		#region method LoadOneChildFromXml
 
 		protected virtual void LoadOneChildFromXml(XmlNode oRoot, Type oTableType, ASrcAttribute oGroupSrcAttr) {
 			oGroupSrcAttr = oGroupSrcAttr ?? oTableType.GetCustomAttribute<ASrcAttribute>();
@@ -532,14 +433,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			Log.Debug("Parsing Experian company data into {0} complete.", oTableType.Name);
 		} // LoadOneChildFromXml
 
-		#endregion method LoadOneChildFromXml
-
-		#endregion protected
-
-		#region private
-
-		#region method SetValue
-
 		private static void SetValue(AExperianLtdDataRow oCurTable, PropertyInfo pi, XmlNode oNode) {
 			if (pi.PropertyType == typeof (string))
 				pi.SetValue(oCurTable, oNode.InnerText);
@@ -565,10 +458,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			} // if
 		} // SetValue
 
-		#endregion method SetValue
-
-		#region method SetInt
-
 		private static void SetInt(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
 			int n;
 
@@ -577,10 +466,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			else
 				pi.SetValue(oCurTable, null);
 		} // SetInt
-
-		#endregion method SetInt
-
-		#region method SetDecimal
 
 		private static void SetDecimal(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
 			decimal n;
@@ -591,10 +476,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				pi.SetValue(oCurTable, null);
 		} // SetDecimal
 
-		#endregion method SetDecimal
-
-		#region method SetDate
-
 		private static void SetDate(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
 			DateTime n;
 
@@ -603,10 +484,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			else
 				pi.SetValue(oCurTable, null);
 		} // SetDate
-
-		#endregion method SetDate
-
-		#region method MD
 
 		private static string MD(XmlNode oNode) {
 			string s = oNode.InnerText;
@@ -617,18 +494,11 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			return s;
 		} // MD
 
-		#endregion method MD
-
-		#region method Str
-
 		private static string Str(string a) {
 			return (a ?? string.Empty).Trim();
 		} // Str
 
-		#endregion method Str
-
 		private static readonly CultureInfo ms_oCulture = new CultureInfo("en-GB", false);
 
-		#endregion private
 	} // class AExperianLtdDataRow
 } // namespace

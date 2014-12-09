@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Web.Services;
@@ -58,7 +58,6 @@ namespace com.yodlee.sampleapps
 		private static int NAV_REFRESH_ALL = itemOptionCount++;
 		/** Navigation Menu Choice. **/
 
-
 		// Services
 
 		ContentServiceTraversalService contentServieTravelService = null;
@@ -77,7 +76,6 @@ namespace com.yodlee.sampleapps
 			printVersionInfo();
 			//itemManagementMenu = new ItemManagementMenu(getCobrandContext(),userContext);
 		}
-
 
 		private void printVersionInfo()
 		{
@@ -119,7 +117,6 @@ namespace com.yodlee.sampleapps
 				System.Console.WriteLine("Please Login!");
 			}
 			System.Console.WriteLine("********************");
-
 
 			System.Console.WriteLine(NAV_REG_USER + ". Register User");
 			System.Console.WriteLine(NAV_SSO_REG_USER + ". SSO Register User");
@@ -212,7 +209,6 @@ namespace com.yodlee.sampleapps
 				}
 			}
 		}
-
 
 		private void ssoRegisterUser()
 		{
@@ -332,7 +328,6 @@ namespace com.yodlee.sampleapps
 
 				LoginUser loginUser = new LoginUser();
 
-
 				userContext = loginUser.loginUser(userName, password);
 				viewItems();
 				System.Console.WriteLine("User Logged in Successfully..");
@@ -366,11 +361,10 @@ namespace com.yodlee.sampleapps
 				Console.WriteLine("Error {0}", ex);
 				return;
 			}
-			
+
 			viewItems();
 			loginUser.logoutUser(userContext);
 		}
-		
 
 		public void sessionlessCallMenu()
 		{
@@ -492,8 +486,6 @@ namespace com.yodlee.sampleapps
 			accountSummary.displayItemSummary(userContext, itemId);
 		}
 
-
-
 		public void addItem()
 		{
 			System.Console.WriteLine("Enter Content ServiceId: ");
@@ -606,7 +598,7 @@ namespace com.yodlee.sampleapps
 		public static void Main(string[] args)
 		{
 			var yc = new YodleeConsoleMain();
-			
+
 			//var log = new LegacyLog();
 			//var conn = new SqlConnection(log);
 

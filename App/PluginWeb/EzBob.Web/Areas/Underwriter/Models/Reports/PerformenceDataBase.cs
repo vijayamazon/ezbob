@@ -11,7 +11,6 @@ namespace EzBob.Web.Areas.Underwriter.Models.Reports
         public PerformenceDataBase()
         {}
 
-
         protected PerformenceDataBase(PerformenceDataBaseRow data)
         {
             Processed = data.Processed;
@@ -113,6 +112,5 @@ namespace EzBob.Web.Areas.Underwriter.Models.Reports
         public long MaxTime { get; set; }
         public long AvgTime { get; set; }
 
-        
     }
 }

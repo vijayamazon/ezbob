@@ -5,7 +5,6 @@
 	using log4net;
 
 	public class Log4Net {
-		#region constructor
 
 		public Log4Net(Ezbob.Context.Environment oEnv = null) {
 			if (oEnv == null) {
@@ -66,8 +65,6 @@
 
 			MailSubject = oEnv.MachineName + " (" + ipStr + "): EzBob log";
 		} // constructor
-
-		#endregion constructor
 
 		public virtual string ErrorMailRecipient { get; private set; } // ErrorMailRecipient
 

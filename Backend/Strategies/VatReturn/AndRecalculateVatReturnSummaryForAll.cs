@@ -4,22 +4,13 @@
 	using Ezbob.Logger;
 
 	public class AndRecalculateVatReturnSummaryForAll : AStrategy {
-		#region constructor
 
 		public AndRecalculateVatReturnSummaryForAll(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Recalculate VAT return summary for all"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			DB.ForEachRowSafe(
@@ -43,6 +34,5 @@
 			);
 		} // Execute
 
-		#endregion method Execute
 	} // class AndRecalculateVatReturnSummaryForAll
 } // namespace

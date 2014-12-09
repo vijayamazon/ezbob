@@ -1,4 +1,4 @@
-namespace Ezbob.Utils.Serialization {
+﻿namespace Ezbob.Utils.Serialization {
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
@@ -7,7 +7,6 @@ namespace Ezbob.Utils.Serialization {
 	using System.Xml.Serialization;
 
 	public class Serialized {
-		#region method AsBase64
 
 		public static string AsBase64String<T>(T oData) {
 			return Convert.ToBase64String(new Serialized(oData));
@@ -16,10 +15,6 @@ namespace Ezbob.Utils.Serialization {
 		public static byte[] AsBase64<T>(T oData) {
 			return Convert.FromBase64String(AsBase64String(oData));
 		} // AsBase64
-
-		#endregion method AsBase64
-
-		#region method Serialize
 
 		public static void Serialize<T>(string fileName, T type) {
 			var serializer = GetSerializer(typeof(T));
@@ -31,10 +26,6 @@ namespace Ezbob.Utils.Serialization {
 				} // using writer
 			} // using stream
 		} // Serialize
-
-		#endregion method Serialize
-
-		#region method Deserialize
 
 		public static T Deserialize<T>(Serialized data) {
 			return Deserialize<T>(data.m_oData);
@@ -67,10 +58,6 @@ namespace Ezbob.Utils.Serialization {
 			return (T)serializer.Deserialize(stream);
 		} // Deserialize
 
-		#endregion method Deserialize
-
-		#region conversion operators
-
 		public static implicit operator byte[](Serialized obj) {
 			return obj.m_oData;
 		} // to byte[]
@@ -78,10 +65,6 @@ namespace Ezbob.Utils.Serialization {
 		public static implicit operator string(Serialized obj) {
 			return Encoding.UTF8.GetString(obj.m_oData);
 		} // to byte[]
-
-		#endregion conversion operators
-
-		#region constructor
 
 		public Serialized(object obj) {
 			var modelSerializer = GetSerializer(obj.GetType());
@@ -92,13 +75,7 @@ namespace Ezbob.Utils.Serialization {
 			} // using stream
 		} // constructor
 
-		#endregion constructor
-
-		#region private
-
 		private readonly byte[] m_oData;
-
-		#region cache of serializers
 
 		private static XmlSerializer GetSerializer(Type type) {
 			XmlSerializer res = null;
@@ -117,8 +94,5 @@ namespace Ezbob.Utils.Serialization {
 
 		private static readonly SortedDictionary<string, XmlSerializer> ms_oHash = new SortedDictionary<string, XmlSerializer>();
 
-		#endregion cache of serializers
-
-		#endregion private
 	} // class Serialized
 } // namespace

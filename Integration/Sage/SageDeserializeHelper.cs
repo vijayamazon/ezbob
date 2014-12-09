@@ -1,8 +1,8 @@
-namespace Sage
+﻿namespace Sage
 {
 	using System;
 	using System.Collections.Generic;
-	
+
 	[Serializable]
 	public class SageReferenceKey
 	{
@@ -26,7 +26,7 @@ namespace Sage
 		public SageReferenceKey product { get; set; }
 		public int lock_version { get; set; }
 	}
-	
+
 	[Serializable]
 	public class SageSalesInvoiceDeserialization
 	{
@@ -55,7 +55,7 @@ namespace Sage
 
 		public List<SageInvoiceItemDeserialization> line_items { get; set; }
 	}
-	
+
 	[Serializable]
 	public class SagePaymentStatusDeserialization
 	{
@@ -87,7 +87,6 @@ namespace Sage
 
 		public List<SageInvoiceItemDeserialization> line_items { get; set; }
 	}
-
 
 	[Serializable]
 	public class SageIncomeDeserialization

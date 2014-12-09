@@ -5,12 +5,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class BrokerLoadCustomerDetails
-
 	public class BrokerLoadCustomerDetails : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_sCustomerRefNum = sCustomerRefNum;
@@ -19,20 +14,11 @@
 			PotentialEsigners = new List<Esigner>();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Broker load customer details"; }
 		} // Name
 
-		#endregion property Name
-
-		#region class BrokerLoadCustomerDetailsRawData
-
 		public class BrokerLoadCustomerDetailsRawData {
-			#region properties
 
 			public int CustomerID { get; set; }
 			public string FirstName { get; set; }
@@ -53,10 +39,6 @@
 			public string Postcode { get; set; }
 			public string Country { get; set; }
 
-			#endregion properties
-
-			#region method ToModel
-
 			public void ToModel(BrokerCustomerPersonalData oModel) {
 				oModel.id = CustomerID;
 				oModel.name = string.Join(" ", FirstName, Surname);
@@ -72,12 +54,7 @@
 				);
 			} // ToModel
 
-			#endregion method ToModel
 		} // BrokerLoadCustomerDetailsRawData
-
-		#endregion class BrokerLoadCustomerDetailsRawData
-
-		#region method Execute
 
 		public override void Execute() {
 			BrokerLoadCustomerDetailsRawData raw = DB.FillFirst<BrokerLoadCustomerDetailsRawData>(
@@ -106,29 +83,13 @@
 			);
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public BrokerCustomerDetails Result { get; private set; } // Result
 
-		#endregion property Result
-
-		#region property PotentialEsigners
-
 		public List<Esigner> PotentialEsigners { get; private set; }
-
-		#endregion property PotentialEsigners
-
-		#endregion public
-
-		#region private
 
 		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
 
-		#endregion private
 	} // class BrokerLoadCustomerDetails
 
-	#endregion class BrokerLoadCustomerDetails
 } // namespace EzBob.Backend.Strategies.Broker

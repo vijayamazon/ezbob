@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Services.Protocols;
@@ -53,7 +53,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.Base
 		protected DataProviderTokenDependentBase( DataProviderCreationInfo info )			
 		{
 			Info = info;
-			
+
 			if ( info.ServiceTokenProvider == null )
 			{
 				info.ServiceTokenProvider = new ServiceTokenProviderEmpty();
@@ -65,7 +65,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.Base
 		}
 
 		public abstract CallProcedureType CallProcedureType { get; }
-		
+
 		public string CallProcedureName
 		{
 			get { return CallProcedureInfo.ServiceName; }
@@ -118,7 +118,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.Base
 					catch ( SoapException ex)
 					{
 						ServiceFaultDetail fault;
-						
+
 						if ( ServiceRequestException.TryExtractErrorMessage( ex, out fault ) )
 						{
 							throw ServiceRequestExceptionFactory.Create( fault, ex );
@@ -144,7 +144,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.Base
 						var exFail = ex as IServiceRequestException;						
 						return _CommonInternalErrors.Any( exFail.HasErrorWithCode );
 					}					
-					
+
 					return true;
 
 				} );						
@@ -157,7 +157,6 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.Base
 		}
 	}
 
-	
 	internal class AmazonServiceResponceExceptionWrapper : ServiceResponceExceptionWrapperBase
 	{
 		public AmazonServiceResponceExceptionWrapper(AbstractResponseType response)
@@ -175,6 +174,5 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.Base
 			}
 		}
 	}
-
 
 }

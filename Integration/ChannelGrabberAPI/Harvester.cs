@@ -11,12 +11,7 @@
 	using Newtonsoft.Json;
 	using RestSharp;
 
-	#region class Harvester
-
 	public class Harvester : SafeILog, IHarvester {
-		#region public
-
-		#region constructor
 
 		public Harvester(AccountData oAccountData, ASafeLog log, int nCustomerID, string sCustomerEmail) : base(log) {
 			ErrorsToEmail = new SortedDictionary<string, string>();
@@ -29,10 +24,6 @@
 			m_nCustomerID = nCustomerID;
 			m_sCustomerEmail = sCustomerEmail;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Init
 
 		public virtual bool Init() {
 			RetrievedOrders = null;
@@ -59,10 +50,6 @@
 			return true;
 		} // Init
 
-		#endregion method Init
-
-		#region method Run
-
 		public virtual void Run(bool bValidateCredentialsOnly, int nCustomerMarketplaceID) {
 			Run(bValidateCredentialsOnly);
 		} // Run
@@ -74,41 +61,17 @@
 				RetrievedOrders = GetOrders();
 		} // Run
 
-		#endregion method Run
-
-		#region method Done
-
 		public virtual void Done() {
 			// nothing here
 		} // Done
 
-		#endregion method Done
-
-		#region property RetrievedOrders
-
 		public virtual List<Order> RetrievedOrders { get; private set; }
-
-		#endregion property RetrievedOrders
-
-		#region property SourceID
 
 		public int SourceID {
 			get { return 0;}
 		} // SourceID
 
-		#endregion property SourceID
-
-		#region property ErrorsToEmail
-
 		public SortedDictionary<string, string> ErrorsToEmail { get; private set; }
-
-		#endregion property ErrorsToEmail
-
-		#endregion public
-
-		#region private
-
-		#region method Validate
 
 		private void Validate() {
 			Info("Validate {0} customer started with parameter [ {1} ]", m_oAccountData.AccountTypeName(), m_oAccountData);
@@ -135,10 +98,6 @@
 
 			Info("Validate {0} customer complete.", m_oAccountData.AccountTypeName());
 		} // Validate
-
-		#endregion method Validate
-
-		#region method GetOrders
 
 		private List<Order> GetOrders() {
 			Info(
@@ -207,10 +166,6 @@
 			return oOrdExpList;
 		} // GetOrders
 
-		#endregion method GetOrders
-
-		#region method LoadCustomers
-
 		private Dictionary<string, Customer> LoadCustomers() {
 			var oCustomers = new Dictionary<string, Customer>();
 
@@ -236,12 +191,6 @@
 			return oCustomers;
 		} // LoadCustomers
 
-		#endregion method LoadCustomers
-
-		#region Validate related only
-
-		#region method ValidateShop
-
 		private void ValidateShop(Customer oCustomer, AccountData oAccountData) {
 			Debug("Validating shop details...");
 
@@ -259,10 +208,6 @@
 
 			Debug("Validating shop details complete.");
 		} // ValidateShop
-
-		#endregion method ValidateShop
-
-		#region method CreateCustomer
 
 		private Customer CreateCustomer(string sCustomerName, string sCountry) {
 			Debug("Creating Channel Grabber customer {0} from {1}...", sCustomerName, sCountry);
@@ -282,32 +227,16 @@
 			return oCustomer;
 		} // CreateCustomer
 
-		#endregion method CreateCustomer
-
-		#endregion Validate related only
-
-		#region GetOrders related only
-
-		#region SendGenerateOrdersRq
-
 		private int SendGenerateOrdExpRq(string sRequest, Customer oCustomer, AccountData oAccountData) {
 			Debug("Sending generate orders request...");
 			XmlDocument doc = ExecutePostRequest(BuildGenerateOrdExpRq(sRequest, oCustomer, oAccountData));
 			return XmlUtil.GetInt(doc, XmlUtil.IdNode);
 		} // SendGenerateOrdExpRq
 
-		#endregion SendGenerateOrdExpRq
-
-		#region struct OrdExpFetchResult
-
 		private struct OrdExpFetchResult {
 			public OrderFetchStatus Status;
 			public XmlDocument Data;
 		} // OrdExpFetchResult
-
-		#endregion struct OrdExpFetchResult
-
-		#region FetchOrdExpRq
 
 		private OrdExpFetchResult FetchOrdExpRq(string sRequest, Customer oCustomer, AccountData oAccountData, int nRqID) {
 			Debug("Tesing whether request is complete...");
@@ -327,10 +256,6 @@
 
 			return oRes;
 		} // FetchOrdExpRq
-
-		#endregion FetchOrdExpRq
-
-		#region LoadOrdExp
 
 		private void LoadOrdExp(List<Order> lst, XmlDocument oData, int nIsExpense, AccountData oAccountData) {
 			Debug("Loading list of {0}s...", nIsExpense == 0 ? "order": "expense");
@@ -353,14 +278,6 @@
 
 			Debug("Loading list of {2}s complete, {0} {2}{1} loaded.", nCount, nCount == 1 ? "" : "s", nIsExpense == 0 ? "order" : "expense");
 		} // LoadOrdExp
-
-		#endregion LoadOrdExp
-
-		#endregion GetOrders related only
-
-		#region infrastructure
-
-		#region method ExecuteRequest
 
 		private XmlDocument ExecutePostRequest(string sResource) {
 			return ExecuteRequest(CreatePostRequest(sResource));
@@ -423,10 +340,6 @@
 			return doc;
 		} // ExecuteRequest
 
-		#endregion method ExecuteRequest
-
-		#region method CreateRequest
-
 		private RestRequest CreatePostRequest(string sResource) {
 			var oRequest = new RestRequest(sResource, Method.POST);
 			oRequest.AddHeader("Accept", "application/xml");
@@ -484,19 +397,11 @@ Data: {3}
 			return oRequest;
 		} // CreateRequest
 
-		#endregion method CreateRequest
-
-		#region method BuildRegisterShopRq
-
 		private string BuildRegisterShopRq(Customer oCustomer) {
 			return string.Format(
 				RegisterShopRq, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower()
 			);
 		} // BuildRegisterShopRq
-
-		#endregion method BuildRegisterShopRq
-
-		#region enum OrderFetchStatus
 
 		private enum OrderFetchStatus {
 			Complete,
@@ -504,19 +409,11 @@ Data: {3}
 			NotReady
 		} // enum OrderFetchStatus
 
-		#endregion enum OrderFetchStatus
-
-		#region method BuildValidityRq
-
 		private string BuildValidityRq(Customer oCustomer, AccountData oAccountData) {
 			return string.Format(
 				ValidityReportRq, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower(), oAccountData.Id()
 			);
 		} // BuildValidityRq
-
-		#endregion method BuildRegisterShopRq
-
-		#region method BuildGenerateOrdExpRq
 
 		private string BuildGenerateOrdExpRq(string sRequest, Customer oCustomer, AccountData oAccountData) {
 			return string.Format(
@@ -524,19 +421,11 @@ Data: {3}
 			);
 		} // BuildGenerateOrdExpRq
 
-		#endregion method BuildGenerateOrdExpRq
-
-		#region method BuildOrdExpGeneratedRq
-
 		private string BuildOrdExpGeneratedRq(string sRequest, Customer oCustomer, AccountData oAccountData, int nRqID) {
 			return string.Format(
 				sRequest, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower(), oAccountData.Id(), nRqID
 			);
 		} // BuildOrdExpGeneratedRq
-
-		#endregion method BuildOrdExpGeneratedRq
-		
-		#region private fields
 
 		private readonly int m_nCustomerID;
 		private readonly string m_sCustomerEmail;
@@ -547,10 +436,6 @@ Data: {3}
 
 		private int m_nSleepTime;
 		private ulong m_nWaitCycleCount;
-
-		#endregion private fields
-
-		#region private const
 
 		private const string DefaultRegion = "en-GB";
 
@@ -565,12 +450,6 @@ Data: {3}
 		private const string CustomerXpath = "/resource/resource";
 		private const string ServiceValidateXpath = "/resource/link[@rel]";
 
-		#endregion private const
-
-		#endregion infrastructure
-
-		#endregion private
 	} // class Harvester
 
-	#endregion class Harvester
 } // namespace ChannelGrabberAPI

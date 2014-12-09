@@ -120,7 +120,6 @@
 				}
 			}
 
-
 			if (!yodlee.MaxDateDict.ContainsKey(yearmonth))
 			{
 				yodlee.MaxDateDict[yearmonth] = date.Value.Day;
@@ -176,7 +175,6 @@
 									 string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
 			}
 		}
-
 
 		private void AddIfMissing(string catPrefix, string cat)
 		{
@@ -319,7 +317,7 @@
 
 			if (annualModel.DateFrom.HasValue && annualModel.DateTo.HasValue) {
 				var days = (annualModel.DateTo.Value - annualModel.DateFrom.Value).TotalDays;
-				
+
 				if (days > 60 && days < 90) {
 					days = 90; // we get usually 90 of data
 				}

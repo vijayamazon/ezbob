@@ -2,14 +2,10 @@
 using System.Xml;
 
 namespace Integration.ChannelGrabberConfig {
-	#region class XmlUtil
 
 	public class XmlUtil {
-		#region public
 
 		public const string IdNode = "id";
-
-		#region method GetString
 
 		public static string GetString(XmlDocument doc, string sNodeName) {
 			return GetString(doc.DocumentElement, sNodeName);
@@ -31,10 +27,6 @@ namespace Integration.ChannelGrabberConfig {
 			return oNode.InnerText;
 		} // GetString
 
-		#endregion method GetString
-
-		#region method GetInt
-
 		public static int GetInt(XmlDocument doc, string sNodeName) {
 			return XmlConvert.ToInt32(XmlUtil.GetString(doc, sNodeName));
 		} // GetInt
@@ -42,10 +34,6 @@ namespace Integration.ChannelGrabberConfig {
 		public static int GetInt(XmlNode oNode, string sNodeName) {
 			return XmlConvert.ToInt32(XmlUtil.GetString(oNode, sNodeName));
 		} // GetInt
-
-		#endregion method GetInt
-
-		#region method GetDouble
 
 		public static double GetDouble(XmlDocument doc, string sNodeName) {
 			return XmlConvert.ToDouble(XmlUtil.GetString(doc, sNodeName));
@@ -55,10 +43,6 @@ namespace Integration.ChannelGrabberConfig {
 			return XmlConvert.ToDouble(XmlUtil.GetString(oNode, sNodeName));
 		} // GetDouble
 
-		#endregion method GetDouble
-
-		#region method GetDate
-
 		public static DateTime GetDate(XmlDocument doc, string sNodeName) {
 			return XmlConvert.ToDateTime(XmlUtil.GetString(doc, sNodeName), XmlDateTimeSerializationMode.Utc);
 		} // GetDate
@@ -67,33 +51,17 @@ namespace Integration.ChannelGrabberConfig {
 			return XmlConvert.ToDateTime(XmlUtil.GetString(oNode, sNodeName), XmlDateTimeSerializationMode.Utc);
 		} // GetDate
 
-		#endregion method GetDate
-
-		#region method IsComplete
-
 		public static bool IsComplete(XmlDocument doc) {
 			return XmlUtil.IsEqual(doc, NodeName.Status, NodeValue.Complete);
 		} // IsComplete
-
-		#endregion method IsComplete
-
-		#region method IsError
 
 		public static bool IsError(XmlDocument doc) {
 			return XmlUtil.IsEqual(doc, NodeName.Status, NodeValue.Error);
 		} // IsError
 
-		#endregion method IsError
-
-		#region method GetError
-
 		public static string GetError(XmlDocument doc) {
 			return XmlUtil.GetString(doc, NodeName.Error);
 		} // IsError
-
-		#endregion method GetError
-
-		#region method IsEqual
 
 		private static bool IsEqual(XmlDocument doc, NodeName nNodeName, NodeValue nValue) {
 			return XmlUtil.IsEqual(doc.DocumentElement, nNodeName.ToString().ToLower(), nValue.ToString().ToLower());
@@ -111,32 +79,16 @@ namespace Integration.ChannelGrabberConfig {
 			return sValue.ToLower() == XmlUtil.GetString(oNode, sNodeName).ToLower();
 		} // IsEqual
 
-		#endregion method IsEqual
-
-		#endregion public
-
-		#region private
-
-		#region enum NodeName
-
 		enum NodeName {
 			Status,
 			Error
 		} // enum NodeName
-
-		#endregion enum NodeName
-
-		#region enum NodeValue
 
 		enum NodeValue {
 			Complete,
 			Error
 		} // enum NodeValue
 
-		#endregion enum NodeValue
-
-		#endregion private
 	} // class XmlUtil
 
-	#endregion class XmlUtil
 } // namespace Integration.ChannelGrabberConfig

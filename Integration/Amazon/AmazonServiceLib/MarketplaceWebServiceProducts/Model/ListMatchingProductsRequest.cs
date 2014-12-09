@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class ListMatchingProductsRequest
     {
-    
+
         private String sellerIdField;
 
         private String marketplaceIdField;
@@ -35,7 +33,6 @@ namespace MarketplaceWebServiceProducts.Model
         private String queryField;
 
         private String queryContextIdField;
-
 
         /// <summary>
         /// Gets and sets the SellerId property.
@@ -46,8 +43,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.sellerIdField ; }
             set { this.sellerIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SellerId property
@@ -60,8 +55,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SellerId property is set
         /// </summary>
@@ -72,7 +65,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the MarketplaceId property.
         /// </summary>
@@ -82,8 +74,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.marketplaceIdField ; }
             set { this.marketplaceIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the MarketplaceId property
@@ -96,8 +86,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if MarketplaceId property is set
         /// </summary>
@@ -108,7 +96,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Query property.
         /// </summary>
@@ -118,8 +105,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.queryField ; }
             set { this.queryField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Query property
@@ -132,8 +117,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Query property is set
         /// </summary>
@@ -144,7 +127,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the QueryContextId property.
         /// </summary>
@@ -154,8 +136,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.queryContextIdField ; }
             set { this.queryContextIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the QueryContextId property
@@ -168,8 +148,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if QueryContextId property is set
         /// </summary>
@@ -179,10 +157,6 @@ namespace MarketplaceWebServiceProducts.Model
             return  this.queryContextIdField != null;
 
         }
-
-
-
-
 
     }
 

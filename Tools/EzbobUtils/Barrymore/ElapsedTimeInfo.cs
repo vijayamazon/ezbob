@@ -1,10 +1,8 @@
-namespace Ezbob.Utils {
+﻿namespace Ezbob.Utils {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-
-	#region enum ElapsedDataMemberType
 
 	[DataContract]
 	public enum ElapsedDataMemberType {
@@ -23,10 +21,6 @@ namespace Ezbob.Utils {
 		[EnumMember]
 		StoreAggregatedData
 	} // enum ElapsedDataMemberType
-
-	#endregion enum ElapsedDataMemberType
-
-	#region class ElapsedTimeInfo
 
 	[DataContract]
 	public class ElapsedTimeInfo : IEnumerable<ElapsedDataMemberType> {
@@ -62,5 +56,4 @@ namespace Ezbob.Utils {
 		private readonly SortedDictionary<ElapsedDataMemberType, long> m_oData;
 	} // class ElapsedTimeInfo
 
-	#endregion class ElapsedTimeInfo
 } // namespace

@@ -1,4 +1,4 @@
-namespace EzBob.Models.Marketplaces.Builders {
+﻿namespace EzBob.Models.Marketplaces.Builders {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -11,16 +11,9 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using StructureMap;
 
 	class ChannelGrabberMarketplaceModelBuilder : MarketplaceModelBuilder {
-		#region public
-
-		#region constructor
 
 		public ChannelGrabberMarketplaceModelBuilder(ISession session) : base(session) {
 		} // constructor
-
-		#endregion constructor
-
-		#region method GetPaymentAccountModel
 
 		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
 			VendorInfo vi = Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
@@ -64,10 +57,6 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return paymentAccountModel;
 		} // GetPaymentAccountModel
 
-		#endregion method GetPaymentAccountModel
-
-		#region method InitializeSpecificData
-
 		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
 			VendorInfo vi = Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
@@ -79,7 +68,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				VatReturnFullData vrd = ObjectFactory.GetInstance<IEzServiceAccessor>().LoadVatReturnFullData(mp.Customer.Id, mp.Id);
 
 				var datesSummary = new List<VatReturnSummaryDates>();
-				
+
 				if (vrd.Summary != null) {
 					foreach (var oSummary in vrd.Summary) {
 						if (oSummary.Quarters.Any()) {
@@ -108,38 +97,18 @@ namespace EzBob.Models.Marketplaces.Builders {
 			} // switch
 		} // InitializeSpecificData
 
-		#endregion method InitializeSpecificData
-
-		#region method GetSeniority
-
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
 			return GetDateFromList(mp, WhichDateToTake.Min);
 		} // GetSeniority
-
-		#endregion method GetSeniority
-
-		#region method GetLastTransaction
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp) {
 			return GetDateFromList(mp, WhichDateToTake.Max);
 		} // GetSeniority
 
-		#endregion method GetLastTransaction
-
-		#endregion public
-
-		#region private
-
-		#region enum WhichDateToTake
-
 		private enum WhichDateToTake {
 			Min,
 			Max,
 		} // enum WhichDateToTake
-
-		#endregion enum WhichDateToTake
-
-		#region method GetDateFromList
 
 		private DateTime? GetDateFromList(MP_CustomerMarketPlace mp, WhichDateToTake nWhich) {
 			if (null == Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
@@ -169,10 +138,6 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return oResult;
 		} // GetDateFromList
 
-		#endregion method GetDateFromList
-
-		#region method SelectOne
-
 		private static DateTime? SelectOne(DateTime? oResult, DateTime oDate, WhichDateToTake nWhich) {
 			if (oResult == null)
 				return oDate;
@@ -189,8 +154,5 @@ namespace EzBob.Models.Marketplaces.Builders {
 			} // switch
 		} // SelectOne
 
-		#endregion method SelectOne
-
-		#endregion private
 	} // class ChannelGrabberMarketplaceBuilder
 } // namespace

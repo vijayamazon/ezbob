@@ -6,7 +6,6 @@
 	using Ezbob.Logger;
 
 	public class CrmLoadLookups : AStrategy {
-		#region constructor
 
 		public CrmLoadLookups(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Actions = new List<IdNameModel>();
@@ -14,35 +13,15 @@
 			Ranks = new List<IdNameModel>();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "CRM load lookups"; } // get
 		} // Name
 
-		#endregion property Name
-
-		#region property Actions
-
 		public virtual List<IdNameModel> Actions { get; private set; } // Actions
-
-		#endregion property Actions
-
-		#region property Statuses
 
 		public virtual List<CrmStatusGroup> Statuses { get; private set; } // Statuses
 
-		#endregion property Statuses
-
-		#region property Ranks
-
 		public virtual List<IdNameModel> Ranks { get; private set; } // Statuses
-
-		#endregion property Ranks
-
-		#region method Execute
 
 		public override void Execute() {
 			DB.ForEachRowSafe(
@@ -101,6 +80,5 @@
 			Statuses = oStatuses.Values.ToList();
 		} // Execute
 
-		#endregion method Execute
 	} // class CrmLoadLookups
 } // namespace EzBob.Backend.Strategies

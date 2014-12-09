@@ -21,21 +21,14 @@
 	using Ezbob.Utils.Lingvo;
 
 	public class Agent {
-		#region public
 
 		public virtual RejectionTrail Trail { get; private set; }
-
-		#region constructor
 
 		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
 			DB = oDB;
 			Log = oLog ?? new SafeLog();
 			Args = new Arguments(nCustomerID);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Init
 
 		public virtual Agent Init() {
 			Trail = new RejectionTrail(Args.CustomerID, Log, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
@@ -50,10 +43,6 @@
 			return this;
 		} // Init
 
-		#endregion method Init
-
-		#region method MakeAndVerifyDecision
-
 		public virtual bool MakeAndVerifyDecision() {
 			RunPrimary();
 
@@ -66,10 +55,6 @@
 
 			return bSuccess;
 		} // MakeAndVerifyDecision
-
-		#endregion method MakeAndVerifyDecision
-
-		#region method MakeDecision
 
 		public virtual void MakeDecision(AutoDecisionResponse response) {
 			bool bSuccess = false;
@@ -91,14 +76,6 @@
 			} // if
 		} // MakeDecision
 
-		#endregion method MakeDecision
-
-		#endregion public
-
-		#region protected
-
-		#region properties
-
 		protected virtual DateTime Now { get; set; }
 
 		protected virtual AConnection DB { get; private set; }
@@ -112,10 +89,6 @@
 		protected virtual CalculatedTurnover Turnover { get; private set; }
 		protected virtual OriginationTime OriginationTime { get; private set; }
 
-		#endregion properties
-
-		#region method RunPrimary
-
 		protected virtual void RunPrimary() {
 			Log.Debug("Primary: checking if auto reject should take place for customer {0}...", Args.CustomerID);
 
@@ -126,17 +99,9 @@
 			Log.Debug("Primary: checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
 		} // RunPrimary
 
-		#endregion method RunPrimary
-
-		#region method InitCfg
-
 		protected virtual Configuration InitCfg() {
 			return new Configuration(DB, Log);
 		} // InitCfg
-
-		#endregion method InitCfg
-
-		#region method LoadData
 
 		protected virtual void LoadData() {
 			DB.ForEachRowSafe(
@@ -149,10 +114,6 @@
 			MetaData.Validate();
 		} // LoadData
 
-		#endregion method LoadMetaData
-
-		#region method LoadConsumerData
-
 		protected virtual ExperianConsumerData LoadConsumerData() {
 			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, null, DB, Log);
 			lcd.Execute();
@@ -160,20 +121,12 @@
 			return lcd.Result;
 		} // LoadConsumerData
 
-		#endregion method LoadConsumerData
-
-		#region method LoadCompanyData
-
 		protected virtual ExperianLtd LoadCompanyData() {
 			var ltd = new LoadExperianLtd(MetaData.CompanyRefNum, 0, DB, Log);
 			ltd.Execute();
 
 			return ltd.Result;
 		} // LoadCompanyData
-
-		#endregion method LoadCompanyData
-
-		#region method ProcessRow
 
 		protected  virtual void ProcessRow(SafeReader sr) {
 			RowType nRowType;
@@ -207,14 +160,6 @@
 			} // switch
 		} // ProcessRow
 
-		#endregion method ProcessRow
-
-		#endregion protected
-
-		#region private
-
-		#region method GatherData
-
 		private void GatherData() {
 			Cfg.Load();
 
@@ -229,10 +174,6 @@
 
 			Trail.MyInputData.InitData(ToInputData());
 		} // GatherData
-
-		#endregion method GatherData
-
-		#region method FillFromConsumerData
 
 		private void FillFromConsumerData() {
 			var lcd = LoadConsumerData();
@@ -250,10 +191,6 @@
 
 			Log.Debug("Consumer score after: {0}", MetaData.ConsumerScore);
 		} // FillFromConsumerData
-
-		#endregion method FillFromConsumerData
-
-		#region method FillFromCompanyData
 
 		private void FillFromCompanyData() {
 			m_nNumOfDefaultBusinessAccounts = 0;
@@ -326,10 +263,6 @@
 			} // for each account
 		} // FillFromCompanyData
 
-		#endregion method FillFromCompanyData
-
-		#region method RunSecondary
-
 		private AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent RunSecondary() {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
 				new RejectionAgent(DB, Log, Args.CustomerID, Cfg.Values);
@@ -338,10 +271,6 @@
 
 			return oSecondary;
 		} // RunSecondary
-
-		#endregion method RunSecondary
-
-		#region method ToInputData
 
 		private RejectionInputData ToInputData() {
 			return new RejectionInputData {
@@ -367,10 +296,6 @@
 				ConsumerDataTime = MetaData.ConsumerDataTime,
 			};
 		} // ToInputData
-
-		#endregion method ToInputData
-
-		#region method FillNumOfPersonalDefaults
 
 		private void FillNumOfPersonalDefaults(ExperianConsumerData oData) {
 			m_nNumOfDefaultConsumerAccounts = 0;
@@ -428,10 +353,6 @@
 			} // for each
 		} // FillNumOfPersonalDefaults
 
-		#endregion method FillNumOfPersonalDefaults
-
-		#region method FillNumOfLateConsumerAccounts
-
 		private void FillNumOfLateConsumerAccounts(ExperianConsumerData oData) {
 			m_nNumOfLateConsumerAccounts = 0;
 
@@ -487,10 +408,6 @@
 			} // for each account
 		} // FillLateConsumerAccounts
 
-		#endregion method FillNumOfLateConsumerAccounts
-
-		#region enum RowType
-
 		private enum RowType {
 			MetaData,
 			MpError,
@@ -498,15 +415,9 @@
 			Turnover,
 		} // enum RowType
 
-		#endregion enum RowType
-
-		#region method StepNoReject
-
 		private T StepNoReject<T>() where T : ATrace {
 			return Trail.Negative<T>(true);
 		} // StepNoReject
-
-		#endregion method StepNoReject
 
 		private static readonly SortedSet<char> ms_oLateStatuses = new SortedSet<char> { '1', '2', '3', '4', '5', '6', };
 
@@ -514,6 +425,5 @@
 		private int m_nNumOfLateConsumerAccounts;
 		private int m_nNumOfDefaultBusinessAccounts;
 
-		#endregion private
 	} // class Agent
 } // namespace

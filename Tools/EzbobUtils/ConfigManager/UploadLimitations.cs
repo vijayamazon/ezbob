@@ -6,9 +6,6 @@
 	using Microsoft.Web.Administration;
 
 	public class UploadLimitations {
-		#region public
-
-		#region constructor
 
 		public UploadLimitations(AConnection oDB, ASafeLog oLog) {
 			m_oLimits = new SortedDictionary<string, OneUploadLimitation>();
@@ -17,10 +14,6 @@
 			m_oDB = oDB;
 			m_oLog = oLog ?? new SafeLog();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Load
 
 		public void Load() {
 			m_oLimits.Clear();
@@ -60,15 +53,7 @@
 				OnLoad(this);
 		} // Load
 
-		#endregion method Load
-
-		#region property Global
-
 		public OneUploadLimitation Global { get; private set; }
-
-		#endregion property Global
-
-		#region property indexer
 
 		public OneUploadLimitation this[string sControllerName, string sActionName] {
 			get {
@@ -80,10 +65,6 @@
 				return m_oLimits.ContainsKey(sKey) ? m_oLimits[sKey] : null;
 			} // get
 		} // indexer
-
-		#endregion property indexer
-
-		#region method UpdateWebSiteCfg
 
 		public void UpdateWebSiteCfg(string sWebSiteName) {
 			var oPendingUpdate = new List<Tuple<string, int>>();
@@ -118,15 +99,9 @@
 			} // using
 		} // UpdateWebSiteCfg
 
-		#endregion method UpdateWebSiteCfg
-
 		public delegate void OnLoadDelegate(UploadLimitations oLimitations);
 
 		public event OnLoadDelegate OnLoad;
-
-		#endregion public
-
-		#region private
 
 		private readonly SortedDictionary<string, OneUploadLimitation> m_oLimits;
 		private readonly AConnection m_oDB;
@@ -135,8 +110,6 @@
 		private const string SectionPath = "system.webServer/security/requestFiltering";
 		private const string ElementName = "requestLimits";
 		private const string AttributeName = "maxAllowedContentLength";
-
-		#region method SetWebSiteUploadLimitation
 
 		private void SetWebSiteUploadLimitation(Microsoft.Web.Administration.Configuration oConfig, int nUploadLimit, string sControllerAction) {
 			try {
@@ -154,10 +127,6 @@
 				m_oLog.Warn(e, "Failed to update upload limit to '{0}' for action '{1}'.", nUploadLimit, sControllerAction);
 			} // try
 		} // SetWebSiteUploadLimitation
-
-		#endregion method SetWebSiteUploadLimitation
-
-		#region method GetWebSiteUploadLimitation
 
 		private int GetWebSiteUploadLimitation(Microsoft.Web.Administration.Configuration oConfig, string sControllerAction) {
 			int nResult = 0;
@@ -189,8 +158,5 @@
 			return nResult;
 		} // GetWebSiteUploadLimitation
 
-		#endregion method GetWebSiteUploadLimitation
-
-		#endregion private
 	} // class UploadLimitations
 } // namespace

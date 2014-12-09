@@ -4,7 +4,6 @@
 	using Ezbob.Logger;
 
 	public class VerifyApproval : AVerificationBase {
-		#region public
 
 		public VerifyApproval(
 			int nTopCount,
@@ -14,19 +13,9 @@
 		) : base(nTopCount, nLastCheckedCustomerID, oDB, oLog) {
 		} // constructor
 
-		#endregion public
-
-		#region protected
-
-		#region property DecisionName
-
 		protected override string DecisionName {
 			get { return "Auto approval"; }
 		} // DecisionName
-
-		#endregion property DecisionName
-
-		#region method MakeAndVerifyDecision
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
 			return new Approval(
@@ -38,8 +27,5 @@
 			).Init().MakeAndVerifyDecision();
 		} // MakeAndVerifyDecision
 
-		#endregion method MakeAndVerifyDecision
-
-		#endregion protected
 	} // class VerifyApproval
 } // namespace

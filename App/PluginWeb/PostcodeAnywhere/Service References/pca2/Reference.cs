@@ -11,74 +11,73 @@
 namespace PostcodeAnywhere.pca2 {
     using System.Runtime.Serialization;
     using System;
-    
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="BankAccountValidation_Interactive_Validate_v2_00_ArrayOfResults", Namespace="http://services.postcodeanywhere.co.uk/", ItemName="BankAccountValidation_Interactive_Validate_v2_00_Results")]
     [System.SerializableAttribute()]
     public class BankAccountValidation_Interactive_Validate_v2_00_ArrayOfResults : System.Collections.Generic.List<PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00_Results> {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BankAccountValidation_Interactive_Validate_v2_00_Results", Namespace="http://services.postcodeanywhere.co.uk/")]
     [System.SerializableAttribute()]
     public partial class BankAccountValidation_Interactive_Validate_v2_00_Results : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         private bool IsCorrectField;
-        
+
         private bool IsDirectDebitCapableField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string StatusInformationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CorrectedSortCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CorrectedAccountNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string IBANField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string BankField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string BankBICField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string BranchField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string BranchBICField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContactAddressLine1Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContactAddressLine2Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContactPostTownField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContactPostcodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContactPhoneField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContactFaxField;
-        
+
         private bool FasterPaymentsSupportedField;
-        
+
         private bool CHAPSSupportedField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -88,7 +87,7 @@ namespace PostcodeAnywhere.pca2 {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public bool IsCorrect {
             get {
@@ -101,7 +100,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public bool IsDirectDebitCapable {
             get {
@@ -114,7 +113,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string StatusInformation {
             get {
@@ -127,7 +126,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string CorrectedSortCode {
             get {
@@ -140,7 +139,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string CorrectedAccountNumber {
             get {
@@ -153,7 +152,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string IBAN {
             get {
@@ -166,7 +165,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string Bank {
             get {
@@ -179,7 +178,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
         public string BankBIC {
             get {
@@ -192,7 +191,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
         public string Branch {
             get {
@@ -205,7 +204,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
         public string BranchBIC {
             get {
@@ -218,7 +217,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=10)]
         public string ContactAddressLine1 {
             get {
@@ -231,7 +230,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=11)]
         public string ContactAddressLine2 {
             get {
@@ -244,7 +243,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=12)]
         public string ContactPostTown {
             get {
@@ -257,7 +256,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=13)]
         public string ContactPostcode {
             get {
@@ -270,7 +269,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=14)]
         public string ContactPhone {
             get {
@@ -283,7 +282,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=15)]
         public string ContactFax {
             get {
@@ -296,7 +295,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=16)]
         public bool FasterPaymentsSupported {
             get {
@@ -309,7 +308,7 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=17)]
         public bool CHAPSSupported {
             get {
@@ -322,9 +321,9 @@ namespace PostcodeAnywhere.pca2 {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -332,91 +331,91 @@ namespace PostcodeAnywhere.pca2 {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://services.postcodeanywhere.co.uk/", ConfigurationName="pca2.PostcodeAnywhere_Soap")]
     public interface PostcodeAnywhere_Soap {
-        
+
         // CODEGEN: Generating message contract since the wrapper name (BankAccountValidation_Interactive_Validate_v2_00_Response) of message BankAccountValidation_Interactive_Validate_v2_00Response does not match the default value (BankAccountValidation_Interactive_Validate_v2_00)
         [System.ServiceModel.OperationContractAttribute(Action="http://services.postcodeanywhere.co.uk/BankAccountValidation_Interactive_Validate" +
             "_v2_00", ReplyAction="*")]
         PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00Response BankAccountValidation_Interactive_Validate_v2_00(PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00Request request);
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="BankAccountValidation_Interactive_Validate_v2_00", WrapperNamespace="http://services.postcodeanywhere.co.uk/", IsWrapped=true)]
     public partial class BankAccountValidation_Interactive_Validate_v2_00Request {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://services.postcodeanywhere.co.uk/", Order=0)]
         public string Key;
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://services.postcodeanywhere.co.uk/", Order=1)]
         public string AccountNumber;
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://services.postcodeanywhere.co.uk/", Order=2)]
         public string SortCode;
-        
+
         public BankAccountValidation_Interactive_Validate_v2_00Request() {
         }
-        
+
         public BankAccountValidation_Interactive_Validate_v2_00Request(string Key, string AccountNumber, string SortCode) {
             this.Key = Key;
             this.AccountNumber = AccountNumber;
             this.SortCode = SortCode;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="BankAccountValidation_Interactive_Validate_v2_00_Response", WrapperNamespace="http://services.postcodeanywhere.co.uk/", IsWrapped=true)]
     public partial class BankAccountValidation_Interactive_Validate_v2_00Response {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://services.postcodeanywhere.co.uk/", Order=0)]
         public PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00_ArrayOfResults BankAccountValidation_Interactive_Validate_v2_00_Result;
-        
+
         public BankAccountValidation_Interactive_Validate_v2_00Response() {
         }
-        
+
         public BankAccountValidation_Interactive_Validate_v2_00Response(PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00_ArrayOfResults BankAccountValidation_Interactive_Validate_v2_00_Result) {
             this.BankAccountValidation_Interactive_Validate_v2_00_Result = BankAccountValidation_Interactive_Validate_v2_00_Result;
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface PostcodeAnywhere_SoapChannel : PostcodeAnywhere.pca2.PostcodeAnywhere_Soap, System.ServiceModel.IClientChannel {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PostcodeAnywhere_SoapClient : System.ServiceModel.ClientBase<PostcodeAnywhere.pca2.PostcodeAnywhere_Soap>, PostcodeAnywhere.pca2.PostcodeAnywhere_Soap {
-        
+
         public PostcodeAnywhere_SoapClient() {
         }
-        
+
         public PostcodeAnywhere_SoapClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
-        
+
         public PostcodeAnywhere_SoapClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public PostcodeAnywhere_SoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public PostcodeAnywhere_SoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00Response PostcodeAnywhere.pca2.PostcodeAnywhere_Soap.BankAccountValidation_Interactive_Validate_v2_00(PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00Request request) {
             return base.Channel.BankAccountValidation_Interactive_Validate_v2_00(request);
         }
-        
+
         public PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00_ArrayOfResults BankAccountValidation_Interactive_Validate_v2_00(string Key, string AccountNumber, string SortCode) {
             PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00Request inValue = new PostcodeAnywhere.pca2.BankAccountValidation_Interactive_Validate_v2_00Request();
             inValue.Key = Key;

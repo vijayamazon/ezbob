@@ -1,4 +1,4 @@
-using EZBob.DatabaseLib;
+﻿using EZBob.DatabaseLib;
 using EzBob.eBayServiceLib.TradingServiceCore.DataInfos;
 using EzBob.eBayServiceLib.com.ebay.developer.soap;
 
@@ -62,8 +62,6 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 				//ParentNameList
 			};
 		}
-
-		
 
 	}
 }

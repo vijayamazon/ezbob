@@ -9,8 +9,6 @@
 
 		public override string Name { get {return "RequestCashWithoutTakenLoan"; } } // Name
 
-		#region method SetTemplateAndVariables
-
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Re-analyzing customer";
 
@@ -19,6 +17,5 @@
 			};
 		} // SetTemplateAndSubjectAndVariables
 
-		#endregion method SetTemplateAndVariables
 	} // class RequestCashWithoutTakenLoan
 } // namespace

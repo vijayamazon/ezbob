@@ -40,7 +40,7 @@
 
             return UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
         }
-        
+
         private ElapsedTimeInfo UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
 			string condition = Helper.GetPayPointDeltaPeriod(databaseCustomerMarketPlace);
@@ -115,7 +115,6 @@
 
         protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
         {
-          
 
         }
 

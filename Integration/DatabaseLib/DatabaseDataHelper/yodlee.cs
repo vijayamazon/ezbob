@@ -1,6 +1,5 @@
 ﻿namespace EZBob.DatabaseLib
 {
-	#region using
 
 	using System;
 	using System.Collections.Generic;
@@ -15,13 +14,8 @@
 	using Model.Marketplaces.Yodlee;
 	using StructureMap;
 
-	#endregion using
-
 	public partial class DatabaseDataHelper
 	{
-		#region public
-
-		#region property YodleeBanks
 
 		private string m_sYodleeBanks;
 
@@ -64,10 +58,6 @@
 			}
 		} // YodleeBanks
 
-		#endregion property YodleeBanks
-
-		#region method StoreYodleeOrdersData
-
 		public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrderDictionary ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -94,7 +84,6 @@
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
-
 
 			foreach (var item in ordersData.Data.Keys)
 			{
@@ -151,7 +140,6 @@
 							: null,
 					itemAccountId = item.itemAccountId
 				};
-
 
 				foreach (var bankTransaction in ordersData.Data[item])
 				{
@@ -227,8 +215,6 @@
 			_session.Flush();
 		}
 
-		#endregion method StoreYodleeOrdersData
-
 		private AmountInfo CurrencyXchg(YMoney coin, YDate date)
 		{
 			try
@@ -243,8 +229,6 @@
 				return null;
 			}
 		} // CurrencyXchg
-
-		#region method CalculateYodleeRunningBalance(
 
 		public void CalculateYodleeRunningBalance(
 			MP_CustomerMarketPlace mp,
@@ -354,10 +338,6 @@
 
 		// CalculateYodleeRunningBalance
 
-		#endregion method CalculateYodleeRunningBalance(
-
-		#region method GetAllYodleeOrdersData
-
 		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime, out List<string> directors)
 		{
 			directors = new List<string>();
@@ -366,8 +346,6 @@
 			var orders = new YodleeOrderDictionary { Data = new Dictionary<BankData, List<BankTransactionData>>() };
 
 			var mpYodleeOrder = mp.YodleeOrders.OrderByDescending(x => x.Created).FirstOrDefault(y => y.Created.Date <= history);
-
-			#region yodlee data retrieve
 
 			if (mpYodleeOrder != null)
 			{
@@ -408,7 +386,6 @@
 							item.srcElementId,
 							_CurrencyConvertor.ConvertToBaseCurrency(currentBalanceCurrency, currentBalance, item.asOfDate), transactions, directorsList);
 					}
-
 
 					// Not Retrieving Seid transactions as they seem to be duplicated data
 					var bankTransactionsDataList = transactions
@@ -455,24 +432,14 @@
 				} // for each order item
 			} // if order is not null
 
-			#endregion yodlee data retrieve
-
 			return orders;
 		} // GetAllYodleeOrdersData
-
-		#endregion method GetAllYodleeOrdersData
-
-		#region method HasYodleeOrders
 
 		public bool HasYodleeOrders(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			return !GetCustomerMarketPlace(databaseCustomerMarketPlace.Id).YodleeOrders.IsEmpty;
 		} // HasYodleeOrders
 
-		#endregion method HasYodleeOrders
-
-		#region method GetFileInfo
-		
 		public FileInfo GetFileInfo(int fileId) {
 			var companyFiledRepo = ObjectFactory.GetInstance<CompanyFilesMetaDataRepository>();
 			var file = companyFiledRepo.Get(fileId);
@@ -483,9 +450,6 @@
 			return null;
 		}
 
-		#endregion method GetFileInfo
-
-		#region method GetLastTransactionId
 		public int GetLastTransactionId() {
 			try {
 				var t = new YodleeTransactionRepository(_session);
@@ -495,15 +459,9 @@
 				return 0;
 			}
 		}
-		#endregion method GetLastTransactionId
-		#endregion public
-
-		#region private
 
 		private readonly IMP_YodleeTransactionCategoriesRepository _yodleeTransactionCategoriesRepository;
 		private readonly YodleeBanksRepository _yodleeBanksRepository;
-
-		#region method GetExperianDirectors
 
 		private List<string> GetExperianDirectors(Customer customer)
 		{
@@ -527,10 +485,6 @@
 
 			return experianDirectors.Distinct().ToList();
 		} // GetExperianDirectors
-
-		#endregion method GetExperianDirectors
-
-		#region method CategorizeTransaction
 
 		private MP_YodleeGroup CategorizeTransaction(List<MP_YodleeGroup> yodleeGroupRepository, List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository, string description, string baseType, int amount, int customerId, string customerSurname, List<string> directors)
 		{
@@ -612,8 +566,6 @@
 			return category;
 		} // CategorizeTransaction
 
-		#endregion method CategorizeTransaction
-
 		private void CategorizeTransaction(
 			MP_YodleeOrderItemBankTransaction oTransaction,
 			List<MP_YodleeGroup> yodleeGroupRepository,
@@ -644,6 +596,5 @@
 			} // try
 		} // CategorizeTransaction
 
-		#endregion private
 	} // class DatabaseDataHelper
 } // namespace EZBob.DatabaseLib

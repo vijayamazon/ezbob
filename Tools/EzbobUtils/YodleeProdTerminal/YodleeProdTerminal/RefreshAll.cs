@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Web.Services.Protocols;
 using System.Threading;
 using System.Collections;
@@ -38,7 +38,6 @@ namespace com.yodlee.sampleapps
 		 * Indicates the stop_refresh reason as "refresh aborted by the user".
 		 */
 		public static int STOP_REFRESH_REASON_USER_ABORTED   = 101;
-
 
 		public RefreshAll()
 		{
@@ -104,13 +103,12 @@ namespace com.yodlee.sampleapps
 			}
 		}
 
-
 		public bool pollRefreshStatus(UserContext userContext)
 		{
 			DateTime d1 = DateTime.Now;
 			DateTime d2 = d1.AddMinutes(REFRESH_TIME_OUT);
 			Hashtable ht = new Hashtable();
-			
+
 			while(d2 > d1)
 			{
 				System.Console.Write("\n\tChecking the refresh status of items:");
@@ -136,7 +134,7 @@ namespace com.yodlee.sampleapps
 							//hm.Add(itemId, true);
 							ht.Remove(itemId);
 							ht.Add(itemId, true);
-							
+
 							System.Console.WriteLine("\n\tThe refresh of " + itemId + " has completed successfully.");
 							if(doneRefreshing(ht))
 							{
@@ -173,7 +171,7 @@ namespace com.yodlee.sampleapps
 		public static bool doneRefreshing(Hashtable ht)
 		{
 			IDictionaryEnumerator en = ht.GetEnumerator();
-			
+
 			while (en.MoveNext())
 			{
 				//System.Console.WriteLine(en.Key + " : " + en.Value);
@@ -184,8 +182,6 @@ namespace com.yodlee.sampleapps
 			}
 			return true;	
 		}
-
-
 
 	}
 }

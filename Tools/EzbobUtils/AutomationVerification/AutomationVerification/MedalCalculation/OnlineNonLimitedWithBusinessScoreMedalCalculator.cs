@@ -27,7 +27,7 @@
 
 			var dict = new Dictionary<Parameter, Weight>
 				{
-					
+
 					{Parameter.BusinessScore,      GetBusinessScoreWeight(model.BusinessScore, model.FirstRepaymentDatePassed, model.UseHmrc)},
 					{Parameter.BusinessSeniority,  GetBusinessSeniorityWeight(model.BusinessSeniority, model.FirstRepaymentDatePassed, model.UseHmrc)},
 					{Parameter.ConsumerScore,      GetConsumerScoreWeight(model.ConsumerScore, model.FirstRepaymentDatePassed, model.UseHmrc)},
@@ -45,7 +45,7 @@
 			CalcDelta(model, dict);
 
 			MedalOutputModel scoreMedal = CalcScoreMedalOffer(dict, model, MedalType.OnlineNonLimitedWithBusinessScore);
-			
+
 			return scoreMedal;
 		}
 
@@ -71,9 +71,7 @@
 				dict[Parameter.PositiveFeedbacks].FinalWeight *= ratio;
 			}
 		}
-		
-		#region WeightConstants
-		#region Base Weight
+
 		public override decimal BusinessScoreBaseWeight { get { return 0.25M; } }
 		public override decimal FreeCashFlowBaseWeight { get { return 0.0M; } }
 		public override decimal AnnualTurnoverBaseWeight { get { return 0.13M; } }
@@ -82,30 +80,23 @@
 		public override decimal ConsumerScoreBaseWeight { get { return 0.35M; } }
 		public override decimal NetWorthBaseWeight { get { return 0.10M; } }
 		public override decimal MaritalStatusBaseWeight { get { return 0.05M; } }
-		
+
 		public override decimal NumOfStoresBaseWeight { get { return 0.02M; } }
 		public override decimal PositiveFeedbacksBaseWeight { get { return 0.05M; } }
-		#endregion
 
-		#region No HMRC Weight
 		public override decimal FreeCashFlowNoHmrcWeight { get { return 0; } }
 
 		public override decimal AnnualTurnoverNoHmrcWeightChange { get { return 0.0M; } }
 		public override decimal BusinessScoreNoHmrcWeightChange { get { return 0.0M; } }
 		public override decimal ConsumerScoreNoHmrcWeightChange { get { return 0.0M; } }
 		public override decimal BusinessSeniorityNoHmrcWeightChange { get { return 0.0M; } }
-		#endregion
 
-		#region Low Score Weight
 		public override decimal BusinessScoreLowScoreWeight { get { return 0.33M; } }
 		public override decimal ConsumerScoreLowScoreWeight { get { return 0.47M; } }
-		#endregion
 
-		#region First Repayment Passed Weight
 		public override decimal ConsumerScoreFirstRepaymentWeightChange { get { return -0.04M; } }
 		public override decimal BusinessScoreFirstRepaymentWeightChange { get { return -0.04M; } }
 		public override decimal BusinessSeniorityFirstRepaymentWeightChange { get { return -0.02M; } }
-		#endregion
-		#endregion
+
 	}
 }

@@ -10,9 +10,6 @@
 	using JetBrains.Annotations;
 
 	public class LoadVatReturnSummary : AStrategy {
-		#region public
-
-		#region constructor
 
 		public LoadVatReturnSummary(int nCustomerID, int nMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpLoadVatReturnSummary(nMarketplaceID, DB, Log);
@@ -20,17 +17,9 @@
 			Summary = new VatReturnSummary[0];
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Load VAT return summary"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			var oResults = new SortedDictionary<int, VatReturnSummary>();
@@ -77,22 +66,10 @@
 			Summary = oResults.Values.ToArray();
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Summary
-
 		public VatReturnSummary[] Summary { get; private set; }
-
-		#endregion property Summary
-
-		#endregion public
-
-		#region private
 
 		private readonly int m_nCustomerID;
 		private readonly SpLoadVatReturnSummary m_oSp;
-
-		#region class SpLoadVatReturnSummary
 
 		private class SpLoadVatReturnSummary : AStoredProc {
 			public SpLoadVatReturnSummary(int nMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
@@ -107,26 +84,15 @@
 			public int MarketplaceID { get; set; }
 		} // class SpLoadVatReturnSummary
 
-		#endregion class SpLoadVatReturnSummary
-
-		#region method ProcessSummary
-
 		private static void ProcessSummary(SortedDictionary<int, VatReturnSummary> oResults, SafeReader sr) {
 			var oSummary = sr.Fill<VatReturnSummary>();
 			oResults[oSummary.SummaryID] = oSummary;
 		} // ProcessSummary
-
-		#endregion method ProcessSummary
-
-		#region method ProcessQuarter
 
 		private static void ProcessQuarter(SortedDictionary<int, VatReturnSummary> oResults, SafeReader sr) {
 			var oQuarter = sr.Fill<VatReturnQuarter>();
 			oResults[oQuarter.SummaryID].Quarters.Add(oQuarter);
 		} // ProcessQuarter
 
-		#endregion method ProcessQuarter
-
-		#endregion private
 	} // class LoadVatReturnSummary
 } // namespace

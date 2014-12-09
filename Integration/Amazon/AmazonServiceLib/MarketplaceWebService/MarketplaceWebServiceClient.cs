@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -31,7 +31,6 @@ using MarketplaceWebService.Attributes;
 using System.Reflection;
 using System.Collections.Specialized;
 using log4net;
-
 
 namespace MarketplaceWebService
 {
@@ -96,7 +95,6 @@ namespace MarketplaceWebService
         {
         }
 
-
         /// <summary>
         /// Constructs MarketplaceWebServiceClient with AWS Access Key ID and AWS Secret Key
         /// an application name, and application version.
@@ -121,7 +119,7 @@ namespace MarketplaceWebService
         }
 
         private const string mwsClientVersion = "2011-08-01";
-        
+
         private void buildUserAgentHeader(
             string applicationName,
             string applicationVersion,
@@ -136,11 +134,8 @@ namespace MarketplaceWebService
                 "MWSClientVersion", mwsClientVersion );
         }
 
-
-
         // Public API ------------------------------------------------------------//
 
-        
         /// <summary>
         /// Get Report 
         /// </summary>
@@ -157,7 +152,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportResponse, GetReportRequest>(ConvertGetReport(request), request);
         }
 
-        
         /// <summary>
         /// Get Report Schedule Count 
         /// </summary>
@@ -172,7 +166,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportScheduleCountResponse>(ConvertGetReportScheduleCount(request));
         }
 
-        
         /// <summary>
         /// Get Report Request List By Next Token 
         /// </summary>
@@ -187,7 +180,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportRequestListByNextTokenResponse>(ConvertGetReportRequestListByNextToken(request));
         }
 
-        
         /// <summary>
         /// Update Report Acknowledgements 
         /// </summary>
@@ -202,7 +194,6 @@ namespace MarketplaceWebService
             return Invoke<UpdateReportAcknowledgementsResponse>(ConvertUpdateReportAcknowledgements(request));
         }
 
-        
         /// <summary>
         /// Submit Feed 
         /// </summary>
@@ -221,7 +212,6 @@ namespace MarketplaceWebService
             return Invoke<SubmitFeedResponse,SubmitFeedRequest>(ConvertSubmitFeed(request), request);
         }
 
-        
         /// <summary>
         /// Get Report Count 
         /// </summary>
@@ -238,7 +228,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportCountResponse>(ConvertGetReportCount(request));
         }
 
-        
         /// <summary>
         /// Get Feed Submission List By Next Token 
         /// </summary>
@@ -253,7 +242,6 @@ namespace MarketplaceWebService
             return Invoke<GetFeedSubmissionListByNextTokenResponse>(ConvertGetFeedSubmissionListByNextToken(request));
         }
 
-        
         /// <summary>
         /// Cancel Feed Submissions 
         /// </summary>
@@ -269,7 +257,6 @@ namespace MarketplaceWebService
             return Invoke<CancelFeedSubmissionsResponse>(ConvertCancelFeedSubmissions(request));
         }
 
-        
         /// <summary>
         /// Request Report 
         /// </summary>
@@ -284,7 +271,6 @@ namespace MarketplaceWebService
             return Invoke<RequestReportResponse>(ConvertRequestReport(request));
         }
 
-        
         /// <summary>
         /// Get Feed Submission Count 
         /// </summary>
@@ -299,7 +285,6 @@ namespace MarketplaceWebService
             return Invoke<GetFeedSubmissionCountResponse>(ConvertGetFeedSubmissionCount(request));
         }
 
-        
         /// <summary>
         /// Cancel Report Requests 
         /// </summary>
@@ -315,7 +300,6 @@ namespace MarketplaceWebService
             return Invoke<CancelReportRequestsResponse>(ConvertCancelReportRequests(request));
         }
 
-        
         /// <summary>
         /// Get Report List 
         /// </summary>
@@ -331,7 +315,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportListResponse>(ConvertGetReportList(request));
         }
 
-        
         /// <summary>
         /// Get Feed Submission Result 
         /// </summary>
@@ -346,7 +329,6 @@ namespace MarketplaceWebService
             return Invoke<GetFeedSubmissionResultResponse, GetFeedSubmissionResultRequest>(ConvertGetFeedSubmissionResult(request), request);
         }
 
-        
         /// <summary>
         /// Get Feed Submission List 
         /// </summary>
@@ -361,7 +343,6 @@ namespace MarketplaceWebService
             return Invoke<GetFeedSubmissionListResponse>(ConvertGetFeedSubmissionList(request));
         }
 
-        
         /// <summary>
         /// Get Report Request List 
         /// </summary>
@@ -376,7 +357,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportRequestListResponse>(ConvertGetReportRequestList(request));
         }
 
-        
         /// <summary>
         /// Get Report Schedule List By Next Token 
         /// </summary>
@@ -391,7 +371,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportScheduleListByNextTokenResponse>(ConvertGetReportScheduleListByNextToken(request));
         }
 
-        
         /// <summary>
         /// Get Report List By Next Token 
         /// </summary>
@@ -406,7 +385,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportListByNextTokenResponse>(ConvertGetReportListByNextToken(request));
         }
 
-        
         /// <summary>
         /// Manage Report Schedule 
         /// </summary>
@@ -422,7 +400,6 @@ namespace MarketplaceWebService
             return Invoke<ManageReportScheduleResponse>(ConvertManageReportSchedule(request));
         }
 
-        
         /// <summary>
         /// Get Report Request Count 
         /// </summary>
@@ -438,7 +415,6 @@ namespace MarketplaceWebService
             return Invoke<GetReportRequestCountResponse>(ConvertGetReportRequestCount(request));
         }
 
-        
         /// <summary>
         /// Get Report Schedule List 
         /// </summary>
@@ -756,7 +732,7 @@ namespace MarketplaceWebService
                     headers.Add(attribute.HeaderName, (String)pi.GetValue(request, null));
                 }
             }
-            
+
             return headers;
         }
 
@@ -807,7 +783,7 @@ namespace MarketplaceWebService
         private T DeserializeStreamingResponse<T>(IDictionary<String, String> responseElements)
         {
             string responseElementBase = typeof(T).Name;
-            
+
             if (responseElementBase.EndsWith("Response"))
             {
                 responseElementBase = responseElementBase.Remove(responseElementBase.Length - "Response".Length);
@@ -1132,7 +1108,7 @@ namespace MarketplaceWebService
                 utcTime = dt;
 
             }
-            
+
             return utcTime.ToString("yyyy-MM-dd\\THH:mm:ss.fff\\Z", CultureInfo.InvariantCulture);
         }
 
@@ -1141,7 +1117,7 @@ namespace MarketplaceWebService
          */
         private IDictionary<String, String> ConvertGetReport(GetReportRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReport");
             if (request.IsSetMarketplace())
@@ -1159,14 +1135,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportScheduleCountRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportScheduleCount(GetReportScheduleCountRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportScheduleCount");
             if (request.IsSetMarketplace())
@@ -1189,14 +1164,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportRequestListByNextTokenRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportRequestListByNextToken(GetReportRequestListByNextTokenRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportRequestListByNextToken");
             if (request.IsSetMarketplace())
@@ -1214,14 +1188,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert UpdateReportAcknowledgementsRequest to name value pairs
          */
         private IDictionary<String, String> ConvertUpdateReportAcknowledgements(UpdateReportAcknowledgementsRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "UpdateReportAcknowledgements");
             if (request.IsSetMarketplace())
@@ -1248,14 +1221,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert SubmitFeedRequest to name value pairs
          */
         private IDictionary<String, String> ConvertSubmitFeed(SubmitFeedRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "SubmitFeed");
             if (request.IsSetMarketplace())
@@ -1288,14 +1260,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportCountRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportCount(GetReportCountRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportCount");
             if (request.IsSetMarketplace())
@@ -1330,14 +1301,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetFeedSubmissionListByNextTokenRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetFeedSubmissionListByNextToken(GetFeedSubmissionListByNextTokenRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetFeedSubmissionListByNextToken");
             if (request.IsSetMarketplace())
@@ -1355,14 +1325,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert CancelFeedSubmissionsRequest to name value pairs
          */
         private IDictionary<String, String> ConvertCancelFeedSubmissions(CancelFeedSubmissionsRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "CancelFeedSubmissions");
             if (request.IsSetMarketplace())
@@ -1402,14 +1371,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert RequestReportRequest to name value pairs
          */
         private IDictionary<String, String> ConvertRequestReport(RequestReportRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "RequestReport");
             if (request.IsSetMarketplace())
@@ -1450,14 +1418,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetFeedSubmissionCountRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetFeedSubmissionCount(GetFeedSubmissionCountRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetFeedSubmissionCount");
             if (request.IsSetMarketplace())
@@ -1497,14 +1464,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert CancelReportRequestsRequest to name value pairs
          */
         private IDictionary<String, String> ConvertCancelReportRequests(CancelReportRequestsRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "CancelReportRequests");
             if (request.IsSetMarketplace())
@@ -1553,14 +1519,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportListRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportList(GetReportListRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportList");
             if (request.IsSetMarketplace())
@@ -1608,14 +1573,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetFeedSubmissionResultRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetFeedSubmissionResult(GetFeedSubmissionResultRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetFeedSubmissionResult");
             if (request.IsSetMarketplace())
@@ -1633,14 +1597,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetFeedSubmissionListRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetFeedSubmissionList(GetFeedSubmissionListRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetFeedSubmissionList");
             if (request.IsSetMarketplace())
@@ -1693,14 +1656,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportRequestListRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportRequestList(GetReportRequestListRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportRequestList");
             if (request.IsSetMarketplace())
@@ -1753,14 +1715,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportScheduleListByNextTokenRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportScheduleListByNextToken(GetReportScheduleListByNextTokenRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportScheduleListByNextToken");
             if (request.IsSetMarketplace())
@@ -1778,14 +1739,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportListByNextTokenRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportListByNextToken(GetReportListByNextTokenRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportListByNextToken");
             if (request.IsSetMarketplace())
@@ -1803,14 +1763,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert ManageReportScheduleRequest to name value pairs
          */
         private IDictionary<String, String> ConvertManageReportSchedule(ManageReportScheduleRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "ManageReportSchedule");
             if (request.IsSetMarketplace())
@@ -1836,14 +1795,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportRequestCountRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportRequestCount(GetReportRequestCountRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportRequestCount");
             if (request.IsSetMarketplace())
@@ -1883,14 +1841,13 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                
+
         /**
          * Convert GetReportScheduleListRequest to name value pairs
          */
         private IDictionary<String, String> ConvertGetReportScheduleList(GetReportScheduleListRequest request)
         {
-            
+
             IDictionary<String, String> parameters = new Dictionary<String, String>();
             parameters.Add("Action", "GetReportScheduleList");
             if (request.IsSetMarketplace())
@@ -1913,7 +1870,6 @@ namespace MarketplaceWebService
 
             return parameters;
         }
-        
-                                                                                        
+
     }
 }

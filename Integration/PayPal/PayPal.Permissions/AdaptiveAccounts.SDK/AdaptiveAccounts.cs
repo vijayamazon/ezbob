@@ -18,19 +18,18 @@ namespace PayPal.Services.Private.AA {
     using System.Web.Services.Protocols;
     using System.ComponentModel;
     using System.Web.Services;
-    
-    
+
     /// <remarks/>
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="AdaptiveAccountsSOAP11Binding", Namespace="http://svcs.paypal.com/services")]
     public class AdaptiveAccounts : System.Web.Services.Protocols.SoapHttpClientProtocol {
-        
+
         /// <remarks/>
         public AdaptiveAccounts() {
             this.Url = "https://svcs.paypal.com/AdaptiveAccounts";
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:CreateAccount", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("CreateAccountResponse", Namespace="http://svcs.paypal.com/types/aa", IsNullable=true)]
@@ -39,19 +38,19 @@ namespace PayPal.Services.Private.AA {
                         CreateAccountRequest});
             return ((CreateAccountResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginCreateAccount(CreateAccountRequest CreateAccountRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("CreateAccount", new object[] {
                         CreateAccountRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public CreateAccountResponse EndCreateAccount(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((CreateAccountResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:GetUserAgreement", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetUserAgreementResponse", Namespace="http://svcs.paypal.com/types/aa", IsNullable=true)]
@@ -60,19 +59,19 @@ namespace PayPal.Services.Private.AA {
                         GetUserAgreementRequest});
             return ((GetUserAgreementResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginGetUserAgreement(GetUserAgreementRequest GetUserAgreementRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("GetUserAgreement", new object[] {
                         GetUserAgreementRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetUserAgreementResponse EndGetUserAgreement(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetUserAgreementResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:GetVerifiedStatus", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetVerifiedStatusResponse", Namespace="http://svcs.paypal.com/types/aa", IsNullable=true)]
@@ -81,19 +80,19 @@ namespace PayPal.Services.Private.AA {
                         GetVerifiedStatusRequest});
             return ((GetVerifiedStatusResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginGetVerifiedStatus(GetVerifiedStatusRequest GetVerifiedStatusRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("GetVerifiedStatus", new object[] {
                         GetVerifiedStatusRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetVerifiedStatusResponse EndGetVerifiedStatus(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetVerifiedStatusResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:AddBankAccount", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("AddBankAccountResponse", Namespace="http://svcs.paypal.com/types/aa", IsNullable=true)]
@@ -102,19 +101,19 @@ namespace PayPal.Services.Private.AA {
                         AddBankAccountRequest});
             return ((AddBankAccountResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginAddBankAccount(AddBankAccountRequest AddBankAccountRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("AddBankAccount", new object[] {
                         AddBankAccountRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public AddBankAccountResponse EndAddBankAccount(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((AddBankAccountResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:AddPaymentCard", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("AddPaymentCardResponse", Namespace="http://svcs.paypal.com/types/aa", IsNullable=true)]
@@ -123,19 +122,19 @@ namespace PayPal.Services.Private.AA {
                         AddPaymentCardRequest});
             return ((AddPaymentCardResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginAddPaymentCard(AddPaymentCardRequest AddPaymentCardRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("AddPaymentCard", new object[] {
                         AddPaymentCardRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public AddPaymentCardResponse EndAddPaymentCard(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((AddPaymentCardResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:SetFundingSourceConfirmed", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("SetFundingSourceConfirmedResponse", Namespace="http://svcs.paypal.com/types/aa", IsNullable=true)]
@@ -144,1202 +143,1202 @@ namespace PayPal.Services.Private.AA {
                         SetFundingSourceConfirmedRequest});
             return ((SetFundingSourceConfirmedResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginSetFundingSourceConfirmed(SetFundingSourceConfirmedRequest SetFundingSourceConfirmedRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("SetFundingSourceConfirmed", new object[] {
                         SetFundingSourceConfirmedRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public SetFundingSourceConfirmedResponse EndSetFundingSourceConfirmed(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((SetFundingSourceConfirmedResponse)(results[0]));
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class CreateAccountRequest {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ClientDetailsType clientDetails;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string accountType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public NameType name;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date")]
         public System.DateTime dateOfBirth;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool dateOfBirthSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AddressType address;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string contactPhoneNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string homePhoneNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string mobilePhoneNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string currencyCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string citizenshipCountryCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string preferredLanguageCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string notificationURL;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string emailAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string registrationType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public CreateAccountWebOptionsType createAccountWebOptions;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public bool suppressWelcomeEmail;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool suppressWelcomeEmailSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public bool performExtraVettingOnThisAccount;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool performExtraVettingOnThisAccountSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string taxId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string partnerField1;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string partnerField2;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string partnerField3;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string partnerField4;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string partnerField5;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public BusinessInfoType businessInfo;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/common")]
     public class RequestEnvelope {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.ComponentModel.DefaultValueAttribute(DetailLevelCode.ReturnAll)]
         public DetailLevelCode detailLevel = DetailLevelCode.ReturnAll;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string errorLanguage;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/common")]
     public enum DetailLevelCode {
-        
+
         /// <remarks/>
         ReturnAll,
-        
+
         /// <remarks/>
         ReturnAttributes,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class SetFundingSourceConfirmedResponse {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/common")]
     public class ResponseEnvelope {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public System.DateTime timestamp;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AckCode ack;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string correlationId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string build;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/common")]
     public enum AckCode {
-        
+
         /// <remarks/>
         Success,
-        
+
         /// <remarks/>
         Failure,
-        
+
         /// <remarks/>
         Warning,
-        
+
         /// <remarks/>
         SuccessWithWarning,
-        
+
         /// <remarks/>
         FailureWithWarning,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class SetFundingSourceConfirmedRequest {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string emailAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string accountId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string fundingSourceKey;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class AddPaymentCardResponse {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string execStatus;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string redirectURL;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string fundingSourceKey;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class CardDateType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
         public string month;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
         public string year;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class AddPaymentCardRequest {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string emailAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string accountId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string createAccountKey;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public NameType nameOnCard;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AddressType billingAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date")]
         public System.DateTime cardOwnerDateOfBirth;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool cardOwnerDateOfBirthSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string cardNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public CardTypeType cardType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public CardDateType expirationDate;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string cardVerificationNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public CardDateType startDate;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string issueNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ConfirmationType confirmationType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public WebOptionsType webOptions;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class NameType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string salutation;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string firstName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string middleName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string lastName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string suffix;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class AddressType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string line1;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string line2;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string city;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string state;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string postalCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string countryCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public enum CardTypeType {
-        
+
         /// <remarks/>
         Visa,
-        
+
         /// <remarks/>
         MasterCard,
-        
+
         /// <remarks/>
         AmericanExpress,
-        
+
         /// <remarks/>
         Discover,
-        
+
         /// <remarks/>
         SwitchMaestro,
-        
+
         /// <remarks/>
         Solo,
-        
+
         /// <remarks/>
         CarteAurore,
-        
+
         /// <remarks/>
         CarteBleue,
-        
+
         /// <remarks/>
         Cofinoga,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("4etoiles")]
         Item4etoiles,
-        
+
         /// <remarks/>
         CartaAura,
-        
+
         /// <remarks/>
         TarjetaAurora,
-        
+
         /// <remarks/>
         JCB,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public enum ConfirmationType {
-        
+
         /// <remarks/>
         WEB,
-        
+
         /// <remarks/>
         MOBILE,
-        
+
         /// <remarks/>
         NONE,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class WebOptionsType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string returnUrl;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string cancelUrl;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string returnUrlDescription;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string cancelUrlDescription;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class AddBankAccountResponse {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string execStatus;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string redirectURL;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string fundingSourceKey;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class AddBankAccountRequest {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string emailAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string accountId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string createAccountKey;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string bankCountryCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string bankName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string routingNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public BankAccountType bankAccountType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool bankAccountTypeSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string bankAccountNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string iban;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string clabe;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string bsbNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string branchLocation;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string sortCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string bankTransitNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string institutionNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string branchCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string agencyNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string bankCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ribKey;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string controlDigit;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string taxIdType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string taxIdNumber;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date")]
         public System.DateTime accountHolderDateOfBirth;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool accountHolderDateOfBirthSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ConfirmationType confirmationType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public WebOptionsType webOptions;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public enum BankAccountType {
-        
+
         /// <remarks/>
         CHECKING,
-        
+
         /// <remarks/>
         SAVINGS,
-        
+
         /// <remarks/>
         BUSINESS_CHECKING,
-        
+
         /// <remarks/>
         BUSINESS_SAVINGS,
-        
+
         /// <remarks/>
         NORMAL,
-        
+
         /// <remarks/>
         UNKNOWN,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class UserInfoType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string emailAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string accountType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string accountId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public NameType name;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string businessName;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class GetVerifiedStatusResponse {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string accountStatus;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string countryCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public UserInfoType userInfo;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class GetVerifiedStatusRequest {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string emailAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string matchCriteria;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string firstName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string lastName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class GetUserAgreementResponse {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string agreement;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class GetUserAgreementRequest {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string createAccountKey;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string countryCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string languageCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class CreateAccountResponse {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string createAccountKey;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string execStatus;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string redirectURL;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string accountId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class BusinessStakeholderType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public StakeholderRoleType role;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public NameType name;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string fullLegalName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AddressType address;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date")]
         public System.DateTime dateOfBirth;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool dateOfBirthSpecified;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public enum StakeholderRoleType {
-        
+
         /// <remarks/>
         CHAIRMAN,
-        
+
         /// <remarks/>
         SECRETARY,
-        
+
         /// <remarks/>
         TREASURER,
-        
+
         /// <remarks/>
         BENEFICIAL_OWNER,
-        
+
         /// <remarks/>
         PRIMARY_CONTACT,
-        
+
         /// <remarks/>
         INDIVIDUAL_PARTNER,
-        
+
         /// <remarks/>
         NON_INDIVIDUAL_PARTNER,
-        
+
         /// <remarks/>
         PRIMARY_INDIVIDUAL_PARTNER,
-        
+
         /// <remarks/>
         DIRECTOR,
-        
+
         /// <remarks/>
         NO_BENEFICIAL_OWNER,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class BusinessInfoType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string businessName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AddressType businessAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string workPhone;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
         public string category;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
         public string subCategory;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
         public string merchantCategoryCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string doingBusinessAs;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string customerServicePhone;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string customerServiceEmail;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string disputeEmail;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string webSite;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string companyId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date")]
         public System.DateTime dateOfEstablishment;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool dateOfEstablishmentSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public BusinessType businessType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool businessTypeSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public BusinessSubtypeType businessSubtype;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool businessSubtypeSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string incorporationId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public System.Decimal averagePrice;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool averagePriceSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public System.Decimal averageMonthlyVolume;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool averageMonthlyVolumeSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
         public string percentageRevenueFromOnline;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("salesVenue", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public SalesVenueType[] salesVenue;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string salesVenueDesc;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string vatId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string vatCountryCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string commercialRegistrationLocation;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AddressType principalPlaceOfBusinessAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AddressType registeredOfficeAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string establishmentCountryCode;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string establishmentState;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("businessStakeholder", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public BusinessStakeholderType[] businessStakeholder;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public enum BusinessType {
-        
+
         /// <remarks/>
         ASSOCIATION,
-        
+
         /// <remarks/>
         CORPORATION,
-        
+
         /// <remarks/>
         GENERAL_PARTNERSHIP,
-        
+
         /// <remarks/>
         GOVERNMENT,
-        
+
         /// <remarks/>
         INDIVIDUAL,
-        
+
         /// <remarks/>
         LIMITED_LIABILITY_PARTNERSHIP,
-        
+
         /// <remarks/>
         LIMITED_LIABILITY_PRIVATE_CORPORATION,
-        
+
         /// <remarks/>
         LIMITED_LIABILITY_PROPRIETORS,
-        
+
         /// <remarks/>
         LIMITED_PARTNERSHIP,
-        
+
         /// <remarks/>
         LIMITED_PARTNERSHIP_PRIVATE_CORPORATION,
-        
+
         /// <remarks/>
         NONPROFIT,
-        
+
         /// <remarks/>
         OTHER_CORPORATE_BODY,
-        
+
         /// <remarks/>
         PARTNERSHIP,
-        
+
         /// <remarks/>
         PRIVATE_CORPORATION,
-        
+
         /// <remarks/>
         PRIVATE_PARTNERSHIP,
-        
+
         /// <remarks/>
         PROPRIETORSHIP,
-        
+
         /// <remarks/>
         PROPRIETORSHIP_CRAFTSMAN,
-        
+
         /// <remarks/>
         PROPRIETARY_COMPANY,
-        
+
         /// <remarks/>
         PUBLIC_COMPANY,
-        
+
         /// <remarks/>
         PUBLIC_CORPORATION,
-        
+
         /// <remarks/>
         PUBLIC_PARTNERSHIP,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public enum BusinessSubtypeType {
-        
+
         /// <remarks/>
         ENTITY,
-        
+
         /// <remarks/>
         EMANATION,
-        
+
         /// <remarks/>
         ESTD_COMMONWEALTH,
-        
+
         /// <remarks/>
         ESTD_UNDER_STATE_TERRITORY,
-        
+
         /// <remarks/>
         ESTD_UNDER_FOREIGN_COUNTRY,
-        
+
         /// <remarks/>
         INCORPORATED,
-        
+
         /// <remarks/>
         NON_INCORPORATED,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public enum SalesVenueType {
-        
+
         /// <remarks/>
         WEB,
-        
+
         /// <remarks/>
         EBAY,
-        
+
         /// <remarks/>
         OTHER_MARKETPLACE,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/aa")]
     public class CreateAccountWebOptionsType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string returnUrl;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public bool showAddCreditCard;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool showAddCreditCardSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public bool showMobileConfirm;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool showMobileConfirmSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string returnUrlDescription;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public bool useMiniBrowser;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool useMiniBrowserSpecified;
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/common")]
     public class ClientDetailsType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ipAddress;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string deviceId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string applicationId;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string model;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string geoLocation;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string customerType;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string partnerName;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string customerId;

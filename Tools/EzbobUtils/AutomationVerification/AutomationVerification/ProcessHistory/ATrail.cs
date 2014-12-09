@@ -12,9 +12,6 @@
 	using MailApi;
 
 	public abstract class ATrail {
-		#region public
-
-		#region method GetDecisionName
 
 		public virtual string GetDecisionName(DecisionStatus? nStatus = null) {
 			if (nStatus == null)
@@ -35,8 +32,6 @@
 			} // switch
 		} // GetDecisionName
 
-		#endregion method GetDecisionName
-
 		public virtual int CustomerID { get; private set; }
 
 		public abstract string PositiveDecisionName { get; }
@@ -49,8 +44,6 @@
 
 		public abstract string Name { get; }
 
-		#region property DecisionStatus
-
 		public virtual DecisionStatus DecisionStatus {
 			get { return m_nDecisionStatus; }
 			protected set { m_nDecisionStatus = value; }
@@ -58,57 +51,29 @@
 
 		private DecisionStatus m_nDecisionStatus;
 
-		#endregion property DecisionStatus
-
-		#region property HasDecided
-
 		public virtual bool HasDecided {
 			get { return DecisionStatus == DecisionStatus.Affirmative; }
 		} // HasDecided
-
-		#endregion property HasDecided
-
-		#region property Length
 
 		public virtual int Length {
 			get { return m_oSteps.Count; } // get
 		} // Length
 
-		#endregion property Length
-
-		#region method LockDecision
-
 		public virtual void LockDecision() {
 			IsDecisionLocked = true;
 		} // LockDecision
-
-		#endregion method LockDecision
-
-		#region method Affirmative
 
 		public virtual T Affirmative<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
 			return Add<T>(DecisionStatus.Affirmative, bLockDecisionAfterAddingAStep);
 		} // Affirmative
 
-		#endregion method Affirmative
-
-		#region method Negative
-
 		public virtual T Negative<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
 			return Add<T>(DecisionStatus.Negative, bLockDecisionAfterAddingAStep);
 		} // Negative
 
-		#endregion method Negative
-
-		#region method Dunno
-
 		public virtual T Dunno<T>() where T : ATrace {
 			return Add<T>(DecisionStatus.Dunno, false);
 		} // Dunno
-
-		#endregion method Dunno
-
-		#region method ToString
 
 		public override string ToString() {
 			var lst = new List<Tuple<string, string, string, string>>();
@@ -151,10 +116,6 @@
 				os
 			);
 		} // ToString
-
-		#endregion method ToString
-
-		#region method EqualsTo
 
 		public virtual bool EqualsTo(ATrail oTrail, bool bQuiet = false) {
 			if (oTrail == null) {
@@ -289,10 +250,6 @@
 			return bResult;
 		} // EqualsTo
 
-		#endregion method EqualsTo
-
-		#region property UniqueID
-
 		public virtual Guid UniqueID {
 			get {
 				if (m_oUniqueID == null)
@@ -303,10 +260,6 @@
 		} // UniqueID
 
 		private Guid? m_oUniqueID;
-
-		#endregion property UniqueID
-
-		#region method Save
 
 		public virtual void Save(AConnection oDB, ATrail oTrail) {
 			ConnectionWrapper cw = null;
@@ -342,14 +295,6 @@
 			} // try
 		} // Save
 
-		#endregion method Save
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
 		protected ATrail(
 			int nCustomerID,
 			DecisionStatus nDecisionStatus,
@@ -370,10 +315,6 @@
 			m_oLog = oLog ?? new SafeLog();
 		} // constructor
 
-		#endregion constructor
-
-		#region property IsDecisionLocked
-
 		protected virtual bool IsDecisionLocked {
 			get { return m_bIsDecisionLocked; }
 			set { m_bIsDecisionLocked = value; }
@@ -381,18 +322,9 @@
 
 		private bool m_bIsDecisionLocked;
 
-		#endregion property IsDecisionLocked
-
 		protected abstract void UpdateDecision(DecisionStatus nDecisionStatus);
 
-		#endregion protected
-
-		#region private
-
-		#region class SaveDecisionTrail
-
 		private class SaveDecisionTrail : AStoredProcedure {
-			#region constructor
 
 			public SaveDecisionTrail(ATrail oTrail, Guid oDiffID, bool bIsPrimary, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				m_oTrail = oTrail;
@@ -407,10 +339,6 @@
 				for (int i = 0; i < oTrail.Length; i++)
 					Traces.Add(oTrail.m_oSteps[i].ToDBModel(i, false));
 			} // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
 				bool bResult = true;
@@ -454,15 +382,11 @@
 				return bResult;
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
 			[UsedImplicitly]
 			public int CustomerID { get; set; }
 
 			[UsedImplicitly]
 			public int DecisionID { get; set; }
-
-			#region property DecisionTime
 
 			[UsedImplicitly]
 			public DateTime DecisionTime {
@@ -471,8 +395,6 @@
 				set { }
 				// ReSharper restore ValueParameterNotUsed
 			} // DecisionTime
-
-			#endregion property DecisionTime
 
 			[UsedImplicitly]
 			public Guid UniqueID { get; set; }
@@ -489,8 +411,6 @@
 			[UsedImplicitly]
 			public List<ATrace.DBModel> Traces { get; set; }
 
-			#region property Notes
-
 			[UsedImplicitly]
 			public List<string> Notes {
 				get { return m_oTrail.m_oDiffNotes; }
@@ -499,16 +419,9 @@
 				// ReSharper restore ValueParameterNotUsed
 			} // Notes
 
-			#endregion property Notes
-
-			#region private
-
 			private readonly ATrail m_oTrail;
 
-			#endregion private
 		} // SaveDecisionTrail
-
-		#endregion class SaveDecisionTrail
 
 		private readonly List<string> m_oDiffNotes;
 
@@ -519,8 +432,6 @@
 		private readonly string m_sToExplanationEmailAddress;
 		private readonly string m_sFromEmailAddress;
 		private readonly string m_sFromEmailName;
-
-		#region method Add
 
 		private T Add<T>(DecisionStatus nDecisionStatus, bool bLockDecisionAfterAddingAStep) where T: ATrace {
 			T oTrace = (T)Activator.CreateInstance(typeof (T), nDecisionStatus);
@@ -543,10 +454,6 @@
 			return oTrace;
 		} // Add
 
-		#endregion method Add
-
-		#region method SendExplanationMail
-
 		private void SendExplanationMail(ATrail oTrail, string sMsg) {
 			var message = string.Format(
 				EmailFormat,
@@ -562,10 +469,6 @@
 			new Mail().Send(m_sToExplanationEmailAddress, null, message, m_sFromEmailAddress, m_sFromEmailName, "#Mismatch in " + Name + " for customer " + CustomerID);
 		} // SendExplanationMail
 
-		#endregion method SendExplanationMail
-
-		#region const EmailFormat
-
 		private const string EmailFormat =
 			"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b></u></h1><br>" +
 			"<h2><b style='color:red'>{2}</b><br></h2>" +
@@ -578,8 +481,5 @@
 			"</b></h2>verification data:</b></h2>" +
 			"<pre><h3>{6}</h3></pre>";
 
-		#endregion const EmailFormat
-
-		#endregion private
 	} // class Trail
 } // namespace

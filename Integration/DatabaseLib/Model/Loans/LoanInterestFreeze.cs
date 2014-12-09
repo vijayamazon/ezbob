@@ -5,12 +5,8 @@ using FluentNHibernate.Mapping;
 using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database.Loans {
-	#region class LoanInterestFreeze
 
 	public class LoanInterestFreeze {
-		#region public
-
-		#region properties - loaded from DB
 
 		public virtual int Id { get; set; }
 		public virtual Loan Loan { get; set; }
@@ -19,10 +15,6 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 		public virtual decimal InterestRate { get; set; }
 		public virtual DateTime ActivationDate { get; set; }
 		public virtual DateTime? DeactivationDate { get; set; }
-
-		#endregion properties - loaded from DB
-
-		#region method Contains
 
 		public virtual bool Contains(DateTime oDate) {
 			if (!StartDate.HasValue && !EndDate.HasValue)
@@ -41,10 +33,6 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 			return bGTstart && bLTend;
 		} // Contains
 
-		#endregion method Contains
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format(
 				"{0}|{1}|{2}|{3}|{4}|{5}",
@@ -57,16 +45,11 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
 	} // class LoanInterestFreeze
 
-	#endregion class LoanInterestFreeze
 } // namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping {
-	#region class LoanInterestFreezeMap
 
 	public sealed class LoanInterestFreezeMap : ClassMap<LoanInterestFreeze> {
 		public LoanInterestFreezeMap() {
@@ -82,5 +65,4 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 		} // constructor
 	} // class LoanInterestFreezeMap
 
-	#endregion class LoanInterestFreezeMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

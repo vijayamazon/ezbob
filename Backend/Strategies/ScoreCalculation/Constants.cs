@@ -4,9 +4,6 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 {
 	public static class Constants
 	{
-		#region MedalScoreCalculation
-
-		#region Weight
 
 		public static readonly decimal ExperianScoreBaseWeight = 0.4M;
 		public static readonly decimal ExperianScore650_750Weight = 0.55M;
@@ -38,8 +35,6 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 		public static readonly decimal EzbobNumOfEarlyRepaymentsBaseWeight = 0M;
 		public static readonly decimal EzbobNumOfEarlyRepayments_FirstRepaymentWeight = 0.03M;
 
-		#region Weight Min/Max
-
 		public static readonly int ExperianScoreWeightMin = 650;
 		public static readonly int ExperianScoreWeightMax = 750;
 
@@ -48,21 +43,9 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 
 		public static readonly int PositiveFeedback_GT50K = 50000;
 
-		#endregion Weight Min/Max
-
-		#region Weight Deduction On First Repayment Reached
-
 		public static readonly decimal ExperianScoreWeightDeduction = 0.08M;
 		public static readonly decimal MpSenorityWeightDeduction = 0.04M;
 		public static readonly decimal AnnualTurnoverWeightDeduction = 0.03M;
-
-		#endregion Weight Deduction On First Repayment Reached
-
-		#endregion Weight
-
-		#region Grade
-
-		#region Min/Max Grade
 
 		public static readonly int ExperianScoreGradeMin = 1;
 		public static readonly int ExperianScoreGradeMax = 5;
@@ -84,10 +67,6 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 		public static readonly int EzbobNumOfLateRepaymentsGradeMax = 5;
 		public static readonly int EzbobNumOfEarlyRepaymentsGradeMin = 2;
 		public static readonly int EzbobNumOfEarlyRepaymentsGradeMax = 5;
-
-		#endregion Min/Max Grade
-
-		#region Grade Ranges
 
 		public static readonly List<RangeGrage> ExperianRanges = new List<RangeGrage> {
 			new RangeGrage {MinValue = null,MaxValue = 680, Grade = 1},
@@ -157,12 +136,6 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 		public static readonly int MaritalStatusGrade_LivingTogether = 4;
 		public static readonly int MaritalStatusGrade_Separated = 3;
 
-		#endregion Grade Ranges
-
-		#endregion Grade
-
-		#region Medal Range
-
 		public static readonly List<RangeMedal> MedalRanges = new List<RangeMedal> {
 			new RangeMedal {MinValue = null,MaxValue = 0.4M, Medal = MedalMultiplier.Silver },
 			new RangeMedal {MinValue = 0.4M,MaxValue = 0.62M, Medal = MedalMultiplier.Gold},
@@ -170,8 +143,5 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 			new RangeMedal {MinValue = 0.84M,MaxValue = null,Medal = MedalMultiplier.Diamond},
 		};
 
-		#endregion Medal Range
-
-		#endregion MedalScoreCalculation
 	} // class Constants
 } // namespace

@@ -28,8 +28,6 @@
             return result;
         }
 
-
-
         public int CalculateCountRepayment(Loan loan)
         {
             int result;

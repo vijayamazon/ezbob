@@ -28,7 +28,6 @@
 			Assert.AreEqual( rez[2].Price, 200.36 );
 			Assert.AreEqual( rez[2].Count, 2 );			
 
-
 		}
 
 		[Test]

@@ -4,7 +4,6 @@
 	using Pool;
 
 	public class ConnectionWrapper {
-		#region constructor
 
 		public ConnectionWrapper(PooledConnection oPooled) {
 			Connection = oPooled.Connection;
@@ -12,10 +11,6 @@
 			IsOpen = false;
 			Transaction = null;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Open
 
 		public ConnectionWrapper Open() {
 			if (IsOpen)
@@ -32,10 +27,6 @@
 			return this;
 		} // Open
 
-		#endregion method Open
-
-		#region method Close
-
 		public void Close() {
 			if (Transaction != null)
 				throw new DbException("Cannot close connection wrapper: transaction is still active.");
@@ -46,10 +37,6 @@
 			Connection = null;
 		} // Close
 
-		#endregion method Close
-
-		#region method BeginTransaction
-
 		public void BeginTransaction() {
 			if (Transaction != null)
 				return;
@@ -59,10 +46,6 @@
 
 			Transaction = Connection.BeginTransaction();
 		} // BeginTransaction
-
-		#endregion method BeginTransaction
-
-		#region method Commit
 
 		public void Commit() {
 			if (Transaction == null)
@@ -75,10 +58,6 @@
 			Close();
 		} // Commit
 
-		#endregion method Commit
-
-		#region method Rollback
-
 		public void Rollback() {
 			if (Transaction == null)
 				return;
@@ -89,8 +68,6 @@
 
 			Close();
 		} // Rollback
-
-		#endregion method Rollback
 
 		public DbConnection Connection { get; private set; }
 

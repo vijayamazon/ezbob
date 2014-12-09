@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -152,7 +152,7 @@ namespace com.yodlee.sampleapps.util
                 input = (IOUtils.readStr()).Trim();
                 if (null != input)
                 {
-                   
+
                     validInputFlag = false;
                 }
 
@@ -165,7 +165,6 @@ namespace com.yodlee.sampleapps.util
 
             return input;
         }
-
 
         public static DateTime readDate()
         {
@@ -192,7 +191,7 @@ namespace com.yodlee.sampleapps.util
                 if (year == DateTime.Now.Year && month == DateTime.Now.Month && day < DateTime.Now.Day)
                     throw e3;
                 return new DateTime(year, month, day);
-                    
+
             }
             catch (Exception e)
             {
@@ -228,6 +227,5 @@ namespace com.yodlee.sampleapps.util
         }
 
     }
-    
 
 }

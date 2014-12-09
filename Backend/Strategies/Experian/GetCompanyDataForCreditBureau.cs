@@ -8,17 +8,11 @@
 	{
 		private readonly string refNumber;
 
-		#region constructor
-
 		public GetCompanyDataForCreditBureau(AConnection oDb, ASafeLog oLog, string refNumber)
 			: base(oDb, oLog)
 		{
 			this.refNumber = refNumber;
 		}
-
-		#endregion constructor
-
-		#region property Name
 
 		public override string Name
 		{
@@ -28,10 +22,6 @@
 		public DateTime? LastUpdate { get; set; }
 		public int Score { get; set; }
 		public string Errors { get; set; }
-
-		#endregion property Name
-
-		#region property Execute
 
 		public override void Execute() {
 			SafeReader sr = DB.GetFirst(
@@ -47,6 +37,5 @@
 			}
 		}
 
-		#endregion property Execute
 	}
 }

@@ -17,10 +17,6 @@
 		private readonly DbHelper _dbHelper;
 		private readonly MarketPlacesHelper _mpHelper;
 
-		#region public
-
-		#region constructor
-
 		/// <summary>
 		/// Constructor get db, log customer id and rejection configuration variables
 		/// </summary>
@@ -39,8 +35,6 @@
 			Trail = new RejectionTrail(nCustomerID, oLog);
 		} // constructor
 
-		#endregion constructor
-
 		/// <summary>
 		/// Retrieves customer's rejection input data
 		/// </summary>
@@ -50,7 +44,7 @@
 			DateTime now = dataAsOf.HasValue ? dataAsOf.Value : DateTime.UtcNow;
 			var model = new RejectionInputData();
 			var dbData = _dbHelper.GetRejectionData(_customerId);
-			
+
 			var originationTime = new OriginationTime(m_oLog);
 			m_oDB.ForEachRowSafe(originationTime.Process, "LoadCustomerMarketplaceOriginationTimes",
 			                     CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", _customerId));
@@ -96,12 +90,10 @@
 				ConsumerLateDays = lates.LateDays,
 				ConsumerDataTime = dbData.ConsumerDataTime,
 			};
-		
+
 			model.Init(now, data, _configs);
 			return model;
 		}
-
-		#region method MakeDecision
 
 		/// <summary>
 		/// Main logic flow function to determine weather to auto reject the customer or not 
@@ -135,17 +127,7 @@
 			);
 		}
 
-		#endregion method MakeDecision
-
 		public RejectionTrail Trail { get; private set; }
-
-		#endregion public
-
-		#region private
-
-		#region steps
-
-		#region rejection exception checks
 
 		/// <summary>
 		/// Rejection exception steps - if one of them determins no reject - the client won't be auto rejected
@@ -251,9 +233,6 @@
 				StepNoDecision<ConsumerDataTooOldPreventer>().Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
 		}
 
-		#endregion
-
-		#region rejection checks
 		/// <summary>
 		/// rejection steps - if one of the steps determine reject - the client will be rejected (if none of the rejection exception rules where true)
 		/// </summary>
@@ -404,9 +383,6 @@
 				StepNoDecision<ConsumerLates>().Init(data);
 			}
 		}
-		#endregion
-
-		#endregion steps
 
 		private T StepReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace
 		{
@@ -423,8 +399,6 @@
 			return Trail.Dunno<T>();
 		} // StepReject
 
-
-		#region fields
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 
@@ -432,8 +406,5 @@
 		public bool IsAutoRejected { get; private set; }
 		private readonly RejectionConfigs _configs;
 
-		#endregion fields
-
-		#endregion private
 	} // class Agent
 } // namespace

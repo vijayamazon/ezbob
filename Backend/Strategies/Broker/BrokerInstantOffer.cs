@@ -8,26 +8,15 @@
 	using MedalCalculations;
 
 	public class BrokerInstantOffer : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerInstantOffer(BrokerInstantOfferRequest request, AConnection oDB, ASafeLog oLog)
 			: base(oDB, oLog) {
 			_request = request;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "BrokerInstantOffer"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			SaveRequest();
@@ -35,13 +24,7 @@
 			SaveResponse();
 		}
 
-		#endregion method Execute
-
 		public BrokerInstantOfferResponse Response { get; private set; }
-
-		#endregion public
-
-		#region private
 
 		private void SaveRequest() {
 			_requestId = DB.ExecuteScalar<int>(
@@ -75,7 +58,7 @@
 			}
 			var calculator = new LimitedMedalCalculatorForInstantOffer(businessScore, _request.AnnualProfit, _request.AnnualTurnover, tangibleEquity, businessSeniority, consumerScore, netWorth, DB, Log);
 			MedalResult medalScore = calculator.CalculateMedalScore(0, DateTime.UtcNow);
-			
+
 			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {
 				BrokerInstantOfferRequestId = _requestId,
@@ -129,6 +112,5 @@
 		private readonly BrokerInstantOfferRequest _request;
 		private int _requestId;
 
-		#endregion private
 	}
 } // namespace

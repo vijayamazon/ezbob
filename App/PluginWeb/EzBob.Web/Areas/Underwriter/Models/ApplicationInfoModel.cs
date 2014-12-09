@@ -30,7 +30,7 @@
 
 		public bool? IsOffline { get; set; }
 		public bool HasYodlee { get; set; }
-        
+
 		public bool IsAvoid { get; set; }
         public bool AllowSendingEmail { get; set; }
 
@@ -64,7 +64,6 @@
 		public decimal AnnualTurnover { get; set; }
 		public int CustomerReasonType { get; set; }
 		public string CustomerReason { get; set; }
-
 
 		public decimal Turnover { get; set; }
 		public decimal FreeCashFlow { get; set; }

@@ -8,9 +8,6 @@
 	using Ezbob.Logger;
 
 	public class SaveSourceRefHistory : AStrategy {
-		#region public
-
-		#region constructor
 
 		public SaveSourceRefHistory(
 			int nUserID,
@@ -30,17 +27,9 @@
 			);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "SaveSourceRefHistory"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Log.Debug("Saving sourceref history for user {0}...", m_nUserID);
@@ -93,7 +82,6 @@
 			else
 				Log.Msg("No sourceref history to save for user {0}.", m_nUserID);
 
-
 			if (m_CampaignSourceRef != null) {
 				m_CampaignSourceRef.RSource = m_CampaignSourceRef.RSource ?? "Direct";
 				m_CampaignSourceRef.RDate = m_CampaignSourceRef.RDate ?? DateTime.UtcNow;
@@ -107,26 +95,15 @@
 			Log.Debug("Saving sourceref history for user {0} complete.", m_nUserID);
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly int m_nUserID;
 		private readonly string m_sSourceRefList;
 		private readonly string m_sVisitTimeList;
 		private readonly CampaignSourceRef m_CampaignSourceRef;
-
-		#region class SourceRefEntry
 
 		private class SourceRefEntry {
 			public string SourceRef { get; set; }
 			public DateTime? VisitTime { get; set; }
 		} // class SourceRefEntry
 
-		#endregion class SourceRefEntry
-
-		#endregion private
 	} // class SaveSourceRefHistory
 } // namespace

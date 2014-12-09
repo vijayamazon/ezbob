@@ -9,7 +9,6 @@
 	using Ezbob.Utils.Exceptions;
 
 	partial class EzServiceImplementation {
-		#region method Shutdown
 
 		public ActionMetaData Shutdown() {
 			ActionMetaData amd = null;
@@ -56,10 +55,6 @@
 			} // try
 		} // Shutdown
 
-		#endregion method Shutdown
-
-		#region method Terminate
-
 		public ActionMetaData Terminate(Guid oActionID) {
 			lock (ms_oLockTerminateAction) {
 				try {
@@ -103,25 +98,13 @@
 			} // lock
 		} // Terminate
 
-		#endregion method Terminate
-
-		#region method Nop
-
 		public ActionMetaData Nop(int nLengthInSeconds, string sMsg) {
 			return Execute<Nop>(null, null, nLengthInSeconds, sMsg);
 		} // Nop
 
-		#endregion method Nop
-
-		#region method Noop
-
 		public ActionMetaData Noop() {
 			return Execute<Noop>(null, null);
 		} // Noop
-
-		#endregion method Noop
-
-		#region method StressTestAction
 
 		public ActionMetaData StressTestAction(int nLengthInSeconds, string sMsg) {
 			try {
@@ -173,10 +156,6 @@
 			} // try
 		} // StressTestAction
 
-		#endregion method StressTestAction
-
-		#region method StressTestSync
-
 		public ActionMetaData StressTestSync(int nLengthInSeconds, string sMsg) {
 			try {
 				int nActiveCount = 0;
@@ -217,10 +196,6 @@
 			} // try
 		} // StressTestSync
 
-		#endregion method StressTestSync
-
-		#region method ListActiveActions
-
 		public StringListActionResult ListActiveActions() {
 			try {
 				ActionMetaData amd = NewSync("Admin.ListActiveActions");
@@ -248,10 +223,6 @@
 				throw new FaultException(e.Message);
 			} // try
 		} // ListActiveActions
-
-		#endregion method ListActiveActions
-
-		#region method WriteToLog
 
 		public ActionMetaData WriteToLog(string sSeverity, string sMsg) {
 			ActionMetaData amd = null;
@@ -289,6 +260,5 @@
 			} // try
 		} // WriteToLog
 
-		#endregion method WriteToLog
 	} // class EzServiceImplementation
 } // namespace EzService

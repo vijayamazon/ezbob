@@ -8,24 +8,13 @@
 	using JetBrains.Annotations;
 
 	public class EncryptChannelGrabberMarketplaces : AStrategy {
-		#region public
-
-		#region constructor
 
 		public EncryptChannelGrabberMarketplaces(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Encrypt Channel Grabber Marketplaces"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oBatchID = Guid.NewGuid();
@@ -45,16 +34,8 @@
 			} // if
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private int m_nEncryptionCounter;
 		private Guid m_oBatchID;
-
-		#region method ProcessVendor
 
 		private void ProcessVendor(VendorInfo vi) {
 			Log.Debug("Processing {0} marketplaces started...", vi.Name);
@@ -94,10 +75,6 @@
 			Log.Debug("Processing {0} marketplaces complete.", vi.Name);
 		} // ProcessVendor
 
-		#endregion method ProcessVendor
-
-		#region class ApplyEncryptedMarketplaceSecurityData
-
 		private class ApplyEncryptedMarketplaceSecurityData : AStoredProcedure {
 			public ApplyEncryptedMarketplaceSecurityData(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				DoRollback = false;
@@ -113,10 +90,6 @@
 			[UsedImplicitly] 
 			public bool DoRollback { get; set; }
 		} // ApplyEncryptedMarketplaceSecurityData
-
-		#endregion class ApplyEncryptedMarketplaceSecurityData
-
-		#region class EncryptMarketplaceSecurityData
 
 		private class EncryptMarketplaceSecurityData : AStoredProcedure {
 			public EncryptMarketplaceSecurityData(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -148,10 +121,6 @@
 			public byte[] NewData { get; set; }
 		} // EncryptMarketplaceSecurityData
 
-		#endregion class EncryptMarketplaceSecurityData
-
-		#region class LoadMarketplaceSecurityData
-
 		private class LoadMarketplaceSecurityData : AStoredProcedure {
 			public LoadMarketplaceSecurityData(Guid nMarketplaceType, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				MarketplaceType = nMarketplaceType;
@@ -164,19 +133,13 @@
 			[UsedImplicitly] 
 			public Guid MarketplaceType { get; set; }
 
-			#region class ResultRow
-
 			public class ResultRow : AResultRow {
 				public int ID { get; [UsedImplicitly] set; }
 
 				public byte[] SecurityData { get; [UsedImplicitly] set; }
 			} // class ResultRow
 
-			#endregion class ResultRow
 		} // class LoadMarketplaceSecurityData
 
-		#endregion class LoadMarketplaceSecurityData
-
-		#endregion private
 	} // class EncryptChannelGrabberMarketplaces
 } // namespace EzBob.Backend.Strategies

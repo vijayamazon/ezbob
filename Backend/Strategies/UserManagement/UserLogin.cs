@@ -8,9 +8,6 @@
 	using MailStrategies;
 
 	public class UserLogin : AStrategy {
-		#region public
-
-		#region constructor
 
 		public UserLogin(string sEmail, Password oPassword, string sRemoteIp, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oResult = null;
@@ -29,17 +26,9 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "User login"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Log.Debug("User '{0}' tries to log in...", m_oData.Email);
@@ -140,32 +129,16 @@
 				new ThreeInvalidAttempts(m_oSpResult.UserID, DB, Log).Execute();
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public string Result {
 			get { return m_oResult.HasValue ? m_oResult.Value.ToString() : string.Empty; } // get
 		} // Result
 
-		#endregion property Result
-
-		#region property SessionID
-
 		public int SessionID { get; private set; } // SessionID
-
-		#endregion property SessionID
-
-		#endregion public
-
-		#region private
 
 		private MembershipCreateStatus? m_oResult;
 		private readonly UserSecurityData m_oData;
 		private readonly UserLoginCheckResult m_oSpResult;
 		private readonly UserDataForLogin m_oSpLoad;
-
-		#region class UserLoginCheckResult
 
 		private class UserLoginCheckResult : AStoredProcedure {
 			public UserLoginCheckResult(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
@@ -208,8 +181,5 @@
 			} // Now
 		} // class UserLoginCheckResult
 
-		#endregion class UserLoginCheckResult
-
-		#endregion private
 	} // class UserLogin
 } // namespace EzBob.Backend.Strategies.UserManagement

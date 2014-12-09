@@ -1,11 +1,8 @@
 ﻿namespace AutomationCalculator.ProcessHistory.ReApproval {
 	public class Charges : ANumericTrace {
-		#region constructor
 
 		public Charges(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
-
-		#endregion constructor
 
 		protected override string ValueStr {
 			get {

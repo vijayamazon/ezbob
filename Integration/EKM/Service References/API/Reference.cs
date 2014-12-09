@@ -11,47 +11,46 @@
 namespace EKM.API {
     using System.Runtime.Serialization;
     using System;
-    
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetOrdersRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class GetOrdersRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SearchTextField;
-        
+
         private int CustomerIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string StatusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FromDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ToDateField;
-        
+
         private int ItemsPerPageField;
-        
+
         private int PageNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FieldsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderByField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -61,7 +60,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -74,7 +73,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -87,7 +86,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string SearchText {
             get {
@@ -100,7 +99,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
         public int CustomerID {
             get {
@@ -113,7 +112,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string Status {
             get {
@@ -126,7 +125,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string FromDate {
             get {
@@ -139,7 +138,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string ToDate {
             get {
@@ -152,7 +151,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=7)]
         public int ItemsPerPage {
             get {
@@ -165,7 +164,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=8)]
         public int PageNumber {
             get {
@@ -178,7 +177,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
         public string Fields {
             get {
@@ -191,7 +190,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=10)]
         public string OrderBy {
             get {
@@ -204,9 +203,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -214,7 +213,7 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GenericResponse", Namespace="http://partnerapi.ekmpowershop.com/")]
@@ -227,17 +226,17 @@ namespace EKM.API {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EKM.API.ProductObject))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EKM.API.OrdersObject))]
     public partial class GenericResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         private EKM.API.StatusCodes StatusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EKM.API.ArrayOfString ErrorsField;
-        
+
         private System.DateTime DateField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -247,7 +246,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public EKM.API.StatusCodes Status {
             get {
@@ -260,7 +259,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
         public EKM.API.ArrayOfString Errors {
             get {
@@ -273,7 +272,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
         public System.DateTime Date {
             get {
@@ -286,9 +285,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -296,149 +295,149 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OrderObject", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class OrderObject : EKM.API.GenericResponse {
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EKM.API.OrderItem[] OrderItemsField;
-        
+
         private System.Nullable<int> CustomerIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderGatewayField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderDateISOField;
-        
+
         private System.Nullable<double> TotalTaxField;
-        
+
         private System.Nullable<double> TotalDeliveryField;
-        
+
         private System.Nullable<double> DiscountsTotalField;
-        
+
         private System.Nullable<double> SubTotalField;
-        
+
         private System.Nullable<double> TotalCostField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FirstNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CompanyNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string Address1Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string Address2Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TownField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CountyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CountryField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CountryCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PostcodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailAddressField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TelephoneField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FaxField;
-        
+
         private System.Nullable<bool> EnteredShippingAddressField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingFirstNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingLastNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingCompanyNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingAddress1Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingAddress2Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingTownField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingCountyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingCountryField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingCountryCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ShippingPostcodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DeliveryMethodField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DiscountsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CustomFieldsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderNotesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string InternalNotesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderStatusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderStatusColourField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TransactionIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TransactionStatusField;
-        
+
         private System.Nullable<bool> StockReducedField;
-        
+
         private System.Nullable<bool> ProductsIncludeTaxField;
-        
+
         private System.Nullable<bool> DeliveryIncludesTaxField;
-        
+
         private System.Nullable<double> TaxRateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CurrencyField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public EKM.API.OrderItem[] OrderItems {
             get {
@@ -451,7 +450,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=1)]
         public System.Nullable<int> CustomerID {
             get {
@@ -464,7 +463,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public string OrderGateway {
             get {
@@ -477,7 +476,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string OrderNumber {
             get {
@@ -490,7 +489,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string OrderDate {
             get {
@@ -503,7 +502,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string OrderDateISO {
             get {
@@ -516,7 +515,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=6)]
         public System.Nullable<double> TotalTax {
             get {
@@ -529,7 +528,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=7)]
         public System.Nullable<double> TotalDelivery {
             get {
@@ -542,7 +541,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=8)]
         public System.Nullable<double> DiscountsTotal {
             get {
@@ -555,7 +554,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=9)]
         public System.Nullable<double> SubTotal {
             get {
@@ -568,7 +567,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=10)]
         public System.Nullable<double> TotalCost {
             get {
@@ -581,7 +580,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=11)]
         public string FirstName {
             get {
@@ -594,7 +593,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=12)]
         public string LastName {
             get {
@@ -607,7 +606,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=13)]
         public string CompanyName {
             get {
@@ -620,7 +619,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=14)]
         public string Address1 {
             get {
@@ -633,7 +632,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=15)]
         public string Address2 {
             get {
@@ -646,7 +645,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=16)]
         public string Town {
             get {
@@ -659,7 +658,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=17)]
         public string County {
             get {
@@ -672,7 +671,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=18)]
         public string Country {
             get {
@@ -685,7 +684,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=19)]
         public string CountryCode {
             get {
@@ -698,7 +697,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=20)]
         public string Postcode {
             get {
@@ -711,7 +710,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=21)]
         public string EmailAddress {
             get {
@@ -724,7 +723,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=22)]
         public string Telephone {
             get {
@@ -737,7 +736,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=23)]
         public string Fax {
             get {
@@ -750,7 +749,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=24)]
         public System.Nullable<bool> EnteredShippingAddress {
             get {
@@ -763,7 +762,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=25)]
         public string ShippingFirstName {
             get {
@@ -776,7 +775,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=26)]
         public string ShippingLastName {
             get {
@@ -789,7 +788,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=27)]
         public string ShippingCompanyName {
             get {
@@ -802,7 +801,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=28)]
         public string ShippingAddress1 {
             get {
@@ -815,7 +814,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=29)]
         public string ShippingAddress2 {
             get {
@@ -828,7 +827,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=30)]
         public string ShippingTown {
             get {
@@ -841,7 +840,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=31)]
         public string ShippingCounty {
             get {
@@ -854,7 +853,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=32)]
         public string ShippingCountry {
             get {
@@ -867,7 +866,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=33)]
         public string ShippingCountryCode {
             get {
@@ -880,7 +879,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=34)]
         public string ShippingPostcode {
             get {
@@ -893,7 +892,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=35)]
         public string DeliveryMethod {
             get {
@@ -906,7 +905,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=36)]
         public string Discounts {
             get {
@@ -919,7 +918,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=37)]
         public string CustomFields {
             get {
@@ -932,7 +931,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=38)]
         public string OrderNotes {
             get {
@@ -945,7 +944,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=39)]
         public string InternalNotes {
             get {
@@ -958,7 +957,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=40)]
         public string OrderStatus {
             get {
@@ -971,7 +970,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=41)]
         public string OrderStatusColour {
             get {
@@ -984,7 +983,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=42)]
         public string TransactionID {
             get {
@@ -997,7 +996,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=43)]
         public string TransactionStatus {
             get {
@@ -1010,7 +1009,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=44)]
         public System.Nullable<bool> StockReduced {
             get {
@@ -1023,7 +1022,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=45)]
         public System.Nullable<bool> ProductsIncludeTax {
             get {
@@ -1036,7 +1035,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=46)]
         public System.Nullable<bool> DeliveryIncludesTax {
             get {
@@ -1049,7 +1048,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=47)]
         public System.Nullable<double> TaxRate {
             get {
@@ -1062,7 +1061,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=48)]
         public string Currency {
             get {
@@ -1076,16 +1075,16 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OrderStatusesObject", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class OrderStatusesObject : EKM.API.GenericResponse {
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EKM.API.OrderStatus[] OrderStatusesField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public EKM.API.OrderStatus[] OrderStatuses {
             get {
@@ -1099,18 +1098,18 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CustomersObject", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class CustomersObject : EKM.API.GenericResponse {
-        
+
         private int TotalCustomersField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EKM.API.CustomerItem[] CustomersField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public int TotalCustomers {
             get {
@@ -1123,7 +1122,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
         public EKM.API.CustomerItem[] Customers {
             get {
@@ -1137,73 +1136,73 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Customer", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class Customer : EKM.API.GenericResponse {
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EKM.API.CommunicationItem[] CommunicationItemsField;
-        
+
         private System.Nullable<int> CustomerIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailAddressField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PasswordField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FirstNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CompanyNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string Address1Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string Address2Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TownField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CountyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CountryField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CountryCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PostcodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TelephoneField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FaxField;
-        
+
         private System.Nullable<int> TimesOrderedField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SignUpDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SignUpDateISOField;
-        
+
         private System.Nullable<int> LoyaltyPointsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NotesField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public EKM.API.CommunicationItem[] CommunicationItems {
             get {
@@ -1216,7 +1215,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public System.Nullable<int> CustomerID {
             get {
@@ -1229,7 +1228,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string EmailAddress {
             get {
@@ -1242,7 +1241,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string Password {
             get {
@@ -1255,7 +1254,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string FirstName {
             get {
@@ -1268,7 +1267,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string LastName {
             get {
@@ -1281,7 +1280,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string CompanyName {
             get {
@@ -1294,7 +1293,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
         public string Address1 {
             get {
@@ -1307,7 +1306,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
         public string Address2 {
             get {
@@ -1320,7 +1319,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
         public string Town {
             get {
@@ -1333,7 +1332,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=10)]
         public string County {
             get {
@@ -1346,7 +1345,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=11)]
         public string Country {
             get {
@@ -1359,7 +1358,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=12)]
         public string CountryCode {
             get {
@@ -1372,7 +1371,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=13)]
         public string Postcode {
             get {
@@ -1385,7 +1384,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=14)]
         public string Telephone {
             get {
@@ -1398,7 +1397,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=15)]
         public string Fax {
             get {
@@ -1411,7 +1410,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=16)]
         public System.Nullable<int> TimesOrdered {
             get {
@@ -1424,7 +1423,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=17)]
         public string SignUpDate {
             get {
@@ -1437,7 +1436,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=18)]
         public string SignUpDateISO {
             get {
@@ -1450,7 +1449,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=19)]
         public System.Nullable<int> LoyaltyPoints {
             get {
@@ -1463,7 +1462,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=20)]
         public string Notes {
             get {
@@ -1477,19 +1476,19 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ApiKey", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class ApiKey : EKM.API.GenericResponse {
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string KeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EndPointField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string Key {
             get {
@@ -1502,7 +1501,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
         public string EndPoint {
             get {
@@ -1516,15 +1515,15 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ProductObject", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class ProductObject : EKM.API.GenericResponse {
-        
+
         private int ProductStockField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public int ProductStock {
             get {
@@ -1538,23 +1537,23 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OrdersObject", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class OrdersObject : EKM.API.GenericResponse {
-        
+
         private int TotalOrdersField;
-        
+
         private System.Nullable<double> TotalCostField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EKM.API.Order[] OrdersField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CurrencyField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public int TotalOrders {
             get {
@@ -1567,7 +1566,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=1)]
         public System.Nullable<double> TotalCost {
             get {
@@ -1580,7 +1579,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public EKM.API.Order[] Orders {
             get {
@@ -1593,7 +1592,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string Currency {
             get {
@@ -1607,67 +1606,67 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="StatusCodes", Namespace="http://partnerapi.ekmpowershop.com/")]
     public enum StatusCodes : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Success = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Failure = 1,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfString", Namespace="http://partnerapi.ekmpowershop.com/", ItemName="string")]
     [System.SerializableAttribute()]
     public class ArrayOfString : System.Collections.Generic.List<string> {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Order", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class Order : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         private System.Nullable<int> OrderIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderNumberField;
-        
+
         private System.Nullable<int> CustomerIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FirstNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CompanyNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailAddressField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderStatusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderStatusColourField;
-        
+
         private System.Nullable<double> TotalCostField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderDateISOField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1677,7 +1676,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public System.Nullable<int> OrderID {
             get {
@@ -1690,7 +1689,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string OrderNumber {
             get {
@@ -1703,7 +1702,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
         public System.Nullable<int> CustomerID {
             get {
@@ -1716,7 +1715,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string FirstName {
             get {
@@ -1729,7 +1728,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string LastName {
             get {
@@ -1742,7 +1741,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string CompanyName {
             get {
@@ -1755,7 +1754,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string EmailAddress {
             get {
@@ -1768,7 +1767,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
         public string OrderStatus {
             get {
@@ -1781,7 +1780,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
         public string OrderStatusColour {
             get {
@@ -1794,7 +1793,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=9)]
         public System.Nullable<double> TotalCost {
             get {
@@ -1807,7 +1806,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=10)]
         public string OrderDate {
             get {
@@ -1820,7 +1819,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=11)]
         public string OrderDateISO {
             get {
@@ -1833,9 +1832,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1843,39 +1842,39 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OrderItem", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class OrderItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         private System.Nullable<int> ProductIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ProductNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ProductOptionsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ProductCodeField;
-        
+
         private System.Nullable<double> ProductPriceField;
-        
+
         private System.Nullable<double> ProductDiscountField;
-        
+
         private System.Nullable<double> ProductDeliveryField;
-        
+
         private System.Nullable<int> ProductQuantityField;
-        
+
         private System.Nullable<double> ProductRRPField;
-        
+
         private System.Nullable<bool> ProductTaxApplicableField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1885,7 +1884,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public System.Nullable<int> ProductID {
             get {
@@ -1898,7 +1897,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string ProductName {
             get {
@@ -1911,7 +1910,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string ProductOptions {
             get {
@@ -1924,7 +1923,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string ProductCode {
             get {
@@ -1937,7 +1936,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=4)]
         public System.Nullable<double> ProductPrice {
             get {
@@ -1950,7 +1949,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
         public System.Nullable<double> ProductDiscount {
             get {
@@ -1963,7 +1962,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=6)]
         public System.Nullable<double> ProductDelivery {
             get {
@@ -1976,7 +1975,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=7)]
         public System.Nullable<int> ProductQuantity {
             get {
@@ -1989,7 +1988,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=8)]
         public System.Nullable<double> ProductRRP {
             get {
@@ -2002,7 +2001,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=9)]
         public System.Nullable<bool> ProductTaxApplicable {
             get {
@@ -2015,9 +2014,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2025,22 +2024,22 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OrderStatus", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class OrderStatus : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string StatusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string StatusColourField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2050,7 +2049,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string Status {
             get {
@@ -2063,7 +2062,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string StatusColour {
             get {
@@ -2076,9 +2075,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2086,38 +2085,38 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CustomerItem", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class CustomerItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         private System.Nullable<int> CustomerIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailAddressField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FirstNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CompanyNameField;
-        
+
         private System.Nullable<int> TimesOrderedField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SignUpDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SignUpDateISOField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2127,7 +2126,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public System.Nullable<int> CustomerID {
             get {
@@ -2140,7 +2139,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string EmailAddress {
             get {
@@ -2153,7 +2152,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string FirstName {
             get {
@@ -2166,7 +2165,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string LastName {
             get {
@@ -2179,7 +2178,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string CompanyName {
             get {
@@ -2192,7 +2191,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
         public System.Nullable<int> TimesOrdered {
             get {
@@ -2205,7 +2204,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string SignUpDate {
             get {
@@ -2218,7 +2217,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
         public string SignUpDateISO {
             get {
@@ -2231,9 +2230,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2241,28 +2240,28 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CommunicationItem", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class CommunicationItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContentField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DateISOField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2272,7 +2271,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string Type {
             get {
@@ -2285,7 +2284,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
         public string Content {
             get {
@@ -2298,7 +2297,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public string Date {
             get {
@@ -2311,7 +2310,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string DateISO {
             get {
@@ -2324,9 +2323,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2334,28 +2333,28 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetOrderRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class GetOrderRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FieldsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2365,7 +2364,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -2378,7 +2377,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -2391,7 +2390,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public string OrderNumber {
             get {
@@ -2404,7 +2403,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string Fields {
             get {
@@ -2417,9 +2416,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2427,22 +2426,22 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetOrderStatusesRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class GetOrderStatusesRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2452,7 +2451,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -2465,7 +2464,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -2478,9 +2477,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2488,28 +2487,28 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SetOrderStatusRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class SetOrderStatusRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderStatusField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2519,7 +2518,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -2532,7 +2531,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -2545,7 +2544,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public string OrderNumber {
             get {
@@ -2558,7 +2557,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string OrderStatus {
             get {
@@ -2571,9 +2570,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2581,35 +2580,35 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetCustomersRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class GetCustomersRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SearchTextField;
-        
+
         private int ItemsPerPageField;
-        
+
         private int PageNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FieldsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OrderByField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2619,7 +2618,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -2632,7 +2631,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -2645,7 +2644,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string SearchText {
             get {
@@ -2658,7 +2657,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
         public int ItemsPerPage {
             get {
@@ -2671,7 +2670,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=4)]
         public int PageNumber {
             get {
@@ -2684,7 +2683,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string Fields {
             get {
@@ -2697,7 +2696,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string OrderBy {
             get {
@@ -2710,9 +2709,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2720,27 +2719,27 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetCustomerRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class GetCustomerRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         private int CustomerIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FieldsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2750,7 +2749,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -2763,7 +2762,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -2776,7 +2775,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
         public int CustomerID {
             get {
@@ -2789,7 +2788,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string Fields {
             get {
@@ -2802,9 +2801,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2812,26 +2811,26 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SetLoyaltyPointsRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class SetLoyaltyPointsRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         private int CustomerIDField;
-        
+
         private int LoyaltyPointsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2841,7 +2840,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -2854,7 +2853,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -2867,7 +2866,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
         public int CustomerID {
             get {
@@ -2880,7 +2879,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
         public int LoyaltyPoints {
             get {
@@ -2893,9 +2892,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2903,25 +2902,25 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetKeyRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class GetKeyRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UserNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PasswordField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2931,7 +2930,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -2944,7 +2943,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string UserName {
             get {
@@ -2957,7 +2956,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public string Password {
             get {
@@ -2970,9 +2969,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2980,25 +2979,25 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetProductStockRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class GetProductStockRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ProductCodeField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3008,7 +3007,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -3021,7 +3020,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -3034,7 +3033,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string ProductCode {
             get {
@@ -3047,9 +3046,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3057,27 +3056,27 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SetProductStockRequest", Namespace="http://partnerapi.ekmpowershop.com/")]
     [System.SerializableAttribute()]
     public partial class SetProductStockRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string APIKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PartnerKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ProductCodeField;
-        
+
         private int ProductStockField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3087,7 +3086,7 @@ namespace EKM.API {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string APIKey {
             get {
@@ -3100,7 +3099,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string PartnerKey {
             get {
@@ -3113,7 +3112,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string ProductCode {
             get {
@@ -3126,7 +3125,7 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public int ProductStock {
             get {
@@ -3139,9 +3138,9 @@ namespace EKM.API {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3149,764 +3148,764 @@ namespace EKM.API {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/", ConfigurationName="API.PartnerAPISoap")]
     public interface PartnerAPISoap {
-        
+
         // CODEGEN: Generating message contract since element name GetOrdersRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/GetOrders", ReplyAction="*")]
         EKM.API.GetOrdersResponse GetOrders(EKM.API.GetOrdersRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name GetOrderRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/GetOrder", ReplyAction="*")]
         EKM.API.GetOrderResponse GetOrder(EKM.API.GetOrderRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name GetOrderStatusesRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/GetOrderStatuses", ReplyAction="*")]
         EKM.API.GetOrderStatusesResponse GetOrderStatuses(EKM.API.GetOrderStatusesRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name SetOrderStatusRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/SetOrderStatus", ReplyAction="*")]
         EKM.API.SetOrderStatusResponse SetOrderStatus(EKM.API.SetOrderStatusRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name GetCustomersRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/GetCustomers", ReplyAction="*")]
         EKM.API.GetCustomersResponse GetCustomers(EKM.API.GetCustomersRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name GetCustomerRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/GetCustomer", ReplyAction="*")]
         EKM.API.GetCustomerResponse GetCustomer(EKM.API.GetCustomerRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name SetLoyaltyPointsRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/SetLoyaltyPoints", ReplyAction="*")]
         EKM.API.SetLoyaltyPointsResponse SetLoyaltyPoints(EKM.API.SetLoyaltyPointsRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name GetKeyRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/GetKey", ReplyAction="*")]
         EKM.API.GetKeyResponse GetKey(EKM.API.GetKeyRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name GetProductStockRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/GetProductStock", ReplyAction="*")]
         EKM.API.GetProductStockResponse GetProductStock(EKM.API.GetProductStockRequest1 request);
-        
+
         // CODEGEN: Generating message contract since element name SetProductStockRequest from namespace http://partnerapi.ekmpowershop.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://partnerapi.ekmpowershop.com/SetProductStock", ReplyAction="*")]
         EKM.API.SetProductStockResponse SetProductStock(EKM.API.SetProductStockRequest1 request);
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetOrdersRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetOrders", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetOrdersRequest1Body Body;
-        
+
         public GetOrdersRequest1() {
         }
-        
+
         public GetOrdersRequest1(EKM.API.GetOrdersRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetOrdersRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GetOrdersRequest GetOrdersRequest;
-        
+
         public GetOrdersRequest1Body() {
         }
-        
+
         public GetOrdersRequest1Body(EKM.API.GetOrdersRequest GetOrdersRequest) {
             this.GetOrdersRequest = GetOrdersRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetOrdersResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetOrdersResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetOrdersResponseBody Body;
-        
+
         public GetOrdersResponse() {
         }
-        
+
         public GetOrdersResponse(EKM.API.GetOrdersResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetOrdersResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.OrdersObject GetOrdersResult;
-        
+
         public GetOrdersResponseBody() {
         }
-        
+
         public GetOrdersResponseBody(EKM.API.OrdersObject GetOrdersResult) {
             this.GetOrdersResult = GetOrdersResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetOrderRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetOrder", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetOrderRequest1Body Body;
-        
+
         public GetOrderRequest1() {
         }
-        
+
         public GetOrderRequest1(EKM.API.GetOrderRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetOrderRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GetOrderRequest GetOrderRequest;
-        
+
         public GetOrderRequest1Body() {
         }
-        
+
         public GetOrderRequest1Body(EKM.API.GetOrderRequest GetOrderRequest) {
             this.GetOrderRequest = GetOrderRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetOrderResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetOrderResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetOrderResponseBody Body;
-        
+
         public GetOrderResponse() {
         }
-        
+
         public GetOrderResponse(EKM.API.GetOrderResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetOrderResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.OrderObject GetOrderResult;
-        
+
         public GetOrderResponseBody() {
         }
-        
+
         public GetOrderResponseBody(EKM.API.OrderObject GetOrderResult) {
             this.GetOrderResult = GetOrderResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetOrderStatusesRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetOrderStatuses", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetOrderStatusesRequest1Body Body;
-        
+
         public GetOrderStatusesRequest1() {
         }
-        
+
         public GetOrderStatusesRequest1(EKM.API.GetOrderStatusesRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetOrderStatusesRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GetOrderStatusesRequest GetOrderStatusesRequest;
-        
+
         public GetOrderStatusesRequest1Body() {
         }
-        
+
         public GetOrderStatusesRequest1Body(EKM.API.GetOrderStatusesRequest GetOrderStatusesRequest) {
             this.GetOrderStatusesRequest = GetOrderStatusesRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetOrderStatusesResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetOrderStatusesResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetOrderStatusesResponseBody Body;
-        
+
         public GetOrderStatusesResponse() {
         }
-        
+
         public GetOrderStatusesResponse(EKM.API.GetOrderStatusesResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetOrderStatusesResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.OrderStatusesObject GetOrderStatusesResult;
-        
+
         public GetOrderStatusesResponseBody() {
         }
-        
+
         public GetOrderStatusesResponseBody(EKM.API.OrderStatusesObject GetOrderStatusesResult) {
             this.GetOrderStatusesResult = GetOrderStatusesResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class SetOrderStatusRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="SetOrderStatus", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.SetOrderStatusRequest1Body Body;
-        
+
         public SetOrderStatusRequest1() {
         }
-        
+
         public SetOrderStatusRequest1(EKM.API.SetOrderStatusRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class SetOrderStatusRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.SetOrderStatusRequest SetOrderStatusRequest;
-        
+
         public SetOrderStatusRequest1Body() {
         }
-        
+
         public SetOrderStatusRequest1Body(EKM.API.SetOrderStatusRequest SetOrderStatusRequest) {
             this.SetOrderStatusRequest = SetOrderStatusRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class SetOrderStatusResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="SetOrderStatusResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.SetOrderStatusResponseBody Body;
-        
+
         public SetOrderStatusResponse() {
         }
-        
+
         public SetOrderStatusResponse(EKM.API.SetOrderStatusResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class SetOrderStatusResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GenericResponse SetOrderStatusResult;
-        
+
         public SetOrderStatusResponseBody() {
         }
-        
+
         public SetOrderStatusResponseBody(EKM.API.GenericResponse SetOrderStatusResult) {
             this.SetOrderStatusResult = SetOrderStatusResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetCustomersRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetCustomers", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetCustomersRequest1Body Body;
-        
+
         public GetCustomersRequest1() {
         }
-        
+
         public GetCustomersRequest1(EKM.API.GetCustomersRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetCustomersRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GetCustomersRequest GetCustomersRequest;
-        
+
         public GetCustomersRequest1Body() {
         }
-        
+
         public GetCustomersRequest1Body(EKM.API.GetCustomersRequest GetCustomersRequest) {
             this.GetCustomersRequest = GetCustomersRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetCustomersResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetCustomersResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetCustomersResponseBody Body;
-        
+
         public GetCustomersResponse() {
         }
-        
+
         public GetCustomersResponse(EKM.API.GetCustomersResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetCustomersResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.CustomersObject GetCustomersResult;
-        
+
         public GetCustomersResponseBody() {
         }
-        
+
         public GetCustomersResponseBody(EKM.API.CustomersObject GetCustomersResult) {
             this.GetCustomersResult = GetCustomersResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetCustomerRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetCustomer", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetCustomerRequest1Body Body;
-        
+
         public GetCustomerRequest1() {
         }
-        
+
         public GetCustomerRequest1(EKM.API.GetCustomerRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetCustomerRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GetCustomerRequest GetCustomerRequest;
-        
+
         public GetCustomerRequest1Body() {
         }
-        
+
         public GetCustomerRequest1Body(EKM.API.GetCustomerRequest GetCustomerRequest) {
             this.GetCustomerRequest = GetCustomerRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetCustomerResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetCustomerResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetCustomerResponseBody Body;
-        
+
         public GetCustomerResponse() {
         }
-        
+
         public GetCustomerResponse(EKM.API.GetCustomerResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetCustomerResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.Customer GetCustomerResult;
-        
+
         public GetCustomerResponseBody() {
         }
-        
+
         public GetCustomerResponseBody(EKM.API.Customer GetCustomerResult) {
             this.GetCustomerResult = GetCustomerResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class SetLoyaltyPointsRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="SetLoyaltyPoints", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.SetLoyaltyPointsRequest1Body Body;
-        
+
         public SetLoyaltyPointsRequest1() {
         }
-        
+
         public SetLoyaltyPointsRequest1(EKM.API.SetLoyaltyPointsRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class SetLoyaltyPointsRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.SetLoyaltyPointsRequest SetLoyaltyPointsRequest;
-        
+
         public SetLoyaltyPointsRequest1Body() {
         }
-        
+
         public SetLoyaltyPointsRequest1Body(EKM.API.SetLoyaltyPointsRequest SetLoyaltyPointsRequest) {
             this.SetLoyaltyPointsRequest = SetLoyaltyPointsRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class SetLoyaltyPointsResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="SetLoyaltyPointsResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.SetLoyaltyPointsResponseBody Body;
-        
+
         public SetLoyaltyPointsResponse() {
         }
-        
+
         public SetLoyaltyPointsResponse(EKM.API.SetLoyaltyPointsResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class SetLoyaltyPointsResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GenericResponse SetLoyaltyPointsResult;
-        
+
         public SetLoyaltyPointsResponseBody() {
         }
-        
+
         public SetLoyaltyPointsResponseBody(EKM.API.GenericResponse SetLoyaltyPointsResult) {
             this.SetLoyaltyPointsResult = SetLoyaltyPointsResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetKeyRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetKey", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetKeyRequest1Body Body;
-        
+
         public GetKeyRequest1() {
         }
-        
+
         public GetKeyRequest1(EKM.API.GetKeyRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetKeyRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GetKeyRequest GetKeyRequest;
-        
+
         public GetKeyRequest1Body() {
         }
-        
+
         public GetKeyRequest1Body(EKM.API.GetKeyRequest GetKeyRequest) {
             this.GetKeyRequest = GetKeyRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetKeyResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetKeyResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetKeyResponseBody Body;
-        
+
         public GetKeyResponse() {
         }
-        
+
         public GetKeyResponse(EKM.API.GetKeyResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetKeyResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.ApiKey GetKeyResult;
-        
+
         public GetKeyResponseBody() {
         }
-        
+
         public GetKeyResponseBody(EKM.API.ApiKey GetKeyResult) {
             this.GetKeyResult = GetKeyResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetProductStockRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetProductStock", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetProductStockRequest1Body Body;
-        
+
         public GetProductStockRequest1() {
         }
-        
+
         public GetProductStockRequest1(EKM.API.GetProductStockRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetProductStockRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GetProductStockRequest GetProductStockRequest;
-        
+
         public GetProductStockRequest1Body() {
         }
-        
+
         public GetProductStockRequest1Body(EKM.API.GetProductStockRequest GetProductStockRequest) {
             this.GetProductStockRequest = GetProductStockRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetProductStockResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetProductStockResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.GetProductStockResponseBody Body;
-        
+
         public GetProductStockResponse() {
         }
-        
+
         public GetProductStockResponse(EKM.API.GetProductStockResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class GetProductStockResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.ProductObject GetProductStockResult;
-        
+
         public GetProductStockResponseBody() {
         }
-        
+
         public GetProductStockResponseBody(EKM.API.ProductObject GetProductStockResult) {
             this.GetProductStockResult = GetProductStockResult;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class SetProductStockRequest1 {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="SetProductStock", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.SetProductStockRequest1Body Body;
-        
+
         public SetProductStockRequest1() {
         }
-        
+
         public SetProductStockRequest1(EKM.API.SetProductStockRequest1Body Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class SetProductStockRequest1Body {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.SetProductStockRequest SetProductStockRequest;
-        
+
         public SetProductStockRequest1Body() {
         }
-        
+
         public SetProductStockRequest1Body(EKM.API.SetProductStockRequest SetProductStockRequest) {
             this.SetProductStockRequest = SetProductStockRequest;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class SetProductStockResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="SetProductStockResponse", Namespace="http://partnerapi.ekmpowershop.com/", Order=0)]
         public EKM.API.SetProductStockResponseBody Body;
-        
+
         public SetProductStockResponse() {
         }
-        
+
         public SetProductStockResponse(EKM.API.SetProductStockResponseBody Body) {
             this.Body = Body;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://partnerapi.ekmpowershop.com/")]
     public partial class SetProductStockResponseBody {
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EKM.API.GenericResponse SetProductStockResult;
-        
+
         public SetProductStockResponseBody() {
         }
-        
+
         public SetProductStockResponseBody(EKM.API.GenericResponse SetProductStockResult) {
             this.SetProductStockResult = SetProductStockResult;
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface PartnerAPISoapChannel : EKM.API.PartnerAPISoap, System.ServiceModel.IClientChannel {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PartnerAPISoapClient : System.ServiceModel.ClientBase<EKM.API.PartnerAPISoap>, EKM.API.PartnerAPISoap {
-        
+
         public PartnerAPISoapClient() {
         }
-        
+
         public PartnerAPISoapClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
-        
+
         public PartnerAPISoapClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public PartnerAPISoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public PartnerAPISoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.GetOrdersResponse EKM.API.PartnerAPISoap.GetOrders(EKM.API.GetOrdersRequest1 request) {
             return base.Channel.GetOrders(request);
         }
-        
+
         public EKM.API.OrdersObject GetOrders(EKM.API.GetOrdersRequest GetOrdersRequest) {
             EKM.API.GetOrdersRequest1 inValue = new EKM.API.GetOrdersRequest1();
             inValue.Body = new EKM.API.GetOrdersRequest1Body();
@@ -3914,12 +3913,12 @@ namespace EKM.API {
             EKM.API.GetOrdersResponse retVal = ((EKM.API.PartnerAPISoap)(this)).GetOrders(inValue);
             return retVal.Body.GetOrdersResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.GetOrderResponse EKM.API.PartnerAPISoap.GetOrder(EKM.API.GetOrderRequest1 request) {
             return base.Channel.GetOrder(request);
         }
-        
+
         public EKM.API.OrderObject GetOrder(EKM.API.GetOrderRequest GetOrderRequest) {
             EKM.API.GetOrderRequest1 inValue = new EKM.API.GetOrderRequest1();
             inValue.Body = new EKM.API.GetOrderRequest1Body();
@@ -3927,12 +3926,12 @@ namespace EKM.API {
             EKM.API.GetOrderResponse retVal = ((EKM.API.PartnerAPISoap)(this)).GetOrder(inValue);
             return retVal.Body.GetOrderResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.GetOrderStatusesResponse EKM.API.PartnerAPISoap.GetOrderStatuses(EKM.API.GetOrderStatusesRequest1 request) {
             return base.Channel.GetOrderStatuses(request);
         }
-        
+
         public EKM.API.OrderStatusesObject GetOrderStatuses(EKM.API.GetOrderStatusesRequest GetOrderStatusesRequest) {
             EKM.API.GetOrderStatusesRequest1 inValue = new EKM.API.GetOrderStatusesRequest1();
             inValue.Body = new EKM.API.GetOrderStatusesRequest1Body();
@@ -3940,12 +3939,12 @@ namespace EKM.API {
             EKM.API.GetOrderStatusesResponse retVal = ((EKM.API.PartnerAPISoap)(this)).GetOrderStatuses(inValue);
             return retVal.Body.GetOrderStatusesResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.SetOrderStatusResponse EKM.API.PartnerAPISoap.SetOrderStatus(EKM.API.SetOrderStatusRequest1 request) {
             return base.Channel.SetOrderStatus(request);
         }
-        
+
         public EKM.API.GenericResponse SetOrderStatus(EKM.API.SetOrderStatusRequest SetOrderStatusRequest) {
             EKM.API.SetOrderStatusRequest1 inValue = new EKM.API.SetOrderStatusRequest1();
             inValue.Body = new EKM.API.SetOrderStatusRequest1Body();
@@ -3953,12 +3952,12 @@ namespace EKM.API {
             EKM.API.SetOrderStatusResponse retVal = ((EKM.API.PartnerAPISoap)(this)).SetOrderStatus(inValue);
             return retVal.Body.SetOrderStatusResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.GetCustomersResponse EKM.API.PartnerAPISoap.GetCustomers(EKM.API.GetCustomersRequest1 request) {
             return base.Channel.GetCustomers(request);
         }
-        
+
         public EKM.API.CustomersObject GetCustomers(EKM.API.GetCustomersRequest GetCustomersRequest) {
             EKM.API.GetCustomersRequest1 inValue = new EKM.API.GetCustomersRequest1();
             inValue.Body = new EKM.API.GetCustomersRequest1Body();
@@ -3966,12 +3965,12 @@ namespace EKM.API {
             EKM.API.GetCustomersResponse retVal = ((EKM.API.PartnerAPISoap)(this)).GetCustomers(inValue);
             return retVal.Body.GetCustomersResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.GetCustomerResponse EKM.API.PartnerAPISoap.GetCustomer(EKM.API.GetCustomerRequest1 request) {
             return base.Channel.GetCustomer(request);
         }
-        
+
         public EKM.API.Customer GetCustomer(EKM.API.GetCustomerRequest GetCustomerRequest) {
             EKM.API.GetCustomerRequest1 inValue = new EKM.API.GetCustomerRequest1();
             inValue.Body = new EKM.API.GetCustomerRequest1Body();
@@ -3979,12 +3978,12 @@ namespace EKM.API {
             EKM.API.GetCustomerResponse retVal = ((EKM.API.PartnerAPISoap)(this)).GetCustomer(inValue);
             return retVal.Body.GetCustomerResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.SetLoyaltyPointsResponse EKM.API.PartnerAPISoap.SetLoyaltyPoints(EKM.API.SetLoyaltyPointsRequest1 request) {
             return base.Channel.SetLoyaltyPoints(request);
         }
-        
+
         public EKM.API.GenericResponse SetLoyaltyPoints(EKM.API.SetLoyaltyPointsRequest SetLoyaltyPointsRequest) {
             EKM.API.SetLoyaltyPointsRequest1 inValue = new EKM.API.SetLoyaltyPointsRequest1();
             inValue.Body = new EKM.API.SetLoyaltyPointsRequest1Body();
@@ -3992,12 +3991,12 @@ namespace EKM.API {
             EKM.API.SetLoyaltyPointsResponse retVal = ((EKM.API.PartnerAPISoap)(this)).SetLoyaltyPoints(inValue);
             return retVal.Body.SetLoyaltyPointsResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.GetKeyResponse EKM.API.PartnerAPISoap.GetKey(EKM.API.GetKeyRequest1 request) {
             return base.Channel.GetKey(request);
         }
-        
+
         public EKM.API.ApiKey GetKey(EKM.API.GetKeyRequest GetKeyRequest) {
             EKM.API.GetKeyRequest1 inValue = new EKM.API.GetKeyRequest1();
             inValue.Body = new EKM.API.GetKeyRequest1Body();
@@ -4005,12 +4004,12 @@ namespace EKM.API {
             EKM.API.GetKeyResponse retVal = ((EKM.API.PartnerAPISoap)(this)).GetKey(inValue);
             return retVal.Body.GetKeyResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.GetProductStockResponse EKM.API.PartnerAPISoap.GetProductStock(EKM.API.GetProductStockRequest1 request) {
             return base.Channel.GetProductStock(request);
         }
-        
+
         public EKM.API.ProductObject GetProductStock(EKM.API.GetProductStockRequest GetProductStockRequest) {
             EKM.API.GetProductStockRequest1 inValue = new EKM.API.GetProductStockRequest1();
             inValue.Body = new EKM.API.GetProductStockRequest1Body();
@@ -4018,12 +4017,12 @@ namespace EKM.API {
             EKM.API.GetProductStockResponse retVal = ((EKM.API.PartnerAPISoap)(this)).GetProductStock(inValue);
             return retVal.Body.GetProductStockResult;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EKM.API.SetProductStockResponse EKM.API.PartnerAPISoap.SetProductStock(EKM.API.SetProductStockRequest1 request) {
             return base.Channel.SetProductStock(request);
         }
-        
+
         public EKM.API.GenericResponse SetProductStock(EKM.API.SetProductStockRequest SetProductStockRequest) {
             EKM.API.SetProductStockRequest1 inValue = new EKM.API.SetProductStockRequest1();
             inValue.Body = new EKM.API.SetProductStockRequest1Body();

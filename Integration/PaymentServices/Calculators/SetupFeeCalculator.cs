@@ -6,9 +6,6 @@
 	using StructureMap;
 
 	public class SetupFeeCalculator {
-		#region public
-
-		#region constructor
 
 		public SetupFeeCalculator(bool setupFee, bool brokerFee, int? manualAmount, decimal? manualPercent) {
 			_setupFeeFixed = CurrentValues.Instance.SetupFeeFixed;
@@ -20,10 +17,6 @@
 			_manualAmount = manualAmount;
 			_manualPercent = manualPercent;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Calculate
 
 		public decimal Calculate(decimal amount) {
 			//use manual fee
@@ -50,14 +43,6 @@
 			return 0M;
 		} // Calculate
 
-		#endregion method Calculate
-
-		#endregion public
-
-		#region private
-
-		#region method CalculateBroker
-
 		private decimal CalculateBroker(decimal amount) {
 			var oVar = CurrentValues.Instance.BrokerSetupFeeRate;
 
@@ -69,8 +54,6 @@
 			return amount * (decimal)oVar;
 		} // CalculateBroker
 
-		#endregion method CalculateBroker
-
 		private readonly int _setupFeeFixed;
 		private readonly decimal _setupFeePercent;
 		private readonly bool _useMax;
@@ -80,6 +63,5 @@
 		private readonly int? _manualAmount;
 		private readonly decimal? _manualPercent;
 
-		#endregion private
 	} // class SetupFeeCalculator
 } // namespace

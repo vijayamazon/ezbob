@@ -23,7 +23,6 @@ namespace Raven.API
          * original request */
         protected HttpStatusCode httpStatusCode;
 
-
         /** the Raven request that the receiver is a response to */
         private RavenRequest originalRequest;
         public RavenResponse(){}
@@ -138,7 +137,7 @@ namespace Raven.API
         {
             this.paramValuesByKey["Report"] = reportData;
         }
-        
+
         /**
          * <p>Answers a concatenated string of the subset of the receiver's parameter
          * data values used to determine its signature.</p>
@@ -166,8 +165,6 @@ namespace Raven.API
                 return false;
             }
         }
-
-
 
         /**
          * <p>Verifies that the receiver is a valid Raven API interaction.</p>

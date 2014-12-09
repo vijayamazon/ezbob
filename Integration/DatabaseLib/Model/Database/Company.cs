@@ -1,11 +1,8 @@
-namespace EZBob.DatabaseLib.Model.Database
+﻿namespace EZBob.DatabaseLib.Model.Database
 {
 	using FluentNHibernate.Mapping;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
-
-	
-	#region class Company
 
 	public class Company
 	{
@@ -23,7 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual double? CapitalExpenditure { get; set; }
 		public virtual string ExperianRefNum { get; set; }
 		public virtual string ExperianCompanyName { get; set; }
-		
+
 		private ISet<CustomerAddress> _companyAddress = new HashedSet<CustomerAddress>();
 		public virtual ISet<CustomerAddress> CompanyAddress
 		{
@@ -46,7 +43,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		} // CompanyEmployeeCount
 
 		private ISet<Director> _directors = new HashedSet<Director>();
-		
+
 		public virtual ISet<Director> Directors
 		{
 			get { return _directors; }
@@ -55,9 +52,6 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	} // class Company
 
-	#endregion class Company
-
-	#region CompanyMap
 	public class CompanyMap : ClassMap<Company>
 	{
 		public CompanyMap()
@@ -110,12 +104,9 @@ namespace EZBob.DatabaseLib.Model.Database
 				.Cache.ReadWrite().Region("LongTerm").ReadWrite();
 		} // constructor
 	} // class CompanyMap
-	#endregion 
-
-	#region enum TypeOfBusinessReduced
 
 	public class TypeOfBusinessType : EnumStringType<TypeOfBusiness> { }
-	
+
 	public class IndustryTypeType : EnumStringType<IndustryType> { }
 
 	public class VatReportingType: EnumStringType<VatReporting> { }
@@ -126,10 +117,6 @@ namespace EZBob.DatabaseLib.Model.Database
 		Limited,
 		NonLimited,
 	} // enum TypeOfBusinessReduced
-
-	#endregion enum TypeOfBusinessReduced
-
-	#region class TypeOfBusinessExtenstions
 
 	public static class TypeOfBusinessExtenstions
 	{
@@ -180,7 +167,4 @@ namespace EZBob.DatabaseLib.Model.Database
 		} // TypeOfBussinessForWeb
 	} // class TypeOfBusinessExtenstions
 
-	#endregion class TypeOfBusinessExtenstions
-
-	
 } // namespace

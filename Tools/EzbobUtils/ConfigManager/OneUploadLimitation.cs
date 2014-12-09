@@ -6,7 +6,6 @@
 	using Ezbob.Utils.MimeTypes;
 
 	public class OneUploadLimitation {
-		#region constructor
 
 		public OneUploadLimitation() : this(0, "") {} // constructor
 
@@ -15,10 +14,6 @@
 
 			Init(nFileSize, sAcceptedFiles);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Init
 
 		public void Init(int nFileSize, string sAcceptedFiles) {
 			FileSize = nFileSize;
@@ -65,47 +60,19 @@
 			} // if
 		} // Init
 
-		#endregion method Init
-
-		#region property FileSize
-
 		public int FileSize { get; private set; }
-
-		#endregion property FileSize
-
-		#region property AcceptedFiles
 
 		public string AcceptedFiles { get; private set; }
 
-		#endregion property AcceptedFiles
-
-		#region property MimeTypePrefixes
-
 		public SortedSet<string> MimeTypePrefixes { get; private set; }
-
-		#endregion property MimeTypePrefixes
-
-		#region property MimeTypes
 
 		public SortedSet<string> MimeTypes { get; private set; }
 
-		#endregion property MimeTypes
-
-		#region property FileExtensions
-
 		public SortedSet<string> FileExtensions { get; private set; }
-
-		#endregion property FileExtensions
-
-		#region method ToString
 
 		public override string ToString() {
 			return FileSize.ToString("N0", CultureInfo.InvariantCulture) + " bytes of " + AcceptedFiles;
 		} // ToString
-
-		#endregion method ToString
-
-		#region method DetectFileMimeType
 
 		public string DetectFileMimeType(byte[] oFilePrefix, string sFileName, int? nFilePrefixLength = 256, ASafeLog oLog = null) {
 			oLog = oLog ?? new SafeLog();
@@ -180,15 +147,9 @@
 			return null;
 		} // DetectFileMimeType
 
-		#endregion method DetectFileMimeType
-
-		#region private
-
 		private const string Star = "*";
 		private const char StarChar = '*';
 		private readonly SortedSet<string> m_oMimeTypesFromExtensions;
-
-		#region method Contains
 
 		private bool Contains(string sMimeType) {
 			if (MimeTypes.Contains(sMimeType) || m_oMimeTypesFromExtensions.Contains(sMimeType))
@@ -201,8 +162,5 @@
 			return false;
 		} // Contains
 
-		#endregion method Contains
-
-		#endregion private
 	} // class OneUploadLimitation
 } // namespace

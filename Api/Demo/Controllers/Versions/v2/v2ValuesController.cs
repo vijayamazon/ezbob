@@ -11,7 +11,6 @@
 	[HandleActionExecuted(2)]
 	[RoutePrefix("api/v2/values")]
 	public class V2ValuesController : ValuesController {
-		#region load all values action
 
 		// GET api/values
 		/// <summary>
@@ -25,10 +24,6 @@
 		public IEnumerable<ValueModel> Get() {
 			return base.Get();
 		} // Get
-
-		#endregion load all values action
-
-		#region load one value action
 
 		// GET api/values/5
 		/// <summary>
@@ -44,10 +39,6 @@
 			return base.Get(nID);
 		} // Get
 
-		#endregion load one value action
-
-		#region create value action
-
 		// POST api/values
 		/// <summary>
 		/// Creates a new value.
@@ -61,10 +52,6 @@
 		public ValueModel Post([FromBody]ValueModel oValue) {
 			return base.Post(oValue);
 		} // Post
-
-		#endregion create value action
-
-		#region update value action
 
 		// PUT api/values/5
 		/// <summary>
@@ -80,10 +67,6 @@
 			base.Put(nID, oValue);
 		} // Put
 
-		#endregion update value action
-
-		#region delete value action
-
 		// DELETE api/values/5
 		/// <summary>
 		/// Deletes existing value by its id. HTTP status code 404 is returned when no value found by requested id.
@@ -97,6 +80,5 @@
 			base.Delete(nID);
 		} // Delete
 
-		#endregion delete value action
 	} // class ValuesController
 } // namespace

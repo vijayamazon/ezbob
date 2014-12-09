@@ -4,7 +4,6 @@
 	using Ezbob.Logger;
 
 	internal class SpLoadPendingEsignatures : AStoredProc {
-		#region constructor
 
 		public SpLoadPendingEsignatures(int? nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Signatures = new SortedDictionary<int, Esignature>();
@@ -12,19 +11,11 @@
 			CustomerID = nCustomerID;
 		} // constructor
 
-		#endregion constructor
-
-		#region method HasValidParameters
-
 		public override bool HasValidParameters() {
 			return (CustomerID == null) || (CustomerID > 0);
 		} // HasValidParameters
 
-		#endregion method HasValidParameters
-
 		public int? CustomerID { get; set; }
-
-		#region method Load
 
 		public void Load() {
 			ForEachRowSafe((sr, bRowsetStart) => {
@@ -42,8 +33,6 @@
 				return ActionResult.Continue;
 			});
 		} // Load
-
-		#endregion method Load
 
 		public SortedDictionary<int, Esignature> Signatures { get; private set; }
 	} // class SpLoadPendingEsignatures

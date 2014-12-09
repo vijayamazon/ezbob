@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2009 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -15,12 +15,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -28,10 +26,9 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class NumberOfOfferListingsType
     {
-    
+
         private  String conditionField;
         private  Decimal valueField;
-
 
         /// <summary>
         /// Gets and sets  the condition property.
@@ -42,8 +39,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.conditionField ; }
             set { this.conditionField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the condition property
@@ -56,8 +51,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if condition property is set
         /// </summary>
@@ -68,7 +61,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets  the Value property.
         /// </summary>
@@ -78,8 +70,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.valueField ; }
             set { this.valueField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Value property
@@ -92,9 +82,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
-
         /// <summary>
         /// Checks if Value property is set
         /// </summary>
@@ -105,8 +92,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -115,7 +100,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -153,8 +137,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

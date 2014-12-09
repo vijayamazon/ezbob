@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 using EzBob.CommonLib.TimePeriodLogic;
@@ -15,7 +15,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 			UpdatedDate = updatedDate;
 		}
 
-		
 		public IDatabaseFunction Function { get; private set; }
 		public ITimePeriod TimePeriod { get; private set; }
 		public DateTime UpdatedDate { get; private set; }

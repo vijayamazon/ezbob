@@ -17,9 +17,6 @@
 	using log4net;
 
 	public class CustomerRelationsController : Controller {
-		#region public
-
-		#region constructor
 
 		public CustomerRelationsController(
 			CustomerRelationsRepository customerRelationsRepository,
@@ -46,10 +43,6 @@
 			_serviceClient = new ServiceClient();
 		} // constructor
 
-		#endregion constructor
-
-		#region action Index
-
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
@@ -57,10 +50,6 @@
 			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
 			return Json(crm.Create(id), JsonRequestBehavior.AllowGet);
 		} // Index
-
-		#endregion action Index
-
-		#region action CrmStatic
 
 		[Ajax]
 		[HttpGet]
@@ -85,10 +74,6 @@
 				}, JsonRequestBehavior.AllowGet);
 			}
 		} // CrmStatic
-
-		#endregion action CrmStatic
-
-		#region action SaveEntry
 
 		[Ajax]
 		[HttpPost]
@@ -119,10 +104,6 @@
 			} // try
 		} // SaveEntry
 
-		#endregion action SaveEntry
-
-		#region action SaveFollowUp
-
 		[Ajax]
 		[HttpPost]
 		[Transactional]
@@ -150,10 +131,6 @@
 			} // try
 		} // SaveFollowUp
 
-		#endregion action SaveFollowUp
-
-		#region action ChangeRank
-
 		[Ajax]
 		[HttpPost]
 		[Transactional]
@@ -177,10 +154,6 @@
 				return Json(new { success = false, error = "Error saving new customer relations rank." });
 			} // try
 		} // ChangeRank
-
-		#endregion action ChangeRank
-
-		#region action CloseFollowUp
 
 		[Ajax]
 		[HttpPost]
@@ -207,9 +180,6 @@
 			} // try
 		} // CloseFollowUp
 
-		#endregion action CloseFollowUp
-
-		#region action SendSms
 		[Ajax]
 		[HttpPost]
 		[Transactional]
@@ -239,7 +209,6 @@
 				return Json(new { success = false, error = "Error saving new customer relations follow up." });
 			} // try
 		} // CloseFollowUp
-		#endregion action SendSms
 
 		[Ajax]
 		[HttpPost]
@@ -330,10 +299,6 @@
 			return checkedIds;
 		}
 
-		#endregion public
-
-		#region private
-
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly CRMActionsRepository _crmActionsRepository;
 		private readonly CRMStatusesRepository _crmStatusesRepository;
@@ -348,6 +313,5 @@
 		private readonly IWorkplaceContext _context;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerRelationsController));
 
-		#endregion private
 	} // class CustomerRelationsController
 } // namespace

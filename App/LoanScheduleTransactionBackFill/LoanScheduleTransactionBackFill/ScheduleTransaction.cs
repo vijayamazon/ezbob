@@ -2,17 +2,11 @@
 using Ezbob.Database;
 
 namespace LoanScheduleTransactionBackFill {
-	#region class ScheduleTransaction
 
 	class ScheduleTransaction {
-		#region public
-
-		#region constructor
 
 		public ScheduleTransaction() {
 		} // constructor
-
-		#endregion constructor
 
 		public Schedule Schedule { get; set; }
 		public Transaction Transaction { get; set; }
@@ -22,13 +16,7 @@ namespace LoanScheduleTransactionBackFill {
 		public decimal InterestDelta { get; set; }
 		public decimal FeesDelta { get; set; }
 
-		#region property IsAlreadyProcessed
-
 		public bool IsAlreadyProcessed { get { return (Schedule != null && Schedule.IsAlreadyProcessed) || Transaction.IsAlreadyProcessed; } }
-
-		#endregion property IsAlreadyProcessed
-
-		#region method Save
 
 		public void Save(int nLoanID, ScheduleState nStatus, AConnection oDB) {
 			if (IsAlreadyProcessed)
@@ -60,10 +48,6 @@ namespace LoanScheduleTransactionBackFill {
 			oDB.ExecuteNonQuery(sQuery);
 		} // Save
 
-		#endregion method Save
-
-		#region method ToString
-
 		public override string ToString() {
 			var os = new StringBuilder();
 
@@ -83,10 +67,6 @@ namespace LoanScheduleTransactionBackFill {
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
 	} // class ScheduleTransaction
 
-	#endregion class ScheduleTransaction
 } // namespace LoanScheduleTransactionBackFill

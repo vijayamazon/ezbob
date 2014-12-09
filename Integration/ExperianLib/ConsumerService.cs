@@ -25,9 +25,6 @@
 
 	public class ConsumerService
 	{
-		#region public
-
-		#region method ShiftLocation
 
 		public static InputLocationDetailsMultiLineLocation ShiftLocation(InputLocationDetailsMultiLineLocation mlLocation)
 		{
@@ -69,19 +66,11 @@
 			return mlLocation;
 		} // ShiftLocation
 
-		#endregion method ShiftLocation
-
-		#region constructor
-
 		public ConsumerService()
 		{
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
 			interactiveMode = CurrentValues.Instance.ExperianInteractiveMode;
 		} // constructor
-
-		#endregion constructor
-
-		#region GetConsumerInfo
 
 		public ExperianConsumerData GetConsumerInfo(
 			string firstName,
@@ -107,7 +96,7 @@
 					firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode, gender, applicationType,
 					JsonConvert.SerializeObject(ukLocation, new JsonSerializerSettings { Formatting = Formatting.Indented }),
 					JsonConvert.SerializeObject(mlLocation, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-				
+
 				ExperianConsumerData cachedResponse = ObjectFactory.GetInstance<IEzServiceAccessor>()
 					.LoadExperianConsumer(1, customerId, isDirector ?  directorId : (int?)null , null);
 
@@ -123,7 +112,6 @@
 					}
 					return cachedResponse;
 				} // if test
-
 
 				if (!forceCheck)
 				{
@@ -148,14 +136,6 @@
 					};
 			} // try
 		} // GetConsumerInfo
-
-		#endregion GetConsumerInfo
-
-		#endregion public
-
-		#region private
-
-		#region method SaveDefaultAccountIntoDb
 
 		private void SaveDefaultAccountIntoDb(OutputRoot output, int customerId, MP_ServiceLog serviceLog) {
 			var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
@@ -218,9 +198,6 @@
 				} // foreach detail in cais datum
 			} // foreach cais datum in cais data
 		} // SaveDefaultAccountIntoDb
-
-		#endregion method SaveDefaultAccountIntoDb
-		#region method GetServiceOutput
 
 		private ExperianConsumerData GetServiceOutput(
 			string gender,
@@ -332,19 +309,11 @@
 			return serviceLog.ExperianConsumer;
 		} // GetServiceOutput
 
-		#endregion method GetServiceOutput
-
-		#region method CacheNotExpired
-
 		private bool CacheNotExpired(DateTime cacheDate)
 		{
 			int cacheIsValidForDays = CurrentValues.Instance.UpdateConsumerDataPeriodDays;
 			return (DateTime.UtcNow - cacheDate).TotalDays <= cacheIsValidForDays;
 		} // CacheNotExpired
-
-		#endregion method CacheNotExpired
-
-		#region method ConsumerDebugResult
 
 		private ExperianConsumerData ConsumerDebugResult(string surname, int customerId)
 		{
@@ -415,23 +384,13 @@
 			var serviceLog = Utils.WriteLog(input, outputRoot, ExperianServiceType.Consumer, customerId, null, null, surname, null, null);
 			SaveDefaultAccountIntoDb(outputRoot, customerId, serviceLog.ServiceLog);
 			var builder = new ConsumerExperianModelBuilder();
-			
+
 			return builder.Build(outputRoot, customerId);
 		} // ConsumerDebugResult
-
-		#endregion method ConsumerDebugResult
-
-		#region properties
 
 		private readonly SqlRetryer m_oRetryer;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
 		private readonly string interactiveMode;
-
-		#endregion properties
-
-		#region static
-
-		#region method GetPostcode
 
 		private static string GetPostcode(
 			InputLocationDetailsUKLocation ukLocation,
@@ -442,10 +401,6 @@
 				? ukLocation.Postcode
 				: (mlLocation != null) ? mlLocation.LocationLine6 : string.Empty;
 		} // GetPostcode
-
-		#endregion method GetPostcode
-
-		#region method TryRead
 
 		private static void TryRead(Action a)
 		{
@@ -459,10 +414,5 @@
 			} // try
 		} // TryRead
 
-		#endregion method TryRead
-
-		#endregion static
-
-		#endregion private
 	} // class ConsumerService
 } // namespace

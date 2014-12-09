@@ -7,25 +7,14 @@
 	using Ezbob.Utils;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {
-		#region public
-
-		#region constructor
 
 		public EzServiceAccessorLong() {
 			m_oServiceClient = new ServiceClient();
 		} // constructor
 
-		#endregion constructor
-
-		#region method CalculateVatReturnSummary
-
 		public void CalculateVatReturnSummary(int nCustomerMarketplaceID) {
 			m_oServiceClient.Instance.CalculateVatReturnSummary(nCustomerMarketplaceID);
 		} // CalculateVatReturnSummary
-
-		#endregion method CalculateVatReturnSummary
-
-		#region method SaveVatReturnData
 
 		public ElapsedTimeInfo SaveVatReturnData(
 			int nCustomerMarketplaceID,
@@ -39,10 +28,6 @@
 			return etiar.MetaData.Status == ActionStatus.Done ? etiar.Value : new ElapsedTimeInfo();
 		} // CalculateVatReturnSummary
 
-		#endregion method SaveVatReturnData
-
-		#region method LoadVatReturnFullData
-
 		public VatReturnFullData LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
 			VatReturnDataActionResult vrdar = m_oServiceClient.Instance.LoadVatReturnFullData(nCustomerID, nCustomerMarketplaceID);
 
@@ -54,8 +39,6 @@
 				BankStatementAnnualized = vrdar.BankStatementAnnualized,
 			};
 		} // LoadVatReturnFullData
-
-		#endregion method LoadVatReturnFullData
 
 		public ExperianConsumerData ParseExperianConsumer(long nServiceLogId)
 		{
@@ -69,34 +52,20 @@
 			return res.Value;
 		}
 
-		#region method ParseExperianLtd
-
 		public ExperianLtd ParseExperianLtd(long nServiceLogID) {
 			ExperianLtdActionResult ar = m_oServiceClient.Instance.ParseExperianLtd(nServiceLogID);
 			return ar.Value;
 		} // ParseExperianLtd
-
-		#endregion method ParseExperianLtd
-
-		#region method LoadExperianLtd
 
 		public ExperianLtd LoadExperianLtd(long nServiceLogID) {
 			ExperianLtdActionResult ar = m_oServiceClient.Instance.LoadExperianLtd(nServiceLogID);
 			return ar.Value;
 		} // LoadExperianLtd
 
-		#endregion method LoadExperianLtd
-
-		#region method CheckLtdCompanyCache
-
 		public ExperianLtd CheckLtdCompanyCache(int userId, string sCompanyRefNum) {
 			ExperianLtdActionResult ar = m_oServiceClient.Instance.CheckLtdCompanyCache(userId, sCompanyRefNum);
 			return ar.Value;
 		} // CheckLtdCompanyCache
-
-		#endregion method CheckLtdCompanyCache
-
-		#region method EmailHmrcParsingErrors
 
 		public void EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail) {
 			Dictionary<string, string> arg = new Dictionary<string, string>();
@@ -107,18 +76,11 @@
 			m_oServiceClient.Instance.EmailHmrcParsingErrors(nCustomerID, nCustomerMarketplaceID, arg);
 		} // EmailHmrcParsingErrors
 
-		#endregion method EmailHmrcParsingErrors
-
 		public CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
 			return m_oServiceClient.Instance.GetCompanyDataForCreditBureau(underwriterId, refNumber).Result;
 		}
 
-		#endregion public
-
-		#region private
-
 		private readonly ServiceClient m_oServiceClient;
 
-		#endregion private
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

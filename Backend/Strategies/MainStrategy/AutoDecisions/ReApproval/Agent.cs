@@ -14,19 +14,12 @@
 	using Ezbob.Logger;
 
 	public class Agent {
-		#region public
-
-		#region constructor
 
 		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
 			DB = oDB;
 			Log = oLog ?? new SafeLog();
 			Args = new Arguments(nCustomerID);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Init
 
 		public virtual Agent Init() {
 			MetaData = new MetaData();
@@ -40,11 +33,7 @@
 			return this;
 		} // Init
 
-		#endregion method Init
-
 		public virtual ReapprovalTrail Trail { get; private set; }
-
-		#region method MakeAndVerifyDecision
 
 		public virtual bool MakeAndVerifyDecision() {
 			RunPrimary();
@@ -78,10 +67,6 @@
 			return bSuccess;
 		} // MakeAndVerifyDecision
 
-		#endregion method MakeAndVerifyDecision
-
-		#region method MakeDecision
-
 		public virtual void MakeDecision(AutoDecisionResponse response) {
 			try {
 				if (MakeAndVerifyDecision() && Trail.HasDecided) {
@@ -104,15 +89,7 @@
 			Log.Msg("Auto re-approved amount: {0}.", ApprovedAmount);
 		} // MakeDecision
 
-		#endregion method MakeDecision
-
 		public virtual decimal ApprovedAmount { get; private set; }
-
-		#endregion public
-
-		#region protected
-
-		#region method GatherData
 
 		protected virtual void GatherData() {
 			Cfg.Load();
@@ -146,10 +123,6 @@
 			Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans = Cfg.MaxNumOfOutstandingLoans;
 		} // GatherData
 
-		#endregion method GatherData
-
-		#region fields
-
 		protected virtual AConnection DB { get; private set; }
 		protected virtual ASafeLog Log { get; private set; }
 
@@ -160,14 +133,6 @@
 		protected virtual List<Payment> LatePayments { get; private set; }
 
 		protected virtual List<Marketplace> NewMarketplaces { get; private set; }
-
-		#endregion fields
-
-		#endregion protected
-
-		#region private
-
-		#region method RunPrimary
 
 		private void RunPrimary() {
 			Log.Debug("Primary: checking if auto re-approve should take place for customer {0}...", Args.CustomerID);
@@ -190,22 +155,12 @@
 			Log.Debug("Primary: checking if auto re-approve should take place for customer {0} complete.\n{1}", Args.CustomerID, Trail);
 		} // RunPrimary
 
-		#endregion method RunPrimary
-
-		#region method RunSecondary
-
 		private AutomationCalculator.AutoDecision.AutoReApproval.Agent RunSecondary() {
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(DB, Log, Args.CustomerID, Trail.InputData.DataAsOf);
 			oSecondary.MakeDecision(oSecondary.GetInputData());
 
 			return oSecondary;
 		} // RunSecondary
-
-		#endregion method RunSecondary
-
-		#region steps
-
-		#region method CheckComplete
 
 		private void CheckComplete() {
 			if (ApprovedAmount > 0)
@@ -214,20 +169,12 @@
 				StepFailed<Complete>().Init(ApprovedAmount);
 		} // CheckComplete
 
-		#endregion method CheckComplete
-
-		#region method CheckInit
-
 		private void CheckInit() {
 			if (MetaData.ValidationErrors.Count == 0)
 				StepDone<InitialAssignment>().Init(MetaData.ValidationErrors);
 			else
 				StepFailed<InitialAssignment>().Init(MetaData.ValidationErrors);
 		} // CheckInit
-
-		#endregion method CheckInit
-
-		#region method CheckIsFraud
 
 		private void CheckIsFraud() {
 			if (MetaData.FraudStatus == FraudStatus.Ok)
@@ -236,20 +183,12 @@
 				StepFailed<FraudSuspect>().Init(MetaData.FraudStatus);
 		} // CheckIsFraud
 
-		#endregion method CheckIsFraud
-
-		#region method CheckLacrTooOld
-
 		private void CheckLacrTooOld() {
 			if (MetaData.LacrIsTooOld(Cfg.MaxLacrAge))
 				StepFailed<LacrTooOld>().Init(MetaData.LacrAge ?? -1, Cfg.MaxLacrAge);
 			else
 				StepDone<LacrTooOld>().Init(MetaData.LacrAge ?? -1, Cfg.MaxLacrAge);
 		} // CheckLacrTooOld
-
-		#endregion method CheckLacrTooOld
-
-		#region method CheckRejectAfterLacr
 
 		private void CheckRejectAfterLacr() {
 			if (MetaData.RejectAfterLacrID > 0)
@@ -258,20 +197,12 @@
 				StepDone<RejectAfterLacr>().Init(MetaData.RejectAfterLacrID, MetaData.LacrID);
 		} // CheckRejectAfterLacr
 
-		#endregion method CheckRejectAfterLacr
-
-		#region method CheckLateLoans
-
 		private void CheckLateLoans() {
 			if (MetaData.LateLoanCount > 0)
 				StepFailed<LateLoans>().Init();
 			else
 				StepDone<LateLoans>().Init();
 		} // CheckLateLoans
-
-		#endregion method CheckLateLoans
-
-		#region method CheckLatePayments
 
 		private void CheckLatePayments() {
 			if (Trail.MyInputData.MaxLateDays <= Trail.MyInputData.AutoReApproveMaxLatePayment)
@@ -295,10 +226,6 @@
 			*/
 		} // CheckLatePayments
 
-		#endregion method CheckLatePayments
-
-		#region method CheckNewMarketplaces
-
 		private void CheckNewMarketplaces() {
 			if (NewMarketplaces.Count < 1) {
 				StepDone<NewMarketplace>().Init(NewMarketplaces.Count < 1);
@@ -310,10 +237,6 @@
 			} // if
 		} // CheckNewMarketplaces
 
-		#endregion method CheckNewMarketplaces
-
-		#region method CheckOutstandingLoans
-
 		private void CheckOutstandingLoans() {
 			if (MetaData.OpenLoanCount > Cfg.MaxNumOfOutstandingLoans)
 				StepFailed<OutstandingLoanCount>().Init(MetaData.OpenLoanCount, Cfg.MaxNumOfOutstandingLoans);
@@ -321,20 +244,12 @@
 				StepDone<OutstandingLoanCount>().Init(MetaData.OpenLoanCount, Cfg.MaxNumOfOutstandingLoans);
 		} // CheckOutstandingLoans
 
-		#endregion method CheckOutstandingLoans
-
-		#region method CheckLoanCharges
-
 		private void CheckLoanCharges() {
 			if (MetaData.SumOfCharges > 0)
 				StepFailed<Charges>().Init(MetaData.SumOfCharges);
 			else
 				StepDone<Charges>().Init(0);
 		} // CheckLoanCharges
-
-		#endregion method CheckLoanCharges
-
-		#region method SetApprovedAmount
 
 		private void SetApprovedAmount() {
 			if (Trail.HasDecided)
@@ -346,22 +261,12 @@
 				StepFailed<ApprovedAmount>().Init(ApprovedAmount);
 		} // SetApprovedAmount
 
-		#endregion method SetApprovedAmount
-
-		#region method CheckAvailableFunds
-
 		private void CheckAvailableFunds() {
 			if (ApprovedAmount < Trail.MyInputData.AvaliableFunds)
 				StepDone<EnoughFunds>().Init(ApprovedAmount, Trail.MyInputData.AvaliableFunds);
 			else
 				StepFailed<EnoughFunds>().Init(ApprovedAmount, Trail.MyInputData.AvaliableFunds);
 		} // CheckAvailableFunds
-
-		#endregion method CheckAvailableFunds
-
-		#endregion steps
-
-		#region method ProcessRow
 
 		private void ProcessRow(SafeReader sr) {
 			RowType nRowType;
@@ -391,19 +296,11 @@
 			} // switch
 		} // ProcessRow
 
-		#endregion method ProcessRow
-
-		#region enum RowType
-
 		private enum RowType {
 			MetaData,
 			LatePayment,
 			Marketplace,
 		} // enum RowType
-
-		#endregion enum RowType
-
-		#region method StepFailed
 
 		/// <summary>
 		/// Sets overall decision to 'no approve'.
@@ -415,10 +312,6 @@
 			return Trail.Negative<T>(true);
 		} // StepFailed
 
-		#endregion method StepFailed
-
-		#region method StepDone
-
 		/// <summary>
 		/// If the step was the only step then overall decision would be 'approved'.
 		/// </summary>
@@ -428,8 +321,5 @@
 			return Trail.Affirmative<T>(false);
 		} // StepFailed
 
-		#endregion method StepDone
-
-		#endregion private
 	} // class Agent
 } // namespace

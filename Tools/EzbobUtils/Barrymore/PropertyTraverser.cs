@@ -4,26 +4,13 @@
 	using System.Linq;
 	using System.Reflection;
 
-	#region class TraversableAttribute
-
 	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class TraversableAttribute : Attribute { } // TraversableAttribute
-
-	#endregion class TraversableAttribute
-
-	#region class NonTraversableAttribute
 
 	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class NonTraversableAttribute : Attribute { } // NonTraversableAttribute
 
-	#endregion class NonTraversableAttribute
-
-	#region class PropertyTraverser
-
 	public static class PropertyTraverser {
-		#region public
-
-		#region method Traverse
 
 		public static void Traverse(Type oType, Action<object, PropertyInfo> oCallback) {
 			if (oType == null)
@@ -52,10 +39,6 @@
 			Traverse(oInstance, oInstance.GetType(), oCallback);
 		} // Traverse
 
-		#endregion method Traverse
-
-		#region method EnumerateProperties
-
 		public static IEnumerable<PropertyInfo> EnumerateProperties(Type oType) {
 			if (oType == null)
 				throw new ArgumentNullException("oType", "Type to traverse not specified.");
@@ -73,12 +56,6 @@
 
 			return Traverse(oInstance, oInstance.GetType(), null);
 		} // EnumerateProperties
-
-		#endregion method EnumerateProperties
-
-		#endregion public
-
-		#region private
 
 		private static IEnumerable<PropertyInfo> Traverse(object oInstance, Type oRealType, Action<object, PropertyInfo> oCallback) {
 			List<PropertyInfo> oResult = (oCallback == null) ? new List<PropertyInfo>() : null;
@@ -114,12 +91,7 @@
 			return oResult;
 		} // Traverse
 
-		#endregion private
 	} // class PropertyTraverser
-
-	#endregion class PropertyTraverser
-
-	#region class TraversableExt
 
 	public static class TraversableExt {
 		public static object[] ToObjectArray(this object oSrc) {
@@ -134,5 +106,4 @@
 		} // ToObjectArray
 	} // class TraversableExt
 
-	#endregion class TraversableExt
 } // namespace

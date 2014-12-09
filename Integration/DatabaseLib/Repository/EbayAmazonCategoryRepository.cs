@@ -1,4 +1,4 @@
-namespace EZBob.DatabaseLib.Repository
+﻿namespace EZBob.DatabaseLib.Repository
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -7,7 +7,6 @@ namespace EZBob.DatabaseLib.Repository
 	using Model.Marketplaces.Amazon;
 	using NHibernate;
 	using NHibernate.Linq;
-	
 
 	public class EbayAmazonCategoryRepository : NHibernateRepositoryBase<MP_EbayAmazonCategory>
 	{

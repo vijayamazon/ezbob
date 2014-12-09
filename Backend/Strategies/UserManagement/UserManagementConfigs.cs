@@ -9,7 +9,6 @@
 	using JetBrains.Annotations;
 
 	internal class UserManagementConfigs {
-		#region constructor
 
 		public UserManagementConfigs(AConnection oDB, ASafeLog oLog) {
 			Underwriters = new SortedSet<string>();
@@ -17,8 +16,6 @@
 			var sp = new GetUserManagementConfiguration(oDB, oLog);
 			sp.ForEachResult<GetUserManagementConfiguration.ResultRow>(FillProp);
 		} // constructor
-
-		#endregion constructor
 
 		public string LoginValidationStringForWeb { get; set; }
 
@@ -47,11 +44,7 @@
 			return "(\n" + os.ToString() + ")";
 		} // ToString
 
-		#region private
-
 		public SortedSet<string> Underwriters { get; private set; }
-
-		#region method FillProp
 
 		private ActionResult FillProp(GetUserManagementConfiguration.ResultRow oRow) {
 			// ReSharper disable EmptyGeneralCatchClause
@@ -78,18 +71,12 @@
 			return ActionResult.Continue;
 		} // FillProp
 
-		#endregion method FillProp
-
-		#region class GetUserManagementConfiguration
-
 		private class GetUserManagementConfiguration : AStoredProcedure {
 			public GetUserManagementConfiguration(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
 				return true;
 			} // HasValidParameters
-
-			#region class ResultRow
 
 			public class ResultRow : AResultRow {
 				[UsedImplicitly]
@@ -100,11 +87,7 @@
 
 			} // ResultRow
 
-			#endregion class ResultRow
 		} // GetUserManagementConfiguration
 
-		#endregion class GetUserManagementConfiguration
-
-		#endregion private
 	} // class UserManagementConfigs
 } // namespace EzBob.Backend.Strategies.UserManagement

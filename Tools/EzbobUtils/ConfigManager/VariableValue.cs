@@ -5,16 +5,11 @@
 	using Ezbob.Logger;
 
 	public class VariableValue {
-		#region static constructor
 
 		static VariableValue() {
 			ms_oLock = new object();
 			LogVerbosityLevel = LogVerbosityLevel.Compact;
 		} // static constructor
-
-		#endregion static constructor
-
-		#region property LogVerbosityLevel
 
 		public static LogVerbosityLevel LogVerbosityLevel {
 			get {
@@ -36,12 +31,6 @@
 
 		private static LogVerbosityLevel ms_nLogVerbosityLevel;
 
-		#endregion property LogVerbosityLevel
-
-		#region type case operators
-
-		#region operator string
-
 		public static implicit operator string(VariableValue oValue) {
 			if (oValue == null)
 				throw new NullReferenceException("String configuration variable not specified that is used at " + GetPosition());
@@ -51,10 +40,6 @@
 
 			return oValue.Value;
 		} // operator to string
-
-		#endregion operator string
-
-		#region operator int
 
 		public static implicit operator int(VariableValue oValue) {
 			if (oValue == null)
@@ -68,10 +53,6 @@
 			return nValue;
 		} // operator to int
 
-		#endregion operator int
-
-		#region operator long
-
 		public static implicit operator long(VariableValue oValue) {
 			if (oValue == null)
 				throw new NullReferenceException("Long configuration variable not specified that is used at " + GetPosition());
@@ -83,10 +64,6 @@
 
 			return nValue;
 		} // operator to long
-
-		#endregion operator long
-
-		#region operator ulong
 
 		public static implicit operator ulong(VariableValue oValue) {
 			if (oValue == null)
@@ -100,10 +77,6 @@
 			return nValue;
 		} // operator to ulong
 
-		#endregion operator ulong
-
-		#region operator double
-
 		public static implicit operator double(VariableValue oValue) {
 			if (oValue == null)
 				throw new NullReferenceException("Double configuration variable not specified that is used at " + GetPosition());
@@ -116,10 +89,6 @@
 			return nValue;
 		} // operator to double
 
-		#endregion operator double
-
-		#region operator decimal
-
 		public static implicit operator decimal(VariableValue oValue) {
 			if (oValue == null)
 				throw new NullReferenceException("Decimal configuration variable not specified that is used at " + GetPosition());
@@ -131,10 +100,6 @@
 
 			return nValue;
 		} // operator to decimal
-
-		#endregion operator decimal
-
-		#region operator bool
 
 		public static implicit operator bool(VariableValue oValue) {
 			if (oValue == null)
@@ -156,12 +121,6 @@
 			return bValue;
 		} // operator to bool
 
-		#endregion operator bool
-
-		#endregion type case operators
-
-		#region constructor
-
 		public VariableValue(int nID, Variables nName, string sValue, string sDescription, ASafeLog oLog) {
 			ID = nID;
 			Name = nName;
@@ -171,30 +130,14 @@
 			m_oLog = oLog ?? new SafeLog();
 		} // constructor
 
-		#endregion constructor
-
-		#region method Update
-
 		public VariableValue Update(string sValue) {
 			Value = sValue;
 			return this;
 		} // Update
 
-		#endregion method Update
-
-		#region property ID
-
 		public virtual int ID { get; private set; }
 
-		#endregion property ID
-
-		#region property Name
-
 		public virtual Variables Name { get; private set; }
-
-		#endregion property Name
-
-		#region property Value
 
 		public virtual string Value {
 			get { return m_sValue ?? ""; } // get
@@ -203,21 +146,11 @@
 
 		private string m_sValue;
 
-		#endregion property Value
-
-		#region property Description
-
 		public virtual string Description { get; private set; } // Description
-
-		#endregion property Description
-
-		#region private
 
 		private readonly ASafeLog m_oLog;
 
 		private static readonly object ms_oLock;
-
-		#region method GetPosition
 
 		private static string GetPosition() {
 			var oStack = new StackTrace(true);
@@ -234,8 +167,5 @@
 			return string.Format("{0}:{1},{2}{3}", oFrame.GetFileName(), oFrame.GetFileLineNumber(), oFrame.GetFileColumnNumber(), sMethodName);
 		} // GetPosition
 
-		#endregion method GetPosition
-
-		#endregion private
 	} // class VariableValue
 } // namespace ConfigManager

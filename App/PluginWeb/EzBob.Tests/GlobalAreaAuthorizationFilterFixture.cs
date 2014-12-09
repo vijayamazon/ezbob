@@ -15,7 +15,7 @@
         public void white_list_passes_not_authenticated_requests()
         {
             var attr = new AuthorizeAttributeHelper("Customer", "Web");
-            
+
             var mockHttpContext = new Mock<HttpContextBase>();
             var routeData = new RouteData();
             routeData.DataTokens.Add("area", "Customer");
@@ -125,8 +125,6 @@
             mockHttpContext.Setup(c => c.User.IsInRole("Web")).Returns(true);
             mockHttpContext.Setup(x => x.Request.RequestContext.RouteData).Returns(routeData);
 
-            
-
             var mockRepo = new Mock<IUsersRepository>();
             var user = new User();
             user.Roles.Add(new Role() { Name = "Web" });
@@ -146,7 +144,7 @@
             var attr = new AuthorizeAttributeHelper("Customer", "Web", false, true);
 
             var mockHttpContext = new Mock<HttpContextBase>();
-            
+
             var routeData = new RouteData();
             routeData.DataTokens.Add("area", "Customer");
             routeData.Values.Add("controller", "Fake");
@@ -166,7 +164,7 @@
             mockRepo.Setup(x => x.GetUserByLogin("test.test.com")).Returns(user);
 
             attr.SetUsersRepository(mockRepo.Object); 
-            
+
             var result = attr.PublicAuthorizeCore(mockHttpContext.Object);
 
             Assert.That(result, Is.False);

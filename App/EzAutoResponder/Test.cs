@@ -49,13 +49,11 @@
 				//Mailer.Mailer.SendMail(_cfg.TestAddress, _cfg.TestPassword, "EzAutoresonder Error", e.ToString(), "stasdes@gmail.com");
 			} // try
 
-
 			_imap = new Imap { SslMode = MailBee.Security.SslStartupMode.OnConnect };
 
 			// Connect to IMAP server
 			_imap.Connect(_cfg.Server, _cfg.Port);
 			_log.Info("Connected to the server");
-
 
 			// Log into IMAP account
 			_imap.Login("","");//todo enter a login
@@ -145,7 +143,7 @@
 					Console.WriteLine("weekend");
 					return;
 			}
-			
+
 			Console.WriteLine("not weekend");
 
 		}

@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -13,7 +13,6 @@
  *  API Version: 2011-10-01
  * 
  */
-
 
 using System;
 using System.IO;
@@ -36,11 +35,9 @@ namespace MarketplaceWebServiceProducts.Mock
     /// Note, current Mock Service implementation does not valiadate requests
     /// </remarks>
     public  class MarketplaceWebServiceProductsMock : IMarketplaceWebServiceProducts {
-    
 
         // Public API ------------------------------------------------------------//
-    
-        
+
         /// <summary>
         /// Get Matching Product 
         /// </summary>
@@ -55,7 +52,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetMatchingProductResponse>("GetMatchingProductResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Lowest Offer Listings For ASIN 
         /// </summary>
@@ -70,7 +67,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetLowestOfferListingsForASINResponse>("GetLowestOfferListingsForASINResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Service Status 
         /// </summary>
@@ -86,7 +83,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetServiceStatusResponse>("GetServiceStatusResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Matching Product For Id 
         /// </summary>
@@ -101,7 +98,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetMatchingProductForIdResponse>("GetMatchingProductForIdResponse.xml");
         }
-        
+
         /// <summary>
         /// Get My Price For SKU 
         /// </summary>
@@ -116,7 +113,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetMyPriceForSKUResponse>("GetMyPriceForSKUResponse.xml");
         }
-        
+
         /// <summary>
         /// List Matching Products 
         /// </summary>
@@ -131,7 +128,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<ListMatchingProductsResponse>("ListMatchingProductsResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Competitive Pricing For SKU 
         /// </summary>
@@ -146,7 +143,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetCompetitivePricingForSKUResponse>("GetCompetitivePricingForSKUResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Competitive Pricing For ASIN 
         /// </summary>
@@ -161,7 +158,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetCompetitivePricingForASINResponse>("GetCompetitivePricingForASINResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Product Categories For SKU 
         /// </summary>
@@ -176,7 +173,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetProductCategoriesForSKUResponse>("GetProductCategoriesForSKUResponse.xml");
         }
-        
+
         /// <summary>
         /// Get My Price For ASIN 
         /// </summary>
@@ -191,7 +188,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetMyPriceForASINResponse>("GetMyPriceForASINResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Lowest Offer Listings For SKU 
         /// </summary>
@@ -206,7 +203,7 @@ namespace MarketplaceWebServiceProducts.Mock
         {
             return Invoke<GetLowestOfferListingsForSKUResponse>("GetLowestOfferListingsForSKUResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Product Categories For ASIN 
         /// </summary>

@@ -9,7 +9,6 @@
 	using OfficeOpenXml;
 
 	public partial class BaseReportHandler : SafeLog {
-		#region method BuildStrategyRunningTimeReport
 
 		public ATag BuildStrategyRunningTimeReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			StrategyRunningTime.StrategyRunningTime rpt = new StrategyRunningTime.StrategyRunningTime(DB, this);
@@ -20,10 +19,6 @@
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildStrategyRunningTimeReport
 
-		#endregion method BuildStrategyRunningTimeReport
-
-		#region method BuildStrategyRunningTimeXls
-
 		public ExcelPackage BuildStrategyRunningTimeXls(Report report, DateTime today, DateTime tomorrow) {
 			StrategyRunningTime.StrategyRunningTime rpt = new StrategyRunningTime.StrategyRunningTime(DB, this);
 			KeyValuePair<ReportQuery, DataTable> pair = rpt.Run(report, today, tomorrow);
@@ -31,6 +26,5 @@
 			return AddSheetToExcel(pair.Value, report.GetTitle(today, oToDate: tomorrow));
 		} // BuildStrategyRunningTimeXls
 
-		#endregion method BuildStrategyRunningTimeXls
 	} // class BaseReportHandler
 } // namespace

@@ -25,7 +25,7 @@
 		private readonly bool enableCardLimit;
 		private readonly bool enableDebugErrorCodeN;
 		private readonly int cardLimitAmount;
-		
+
 		public PayPointApi()
 		{
 			_loans = ObjectFactory.GetInstance<ILoanRepository>();
@@ -140,7 +140,6 @@
 			var loanPaymentFacade = ObjectFactory.GetInstance<LoanPaymentFacade>();
 
 			PayPointReturnData payPointReturnData = null;
-
 
 			installments.BeginTransaction();
 

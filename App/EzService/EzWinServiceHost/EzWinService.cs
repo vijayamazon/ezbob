@@ -2,7 +2,6 @@
 using System.ServiceProcess;
 using System.Timers;
 
-
 //manual http://conceptf1.blogspot.co.il/2013/11/create-windows-service-step-by-step.html
 namespace EzWinServiceHost
 {

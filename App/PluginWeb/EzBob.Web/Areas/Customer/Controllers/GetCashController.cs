@@ -83,8 +83,6 @@
 											 },
 										 "https");
 
-			
-
 			string url = _payPointFacade.GeneratePaymentUrl(customer, 5.00m, callback);
 			_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Redirect to " + url, "Successful", "");
 			return Redirect(url);
@@ -185,7 +183,6 @@
 				ValidateCustomerName(customer, cus);
 
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
-
 
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer);
 

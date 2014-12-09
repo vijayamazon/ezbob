@@ -3,14 +3,9 @@
 	using Ezbob.Logger;
 
 	public abstract class AVatReturnStrategy : AStrategy {
-		#region constructor
 
 		protected AVatReturnStrategy(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 		} // constructor
-
-		#endregion constructor
-
-		#region enum DeleteReasons
 
 		protected enum DeleteReasons {
 			UploadedEqual = 1,
@@ -24,6 +19,5 @@
 			LinkedUpdated = 9,
 		} // enum DeleteReasons
 
-		#endregion enum DeleteReasons
 	} // class AVatReturnStrategy
 } // namespace EzBob.Backend.Strategies.VatReturn

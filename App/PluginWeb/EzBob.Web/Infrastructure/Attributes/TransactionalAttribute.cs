@@ -6,7 +6,6 @@
 	using log4net;
 
 	public class TransactionalAttribute : ActionFilterAttribute, IAuthorizationFilter, IExceptionFilter {
-		#region public
 
 		public TransactionalAttribute() {
 			IsolationLevel = System.Data.IsolationLevel.ReadCommitted;
@@ -34,22 +33,12 @@
 			CloseTransaction(false);
 		} // OnException
 
-		#endregion public
-
-		#region private
-
-		#region method BeginTransaction
-
 		private void BeginTransaction() {
 			ISession instance = ObjectFactory.GetInstance<ISession>();
 
 			if (instance.Transaction == null || !instance.Transaction.IsActive)
 				instance.BeginTransaction(this.IsolationLevel);
 		} // BeginTransaction
-
-		#endregion method BeginTransaction
-
-		#region method CloseTransaction
 
 		private void CloseTransaction(bool commit = true) {
 			using (ITransaction transaction = ObjectFactory.GetInstance<ISession>().Transaction) {
@@ -71,8 +60,5 @@
 			} // using
 		} // CloseTransaction
 
-		#endregion method CloseTransaction
-
-		#endregion private
 	} // class TransactionalAttribute
 } // namespace

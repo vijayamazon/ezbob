@@ -5,9 +5,6 @@
 	using Ezbob.Logger;
 
 	public class Configuration {
-		#region public
-
-		#region constructor
 
 		public Configuration(AConnection oDB, ASafeLog oLog) {
 			m_oDB = oDB;
@@ -15,23 +12,11 @@
 			Values = new RejectionConfigs();
 		} // constructor
 
-		#endregion constructor
-
-		#region method Load
-
 		public virtual void Load() {
 			m_oDB.ForEachRowSafe(SetValue, "LoadAutoRejectionConfigs", CommandSpecies.StoredProcedure);
 		} // Load
 
-		#endregion method Load
-
 		public RejectionConfigs Values { get; private set; }
-
-		#endregion public
-
-		#region private
-
-		#region method SetValue
 
 		private void SetValue(SafeReader sr) {
 			string sName = sr["Name"];
@@ -48,11 +33,8 @@
 			m_oLog.Debug("Auto reject configuration: '{0}' was set to {1}.", sName, pi.GetValue(this.Values));
 		} // SetValue
 
-		#endregion method SetValue
-
 		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
 
-		#endregion private
 	} // class Configuration
 } // namespace

@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 using System.Linq;
 using EzBob.PayPalServiceLib.com.paypal.service;
 
 namespace EzBob.PayPalServiceLib
 {
-	
 
 	public class ServiceResponceException : Exception
 	{

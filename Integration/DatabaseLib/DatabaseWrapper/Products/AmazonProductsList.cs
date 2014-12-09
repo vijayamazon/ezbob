@@ -1,4 +1,4 @@
-namespace EZBob.DatabaseLib.DatabaseWrapper.Products
+﻿namespace EZBob.DatabaseLib.DatabaseWrapper.Products
 {
 	using System;
 	using System.Collections.Generic;
@@ -40,7 +40,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Products
 
 		public string ProductASIN { get; private set; }
 
-
 		public override string Key
 		{
 			get { return ProductASIN; }
@@ -55,7 +54,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Products
 		}
 
 		public string ProductSellerSku { get; private set; }
-
 
 		public override string Key
 		{

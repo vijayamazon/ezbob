@@ -11,7 +11,6 @@
 
 	public class BundleHelper
 	{
-		#region CSS
 
 		public static MvcHtmlString RenderCustomerCss()
 		{
@@ -106,12 +105,6 @@
 				.MvcRender("~/Content/css/min/print_combined_#.css");
 		} // RenderPrintCss
 
-		#endregion CSS
-
-		#region JS
-
-		#region Common JS
-
 		public static MvcHtmlString RenderCommonJs()
 		{
 			return Bundle.JavaScript()
@@ -158,7 +151,6 @@
 				.Add("~/Content/js/controls/ezbob.jqmodal.js")
 				.Add("~/Content/js/controls/ezbob.BoundItemView.js")
 				.Add("~/Content/js/controls/captcha.js")
-				
 
 				//login
 				.Add("~/Content/js/login/ezbob.restorePassword.js")
@@ -194,10 +186,6 @@
 			string json = JsonConvert.SerializeObject(dict);
 			return "var EzBob = EzBob || {};" + "EzBob.dbStrings = " + json + ";";
 		} // GetDbStrings
-
-		#endregion Common JS
-
-		#region underwriter js
 
 		public static MvcHtmlString RenderUnderwriterJs()
 		{
@@ -365,10 +353,6 @@
 				.MvcRender("~/Content/js/min/underwriter_#.js");
 		} // RenderUnderwriterJs
 
-		#endregion underwriter js
-
-		#region customer js
-
 		public static MvcHtmlString RenderWizardJs()
 		{
 			return Bundle.JavaScript()
@@ -500,9 +484,6 @@
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderCreatePasswordJs
 
-		#endregion customer js
-
-		#region paypoint js
 		public static MvcHtmlString RenderPaypointTemplateJs()
 		{
 			return Bundle.JavaScript()
@@ -523,8 +504,6 @@
 				.Add("~/Content/js/lib/attardi.labels.js")
 				.MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
 		} // RenderPaypointTemplateJs
-		#endregion
 
-		#endregion JS
 	} // class BundleHelper
 } // namespace

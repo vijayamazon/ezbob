@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -33,7 +33,7 @@ namespace EzBob.eBayServiceLib.LargeMerchantServiceCore.ServiceLogic.BulkData
 			var jobRequest = new StartDownloadJobRequest();
 			jobRequest.downloadJobType = reportType.ToString();
 			jobRequest.UUID = Guid.NewGuid().ToString();
-			
+
 			return base.startDownloadJob( jobRequest );
 		}
 
@@ -53,7 +53,7 @@ namespace EzBob.eBayServiceLib.LargeMerchantServiceCore.ServiceLogic.BulkData
 
 			//DeleteRecurringJob( reportType );
 			//AbortIncompleteJob( reportType );
-			
+
 			StartDownloadJobResponse startDownloadJobResponse = StartDownloadJob( reportType );
 			var rez = new ResultInfoDownloadJobRequest( startDownloadJobResponse );
 
@@ -64,7 +64,6 @@ namespace EzBob.eBayServiceLib.LargeMerchantServiceCore.ServiceLogic.BulkData
 
 			ResultInfoJobRequest jobRez = null;
 			bool inProgress = true;
-			
 
 			while ( inProgress )
 			{
@@ -98,7 +97,7 @@ namespace EzBob.eBayServiceLib.LargeMerchantServiceCore.ServiceLogic.BulkData
 				deleteRecurringJobRequest.recurringJobId = recurringJobDetail.recurringJobId;
 				var rez = base.deleteRecurringJob( deleteRecurringJobRequest );
 			}
-			
+
 		}
 
 		public void AbortJob( string jobId )
@@ -117,14 +116,14 @@ namespace EzBob.eBayServiceLib.LargeMerchantServiceCore.ServiceLogic.BulkData
 			var jobs = GetJobs();
 
 			jobs.jobProfile.Where( j => j.jobStatus != JobStatus.Completed && j.jobType.Equals( reportType.ToString() ) ).ToList().ForEach( j => AbortJob( j.jobId ) );
-			
+
 		}
 
 		public GetJobsResponse GetJobs()
 		{
 			_CurrentOperationName = "getJobs";
 			GetJobsRequest req = new GetJobsRequest();
-			
+
 			return base.getJobs( req );
 		}
 

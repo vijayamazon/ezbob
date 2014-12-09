@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -23,14 +23,12 @@ using MarketplaceWebService.Model;
 namespace MarketplaceWebService
 {
 
-
     /// <summary>
     /// The Amazon Marketplace Web Service contain APIs for inventory and order management.
     /// 
     /// </summary>
     public interface  IMarketplaceWebService {
-    
-                
+
         /// <summary>
         /// Get Report 
         /// </summary>
@@ -44,7 +42,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportResponse GetReport(GetReportRequest request);
 
-                
         /// <summary>
         /// Get Report Schedule Count 
         /// </summary>
@@ -56,7 +53,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportScheduleCountResponse GetReportScheduleCount(GetReportScheduleCountRequest request);
 
-                
         /// <summary>
         /// Get Report Request List By Next Token 
         /// </summary>
@@ -68,7 +64,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportRequestListByNextTokenResponse GetReportRequestListByNextToken(GetReportRequestListByNextTokenRequest request);
 
-                
         /// <summary>
         /// Update Report Acknowledgements 
         /// </summary>
@@ -80,7 +75,6 @@ namespace MarketplaceWebService
         /// </remarks>
         UpdateReportAcknowledgementsResponse UpdateReportAcknowledgements(UpdateReportAcknowledgementsRequest request);
 
-                
         /// <summary>
         /// Submit Feed 
         /// </summary>
@@ -96,7 +90,6 @@ namespace MarketplaceWebService
         /// </remarks>
         SubmitFeedResponse SubmitFeed(SubmitFeedRequest request);
 
-                
         /// <summary>
         /// Get Report Count 
         /// </summary>
@@ -110,7 +103,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportCountResponse GetReportCount(GetReportCountRequest request);
 
-                
         /// <summary>
         /// Get Feed Submission List By Next Token 
         /// </summary>
@@ -122,7 +114,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetFeedSubmissionListByNextTokenResponse GetFeedSubmissionListByNextToken(GetFeedSubmissionListByNextTokenRequest request);
 
-                
         /// <summary>
         /// Cancel Feed Submissions 
         /// </summary>
@@ -135,7 +126,6 @@ namespace MarketplaceWebService
         /// </remarks>
         CancelFeedSubmissionsResponse CancelFeedSubmissions(CancelFeedSubmissionsRequest request);
 
-                
         /// <summary>
         /// Request Report 
         /// </summary>
@@ -147,7 +137,6 @@ namespace MarketplaceWebService
         /// </remarks>
         RequestReportResponse RequestReport(RequestReportRequest request);
 
-                
         /// <summary>
         /// Get Feed Submission Count 
         /// </summary>
@@ -159,7 +148,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetFeedSubmissionCountResponse GetFeedSubmissionCount(GetFeedSubmissionCountRequest request);
 
-                
         /// <summary>
         /// Cancel Report Requests 
         /// </summary>
@@ -172,7 +160,6 @@ namespace MarketplaceWebService
         /// </remarks>
         CancelReportRequestsResponse CancelReportRequests(CancelReportRequestsRequest request);
 
-                
         /// <summary>
         /// Get Report List 
         /// </summary>
@@ -185,7 +172,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportListResponse GetReportList(GetReportListRequest request);
 
-                
         /// <summary>
         /// Get Feed Submission Result 
         /// </summary>
@@ -197,7 +183,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetFeedSubmissionResultResponse GetFeedSubmissionResult(GetFeedSubmissionResultRequest request);
 
-                
         /// <summary>
         /// Get Feed Submission List 
         /// </summary>
@@ -209,7 +194,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetFeedSubmissionListResponse GetFeedSubmissionList(GetFeedSubmissionListRequest request);
 
-                
         /// <summary>
         /// Get Report Request List 
         /// </summary>
@@ -221,7 +205,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportRequestListResponse GetReportRequestList(GetReportRequestListRequest request);
 
-                
         /// <summary>
         /// Get Report Schedule List By Next Token 
         /// </summary>
@@ -233,7 +216,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportScheduleListByNextTokenResponse GetReportScheduleListByNextToken(GetReportScheduleListByNextTokenRequest request);
 
-                
         /// <summary>
         /// Get Report List By Next Token 
         /// </summary>
@@ -245,7 +227,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportListByNextTokenResponse GetReportListByNextToken(GetReportListByNextTokenRequest request);
 
-                
         /// <summary>
         /// Manage Report Schedule 
         /// </summary>
@@ -258,7 +239,6 @@ namespace MarketplaceWebService
         /// </remarks>
         ManageReportScheduleResponse ManageReportSchedule(ManageReportScheduleRequest request);
 
-                
         /// <summary>
         /// Get Report Request Count 
         /// </summary>
@@ -271,7 +251,6 @@ namespace MarketplaceWebService
         /// </remarks>
         GetReportRequestCountResponse GetReportRequestCount(GetReportRequestCountRequest request);
 
-                
         /// <summary>
         /// Get Report Schedule List 
         /// </summary>

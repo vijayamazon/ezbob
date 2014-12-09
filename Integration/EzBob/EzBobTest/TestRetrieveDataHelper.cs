@@ -1,4 +1,4 @@
-namespace EzBobTest
+﻿namespace EzBobTest
 {
 	using System;
 	using System.Collections.Generic;
@@ -99,7 +99,7 @@ namespace EzBobTest
 					FileType = FileType.Pdf,
 					Thrasher = p
 				};
-				
+
 				ISeeds s = p.Run(smd, File.ReadAllBytes(sFilePah));
 
 				oLog.Msg("Processing file {0} complete.", sFilePah);
@@ -133,7 +133,6 @@ namespace EzBobTest
 					new { Id = "AY7B0VWAMNYUB", Name ="positivenoise"}
 				};
 
-
             foreach (var si in siList)
             {
                 var amazonSecurityInfo = new AmazonSecurityInfo(si.Id);
@@ -157,7 +156,6 @@ namespace EzBobTest
 					new { UserId = "a.milburn@ntlworld.com", Name = "a.milburn"},
 					new { UserId = "paypal@madjungle.com", Name ="adjungle"}
 				};
-
 
             foreach (var si in siList)
             {
@@ -258,7 +256,6 @@ namespace EzBobTest
 
             Assert.AreEqual(rez, 0);
 
-
             countOrders = 51;
             countItems = 100;
             rez = (int)Math.Round(countOrders / (double)countItems, MidpointRounding.AwayFromZero);
@@ -276,8 +273,6 @@ namespace EzBobTest
             rez = (int)Math.Round(countOrders / (double)countItems, MidpointRounding.AwayFromZero);
 
             Assert.AreEqual(rez, 0);
-
-
 
         }
 
@@ -343,7 +338,6 @@ namespace EzBobTest
         public string AmazonMarketplaceId { get; set; }
         public string MarketplaceName { get; set; }
     }
-	
 
 	public class AmazonTester {
 		public List<OrderItemTwo> GetOrders(int umi, ElapsedTimeInfo elapsedTimeInfo, AmazonServiceConnectionInfo _ConnectionInfo, int days, bool useReporting) {
@@ -369,7 +363,6 @@ namespace EzBobTest
 				MerchantId = securityInfo.MerchantId,
 				ErrorRetryingInfo = errorRetryingInfo
 			};
-
 
 			List<OrderItemTwo> orders;
 

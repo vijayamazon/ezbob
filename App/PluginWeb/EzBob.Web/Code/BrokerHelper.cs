@@ -10,9 +10,6 @@
 	using log4net;
 
 	public class BrokerHelper {
-		#region public
-
-		#region method SetAuth
 
 		public static void SetAuth(string sLoginEmail, HttpContextBase oContext = null, string sRole = "Broker") {
 			GenericPrincipal oNewUser;
@@ -32,18 +29,10 @@
 				oContext.User = oNewUser;
 		} // SetAuth
 
-		#endregion method SetAuth
-
-		#region constructor
-
 		public BrokerHelper(ServiceClient oServiceClient = null, ASafeLog oLog = null) {
 			m_oLog = oLog ?? new SafeILog(LogManager.GetLogger(typeof(BrokerHelper)));
 			m_oServiceClient = oServiceClient ?? new ServiceClient();
 		} // constructor
-
-		#endregion constructor
-
-		#region method IsBroker
 
 		public bool IsBroker(string sContactEmail) {
 			BoolActionResult bar = null;
@@ -65,10 +54,6 @@
 
 			return bIsBroker;
 		} // IsBroker
-
-		#endregion method IsBroker
-
-		#region method TryLogin
 
 		public BrokerProperties TryLogin(string sLoginEmail, string sPassword) {
 			m_oLog.Debug("Trying to login as broker '{0}'...", sLoginEmail);
@@ -93,24 +78,13 @@
 			return null;
 		} // TryLogin
 
-		#endregion method TryLogin
-
-		#region method Logoff
-
 		public void Logoff(string sCurrentLogin, HttpContextBase oContext) {
 			m_oLog.Debug("Broker {0} signed out.", sCurrentLogin);
 			SetAuth(null, oContext);
 		} // Logoff
 
-		#endregion method Logoff
-
-		#endregion public
-
-		#region private
-
 		private readonly ServiceClient m_oServiceClient;
 		private readonly ASafeLog m_oLog;
 
-		#endregion private
 	} // class BrokerHelper
 } // namespace

@@ -3,9 +3,6 @@
 	using System.Collections.Generic;
 
 	class Stat {
-		#region public
-
-		#region constructor
 
 		public Stat() {
 			Min = double.MaxValue;
@@ -14,8 +11,6 @@
 			Median = 0;
 			Count = 0;
 		} // constructor
-
-		#endregion constructor
 
 		public int Count { get; private set; }
 		public double Min { get; private set; }
@@ -74,6 +69,5 @@
 			} // if
 		} // ToRow
 
-		#endregion public
 	} // class Stat
 } // namespace

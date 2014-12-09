@@ -3,15 +3,10 @@
 	using System.Text;
 
 	public class SimplePassword {
-		#region operator to string
 
 		public static implicit operator string(SimplePassword pwd) {
 			return pwd.ToString();
 		} // operator to string
-
-		#endregion operator to string
-
-		#region constructor
 
 		public SimplePassword(int nLength, string sUserName = null) {
 			var osPassword = new StringBuilder();
@@ -40,50 +35,25 @@
 			UserName = sUserName ?? string.Empty;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Password
-
 		public string Password { get; private set; }
-
-		#endregion property Password
-
-		#region property RawValue
 
 		public string RawValue {
 			get { return Password; }
 		} // RawValue
 
-		#endregion property RawValue
-
-		#region property UserName
-
 		public string UserName { get; private set; }
-
-		#endregion property UserName
-
-		#region property Encrypted
 
 		public Encrypted Encrypted {
 			get { return new Encrypted(Password); }
 		} // Encrypted
 
-		#endregion property Encrypted
-
-		#region property Hash
-
 		public string Hash {
 			get { return SecurityUtils.HashPassword(UserName, Password); }
 		} // Hash
-
-		#endregion property Hash
-
-		#region method ToString
 
 		public override string ToString() {
 			return Hash;
 		} // ToString
 
-		#endregion method ToString
 	} // class SimplePassword
 } // namespace

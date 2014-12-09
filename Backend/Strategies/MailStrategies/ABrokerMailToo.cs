@@ -4,20 +4,13 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class ABrokerMailToo
-
 	public abstract class ABrokerMailToo : AMailStrategyBase {
-		#region constructor
 
 		protected ABrokerMailToo(int nCustomerID, bool bSendToCustomer, AConnection oDB, ASafeLog oLog, bool bSendWhenOneLoan = false)
 			: base(nCustomerID, bSendToCustomer, oDB, oLog)
 		{
 			m_bSendWhenOneLoan = bSendWhenOneLoan;
 		} // constructor
-
-		#endregion constructor
-
-		#region method GetRecipients
 
 		protected override Addressee[] GetRecipients()
 		{
@@ -41,13 +34,7 @@
 			return aryAddresses.ToArray();
 		} // GetRecipients
 
-		#endregion method GetRecipients
-
-		#region private
-
 		private readonly bool m_bSendWhenOneLoan;
-
-		#region class BrokerLoadAddressForCustomerMailCC
 
 		private class BrokerLoadAddressForCustomerMailCC : AStoredProcedure {
 			public BrokerLoadAddressForCustomerMailCC(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -59,10 +46,6 @@
 			public int CustomerID { get; set; }
 		} // BrokerLoadAddressForCustomerMailCC
 
-		#endregion class BrokerLoadAddressForCustomerMailCC
-
-		#endregion private
 	} // class ABrokerMailToo
 
-	#endregion class ABrokerMailToo
 } // namespace EzBob.Backend.Strategies.MailStrategies

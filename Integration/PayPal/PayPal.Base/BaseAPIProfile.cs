@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Collections;
 using log4net;
@@ -26,7 +26,6 @@ namespace PayPal.Platform.SDK
 		/// </summary>
 		private string subject;
 
-
 		/// <summary>
 		///  The PayPal environment (Live, Sadnbox)
 		/// </summary>
@@ -37,18 +36,15 @@ namespace PayPal.Platform.SDK
 		/// </summary>
 		private int timeout;
 
-
 		/// <summary>
 		///  The maximum number of retries
 		/// </summary>
 		private int maximumRetries;
 
-
 		/// <summary>
 		///  The delay time bewteen each retry call in milliseconds
 		/// </summary>
 		private int delayTime;
-
 
 		/// <summary>
 		/// The API signature used in three-token authentication
@@ -58,7 +54,7 @@ namespace PayPal.Platform.SDK
 		/// <summary>
 		/// The username used to access the PayPal API
 		/// </summary>
-		
+
 		/// <summary>
 		/// The certificate used to access the PayPal API
 		/// </summary>
@@ -72,7 +68,7 @@ namespace PayPal.Platform.SDK
 		/// The privateKeyPassword used
 		/// </summary>
 		private string privateKeyPassword = "";
-		
+
 		/// <summary>
 		/// Type of profile used to authenticate
 		/// </summary>
@@ -82,7 +78,6 @@ namespace PayPal.Platform.SDK
         /// To specify trust all certificate
         /// </summary>
         private bool isTrustallCertificate;
-
 
         private string deviceIpaddress = string.Empty;
 
@@ -102,8 +97,7 @@ namespace PayPal.Platform.SDK
         private string EndPointAP;
 
         private string source;
-        
-		
+
         /// <summary>
         /// API Username
         /// </summary>
@@ -113,7 +107,6 @@ namespace PayPal.Platform.SDK
 			set { this.apiUsername = value; }
 		}
 
-
 		/// <summary>
 		/// The password used to access the PayPal API
 		/// </summary>
@@ -122,7 +115,6 @@ namespace PayPal.Platform.SDK
 			get { return this.apiPassword; }
 			set { this.apiPassword = value; }
 		}
-
 
 		/// <summary>
 		/// The name of the entity on behalf of which this profile is issuing calls
@@ -136,7 +128,6 @@ namespace PayPal.Platform.SDK
 			set { this.subject = value; }
 		}
 
-
 		/// <summary>
 		/// The PayPal environment (Live, Sadnbox) 
 		/// </summary>
@@ -145,7 +136,6 @@ namespace PayPal.Platform.SDK
 			get { return this.environment; }
 			set { this.environment = value; }
 		}
-
 
 		/// <summary>
 		///  The connection timeout in milliseconds
@@ -160,7 +150,6 @@ namespace PayPal.Platform.SDK
 			}
 		}
 
-
 		/// <summary>
 		///  The maximum number of retries
 		/// </summary>
@@ -170,7 +159,6 @@ namespace PayPal.Platform.SDK
 			set { if (value >= 0) this.maximumRetries = value; }
 		}
 
-
 		/// <summary>
 		///  The delay time bewteen each retry call in milliseconds
 		/// </summary>
@@ -179,7 +167,6 @@ namespace PayPal.Platform.SDK
 			get { return this.delayTime; }
 			set { if (value >= 0) this.delayTime = value; }
 		}
-
 
 		/// <summary>
 		/// API Signature used to access the PayPal API.  Only used for
@@ -196,7 +183,6 @@ namespace PayPal.Platform.SDK
 				this.apiSignature = value;
 			}
 		}
-
 
 		/// <summary>
 		/// The file-name of the certificate to be used.
@@ -228,8 +214,7 @@ namespace PayPal.Platform.SDK
                 this.certificate = value;
             }
         }
-	
-	
+
 		/// <summary>
 		/// Represents Data format of Request.
 		/// </summary>
@@ -318,7 +303,7 @@ namespace PayPal.Platform.SDK
                 this.EndPointAP = value;
             }
         }
-		
+
 		/// <summary>
 		/// Represents Profile type (3token or Certificate)
 		/// </summary>
@@ -333,7 +318,7 @@ namespace PayPal.Platform.SDK
 				this.apiProfileType = value;
 			}
 		}
-		
+
 		/// <summary>
 		/// Password of given Certificate's Private Key
 		/// </summary>

@@ -9,12 +9,7 @@ using Ezbob.Logger;
 
 namespace Integration.ChannelGrabberSecurityInfoConverter {
 
-	#region class FileSaver
-
 	internal class FileSaver : SafeLog {
-		#region public
-
-		#region constructor
 
 		public FileSaver(ASafeLog oLog) : base(oLog) {
 			m_sCurPath = Path.Combine(Directory.GetCurrentDirectory(), "utc." + DateTime.UtcNow.ToString("yyyy-MM-dd.HH-mm-ss"));
@@ -30,10 +25,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 				throw new Exception("Failed to create target directory", e);
 			} // try
 		} // constructor
-
-		#endregion constructor
-
-		#region method Save
 
 		public bool Save(int nItemID, byte[] oData) {
 			string sFileName = Path.Combine(m_sCurPath, nItemID.ToString() + ".old.xml");
@@ -63,18 +54,10 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 			} // try
 		} // Save
 
-		#endregion method Save
-
-		#endregion public
-
-		#region private
-
 		private string m_sCurPath;
 
-		#endregion private
 	}
 
 	// class FileSaver
 
-	#endregion class FileSaver
 } // namespace Integration.ChannelGrabberSecurityInfoConverter

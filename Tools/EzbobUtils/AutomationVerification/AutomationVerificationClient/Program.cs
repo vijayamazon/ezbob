@@ -173,7 +173,7 @@
 					}
 				}
 			}
-			
+
 			return verificationReportList;
 		}
 
@@ -196,8 +196,6 @@
 				});
 			//}
 		}
-
-	
 
 		private static Dictionary<int, Dictionary<DecisionType,AutoDecision>> GetVerificationDecisions(Dictionary<int, AutoDecision> decisions)
 		{
@@ -236,8 +234,6 @@
 						Comment = reason
 					});
 
-
-				
 				bool isAutoReRejected = arr.IsAutoReRejected(autoDecision.CustomerId, autoDecision.CashRequestId, out reason);
 				autoDecisionsDict.Add(DecisionType.AutoReReject, new AutoDecision
 				{
@@ -259,7 +255,6 @@
 					Comment = reason
 				});
 
-				
 				bool isAutoApproved = aa.IsAutoApproved(autoDecision.CustomerId, out reason, out amount);
 				autoDecisionsDict.Add(DecisionType.AutoApprove, new AutoDecision
 				{

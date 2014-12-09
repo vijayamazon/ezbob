@@ -8,12 +8,8 @@ using Google.Apis.Analytics.v3.Data;
 
 namespace GoogleAnalyticsLib
 {
-	#region class GoogleDataFetcher
 
 	class GoogleDataFetcher : SafeLog {
-		#region public
-
-		#region constants
 
 		public const string ProfileID = "ga:60953365";
 		public const string KeyFileName = "08a190d7e7b61e5cdfa63301e528134d3699f096-privatekey.p12";
@@ -25,10 +21,6 @@ namespace GoogleAnalyticsLib
 		public const string IL = "Israel";
 		public const string UA = "Ukraine";
 		public const string UK = "United Kingdom";
-
-		#endregion constants
-
-		#region constructor
 
 		public GoogleDataFetcher(AnalyticsService oService, DateTime oStartDate, DateTime oEndDate, IEnumerable<GoogleReportDimensions> oDimensions, IEnumerable<GoogleReportMetrics> oMetrics, string sFilters = null, ASafeLog oLog = null) : base(oLog) {
 			m_oService = oService;
@@ -43,10 +35,6 @@ namespace GoogleAnalyticsLib
 
 			m_sFilters = string.IsNullOrWhiteSpace(sFilters) ? null : sFilters;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Fetch
 
 		public List<GoogleDataItem> Fetch() {
 			string sStartDate = m_oStartDate.ToString(GoogleDataFetcher.OAuthDateFormat, CultureInfo.InvariantCulture);
@@ -93,47 +81,19 @@ namespace GoogleAnalyticsLib
 			return oOutput;
 		} // Fetch
 
-		#endregion method Fetch
-
-		#region method GAString
-
 		public static string GAString<T>(T v) {
 			return string.Format("ga:{0}", v);
 		} // GAString
 
-		#endregion method GAString
-
-		#endregion public
-
-		#region private
-
-		#region property Dimensions
-
 		private string Dimensions { get; set; }
 
-		#endregion property Dimensions
-
-		#region property Metrics
-
 		private string Metrics { get; set; }
-
-		#endregion property Metrics
-
-		#region method Idx
 
 		private int Idx(GoogleReportDimensions val) { return m_oDimensions[val]; } // Idx
 
 		private int Idx(GoogleReportMetrics val) { return m_oDimensions.Count + m_oMetrics[val]; } // Idx
 
-		#endregion method Idx
-
-		#region property DimMetCount
-
 		private int DimMetCount { get { return m_oDimensions.Count + m_oMetrics.Count; } }
-
-		#endregion property DimMetCount
-
-		#region method FillIndices
 
 		private string FillIndices<T>(SortedDictionary<T, int> oDic, IEnumerable<T> oItems) {
 			int i = 0;
@@ -154,8 +114,6 @@ namespace GoogleAnalyticsLib
 			return sb.ToString();
 		} // FillIndices
 
-		#endregion method FillIndices
-
 		private readonly AnalyticsService m_oService;
 		private DateTime m_oStartDate;
 		private DateTime m_oEndDate;
@@ -165,8 +123,6 @@ namespace GoogleAnalyticsLib
 		private readonly SortedDictionary<GoogleReportDimensions, int> m_oDimensions;
 		private readonly SortedDictionary<GoogleReportMetrics, int> m_oMetrics;
 
-		#endregion private
 	} // class GoogleDataFetcher
 
-	#endregion class GoogleDataFetcher
 } // namespace EzAnalyticsConsoleClient

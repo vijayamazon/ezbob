@@ -2,8 +2,6 @@
 {
 	using NHibernate.Type;
 
-	#region enum LoanStatus
-
 	public enum LoanStatus {
 		Live,
 		Late,
@@ -12,14 +10,11 @@
 
 	public class LoanStatusType : EnumStringType<LoanStatus> {} // class LoanStatusType
 
-	#endregion enum LoanStatus
 } // namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping 
 {
 	using Loans;
-
-	#region class LoanStatusExtenstions
 
 	public static class LoanStatusExtenstions {
 		public static string ToDescription(this LoanStatus status) {
@@ -38,5 +33,4 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 		} // ToDescription
 	} // class LoanStatusExtenstions
 
-	#endregion class LoanStatusExtenstions
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

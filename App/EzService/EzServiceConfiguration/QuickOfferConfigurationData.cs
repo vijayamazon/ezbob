@@ -1,5 +1,4 @@
 ﻿namespace EzServiceConfiguration {
-	#region enum QuickOfferEnabledStatus
 
 	public enum QuickOfferEnabledStatus {
 		Disabled = 0,
@@ -7,12 +6,7 @@
 		Silent = 2,
 	} // enum QuickOfferEnabledStatus
 
-	#endregion enum QuickOfferEnabledStatus
-
-	#region class QuickOfferConfigurationData
-
 	public abstract class QuickOfferConfigurationData : AConfigurationData {
-		#region public
 
 		public virtual QuickOfferEnabledStatus Enabled { get; protected set; }
 		public virtual int CompanySeniorityMonths { get; protected set; }
@@ -39,19 +33,9 @@
 		public abstract decimal OfferAmountPct(int nBusinessScore);
 		public abstract decimal LoanPct(int nBusinessScore, decimal nRequestedAmount);
 
-		#endregion public
-
-		#region protected
-
-		#region property InvalidExceptionMessage
-
 		protected override string InvalidExceptionMessage {
 			get { return "Invalid quick offer configuration has been loaded from DB."; } // get
 		} // InvalidExceptionMessage
-
-		#endregion property InvalidExceptionMessage
-
-		#region method IsValid
 
 		protected override bool IsValid() {
 			return
@@ -77,10 +61,6 @@
 				!string.IsNullOrWhiteSpace(PriceCalculator);
 		} // IsValid
 
-		#endregion method IsValid
-
-		#endregion protected
 	} // class QuickOfferConfigurationData
 
-	#endregion class QuickOfferConfigurationData
 } // namespace EzServiceConfiguration

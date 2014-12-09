@@ -3,12 +3,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class SpSelectCustomers
-
 	class SpSelectCustomers : AStoredProcedure {
-		#region public
-
-		#region constructor
 
 		public SpSelectCustomers(Constants.CampaignsType nCampaignType, DateTime oDateStart, DateTime oDateEnd, bool bIncludeTest, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			DateStart = oDateStart;
@@ -41,15 +36,9 @@
 			} // switch
 		} // constructor
 
-		#endregion constructor
-
-		#region method HasValidParameters
-
 		public override bool HasValidParameters() {
 			return true;
 		} // HasValidParameters
-
-		#endregion method HasValidParameters
 
 		public DateTime DateStart { get; set; }
 
@@ -57,22 +46,12 @@
 
 		public bool IncludeTest { get; set; }
 
-		#endregion public
-
-		#region protected
-
 		protected override string GetName() {
 			return m_sSpName;
 		} // GetName
 
-		#endregion protected
-
-		#region private
-
 		private readonly string m_sSpName;
 
-		#endregion private
 	} // class SpSelectCustomers
 
-	#endregion class SpSelectCustomers
 } // namespace EzMailChimpCampaigner

@@ -12,8 +12,6 @@
 	using NHibernate.Criterion;
 	using NHibernate.Type;
 
-	#region enum PaymentStatus
-
 	public enum PaymentStatus {
 		PaidOnTime,
 		Late,
@@ -22,15 +20,9 @@
 
 	public class PaymentStatusType : EnumStringType<PaymentStatus> {} // class PaymentStatusType
 
-	#endregion enum PaymentStatus
-
-	#region class Loan
-
 	public class Loan
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(Loan));
-
-		#region properties
 
 		public virtual int Id { get; set; }
 
@@ -69,8 +61,6 @@
 		/// </summary>
 		public virtual decimal Principal { get; set; }
 
-		#region property Transactions
-
 		private Iesi.Collections.Generic.ISet<LoanTransaction> _transactions = new HashedSet<LoanTransaction>();
 		public virtual Iesi.Collections.Generic.ISet<LoanTransaction> Transactions {
 			get { return _transactions; }
@@ -89,19 +79,11 @@
 			get { return Transactions.OfType<PacnetTransaction>().ToList(); }
 		}
 
-		#endregion property Transactions
-
-		#region property Charges
-
 		private IList<LoanCharge> _charges = new List<LoanCharge>();
 		public virtual IList<LoanCharge> Charges {
 			get { return _charges; }
 			set { _charges = value; }
 		}
-
-		#endregion property Charges
-
-		#region property Schedule
 
 		private IList<LoanScheduleItem> _schedule = new List<LoanScheduleItem>();
 		public virtual IList<LoanScheduleItem> Schedule {
@@ -109,19 +91,11 @@
 			set { _schedule = value; }
 		}
 
-		#endregion property Schedule
-
-		#region property ScheduleTransactions
-
 		private IList<LoanScheduleTransaction> _scheduleTransactions = new List<LoanScheduleTransaction>();
 		public virtual IList<LoanScheduleTransaction> ScheduleTransactions {
 			get { return _scheduleTransactions; }
 			set { _scheduleTransactions = value; }
 		} // ScheduleTransactions
-
-		#endregion property ScheduleTransactions
-
-		#region property InterestFreeze
 
 		private IList<LoanInterestFreeze> _interestFreeze = new List<LoanInterestFreeze>();
 		public virtual IList<LoanInterestFreeze> InterestFreeze {
@@ -136,8 +110,6 @@
 		public virtual bool HasInterestFreeze {
 			get { return ActiveInterestFreeze.Any(); }
 		} // HasInterestFreeze
-
-		#endregion property InterestFreeze
 
 		/// <summary>
 		/// Loan end date of payments, close loan date
@@ -316,29 +288,15 @@
 			get { return _loanType.NextInterestPayment(this); }
 		}
 
-		#region property LoanSource
-
 		public virtual LoanSource LoanSource { get; set; } // LoanSource
-
-		#endregion property LoanSource
 
 		public virtual int? LoanLegalId { get; set; }
 
 		public virtual int? CustomerSelectedTerm { get; set; }
 
-		#endregion properties
-
-		#region methods
-
-		#region method FindLateScheduledItems
-
 		public virtual List<LoanScheduleItem> FindLateScheduledItems() {
 			return Schedule.Where(s => s.Status == LoanScheduleStatus.Late).OrderBy(s => s.Date).ToList();
 		} // FindLateScheduledItems
-
-		#endregion method FindLateScheduledItems
-
-		#region method UpdateNexPayment
 
 		public virtual void UpdateNexPayment() {
 			var q = from repayment in Schedule
@@ -352,17 +310,9 @@
 			NextRepayment = payment == null ? 0 : payment.AmountDue;
 		} // UpdateNextPayment
 
-		#endregion method UpdateNexPayment
-
-		#region method GenerateRefNumber
-
 		public virtual void GenerateRefNumber(string customerRefNum, int num) {
 			RefNumber = customerRefNum + string.Format("{0:D3}", num + 1);
 		}
-
-		#endregion method GenerateRefNumber
-
-		#region method UpdateStatus
 
 		public virtual void UpdateStatus(DateTime? term = null) {
 			if (Customer != null) {
@@ -429,10 +379,6 @@
 			Status = LoanStatus.Live;
 		} // UpdateStatus
 
-		#endregion method UpdateStatus
-
-		#region method UpdateBalance
-
 		public virtual void UpdateBalance() {
 			Balance = Schedule.Sum(x => x.AmountDue);
 			Interest = Schedule.Sum(x => x.Interest);
@@ -444,10 +390,6 @@
 			Principal = Math.Abs(LoanAmount - TransactionsWithPaypointSuccesefull.Sum(x => x.LoanRepayment));
 			OnTimeNum = Schedule.Count(s => s.Status == LoanScheduleStatus.PaidOnTime);
 		} // UpdateBalance
-
-		#endregion method UpdateBalance
-
-		#region method Clone
 
 		public virtual Loan Clone() {
 			var newItem = new Database.Loans.Loan() {
@@ -479,19 +421,11 @@
 			return newItem;
 		} // Clone
 
-		#endregion method Clone
-
-		#region method AddTransaction
-
 		public virtual void AddTransaction(LoanTransaction tran) {
 			tran.Loan = this;
 			Transactions.Add(tran);
 			tran.RefNumber = RefNumber + string.Format("{0,3:D3}", Transactions.Count);
 		} // AddTransaction
-
-		#endregion method AddTransaction
-
-		#region method ToString
 
 		public override string ToString() {
 			var sb = new StringBuilder();
@@ -524,19 +458,11 @@
 			return sb.ToString();
 		} // ToString
 
-		#endregion method ToString
-
-		#region method ShiftPayments
-
 		public virtual void ShiftPayments(DateTime date, int month) {
 			foreach (var installment in Schedule.Where(i => i.Date >= date)) {
 				installment.Date = installment.Date.AddMonths(month);
 			}
 		} // ShiftPayments
-
-		#endregion method ShiftPayments
-
-		#region method TryAddCharge
 
 		public virtual bool TryAddCharge(LoanCharge charge) {
 			if (charge.Date < Date)
@@ -572,14 +498,7 @@
 			return true;
 		} // TryAddCharge
 
-		#endregion method TryAddCharge
-
-		#endregion methods
 	} // class Loan
-
-	#endregion class Loan
-
-	#region interface ILoanRepository
 
 	public interface ILoanRepository : IRepository<Loan> {
 		IEnumerable<Loan> GetLoansWithoutAgreements();
@@ -587,10 +506,6 @@
 		IEnumerable<Loan> LiveLoans();
 		IQueryable<Loan> NotPaid();
 	} // interface ILoanRepository
-
-	#endregion interface ILoanRepository
-
-	#region class LoanRepository
 
 	public class LoanRepository : NHibernateRepositoryBase<Loan>, ILoanRepository {
 		public LoanRepository(ISession session)
@@ -620,5 +535,4 @@
 		}
 	} // class LoanRepository
 
-	#endregion class LoanRepository
 } // namespace EZBob.DatabaseLib.Model.Database.Loans

@@ -1,4 +1,4 @@
-namespace EzBob.PayPalServiceLib {
+﻿namespace EzBob.PayPalServiceLib {
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
@@ -104,7 +104,6 @@ namespace EzBob.PayPalServiceLib {
 
 					if (!func(list))
 						break;
-
 
 					toDate = list.AsParallel().Min(x => x.Created);
 

@@ -8,9 +8,6 @@
 	using log4net;
 
 	public class ServerLogController : Controller {
-		#region public
-
-		#region method Say
 
 		[HttpPost]
 		public JsonResult Say(string version, string history) {
@@ -22,7 +19,7 @@
 			catch (Exception ex) {
 				ms_oLog.Warn(ex, "Failed to deserialize history: {0}", history);
 			}
-			
+
 			ms_oLog.Debug("Client package for logging from remote address '{0}' - begin", RemoteIp());
 
 			var oSavedPackages = new List<string>();
@@ -42,14 +39,6 @@
 			return Json(new { result = "success", saved = oSavedPackages, });
 		} // Say
 
-		#endregion method Say
-
-		#endregion public
-
-		#region private
-
-		#region method RemoteIp
-
 		private string RemoteIp() {
 			string ip = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
 
@@ -59,10 +48,7 @@
 			return ip;
 		} // RemoteIp
 
-		#endregion method RemoteIp
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(LogManager.GetLogger(typeof(ServerLogController)));
 
-		#endregion private
 	} // class ServerLogController
 } // namespace

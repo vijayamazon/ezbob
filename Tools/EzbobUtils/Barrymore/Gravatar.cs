@@ -3,7 +3,6 @@
 	using System.Web;
 
 	public static class Gravatar {
-		#region method Url
 
 		public static string Url(string sEmail, string sDefaultImgUrl = null, int nImgSize = 0) {
 			var os = new StringBuilder();
@@ -25,6 +24,5 @@
 			return os.ToString();
 		} // Url
 
-		#endregion method Url
 	} // class Gravatar
 } // namespace

@@ -3,7 +3,6 @@
 	using Ezbob.Logger;
 
 	public abstract partial class AConnection : SafeLog {
-		#region with iteration procedure
 
 		public virtual void ForEachResult<T>(ConnectionWrapper oConnectionToUse, Action<T> oAction, string sQuery, params QueryParameter[] aryParams) where T : IResultRow, new() {
 			ForEachResult<T>(oConnectionToUse, oAction, sQuery, CommandSpecies.Auto, aryParams);
@@ -31,10 +30,6 @@
 
 			ForEachResult(oConnectionToUse, oFunc, sQuery, nSpecies, aryParams);
 		} // ForEachResult
-
-		#endregion with iteration procedure
-
-		#region with iteration function
 
 		public virtual void ForEachResult<T>(ConnectionWrapper oConnectionToUse, Func<T, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) where T : IResultRow, new() {
 			ForEachResult<T>(oConnectionToUse, oAction, sQuery, CommandSpecies.Auto, aryParams);
@@ -71,6 +66,5 @@
 			);
 		} // ForEachResult
 
-		#endregion with iteration function
 	} // AConnection
 } // namespace Ezbob.Database

@@ -369,7 +369,7 @@
 		private void BuildDataAlerts(Customer customer, ProfileSummaryModel summary, int userId) {
 			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			var errors = new StringBuilder();
-			
+
 			if (currAddr != null && !currAddr.Zoopla.Any() && currAddr.IsOwnerAccordingToLandRegistry)
 			{
 				AppendLi(errors, "No zoopla for current address");
@@ -435,7 +435,7 @@
 					});
 				return true;
 			}
-			
+
 			if (lrs.Any())
 			{
 				var owners = lrs.SelectMany(x => x.Owners).Select(x => new {firstName = x.FirstName ?? string.Empty, lastName = x.LastName ?? string.Empty, company = x.CompanyName ?? string.Empty}).ToList();
@@ -776,7 +776,6 @@
 			}
 		}
 
-
 		private LightsState ObtainLoanActivityState(decimal latePayments, decimal collection)
 		{
 			if (collection > 0)
@@ -792,7 +791,7 @@
 			{
 				return LightsState.Error;
 			}
-			
+
 			var session = ObjectFactory.GetInstance<ISession>();
 			foreach (MP_CustomerMarketPlace mp in marketplaces)
 			{

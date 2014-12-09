@@ -32,7 +32,6 @@
 
 			m_oDB = new SqlConnection(oLog4NetCfg.Environment, m_oLog);
 
-
 			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
 			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);

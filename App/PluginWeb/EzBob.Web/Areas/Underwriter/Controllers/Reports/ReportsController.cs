@@ -94,7 +94,7 @@
                     throw new ArgumentOutOfRangeException("type");
             }
         }
-        
+
         private bool IsMedalReport(ReportType type)
         {
             switch (type)
@@ -519,7 +519,7 @@
                                                     new ReportTableColumn {Caption = "£", FieldName = "LowSideAmount", DataType = ReportTableCreator.DataType.Amount},
                                                     new ReportTableColumn
                                                         {Caption = "%", FieldName = "LowSideAmountToProcessedAmount", DataType = ReportTableCreator.DataType.Percents}
-                                                        
+
                                                 }
 
                                },
@@ -718,7 +718,6 @@
             var model = new ReportModelDay<ExpectationReportData>();
             var data = builder.GenerateReport(date.Year, date.Month, date.Day);
 
-
             var columns = new List<ReportTableColumn>(){
                             new ReportTableColumn {Caption = "Customer name", FieldName = "CustomerName", DataType = ReportTableCreator.DataType.Overall},
                             new ReportTableColumn {Caption = "Loan ref. #", FieldName = "LoanRef"},
@@ -731,7 +730,6 @@
                                     new ReportTableColumn {Caption = "Fees", FieldValue = (o) => (double)((ExpectationReportData)o).Before.Fees, DataType = ReportTableCreator.DataType.Amount},
                                     new ReportTableColumn {Caption = "Total", FieldValue = (o) => (double)((ExpectationReportData)o).Before.Balance, DataType = ReportTableCreator.DataType.Amount}
                                 }},
-
 
                             new ReportTableColumn(){Caption = "Expected (£)", Childs = new List<ReportTableColumn>()
                                 {
@@ -756,7 +754,7 @@
                                     new ReportTableColumn {Caption = "Fees", FieldValue = (o) => (double)((ExpectationReportData)o).After.Fees, DataType = ReportTableCreator.DataType.Amount},
                                     new ReportTableColumn {Caption = "Total", FieldValue = (o) => (double)((ExpectationReportData)o).After.Total, DataType = ReportTableCreator.DataType.Amount}
                                 }},
-                            
+
                             new ReportTableColumn {Caption = "Variance", FieldValue = (o) => (double)((ExpectationReportData)o).Variance, DataType = ReportTableCreator.DataType.Amount},
                             new ReportTableColumn {Caption = "Status", FieldValue = (o) => ((ExpectationReportData)o).Status, DataType = ReportTableCreator.DataType.Overall}
             };

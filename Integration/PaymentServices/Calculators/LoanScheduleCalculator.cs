@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database.Loans;
@@ -84,7 +84,6 @@ namespace PaymentServices.Calculators
                 item.BalanceBeforeRepayment = balance;
                 balance = balances[m];
 
-
                 item.Loan = loan;
                 item.Date = startDate.Value.AddMonths(m + 1);
                 item.Balance = balance;
@@ -112,7 +111,7 @@ namespace PaymentServices.Calculators
         {
             var discounts = new List<decimal>(term);
             discounts.AddRange(new decimal[term]);
-            
+
             if (loan != null && loan.CashRequest != null && loan.CashRequest.DiscountPlan != null)
             {
                 for (int i = 0; i < loan.CashRequest.DiscountPlan.Discounts.Length; i++)

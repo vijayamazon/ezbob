@@ -1,10 +1,8 @@
-namespace EZBob.DatabaseLib.Model.CustomerRelations {
+﻿namespace EZBob.DatabaseLib.Model.CustomerRelations {
 	using System;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using NHibernate;
-
-	#region class CustomerRelations
 
 	public class CustomerRelations {
 		public virtual int Id { get; set; }
@@ -21,10 +19,6 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations {
 		public virtual string PhoneNumber { get; set; }
 	} // class CustomerRelations
 
-	#endregion class CustomerRelations
-
-	#region class CustomerRelationsRepository
-
 	public class CustomerRelationsRepository : NHibernateRepositoryBase<CustomerRelations> {
 		public CustomerRelationsRepository(ISession session) : base(session) {} // constructor
 
@@ -40,5 +34,4 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations {
 		} // GetLastCrm
 	} // class CustomerRelationsRepository
 
-	#endregion class CustomerRelationsRepository
 } // namespace

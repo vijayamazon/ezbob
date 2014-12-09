@@ -8,9 +8,6 @@
 	using JetBrains.Annotations;
 
 	public class BrokerUpdatePassword : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerUpdatePassword(
 			string sContactEmail,
@@ -29,8 +26,6 @@
 			BrokerID = 0;
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name {
 			get { return "Broker update password"; }
 		} // Name
@@ -43,10 +38,6 @@
 		} // Execute
 
 		public int BrokerID { get; private set; }
-
-		#endregion public
-
-		#region private
 
 		private readonly SpBrokerUpdatePassword m_oSp;
 
@@ -96,6 +87,5 @@
 			public string NewPassword2 { private get; set; }
 		} // class SpBrokerUpdatePassword
 
-		#endregion private
 	} // class BrokerUpdatePassword
 } // namespace EzBob.Backend.Strategies.Broker

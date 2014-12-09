@@ -8,7 +8,6 @@
 	/// Harvest result (retrieved files and errors).
 	/// </summary>
 	public class Hopper {
-		#region constructor
 
 		/// <summary>
 		/// Creates a Hopper object.
@@ -17,10 +16,6 @@
 			Source = nSource;
 			Clear();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Add
 
 		/// <summary>
 		/// Adds an error message. Thread safe.
@@ -64,10 +59,6 @@
 			} // lock
 		} // Add
 
-		#endregion method Add
-
-		#region method ForEachFile
-
 		/// <summary>
 		/// Performs specified action on every file of specific data type and file type.
 		/// </summary>
@@ -89,10 +80,6 @@
 			foreach (KeyValuePair<string, byte[]> f in Files[dt][ft])
 				action(dt, ft, f.Key, f.Value);
 		} // ForEachFile
-
-		#endregion method ForEachFile
-
-		#region method FetchBackdoorData
 
 		public void FetchBackdoorData(Hopper oHopper) {
 			lock(this) {
@@ -125,54 +112,30 @@
 			} // lock
 		} // FetchBackdoorData
 
-		#endregion method FetchBackdoorData
-
-		#region property IsManual
-
 		/// <summary>
 		/// Data source: uploaded, linked, manual.
 		/// </summary>
 		public VatReturnSourceType Source { get; private set; } // IsManual
-
-		#endregion property IsManual
-
-		#region property Errors
 
 		/// <summary>
 		/// Errors storage.
 		/// </summary>
 		public SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, HarvesterError>>> Errors { get; private set; }
 
-		#endregion property Errors 
-
-		#region property ErrorCount
-
 		/// <summary>
 		/// Number of errors (e.g. to check that there are no errors).
 		/// </summary>
 		public int ErrorCount { get; private set; }
-
-		#endregion property ErrorCount
-
-		#region property Files
 
 		/// <summary>
 		/// Files storage.
 		/// </summary>
 		public SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, byte[]>>> Files { get; private set; } 
 
-		#endregion property Files
-
-		#region property Seeds
-
 		/// <summary>
 		/// Parsed data storage.
 		/// </summary>
 		public SortedDictionary<DataType, SortedDictionary<string, ISeeds>> Seeds { get; private set; }
-
-		#endregion property Seeds
-
-		#region method Clear
 
 		public void Clear() {
 			Errors = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, HarvesterError>>>();
@@ -196,6 +159,5 @@
 			} // for each data type
 		} // Clear
 
-		#endregion method Clear
 	} // class Hopper
 } // namespace Ezbob.HmrcHarvester

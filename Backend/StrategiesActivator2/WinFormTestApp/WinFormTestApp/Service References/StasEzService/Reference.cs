@@ -11,38 +11,37 @@
 namespace WinFormTestApp.StasEzService {
     using System.Runtime.Serialization;
     using System;
-    
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionMetaData", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class ActionMetaData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid ActionIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CommentField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> CustomerIDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsSynchronousField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private WinFormTestApp.StasEzService.ActionStatus StatusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> UserIDField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -52,7 +51,7 @@ namespace WinFormTestApp.StasEzService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Guid ActionID {
             get {
@@ -65,7 +64,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string Comment {
             get {
@@ -78,7 +77,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> CustomerID {
             get {
@@ -91,7 +90,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool IsSynchronous {
             get {
@@ -104,7 +103,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string Name {
             get {
@@ -117,7 +116,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public WinFormTestApp.StasEzService.ActionStatus Status {
             get {
@@ -130,7 +129,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> UserID {
             get {
@@ -143,9 +142,9 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -153,33 +152,33 @@ namespace WinFormTestApp.StasEzService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionStatus", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     public enum ActionStatus : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InProgress = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Done = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Finished = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Failed = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Terminated = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Unknown = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Launched = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
@@ -189,13 +188,13 @@ namespace WinFormTestApp.StasEzService {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WinFormTestApp.StasEzService.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(WinFormTestApp.StasEzService.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private WinFormTestApp.StasEzService.ActionMetaData MetaDataField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -205,7 +204,7 @@ namespace WinFormTestApp.StasEzService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public WinFormTestApp.StasEzService.ActionMetaData MetaData {
             get {
@@ -218,9 +217,9 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -228,16 +227,16 @@ namespace WinFormTestApp.StasEzService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BoolActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class BoolActionResult : WinFormTestApp.StasEzService.ActionResult {
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool ValueField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool Value {
             get {
@@ -251,22 +250,22 @@ namespace WinFormTestApp.StasEzService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class WizardConfigsActionResult : WinFormTestApp.StasEzService.ActionResult {
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool AllowInsertingMobileCodeWithoutGenerationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsSmsValidationActiveField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int NumberOfMobileCodeAttemptsField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool AllowInsertingMobileCodeWithoutGeneration {
             get {
@@ -279,7 +278,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool IsSmsValidationActive {
             get {
@@ -292,7 +291,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int NumberOfMobileCodeAttempts {
             get {
@@ -306,19 +305,19 @@ namespace WinFormTestApp.StasEzService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class QuickOfferActionResult : WinFormTestApp.StasEzService.ActionResult {
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool HasValueField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private WinFormTestApp.StasEzService.QuickOfferModel ValueField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool HasValue {
             get {
@@ -331,7 +330,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public WinFormTestApp.StasEzService.QuickOfferModel Value {
             get {
@@ -345,16 +344,16 @@ namespace WinFormTestApp.StasEzService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="StringListActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class StringListActionResult : WinFormTestApp.StasEzService.ActionResult {
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string[] RecordsField;
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string[] Records {
             get {
@@ -368,64 +367,64 @@ namespace WinFormTestApp.StasEzService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferModel", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models")]
     [System.SerializableAttribute()]
     public partial class QuickOfferModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int AmlField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal AmountField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int BusinessScoreField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime CreationDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime ExpirationDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int IDField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal ImmediateInterestRateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal ImmediateSetupFeeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int ImmediateTermField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime IncorporationDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal PotentialAmountField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal PotentialInterestRateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal PotentialSetupFeeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int PotentialTermField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal TangibleEquityField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal TotalCurrentAssetsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -435,7 +434,7 @@ namespace WinFormTestApp.StasEzService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int Aml {
             get {
@@ -448,7 +447,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal Amount {
             get {
@@ -461,7 +460,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int BusinessScore {
             get {
@@ -474,7 +473,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime CreationDate {
             get {
@@ -487,7 +486,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime ExpirationDate {
             get {
@@ -500,7 +499,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int ID {
             get {
@@ -513,7 +512,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal ImmediateInterestRate {
             get {
@@ -526,7 +525,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal ImmediateSetupFee {
             get {
@@ -539,7 +538,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int ImmediateTerm {
             get {
@@ -552,7 +551,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime IncorporationDate {
             get {
@@ -565,7 +564,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal PotentialAmount {
             get {
@@ -578,7 +577,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal PotentialInterestRate {
             get {
@@ -591,7 +590,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal PotentialSetupFee {
             get {
@@ -604,7 +603,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int PotentialTerm {
             get {
@@ -617,7 +616,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal TangibleEquity {
             get {
@@ -630,7 +629,7 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal TotalCurrentAssets {
             get {
@@ -643,9 +642,9 @@ namespace WinFormTestApp.StasEzService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -653,480 +652,480 @@ namespace WinFormTestApp.StasEzService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
     public enum FraudMode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FullCheck = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PersonalDetaisCheck = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CompanyDetailsCheck = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MarketplacesCheck = 3,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="NewCreditLineOption", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies")]
     public enum NewCreditLineOption : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SkipEverything = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UpdateEverythingExceptMp = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UpdateEverythingAndApplyAutoRules = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UpdateEverythingAndGoToManualDecision = 4,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="StasEzService.IEzServiceAdmin")]
     public interface IEzServiceAdmin {
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceAdmin/Shutdown", ReplyAction="http://tempuri.org/IEzServiceAdmin/ShutdownResponse")]
         WinFormTestApp.StasEzService.ActionMetaData Shutdown();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceAdmin/Nop", ReplyAction="http://tempuri.org/IEzServiceAdmin/NopResponse")]
         WinFormTestApp.StasEzService.ActionMetaData Nop(int nLengthInSeconds);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceAdmin/Terminate", ReplyAction="http://tempuri.org/IEzServiceAdmin/TerminateResponse")]
         WinFormTestApp.StasEzService.ActionMetaData Terminate(System.Guid sActionID);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceAdmin/ListActiveActions", ReplyAction="http://tempuri.org/IEzServiceAdmin/ListActiveActionsResponse")]
         WinFormTestApp.StasEzService.StringListActionResult ListActiveActions();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceAdmin/WriteToLog", ReplyAction="http://tempuri.org/IEzServiceAdmin/WriteToLogResponse")]
         WinFormTestApp.StasEzService.ActionMetaData WriteToLog(string sSeverity, string sMsg);
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IEzServiceAdminChannel : WinFormTestApp.StasEzService.IEzServiceAdmin, System.ServiceModel.IClientChannel {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class EzServiceAdminClient : System.ServiceModel.ClientBase<WinFormTestApp.StasEzService.IEzServiceAdmin>, WinFormTestApp.StasEzService.IEzServiceAdmin {
-        
+
         public EzServiceAdminClient() {
         }
-        
+
         public EzServiceAdminClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
-        
+
         public EzServiceAdminClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public EzServiceAdminClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public EzServiceAdminClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData Shutdown() {
             return base.Channel.Shutdown();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData Nop(int nLengthInSeconds) {
             return base.Channel.Nop(nLengthInSeconds);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData Terminate(System.Guid sActionID) {
             return base.Channel.Terminate(sActionID);
         }
-        
+
         public WinFormTestApp.StasEzService.StringListActionResult ListActiveActions() {
             return base.Channel.ListActiveActions();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData WriteToLog(string sSeverity, string sMsg) {
             return base.Channel.WriteToLog(sSeverity, sMsg);
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="StasEzService.IEzService")]
     public interface IEzService {
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GreetingMailStrategy", ReplyAction="http://tempuri.org/IEzService/GreetingMailStrategyResponse")]
         WinFormTestApp.StasEzService.ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
         WinFormTestApp.StasEzService.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CashTransferred(int customerId, decimal amount);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
         WinFormTestApp.StasEzService.ActionMetaData EmailUnderReview(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Escalated", ReplyAction="http://tempuri.org/IEzService/EscalatedResponse")]
         WinFormTestApp.StasEzService.ActionMetaData Escalated(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCashFailed", ReplyAction="http://tempuri.org/IEzService/GetCashFailedResponse")]
         WinFormTestApp.StasEzService.ActionMetaData GetCashFailed(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         WinFormTestApp.StasEzService.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlAndBwaInformationResponse")]
         WinFormTestApp.StasEzService.ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlInformationResponse")]
         WinFormTestApp.StasEzService.ActionMetaData MoreAmlInformation(int userId, int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreBwaInformationResponse")]
         WinFormTestApp.StasEzService.ActionMetaData MoreBwaInformation(int userId, int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordChanged", ReplyAction="http://tempuri.org/IEzService/PasswordChangedResponse")]
         WinFormTestApp.StasEzService.ActionMetaData PasswordChanged(int customerId, string password);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordRestored", ReplyAction="http://tempuri.org/IEzService/PasswordRestoredResponse")]
         WinFormTestApp.StasEzService.ActionMetaData PasswordRestored(int customerId, string password);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayEarly", ReplyAction="http://tempuri.org/IEzService/PayEarlyResponse")]
         WinFormTestApp.StasEzService.ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriter", ReplyAction="http://tempuri.org/IEzService/PayPointAddedByUnderwriterResponse")]
         WinFormTestApp.StasEzService.ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointNameValidationFailed", ReplyAction="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse")]
         WinFormTestApp.StasEzService.ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
         WinFormTestApp.StasEzService.ActionMetaData RejectUser(int userId, int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
         WinFormTestApp.StasEzService.ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RenewEbayToken", ReplyAction="http://tempuri.org/IEzService/RenewEbayTokenResponse")]
         WinFormTestApp.StasEzService.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoan", ReplyAction="http://tempuri.org/IEzService/RequestCashWithoutTakenLoanResponse")]
         WinFormTestApp.StasEzService.ActionMetaData RequestCashWithoutTakenLoan(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEmailVerification", ReplyAction="http://tempuri.org/IEzService/SendEmailVerificationResponse")]
         WinFormTestApp.StasEzService.ActionMetaData SendEmailVerification(int customerId, string email, string address);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ThreeInvalidAttempts", ReplyAction="http://tempuri.org/IEzService/ThreeInvalidAttemptsResponse")]
         WinFormTestApp.StasEzService.ActionMetaData ThreeInvalidAttempts(int customerId, string password);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TransferCashFailed", ReplyAction="http://tempuri.org/IEzService/TransferCashFailedResponse")]
         WinFormTestApp.StasEzService.ActionMetaData TransferCashFailed(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CaisGenerate(int underwriterId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CaisUpdate(int userId, int caisId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
         WinFormTestApp.StasEzService.ActionMetaData FirstOfMonthStatusNotifier();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
         WinFormTestApp.StasEzService.ActionMetaData FraudChecker(int customerId, WinFormTestApp.StasEzService.FraudMode mode);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
         WinFormTestApp.StasEzService.ActionMetaData LateBy14Days();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
         WinFormTestApp.StasEzService.ActionMetaData PayPointCharger();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
         WinFormTestApp.StasEzService.ActionMetaData SetLateLoanStatus();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
         WinFormTestApp.StasEzService.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateAllMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateAllMarketplacesResponse")]
         WinFormTestApp.StasEzService.ActionMetaData UpdateAllMarketplaces(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
         WinFormTestApp.StasEzService.ActionMetaData UpdateTransactionStatus();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         WinFormTestApp.StasEzService.ActionMetaData XDaysDue();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CheckExperianCompany(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CheckExperianConsumer(int customerId, int directorId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAml", ReplyAction="http://tempuri.org/IEzService/CheckAmlResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CheckAml(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAmlCustom", ReplyAction="http://tempuri.org/IEzService/CheckAmlCustomResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwa", ReplyAction="http://tempuri.org/IEzService/CheckBwaResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CheckBwa(int customerId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwaCustom", ReplyAction="http://tempuri.org/IEzService/CheckBwaCustomResponse")]
         WinFormTestApp.StasEzService.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
         WinFormTestApp.StasEzService.ActionMetaData MainStrategy1(int uderwriterId, int customerId, WinFormTestApp.StasEzService.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
         WinFormTestApp.StasEzService.ActionMetaData MainStrategy2(int uderwriterId, int customerId, WinFormTestApp.StasEzService.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
         WinFormTestApp.StasEzService.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
         WinFormTestApp.StasEzService.ActionMetaData MainStrategySync1(int underwriterId, int customerId, WinFormTestApp.StasEzService.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
         WinFormTestApp.StasEzService.BoolActionResult GenerateMobileCode(string phone);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         WinFormTestApp.StasEzService.BoolActionResult ValidateMobileCode(string phone, string code);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
         WinFormTestApp.StasEzService.WizardConfigsActionResult GetWizardConfigs();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
         WinFormTestApp.StasEzService.ActionMetaData UpdateCurrencyRates();
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
         WinFormTestApp.StasEzService.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites", ReplyAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse")]
         WinFormTestApp.StasEzService.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IEzServiceChannel : WinFormTestApp.StasEzService.IEzService, System.ServiceModel.IClientChannel {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class EzServiceClient : System.ServiceModel.ClientBase<WinFormTestApp.StasEzService.IEzService>, WinFormTestApp.StasEzService.IEzService {
-        
+
         public EzServiceClient() {
         }
-        
+
         public EzServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
-        
+
         public EzServiceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public EzServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
             return base.Channel.GreetingMailStrategy(nCustomerID, sConfirmationEmail);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
             return base.Channel.ApprovedUser(userId, customerId, loanAmount);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CashTransferred(int customerId, decimal amount) {
             return base.Channel.CashTransferred(customerId, amount);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData EmailUnderReview(int customerId) {
             return base.Channel.EmailUnderReview(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData Escalated(int customerId) {
             return base.Channel.Escalated(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData GetCashFailed(int customerId) {
             return base.Channel.GetCashFailed(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
             return base.Channel.LoanFullyPaid(customerId, loanRefNum);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId) {
             return base.Channel.MoreAmlAndBwaInformation(userId, customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData MoreAmlInformation(int userId, int customerId) {
             return base.Channel.MoreAmlInformation(userId, customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData MoreBwaInformation(int userId, int customerId) {
             return base.Channel.MoreBwaInformation(userId, customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData PasswordChanged(int customerId, string password) {
             return base.Channel.PasswordChanged(customerId, password);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData PasswordRestored(int customerId, string password) {
             return base.Channel.PasswordRestored(customerId, password);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum) {
             return base.Channel.PayEarly(customerId, amount, loanRefNum);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId) {
             return base.Channel.PayPointAddedByUnderwriter(customerId, cardno, underwriterName, underwriterId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName) {
             return base.Channel.PayPointNameValidationFailed(userId, customerId, cardHolderName);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData RejectUser(int userId, int customerId) {
             return base.Channel.RejectUser(userId, customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
             return base.Channel.EmailRolloverAdded(customerId, amount);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {
             return base.Channel.RenewEbayToken(customerId, marketplaceName, eBayAddress);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData RequestCashWithoutTakenLoan(int customerId) {
             return base.Channel.RequestCashWithoutTakenLoan(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData SendEmailVerification(int customerId, string email, string address) {
             return base.Channel.SendEmailVerification(customerId, email, address);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData ThreeInvalidAttempts(int customerId, string password) {
             return base.Channel.ThreeInvalidAttempts(customerId, password);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData TransferCashFailed(int customerId) {
             return base.Channel.TransferCashFailed(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CaisGenerate(int underwriterId) {
             return base.Channel.CaisGenerate(underwriterId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CaisUpdate(int userId, int caisId) {
             return base.Channel.CaisUpdate(userId, caisId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData FirstOfMonthStatusNotifier() {
             return base.Channel.FirstOfMonthStatusNotifier();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData FraudChecker(int customerId, WinFormTestApp.StasEzService.FraudMode mode) {
             return base.Channel.FraudChecker(customerId, mode);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData LateBy14Days() {
             return base.Channel.LateBy14Days();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData PayPointCharger() {
             return base.Channel.PayPointCharger();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData SetLateLoanStatus() {
             return base.Channel.SetLateLoanStatus();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId) {
             return base.Channel.UpdateMarketplace(customerId, marketplaceId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData UpdateAllMarketplaces(int customerId) {
             return base.Channel.UpdateAllMarketplaces(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData UpdateTransactionStatus() {
             return base.Channel.UpdateTransactionStatus();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData XDaysDue() {
             return base.Channel.XDaysDue();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CheckExperianCompany(int customerId) {
             return base.Channel.CheckExperianCompany(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
             return base.Channel.CheckExperianConsumer(customerId, directorId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CheckAml(int customerId) {
             return base.Channel.CheckAml(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode) {
             return base.Channel.CheckAmlCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CheckBwa(int customerId) {
             return base.Channel.CheckBwa(customerId);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber) {
             return base.Channel.CheckBwaCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData MainStrategy1(int uderwriterId, int customerId, WinFormTestApp.StasEzService.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData MainStrategy2(int uderwriterId, int customerId, WinFormTestApp.StasEzService.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
             return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
             return base.Channel.MainStrategy3(uderwriterId, customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData MainStrategySync1(int underwriterId, int customerId, WinFormTestApp.StasEzService.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
-        
+
         public WinFormTestApp.StasEzService.BoolActionResult GenerateMobileCode(string phone) {
             return base.Channel.GenerateMobileCode(phone);
         }
-        
+
         public WinFormTestApp.StasEzService.BoolActionResult ValidateMobileCode(string phone, string code) {
             return base.Channel.ValidateMobileCode(phone, code);
         }
-        
+
         public WinFormTestApp.StasEzService.WizardConfigsActionResult GetWizardConfigs() {
             return base.Channel.GetWizardConfigs();
         }
-        
+
         public WinFormTestApp.StasEzService.ActionMetaData UpdateCurrencyRates() {
             return base.Channel.UpdateCurrencyRates();
         }
-        
+
         public WinFormTestApp.StasEzService.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
             return base.Channel.QuickOffer(customerId, saveOfferToDB);
         }
-        
+
         public WinFormTestApp.StasEzService.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB) {
             return base.Channel.QuickOfferWithPrerequisites(customerId, saveOfferToDB);
         }

@@ -5,13 +5,9 @@ using System.Data.Common;
 
 namespace Reports
 {
-	#region class CciReportItem
 
 	public class CciReportItem
 	{
-		#region public
-
-		#region method CreateTable
 
 		public static DataTable CreateTable()
 		{
@@ -52,10 +48,6 @@ namespace Reports
 			return oOutput;
 		} // CreateTable
 
-		#endregion method CreateTable
-
-		#region constructor
-
 		public CciReportItem(DbDataReader oRow, SortedDictionary<int, decimal> oEarnedInterestList)
 		{
 			try
@@ -93,10 +85,6 @@ namespace Reports
 			} // try
 		} // constructor
 
-		#endregion constructor
-
-		#region method ToRow
-
 		public void ToRow(DataTable tbl)
 		{
 			if (Math.Abs(TotalDue) < 0.01m)
@@ -117,10 +105,6 @@ namespace Reports
 				PropertyStatusDescription, Notes, sClass
 			);
 		} // ToRow
-
-		#endregion method ToRow
-
-		#region properties
 
 		public string DebtorType { get; private set; }
 		public string LoanType { get; private set; }
@@ -153,14 +137,6 @@ namespace Reports
 		public string PropertyStatusDescription { get; private set; }
 		public string Notes { get { return ""; } }
 
-		#endregion properties
-
-		#endregion public
-
-		#region private
-
-		#region method AdjustDate
-
 		private static DateTime? AdjustDate(DateTime? oDate)
 		{
 			if (!oDate.HasValue)
@@ -169,12 +145,8 @@ namespace Reports
 			return (oDate.Value.Date == ms_oLongAgo.Date) ? (DateTime?)null : oDate.Value.Date;
 		} // AdjustDate
 
-		#endregion method AdjustDate
-
 		private static DateTime ms_oLongAgo = new DateTime(1976, 7, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		#endregion private
 	} // class CciReportItem
 
-	#endregion class CciReportItem
 } // namespace Reports

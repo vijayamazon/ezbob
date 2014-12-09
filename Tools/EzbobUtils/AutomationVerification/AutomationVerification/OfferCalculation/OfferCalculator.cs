@@ -72,7 +72,6 @@
 				} while (setupFee <= setupFeeRange.MaxSetupFee);
 			}
 
-
 			if (!input.AspireToMinSetupFee) {
 				var wasTooBigIneteres = false;
 				var setupFee = setupFeeRange.MaxSetupFee;

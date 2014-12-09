@@ -8,9 +8,6 @@
 	using GoogleAnalyticsLib;
 
 	public class UpdateGoogleAnalytics : AStrategy {
-		#region public
-
-		#region constructor
 
 		public UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			if ((oBackfillStartDate != null) && (oBackfillEndDate != null)) {
@@ -31,17 +28,9 @@
 			m_sCertThumb = CurrentValues.Instance.GoogleAnalyticsCertThumb;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "UpdateGoogleAnalytics"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			try {
@@ -69,27 +58,15 @@
 			} // try
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly GoogleAnalytics m_oApp;
 		private readonly DateTime? m_oBackfillStartDate;
 		private readonly DateTime? m_oBackfillEndDate;
 		private readonly string m_sCertThumb;
 		private DateTime m_oReportDate;
 
-		#region property ReportDateStr
-
 		private string ReportDateStr {
 			get { return m_oReportDate.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture); }
 		} // ReportDateStr
-
-		#endregion property ReportDateStr
-
-		#region method UpdateCurrentReportDate
 
 		private void UpdateCurrentReportDate() {
 			Log.Debug("UpdateCurrentReportDate('{0}') started...", ReportDateStr);
@@ -111,10 +88,6 @@
 
 			Log.Debug("UpdateCurrentReportDate('{0}') complete.", ReportDateStr);
 		} // UpdateCurrentReportDate
-
-		#endregion method UpdateCurrentReportDate
-
-		#region method SaveStats
 
 		private void SaveStats(SortedDictionary<string, int> oStats, string sDescription) {
 			Log.Debug("Saving {1} stats for {0} started...", ReportDateStr, sDescription);
@@ -152,8 +125,5 @@
 			Log.Debug("Saving {1} stats for {0} complete.", ReportDateStr, sDescription);
 		} // SaveStats
 
-		#endregion method SaveStats
-
-		#endregion private
 	} // class UpdateGoogleAnalytics
 } // namespace

@@ -1,13 +1,8 @@
 ﻿namespace EZBob.DatabaseLib.Common {
 	using System;
 
-	#region class Coin
-
 	[Serializable]
 	public class Coin {
-		#region public
-
-		#region constructor
 
 		public Coin() : this(0, "GBP") {
 		} // constructor
@@ -17,22 +12,10 @@
 			CurrencyCode = sCurrency;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Amount
-
 		public virtual decimal Amount { get; set; }
-
-		#endregion property Amount
-
-		#region property CurrencyCode
 
 		public virtual string CurrencyCode { get; set; }
 
-		#endregion property CurrencyCode
-
-		#endregion public
 	} // class Coin
 
-	#endregion class Coin
 } // namespace EZBob.DatabaseLib.Common

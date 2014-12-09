@@ -8,7 +8,6 @@
 	{
 		private readonly string query;
 		public bool IsError { get; private set; }
-		#region constructor
 
 		public ExecuteQuery(string query, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
@@ -16,17 +15,9 @@
 			this.query = query;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Execute query"; }
 		} // Name
-
-		#endregion property Name
-
-		#region property Execute
 
 		public override void Execute() {
 			try
@@ -40,6 +31,5 @@
 			}
 		} // Execute
 
-		#endregion property Execute
 	} // class ExecuteQuery
 } // namespace

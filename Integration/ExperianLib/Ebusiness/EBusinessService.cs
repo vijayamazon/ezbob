@@ -18,9 +18,6 @@
 	using StructureMap;
 
 	public class EBusinessService {
-		#region public
-
-		#region constructor
 
 		public EBusinessService(AConnection oDB) {
 			m_oRetryer = new SqlRetryer(oLog: ms_oLog);
@@ -29,10 +26,6 @@
 
 			m_oDB = oDB;
 		} // constructor
-
-		#endregion constructor
-
-		#region method TargetBusiness
 
 		public TargetResults TargetBusiness(string companyName, string postCode, int customerId, TargetResults.LegalStatus nFilter, string regNum = "") {
 			try {
@@ -60,10 +53,6 @@
 				throw;
 			} // try
 		} // TargetBusiness
-
-		#endregion method TargetBusiness
-
-		#region method GetLimitedBusinessData
 
 		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			ms_oLog.Debug("Begin GetLimitedBusinessData({0}, {1}, {2}, {3})...", regNumber, customerId, checkInCacheOnly, forceCheck);
@@ -105,10 +94,6 @@
 			return oRes;
 		} // GetLimitedBusinessData
 
-		#endregion method GetLimitedBusinessData
-
-		#region method GetNotLimitedBusinessData
-
 		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
 			if (oRes == null)
@@ -121,10 +106,6 @@
 			ms_oLog.Info("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", oRes.BureauScore, oRes.MaxBureauScore, customerId, regNumber);
 			return oRes;
 		} // GetNotLimitedBusinessData
-
-		#endregion method GetNotLimitedBusinessData
-
-		#region method TargetCache
 
 		public CompanyInfo TargetCache(int customerId, string refNumber) {
 			return m_oRetryer.Retry(() => {
@@ -143,14 +124,6 @@
 				return null;
 			}, "EBusinessService.TargetCache(" + customerId + ", " + refNumber + ")");
 		} // TargetCache
-
-		#endregion method TargetCache
-
-		#endregion public
-
-		#region private
-
-		#region method GetOneLimitedBusinessData
 
 		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			if (string.IsNullOrWhiteSpace(regNumber))
@@ -214,10 +187,6 @@
 			} // try
 		} // GetOneLimitedBusinessData
 
-		#endregion method GetOneLimitedBusinessData
-
-		#region method DownloadOneLimitedFromExperian
-
 		private ExperianLtd DownloadOneLimitedFromExperian(string regNumber, int customerId) {
 			ms_oLog.Debug("Downloading data from Experian for company {0} and customer {1}...", regNumber, customerId);
 
@@ -234,10 +203,6 @@
 			return pkg.Out.ExperianLtd;
 		} // DownloadOneLimitedFromExperian
 
-		#endregion method DownloadOneLimitedFromExperian
-
-		#region method CacheExpired
-
 		private bool CacheExpired(DateTime? updateDate) {
 			if (!updateDate.HasValue)
 				return true;
@@ -245,10 +210,6 @@
 			int cacheIsValidForDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 			return (DateTime.UtcNow - updateDate.Value).TotalDays > cacheIsValidForDays;
 		} // CacheNotExpired
-
-		#endregion method CacheExpired
-
-		#region method GetOneNotLimitedBusinessData
 
 		private NonLimitedResults GetOneNotLimitedBusinessData(string refNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			try {
@@ -338,10 +299,6 @@
 			return new NonLimitedResults("No data found.", 0);
 		} // BuildResponseFromDb
 
-		#endregion method GetOneNotLimitedBusinessData
-
-		#region method MakeRequest
-
 		private string MakeRequest(string post) {
 			string sRequestID = Guid.NewGuid().ToString("N");
 
@@ -377,10 +334,6 @@
 			} // using response
 		} // MakeRequest
 
-		#endregion method MakeRequest
-
-		#region method GetResource
-
 		private string GetResource(string resName, params object[] p) {
 			using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resName)) {
 				if (s == null)
@@ -394,10 +347,6 @@
 			} // using
 		} // GetResource
 
-		#endregion method GetResource
-
-		#region properties
-
 		private readonly SqlRetryer m_oRetryer;
 		private readonly NonLimitedParser nonLimitedParser;
 		private readonly string eSeriesUrl;
@@ -405,8 +354,5 @@
 		private readonly AConnection m_oDB;
 		private static readonly SafeILog ms_oLog = new SafeILog(typeof(EBusinessService));
 
-		#endregion properties
-
-		#endregion private
 	} // class EBusinessService
 } // namespace

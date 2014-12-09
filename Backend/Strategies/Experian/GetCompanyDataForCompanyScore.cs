@@ -5,25 +5,16 @@
 	using Ezbob.Logger;
 
 	public class GetCompanyDataForCompanyScore : AStrategy {
-		#region constructor
 
 		public GetCompanyDataForCompanyScore(AConnection oDb, ASafeLog oLog, string refNumber) : base(oDb, oLog) {
 			this.refNumber = refNumber;
 		} // constructor
-
-		#endregion constructor
-
-		#region property Name
 
 		public override string Name {
 			get { return "GetCompanyDataForCompanyScore"; }
 		} // Name
 
 		public CompanyData Data { get; set; }
-
-		#endregion property Name
-
-		#region property Execute
 
 		public override void Execute() {
 			Data = new CompanyData { IsLimited = true };
@@ -68,12 +59,6 @@
 
 			FillScoreHistory();
 		} // Execute
-
-		#endregion property Execute
-
-		#region private
-
-		#region method FillBasicData
 
 		private void FillBasicData(SafeReader nonLimitedSafeReader) {
 			Data.BusinessName = nonLimitedSafeReader["BusinessName"].ToNullString();
@@ -139,10 +124,6 @@
 			Data.Errors = nonLimitedSafeReader["Errors"].ToNullString();
 		} // FillBasicData
 
-		#endregion method FillBasicData
-
-		#region method FillSicCodes
-
 		private void FillSicCodes(int experianNonLimitedResultId) {
 			DB.ForEachRowSafe(
 				(sicCodesSafeReader, bRowsetStart) => {
@@ -164,10 +145,6 @@
 				new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId)
 			);
 		} // FillSicCodes
-
-		#endregion method FillSicCodes
-
-		#region method FillBankruptcy
 
 		private void FillBankruptcy(int experianNonLimitedResultId) {
 			DB.ForEachRowSafe(
@@ -197,10 +174,6 @@
 				new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId)
 			);
 		} // FillBankruptcy
-
-		#endregion method FillBankruptcy
-
-		#region method FillCcj
 
 		private void FillCcj(int experianNonLimitedResultId) {
 			DB.ForEachRowSafe(
@@ -279,10 +252,6 @@
 			);
 		} // FillCcj
 
-		#endregion method FillCcj
-
-		#region method FillPaymentPerformanceDetails
-
 		private void FillPaymentPerformanceDetails(int experianNonLimitedResultId) {
 			DB.ForEachRowSafe(
 				(paymentPerformanceDetailsSafeReader, bRowsetStart) => {
@@ -302,10 +271,6 @@
 				new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId)
 			);
 		} // FillPaymentPerformanceDetails
-
-		#endregion method FillPaymentPerformanceDetails
-
-		#region method FillPreviousSearches
 
 		private void FillPreviousSearches(int experianNonLimitedResultId) {
 			DB.ForEachRowSafe(
@@ -329,10 +294,6 @@
 			);
 		} // FillPreviousSearches
 
-		#endregion method FillPreviousSearches
-
-		#region method FillScoreHistory
-
 		private void FillScoreHistory() {
 			var scoreHistory = DB.Fill<ScoreAtDate>(
 				"GetCompanyHistory",
@@ -343,10 +304,7 @@
 			Data.ScoreHistory = scoreHistory;
 		} // FillScoreHistory
 
-		#endregion method FillScoreHistory
-
 		private readonly string refNumber;
 
-		#endregion private
 	} // class GetCompanyDataForCompanyScore
 } // namespace

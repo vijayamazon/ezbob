@@ -1,8 +1,7 @@
-using System;
+﻿using System;
 using System.Linq;
 
 namespace EZBob.DatabaseLib.Model.Database {
-	#region class CompanyEmployeeCount
 
 	public class CompanyEmployeeCount {
 		public static DateTime LongAgo() {
@@ -23,10 +22,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual int? EmployeeCountChange { get; set; }
 		public virtual double TotalMonthlySalary { get; set; }
 	} // class CompanyEmployeeCount
-
-	#endregion class CompanyEmployeeCount
-
-	#region class CompanyEmployeeCountInfo
 
 	public class CompanyEmployeeCountInfo {
 		public CompanyEmployeeCountInfo() {
@@ -59,5 +54,4 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public bool HasData { get; private set; }
 	} // class CompanyEmployeeCountInfo 
 
-	#endregion class CompanyEmployeeCountInfo
 } // namespace

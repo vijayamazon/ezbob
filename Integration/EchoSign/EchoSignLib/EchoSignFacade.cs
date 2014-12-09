@@ -14,22 +14,13 @@
 	using EchoSignClient = EchoSignLib.EchoSignService.EchoSignDocumentService19PortTypeClient;
 	using FileInfo = EchoSignService.FileInfo;
 
-	#region class EchoSignFacadeExt
-
 	internal static class EchoSignFacadeExt {
 		public static bool IsTerminal(this AgreementStatus? nStatus, SortedSet<AgreementStatus> oTerminalStatuses) {
 			return (oTerminalStatuses != null) && nStatus.HasValue && oTerminalStatuses.Contains(nStatus.Value);
 		} // IsTerminal
 	} // class EchoSignFacadeExt
 
-	#endregion class EchoSignFacadeExt
-
-	#region class EchoSignFacade
-
 	public class EchoSignFacade {
-		#region public
-
-		#region constructor
 
 		public EchoSignFacade(AConnection oDB, ASafeLog oLog) {
 			m_bIsReady = false;
@@ -52,10 +43,6 @@
 
 			m_oLog.Say(m_bIsReady ? Severity.Msg : Severity.Warn, "EchoSign façade is {0}ready.", m_bIsReady ? string.Empty : "NOT ");
 		} // constructor
-
-		#endregion constructor
-
-		#region method Send
 
 		public EchoSignSendResult Send(IEnumerable<EchoSignEnvelope> oCorrespondence) {
 			int nTotalCount = 0;
@@ -187,10 +174,6 @@
 			} // switch
 		} // Send
 
-		#endregion method Send
-
-		#region method ProcessPending
-
 		public List<EsignatureStatus> ProcessPending(int? nCustomerID = null) {
 			if (!m_bIsReady) {
 				m_oLog.Msg("EchoSign cannot process pending - not ready.");
@@ -238,14 +221,6 @@
 			return oCompleted;
 		} // ProcessPending
 
-		#endregion method ProcessPending
-
-		#endregion public
-
-		#region private
-
-		#region method GetDocuments
-
 		private SignedDoc GetDocuments(Esignature oSignature) {
 			m_oLog.Msg("Loading documents for the key '{0}' started...", oSignature.DocumentKey);
 
@@ -290,10 +265,6 @@
 
 			return new SignedDoc { HasValue = true, MimeType = doc.mimetype, Content = doc.bytes, };
 		} // GetDocuments
-
-		#endregion method GetDocuments
-
-		#region method GetDocumentInfo
 
 		private AgreementStatus? GetDocumentInfo(Esignature oSignature) {
 			m_oLog.Msg("Loading document info for the key '{0}' started...", oSignature.DocumentKey);
@@ -344,10 +315,6 @@
 
 			return oResult.status;
 		} // GetDocumentInfo
-
-		#endregion method GetDocumentInfo
-
-		#region method SendOne
 
 		private EchoSignSendResult SendOne(
 			Template oTemplate,
@@ -413,10 +380,6 @@
 			return EchoSignSendResult.Success;
 		} // SendOne
 
-		#endregion method SendOne
-
-		#region method LoadConfiguration
-
 		private void LoadConfiguration() {
 			m_sApiKey = CurrentValues.Instance.EchoSignApiKey;
 			m_sUrl = CurrentValues.Instance.EchoSignUrl;
@@ -474,10 +437,6 @@
 			m_oLog.Debug("************************************************************************");
 		} // LoadConfiguration
 
-		#endregion method LoadConfiguration
-
-		#region method CreateClient
-
 		private void CreateClient() {
 			m_oEchoSign = new EchoSignClient(
 				new BasicHttpsBinding {
@@ -514,22 +473,14 @@
 				m_oLog.Alert("EchoSign echo failed!");
 		} // CreateClient
 
-		#endregion method CreateClient
-
-		#region class SigedDoc
-
 		private class SignedDoc {
 			public bool HasValue { get; set; }
 			public string MimeType { get; set; }
 			public byte[] Content { get; set; }
 		} // class SignedDoc
 
-		#endregion class SigedDoc
-
-		#region fields & const
-
 		private SortedSet<AgreementStatus> m_oTerminalStatuses;
- 
+
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 
@@ -544,10 +495,6 @@
 
 		private const string ExpectedPong = "It works!";
 
-		#endregion fields & const
-
-		#endregion private
 	} // class EchoSignFacade
 
-	#endregion class EchoSignFacade
 } // namespace

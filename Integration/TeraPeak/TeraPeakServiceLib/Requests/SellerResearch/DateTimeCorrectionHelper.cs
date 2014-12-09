@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 
 namespace EzBob.TeraPeakServiceLib.Requests.SellerResearch
@@ -6,7 +6,6 @@ namespace EzBob.TeraPeakServiceLib.Requests.SellerResearch
 	internal class DateTimeCorrectionHelper
 	{
 		private static readonly TimeZoneInfo _PacificStandardTimeZone = TimeZoneInfo.FindSystemTimeZoneById( "Pacific Standard Time" );
-
 
 		/// <summary>
 		/// 

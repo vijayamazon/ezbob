@@ -20,139 +20,138 @@ namespace EchoSoap.secure.echosign.com {
     using System.Web.Services.Protocols;
     using System.ComponentModel;
     using System.Xml.Serialization;
-    
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="EchoSignDocumentService18HttpBinding", Namespace="http://api.echosign")]
     public partial class EchoSignDocumentService18 : System.Web.Services.Protocols.SoapHttpClientProtocol {
-        
+
         private System.Threading.SendOrPostCallback cancelDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createAccountOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createEmbeddedWidgetOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createFormOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createGroupOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createLibraryDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createPersonalEmbeddedWidgetOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createPersonalUrlWidgetOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createUrlWidgetOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback createUserOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback delegateSigningOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback deleteGroupOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback deliverDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback disableWidgetOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback enableWidgetOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getAuditTrailOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getComposeDocumentUrlOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentByVersionOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentEventsForUserOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentImageUrlsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentInfoOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentInfosByExternalIdOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentUrlByVersionOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentUrlsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getDocumentsForUserOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getFormDataOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getGroupsInAccountOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getImagesByVersionOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getLatestDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getLatestDocumentUrlOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getLatestImagesOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getLibraryDocumentsForUserOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getMegaSignDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getMyDocumentsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getMyLibraryDocumentsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getMyWidgetsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getSigningUrlOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getSupportingDocumentsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getUserDocumentsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getUserInfoOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getUsersInAccountOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getUsersInGroupOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback getWidgetsForUserOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback initiateInteractiveSendDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback moveUsersToGroupOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback notifyDocumentVaultedOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback personalizeEmbeddedWidgetOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback personalizeUrlWidgetOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback rejectDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback removeDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback renameGroupOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback replaceSignerOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback searchUserDocumentsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback sendDocumentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback sendDocumentInteractiveOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback sendDocumentMegaSignOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback sendReminderOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback testEchoFileOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback testPingOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback verifyUserOperationCompleted;
-        
+
         private bool useDefaultCredentialsSetExplicitly;
-        
+
         /// <remarks/>
         public EchoSignDocumentService18() {
             this.Url = global::EchoSoap.Properties.Settings.Default.EchoSignDocumentService;
@@ -164,7 +163,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         public new string Url {
             get {
                 return base.Url;
@@ -178,7 +177,7 @@ namespace EchoSoap.secure.echosign.com {
                 base.Url = value;
             }
         }
-        
+
         public new bool UseDefaultCredentials {
             get {
                 return base.UseDefaultCredentials;
@@ -188,190 +187,190 @@ namespace EchoSoap.secure.echosign.com {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         /// <remarks/>
         public event cancelDocumentCompletedEventHandler cancelDocumentCompleted;
-        
+
         /// <remarks/>
         public event createAccountCompletedEventHandler createAccountCompleted;
-        
+
         /// <remarks/>
         public event createEmbeddedWidgetCompletedEventHandler createEmbeddedWidgetCompleted;
-        
+
         /// <remarks/>
         public event createFormCompletedEventHandler createFormCompleted;
-        
+
         /// <remarks/>
         public event createGroupCompletedEventHandler createGroupCompleted;
-        
+
         /// <remarks/>
         public event createLibraryDocumentCompletedEventHandler createLibraryDocumentCompleted;
-        
+
         /// <remarks/>
         public event createPersonalEmbeddedWidgetCompletedEventHandler createPersonalEmbeddedWidgetCompleted;
-        
+
         /// <remarks/>
         public event createPersonalUrlWidgetCompletedEventHandler createPersonalUrlWidgetCompleted;
-        
+
         /// <remarks/>
         public event createUrlWidgetCompletedEventHandler createUrlWidgetCompleted;
-        
+
         /// <remarks/>
         public event createUserCompletedEventHandler createUserCompleted;
-        
+
         /// <remarks/>
         public event delegateSigningCompletedEventHandler delegateSigningCompleted;
-        
+
         /// <remarks/>
         public event deleteGroupCompletedEventHandler deleteGroupCompleted;
-        
+
         /// <remarks/>
         public event deliverDocumentCompletedEventHandler deliverDocumentCompleted;
-        
+
         /// <remarks/>
         public event disableWidgetCompletedEventHandler disableWidgetCompleted;
-        
+
         /// <remarks/>
         public event enableWidgetCompletedEventHandler enableWidgetCompleted;
-        
+
         /// <remarks/>
         public event getAuditTrailCompletedEventHandler getAuditTrailCompleted;
-        
+
         /// <remarks/>
         public event getComposeDocumentUrlCompletedEventHandler getComposeDocumentUrlCompleted;
-        
+
         /// <remarks/>
         public event getDocumentByVersionCompletedEventHandler getDocumentByVersionCompleted;
-        
+
         /// <remarks/>
         public event getDocumentEventsForUserCompletedEventHandler getDocumentEventsForUserCompleted;
-        
+
         /// <remarks/>
         public event getDocumentImageUrlsCompletedEventHandler getDocumentImageUrlsCompleted;
-        
+
         /// <remarks/>
         public event getDocumentInfoCompletedEventHandler getDocumentInfoCompleted;
-        
+
         /// <remarks/>
         public event getDocumentInfosByExternalIdCompletedEventHandler getDocumentInfosByExternalIdCompleted;
-        
+
         /// <remarks/>
         public event getDocumentUrlByVersionCompletedEventHandler getDocumentUrlByVersionCompleted;
-        
+
         /// <remarks/>
         public event getDocumentUrlsCompletedEventHandler getDocumentUrlsCompleted;
-        
+
         /// <remarks/>
         public event getDocumentsCompletedEventHandler getDocumentsCompleted;
-        
+
         /// <remarks/>
         public event getDocumentsForUserCompletedEventHandler getDocumentsForUserCompleted;
-        
+
         /// <remarks/>
         public event getFormDataCompletedEventHandler getFormDataCompleted;
-        
+
         /// <remarks/>
         public event getGroupsInAccountCompletedEventHandler getGroupsInAccountCompleted;
-        
+
         /// <remarks/>
         public event getImagesByVersionCompletedEventHandler getImagesByVersionCompleted;
-        
+
         /// <remarks/>
         public event getLatestDocumentCompletedEventHandler getLatestDocumentCompleted;
-        
+
         /// <remarks/>
         public event getLatestDocumentUrlCompletedEventHandler getLatestDocumentUrlCompleted;
-        
+
         /// <remarks/>
         public event getLatestImagesCompletedEventHandler getLatestImagesCompleted;
-        
+
         /// <remarks/>
         public event getLibraryDocumentsForUserCompletedEventHandler getLibraryDocumentsForUserCompleted;
-        
+
         /// <remarks/>
         public event getMegaSignDocumentCompletedEventHandler getMegaSignDocumentCompleted;
-        
+
         /// <remarks/>
         public event getMyDocumentsCompletedEventHandler getMyDocumentsCompleted;
-        
+
         /// <remarks/>
         public event getMyLibraryDocumentsCompletedEventHandler getMyLibraryDocumentsCompleted;
-        
+
         /// <remarks/>
         public event getMyWidgetsCompletedEventHandler getMyWidgetsCompleted;
-        
+
         /// <remarks/>
         public event getSigningUrlCompletedEventHandler getSigningUrlCompleted;
-        
+
         /// <remarks/>
         public event getSupportingDocumentsCompletedEventHandler getSupportingDocumentsCompleted;
-        
+
         /// <remarks/>
         public event getUserDocumentsCompletedEventHandler getUserDocumentsCompleted;
-        
+
         /// <remarks/>
         public event getUserInfoCompletedEventHandler getUserInfoCompleted;
-        
+
         /// <remarks/>
         public event getUsersInAccountCompletedEventHandler getUsersInAccountCompleted;
-        
+
         /// <remarks/>
         public event getUsersInGroupCompletedEventHandler getUsersInGroupCompleted;
-        
+
         /// <remarks/>
         public event getWidgetsForUserCompletedEventHandler getWidgetsForUserCompleted;
-        
+
         /// <remarks/>
         public event initiateInteractiveSendDocumentCompletedEventHandler initiateInteractiveSendDocumentCompleted;
-        
+
         /// <remarks/>
         public event moveUsersToGroupCompletedEventHandler moveUsersToGroupCompleted;
-        
+
         /// <remarks/>
         public event notifyDocumentVaultedCompletedEventHandler notifyDocumentVaultedCompleted;
-        
+
         /// <remarks/>
         public event personalizeEmbeddedWidgetCompletedEventHandler personalizeEmbeddedWidgetCompleted;
-        
+
         /// <remarks/>
         public event personalizeUrlWidgetCompletedEventHandler personalizeUrlWidgetCompleted;
-        
+
         /// <remarks/>
         public event rejectDocumentCompletedEventHandler rejectDocumentCompleted;
-        
+
         /// <remarks/>
         public event removeDocumentCompletedEventHandler removeDocumentCompleted;
-        
+
         /// <remarks/>
         public event renameGroupCompletedEventHandler renameGroupCompleted;
-        
+
         /// <remarks/>
         public event replaceSignerCompletedEventHandler replaceSignerCompleted;
-        
+
         /// <remarks/>
         public event searchUserDocumentsCompletedEventHandler searchUserDocumentsCompleted;
-        
+
         /// <remarks/>
         public event sendDocumentCompletedEventHandler sendDocumentCompleted;
-        
+
         /// <remarks/>
         public event sendDocumentInteractiveCompletedEventHandler sendDocumentInteractiveCompleted;
-        
+
         /// <remarks/>
         public event sendDocumentMegaSignCompletedEventHandler sendDocumentMegaSignCompleted;
-        
+
         /// <remarks/>
         public event sendReminderCompletedEventHandler sendReminderCompleted;
-        
+
         /// <remarks/>
         public event testEchoFileCompletedEventHandler testEchoFileCompleted;
-        
+
         /// <remarks/>
         public event testPingCompletedEventHandler testPingCompleted;
-        
+
         /// <remarks/>
         public event verifyUserCompletedEventHandler verifyUserCompleted;
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -383,7 +382,7 @@ namespace EchoSoap.secure.echosign.com {
                         notifySigner});
             return ((CancelDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincancelDocument(string apiKey, string documentKey, string comment, bool notifySigner, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("cancelDocument", new object[] {
@@ -392,18 +391,18 @@ namespace EchoSoap.secure.echosign.com {
                         comment,
                         notifySigner}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public CancelDocumentResult EndcancelDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((CancelDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void cancelDocumentAsync(string apiKey, string documentKey, string comment, bool notifySigner) {
             this.cancelDocumentAsync(apiKey, documentKey, comment, notifySigner, null);
         }
-        
+
         /// <remarks/>
         public void cancelDocumentAsync(string apiKey, string documentKey, string comment, bool notifySigner, object userState) {
             if ((this.cancelDocumentOperationCompleted == null)) {
@@ -415,14 +414,14 @@ namespace EchoSoap.secure.echosign.com {
                         comment,
                         notifySigner}, this.cancelDocumentOperationCompleted, userState);
         }
-        
+
         private void OncancelDocumentOperationCompleted(object arg) {
             if ((this.cancelDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.cancelDocumentCompleted(this, new cancelDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -433,7 +432,7 @@ namespace EchoSoap.secure.echosign.com {
                         accountCreationInfo});
             return ((CreateAccountResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreateAccount(string apiKey, UserCreationInfo userCreationInfo, AccountCreationInfo accountCreationInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createAccount", new object[] {
@@ -441,18 +440,18 @@ namespace EchoSoap.secure.echosign.com {
                         userCreationInfo,
                         accountCreationInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public CreateAccountResult EndcreateAccount(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((CreateAccountResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createAccountAsync(string apiKey, UserCreationInfo userCreationInfo, AccountCreationInfo accountCreationInfo) {
             this.createAccountAsync(apiKey, userCreationInfo, accountCreationInfo, null);
         }
-        
+
         /// <remarks/>
         public void createAccountAsync(string apiKey, UserCreationInfo userCreationInfo, AccountCreationInfo accountCreationInfo, object userState) {
             if ((this.createAccountOperationCompleted == null)) {
@@ -463,14 +462,14 @@ namespace EchoSoap.secure.echosign.com {
                         userCreationInfo,
                         accountCreationInfo}, this.createAccountOperationCompleted, userState);
         }
-        
+
         private void OncreateAccountOperationCompleted(object arg) {
             if ((this.createAccountCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createAccountCompleted(this, new createAccountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("embeddedWidgetCreationResult", IsNullable=true)]
@@ -481,7 +480,7 @@ namespace EchoSoap.secure.echosign.com {
                         widgetInfo});
             return ((EmbeddedWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreateEmbeddedWidget(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createEmbeddedWidget", new object[] {
@@ -489,18 +488,18 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         widgetInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public EmbeddedWidgetCreationResult EndcreateEmbeddedWidget(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((EmbeddedWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createEmbeddedWidgetAsync(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo) {
             this.createEmbeddedWidgetAsync(apiKey, senderInfo, widgetInfo, null);
         }
-        
+
         /// <remarks/>
         public void createEmbeddedWidgetAsync(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, object userState) {
             if ((this.createEmbeddedWidgetOperationCompleted == null)) {
@@ -511,14 +510,14 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         widgetInfo}, this.createEmbeddedWidgetOperationCompleted, userState);
         }
-        
+
         private void OncreateEmbeddedWidgetOperationCompleted(object arg) {
             if ((this.createEmbeddedWidgetCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createEmbeddedWidgetCompleted(this, new createEmbeddedWidgetCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("formCreationResult", IsNullable=true)]
@@ -529,7 +528,7 @@ namespace EchoSoap.secure.echosign.com {
                         formInfo});
             return ((FormCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreateForm(string apiKey, SenderInfo senderInfo, FormCreationInfo formInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createForm", new object[] {
@@ -537,18 +536,18 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         formInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public FormCreationResult EndcreateForm(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((FormCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createFormAsync(string apiKey, SenderInfo senderInfo, FormCreationInfo formInfo) {
             this.createFormAsync(apiKey, senderInfo, formInfo, null);
         }
-        
+
         /// <remarks/>
         public void createFormAsync(string apiKey, SenderInfo senderInfo, FormCreationInfo formInfo, object userState) {
             if ((this.createFormOperationCompleted == null)) {
@@ -559,14 +558,14 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         formInfo}, this.createFormOperationCompleted, userState);
         }
-        
+
         private void OncreateFormOperationCompleted(object arg) {
             if ((this.createFormCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createFormCompleted(this, new createFormCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -576,25 +575,25 @@ namespace EchoSoap.secure.echosign.com {
                         groupName});
             return ((CreateGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreateGroup(string apiKey, string groupName, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createGroup", new object[] {
                         apiKey,
                         groupName}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public CreateGroupResult EndcreateGroup(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((CreateGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createGroupAsync(string apiKey, string groupName) {
             this.createGroupAsync(apiKey, groupName, null);
         }
-        
+
         /// <remarks/>
         public void createGroupAsync(string apiKey, string groupName, object userState) {
             if ((this.createGroupOperationCompleted == null)) {
@@ -604,14 +603,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         groupName}, this.createGroupOperationCompleted, userState);
         }
-        
+
         private void OncreateGroupOperationCompleted(object arg) {
             if ((this.createGroupCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createGroupCompleted(this, new createGroupCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("libraryDocumentCreationResult", IsNullable=true)]
@@ -622,7 +621,7 @@ namespace EchoSoap.secure.echosign.com {
                         libraryDocumentCreationInfo});
             return ((LibraryDocumentCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreateLibraryDocument(string apiKey, SenderInfo senderInfo, LibraryDocumentCreationInfo libraryDocumentCreationInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createLibraryDocument", new object[] {
@@ -630,18 +629,18 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         libraryDocumentCreationInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public LibraryDocumentCreationResult EndcreateLibraryDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((LibraryDocumentCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createLibraryDocumentAsync(string apiKey, SenderInfo senderInfo, LibraryDocumentCreationInfo libraryDocumentCreationInfo) {
             this.createLibraryDocumentAsync(apiKey, senderInfo, libraryDocumentCreationInfo, null);
         }
-        
+
         /// <remarks/>
         public void createLibraryDocumentAsync(string apiKey, SenderInfo senderInfo, LibraryDocumentCreationInfo libraryDocumentCreationInfo, object userState) {
             if ((this.createLibraryDocumentOperationCompleted == null)) {
@@ -652,14 +651,14 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         libraryDocumentCreationInfo}, this.createLibraryDocumentOperationCompleted, userState);
         }
-        
+
         private void OncreateLibraryDocumentOperationCompleted(object arg) {
             if ((this.createLibraryDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createLibraryDocumentCompleted(this, new createLibraryDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("embeddedWidgetCreationResult", IsNullable=true)]
@@ -671,7 +670,7 @@ namespace EchoSoap.secure.echosign.com {
                         personalizationInfo});
             return ((EmbeddedWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreatePersonalEmbeddedWidget(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, WidgetPersonalizationInfo personalizationInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createPersonalEmbeddedWidget", new object[] {
@@ -680,18 +679,18 @@ namespace EchoSoap.secure.echosign.com {
                         widgetInfo,
                         personalizationInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public EmbeddedWidgetCreationResult EndcreatePersonalEmbeddedWidget(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((EmbeddedWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createPersonalEmbeddedWidgetAsync(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, WidgetPersonalizationInfo personalizationInfo) {
             this.createPersonalEmbeddedWidgetAsync(apiKey, senderInfo, widgetInfo, personalizationInfo, null);
         }
-        
+
         /// <remarks/>
         public void createPersonalEmbeddedWidgetAsync(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, WidgetPersonalizationInfo personalizationInfo, object userState) {
             if ((this.createPersonalEmbeddedWidgetOperationCompleted == null)) {
@@ -703,14 +702,14 @@ namespace EchoSoap.secure.echosign.com {
                         widgetInfo,
                         personalizationInfo}, this.createPersonalEmbeddedWidgetOperationCompleted, userState);
         }
-        
+
         private void OncreatePersonalEmbeddedWidgetOperationCompleted(object arg) {
             if ((this.createPersonalEmbeddedWidgetCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createPersonalEmbeddedWidgetCompleted(this, new createPersonalEmbeddedWidgetCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("urlWidgetCreationResult", IsNullable=true)]
@@ -722,7 +721,7 @@ namespace EchoSoap.secure.echosign.com {
                         personalizationInfo});
             return ((UrlWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreatePersonalUrlWidget(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, WidgetPersonalizationInfo personalizationInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createPersonalUrlWidget", new object[] {
@@ -731,18 +730,18 @@ namespace EchoSoap.secure.echosign.com {
                         widgetInfo,
                         personalizationInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public UrlWidgetCreationResult EndcreatePersonalUrlWidget(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((UrlWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createPersonalUrlWidgetAsync(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, WidgetPersonalizationInfo personalizationInfo) {
             this.createPersonalUrlWidgetAsync(apiKey, senderInfo, widgetInfo, personalizationInfo, null);
         }
-        
+
         /// <remarks/>
         public void createPersonalUrlWidgetAsync(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, WidgetPersonalizationInfo personalizationInfo, object userState) {
             if ((this.createPersonalUrlWidgetOperationCompleted == null)) {
@@ -754,14 +753,14 @@ namespace EchoSoap.secure.echosign.com {
                         widgetInfo,
                         personalizationInfo}, this.createPersonalUrlWidgetOperationCompleted, userState);
         }
-        
+
         private void OncreatePersonalUrlWidgetOperationCompleted(object arg) {
             if ((this.createPersonalUrlWidgetCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createPersonalUrlWidgetCompleted(this, new createPersonalUrlWidgetCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("urlWidgetCreationResult", IsNullable=true)]
@@ -772,7 +771,7 @@ namespace EchoSoap.secure.echosign.com {
                         widgetInfo});
             return ((UrlWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreateUrlWidget(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createUrlWidget", new object[] {
@@ -780,18 +779,18 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         widgetInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public UrlWidgetCreationResult EndcreateUrlWidget(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((UrlWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createUrlWidgetAsync(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo) {
             this.createUrlWidgetAsync(apiKey, senderInfo, widgetInfo, null);
         }
-        
+
         /// <remarks/>
         public void createUrlWidgetAsync(string apiKey, SenderInfo senderInfo, WidgetCreationInfo widgetInfo, object userState) {
             if ((this.createUrlWidgetOperationCompleted == null)) {
@@ -802,14 +801,14 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         widgetInfo}, this.createUrlWidgetOperationCompleted, userState);
         }
-        
+
         private void OncreateUrlWidgetOperationCompleted(object arg) {
             if ((this.createUrlWidgetCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createUrlWidgetCompleted(this, new createUrlWidgetCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("userKey", IsNullable=true)]
@@ -819,25 +818,25 @@ namespace EchoSoap.secure.echosign.com {
                         userInfo});
             return ((string)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegincreateUser(string apiKey, UserCreationInfo userInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("createUser", new object[] {
                         apiKey,
                         userInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public string EndcreateUser(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((string)(results[0]));
         }
-        
+
         /// <remarks/>
         public void createUserAsync(string apiKey, UserCreationInfo userInfo) {
             this.createUserAsync(apiKey, userInfo, null);
         }
-        
+
         /// <remarks/>
         public void createUserAsync(string apiKey, UserCreationInfo userInfo, object userState) {
             if ((this.createUserOperationCompleted == null)) {
@@ -847,14 +846,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         userInfo}, this.createUserOperationCompleted, userState);
         }
-        
+
         private void OncreateUserOperationCompleted(object arg) {
             if ((this.createUserCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.createUserCompleted(this, new createUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -866,7 +865,7 @@ namespace EchoSoap.secure.echosign.com {
                         delegateSigningOptions});
             return ((DelegateSigningResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegindelegateSigning(string apiKey, UserCredentials userCredentials, string documentKey, DelegateSigningOptions delegateSigningOptions, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("delegateSigning", new object[] {
@@ -875,18 +874,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         delegateSigningOptions}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DelegateSigningResult EnddelegateSigning(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DelegateSigningResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void delegateSigningAsync(string apiKey, UserCredentials userCredentials, string documentKey, DelegateSigningOptions delegateSigningOptions) {
             this.delegateSigningAsync(apiKey, userCredentials, documentKey, delegateSigningOptions, null);
         }
-        
+
         /// <remarks/>
         public void delegateSigningAsync(string apiKey, UserCredentials userCredentials, string documentKey, DelegateSigningOptions delegateSigningOptions, object userState) {
             if ((this.delegateSigningOperationCompleted == null)) {
@@ -898,14 +897,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         delegateSigningOptions}, this.delegateSigningOperationCompleted, userState);
         }
-        
+
         private void OndelegateSigningOperationCompleted(object arg) {
             if ((this.delegateSigningCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.delegateSigningCompleted(this, new delegateSigningCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -915,25 +914,25 @@ namespace EchoSoap.secure.echosign.com {
                         groupKey});
             return ((DeleteGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegindeleteGroup(string apiKey, string groupKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("deleteGroup", new object[] {
                         apiKey,
                         groupKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DeleteGroupResult EnddeleteGroup(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DeleteGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void deleteGroupAsync(string apiKey, string groupKey) {
             this.deleteGroupAsync(apiKey, groupKey, null);
         }
-        
+
         /// <remarks/>
         public void deleteGroupAsync(string apiKey, string groupKey, object userState) {
             if ((this.deleteGroupOperationCompleted == null)) {
@@ -943,14 +942,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         groupKey}, this.deleteGroupOperationCompleted, userState);
         }
-        
+
         private void OndeleteGroupOperationCompleted(object arg) {
             if ((this.deleteGroupCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.deleteGroupCompleted(this, new deleteGroupCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("DeliverDocumentResult", IsNullable=true)]
@@ -960,25 +959,25 @@ namespace EchoSoap.secure.echosign.com {
                         fileInfo});
             return ((DeliverDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegindeliverDocument(string apiKey, FileInfo fileInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("deliverDocument", new object[] {
                         apiKey,
                         fileInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DeliverDocumentResult EnddeliverDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DeliverDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void deliverDocumentAsync(string apiKey, FileInfo fileInfo) {
             this.deliverDocumentAsync(apiKey, fileInfo, null);
         }
-        
+
         /// <remarks/>
         public void deliverDocumentAsync(string apiKey, FileInfo fileInfo, object userState) {
             if ((this.deliverDocumentOperationCompleted == null)) {
@@ -988,14 +987,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         fileInfo}, this.deliverDocumentOperationCompleted, userState);
         }
-        
+
         private void OndeliverDocumentOperationCompleted(object arg) {
             if ((this.deliverDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.deliverDocumentCompleted(this, new deliverDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("out", IsNullable=true)]
@@ -1006,7 +1005,7 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((DisableWidgetResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegindisableWidget(string apiKey, string documentKey, DisableWidgetOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("disableWidget", new object[] {
@@ -1014,18 +1013,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DisableWidgetResult EnddisableWidget(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DisableWidgetResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void disableWidgetAsync(string apiKey, string documentKey, DisableWidgetOptions options) {
             this.disableWidgetAsync(apiKey, documentKey, options, null);
         }
-        
+
         /// <remarks/>
         public void disableWidgetAsync(string apiKey, string documentKey, DisableWidgetOptions options, object userState) {
             if ((this.disableWidgetOperationCompleted == null)) {
@@ -1036,14 +1035,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, this.disableWidgetOperationCompleted, userState);
         }
-        
+
         private void OndisableWidgetOperationCompleted(object arg) {
             if ((this.disableWidgetCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.disableWidgetCompleted(this, new disableWidgetCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("out", IsNullable=true)]
@@ -1054,7 +1053,7 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((EnableWidgetResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginenableWidget(string apiKey, string documentKey, EnableWidgetOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("enableWidget", new object[] {
@@ -1062,18 +1061,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public EnableWidgetResult EndenableWidget(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((EnableWidgetResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void enableWidgetAsync(string apiKey, string documentKey, EnableWidgetOptions options) {
             this.enableWidgetAsync(apiKey, documentKey, options, null);
         }
-        
+
         /// <remarks/>
         public void enableWidgetAsync(string apiKey, string documentKey, EnableWidgetOptions options, object userState) {
             if ((this.enableWidgetOperationCompleted == null)) {
@@ -1084,14 +1083,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, this.enableWidgetOperationCompleted, userState);
         }
-        
+
         private void OnenableWidgetOperationCompleted(object arg) {
             if ((this.enableWidgetCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.enableWidgetCompleted(this, new enableWidgetCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1101,25 +1100,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((AuditTrailResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetAuditTrail(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getAuditTrail", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public AuditTrailResult EndgetAuditTrail(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((AuditTrailResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getAuditTrailAsync(string apiKey, string documentKey) {
             this.getAuditTrailAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void getAuditTrailAsync(string apiKey, string documentKey, object userState) {
             if ((this.getAuditTrailOperationCompleted == null)) {
@@ -1129,14 +1128,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.getAuditTrailOperationCompleted, userState);
         }
-        
+
         private void OngetAuditTrailOperationCompleted(object arg) {
             if ((this.getAuditTrailCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getAuditTrailCompleted(this, new getAuditTrailCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1146,25 +1145,25 @@ namespace EchoSoap.secure.echosign.com {
                         composeDocumentInfo});
             return ((GetComposeDocumentUrlResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetComposeDocumentUrl(string accessToken, ComposeDocumentInfo composeDocumentInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getComposeDocumentUrl", new object[] {
                         accessToken,
                         composeDocumentInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetComposeDocumentUrlResult EndgetComposeDocumentUrl(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetComposeDocumentUrlResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getComposeDocumentUrlAsync(string accessToken, ComposeDocumentInfo composeDocumentInfo) {
             this.getComposeDocumentUrlAsync(accessToken, composeDocumentInfo, null);
         }
-        
+
         /// <remarks/>
         public void getComposeDocumentUrlAsync(string accessToken, ComposeDocumentInfo composeDocumentInfo, object userState) {
             if ((this.getComposeDocumentUrlOperationCompleted == null)) {
@@ -1174,14 +1173,14 @@ namespace EchoSoap.secure.echosign.com {
                         accessToken,
                         composeDocumentInfo}, this.getComposeDocumentUrlOperationCompleted, userState);
         }
-        
+
         private void OngetComposeDocumentUrlOperationCompleted(object arg) {
             if ((this.getComposeDocumentUrlCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getComposeDocumentUrlCompleted(this, new getComposeDocumentUrlCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("pdf", DataType="base64Binary", IsNullable=true)]
@@ -1191,25 +1190,25 @@ namespace EchoSoap.secure.echosign.com {
                         versionKey});
             return ((byte[])(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocumentByVersion(string apiKey, string versionKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocumentByVersion", new object[] {
                         apiKey,
                         versionKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public byte[] EndgetDocumentByVersion(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((byte[])(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentByVersionAsync(string apiKey, string versionKey) {
             this.getDocumentByVersionAsync(apiKey, versionKey, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentByVersionAsync(string apiKey, string versionKey, object userState) {
             if ((this.getDocumentByVersionOperationCompleted == null)) {
@@ -1219,14 +1218,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         versionKey}, this.getDocumentByVersionOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentByVersionOperationCompleted(object arg) {
             if ((this.getDocumentByVersionCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentByVersionCompleted(this, new getDocumentByVersionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1237,7 +1236,7 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((GetDocumentEventsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocumentEventsForUser(string apiKey, UserCredentials userCredentials, DocumentEventsForUserOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocumentEventsForUser", new object[] {
@@ -1245,18 +1244,18 @@ namespace EchoSoap.secure.echosign.com {
                         userCredentials,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetDocumentEventsForUserResult EndgetDocumentEventsForUser(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetDocumentEventsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentEventsForUserAsync(string apiKey, UserCredentials userCredentials, DocumentEventsForUserOptions options) {
             this.getDocumentEventsForUserAsync(apiKey, userCredentials, options, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentEventsForUserAsync(string apiKey, UserCredentials userCredentials, DocumentEventsForUserOptions options, object userState) {
             if ((this.getDocumentEventsForUserOperationCompleted == null)) {
@@ -1267,14 +1266,14 @@ namespace EchoSoap.secure.echosign.com {
                         userCredentials,
                         options}, this.getDocumentEventsForUserOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentEventsForUserOperationCompleted(object arg) {
             if ((this.getDocumentEventsForUserCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentEventsForUserCompleted(this, new getDocumentEventsForUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1285,7 +1284,7 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((GetDocumentImageUrlsResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocumentImageUrls(string apiKey, string documentKey, GetDocumentImageUrlsOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocumentImageUrls", new object[] {
@@ -1293,18 +1292,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetDocumentImageUrlsResult EndgetDocumentImageUrls(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetDocumentImageUrlsResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentImageUrlsAsync(string apiKey, string documentKey, GetDocumentImageUrlsOptions options) {
             this.getDocumentImageUrlsAsync(apiKey, documentKey, options, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentImageUrlsAsync(string apiKey, string documentKey, GetDocumentImageUrlsOptions options, object userState) {
             if ((this.getDocumentImageUrlsOperationCompleted == null)) {
@@ -1315,14 +1314,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, this.getDocumentImageUrlsOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentImageUrlsOperationCompleted(object arg) {
             if ((this.getDocumentImageUrlsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentImageUrlsCompleted(this, new getDocumentImageUrlsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("documentInfo", IsNullable=true)]
@@ -1332,25 +1331,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((DocumentInfo)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocumentInfo(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocumentInfo", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DocumentInfo EndgetDocumentInfo(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DocumentInfo)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentInfoAsync(string apiKey, string documentKey) {
             this.getDocumentInfoAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentInfoAsync(string apiKey, string documentKey, object userState) {
             if ((this.getDocumentInfoOperationCompleted == null)) {
@@ -1360,14 +1359,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.getDocumentInfoOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentInfoOperationCompleted(object arg) {
             if ((this.getDocumentInfoCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentInfoCompleted(this, new getDocumentInfoCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("documentInfoList", IsNullable=true)]
@@ -1379,7 +1378,7 @@ namespace EchoSoap.secure.echosign.com {
                         externalId});
             return ((DocumentInfoList)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocumentInfosByExternalId(string apiKey, string email, string password, ExternalId externalId, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocumentInfosByExternalId", new object[] {
@@ -1388,18 +1387,18 @@ namespace EchoSoap.secure.echosign.com {
                         password,
                         externalId}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DocumentInfoList EndgetDocumentInfosByExternalId(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DocumentInfoList)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentInfosByExternalIdAsync(string apiKey, string email, string password, ExternalId externalId) {
             this.getDocumentInfosByExternalIdAsync(apiKey, email, password, externalId, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentInfosByExternalIdAsync(string apiKey, string email, string password, ExternalId externalId, object userState) {
             if ((this.getDocumentInfosByExternalIdOperationCompleted == null)) {
@@ -1411,14 +1410,14 @@ namespace EchoSoap.secure.echosign.com {
                         password,
                         externalId}, this.getDocumentInfosByExternalIdOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentInfosByExternalIdOperationCompleted(object arg) {
             if ((this.getDocumentInfosByExternalIdCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentInfosByExternalIdCompleted(this, new getDocumentInfosByExternalIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("documentUrlResult", IsNullable=true)]
@@ -1428,25 +1427,25 @@ namespace EchoSoap.secure.echosign.com {
                         versionKey});
             return ((DocumentUrlResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocumentUrlByVersion(string apiKey, string versionKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocumentUrlByVersion", new object[] {
                         apiKey,
                         versionKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DocumentUrlResult EndgetDocumentUrlByVersion(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DocumentUrlResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentUrlByVersionAsync(string apiKey, string versionKey) {
             this.getDocumentUrlByVersionAsync(apiKey, versionKey, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentUrlByVersionAsync(string apiKey, string versionKey, object userState) {
             if ((this.getDocumentUrlByVersionOperationCompleted == null)) {
@@ -1456,14 +1455,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         versionKey}, this.getDocumentUrlByVersionOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentUrlByVersionOperationCompleted(object arg) {
             if ((this.getDocumentUrlByVersionCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentUrlByVersionCompleted(this, new getDocumentUrlByVersionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1474,7 +1473,7 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((GetDocumentUrlsResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocumentUrls(string apiKey, string documentKey, GetDocumentUrlsOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocumentUrls", new object[] {
@@ -1482,18 +1481,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetDocumentUrlsResult EndgetDocumentUrls(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetDocumentUrlsResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentUrlsAsync(string apiKey, string documentKey, GetDocumentUrlsOptions options) {
             this.getDocumentUrlsAsync(apiKey, documentKey, options, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentUrlsAsync(string apiKey, string documentKey, GetDocumentUrlsOptions options, object userState) {
             if ((this.getDocumentUrlsOperationCompleted == null)) {
@@ -1504,14 +1503,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, this.getDocumentUrlsOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentUrlsOperationCompleted(object arg) {
             if ((this.getDocumentUrlsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentUrlsCompleted(this, new getDocumentUrlsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1522,7 +1521,7 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((GetDocumentsResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocuments(string apiKey, string documentKey, GetDocumentsOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocuments", new object[] {
@@ -1530,18 +1529,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetDocumentsResult EndgetDocuments(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetDocumentsResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentsAsync(string apiKey, string documentKey, GetDocumentsOptions options) {
             this.getDocumentsAsync(apiKey, documentKey, options, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentsAsync(string apiKey, string documentKey, GetDocumentsOptions options, object userState) {
             if ((this.getDocumentsOperationCompleted == null)) {
@@ -1552,14 +1551,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         options}, this.getDocumentsOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentsOperationCompleted(object arg) {
             if ((this.getDocumentsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentsCompleted(this, new getDocumentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1569,25 +1568,25 @@ namespace EchoSoap.secure.echosign.com {
                         userKey});
             return ((GetDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetDocumentsForUser(string apiKey, string userKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getDocumentsForUser", new object[] {
                         apiKey,
                         userKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetDocumentsForUserResult EndgetDocumentsForUser(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getDocumentsForUserAsync(string apiKey, string userKey) {
             this.getDocumentsForUserAsync(apiKey, userKey, null);
         }
-        
+
         /// <remarks/>
         public void getDocumentsForUserAsync(string apiKey, string userKey, object userState) {
             if ((this.getDocumentsForUserOperationCompleted == null)) {
@@ -1597,14 +1596,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         userKey}, this.getDocumentsForUserOperationCompleted, userState);
         }
-        
+
         private void OngetDocumentsForUserOperationCompleted(object arg) {
             if ((this.getDocumentsForUserCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getDocumentsForUserCompleted(this, new getDocumentsForUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1614,25 +1613,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((GetFormDataResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetFormData(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getFormData", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetFormDataResult EndgetFormData(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetFormDataResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getFormDataAsync(string apiKey, string documentKey) {
             this.getFormDataAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void getFormDataAsync(string apiKey, string documentKey, object userState) {
             if ((this.getFormDataOperationCompleted == null)) {
@@ -1642,14 +1641,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.getFormDataOperationCompleted, userState);
         }
-        
+
         private void OngetFormDataOperationCompleted(object arg) {
             if ((this.getFormDataCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getFormDataCompleted(this, new getFormDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1658,24 +1657,24 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey});
             return ((GetGroupsInAccountResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetGroupsInAccount(string apiKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getGroupsInAccount", new object[] {
                         apiKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetGroupsInAccountResult EndgetGroupsInAccount(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetGroupsInAccountResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getGroupsInAccountAsync(string apiKey) {
             this.getGroupsInAccountAsync(apiKey, null);
         }
-        
+
         /// <remarks/>
         public void getGroupsInAccountAsync(string apiKey, object userState) {
             if ((this.getGroupsInAccountOperationCompleted == null)) {
@@ -1684,14 +1683,14 @@ namespace EchoSoap.secure.echosign.com {
             this.InvokeAsync("getGroupsInAccount", new object[] {
                         apiKey}, this.getGroupsInAccountOperationCompleted, userState);
         }
-        
+
         private void OngetGroupsInAccountOperationCompleted(object arg) {
             if ((this.getGroupsInAccountCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getGroupsInAccountCompleted(this, new getGroupsInAccountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("documentImageList", IsNullable=true)]
@@ -1701,25 +1700,25 @@ namespace EchoSoap.secure.echosign.com {
                         versionKey});
             return ((DocumentImageList)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetImagesByVersion(string apiKey, string versionKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getImagesByVersion", new object[] {
                         apiKey,
                         versionKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DocumentImageList EndgetImagesByVersion(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DocumentImageList)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getImagesByVersionAsync(string apiKey, string versionKey) {
             this.getImagesByVersionAsync(apiKey, versionKey, null);
         }
-        
+
         /// <remarks/>
         public void getImagesByVersionAsync(string apiKey, string versionKey, object userState) {
             if ((this.getImagesByVersionOperationCompleted == null)) {
@@ -1729,14 +1728,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         versionKey}, this.getImagesByVersionOperationCompleted, userState);
         }
-        
+
         private void OngetImagesByVersionOperationCompleted(object arg) {
             if ((this.getImagesByVersionCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getImagesByVersionCompleted(this, new getImagesByVersionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("pdf", DataType="base64Binary", IsNullable=true)]
@@ -1746,25 +1745,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((byte[])(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetLatestDocument(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getLatestDocument", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public byte[] EndgetLatestDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((byte[])(results[0]));
         }
-        
+
         /// <remarks/>
         public void getLatestDocumentAsync(string apiKey, string documentKey) {
             this.getLatestDocumentAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void getLatestDocumentAsync(string apiKey, string documentKey, object userState) {
             if ((this.getLatestDocumentOperationCompleted == null)) {
@@ -1774,14 +1773,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.getLatestDocumentOperationCompleted, userState);
         }
-        
+
         private void OngetLatestDocumentOperationCompleted(object arg) {
             if ((this.getLatestDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getLatestDocumentCompleted(this, new getLatestDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("documentUrlResult", IsNullable=true)]
@@ -1791,25 +1790,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((DocumentUrlResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetLatestDocumentUrl(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getLatestDocumentUrl", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DocumentUrlResult EndgetLatestDocumentUrl(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DocumentUrlResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getLatestDocumentUrlAsync(string apiKey, string documentKey) {
             this.getLatestDocumentUrlAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void getLatestDocumentUrlAsync(string apiKey, string documentKey, object userState) {
             if ((this.getLatestDocumentUrlOperationCompleted == null)) {
@@ -1819,14 +1818,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.getLatestDocumentUrlOperationCompleted, userState);
         }
-        
+
         private void OngetLatestDocumentUrlOperationCompleted(object arg) {
             if ((this.getLatestDocumentUrlCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getLatestDocumentUrlCompleted(this, new getLatestDocumentUrlCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("documentImageList", IsNullable=true)]
@@ -1836,25 +1835,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((DocumentImageList)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetLatestImages(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getLatestImages", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DocumentImageList EndgetLatestImages(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DocumentImageList)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getLatestImagesAsync(string apiKey, string documentKey) {
             this.getLatestImagesAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void getLatestImagesAsync(string apiKey, string documentKey, object userState) {
             if ((this.getLatestImagesOperationCompleted == null)) {
@@ -1864,14 +1863,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.getLatestImagesOperationCompleted, userState);
         }
-        
+
         private void OngetLatestImagesOperationCompleted(object arg) {
             if ((this.getLatestImagesCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getLatestImagesCompleted(this, new getLatestImagesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1881,25 +1880,25 @@ namespace EchoSoap.secure.echosign.com {
                         userCredentials});
             return ((GetLibraryDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetLibraryDocumentsForUser(string apiKey, UserCredentials userCredentials, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getLibraryDocumentsForUser", new object[] {
                         apiKey,
                         userCredentials}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetLibraryDocumentsForUserResult EndgetLibraryDocumentsForUser(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetLibraryDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getLibraryDocumentsForUserAsync(string apiKey, UserCredentials userCredentials) {
             this.getLibraryDocumentsForUserAsync(apiKey, userCredentials, null);
         }
-        
+
         /// <remarks/>
         public void getLibraryDocumentsForUserAsync(string apiKey, UserCredentials userCredentials, object userState) {
             if ((this.getLibraryDocumentsForUserOperationCompleted == null)) {
@@ -1909,14 +1908,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         userCredentials}, this.getLibraryDocumentsForUserOperationCompleted, userState);
         }
-        
+
         private void OngetLibraryDocumentsForUserOperationCompleted(object arg) {
             if ((this.getLibraryDocumentsForUserCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getLibraryDocumentsForUserCompleted(this, new getLibraryDocumentsForUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1926,25 +1925,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((GetMegaSignDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetMegaSignDocument(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getMegaSignDocument", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetMegaSignDocumentResult EndgetMegaSignDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetMegaSignDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getMegaSignDocumentAsync(string apiKey, string documentKey) {
             this.getMegaSignDocumentAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void getMegaSignDocumentAsync(string apiKey, string documentKey, object userState) {
             if ((this.getMegaSignDocumentOperationCompleted == null)) {
@@ -1954,14 +1953,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.getMegaSignDocumentOperationCompleted, userState);
         }
-        
+
         private void OngetMegaSignDocumentOperationCompleted(object arg) {
             if ((this.getMegaSignDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getMegaSignDocumentCompleted(this, new getMegaSignDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -1970,24 +1969,24 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey});
             return ((GetDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetMyDocuments(string apiKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getMyDocuments", new object[] {
                         apiKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetDocumentsForUserResult EndgetMyDocuments(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getMyDocumentsAsync(string apiKey) {
             this.getMyDocumentsAsync(apiKey, null);
         }
-        
+
         /// <remarks/>
         public void getMyDocumentsAsync(string apiKey, object userState) {
             if ((this.getMyDocumentsOperationCompleted == null)) {
@@ -1996,14 +1995,14 @@ namespace EchoSoap.secure.echosign.com {
             this.InvokeAsync("getMyDocuments", new object[] {
                         apiKey}, this.getMyDocumentsOperationCompleted, userState);
         }
-        
+
         private void OngetMyDocumentsOperationCompleted(object arg) {
             if ((this.getMyDocumentsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getMyDocumentsCompleted(this, new getMyDocumentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2012,24 +2011,24 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey});
             return ((GetLibraryDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetMyLibraryDocuments(string apiKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getMyLibraryDocuments", new object[] {
                         apiKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetLibraryDocumentsForUserResult EndgetMyLibraryDocuments(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetLibraryDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getMyLibraryDocumentsAsync(string apiKey) {
             this.getMyLibraryDocumentsAsync(apiKey, null);
         }
-        
+
         /// <remarks/>
         public void getMyLibraryDocumentsAsync(string apiKey, object userState) {
             if ((this.getMyLibraryDocumentsOperationCompleted == null)) {
@@ -2038,14 +2037,14 @@ namespace EchoSoap.secure.echosign.com {
             this.InvokeAsync("getMyLibraryDocuments", new object[] {
                         apiKey}, this.getMyLibraryDocumentsOperationCompleted, userState);
         }
-        
+
         private void OngetMyLibraryDocumentsOperationCompleted(object arg) {
             if ((this.getMyLibraryDocumentsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getMyLibraryDocumentsCompleted(this, new getMyLibraryDocumentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2054,24 +2053,24 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey});
             return ((GetWidgetsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetMyWidgets(string apiKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getMyWidgets", new object[] {
                         apiKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetWidgetsForUserResult EndgetMyWidgets(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetWidgetsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getMyWidgetsAsync(string apiKey) {
             this.getMyWidgetsAsync(apiKey, null);
         }
-        
+
         /// <remarks/>
         public void getMyWidgetsAsync(string apiKey, object userState) {
             if ((this.getMyWidgetsOperationCompleted == null)) {
@@ -2080,14 +2079,14 @@ namespace EchoSoap.secure.echosign.com {
             this.InvokeAsync("getMyWidgets", new object[] {
                         apiKey}, this.getMyWidgetsOperationCompleted, userState);
         }
-        
+
         private void OngetMyWidgetsOperationCompleted(object arg) {
             if ((this.getMyWidgetsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getMyWidgetsCompleted(this, new getMyWidgetsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2097,25 +2096,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((SigningUrlResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetSigningUrl(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getSigningUrl", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public SigningUrlResult EndgetSigningUrl(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((SigningUrlResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getSigningUrlAsync(string apiKey, string documentKey) {
             this.getSigningUrlAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void getSigningUrlAsync(string apiKey, string documentKey, object userState) {
             if ((this.getSigningUrlOperationCompleted == null)) {
@@ -2125,14 +2124,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.getSigningUrlOperationCompleted, userState);
         }
-        
+
         private void OngetSigningUrlOperationCompleted(object arg) {
             if ((this.getSigningUrlCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getSigningUrlCompleted(this, new getSigningUrlCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2144,7 +2143,7 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((GetSupportingDocumentsResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetSupportingDocuments(string apiKey, string documentKey, string[] supportingDocumentKeys, GetSupportingDocumentsOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getSupportingDocuments", new object[] {
@@ -2153,18 +2152,18 @@ namespace EchoSoap.secure.echosign.com {
                         supportingDocumentKeys,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetSupportingDocumentsResult EndgetSupportingDocuments(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetSupportingDocumentsResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getSupportingDocumentsAsync(string apiKey, string documentKey, string[] supportingDocumentKeys, GetSupportingDocumentsOptions options) {
             this.getSupportingDocumentsAsync(apiKey, documentKey, supportingDocumentKeys, options, null);
         }
-        
+
         /// <remarks/>
         public void getSupportingDocumentsAsync(string apiKey, string documentKey, string[] supportingDocumentKeys, GetSupportingDocumentsOptions options, object userState) {
             if ((this.getSupportingDocumentsOperationCompleted == null)) {
@@ -2176,14 +2175,14 @@ namespace EchoSoap.secure.echosign.com {
                         supportingDocumentKeys,
                         options}, this.getSupportingDocumentsOperationCompleted, userState);
         }
-        
+
         private void OngetSupportingDocumentsOperationCompleted(object arg) {
             if ((this.getSupportingDocumentsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getSupportingDocumentsCompleted(this, new getSupportingDocumentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("getDocumentsForUserResult", IsNullable=true)]
@@ -2193,25 +2192,25 @@ namespace EchoSoap.secure.echosign.com {
                         userCredentials});
             return ((GetDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetUserDocuments(string apiKey, UserCredentials userCredentials, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getUserDocuments", new object[] {
                         apiKey,
                         userCredentials}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetDocumentsForUserResult EndgetUserDocuments(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getUserDocumentsAsync(string apiKey, UserCredentials userCredentials) {
             this.getUserDocumentsAsync(apiKey, userCredentials, null);
         }
-        
+
         /// <remarks/>
         public void getUserDocumentsAsync(string apiKey, UserCredentials userCredentials, object userState) {
             if ((this.getUserDocumentsOperationCompleted == null)) {
@@ -2221,14 +2220,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         userCredentials}, this.getUserDocumentsOperationCompleted, userState);
         }
-        
+
         private void OngetUserDocumentsOperationCompleted(object arg) {
             if ((this.getUserDocumentsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getUserDocumentsCompleted(this, new getUserDocumentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2238,25 +2237,25 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((GetUserInfoResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetUserInfo(string apiKey, GetUserInfoOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getUserInfo", new object[] {
                         apiKey,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetUserInfoResult EndgetUserInfo(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetUserInfoResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getUserInfoAsync(string apiKey, GetUserInfoOptions options) {
             this.getUserInfoAsync(apiKey, options, null);
         }
-        
+
         /// <remarks/>
         public void getUserInfoAsync(string apiKey, GetUserInfoOptions options, object userState) {
             if ((this.getUserInfoOperationCompleted == null)) {
@@ -2266,14 +2265,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         options}, this.getUserInfoOperationCompleted, userState);
         }
-        
+
         private void OngetUserInfoOperationCompleted(object arg) {
             if ((this.getUserInfoCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getUserInfoCompleted(this, new getUserInfoCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2282,24 +2281,24 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey});
             return ((GetUsersInAccountResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetUsersInAccount(string apiKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getUsersInAccount", new object[] {
                         apiKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetUsersInAccountResult EndgetUsersInAccount(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetUsersInAccountResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getUsersInAccountAsync(string apiKey) {
             this.getUsersInAccountAsync(apiKey, null);
         }
-        
+
         /// <remarks/>
         public void getUsersInAccountAsync(string apiKey, object userState) {
             if ((this.getUsersInAccountOperationCompleted == null)) {
@@ -2308,14 +2307,14 @@ namespace EchoSoap.secure.echosign.com {
             this.InvokeAsync("getUsersInAccount", new object[] {
                         apiKey}, this.getUsersInAccountOperationCompleted, userState);
         }
-        
+
         private void OngetUsersInAccountOperationCompleted(object arg) {
             if ((this.getUsersInAccountCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getUsersInAccountCompleted(this, new getUsersInAccountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2325,25 +2324,25 @@ namespace EchoSoap.secure.echosign.com {
                         groupKey});
             return ((GetUsersInGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetUsersInGroup(string apiKey, string groupKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getUsersInGroup", new object[] {
                         apiKey,
                         groupKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetUsersInGroupResult EndgetUsersInGroup(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetUsersInGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getUsersInGroupAsync(string apiKey, string groupKey) {
             this.getUsersInGroupAsync(apiKey, groupKey, null);
         }
-        
+
         /// <remarks/>
         public void getUsersInGroupAsync(string apiKey, string groupKey, object userState) {
             if ((this.getUsersInGroupOperationCompleted == null)) {
@@ -2353,14 +2352,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         groupKey}, this.getUsersInGroupOperationCompleted, userState);
         }
-        
+
         private void OngetUsersInGroupOperationCompleted(object arg) {
             if ((this.getUsersInGroupCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getUsersInGroupCompleted(this, new getUsersInGroupCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2370,25 +2369,25 @@ namespace EchoSoap.secure.echosign.com {
                         userCredentials});
             return ((GetWidgetsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegingetWidgetsForUser(string apiKey, UserCredentials userCredentials, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("getWidgetsForUser", new object[] {
                         apiKey,
                         userCredentials}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetWidgetsForUserResult EndgetWidgetsForUser(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetWidgetsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void getWidgetsForUserAsync(string apiKey, UserCredentials userCredentials) {
             this.getWidgetsForUserAsync(apiKey, userCredentials, null);
         }
-        
+
         /// <remarks/>
         public void getWidgetsForUserAsync(string apiKey, UserCredentials userCredentials, object userState) {
             if ((this.getWidgetsForUserOperationCompleted == null)) {
@@ -2398,14 +2397,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         userCredentials}, this.getWidgetsForUserOperationCompleted, userState);
         }
-        
+
         private void OngetWidgetsForUserOperationCompleted(object arg) {
             if ((this.getWidgetsForUserCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.getWidgetsForUserCompleted(this, new getWidgetsForUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2418,7 +2417,7 @@ namespace EchoSoap.secure.echosign.com {
                         authoringRequested});
             return ((InitiateInteractiveSendDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegininitiateInteractiveSendDocument(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, bool forceSendConfirmation, System.Nullable<bool> authoringRequested, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("initiateInteractiveSendDocument", new object[] {
@@ -2428,18 +2427,18 @@ namespace EchoSoap.secure.echosign.com {
                         forceSendConfirmation,
                         authoringRequested}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public InitiateInteractiveSendDocumentResult EndinitiateInteractiveSendDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((InitiateInteractiveSendDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void initiateInteractiveSendDocumentAsync(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, bool forceSendConfirmation, System.Nullable<bool> authoringRequested) {
             this.initiateInteractiveSendDocumentAsync(apiKey, senderInfo, documentCreationInfo, forceSendConfirmation, authoringRequested, null);
         }
-        
+
         /// <remarks/>
         public void initiateInteractiveSendDocumentAsync(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, bool forceSendConfirmation, System.Nullable<bool> authoringRequested, object userState) {
             if ((this.initiateInteractiveSendDocumentOperationCompleted == null)) {
@@ -2452,14 +2451,14 @@ namespace EchoSoap.secure.echosign.com {
                         forceSendConfirmation,
                         authoringRequested}, this.initiateInteractiveSendDocumentOperationCompleted, userState);
         }
-        
+
         private void OninitiateInteractiveSendDocumentOperationCompleted(object arg) {
             if ((this.initiateInteractiveSendDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.initiateInteractiveSendDocumentCompleted(this, new initiateInteractiveSendDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2470,7 +2469,7 @@ namespace EchoSoap.secure.echosign.com {
                         usersToMoveInfo});
             return ((MoveUsersToGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginmoveUsersToGroup(string apiKey, string groupKey, UsersToMoveInfo usersToMoveInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("moveUsersToGroup", new object[] {
@@ -2478,18 +2477,18 @@ namespace EchoSoap.secure.echosign.com {
                         groupKey,
                         usersToMoveInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public MoveUsersToGroupResult EndmoveUsersToGroup(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((MoveUsersToGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void moveUsersToGroupAsync(string apiKey, string groupKey, UsersToMoveInfo usersToMoveInfo) {
             this.moveUsersToGroupAsync(apiKey, groupKey, usersToMoveInfo, null);
         }
-        
+
         /// <remarks/>
         public void moveUsersToGroupAsync(string apiKey, string groupKey, UsersToMoveInfo usersToMoveInfo, object userState) {
             if ((this.moveUsersToGroupOperationCompleted == null)) {
@@ -2500,14 +2499,14 @@ namespace EchoSoap.secure.echosign.com {
                         groupKey,
                         usersToMoveInfo}, this.moveUsersToGroupOperationCompleted, userState);
         }
-        
+
         private void OnmoveUsersToGroupOperationCompleted(object arg) {
             if ((this.moveUsersToGroupCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.moveUsersToGroupCompleted(this, new moveUsersToGroupCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2518,7 +2517,7 @@ namespace EchoSoap.secure.echosign.com {
                         vaultEventInfo});
             return ((NotifyDocumentVaultedResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginnotifyDocumentVaulted(string accessToken, string documentKey, VaultEventInfo vaultEventInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("notifyDocumentVaulted", new object[] {
@@ -2526,18 +2525,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         vaultEventInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public NotifyDocumentVaultedResult EndnotifyDocumentVaulted(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((NotifyDocumentVaultedResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void notifyDocumentVaultedAsync(string accessToken, string documentKey, VaultEventInfo vaultEventInfo) {
             this.notifyDocumentVaultedAsync(accessToken, documentKey, vaultEventInfo, null);
         }
-        
+
         /// <remarks/>
         public void notifyDocumentVaultedAsync(string accessToken, string documentKey, VaultEventInfo vaultEventInfo, object userState) {
             if ((this.notifyDocumentVaultedOperationCompleted == null)) {
@@ -2548,14 +2547,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         vaultEventInfo}, this.notifyDocumentVaultedOperationCompleted, userState);
         }
-        
+
         private void OnnotifyDocumentVaultedOperationCompleted(object arg) {
             if ((this.notifyDocumentVaultedCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.notifyDocumentVaultedCompleted(this, new notifyDocumentVaultedCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("embeddedWidgetCreationResult", IsNullable=true)]
@@ -2566,7 +2565,7 @@ namespace EchoSoap.secure.echosign.com {
                         personalizationInfo});
             return ((EmbeddedWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginpersonalizeEmbeddedWidget(string apiKey, string widgetJavascript, WidgetPersonalizationInfo personalizationInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("personalizeEmbeddedWidget", new object[] {
@@ -2574,18 +2573,18 @@ namespace EchoSoap.secure.echosign.com {
                         widgetJavascript,
                         personalizationInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public EmbeddedWidgetCreationResult EndpersonalizeEmbeddedWidget(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((EmbeddedWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void personalizeEmbeddedWidgetAsync(string apiKey, string widgetJavascript, WidgetPersonalizationInfo personalizationInfo) {
             this.personalizeEmbeddedWidgetAsync(apiKey, widgetJavascript, personalizationInfo, null);
         }
-        
+
         /// <remarks/>
         public void personalizeEmbeddedWidgetAsync(string apiKey, string widgetJavascript, WidgetPersonalizationInfo personalizationInfo, object userState) {
             if ((this.personalizeEmbeddedWidgetOperationCompleted == null)) {
@@ -2596,14 +2595,14 @@ namespace EchoSoap.secure.echosign.com {
                         widgetJavascript,
                         personalizationInfo}, this.personalizeEmbeddedWidgetOperationCompleted, userState);
         }
-        
+
         private void OnpersonalizeEmbeddedWidgetOperationCompleted(object arg) {
             if ((this.personalizeEmbeddedWidgetCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.personalizeEmbeddedWidgetCompleted(this, new personalizeEmbeddedWidgetCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("urlWidgetCreationResult", IsNullable=true)]
@@ -2614,7 +2613,7 @@ namespace EchoSoap.secure.echosign.com {
                         personalizationInfo});
             return ((UrlWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginpersonalizeUrlWidget(string apiKey, string widgetUrl, WidgetPersonalizationInfo personalizationInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("personalizeUrlWidget", new object[] {
@@ -2622,18 +2621,18 @@ namespace EchoSoap.secure.echosign.com {
                         widgetUrl,
                         personalizationInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public UrlWidgetCreationResult EndpersonalizeUrlWidget(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((UrlWidgetCreationResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void personalizeUrlWidgetAsync(string apiKey, string widgetUrl, WidgetPersonalizationInfo personalizationInfo) {
             this.personalizeUrlWidgetAsync(apiKey, widgetUrl, personalizationInfo, null);
         }
-        
+
         /// <remarks/>
         public void personalizeUrlWidgetAsync(string apiKey, string widgetUrl, WidgetPersonalizationInfo personalizationInfo, object userState) {
             if ((this.personalizeUrlWidgetOperationCompleted == null)) {
@@ -2644,14 +2643,14 @@ namespace EchoSoap.secure.echosign.com {
                         widgetUrl,
                         personalizationInfo}, this.personalizeUrlWidgetOperationCompleted, userState);
         }
-        
+
         private void OnpersonalizeUrlWidgetOperationCompleted(object arg) {
             if ((this.personalizeUrlWidgetCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.personalizeUrlWidgetCompleted(this, new personalizeUrlWidgetCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2663,7 +2662,7 @@ namespace EchoSoap.secure.echosign.com {
                         rejectDocumentOptions});
             return ((RejectDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginrejectDocument(string apiKey, UserCredentials userCredentials, string documentKey, RejectDocumentOptions rejectDocumentOptions, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("rejectDocument", new object[] {
@@ -2672,18 +2671,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         rejectDocumentOptions}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public RejectDocumentResult EndrejectDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((RejectDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void rejectDocumentAsync(string apiKey, UserCredentials userCredentials, string documentKey, RejectDocumentOptions rejectDocumentOptions) {
             this.rejectDocumentAsync(apiKey, userCredentials, documentKey, rejectDocumentOptions, null);
         }
-        
+
         /// <remarks/>
         public void rejectDocumentAsync(string apiKey, UserCredentials userCredentials, string documentKey, RejectDocumentOptions rejectDocumentOptions, object userState) {
             if ((this.rejectDocumentOperationCompleted == null)) {
@@ -2695,14 +2694,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         rejectDocumentOptions}, this.rejectDocumentOperationCompleted, userState);
         }
-        
+
         private void OnrejectDocumentOperationCompleted(object arg) {
             if ((this.rejectDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.rejectDocumentCompleted(this, new rejectDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2712,25 +2711,25 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey});
             return ((RemoveDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginremoveDocument(string apiKey, string documentKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("removeDocument", new object[] {
                         apiKey,
                         documentKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public RemoveDocumentResult EndremoveDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((RemoveDocumentResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void removeDocumentAsync(string apiKey, string documentKey) {
             this.removeDocumentAsync(apiKey, documentKey, null);
         }
-        
+
         /// <remarks/>
         public void removeDocumentAsync(string apiKey, string documentKey, object userState) {
             if ((this.removeDocumentOperationCompleted == null)) {
@@ -2740,14 +2739,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         documentKey}, this.removeDocumentOperationCompleted, userState);
         }
-        
+
         private void OnremoveDocumentOperationCompleted(object arg) {
             if ((this.removeDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.removeDocumentCompleted(this, new removeDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2758,7 +2757,7 @@ namespace EchoSoap.secure.echosign.com {
                         newGroupName});
             return ((RenameGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginrenameGroup(string apiKey, string groupKey, string newGroupName, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("renameGroup", new object[] {
@@ -2766,18 +2765,18 @@ namespace EchoSoap.secure.echosign.com {
                         groupKey,
                         newGroupName}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public RenameGroupResult EndrenameGroup(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((RenameGroupResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void renameGroupAsync(string apiKey, string groupKey, string newGroupName) {
             this.renameGroupAsync(apiKey, groupKey, newGroupName, null);
         }
-        
+
         /// <remarks/>
         public void renameGroupAsync(string apiKey, string groupKey, string newGroupName, object userState) {
             if ((this.renameGroupOperationCompleted == null)) {
@@ -2788,14 +2787,14 @@ namespace EchoSoap.secure.echosign.com {
                         groupKey,
                         newGroupName}, this.renameGroupOperationCompleted, userState);
         }
-        
+
         private void OnrenameGroupOperationCompleted(object arg) {
             if ((this.renameGroupCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.renameGroupCompleted(this, new renameGroupCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2807,7 +2806,7 @@ namespace EchoSoap.secure.echosign.com {
                         replaceSignerOptions});
             return ((ReplaceSignerResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginreplaceSigner(string apiKey, UserCredentials userCredentials, string documentKey, ReplaceSignerOptions replaceSignerOptions, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("replaceSigner", new object[] {
@@ -2816,18 +2815,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         replaceSignerOptions}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public ReplaceSignerResult EndreplaceSigner(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((ReplaceSignerResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void replaceSignerAsync(string apiKey, UserCredentials userCredentials, string documentKey, ReplaceSignerOptions replaceSignerOptions) {
             this.replaceSignerAsync(apiKey, userCredentials, documentKey, replaceSignerOptions, null);
         }
-        
+
         /// <remarks/>
         public void replaceSignerAsync(string apiKey, UserCredentials userCredentials, string documentKey, ReplaceSignerOptions replaceSignerOptions, object userState) {
             if ((this.replaceSignerOperationCompleted == null)) {
@@ -2839,14 +2838,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         replaceSignerOptions}, this.replaceSignerOperationCompleted, userState);
         }
-        
+
         private void OnreplaceSignerOperationCompleted(object arg) {
             if ((this.replaceSignerCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.replaceSignerCompleted(this, new replaceSignerCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2857,7 +2856,7 @@ namespace EchoSoap.secure.echosign.com {
                         options});
             return ((GetDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginsearchUserDocuments(string apiKey, UserCredentials userCredentials, SearchUserDocumentsOptions options, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("searchUserDocuments", new object[] {
@@ -2865,18 +2864,18 @@ namespace EchoSoap.secure.echosign.com {
                         userCredentials,
                         options}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetDocumentsForUserResult EndsearchUserDocuments(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetDocumentsForUserResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void searchUserDocumentsAsync(string apiKey, UserCredentials userCredentials, SearchUserDocumentsOptions options) {
             this.searchUserDocumentsAsync(apiKey, userCredentials, options, null);
         }
-        
+
         /// <remarks/>
         public void searchUserDocumentsAsync(string apiKey, UserCredentials userCredentials, SearchUserDocumentsOptions options, object userState) {
             if ((this.searchUserDocumentsOperationCompleted == null)) {
@@ -2887,14 +2886,14 @@ namespace EchoSoap.secure.echosign.com {
                         userCredentials,
                         options}, this.searchUserDocumentsOperationCompleted, userState);
         }
-        
+
         private void OnsearchUserDocumentsOperationCompleted(object arg) {
             if ((this.searchUserDocumentsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.searchUserDocumentsCompleted(this, new searchUserDocumentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlArrayAttribute("documentKeys", IsNullable=true)]
@@ -2906,7 +2905,7 @@ namespace EchoSoap.secure.echosign.com {
                         documentCreationInfo});
             return ((DocumentKey[])(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginsendDocument(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("sendDocument", new object[] {
@@ -2914,18 +2913,18 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         documentCreationInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public DocumentKey[] EndsendDocument(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((DocumentKey[])(results[0]));
         }
-        
+
         /// <remarks/>
         public void sendDocumentAsync(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo) {
             this.sendDocumentAsync(apiKey, senderInfo, documentCreationInfo, null);
         }
-        
+
         /// <remarks/>
         public void sendDocumentAsync(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, object userState) {
             if ((this.sendDocumentOperationCompleted == null)) {
@@ -2936,14 +2935,14 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         documentCreationInfo}, this.sendDocumentOperationCompleted, userState);
         }
-        
+
         private void OnsendDocumentOperationCompleted(object arg) {
             if ((this.sendDocumentCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.sendDocumentCompleted(this, new sendDocumentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -2955,7 +2954,7 @@ namespace EchoSoap.secure.echosign.com {
                         sendDocumentInteractiveOptions});
             return ((SendDocumentInteractiveResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginsendDocumentInteractive(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, SendDocumentInteractiveOptions sendDocumentInteractiveOptions, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("sendDocumentInteractive", new object[] {
@@ -2964,18 +2963,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentCreationInfo,
                         sendDocumentInteractiveOptions}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public SendDocumentInteractiveResult EndsendDocumentInteractive(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((SendDocumentInteractiveResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void sendDocumentInteractiveAsync(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, SendDocumentInteractiveOptions sendDocumentInteractiveOptions) {
             this.sendDocumentInteractiveAsync(apiKey, senderInfo, documentCreationInfo, sendDocumentInteractiveOptions, null);
         }
-        
+
         /// <remarks/>
         public void sendDocumentInteractiveAsync(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, SendDocumentInteractiveOptions sendDocumentInteractiveOptions, object userState) {
             if ((this.sendDocumentInteractiveOperationCompleted == null)) {
@@ -2987,14 +2986,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentCreationInfo,
                         sendDocumentInteractiveOptions}, this.sendDocumentInteractiveOperationCompleted, userState);
         }
-        
+
         private void OnsendDocumentInteractiveOperationCompleted(object arg) {
             if ((this.sendDocumentInteractiveCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.sendDocumentInteractiveCompleted(this, new sendDocumentInteractiveCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("sendMegaSignDocumentResult", IsNullable=true)]
@@ -3005,7 +3004,7 @@ namespace EchoSoap.secure.echosign.com {
                         documentCreationInfo});
             return ((SendDocumentMegaSignResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginsendDocumentMegaSign(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("sendDocumentMegaSign", new object[] {
@@ -3013,18 +3012,18 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         documentCreationInfo}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public SendDocumentMegaSignResult EndsendDocumentMegaSign(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((SendDocumentMegaSignResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void sendDocumentMegaSignAsync(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo) {
             this.sendDocumentMegaSignAsync(apiKey, senderInfo, documentCreationInfo, null);
         }
-        
+
         /// <remarks/>
         public void sendDocumentMegaSignAsync(string apiKey, SenderInfo senderInfo, DocumentCreationInfo documentCreationInfo, object userState) {
             if ((this.sendDocumentMegaSignOperationCompleted == null)) {
@@ -3035,14 +3034,14 @@ namespace EchoSoap.secure.echosign.com {
                         senderInfo,
                         documentCreationInfo}, this.sendDocumentMegaSignOperationCompleted, userState);
         }
-        
+
         private void OnsendDocumentMegaSignOperationCompleted(object arg) {
             if ((this.sendDocumentMegaSignCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.sendDocumentMegaSignCompleted(this, new sendDocumentMegaSignCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("sendreminderResult", IsNullable=true)]
@@ -3053,7 +3052,7 @@ namespace EchoSoap.secure.echosign.com {
                         comment});
             return ((SendReminderResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginsendReminder(string apiKey, string documentKey, string comment, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("sendReminder", new object[] {
@@ -3061,18 +3060,18 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         comment}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public SendReminderResult EndsendReminder(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((SendReminderResult)(results[0]));
         }
-        
+
         /// <remarks/>
         public void sendReminderAsync(string apiKey, string documentKey, string comment) {
             this.sendReminderAsync(apiKey, documentKey, comment, null);
         }
-        
+
         /// <remarks/>
         public void sendReminderAsync(string apiKey, string documentKey, string comment, object userState) {
             if ((this.sendReminderOperationCompleted == null)) {
@@ -3083,14 +3082,14 @@ namespace EchoSoap.secure.echosign.com {
                         documentKey,
                         comment}, this.sendReminderOperationCompleted, userState);
         }
-        
+
         private void OnsendReminderOperationCompleted(object arg) {
             if ((this.sendReminderCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.sendReminderCompleted(this, new sendReminderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("outFile", DataType="base64Binary", IsNullable=true)]
@@ -3100,25 +3099,25 @@ namespace EchoSoap.secure.echosign.com {
                         file});
             return ((byte[])(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegintestEchoFile(string apiKey, byte[] file, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("testEchoFile", new object[] {
                         apiKey,
                         file}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public byte[] EndtestEchoFile(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((byte[])(results[0]));
         }
-        
+
         /// <remarks/>
         public void testEchoFileAsync(string apiKey, byte[] file) {
             this.testEchoFileAsync(apiKey, file, null);
         }
-        
+
         /// <remarks/>
         public void testEchoFileAsync(string apiKey, byte[] file, object userState) {
             if ((this.testEchoFileOperationCompleted == null)) {
@@ -3128,14 +3127,14 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey,
                         file}, this.testEchoFileOperationCompleted, userState);
         }
-        
+
         private void OntestEchoFileOperationCompleted(object arg) {
             if ((this.testEchoFileCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.testEchoFileCompleted(this, new testEchoFileCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("pong", IsNullable=true)]
@@ -3144,24 +3143,24 @@ namespace EchoSoap.secure.echosign.com {
                         apiKey});
             return ((Pong)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BegintestPing(string apiKey, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("testPing", new object[] {
                         apiKey}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public Pong EndtestPing(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((Pong)(results[0]));
         }
-        
+
         /// <remarks/>
         public void testPingAsync(string apiKey) {
             this.testPingAsync(apiKey, null);
         }
-        
+
         /// <remarks/>
         public void testPingAsync(string apiKey, object userState) {
             if ((this.testPingOperationCompleted == null)) {
@@ -3170,14 +3169,14 @@ namespace EchoSoap.secure.echosign.com {
             this.InvokeAsync("testPing", new object[] {
                         apiKey}, this.testPingOperationCompleted, userState);
         }
-        
+
         private void OntestPingOperationCompleted(object arg) {
             if ((this.testPingCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.testPingCompleted(this, new testPingCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://api.echosign", ResponseNamespace="http://api.echosign", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("userVerificationInfo", IsNullable=true)]
@@ -3188,7 +3187,7 @@ namespace EchoSoap.secure.echosign.com {
                         password});
             return ((UserVerificationInfo)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginverifyUser(string apiKey, string email, string password, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("verifyUser", new object[] {
@@ -3196,18 +3195,18 @@ namespace EchoSoap.secure.echosign.com {
                         email,
                         password}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public UserVerificationInfo EndverifyUser(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((UserVerificationInfo)(results[0]));
         }
-        
+
         /// <remarks/>
         public void verifyUserAsync(string apiKey, string email, string password) {
             this.verifyUserAsync(apiKey, email, password, null);
         }
-        
+
         /// <remarks/>
         public void verifyUserAsync(string apiKey, string email, string password, object userState) {
             if ((this.verifyUserOperationCompleted == null)) {
@@ -3218,19 +3217,19 @@ namespace EchoSoap.secure.echosign.com {
                         email,
                         password}, this.verifyUserOperationCompleted, userState);
         }
-        
+
         private void OnverifyUserOperationCompleted(object arg) {
             if ((this.verifyUserCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.verifyUserCompleted(this, new verifyUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
-        
+
         private bool IsLocalFileSystemWebService(string url) {
             if (((url == null) 
                         || (url == string.Empty))) {
@@ -3244,7 +3243,7 @@ namespace EchoSoap.secure.echosign.com {
             return false;
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3252,11 +3251,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class CancelDocumentResult {
-        
+
         private System.Nullable<Result> resultField;
-        
+
         private bool resultFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<Result> result {
@@ -3267,7 +3266,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.resultField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool resultSpecified {
@@ -3279,32 +3278,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum Result {
-        
+
         /// <remarks/>
         REMINDER_SENT,
-        
+
         /// <remarks/>
         CANCELLED,
-        
+
         /// <remarks/>
         ALREADY_SIGNED,
-        
+
         /// <remarks/>
         ALREADY_CANCELLED,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3312,11 +3311,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class UserVerificationInfo {
-        
+
         private System.Nullable<UserVerificationStatus> userVerificationStatusField;
-        
+
         private bool userVerificationStatusFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<UserVerificationStatus> userVerificationStatus {
@@ -3327,7 +3326,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.userVerificationStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool userVerificationStatusSpecified {
@@ -3339,26 +3338,26 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum UserVerificationStatus {
-        
+
         /// <remarks/>
         VALID,
-        
+
         /// <remarks/>
         DOES_NOT_EXIST,
-        
+
         /// <remarks/>
         INVALID_PASSWORD,
-        
+
         /// <remarks/>
         UNVERIFIED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3366,9 +3365,9 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class Pong {
-        
+
         private string messageField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string message {
@@ -3380,7 +3379,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3388,13 +3387,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class SendReminderResult {
-        
+
         private string recipientEmailField;
-        
+
         private System.Nullable<Result> resultField;
-        
+
         private bool resultFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string recipientEmail {
@@ -3405,7 +3404,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.recipientEmailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<Result> result {
@@ -3416,7 +3415,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.resultField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool resultSpecified {
@@ -3428,7 +3427,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3436,21 +3435,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class SendDocumentMegaSignResult {
-        
+
         private DocumentKey documentKeyField;
-        
+
         private DocumentKey[] documentKeyArrayField;
-        
+
         private System.Nullable<SendDocumentMegaSignResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DocumentKey documentKey {
@@ -3461,7 +3460,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentKey[] documentKeyArray {
@@ -3472,7 +3471,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyArrayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SendDocumentMegaSignResultErrorCode> errorCode {
@@ -3483,7 +3482,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -3494,7 +3493,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -3505,7 +3504,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -3515,7 +3514,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -3527,7 +3526,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3535,11 +3534,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class DocumentKey {
-        
+
         private string documentKeyField;
-        
+
         private string recipientEmailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -3550,7 +3549,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string recipientEmail {
@@ -3562,17 +3561,17 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum SendDocumentMegaSignResultErrorCode {
-        
+
         /// <remarks/>
         ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3580,27 +3579,27 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class SendDocumentInteractiveResult {
-        
+
         private DocumentKey documentKeyField;
-        
+
         private string embeddedCodeField;
-        
+
         private System.Nullable<SendDocumentInteractiveResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private System.DateTime expirationField;
-        
+
         private bool expirationFieldSpecified;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         private string urlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DocumentKey documentKey {
@@ -3611,7 +3610,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string embeddedCode {
@@ -3622,7 +3621,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.embeddedCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SendDocumentInteractiveResultErrorCode> errorCode {
@@ -3633,7 +3632,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -3644,7 +3643,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -3655,7 +3654,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime expiration {
             get {
@@ -3665,7 +3664,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.expirationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool expirationSpecified {
@@ -3676,7 +3675,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.expirationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -3686,7 +3685,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -3697,7 +3696,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -3709,32 +3708,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto12.api.echosign")]
     public enum SendDocumentInteractiveResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_ARGUMENTS,
-        
+
         /// <remarks/>
         AUTOLOGIN_DENIED,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3742,19 +3741,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto12.api.echosign")]
     public partial class SendDocumentInteractiveOptions {
-        
+
         private bool authoringRequestedField;
-        
+
         private bool authoringRequestedFieldSpecified;
-        
+
         private bool autoLoginUserField;
-        
+
         private bool autoLoginUserFieldSpecified;
-        
+
         private bool noChromeField;
-        
+
         private bool noChromeFieldSpecified;
-        
+
         /// <remarks/>
         public bool authoringRequested {
             get {
@@ -3764,7 +3763,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.authoringRequestedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool authoringRequestedSpecified {
@@ -3775,7 +3774,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.authoringRequestedFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool autoLoginUser {
             get {
@@ -3785,7 +3784,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.autoLoginUserField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool autoLoginUserSpecified {
@@ -3796,7 +3795,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.autoLoginUserFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool noChrome {
             get {
@@ -3806,7 +3805,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.noChromeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool noChromeSpecified {
@@ -3818,7 +3817,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3826,9 +3825,9 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class SearchUserDocumentsOptions {
-        
+
         private string queryField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string query {
@@ -3840,7 +3839,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3848,17 +3847,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class ReplaceSignerResult {
-        
+
         private System.Nullable<ReplaceSignerResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<ReplaceSignerResultErrorCode> errorCode {
@@ -3869,7 +3868,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -3880,7 +3879,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -3891,7 +3890,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -3901,7 +3900,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -3913,47 +3912,47 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum ReplaceSignerResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_CREDENTIALS,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_OPTIONS,
-        
+
         /// <remarks/>
         INVALID_ORIGINAL_SIGNER,
-        
+
         /// <remarks/>
         INVALID_NEW_SIGNER,
-        
+
         /// <remarks/>
         INVALID_MESSAGE,
-        
+
         /// <remarks/>
         SIGNER_REPLACEMENT_NOT_ALLOWED,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -3961,13 +3960,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class ReplaceSignerOptions {
-        
+
         private string messageField;
-        
+
         private string newSignerEmailField;
-        
+
         private string originalSignerEmailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string message {
@@ -3978,7 +3977,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string newSignerEmail {
@@ -3989,7 +3988,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.newSignerEmailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string originalSignerEmail {
@@ -4001,7 +4000,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4009,17 +4008,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public partial class RenameGroupResult {
-        
+
         private System.Nullable<RenameGroupResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<RenameGroupResultErrorCode> errorCode {
@@ -4030,7 +4029,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -4041,7 +4040,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -4052,7 +4051,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -4062,7 +4061,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -4074,41 +4073,41 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public enum RenameGroupResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_GROUP_KEY,
-        
+
         /// <remarks/>
         INVALID_GROUP_NAME,
-        
+
         /// <remarks/>
         TERMS_NOT_ACCEPTED,
-        
+
         /// <remarks/>
         NOT_IN_ACCOUNT,
-        
+
         /// <remarks/>
         NO_PERMISSION_TO_EXECUTE_METHOD,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4116,17 +4115,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class RemoveDocumentResult {
-        
+
         private System.Nullable<RemoveDocumentErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<RemoveDocumentErrorCode> errorCode {
@@ -4137,7 +4136,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -4148,7 +4147,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -4159,7 +4158,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -4169,7 +4168,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -4181,29 +4180,29 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum RemoveDocumentErrorCode {
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         DOCUMENT_HAS_BEEN_REMOVED,
-        
+
         /// <remarks/>
         DYNAMIC_DOCUMENT_EXPIRATION_NOT_ENABLED,
-        
+
         /// <remarks/>
         REMOVE_FAILED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4211,17 +4210,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class RejectDocumentResult {
-        
+
         private System.Nullable<RejectDocumentResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<RejectDocumentResultErrorCode> errorCode {
@@ -4232,7 +4231,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -4243,7 +4242,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -4254,7 +4253,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -4264,7 +4263,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -4276,38 +4275,38 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum RejectDocumentResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_CREDENTIALS,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_COMMENT,
-        
+
         /// <remarks/>
         DOCUMENT_REJECTION_NOT_ALLOWED,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4315,9 +4314,9 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class RejectDocumentOptions {
-        
+
         private string commentField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string comment {
@@ -4329,7 +4328,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4337,17 +4336,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class NotifyDocumentVaultedResult {
-        
+
         private System.Nullable<NotifyDocumentVaultedResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<NotifyDocumentVaultedResultErrorCode> errorCode {
@@ -4358,7 +4357,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -4369,7 +4368,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -4380,7 +4379,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -4390,7 +4389,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -4402,47 +4401,47 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum NotifyDocumentVaultedResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_ACCESS_TOKEN,
-        
+
         /// <remarks/>
         NO_PERMISSION_TO_EXECUTE_METHOD,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_VAULT_ID,
-        
+
         /// <remarks/>
         DOCUMENT_REMOVED,
-        
+
         /// <remarks/>
         DOCUMENT_DELETED,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_READY_TO_VAULT,
-        
+
         /// <remarks/>
         DOCMENT_VAULTED_ALREADY,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4450,11 +4449,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class VaultEventInfo {
-        
+
         private string vaultEventCommentField;
-        
+
         private string vaultEventIdField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string vaultEventComment {
@@ -4465,7 +4464,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.vaultEventCommentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string vaultEventId {
@@ -4477,7 +4476,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4485,17 +4484,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public partial class MoveUsersToGroupResult {
-        
+
         private System.Nullable<MoveUsersToGroupResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<MoveUsersToGroupResultErrorCode> errorCode {
@@ -4506,7 +4505,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -4517,7 +4516,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -4528,7 +4527,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -4538,7 +4537,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -4550,41 +4549,41 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public enum MoveUsersToGroupResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_GROUP_KEY,
-        
+
         /// <remarks/>
         INVALID_USER_EMAIL,
-        
+
         /// <remarks/>
         TERMS_NOT_ACCEPTED,
-        
+
         /// <remarks/>
         NOT_IN_ACCOUNT,
-        
+
         /// <remarks/>
         NO_PERMISSION_TO_EXECUTE_METHOD,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4592,13 +4591,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public partial class UsersToMoveInfo {
-        
+
         private bool preserveGroupAdminsField;
-        
+
         private bool preserveGroupAdminsFieldSpecified;
-        
+
         private string[] userEmailsField;
-        
+
         /// <remarks/>
         public bool preserveGroupAdmins {
             get {
@@ -4608,7 +4607,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.preserveGroupAdminsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool preserveGroupAdminsSpecified {
@@ -4619,7 +4618,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.preserveGroupAdminsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://api.echosign")]
@@ -4632,7 +4631,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4640,11 +4639,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(TypeName="DocumentKey", Namespace="http://dto.api.echosign")]
     public partial class DocumentKey1 {
-        
+
         private string documentKeyField;
-        
+
         private string recipientEmailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -4655,7 +4654,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string recipientEmail {
@@ -4667,7 +4666,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4675,25 +4674,25 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public partial class InitiateInteractiveSendDocumentResult {
-        
+
         private DocumentKey1 documentKeyField;
-        
+
         private System.Nullable<InitiateInteractiveSendDocumentResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool needsInteractionField;
-        
+
         private bool needsInteractionFieldSpecified;
-        
+
         private string sendDocumentURLField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DocumentKey1 documentKey {
@@ -4704,7 +4703,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<InitiateInteractiveSendDocumentResultErrorCode> errorCode {
@@ -4715,7 +4714,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -4726,7 +4725,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -4737,7 +4736,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool needsInteraction {
             get {
@@ -4747,7 +4746,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.needsInteractionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool needsInteractionSpecified {
@@ -4758,7 +4757,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.needsInteractionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string sendDocumentURL {
@@ -4769,7 +4768,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.sendDocumentURLField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -4779,7 +4778,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -4791,29 +4790,29 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public enum InitiateInteractiveSendDocumentResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         FILE_RETRIEVAL_ERROR,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -4821,51 +4820,51 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class DocumentCreationInfo {
-        
+
         private CallbackInfo callbackInfoField;
-        
+
         private string[] ccsField;
-        
+
         private System.Nullable<int> daysUntilSigningDeadlineField;
-        
+
         private bool daysUntilSigningDeadlineFieldSpecified;
-        
+
         private ExternalId externalIdField;
-        
+
         private FileInfo[] fileInfosField;
-        
+
         private FileInfo[] formFieldLayerTemplatesField;
-        
+
         private string localeField;
-        
+
         private MergeFieldInfo mergeFieldInfoField;
-        
+
         private byte[] mergeFileField;
-        
+
         private string messageField;
-        
+
         private string nameField;
-        
+
         private RecipientInfo[] recipientsField;
-        
+
         private System.Nullable<ReminderFrequency> reminderFrequencyField;
-        
+
         private bool reminderFrequencyFieldSpecified;
-        
+
         private SecurityOptions securityOptionsField;
-        
+
         private System.Nullable<SignatureFlow> signatureFlowField;
-        
+
         private bool signatureFlowFieldSpecified;
-        
+
         private System.Nullable<SignatureType> signatureTypeField;
-        
+
         private bool signatureTypeFieldSpecified;
-        
+
         private string[] tosField;
-        
+
         private VaultingInfo vaultingInfoField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public CallbackInfo callbackInfo {
@@ -4876,7 +4875,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.callbackInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://api.echosign")]
@@ -4888,7 +4887,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.ccsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<int> daysUntilSigningDeadline {
@@ -4899,7 +4898,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.daysUntilSigningDeadlineField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool daysUntilSigningDeadlineSpecified {
@@ -4910,7 +4909,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.daysUntilSigningDeadlineFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public ExternalId externalId {
@@ -4921,7 +4920,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.externalIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public FileInfo[] fileInfos {
@@ -4932,7 +4931,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fileInfosField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public FileInfo[] formFieldLayerTemplates {
@@ -4943,7 +4942,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.formFieldLayerTemplatesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string locale {
@@ -4954,7 +4953,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.localeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public MergeFieldInfo mergeFieldInfo {
@@ -4965,7 +4964,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.mergeFieldInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
         public byte[] mergeFile {
@@ -4976,7 +4975,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.mergeFileField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string message {
@@ -4987,7 +4986,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -4998,7 +4997,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto14.api.echosign")]
@@ -5010,7 +5009,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.recipientsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<ReminderFrequency> reminderFrequency {
@@ -5021,7 +5020,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.reminderFrequencyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool reminderFrequencySpecified {
@@ -5032,7 +5031,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.reminderFrequencyFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public SecurityOptions securityOptions {
@@ -5043,7 +5042,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.securityOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SignatureFlow> signatureFlow {
@@ -5054,7 +5053,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureFlowField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool signatureFlowSpecified {
@@ -5065,7 +5064,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureFlowFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SignatureType> signatureType {
@@ -5076,7 +5075,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool signatureTypeSpecified {
@@ -5087,7 +5086,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://api.echosign")]
@@ -5099,7 +5098,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.tosField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public VaultingInfo vaultingInfo {
@@ -5111,7 +5110,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5119,9 +5118,9 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class CallbackInfo {
-        
+
         private string signedDocumentUrlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string signedDocumentUrl {
@@ -5133,7 +5132,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5141,13 +5140,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class ExternalId {
-        
+
         private string groupField;
-        
+
         private string idField;
-        
+
         private string namespaceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string group {
@@ -5158,7 +5157,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.groupField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string id {
@@ -5169,7 +5168,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.idField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string @namespace {
@@ -5181,7 +5180,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5189,21 +5188,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class FileInfo {
-        
+
         private byte[] fileField;
-        
+
         private string fileNameField;
-        
+
         private string formKeyField;
-        
+
         private string libraryDocumentKeyField;
-        
+
         private string libraryDocumentNameField;
-        
+
         private string mimeTypeField;
-        
+
         private string urlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
         public byte[] file {
@@ -5214,7 +5213,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fileField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fileName {
@@ -5225,7 +5224,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fileNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string formKey {
@@ -5236,7 +5235,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.formKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string libraryDocumentKey {
@@ -5247,7 +5246,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.libraryDocumentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string libraryDocumentName {
@@ -5258,7 +5257,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.libraryDocumentNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string mimeType {
@@ -5269,7 +5268,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.mimeTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -5281,7 +5280,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5289,9 +5288,9 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public partial class MergeFieldInfo {
-        
+
         private MergeField[] mergeFieldsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public MergeField[] mergeFields {
@@ -5303,7 +5302,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5311,11 +5310,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public partial class MergeField {
-        
+
         private string defaultValueField;
-        
+
         private string fieldNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string defaultValue {
@@ -5326,7 +5325,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.defaultValueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fieldName {
@@ -5338,7 +5337,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5346,17 +5345,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class RecipientInfo {
-        
+
         private string emailField;
-        
+
         private string faxField;
-        
+
         private System.Nullable<RecipientRole> roleField;
-        
+
         private bool roleFieldSpecified;
-        
+
         private RecipientSecurityOption[] securityOptionsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -5367,7 +5366,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fax {
@@ -5378,7 +5377,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.faxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<RecipientRole> role {
@@ -5389,7 +5388,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.roleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool roleSpecified {
@@ -5400,7 +5399,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.roleFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto18.api.echosign")]
@@ -5413,20 +5412,20 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum RecipientRole {
-        
+
         /// <remarks/>
         SIGNER,
-        
+
         /// <remarks/>
         APPROVER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5434,13 +5433,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class RecipientSecurityOption {
-        
+
         private System.Nullable<AuthenticationMethod> authenticationMethodField;
-        
+
         private bool authenticationMethodFieldSpecified;
-        
+
         private string passwordField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AuthenticationMethod> authenticationMethod {
@@ -5451,7 +5450,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.authenticationMethodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool authenticationMethodSpecified {
@@ -5462,7 +5461,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.authenticationMethodFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string password {
@@ -5474,45 +5473,45 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public enum AuthenticationMethod {
-        
+
         /// <remarks/>
         NONE,
-        
+
         /// <remarks/>
         INHERITED_FROM_DOCUMENT,
-        
+
         /// <remarks/>
         PASSWORD,
-        
+
         /// <remarks/>
         WEB_IDENTITY,
-        
+
         /// <remarks/>
         KBA,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum ReminderFrequency {
-        
+
         /// <remarks/>
         DAILY_UNTIL_SIGNED,
-        
+
         /// <remarks/>
         WEEKLY_UNTIL_SIGNED,
-        
+
         /// <remarks/>
         NEVER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5520,29 +5519,29 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class SecurityOptions {
-        
+
         private string externalPasswordField;
-        
+
         private string internalPasswordField;
-        
+
         private System.Nullable<AppliesTo> kbaProtectionField;
-        
+
         private bool kbaProtectionFieldSpecified;
-        
+
         private string openPasswordField;
-        
+
         private System.Nullable<AppliesTo> passwordProtectionField;
-        
+
         private bool passwordProtectionFieldSpecified;
-        
+
         private bool protectOpenField;
-        
+
         private bool protectOpenFieldSpecified;
-        
+
         private System.Nullable<AppliesTo> webIdentityProtectionField;
-        
+
         private bool webIdentityProtectionFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string externalPassword {
@@ -5553,7 +5552,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.externalPasswordField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string internalPassword {
@@ -5564,7 +5563,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.internalPasswordField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AppliesTo> kbaProtection {
@@ -5575,7 +5574,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.kbaProtectionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool kbaProtectionSpecified {
@@ -5586,7 +5585,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.kbaProtectionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string openPassword {
@@ -5597,7 +5596,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.openPasswordField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AppliesTo> passwordProtection {
@@ -5608,7 +5607,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.passwordProtectionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool passwordProtectionSpecified {
@@ -5619,7 +5618,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.passwordProtectionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool protectOpen {
             get {
@@ -5629,7 +5628,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.protectOpenField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool protectOpenSpecified {
@@ -5640,7 +5639,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.protectOpenFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AppliesTo> webIdentityProtection {
@@ -5651,7 +5650,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.webIdentityProtectionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool webIdentityProtectionSpecified {
@@ -5663,64 +5662,64 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum AppliesTo {
-        
+
         /// <remarks/>
         NONE,
-        
+
         /// <remarks/>
         EXTERNAL_USERS,
-        
+
         /// <remarks/>
         INTERNAL_USERS,
-        
+
         /// <remarks/>
         ALL_USERS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum SignatureFlow {
-        
+
         /// <remarks/>
         SENDER_SIGNS_LAST,
-        
+
         /// <remarks/>
         SENDER_SIGNS_FIRST,
-        
+
         /// <remarks/>
         SENDER_SIGNATURE_NOT_REQUIRED,
-        
+
         /// <remarks/>
         SENDER_SIGNS_ONLY,
-        
+
         /// <remarks/>
         SEQUENTIAL,
-        
+
         /// <remarks/>
         PARALLEL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum SignatureType {
-        
+
         /// <remarks/>
         ESIGN,
-        
+
         /// <remarks/>
         WRITTEN,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5728,11 +5727,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class VaultingInfo {
-        
+
         private bool enabledField;
-        
+
         private bool enabledFieldSpecified;
-        
+
         /// <remarks/>
         public bool enabled {
             get {
@@ -5742,7 +5741,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.enabledField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool enabledSpecified {
@@ -5754,7 +5753,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5762,19 +5761,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class GetUsersInGroupResult {
-        
+
         private UserInfo[] userListForGroupField;
-        
+
         private System.Nullable<GetUsersInGroupResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public UserInfo[] userListForGroup {
@@ -5785,7 +5784,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.userListForGroupField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetUsersInGroupResultErrorCode> errorCode {
@@ -5796,7 +5795,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -5807,7 +5806,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -5818,7 +5817,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -5828,7 +5827,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -5840,7 +5839,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5848,17 +5847,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class UserInfo {
-        
+
         private string groupKeyField;
-        
+
         private string companyField;
-        
+
         private string emailField;
-        
+
         private string fullNameOrEmailField;
-        
+
         private string userKeyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string groupKey {
@@ -5869,7 +5868,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.groupKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string company {
@@ -5880,7 +5879,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.companyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -5891,7 +5890,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fullNameOrEmail {
@@ -5902,7 +5901,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fullNameOrEmailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string userKey {
@@ -5914,38 +5913,38 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public enum GetUsersInGroupResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_GROUP_KEY,
-        
+
         /// <remarks/>
         TERMS_NOT_ACCEPTED,
-        
+
         /// <remarks/>
         NOT_IN_ACCOUNT,
-        
+
         /// <remarks/>
         NO_PERMISSION_TO_EXECUTE_METHOD,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -5953,19 +5952,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class GetUsersInAccountResult {
-        
+
         private UserInfo[] userListForAccountField;
-        
+
         private System.Nullable<GetUsersInAccountResultCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public UserInfo[] userListForAccount {
@@ -5976,7 +5975,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.userListForAccountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetUsersInAccountResultCode> errorCode {
@@ -5987,7 +5986,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -5998,7 +5997,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -6009,7 +6008,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -6019,7 +6018,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -6031,26 +6030,26 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum GetUsersInAccountResultCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6058,41 +6057,41 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class UserData {
-        
+
         private string accountField;
-        
+
         private System.Nullable<AccountType> accountTypeField;
-        
+
         private bool accountTypeFieldSpecified;
-        
+
         private System.Nullable<UserCapabilityFlag>[] capabilityFlagsField;
-        
+
         private string channelField;
-        
+
         private string companyField;
-        
+
         private string emailField;
-        
+
         private string firstNameField;
-        
+
         private string groupField;
-        
+
         private string initialsField;
-        
+
         private string lastNameField;
-        
+
         private string localeField;
-        
+
         private System.DateTime passwordExpirationField;
-        
+
         private bool passwordExpirationFieldSpecified;
-        
+
         private string phoneField;
-        
+
         private System.Nullable<UserRole>[] rolesField;
-        
+
         private string titleField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string account {
@@ -6103,7 +6102,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.accountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AccountType> accountType {
@@ -6114,7 +6113,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.accountTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool accountTypeSpecified {
@@ -6125,7 +6124,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.accountTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute()]
@@ -6137,7 +6136,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.capabilityFlagsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string channel {
@@ -6148,7 +6147,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.channelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string company {
@@ -6159,7 +6158,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.companyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -6170,7 +6169,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string firstName {
@@ -6181,7 +6180,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.firstNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string group {
@@ -6192,7 +6191,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.groupField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string initials {
@@ -6203,7 +6202,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.initialsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string lastName {
@@ -6214,7 +6213,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.lastNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string locale {
@@ -6225,7 +6224,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.localeField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime passwordExpiration {
             get {
@@ -6235,7 +6234,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.passwordExpirationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool passwordExpirationSpecified {
@@ -6246,7 +6245,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.passwordExpirationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string phone {
@@ -6257,7 +6256,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.phoneField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute()]
@@ -6269,7 +6268,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.rolesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string title {
@@ -6281,82 +6280,82 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto7.api.echosign")]
     public enum AccountType {
-        
+
         /// <remarks/>
         FREE,
-        
+
         /// <remarks/>
         PRO,
-        
+
         /// <remarks/>
         TEAM,
-        
+
         /// <remarks/>
         TEAM_TRIAL,
-        
+
         /// <remarks/>
         ENTERPRISE,
-        
+
         /// <remarks/>
         ENTERPRISE_TRIAL,
-        
+
         /// <remarks/>
         GLOBAL,
-        
+
         /// <remarks/>
         GLOBAL_TRIAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public enum UserCapabilityFlag {
-        
+
         /// <remarks/>
         CAN_SEND,
-        
+
         /// <remarks/>
         CAN_SIGN,
-        
+
         /// <remarks/>
         CAN_REPLACE_SIGNER,
-        
+
         /// <remarks/>
         VAULT_ENABLED,
-        
+
         /// <remarks/>
         VAULT_PER_AGREEMENT,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public enum UserRole {
-        
+
         /// <remarks/>
         API,
-        
+
         /// <remarks/>
         GROUP_ADMIN,
-        
+
         /// <remarks/>
         ACCOUNT_ADMIN,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6364,19 +6363,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class GetUserInfoResult {
-        
+
         private UserData dataField;
-        
+
         private System.Nullable<GetUserInfoResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public UserData data {
@@ -6387,7 +6386,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.dataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetUserInfoResultErrorCode> errorCode {
@@ -6398,7 +6397,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -6409,7 +6408,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -6420,7 +6419,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -6430,7 +6429,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -6442,32 +6441,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public enum GetUserInfoResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_EMAIL,
-        
+
         /// <remarks/>
         NO_PERMISSION,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6475,9 +6474,9 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class GetUserInfoOptions {
-        
+
         private string emailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -6489,7 +6488,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6497,19 +6496,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class GetSupportingDocumentsResult {
-        
+
         private SupportingDocument[] supportingDocumentsField;
-        
+
         private System.Nullable<GetSupportingDocumentsResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public SupportingDocument[] supportingDocuments {
@@ -6520,7 +6519,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.supportingDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetSupportingDocumentsResultErrorCode> errorCode {
@@ -6531,7 +6530,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -6542,7 +6541,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -6553,7 +6552,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -6563,7 +6562,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -6575,7 +6574,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6583,17 +6582,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class SupportingDocument {
-        
+
         private string supportingDocumentKeyField;
-        
+
         private byte[] contentField;
-        
+
         private string displayLabelField;
-        
+
         private string fieldNameField;
-        
+
         private string mimeTypeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string supportingDocumentKey {
@@ -6604,7 +6603,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.supportingDocumentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
         public byte[] content {
@@ -6615,7 +6614,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.contentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string displayLabel {
@@ -6626,7 +6625,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.displayLabelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fieldName {
@@ -6637,7 +6636,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fieldNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string mimeType {
@@ -6649,44 +6648,44 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum GetSupportingDocumentsResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         DOCUMENT_HAS_BEEN_DELETED,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_AVAILABLE,
-        
+
         /// <remarks/>
         DOCUMENT_ORIGINAL_FORMAT_NOT_ALLOWED,
-        
+
         /// <remarks/>
         TERMS_OF_USE_NOT_ACCEPTED,
-        
+
         /// <remarks/>
         NO_PERMISSION_TO_EXECUTE_METHOD,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6694,11 +6693,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class GetSupportingDocumentsOptions {
-        
+
         private System.Nullable<SupportingDocumentContentFormat> documentFormatRequestedField;
-        
+
         private bool documentFormatRequestedFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SupportingDocumentContentFormat> documentFormatRequested {
@@ -6709,7 +6708,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentFormatRequestedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool documentFormatRequestedSpecified {
@@ -6721,23 +6720,23 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum SupportingDocumentContentFormat {
-        
+
         /// <remarks/>
         NONE,
-        
+
         /// <remarks/>
         ORIGINAL,
-        
+
         /// <remarks/>
         CONVERTED_PDF,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6745,13 +6744,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public partial class SigningUrl {
-        
+
         private string emailField;
-        
+
         private string esignUrlField;
-        
+
         private string simpleEsignUrlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -6762,7 +6761,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string esignUrl {
@@ -6773,7 +6772,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.esignUrlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string simpleEsignUrl {
@@ -6785,7 +6784,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6793,19 +6792,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class SigningUrlResult {
-        
+
         private System.Nullable<SigningUrlResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private SigningUrl[] signingUrlsField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SigningUrlResultErrorCode> errorCode {
@@ -6816,7 +6815,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -6827,7 +6826,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -6838,7 +6837,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto9.api.echosign")]
@@ -6850,7 +6849,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signingUrlsField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -6860,7 +6859,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -6872,44 +6871,44 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum SigningUrlResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         DOCUMENT_HAS_BEEN_DELETED,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_SIGNABLE,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_VISIBLE,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_EXPOSED,
-        
+
         /// <remarks/>
         DOCUMENT_ALREADY_SIGNED,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -6917,23 +6916,23 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class WidgetItem {
-        
+
         private string documentKeyField;
-        
+
         private System.Nullable<ReusableDocumentStatus> reusableDocumentStatusField;
-        
+
         private bool reusableDocumentStatusFieldSpecified;
-        
+
         private string javascriptField;
-        
+
         private System.DateTime modifiedDateField;
-        
+
         private bool modifiedDateFieldSpecified;
-        
+
         private string nameField;
-        
+
         private string urlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -6944,7 +6943,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<ReusableDocumentStatus> reusableDocumentStatus {
@@ -6955,7 +6954,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.reusableDocumentStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool reusableDocumentStatusSpecified {
@@ -6966,7 +6965,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.reusableDocumentStatusFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string javascript {
@@ -6977,7 +6976,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.javascriptField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime modifiedDate {
             get {
@@ -6987,7 +6986,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.modifiedDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool modifiedDateSpecified {
@@ -6998,7 +6997,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.modifiedDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -7009,7 +7008,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -7021,23 +7020,23 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public enum ReusableDocumentStatus {
-        
+
         /// <remarks/>
         ENABLED,
-        
+
         /// <remarks/>
         DISABLED,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7045,19 +7044,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class GetWidgetsForUserResult {
-        
+
         private WidgetItem[] widgetsField;
-        
+
         private System.Nullable<GetWidgetsForUserErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public WidgetItem[] widgets {
@@ -7068,7 +7067,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.widgetsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetWidgetsForUserErrorCode> errorCode {
@@ -7079,7 +7078,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -7090,7 +7089,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -7101,7 +7100,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -7111,7 +7110,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -7123,32 +7122,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto10.api.echosign")]
     public enum GetWidgetsForUserErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_USER_CREDENTIALS,
-        
+
         /// <remarks/>
         PERMISSION_DENIED,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7156,19 +7155,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class GetMegaSignDocumentResult {
-        
+
         private DocumentListItem[] documentsField;
-        
+
         private System.Nullable<GetMegaSignDocumentResultCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentListItem[] documents {
@@ -7179,7 +7178,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetMegaSignDocumentResultCode> errorCode {
@@ -7190,7 +7189,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -7201,7 +7200,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -7212,7 +7211,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -7222,7 +7221,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -7234,7 +7233,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7242,31 +7241,31 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class DocumentListItem {
-        
+
         private System.Nullable<DocumentListItemUserDocumentStatus> userDocumentStatusField;
-        
+
         private bool userDocumentStatusFieldSpecified;
-        
+
         private string documentKeyField;
-        
+
         private string latestDocumentKeyField;
-        
+
         private System.DateTime displayDateField;
-        
+
         private bool displayDateFieldSpecified;
-        
+
         private DisplayUserInfo displayUserInfoField;
-        
+
         private bool esignField;
-        
+
         private bool esignFieldSpecified;
-        
+
         private bool megaSignField;
-        
+
         private bool megaSignFieldSpecified;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DocumentListItemUserDocumentStatus> userDocumentStatus {
@@ -7277,7 +7276,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.userDocumentStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool userDocumentStatusSpecified {
@@ -7288,7 +7287,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.userDocumentStatusFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -7299,7 +7298,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string latestDocumentKey {
@@ -7310,7 +7309,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.latestDocumentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime displayDate {
             get {
@@ -7320,7 +7319,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.displayDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool displayDateSpecified {
@@ -7331,7 +7330,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.displayDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DisplayUserInfo displayUserInfo {
@@ -7342,7 +7341,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.displayUserInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool esign {
             get {
@@ -7352,7 +7351,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.esignField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool esignSpecified {
@@ -7363,7 +7362,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.esignFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool megaSign {
             get {
@@ -7373,7 +7372,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.megaSignField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool megaSignSpecified {
@@ -7384,7 +7383,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.megaSignFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -7396,62 +7395,62 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum DocumentListItemUserDocumentStatus {
-        
+
         /// <remarks/>
         WAITING_FOR_MY_SIGNATURE,
-        
+
         /// <remarks/>
         WAITING_FOR_MY_APPROVAL,
-        
+
         /// <remarks/>
         OUT_FOR_SIGNATURE,
-        
+
         /// <remarks/>
         OUT_FOR_APPROVAL,
-        
+
         /// <remarks/>
         SIGNED,
-        
+
         /// <remarks/>
         APPROVED,
-        
+
         /// <remarks/>
         RECALLED,
-        
+
         /// <remarks/>
         WAITING_FOR_FAXIN,
-        
+
         /// <remarks/>
         ARCHIVED,
-        
+
         /// <remarks/>
         FORM,
-        
+
         /// <remarks/>
         EXPIRED,
-        
+
         /// <remarks/>
         WIDGET,
-        
+
         /// <remarks/>
         WAITING_FOR_AUTHORING,
-        
+
         /// <remarks/>
         SIGNED_IN_ADOBE_ACROBAT,
-        
+
         /// <remarks/>
         SIGNED_IN_ADOBE_READER,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7459,11 +7458,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class DisplayUserInfo {
-        
+
         private string companyField;
-        
+
         private string fullNameOrEmailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string company {
@@ -7474,7 +7473,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.companyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fullNameOrEmail {
@@ -7486,38 +7485,38 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum GetMegaSignDocumentResultCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         PERMISSION_DENIED,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         NOT_MEGASIGN,
-        
+
         /// <remarks/>
         EXPIRED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7525,21 +7524,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class DocumentLibraryItem {
-        
+
         private System.Nullable<LibraryTemplateType>[] libraryTemplateTypesField;
-        
+
         private string documentKeyField;
-        
+
         private System.DateTime modifiedDateField;
-        
+
         private bool modifiedDateFieldSpecified;
-        
+
         private string nameField;
-        
+
         private System.Nullable<DocumentLibraryItemScope> scopeField;
-        
+
         private bool scopeFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute()]
@@ -7551,7 +7550,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.libraryTemplateTypesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -7562,7 +7561,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime modifiedDate {
             get {
@@ -7572,7 +7571,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.modifiedDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool modifiedDateSpecified {
@@ -7583,7 +7582,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.modifiedDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -7594,7 +7593,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DocumentLibraryItemScope> scope {
@@ -7605,7 +7604,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.scopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool scopeSpecified {
@@ -7617,36 +7616,36 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum LibraryTemplateType {
-        
+
         /// <remarks/>
         DOCUMENT,
-        
+
         /// <remarks/>
         FORM_FIELD_LAYER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public enum DocumentLibraryItemScope {
-        
+
         /// <remarks/>
         PERSONAL,
-        
+
         /// <remarks/>
         SHARED,
-        
+
         /// <remarks/>
         GLOBAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7654,19 +7653,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class GetLibraryDocumentsForUserResult {
-        
+
         private DocumentLibraryItem[] libraryDocumentsField;
-        
+
         private System.Nullable<GetLibraryDocumentsForUserErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentLibraryItem[] libraryDocuments {
@@ -7677,7 +7676,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.libraryDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetLibraryDocumentsForUserErrorCode> errorCode {
@@ -7688,7 +7687,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -7699,7 +7698,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -7710,7 +7709,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -7720,7 +7719,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -7732,32 +7731,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public enum GetLibraryDocumentsForUserErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_USER_CREDENTIALS,
-        
+
         /// <remarks/>
         PERMISSION_DENIED,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7765,13 +7764,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class DocumentPageImages {
-        
+
         private string largeImageUrlField;
-        
+
         private string mediumImageUrlField;
-        
+
         private string smallImageUrlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string largeImageUrl {
@@ -7782,7 +7781,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.largeImageUrlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string mediumImageUrl {
@@ -7793,7 +7792,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.mediumImageUrlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string smallImageUrl {
@@ -7805,7 +7804,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7813,19 +7812,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class DocumentImageList {
-        
+
         private System.Nullable<DocumentImageListErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private DocumentPageImages[] pageImagesField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DocumentImageListErrorCode> errorCode {
@@ -7836,7 +7835,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -7847,7 +7846,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -7858,7 +7857,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentPageImages[] pageImages {
@@ -7869,7 +7868,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.pageImagesField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -7879,7 +7878,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -7891,29 +7890,29 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum DocumentImageListErrorCode {
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_VERSION_KEY,
-        
+
         /// <remarks/>
         DOCUMENT_HAS_BEEN_DELETED,
-        
+
         /// <remarks/>
         IMAGES_NOT_AVAILABLE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7921,11 +7920,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class GroupInfo {
-        
+
         private string groupKeyField;
-        
+
         private string groupNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string groupKey {
@@ -7936,7 +7935,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.groupKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string groupName {
@@ -7948,7 +7947,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -7956,19 +7955,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class GetGroupsInAccountResult {
-        
+
         private GroupInfo[] groupListField;
-        
+
         private System.Nullable<GetGroupsInAccountResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public GroupInfo[] groupList {
@@ -7979,7 +7978,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.groupListField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetGroupsInAccountResultErrorCode> errorCode {
@@ -7990,7 +7989,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -8001,7 +8000,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -8012,7 +8011,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -8022,7 +8021,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -8034,35 +8033,35 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public enum GetGroupsInAccountResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         TERMS_NOT_ACCEPTED,
-        
+
         /// <remarks/>
         NOT_IN_ACCOUNT,
-        
+
         /// <remarks/>
         NO_PERMISSION_TO_EXECUTE_METHOD,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8070,19 +8069,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto8.api.echosign")]
     public partial class GetFormDataResult {
-        
+
         private System.Nullable<GetFormDataResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private string formDataCsvField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetFormDataResultErrorCode> errorCode {
@@ -8093,7 +8092,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -8104,7 +8103,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -8115,7 +8114,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string formDataCsv {
@@ -8126,7 +8125,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.formDataCsvField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -8136,7 +8135,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -8148,35 +8147,35 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto8.api.echosign")]
     public enum GetFormDataResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         DOCUMENT_HAS_BEEN_DELETED,
-        
+
         /// <remarks/>
         NO_FORM_DATA,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8184,19 +8183,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class GetDocumentsForUserResult {
-        
+
         private DocumentListItem[] documentListForUserField;
-        
+
         private System.Nullable<GetDocumentsForUserResultCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentListItem[] documentListForUser {
@@ -8207,7 +8206,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentListForUserField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetDocumentsForUserResultCode> errorCode {
@@ -8218,7 +8217,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -8229,7 +8228,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -8240,7 +8239,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -8250,7 +8249,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -8262,35 +8261,35 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum GetDocumentsForUserResultCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_USER_CREDENTIALS,
-        
+
         /// <remarks/>
         INVALID_USER_KEY,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         PERMISSION_DENIED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8298,13 +8297,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class DocumentContent {
-        
+
         private byte[] bytesField;
-        
+
         private string mimetypeField;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
         public byte[] bytes {
@@ -8315,7 +8314,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.bytesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string mimetype {
@@ -8326,7 +8325,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.mimetypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -8338,7 +8337,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8346,21 +8345,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class GetDocumentsResult {
-        
+
         private SupportingDocument[] supportingDocumentsField;
-        
+
         private DocumentContent[] documentsField;
-        
+
         private System.Nullable<GetDocumentsErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public SupportingDocument[] supportingDocuments {
@@ -8371,7 +8370,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.supportingDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto14.api.echosign")]
@@ -8383,7 +8382,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetDocumentsErrorCode> errorCode {
@@ -8394,7 +8393,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -8405,7 +8404,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -8416,7 +8415,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -8426,7 +8425,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -8438,44 +8437,44 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum GetDocumentsErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_VERSION_KEY,
-        
+
         /// <remarks/>
         INVALID_PARTICIPANT,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_AVAILABLE,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_EXPOSED,
-        
+
         /// <remarks/>
         DOCUMENT_REMOVED,
-        
+
         /// <remarks/>
         DOCUMENT_DELETED,
-        
+
         /// <remarks/>
         INTERNAL_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8483,23 +8482,23 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class GetDocumentsOptions {
-        
+
         private bool attachSupportingDocumentsField;
-        
+
         private bool attachSupportingDocumentsFieldSpecified;
-        
+
         private bool auditReportField;
-        
+
         private bool auditReportFieldSpecified;
-        
+
         private bool combineField;
-        
+
         private bool combineFieldSpecified;
-        
+
         private string participantEmailField;
-        
+
         private string versionKeyField;
-        
+
         /// <remarks/>
         public bool attachSupportingDocuments {
             get {
@@ -8509,7 +8508,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.attachSupportingDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool attachSupportingDocumentsSpecified {
@@ -8520,7 +8519,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.attachSupportingDocumentsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool auditReport {
             get {
@@ -8530,7 +8529,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.auditReportField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool auditReportSpecified {
@@ -8541,7 +8540,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.auditReportFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool combine {
             get {
@@ -8551,7 +8550,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.combineField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool combineSpecified {
@@ -8562,7 +8561,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.combineFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string participantEmail {
@@ -8573,7 +8572,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.participantEmailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string versionKey {
@@ -8585,7 +8584,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8593,11 +8592,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class DocumentUrl {
-        
+
         private string nameField;
-        
+
         private string urlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -8608,7 +8607,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -8620,7 +8619,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8628,11 +8627,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class SupportingDocumentUrl {
-        
+
         private string fieldNameField;
-        
+
         private string urlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fieldName {
@@ -8643,7 +8642,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fieldNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -8655,7 +8654,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8663,21 +8662,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class GetDocumentUrlsResult {
-        
+
         private System.Nullable<GetDocumentUrlsErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         private SupportingDocumentUrl[] supportingDocumentUrlsField;
-        
+
         private DocumentUrl[] urlsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetDocumentUrlsErrorCode> errorCode {
@@ -8688,7 +8687,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -8699,7 +8698,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -8710,7 +8709,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -8720,7 +8719,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -8731,7 +8730,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public SupportingDocumentUrl[] supportingDocumentUrls {
@@ -8742,7 +8741,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.supportingDocumentUrlsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentUrl[] urls {
@@ -8754,44 +8753,44 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum GetDocumentUrlsErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_VERSION_KEY,
-        
+
         /// <remarks/>
         INVALID_PARTICIPANT,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_AVAILABLE,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_EXPOSED,
-        
+
         /// <remarks/>
         DOCUMENT_REMOVED,
-        
+
         /// <remarks/>
         DOCUMENT_DELETED,
-        
+
         /// <remarks/>
         INTERNAL_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8799,23 +8798,23 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class GetDocumentUrlsOptions {
-        
+
         private bool attachSupportingDocumentsField;
-        
+
         private bool attachSupportingDocumentsFieldSpecified;
-        
+
         private bool auditReportField;
-        
+
         private bool auditReportFieldSpecified;
-        
+
         private bool combineField;
-        
+
         private bool combineFieldSpecified;
-        
+
         private string participantEmailField;
-        
+
         private string versionKeyField;
-        
+
         /// <remarks/>
         public bool attachSupportingDocuments {
             get {
@@ -8825,7 +8824,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.attachSupportingDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool attachSupportingDocumentsSpecified {
@@ -8836,7 +8835,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.attachSupportingDocumentsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool auditReport {
             get {
@@ -8846,7 +8845,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.auditReportField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool auditReportSpecified {
@@ -8857,7 +8856,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.auditReportFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool combine {
             get {
@@ -8867,7 +8866,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.combineField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool combineSpecified {
@@ -8878,7 +8877,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.combineFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string participantEmail {
@@ -8889,7 +8888,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.participantEmailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string versionKey {
@@ -8901,7 +8900,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -8909,19 +8908,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class DocumentUrlResult {
-        
+
         private System.Nullable<DocumentUrlErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         private string urlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DocumentUrlErrorCode> errorCode {
@@ -8932,7 +8931,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -8943,7 +8942,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -8954,7 +8953,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -8964,7 +8963,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -8975,7 +8974,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -8987,26 +8986,26 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum DocumentUrlErrorCode {
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_VERSION_KEY,
-        
+
         /// <remarks/>
         DOCUMENT_HAS_BEEN_DELETED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -9014,19 +9013,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class DocumentInfoList {
-        
+
         private DocumentInfo[] documentInfosField;
-        
+
         private System.Nullable<DocumentInfoListErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentInfo[] documentInfos {
@@ -9037,7 +9036,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentInfosField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DocumentInfoListErrorCode> errorCode {
@@ -9048,7 +9047,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -9059,7 +9058,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -9070,7 +9069,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -9080,7 +9079,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -9092,7 +9091,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -9100,33 +9099,33 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class DocumentInfo {
-        
+
         private DocumentHistoryEvent[] eventsField;
-        
+
         private ParticipantInfo[] participantsField;
-        
+
         private System.Nullable<AgreementStatus> statusField;
-        
+
         private bool statusFieldSpecified;
-        
+
         private string documentKeyField;
-        
+
         private string latestDocumentKeyField;
-        
+
         private System.DateTime expirationField;
-        
+
         private bool expirationFieldSpecified;
-        
+
         private string localeField;
-        
+
         private string messageField;
-        
+
         private string nameField;
-        
+
         private NextParticipantInfo[] nextParticipantInfosField;
-        
+
         private System.Nullable<SecurityOption>[] securityOptionsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentHistoryEvent[] events {
@@ -9137,7 +9136,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.eventsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto17.api.echosign")]
@@ -9149,7 +9148,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.participantsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AgreementStatus> status {
@@ -9160,7 +9159,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool statusSpecified {
@@ -9171,7 +9170,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.statusFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -9182,7 +9181,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string latestDocumentKey {
@@ -9193,7 +9192,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.latestDocumentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime expiration {
             get {
@@ -9203,7 +9202,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.expirationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool expirationSpecified {
@@ -9214,7 +9213,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.expirationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string locale {
@@ -9225,7 +9224,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.localeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string message {
@@ -9236,7 +9235,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -9247,7 +9246,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto9.api.echosign")]
@@ -9259,7 +9258,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nextParticipantInfosField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto13.api.echosign")]
@@ -9272,7 +9271,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -9280,31 +9279,31 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class DocumentHistoryEvent {
-        
+
         private System.Nullable<AgreementEventType> typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private DeviceLocation deviceLocationField;
-        
+
         private string documentVersionKeyField;
-        
+
         private string synchronizationKeyField;
-        
+
         private string actingUserIpAddressField;
-        
+
         private string actingUserEmailField;
-        
+
         private string commentField;
-        
+
         private string participantEmailField;
-        
+
         private System.DateTime dateField;
-        
+
         private bool dateFieldSpecified;
-        
+
         private string descriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AgreementEventType> type {
@@ -9315,7 +9314,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool typeSpecified {
@@ -9326,7 +9325,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DeviceLocation deviceLocation {
@@ -9337,7 +9336,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deviceLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentVersionKey {
@@ -9348,7 +9347,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentVersionKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string synchronizationKey {
@@ -9359,7 +9358,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.synchronizationKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string actingUserIpAddress {
@@ -9370,7 +9369,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.actingUserIpAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string actingUserEmail {
@@ -9381,7 +9380,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.actingUserEmailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string comment {
@@ -9392,7 +9391,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.commentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string participantEmail {
@@ -9403,7 +9402,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.participantEmailField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime date {
             get {
@@ -9413,7 +9412,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.dateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool dateSpecified {
@@ -9424,7 +9423,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.dateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string description {
@@ -9436,110 +9435,110 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public enum AgreementEventType {
-        
+
         /// <remarks/>
         CREATED,
-        
+
         /// <remarks/>
         UPLOADED_BY_SENDER,
-        
+
         /// <remarks/>
         FAXED_BY_SENDER,
-        
+
         /// <remarks/>
         SIGNED,
-        
+
         /// <remarks/>
         ESIGNED,
-        
+
         /// <remarks/>
         APPROVED,
-        
+
         /// <remarks/>
         OFFLINE_SYNC,
-        
+
         /// <remarks/>
         FAXIN_RECEIVED,
-        
+
         /// <remarks/>
         SIGNATURE_REQUESTED,
-        
+
         /// <remarks/>
         APPROVAL_REQUESTED,
-        
+
         /// <remarks/>
         RECALLED,
-        
+
         /// <remarks/>
         REJECTED,
-        
+
         /// <remarks/>
         EXPIRED,
-        
+
         /// <remarks/>
         EXPIRED_AUTOMATICALLY,
-        
+
         /// <remarks/>
         SHARED,
-        
+
         /// <remarks/>
         EMAIL_VIEWED,
-        
+
         /// <remarks/>
         AUTO_CANCELLED_CONVERSION_PROBLEM,
-        
+
         /// <remarks/>
         SIGNER_SUGGESTED_CHANGES,
-        
+
         /// <remarks/>
         SENDER_CREATED_NEW_REVISION,
-        
+
         /// <remarks/>
         PASSWORD_AUTHENTICATION_FAILED,
-        
+
         /// <remarks/>
         KBA_AUTHENTICATION_FAILED,
-        
+
         /// <remarks/>
         KBA_AUTHENTICATED,
-        
+
         /// <remarks/>
         WEB_IDENTITY_AUTHENTICATED,
-        
+
         /// <remarks/>
         WEB_IDENTITY_SPECIFIED,
-        
+
         /// <remarks/>
         EMAIL_BOUNCED,
-        
+
         /// <remarks/>
         WIDGET_ENABLED,
-        
+
         /// <remarks/>
         WIDGET_DISABLED,
-        
+
         /// <remarks/>
         DELEGATED,
-        
+
         /// <remarks/>
         REPLACED_SIGNER,
-        
+
         /// <remarks/>
         VAULTED,
-        
+
         /// <remarks/>
         DOCUMENTS_DELETED,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -9547,15 +9546,15 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class DeviceLocation {
-        
+
         private System.Nullable<float> latitudeField;
-        
+
         private bool latitudeFieldSpecified;
-        
+
         private System.Nullable<float> longitudeField;
-        
+
         private bool longitudeFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<float> latitude {
@@ -9566,7 +9565,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.latitudeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool latitudeSpecified {
@@ -9577,7 +9576,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.latitudeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<float> longitude {
@@ -9588,7 +9587,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.longitudeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool longitudeSpecified {
@@ -9600,7 +9599,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -9608,25 +9607,25 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class ParticipantInfo {
-        
+
         private ParticipantInfo[] alternateParticipantsField;
-        
+
         private System.Nullable<UserAgreementStatus> statusField;
-        
+
         private bool statusFieldSpecified;
-        
+
         private System.Nullable<ParticipantRole>[] rolesField;
-        
+
         private System.Nullable<ParticipantSecurityOption>[] securityOptionsField;
-        
+
         private string companyField;
-        
+
         private string emailField;
-        
+
         private string nameField;
-        
+
         private string titleField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public ParticipantInfo[] alternateParticipants {
@@ -9637,7 +9636,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.alternateParticipantsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<UserAgreementStatus> status {
@@ -9648,7 +9647,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool statusSpecified {
@@ -9659,7 +9658,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.statusFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto14.api.echosign")]
@@ -9671,7 +9670,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.rolesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto13.api.echosign")]
@@ -9683,7 +9682,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.securityOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string company {
@@ -9694,7 +9693,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.companyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -9705,7 +9704,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -9716,7 +9715,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string title {
@@ -9728,191 +9727,191 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum UserAgreementStatus {
-        
+
         /// <remarks/>
         WAITING_FOR_MY_SIGNATURE,
-        
+
         /// <remarks/>
         WAITING_FOR_MY_APPROVAL,
-        
+
         /// <remarks/>
         OUT_FOR_SIGNATURE,
-        
+
         /// <remarks/>
         SIGNED,
-        
+
         /// <remarks/>
         APPROVED,
-        
+
         /// <remarks/>
         RECALLED,
-        
+
         /// <remarks/>
         HIDDEN,
-        
+
         /// <remarks/>
         NOT_YET_VISIBLE,
-        
+
         /// <remarks/>
         WAITING_FOR_FAXIN,
-        
+
         /// <remarks/>
         ARCHIVED,
-        
+
         /// <remarks/>
         UNKNOWN,
-        
+
         /// <remarks/>
         PARTIAL,
-        
+
         /// <remarks/>
         FORM,
-        
+
         /// <remarks/>
         WAITING_FOR_AUTHORING,
-        
+
         /// <remarks/>
         OUT_FOR_APPROVAL,
-        
+
         /// <remarks/>
         WIDGET,
-        
+
         /// <remarks/>
         EXPIRED,
-        
+
         /// <remarks/>
         WAITING_FOR_MY_REVIEW,
-        
+
         /// <remarks/>
         IN_REVIEW,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         SIGNED_IN_ADOBE_ACROBAT,
-        
+
         /// <remarks/>
         SIGNED_IN_ADOBE_READER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum ParticipantRole {
-        
+
         /// <remarks/>
         SENDER,
-        
+
         /// <remarks/>
         SIGNER,
-        
+
         /// <remarks/>
         APPROVER,
-        
+
         /// <remarks/>
         CC,
-        
+
         /// <remarks/>
         DELEGATE,
-        
+
         /// <remarks/>
         SHARE,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto13.api.echosign")]
     public enum ParticipantSecurityOption {
-        
+
         /// <remarks/>
         PASSWORD,
-        
+
         /// <remarks/>
         WEB_IDENTITY,
-        
+
         /// <remarks/>
         KBA,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum AgreementStatus {
-        
+
         /// <remarks/>
         OUT_FOR_SIGNATURE,
-        
+
         /// <remarks/>
         WAITING_FOR_REVIEW,
-        
+
         /// <remarks/>
         SIGNED,
-        
+
         /// <remarks/>
         APPROVED,
-        
+
         /// <remarks/>
         ABORTED,
-        
+
         /// <remarks/>
         DOCUMENT_LIBRARY,
-        
+
         /// <remarks/>
         WIDGET,
-        
+
         /// <remarks/>
         EXPIRED,
-        
+
         /// <remarks/>
         ARCHIVED,
-        
+
         /// <remarks/>
         PREFILL,
-        
+
         /// <remarks/>
         AUTHORING,
-        
+
         /// <remarks/>
         WAITING_FOR_FAXIN,
-        
+
         /// <remarks/>
         WAITING_FOR_VERIFICATION,
-        
+
         /// <remarks/>
         WIDGET_WAITING_FOR_VERIFICATION,
-        
+
         /// <remarks/>
         WAITING_FOR_PAYMENT,
-        
+
         /// <remarks/>
         OUT_FOR_APPROVAL,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         SIGNED_IN_ADOBE_ACROBAT,
-        
+
         /// <remarks/>
         SIGNED_IN_ADOBE_READER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -9920,15 +9919,15 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public partial class NextParticipantInfo {
-        
+
         private string emailField;
-        
+
         private string nameField;
-        
+
         private System.DateTime waitingSinceField;
-        
+
         private bool waitingSinceFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -9939,7 +9938,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -9950,7 +9949,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime waitingSince {
             get {
@@ -9960,7 +9959,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.waitingSinceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool waitingSinceSpecified {
@@ -9972,39 +9971,39 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto13.api.echosign")]
     public enum SecurityOption {
-        
+
         /// <remarks/>
         OPEN_PROTECTED,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto11.api.echosign")]
     public enum DocumentInfoListErrorCode {
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         NO_ACCESS_WITHOUT_CREDENTIAL,
-        
+
         /// <remarks/>
         INVALID_CREDENTIAL,
-        
+
         /// <remarks/>
         INVALID_EXTERNAL_ID,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10012,11 +10011,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class SupportingDocumentImageUrls {
-        
+
         private PageImageUrls[] pagesField;
-        
+
         private string fieldNameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public PageImageUrls[] pages {
@@ -10027,7 +10026,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.pagesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fieldName {
@@ -10039,7 +10038,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10047,9 +10046,9 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class PageImageUrls {
-        
+
         private PageImageUrl[] imagesField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public PageImageUrl[] images {
@@ -10061,7 +10060,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10069,21 +10068,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class PageImageUrl {
-        
+
         private System.Nullable<ScalingType> scalingTypeField;
-        
+
         private bool scalingTypeFieldSpecified;
-        
+
         private System.Nullable<int> zoomField;
-        
+
         private bool zoomFieldSpecified;
-        
+
         private string urlField;
-        
+
         private System.Nullable<int> widthField;
-        
+
         private bool widthFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<ScalingType> scalingType {
@@ -10094,7 +10093,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.scalingTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool scalingTypeSpecified {
@@ -10105,7 +10104,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.scalingTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<int> zoom {
@@ -10116,7 +10115,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.zoomField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool zoomSpecified {
@@ -10127,7 +10126,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.zoomFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -10138,7 +10137,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.urlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<int> width {
@@ -10149,7 +10148,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.widthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool widthSpecified {
@@ -10161,20 +10160,20 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public enum ScalingType {
-        
+
         /// <remarks/>
         FIXED_WIDTH,
-        
+
         /// <remarks/>
         PERCENT_ZOOM,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10182,11 +10181,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class DocumentImageUrls {
-        
+
         private PageImageUrls[] pagesField;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public PageImageUrls[] pages {
@@ -10197,7 +10196,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.pagesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -10209,7 +10208,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10217,21 +10216,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class GetDocumentImageUrlsResult {
-        
+
         private DocumentImageUrls[] imageUrlsField;
-        
+
         private SupportingDocumentImageUrls[] supportingDocumentImageUrlsField;
-        
+
         private System.Nullable<GetDocumentImageUrlsErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentImageUrls[] imageUrls {
@@ -10242,7 +10241,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.imageUrlsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public SupportingDocumentImageUrls[] supportingDocumentImageUrls {
@@ -10253,7 +10252,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.supportingDocumentImageUrlsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetDocumentImageUrlsErrorCode> errorCode {
@@ -10264,7 +10263,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -10275,7 +10274,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -10286,7 +10285,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -10296,7 +10295,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -10308,47 +10307,47 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum GetDocumentImageUrlsErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_VERSION_KEY,
-        
+
         /// <remarks/>
         INVALID_PARTICIPANT,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_AVAILABLE,
-        
+
         /// <remarks/>
         DOCUMENT_NOT_EXPOSED,
-        
+
         /// <remarks/>
         DOCUMENT_REMOVED,
-        
+
         /// <remarks/>
         DOCUMENT_DELETED,
-        
+
         /// <remarks/>
         IMAGES_NOT_AVAILABLE,
-        
+
         /// <remarks/>
         INTERNAL_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10356,19 +10355,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public partial class GetDocumentImageUrlsOptions {
-        
+
         private bool attachSupportingDocumentsField;
-        
+
         private bool attachSupportingDocumentsFieldSpecified;
-        
+
         private System.Nullable<IncludeScalingTypes> includeScalingTypesField;
-        
+
         private bool includeScalingTypesFieldSpecified;
-        
+
         private string participantEmailField;
-        
+
         private string versionKeyField;
-        
+
         /// <remarks/>
         public bool attachSupportingDocuments {
             get {
@@ -10378,7 +10377,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.attachSupportingDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool attachSupportingDocumentsSpecified {
@@ -10389,7 +10388,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.attachSupportingDocumentsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<IncludeScalingTypes> includeScalingTypes {
@@ -10400,7 +10399,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.includeScalingTypesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool includeScalingTypesSpecified {
@@ -10411,7 +10410,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.includeScalingTypesFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string participantEmail {
@@ -10422,7 +10421,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.participantEmailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string versionKey {
@@ -10434,23 +10433,23 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto14.api.echosign")]
     public enum IncludeScalingTypes {
-        
+
         /// <remarks/>
         ALL,
-        
+
         /// <remarks/>
         FIXED_WIDTH,
-        
+
         /// <remarks/>
         PERCENT_ZOOM,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10458,13 +10457,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class DocumentEventForUser {
-        
+
         private string documentKeyField;
-        
+
         private DocumentHistoryEvent eventField;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -10475,7 +10474,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DocumentHistoryEvent @event {
@@ -10486,7 +10485,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.eventField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -10498,7 +10497,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10506,19 +10505,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class GetDocumentEventsForUserResult {
-        
+
         private DocumentEventForUser[] documentEventsForUserField;
-        
+
         private System.Nullable<GetDocumentEventsForUserResultCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public DocumentEventForUser[] documentEventsForUser {
@@ -10529,7 +10528,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentEventsForUserField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetDocumentEventsForUserResultCode> errorCode {
@@ -10540,7 +10539,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -10551,7 +10550,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -10562,7 +10561,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -10572,7 +10571,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -10584,35 +10583,35 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public enum GetDocumentEventsForUserResultCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_USER_CREDENTIALS,
-        
+
         /// <remarks/>
         INVALID_DATE_RANGE,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         PERMISSION_DENIED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10620,21 +10619,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto18.api.echosign")]
     public partial class DocumentEventsForUserOptions {
-        
+
         private System.DateTime endDateField;
-        
+
         private bool endDateFieldSpecified;
-        
+
         private System.Nullable<AgreementEventType>[] filterEventsField;
-        
+
         private bool onlyShowLatestEventField;
-        
+
         private bool onlyShowLatestEventFieldSpecified;
-        
+
         private System.DateTime startDateField;
-        
+
         private bool startDateFieldSpecified;
-        
+
         /// <remarks/>
         public System.DateTime endDate {
             get {
@@ -10644,7 +10643,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.endDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool endDateSpecified {
@@ -10655,7 +10654,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.endDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute()]
@@ -10667,7 +10666,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.filterEventsField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool onlyShowLatestEvent {
             get {
@@ -10677,7 +10676,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.onlyShowLatestEventField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool onlyShowLatestEventSpecified {
@@ -10688,7 +10687,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.onlyShowLatestEventFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime startDate {
             get {
@@ -10698,7 +10697,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.startDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool startDateSpecified {
@@ -10710,7 +10709,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10718,19 +10717,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class GetComposeDocumentUrlResult {
-        
+
         private string composeDocumentUrlField;
-        
+
         private System.Nullable<GetComposeDocumentUrlResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string composeDocumentUrl {
@@ -10741,7 +10740,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.composeDocumentUrlField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<GetComposeDocumentUrlResultErrorCode> errorCode {
@@ -10752,7 +10751,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -10763,7 +10762,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -10774,7 +10773,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -10784,7 +10783,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -10796,32 +10795,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum GetComposeDocumentUrlResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_ACCESS_TOKEN,
-        
+
         /// <remarks/>
         INVALID_ARGUMENTS,
-        
+
         /// <remarks/>
         FILE_RETRIEVAL_ERROR,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10829,27 +10828,27 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class SignatureLocation {
-        
+
         private System.Nullable<float> bottomField;
-        
+
         private bool bottomFieldSpecified;
-        
+
         private System.Nullable<float> leftField;
-        
+
         private bool leftFieldSpecified;
-        
+
         private System.Nullable<int> pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         private System.Nullable<float> rightField;
-        
+
         private bool rightFieldSpecified;
-        
+
         private System.Nullable<float> topField;
-        
+
         private bool topFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<float> bottom {
@@ -10860,7 +10859,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.bottomField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool bottomSpecified {
@@ -10871,7 +10870,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.bottomFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<float> left {
@@ -10882,7 +10881,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.leftField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool leftSpecified {
@@ -10893,7 +10892,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.leftFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<int> pageNumber {
@@ -10904,7 +10903,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.pageNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool pageNumberSpecified {
@@ -10915,7 +10914,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.pageNumberFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<float> right {
@@ -10926,7 +10925,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.rightField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool rightSpecified {
@@ -10937,7 +10936,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.rightFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<float> top {
@@ -10948,7 +10947,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.topField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool topSpecified {
@@ -10960,7 +10959,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -10968,21 +10967,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class DeviceInfo {
-        
+
         private string applicationDescriptionField;
-        
+
         private string deviceDescriptionField;
-        
+
         private DeviceLocation deviceLocationField;
-        
+
         private System.DateTime deviceTimeField;
-        
+
         private bool deviceTimeFieldSpecified;
-        
+
         private System.Nullable<int> deviceTimeZoneOffsetField;
-        
+
         private bool deviceTimeZoneOffsetFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string applicationDescription {
@@ -10993,7 +10992,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.applicationDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string deviceDescription {
@@ -11004,7 +11003,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deviceDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DeviceLocation deviceLocation {
@@ -11015,7 +11014,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deviceLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime deviceTime {
             get {
@@ -11025,7 +11024,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deviceTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool deviceTimeSpecified {
@@ -11036,7 +11035,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deviceTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<int> deviceTimeZoneOffset {
@@ -11047,7 +11046,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deviceTimeZoneOffsetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool deviceTimeZoneOffsetSpecified {
@@ -11059,7 +11058,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11067,27 +11066,27 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class ComposeDocumentInfo {
-        
+
         private System.Nullable<ComposeDocumentType> composeDocumentTypeField;
-        
+
         private bool composeDocumentTypeFieldSpecified;
-        
+
         private DeviceInfo deviceInfoField;
-        
+
         private byte[] fileField;
-        
+
         private string fileNameField;
-        
+
         private string localeField;
-        
+
         private string messageField;
-        
+
         private RecipientInfo[] recipientsField;
-        
+
         private SignatureLocation signatureLocationField;
-        
+
         private string titleField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<ComposeDocumentType> composeDocumentType {
@@ -11098,7 +11097,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.composeDocumentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool composeDocumentTypeSpecified {
@@ -11109,7 +11108,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.composeDocumentTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DeviceInfo deviceInfo {
@@ -11120,7 +11119,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deviceInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
         public byte[] file {
@@ -11131,7 +11130,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fileField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string fileName {
@@ -11142,7 +11141,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fileNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string locale {
@@ -11153,7 +11152,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.localeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string message {
@@ -11164,7 +11163,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto14.api.echosign")]
@@ -11176,7 +11175,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.recipientsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public SignatureLocation signatureLocation {
@@ -11187,7 +11186,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureLocationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string title {
@@ -11199,26 +11198,26 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum ComposeDocumentType {
-        
+
         /// <remarks/>
         SIGN_THEN_DELIVER,
-        
+
         /// <remarks/>
         DELIVER_ONLY,
-        
+
         /// <remarks/>
         SIGN_THEN_SEND,
-        
+
         /// <remarks/>
         SEND_ONLY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11226,19 +11225,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public partial class AuditTrailResult {
-        
+
         private byte[] auditTrailPdfField;
-        
+
         private System.Nullable<AuditTrailResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
         public byte[] auditTrailPdf {
@@ -11249,7 +11248,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.auditTrailPdfField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AuditTrailResultErrorCode> errorCode {
@@ -11260,7 +11259,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -11271,7 +11270,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -11282,7 +11281,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -11292,7 +11291,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -11304,32 +11303,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public enum AuditTrailResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         DOCUMENT_HAS_BEEN_DELETED,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11337,17 +11336,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class EnableWidgetResult {
-        
+
         private string errorMessageField;
-        
+
         private System.Nullable<EnableWidgetResultCode> resultCodeField;
-        
+
         private bool resultCodeFieldSpecified;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -11358,7 +11357,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<EnableWidgetResultCode> resultCode {
@@ -11369,7 +11368,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.resultCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool resultCodeSpecified {
@@ -11380,7 +11379,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.resultCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -11390,7 +11389,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -11402,29 +11401,29 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public enum EnableWidgetResultCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         ALREADY_ENABLED,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11433,7 +11432,7 @@ namespace EchoSoap.secure.echosign.com {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class EnableWidgetOptions {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11441,17 +11440,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class DisableWidgetResult {
-        
+
         private string errorMessageField;
-        
+
         private System.Nullable<DisableWidgetResultCode> resultCodeField;
-        
+
         private bool resultCodeFieldSpecified;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -11462,7 +11461,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DisableWidgetResultCode> resultCode {
@@ -11473,7 +11472,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.resultCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool resultCodeSpecified {
@@ -11484,7 +11483,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.resultCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -11494,7 +11493,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -11506,38 +11505,38 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public enum DisableWidgetResultCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         ALREADY_DISABLED,
-        
+
         /// <remarks/>
         TOO_MANY_ACTIONS_SPECIFIED,
-        
+
         /// <remarks/>
         NO_ACTION_SPECIFIED,
-        
+
         /// <remarks/>
         INVALID_URL,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11545,11 +11544,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class DisableWidgetOptions {
-        
+
         private string messageField;
-        
+
         private string redirectUrlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string message {
@@ -11560,7 +11559,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string redirectUrl {
@@ -11572,7 +11571,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11580,19 +11579,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto13.api.echosign")]
     public partial class DeliverDocumentResult {
-        
+
         private string deliveryURLField;
-        
+
         private System.Nullable<DeliverDocumentResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string deliveryURL {
@@ -11603,7 +11602,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deliveryURLField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DeliverDocumentResultErrorCode> errorCode {
@@ -11614,7 +11613,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -11625,7 +11624,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -11636,7 +11635,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -11646,7 +11645,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -11658,29 +11657,29 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto13.api.echosign")]
     public enum DeliverDocumentResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         FILE_RETRIEVAL_ERROR,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11688,17 +11687,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public partial class DeleteGroupResult {
-        
+
         private System.Nullable<DeleteGroupResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DeleteGroupResultErrorCode> errorCode {
@@ -11709,7 +11708,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -11720,7 +11719,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -11731,7 +11730,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -11741,7 +11740,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -11753,44 +11752,44 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public enum DeleteGroupResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_GROUP_KEY,
-        
+
         /// <remarks/>
         GROUP_NOT_EMPTY,
-        
+
         /// <remarks/>
         CANNOT_DELETE_DEFAULT_GROUP,
-        
+
         /// <remarks/>
         TERMS_NOT_ACCEPTED,
-        
+
         /// <remarks/>
         NOT_IN_ACCOUNT,
-        
+
         /// <remarks/>
         NO_PERMISSION_TO_EXECUTE_METHOD,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11798,17 +11797,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class DelegateSigningResult {
-        
+
         private System.Nullable<DelegateSigningResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<DelegateSigningResultErrorCode> errorCode {
@@ -11819,7 +11818,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -11830,7 +11829,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -11841,7 +11840,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -11851,7 +11850,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -11863,44 +11862,44 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public enum DelegateSigningResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_CREDENTIALS,
-        
+
         /// <remarks/>
         INVALID_DOCUMENT_KEY,
-        
+
         /// <remarks/>
         INVALID_OPTIONS,
-        
+
         /// <remarks/>
         INVALID_NEW_SIGNER,
-        
+
         /// <remarks/>
         INVALID_MESSAGE,
-        
+
         /// <remarks/>
         SIGNING_DELEGATION_NOT_ALLOWED,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11908,11 +11907,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto17.api.echosign")]
     public partial class DelegateSigningOptions {
-        
+
         private string messageField;
-        
+
         private string newSignerEmailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string message {
@@ -11923,7 +11922,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string newSignerEmail {
@@ -11935,7 +11934,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11943,11 +11942,11 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public partial class UserCredentials {
-        
+
         private string emailField;
-        
+
         private string passwordField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -11958,7 +11957,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string password {
@@ -11970,7 +11969,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -11978,21 +11977,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class UrlWidgetCreationResult {
-        
+
         private string documentKeyField;
-        
+
         private System.Nullable<UrlWidgetCreationResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         private string urlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -12003,7 +12002,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<UrlWidgetCreationResultErrorCode> errorCode {
@@ -12014,7 +12013,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -12025,7 +12024,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -12036,7 +12035,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -12046,7 +12045,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -12057,7 +12056,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -12069,32 +12068,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto8.api.echosign")]
     public enum UrlWidgetCreationResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_URL,
-        
+
         /// <remarks/>
         INVALID_SIGNATURE_FLOW,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12102,23 +12101,23 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto8.api.echosign")]
     public partial class WidgetPersonalizationInfo {
-        
+
         private System.Nullable<bool> allowManualVerificationField;
-        
+
         private bool allowManualVerificationFieldSpecified;
-        
+
         private string commentField;
-        
+
         private string emailField;
-        
+
         private System.DateTime expirationField;
-        
+
         private bool expirationFieldSpecified;
-        
+
         private System.Nullable<bool> reusableField;
-        
+
         private bool reusableFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<bool> allowManualVerification {
@@ -12129,7 +12128,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.allowManualVerificationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool allowManualVerificationSpecified {
@@ -12140,7 +12139,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.allowManualVerificationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string comment {
@@ -12151,7 +12150,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.commentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -12162,7 +12161,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         public System.DateTime expiration {
             get {
@@ -12172,7 +12171,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.expirationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool expirationSpecified {
@@ -12183,7 +12182,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.expirationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<bool> reusable {
@@ -12194,7 +12193,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.reusableField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool reusableSpecified {
@@ -12206,7 +12205,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12214,19 +12213,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class LibraryDocumentCreationResult {
-        
+
         private string documentKeyField;
-        
+
         private System.Nullable<LibraryDocumentCreationResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -12237,7 +12236,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<LibraryDocumentCreationResultErrorCode> errorCode {
@@ -12248,7 +12247,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -12259,7 +12258,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -12270,7 +12269,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -12280,7 +12279,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -12292,26 +12291,26 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public enum LibraryDocumentCreationResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12319,25 +12318,25 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public partial class LibraryDocumentCreationInfo {
-        
+
         private FileInfo[] fileInfosField;
-        
+
         private System.Nullable<LibrarySharingMode> librarySharingModeField;
-        
+
         private bool librarySharingModeFieldSpecified;
-        
+
         private System.Nullable<LibraryTemplateType>[] libraryTemplateTypesField;
-        
+
         private string nameField;
-        
+
         private System.Nullable<SignatureFlow> signatureFlowField;
-        
+
         private bool signatureFlowFieldSpecified;
-        
+
         private System.Nullable<SignatureType> signatureTypeField;
-        
+
         private bool signatureTypeFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto.api.echosign")]
@@ -12349,7 +12348,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fileInfosField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<LibrarySharingMode> librarySharingMode {
@@ -12360,7 +12359,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.librarySharingModeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool librarySharingModeSpecified {
@@ -12371,7 +12370,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.librarySharingModeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto17.api.echosign")]
@@ -12383,7 +12382,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.libraryTemplateTypesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -12394,7 +12393,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SignatureFlow> signatureFlow {
@@ -12405,7 +12404,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureFlowField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool signatureFlowSpecified {
@@ -12416,7 +12415,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureFlowFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SignatureType> signatureType {
@@ -12427,7 +12426,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool signatureTypeSpecified {
@@ -12439,23 +12438,23 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto9.api.echosign")]
     public enum LibrarySharingMode {
-        
+
         /// <remarks/>
         USER,
-        
+
         /// <remarks/>
         GROUP,
-        
+
         /// <remarks/>
         ACCOUNT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12463,19 +12462,19 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class CreateGroupResult {
-        
+
         private string groupKeyField;
-        
+
         private System.Nullable<CreateGroupResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string groupKey {
@@ -12486,7 +12485,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.groupKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<CreateGroupResultErrorCode> errorCode {
@@ -12497,7 +12496,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -12508,7 +12507,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -12519,7 +12518,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -12529,7 +12528,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -12541,38 +12540,38 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto15.api.echosign")]
     public enum CreateGroupResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_GROUP_NAME,
-        
+
         /// <remarks/>
         NOT_IN_ACCOUNT,
-        
+
         /// <remarks/>
         NO_PERMISSION_TO_EXECUTE_METHOD,
-        
+
         /// <remarks/>
         TERMS_NOT_ACCEPTED,
-        
+
         /// <remarks/>
         MISC_ERROR,
-        
+
         /// <remarks/>
         EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12580,13 +12579,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class FormCreationResult {
-        
+
         private DocumentKey documentKeyField;
-        
+
         private string widgetCodeField;
-        
+
         private string widgetUrlField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public DocumentKey documentKey {
@@ -12597,7 +12596,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string widgetCode {
@@ -12608,7 +12607,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.widgetCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string widgetUrl {
@@ -12620,7 +12619,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12628,17 +12627,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class FormCreationInfo {
-        
+
         private ExternalId externalIdField;
-        
+
         private FileInfo[] fileInfosField;
-        
+
         private System.Nullable<FormType> formTypeField;
-        
+
         private bool formTypeFieldSpecified;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public ExternalId externalId {
@@ -12649,7 +12648,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.externalIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         public FileInfo[] fileInfos {
@@ -12660,7 +12659,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fileInfosField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<FormType> formType {
@@ -12671,7 +12670,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.formTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool formTypeSpecified {
@@ -12682,7 +12681,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.formTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -12694,20 +12693,20 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum FormType {
-        
+
         /// <remarks/>
         NORMAL,
-        
+
         /// <remarks/>
         WIDGET,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12715,21 +12714,21 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto16.api.echosign")]
     public partial class EmbeddedWidgetCreationResult {
-        
+
         private string documentKeyField;
-        
+
         private System.Nullable<EmbeddedWidgetCreationResultErrorCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private string javascriptField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string documentKey {
@@ -12740,7 +12739,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.documentKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<EmbeddedWidgetCreationResultErrorCode> errorCode {
@@ -12751,7 +12750,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -12762,7 +12761,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -12773,7 +12772,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string javascript {
@@ -12784,7 +12783,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.javascriptField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -12794,7 +12793,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -12806,32 +12805,32 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto8.api.echosign")]
     public enum EmbeddedWidgetCreationResultErrorCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         INVALID_JAVASCRIPT,
-        
+
         /// <remarks/>
         INVALID_SIGNATURE_FLOW,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12839,17 +12838,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto8.api.echosign")]
     public partial class WidgetCompletionInfo {
-        
+
         private bool deframeField;
-        
+
         private bool deframeFieldSpecified;
-        
+
         private int delayField;
-        
+
         private bool delayFieldSpecified;
-        
+
         private string urlField;
-        
+
         /// <remarks/>
         public bool deframe {
             get {
@@ -12859,7 +12858,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deframeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool deframeSpecified {
@@ -12870,7 +12869,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.deframeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         public int delay {
             get {
@@ -12880,7 +12879,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.delayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool delaySpecified {
@@ -12891,7 +12890,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.delayFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string url {
@@ -12903,7 +12902,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -12911,31 +12910,31 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto8.api.echosign")]
     public partial class WidgetCreationInfo {
-        
+
         private CallbackInfo callbackInfoField;
-        
+
         private FileInfo[] fileInfosField;
-        
+
         private FileInfo[] formFieldLayerTemplatesField;
-        
+
         private string localeField;
-        
+
         private MergeFieldInfo mergeFieldInfoField;
-        
+
         private string nameField;
-        
+
         private SecurityOptions securityOptionsField;
-        
+
         private System.Nullable<SignatureFlow> signatureFlowField;
-        
+
         private bool signatureFlowFieldSpecified;
-        
+
         private VaultingInfo vaultingInfoField;
-        
+
         private WidgetCompletionInfo widgetAuthFailureInfoField;
-        
+
         private WidgetCompletionInfo widgetCompletionInfoField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public CallbackInfo callbackInfo {
@@ -12946,7 +12945,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.callbackInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto.api.echosign")]
@@ -12958,7 +12957,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.fileInfosField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://dto.api.echosign")]
@@ -12970,7 +12969,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.formFieldLayerTemplatesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string locale {
@@ -12981,7 +12980,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.localeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public MergeFieldInfo mergeFieldInfo {
@@ -12992,7 +12991,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.mergeFieldInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string name {
@@ -13003,7 +13002,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public SecurityOptions securityOptions {
@@ -13014,7 +13013,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.securityOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<SignatureFlow> signatureFlow {
@@ -13025,7 +13024,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureFlowField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool signatureFlowSpecified {
@@ -13036,7 +13035,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.signatureFlowFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public VaultingInfo vaultingInfo {
@@ -13047,7 +13046,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.vaultingInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public WidgetCompletionInfo widgetAuthFailureInfo {
@@ -13058,7 +13057,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.widgetAuthFailureInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public WidgetCompletionInfo widgetCompletionInfo {
@@ -13070,7 +13069,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -13078,13 +13077,13 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class SenderInfo {
-        
+
         private string emailField;
-        
+
         private string passwordField;
-        
+
         private string userKeyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -13095,7 +13094,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string password {
@@ -13106,7 +13105,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.passwordField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string userKey {
@@ -13118,7 +13117,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -13126,17 +13125,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto7.api.echosign")]
     public partial class CreateAccountResult {
-        
+
         private System.Nullable<CreateAccountResultCode> errorCodeField;
-        
+
         private bool errorCodeFieldSpecified;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private bool successFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<CreateAccountResultCode> errorCode {
@@ -13147,7 +13146,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool errorCodeSpecified {
@@ -13158,7 +13157,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string errorMessage {
@@ -13169,7 +13168,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         public bool success {
             get {
@@ -13179,7 +13178,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool successSpecified {
@@ -13191,38 +13190,38 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto7.api.echosign")]
     public enum CreateAccountResultCode {
-        
+
         /// <remarks/>
         OK,
-        
+
         /// <remarks/>
         INVALID_API_KEY,
-        
+
         /// <remarks/>
         ACCOUNT_CREATION_NOT_ENABLED,
-        
+
         /// <remarks/>
         INVALID_SEAT_COUNT,
-        
+
         /// <remarks/>
         USER_CREATION_ERROR,
-        
+
         /// <remarks/>
         USER_ALREADY_HAS_ACCOUNT,
-        
+
         /// <remarks/>
         EXCEPTION,
-        
+
         /// <remarks/>
         MISC_ERROR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -13230,17 +13229,17 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto7.api.echosign")]
     public partial class AccountCreationInfo {
-        
+
         private System.Nullable<AccountType> accountTypeField;
-        
+
         private bool accountTypeFieldSpecified;
-        
+
         private string companyNameField;
-        
+
         private System.Nullable<int> numSeatsField;
-        
+
         private bool numSeatsFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<AccountType> accountType {
@@ -13251,7 +13250,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.accountTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool accountTypeSpecified {
@@ -13262,7 +13261,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.accountTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string companyName {
@@ -13273,7 +13272,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.companyNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<int> numSeats {
@@ -13284,7 +13283,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.numSeatsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool numSeatsSpecified {
@@ -13296,7 +13295,7 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
@@ -13304,33 +13303,33 @@ namespace EchoSoap.secure.echosign.com {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public partial class UserCreationInfo {
-        
+
         private string companyField;
-        
+
         private string customField1Field;
-        
+
         private string customField2Field;
-        
+
         private string customField3Field;
-        
+
         private string emailField;
-        
+
         private string firstNameField;
-        
+
         private string groupKeyField;
-        
+
         private string lastNameField;
-        
+
         private System.Nullable<OptIn> optInField;
-        
+
         private bool optInFieldSpecified;
-        
+
         private string passwordField;
-        
+
         private string phoneField;
-        
+
         private string titleField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string company {
@@ -13341,7 +13340,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.companyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string customField1 {
@@ -13352,7 +13351,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.customField1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string customField2 {
@@ -13363,7 +13362,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.customField2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string customField3 {
@@ -13374,7 +13373,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.customField3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string email {
@@ -13385,7 +13384,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string firstName {
@@ -13396,7 +13395,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.firstNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string groupKey {
@@ -13407,7 +13406,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.groupKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string lastName {
@@ -13418,7 +13417,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.lastNameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<OptIn> optIn {
@@ -13429,7 +13428,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.optInField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool optInSpecified {
@@ -13440,7 +13439,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.optInFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string password {
@@ -13451,7 +13450,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.passwordField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string phone {
@@ -13462,7 +13461,7 @@ namespace EchoSoap.secure.echosign.com {
                 this.phoneField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public string title {
@@ -13474,40 +13473,40 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1015")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://dto.api.echosign")]
     public enum OptIn {
-        
+
         /// <remarks/>
         YES,
-        
+
         /// <remarks/>
         NO,
-        
+
         /// <remarks/>
         UNKNOWN,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void cancelDocumentCompletedEventHandler(object sender, cancelDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class cancelDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal cancelDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public CancelDocumentResult Result {
             get {
@@ -13516,24 +13515,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createAccountCompletedEventHandler(object sender, createAccountCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public CreateAccountResult Result {
             get {
@@ -13542,24 +13541,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createEmbeddedWidgetCompletedEventHandler(object sender, createEmbeddedWidgetCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createEmbeddedWidgetCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createEmbeddedWidgetCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public EmbeddedWidgetCreationResult Result {
             get {
@@ -13568,24 +13567,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createFormCompletedEventHandler(object sender, createFormCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createFormCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createFormCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public FormCreationResult Result {
             get {
@@ -13594,24 +13593,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createGroupCompletedEventHandler(object sender, createGroupCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createGroupCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createGroupCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public CreateGroupResult Result {
             get {
@@ -13620,24 +13619,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createLibraryDocumentCompletedEventHandler(object sender, createLibraryDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createLibraryDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createLibraryDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public LibraryDocumentCreationResult Result {
             get {
@@ -13646,24 +13645,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createPersonalEmbeddedWidgetCompletedEventHandler(object sender, createPersonalEmbeddedWidgetCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createPersonalEmbeddedWidgetCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createPersonalEmbeddedWidgetCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public EmbeddedWidgetCreationResult Result {
             get {
@@ -13672,24 +13671,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createPersonalUrlWidgetCompletedEventHandler(object sender, createPersonalUrlWidgetCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createPersonalUrlWidgetCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createPersonalUrlWidgetCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public UrlWidgetCreationResult Result {
             get {
@@ -13698,24 +13697,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createUrlWidgetCompletedEventHandler(object sender, createUrlWidgetCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createUrlWidgetCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createUrlWidgetCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public UrlWidgetCreationResult Result {
             get {
@@ -13724,24 +13723,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void createUserCompletedEventHandler(object sender, createUserCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal createUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public string Result {
             get {
@@ -13750,24 +13749,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void delegateSigningCompletedEventHandler(object sender, delegateSigningCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class delegateSigningCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal delegateSigningCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DelegateSigningResult Result {
             get {
@@ -13776,24 +13775,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void deleteGroupCompletedEventHandler(object sender, deleteGroupCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class deleteGroupCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal deleteGroupCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DeleteGroupResult Result {
             get {
@@ -13802,24 +13801,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void deliverDocumentCompletedEventHandler(object sender, deliverDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class deliverDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal deliverDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DeliverDocumentResult Result {
             get {
@@ -13828,24 +13827,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void disableWidgetCompletedEventHandler(object sender, disableWidgetCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class disableWidgetCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal disableWidgetCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DisableWidgetResult Result {
             get {
@@ -13854,24 +13853,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void enableWidgetCompletedEventHandler(object sender, enableWidgetCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class enableWidgetCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal enableWidgetCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public EnableWidgetResult Result {
             get {
@@ -13880,24 +13879,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getAuditTrailCompletedEventHandler(object sender, getAuditTrailCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getAuditTrailCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getAuditTrailCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public AuditTrailResult Result {
             get {
@@ -13906,24 +13905,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getComposeDocumentUrlCompletedEventHandler(object sender, getComposeDocumentUrlCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getComposeDocumentUrlCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getComposeDocumentUrlCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetComposeDocumentUrlResult Result {
             get {
@@ -13932,24 +13931,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentByVersionCompletedEventHandler(object sender, getDocumentByVersionCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentByVersionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentByVersionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public byte[] Result {
             get {
@@ -13958,24 +13957,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentEventsForUserCompletedEventHandler(object sender, getDocumentEventsForUserCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentEventsForUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentEventsForUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetDocumentEventsForUserResult Result {
             get {
@@ -13984,24 +13983,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentImageUrlsCompletedEventHandler(object sender, getDocumentImageUrlsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentImageUrlsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentImageUrlsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetDocumentImageUrlsResult Result {
             get {
@@ -14010,24 +14009,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentInfoCompletedEventHandler(object sender, getDocumentInfoCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentInfoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentInfoCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DocumentInfo Result {
             get {
@@ -14036,24 +14035,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentInfosByExternalIdCompletedEventHandler(object sender, getDocumentInfosByExternalIdCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentInfosByExternalIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentInfosByExternalIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DocumentInfoList Result {
             get {
@@ -14062,24 +14061,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentUrlByVersionCompletedEventHandler(object sender, getDocumentUrlByVersionCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentUrlByVersionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentUrlByVersionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DocumentUrlResult Result {
             get {
@@ -14088,24 +14087,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentUrlsCompletedEventHandler(object sender, getDocumentUrlsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentUrlsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentUrlsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetDocumentUrlsResult Result {
             get {
@@ -14114,24 +14113,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentsCompletedEventHandler(object sender, getDocumentsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetDocumentsResult Result {
             get {
@@ -14140,24 +14139,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getDocumentsForUserCompletedEventHandler(object sender, getDocumentsForUserCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getDocumentsForUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getDocumentsForUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetDocumentsForUserResult Result {
             get {
@@ -14166,24 +14165,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getFormDataCompletedEventHandler(object sender, getFormDataCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getFormDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getFormDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetFormDataResult Result {
             get {
@@ -14192,24 +14191,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getGroupsInAccountCompletedEventHandler(object sender, getGroupsInAccountCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getGroupsInAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getGroupsInAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetGroupsInAccountResult Result {
             get {
@@ -14218,24 +14217,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getImagesByVersionCompletedEventHandler(object sender, getImagesByVersionCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getImagesByVersionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getImagesByVersionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DocumentImageList Result {
             get {
@@ -14244,24 +14243,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getLatestDocumentCompletedEventHandler(object sender, getLatestDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getLatestDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getLatestDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public byte[] Result {
             get {
@@ -14270,24 +14269,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getLatestDocumentUrlCompletedEventHandler(object sender, getLatestDocumentUrlCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getLatestDocumentUrlCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getLatestDocumentUrlCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DocumentUrlResult Result {
             get {
@@ -14296,24 +14295,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getLatestImagesCompletedEventHandler(object sender, getLatestImagesCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getLatestImagesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getLatestImagesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DocumentImageList Result {
             get {
@@ -14322,24 +14321,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getLibraryDocumentsForUserCompletedEventHandler(object sender, getLibraryDocumentsForUserCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getLibraryDocumentsForUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getLibraryDocumentsForUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetLibraryDocumentsForUserResult Result {
             get {
@@ -14348,24 +14347,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getMegaSignDocumentCompletedEventHandler(object sender, getMegaSignDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getMegaSignDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getMegaSignDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetMegaSignDocumentResult Result {
             get {
@@ -14374,24 +14373,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getMyDocumentsCompletedEventHandler(object sender, getMyDocumentsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getMyDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getMyDocumentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetDocumentsForUserResult Result {
             get {
@@ -14400,24 +14399,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getMyLibraryDocumentsCompletedEventHandler(object sender, getMyLibraryDocumentsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getMyLibraryDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getMyLibraryDocumentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetLibraryDocumentsForUserResult Result {
             get {
@@ -14426,24 +14425,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getMyWidgetsCompletedEventHandler(object sender, getMyWidgetsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getMyWidgetsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getMyWidgetsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetWidgetsForUserResult Result {
             get {
@@ -14452,24 +14451,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getSigningUrlCompletedEventHandler(object sender, getSigningUrlCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getSigningUrlCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getSigningUrlCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public SigningUrlResult Result {
             get {
@@ -14478,24 +14477,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getSupportingDocumentsCompletedEventHandler(object sender, getSupportingDocumentsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getSupportingDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getSupportingDocumentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetSupportingDocumentsResult Result {
             get {
@@ -14504,24 +14503,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getUserDocumentsCompletedEventHandler(object sender, getUserDocumentsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getUserDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getUserDocumentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetDocumentsForUserResult Result {
             get {
@@ -14530,24 +14529,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getUserInfoCompletedEventHandler(object sender, getUserInfoCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getUserInfoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getUserInfoCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetUserInfoResult Result {
             get {
@@ -14556,24 +14555,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getUsersInAccountCompletedEventHandler(object sender, getUsersInAccountCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getUsersInAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getUsersInAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetUsersInAccountResult Result {
             get {
@@ -14582,24 +14581,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getUsersInGroupCompletedEventHandler(object sender, getUsersInGroupCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getUsersInGroupCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getUsersInGroupCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetUsersInGroupResult Result {
             get {
@@ -14608,24 +14607,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void getWidgetsForUserCompletedEventHandler(object sender, getWidgetsForUserCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getWidgetsForUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal getWidgetsForUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetWidgetsForUserResult Result {
             get {
@@ -14634,24 +14633,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void initiateInteractiveSendDocumentCompletedEventHandler(object sender, initiateInteractiveSendDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class initiateInteractiveSendDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal initiateInteractiveSendDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public InitiateInteractiveSendDocumentResult Result {
             get {
@@ -14660,24 +14659,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void moveUsersToGroupCompletedEventHandler(object sender, moveUsersToGroupCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class moveUsersToGroupCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal moveUsersToGroupCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public MoveUsersToGroupResult Result {
             get {
@@ -14686,24 +14685,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void notifyDocumentVaultedCompletedEventHandler(object sender, notifyDocumentVaultedCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class notifyDocumentVaultedCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal notifyDocumentVaultedCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public NotifyDocumentVaultedResult Result {
             get {
@@ -14712,24 +14711,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void personalizeEmbeddedWidgetCompletedEventHandler(object sender, personalizeEmbeddedWidgetCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class personalizeEmbeddedWidgetCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal personalizeEmbeddedWidgetCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public EmbeddedWidgetCreationResult Result {
             get {
@@ -14738,24 +14737,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void personalizeUrlWidgetCompletedEventHandler(object sender, personalizeUrlWidgetCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class personalizeUrlWidgetCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal personalizeUrlWidgetCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public UrlWidgetCreationResult Result {
             get {
@@ -14764,24 +14763,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void rejectDocumentCompletedEventHandler(object sender, rejectDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class rejectDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal rejectDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public RejectDocumentResult Result {
             get {
@@ -14790,24 +14789,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void removeDocumentCompletedEventHandler(object sender, removeDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class removeDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal removeDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public RemoveDocumentResult Result {
             get {
@@ -14816,24 +14815,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void renameGroupCompletedEventHandler(object sender, renameGroupCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class renameGroupCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal renameGroupCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public RenameGroupResult Result {
             get {
@@ -14842,24 +14841,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void replaceSignerCompletedEventHandler(object sender, replaceSignerCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class replaceSignerCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal replaceSignerCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public ReplaceSignerResult Result {
             get {
@@ -14868,24 +14867,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void searchUserDocumentsCompletedEventHandler(object sender, searchUserDocumentsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class searchUserDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal searchUserDocumentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetDocumentsForUserResult Result {
             get {
@@ -14894,24 +14893,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void sendDocumentCompletedEventHandler(object sender, sendDocumentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class sendDocumentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal sendDocumentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public DocumentKey[] Result {
             get {
@@ -14920,24 +14919,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void sendDocumentInteractiveCompletedEventHandler(object sender, sendDocumentInteractiveCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class sendDocumentInteractiveCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal sendDocumentInteractiveCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public SendDocumentInteractiveResult Result {
             get {
@@ -14946,24 +14945,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void sendDocumentMegaSignCompletedEventHandler(object sender, sendDocumentMegaSignCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class sendDocumentMegaSignCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal sendDocumentMegaSignCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public SendDocumentMegaSignResult Result {
             get {
@@ -14972,24 +14971,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void sendReminderCompletedEventHandler(object sender, sendReminderCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class sendReminderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal sendReminderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public SendReminderResult Result {
             get {
@@ -14998,24 +14997,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void testEchoFileCompletedEventHandler(object sender, testEchoFileCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class testEchoFileCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal testEchoFileCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public byte[] Result {
             get {
@@ -15024,24 +15023,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void testPingCompletedEventHandler(object sender, testPingCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class testPingCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal testPingCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public Pong Result {
             get {
@@ -15050,24 +15049,24 @@ namespace EchoSoap.secure.echosign.com {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void verifyUserCompletedEventHandler(object sender, verifyUserCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class verifyUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal verifyUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public UserVerificationInfo Result {
             get {

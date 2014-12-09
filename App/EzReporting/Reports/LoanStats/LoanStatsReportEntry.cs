@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Reports {
 	public class LoanStatsReportEntry {
-		#region public
 
 		public LoanStatsReportEntry() {
 			MarketplaceCount = new SortedDictionary<int, int>();
@@ -43,6 +42,5 @@ namespace Reports {
 		public string Category3 { get; set; }
 		public string Region { get; set; }
 
-		#endregion public
 	} // class LoanStatsReportEntry
 } // namespace

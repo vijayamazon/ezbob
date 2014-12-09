@@ -2,8 +2,6 @@
 	using System;
 	using System.Runtime.Serialization;
 
-	#region class BrokerCustomerCrmEntry
-
 	[DataContract(IsReference = true)]
 	public class BrokerCustomerPersonalData {
 		[DataMember]
@@ -34,5 +32,4 @@
 		public string address { get; set; }
 	} // class BrokerCustomerPersonalData
 
-	#endregion class BrokerCustomerPersonalData
 } // namespace EzBob.Backend.Strategies.Broker

@@ -6,9 +6,6 @@
 	using Ezbob.Utils;
 
 	public partial class CalculateVatReturnSummary : AStrategy {
-		#region public
-
-		#region constructor
 
 		public CalculateVatReturnSummary(int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerMarketplaceID = nCustomerMarketplaceID;
@@ -26,17 +23,9 @@
 			Stopper = new Stopper();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Calculate VAT return summary"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Guid oCalculationID = Guid.NewGuid();
@@ -128,28 +117,12 @@
 			Log.Debug("Summary data - end.");
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Stopper
-
 		public Stopper Stopper { get; private set; } // Stopper
-
-		#endregion property Stopper
-
-		#endregion public
-
-		#region private
-
-		#region method SaveCustomerID
 
 		private void SaveCustomerID(LoadRtiMonthForVatReturnSummary.ResultRow oRow) {
 			m_nCustomerID = oRow.CustomerID;
 			m_oCurrentRtiMonthAction = SaveSalary;
 		} // SaveCustomerID
-
-		#endregion method SaveCustomerID
-
-		#region method SaveSalary
 
 		private void SaveSalary(LoadRtiMonthForVatReturnSummary.ResultRow oRow) {
 			if (oRow.RecordID < 0)
@@ -157,10 +130,6 @@
 			else
 				m_oRtiMonths[oRow.DateStart] = oRow.AmountPaid; // TODO: currency conversion using oRow.CurrencyCode
 		} // SaveSalary
-
-		#endregion method SaveSalary
-
-		#region fields
 
 		private Action<LoadRtiMonthForVatReturnSummary.ResultRow> m_oCurrentRtiMonthAction;
 		private int m_nCustomerID;
@@ -174,20 +143,12 @@
 		private readonly SortedDictionary<int, long> m_oBusinessRegNums; 
 		private readonly SortedDictionary<long, TimedBusinessID> m_oRegNumBusinesses; 
 
-		#endregion fields
-
-		#region method IsZero
-
 		private static bool IsZero(decimal? x) {
 			if (x == null)
 				return true;
 
 			return Math.Abs(x.Value) < 0.0000001m;
 		} // IsZero
-
-		#endregion method IsZero
-
-		#region method Div
 
 		private static decimal? Div(decimal? x, decimal? y) {
 			if ((x == null) || IsZero(y))
@@ -198,8 +159,5 @@
 			// ReSharper restore PossibleInvalidOperationException
 		} // Div
 
-		#endregion method Div
-
-		#endregion private
 	} // class CalculateVatReturnSummary
 } // namespace

@@ -2,7 +2,6 @@
 // using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 
 namespace Integration.ChannelGrabberConfig {
-	#region enum FunctionType
 
 	public enum FunctionType {
 		NumOfOrders,
@@ -14,12 +13,6 @@ namespace Integration.ChannelGrabberConfig {
 		TotalSumOfOrdersAnnualized
 	} // enum FunctionType
 
-	#endregion enum FunctionType
-
-	#region class AggregatorInfo
-
-	#region enum ValueType
-
 	public enum ValueType {
 		String,
 		Integer,
@@ -29,12 +22,7 @@ namespace Integration.ChannelGrabberConfig {
 		Boolean
 	} // enum ValueType
 
-	#endregion enum ValueType
-
 	public class AggregatorInfo : ICloneable {
-		#region public
-
-		#region constructor
 
 		public AggregatorInfo() {
 			FunctionTypeName = "";
@@ -42,17 +30,9 @@ namespace Integration.ChannelGrabberConfig {
 			ID = "";
 		} // constructor
 
-		#endregion constructor
-
-		#region properties
-
 		public string FunctionTypeName { get; set; }
 		public string ValueTypeName { get; set; }
 		public string ID { get; set; }
-
-		#endregion properties
-
-		#region method Parse
 
 		public void Parse() {
 			if (!ChannelGrabberConfig.FunctionType.TryParse(FunctionTypeName, out m_nFunctionType))
@@ -69,25 +49,13 @@ namespace Integration.ChannelGrabberConfig {
 			}
 		} // Parse
 
-		#endregion method Parse
-
-		#region getters
-
 		public FunctionType FunctionType() { return m_nFunctionType; }
 		public ValueType ValueType() { return m_nValueType; }
 		public Guid Guid() { return m_oGuid; }
 
-		#endregion getters
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format("( {0} - {1} - {2} )", FunctionType(), ValueType(), Guid());
 		} // ToString
-
-		#endregion method ToString
-
-		#region method Clone
 
 		public object Clone() {
 			return new AggregatorInfo {
@@ -100,18 +68,10 @@ namespace Integration.ChannelGrabberConfig {
 			};
 		} // Clone
 
-		#endregion method Clone
-
-		#endregion public
-
-		#region private
-
 		private FunctionType m_nFunctionType;
 		private ValueType m_nValueType;
 		private Guid m_oGuid;
 
-		#endregion private
 	} // class AggregatorInfo
 
-	#endregion class AggregatorInfo
 } // namespace Integration.ChannelGrabberConfig

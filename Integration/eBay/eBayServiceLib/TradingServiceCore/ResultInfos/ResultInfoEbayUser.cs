@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.DatabaseWrapper.UsersData;
@@ -36,12 +36,12 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 	    {
 	        get { return _Response.User == null ? null: _Response.User.PayPalAccountType.ToString(); }
 	    }
-		
+
 	    public bool? QualifiesForSelling
 	    {
 			get { return _Response.User != null && _Response.User.QualifiesForSellingSpecified? _Response.User.QualifiesForSelling : (bool?)null; }
 	    }
-		
+
 	    public bool QualifiesForB2BVAT
 	    {
 			get { return _Response.User != null && _Response.User.SellerInfo != null && _Response.User.SellerInfo.QualifiesForB2BVAT; }
@@ -52,7 +52,6 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 			get { return _Response.User == null || _Response.User.SellerInfo == null ? null : _Response.User.SellerInfo.SellerBusinessType.ToString(); }
 	    }
 
-		
 	    public bool StoreOwner
 	    {
 			get { return _Response.User != null && _Response.User.SellerInfo != null && _Response.User.SellerInfo.StoreOwner; }
@@ -72,7 +71,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 	    {
 			get { return _Response.User != null && _Response.User.SellerInfo != null && _Response.User.SellerInfo.TopRatedSellerSpecified? _Response.User.SellerInfo.TopRatedSeller: (bool?)null; }
 	    }
-		
+
 		public string Site
 	    {
 	        get {return _Response.User == null ? null: _Response.User.Site.ToString(); }
@@ -85,12 +84,12 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 				return _Response.User == null || _Response.User.SkypeID == null ? null : string.Join( ", ", _Response.User.SkypeID.Select( s => s.ToString() ) );
 			} 
 		}
-		
+
 		public bool? FeedbackPrivate
 	    {
 			get { return _Response.User != null && _Response.User.FeedbackPrivateSpecified? _Response.User.FeedbackPrivate: (bool?)null; }
 	    }
-		
+
 	    public string EIASToken
 	    {
 			get { return _Response.User == null ? null : _Response.User.EIASToken; }
@@ -155,7 +154,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 					return null;
 				}
 				var topRatedProgram = _Response.User.SellerInfo.TopRatedSellerDetails.TopRatedProgram; 
-				
+
 				return string.Join( ", ", topRatedProgram.Select( p => p.ToString() ) );
 			}
 		}

@@ -13,8 +13,6 @@
 		public readonly SortedDictionary<DateTime, InterestData> Schedule;
 		public readonly SortedDictionary<DateTime, TransactionData> Repayments;
 
-		#region constructor
-
 		public LoanData(int nLoanID, ASafeLog oLog) {
 			m_nLoanID = nLoanID;
 			m_oLog = oLog ?? new SafeLog();
@@ -22,10 +20,6 @@
 			Schedule = new SortedDictionary<DateTime, InterestData>();
 			Repayments = new SortedDictionary<DateTime, TransactionData>();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Calculate
 
 		/// <summary>
 		/// Earned interest is a SUM(Pj * Ij) where the sum is taken on all the days during
@@ -54,7 +48,7 @@
 			DateTime oFirstIncomeDay = IssueDate.AddDays(1);
 
 			// A loan starts to produce interest on the next day.
-			
+
 			DateTime oDayOne = (nMode == Reports.EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance)
 				? oFirstIncomeDay
 				: (
@@ -118,7 +112,7 @@
 
 			int nDayDataPtr = 0;
 			InterestData oCurDayData = aryDates[nDayDataPtr];
-			
+
 			foreach (PrInterest pri in days) {
 				if (pri.Update(oCurDayData, ifp, bp, bAccountingMode, oWriteOffDate)) {
 					nDayDataPtr++;
@@ -144,12 +138,6 @@
 			return nEarnedInterest;
 		} // Calculate
 
-		#endregion method Calculate
-
-		#region private
-
-		#region method IfpToString
-
 		private string IfpToString(InterestFreezePeriods ifp) {
 			string sIfp = "none";
 
@@ -163,10 +151,6 @@
 
 			return sIfp;
 		} // IfpToString
-
-		#endregion method IfpToString
-
-		#region method LogAllDetails
 
 		private void LogAllDetails(
 			decimal nEarnedInterest,
@@ -222,16 +206,9 @@
 			);
 		} // LogAllDetails
 
-		#endregion method LogAllDetails
-
-		#region fields
-
 		private readonly int m_nLoanID;
 		private readonly ASafeLog m_oLog;
 
-		#endregion fields
-
-		#endregion private
 	} // LoanData
 } // namespace Reports
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -100,7 +100,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues {
 				HistoryRecord = historyRecord
 			};
 
-
 			DatabaseValueTypeEnum valueType = data.ValueType;
 
 			switch (valueType) {
@@ -140,7 +139,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues {
 			_AnalyisisFunctionValueRepository.SaveOrUpdate(analyisisFunctionValue);
 		}
 
-		#region CheckValue
 		private static void CheckValue<T>(DatabaseValueTypeEnum functionValueType, T value) {
 			bool rez = false;
 			switch (functionValueType) {
@@ -176,6 +174,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues {
 				throw new ArgumentException();
 			}
 		}
-		#endregion
+
 	}
 }

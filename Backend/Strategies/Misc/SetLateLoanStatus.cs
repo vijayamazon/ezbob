@@ -8,9 +8,6 @@
 	using PaymentServices.PayPoint;
 
 	public class SetLateLoanStatus : AStrategy {
-		#region public
-
-		#region constructor
 
 		public SetLateLoanStatus(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
@@ -31,17 +28,9 @@
 			loanIdPrev = -1;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Set Late Loan Status"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			MarkLoansAsLate();
@@ -121,7 +110,7 @@
 				}
 
 				AccumulateFee(loanId, daysBetween, amountDue);
-				
+
 				DB.ExecuteNonQuery(
 					"UpdateCollection",
 					CommandSpecies.StoredProcedure,
@@ -138,20 +127,12 @@
 					new QueryParameter("Late90Plus", late90Plus),
 					new QueryParameter("Late90PlusNum", late90PlusNum)
 				);
-				
+
 				loanIdPrev = loanId;
 
 				return ActionResult.Continue;
 			}, "GetLateForCollection", CommandSpecies.StoredProcedure); // foreach
 		} // Execute
-
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
-		#region method AccumulateFee
 
 		private void AccumulateFee(int loanId, int daysBetween, decimal amountDue) {
 			if (loanId != loanIdPrev) {
@@ -191,10 +172,6 @@
 			pastDuesNum++;
 		} // AccumulateFee
 
-		#endregion method AccumulateFee
-
-		#region method CalculateFee
-
 		private void CalculateFee(int daysBetween, decimal interest, out int feeAmount, out int feeType) {
 			feeAmount = 0;
 			feeType = 0;
@@ -212,10 +189,6 @@
 				feeType = partialPaymentChargeId;
 			}
 		} // CalculateFee
-
-		#endregion method CalculateFee
-
-		#region method MarkLoansAsLate
 
 		private void MarkLoansAsLate() {
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
@@ -259,10 +232,6 @@
 			}, "GetLoansToCollect", CommandSpecies.StoredProcedure);
 		} // MarkLoansAsLate
 
-		#endregion method MarkLoansAsLate
-
-		#region properties
-
 		private readonly StrategiesMailer mailer;
 		private readonly int collectionPeriod1;
 		private readonly int collectionPeriod2;
@@ -286,8 +255,5 @@
 		private int late90PlusNum;
 		private int pastDuesNum;
 
-		#endregion properties
-
-		#endregion private
 	} // class 
 } // namespace

@@ -5,25 +5,14 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region enum TriState
-
 	public enum TriState {
 		Unknown,
 		Yes,
 		No
 	} // TriState
 
-	#endregion enum TriState
-
-	#region class ActionMetaData
-
 	[DataContract]
 	public class ActionMetaData {
-		#region public
-
-		#region static methods
-
-		#region method Create
 
 		public static ActionMetaData Create(int nServiceInstanceID, string sActionName, AConnection oDB, ASafeLog oLog, bool bIsSynchronous, ActionStatus nStatus, string sComment, int? nCustomerID, int? nUserID) {
 			Guid oActionID = Guid.NewGuid();
@@ -49,27 +38,11 @@
 			return amd;
 		} // Create
 
-		#endregion method Create
-
-		#endregion static methods
-
-		#region serialised properties
-
-		#region property ActionID
-
 		[DataMember]
 		public Guid ActionID { get; private set; }
 
-		#endregion property ActionID
-
-		#region property Name
-
 		[DataMember]
 		public string Name { get; private set; }
-
-		#endregion property Name
-
-		#region property Status
 
 		[DataMember]
 		public ActionStatus Status {
@@ -79,10 +52,6 @@
 
 		private readonly SafeValue<ActionStatus> m_oStatus;
 
-		#endregion property Status
-
-		#region property Comment
-
 		[DataMember]
 		public string Comment {
 			get { return m_oComment.Value; } // get
@@ -91,16 +60,8 @@
 
 		private readonly SafeValue<string> m_oComment;
 
-		#endregion property Comment
-
-		#region property IsSynchronous
-
 		[DataMember]
 		public bool IsSynchronous { get; private set; }
-
-		#endregion property IsSynchronous
-
-		#region property UserID
 
 		[DataMember]
 		public int? UserID {
@@ -110,10 +71,6 @@
 
 		private readonly SafeValue<int?> m_oUserID;
 
-		#endregion property UserID
-
-		#region property CustomerID
-
 		[DataMember]
 		public int? CustomerID {
 			get { return m_oCustomerID.Value; } // get
@@ -121,12 +78,6 @@
 		} // CustomerID
 
 		private readonly SafeValue<int?> m_oCustomerID;
-
-		#endregion property CustomerID
-
-		#endregion serialised properties
-
-		#region method ToString
 
 		public override string ToString() {
 			return string.Format(
@@ -139,10 +90,6 @@
 				Name
 			);
 		} // ToString
-
-		#endregion method ToString
-
-		#region method IsComplete
 
 		public TriState IsComplete() {
 			switch (Status) {
@@ -164,10 +111,6 @@
 			} // switch
 		} // IsComplete
 
-		#endregion method IsComplete
-
-		#region property UnderlyingThread
-
 		public Thread UnderlyingThread {
 			get { return m_oUnderlyingThread; } // get
 			set {
@@ -179,10 +122,6 @@
 		} // UnderlyingThread
 
 		private Thread m_oUnderlyingThread;
-
-		#endregion property UnderlyingThread
-
-		#region method Save
 
 		public void Save(ActionStatus nNewStatus) {
 			Status = nNewStatus;
@@ -212,14 +151,6 @@
 			} // lock
 		} // Save
 
-		#endregion method Save
-
-		#endregion public
-
-		#region private
-
-		#region constructor
-
 		private ActionMetaData(ActionStatus nStatus) {
 			m_oLockSave = new object();
 
@@ -229,20 +160,12 @@
 			m_oCustomerID = new SafeValue<int?>();
 		} // constructor
 
-		#endregion constructor
-
-		#region fields
-
 		private readonly object m_oLockSave;
 
 		private AConnection m_oDB;
 		private ASafeLog m_oLog;
 		private int m_nServiceInstanceID;
 
-		#endregion fields
-
-		#endregion private
 	} // struct ActionMetaData
 
-	#endregion class ActionMetaData
 } // namespace EzService

@@ -1,11 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 using System.Configuration;
 using System.Web.Services.Protocols;
 using System.Reflection;
-
 
 namespace com.yodlee.sampleapps
 {
@@ -48,7 +47,6 @@ namespace com.yodlee.sampleapps
             DateTime now = DateTime.Now;
             DateTime expired = created.AddMinutes(COBRAND_CONTEXT_TIME_OUT );
 
-
             if (now >= expired)
             {
                // System.Console.WriteLine("\t(CobrandContext is old, creating new one...)");
@@ -75,7 +73,6 @@ namespace com.yodlee.sampleapps
                 cobrandPasswordCredentials.password = password;
                 cobrandPasswordCredentials.loginName = username;
 
-               
                     // authentication of a cobrand in the Yodlee software platform and returns 
                     // a valid CobrandContext if the authentication is successful. This method takes a generic CobrandCredentials argument as the
                     // authentication related credentials of the cobrand.
@@ -87,7 +84,7 @@ namespace com.yodlee.sampleapps
                         tncVersion,
                         true,
                         cobrandPasswordCredentials);
-               
+
                 created = DateTime.Now;
                 return cobrandContext;
             }

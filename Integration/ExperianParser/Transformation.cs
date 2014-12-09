@@ -5,7 +5,6 @@ using System.Text;
 using Ezbob.Logger;
 
 namespace Ezbob.ExperianParser {
-	#region enum TransformationType
 
 	enum TransformationType {
 		None,
@@ -17,41 +16,22 @@ namespace Ezbob.ExperianParser {
 		YyyyMmDd
 	} // TransformationType
 
-	#endregion enum TransformationType
-
-	#region class Transformation
-
 	public class Transformation {
-		#region public
-
-		#region method ParseMoney
 
 		public static bool ParseMoney(string sMoney, out decimal nValue) {
 			return decimal.TryParse(sMoney, NumberStyles.Currency, Culture, out nValue);
 		} // ParseMoney
 
-		#endregion method ParseMoney
-
-		#region method EncodeMoney
-
 		public static string EncodeMoney(decimal nValue) {
 			return nValue.ToString("C2", Culture);
 		} // EncodeMoney
-
-		#endregion method EncodeMoney
-
-		#region constructor
 
 		public Transformation() {
 			m_oTypes = new List<TransformationType>();
 		} // constructor
 
-		#endregion constructor
-
 		public List<string> Types { get; set; }
 		public SortedDictionary<string, string> Map { get; set; }
-
-		#region method Validate
 
 		public void Validate(ASafeLog log) {
 			if (Types == null)
@@ -72,10 +52,6 @@ namespace Ezbob.ExperianParser {
 			} // for each type
 		} // Validate
 
-		#endregion method Validate
-
-		#region method Log
-
 		public void Log(StringBuilder sb, string sLinePrefix) {
 			sb.AppendFormat("{0}Types: {1}\n", sLinePrefix, string.Join(", ", Types));
 
@@ -84,10 +60,6 @@ namespace Ezbob.ExperianParser {
 					sb.AppendFormat("{0}\t{1} --> {2}\n", sLinePrefix, pair.Key, pair.Value);
 			} // if
 		} // Log
-
-		#endregion method Log
-
-		#region method Apply
 
 		public string Apply(string sValue) {
 			string sResult = sValue ?? string.Empty;
@@ -187,15 +159,7 @@ namespace Ezbob.ExperianParser {
 			return sResult;
 		} // Apply
 
-		#endregion method Apply
-
-		#endregion public
-
-		#region private
-
 		private readonly List<TransformationType> m_oTypes;
-
-		#region property Culture
 
 		private static CultureInfo Culture {
 			get {
@@ -208,10 +172,6 @@ namespace Ezbob.ExperianParser {
 
 		private static CultureInfo ms_oCulture;
 
-		#endregion property Culture
-
-		#endregion private
 	} // class Transformation
 
-	#endregion class Transformation
 } // namespace Ezbob.ExperianParser

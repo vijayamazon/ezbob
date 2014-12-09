@@ -17,8 +17,6 @@
 
 		public override string Name { get { return "Reject User"; } } // Name
 
-		#region method SetTemplateAndVariables
-
 		protected override void SetTemplateAndVariables()
 		{
 			if (CustomerData.IsAlibaba)
@@ -45,8 +43,6 @@
 				{ "ReportedAnnualTurnover", CustomerData.ReportedAnnualTurnover.ToString("#,#") }
 			};
 		} // SetTemplateAndVariables
-
-		#endregion method SetTemplateAndVariables
 
 		protected override void ActionAtEnd()
 		{

@@ -119,7 +119,6 @@
 			//max issued amount per day (e.g. 150,000 GBP): if we issued more than the limit during the date, the automatic approvals and re-approvals should stop and the system should warn underwriters and managers about this
 			//TODO
 
-			
 			reason = "Approve. Maybe approved (not all rules are checked)";
 			return true;
 		}

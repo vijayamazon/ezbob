@@ -10,7 +10,6 @@
 	using OfficeOpenXml;
 
 	public class CustomerData {
-		#region static constructor
 
 		static CustomerData() {
 			TotalApprovedAmount = 0;
@@ -31,14 +30,8 @@
 			};
 		} // static constructor
 
-		#endregion static constructor
-
-		#region public
-
 		public const string RowType = "RowType";
 		public const string LoanDataCustomerIDField = "CustomerID";
-
-		#region constructor
 
 		public CustomerData(SafeReader sr) {
 			Data = new Dictionary<string, Dictionary<string, ParsedValue>>();
@@ -74,8 +67,6 @@
 			m_oCashRequests = new SortedDictionary<int, CashRequestData>();
 		} // constructor
 
-		#endregion constructor
-
 		public Dictionary<string, Dictionary<string, ParsedValue>> Data { get; private set; }
 
 		public int CustomerID { get; private set; }
@@ -83,8 +74,6 @@
 		public string CustomerRefNum { get; private set; }
 
 		public string AlibabaID { get; private set; }
-
-		#region method AddLoanData
 
 		public void AddLoanData(SafeReader sr) {
 			for (int nIdx = 0; nIdx < sr.Count; nIdx++) {
@@ -98,10 +87,6 @@
 
 			AddSectionItem(SignedField, Yes);
 		} // AddLoanData
-
-		#endregion method AddLoanData
-
-		#region method AddRepayment
 
 		public void AddRepayment(SafeReader sr, SortedSet<int> oLateLoans) {
 			LoanData ld = sr.Fill<LoanData>();
@@ -123,10 +108,6 @@
 				} // if
 			} // if
 		} // AddRepayment
-
-		#endregion method AddRepayment
-
-		#region method SaveTo
 
 		public void SaveTo(ExcelPackage oReport) {
 			foreach (KeyValuePair<string, Dictionary<string, ParsedValue>> pair in Data) {
@@ -178,10 +159,6 @@
 			SaveLoanServicingSection(oReport);
 		} // SaveTo
 
-		#endregion method SaveTo
-
-		#region method AddApprovalPhaseTotal
-
 		public void AddApprovalPhaseTotal(ExcelPackage oReport) {
 			var ws = oReport.FindSheet(ApprovalPhaseFeedback);
 
@@ -221,10 +198,6 @@
 
 		} // AddApprovalPhaseTotal
 
-		#endregion method AddApprovalPhaseTotal
-
-		#region method AddMarketplace
-
 		public void AddMarketplace(SafeReader sr) {
 			string sMpName = sr["Marketplace"];
 
@@ -234,14 +207,6 @@
 			ms_oAllMarketplaces.Add(sMpName);
 			m_oMarketplaces.Add(sMpName);
 		} // AddMarketplace
-
-		#endregion method AddMarketplace
-
-		#endregion public
-
-		#region private
-
-		#region method AddSectionItem
 
 		private void AddSectionItem(string sFieldName, ParsedValue oValue) {
 			int nPos = sFieldName.IndexOf('_');
@@ -255,10 +220,6 @@
 
 			Data[sSectionName][sFieldInSection] = oValue;
 		} // AddSectionItem
-
-		#endregion method AddSectionItem
-
-		#region method SaveLoanServicingSection
 
 		private void SaveLoanServicingSection(ExcelPackage oReport) {
 			ExcelWorksheet oSheet = oReport.FindOrCreateSheet(
@@ -295,10 +256,6 @@
 				nLoanRow++;
 			} // for each loan
 		} // SaveLoanServicingSection 
-
-		#endregion method SaveLoanServicingSection
-
-		#region method SaveDataPointSection
 
 		private void SaveDataPointSection(ExcelPackage oReport) {
 			if (!Data.ContainsKey(DataPoint))
@@ -338,8 +295,6 @@
 			} // for each
 		} // SaveDataPointSection
 
-		#endregion method SaveDataPointSection
-
 		private const string CustomerIDField = "CustomerID";
 		private const string CustomerRefNumField = "CustomerRefnum";
 		private const string AlibabaIDField = "AlibabaID";
@@ -358,8 +313,6 @@
 		private readonly SortedDictionary<int, CashRequestData> m_oCashRequests; 
 
 		private readonly SortedSet<string> m_oMarketplaces;
-
-		#region class LoanData
 
 		private class LoanData {
 			public static LoanData operator +(LoanData a, LoanData b) {
@@ -403,10 +356,6 @@
 			public bool IsLate { get; set; }
 		} // LoanData
 
-		#endregion class LoanData
-
-		#region class CashRequestData
-
 		private class CashRequestData {
 			public decimal ApprovedAmount { get; set; }
 			public decimal AmountTaken { get; set; }
@@ -416,15 +365,11 @@
 			} // UnusedAmount
 		} // CashRequestData
 
-		#endregion class CashRequestData
-
 		private static readonly SortedSet<string> ms_oAllMarketplaces;
- 
+
 		private static readonly Dictionary<string, Dictionary<string, string>> ms_oColumnNumberFormats;
 		private static readonly Dictionary<string, Dictionary<string, string>> ms_oColumnTitles;
 		private static decimal TotalApprovedAmount { get; set; }
-
-		#region method GetColumnDisplayName
 
 		private static string GetColumnDisplayName(string sSectionName, string sColumnTitle) {
 			if (!ms_oColumnTitles.ContainsKey(sSectionName))
@@ -435,8 +380,5 @@
 			return dic.ContainsKey(sColumnTitle) ? dic[sColumnTitle] : sColumnTitle;
 		} // GetColumnDisplayName
 
-		#endregion method GetColumnDisplayName
-
-		#endregion private
 	} // class CustomerData
 } // namespace

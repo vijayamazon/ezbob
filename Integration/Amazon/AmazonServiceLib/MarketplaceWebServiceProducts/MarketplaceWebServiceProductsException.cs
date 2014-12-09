@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -13,7 +13,6 @@
  *  API Version: 2011-10-01
  * 
  */
-
 
 using System;
 using System.Xml.Serialization;
@@ -30,7 +29,7 @@ namespace MarketplaceWebServiceProducts
     /// </summary>
     public class MarketplaceWebServiceProductsException : Exception 
     {
-    
+
         private String message = null;
         private HttpStatusCode statusCode = default(HttpStatusCode);
         private String errorCode = null;
@@ -38,7 +37,6 @@ namespace MarketplaceWebServiceProducts
         private String requestId = null;
         private String xml = null;
         private ResponseHeaderMetadata responseHeaderMetadata = null;
-    
 
         /// <summary>
         /// Constructs MarketplaceWebServiceProductsException with message
@@ -47,7 +45,7 @@ namespace MarketplaceWebServiceProducts
         public MarketplaceWebServiceProductsException(String message) {
             this.message = message;
         }
-    
+
         /// <summary>
         /// Constructs MarketplaceWebServiceProductsException with message and status code
         /// </summary>
@@ -58,7 +56,6 @@ namespace MarketplaceWebServiceProducts
             this.statusCode = statusCode;
             this.responseHeaderMetadata = rhm;
         }
-    
 
         /// <summary>
         /// Constructs MarketplaceWebServiceProductsException with wrapped exception
@@ -67,7 +64,7 @@ namespace MarketplaceWebServiceProducts
         public MarketplaceWebServiceProductsException(Exception t) : this (t.Message, t) {
 
         }
-    
+
         /// <summary>
         /// Constructs MarketplaceWebServiceProductsException with message and wrapped exception
         /// </summary>
@@ -86,7 +83,6 @@ namespace MarketplaceWebServiceProducts
                 this.responseHeaderMetadata = ex.ResponseHeaderMetadata;
             }
         }
-    
 
         /// <summary>
         /// Constructs MarketplaceWebServiceProductsException with information available from service
@@ -104,7 +100,7 @@ namespace MarketplaceWebServiceProducts
             this.requestId = requestId;
             this.xml = xml;
         }
-    
+
         /// <summary>
         /// Gets and sets of the ErrorCode property.
         /// </summary>
@@ -128,8 +124,7 @@ namespace MarketplaceWebServiceProducts
         {
             get { return this.message; }
         }
-    
- 
+
         /// <summary>
         /// Gets status code returned by the service if available. If status
         /// code is set to -1, it means that status code was unavailable at the
@@ -147,7 +142,7 @@ namespace MarketplaceWebServiceProducts
         {
             get { return this.xml; }
         }
- 
+
         /// <summary>
         /// Gets Request ID returned by the service if available.
         /// </summary>
@@ -163,6 +158,6 @@ namespace MarketplaceWebServiceProducts
         {
           get { return this.responseHeaderMetadata; }
         }
-    
+
     }
 }

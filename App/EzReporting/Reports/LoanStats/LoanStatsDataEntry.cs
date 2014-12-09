@@ -6,9 +6,6 @@
 	using Ezbob.Database;
 
 	internal class LoanStatsDataEntry {
-		#region public
-
-		#region properties - loaded from database
 
 		public int CustomerID { get; private set; }
 		public string ApprovedType { get; private set; }
@@ -36,10 +33,6 @@
 		public int LoanTerm { get; private set; }
 		public List<int> RequestIDHistory { get; private set; }
 
-		#endregion properties - loaded from database
-
-		#region properties - calculated
-
 		public bool IsLoanIssued { get { return LoanID != 0; } }
 		public bool IsNewClient { get { return LoanSeqNo == 1; } }
 		public int LoanSeqNo { get; set; }
@@ -55,20 +48,12 @@
 			} // get
 		} // IsFirstLoan
 
-		#endregion properties - calculated
-
-		#region constructor
-
 		public LoanStatsDataEntry(SafeReader sr) {
 			RequestIDHistory = new List<int>();
 			LoanTerm = 0;
 			Update(sr);
 			FirstDecisionDate = LastDecisionDate;
 		} // constructor
-
-		#endregion consturctor
-
-		#region method Update
 
 		public void Update(SafeReader sr) {
 			CustomerID = sr["CustomerID"];
@@ -135,10 +120,6 @@
 					ms_oCustomerFirstLoanDates[CustomerID] = IssueDate;
 			} // if
 		} // Update
-
-		#endregion method Update
-
-		#endregion public
 
 		private static SortedDictionary<int, DateTime> ms_oCustomerFirstLoanDates;
 	} // class LoanStatsDataEntry

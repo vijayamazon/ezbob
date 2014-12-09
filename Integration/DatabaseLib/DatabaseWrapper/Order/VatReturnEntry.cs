@@ -1,30 +1,19 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using EZBob.DatabaseLib.Common;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
-	
+
 	[Serializable]
 	public class VatReturnEntry : AInternalOrderItem {
-		#region public
-
-		#region method CompareForSort
 
 		public static int CompareForSort(VatReturnEntry a, VatReturnEntry b) {
 			return a.DateFrom.CompareTo(b.DateFrom);
 		} // CompareForSort
 
-		#endregion method CompareForSort
-
-		#region constructor
-
 		public VatReturnEntry() {
 			Data = new SortedDictionary<string, Coin>();
 		} // constructor
-
-		#endregion constructor
-
-		#region property NativeOrderId
 
 		public override string NativeOrderId {
 			get {
@@ -48,8 +37,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
 
 		private string m_sNativeOrderId;
 
-		#endregion property NativeOrderId
-
 		public virtual DateTime DateFrom { get; set; }
 		public virtual DateTime DateTo { get; set; }
 		public virtual DateTime DateDue { get; set; }
@@ -63,6 +50,5 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
 
 		public override DateTime RecordTime { get { return DateTo; }} // RecordTime
 
-		#endregion public
 	} // class ChannelGrabberOrderItem
 } // namespace

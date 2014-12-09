@@ -1,4 +1,4 @@
-namespace CustomSchedulers.Currency
+﻿namespace CustomSchedulers.Currency
 {
 	using System;
 	using System.Collections.Generic;
@@ -15,10 +15,9 @@ namespace CustomSchedulers.Currency
 	public class CurrencyUpdateController
 	{		
 		private static readonly ILog Log = LogManager.GetLogger( typeof( CurrencyUpdateController ) );
-		
+
 		private Dictionary<string, decimal> _LastCurrencyRates;
 		private CurrencyRateRepository _CurrencyRateRepository;
-		
 
 		internal CurrencyUpdateController()
 		{
@@ -57,7 +56,7 @@ namespace CustomSchedulers.Currency
 				latestUpdated = DateTime.Now.ToUniversalTime();
 
 				Log.Info("Currency update latest rates started...");
-				
+
 				var webClient = new WebClient();
 				var stream =
 					webClient.OpenRead("http://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote;currency=true?format=json");
@@ -137,7 +136,7 @@ namespace CustomSchedulers.Currency
             {
 				var currencyName = historyData.CurrencyName;
 				var currency = CurrencyRateRepository.GetCurrencyOrCreate( currencyName );
-				
+
 				foreach(var hdi in historyData.History.OrderBy(i => i.Date))
 				{
                     var historyItem = new CurrencyRateHistory
@@ -197,7 +196,7 @@ namespace CustomSchedulers.Currency
 			var now = DateTime.Now.Date;
 
 			var history = RetriveCurrencyHistoriesFromWeb( currencyList, now.AddYears( -1 ), now );
-            
+
             CurrencyRateRepository.EnsureTransaction(() =>
             {
 			    Log.Info( string.Format( "Currency list with history data {0} items", history.Count() ) );

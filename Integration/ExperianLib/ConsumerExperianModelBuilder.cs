@@ -7,7 +7,7 @@ namespace ExperianLib
 	using System.Globalization;
 	using System.Linq;
 	using Ezbob.Backend.ModelsWithDB.Experian;
-	
+
 	public class ConsumerExperianModelBuilder
 	{
 		private string Errors { get; set; }
@@ -40,7 +40,6 @@ namespace ExperianLib
 				data.Error = Errors;
 				return data;
 			}
-
 
 			TryRead(() =>
 				{
@@ -205,7 +204,6 @@ namespace ExperianLib
 			return residencies;
 		}
 
-
 		private List<ExperianConsumerDataCais> GetCais(OutputRoot outputRoot)
 		{
 			var caisAccounts = new List<ExperianConsumerDataCais>();
@@ -258,7 +256,6 @@ namespace ExperianLib
 
 						TryRead(() => account.NumAccountBalances = Convert.ToInt32(caisDetails.NumAccountBalances), "NumAccountBalances");
 						TryRead(() => account.NumCardHistories = Convert.ToInt32(caisDetails.NumCardHistories), "NumCardHistories");
-
 
 						if (caisDetails.CardHistories != null && account.NumCardHistories > 0)
 						{

@@ -2,22 +2,13 @@
 	using System;
 	using Logger;
 
-	#region class ForceRetryException
-
 	public class ForceRetryException : Exception {
 		public const string Name = "Force retry";
 
 		public ForceRetryException(string sMsg = null, Exception oInner = null) : base(sMsg ?? Name, oInner) {} // constructor
 	} // class ForceRetryException
 
-	#endregion class ForceRetryException
-
-	#region class ARetryer
-
 	public abstract class ARetryer {
-		#region public
-
-		#region property LogVerbosityLevel
 
 		public virtual LogVerbosityLevel LogVerbosityLevel {
 			get { return m_nLogVerbosityLevel; }
@@ -26,14 +17,6 @@
 
 		private LogVerbosityLevel m_nLogVerbosityLevel;
 
-		#endregion property LogVerbosityLevel
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
 		protected ARetryer(int nRetryCount = 1, int nSleepBeforeRetryMilliseconds = 0, ASafeLog oLog = null) {
 			RetryCount = nRetryCount;
 			SleepBeforeRetry = nSleepBeforeRetryMilliseconds;
@@ -41,20 +24,12 @@
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
 		} // constructor
 
-		#endregion constructor
-
-		#region property RetryCount
-
 		protected virtual int RetryCount {
 			get { return m_nRetryCount; } // get
 			private set { m_nRetryCount = (value < 1) ? 1 : value; } // set
 		} // RetryCount
 
 		private int m_nRetryCount;
-
-		#endregion property RetryCount
-
-		#region property SleepBeforeRetry
 
 		/// <summary>
 		/// In milliseconds.
@@ -65,10 +40,6 @@
 		} // SleepBeforeRetry
 
 		private int m_nSleepBeforeRetry;
-
-		#endregion property SleepBeforeRetry
-
-		#region method Retry
 
 		public virtual T Retry<T>(Func<T> oFunc, string sActionDescription = null) {
 			if (oFunc == null)
@@ -83,16 +54,8 @@
 
 		public abstract void Retry(Action func, string sFuncDescription = null); // Retry
 
-		#endregion method Retry
-
-		#region property Log
-
 		protected ASafeLog Log { get; private set; }
 
-		#endregion property Log
-
-		#endregion protected
 	} // class ARetryer
 
-	#endregion class ARetryer
 } // namespace

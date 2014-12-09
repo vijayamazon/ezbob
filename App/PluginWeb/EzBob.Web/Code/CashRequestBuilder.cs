@@ -13,7 +13,6 @@
 
 	public class CashRequestBuilder
 	{
-		#region constructor
 
 		public CashRequestBuilder(
 			ILoanTypeRepository loanTypes,
@@ -31,15 +30,11 @@
 			_historyRepository = historyRepository;
 		} // constructor
 
-		#endregion constructor
-
-		#region method CreateCashRequest
-
 		public CashRequest CreateCashRequest(Customer customer, CashRequestOriginator originator)
 		{
 			LoanType loanType = customer.IsAlibaba ? _loanTypes.ByName("Alibaba Loan") : _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
-			
+
 			int? experianScore = customer.ExperianConsumerScore;
 
 			var cashRequest = new CashRequest
@@ -66,10 +61,6 @@
 
 			return cashRequest;
 		} // CreateCashRequest
-
-		#endregion method CreateCashRequest
-
-		#region method CreateQuickOfferCashRequest
 
 		public CashRequest CreateQuickOfferCashRequest(Customer customer)
 		{
@@ -132,10 +123,6 @@
 			return cashRequest;
 		} // CreateQuickOfferCashRequest
 
-		#endregion method CreateQuickOfferCashRequest
-
-		#region method ForceEvaluate
-
 		public void ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isSync) {
 			bool bUpdateMarketplaces =
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
@@ -160,10 +147,6 @@
 				m_oServiceClient.Instance.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
 		} // ForceEvaluate
 
-		#endregion method ForceEvaluate
-
-		#region private
-
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IUsersRepository _users;
@@ -171,6 +154,5 @@
 		private readonly IDecisionHistoryRepository _historyRepository;
 		private readonly ServiceClient m_oServiceClient;
 
-		#endregion private
 	} // class CashRequestBuilder
 } // namespace

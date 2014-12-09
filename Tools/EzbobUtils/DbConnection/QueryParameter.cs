@@ -6,8 +6,6 @@
 	using System.Data.Common;
 	using Utils;
 
-	#region class QueryParameter
-
 	public class QueryParameter {
 		public string Name { get; set; }
 		public object Value { get; set; }
@@ -107,5 +105,4 @@
 		} // SafeReturnedValue
 	} // class QueryParameter
 
-	#endregion class QueryParameter
 } // namespace Ezbob.Database

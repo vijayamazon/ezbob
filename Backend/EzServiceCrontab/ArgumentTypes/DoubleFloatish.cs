@@ -4,8 +4,6 @@
 	internal class DoubleFloatish : AType<double?> {
 		public DoubleFloatish() : base("double") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			double nResult;
 
@@ -15,6 +13,5 @@
 			return Activator.CreateInstance(UnderlyingType);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class DoubleFloatish
 } // namespace

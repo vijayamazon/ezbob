@@ -1,5 +1,4 @@
 ﻿namespace EzServiceHost {
-	#region using
 
 	using System;
 	using System.Diagnostics;
@@ -43,12 +42,7 @@
 	using EzServiceConfigurationLoader;
 	using ActionResult = Ezbob.Database.ActionResult;
 
-	#endregion using
-
 	public class Program : IHost {
-		#region public
-
-		#region method Shutdown
 
 		public void Shutdown() {
 			lock (ms_oLock) {
@@ -57,14 +51,6 @@
 
 			GetAvailableFunds.StopBackgroundThread = true;
 		} // Handle
-
-		#endregion method Shutdown
-
-		#endregion public
-
-		#region private
-
-		#region method Main
 
 		private static void Main(string[] args) {
 			var app = new Program(args);
@@ -80,10 +66,6 @@
 				throw;
 			} // try
 		} // Main
-
-		#endregion method Main
-
-		#region method Usage
 
 		private void Usage(OptionSet oArgs, Exception e) {
 			var os = new StringBuilder();
@@ -106,10 +88,6 @@
 				throw e;
 			} // if
 		} // Usage
-
-		#endregion method Usage
-
-		#region constructor
 
 		private Program(string[] args) {
 			ServicePointManager.SecurityProtocol =
@@ -170,10 +148,6 @@
 			});
 		} // constructor
 
-		#endregion constructor
-
-		#region method InitInstanceName
-
 		private bool InitInstanceName() {
 			m_sInstanceName = string.Empty;
 
@@ -208,10 +182,6 @@
 
 			return true;
 		} // InitInstanceName
-
-		#endregion method InitInstanceName
-
-		#region method Init
 
 		private bool Init() {
 			m_oDB = new SqlConnection(m_oEnv, m_oLog);
@@ -253,10 +223,6 @@
 			return true;
 		} // Init
 
-		#endregion method Init
-
-		#region method Run
-
 		private void Run() {
 			try {
 				m_oHost.Open();
@@ -290,10 +256,6 @@
 			} // try
 		} // Run
 
-		#endregion method Run
-
-		#region method Done
-
 		private void Done() {
 			if (m_oDB != null) {
 				m_oDB.Dispose();
@@ -302,10 +264,6 @@
 
 			NotifyStartStop("stopped");
 		} // Done
-
-		#endregion method Done
-
-		#region method NotifyStartStop
 
 		private void NotifyStartStop(string sEvent) {
 			m_oLog.Info(
@@ -319,10 +277,6 @@
 			);
 		} // NotifyStartStop
 
-		#endregion method NotifyStartStop
-
-		#region fields
-
 		private readonly string[] m_aryArgs;
 		private string m_sInstanceName;
 		private Configuration m_oCfg;
@@ -334,15 +288,8 @@
 
 		private Daemon m_oCrontabDaemon;
 
-		#endregion fields
-
-		#region static fields
-
 		private static bool ms_bStop = false;
 		private static readonly object ms_oLock = new object();
 
-		#endregion static fields
-
-		#endregion private
 	} // class Program
 } // namespace EzServiceHost

@@ -12,7 +12,6 @@
 	using Ezbob.Utils.Lingvo;
 
 	internal class Job {
-		#region constructor
 
 		public Job(EzServiceInstanceRuntimeData oRuntimeData, SafeReader sr, TypeRepository oTypeRepo) {
 			WhyNotStarting = "never checked whether it is time to start";
@@ -26,10 +25,6 @@
 			AddArgument(sr, oTypeRepo);
 		} // constructor
 
-		#endregion constructor
-
-		#region method AddArgument
-
 		public void AddArgument(SafeReader sr, TypeRepository oTypeRepo) {
 			long nArgID = sr["ArgumentID"];
 
@@ -37,20 +32,12 @@
 				m_oArguments.Add(new JobArgument(sr, oTypeRepo));
 		} // AddArgument
 
-		#endregion method AddArgument
-
-		#region properties
-
-		#region from DB
-
 		// ID property must be declared before RepetitionTypeID because properties are filled from DB in order of declaration.
 		[FieldName("JobID")]
 		public long ID { get; set; }
 
 		public string ActionName { get; set; }
 		public int ActionNameID { get; set; }
-
-		#region property RepetitionTypeID
 
 		public int RepetitionTypeID {
 			get { return m_nRepetitionTypeID; }
@@ -68,11 +55,7 @@
 
 		private int m_nRepetitionTypeID;
 
-		#endregion property RepetitionTypeID
-
 		public DateTime RepetitionTime { get; set; }
-
-		#region property LastActionStatusID
 
 		public int? LastActionStatusID {
 			get { return m_nLastActionStatusID; }
@@ -94,18 +77,12 @@
 
 		private int? m_nLastActionStatusID;
 
-		#endregion property LastActionStatusID
-
 		public DateTime? LastStartTime { get; set; }
 		public DateTime? LastEndTime { get; set; }
 		public bool IsInProgress { get; set; }
 
-		#endregion from DB
-
 		public RepetitionType RepetitionType { get; private set; }
 		public ActionStatus LastActionStatus { get; private set; }
-
-		#region property RepetitionStr
 
 		public string RepetitionStr {
 			get {
@@ -124,12 +101,6 @@
 				} // switch
 			} // get
 		} // RepetitionStr
-
-		#endregion property RepetitionStr
-
-		#endregion properties
-
-		#region method ToString
 
 		public override string ToString() {
 			string sArgs;
@@ -153,10 +124,6 @@
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#region method Differs
-
 		public bool Differs(Job oPrevious) {
 			if (oPrevious == null)
 				return true;
@@ -179,10 +146,6 @@
 
 			return false;
 		} // Differs
-
-		#endregion method Differs
-
-		#region method IsTimeToStart
 
 		public bool IsTimeToStart(DateTime oNow) {
 			bool bStart;
@@ -231,15 +194,7 @@
 			} // switch
 		} // IsTimeToStart
 
-		#endregion method IsTimeToStart
-
-		#region property WhyNotStarting
-
 		public string WhyNotStarting { get; private set; }
-
-		#endregion property WhyNotStarting
-
-		#region method Start
 
 		public void Start() {
 			try {
@@ -268,39 +223,21 @@
 			} // try
 		} // Start
 
-		#endregion method Start
-
-		#region private
-
-		#region property DB
-
 		private AConnection DB {
 			get { return m_oRuntimeData.DB; }
 		} // DB
-
-		#endregion property DB
-
-		#region property Log
 
 		private ASafeLog Log {
 			get { return m_oRuntimeData.Log; }
 		} // Log
 
-		#endregion property Log
-
 		private readonly EzServiceInstanceRuntimeData m_oRuntimeData;
 
 		private readonly List<JobArgument> m_oArguments;
 
-		#region property RepetitionMinutes
-
 		private int RepetitionMinutes {
 			get { return RepetitionTime.Hour * 60 + RepetitionTime.Minute; }
 		} // RepetitionMinutes
-
-		#endregion property RepetitionMinutes
-
-		#region method OnInit
 
 		private void OnInit(AStrategy oInstance, ActionMetaData oMetaData) {
 			DB.ExecuteNonQuery(
@@ -313,10 +250,6 @@
 			);
 		} // OnInit
 
-		#endregion method OnInit
-
-		#region method OnSuccess
-
 		private void OnSuccess(AStrategy oInstance, ActionMetaData oMetaData) {
 			DB.ExecuteNonQuery(
 				"UpdateCronjobEnded",
@@ -327,10 +260,6 @@
 				new QueryParameter("Now", DateTime.UtcNow)
 			);
 		} // OnSuccess
-
-		#endregion method OnSuccess
-
-		#region method OnException
 
 		private void OnException(ActionMetaData oMetaData) {
 			DB.ExecuteNonQuery(
@@ -343,10 +272,6 @@
 			);
 		} // OnException
 
-		#endregion method OnException
-
-		#region method OnFail
-
 		private void OnFail(ActionMetaData oMetaData) {
 			DB.ExecuteNonQuery(
 				"UpdateCronjobEnded",
@@ -358,10 +283,6 @@
 			);
 		} // OnFail
 
-		#endregion method OnFail
-
-		#region method OnLaunch
-
 		private void OnLaunch(ActionMetaData oMetaData) {
 			DB.ExecuteNonQuery(
 				"UpdateCronjobStatus",
@@ -372,10 +293,6 @@
 				new QueryParameter("Now", DateTime.UtcNow)
 			);
 		} // OnLaunch
-
-		#endregion method OnLaunch
-
-		#region method GetMonthlyRepetitionTimeStr
 
 		private static string GetMonthlyRepetitionTimeStr(DateTime oTime, bool bAddRepetition) {
 			string sSuffix = "th";
@@ -401,10 +318,6 @@
 			);
 		} // GetMonthlyRepetitionTimeStr
 
-		#endregion method GetMonthlyRepetitionTimeStr
-
-		#region method GetDailyRepetitionTimeStr
-
 		private static string GetDailyRepetitionTimeStr(DateTime oTime, bool bAddRepetition) {
 			return string.Format(
 				"{1}{0}",
@@ -412,10 +325,6 @@
 				bAddRepetition ? "daily at " : string.Empty
 			);
 		} // GetDailyRepetitionTimeStr
-
-		#endregion method GetDailyRepetitionTimeStr
-
-		#region method GetXMinutesRepetitionTimeStr
 
 		private static string GetXMinutesRepetitionTimeStr(int nHour, int nMinute, int nTotalMinutes, bool bAddRepetition) {
 			string sTime;
@@ -434,10 +343,7 @@
 			return string.Format("{1}{0}", sTime, bAddRepetition ? "every " : string.Empty);
 		} // GetXMinutesRepetitionTimeStr
 
-		#endregion method GetXMinutesRepetitionTimeStr
-
 		private const string Starting = "starting";
 
-		#endregion private
 	} // class Job
 } // namespace

@@ -5,7 +5,6 @@
 	using Ezbob.Logger;
 
 	public class EmailRolloverAdded : AMailStrategyBase {
-		#region constructor
 
 		public EmailRolloverAdded(int customerId, decimal amount, AConnection oDb, ASafeLog oLog)
 			: base(customerId, true, oDb, oLog)
@@ -13,11 +12,7 @@
 			this.amount = amount;
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "Email Rollover Added"; } }
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Rollover added";
@@ -27,8 +22,6 @@
 				{"RolloverAmount", amount.ToString(CultureInfo.InvariantCulture)}
 			};
 		} // SetTemplateAndVariables
-
-		#endregion method SetTemplateAndVariables
 
 		private readonly decimal amount;
 	} // class EmailRolloverAdded

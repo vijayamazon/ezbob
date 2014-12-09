@@ -12,9 +12,6 @@
 
 	[DataContract]
 	public class ExperianLtd : AExperianLtdDataRow {
-		#region public
-
-		#region method Load
 
 		public static ExperianLtd Load(string sCompanyRefNum, AConnection oDB, ASafeLog oLog) {
 			return Load(oDB.ExecuteEnumerable(
@@ -98,16 +95,8 @@
 			return oResult;
 		} // Load
 
-		#endregion method Load
-
-		#region constructor
-
 		public ExperianLtd(ASafeLog oLog = null) : base(oLog) {
 		} // constructor
-
-		#endregion constructor
-
-		#region property ExperianLtdID
 
 		[DataMember]
 		[NonTraversable] // <- this attribute is the reason of the overriding...
@@ -116,23 +105,11 @@
 			set { base.ExperianLtdID = value; }
 		} // ExperianLtdID
 
-		#endregion property ExperianLtdID
-
-		#region property ServiceLogID
-
 		public long ServiceLogID { get; set; }
-
-		#endregion property ServiceLogID
-
-		#region method ShouldBeSaved
 
 		public override bool ShouldBeSaved() {
 			return !string.IsNullOrWhiteSpace(RegisteredNumber);
 		} // ShouldBeSaved
-
-		#endregion method ShouldBeSaved
-
-		#region properties loaded from XML
 
 		[DataMember]
 		[DL12("REGNUMBER", "Registered Number")]
@@ -351,20 +328,12 @@
 		}")]
 		public string SupplierPaymentPattern { get; set; }
 
-		#endregion properties loaded from XML
-
-		#region property ID
-
 		[DataMember]
 		[NonTraversable]
 		public override long ID {
 			get { return ExperianLtdID; }
 			set { ExperianLtdID = value; }
 		} // ID
-
-		#endregion property ID
-
-		#region property ParentID
 
 		[DataMember]
 		[NonTraversable]
@@ -373,33 +342,17 @@
 			set { ServiceLogID = value; }
 		} // ParentID
 
-		#endregion property ParentID
-
-		#region property ReceivedTime
-
 		[DataMember]
 		[NonTraversable]
 		public virtual DateTime ReceivedTime { get; set; }
 
-		#endregion property ReceivedTime
-
-		#region method GetAgeOfMostRecentCCJDecreeMonths
-
 		public int GetAgeOfMostRecentCCJDecreeMonths() { return AgeOfMostRecentCCJDecreeMonths ?? 0; } // GetAgeOfMostRecentCCJDecreeMonths
-
-		#endregion method GetAgeOfMostRecentCCJDecreeMonths
-
-		#region method GetNumberOfCcjsInLast24Months
 
 		public int GetNumberOfCcjsInLast24Months() {
 			return
 				(NumberOfCCJsDuringLast12Months ?? 0) +
 				(NumberOfCCJsBetween13And24MonthsAgo ?? 0);
 		} // GetNumberOfCcjsInLast24Months
-
-		#endregion method GetNumberOfCcjsInLast24Months
-
-		#region method GetSumOfCcjsInLast24Months
 
 		public int GetSumOfCcjsInLast24Months() {
 			return Convert.ToInt32(
@@ -408,23 +361,11 @@
 			);
 		} // GetSumOfCcjsInLast24Months
 
-		#endregion method GetSumOfCcjsInLast24Months
-
-		#region method GetCommercialDelphiScore
-
 		public int GetCommercialDelphiScore() { return CommercialDelphiScore ?? 0; } // GetCommercialDelphiScore
-
-		#endregion method GetCommercialDelphiScore
-
-		#region method GetCommercialDelphiCreditLimit
 
 		public int GetCommercialDelphiCreditLimit() {
 			return Convert.ToInt32(CommercialDelphiCreditLimit ?? 0);
 		} // GetCommercialDelphiCreditLimit
-
-		#endregion method GetCommercialDelphiCreditLimit
-
-		#region method LoadFromXml
 
 		public override void LoadFromXml(XmlNode oRoot) {
 			base.LoadFromXml(oRoot);
@@ -435,14 +376,6 @@
 			} // if
 		} // LoadFromXml
 
-		#endregion method LoadFromXml
-
-		#endregion public
-
-		#region protected
-
-		#region method DoBeforeTheMainInsert
-
 		protected override void DoBeforeTheMainInsert(List<string> oProcSql) {
 			oProcSql.Add("\tDECLARE @ExperianLtdID INT");
 
@@ -452,18 +385,10 @@
 			oProcSql.Add("\t\tRAISERROR('Invalid argument: no/too much data to insert into ExperianLtd table.', 11, 1)\n");
 		} // DoBeforeTheMainInsert
 
-		#endregion method DoBeforeTheMainInsert
-
-		#region method DoAfterTheMainInsert
-
 		protected override void DoAfterTheMainInsert(List<string> oProcSql) {
 			oProcSql.Add("\n\tSET @ExperianLtdID = SCOPE_IDENTITY()\n");
 			oProcSql.Add("\tSELECT @ExperianLtdID AS ExperianLtdID");
 		} // DoAfterTheMainInsert
-
-		#endregion method DoAfterTheMainInsert
-
-		#region method SelfSave
 
 		protected override bool SelfSave(AConnection oDB, ConnectionWrapper oPersistent) {
 			try {
@@ -484,10 +409,6 @@
 			return ExperianLtdID > 0;
 		} // SelfSave
 
-		#endregion method SelfSave
-
-		#region method LoadChildrenFromXml
-
 		protected override void LoadChildrenFromXml(XmlNode oRoot) {
 			foreach (Type oTableType in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(AExperianLtdDataRow)))) {
 				ASrcAttribute oGroupSrcAttr = oTableType.GetCustomAttribute<ASrcAttribute>();
@@ -502,8 +423,5 @@
 			} // for each row type (DL 65, DL 72, etc)
 		} // LoadChildrenFromXml
 
-		#endregion method LoadChildrenFromXml
-
-		#endregion protected
 	} // class ExperianLtd
 } // namespace

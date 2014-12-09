@@ -8,12 +8,7 @@ using Ezbob.Utils;
 namespace Reports {
 	using System.Data;
 
-	#region class UiReportExt
-
 	public class UiReportExt : SafeLog {
-		#region public
-
-		#region constructor
 
 		public UiReportExt(AConnection oDB, DateTime oDateStart, DateTime oDateEnd, ASafeLog log) : base(log) {
 			VerboseLogging = false;
@@ -28,10 +23,6 @@ namespace Reports {
 
 			m_oCurHandler = null;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Run
 
 		public Tuple<DataTable, ColumnInfo[]> Run() {
 			m_oDB.ForEachRow(
@@ -96,19 +87,7 @@ namespace Reports {
 			return new Tuple<DataTable, ColumnInfo[]>(oOutput, oColumns.ToArray());
 		} // Run
 
-		#endregion method Run
-
-		#region property VerboseLogging
-
 		public bool VerboseLogging { get; set; }
-
-		#endregion property VerboseLogging
-
-		#endregion public
-
-		#region private
-
-		#region method HandleRow
 
 		private ActionResult HandleRow(DbDataReader oRow, bool bRowSetStart) {
 			if (bRowSetStart) {
@@ -151,10 +130,6 @@ namespace Reports {
 			return ActionResult.Continue;
 		} // HandleRow
 
-		#endregion method HandleRow
-
-		#region method SaveUiControl
-
 		private void SaveUiControl(DbDataReader oRow) {
 			int nID = Convert.ToInt32(oRow["UiControlID"]);
 			string sName = Convert.ToString(oRow["UiControlName"]);
@@ -167,10 +142,6 @@ namespace Reports {
 				Debug("UiReportExt: UiControl[{0}] = {1}", nID, oCtrl);
 		} // SaveUiControl
 
-		#endregion method SaveUiControl
-
-		#region method SaveCustomer
-
 		private void SaveCustomer(DbDataReader oRow) {
 			var oCustomer = new CustomerData(oRow);
 
@@ -179,10 +150,6 @@ namespace Reports {
 			if (VerboseLogging)
 				Debug("UiReportExt: customer {0}", oCustomer);
 		} // SaveCustomer
-
-		#endregion method SaveCustomer
-
-		#region method ProcessEvent
 
 		private void ProcessEvent(DbDataReader oRow) {
 			int nControlID = Convert.ToInt32(oRow["UiControlID"]);
@@ -196,10 +163,6 @@ namespace Reports {
 			m_oProgress++;
 		} // ProcessEvent
 
-		#endregion method ProcessEvent
-
-		#region properties
-
 		private ProgressCounter m_oProgress;
 
 		private readonly SortedDictionary<int, UiControlData> m_oControls;
@@ -212,10 +175,6 @@ namespace Reports {
 
 		private Action<DbDataReader> m_oCurHandler;
 
-		#endregion properties
-
-		#endregion private
 	} // class UiReportExt
 
-	#endregion class UiReportExt
 } // namespace Reports

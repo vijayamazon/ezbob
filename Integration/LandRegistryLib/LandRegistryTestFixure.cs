@@ -67,7 +67,7 @@
 			Assert.NotNull(model.Response);
 			Assert.AreEqual(LandRegistryResponseType.Acknowledgement, model.ResponseType);
 		}
-		
+
 		[Test]
 		public void test_res_builder()
 		{
@@ -87,7 +87,6 @@
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
-
 			var resHs94850 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHs94850);
 			model = b.BuildResModel(resHs94850);
 			Assert.IsNotNull(model);
@@ -102,7 +101,6 @@
 			model = b.BuildResModel(responseNt147249);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
-
 
 			var responseHw153409 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHw153409);
 			model = b.BuildResModel(responseHw153409);
@@ -129,8 +127,6 @@
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
-			
-			
 		}
 
 		public const string TestEnq2 = @"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -213,8 +209,6 @@
     </Results>
   </GatewayResponse>
 </ResponseSearchByPropertyDescriptionV2_0Type>";
-
-
 
 		public const string TestResHs94850 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">

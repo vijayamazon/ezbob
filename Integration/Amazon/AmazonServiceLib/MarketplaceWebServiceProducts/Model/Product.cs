@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class Product
     {
-    
+
         private  IdentifierType identifiersField;
         private  AttributeSetList attributeSetsField;
         private  RelationshipList relationshipsField;
@@ -46,8 +44,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.identifiersField = value; }
         }
 
-
-
         /// <summary>
         /// Sets the Identifiers property
         /// </summary>
@@ -59,8 +55,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Identifiers property is set
         /// </summary>
@@ -69,9 +63,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.identifiersField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the AttributeSets property.
@@ -82,8 +73,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.attributeSetsField ; }
             set { this.attributeSetsField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the AttributeSets property
@@ -96,8 +85,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if AttributeSets property is set
         /// </summary>
@@ -106,9 +93,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.attributeSetsField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the Relationships property.
@@ -119,8 +103,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.relationshipsField ; }
             set { this.relationshipsField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Relationships property
@@ -133,8 +115,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Relationships property is set
         /// </summary>
@@ -143,9 +123,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.relationshipsField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the CompetitivePricing property.
@@ -156,8 +133,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.competitivePricingField ; }
             set { this.competitivePricingField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the CompetitivePricing property
@@ -170,8 +145,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if CompetitivePricing property is set
         /// </summary>
@@ -180,9 +153,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.competitivePricingField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the SalesRankings property.
@@ -193,8 +163,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.salesRankingsField ; }
             set { this.salesRankingsField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the SalesRankings property
@@ -207,8 +175,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SalesRankings property is set
         /// </summary>
@@ -217,9 +183,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.salesRankingsField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the LowestOfferListings property.
@@ -230,8 +193,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.lowestOfferListingsField ; }
             set { this.lowestOfferListingsField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the LowestOfferListings property
@@ -244,8 +205,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if LowestOfferListings property is set
         /// </summary>
@@ -254,9 +213,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.lowestOfferListingsField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the Offers property.
@@ -267,8 +223,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.offersField ; }
             set { this.offersField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Offers property
@@ -281,8 +235,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Offers property is set
         /// </summary>
@@ -292,11 +244,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this.offersField != null;
         }
 
-
-
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -305,7 +252,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -387,8 +333,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

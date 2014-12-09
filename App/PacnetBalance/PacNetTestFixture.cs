@@ -17,7 +17,6 @@
 			m_oConf = pacnetcfg;
 		}
 
-
 		[Test]
 		[Ignore]
 		public void testSendEmail()

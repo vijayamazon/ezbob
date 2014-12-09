@@ -78,7 +78,6 @@
 			return Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
 		}
 
-
 		private double GetAnnualizedTurnoverFromValues(List<IAnalysisDataParameterInfo> av, string mpName)
 		{
 			string annualizedParameterName;
@@ -284,7 +283,7 @@
 			decimal month = (decimal)GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month);
 
 			var vals = new List<decimal>();
-			
+
 			if (month != 0)
 			{
 				vals.Add(month);
@@ -301,9 +300,9 @@
 			{
 				vals.Add(year);
 			}
-			
+
 			decimal min = vals.Count > 0 ? vals.ToArray().Min() : 0;
-			
+
 			log.InfoFormat("Calculated annualized turnover. Year:{0} 6Months:{1} 3Months:{2} Month:{3}. Using min:{4}", year, month6, month3, month, min);
 			return min;
 		}
@@ -718,7 +717,7 @@
 			catch (Exception) {
 				return new MpsTotals();
 			}
-			
+
 		}
 
 		private bool IsOwner(Customer customer, string response, string titleNumber)

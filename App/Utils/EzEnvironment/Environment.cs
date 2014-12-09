@@ -5,35 +5,19 @@ using Ezbob.Logger;
 using Newtonsoft.Json;
 
 namespace Ezbob.Context {
-	#region class Environment
 
 	public class Environment : SafeLog {
-		#region public
 
 		public const string CompanyName = "Ezbob";
 		public const string EnvNameFile = "environment.json";
-
-		#region constructor
 
 		public Environment(ASafeLog oLog = null) : base(oLog) {
 			Detect();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public Name Name { get; private set; }
 
-		#endregion property Name
-
-		#region property Variant
-
 		public string Variant { get; private set; }
-
-		#endregion property Variant
-
-		#region property Context
 
 		public string Context {
 			get {
@@ -43,31 +27,11 @@ namespace Ezbob.Context {
 			} // get
 		} // Context
 
-		#endregion property Context
-
-		#region property MachineName
-
 		public string MachineName { get { return System.Environment.MachineName; } }
-
-		#endregion property MachineName
-
-		#region property UserName
 
 		public string UserName { get { return System.Environment.UserName; } }
 
-		#endregion property UserName
-
-		#region property Pid
-
 		public int Pid { get { return Process.GetCurrentProcess().Id; } } // Pid
-
-		#endregion property Pid
-
-		#endregion public
-
-		#region private
-
-		#region method Detect
 
 		private void Detect() {
 			Name = Name.Unknown;
@@ -109,10 +73,6 @@ namespace Ezbob.Context {
 			Debug("Detect env: variant is {0}", Variant);
 		} // Detect
 
-		#endregion method Detect
-
-		#endregion private
 	} // class Environment
 
-	#endregion class Environment
 } // namespace Ezbob.Context

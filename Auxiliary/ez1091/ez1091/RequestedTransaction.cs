@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 using Ezbob.Logger;
 
 namespace ez1091 {
-	#region class RequestedTransaction
 
 	class RequestedTransaction {
-		#region public
-
-		#region constructor
 
 		static RequestedTransaction() {
 			ms_oCulture = new CultureInfo("en-GB", false);
@@ -33,13 +29,9 @@ namespace ez1091 {
 			m_oLog.Debug("{0} -> {1}", sRawData, this);
 		} // constructor
 
-		#endregion constructor
-
 		public DateTime Date { get; private set; }
 		public int LoanID { get; private set; }
 		public decimal PaidAmount { get; private set; }
-
-		#region method ToString
 
 		public override string ToString() {
 			return string.Format(
@@ -50,20 +42,9 @@ namespace ez1091 {
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region protected
-		#endregion protected
-
-		#region private
-
 		private readonly ASafeLog m_oLog;
 		private static readonly CultureInfo ms_oCulture;
 
-		#endregion private
 	} // class RequestedTransaction
 
-	#endregion class RequestedTransaction
 } // namespace ez1091

@@ -10,7 +10,6 @@ namespace EzBob.Tests.PostcodeAnywhereTests
     {
         private SortCodeChecker _checker;
 
-
         [SetUp]
         public void SetUp()
         {

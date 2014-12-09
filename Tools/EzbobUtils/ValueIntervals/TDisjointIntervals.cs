@@ -4,12 +4,8 @@ using System.Linq;
 using System.Text;
 
 namespace Ezbob.ValueIntervals {
-	#region class TDisjointIntervals
 
 	public class TDisjointIntervals<TFinite> : SortedSet<TInterval<TFinite>> where TFinite : IComparable<TFinite>  {
-		#region public
-
-		#region operator +
 
 		public static TDisjointIntervals<TFinite> operator +(TDisjointIntervals<TFinite> oSet, TInterval<TFinite> oInterval) {
 			return ReferenceEquals(oSet, null) ? null : oSet.Add(oInterval);
@@ -18,10 +14,6 @@ namespace Ezbob.ValueIntervals {
 		public static TDisjointIntervals<TFinite> operator +(TDisjointIntervals<TFinite> oSet, TDisjointIntervals<TFinite> oOther) {
 			return ReferenceEquals(oSet, null) ? null : oSet.Add(oOther);
 		} // operator +
-
-		#endregion operator +
-
-		#region constructor
 
 		public TDisjointIntervals() {} // constructor
 
@@ -32,10 +24,6 @@ namespace Ezbob.ValueIntervals {
 		public TDisjointIntervals(TInterval<TFinite> a, TInterval<TFinite> b) : this(a) {
 			Add(b);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Add
 
 		public new virtual TDisjointIntervals<TFinite> Add(TInterval<TFinite> oInterval) {
 			if (oInterval == null)
@@ -65,10 +53,6 @@ namespace Ezbob.ValueIntervals {
 			return this;
 		} // Add
 
-		#endregion method Add
-
-		#region method ToString
-
 		public override string ToString() {
 			var os = new StringBuilder();
 
@@ -82,14 +66,6 @@ namespace Ezbob.ValueIntervals {
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region private
-
-		#endregion private
 	} // class TDisjointIntervals
 
-	#endregion class TDisjointIntervals
 } // namespace Ezbob.ValueIntervals

@@ -5,9 +5,6 @@
 	using JetBrains.Annotations;
 
 	public class UpdateExperianDirectorDetails : AStrategy {
-		#region public
-
-		#region constructor
 
 		public UpdateExperianDirectorDetails(Esigner oDetails, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpUpdateExperianDirectorDetails(DB, Log) {
@@ -23,31 +20,15 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Update Experian director details"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly SpUpdateExperianDirectorDetails m_oSp;
-
-		#region class SpUpdateExperianDirectorDetails
 
 		private class SpUpdateExperianDirectorDetails : AStoredProc {
 			public SpUpdateExperianDirectorDetails(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -90,8 +71,5 @@
 			public string Postcode { get; set; }
 		} // class SpUpdateExperianDirectorDetails
 
-		#endregion class SpUpdateExperianDirectorDetails
-
-		#endregion private
 	} // class UpdateExperianDirectorDetails
 } // namespace

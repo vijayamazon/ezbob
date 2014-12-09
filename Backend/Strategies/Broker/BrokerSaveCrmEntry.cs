@@ -3,12 +3,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class BrokerSaveCrmEntry
-
 	public class BrokerSaveCrmEntry : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerSaveCrmEntry(
 			string sType,
@@ -32,23 +27,11 @@
 				m_sComment = m_sComment.Substring(0, 1000);
 		} // constructor
 
-		#endregion constructor
-
-		#region property ErrorMsg
-
 		public virtual string ErrorMsg { get; private set; }
-
-		#endregion property ErrorMsg
-
-		#region property Name
 
 		public override string Name {
 			get { return "Broker: save CRM entry"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			if (string.IsNullOrWhiteSpace(m_sContactEmail)) {
@@ -80,12 +63,6 @@
 			} // try
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly int m_nActionID;
 		private readonly int m_nStatusID;
 		private readonly string m_sComment;
@@ -93,8 +70,6 @@
 		private readonly string m_sContactEmail;
 		private readonly string m_sType;
 
-		#endregion private
 	} // class BrokerSaveCrmEntry
 
-	#endregion class BrokerSaveCrmEntry
 } // namespace EzBob.Backend.Strategies.Broker

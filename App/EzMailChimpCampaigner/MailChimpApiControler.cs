@@ -96,15 +96,14 @@
 			};
 
 			List.BatchSubscribe batchSubscribe = m_oMcApi.ListBatchSubscribe(listId, batch, options);
-			
+
 			ms_oLog.Debug("ListBatchSubscribe Result: AddCount: {0} UpdateCount: {1} ErrorCount{2}.", batchSubscribe.AddCount, batchSubscribe.UpdateCount, batchSubscribe.ErrorCount);
 
 			if (batchSubscribe.ErrorCount > 0) {
 				foreach (var error in batchSubscribe.Errors)
 					ms_oLog.Error("List.BatchSubscribe error: " + error.Message + " email:" + error.Email + " code:" + error.Code);
 			}
-			
-			
+
 		} // ListBatchSubscribe
 
 		public string CreateSegmentedCampaign(string listId, int templateId, string condition, string subject, string title, string group) {
@@ -259,8 +258,6 @@
 			} // using
 		} // StoreStatsToDbFromXml
 
-		#region Old/Test Code
-
 		public void GetCampaignAnalytics() {
 			var page = 0;
 
@@ -411,7 +408,6 @@
 		//        ms_oLog.Debug(member.email + " " + member.timestamp);
 		//    }
 
-
 		//    return listOut.result;
 		//}
 
@@ -444,8 +440,6 @@
 		//        send_welcome = true,
 		//        update_existing = true,
 
-
-
 		//    };
 		//    listSubscribeInput newlistSubscribeInput = new listSubscribeInput(newlistSubscribeParms);
 		//    var subscribeSuccess = cmd.Execute(newlistSubscribeInput);
@@ -458,9 +452,7 @@
 		//        ms_oLog.Debug(email + " successfully subscribed.");
 		//    }
 
-
 		//}
-
 
 		//public void getTemplate()
 		//{
@@ -523,7 +515,6 @@
 		//    }
 
 		//} 
-		#endregion
 
 		private readonly MCApi m_oMcApi;
 

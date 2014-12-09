@@ -93,7 +93,7 @@
 									LoanScheduleId = x.LoanSchedule.Id
 								});
 			var rolloverCount = _rolloverRepository.GetByLoanId(loan.Id).Count(x => x.Status != RolloverStatus.Removed && x.Status != RolloverStatus.Expired);
-			
+
 			bool transactionsDoneToday = loan.Transactions.Count(x => x.PostDate.Date == DateTime.UtcNow.Date && x.Status == LoanTransactionStatus.Done) > 0;
 			string rolloverAvailableClass = transactionsDoneToday ? "disabled" : string.Empty;
 
@@ -179,7 +179,6 @@
 
 			try
 			{
-
 
 				_log.InfoFormat("Manual payment request for customer id {0}, amount {1}", customer.Id, realAmount);
 

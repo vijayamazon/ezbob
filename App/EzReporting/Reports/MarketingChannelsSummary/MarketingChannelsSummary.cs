@@ -9,18 +9,11 @@
 	using TraficReport;
 
 	public class MarketingChannelsSummary {
-		#region public
-
-		#region constructor
 
 		public MarketingChannelsSummary(AConnection oDB, ASafeLog oLog) {
 			m_oDB = oDB;
 			m_oLog = oLog ?? new SafeLog();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Run
 
 		public KeyValuePair<ReportQuery, DataTable> Run(Report report, DateTime from, DateTime to) {
 			SortedDictionary<Source, McsRow> oData = new SortedDictionary<Source, McsRow>();
@@ -125,16 +118,8 @@
 			return new KeyValuePair<ReportQuery, DataTable>(reprortQuery, ToTable(oData));
 		} // Run
 
-		#endregion method Run
-
-		#endregion public
-
-		#region private
-
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
-
-		#region enum InputRowTypes
 
 		private enum InputRowTypes {
 			Visitors,
@@ -150,10 +135,6 @@
 			LoansGiven,
 		} // enum InputRowTypes
 
-		#endregion enum InputRowTypes
-
-		#region method ToTable
-
 		private static DataTable ToTable(SortedDictionary<Source, McsRow> oData) {
 			McsRow oTotal = new McsRow {
 				Source = Source.Total,
@@ -168,7 +149,7 @@
 			});
 
 			Source[] aryAllSources = Enum.GetValues(typeof (Source)).Cast<Source>().ToArray();
-			
+
 			Array.Sort(aryAllSources,
 				(a, b) => string.Compare(a.ToString(), b.ToString(), System.StringComparison.InvariantCultureIgnoreCase)
 			);
@@ -187,10 +168,6 @@
 			return tbl;
 		} // ToTable
 
-		#endregion method ToTable
-
-		#region method ToRow
-
 		private static void ToRow(DataTable tbl, McsRow oRow) {
 			var lst = new List<object>();
 
@@ -204,8 +181,5 @@
 			tbl.Rows.Add(lst.ToArray());
 		} // ToRow
 
-		#endregion method ToRow
-
-		#endregion private
 	} // class MarketingChannelsSummary
 } // namespace

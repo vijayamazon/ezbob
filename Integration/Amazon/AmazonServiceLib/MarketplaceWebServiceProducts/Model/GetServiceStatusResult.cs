@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class GetServiceStatusResult
     {
-    
+
         private ServiceStatusEnum? statusField;
 
         private DateTime? timestampField;
@@ -46,8 +44,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.statusField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the Status property
         /// </summary>
@@ -59,8 +55,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Status property is set
         /// </summary>
@@ -71,7 +65,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Timestamp property.
         /// </summary>
@@ -81,8 +74,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.timestampField.GetValueOrDefault() ; }
             set { this.timestampField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Timestamp property
@@ -95,8 +86,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Timestamp property is set
         /// </summary>
@@ -107,7 +96,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the MessageId property.
         /// </summary>
@@ -117,8 +105,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.messageIdField ; }
             set { this.messageIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the MessageId property
@@ -131,8 +117,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if MessageId property is set
         /// </summary>
@@ -143,7 +127,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Messages property.
         /// </summary>
@@ -153,8 +136,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.messagesField ; }
             set { this.messagesField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Messages property
@@ -167,8 +148,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Messages property is set
         /// </summary>
@@ -178,11 +157,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this.messagesField != null;
         }
 
-
-
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -191,7 +165,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -252,8 +225,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

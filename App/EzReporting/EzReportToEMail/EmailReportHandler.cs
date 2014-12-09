@@ -10,20 +10,11 @@
 	using Ezbob.Utils.Html.Attributes;
 	using OfficeOpenXml;
 
-	#region class EmailReportHandler
-
 	public class EmailReportHandler : BaseReportHandler {
-		#region public
-
-		#region constructor
 
 		public EmailReportHandler(AConnection oDB, ASafeLog log = null)
 			: base(oDB, log) {
 		} // constructor
-
-		#endregion constructor
-
-		#region method ExecuteReportHandler
 
 		public void ExecuteReportHandler(DateTime dToday, ReportType? nReportTypeToExecute) {
 			SortedDictionary<string, Report> reportList = Report.GetScheduledReportsList(DB);
@@ -147,14 +138,6 @@
 			}
 		} // ExecuteReportHandler
 
-		#endregion method ExecuteReportHandler
-
-		#endregion public
-
-		#region private
-
-		#region method HandleGenericReport
-
 		private void HandleGenericReport(
 			Report report,
 			DateTime dToday,
@@ -178,10 +161,6 @@
 				BuildReport(report, monthStart, dToday.AddDays(1), MonthToDatePerdiod, sender, dToday, oBuildHtml, oBuildXls);
 			} // if month to date
 		} // HandleGenericReport
-
-		#endregion method HandleGenericReport
-
-		#region method BuildReport
 
 		private void BuildReport(
 			Report report,
@@ -235,35 +214,19 @@
 			);
 		} // BuildReport
 
-		#endregion method BuildReport
-
-		#region method IsMonthly
-
 		private bool IsMonthly(bool isMonthlyFlag, DateTime dToday) {
 			return isMonthlyFlag && dToday.Day == 1;
 		} // IsMonthly
 
-		#endregion method IsMonthly
-
-		#region method IsWeekly
-
 		private bool IsWeekly(bool isWeeklyFlag, DateTime dToday) {
 			return isWeeklyFlag && dToday.DayOfWeek == DayOfWeek.Sunday;
 		} // IsWeekly
-
-		#endregion method IsWeekly
-
-		#region const
 
 		private const string DailyPerdiod = "Daily";
 		private const string WeeklyPerdiod = "Weekly";
 		private const string MonthlyPerdiod = "Monthly";
 		private const string MonthToDatePerdiod = "Month to Date";
 
-		#endregion const
-
-		#endregion private
 	} // class EmailReportHandler
 
-	#endregion class EmailReportHandler
 } // namespace EzReportToEMail

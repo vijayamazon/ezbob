@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using StructureMap;
@@ -12,7 +12,6 @@ namespace EzBob.CommonLib.TimePeriodLogic
 		static TimePeriodBase()
 		{
 		    var helper = ObjectFactory.GetInstance<IDatabaseDataHelper>();
-           
 
 			AllTimePeriods = new List<ITimePeriod>();
 
@@ -23,8 +22,6 @@ namespace EzBob.CommonLib.TimePeriodLogic
 
 			helper.InitFunctionTimePeriod();
 		}
-
-
 
 		public static readonly ITimePeriod Month	= new TimePeriodMonthly( TimePeriodEnum.Month, new Guid( "{318795D7-C51D-4B18-8E1F-5A563B3091F4}" ), 1 );
 		public static readonly ITimePeriod Month3	= new TimePeriodMonthly( TimePeriodEnum.Month3, new Guid( "{AA13A708-5230-4F24-895F-E05D513278BD}" ), 3 );
@@ -58,7 +55,7 @@ namespace EzBob.CommonLib.TimePeriodLogic
 		public string DisplayName { get; private set; }
 
 		public abstract int DaysInPeriod { get; }
-		
+
 		public static ITimePeriod GetById(Guid id)
 		{
 			return AllTimePeriods.FirstOrDefault( tp => tp.InternalId.Equals( id ) );

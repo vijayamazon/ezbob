@@ -62,7 +62,6 @@
 			return RedirectToAction("Index", "GenerateAgreements", new { Area = "Underwriter" });
 		}
 
-
 		[Transactional]
 		[NoCache]
 		public RedirectToRouteResult GenerateConsentAgreement()

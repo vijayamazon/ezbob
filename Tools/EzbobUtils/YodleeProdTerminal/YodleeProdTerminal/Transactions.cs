@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Text;
 
@@ -33,7 +33,7 @@ namespace com.yodlee.sampleapps
         private static int NAV_EDIT_TRANSACTION_DESCRIPTION = OPTION_CNT++;
         private static int NAV_ADD_MANUAL_TRANSACTION = OPTION_CNT++;
         private static int NAV_VIEW_MANUAL_TRANSACTIONS = OPTION_CNT++;
-        
+
         public static String InvalidEnterPrompt = "Invalid Entry.. Enter ";
         public static String EXIT_VALUE = "-1";
         public static String EXIT_STRING = " or " + EXIT_VALUE + " to Quit : ";
@@ -73,7 +73,6 @@ namespace com.yodlee.sampleapps
         public static long INVESTMENT_TRANSACTION = 48;
         public static long LOAN_TRANSACTION = 61;
         public static long MANUAL_TRANSACTION = 101;
-
 
         public Transactions ()
         {
@@ -188,7 +187,7 @@ namespace com.yodlee.sampleapps
 	            long?[] itemIds = new long?[] {long.Parse(itemId)};
                 object[] itemSummaries = dataService.getItemSummaries3(
                         userContext, itemIds);
-    	        
+
 	            if(itemSummaries != null) {
 	                for(int i=0; i<itemSummaries.Length; i++){
 			            ItemSummary itemSummary = (ItemSummary)itemSummaries[i];
@@ -196,7 +195,7 @@ namespace com.yodlee.sampleapps
                         object[] accounts = itemSummary.itemData.accounts;
                         if(containerName.Equals(ContainerTypes.BANK) 
                     		    && accounts.Length > 0) {
-                        	
+
                         }                            
                             for (int j = 0; j < accounts.Length; j++) 
                             {
@@ -206,7 +205,7 @@ namespace com.yodlee.sampleapps
                             	    runningBalance = bankData.currentBalance.amount;
                                 }
                             }
-    			        
+
 	                }
 	            }
             } catch (Exception e) {
@@ -300,7 +299,7 @@ namespace com.yodlee.sampleapps
         	    System.Console.WriteLine("\ttransactionSearchIdentifier is null");
             } else {
         	    System.Console.WriteLine("\ttransactionSearchIdentifier details: ");
-            	
+
         	    String[] identifiers = transactionSearchIdentifier.identifiers;
         	    if(identifiers != null) {
 	        	    for(int i=0; i<identifiers.Length; i++) {
@@ -309,7 +308,7 @@ namespace com.yodlee.sampleapps
         	    } else {
         		    System.Console.WriteLine("\t\tidentifiers is null");
         	    }
-            	
+
         	    String identifier = transactionSearchIdentifier.identifier;
         	    if(identifier != null) {
         		    System.Console.WriteLine("\t\tidentifier = " + identifier);
@@ -396,7 +395,7 @@ namespace com.yodlee.sampleapps
                         }
                         System.Console.WriteLine("\n");
                     }
-	        	    
+
 	        	    searchHit = searchHit - 10;
                     startRange = endRange + 1;
                     endRange = endRange + 10;
@@ -443,7 +442,7 @@ namespace com.yodlee.sampleapps
             txSearchRequest.higherFetchLimit = 0;
             txSearchRequest.includeAggregatedTransactions = true;
             txSearchRequest.isSharedAccountTransactionReq = true;
-            
+
             txSearchRequest.resultRange = txSearchResultRange;
             txSearchRequest.ignoreUserInput = true;            
             txSearchRequest.searchClients = TransactionSearchClients.DEFAULT_SERVICE_CLIENT;
@@ -586,7 +585,6 @@ namespace com.yodlee.sampleapps
                                             itemAccountId = rewardData.itemAccountId;
                                         }
 
-
                                     } else if(containerName.Equals(ContainerTypes.LOAN) || containerName.Equals(ContainerTypes.MORTGAGE)){
                                         LoanLoginAccountData loanLoginAccountData = (LoanLoginAccountData)accounts[j];
                                         if(loanLoginAccountData != null){
@@ -718,7 +716,7 @@ namespace com.yodlee.sampleapps
             //String containerType = IOUtils.promptInput(
             //        ContainerTypePrompt,
             //        ReContainerTypePrompt);
-            
+
             // Get the list of supported transaction categories to display
             Category1[] category = tcService.getUserTransactionCategories(userContext);
 
@@ -741,7 +739,7 @@ namespace com.yodlee.sampleapps
             //    String categoryName;                
             //    for ( int i = 0; i < category.Length; ++i) {
             //        childCategory = category[i].childCategory;
-                    
+
             //        categoryName = category[i].categoryName != null ? category[i].categoryName : category[i].localizedCategoryName;
             //        System.Console.Write(categoryName);
             //        for (int j = categoryName.Length; j < 32; j++)
@@ -768,18 +766,17 @@ namespace com.yodlee.sampleapps
             //    System.Console.Write("\n");
             //}
 
-            
             //// Prompt for the categoryId.
             //String categoryId = IOUtils.promptInput(
             //        CategoryIdPrompt,
             //        ReCategoryIdPrompt);            
-            
+
             //System.Console.WriteLine("\n");
-            
+
             //UserCategorizationObject [] userCategorizationObjects = new UserCategorizationObject[1];
-            
+
             //UserCategorizationObject ucObject = new UserCategorizationObject();
-            
+
             //ucObject.containerTransactionId = transactionId;
             //ucObject.targetTransactionCategoryId = categoryId;
             //ucObject.container = containerType;
@@ -866,9 +863,9 @@ namespace com.yodlee.sampleapps
 
                     //set category
                     //Category category = new Category();
-                    
+
                     Category1 category = new Category1();
-                    
+
                     //category.categoryId = txnView[0].category.categoryId; //25;
                     category.categoryId = txnView[0].category.categoryId; //25;
                     //TransactionCategory tc = (TransactionCategory)txnView[0].category.categoryName;
@@ -878,31 +875,31 @@ namespace com.yodlee.sampleapps
                     category.categoryIdSpecified = true;
                     if (txnView[0].category.categoryLevelId == 0 || txnView[0].category.categoryLevelId == null)
                     {
-                       
+
                        category.categoryLevelId = CATEGORY;
                        category.categoryLevelIdSpecified = true;
-                        
+
                     }
                     else
                     {
-                        
+
                         category.categoryLevelId = txnView[0].category.categoryLevelId;
                         category.categoryLevelIdSpecified = true;
                     }
                     if (txnView[0].category.parentTransactionCategory != null)
                     {
-                        
+
                         category.parentCategoryId = txnView[0].category.parentTransactionCategory.categoryId;
                         category.parentCategoryIdSpecified = true;
                     }
                     else
                     {
-                       
+
                         category.parentCategoryId = 25;
                         category.parentCategoryIdSpecified = true;
 
                     }
-                  
+
                     splitTxn.category = category;
 
                     //set txn_id
@@ -930,7 +927,7 @@ namespace com.yodlee.sampleapps
 
                     SplitTransactionWithOperation splitTxnWithOperation = new SplitTransactionWithOperation();
                     splitTxnWithOperation.splitTransaction = splitTxn;
-                    
+
                     splitTxnWithOperation.splitTransactionOperation = SplitTransactionOperation.ADD_SPLIT_TRANSACTON;
                     splitTxnWithOperation.splitTransactionOperationSpecified = true;
 
@@ -1028,7 +1025,7 @@ namespace com.yodlee.sampleapps
                         {
                             System.Console.WriteLine("\t" + childCat[c].categoryName + " [" + childCat[c].categoryId + "] "+childCat[c].categoryLevelId);
                         }
-                        
+
                     }
                 }
 
@@ -1050,7 +1047,7 @@ namespace com.yodlee.sampleapps
                 subCategory.categoryLevelIdSpecified = true;
 
                 subCategory.categoryDescription = "TEST";
-                                
+
                 Category1[] subCategoryToBeAdded = { subCategory };
 
                 try
@@ -1060,11 +1057,10 @@ namespace com.yodlee.sampleapps
                 } catch (SoapException soapExc) {
                     System.Console.WriteLine("Exception::" + soapExc.Message);
                     System.Console.WriteLine("Error adding subcategory:" + soapExc.StackTrace);
-                    
-                    
+
                     /*
                      CoreException coreEx = ExceptionHandler.processException(soapExc);
-                     
+
                     if (coreEx != null) {
                         if (coreEx is CategoryLevelNotSupportedException) {
                             System.Console.WriteLine("Exception: Category Level Not Supported");
@@ -1077,9 +1073,7 @@ namespace com.yodlee.sampleapps
                         } else
                             System.Console.WriteLine("Exception:" + coreEx.message);
                     }*/
-                    
 
-                    
                 }
             } else {
                 System.Console.WriteLine("Error fetching transaction categories");
@@ -1189,7 +1183,7 @@ namespace com.yodlee.sampleapps
                 transactionTypeData.transactionTypeId = view.transactionTypeId;
                 transactionTypeData.transactionTypeIdSpecified = true;
                 transactionTypeData.transactionType = view.transactionType;
-                
+
                 TransactionCategoryData transactionCategoryData = new TransactionCategoryData();
                 /**DEBUG BEGIN*/
                 /*transactionCategoryData.categoryId = view.category.categoryId;

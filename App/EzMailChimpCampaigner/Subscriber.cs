@@ -28,8 +28,6 @@
 			};
 		} // Clone
 
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format(
 				"Email: {0}\n\tLoan: {1} Name: {2} Broker email: {7}\n\tDayAfter: {3} Week: {4} TwoWeeks: {5} Month: {6}",
@@ -44,6 +42,5 @@
 			);
 		} // ToString
 
-		#endregion method ToString
 	} // class Subscriber
 } // namespace

@@ -5,12 +5,8 @@ using FluentNHibernate.Mapping;
 using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database.Loans {
-	#region class LoanSource
 
 	public class LoanSource {
-		#region public
-
-		#region properties - loaded from DB
 
 		public virtual int ID { get; set; }
 		public virtual string Name { get; set; }
@@ -22,14 +18,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 		public virtual bool IsDefault { get; set; }
 		public virtual int? AlertOnCustomerReasonType { get; set; }
 
-		#endregion properties - loaded from DB
-
-		#endregion public
 	} // class LoanSource
-
-	#endregion class LoanSource
-
-	#region LoanSourceRepository
 
 	public interface ILoanSourceRepository : IRepository<LoanSource> {
 		LoanSource GetDefault();
@@ -40,7 +29,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 		public LoanSourceRepository(ISession session) : base(session) {} // constructor
 
 		public LoanSource GetDefault() { return GetAll().FirstOrDefault(p => p.IsDefault) ?? GetAll().Single(p => p.ID == 1); }
-		
+
 		public LoanSource GetByName(string name) {
 			return GetAll().FirstOrDefault(x => x.Name == name);
 		}
@@ -48,11 +37,9 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 // GetDefault
 	} // class LoanSourceRepository
 
-	#endregion LoanSourceRepository
 } // namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping {
-	#region class LoanSourceMap
 
 	public sealed class LoanSourceMap : ClassMap<LoanSource> {
 		public LoanSourceMap() {
@@ -71,5 +58,4 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 		} // constructor
 	} // class LoanSourceMap
 
-	#endregion class LoanSourceMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

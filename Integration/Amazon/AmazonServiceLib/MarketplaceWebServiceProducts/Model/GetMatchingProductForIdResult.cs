@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class GetMatchingProductForIdResult
     {
-    
+
         private  String idField;
         private  String idTypeField;
         private  String statusField;
@@ -44,8 +42,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.productsField = value; }
         }
 
-
-
         /// <summary>
         /// Sets the Products property
         /// </summary>
@@ -57,8 +53,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Products property is set
         /// </summary>
@@ -67,9 +61,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.productsField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the Error property.
@@ -80,8 +71,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.errorField ; }
             set { this.errorField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Error property
@@ -94,8 +83,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Error property is set
         /// </summary>
@@ -104,10 +91,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.errorField != null;
         }
-
-
-
-
 
         /// <summary>
         /// Gets and sets  the Id property.
@@ -118,8 +101,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.idField ; }
             set { this.idField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Id property
@@ -132,8 +113,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Id property is set
         /// </summary>
@@ -144,7 +123,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets  the IdType property.
         /// </summary>
@@ -154,8 +132,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.idTypeField ; }
             set { this.idTypeField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the IdType property
@@ -168,8 +144,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if IdType property is set
         /// </summary>
@@ -180,7 +154,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets  the status property.
         /// </summary>
@@ -190,8 +163,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.statusField ; }
             set { this.statusField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the status property
@@ -204,8 +175,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if status property is set
         /// </summary>
@@ -216,8 +185,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -226,7 +193,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -278,8 +244,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

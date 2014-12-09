@@ -5,9 +5,6 @@
 	using System.Text;
 
 	public class Encrypted {
-		#region public
-
-		#region method Decrypt
 
 		public static string Decrypt(Encrypted input) {
 			return input.Decrypt();
@@ -21,10 +18,6 @@
 			return InternalDecrypt(input);
 		} // Decrypt
 
-		#endregion method Decrypt
-
-		#region conversion operators
-
 		public static implicit operator byte[](Encrypted obj) {
 			return Encoding.UTF8.GetBytes(obj.m_sEncrypted);
 		} // to string
@@ -33,39 +26,19 @@
 			return obj.m_sEncrypted;
 		} // to string
 
-		#endregion conversion operators
-
-		#region constructor
-
 		public Encrypted(string sUnencrypted) {
 			m_sEncrypted = InternalEncrypt(sUnencrypted);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Decrypt
 
 		public string Decrypt() {
 			return Decrypt(m_sEncrypted);
 		} // Decrypt
 
-		#endregion method Decrypt
-
-		#region method ToString
-
 		public override string ToString() {
 			return m_sEncrypted;
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region private
-
 		private readonly string m_sEncrypted;
-
-		#region method Encrypt
 
 		private static string InternalEncrypt(string value) {
 			string password = GetKey();
@@ -91,10 +64,6 @@
 			} // using buffer
 		} // InternalEncrypt
 
-		#endregion method Encrypt
-
-		#region method InternalDecrypt
-
 		private static string InternalDecrypt(string text) {
 			string password = GetKey();
 			string salt = GetSalt();
@@ -117,24 +86,13 @@
 			} // using buffer
 		} // InternalDecrypt
 
-		#endregion method InternalDecrypt
-
-		#region method GetKey
-
 		private static string GetKey() {
 			return "F40D3C355CFD5DC4251D9ADEECC7DD73BFB9D5A80946786F071007399130335D";
 		} // GetKey
-
-		#endregion method GetKey
-
-		#region method GetSalt
 
 		private static string GetSalt() {
 			return "EzBB0b";
 		} // GetSalt
 
-		#endregion method GetSalt
-
-		#endregion private
 	} // class Encrypted
 } // namespace

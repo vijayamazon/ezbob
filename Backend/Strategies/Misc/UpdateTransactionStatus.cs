@@ -5,21 +5,12 @@
 	using StructureMap;
 
 	public class UpdateTransactionStatus : AStrategy {
-		#region constructor
 
 		public UpdateTransactionStatus(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) { } // constructor
-
-		#endregion constructor
-
-		#region property Name
 
 		public override string Name {
 			get { return "Update Transaction Status"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			var lst = DB.ExecuteEnumerable("GetPacnetTransactions", CommandSpecies.StoredProcedure);
@@ -29,7 +20,7 @@
 			foreach (var sr in lst) {
 				int customerId = sr["CustomerId"];
 				string trackingNumber = sr["TrackingNumber"];
-				
+
 				PacnetReturnData result = service.CheckStatus(customerId, trackingNumber);
 
 				string newStatus;
@@ -74,6 +65,5 @@
 			} // foreach
 		} // Execute
 
-		#endregion method Execute
 	} // UpdateTransactionStatus
 } // namespace

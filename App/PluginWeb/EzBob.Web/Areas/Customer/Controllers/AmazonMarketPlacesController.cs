@@ -187,7 +187,6 @@
 
 			_session.Flush();
 
-
 			if (CurrentValues.Instance.AskvilleEnabled)
 			{
 				Askville(marketplace.Id, merchantId, marketplaceId);

@@ -87,8 +87,6 @@
 		private static ASafeLog ms_oLog;
 		private static bool ms_bIncludeTest = false;
 
-		#region Tests
-
 		/*private static void TestGetSubscribers() {
 			Campaigns.InitCampaignsList();
 
@@ -177,7 +175,7 @@
 
 						ms_oLog.Debug("CreateSegmentedCampaign listId:{0}, templateId:{1}, condition:{2}, subject:{3}, title:{4}, type:{5}",
 							campaign.ListId, day.TemplateId, day.Condition, day.Subject, campaign.Title, campaign.CampaignType.ToString());
-						
+
 						string campaignId = oMailChimpApiControler.CreateSegmentedCampaign(campaign.ListId, day.TemplateId, day.Condition,
 						                                                                   day.Subject, campaign.Title,
 						                                                                   campaign.CampaignType.ToString());
@@ -193,6 +191,6 @@
 				}
 			} // for each campaign
 		}
-		#endregion
+
 	} // class Program
 } // namesapce

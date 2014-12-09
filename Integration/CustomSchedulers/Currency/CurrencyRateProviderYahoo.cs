@@ -1,4 +1,4 @@
-namespace CustomSchedulers.Currency
+﻿namespace CustomSchedulers.Currency
 {
 	using System;
 	using System.Globalization;
@@ -92,7 +92,7 @@ namespace CustomSchedulers.Currency
 
 		protected string CreateServiceConnectionString( string symbolName, DateTime startDate, DateTime endDate, bool isNeedToReversePrice )
 		{
-			#region Info
+
 			/*info: http://etraderzone.com/free-scripts/47-historical-quotes-yahoo.html
 			 s - This is where you can specify your stock quote, if you want to download stock quote for Microsoft, 
 				just enter it as 's=MSFT'
@@ -117,8 +117,7 @@ namespace CustomSchedulers.Currency
 
 			example: http://ichart.finance.yahoo.com/table.csv?s=GBP&a=4&b=1&c=2012&d=4&e=27&f=2012&g=d
 			*/
-			#endregion
-			
+
 			var startMonth = startDate.Month;
 			var startDay = 1;
 			var startYear = startDate.Year;
@@ -131,7 +130,7 @@ namespace CustomSchedulers.Currency
 
 		private CurrencyRateHistoryContainer ParceData(string response, bool isNeedToReversePrice)
 		{
-			#region test response from YAHOO
+
 			/* 
 				Date,Open,High,Low,Close,Volume,Adj Close
 				2012-04-26,1843.71,1845.31,1831.23,1837.21,000,1837.21
@@ -140,9 +139,8 @@ namespace CustomSchedulers.Currency
 				2011-05-31,1782.95,1785.86,1771.70,1775.49,000,1775.49
 				2011-05-30,1784.99,1785.53,1777.27,1778.36,000,1778.36
 				2011-05-27,1785.26,1789.38,1772.51,1785.25,000,1785.25
-				
+
 				 */
-			#endregion
 
 			var list = response.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 

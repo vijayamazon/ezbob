@@ -5,9 +5,6 @@
 	using System.Text.RegularExpressions;
 
 	class RtiTaxYearRowData {
-		#region public
-
-		#region constructor
 
 		public RtiTaxYearRowData(string sPeriod, string sAmountPaid, string sAmountDue) {
 			var ci = new CultureInfo("en-GB", false);
@@ -33,8 +30,6 @@
 			AmountDue = AThrasher.ParseGBP(NormaliseAmountStr(sAmountDue));
 		} // constructor
 
-		#endregion constructor
-
 		public int DayStart { get; private set; }
 		public int MonthStart { get; private set; }
 
@@ -43,10 +38,6 @@
 
 		public decimal AmountPaid { get; private set; }
 		public decimal AmountDue { get; private set; }
-
-		#endregion public
-
-		#region private
 
 		private string NormaliseAmountStr(string sAmount) {
 			if (string.IsNullOrWhiteSpace(sAmount))
@@ -71,6 +62,5 @@
 			'-', ',', '.',
 		};
 
-		#endregion private
 	} // class RtiTaxYearRowData
 } // namespace Ezbob.HmrcHarvester

@@ -48,7 +48,6 @@
 			}
 		}
 
-
 		public void Add(YodleeTransactionModel transaction)
 		{
 			foreach (var word in _yodleeSearchWords)
@@ -70,7 +69,6 @@
 				}
 			}
 		}
-
 
 		public void AddMissing()
 		{

@@ -4,9 +4,6 @@
 	using Logger;
 
 	public class ObjectPool<T> where T: class, IPoolable, new() {
-		#region public
-
-		#region constructor
 
 		public ObjectPool(int nMaxSize, ASafeLog oLog = null) {
 			m_nIDGenerator = 0;
@@ -29,21 +26,9 @@
 			Log.Debug("New {0} has been created with max size of {1}.", this, MaxSize);
 		} // constructor
 
-		#endregion constructor
-
-		#region method SetLog
-
 		public virtual void SetLog(ASafeLog oLog) {} // SetLog
 
-		#endregion method SetLog
-
-		#region property Log
-
 		public virtual SafeLog Log { get; private set; } // Log
-
-		#endregion property Log
-
-		#region property MaxSize
 
 		public int MaxSize {
 			get {
@@ -59,10 +44,6 @@
 
 		private int m_nMaxSize;
 
-		#endregion property MaxSize
-
-		#region property CurrentlyOut
-
 		public virtual int CurrentlyOut {
 			get {
 				lock (m_oLock)
@@ -72,20 +53,12 @@
 
 		private int m_nCurrentlyOut;
 
-		#endregion property CurrentlyOut
-
-		#region property CurrentSize
-
 		public virtual int CurrentSize {
 			get {
 				lock (m_oLock)
 					return m_nCurrentlyOut + m_oPool.Count;
 			} // get
 		} // CurrentSize
-
-		#endregion property CurrentSize
-
-		#region method Give
 
 		public virtual T Give() {
 			lock (m_oLock) {
@@ -116,10 +89,6 @@
 			} // lock
 		} // Give
 
-		#endregion method Give
-
-		#region method Take
-
 		public virtual bool Take(T obj) {
 			if (obj == null) {
 				Log.Debug("An object to take is null for {0}, no object taken.", this.StringifyStatus());
@@ -145,22 +114,10 @@
 			} // lock
 		} // Take
 
-		#endregion method Take
-
-		#region method ToString
-
 		public override string ToString() {
 			lock (m_oLock)
 				return StringifyStatus();
 		} // ToString
-
-		#endregion method ToString
-
-		#endregion public
-
-		#region protected
-
-		#region method Forget
 
 		protected virtual void Forget(int nHowMany) {
 			if (nHowMany <= 0)
@@ -182,18 +139,10 @@
 			} // lock
 		} // Forget
 
-		#endregion method Forget
-
-		#endregion protected
-
-		#region private
-
 		private readonly Queue<T> m_oPool;
 		private readonly object m_oLock;
 		private readonly string m_sName;
 		private ulong m_nIDGenerator;
-
-		#region method StringifyStatus
 
 		private string StringifyStatus() {
 			return string.Format(
@@ -206,8 +155,5 @@
 			);
 		} // StringifyStatus
 
-		#endregion method StringifyStatus
-
-		#endregion private
 	} // class ObjectPool
 } // namespace Ezbob.Utils.ObjectPool

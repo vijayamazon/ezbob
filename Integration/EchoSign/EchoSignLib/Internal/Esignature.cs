@@ -28,10 +28,6 @@
 				.ToList();
 		} // SetHistoryAndStatus
 
-		#region private
-
-		#region method ConvertEvent
-
 		private SpSaveSignedDocument.HistoryEvent ConvertEvent(DocumentHistoryEvent oEvent) {
 			switch (oEvent.type) {
 			case AgreementEventType.ESIGNED:
@@ -45,10 +41,6 @@
 			return new SpSaveSignedDocument.HistoryEvent(oEvent);
 		} // ConvertEvent 
 
-		#endregion method ConvertEvent
-
-		#region method EmailToSigner
-
 		private SortedDictionary<string, int> EmailToSigner() {
 			var res = new SortedDictionary<string, int>();
 
@@ -57,10 +49,6 @@
 
 			return res;
 		} // EmailToSigner
-
-		#endregion method EmailToSigner
-
-		#region method SaveSignerStatus
 
 		private List<SpSaveSignedDocument.EsignerStatus> SaveSignerStatus(IEnumerable<ParticipantInfo> participants) {
 			m_oSignerStatuses = new SortedDictionary<string, SpSaveSignedDocument.EsignerStatus>();
@@ -86,10 +74,7 @@
 			return res;
 		} // SaveSignerStatus
 
-		#endregion method SaveSignerStatus
-
 		private SortedDictionary<string, SpSaveSignedDocument.EsignerStatus> m_oSignerStatuses;
 
-		#endregion private
 	} // class Esignature
 } // namespace

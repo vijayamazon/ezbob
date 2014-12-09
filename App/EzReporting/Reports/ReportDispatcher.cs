@@ -6,14 +6,9 @@
 	using Ezbob.Utils.Html;
 	using OfficeOpenXml;
 
-	#region class ReportDispatcher
-
 	public class ReportDispatcher : SafeLog {
-		#region public
 
 		public const string ToDropbox = "dropbox";
-
-		#region constructor
 
 		public ReportDispatcher(AConnection oDB, ASafeLog oLog = null) : base(oLog) {
 			m_oDropbox = new DropboxReportSaver(oDB, oLog);
@@ -21,10 +16,6 @@
 
 			m_oSender = new BaseReportSender(oLog);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Dispatch
 
 		public void Dispatch(string subject, DateTime oReportDate, ATag mailBody, ExcelPackage wb, string toAddressStr, string period = "Daily") {
 			if ((toAddressStr ?? "").Trim().ToLower() == ReportDispatcher.ToDropbox) {
@@ -52,17 +43,9 @@
 				m_oSender.Send(subject, mailBody, wb, toAddressStr, period);
 		} // Dispatch
 
-		#endregion method Dispatch
-
-		#endregion public
-
-		#region private
-
 		private readonly BaseReportSender m_oSender;
 		private readonly DropboxReportSaver m_oDropbox;
 
-		#endregion private
 	} // class ReportDispatcher
 
-	#endregion class ReportDispatcher
 } // namespace Reports

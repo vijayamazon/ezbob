@@ -2,24 +2,17 @@
 	using System.Collections.Generic;
 
 	public class DisplayMetaData {
-		#region enum DisplayDirections
 
 		public enum DisplayDirections {
 			Vertical,
 			Horizontal,
 		} // enum DisplayDirections
 
-		#endregion enum DisplayDirections
-
-		#region constructor
-
 		public DisplayMetaData() {
 			ID = null;
 			UnlimitedWidth = null;
 			DisplayDirection = DisplayDirections.Vertical;
 		} // constructor
-
-		#endregion constructor
 
 		public string ID { get; set; }
 

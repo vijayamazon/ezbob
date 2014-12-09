@@ -28,7 +28,7 @@
 			_workbook.ChangePalette(Color.FromArgb(197,197,197), 55);
 			_workbook.ChangePalette(Color.FromArgb(221, 221, 221), 54);
 			_workbook.ChangePalette(Color.FromArgb(123, 178, 36), 53);
-			
+
 			HeaderReportGenerator.CreateHeader(worksheet, header, column - 1, column, 7);
 
 			worksheet.Cells.SetColumnWidth(0, 1);
@@ -56,7 +56,6 @@
 			}
 
 			row = CreateTotalBlock(loanOffer, row, column, worksheet);
-
 
 			if (loanOffer.Details.IsModified)
 			{
@@ -97,8 +96,6 @@
 			worksheet.Cells[row, column + 1].Style.Font.IsBold = true;
 		}
 
-
-
 		private int CreateTotalBlock(LoanOffer loanOffer, int row, int column, Worksheet worksheet)
 		{
 			row += 2;
@@ -131,11 +128,10 @@
 			worksheet.Pictures.Add(row, column + 5, filePath, 100, 80);
 
 			row += 2;
-			
+
 			worksheet.Cells.Merge(row, column + 0, 2, 7);
 			worksheet.Cells[row, column + 0].PutValue(string.Format("Real Loan Cost ={0:0.00}%,    Apr={1}%",
 														   loanOffer.RealInterestCost * 100, loanOffer.Apr));
-
 
 			//worksheet.Cells[row, column].GetMergedRange().SetOutlineBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.FromArgb(197, 197, 197));
 			//worksheet.Cells[row, column].GetMergedRange().SetOutlineBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.FromArgb(197, 197, 197));

@@ -1,5 +1,4 @@
-namespace EZBob.DatabaseLib {
-	#region using
+﻿namespace EZBob.DatabaseLib {
 
 	using System;
 	using System.Collections.Generic;
@@ -31,10 +30,6 @@ namespace EZBob.DatabaseLib {
 	using Model.Marketplaces.Sage;
 	using Model.Marketplaces.Yodlee;
 
-	#endregion using
-
-	#region enum CustomerMarketplaceUpdateActionType
-
 	public enum CustomerMarketplaceUpdateActionType {
 		UpdateInventoryInfo,
 		UpdateOrdersInfo,
@@ -46,16 +41,10 @@ namespace EZBob.DatabaseLib {
 		UpdateTransactionInfo
 	} // enum CustomerMarketplaceUpdateActionType
 
-	#endregion enum CustomerMarketplaceUpdateActionType
-
-	#region class DatabaseDataHelper
-
 	public partial class DatabaseDataHelper : IDatabaseDataHelper {
 		private static readonly ILog _Log = LogManager.GetLogger(typeof(DatabaseDataHelper));
 
 		private ISession _session;
-
-		#region repositories
 
 		private readonly CustomerRepository _CustomerRepository;
 		private readonly MarketPlaceRepository _MarketPlaceRepository;
@@ -82,10 +71,6 @@ namespace EZBob.DatabaseLib {
 		private readonly CustomerMarketPlaceUpdatingHistoryRepository customerMarketPlaceUpdatingHistoryRepository;
 
 		private readonly ExperianDirectorRepository m_oExperianDirectorRepository;
-
-		#endregion repositories
-
-		#region constructor
 
 		public DatabaseDataHelper(ISession session) {
 			_session = session;
@@ -132,10 +117,6 @@ namespace EZBob.DatabaseLib {
 			m_oExperianDirectorRepository = new ExperianDirectorRepository(session);
 		} // constructor
 
-		#endregion constructor
-
-		#region property WizardStepSequence
-
 		public string WizardStepSequence {
 			get {
 				var oResult = new {
@@ -155,15 +136,9 @@ namespace EZBob.DatabaseLib {
 			}
 		} // WizardStepSequence
 
-		#endregion property WizardStepSequence
-
-		#region property WizardSteps
-
 		public WizardStepRepository WizardSteps {
 			get { return _wizardStepRepository; }
 		} // WizardSteps
-
-		#endregion property WizardSteps
 
 		public ExperianDirectorRepository ExperianDirectorRepository { get { return m_oExperianDirectorRepository; } }
 
@@ -671,7 +646,7 @@ namespace EZBob.DatabaseLib {
 				_FreeAgentUsersRepository.SaveOrUpdate(user);
 			}
 		}
-		
+
 		public void StoreToDatabaseAggregatedData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IEnumerable<IWriteDataInfo<TEnum>> dataInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			_FunctionValuesWriterHelper.SetRangeOfData(databaseCustomerMarketPlace, dataInfo, historyRecord);
 		}
@@ -788,10 +763,6 @@ namespace EZBob.DatabaseLib {
 			Debug.WriteLine(message);
 		}
 
-		#region method GetAnalyisisfunctions
-
-		#region class AnalysisFunctionData
-
 		private class AnalysisFunctionData {
 			public Guid fid { get; private set; }
 			public Guid fpid { get; private set; }
@@ -805,8 +776,6 @@ namespace EZBob.DatabaseLib {
 				afDate = (DateTime)val[3];
 			} // constructor
 		} // class AnalysisFunctionData
-
-		#endregion class AnalysisFunctionData
 
 		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			var lst = new List<AnalysisFunctionData>();
@@ -839,8 +808,6 @@ namespace EZBob.DatabaseLib {
 
 			return oResult;
 		} // GetAnalyisisFunctions
-
-		#endregion method GetAnalyisisfunctions
 
 		public EkmOrdersList GetAllEkmOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -1166,7 +1133,5 @@ namespace EZBob.DatabaseLib {
 			return (int)_FreeAgentExpenseCategoryRepository.Save(dbCategory);
 		}
 	} // class DatabaseDataHelper
-
-	#endregion class DatabaseDataHelper
 
 } // namespace

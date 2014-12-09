@@ -5,17 +5,10 @@
 	using Ezbob.Utils.Html.Attributes;
 
 	public abstract class ATag {
-		#region public
 
 		public abstract string Tag { get; }
 
-		#region property MustClose
-
 		public virtual bool MustClose { get { return true; } }
-
-		#endregion property MustClose
-
-		#region method Add
 
 		public virtual ATag Add<T>(string sValue) where T : AAttribute {
 			PropertyInfo[] aryProperties = this.GetType().GetProperties();
@@ -30,10 +23,6 @@
 			return this;
 		} // Add
 
-		#endregion method Add
-
-		#region method ApplyToChildren
-
 		public virtual ATag ApplyToChildren<T>(string sValue) where T : AAttribute {
 			foreach (var child in Children) {
 				child.Add<T>(sValue);
@@ -43,20 +32,12 @@
 			return this;
 		} // ApplyToChildren
 
-		#endregion method ApplyToChildren
-
-		#region method Append
-
 		public virtual ATag Append(ATag oTag) {
 			if (oTag != null)
 				Children.Add(oTag);
 
 			return this;
 		} // Append
-
-		#endregion method Append
-
-		#region method MoveCssInline
 
 		public ATag MoveCssInline(Dictionary<string, string> oStyles) {
 			foreach (string sClass in this.Class.RawValues)
@@ -69,27 +50,11 @@
 			return this;
 		} // MoveCssInline
 
-		#endregion method MoveCssInline
-
-		#region property ID
-
 		public virtual ID ID { get; private set; }
-
-		#endregion property ID
-
-		#region property Class
 
 		public virtual Class Class { get; private set; }
 
-		#endregion property Class
-
-		#region property Style
-
 		public virtual Style Style { get; private set; }
-
-		#endregion property Style
-
-		#region method ToString
 
 		public override string ToString() {
 			var sb = new StringBuilder();
@@ -121,14 +86,6 @@
 			return sb.ToString();
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
 		protected ATag() {
 			Children = new List<ATag>();
 			ID = new ID();
@@ -136,14 +93,7 @@
 			Style = new Style();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Children
-
 		protected virtual List<ATag> Children { get; private set; }
 
-		#endregion property Children
-
-		#endregion protected
 	} // class ATag
 } // namespace

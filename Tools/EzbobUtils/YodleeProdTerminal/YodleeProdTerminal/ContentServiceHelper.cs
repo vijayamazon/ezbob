@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Text;
 
@@ -35,7 +35,6 @@ namespace com.yodlee.sampleapps
             cst = new ContentServiceTraversalService();
             cst.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + "ContentServiceTraversalService";
         }
-
 
         public void contentServiceMenu()
         {
@@ -114,7 +113,7 @@ namespace com.yodlee.sampleapps
                 }
             }
         }
-        
+
         /**
          * This method will give a summary of how many services there are per container and
          * give the user the option to print them all out
@@ -150,7 +149,7 @@ namespace com.yodlee.sampleapps
             }
 
         }
-        
+
         /**
          * View the details of a single content service
          */
@@ -257,7 +256,7 @@ namespace com.yodlee.sampleapps
                    }
                }
                    System.Console.WriteLine("");
-               
+
                if (csi.hasSiblingContentServices)
                {
                    ContentServiceInfo[] siblingCSIDs = cst.getSiblingContentServices(getCobrandContext(), csi.contentServiceId, true);
@@ -302,7 +301,7 @@ namespace com.yodlee.sampleapps
                System.Console.WriteLine("\n\n");
 
            }
-			
+
            public void viewContainerServices()
            {
                System.Console.WriteLine("The following are the containers to get the sites for");
@@ -360,9 +359,8 @@ namespace com.yodlee.sampleapps
                    System.Console.WriteLine("Invalid content service entered: " + choice);
                }
 
-
            }
-               
+
         private bool isValid(String choice)
         {
             string[] containerTypes = ConverToArray();
@@ -373,7 +371,7 @@ namespace com.yodlee.sampleapps
             }
             return false;
         }
- 
+
         public void printBriefContentServices(ContentServiceInfo[] csis)
         {
             for (int i = 0; i < csis.Length; i++)
@@ -428,7 +426,7 @@ namespace com.yodlee.sampleapps
 
             return containerArray;
         }
-        
+
         /**
          * This method is to get the MFAtype of the particular content service id. 
          * @param content_service_id

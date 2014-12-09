@@ -4,8 +4,6 @@
 	internal class LongIntish : AType<long?> {
 		public LongIntish() : base("long") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			long nResult;
 
@@ -15,6 +13,5 @@
 			return Activator.CreateInstance(UnderlyingType);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class LongIntish
 } // namespace

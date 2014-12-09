@@ -92,7 +92,6 @@
 			});
 			m_oCustomerRepository.CommitTransaction();
 
-
 			m_oCustomerCompanyHistoryRepository.SaveOrUpdate(new CustomerCompanyHistory {
 				CustomerId = customer.Id,
 				CompanyId = customer.Company.Id,

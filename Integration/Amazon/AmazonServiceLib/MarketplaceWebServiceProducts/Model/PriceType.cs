@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class PriceType
     {
-    
+
         private  MoneyType landedPriceField;
         private  MoneyType listingPriceField;
         private  MoneyType shippingField;
@@ -42,8 +40,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.landedPriceField = value; }
         }
 
-
-
         /// <summary>
         /// Sets the LandedPrice property
         /// </summary>
@@ -55,8 +51,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if LandedPrice property is set
         /// </summary>
@@ -65,9 +59,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.landedPriceField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the ListingPrice property.
@@ -78,8 +69,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.listingPriceField ; }
             set { this.listingPriceField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ListingPrice property
@@ -92,8 +81,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ListingPrice property is set
         /// </summary>
@@ -102,9 +89,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.listingPriceField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the Shipping property.
@@ -115,8 +99,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.shippingField ; }
             set { this.shippingField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Shipping property
@@ -129,8 +111,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Shipping property is set
         /// </summary>
@@ -140,11 +120,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this.shippingField != null;
         }
 
-
-
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -153,7 +128,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -211,8 +185,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

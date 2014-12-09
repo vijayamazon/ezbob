@@ -9,8 +9,6 @@
 
 		public override string Name { get { return "Transfer Cash Failed"; } } // Name
 
-		#region method SetTemplateAndVariables
-
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Problem with bank account";
 
@@ -19,6 +17,5 @@
 			};
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
 	} // class 
 } // namespace

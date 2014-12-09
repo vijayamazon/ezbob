@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
-	#region using
 
 	using System;
 	using System.Web.Mvc;
@@ -23,12 +22,7 @@
 	using NHibernate.Linq;
 	using System.Linq;
 
-	#endregion using
-
 	public class ProfileController : Controller {
-		#region public
-
-		#region constructor
 
 		public ProfileController(
 			CustomerModelBuilder oCustomerModelBuilder,
@@ -44,10 +38,6 @@
 			m_oSession = oSession;
 			m_oPayPointFacade = oPayPointFacade;
 		} // constructor
-
-		#endregion constructor
-
-		#region action Index
 
 		[IsSuccessfullyRegisteredFilter]
 		public ViewResult Index() {
@@ -70,10 +60,6 @@
 			return View("Index", wizardModel);
 		} // Index
 
-		#endregion action Index
-
-		#region action Details
-
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
@@ -81,10 +67,6 @@
 			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, true);
 			return Json(details.Customer, JsonRequestBehavior.AllowGet);
 		} // Details
-
-		#endregion action Details
-
-		#region action ClaimsTrustPilotReview
 
 		[Transactional]
 		[Ajax]
@@ -106,10 +88,6 @@
 
 			return Json(new { status = "ok", error = "" });
 		} // ClaimsTrustPilotReview
-
-		#endregion action ClaimsTrustPilotReview
-
-		#region action EntrepreneurTargeting
 
 		[Transactional]
 		[Ajax]
@@ -153,10 +131,6 @@
 			return Json(new { companyTargeting = false });
 		} // EntrepreneurTargeting
 
-		#endregion action EntrepreneurTargeting
-
-		#region action SaveTargeting
-
 		[Transactional]
 		[Ajax]
 		[HttpPost]
@@ -184,10 +158,6 @@
 			return Json(new { });
 		} // SaveTargeting
 
-		#endregion action SaveTargeting
-
-		#region action ApplyForALoan
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -199,10 +169,6 @@
 
 			return Json(oModel);
 		} // ApplyForALoan
-
-		#endregion action ApplyForALoan
-
-		#region action DirectApplyForLoan
 
 		[Ajax]
 		[HttpPost]
@@ -216,17 +182,9 @@
 			return Json(oModel);
 		} // DirectApplyForLoan
 
-		#endregion action DirectApplyForLoan
-
-		#region action RenewEbayToken
-
 		public ViewResult RenewEbayToken() {
 			return View();
 		} // RenewEbayToken
-
-		#endregion action RenewEbayToken
-
-		#region action SetDefaultCard
 
 		[Ajax]
 		[HttpPost]
@@ -249,10 +207,6 @@
 			return Json(new { });
 		} // SetDefaultCard
 
-		#endregion action SetDefaultCard
-
-		#region action AddPayPoint
-
 		public RedirectResult AddPayPoint() {
 			var oCustomer = m_oContext.Customer;
 			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
@@ -269,10 +223,6 @@
 
 			return Redirect(url);
 		} // AddPayPoint
-
-		#endregion action AddPayPoint
-
-		#region action PayPointCallback
 
 		[Transactional]
 		[HttpGet]
@@ -306,14 +256,6 @@
 			return View(new { success = true });
 		} // PayPointCallback
 
-		#endregion action PayPointCallback
-
-		#endregion public
-
-		#region private
-
-		#region method DoApplyForLoan
-
 		private void DoApplyForLoan() {
 			Customer customer = m_oContext.Customer;
 
@@ -339,10 +281,6 @@
 			ms_oLog.Debug("Customer {0} applied for loan, cash request is ready.", customer.Stringify());
 		} // DoApplyForLoan
 
-		#endregion method DoApplyForLoan
-
-		#region fields
-
 		private readonly CustomerModelBuilder m_oCustomerModelBuilder;
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;
@@ -352,8 +290,5 @@
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
 
-		#endregion fields
-
-		#endregion private
 	} // class ProfileController
 } // namespace

@@ -6,12 +6,7 @@
 	using System.Globalization;
 	using Ezbob.Logger;
 
-	#region class SqlConnection
-
 	public class SqlConnection : AConnection {
-		#region public
-
-		#region constructor
 
 		public SqlConnection(ASafeLog log = null, string sConnectionString = null) : base(log, sConnectionString) {
 		} // constructor
@@ -19,17 +14,9 @@
 		public SqlConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) : base(oEnv, log) {
 		} // constructor
 
-		#endregion constructor
-
-		#region method DateToString
-
 		public override string DateToString(DateTime oDate) {
 			return oDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture);
 		} // DateToString
-
-		#endregion method DateToString
-
-		#region method CreateTableParameter
 
 		public override QueryParameter BuildTableParameter(string sFieldName, DataTable oValues) {
 			return new QueryParameter(new SqlParameter(sFieldName, SqlDbType.Structured) {
@@ -37,14 +24,6 @@
 				Direction = ParameterDirection.Input,
 			});
 		} // CreateTableParameter
-
-		#endregion method CreateTableParameter
-
-		#endregion public
-
-		#region protected
-
-		#region method CreateConnection
 
 		protected override DbConnection CreateConnection() {
 			var oConnection = new System.Data.SqlClient.SqlConnection(ConnectionString);
@@ -58,19 +37,11 @@
 			return oConnection;
 		} // CreateConnection
 
-		#endregion method CreateConnection
-
-		#region method CreateCommand
-
 		protected override DbCommand CreateCommand(string sCommand) {
 			return new SqlCommand {
 				CommandText = sCommand,
 			};
 		} // CreateCommand
-
-		#endregion method CreateCommand
-
-		#region method AppendParameter
 
 		protected override void AppendParameter(DbCommand cmd, QueryParameter prm) {
 			var oCmd = cmd as SqlCommand;
@@ -130,18 +101,10 @@
 			prm.UnderlyingParameter = oParam;
 		} // AppendParameter
 
-		#endregion method AppendParameter
-
-		#region method CreateRetryer
-
 		protected override Utils.ARetryer CreateRetryer() {
 			return new SqlRetryer(nRetryCount: 3, nSleepBeforeRetryMilliseconds: 500, oLog: this);
 		} // CreateRetryer
 
-		#endregion method CreateRetryer
-
-		#endregion protected
 	} // class SqlConnection
 
-	#endregion class SqlConnection
 } // namespace Ezbob.Database

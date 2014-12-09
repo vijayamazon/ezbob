@@ -8,18 +8,9 @@
 	using Newtonsoft.Json;
 	using Ezbob.Logger;
 
-	#region class Configuration
-
 	public class Configuration {
-		#region public
-
-		#region property Instance
 
 		public static Configuration Instance { get { return GetInstance(new SafeILog(typeof(Configuration))); } }
-
-		#endregion property Instance
-
-		#region method GetInstance
 
 		public static Configuration GetInstance(ILog oLog = null) {
 			return GetInstance(new SafeILog(oLog));
@@ -77,10 +68,6 @@
 			throw new ConfigException("Failed to load Channel Grabber configuration.");
 		} // GetInstance
 
-		#endregion method GetInstance
-
-		#region method GetVendorInfo
-
 		public VendorInfo GetVendorInfo(string sAccountTypeName) {
 			return m_oInternalVendorsByName.ContainsKey(sAccountTypeName) ? m_oInternalVendorsByName[sAccountTypeName] : null;
 		} // GetVendorInfo
@@ -88,10 +75,6 @@
 		public VendorInfo GetVendorInfo(Guid oAccountTypeInternalID) {
 			return m_oInternalVendorsByGuid.ContainsKey(oAccountTypeInternalID) ? m_oInternalVendorsByGuid[oAccountTypeInternalID] : null;
 		} // GetVendorInfo
-
-		#endregion method GetVendorInfo
-
-		#region method ForEachVendor
 
 		public void ForEachVendor(Action<VendorInfo> oCallback) {
 			if (oCallback == null)
@@ -101,10 +84,6 @@
 				oCallback.Invoke(vi.Value);
 		} // ForEachVendor
 
-		#endregion method ForEachVendor
-
-		#region method ForEachPureVendor
-
 		public void ForEachPureVendor(Action<VendorInfo> oCallback) {
 			if (oCallback == null)
 				return;
@@ -113,19 +92,11 @@
 				oCallback.Invoke(vi.Value);
 		} // ForEachPureVendor
 
-		#endregion method ForEachPureVendor
-
-		#region property Vendors
-
 		public IDictionary<string, VendorInfo> Vendors {
 			get { return m_oVendors; }
 		} // Vendors
 
 		private readonly IDictionary<string, VendorInfo> m_oVendors; 
-
-		#endregion property Vendors
-
-		#region property PureVendors
 
 		public IDictionary<string, VendorInfo> PureVendors {
 			get { return m_oPureVendors; }
@@ -133,19 +104,11 @@
 
 		private readonly IDictionary<string, VendorInfo> m_oPureVendors; 
 
-		#endregion property PureVendors
-
-		#region property Hmrc
-
 		public VendorInfo Hmrc {
 			get { return m_oHmrc; }
 		} // Hmrc
 
 		private VendorInfo m_oHmrc;
-
-		#endregion property Hmrc
-
-		#region GetMarketPlaceDiscriminator
 
 		public string GetMarketplaceDiscriminator() {
 			var sb = new StringBuilder();
@@ -154,14 +117,6 @@
 
 			return sb.ToString();
 		} // GetMarketplaceDiscriminator
-
-		#endregion GetMarketPlaceDiscriminator
-
-		#endregion public
-
-		#region private
-
-		#region constructor
 
 		private Configuration(string sConfigurationJson, ASafeLog oLog = null) {
 			Log = oLog ?? new SafeLog();
@@ -208,38 +163,18 @@
 			Log.Debug("Parsing Channel Grabber connectors configuration complete.");
 		} // constructor
 
-		#endregion constructor
-
-		#region property Log
-
 		private ASafeLog Log { get; set; }
 
-		#endregion property Log
-
-		#region property Configurations
-
 		private static Configuration ms_oConfiguration;
-
-		#endregion property Configurations
-
-		#region fields
 
 		private readonly SortedDictionary<string, VendorInfo> m_oInternalVendorsByName;
 		private readonly SortedDictionary<Guid, VendorInfo> m_oInternalVendorsByGuid;
 		private readonly SortedDictionary<string, VendorInfo> m_oInternalPureVendorsByName;
 
-		#endregion fields
-
-		#region constants
-
 		private const string CompanyName = "Ezbob";
 		private const string EnvNameFile = "channelgrabber.json";
 		private static readonly Guid ms_oHmrcGuid = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
 
-		#endregion constants
-
-		#endregion private
 	} // class Configuration
 
-	#endregion class Configuration
 } // namespace Integration.ChannelGrabberConfig

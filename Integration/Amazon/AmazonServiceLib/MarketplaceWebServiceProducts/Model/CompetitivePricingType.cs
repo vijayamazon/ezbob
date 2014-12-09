@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class CompetitivePricingType
     {
-    
+
         private  CompetitivePriceList competitivePricesField;
         private  NumberOfOfferListingsList numberOfOfferListingsField;
         private  MoneyType tradeInValueField;
@@ -42,8 +40,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.competitivePricesField = value; }
         }
 
-
-
         /// <summary>
         /// Sets the CompetitivePrices property
         /// </summary>
@@ -55,8 +51,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if CompetitivePrices property is set
         /// </summary>
@@ -65,9 +59,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.competitivePricesField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the NumberOfOfferListings property.
@@ -78,8 +69,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.numberOfOfferListingsField ; }
             set { this.numberOfOfferListingsField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the NumberOfOfferListings property
@@ -92,8 +81,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if NumberOfOfferListings property is set
         /// </summary>
@@ -102,9 +89,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.numberOfOfferListingsField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the TradeInValue property.
@@ -115,8 +99,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.tradeInValueField ; }
             set { this.tradeInValueField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the TradeInValue property
@@ -129,8 +111,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if TradeInValue property is set
         /// </summary>
@@ -140,11 +120,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this.tradeInValueField != null;
         }
 
-
-
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -153,7 +128,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -211,8 +185,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

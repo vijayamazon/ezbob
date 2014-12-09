@@ -12,7 +12,6 @@
 	using Ezbob.Utils.Serialization;
 
 	public class CGMPUniqChecker : MPUniqChecker {
-		#region constructor
 
 		public CGMPUniqChecker(
 			ICustomerMarketPlaceRepository customerMarketPlaceRepository,
@@ -21,10 +20,6 @@
 		) : base(customerMarketPlaceRepository, whiteList) {
 			m_oMpTypes = mpTypes;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Check
 
 		public override void Check(Guid marketplaceType, Customer customer, string token) {
 			if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, token))
@@ -50,10 +45,6 @@
 			} // for each marketplace
 		} // Check
 
-		#endregion method Check
-
-		#region method IsSameMarketPlace
-
 		private bool IsSameMarketPlace(int nMpID, byte[] oSecData, MP_MarketplaceType oMp, string sShopID) {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(oMp.Name);
 
@@ -70,8 +61,6 @@
 				return false;
 			}
 		} // IsSameMarketPlace
-
-		#endregion method IsSameMarketPlace
 
 		private readonly MarketPlaceRepository m_oMpTypes;
 	} // class CGMPUniqChecker

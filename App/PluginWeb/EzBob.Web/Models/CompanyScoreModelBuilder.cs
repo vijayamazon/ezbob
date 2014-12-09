@@ -17,7 +17,6 @@
 	using StructureMap;
 
 	public class CompanyScoreModelBuilder {
-		#region static constructor
 
 		static CompanyScoreModelBuilder() {
 			var oAttrTypes = typeof (ASrcAttribute).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(ASrcAttribute)) && t != typeof (ASrcAttribute));
@@ -47,20 +46,10 @@
 			ms_DisplayOrder = oOrder.Values.ToList();
 		} // static constructor
 
-		#endregion static constructor
-
-		#region public
-
-		#region constructor
-
 		public CompanyScoreModelBuilder() {
 			m_oServiceClient = new ServiceClient();
 			m_oContext = ObjectFactory.GetInstance<IWorkplaceContext>();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Create
 
 		public CompanyScoreModel Create(Customer customer) {
 			var model = new CompanyScoreModel {CompanyDetails = BuildDetails(customer)};
@@ -79,7 +68,7 @@
 				model.result = "No data found.";
 				model.DashboardModel = new ComapanyDashboardModel {Error = "No data found.",};
 				return model;
-			
+
 			} // if
 
 			if (nBusinessType != TypeOfBusinessReduced.Limited) {
@@ -144,9 +133,6 @@
 
 // Create
 
-		#endregion method Create
-
-
 		public ComapanyDashboardModel BuildNonLimitedDashboardModel(CompanyData data, string refNumber)
 		{
 			var model = new ComapanyDashboardModel();
@@ -181,8 +167,6 @@
 			return model;
 		}
 
-		#region method BuildLimitedDashboardModel
-		
 		public ComapanyDashboardModel BuildLimitedDashboardModel(ExperianLtdActionResult data, ComapanyDashboardModel oModel = null) {
 			if (oModel == null) {
 				oModel = new ComapanyDashboardModel {
@@ -304,14 +288,6 @@
 			return oModel;
 		} // BuildLimitedDashboardModel
 
-		#endregion method BuildLimitedDashboardModel
-
-		#endregion public
-
-		#region private
-
-		#region method AddOwners
-
 		private void AddOwners(CompanyScoreModel oPossession, string sOwnerRegNum) {
 			if (string.IsNullOrWhiteSpace(sOwnerRegNum))
 				return;
@@ -330,10 +306,6 @@
 				oPossession.AddOwner(BuildLimitedScoreModel(oLtdAr));
 		} // AddOwners
 
-		#endregion method AddOwners
-
-		#region method BuildLimitedScoreModel
-
 		private CompanyScoreModel BuildLimitedScoreModel(ExperianLtdActionResult oExperianLtd) {
 			SortedDictionary<string, CompanyScoreModelItem> oDataset = oExperianLtd.Value.ToCompanyScoreModel();
 
@@ -348,10 +320,6 @@
 			};
 		} // BuildLimitedScoreModel
 
-		#endregion method BuildLimitedScoreModel
-
-		#region fields
-
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IWorkplaceContext m_oContext;
 		private static readonly SafeILog m_oLog = new SafeILog(typeof(CompanyScoreModelBuilder));
@@ -359,10 +327,7 @@
 		private const int CompanyScoreMax = 100;
 		private const int CompanyScoreMin = 0;
 
-		#endregion fields
-
 		private static readonly List<string> ms_DisplayOrder;
 
-		#endregion private
 	} // class CompanyScoreModelBuilder
 } // namespace

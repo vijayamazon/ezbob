@@ -16,7 +16,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 			: base( response )
 		{
 			_response = response;
-            
+
 		}
 
         public int UniqueNeutralFeedbackCount
@@ -28,7 +28,6 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
         {
 			get { return _response.FeedbackSummary == null ? 0 : _response.FeedbackSummary.UniquePositiveFeedbackCount; }
         }
-
 
 	    public int UniqueNegativeFeedbackCount
 	    {
@@ -133,6 +132,5 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 
 	}
 
-	
 }
 

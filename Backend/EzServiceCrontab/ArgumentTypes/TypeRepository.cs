@@ -6,9 +6,6 @@
 	using Ezbob.Utils.Lingvo;
 
 	internal class TypeRepository {
-		#region public
-
-		#region constructor
 
 		public TypeRepository(ASafeLog oLog) {
 			m_oLog = oLog ?? new SafeLog();
@@ -34,10 +31,6 @@
 			} // if
 		} // constructor
 
-		#endregion constructor
-
-		#region method Find
-
 		public IType Find(string sName, bool bIsNullable, string sHint) {
 			try {
 				foreach (IType t in m_oTypes) {
@@ -59,10 +52,6 @@
 			return null;
 		} // Find
 
-		#endregion method Find
-
-		#region method CreateValue
-
 		public bool CreateValue(string sName, bool bIsNullable, string sValue, string sHint, out object oResult) {
 			IType oType = Find(sName, bIsNullable, sHint);
 
@@ -83,15 +72,8 @@
 			return false;
 		} // CreateValue
 
-		#endregion method CreateValue
-
-		#endregion public
-
-		#region private
-
 		private readonly List<IType> m_oTypes;
 		private readonly ASafeLog m_oLog;
 
-		#endregion private
 	} // class TypeRepository
 } // namespace

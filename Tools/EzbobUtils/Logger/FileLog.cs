@@ -8,12 +8,7 @@ using System.Text;
 namespace Ezbob.Logger {
 	using JetBrains.Annotations;
 
-	#region class FileLog
-
 	public class FileLog : ASafeLog {
-		#region public
-
-		#region constructor
 
 		public FileLog(
 			string sAppName = null,
@@ -55,10 +50,6 @@ namespace Ezbob.Logger {
 			SayCurrentTimezone();
 		} // constructor
 
-		#endregion constructor
-
-		#region method Dispose
-
 		public override void Dispose() {
 			if (m_oLogFile != null) {
 				NotifyStartStop("stopped");
@@ -69,14 +60,6 @@ namespace Ezbob.Logger {
 
 			base.Dispose();
 		} // Dispose
-
-		#endregion method Dispose
-
-		#endregion public
-
-		#region protected
-
-		#region method OwnSay
 
 		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
@@ -105,15 +88,7 @@ namespace Ezbob.Logger {
 			} // lock
 		} // OwnSay
 
-		#endregion method OwnSay
-
-		#region property AppName
-
 		protected virtual string AppName { get; private set; }
-
-		#endregion property AppName
-
-		#region method NotifyStartStop
 
 		protected virtual void NotifyStartStop(string sEvent) {
 			Msg(
@@ -127,17 +102,9 @@ namespace Ezbob.Logger {
 			);
 		} // NotifyStartStop
 
-		#endregion method NotifyStartStop
-
-		#endregion protected
-
-		#region private
-
 		private StreamWriter m_oLogFile;
 		private readonly object m_oLock;
 
-		#endregion private
 	} // class FileLog
 
-	#endregion class FileLog
 } // namespace Ezbob.Logger

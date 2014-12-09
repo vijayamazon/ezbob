@@ -29,7 +29,7 @@ namespace EzAutoResponder
 		{
 			var begin = WeekendBegin(dayBegin);
 			var end = WeekendEnd(dayEnd);
-			
+
 			while (begin != end)
 			{
 				begin = begin.NextOrFirst();
@@ -50,7 +50,6 @@ namespace EzAutoResponder
 		{
 			return GetWeekend(dayOfWeek).WeekendMiddle;
 		}
-
 
 		private Weekend GetWeekend(DayOfWeek dayOfWeek)
 		{

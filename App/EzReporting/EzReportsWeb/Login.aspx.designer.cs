@@ -8,10 +8,9 @@
 //------------------------------------------------------------------------------
 
 namespace EzReportsWeb {
-    
-    
+
     public partial class Login {
-        
+
         /// <summary>
         /// form1 control.
         /// </summary>
@@ -20,7 +19,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// lblMessage control.
         /// </summary>
@@ -29,7 +28,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMessage;
-        
+
         /// <summary>
         /// divLogin control.
         /// </summary>
@@ -38,7 +37,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divLogin;
-        
+
         /// <summary>
         /// LoginControl control.
         /// </summary>
@@ -47,7 +46,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Login LoginControl;
-        
+
         /// <summary>
         /// btnShowChangePassword control.
         /// </summary>
@@ -56,7 +55,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnShowChangePassword;
-        
+
         /// <summary>
         /// divChangePassword control.
         /// </summary>
@@ -65,7 +64,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divChangePassword;
-        
+
         /// <summary>
         /// txtUserName control.
         /// </summary>
@@ -74,7 +73,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtUserName;
-        
+
         /// <summary>
         /// RequiredFieldValidator5 control.
         /// </summary>
@@ -83,7 +82,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
-        
+
         /// <summary>
         /// txtOldPassword control.
         /// </summary>
@@ -92,7 +91,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtOldPassword;
-        
+
         /// <summary>
         /// RequiredFieldValidator2 control.
         /// </summary>
@@ -101,7 +100,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-        
+
         /// <summary>
         /// txtNewPassword1 control.
         /// </summary>
@@ -110,7 +109,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNewPassword1;
-        
+
         /// <summary>
         /// RequiredFieldValidator3 control.
         /// </summary>
@@ -119,7 +118,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
-        
+
         /// <summary>
         /// txtNewPassword2 control.
         /// </summary>
@@ -128,7 +127,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNewPassword2;
-        
+
         /// <summary>
         /// CompareValidator1 control.
         /// </summary>
@@ -137,7 +136,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator CompareValidator1;
-        
+
         /// <summary>
         /// btnChangePassword control.
         /// </summary>
@@ -146,7 +145,7 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnChangePassword;
-        
+
         /// <summary>
         /// btnBack control.
         /// </summary>

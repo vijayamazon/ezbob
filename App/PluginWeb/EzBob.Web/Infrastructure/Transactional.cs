@@ -6,17 +6,10 @@
 	using StructureMap;
 
 	public class Transactional {
-		#region public
-
-		#region static method Execute
 
 		public static void Execute(Action oAction, IsolationLevel nLevel = IsolationLevel.ReadCommitted) {
 			new Transactional(oAction, nLevel).Execute();
 		} // constructor
-
-		#endregion static method Execute
-
-		#region constructor
 
 		public Transactional(Action oAction, IsolationLevel nLevel = IsolationLevel.ReadCommitted) {
 			m_oAction = oAction;
@@ -24,15 +17,7 @@
 			m_oLog = new SafeILog(this);
 		} // constructor
 
-		#endregion constructor
-
-		#region property IsolationLevel
-
 		public IsolationLevel IsolationLevel { get; private set; }
-
-		#endregion property IsolationLevel
-
-		#region method Execute
 
 		public void Execute() {
 			if (m_oAction == null)
@@ -89,15 +74,8 @@
 				throw oExceptionToThrow;
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly Action m_oAction;
 		private readonly ASafeLog m_oLog;
 
-		#endregion private
 	} // Transactional
 } // namespace

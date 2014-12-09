@@ -15,7 +15,7 @@ namespace EzBob.Tests.CAIS
             var ms = new MemoryStream(cais.cais_big);
             _caisReader = new StreamReader(ms);
         }
-        
+
         [Test]
         public void parse_big_file_line_by_line()
         {
@@ -27,7 +27,7 @@ namespace EzBob.Tests.CAIS
             Assert.That(b.Header.CompanyPortfolioName, Is.EqualTo("Orange Money"));
             Assert.That(b.Trailer.TotalRecords, Is.EqualTo(b.Accounts.Count));
         }
-        
+
         [Test]
         public void parse_big_file_at_once()
         {
@@ -39,7 +39,6 @@ namespace EzBob.Tests.CAIS
             Assert.That(b.Header.CompanyPortfolioName, Is.EqualTo("Orange Money"));
             Assert.That(b.Trailer.TotalRecords, Is.EqualTo(b.Accounts.Count));
         }
-
 
     }
 }

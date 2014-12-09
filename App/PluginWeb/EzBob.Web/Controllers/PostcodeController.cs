@@ -12,15 +12,10 @@
 
 	[Authorize]
 	public class PostcodeController : Controller {
-		#region constructor
 
 		public PostcodeController(IEzbobWorkplaceContext context) {
 			m_oContext = context;
 		} // constructor
-
-		#endregion constructor
-
-		#region action GetAddressListFromPostCode
 
 		[OutputCache(VaryByParam = "postCode", Duration = 3600 * 24 * 7)]
 		public JsonResult GetAddressListFromPostCode(string postCode) {
@@ -30,10 +25,6 @@
 			);
 		} // GetAddressListFromPostCode
 
-		#endregion action GetAddressListFromPostCode
-
-		#region action GetFullAddressFromId
-
 		[OutputCache(VaryByParam = "id", Duration = 3600 * 24 * 7)]
 		public JsonResult GetFullAddressFromId(string id) {
 			return Json(
@@ -41,12 +32,6 @@
 				JsonRequestBehavior.AllowGet
 			);
 		} // GetFullAddressFromId
-
-		#endregion action GetFullAddressFromId
-
-		#region private
-
-		#region method PostToPostcodeService
 
 		private IPostCodeResponse PostToPostcodeService(Type oPostCodeResponseType, string sSearchKey, int nUserID) {
 			string sRequestType;
@@ -141,12 +126,9 @@
 			return model ?? new PostCodeResponseSearchListModel { Success = false, Message = "Not found" };
 		} // PostToPostcodeService
 
-		#endregion method PostToPostcodeService
-
 		private readonly IEzbobWorkplaceContext m_oContext;
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (PostcodeController));
 
-		#endregion private
 	} // class PostcodeController
 } // namespace

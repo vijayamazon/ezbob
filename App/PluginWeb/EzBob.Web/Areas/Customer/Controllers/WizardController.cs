@@ -24,9 +24,6 @@
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class WizardController : Controller {
-		#region public
-
-		#region constructor
 
 		public WizardController(
 			IEzbobWorkplaceContext context,
@@ -47,10 +44,6 @@
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 		} // constructor
 
-		#endregion constructor
-
-		#region action Index
-
 		[IsSuccessfullyRegisteredFilter]
 		public ActionResult Index(string provider = "") {
 			ViewData["Questions"] = _questions.GetAll().ToList();
@@ -66,7 +59,7 @@
 
 			bool targetsEnabledEntrepreneur = CurrentValues.Instance.TargetsEnabledEntrepreneur;
 			ViewData["TargetsEnabledEntrepreneur"] = targetsEnabledEntrepreneur;
-			
+
 			ViewData["MarketPlaces"] = _session
 				.Query<MP_MarketplaceType>()
 				.ToArray();
@@ -81,10 +74,6 @@
 
 			return View(wizardModel);
 		} // Index
-
-		#endregion action Index
-
-		#region action EarnedPointsStr
 
 		//[Ajax]
 		//[HttpGet]
@@ -101,8 +90,6 @@
 		//	return Json(new { EarnedPointsStr = sPoints }, JsonResultBehavior.AllowGet);
 		//} // EarnedPointsStr
 
-		#endregion action EarnedPointsStr
-		
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
@@ -164,10 +151,6 @@
 			return Json(new {});
 		} // Vip
 
-		#endregion public
-
-		#region private
-
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISecurityQuestionRepository _questions;
 		private readonly CustomerModelBuilder _customerModelBuilder;
@@ -178,8 +161,6 @@
 		private readonly AConnection m_oDB;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (WizardController));
 
-		#region method GetCookie
-
 		private string GetCookie(string cookieName) {
 			var reqCookie = Request.Cookies[cookieName];
 
@@ -188,10 +169,6 @@
 
 			return null;
 		} // GetCookie
-
-		#endregion method GetCookie
-
-		#region method SavePageLoadEvent
 
 		private void SavePageLoadEvent() {
 			try {
@@ -237,8 +214,5 @@
 			} // try
 		} // SavePageLoadEvent
 
-		#endregion method SavePageLoadEvent
-
-		#endregion private
 	} // class WizardController
 } // namespace

@@ -5,7 +5,7 @@ using log4net;
 
 namespace EzBob.Web.Infrastructure
 {
-    
+
     public class EzBobHandleErrorAttribute:HandleErrorAttribute
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(EzBobHandleErrorAttribute));
@@ -18,7 +18,6 @@ namespace EzBob.Web.Infrastructure
             ThreadContext.Properties["Action"] = filterContext.RouteData.Values["action"];
             ThreadContext.Properties["Controller"] = filterContext.RouteData.Values["controller"];
             ThreadContext.Properties["IP"] = filterContext.RequestContext.HttpContext.Request.UserHostAddress;
-
 
             _errorMessage = filterContext.Exception is HttpRequestValidationException
                                 ? "A potentially dangerous request was detected from the client."
@@ -36,8 +35,6 @@ namespace EzBob.Web.Infrastructure
 			else {
 				_log.ErrorFormat("\nUser name:\n{0}\nException:\n{1}", userName, filterContext.Exception);
 			}
-            
-
 
             if(filterContext.HttpContext.Request.IsAjaxRequest())
             {

@@ -14,9 +14,6 @@
 	[HandleActionExecuted(1)]
 	[RoutePrefix("api/v1/values")]
 	public class ValuesController : DemoApiControllerBase {
-		#region public
-
-		#region constructor
 
 		/// <summary>
 		/// 
@@ -24,10 +21,6 @@
 		public ValuesController() {
 			m_oValues = ValueStorage.Instance;
 		} // constructor
-
-		#endregion constructor
-
-		#region load all values action
 
 		// GET api/values
 		/// <summary>
@@ -53,10 +46,6 @@
 			} // try
 		} // Get
 
-		#endregion load all values action
-
-		#region load one value action
-
 		// GET api/values/5
 		/// <summary>
 		/// Gets specified value by its id.
@@ -81,10 +70,6 @@
 				throw Return.Error(ApiVersion, "Failed to retrieve item list: {0}", e.Message);
 			} // try
 		} // Get
-
-		#endregion load one value action
-
-		#region create value action
 
 		// POST api/values
 		/// <summary>
@@ -113,10 +98,6 @@
 			} // try
 		} // Post
 
-		#endregion create value action
-
-		#region update value action
-
 		// PUT api/values/5
 		/// <summary>
 		/// Updates existing value by its id. HTTP status code 404 is returned when no value found by requested id.
@@ -144,10 +125,6 @@
 			} // try
 		} // Put
 
-		#endregion update value action
-
-		#region delete value action
-
 		// DELETE api/values/5
 		/// <summary>
 		/// Deletes existing value by its id. HTTP status code 404 is returned when no value found by requested id.
@@ -171,10 +148,6 @@
 				throw Return.Error(ApiVersion, "Failed to remove item with the requested id ({0}): {1}", nID, e.Message);
 			} // try
 		} // Delete
-
-		#endregion delete value action
-
-		#endregion public
 
 		private ValueStorage m_oValues;
 	} // class ValuesController

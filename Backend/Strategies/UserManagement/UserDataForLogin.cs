@@ -16,10 +16,7 @@
 
 		public string Email { get; set; }
 
-		#region class Result
-
 		public class Result : AResultRow {
-			#region DB properties
 
 			public int UserID { get; set; }
 			public string Email { get; set; }
@@ -36,25 +33,13 @@
 			[UsedImplicitly]
 			public int? LoginFailedCount { get; set; }
 
-			#endregion DB properties
-
-			#region property FailCount
-
 			public int FailCount {
 				get { return LoginFailedCount.HasValue ? LoginFailedCount.Value : 0; }
 			} // FailCount
 
-			#endregion property FailCount
-
-			#region property IsOldPasswordStyle
-
 			public bool IsOldPasswordStyle {
 				get { return string.IsNullOrWhiteSpace(EzPassword); } // get
 			} // IsOldPasswordStyle
-
-			#endregion property IsOldPasswordStyle
-
-			#region method IsPasswordValid
 
 			public bool IsPasswordValid(string sPassword) {
 				if (IsOldPasswordStyle) {
@@ -65,10 +50,6 @@
 
 				return EzPassword == Ezbob.Utils.Security.SecurityUtils.HashPassword(Email, sPassword);
 			} // IsPasswordValid
-
-			#endregion method IsPasswordValid
-
-			#region method ToString
 
 			public override string ToString() {
 				var os = new StringBuilder();
@@ -84,10 +65,6 @@
 
 				return "(\n" + os + ")";
 			} // ToString
-
-			#endregion method ToString
-
-			#region Old password hash method
 
 			// This is an old password encryption method that we got from S c o r t o.
 			// It can be removed once we are not using Password field in Security_User.
@@ -109,9 +86,7 @@
 				173, 106, 87, 105, 195, 62, 171, 89, 189, 230, 39, 60, 148
 			};
 
-			#endregion Old password hash method
 		} // class Result
 
-		#endregion class Result
 	} // class UserDataForLogin
 } // namespace EzBob.Backend.Strategies.UserManagement

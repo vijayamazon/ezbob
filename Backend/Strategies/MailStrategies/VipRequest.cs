@@ -31,8 +31,6 @@
 			m_oMailer.SendMailViaMandrill(_mailMetaData);
 		}
 
-		#region method SetTemplateAndVariables
-
 		protected void SetTemplateAndVariables()
 		{
 			_mailMetaData = new MailMetaData("VipRequest");
@@ -56,6 +54,5 @@
 			_mailMetaData.Add(new Addressee(ConfigManager.CurrentValues.Instance.VipMailReceiver));
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
 	} // class 
 } // namespace

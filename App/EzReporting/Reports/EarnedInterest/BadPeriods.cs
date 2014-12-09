@@ -7,9 +7,6 @@
 	using Ezbob.ValueIntervals;
 
 	public class BadPeriods {
-		#region public
-
-		#region method IsBad
 
 		public static bool IsBad(CustomerStatus nStatus) {
 			switch (nStatus) {
@@ -32,10 +29,6 @@
 			} // switch
 		} // IsBad
 
-		#endregion method IsBad
-
-		#region constructor
-
 		public BadPeriods(DateTime oChangeDate) {
 			m_oBadPeriods = new List<DateInterval>();
 
@@ -45,37 +38,21 @@
 			Add(oChangeDate, true);
 		} // constructor
 
-		#endregion constructor
-
-		#region property IsLastKnownGood
-
 		public bool IsLastKnownGood {
 			get {
 				return (m_oExtremumPoints.Count < 1) || !m_oExtremumPoints[m_oExtremumPoints.Count - 1].Item2;
 			} // get
 		} // IsLastKnownGood
 
-		#endregion property IsLastKnownGood
-
-		#region method Add
-
 		public void Add(DateTime oChangeDate, bool bIsBad) {
 			if ((m_oExtremumPoints.Count < 1) || (IsLastKnownGood != !bIsBad))
 				m_oExtremumPoints.Add(new Tuple<DateTime, bool>(oChangeDate.Date, bIsBad));
 		} // Add
 
-		#endregion method Add
-
-		#region method Contains
-
 		public bool Contains(DateTime oDate) {
 			CreateIntervals();
 			return m_oBadPeriods.Any(oPeriod => oPeriod.Contains(oDate));
 		} // Contains
-
-		#endregion method Contains
-
-		#region property Count
 
 		public int Count {
 			get {
@@ -83,10 +60,6 @@
 				return m_oBadPeriods.Count;
 			} // get
 		} // Count
-
-		#endregion property Count
-
-		#region method ToString
 
 		public override string ToString() {
 			CreateIntervals();
@@ -108,14 +81,6 @@
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region private
-
-		#region method CreateIntervals
-
 		private void CreateIntervals() {
 			if (m_oBadPeriods.Count > 0)
 				return;
@@ -135,13 +100,10 @@
 				m_oBadPeriods.Add(new DateInterval(m_oExtremumPoints[m_oExtremumPoints.Count - 1].Item1, DateTime.UtcNow.AddYears(1000)));
 		} // CreateIntervals
 
-		#endregion method CreateIntervals
-
 		private readonly List<DateInterval> m_oBadPeriods;
 		private readonly List<Tuple<DateTime, bool>> m_oExtremumPoints;
 
 		private static readonly DateTime ms_oLongAgo = new DateTime(1976, 7, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		#endregion private
 	} // class BadPeriods
 } // namespace

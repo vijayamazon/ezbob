@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -77,7 +77,6 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 			}
 		}
 
-		
 		[Test]
 		public void TestMethod2()
 		{

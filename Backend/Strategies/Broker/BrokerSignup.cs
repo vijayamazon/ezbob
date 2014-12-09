@@ -10,9 +10,6 @@
 	using Misc;
 
 	public class BrokerSignup : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerSignup(
 			string sFirmName,
@@ -55,21 +52,9 @@
 			Properties = new BrokerProperties();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name { get { return "Broker signup"; } } // Name
 
-		#endregion property Name
-
-		#region property Properties
-
 		public BrokerProperties Properties { get; private set; }
-
-		#endregion property Properties
-
-		#region method Execute
 
 		public override void Execute() {
 			if (!m_bIsCaptchaEnabled) {
@@ -93,27 +78,14 @@
 			} // if
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly bool m_bIsCaptchaEnabled;
 		private readonly string m_sMobileCode;
 
 		private readonly SpBrokerSignUp m_oCreateSp;
 
-		#region class SpBrokerSignUp
-
 		private class SpBrokerSignUp : AStoredProc {
-			#region constructor
 
 			public SpBrokerSignUp(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
 				FirmName = Validate(FirmName, "Broker name");
@@ -136,10 +108,6 @@
 				return true;
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
-			#region properties
-
 			[UsedImplicitly]
 			public string FirmName { get; set; }
 
@@ -161,8 +129,6 @@
 			[UsedImplicitly]
 			public decimal EstimatedMonthlyClientAmount { get; set; }
 
-			#region property Password
-
 			[UsedImplicitly]
 			public string Password {
 				get { return SecurityUtils.HashPassword(ContactEmail, m_sPassword); } // get
@@ -170,8 +136,6 @@
 			} // Password
 
 			private string m_sPassword;
-
-			#endregion property Password
 
 			[UsedImplicitly]
 			public string FirmWebSiteUrl { get; set; }
@@ -211,12 +175,8 @@
 			[UsedImplicitly]
 			public string ReferredBy { get; set; }
 
-			#endregion properties
-
 			[NonTraversable]
 			public AStrategy Strategy { private get; set; }
-
-			#region method Validate
 
 			private string Validate(string sValue, string sArgName, bool bThrow = true) {
 				sValue = (sValue ?? string.Empty).Trim();
@@ -238,11 +198,7 @@
 				return sValue;
 			} // Validate
 
-			#endregion method Validate
 		} // SpBrokerSignUp
 
-		#endregion class SpBrokerSignUp
-
-		#endregion private
 	} // class BrokerSignup
 } // namespace EzBob.Backend.Strategies.Broker

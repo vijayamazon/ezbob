@@ -23,7 +23,7 @@
 
 	public interface IYodleeSearchWordsRepository : IRepository<MP_YodleeSearchWords>
 	{
-		
+
 	}
 
 	public class YodleeSearchWordsRepository : NHibernateRepositoryBase<MP_YodleeSearchWords>, IYodleeSearchWordsRepository
@@ -37,7 +37,6 @@
 		{
 			return _session.QueryOver<MP_YodleeSearchWords>().Where(c => c.SearchWords == word).SingleOrDefault<MP_YodleeSearchWords>() != null;
 		}
-		
 
 		public void AddWord(string word)
 		{
@@ -55,7 +54,7 @@
 			{
 				return;
 			}
-			
+
 			var property = _session.QueryOver<MP_YodleeSearchWords>().Where(c => c.SearchWords == word).SingleOrDefault<MP_YodleeSearchWords>();
 			Delete(property);
 		}

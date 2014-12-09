@@ -4,7 +4,6 @@ using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model
 {
-	
 
 	public class CustomerSession
     {

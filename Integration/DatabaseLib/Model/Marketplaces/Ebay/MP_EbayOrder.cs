@@ -47,7 +47,6 @@ namespace EZBob.DatabaseLib.Model.Database
                 .ToList();
         }
 
-	    
     }
 
 	public class MP_EbayTransactionsRepository : NHibernateRepositoryBase<MP_EbayTransaction>, IMP_EbayTransactionsRepository

@@ -1,12 +1,8 @@
 ﻿using System;
 
 namespace Integration.ChannelGrabberSecurityInfoConverter {
-	#region class AccountModel
 
 	public class AccountModel {
-		#region public
-
-		#region enum NodeNames
 
 		public enum NodeNames {
 			MarketplaceId,
@@ -22,10 +18,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 			DisplayName,
 		} // enum NodeNames
 
-		#endregion enum NodeNames
-
-		#region properties
-
 		public int id { get; set; }
 		public string name { get; set; }
 		public string url { get; set; }
@@ -38,10 +30,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 		public string accountTypeName { get; set; }
 
 		public string displayName { get; set; }
-
-		#endregion properties
-
-		#region method Set
 
 		public void Set(NodeNames nNodeName, string sValue) {
 			switch (nNodeName) {
@@ -94,19 +82,11 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 			} // switch
 		} // Set
 
-		#endregion method Set
-
-		#region method Validate
-
 		public void Validate() {
 			if ((displayName ?? "").Trim() == string.Empty)
 				displayName = name;
 		} // Validate
 
-		#endregion method Validate
-
-		#endregion public
 	} // class AccountModel
 
-	#endregion class AccountModel
 } // namespace Integration.ChannelGrabberSecurityInfoConverter

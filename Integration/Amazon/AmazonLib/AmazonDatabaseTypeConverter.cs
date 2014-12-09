@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using EzBob.AmazonDbLib;
 using EzBob.AmazonServiceLib.UserInfo;
 using EzBob.CommonLib;
@@ -8,7 +8,7 @@ namespace EzBob.AmazonLib
 {
 	internal static class AmazonDatabaseTypeConverter
 	{
-		#region obsolete
+
 		/*public static TimePeriodEnum ConvertToDatabaseTimePeriad( FeedbackPeriod type )
 		{
 			switch ( type )
@@ -50,7 +50,6 @@ namespace EzBob.AmazonLib
 					throw new NotImplementedException();
 			}
 		}*/
-		#endregion
 
 		public static FeedbackPeriod ConvertToAmazonTimePeriod(TimePeriodEnum timePeriod)
 		{

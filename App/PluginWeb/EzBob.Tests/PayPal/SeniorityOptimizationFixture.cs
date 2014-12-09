@@ -40,7 +40,6 @@
 
         }
 
-
         protected override void PreInit()
         {
             NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);

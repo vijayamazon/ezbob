@@ -4,12 +4,7 @@ namespace Ezbob.ExperianParser {
 	using System.Xml;
 	using Logger;
 
-	#region class ParsedData
-
 	public class ParsedData {
-		#region public
-
-		#region constructor
 
 		public ParsedData(FieldGroup grp = null) {
 			Data = new List<ParsedDataItem>();
@@ -26,27 +21,11 @@ namespace Ezbob.ExperianParser {
 			} // if grp is specified
 		} // constructor
 
-		#endregion constructor
-
-		#region property GroupName
-
 		public string GroupName { get; set; }
-
-		#endregion property GroupName
-
-		#region property MetaData
 
 		public SortedDictionary<string, string> MetaData { get; private set; }
 
-		#endregion property MetaData
-
-		#region property Data
-
 		public List<ParsedDataItem> Data { get; private set; }
-
-		#endregion property Data
-
-		#region method Parse
 
 		public void Parse(XmlNode oRoot, ASafeLog log) {
 			if (ReferenceEquals(m_oFieldGroup, null))
@@ -69,14 +48,6 @@ namespace Ezbob.ExperianParser {
 			else
 				ParseOne(oRoot, oLog);
 		} // Parse
-
-		#endregion method Parse
-
-		#endregion public
-
-		#region private
-
-		#region method ParseOne
 
 		private void ParseOne(XmlNode oNode, SafeLog oLog) {
 			var oData = new ParsedDataItem();
@@ -107,12 +78,8 @@ namespace Ezbob.ExperianParser {
 			Data.Add(oData);
 		} // ParseOne
 
-		#endregion method ParseOne
-
 		private readonly FieldGroup m_oFieldGroup;
 
-		#endregion private
 	} // class ParsedData
 
-	#endregion class ParsedData
 } // namespace Ezbob.ExperianParser

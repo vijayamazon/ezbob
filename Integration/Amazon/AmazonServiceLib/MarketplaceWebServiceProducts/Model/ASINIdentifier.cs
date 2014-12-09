@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,11 +25,10 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class ASINIdentifier
     {
-    
+
         private String marketplaceIdField;
 
         private String ASINField;
-
 
         /// <summary>
         /// Gets and sets the MarketplaceId property.
@@ -42,8 +39,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.marketplaceIdField ; }
             set { this.marketplaceIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the MarketplaceId property
@@ -56,8 +51,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if MarketplaceId property is set
         /// </summary>
@@ -68,7 +61,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ASIN property.
         /// </summary>
@@ -78,8 +70,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.ASINField ; }
             set { this.ASINField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ASIN property
@@ -92,8 +82,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ASIN property is set
         /// </summary>
@@ -104,9 +92,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -115,7 +100,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -165,8 +149,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

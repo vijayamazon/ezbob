@@ -1,4 +1,4 @@
-namespace EzBob.Models.Marketplaces.Builders
+﻿namespace EzBob.Models.Marketplaces.Builders
 {
 	using System;
 	using System.Linq;
@@ -33,13 +33,10 @@ namespace EzBob.Models.Marketplaces.Builders
 
             var amazonSellerRating = amazonFeedback != null ? amazonFeedback.UserRaining : 0;
 
-
-
             var feedbackByPeriodAmazon = amazonFeedback != null
                                              ? amazonFeedback.FeedbackByPeriodItems.FirstOrDefault(
                                                  x => x.TimePeriod.Id == 4)
                                              : null;
-
 
             var negative = feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Negative : null;
             var positive = feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Positive : null;

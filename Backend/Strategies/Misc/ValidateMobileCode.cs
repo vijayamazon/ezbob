@@ -3,9 +3,6 @@
 	using Ezbob.Logger;
 
 	public class ValidateMobileCode : AStrategy {
-		#region public
-
-		#region constructor
 
 		public ValidateMobileCode(string sMobilePhone, string sMobileCode, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			m_sMobilePhone = sMobilePhone;
@@ -23,17 +20,9 @@
 			);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Validate mobile code"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			if (m_sSkipCodeGenerationNumber == m_sMobilePhone) {
@@ -62,19 +51,9 @@
 			);
 		} // Execute
 
-		#endregion method Execute
-
-		#region method IsValidatedSuccessfully
-
 		public bool IsValidatedSuccessfully() {
 			return m_bIsValidatedSuccessfully;
 		} // IsValidatedSuccessfully
-
-		#endregion method IsValidatedSuccessfully
-
-		#endregion public
-
-		#region private
 
 		private readonly string m_sMobilePhone;
 		private readonly string m_sMobileCode;
@@ -82,6 +61,5 @@
 		private string m_sSkipCodeGenerationNumber;
 		private string m_sSkipCodeGenerationNumberCode;
 
-		#endregion private
 	} // class ValidateMobileCode
 } // namespace

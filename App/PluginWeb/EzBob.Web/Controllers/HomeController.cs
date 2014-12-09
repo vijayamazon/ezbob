@@ -14,17 +14,10 @@
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class HomeController : Controller {
-		#region public
-
-		#region constructor
 
 		public HomeController(AskvilleRepository askvilleRepository) {
 			m_oAskvilleRepository = askvilleRepository;
 		} // constructor
-
-		#endregion constructor
-
-		#region action Index
 
 		public ActionResult Index(
 			string sourceref = "",
@@ -43,7 +36,7 @@
 			string fcontent = "",
 			string fname = "",
 			string fdate = "",
-			
+
 			string rurl = "",
 			string rsource = "",
 			string rmedium = "",
@@ -69,7 +62,7 @@
 			AddCookie(sourceref_time, "sourceref_time", 3);
 
 			AddCookie(alibaba_id, "alibaba_id", 6);
-			
+
 			AddCookie(furl, "furl", 6);
 			AddCookie(fsource, "fsource", 6);
 			AddCookie(fmedium, "fmedium", 6);
@@ -87,7 +80,7 @@
 			AddCookie(rcontent, "rcontent", days: week, isDay: true);
 			AddCookie(rname, "rname", days: week, isDay: true);
 			AddCookie(rdate, "rdate", days: week, isDay: true);
-			
+
 			ParseLeadData(lead_data);
 
 			if (oCreatePassword != null) {
@@ -114,11 +107,6 @@
 			} // if
 		}
 
-
-		#endregion action Index
-
-		#region action ActivateStore
-
 		[Transactional]
 		public ActionResult ActivateStore(string id, bool? approve) {
 			if (approve != null) {
@@ -137,14 +125,6 @@
 
 			return View();
 		} // ActivateStore
-
-		#endregion action ActivateStore
-
-		#endregion public
-
-		#region private
-
-		#region method SetBrokerLeadData
 
 		private CreatePasswordModel SetBrokerLeadData(string sBrokerLeadToken) {
 			CreatePasswordModel oResult = null;
@@ -202,12 +182,8 @@
 			return oResult;
 		} // SetBrokerLeadData
 
-		#endregion method SetBrokerLeadData
-
 		private readonly AskvilleRepository m_oAskvilleRepository;
 		private readonly ASafeLog ms_oLog = new SafeILog(typeof(HomeController));
-
-		#region method ParseLeadData
 
 		private void ParseLeadData(string sLeadData) {
 			sLeadData = sLeadData ?? string.Empty;
@@ -243,8 +219,5 @@
 
 		} // ParseLeadData
 
-		#endregion method ParseLeadData
-
-		#endregion private
 	} // class HomeController
 } // namespace

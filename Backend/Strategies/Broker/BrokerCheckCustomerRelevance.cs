@@ -4,9 +4,6 @@
 	using MailStrategies;
 
 	public class BrokerCheckCustomerRelevance : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerCheckCustomerRelevance(
 			int nCustomerID,
@@ -33,33 +30,17 @@
 			}
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Broker check customer relevance"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
 			m_oGreetingStrat.Execute();
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly ABrokerMailToo m_oGreetingStrat;
 		private readonly SpBrokerCheckCustomerRelevance m_oSp;
-
-		#region class SpBrokerCheckCustomerRelevance
 
 		private class SpBrokerCheckCustomerRelevance : AStoredProc {
 			public SpBrokerCheckCustomerRelevance(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -75,8 +56,5 @@
 			public string SourceRef { get; set; }
 		} // class SpBrokerCheckCustomerRelevance
 
-		#endregion class SpBrokerCheckCustomerRelevance
-
-		#endregion private
 	} // class BrokerCheckCustomerRelevance
 } // namespace EzBob.Backend.Strategies.Broker

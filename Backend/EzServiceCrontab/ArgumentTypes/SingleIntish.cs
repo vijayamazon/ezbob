@@ -4,8 +4,6 @@
 	internal class SingleIntish : AType<int?> {
 		public SingleIntish() : base("int") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			int nResult;
 
@@ -15,6 +13,5 @@
 			return Activator.CreateInstance(UnderlyingType);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class SingleIntish
 } // namespace

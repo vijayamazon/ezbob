@@ -9,7 +9,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
 	public class CustomerStatusController : Controller
     {
-		#region action GetRefreshInterval
 
 		[Ajax]
 		[HttpPost]
@@ -20,10 +19,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			return Json(new { Interval = refreshInterval });
 		} // GetRefreshInterval
 
-		#endregion action GetRefreshInterval
-
-		#region action GetCustomerStatus
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -33,6 +28,5 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			return Json(new { State = state });
 		} // GetCustomerStatus
 
-		#endregion action GetCustomerStatus
     }
 }

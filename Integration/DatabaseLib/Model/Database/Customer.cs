@@ -1,4 +1,4 @@
-namespace EZBob.DatabaseLib.Model.Database {
+﻿namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -11,10 +11,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using NHibernate.Type;
 	using NHibernateWrapper.NHibernate.Types;
 
-	#region relevant to Customer class
-
-	#region enum PendingStatus
-
 	public enum PendingStatus {
 		AML,
 		Bank,
@@ -24,10 +20,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public class PendingStatusType : EnumStringType<PendingStatus> { }
 
-	#endregion enum PendingStatus
-
-	#region enum SystemDecision
-
 	public enum SystemDecision {
 		Approve,
 		Reject,
@@ -35,10 +27,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	} // enum SystemDecision
 
 	public class SystemDecisionType : EnumStringType<SystemDecision> { }
-
-	#endregion enum SystemDecision
-
-	#region enum Status
 
 	public enum Status {
 		Registered,
@@ -48,10 +36,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	} // enum Status
 
 	public class StatusType : EnumStringType<Status> { }
-
-	#endregion enum Status
-
-	#region enum CreditResultStatus
 
 	public enum CreditResultStatus {
 		WaitingForDecision,
@@ -70,15 +54,11 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public class CreditResultStatusType : EnumStringType<CreditResultStatus> { }
 
-	#endregion enum CreditResultStatus
-
 	public class GenderType : EnumStringType<Gender> { }
 
 	public class MaritalStatusType : EnumStringType<MaritalStatus> { }
 
 	public class MedalType : CaseInsensitiveEnumStringType<Medal> { }
-
-	#region enum BankAccountType
 
 	public enum BankAccountType {
 		Unknown,
@@ -88,19 +68,11 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public class BankAccountTypeType : CaseInsensitiveEnumStringType<BankAccountType> { }
 
-	#endregion enum BankAccountType
-
-	#region enum PaymentdemeanorType
-
 	public enum PaymentdemeanorType {
 		Late,
 		WasLate,
 		Ok
 	} // enum PaymentdemeanorType
-
-	#endregion enum PaymentdemeanorType
-
-	#region class BankAccount
 
 	public class BankAccount {
 		public string AccountNumber { get; set; }
@@ -108,10 +80,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public BankAccountType Type { get; set; }
 	} // class BankAccount
 
-	#endregion class BankAccount
-
 	//todo remove classes LimitedInfo/NonLimitedInfo/CompanyAdditionalInfo when new wizard
-	#region class LimitedInfo
 
 	public class LimitedInfo {
 		public string LimitedRefNum { get; set; }
@@ -120,8 +89,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public int? LimitedTimeAtAddress { get; set; }
 		public string LimitedBusinessPhone { get; set; }
 
-		#region property Directors
-
 		private Iesi.Collections.Generic.ISet<Director> _directors = new HashedSet<Director>();
 
 		public virtual Iesi.Collections.Generic.ISet<Director> Directors {
@@ -129,12 +96,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			set { _directors = value; }
 		} // Directors
 
-		#endregion property Directors
 	} // class LimitedInfo
-
-	#endregion class LimitedInfo
-
-	#region class NonLimitedInfo
 
 	public class NonLimitedInfo {
 		public string NonLimitedRefNum { get; set; }
@@ -143,8 +105,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public int? NonLimitedTimeAtAddress { get; set; }
 		public string NonLimitedBusinessPhone { get; set; }
 
-		#region property Directors
-
 		private Iesi.Collections.Generic.ISet<Director> _directors = new HashedSet<Director>();
 
 		public virtual Iesi.Collections.Generic.ISet<Director> Directors {
@@ -152,12 +112,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			set { _directors = value; }
 		} // Directors
 
-		#endregion property Directors
 	} // class NonLimitedInfo
-
-	#endregion class NonLimitedInfo
-
-	#region class CompanyAdditionalInfo
 
 	public class CompanyAdditionalInfo {
 		public string TypeOfBusiness { get; set; }
@@ -166,7 +121,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public string VatReporting { get; set; }
 		public bool PartBusinessOnline { get; set; }
 		public bool DirectorCheck { get; set; }
-		
+
 		public bool? PropertyOwnedByCompany { get; set; }
 		public string YearsInCompany { get; set; }
 		public string RentMonthsLeft { get; set; }
@@ -180,10 +135,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public string ExperianCompanyAddrLine4 { get; set; }
 		public string ExperianCompanyPostcode { get; set; }
 	} // class CompanyAdditionalInfo
-
-	#endregion class CompanyAdditionalInfo
-
-	#region class PersonalInfo
 
 	public class PersonalInfo {
 		public virtual string FirstName { get; set; }
@@ -218,10 +169,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // SetFullName
 	} // class PersonalInfo
 
-	#endregion class PersonalInfo
-
-	#region class PersonalInfoExt
-
 	public static class PersonalInfoExt {
 		public static string Stringify(this PersonalInfo pi) {
 			if (pi == null)
@@ -231,12 +178,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // Stringify
 	} // class PersonalInfoExt
 
-	#endregion class PersonalInfoExt
-
-	#region class AddressInfo
-
 	public class AddressInfo {
-		#region property PersonalAddress
 
 		private Iesi.Collections.Generic.ISet<CustomerAddress> _personalAddress = new HashedSet<CustomerAddress>();
 		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> PersonalAddress {
@@ -244,27 +186,17 @@ namespace EZBob.DatabaseLib.Model.Database {
 			set { _personalAddress = value; }
 		} // PersonalAddress
 
-		#endregion property PersonalAddress
-
-		#region property PrevPersonAddresses
-
 		private Iesi.Collections.Generic.ISet<CustomerAddress> _prevPersonAddresses = new HashedSet<CustomerAddress>();
 		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> PrevPersonAddresses {
 			get { return _prevPersonAddresses; }
 			set { _prevPersonAddresses = value; }
 		} // PrevPersonAddresses
 
-		#endregion property PrevPersonAddresses
-
-		#region property AllAddresses
-
 		private Iesi.Collections.Generic.ISet<CustomerAddress> _allAddresses = new HashedSet<CustomerAddress>();
 		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> AllAddresses {
 			get { return _allAddresses; }
 			set { _allAddresses = value; }
 		} // AllAddresses
-
-		#endregion property AllAddresses
 
 		private Iesi.Collections.Generic.ISet<CustomerAddress> _otherPropertiesAddresses = new HashedSet<CustomerAddress>();
 		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> OtherPropertiesAddresses {
@@ -273,10 +205,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		}
 	} // class AddressInfo
 
-	#endregion class AddressInfo
-	
-	#region class CollectionStatus
-
 	[Serializable]
 	public class CollectionStatus {
 		[Newtonsoft.Json.JsonIgnore]
@@ -284,12 +212,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual CustomerStatuses CurrentStatus { get; set; }
 		public virtual string CollectionDescription { get; set; }
 	} // class CollectionStatus
-
-	#endregion class CollectionStatus
-
-	#endregion relevant to Customer class
-
-	#region class Customer
 
 	public class Customer : IEqualityComparer<Customer> {
 		public Customer() {
@@ -450,7 +372,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // ActiveLoans
 
 		public virtual decimal TotalBalance { get { return ActiveLoans.Sum(l => l.Balance); } }
-		
+
 		public virtual CashRequest LastCashRequest { get { return CashRequests.LastOrDefault(); } }
 
 		/// <summary>
@@ -605,7 +527,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual IList<CustomerRequestedLoan> CustomerRequestedLoan { get; set; }
 		public virtual IList<CustomerInviteFriend> CustomerInviteFriend { get; set; }
 		public virtual Company Company { get; set; }
-		
+
 		public virtual bool Equals(Customer x, Customer y) {
 			return x.Id == y.Id;
 		} // Equals
@@ -673,10 +595,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string AlibabaId { get; set; }
 	} // class Customer
 
-	#endregion class Customer
-
-	#region class CustomerExt
-
 	public static class CustomerExt {
 		public static string Stringify(this Customer c) {
 			return (c == null)
@@ -685,5 +603,4 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // Stringify
 	} // class CustomerExt
 
-	#endregion class CustomerExt
 } // namespace EZBob.DatabaseLib.Model.Database

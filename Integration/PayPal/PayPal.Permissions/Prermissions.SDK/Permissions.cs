@@ -18,50 +18,49 @@ namespace PayPal.Services.Private.Permissions {
     using System.Web.Services.Protocols;
     using System;
     using System.Xml.Serialization;
-    
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="PermissionsSOAP11Binding", Namespace="http://svcs.paypal.com/services")]
     public partial class Permissions : System.Web.Services.Protocols.SoapHttpClientProtocol {
-        
+
         private System.Threading.SendOrPostCallback RequestPermissionsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetAccessTokenOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPermissionsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CancelPermissionsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetBasicPersonalDataOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetAdvancedPersonalDataOperationCompleted;
-        
+
         /// <remarks/>
         public Permissions() {
             this.Url = "https://svcs.paypal.com/Permissions";
         }
-        
+
         /// <remarks/>
         public event RequestPermissionsCompletedEventHandler RequestPermissionsCompleted;
-        
+
         /// <remarks/>
         public event GetAccessTokenCompletedEventHandler GetAccessTokenCompleted;
-        
+
         /// <remarks/>
         public event GetPermissionsCompletedEventHandler GetPermissionsCompleted;
-        
+
         /// <remarks/>
         public event CancelPermissionsCompletedEventHandler CancelPermissionsCompleted;
-        
+
         /// <remarks/>
         public event GetBasicPersonalDataCompletedEventHandler GetBasicPersonalDataCompleted;
-        
+
         /// <remarks/>
         public event GetAdvancedPersonalDataCompletedEventHandler GetAdvancedPersonalDataCompleted;
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:RequestPermissions", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("RequestPermissionsResponse", Namespace="http://svcs.paypal.com/types/perm", IsNullable=true)]
@@ -70,24 +69,24 @@ namespace PayPal.Services.Private.Permissions {
                         RequestPermissionsRequest});
             return ((RequestPermissionsResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginRequestPermissions(RequestPermissionsRequest RequestPermissionsRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("RequestPermissions", new object[] {
                         RequestPermissionsRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public RequestPermissionsResponse EndRequestPermissions(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((RequestPermissionsResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void RequestPermissionsAsync(RequestPermissionsRequest RequestPermissionsRequest) {
             this.RequestPermissionsAsync(RequestPermissionsRequest, null);
         }
-        
+
         /// <remarks/>
         public void RequestPermissionsAsync(RequestPermissionsRequest RequestPermissionsRequest, object userState) {
             if ((this.RequestPermissionsOperationCompleted == null)) {
@@ -96,14 +95,14 @@ namespace PayPal.Services.Private.Permissions {
             this.InvokeAsync("RequestPermissions", new object[] {
                         RequestPermissionsRequest}, this.RequestPermissionsOperationCompleted, userState);
         }
-        
+
         private void OnRequestPermissionsOperationCompleted(object arg) {
             if ((this.RequestPermissionsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.RequestPermissionsCompleted(this, new RequestPermissionsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:GetAccessToken", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetAccessTokenResponse", Namespace="http://svcs.paypal.com/types/perm", IsNullable=true)]
@@ -112,24 +111,24 @@ namespace PayPal.Services.Private.Permissions {
                         GetAccessTokenRequest});
             return ((GetAccessTokenResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginGetAccessToken(GetAccessTokenRequest GetAccessTokenRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("GetAccessToken", new object[] {
                         GetAccessTokenRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetAccessTokenResponse EndGetAccessToken(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetAccessTokenResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void GetAccessTokenAsync(GetAccessTokenRequest GetAccessTokenRequest) {
             this.GetAccessTokenAsync(GetAccessTokenRequest, null);
         }
-        
+
         /// <remarks/>
         public void GetAccessTokenAsync(GetAccessTokenRequest GetAccessTokenRequest, object userState) {
             if ((this.GetAccessTokenOperationCompleted == null)) {
@@ -138,14 +137,14 @@ namespace PayPal.Services.Private.Permissions {
             this.InvokeAsync("GetAccessToken", new object[] {
                         GetAccessTokenRequest}, this.GetAccessTokenOperationCompleted, userState);
         }
-        
+
         private void OnGetAccessTokenOperationCompleted(object arg) {
             if ((this.GetAccessTokenCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetAccessTokenCompleted(this, new GetAccessTokenCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:GetPermissions", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetPermissionsResponse", Namespace="http://svcs.paypal.com/types/perm", IsNullable=true)]
@@ -154,24 +153,24 @@ namespace PayPal.Services.Private.Permissions {
                         GetPermissionsRequest});
             return ((GetPermissionsResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginGetPermissions(GetPermissionsRequest GetPermissionsRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("GetPermissions", new object[] {
                         GetPermissionsRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetPermissionsResponse EndGetPermissions(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetPermissionsResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void GetPermissionsAsync(GetPermissionsRequest GetPermissionsRequest) {
             this.GetPermissionsAsync(GetPermissionsRequest, null);
         }
-        
+
         /// <remarks/>
         public void GetPermissionsAsync(GetPermissionsRequest GetPermissionsRequest, object userState) {
             if ((this.GetPermissionsOperationCompleted == null)) {
@@ -180,14 +179,14 @@ namespace PayPal.Services.Private.Permissions {
             this.InvokeAsync("GetPermissions", new object[] {
                         GetPermissionsRequest}, this.GetPermissionsOperationCompleted, userState);
         }
-        
+
         private void OnGetPermissionsOperationCompleted(object arg) {
             if ((this.GetPermissionsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetPermissionsCompleted(this, new GetPermissionsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:CancelPermissions", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("CancelPermissionsResponse", Namespace="http://svcs.paypal.com/types/perm", IsNullable=true)]
@@ -196,24 +195,24 @@ namespace PayPal.Services.Private.Permissions {
                         CancelPermissionsRequest});
             return ((CancelPermissionsResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginCancelPermissions(CancelPermissionsRequest CancelPermissionsRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("CancelPermissions", new object[] {
                         CancelPermissionsRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public CancelPermissionsResponse EndCancelPermissions(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((CancelPermissionsResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void CancelPermissionsAsync(CancelPermissionsRequest CancelPermissionsRequest) {
             this.CancelPermissionsAsync(CancelPermissionsRequest, null);
         }
-        
+
         /// <remarks/>
         public void CancelPermissionsAsync(CancelPermissionsRequest CancelPermissionsRequest, object userState) {
             if ((this.CancelPermissionsOperationCompleted == null)) {
@@ -222,14 +221,14 @@ namespace PayPal.Services.Private.Permissions {
             this.InvokeAsync("CancelPermissions", new object[] {
                         CancelPermissionsRequest}, this.CancelPermissionsOperationCompleted, userState);
         }
-        
+
         private void OnCancelPermissionsOperationCompleted(object arg) {
             if ((this.CancelPermissionsCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.CancelPermissionsCompleted(this, new CancelPermissionsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:GetBasicPersonalData", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetBasicPersonalDataResponse", Namespace="http://svcs.paypal.com/types/perm", IsNullable=true)]
@@ -238,24 +237,24 @@ namespace PayPal.Services.Private.Permissions {
                         GetBasicPersonalDataRequest});
             return ((GetBasicPersonalDataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginGetBasicPersonalData(GetBasicPersonalDataRequest GetBasicPersonalDataRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("GetBasicPersonalData", new object[] {
                         GetBasicPersonalDataRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetBasicPersonalDataResponse EndGetBasicPersonalData(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetBasicPersonalDataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void GetBasicPersonalDataAsync(GetBasicPersonalDataRequest GetBasicPersonalDataRequest) {
             this.GetBasicPersonalDataAsync(GetBasicPersonalDataRequest, null);
         }
-        
+
         /// <remarks/>
         public void GetBasicPersonalDataAsync(GetBasicPersonalDataRequest GetBasicPersonalDataRequest, object userState) {
             if ((this.GetBasicPersonalDataOperationCompleted == null)) {
@@ -264,14 +263,14 @@ namespace PayPal.Services.Private.Permissions {
             this.InvokeAsync("GetBasicPersonalData", new object[] {
                         GetBasicPersonalDataRequest}, this.GetBasicPersonalDataOperationCompleted, userState);
         }
-        
+
         private void OnGetBasicPersonalDataOperationCompleted(object arg) {
             if ((this.GetBasicPersonalDataCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetBasicPersonalDataCompleted(this, new GetBasicPersonalDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:GetBasicPersonalData", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetAdvancedPersonalDataResponse", Namespace="http://svcs.paypal.com/types/perm", IsNullable=true)]
@@ -280,24 +279,24 @@ namespace PayPal.Services.Private.Permissions {
                         GetAdvancedPersonalDataRequest});
             return ((GetAdvancedPersonalDataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public System.IAsyncResult BeginGetAdvancedPersonalData(GetAdvancedPersonalDataRequest GetAdvancedPersonalDataRequest, System.AsyncCallback callback, object asyncState) {
             return this.BeginInvoke("GetAdvancedPersonalData", new object[] {
                         GetAdvancedPersonalDataRequest}, callback, asyncState);
         }
-        
+
         /// <remarks/>
         public GetAdvancedPersonalDataResponse EndGetAdvancedPersonalData(System.IAsyncResult asyncResult) {
             object[] results = this.EndInvoke(asyncResult);
             return ((GetAdvancedPersonalDataResponse)(results[0]));
         }
-        
+
         /// <remarks/>
         public void GetAdvancedPersonalDataAsync(GetAdvancedPersonalDataRequest GetAdvancedPersonalDataRequest) {
             this.GetAdvancedPersonalDataAsync(GetAdvancedPersonalDataRequest, null);
         }
-        
+
         /// <remarks/>
         public void GetAdvancedPersonalDataAsync(GetAdvancedPersonalDataRequest GetAdvancedPersonalDataRequest, object userState) {
             if ((this.GetAdvancedPersonalDataOperationCompleted == null)) {
@@ -306,20 +305,20 @@ namespace PayPal.Services.Private.Permissions {
             this.InvokeAsync("GetAdvancedPersonalData", new object[] {
                         GetAdvancedPersonalDataRequest}, this.GetAdvancedPersonalDataOperationCompleted, userState);
         }
-        
+
         private void OnGetAdvancedPersonalDataOperationCompleted(object arg) {
             if ((this.GetAdvancedPersonalDataCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetAdvancedPersonalDataCompleted(this, new GetAdvancedPersonalDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -327,15 +326,15 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class RequestPermissionsRequest {
-        
+
         private RequestEnvelope requestEnvelopeField;
-        
+
         private string[] scopeField;
-        
+
         private string callbackField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope {
@@ -346,7 +345,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.requestEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("scope", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string[] scope {
@@ -357,7 +356,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.scopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string callback {
@@ -368,7 +367,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.callbackField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -380,7 +379,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -388,15 +387,15 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/common")]
     public partial class RequestEnvelope {
-        
+
         private string errorLanguageField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         public RequestEnvelope() {
             this.errorLanguageField = "en_US";
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string errorLanguage {
@@ -407,7 +406,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.errorLanguageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -419,7 +418,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -427,11 +426,11 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class GetAdvancedPersonalDataResponse {
-        
+
         private ResponseEnvelope responseEnvelopeField;
-        
+
         private PersonalData[] responseField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope {
@@ -442,7 +441,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.responseEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("personalData", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
@@ -455,7 +454,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -463,19 +462,19 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/common")]
     public partial class ResponseEnvelope {
-        
+
         private System.DateTime timestampField;
-        
+
         private AckCode ackField;
-        
+
         private bool ackFieldSpecified;
-        
+
         private string correlationIdField;
-        
+
         private string buildField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public System.DateTime timestamp {
@@ -486,7 +485,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.timestampField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AckCode ack {
@@ -497,7 +496,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.ackField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ackSpecified {
@@ -508,7 +507,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.ackFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string correlationId {
@@ -519,7 +518,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.correlationIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string build {
@@ -530,7 +529,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.buildField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -542,32 +541,32 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/common")]
     public enum AckCode {
-        
+
         /// <remarks/>
         Success,
-        
+
         /// <remarks/>
         Failure,
-        
+
         /// <remarks/>
         Warning,
-        
+
         /// <remarks/>
         SuccessWithWarning,
-        
+
         /// <remarks/>
         FailureWithWarning,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -575,11 +574,11 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class PersonalData {
-        
+
         private PersonalAttribute personalDataKeyField;
-        
+
         private string personalDataValueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public PersonalAttribute personalDataKey {
@@ -590,7 +589,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.personalDataKeyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string personalDataValue {
@@ -602,70 +601,70 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public enum PersonalAttribute {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/namePerson/first")]
         httpaxschemaorgnamePersonfirst,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/namePerson/last")]
         httpaxschemaorgnamePersonlast,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/contact/email")]
         httpaxschemaorgcontactemail,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://schema.openid.net/contact/fullname")]
         httpschemaopenidnetcontactfullname,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/company/name")]
         httpaxschemaorgcompanyname,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/contact/country/home")]
         httpaxschemaorgcontactcountryhome,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/birthDate")]
         httpaxschemaorgbirthDate,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/contact/postalCode/home")]
         httpaxschemaorgcontactpostalCodehome,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://schema.openid.net/contact/street1")]
         httpschemaopenidnetcontactstreet1,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://schema.openid.net/contact/street2")]
         httpschemaopenidnetcontactstreet2,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/contact/city/home")]
         httpaxschemaorgcontactcityhome,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/contact/state/home")]
         httpaxschemaorgcontactstatehome,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("http://axschema.org/contact/phone/default")]
         httpaxschemaorgcontactphonedefault,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("https://www.paypal.com/webapps/auth/schema/payerID")]
         httpswwwpaypalcomwebappsauthschemapayerID,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -673,13 +672,13 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class GetAdvancedPersonalDataRequest {
-        
+
         private RequestEnvelope requestEnvelopeField;
-        
+
         private PersonalAttribute[] attributeListField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope {
@@ -690,7 +689,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.requestEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("attribute", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
@@ -702,7 +701,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.attributeListField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -714,7 +713,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -722,11 +721,11 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class GetBasicPersonalDataResponse {
-        
+
         private ResponseEnvelope responseEnvelopeField;
-        
+
         private PersonalData[] responseField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope {
@@ -737,7 +736,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.responseEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("personalData", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
@@ -750,7 +749,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -758,13 +757,13 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class GetBasicPersonalDataRequest {
-        
+
         private RequestEnvelope requestEnvelopeField;
-        
+
         private PersonalAttribute[] attributeListField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope {
@@ -775,7 +774,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.requestEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("attribute", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
@@ -787,7 +786,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.attributeListField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -799,7 +798,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -807,9 +806,9 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class CancelPermissionsResponse {
-        
+
         private ResponseEnvelope responseEnvelopeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope {
@@ -821,7 +820,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -829,13 +828,13 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class CancelPermissionsRequest {
-        
+
         private RequestEnvelope requestEnvelopeField;
-        
+
         private string tokenField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope {
@@ -846,7 +845,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.requestEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string token {
@@ -857,7 +856,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.tokenField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -869,7 +868,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -877,11 +876,11 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class GetPermissionsResponse {
-        
+
         private ResponseEnvelope responseEnvelopeField;
-        
+
         private string[] scopeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope {
@@ -892,7 +891,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.responseEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("scope", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string[] scope {
@@ -904,7 +903,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -912,13 +911,13 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class GetPermissionsRequest {
-        
+
         private RequestEnvelope requestEnvelopeField;
-        
+
         private string tokenField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope {
@@ -929,7 +928,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.requestEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string token {
@@ -940,7 +939,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.tokenField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -952,7 +951,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -960,15 +959,15 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class GetAccessTokenResponse {
-        
+
         private ResponseEnvelope responseEnvelopeField;
-        
+
         private string[] scopeField;
-        
+
         private string tokenField;
-        
+
         private string tokenSecretField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope {
@@ -979,7 +978,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.responseEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("scope", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string[] scope {
@@ -990,7 +989,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.scopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string token {
@@ -1001,7 +1000,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.tokenField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string tokenSecret {
@@ -1013,7 +1012,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -1021,17 +1020,17 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class GetAccessTokenRequest {
-        
+
         private RequestEnvelope requestEnvelopeField;
-        
+
         private string tokenField;
-        
+
         private string verifierField;
-        
+
         private string subjectAliasField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public RequestEnvelope requestEnvelope {
@@ -1042,7 +1041,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.requestEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string token {
@@ -1053,7 +1052,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.tokenField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string verifier {
@@ -1064,7 +1063,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.verifierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string subjectAlias {
@@ -1075,7 +1074,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.subjectAliasField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -1087,7 +1086,7 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -1095,11 +1094,11 @@ namespace PayPal.Services.Private.Permissions {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://svcs.paypal.com/types/perm")]
     public partial class RequestPermissionsResponse {
-        
+
         private ResponseEnvelope responseEnvelopeField;
-        
+
         private string tokenField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public ResponseEnvelope responseEnvelope {
@@ -1110,7 +1109,7 @@ namespace PayPal.Services.Private.Permissions {
                 this.responseEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string token {
@@ -1122,24 +1121,24 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     public delegate void RequestPermissionsCompletedEventHandler(object sender, RequestPermissionsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class RequestPermissionsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal RequestPermissionsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public RequestPermissionsResponse Result {
             get {
@@ -1148,24 +1147,24 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     public delegate void GetAccessTokenCompletedEventHandler(object sender, GetAccessTokenCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetAccessTokenCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal GetAccessTokenCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetAccessTokenResponse Result {
             get {
@@ -1174,24 +1173,24 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     public delegate void GetPermissionsCompletedEventHandler(object sender, GetPermissionsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetPermissionsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal GetPermissionsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetPermissionsResponse Result {
             get {
@@ -1200,24 +1199,24 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     public delegate void CancelPermissionsCompletedEventHandler(object sender, CancelPermissionsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class CancelPermissionsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal CancelPermissionsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public CancelPermissionsResponse Result {
             get {
@@ -1226,24 +1225,24 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     public delegate void GetBasicPersonalDataCompletedEventHandler(object sender, GetBasicPersonalDataCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetBasicPersonalDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal GetBasicPersonalDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetBasicPersonalDataResponse Result {
             get {
@@ -1252,24 +1251,24 @@ namespace PayPal.Services.Private.Permissions {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     public delegate void GetAdvancedPersonalDataCompletedEventHandler(object sender, GetAdvancedPersonalDataCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetAdvancedPersonalDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+
         private object[] results;
-        
+
         internal GetAdvancedPersonalDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
-        
+
         /// <remarks/>
         public GetAdvancedPersonalDataResponse Result {
             get {

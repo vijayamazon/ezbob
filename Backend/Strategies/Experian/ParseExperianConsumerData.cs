@@ -11,26 +11,15 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class ParseExperianConsumerData : AStrategy {
-		#region public
-
-		#region constructor
 
 		public ParseExperianConsumerData(long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Result = null;
 			m_nServiceLogID = nServiceLogID;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "ParseExperianConsumerData"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Log.Info("Parsing Experian Consumer for service log entry {0}...", m_nServiceLogID);
@@ -49,21 +38,9 @@
 			Log.Info("Parsing Experian Consumer for service log entry {0} complete.", m_nServiceLogID);
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public ExperianConsumerData Result { get; private set; }
 
-		#endregion property Result
-
-		#endregion public
-
-		#region private
-
 		private readonly long m_nServiceLogID;
-
-		#region method Load
 
 		private Tuple<OutputRoot, ServiceLog> Load() {
 			SafeReader sr = DB.GetFirst(
@@ -95,10 +72,6 @@
 			} // try
 		} // Load
 
-		#endregion method Load
-
-		#region method Parse
-
 		private ExperianConsumerData Parse(Tuple<OutputRoot, ServiceLog> oDoc)
 		{
 			if (oDoc == null)
@@ -112,16 +85,11 @@
 			return builder.Build(oDoc.Item1, oDoc.Item2.CustomerId, oDoc.Item2.DirectorId, oDoc.Item2.InsertDate, oDoc.Item2.Id);
 		} // Parse
 
-		#endregion method ParseAndSave
-
-		#region method Save
-
 		private ExperianConsumerData Save(ExperianConsumerData data) {
 			if (data == null)
 				return null;
 
 			Log.Info("Saving Experian consumer data into DB...");
-
 
 			var con = DB.GetPersistent();
 			con.BeginTransaction();
@@ -205,8 +173,5 @@
 			return data;
 		} // Save
 
-		#endregion method Save
-
-		#endregion private
 	} // class ParseExperianConsumerData
 } // namespace

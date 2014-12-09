@@ -13,8 +13,7 @@
 // 
 namespace PayPal.Platform.SDK {
     using System.Xml.Serialization;
-    
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -23,13 +22,13 @@ namespace PayPal.Platform.SDK {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
     public partial class Fault {
-        
+
         private string faultcodeField;
-        
+
         private string faultstringField;
-        
+
         private FaultDetail detailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string faultcode {
@@ -40,7 +39,7 @@ namespace PayPal.Platform.SDK {
                 this.faultcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string faultstring {
@@ -51,7 +50,7 @@ namespace PayPal.Platform.SDK {
                 this.faultstringField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("detail", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public FaultDetail detail {
@@ -63,7 +62,7 @@ namespace PayPal.Platform.SDK {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -71,9 +70,9 @@ namespace PayPal.Platform.SDK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
     public partial class FaultDetail {
-        
+
         private FaultDetailFaultMessage faultMessageField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public FaultDetailFaultMessage FaultMessage {
@@ -85,7 +84,7 @@ namespace PayPal.Platform.SDK {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -93,11 +92,11 @@ namespace PayPal.Platform.SDK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
     public partial class FaultDetailFaultMessage {
-        
+
         private FaultDetailFaultMessageResponseEnvelope responseEnvelopeField;
-        
+
         private FaultDetailFaultMessageError[] errorField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public FaultDetailFaultMessageResponseEnvelope responseEnvelope {
@@ -108,7 +107,7 @@ namespace PayPal.Platform.SDK {
                 this.responseEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public FaultDetailFaultMessageError[] error {
@@ -120,7 +119,7 @@ namespace PayPal.Platform.SDK {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -128,15 +127,15 @@ namespace PayPal.Platform.SDK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
     public partial class FaultDetailFaultMessageResponseEnvelope {
-        
+
         private string timestampField;
-        
+
         private string ackField;
-        
+
         private string correlationIdField;
-        
+
         private string buildField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string timestamp {
@@ -147,7 +146,7 @@ namespace PayPal.Platform.SDK {
                 this.timestampField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ack {
@@ -158,7 +157,7 @@ namespace PayPal.Platform.SDK {
                 this.ackField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string correlationId {
@@ -169,7 +168,7 @@ namespace PayPal.Platform.SDK {
                 this.correlationIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string build {
@@ -181,7 +180,7 @@ namespace PayPal.Platform.SDK {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -189,19 +188,19 @@ namespace PayPal.Platform.SDK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
     public partial class FaultDetailFaultMessageError {
-        
+
         private string errorIdField;
-        
+
         private string domainField;
-        
+
         private string severityField;
-        
+
         private string categoryField;
-        
+
         private string messageField;
-        
+
         private FaultDetailFaultMessageErrorParameter[] parameterField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string errorId {
@@ -212,7 +211,7 @@ namespace PayPal.Platform.SDK {
                 this.errorIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string domain {
@@ -223,7 +222,7 @@ namespace PayPal.Platform.SDK {
                 this.domainField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string severity {
@@ -234,7 +233,7 @@ namespace PayPal.Platform.SDK {
                 this.severityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string category {
@@ -245,7 +244,7 @@ namespace PayPal.Platform.SDK {
                 this.categoryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string message {
@@ -256,7 +255,7 @@ namespace PayPal.Platform.SDK {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("parameter", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public FaultDetailFaultMessageErrorParameter[] parameter {
@@ -268,7 +267,7 @@ namespace PayPal.Platform.SDK {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
     [System.SerializableAttribute()]
@@ -276,9 +275,9 @@ namespace PayPal.Platform.SDK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
     public partial class FaultDetailFaultMessageErrorParameter {
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {

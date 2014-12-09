@@ -4,25 +4,14 @@
 	using Ezbob.Logger;
 
 	public class BackfillCustomerAnalyticsCompany : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BackfillCustomerAnalyticsCompany(AConnection oDB, ASafeLog oLog)
 			: base(oDB, oLog) {
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "BackfillCustomerAnalyticsCompany"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			var service = new EBusinessService(DB);
@@ -48,11 +37,5 @@
 			} // for each row
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-		#endregion private
 	} // class BackfillCustomerAnalyticsCompany
 } // namespace

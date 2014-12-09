@@ -175,7 +175,7 @@ namespace MWSClientCsRuntime
             //move to child node for complex object reading
             currentElement = node;
             currentChild = node.FirstChild;
-           
+
         }
 
         private void EndObject()
@@ -214,7 +214,7 @@ namespace MWSClientCsRuntime
                 throw new InvalidDataException("Unsupported type for conversion from string: " + type.FullName);
             }
         }
-        
+
        private decimal convertToDecimal(string str) {
              return Decimal.Parse(str,
                     System.Globalization.NumberStyles.Float, 
@@ -241,7 +241,7 @@ namespace MWSClientCsRuntime
                 return (T) Activator.CreateInstance(type, new object[] { value });
             }
         }
-        
+
         /// <summary>
         /// Read element value
         /// </summary>
@@ -269,7 +269,6 @@ namespace MWSClientCsRuntime
                 return ConvertValue<T>(node.InnerText);
             }
         }
-              
 
         private bool IsNumberType(Type type)
         {

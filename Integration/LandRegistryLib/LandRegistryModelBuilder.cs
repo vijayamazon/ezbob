@@ -35,9 +35,6 @@
 			return type;
 		}
 
-
-
-
 		public LandRegistryEnquiryModel BuildEnquiryModel(string responseXml)
 		{
 			var response = XmlHelper.DeserializeObject<ResponseSearchByPropertyDescriptionV2_0Type>(responseXml);

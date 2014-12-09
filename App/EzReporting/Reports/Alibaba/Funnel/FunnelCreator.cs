@@ -5,9 +5,6 @@
 	using OfficeOpenXml;
 
 	public class FunnelCreator : IAlibaba {
-		#region public
-
-		#region constructor
 
 		// ReSharper disable UnusedParameter.Local
 		// oDateEnd: for future use.
@@ -23,10 +20,6 @@
 		} // constructor
 		// ReSharper restore UnusedParameter.Local
 
-		#endregion constructor
-
-		#region method Generate
-
 		public void Generate() {
 			Report = new ExcelPackage();
 
@@ -41,18 +34,11 @@
 			Report.AutoFitColumns();
 		} // Generate
 
-		#endregion method Generate
-
 		public ExcelPackage Report { get; private set; }
-
-		#endregion public
-
-		#region private
 
 		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
 		private readonly DateTime? m_oDateEnd;
 
-		#endregion private
 	} // class FunnelCreator
 } // namespace

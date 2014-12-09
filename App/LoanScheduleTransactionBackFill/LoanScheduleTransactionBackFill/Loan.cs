@@ -8,12 +8,8 @@ using Ezbob.Logger;
 using Newtonsoft.Json;
 
 namespace LoanScheduleTransactionBackFill {
-	#region class Loan
 
 	class Loan : SafeLog {
-		#region public
-
-		#region property Step2
 
 		public static SortedSet<int> Step2 { get {
 			if (ms_aryStep2 == null) {
@@ -33,10 +29,6 @@ namespace LoanScheduleTransactionBackFill {
 		}} // Step2
 
 		private static SortedSet<int> ms_aryStep2;
-
-		#endregion property Step2
-
-		#region constructor
 
 		public Loan(ASafeLog log = null) : base(log) {
 			DeclaredLoanAmount = 0;
@@ -75,10 +67,6 @@ namespace LoanScheduleTransactionBackFill {
 			FillPlanned(row["AgreementModel"].ToString());
 		} // Loan
 
-		#endregion constructor
-
-		#region properties
-
 		public int ID { get; set; }
 		public LoanType LoanType { get; set; }
 		public decimal DeclaredLoanAmount { get; set; }
@@ -92,10 +80,6 @@ namespace LoanScheduleTransactionBackFill {
 		public List<ScheduleTransaction> ScheduleTransactions { get; private set; }
 
 		public ScheduleState ScheduleState { get; private set; }
-
-		#endregion properties
-
-		#region method BuildWorkingSet
 
 		public void BuildWorkingSet() {
 			if (Planned.Count == Actual.Count) {
@@ -124,10 +108,6 @@ namespace LoanScheduleTransactionBackFill {
 				BuildBadWorkingSet();
 			}// if
 		} // BuildWorkingSet
-
-		#endregion method BuildWorkingSet
-
-		#region method Calculate
 
 		public void Calculate() {
 			if (!IsCountable)
@@ -274,26 +254,14 @@ namespace LoanScheduleTransactionBackFill {
 			return LoanScheduleStatus.Paid;
 		} // GetStatus
 
-		#endregion method Calculate
-
-		#region method Save
-
 		public void Save(AConnection oDB) {
 			foreach (ScheduleTransaction st in ScheduleTransactions)
 				st.Save(ID, ScheduleState, oDB);
 		} // Save
 
-		#endregion method Save
-
-		#region property IsCountable
-
 		public bool IsCountable { get {
 			return (ScheduleState != ScheduleState.Unknown);
 		}} // IsCountable
-
-		#endregion property IsCountable
-
-		#region property TotalPrincipalPaid
 
 		public decimal TotalPrincipalPaid { get {
 			if (!m_nTotalPrincipalPaid.HasValue)
@@ -304,10 +272,6 @@ namespace LoanScheduleTransactionBackFill {
 
 		private decimal? m_nTotalPrincipalPaid;
 
-		#endregion property TotalPrincipalPaid
-
-		#region property RemainingPrincipal
-
 		public decimal RemainingPrincipal { get {
 			if (!m_nRemainingPrincipal.HasValue)
 				m_nRemainingPrincipal = Actual.Sum(sh => sh.Principal);
@@ -317,10 +281,6 @@ namespace LoanScheduleTransactionBackFill {
 
 		private decimal? m_nRemainingPrincipal;
 
-		#endregion property RemainingPrincipal
-
-		#region property ProcessedTransactionCount
-
 		public int ProcessedTransactionCount { get {
 			if (!m_nProcessedTransactionCount.HasValue)
 				m_nProcessedTransactionCount = Transactions.Count(trn => trn.IsAlreadyProcessed);
@@ -329,10 +289,6 @@ namespace LoanScheduleTransactionBackFill {
 		}} // ProcessedTransactionCount
 
 		private int? m_nProcessedTransactionCount;
-
-		#endregion property ProcessedTransactionCount
-
-		#region method ToString
 
 		public override string ToString() {
 			var os = new StringBuilder();
@@ -397,14 +353,6 @@ namespace LoanScheduleTransactionBackFill {
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region private
-
-		#region method FillPlanned
-
 		private void FillPlanned(string sAgreementModelJson) {
 			LoanModel lm = JsonConvert.DeserializeObject<LoanModel>(sAgreementModelJson);
 
@@ -416,10 +364,6 @@ namespace LoanScheduleTransactionBackFill {
 			foreach (ScheduleModel sm in lm.Schedule)
 				Planned.Add(new Schedule(sm, this));
 		} // FillPlanned
-
-		#endregion method FillPlanned
-
-		#region method BuildBadWorkingSet
 
 		private void BuildBadWorkingSet() {
 			if (Actual.Count == 0)
@@ -476,10 +420,6 @@ namespace LoanScheduleTransactionBackFill {
 			} // if paid loan
 		} // BuildBadWorkingSet
 
-		#endregion method BuildBadWorkingSet
-
-		#endregion private
 	} // class Loan
 
-	#endregion class Loan
 } // namespace LoanScheduleTransactionBackFill

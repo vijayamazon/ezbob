@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class QualifiersType
     {
-    
+
         private String itemConditionField;
 
         private String itemSubconditionField;
@@ -39,7 +37,6 @@ namespace MarketplaceWebServiceProducts.Model
         private  ShippingTimeType shippingTimeField;
         private String sellerPositiveFeedbackRatingField;
 
-
         /// <summary>
         /// Gets and sets the ItemCondition property.
         /// </summary>
@@ -49,8 +46,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.itemConditionField ; }
             set { this.itemConditionField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ItemCondition property
@@ -63,8 +58,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ItemCondition property is set
         /// </summary>
@@ -75,7 +68,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ItemSubcondition property.
         /// </summary>
@@ -85,8 +77,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.itemSubconditionField ; }
             set { this.itemSubconditionField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ItemSubcondition property
@@ -99,8 +89,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ItemSubcondition property is set
         /// </summary>
@@ -111,7 +99,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the FulfillmentChannel property.
         /// </summary>
@@ -121,8 +108,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.fulfillmentChannelField ; }
             set { this.fulfillmentChannelField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the FulfillmentChannel property
@@ -135,8 +120,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FulfillmentChannel property is set
         /// </summary>
@@ -147,7 +130,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ShipsDomestically property.
         /// </summary>
@@ -157,8 +139,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.shipsDomesticallyField ; }
             set { this.shipsDomesticallyField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the ShipsDomestically property
@@ -171,8 +151,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ShipsDomestically property is set
         /// </summary>
@@ -183,7 +161,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ShippingTime property.
         /// </summary>
@@ -193,8 +170,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.shippingTimeField ; }
             set { this.shippingTimeField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ShippingTime property
@@ -207,8 +182,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ShippingTime property is set
         /// </summary>
@@ -217,9 +190,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.shippingTimeField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the SellerPositiveFeedbackRating property.
@@ -230,8 +200,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.sellerPositiveFeedbackRatingField ; }
             set { this.sellerPositiveFeedbackRatingField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SellerPositiveFeedbackRating property
@@ -244,8 +212,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SellerPositiveFeedbackRating property is set
         /// </summary>
@@ -256,9 +222,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -267,7 +230,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -338,8 +300,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

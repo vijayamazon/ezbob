@@ -10,7 +10,6 @@
 	public class VerifyEnoughAvailableFunds : AStrategy
 	{
 		private readonly decimal deductAmount;
-		#region constructor
 
 		public VerifyEnoughAvailableFunds(decimal deductAmount, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
@@ -18,19 +17,11 @@
 			this.deductAmount = deductAmount;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Verify Enough Available Funds"; }
 		} // Name
 
-		#endregion property Name
-
 		public bool HasEnoughFunds { get; private set; }
-		
-		#region property Execute
 
 		public override void Execute() {
 			var getAvailableFunds = new GetAvailableFunds(DB, Log);
@@ -46,8 +37,6 @@
 				SendMail(availableFunds - deductAmount, relevantLimit);
 			}
 		} // Execute
-
-		#endregion property Execute
 
 		private void SendMail(decimal currentFunds, int requiredFunds)
 		{

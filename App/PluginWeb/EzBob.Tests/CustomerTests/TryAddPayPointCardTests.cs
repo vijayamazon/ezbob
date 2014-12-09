@@ -50,7 +50,6 @@ namespace EzBob.Tests.CustomerTests
                                    };
             customer.PayPointCards.Add(payPointCard);
 
-
             var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "1234", "1014", null);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(1));

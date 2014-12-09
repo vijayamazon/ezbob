@@ -2,7 +2,6 @@
 	using Newtonsoft.Json.Linq;
 
 	public static class JsonExtensions {
-		#region method Offspring
 
 		public static JToken Offspring(this JToken oRoot, NameList oChildNames) {
 			if (ReferenceEquals(oRoot, null))
@@ -21,6 +20,5 @@
 			return Offspring(oRoot, new NameList(sChildNames));
 		} // Offspring
 
-		#endregion method Offspring
 	} // class JsonExtensions
 } // namespace Ezbob.Utils.JsonUtils

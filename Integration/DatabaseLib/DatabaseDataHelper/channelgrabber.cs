@@ -7,7 +7,6 @@
 	using NHibernate.Linq;
 
 	public partial class DatabaseDataHelper {
-		#region method GetAllChannelGrabberOrdersData
 
 		public InternalDataList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -26,10 +25,6 @@
 
 			return orders;
 		} // GetAllChannelGrabberOrdersData
-
-		#endregion method GetAllChannelGrabberOrdersData
-
-		#region method StoreChannelGrabberOrdersData
 
 		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord, int nIgnoredHere) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -67,6 +62,5 @@
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		} // StoreChannelGrabberOrdersData
 
-		#endregion method StoreChannelGrabberOrdersData
 	} // class DatabaseDataHelper
 } // namespace EZBob.DatabaseLib

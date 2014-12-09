@@ -5,21 +5,12 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 
-	#region class SqlRetryer
-
 	public class SqlRetryer : ARetryer {
-		#region public
-
-		#region constructor
 
 		public SqlRetryer(int nRetryCount = 3, int nSleepBeforeRetryMilliseconds = 0, ASafeLog oLog = null)
 			: base(nRetryCount, nSleepBeforeRetryMilliseconds, oLog)
 		{
 		} // constructor
-
-		#endregion constructor
-
-		#region method Retry
 
 		public override void Retry(Action oAction, string sFuncDescription = null) {
 			if (oAction == null)
@@ -85,10 +76,6 @@
 			throw new DbException("Out of retry attempts.", ex);
 		} // Retry
 
-		#endregion method Retry
-
-		#endregion public
 	} // class SqlRetryer
 
-	#endregion class SqlRetryer
 } // namespace Ezbob.Database

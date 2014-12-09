@@ -1,4 +1,4 @@
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 namespace EzBob.Models {
 	using System;
 	using System.Collections.Generic;
@@ -7,8 +7,6 @@ namespace EzBob.Models {
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
 	using Web.Areas.Customer.Models;
-
-	#region class CustomerModel
 
 	[Serializable]
 	public class CustomerModel {
@@ -132,10 +130,6 @@ namespace EzBob.Models {
 		public bool IsAlibaba { get; set; }
 	} // class CustomerModel
 
-	#endregion class CustomerModel
-
-	#region class SimpleMarketPlaceModel
-
 	public class SimpleMarketPlaceModel {
 		public string MpName { get; set; }
 		public int MpId { get; set; }
@@ -143,18 +137,10 @@ namespace EzBob.Models {
 		//public string storeInfoStepModelShops { get; set; }
 	} // class SimpleMarketPlaceModel
 
-	#endregion class SimpleMarketPlaceModel
-
-	#region class InvitedFriend
-
 	public class InvitedFriend {
 		public string FriendName { get; set; }
 		public string FriendTookALoan { get; set; }
 	} // class InvitedFriend
-
-	#endregion class InvitedFriend
-
-	#region class CompanyInfoMap
 
 	public class CompanyInfoMap {
 		public TypeOfBusiness TypeOfBusiness { get; set; }
@@ -172,8 +158,6 @@ namespace EzBob.Models {
 		public string ExperianCompanyName { get; set; }
 
 		public virtual List<DirectorModel> Directors { get; set; }
-
-		#region method FromCompany
 
 		public static CompanyInfoMap FromCompany(Company company) {
 			if (company == null)
@@ -196,9 +180,7 @@ namespace EzBob.Models {
 			};
 		} // From Company
 
-		#endregion method FromCompany
 	} // class CompanyInfoMap
 
-	#endregion class CompanyInfoMap
 } // namespace
 // ReSharper restore InconsistentNaming

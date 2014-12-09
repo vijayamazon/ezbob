@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 using EzBob.CommonLib;
@@ -34,7 +34,7 @@ namespace EzBob.AmazonDbLib
 		FeedbackNegative,
 		FeedbackNeutral,
 		FeedbackPositive,
-		
+
 		InventoryUseAFN*/
 	}
 
@@ -55,7 +55,7 @@ namespace EzBob.AmazonDbLib
 			CreateFunctionAndAddToCollection(AmazonDatabaseFunctionType.TotalSumOfOrdersAnnualized, DatabaseValueTypeEnum.Double, "{1F5C801E-B845-400C-BA34-8F2552165B74}");
 			CreateFunctionAndAddToCollection( AmazonDatabaseFunctionType.InventoryTotalItems, DatabaseValueTypeEnum.Integer, "{04A9EB90-E0E6-4CBF-9003-55AA414A16BA}" );
 			CreateFunctionAndAddToCollection( AmazonDatabaseFunctionType.InventoryTotalValue, DatabaseValueTypeEnum.Double, "{94BFA976-BFEF-4DFF-AF25-6D31EF1EDFDD}" );
-			
+
 			/*CreateFunctionAndAddToCollection(  AmazonDatabaseFunctionType.ReturnsToSalesRate, DatabaseValueTypeEnum.Integer, "{0130006B-173E-4B48-A245-E594E85D63F4}" ) ;
 			CreateFunctionAndAddToCollection(  AmazonDatabaseFunctionType.SoldItemsTrend, DatabaseValueTypeEnum.Integer , "{90AC41D6-5514-4314-A1DD-2FA45EED44FE}" );
 			CreateFunctionAndAddToCollection( AmazonDatabaseFunctionType.SoldValueTrend, DatabaseValueTypeEnum.Integer, "{7AA7384C-1476-4545-A45C-1DAE7A2E7081}" );			
@@ -77,8 +77,6 @@ namespace EzBob.AmazonDbLib
 			}
 		}
 	}
-
-
 
 	class AmazonDatabaseFunctionTypeConverter : IDatabaseEnumTypeConverter<AmazonDatabaseFunctionType>
 	{
@@ -146,7 +144,7 @@ namespace EzBob.AmazonDbLib
 				case AmazonDatabaseFunctionType.TotalReturns:
 					name = "Total Returns";
 					break;
-					
+
 				case AmazonDatabaseFunctionType.UserRating:
 					name = "User Raining";
 					break;

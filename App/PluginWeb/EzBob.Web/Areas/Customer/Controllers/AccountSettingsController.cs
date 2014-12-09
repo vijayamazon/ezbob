@@ -11,16 +11,11 @@
 	using ServiceClientProxy.EzServiceReference;
 
 	public class AccountSettingsController : Controller {
-		#region constructor
 
 		public AccountSettingsController(IWorkplaceContext context) {
 			m_oContext = context;
 			m_oServiceClient = new ServiceClient();
 		} // constructor
-
-		#endregion constructor
-
-		#region action UpdateSecurityQuestion
 
 		[Ajax]
 		[HttpPost]
@@ -49,10 +44,6 @@
 
 			return Json(new { success = bSuccess, error = sErrorMsg, });
 		} // UpdateSecurityQuestion
-
-		#endregion action UpdateSecurityQuestion
-
-		#region action ChangePassword
 
 		[Ajax]
 		[HttpPost]
@@ -84,15 +75,10 @@
 			return Json(new { success = bSuccess, error = sErrorMsg, });
 		} // ChangePassword
 
-		#endregion action ChangePassword
-
-		#region private
-
 		private readonly IWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(AccountSettingsController));
 
-		#endregion private
 	} // class AccountSettingsController
 } // namespace

@@ -31,9 +31,9 @@ namespace EzBob.Tests
             _calculator.Term = 5;
 
             var schedule = _calculator.Calculate(3000m, loan);
-            
+
             System.Console.WriteLine(loan);
-            
+
             Assert.That(schedule.Count, Is.EqualTo(5));
 
             Assert.That(schedule[0].AmountDue, Is.EqualTo(180));
@@ -141,7 +141,6 @@ namespace EzBob.Tests
             Assert.That(ep, Is.EqualTo(500));
         }
 
-
         [Test]
         public void pay_all_installments_ontime()
         {
@@ -215,7 +214,6 @@ namespace EzBob.Tests
             Assert.That(loan.Schedule[1].Status, Is.EqualTo(LoanScheduleStatus.Paid));
             Assert.That(loan.Schedule[2].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
         }
-
 
         [Test]
         public void pay_early_376()

@@ -11,7 +11,6 @@
 	using StructureMap;
 
 	public class ApprovedUser : ABrokerMailToo {
-		#region constructor
 
 		public ApprovedUser(int customerId, decimal nLoanAmount, int nValidHours, bool isFirst, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
 			m_nLoanAmount = nLoanAmount;
@@ -20,10 +19,8 @@
 			amountInUsd = CalculateLoanAmountInUsd();
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "Approved User"; } } // Name
-		
+
 		protected override void LoadRecipientData()
 		{
 			base.LoadRecipientData();
@@ -41,8 +38,6 @@
 			public int SystemCalculatedSum { get; set; }
 			public int ManagerApprovedSum { get; set; }
 		}
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables()
 		{
@@ -100,8 +95,6 @@
 				TemplateName = "Mandrill - Approval (not 1st time)";
 			}
 		} // SetTemplateAndVariables
-
-		#endregion method SetTemplateAndVariables
 
 		protected override void ActionAtEnd()
 		{

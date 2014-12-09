@@ -18,9 +18,6 @@
 	using YodleeLib.connector;
 
 	public class FindAccountsToUpdate : AStrategy {
-		#region public
-
-		#region constructor
 
 		public FindAccountsToUpdate(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oStra = new LoadCustomerMarketplaceSecurityData(nCustomerID, DB, Log);
@@ -28,17 +25,9 @@
 			Result = new AccountsToUpdate();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Find accounts to update"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oCustomerData.Load();
@@ -61,24 +50,12 @@
 			Result.IsVatReturnUpToDate = new CheckAllVatReturnPeriods(m_oCustomerData.Id, DB, Log).IsUpToDate();
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public AccountsToUpdate Result { get; private set; } // Result
-
-		#endregion property Result
-
-		#endregion public
-
-		#region private
 
 		private readonly LoadCustomerMarketplaceSecurityData m_oStra;
 		private readonly CustomerData m_oCustomerData;
 
 		private EkmConnector m_oEkmConnector;
-
-		#region method CheckEkm
 
 		private void CheckEkm(LoadCustomerMarketplaceSecurityData.ResultRow ekm) {
 			string sPassword;
@@ -98,10 +75,6 @@
 			if (!m_oEkmConnector.Validate(ekm.DisplayName, sPassword, out sError))
 				Result.Ekms[ekm.DisplayName] = sError;
 		} // CheckEkm
-
-		#endregion method CheckEkm
-
-		#region method CheckHmrc
 
 		private void CheckHmrc(LoadCustomerMarketplaceSecurityData.ResultRow hmrc) {
 			AccountModel oSecInfo;
@@ -146,32 +119,19 @@
 			} // try
 		} // CheckHmrc
 
-		#endregion method CheckHmrc
-
-		#region class CheckAllVatReturnPeriods
-
 		private class CheckAllVatReturnPeriods : AStoredProcedure {
-			#region constructor
 
 			public CheckAllVatReturnPeriods(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				CustomerID = nCustomerID;
 				m_bResult = null;
 			} // constructor
 
-			#endregion constructor
-
-			#region method HasValidParameters
-
 			public override bool HasValidParameters() {
 				return CustomerID > 0;
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
 			[UsedImplicitly]
 			public int CustomerID { get; set; }
-
-			#region method IsUpToDate
 
 			public bool IsUpToDate() {
 				if (m_bResult.HasValue)
@@ -230,21 +190,11 @@
 				return m_bResult.Value;
 			} // IsUpToDate
 
-			#endregion method IsUpToDate
-
-			#region protected
-
 			protected override string GetName() {
 				return "LoadAllVatReturnPeriods";
 			} // GetName
 
-			#endregion protected
-
-			#region private
-
 			private bool? m_bResult;
-
-			#region method IsDateContained
 
 			private static bool IsDateContained(DateTime oMonthMiddle, SortedDictionary<long, List<ResultRow>> oData) {
 				var oEdge = new DateIntervalEdge(oMonthMiddle, AIntervalEdge<DateTime>.EdgeType.Finite);
@@ -253,10 +203,6 @@
 					pair.Value.Where(cur => !cur.IsDeleted).Any(cur => cur.Interval.Contains(oEdge))
 				);
 			} // IsDateContained
-
-			#endregion method IsDateContained
-
-			#region class ResultRow
 
 			private class ResultRow : AResultRow {
 				[UsedImplicitly]
@@ -288,13 +234,7 @@
 				private DateInterval m_oInterval;
 			} // class ResultRow
 
-			#endregion class ResultRow
-
-			#endregion private
 		} // CheckAllVatReturnPeriods
 
-		#endregion class CheckAllVatReturnPeriods
-
-		#endregion private
 	} // class FindAccountsToUpdate
 } // namespace

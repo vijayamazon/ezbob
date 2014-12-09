@@ -4,8 +4,6 @@
 	using System.Globalization;
 	using Ezbob.ValueIntervals;
 
-	#region class HmrcManualOnePeriodDataModel
-
 	public class HmrcManualOnePeriodDataModel {
 		public DateTime FromDate { get; set; }
 		public DateTime ToDate { get; set; }
@@ -16,8 +14,6 @@
 		public Dictionary<int, decimal> BoxData { get; set; }
 
 		public string[] Errors { get; private set; }
-
-		#region method IsValid
 
 		public bool IsValid() {
 			var oErrors = new List<string>();
@@ -42,12 +38,7 @@
 			return Errors.Length == 0;
 		} // IsValid
 
-		#endregion method IsValid
 	} // class HmrcManualOnePeriodDataModel
-
-	#endregion class HmrcManualOnePeriodDataModel
-
-	#region class HmrcManualDataModel
 
 	public class HmrcManualDataModel {
 		public int CustomerID { get; set; }
@@ -60,8 +51,6 @@
 		public HmrcManualOnePeriodDataModel[] VatPeriods { get; set; }
 
 		public string[] Errors { get; private set; }
-
-		#region method IsValid
 
 		public bool IsValid() {
 			var oErrors = new List<string>();
@@ -121,8 +110,6 @@
 			return Errors.Length == 0;
 		} // IsValid
 
-		#endregion method IsValid
 	} // class HmrcManualDataModel
 
-	#endregion class HmrcManualDataModel
 } // namespace EzBob.Models

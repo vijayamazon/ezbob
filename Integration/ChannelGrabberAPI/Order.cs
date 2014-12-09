@@ -3,12 +3,8 @@ using System.Xml;
 using Integration.ChannelGrabberConfig;
 
 namespace Integration.ChannelGrabberAPI {
-	#region class Order
 
 	public class Order {
-		#region public
-
-		#region method Create
 
 		public static Order Create(XmlNode oNode, string sShopTypeName, AccountData oAccountData, int nIsExpense) {
 			string sOrderShopTypeName = XmlUtil.GetString(oNode, "accountType");
@@ -24,10 +20,6 @@ namespace Integration.ChannelGrabberAPI {
 			return new Order(oNode, nIsExpense);
 		} // Create
 
-		#endregion method Create
-
-		#region public properties
-
 		public virtual string   NativeOrderId { get; set; }
 		public virtual double?  TotalCost     { get; set; }
 		public virtual string   CurrencyCode  { get; set; }
@@ -35,14 +27,6 @@ namespace Integration.ChannelGrabberAPI {
 		public virtual DateTime PurchaseDate  { get; set; }
 		public virtual string   OrderStatus   { get; set; }
 		public virtual int      IsExpense     { get; set; }
-
-		#endregion public properties
-
-		#endregion public
-
-		#region private
-
-		#region constructor
 
 		private Order(XmlNode oNode, int nIsExpense) {
 			NativeOrderId = XmlUtil.GetString(oNode, XmlUtil.IdNode);
@@ -54,10 +38,6 @@ namespace Integration.ChannelGrabberAPI {
 			IsExpense     = nIsExpense;
 		} // constructor
 
-		#endregion constructor
-
-		#endregion private
 	} // class Order
 
-	#endregion class Order
 } // namespace Integration.ChannelGrabberAPI

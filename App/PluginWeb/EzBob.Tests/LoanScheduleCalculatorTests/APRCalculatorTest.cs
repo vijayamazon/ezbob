@@ -259,13 +259,11 @@
 							Date = new DateTime(2013, 8, 18),
 							AmountDue = 2169.96M
 
-
 						},
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2013, 9, 18),
 							AmountDue = 2124.16M
-
 
 						},
 					new LoanScheduleItem
@@ -273,13 +271,11 @@
 							Date = new DateTime(2013, 10, 18),
 							AmountDue = 2037.85M
 
-
 						},
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2013, 11, 18),
 							AmountDue = 1996.53M
-
 
 						},
 					new LoanScheduleItem
@@ -287,13 +283,11 @@
 							Date = new DateTime(2013, 12, 18),
 							AmountDue = 1955.22M
 
-
 						},
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2014, 1, 18),
 							AmountDue = 1913.9M
-
 
 						},
 					new LoanScheduleItem
@@ -301,13 +295,11 @@
 							Date = new DateTime(2014, 2, 18),
 							AmountDue = 1872.58M
 
-
 						},
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2014, 3, 18),
 							AmountDue = 1814.61M
-
 
 						},
 					new LoanScheduleItem
@@ -315,20 +307,17 @@
 							Date = new DateTime(2014, 4, 18),
 							AmountDue = 1777.46M
 
-
 						},
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2014, 5, 18),
 							AmountDue = 1740.3M
 
-
 						},
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2014, 5, 18),
 							AmountDue = 1703.15M
-
 
 						},
 				};
@@ -385,7 +374,7 @@
 							BalanceBeforeRepayment = 6667,
 						}
 				};
-			
+
 			for (int i = 0; i < loanSchedule.Count; i++)
 			{
 				var aprMonthRate = calc.CalculateMonthly(40000, loanSchedule, i, 0, new DateTime(2013, 5, 7));

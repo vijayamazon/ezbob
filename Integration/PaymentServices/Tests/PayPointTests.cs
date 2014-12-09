@@ -49,8 +49,6 @@
 			var report = service.getReport("secpay", "secpay", "secpay", "CSV", "Date", "201204", "GBP", "", false, false);*/
 		}
 
-		#region PayPointPayPal
-
 		[Test]
 		public void PayPointPayPal()
 		{
@@ -58,6 +56,5 @@
 			papi.PayPointPayPal("www.google.com", "www.google.com", "www.google.com", 5.0M, "GBP", true);
 		}
 
-		#endregion End PayPointPayPal
 	}
 }

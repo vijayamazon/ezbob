@@ -1,5 +1,4 @@
 ﻿namespace EZBob.DatabaseLib {
-	#region using
 
 	using System;
 	using System.Collections.Generic;
@@ -16,8 +15,6 @@
 	using Model.Marketplaces.Amazon;
 	using NHibernate.Linq;
 	using Repository;
-
-	#endregion using
 
 	public partial class DatabaseDataHelper {
 		private readonly AmazonOrderItemDetailRepository _AmazonOrderItemDetailRepository;

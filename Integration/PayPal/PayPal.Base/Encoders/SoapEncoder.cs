@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text ;
 using System.Xml.Serialization ;
 using System.IO ;
@@ -47,7 +47,7 @@ namespace PayPal.Platform.SDK
 				xml = xml.Replace(" ", "");
 				SoapRequest = SoapRequest + xml.Trim();
 				SoapRequest = SoapRequest + @"</soap:Body></soap:Envelope>";
-						
+
 				return SoapRequest;
 			}
 			catch(FATALException)
@@ -63,7 +63,6 @@ namespace PayPal.Platform.SDK
 				Output = null;
 				serializer = null;
 			}
-
 
 		}
 
@@ -81,7 +80,7 @@ namespace PayPal.Platform.SDK
 			{
 				/// Initializing the XMLSerializer.
 				serializer = new XmlSerializer(toType);
-				
+
 				/// Removing SOAP outer Envelope
 				soapEnvelope = soapEnvelope.Replace("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">", "");
 				soapEnvelope = soapEnvelope.Replace("<soapenv:Header />", "");
@@ -93,11 +92,11 @@ namespace PayPal.Platform.SDK
 				soapEnvelope = soapEnvelope.Replace("soapenv:","");
 				soapEnvelope = soapEnvelope.Replace("ns3:","");
 				soapEnvelope = soapEnvelope.Replace("xmlns:ns2=\"http://svcs.paypal.com/types/ap\"","");
-				
+
                 /// Deserializing and Returning the XML
                 MemoryStream reader = new MemoryStream(Encoding.UTF8.GetBytes(soapEnvelope));
 				return (object)serializer.Deserialize(reader);
-						
+
 			}
 			catch(FATALException)
 			{

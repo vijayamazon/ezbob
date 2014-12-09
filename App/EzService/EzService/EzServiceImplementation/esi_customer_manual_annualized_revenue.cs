@@ -2,7 +2,6 @@
 	using EzBob.Backend.Strategies.CustomerManualAnnualizedRevenue;
 
 	partial class EzServiceImplementation {
-		#region method GetCustomerManualAnnualizedRevenue
 
 		public CustomerManualAnnualizedRevenueActionResult GetCustomerManualAnnualizedRevenue(int nCustomerID) {
 			GetCustomerManualAnnualizedRevenue oInstance;
@@ -15,10 +14,6 @@
 			};
 		} // GetCustomerManualAnnualizedRevenue
 
-		#endregion method GetCustomerManualAnnualizedRevenue
-
-		#region method SetCustomerManualAnnualizedRevenue
-
 		public CustomerManualAnnualizedRevenueActionResult SetCustomerManualAnnualizedRevenue(int nCustomerID, decimal nRevenue, string sComment) {
 			SetCustomerManualAnnualizedRevenue oInstance;
 
@@ -30,6 +25,5 @@
 			};
 		} // SetCustomerManualAnnualizedRevenue
 
-		#endregion method SetCustomerManualAnnualizedRevenue
 	} // class EzServiceImplementation
 } // namespace EzService

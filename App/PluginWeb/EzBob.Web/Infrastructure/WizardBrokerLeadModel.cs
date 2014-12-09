@@ -2,9 +2,6 @@
 	using System.Web;
 
 	public sealed class WizardBrokerLeadModel {
-		#region public
-
-		#region constructor
 
 		public WizardBrokerLeadModel(HttpSessionStateBase oSession) {
 			Session = oSession;
@@ -37,56 +34,24 @@
 			Upload();
 		} // constructor
 
-		#endregion constructor
-
-		#region method Unset
-
 		public void Unset() {
 			Clear();
 			Upload();
 		} // Unset
 
-		#endregion method Unset
-
-		#region property IsSet
-
 		public bool IsSet {
 			get { return IsLeadSet(LeadID, LeadEmail); } // get
 		} // IsSet
 
-		#endregion property IsSet
-
-		#region property Session
-
 		public HttpSessionStateBase Session { get; private set; } // Session
-
-		#endregion property Session
-
-		#region property LeadID
 
 		public int LeadID { get; private set; } // LeadID
 
-		#endregion property LeadID
-
-		#region property LeadEmail
-
 		public string LeadEmail { get; private set; } // LeadEmail
-
-		#endregion property LeadEmail
-
-		#region property FirstName
 
 		public string FirstName { get; private set; } // FirstName
 
-		#endregion property FirstName
-
-		#region property LastName
-
 		public string LastName { get; private set; } // LastName
-
-		#endregion property LastName
-
-		#region property BrokerFillsForCustomer
 
 		public bool BrokerFillsForCustomer {
 			get { return IsSet && m_bBrokerFillsForCustomer; }
@@ -94,10 +59,6 @@
 		} // BrokerFillsForCustomer
 
 		private bool m_bBrokerFillsForCustomer;
-
-		#endregion property BrokerFillsForCustomer
-
-		#region method ToString
 
 		public override string ToString() {
 			return string.Format(
@@ -111,14 +72,6 @@
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region private
-
-		#region method Clear
-
 		private void Clear() {
 			LeadID = 0;
 			LeadEmail = string.Empty;
@@ -126,10 +79,6 @@
 			FirstName = string.Empty;
 			LastName = string.Empty;
 		} // Clear
-
-		#endregion method Clear
-
-		#region method Upload
 
 		private void Upload() {
 			Session[Constant.Broker.LeadID] = LeadID;
@@ -139,16 +88,9 @@
 			Session[Constant.Broker.FillsForCustomer] = BrokerFillsForCustomer ? Constant.Yes : Constant.No;
 		} // Upload
 
-		#endregion method Upload
-
-		#region method IsLeadSet
-
 		private static bool IsLeadSet(int nLeadID, string sLeadEmail) {
 			return (nLeadID > 0) && !string.IsNullOrWhiteSpace(sLeadEmail);
 		} // IsLeadSet
 
-		#endregion method IsLeadSet
-
-		#endregion private
 	} // class WizardBrokerLeadModel
 } // namespace EzBob.Models

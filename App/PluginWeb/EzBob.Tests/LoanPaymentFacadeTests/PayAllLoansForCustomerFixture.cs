@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
@@ -33,7 +33,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var loan2 = new Loan();
             _calculator.Calculate(3000, loan2, date);
-            
+
             _customer.Loans.Add(loan1);
             _customer.Loans.Add(loan2);
 
@@ -68,7 +68,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var loan2 = new Loan();
             _calculator.Calculate(3000, loan2, date);
-            
+
             _customer.Loans.Add(loan1);
             _customer.Loans.Add(loan2);
 
@@ -93,7 +93,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(loan1.TransactionsWithPaypoint.Count, Is.EqualTo(1));
             Assert.That(loan2.TransactionsWithPaypoint.Count, Is.EqualTo(1));
         }
-
 
         [Test]
         public void pay_loan_creates_transaction()

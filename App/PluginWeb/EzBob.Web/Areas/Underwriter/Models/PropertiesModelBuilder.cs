@@ -50,7 +50,6 @@
 				}
 			}
 
-
 			var unmappedLrs = _landRegistryRepository.GetByCustomer(customer).Where(x => x.RequestType == LandRegistryRequestType.Res && x.CustomerAddress == null);
 
 			foreach (var unmappedLr in unmappedLrs) {
@@ -68,7 +67,6 @@
 					VerifyStatus = PropertyVerifyStatus.NotVerified,
 					LandRegistries = new List<LandRegistryResModel> { lrModel }
 				};
-
 
 				if (lrModel.PropertyAddresses != null && lrModel.PropertyAddresses.Any()) {
 					unMappedProperty.Postcode = lrModel.PropertyAddresses.First().PostCode;

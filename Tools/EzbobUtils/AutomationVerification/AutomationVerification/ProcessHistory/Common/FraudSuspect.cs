@@ -2,12 +2,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public class FraudSuspect : ATrace {
-		#region constructor
 
 		public FraudSuspect(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
-
-		#endregion constructor
 
 		public void Init(FraudStatus nFraudStatus) {
 			FraudStatus = nFraudStatus;

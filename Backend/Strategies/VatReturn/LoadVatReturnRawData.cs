@@ -7,9 +7,6 @@
 	using JetBrains.Annotations;
 
 	public class LoadVatReturnRawData : AStrategy {
-		#region public
-
-		#region constructor
 
 		public LoadVatReturnRawData(int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpLoadVatReturnRawData(nCustomerMarketplaceID, DB, Log);
@@ -18,17 +15,9 @@
 			RtiTaxMonthRawData = new RtiTaxMonthRawData[0];
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Load VAT return raw data"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			var oVat = new SortedDictionary<int, VatReturnRawData>();
@@ -67,27 +56,11 @@
 			} // if
 		} // Execute
 
-		#endregion method Execute
-
-		#region property VatReturnRawData
-
 		public VatReturnRawData[] VatReturnRawData { get; private set; }
-
-		#endregion property VatReturnRawData
-
-		#region property RtiTaxMonthRawData
 
 		public RtiTaxMonthRawData[] RtiTaxMonthRawData { get; private set; }
 
-		#endregion property RtiTaxMonthRawData
-
-		#endregion public
-
-		#region private
-
 		private readonly SpLoadVatReturnRawData m_oSp;
-
-		#region class SpLoadVatReturnRawData
 
 		private class SpLoadVatReturnRawData : AStoredProc {
 			public SpLoadVatReturnRawData(int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
@@ -102,8 +75,5 @@
 			public int CustomerMarketplaceID { get; set; }
 		} // class SpLoadVatReturnRawData
 
-		#endregion class SpLoadVatReturnRawData
-
-		#endregion private
 	} // class LoadVatReturnRawData
 } // namespace EzBob.Backend.Strategies.VatReturn

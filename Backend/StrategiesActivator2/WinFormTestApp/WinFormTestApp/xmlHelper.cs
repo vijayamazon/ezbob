@@ -115,7 +115,6 @@ namespace WinFormTestApp
 			}
 		}
 
-
 		public static void ConvertXmlNodeToTreeNode(XmlNode xmlNode, TreeNodeCollection treeNodes)
 		{
 			TreeNode newTreeNode = treeNodes.Add(xmlNode.Name);

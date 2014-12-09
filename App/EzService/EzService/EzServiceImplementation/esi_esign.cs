@@ -5,15 +5,10 @@
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
-		#region method EsignProcessPending
 
 		public ActionMetaData EsignProcessPending(int? nCustomerID) {
 			return Execute<EsignProcessPending>(null, null, nCustomerID);
 		} // EsignProcessPending
-
-		#endregion method EsignProcessPending
-
-		#region method LoadEsignatures
 
 		public EsignatureListActionResult LoadEsignatures(int userId, int? nCustomerID, bool bPollStatus) {
 			LoadEsignatures oInstance;
@@ -31,10 +26,6 @@
 			};
 		} // LoadEsignatures
 
-		#endregion method LoadEsignatures
-
-		#region method LoadEsignatureFile
-
 		public EsignatureFileActionResult LoadEsignatureFile(int userId, long nEsignatureID) {
 			LoadEsignatureFile oInstance;
 
@@ -48,10 +39,6 @@
 			};
 		} // LoadEsignatureFile
 
-		#endregion method LoadEsignatureFile
-
-		#region method EsignSend
-
 		public StringActionResult EsignSend(int userId, EchoSignEnvelope[] oPackage) {
 			EsignSend oInstance;
 
@@ -63,6 +50,5 @@
 			};
 		} // EsignSend
 
-		#endregion method EsignSend
 	} // class EzServiceImplementation
 } // namespace

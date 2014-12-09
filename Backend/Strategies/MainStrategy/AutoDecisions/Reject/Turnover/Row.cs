@@ -10,7 +10,6 @@
 	/// Actual period is between <see cref="DateFrom"/> and <see cref="DateTo"/> inclusive.
 	/// </summary>
 	public class Row {
-		#region public
 
 		/// <summary>
 		/// Marketplace ID (MP_CustomerMarketplace.Id).
@@ -68,18 +67,12 @@
 		[UsedImplicitly]
 		public bool IsPaymentAccount { get; set; }
 
-		#region property IsTotal
-
 		/// <summary>
 		/// Returns 'true' if this row should be included in total period calculation.
 		/// </summary>
 		public bool IsTotal {
 			get { return TurnoverType == Total; } // get
 		} // IsTotal
-
-		#endregion property IsTotal
-
-		#region method WriteToLog
 
 		/// <summary>
 		/// Writes this instance to log.
@@ -107,10 +100,6 @@
 				IsPaymentAccount ? "payment account" : "marketplace"
 			);
 		} // WriteToLog
-
-		#endregion method WriteToLog
-
-		#endregion public
 
 		private const string Total = "Total";
 	} // Row

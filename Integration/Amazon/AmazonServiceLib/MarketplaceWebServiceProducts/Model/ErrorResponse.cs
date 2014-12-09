@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,11 +25,10 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class ErrorResponse
     {
-    
+
         private  List<Error> errorField;
 
         private String requestIdField;
-
 
         /// <summary>
         /// Gets and sets the Error property.
@@ -50,8 +47,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.errorField =  value; }
         }
 
-
-
         /// <summary>
         /// Sets the Error property
         /// </summary>
@@ -65,8 +60,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return this;
         }          
- 
-
 
         /// <summary>
         /// Checks if Error property is set
@@ -77,7 +70,6 @@ namespace MarketplaceWebServiceProducts.Model
             return (Error.Count > 0);
         }
 
-
         /// <summary>
         /// Gets and sets the RequestId property.
         /// </summary>
@@ -87,8 +79,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.requestIdField ; }
             set { this.requestIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the RequestId property
@@ -101,8 +91,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if RequestId property is set
         /// </summary>
@@ -112,9 +100,6 @@ namespace MarketplaceWebServiceProducts.Model
             return  this.requestIdField != null;
 
         }
-
-
-
 
         /// <summary>
         /// XML Representation for this object
@@ -179,8 +164,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return responseHeaderMetadata; }
             set { this.responseHeaderMetadata = value; }
         }
-
-
 
     }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using EzBob.eBayServiceLib.FileTransferServiceReference;
 using EzBob.eBayServiceLib.TradingServiceCore.DataInfos;
@@ -30,7 +30,6 @@ namespace EzBob.eBayServiceLib.LargeMerchantServiceCore.Requests
 		{
 			get { return DataInfoTypeEnum.DownloadedFileInfo; }
 		}
-
 
 	}
 }

@@ -1,4 +1,4 @@
-using EzBob.TeraPeakServiceLib.Requests.ResearchResult;
+﻿using EzBob.TeraPeakServiceLib.Requests.ResearchResult;
 
 namespace EzBob.TeraPeakServiceLib.Requests
 {
@@ -10,7 +10,6 @@ namespace EzBob.TeraPeakServiceLib.Requests
 			Version = 2;
 		}
 
-		
 		protected ServiceRequestDataBase()
 		{
 			Version = 2;

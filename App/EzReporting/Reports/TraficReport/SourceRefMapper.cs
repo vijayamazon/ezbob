@@ -1,10 +1,9 @@
 ﻿namespace Reports.TraficReport {
 	public static class SourceRefMapper {
-		#region method GetSourceBySourceRef
 
 		public static Source GetSourceBySourceRef(string sourceRef, string googleCookie = null) {
 			sourceRef = (sourceRef ?? string.Empty).ToLowerInvariant().Trim();
-			
+
 			if (sourceRef.StartsWith("bros-hs"))
 				return Source.PpcPromotion;
 
@@ -75,10 +74,6 @@
 			return Source.Other;
 		} // GetSourceBySourceRef
 
-		#endregion method GetSourceBySourceRef
-
-		#region method GetSourceByAnalytics
-
 		public static Source GetSourceByAnalytics(string analytics) {
 			analytics = analytics ?? string.Empty;
 
@@ -145,6 +140,5 @@
 			return Source.Other;
 		} // GetSourceByAnalytics
 
-		#endregion method GetSourceByAnalytics
 	} // class SourceRefMapper
 } // namespace

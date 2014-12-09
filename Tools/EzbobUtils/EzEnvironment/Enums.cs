@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Context {
-	#region enum Name
 
 	public enum Name {
 		Unknown,
@@ -10,5 +9,4 @@
 		Production
 	} // enum Name
 
-	#endregion enum Name
 } // namespace Ezbob.Context

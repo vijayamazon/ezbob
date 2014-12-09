@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace EzBob.CommonLib
 		{
 			Add( requestsCounter );
 		}
-
 
 		public void IncrementRequests( string methodName = null, string details = null )
 		{
@@ -46,7 +45,7 @@ namespace EzBob.CommonLib
 			{
 				Add( requestInfo );	
 			}
-			
+
 		}
 
 		private void Add(RequestsCounterItem requestsCounter)

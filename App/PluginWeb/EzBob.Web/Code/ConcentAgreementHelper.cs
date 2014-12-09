@@ -69,7 +69,6 @@
 			return _agreementRenderer.RenderAgreement(template, model);
 		}
 
-
 		public string GetTemplate()
 		{
 			var templateCommercial = _templatesProvider.GetTemplate(TemlatePath, "Commercial");

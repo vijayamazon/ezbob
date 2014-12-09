@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web {
-	#region using
 
 	using System;
 	using System.Globalization;
@@ -30,10 +29,6 @@
 	using NHibernate;
 	using NHibernateWrapper.NHibernate;
 	using log4net;
-
-	#endregion using
-
-	#region class MvcApplication
 
 	public class MvcApplication : HttpApplication {
 		public static ISession CurrentSession {
@@ -252,10 +247,6 @@
 		private static SafeILog ms_oLog;
 	} // class MvcApplication
 
-	#endregion class MvcApplication
-
-	#region class Iso8601DateTimeBinder
-
 	public class Iso8601DateTimeBinder : DefaultModelBinder {
 		public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext) {
 			var name = bindingContext.ModelName;
@@ -275,5 +266,4 @@
 		} // parseIso8601Date
 	} // class Iso8601DateTimeBinder
 
-	#endregion class Iso8601DateTimeBinder
 } // namespace

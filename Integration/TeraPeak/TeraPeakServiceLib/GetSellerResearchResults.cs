@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Xml.Serialization;
 using EzBob.TeraPeakServiceLib.Requests.SellerResearch;
 
@@ -41,7 +41,6 @@ namespace EzBob.TeraPeakServiceLib
 
 		[XmlElement( "ApiAccountInfo" )]
 		public QueryResultApiInfo ApiAccountInfo { get; set; }
-
 
 		public int GetCallsRemaining()
 		{
@@ -103,7 +102,6 @@ namespace EzBob.TeraPeakServiceLib
 		{
 			return string.Format( "[ {0} - {1} ]", StartDate, EndDate );
 		}
-
 
 	}
 

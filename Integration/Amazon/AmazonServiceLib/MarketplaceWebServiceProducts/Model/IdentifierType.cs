@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class IdentifierType
     {
-    
+
         private  ASINIdentifier marketplaceASINField;
         private  SellerSKUIdentifier SKUIdentifierField;
 
@@ -41,8 +39,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.marketplaceASINField = value; }
         }
 
-
-
         /// <summary>
         /// Sets the MarketplaceASIN property
         /// </summary>
@@ -54,8 +50,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if MarketplaceASIN property is set
         /// </summary>
@@ -64,9 +58,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.marketplaceASINField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the SKUIdentifier property.
@@ -77,8 +68,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.SKUIdentifierField ; }
             set { this.SKUIdentifierField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the SKUIdentifier property
@@ -91,8 +80,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SKUIdentifier property is set
         /// </summary>
@@ -102,11 +89,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this.SKUIdentifierField != null;
         }
 
-
-
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -115,7 +97,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -167,8 +148,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

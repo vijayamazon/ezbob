@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using com.yodlee.sampleapps.datatypes;
 
@@ -10,7 +10,7 @@ namespace com.yodlee.sampleapps
 	public class DisplayInvestmentData : ApplicationSuper
 	{
 		DataServiceService dataService;
-		
+
 		public DisplayInvestmentData()
 		{
 			dataService = new DataServiceService();
@@ -33,7 +33,7 @@ namespace com.yodlee.sampleapps
 			ContainerCriteria cc = new ContainerCriteria();
 			cc.dataExtent = dataExtent;
 			cc.containerType = ContainerTypes.INVESTMENT;
-			
+
 			// Create a list of Container Criteria
 			object[] list = {cc};
 
@@ -45,7 +45,7 @@ namespace com.yodlee.sampleapps
 
 			// Get ItemSummary
 			object[] itemSummaries = dataService.getItemSummaries1(userContext, sr);
-			
+
 			// Verify that there is an ItemSummary
 			if(itemSummaries == null || itemSummaries.Length == 0) 
 			{
@@ -125,7 +125,7 @@ namespace com.yodlee.sampleapps
 						System.Console.WriteLine("\t\tTotal Unvested Balance: "+ investment.totalUnvestedBalance.amount );
 						System.Console.WriteLine("\t\tMargin Balance: "+ investment.marginBalance.amount );
 						System.Console.WriteLine("\t\tlastUpdated: " + UtcToDateTime(investment.lastUpdated.Value) );
-						
+
 						// HoldingData
 						object[] holdings = investment.holdings;
 						if (holdings == null || holdings.Length == 0) 
@@ -180,7 +180,6 @@ namespace com.yodlee.sampleapps
 						}
 						// End HoldingData
 
-
 						// InvestmentTransactionData
 						object[] investTransactions = investment.investmentTransactions;
 						if (investTransactions == null || investTransactions.Length == 0) 
@@ -206,12 +205,12 @@ namespace com.yodlee.sampleapps
 							}
 						}
 						// End InvestmentTransactionData
-					
+
 					}
 				}
 				// End InvestmentData
 			}
-			
+
 /*
 			// Get AccountHistory
 			object[] acctHistories = itemData.accountHistory;

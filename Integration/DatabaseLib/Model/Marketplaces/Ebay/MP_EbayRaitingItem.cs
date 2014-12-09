@@ -1,4 +1,4 @@
-using EZBob.DatabaseLib.DatabaseWrapper.EbayFeedbackData;
+﻿using EZBob.DatabaseLib.DatabaseWrapper.EbayFeedbackData;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
@@ -7,7 +7,6 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual int Id { get; set; }
 		public virtual MP_EbayFeedback EbayFeedback { get; set; }
 		public virtual MP_AnalysisFunctionTimePeriod TimePeriod { get; set; }
-
 
 		public virtual EbayRaitingInfo ItemAsDescribed { get; set; }
 		public virtual EbayRaitingInfo Communication { get; set; }

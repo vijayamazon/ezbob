@@ -6,9 +6,6 @@
 	using JetBrains.Annotations;
 
 	public class LoadCustomerMarketplaceSecurityData : AStrategy {
-		#region public
-
-		#region constructor
 
 		public LoadCustomerMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : this(nCustomerID, "", null, oDB, oLog) {
 		} // constructor
@@ -28,31 +25,15 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "LoadCustomerMarketplaceSecurityData"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Result = m_oSp.Fill<ResultRow>();
 		} // Execute
 
-		#endregion method Execute
-
-		#region Result
-
 		public List<ResultRow> Result { get; private set; } // Result
-
-		#endregion Result
-
-		#region class ResultRow
 
 		public class ResultRow : AResultRow {
 			public int CustomerMarketplaceID { get; set; }
@@ -63,15 +44,7 @@
 			public Guid InternalID { get; set; }
 		} // ResultRow
 
-		#endregion class ResultRow
-
-		#endregion public
-
-		#region private
-
 		private readonly SpLoadCustomerMarketplaceSecurityData m_oSp;
-
-		#region class SpLoadCustomerMarketplaceSecurityData
 
 		private class SpLoadCustomerMarketplaceSecurityData : AStoredProc {
 			public SpLoadCustomerMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
@@ -86,8 +59,6 @@
 			[UsedImplicitly]
 			public int CustomerID { get; set; }
 
-			#region property DisplayName
-
 			[UsedImplicitly]
 			public string DisplayName {
 				get { return string.IsNullOrWhiteSpace(m_sDisplayName) ? null : m_sDisplayName; }
@@ -95,10 +66,6 @@
 			} // DisplayName
 
 			private string m_sDisplayName;
-
-			#endregion property DisplayName
-
-			#region property InternalID
 
 			[UsedImplicitly]
 			public Guid? InternalID {
@@ -108,11 +75,7 @@
 
 			private Guid? m_oInternalID;
 
-			#endregion property InternalID
 		} // class SpLoadCustomerMarketplaceSecurityData
 
-		#endregion class SpLoadCustomerMarketplaceSecurityData
-
-		#endregion private
 	} // class LoadCustomerMarketplaceSecurityData
 } // namespace

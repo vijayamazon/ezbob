@@ -3,13 +3,8 @@
 	using Ezbob.Database;
 
 	public class BrokerData : CustomerData {
-		#region constructor
 
 		public BrokerData(AStrategy oStrategy, int nBrokerID, AConnection oDB) : base(oStrategy, nBrokerID, oDB) {} // constructor
-
-		#endregion constructor
-
-		#region method Load
 
 		public override void Load() {
 			BrokerID = 0;
@@ -36,10 +31,6 @@
 				throw new StrategyWarning(Strategy, "Failed to find a broker by id " + RequestedID);
 		} // Load
 
-		#endregion method Load
-
-		#region properties
-
 		public virtual int BrokerID {
 			get { return Id; } // get
 			protected set { Id = value; } // set
@@ -57,6 +48,5 @@
 
 		public virtual string FirmName { get; set; } // FirmName
 
-		#endregion properties
 	} // class CustomerData
 } // namespace

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 
 namespace EzBob.CommonLib.TrapForThrottlingLogic
@@ -16,7 +16,6 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 		private readonly TimeSpan _RunWithIntervalInSeconds;
 		private DateTime _LastRequest;
 
-			
 		internal TrapForThrottlingSimpleWait( string name, int requestQuota, RequestQuoteTimePeriodType requestQuoteTimePeriodType )
 			:base(name)
 		{
@@ -39,7 +38,6 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 		{
 			get { return _RunWithIntervalInSeconds; }
 		}
-
 
 		private T InternalExecute<T>( Func<T> func, string actionName )
 		{
@@ -121,5 +119,4 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 		}
 	}
 
-	
 }

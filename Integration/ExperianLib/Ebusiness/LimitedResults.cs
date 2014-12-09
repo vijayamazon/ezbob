@@ -5,16 +5,9 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class LimitedResults : BusinessReturnData {
-		#region public
 
-		#region properties
-		
 		public decimal ExistingBusinessLoans { get; set; }
 		public SortedSet<string> Owners { get; protected set; }
-
-		#endregion properties
-
-		#region constructors
 
 		public LimitedResults(ExperianLtd oExperianLtd, bool bCacheHit) : base(oExperianLtd.ServiceLogID, oExperianLtd.ReceivedTime, bCacheHit) {
 			Owners = new SortedSet<string>();
@@ -26,25 +19,11 @@
 			Owners = new SortedSet<string>();
 		} // constructor
 
-		#endregion constructors
-
-		#region property IsLimited
-
 		public override bool IsLimited {
 			get { return true; }
 		} // IsLimited
 
-		#endregion property IsLimited
-
-		#region property RawExperianLtd
-
 		public virtual ExperianLtd RawExperianLtd { get; private set; }
-
-		#endregion property RawExperianLtd
-
-		#endregion public
-
-		#region private
 
 		private void Parse() {
 			BureauScore = RawExperianLtd.CommercialDelphiScore.HasValue
@@ -102,6 +81,5 @@
 				(DateTime.UtcNow - LastCheckDate.Value).TotalDays >= CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 		} // Parse
 
-		#endregion private
 	} // class LimitedResults
 } // namespace

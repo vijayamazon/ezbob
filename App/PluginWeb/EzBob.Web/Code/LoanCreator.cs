@@ -125,7 +125,6 @@
 			}
 
 			loan.AddTransaction(loanTransaction);
-			
 
 			var aprCalc = new APRCalculator();
 			loan.APR = (decimal)aprCalc.Calculate(loanAmount, loan.Schedule, fee, now);

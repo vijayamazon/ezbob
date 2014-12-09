@@ -12,13 +12,8 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.XmlUtils;
-	
-	#region class QuickOfferData
 
 	internal class QuickOfferData {
-		#region public
-
-		#region constructor
 
 		public QuickOfferData(QuickOfferConfigurationData qoc, AConnection oDB, ASafeLog oLog) {
 			Log = new SafeLog(oLog);
@@ -27,10 +22,6 @@
 			m_oExperianUtils = new ExperianUtils(oLog);
 			DB = oDB;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Load
 
 		public void Load(SafeReader oReader) {
 			FatalMsg = oReader["FatalMsg"];
@@ -54,15 +45,7 @@
 			Validate();
 		} // Load
 
-		#endregion method Load
-
-		#region property IsValid
-
 		public bool IsValid { get; private set; } // IsValid
-
-		#endregion property IsValid
-
-		#region method GetOffer
 
 		public QuickOfferModel GetOffer(bool bSaveOfferToDB, AConnection oDB, StrategyLog oLog) {
 			if (RequestedAmount < Cfg.MinOfferAmount) {
@@ -151,14 +134,6 @@
 			return oOffer;
 		} // GetOffer
 
-		#endregion method GetOffer
-
-		#endregion public
-
-		#region private
-
-		#region properties
-
 		private int CustomerID;
 		private decimal RequestedAmount;
 		private string CompanyRefNum;
@@ -166,7 +141,7 @@
 		private int Aml;
 		private string FirstName;
 		private string LastName;
-		
+
 		private QuickOfferEnabledStatus Enabled;
 		private decimal FundsAvailable;
 		private int LoanCount;
@@ -185,10 +160,6 @@
 		private readonly SafeLog Log;
 
 		private readonly QuickOfferConfigurationData Cfg;
-
-		#endregion properties
-
-		#region method Calculate
 
 		private decimal? Calculate() {
 			decimal nPct = Cfg.OfferAmountPct(BusinessScore);
@@ -213,7 +184,7 @@
 				Log.Debug("The offer is less than {0}, not offering.", Cfg.MinOfferAmount.ToString("C2", ci));
 				return null;
 			} // if
-			
+
 			decimal nOfferBeforeCap = (int)(Math.Round((RequestedAmount * Cfg.OfferCapPct) / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount);
 
 			decimal nCap = nOfferBeforeCap.Min(Cfg.ImmediateMaxAmount);
@@ -247,10 +218,6 @@
 
 			return nOffer;
 		} // Calculate
-
-		#endregion method Calculate
-
-		#region method Validate
 
 		private void Validate() {
 			if (!string.IsNullOrWhiteSpace(FatalMsg)) {
@@ -307,10 +274,6 @@
 
 			IsValid = true;
 		} // Validate
-
-		#endregion method Validate
-
-		#region method AreLoadedValid
 
 		private bool AreLoadedValid() {
 			if (!string.IsNullOrWhiteSpace(ErrorMsg)) {
@@ -371,10 +334,6 @@
 			return true;
 		} // AreLoadedValid
 
-		#endregion method AreLoadedValid
-
-		#region method IsThinFile
-
 		private bool IsThinFile() {
 			var experianConsumer = new LoadExperianConsumerData(CustomerID, null, null, DB, Log);
 			experianConsumer.Execute();
@@ -387,13 +346,9 @@
 			return false;
 		} // IsThinFile
 
-		#endregion method IsThinFile
-
 		private readonly ExperianUtils m_oExperianUtils;
 		private readonly AConnection DB;
 
-		#endregion private
 	} // class QuickOfferData
 
-	#endregion class QuickOfferData
 } // namespace EzBob.Backend.Strategies.QuickOffer

@@ -12,9 +12,6 @@
 	using JetBrains.Annotations;
 
 	public class SaveVatReturnData : AVatReturnStrategy {
-		#region public
-
-		#region constructor
 
 		public SaveVatReturnData(
 			int nCustomerMarketplaceID,
@@ -39,17 +36,9 @@
 			m_oRaw = new LoadVatReturnRawData(nCustomerMarketplaceID, DB, Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Save VAT return data"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			if (m_oSp.IsEmptyInput())
@@ -100,27 +89,15 @@
 			ElapsedTimeInfo.MergeData(oSummary.Stopper.ElapsedTimeInfo);
 		} // Execute
 
-		#endregion method Execute
-
-		#region property ElapsedTimeInfo
-
 		public ElapsedTimeInfo ElapsedTimeInfo { get { return m_oStopper.ElapsedTimeInfo; } } // ElapsedTimeInfo
-
-		#endregion property ElapsedTimeInfo
-
-		#endregion public
-
-		#region private
 
 		private readonly Stopper m_oStopper;
 		private readonly SpSaveVatReturnData m_oSp;
 		private readonly LoadVatReturnRawData m_oRaw;
 
-		#region class SpSaveVatReturnData
 		// ReSharper disable ValueParameterNotUsed
 
 		private class SpSaveVatReturnData : AStoredProc {
-			#region constructor
 
 			public SpSaveVatReturnData(AStrategy oStrategy, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				HistoryItems = new List<HistoryItem>();
@@ -128,10 +105,6 @@
 
 				m_oStrategy = oStrategy;
 			} // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
 				return
@@ -141,17 +114,9 @@
 					!IsEmptyInput();
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
-			#region method IsEmptyInput
-
 			public bool IsEmptyInput() {
 				return (VatReturnRecords.Count < 1) && (RtiTaxMonthRawData.Count < 1);
 			} // IsEmptyInput
-
-			#endregion method IsEmptyInput
-
-			#region method AddHistoryItem
 
 			private void AddHistoryItem(VatReturnRawData oDeletedItem) {
 				oDeletedItem.IsDeleted = true;
@@ -245,32 +210,14 @@
 				});
 			} // AddHistoryItem
 
-			#endregion method AddHistoryItem
-
-			#region DB arguments
-
-			#region property CustomerMarketplaceID
-
 			[UsedImplicitly]
 			public int CustomerMarketplaceID { get; set; } // CustomerMarketplaceID
-
-			#endregion property CustomerMarketplaceID
-
-			#region property HistoryRecordID
 
 			[UsedImplicitly]
 			public int HistoryRecordID { get; set; } // HistoryRecordID
 
-			#endregion property HistoryRecordID
-
-			#region property SourceID
-
 			[UsedImplicitly]
 			public int SourceID { get; set; } // SourceID
-
-			#endregion property SourceID
-
-			#region property Now
 
 			[UsedImplicitly]
 			public DateTime Now {
@@ -278,37 +225,17 @@
 				set { } // set, !!! DO NOT REMOVE, DO NOT MAKE PRIVATE !!!
 			} // Now
 
-			#endregion property Now
-
-			#region property VatReturnRecords
-
 			[UsedImplicitly]
 			public List<VatReturnRawData> VatReturnRecords { get; set; } // VatReturnRecords
-
-			#endregion property VatReturnRecords
-
-			#region property VatReturnEntries
 
 			[UsedImplicitly]
 			public List<Entry> VatReturnEntries { get; set; } // VatReturnEntries
 
-			#endregion property VatReturnEntries
-
-			#region property RtiTaxMonthRawData
-
 			[UsedImplicitly]
 			public List<RtiTaxMonthRawData> RtiTaxMonthRawData { get; set; } // RtiTaxMonthRawData
 
-			#endregion property RtiTaxMonthRawData
-
-			#region property HistoryItems
-
 			[UsedImplicitly]
 			public List<HistoryItem> HistoryItems { get; set; } // HistoryItems
-
-			#endregion property HistoryItems
-
-			#region property OldDeletedItems
 
 			[UsedImplicitly]
 			public List<int> OldDeletedItems {
@@ -317,12 +244,6 @@
 			} // HistoryItems
 
 			private readonly SortedSet<int> m_oOldDeletedItems; 
-
-			#endregion property OldDeletedItems
-
-			#endregion DB arguments
-
-			#region method ToString
 
 			public override string ToString() {
 				var os = new StringBuilder();
@@ -349,10 +270,6 @@
 				return os.ToString();
 			} // ToSring
 
-			#endregion method ToString
-
-			#region method InitEntries
-
 			public void InitEntries(VatReturnSourceType nSourceType) {
 				var lst = new List<Entry>();
 
@@ -373,10 +290,6 @@
 				VatReturnEntries = lst.ToList();
 			} // InitEntries
 
-			#endregion method InitEntries
-
-			#region class Entry
-
 			public class Entry {
 				[UsedImplicitly]
 				public Guid RecordInternalID { get; set; }
@@ -394,10 +307,6 @@
 					return string.Format("{0}: {1} = {2} {3}", RecordInternalID, BoxName, Amount, CurrencyCode);
 				} // ToString
 			} // class Entry
-
-			#endregion class Entry
-
-			#region class HistoryItem
 
 			public class HistoryItem {
 				[UsedImplicitly]
@@ -419,27 +328,16 @@
 				} // ToString
 			} // HistoryItem
 
-			#endregion class HistoryItem
-
-			#region private
-
 			private readonly AStrategy m_oStrategy;
-
-			#region method Delete
 
 			private VatReturnRawData Delete(VatReturnRawData oItem) {
 				m_oOldDeletedItems.Add(oItem.RecordID);
 				return oItem;
 			} // Delete
 
-			#endregion method Delete
-
-			#endregion private
 		} // class SpSaveVatReturnData
 
 		// ReSharper restore ValueParameterNotUsed
-		#endregion class SpSaveVatReturnData
 
-		#endregion private
 	} // class SaveVatReturnData
 } // namespace EzBob.Backend.Strategies.VatReturn

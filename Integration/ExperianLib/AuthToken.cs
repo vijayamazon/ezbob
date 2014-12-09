@@ -42,7 +42,6 @@
 			service.ClientCertificates.Add(certificate);
 			string response = service.STS(authBlock);
 
-
 			if (response != null && response.IndexOf("Error", StringComparison.Ordinal) < 0)
 			{
 				return new WaspToken(response);

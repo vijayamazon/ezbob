@@ -125,8 +125,6 @@ namespace Ezbob.Utils.dbutils
 			 string.Join("\n", oProcSql) + "\n\n";
 		} // GetCreateSp
 
-
-
 		private static string T2T(PropertyInfo oPropInfo)
 		{
 			if (oPropInfo.PropertyType == typeof(string))
@@ -134,10 +132,10 @@ namespace Ezbob.Utils.dbutils
 
 			if (oPropInfo.PropertyType == typeof(int?))
 				return "INT NULL";
-			
+
 			if (oPropInfo.PropertyType == typeof(int))
 				return "INT NOT NULL";
-			
+
 			if (oPropInfo.PropertyType == typeof(long?))
 				return "BIGINT NULL";
 

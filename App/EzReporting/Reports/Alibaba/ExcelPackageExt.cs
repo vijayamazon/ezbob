@@ -4,7 +4,6 @@
 	using OfficeOpenXml;
 
 	internal static class ExcelPackageExt {
-		#region method CreateSheet
 
 		public static ExcelWorksheet CreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, params string[] oColumnNames) {
 			var oSheet = oReport.Workbook.Worksheets.Add(sSheetName);
@@ -25,17 +24,9 @@
 			return oSheet;
 		} // CreateSheet
 
-		#endregion method CreateSheet
-
-		#region method FindSheet
-
 		public static ExcelWorksheet FindSheet(this ExcelPackage oReport, string sSheetName) {
 			return oReport.Workbook.Worksheets[sSheetName];
 		} // FindSheet
-
-		#endregion method FindSheet
-
-		#region method FindOrCreateSheet
 
 		public static ExcelWorksheet FindOrCreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, params string[] oColumnNames) {
 			return FindOrCreateSheet(oReport, sSheetName, bAddCustomerIDColumn, null, oColumnNames);
@@ -55,10 +46,6 @@
 			return ws;
 		} // FindOrCreateSheet
 
-		#endregion method FindOrCreateSheet
-
-		#region method AutoFitColumns
-
 		public static void AutoFitColumns(this ExcelPackage oReport) {
 			foreach (ExcelWorksheet oSheet in oReport.Workbook.Worksheets) {
 				int nColumn = 1;
@@ -70,6 +57,5 @@
 			} // for each sheet
 		} // AutoFitColumns
 
-		#endregion method AutoFitColumns
 	} // class ExcelPackageExt
 } // namespace

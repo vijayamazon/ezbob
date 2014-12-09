@@ -1,10 +1,9 @@
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Database {
-    
-    
+
     public class MP_AnalyisisFunctionMap : ClassMap<MP_AnalyisisFunction> {
-        
+
         public MP_AnalyisisFunctionMap() {
 			Table("MP_AnalyisisFunction");
 			Id(x => x.Id).GeneratedBy.Identity().Column("Id");

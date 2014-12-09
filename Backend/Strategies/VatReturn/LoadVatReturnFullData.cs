@@ -8,9 +8,6 @@
 	using Misc;
 
 	public class LoadVatReturnFullData : AStrategy {
-		#region public
-
-		#region constructor
 
 		public LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog)
 		{
@@ -20,17 +17,9 @@
 			BankStatementAnnualized = new BankStatementDataModel();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Load VAT return full data"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oRaw = new LoadVatReturnRawData(m_nCustomerMarketplaceID, DB, Log);
@@ -39,8 +28,6 @@
 			m_oSummary.Execute();
 
 		} // Execute
-
-		#endregion method Execute
 
 		public VatReturnRawData[] VatReturnRawData { get { return m_oRaw.VatReturnRawData; } }
 
@@ -51,10 +38,6 @@
 		public BankStatementDataModel BankStatement { get; private set; }
 
 		public BankStatementDataModel BankStatementAnnualized { get; private set; }
-
-		#endregion public
-
-		#region private
 
 		private LoadVatReturnRawData m_oRaw;
 		private LoadVatReturnSummary m_oSummary;
@@ -106,6 +89,5 @@
 			BankStatementAnnualized.FreeCashFlow = BankStatementAnnualized.Ebida - BankStatementAnnualized.ActualLoansRepayment;
 		} // CalculateBankStatements
 
-		#endregion private
 	} // class LoadVatReturnFullData
 } // namespace EzBob.Backend.Strategies.VatReturn

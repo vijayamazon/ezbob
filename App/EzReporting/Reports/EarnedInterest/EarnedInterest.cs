@@ -8,9 +8,6 @@
 	using Reports;
 
 	public class EarnedInterest : SafeLog {
-		#region public
-
-		#region enum WorkingMode
 
 		public enum WorkingMode {
 			/// <summary>
@@ -45,10 +42,6 @@
 			AccountingLoanBalance,
 		} // enum WorkingMode
 
-		#endregion enum WorkingMode
-
-		#region constructor
-
 		public EarnedInterest(
 			AConnection oDB,
 			WorkingMode nMode,
@@ -79,10 +72,6 @@
 			m_bAccountingMode = bAccountingMode;
 		} // constructor
 
-		#endregion constructor
-
-		#region method Run
-
 		public SortedDictionary<int, decimal> Run() {
 			switch (m_nMode) {
 			case WorkingMode.ByIssuedLoans:
@@ -110,22 +99,10 @@
 
 			return ProcessLoans();
 		} // Run
- 
-		#endregion method Run
-
-		#region property VerboseLogging
 
 		public bool VerboseLogging { get; set; }
 
-		#endregion property VerboseLogging
-
 		public CustomerStatusHistory CustomerStatusHistory { get; private set; }
-
-		#endregion public
-
-		#region private
-
-		#region method FillFreezeIntervals
 
 		private void FillFreezeIntervals() {
 			m_oDB.ForEachRowSafe(
@@ -151,10 +128,6 @@
 				CommandSpecies.StoredProcedure
 			);
 		} // FillFreezeIntervals
-
-		#endregion method FillFreezeIntervals
-
-		#region method FillCustomerStatuses
 
 		private void FillCustomerStatuses() {
 			CustomerStatusHistory = new CustomerStatusHistory(null, m_oDateEnd, m_oDB);
@@ -193,10 +166,6 @@
 				} // for each status change
 			} // for each customer
 		} // FillCustomerStatuses
-
-		#endregion method FillCustomerStatuses
-
-		#region method ProcessLoans
 
 		private SortedDictionary<int, decimal> ProcessLoans() {
 			m_oDB.ForEachRowSafe(
@@ -264,10 +233,6 @@
 			return oRes;
 		} // ProcessLoans
 
-		#endregion method ProcessLoans
-
-		#region method FillForPeriod
-
 		private void FillForPeriod() {
 			m_oDB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
@@ -289,10 +254,6 @@
 
 			Info("{0} loans, date range: {1} - {2}", m_oLoans.Count, m_oDateStart, m_oDateEnd);
 		} // FillForPeriod
-
-		#endregion method FillForPeriod
-
-		#region method FillBySp
 
 		private void FillBySp(string sSpName, bool bKeepStartDate, bool bKeepEndDate) {
 			DateTime oDateStart = DateTime.Now.AddYears(1980);
@@ -328,10 +289,6 @@
 			Info("{0} loans, date range: {1} - {2}", m_oLoans.Count, m_oDateStart, m_oDateEnd);
 		} // FillBySp
 
-		#endregion method FillBySp
-
-		#region fields
-
 		private readonly SortedDictionary<int, LoanData> m_oLoans;
 		private readonly SortedDictionary<int, InterestFreezePeriods> m_oFreezePeriods;
 		private readonly SortedDictionary<int, BadPeriods> m_oBadPeriods;
@@ -345,8 +302,5 @@
 
 		private readonly bool m_bAccountingMode;
 
-		#endregion fields
-
-		#endregion private
 	} // class EarnedInterest
 } // namespace

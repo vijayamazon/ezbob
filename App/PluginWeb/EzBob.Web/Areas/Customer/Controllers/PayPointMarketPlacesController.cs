@@ -53,7 +53,6 @@
 			return Json(payPoints, JsonRequestBehavior.AllowGet);
 		}
 
-		
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]

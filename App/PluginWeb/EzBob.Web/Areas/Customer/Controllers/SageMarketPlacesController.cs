@@ -86,7 +86,6 @@
 				}
 				log.Info("Successfully received access token");
 
-
 				var marketPlace = SaveSage(oEsi, accessTokenContainer, approvalToken);
 				m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, marketPlace.Id, true, _customer.Id);
 

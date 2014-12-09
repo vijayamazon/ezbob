@@ -20,9 +20,6 @@
 	using Newtonsoft.Json;
 
 	public class CGMarketPlacesController : Controller {
-		#region public
-
-		#region constructor
 
 		public CGMarketPlacesController(
 			IEzbobWorkplaceContext context,
@@ -37,10 +34,6 @@
 			m_oServiceClient = new ServiceClient();
 		} // constructor
 
-		#endregion constructor
-
-		#region action Accounts (account list by type)
-
 		public JsonResult Accounts(string atn) {
 			var oVsi = Configuration.Instance.GetVendorInfo(atn);
 
@@ -52,10 +45,6 @@
 				JsonRequestBehavior.AllowGet
 			);
 		} // Accounts
-
-		#endregion action Accounts (account list by type)
-
-		#region action Accounts (add new account)
 
 		[Ajax]
 		[HttpPost]
@@ -87,10 +76,6 @@
 			return oState.Model;
 		} // Accounts
 
-		#endregion action Accounts (add new account)
-
-		#region action Update
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -111,14 +96,6 @@
 			} // try
 		} // Update
 
-		#endregion action Update
-
-		#endregion public
-
-		#region private
-
-		#region class AddAccountState
-
 		private class AddAccountState {
 			public VendorInfo VendorInfo;
 			public AccountData AccountData;
@@ -136,10 +113,6 @@
 				CustomerMarketPlace = null;
 			} // constructor
 		} // class AddAccountState
-
-		#endregion class AddAccountState
-
-		#region method ValidateModel
 
 		private AddAccountState ValidateModel(AccountModel model) {
 			var oResult = new AddAccountState();
@@ -176,10 +149,6 @@
 
 			return oResult;
 		} // ValidateModel
-
-		#endregion method ValidateModel
-
-		#region method ValidateAccount
 
 		private void ValidateAccount(AddAccountState oState, AccountModel model) {
 			try {
@@ -219,10 +188,6 @@
 			} // try
 		} // ValidateAccount
 
-		#endregion method ValidateAccount
-
-		#region method SaveMarketplace
-
 		private int SaveMarketplace(AddAccountState oState, AccountModel model) {
 			int nResult = -1;
 
@@ -251,10 +216,6 @@
 			return nResult;
 		} // SaveMarketplace
 
-		#endregion method SaveMarketplace
-		
-		#region method CreateError
-
 		private JsonResult CreateError(Exception ex) {
 			return CreateError(ex.Message);
 		} // CreateError
@@ -263,23 +224,11 @@
 			return Json(new { error = sErrorMsg }, JsonRequestBehavior.AllowGet);
 		} // CreateError
 
-		#endregion method CreateError
-
-		#region property ViewError
-
 		private JsonResult ViewError { set {
 			ViewData["error"] = JsonConvert.SerializeObject(value);
 		} } // ViewError
 
-		#endregion property ViewError
-
-		#region property ViewModel
-
 		private string ViewModel { set { ViewData["model"] = value ?? "null"; } } // ViewModel
-
-		#endregion property ViewModel
-
-		#region fields
 
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly MarketPlaceRepository _mpTypes;
@@ -289,8 +238,5 @@
 
 		private static readonly SafeILog ms_oLog = new SafeILog(typeof(CGMarketPlacesController));
 
-		#endregion fields
-
-		#endregion private
 	} // class CGMarketPlacesController
 } // namespace

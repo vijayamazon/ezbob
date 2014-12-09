@@ -3,7 +3,6 @@
 	using Ezbob.Logger;
 
 	public abstract partial class AConnection : SafeLog {
-		#region with iteration procedure
 
 		public virtual void ForEachRowSafe(ConnectionWrapper oConnectionToUse, Action<SafeReader> oAction, string sQuery, params QueryParameter[] aryParams) {
 			if (ReferenceEquals(oAction, null))
@@ -38,10 +37,6 @@
 			ForEachRowSafe(oConnectionToUse, oFunc, sQuery, nSpecies, aryParams);
 		} // ForEachRowSafe
 
-		#endregion with iteration procedure
-
-		#region with iteration function
-
 		public virtual void ForEachRowSafe(ConnectionWrapper oConnectionToUse, Func<SafeReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
@@ -74,6 +69,5 @@
 			);
 		} // ForEachRowSafe
 
-		#endregion with iteration function
 	} // AConnection
 } // namespace Ezbob.Database

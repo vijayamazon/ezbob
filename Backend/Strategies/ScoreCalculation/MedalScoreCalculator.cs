@@ -141,7 +141,6 @@
 					dict[Parameter.EzbobNumOfEarlyRepayments].Score * 100);
 		}
 
-
 		private void CalcDelta(Dictionary<Parameter, Weight> dict)
 		{
 			decimal finalWeightsFixedWeightParameterSum = 0M;

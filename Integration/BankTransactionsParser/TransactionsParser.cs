@@ -39,7 +39,6 @@
 					csvContext = XlsToCsv(new MemoryStream(context));
 				}
 
-
 				if (csvContext == null)
 				{
 					return new ParsedBankAccount { Error = "Failed to convert file to csv" };
@@ -81,7 +80,6 @@
 				return null;
 			}
 		}
-
 
 		public string XlsToCsv(string filePath)
 		{
@@ -169,7 +167,6 @@
 			return null;
 		}
 
-
 		public byte[] XlsToCsv(Stream file)
 		{
 			Workbook book = Workbook.Load(file);
@@ -256,7 +253,6 @@
 		{
 			record.Add(String.Format("{0}{1}{0}", '"', s));
 		}
-
 
 		/// <summary>
 		/// Assumes file isn't massive
@@ -431,7 +427,6 @@
 
 			throw new Exception(String.Format("Failed to parse number {0}", decimalStr));
 		}
-
 
 		private bool IsHeader(string[] row)
 		{

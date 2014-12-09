@@ -24,7 +24,6 @@ namespace EzBob.Tests
             _calculator = new LoanScheduleCalculator();
             _calculator.Calculate(1000, _loanOriginal, new DateTime(2012, 10, 21));
 
-
             _builder = new ChangeLoanDetailsModelBuilder();
         }
 

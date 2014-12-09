@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Text;
 using MarketplaceWebService.Attributes;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
@@ -29,14 +28,13 @@ namespace MarketplaceWebService.Model
     [MarketplaceWebServiceAttribute(RequestType = RequestType.DEFAULT, ResponseType = ResponseType.DEFAULT)]
     public class UpdateReportAcknowledgementsRequest
     {
-    
+
         private String marketplaceField;
 
         private String merchantField;
 
         private  IdList reportIdListField;
         private Boolean? acknowledgedField;
-
 
         /// <summary>
         /// Gets and sets the Marketplace property.
@@ -48,8 +46,6 @@ namespace MarketplaceWebService.Model
             get { return this.marketplaceField ; }
             set { this.marketplaceField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Marketplace property
@@ -63,8 +59,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Marketplace property is set
         /// </summary>
@@ -76,7 +70,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Merchant property.
         /// </summary>
@@ -86,8 +79,6 @@ namespace MarketplaceWebService.Model
             get { return this.merchantField ; }
             set { this.merchantField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Merchant property
@@ -100,8 +91,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Merchant property is set
         /// </summary>
@@ -112,7 +101,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ReportIdList property.
         /// </summary>
@@ -122,8 +110,6 @@ namespace MarketplaceWebService.Model
             get { return this.reportIdListField ; }
             set { this.reportIdListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ReportIdList property
@@ -136,8 +122,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ReportIdList property is set
         /// </summary>
@@ -146,9 +130,6 @@ namespace MarketplaceWebService.Model
         {
             return this.reportIdListField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the Acknowledged property.
@@ -159,8 +140,6 @@ namespace MarketplaceWebService.Model
             get { return this.acknowledgedField.GetValueOrDefault() ; }
             set { this.acknowledgedField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Acknowledged property
@@ -173,8 +152,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Acknowledged property is set
         /// </summary>
@@ -184,10 +161,6 @@ namespace MarketplaceWebService.Model
             return  this.acknowledgedField.HasValue;
 
         }
-
-
-
-
 
     }
 

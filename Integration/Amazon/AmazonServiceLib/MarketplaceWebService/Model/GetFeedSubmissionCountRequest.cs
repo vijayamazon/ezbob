@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Text;
 using MarketplaceWebService.Attributes;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
@@ -29,7 +28,7 @@ namespace MarketplaceWebService.Model
     [MarketplaceWebServiceAttribute(RequestType = RequestType.DEFAULT, ResponseType = ResponseType.DEFAULT)]
     public class GetFeedSubmissionCountRequest
     {
-    
+
         private String marketplaceField;
 
         private String merchantField;
@@ -39,7 +38,6 @@ namespace MarketplaceWebService.Model
         private DateTime? submittedFromDateField;
 
         private DateTime? submittedToDateField;
-
 
         /// <summary>
         /// Gets and sets the Marketplace property.
@@ -51,8 +49,6 @@ namespace MarketplaceWebService.Model
             get { return this.marketplaceField ; }
             set { this.marketplaceField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Marketplace property
@@ -66,8 +62,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Marketplace property is set
         /// </summary>
@@ -79,7 +73,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Merchant property.
         /// </summary>
@@ -89,8 +82,6 @@ namespace MarketplaceWebService.Model
             get { return this.merchantField ; }
             set { this.merchantField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Merchant property
@@ -103,8 +94,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Merchant property is set
         /// </summary>
@@ -115,7 +104,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the FeedTypeList property.
         /// </summary>
@@ -125,8 +113,6 @@ namespace MarketplaceWebService.Model
             get { return this.feedTypeListField ; }
             set { this.feedTypeListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the FeedTypeList property
@@ -139,8 +125,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FeedTypeList property is set
         /// </summary>
@@ -149,9 +133,6 @@ namespace MarketplaceWebService.Model
         {
             return this.feedTypeListField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the FeedProcessingStatusList property.
@@ -162,8 +143,6 @@ namespace MarketplaceWebService.Model
             get { return this.feedProcessingStatusListField ; }
             set { this.feedProcessingStatusListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the FeedProcessingStatusList property
@@ -176,8 +155,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FeedProcessingStatusList property is set
         /// </summary>
@@ -186,9 +163,6 @@ namespace MarketplaceWebService.Model
         {
             return this.feedProcessingStatusListField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the SubmittedFromDate property.
@@ -199,8 +173,6 @@ namespace MarketplaceWebService.Model
             get { return this.submittedFromDateField.GetValueOrDefault() ; }
             set { this.submittedFromDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SubmittedFromDate property
@@ -213,8 +185,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SubmittedFromDate property is set
         /// </summary>
@@ -225,7 +195,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the SubmittedToDate property.
         /// </summary>
@@ -235,8 +204,6 @@ namespace MarketplaceWebService.Model
             get { return this.submittedToDateField.GetValueOrDefault() ; }
             set { this.submittedToDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SubmittedToDate property
@@ -249,8 +216,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SubmittedToDate property is set
         /// </summary>
@@ -260,10 +225,6 @@ namespace MarketplaceWebService.Model
             return  this.submittedToDateField.HasValue;
 
         }
-
-
-
-
 
     }
 

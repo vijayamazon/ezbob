@@ -7,25 +7,15 @@
 		public int PeriodLength;
 		public decimal OriginalInterest;
 
-		#region constructor
-
 		public InterestData(DateTime oDate, decimal nOriginalInterest) {
 			PeriodLength = 0;
 			Date = oDate;
 			OriginalInterest = nOriginalInterest;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Interest
-
 		public decimal Interest {
 			get { return OriginalInterest / DaysInMonth; }
 		} // Interest
-
-		#endregion property Interest
-
-		#region property DaysInMonth
 
 		private int DaysInMonth {
 			get {
@@ -33,10 +23,6 @@
 				return DateTime.DaysInMonth(d.Year, d.Month);
 			} // get
 		} // DaysInMonth
-
-		#endregion property DaysInMonth
-
-		#region method ToStirng
 
 		public override string ToString() {
 			return string.Format(
@@ -48,8 +34,6 @@
 				PeriodLength.ToString("N0", ms_oCulture)
 			);
 		} // ToString
-
-		#endregion method ToStirng
 
 		private static readonly CultureInfo ms_oCulture = new CultureInfo("en-GB", false);
 	} // class InterestData

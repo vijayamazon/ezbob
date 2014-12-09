@@ -15,7 +15,6 @@
 		IncludeExceptionDetailInFaults = true
 	)]
 	public partial class EzServiceImplementation : IEzServiceAdmin, IEzService, IDisposable {
-		#region static constructor
 
 		static EzServiceImplementation() {
 			ms_oActiveActions = new SortedDictionary<Guid, ActionMetaData>();
@@ -26,12 +25,6 @@
 			ms_bNewInstancesAllowed = true;
 		} // static constructor
 
-		#endregion static constructor
-
-		#region public
-
-		#region constructor
-
 		public EzServiceImplementation(EzServiceInstanceRuntimeData oData) {
 			if (!NewInstancesAllowed)
 				throw new FaultException("Cannot create " + InstanceName + " instance: new instances are disabled.");
@@ -41,17 +34,9 @@
 			Log.Msg("{0} instance created.", InstanceName);
 		} // constructor
 
-		#endregion constructor
-
-		#region method IDisposable.Dispose
-
 		public void Dispose() {
 			Log.Msg("EzService instance disposed.");
 		} // Dispose
-
-		#endregion method IDisposable.Dispose
-
-		#region property Log
 
 		public ASafeLog Log {
 			get {
@@ -64,17 +49,9 @@
 
 		private ASafeLog m_oTheLog;
 
-		#endregion property Log
-
-		#region property DB
-
 		public AConnection DB {
 			get { return ReferenceEquals(m_oData, null) ? null : m_oData.DB; } // get
 		} // DB
-
-		#endregion property DB
-
-		#region method Execute
 
 		public ActionMetaData Execute<TStrategy>(int? nCustomerID, int? nUserID, params object[] args) where TStrategy : AStrategy {
 			try {
@@ -210,14 +187,6 @@
 			} // try
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
-		#region method ExecuteSync
-
 		private ActionMetaData ExecuteSync<T>(int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
 			T oInstance;
 			return ExecuteSync(out oInstance, nCustomerID, nUserID, args);
@@ -302,10 +271,6 @@
 			} // try
 		} // ExecuteSync
 
-		#endregion method ExecuteSync
-
-		#region property NewInstancesAllowed
-
 		private bool NewInstancesAllowed {
 			get {
 				bool b;
@@ -323,10 +288,6 @@
 			} // set
 		} // NewInstancesAllowed
 
-		#endregion property NewInstancesAllowed
-
-		#region method SaveActionStatus
-
 		private void SaveActionStatus(ActionMetaData amd, ActionStatus nNewStatus) {
 			if (amd == null)
 				return;
@@ -341,25 +302,13 @@
 			} // if
 		} // SaveActionStatus
 
-		#endregion method SaveActionStatus
-
-		#region method NewAsync
-
 		private ActionMetaData NewAsync(string sActionName, ActionStatus status = ActionStatus.InProgress, string comment = null, int? nCustomerID = null, int? nUserID = null) {
 			return CreateActionMetaData(sActionName, false, status, comment, nCustomerID, nUserID);
 		} // NewAsync
 
-		#endregion method NewAsync
-
-		#region method NewSync
-
 		private ActionMetaData NewSync(string sActionName, ActionStatus status = ActionStatus.InProgress, string comment = null, int? nCustomerID = null, int? nUserID = null) {
 			return CreateActionMetaData(sActionName, true, status, comment, nCustomerID, nUserID);
 		} // NewSync
-
-		#endregion method NewSync
-
-		#region method CreateActionMetaData
 
 		private ActionMetaData CreateActionMetaData(string sActionName, bool bIsSynchronous, ActionStatus status, string comment, int? nCustomerID, int? nUserID) {
 			var amd = ActionMetaData.Create(InstanceID, sActionName, DB, Log, bIsSynchronous, status, comment, nCustomerID, nUserID);
@@ -373,29 +322,15 @@
 			return amd;
 		} // CreateActionMetaData
 
-		#endregion method CreateActionMetaData
-
-		#region properties and fields
-
 		private readonly EzServiceInstanceRuntimeData m_oData;
-
-		#region property InstanceName
 
 		private string InstanceName {
 			get { return ReferenceEquals(m_oData, null) ? string.Empty : m_oData.InstanceName; } // get
 		} // InstanceName
 
-		#endregion property InstanceName
-
-		#region property InstanceID
-
 		private int InstanceID {
 			get { return ReferenceEquals(m_oData, null) ? 0 : m_oData.InstanceID; } // get
 		} // InstanceID
-
-		#endregion property InstanceID
-
-		#region static fields
 
 		private static readonly SortedDictionary<Guid, ActionMetaData> ms_oActiveActions;
 		private static readonly object ms_oLockActiveActions;
@@ -404,10 +339,5 @@
 		private static bool ms_bNewInstancesAllowed;
 		private static readonly object ms_oLockNewInstancesAllowed;
 
-		#endregion static fields
-
-		#endregion properties and fields
-
-		#endregion private
 	} // class EzServiceImplementation
 } // namespace EzService

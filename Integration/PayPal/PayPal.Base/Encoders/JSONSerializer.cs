@@ -1,4 +1,4 @@
-namespace PayPal.Platform.SDK
+﻿namespace PayPal.Platform.SDK
 {
 	using System;
 	using System.Reflection;
@@ -115,11 +115,11 @@ namespace PayPal.Platform.SDK
                             if ( obj != null && obj.GetType() == typeof(DictionaryEntry) ) 
                             {
                                 DictionaryEntry respTable = (DictionaryEntry)obj;
-                                
+
                                 if (respTable.Value.GetType() == typeof(ArrayList))
                                     {
                                         ArrayList respList = (ArrayList)respTable.Value;
-                                        
+
                                         if (respList != null && respList.Count > 0 )
                                         {
                                             if (respList[0].GetType() == typeof(Hashtable))
@@ -138,16 +138,14 @@ namespace PayPal.Platform.SDK
                      if (responseNewHash != null && responseNewHash.Count > 0)
                      {
                          responseHash = responseNewHash ;
-                    
+
                      }
-                       
 
                     }else if( result1[fieldInfo.Name] != null && result1[fieldInfo.Name].GetType() == typeof(ArrayList))
                     {
                         errorList = (ArrayList)result1[fieldInfo.Name];
                     }
-                    
-                    
+
                     if ( errorList != null && isFault )
                      {
                             if (responseHash != null )
@@ -214,7 +212,7 @@ namespace PayPal.Platform.SDK
                     object obj2 = Activator.CreateInstance(type2);
                     type = type2;
                     isResponse = true;
-                    
+
                     if ( isFault ) 
                     {
                         if (responseHash != null)
@@ -310,7 +308,7 @@ namespace PayPal.Platform.SDK
                                 type.GetProperty(key).SetValue(objConvert, value1, null);
                                 break;
                             }
-                           
+
                         }
                     }
 
@@ -968,7 +966,7 @@ namespace PayPal.Platform.SDK
             }
             return true;
         }
-        
+
         public static string ToJavaScriptObjectNotation(object obj)
         {
             result = null;
@@ -990,7 +988,6 @@ namespace PayPal.Platform.SDK
 
         private static void writeToBrowser(FieldInfo[] finfo, object obj)
         {
-
 
             int countplus = 0;
             foreach (FieldInfo fieldInfo in finfo)
@@ -1077,7 +1074,6 @@ namespace PayPal.Platform.SDK
 
                                 }
 
-
                             }
                         }
 
@@ -1088,5 +1084,4 @@ namespace PayPal.Platform.SDK
         }
     }
 }
-
 

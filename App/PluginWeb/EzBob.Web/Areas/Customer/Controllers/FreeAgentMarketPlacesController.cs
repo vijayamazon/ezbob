@@ -23,7 +23,6 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly DatabaseDataHelper _helper;
 
-
 		public FreeAgentMarketPlacesController(
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,

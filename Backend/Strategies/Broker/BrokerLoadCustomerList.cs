@@ -6,12 +6,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class BrokerLoadCustomerList
-
 	public class BrokerLoadCustomerList : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerLoadCustomerList(string sContactEmail, int nBrokerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSpCustomers = new SpBrokerLoadCustomerList(DB, Log) {
@@ -28,17 +23,9 @@
 			m_oLeads = new List<BrokerCustomerEntry>();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Broker load customer list"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oSpCustomers.ForEachResult<SpBrokerLoadCustomerList.ResultRow>(row => {
@@ -80,10 +67,6 @@
 			});
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Customers
-
 		public List<BrokerCustomerEntry> Customers {
 			get {
 				List<BrokerCustomerEntry> lst = m_oCustomers.Values.ToList();
@@ -92,12 +75,6 @@
 			} // get
 		} // Customers
 
-		#endregion property Customers
-
-		#endregion public
-
-		#region private
-
 		private readonly SortedDictionary<int, BrokerCustomerEntry> m_oCustomers;
 		private readonly List<BrokerCustomerEntry> m_oLeads;
 
@@ -105,36 +82,17 @@
 
 		private readonly SpBrokerLoadLeadList m_oSpLeads;
 
-		#region class SpBrokerLoadCustomerList
-
 		private class SpBrokerLoadCustomerList : AStoredProc {
-			#region constructor
 
 			public SpBrokerLoadCustomerList(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
 				return !string.IsNullOrWhiteSpace(ContactEmail) || (BrokerID > 0);
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
-			#region property ContactEmail
-
 			public string ContactEmail { get; set; }
 
-			#endregion property ContactEmail
-
-			#region property BrokerID
-
 			public int BrokerID { get; set; }
-
-			#endregion property BrokerID
-
-			#region class ResultRow
 
 			public class ResultRow : AResultRow {
 				public int CustomerID { get; set; }
@@ -151,41 +109,19 @@
 				public decimal SetupFee { get; set; }
 			} // class ResultRow
 
-			#endregion class ResultRow
 		} // class SpBrokerLoadCustomerList
 
-		#endregion class SpBrokerLoadCustomerList
-
-		#region class SpBrokerLoadLeadList
-
 		private class SpBrokerLoadLeadList : AStoredProc {
-			#region constructor
 
 			public SpBrokerLoadLeadList(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
 				return !string.IsNullOrWhiteSpace(ContactEmail) || (BrokerID > 0);
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
-			#region property ContactEmail
-
 			public string ContactEmail { get; set; }
 
-			#endregion property ContactEmail
-
-			#region property BrokerID
-
 			public int BrokerID { get; set; }
-
-			#endregion property BrokerID
-
-			#region class ResultRow
 
 			public class ResultRow : AResultRow {
 				public int LeadID { get; set; }
@@ -198,13 +134,8 @@
 				public bool IsDeleted { get; set; }
 			} // class ResultRow
 
-			#endregion class ResultRow
 		} // class SpBrokerLoadLeadList
 
-		#endregion class SpBrokerLoadLeadList
-
-		#endregion private
 	} // class BrokerLoadCustomerList
 
-	#endregion class BrokerLoadCustomerList
 } // namespace EzBob.Backend.Strategies.Broker

@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -22,7 +22,6 @@ using System.Text;
 using System.IO;
 using MarketplaceWebService.Attributes;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
@@ -30,7 +29,7 @@ namespace MarketplaceWebService.Model
     [MarketplaceWebServiceAttribute(RequestType = RequestType.DEFAULT, ResponseType = ResponseType.STREAMING)]
     public class GetReportRequest
     {
-    
+
         private String marketplaceField;
 
         private String merchantField;
@@ -63,8 +62,6 @@ namespace MarketplaceWebService.Model
             set { this.marketplaceField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the Marketplace property
         /// </summary>
@@ -77,8 +74,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Marketplace property is set
         /// </summary>
@@ -90,7 +85,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Merchant property.
         /// </summary>
@@ -100,8 +94,6 @@ namespace MarketplaceWebService.Model
             get { return this.merchantField ; }
             set { this.merchantField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Merchant property
@@ -114,8 +106,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Merchant property is set
         /// </summary>
@@ -125,7 +115,6 @@ namespace MarketplaceWebService.Model
             return  this.merchantField != null;
 
         }
-
 
         /// <summary>
         /// Gets and sets the ReportId property.
@@ -137,8 +126,6 @@ namespace MarketplaceWebService.Model
             set { this.reportIdField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the ReportId property
         /// </summary>
@@ -149,8 +136,6 @@ namespace MarketplaceWebService.Model
             this.reportIdField = reportId;
             return this;
         }
-
-
 
         /// <summary>
         /// Checks if ReportId property is set

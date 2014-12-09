@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using EZBob.DatabaseLib.Common;
 using Iesi.Collections.Generic;
 
@@ -7,9 +7,8 @@ namespace EZBob.DatabaseLib.Model.Database
 	public class MP_EkmOrderItem
 	{
 		public virtual int Id { get; set; }
- 
-		public virtual MP_EkmOrder Order { get; set; }
 
+		public virtual MP_EkmOrder Order { get; set; }
 
         public virtual string OrderNumber { get; set; }
         public virtual int? CustomerId { get; set; }
@@ -22,6 +21,6 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual DateTime OrderDateIso { get; set; }
         public virtual string OrderStatus { get; set; }
         public virtual string OrderStatusColour { get; set; }
-		
+
 	}
 }

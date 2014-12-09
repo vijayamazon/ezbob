@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 
 namespace Integration.ChannelGrabberConfig {
-	#region class FieldInfo
 
 	public class FieldInfo : ICloneable {
-		#region public
-
-		#region constructor
 
 		public FieldInfo() {
 			PropertyName = "";
@@ -20,10 +16,6 @@ namespace Integration.ChannelGrabberConfig {
 			ValidationMessages = new List<ValidationMessage>();
 		} // constructor
 
-		#endregion constructor
-
-		#region properties
-
 		public string PropertyName { get; set; }
 		public string NodeName { get; set; }
 		public int UniqueIDPosition { get; set; }
@@ -32,10 +24,6 @@ namespace Integration.ChannelGrabberConfig {
 		public string Default { get; set; }
 		public ValidationRules ValidationRules { get; set; }
 		public List<ValidationMessage> ValidationMessages { get; set; }
-
-		#endregion properties
-
-		#region method Validate
 
 		public void Validate() {
 			PropertyName = (PropertyName ?? "").Trim();
@@ -72,10 +60,6 @@ namespace Integration.ChannelGrabberConfig {
 			ValidationMessages.ForEach( vm => vm.Validate() );
 		} // Validate
 
-		#endregion method Validate
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format(
 				"{0} <-> {1} = {2}\n\t\tDisplay as {4} with caption{5}\n\t\tDefault: {3}",
@@ -87,10 +71,6 @@ namespace Integration.ChannelGrabberConfig {
 				Caption
 			);
 		} // ToString
-
-		#endregion method ToString
-
-		#region method Clone
 
 		public object Clone() {
 			var fi = new FieldInfo {
@@ -110,10 +90,6 @@ namespace Integration.ChannelGrabberConfig {
 			return fi;
 		} // Clone
 
-		#endregion method Clone
-
-		#endregion public
 	} // class FieldInfo
 
-	#endregion class FieldInfo
 } // namespace Integration.ChannelGrabberConfig

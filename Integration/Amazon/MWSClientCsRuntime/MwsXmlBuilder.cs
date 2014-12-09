@@ -29,7 +29,6 @@ namespace MWSClientCsRuntime
             writer = XmlWriter.Create(builder, settings);
         }
 
-
         public MwsXmlBuilder() : this(false) { }
 
         public MwsXmlBuilder(bool toWrap, ConformanceLevel conformanceLevel)

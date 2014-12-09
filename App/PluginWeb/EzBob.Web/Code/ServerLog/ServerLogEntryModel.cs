@@ -10,8 +10,6 @@
 		public string eventTime { get; set; }
 		public string eventID { get; set; }
 
-		#region method Write
-
 		public void Write(ASafeLog oLog) {
 			DateTime oTime;
 
@@ -35,6 +33,5 @@
 			);
 		} // Save
 
-		#endregion method Write
 	} // class ServerLogEntryModel
 } // namespace

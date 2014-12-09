@@ -34,14 +34,12 @@
 			return LookFor(accStatusIndicator, ms_oAccountStatuses);
 		} // GetAccountStatusString
 
-
 		private static CaisStatus LookFor(string sNeedle, SortedDictionary<string, CaisStatus> oHaystack) {
 			if (string.IsNullOrEmpty(sNeedle)) {
 				return new CaisStatus(){ LongDescription = string.Format("Status: ({0}) not found", sNeedle)};
 			}
 			return oHaystack.ContainsKey(sNeedle) ? oHaystack[sNeedle] : new CaisStatus() { LongDescription = string.Format("Status: ({0}) not found", sNeedle) };
 		} // LookFor
-
 
 		private static readonly SortedDictionary<string, CaisStatus> ms_oAccountStatuses;
 

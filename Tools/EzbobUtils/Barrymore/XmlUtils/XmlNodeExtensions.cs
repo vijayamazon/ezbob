@@ -2,7 +2,6 @@
 	using System.Xml;
 
 	public static class XmlNodeExtensions {
-		#region method Offspring
 
 		public static XmlNode Offspring(this XmlNode oRoot, NameList oChildNames) {
 			if (ReferenceEquals(oRoot, null))
@@ -30,6 +29,5 @@
 			return Offspring(oRoot, new NameList(sChildNames));
 		} // Offspring
 
-		#endregion method Offspring
 	} // class XmlNodeExtensions
 } // namespace Ezbob.Utils.XmlUtils

@@ -9,12 +9,11 @@
 //------------------------------------------------------------------------------
 
 namespace LandRegistryLib.LREnquiryServiceTestNS {
-    
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://epdv2_0.ws.bg.lr.gov/", ConfigurationName="LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0Service")]
     public interface PropertyDescriptionEnquiryV2_0Service {
-        
+
         // CODEGEN: Parameter 'return' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.FaultContractAttribute(typeof(string), Action="", Name="SOAPEngineSystemException")]
@@ -22,7 +21,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         LandRegistryLib.LREnquiryServiceTestNS.searchPropertiesResponse searchProperties(LandRegistryLib.LREnquiryServiceTestNS.searchPropertiesRequest request);
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -30,11 +29,11 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class RequestSearchByPropertyDescriptionV2_0Type : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private Q1IdentifierType idField;
-        
+
         private Q1ProductType productField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public Q1IdentifierType ID {
@@ -46,7 +45,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("ID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Q1ProductType Product {
@@ -58,9 +57,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Product");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -68,7 +67,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -76,9 +75,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class Q1IdentifierType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private Q1TextType messageIDField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public Q1TextType MessageID {
@@ -90,9 +89,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("MessageID");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -100,7 +99,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -108,9 +107,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class Q1TextType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -122,9 +121,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -132,7 +131,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -140,9 +139,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1PostcodeZoneType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TextType1 postcodeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public TextType1 Postcode {
@@ -154,9 +153,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Postcode");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -164,7 +163,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -172,9 +171,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(TypeName="TextType", Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class TextType1 : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -186,9 +185,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -196,7 +195,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -204,19 +203,19 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(TypeName="Q1AddressType", Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1AddressType1 : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TextType1 buildingNameField;
-        
+
         private TextType1 subBuildingNameField;
-        
+
         private TextType1 buildingNumberField;
-        
+
         private TextType1 streetNameField;
-        
+
         private TextType1 cityNameField;
-        
+
         private Q1PostcodeZoneType postcodeZoneField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public TextType1 BuildingName {
@@ -228,7 +227,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("BuildingName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public TextType1 SubBuildingName {
@@ -240,7 +239,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("SubBuildingName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public TextType1 BuildingNumber {
@@ -252,7 +251,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("BuildingNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public TextType1 StreetName {
@@ -264,7 +263,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("StreetName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public TextType1 CityName {
@@ -276,7 +275,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("CityName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public Q1PostcodeZoneType PostcodeZone {
@@ -288,9 +287,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("PostcodeZone");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -298,7 +297,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -306,9 +305,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class TenureCodeType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TenureCodeContentType valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public TenureCodeContentType Value {
@@ -320,9 +319,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -330,66 +329,66 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public enum TenureCodeContentType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("0")]
         Item0,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("10")]
         Item10,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("20")]
         Item20,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("30")]
         Item30,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("40")]
         Item40,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("100")]
         Item100,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("110")]
         Item110,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("120")]
         Item120,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("130")]
         Item130,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("140")]
         Item140,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("150")]
         Item150,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("160")]
         Item160,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("170")]
         Item170,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -397,9 +396,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1TenureInformationType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TenureCodeType tenureTypeCodeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public TenureCodeType TenureTypeCode {
@@ -411,9 +410,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("TenureTypeCode");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -421,7 +420,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -429,15 +428,15 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1TitleType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TextType1 titleNumberField;
-        
+
         private TextType1 descriptionField;
-        
+
         private Q1TenureInformationType tenureInformationField;
-        
+
         private Q1AddressType1 addressField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public TextType1 TitleNumber {
@@ -449,7 +448,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("TitleNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public TextType1 Description {
@@ -461,7 +460,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Description");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public Q1TenureInformationType TenureInformation {
@@ -473,7 +472,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("TenureInformation");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public Q1AddressType1 Address {
@@ -485,9 +484,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Address");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -495,7 +494,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -503,9 +502,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1MessageDetailsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TextType1 descriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public TextType1 Description {
@@ -517,9 +516,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Description");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -527,7 +526,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -535,13 +534,13 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1ResultsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private Q1MessageDetailsType messageDetailsField;
-        
+
         private Q1ExternalReferenceType1 externalReferenceField;
-        
+
         private Q1TitleType[] titleField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public Q1MessageDetailsType MessageDetails {
@@ -553,7 +552,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("MessageDetails");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Q1ExternalReferenceType1 ExternalReference {
@@ -565,7 +564,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("ExternalReference");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Title", Order=2)]
         public Q1TitleType[] Title {
@@ -577,9 +576,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Title");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -587,7 +586,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -595,13 +594,13 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(TypeName="Q1ExternalReferenceType", Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1ExternalReferenceType1 : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TextType1 referenceField;
-        
+
         private TextType1 allocatedByField;
-        
+
         private TextType1 descriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public TextType1 Reference {
@@ -613,7 +612,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Reference");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public TextType1 AllocatedBy {
@@ -625,7 +624,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("AllocatedBy");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public TextType1 Description {
@@ -637,9 +636,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Description");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -647,7 +646,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -655,11 +654,11 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1ValidationErrorsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TextType1 codeField;
-        
+
         private TextType1 descriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public TextType1 Code {
@@ -671,7 +670,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Code");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public TextType1 Description {
@@ -683,9 +682,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Description");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -693,7 +692,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -701,15 +700,15 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1RejectionResponseType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private TextType1 reasonField;
-        
+
         private TextType1 codeField;
-        
+
         private TextType1 otherDescriptionField;
-        
+
         private Q1ValidationErrorsType[] validationErrorsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public TextType1 Reason {
@@ -721,7 +720,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Reason");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public TextType1 Code {
@@ -733,7 +732,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Code");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public TextType1 OtherDescription {
@@ -745,7 +744,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("OtherDescription");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ValidationErrors", Order=3)]
         public Q1ValidationErrorsType[] ValidationErrors {
@@ -757,9 +756,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("ValidationErrors");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -767,7 +766,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -775,11 +774,11 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1RejectionType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private Q1ExternalReferenceType1 externalReferenceField;
-        
+
         private Q1RejectionResponseType rejectionResponseField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public Q1ExternalReferenceType1 ExternalReference {
@@ -791,7 +790,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("ExternalReference");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Q1RejectionResponseType RejectionResponse {
@@ -803,9 +802,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("RejectionResponse");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -813,7 +812,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -821,9 +820,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class DateTimeType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private System.DateTime valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public System.DateTime Value {
@@ -835,9 +834,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -845,7 +844,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -853,13 +852,13 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class IdentifierType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string schemeAgencyNameField;
-        
+
         private string schemeNameField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string schemeAgencyName {
@@ -871,7 +870,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("schemeAgencyName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string schemeName {
@@ -883,7 +882,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("schemeName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute(DataType="normalizedString")]
         public string Value {
@@ -895,9 +894,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -905,7 +904,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -913,13 +912,13 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1AcknowledgementDetailsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private IdentifierType uniqueIDField;
-        
+
         private DateTimeType expectedResponseDateTimeField;
-        
+
         private TextType1 messageDescriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public IdentifierType UniqueID {
@@ -931,7 +930,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("UniqueID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public DateTimeType ExpectedResponseDateTime {
@@ -943,7 +942,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("ExpectedResponseDateTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public TextType1 MessageDescription {
@@ -955,9 +954,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("MessageDescription");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -965,7 +964,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -973,9 +972,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1AcknowledgementType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private Q1AcknowledgementDetailsType acknowledgementDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public Q1AcknowledgementDetailsType AcknowledgementDetails {
@@ -987,9 +986,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("AcknowledgementDetails");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -997,7 +996,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1005,9 +1004,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class ProductResponseCodeType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private ProductResponseCodeContentType valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public ProductResponseCodeContentType Value {
@@ -1019,9 +1018,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1029,30 +1028,30 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public enum ProductResponseCodeContentType {
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("0")]
         Item0,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("10")]
         Item10,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("20")]
         Item20,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("30")]
         Item30,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1060,15 +1059,15 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class Q1GatewayResponseType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private ProductResponseCodeType typeCodeField;
-        
+
         private Q1AcknowledgementType acknowledgementField;
-        
+
         private Q1RejectionType rejectionField;
-        
+
         private Q1ResultsType resultsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public ProductResponseCodeType TypeCode {
@@ -1080,7 +1079,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("TypeCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Q1AcknowledgementType Acknowledgement {
@@ -1092,7 +1091,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Acknowledgement");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public Q1RejectionType Rejection {
@@ -1104,7 +1103,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Rejection");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public Q1ResultsType Results {
@@ -1116,9 +1115,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Results");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1126,7 +1125,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1134,9 +1133,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0")]
     public partial class ResponseSearchByPropertyDescriptionV2_0Type : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private Q1GatewayResponseType gatewayResponseField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public Q1GatewayResponseType GatewayResponse {
@@ -1148,9 +1147,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("GatewayResponse");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1158,7 +1157,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1166,17 +1165,17 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class Q1AddressType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string buildingNameField;
-        
+
         private string buildingNumberField;
-        
+
         private string streetNameField;
-        
+
         private string cityNameField;
-        
+
         private string postcodeZoneField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string BuildingName {
@@ -1188,7 +1187,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("BuildingName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string BuildingNumber {
@@ -1200,7 +1199,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("BuildingNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string StreetName {
@@ -1212,7 +1211,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("StreetName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string CityName {
@@ -1224,7 +1223,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("CityName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string PostcodeZone {
@@ -1236,9 +1235,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("PostcodeZone");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1246,7 +1245,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1254,9 +1253,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class Q1SubjectPropertyType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private Q1AddressType addressField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public Q1AddressType Address {
@@ -1268,9 +1267,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Address");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1278,7 +1277,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1286,13 +1285,13 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class Q1CustomerReferenceType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string referenceField;
-        
+
         private TextType allocatedByField;
-        
+
         private TextType descriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Reference {
@@ -1304,7 +1303,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Reference");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public TextType AllocatedBy {
@@ -1316,7 +1315,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("AllocatedBy");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public TextType Description {
@@ -1328,9 +1327,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Description");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1338,7 +1337,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1346,9 +1345,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class TextType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -1360,9 +1359,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1370,7 +1369,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1378,13 +1377,13 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class Q1ExternalReferenceType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string referenceField;
-        
+
         private TextType allocatedByField;
-        
+
         private TextType descriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Reference {
@@ -1396,7 +1395,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Reference");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public TextType AllocatedBy {
@@ -1408,7 +1407,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("AllocatedBy");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public TextType Description {
@@ -1420,9 +1419,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("Description");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1430,7 +1429,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18060")]
     [System.SerializableAttribute()]
@@ -1438,13 +1437,13 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestSearchByPropertyDescriptionV2_0")]
     public partial class Q1ProductType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private Q1ExternalReferenceType externalReferenceField;
-        
+
         private Q1CustomerReferenceType customerReferenceField;
-        
+
         private Q1SubjectPropertyType subjectPropertyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public Q1ExternalReferenceType ExternalReference {
@@ -1456,7 +1455,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("ExternalReference");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public Q1CustomerReferenceType CustomerReference {
@@ -1468,7 +1467,7 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("CustomerReference");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public Q1SubjectPropertyType SubjectProperty {
@@ -1480,9 +1479,9 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
                 this.RaisePropertyChanged("SubjectProperty");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1490,75 +1489,75 @@ namespace LandRegistryLib.LREnquiryServiceTestNS {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="searchProperties", WrapperNamespace="http://epdv2_0.ws.bg.lr.gov/", IsWrapped=true)]
     public partial class searchPropertiesRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://epdv2_0.ws.bg.lr.gov/", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public LandRegistryLib.LREnquiryServiceTestNS.RequestSearchByPropertyDescriptionV2_0Type arg0;
-        
+
         public searchPropertiesRequest() {
         }
-        
+
         public searchPropertiesRequest(LandRegistryLib.LREnquiryServiceTestNS.RequestSearchByPropertyDescriptionV2_0Type arg0) {
             this.arg0 = arg0;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="searchPropertiesResponse", WrapperNamespace="http://epdv2_0.ws.bg.lr.gov/", IsWrapped=true)]
     public partial class searchPropertiesResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://epdv2_0.ws.bg.lr.gov/", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public LandRegistryLib.LREnquiryServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type @return;
-        
+
         public searchPropertiesResponse() {
         }
-        
+
         public searchPropertiesResponse(LandRegistryLib.LREnquiryServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type @return) {
             this.@return = @return;
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface PropertyDescriptionEnquiryV2_0ServiceChannel : LandRegistryLib.LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0Service, System.ServiceModel.IClientChannel {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PropertyDescriptionEnquiryV2_0ServiceClient : System.ServiceModel.ClientBase<LandRegistryLib.LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0Service>, LandRegistryLib.LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0Service {
-        
+
         public PropertyDescriptionEnquiryV2_0ServiceClient() {
         }
-        
+
         public PropertyDescriptionEnquiryV2_0ServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
-        
+
         public PropertyDescriptionEnquiryV2_0ServiceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public PropertyDescriptionEnquiryV2_0ServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public PropertyDescriptionEnquiryV2_0ServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         LandRegistryLib.LREnquiryServiceTestNS.searchPropertiesResponse LandRegistryLib.LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0Service.searchProperties(LandRegistryLib.LREnquiryServiceTestNS.searchPropertiesRequest request) {
             return base.Channel.searchProperties(request);
         }
-        
+
         public LandRegistryLib.LREnquiryServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type searchProperties(LandRegistryLib.LREnquiryServiceTestNS.RequestSearchByPropertyDescriptionV2_0Type arg0) {
             LandRegistryLib.LREnquiryServiceTestNS.searchPropertiesRequest inValue = new LandRegistryLib.LREnquiryServiceTestNS.searchPropertiesRequest();
             inValue.arg0 = arg0;

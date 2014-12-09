@@ -1,11 +1,10 @@
-using System;
-
+﻿using System;
 
 namespace com.paypal.sdk.core
 {
     public class OAuthException :Exception
     {
-        #region Priavte Members
+
         /// <summary>
         /// Short message
         /// </summary>
@@ -14,10 +13,6 @@ namespace com.paypal.sdk.core
         /// Long message
         /// </summary>
         private string OauthExpLongMessage;
-
-        #endregion
-
-        #region Constructors
 
         public OAuthException(string OauthExceptionMessage, Exception exception)
         {
@@ -28,10 +23,6 @@ namespace com.paypal.sdk.core
         {
             this.OauthExpMessage = OauthExceptionMessage;
         }
-
-        #endregion
-
-        #region Public Properties
 
         /// <summary>
         /// Short message.
@@ -63,7 +54,5 @@ namespace com.paypal.sdk.core
             }
         }
 
-        #endregion
-       
     }
 }

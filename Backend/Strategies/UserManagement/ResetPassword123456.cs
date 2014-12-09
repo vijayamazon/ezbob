@@ -16,9 +16,6 @@
 	} // enum PasswordResetTarget
 
 	public class ResetPassword123456 : AStrategy {
-		#region public
-
-		#region constructor
 
 		public ResetPassword123456(
 			int nTargetID,
@@ -33,17 +30,9 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "ResetPassword123456"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Log.Debug("Resetting password for user {0}...", m_oSpLoad.TargetID);
@@ -79,18 +68,10 @@
 				oEmailSender.Execute();
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly LoadEmailForPasswordReset m_oSpLoad;
 		private readonly PasswordResetTarget m_nTargetType;
 
 		private const string ThePassword = "123456";
-
-		#region class LoadEmailForPasswordReset
 
 		private class LoadEmailForPasswordReset : AStoredProcedure {
 			public LoadEmailForPasswordReset(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -102,10 +83,6 @@
 			[UsedImplicitly]
 			public int TargetID { get; set; }
 		} // class LoadEmailForPasswordReset
-
-		#endregion class LoadEmailForPasswordReset
-
-		#region class SavePassword
 
 		private class SavePassword : AStoredProcedure {
 			public SavePassword(LoadEmailForPasswordReset oSpLoad, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
@@ -123,8 +100,5 @@
 			public string Password { get; set; }
 		} // class SavePassword
 
-		#endregion class SavePassword
-
-		#endregion private
 	} // class ResetPassword123456
 } // namespace

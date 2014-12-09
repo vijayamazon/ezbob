@@ -1,4 +1,4 @@
-namespace YodleeLib
+﻿namespace YodleeLib
 {
     using System;
     using System.Security.Cryptography;
@@ -49,8 +49,6 @@ namespace YodleeLib
         protected class QueryParameterComparer : IComparer<QueryParameter>
         {
 
-            #region IComparer<QueryParameter> Members
-
             public int Compare(QueryParameter x, QueryParameter y)
             {
                 if (x.Name == y.Name)
@@ -60,7 +58,6 @@ namespace YodleeLib
                 return String.CompareOrdinal(x.Name, y.Name);
             }
 
-            #endregion
         }
 
         protected const string OAuthVersion = "1.0";

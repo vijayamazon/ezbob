@@ -33,7 +33,7 @@ namespace com.yodlee.sampleapps
             try
             {
                 Form form = itemManagement.getLoginFormCredentialsForItem(userContext, itemId, true);
-                
+
                 System.Console.WriteLine("\n" + SEPARATOR);
                 FormUtil.PrintFormStructureAsText(form);
                 System.Console.WriteLine(SEPARATOR + "\n");
@@ -87,7 +87,6 @@ namespace com.yodlee.sampleapps
             }
 
         }
-
 
         /// <summary>
         /// List all the accounts a user has.  The user is prompted to pick

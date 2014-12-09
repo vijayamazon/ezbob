@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -89,10 +89,9 @@ namespace EzBob.CommonLib
 
 		[XmlAttribute]		
 		public int CountRequestsExpectError { get; set; }
-		
+
 		[XmlAttribute]
 		public int TimeOutAfterRetryingExpiredInMinutes { get; set; }
-
 
 		public override string ToString()
 		{

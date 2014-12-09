@@ -5,18 +5,11 @@
 	using Ezbob.Logger;
 
 	public class DbCommands {
-		#region public
-
-		#region constructor
 
 		public DbCommands(AConnection oDB, ASafeLog oLog) {
 			m_oDB = oDB;
 			m_oLog = new SafeLog(oLog);
 		} // constructor
-
-		#endregion constructor
-
-		#region method GetSubscriberList
 
 		public List<Subscriber> GetSubscriberList(Constants.CampaignsType campaign, bool bIncludeTest) {
 			try {
@@ -93,10 +86,6 @@
 			} // try
 		} // GetSubscriberList
 
-		#endregion method GetSubscriberList
-
-		#region method AddCampaignClickStat
-
 		public void AddCampaignClickStat(CampaignClickStat campaignClickStat) {
 			m_oDB.ExecuteNonQuery("MC_AddCampaignClickStat",
 				new QueryParameter("@Title", campaignClickStat.Title),
@@ -108,23 +97,12 @@
 			);
 		} // AddCampaignClickStat
 
-		#endregion method AddCampaignClickStat
-
-		#region method DeleteCampaignClickStatsTable
-
 		public void DeleteCampaignClickStatsTable() {
 			m_oDB.ExecuteNonQuery("DELETE FROM MC_CampaignClicks");
 		} // DeleteCampaignClickStatsTable
 
-		#endregion method DeleteCampaignClickStatsTable
-
-		#region private
-
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 
-		#endregion private
-
-		#endregion public
 	} // class DbCommands
 } // namespace

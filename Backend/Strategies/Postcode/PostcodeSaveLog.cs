@@ -4,9 +4,6 @@
 	using Ezbob.Logger;
 
 	public class PostcodeSaveLog : AStrategy {
-		#region public
-
-		#region constructor
 
 		public PostcodeSaveLog(
 			string sRequestType,
@@ -28,31 +25,15 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Postcode save log"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly SpPostcodeSaveLog m_oSp;
-
-		#region class SpPostcodeSaveLog
 
 		private class SpPostcodeSaveLog : AStoredProc {
 			public SpPostcodeSaveLog(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -86,8 +67,5 @@
 			} // InsertDate
 		} // class SpPostcodeSaveLog
 
-		#endregion class SpPostcodeSaveLog
-
-		#endregion private
 	} // class PostcodeSaveLog
 } // namespace EzBob.Backend.Strategies.Postcode

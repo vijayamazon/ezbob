@@ -9,9 +9,6 @@
 	using Code.UiEvents;
 
 	public class UiActionController : Controller {
-		#region public
-
-		#region method Save
 
 		[HttpPost]
 		public JsonResult Save(string version, string history) {
@@ -22,7 +19,6 @@
 			catch (Exception ex) {
 				ms_oLog.Warn(ex, "Failed to deserialize history: {0}", history);
 			}
-			
 
 			if ((oHistory == null) || (oHistory.Count < 1)) {
 				ms_oLog.Warn("No data received, nothing done.");
@@ -59,14 +55,7 @@
 			return Json(new { result = "success", saved = oSavedPackages, failures = oFailedPackages });
 		} // Save
 
-		#endregion method Save
-
-		#endregion public
-
-		#region private
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(UiActionController));
 
-		#endregion private
 	} // class UiActionController
 } // namespace

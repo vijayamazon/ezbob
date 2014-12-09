@@ -1,5 +1,4 @@
-namespace EzBob.Web.Controllers {
-	#region using
+﻿namespace EzBob.Web.Controllers {
 
 	using System;
 	using System.Collections.Generic;
@@ -41,12 +40,7 @@ namespace EzBob.Web.Controllers {
 	using EZBob.DatabaseLib;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
-	#endregion using
-
 	public class AccountController : Controller {
-		#region public
-
-		#region constructor
 
 		public AccountController() {
 			m_oDatabaseHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
@@ -63,10 +57,6 @@ namespace EzBob.Web.Controllers {
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 			_whiteLabelProviderRepository = ObjectFactory.GetInstance <WhiteLabelProviderRepository>();
 		} // constructor
-
-		#endregion constructor
-
-		#region action AdminLogOn
 
 		public ActionResult AdminLogOn(string returnUrl) {
 			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"])) {
@@ -127,18 +117,10 @@ namespace EzBob.Web.Controllers {
 			return View(model);
 		} // AdminLogOn
 
-		#endregion action AdminLogOn
-
-		#region action LogOn
-
 		[IsSuccessfullyRegisteredFilter]
 		public ActionResult LogOn(string returnUrl) {
 			return View(new LogOnModel { ReturnUrl = returnUrl });
 		} // LogOn
-
-		#endregion action LogOn
-
-		#region action CustomerLogOn
 
 		[HttpPost]
 		[NoCache]
@@ -292,10 +274,6 @@ namespace EzBob.Web.Controllers {
 			return Json(new { success = false, errorMessage }, JsonRequestBehavior.AllowGet);
 		} // CustomerLogOn
 
-		#endregion action CustomerLogOn
-
-		#region action LogOff
-
 		public ActionResult LogOff() {
 			EndSession("LogOff customer");
 
@@ -309,19 +287,11 @@ namespace EzBob.Web.Controllers {
 			} // switch
 		} // LogOff
 
-		#endregion action LogOff
-
-		#region action LogOffUnderwriter
-
 		public ActionResult LogOffUnderwriter() {
 			EndSession("LogOff UW");
 
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		} // LogOffUnderwriter
-
-		#endregion action LogOffUnderwriter
-
-		#region action GetPropertyStatuses
 
 		[Ajax]
 		[HttpGet]
@@ -329,10 +299,6 @@ namespace EzBob.Web.Controllers {
 			PropertyStatusesActionResult propertyStatusesActionResult = m_oServiceClient.Instance.GetPropertyStatuses();
 			return Json(propertyStatusesActionResult.Groups, JsonRequestBehavior.AllowGet);
 		} // GetPropertyStatuses
-
-		#endregion action GetPropertyStatuses
-
-		#region action SignUp
 
 		[HttpPost]
 		[Ajax]
@@ -388,7 +354,7 @@ namespace EzBob.Web.Controllers {
 					throw new Exception("Failed to create user.");
 
 				Customer customer = null;
-				
+
 				var blm = new WizardBrokerLeadModel(Session);
 
 				new Transactional(
@@ -425,18 +391,10 @@ namespace EzBob.Web.Controllers {
 			} // try
 		} // SignUp
 
-		#endregion action SignUp
-
-		#region action ForgotPassword
-
 		public ActionResult ForgotPassword() {
 			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
 			return View("ForgotPassword");
 		} // ForgotPassword
-
-		#endregion action ForgotPassword
-
-		#region action QuestionForEmail
 
 		[CaptchaValidationFilter(Order = 999999)]
 		[Ajax]
@@ -458,10 +416,6 @@ namespace EzBob.Web.Controllers {
 				Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet) :
 				Json(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" }, JsonRequestBehavior.AllowGet);
 		} // QuestionForEmail
-
-		#endregion action QuestionForEmail
-
-		#region action RestorePassword
 
 		[Transactional]
 		public JsonResult RestorePassword(string email = "", string answer = "") {
@@ -486,10 +440,6 @@ namespace EzBob.Web.Controllers {
 			return Json(new { result = true }, JsonRequestBehavior.AllowGet);
 		} // RestorePassword
 
-		#endregion action RestorePassword
-
-		#region action Captcha
-
 		public ActionResult SimpleCaptcha() {
 			return View("SimpleCaptcha");
 		} // SimpleCaptcha
@@ -498,16 +448,12 @@ namespace EzBob.Web.Controllers {
 			return View("Recaptcha");
 		} // Recaptcha
 
-		#endregion action Captcha
-
-		#region action CheckingCompany
-
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
 		public JsonResult CheckingCompany(string postcode, string companyName, string filter, string refNum, int? customerId = null) {
 			ms_oLog.Debug("CheckingCompany cId:{0}, postcode:{1}, companuName:{2}, filter:{3}, refnum:{4}", customerId, postcode, companyName, filter, refNum);
-			
+
 			var nFilter = TargetResults.LegalStatus.DontCare;
 
 			switch (filter.ToUpper()) {
@@ -545,19 +491,11 @@ namespace EzBob.Web.Controllers {
 			} // try
 		} // CheckingCompany
 
-		#endregion action CheckingCompany
-
-		#region action GenerateMobileCode
-
 		[Ajax]
 		[HttpPost]
 		public bool GenerateMobileCode(string mobilePhone) {
 			return m_oServiceClient.Instance.GenerateMobileCode(mobilePhone).Value;
 		} // GenerateMobileCode
-
-		#endregion action GenerateMobileCode
-
-		#region action GetTwilioConfig
 
 		[HttpPost]
 		public JsonResult GetTwilioConfig() {
@@ -572,10 +510,6 @@ namespace EzBob.Web.Controllers {
 			}, JsonRequestBehavior.AllowGet);
 		} // GetTwilioConfig
 
-		#endregion action GetTwilioConfig
-
-		#region action LeadCreatePassword
-
 		[IsSuccessfullyRegisteredFilter]
 		[NoCache]
 		public ActionResult LeadCreatePassword(string sToken, string sFirstName, string sLastName, string sEmail) {
@@ -589,10 +523,6 @@ namespace EzBob.Web.Controllers {
 
 			return View("CreatePassword", oModel);
 		} // LeadCreatePassword
-
-		#endregion action LeadCreatePassword
-
-		#region action CreatePassword
 
 		[IsSuccessfullyRegisteredFilter]
 		[NoCache]
@@ -634,10 +564,6 @@ namespace EzBob.Web.Controllers {
 
 			return RedirectToAction("LogOn", "Account", new { Area = "" });
 		} // CreatePassword
-
-		#endregion action CreatePassword
-
-		#region action CustomerCreatePassword
 
 		[HttpPost]
 		[NoCache]
@@ -747,14 +673,6 @@ namespace EzBob.Web.Controllers {
 			return Json(new { success = true, broker = false, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
 		} // CustomerCreatePassword
 
-		#endregion action CustomerCreatePassword
-
-		#endregion public
-
-		#region private
-
-		#region method CreateUser
-
 		private MembershipCreateStatus CreateUser(string email, string password, string passwordQuestion, string passwordAnswer)
 		{
 			ms_oLog.Debug("Creating a user '{0}'...", email);
@@ -782,10 +700,6 @@ namespace EzBob.Web.Controllers {
 			ms_oLog.Debug("User '{0}' has been created.", email);
 			return status;
 		} // CreateUser
-
-		#endregion method CreateUser
-
-		#region method CreateCustomer
 
 		private Customer CreateCustomer(
 			string email,
@@ -883,7 +797,7 @@ namespace EzBob.Web.Controllers {
 			customer.ABTesting = GetAndRemoveCookie("ezbobab");
 			string visitTimes = GetAndRemoveCookie("sourceref_time");
 			customer.FirstVisitTime = HttpUtility.UrlDecode(visitTimes);
-			
+
 			if (Request.Cookies["istest"] != null)
 				customer.IsTest = true;
 
@@ -914,8 +828,6 @@ namespace EzBob.Web.Controllers {
 			return customer;
 		} // CreateCustomer
 
-		#endregion method CreateCustomer
-
 		private DateTime? ToDate(string dateStr) {
 			if (string.IsNullOrEmpty(dateStr))
 				return null;
@@ -944,8 +856,6 @@ namespace EzBob.Web.Controllers {
 
 			return null;
 		} // GetAndRemoveCookie
-
-		#region method ValidateUser
 
 		private MembershipCreateStatus ValidateUser(string username, string password) {
 			ms_oLog.Debug("Validating user '{0}' password...", username);
@@ -978,10 +888,6 @@ namespace EzBob.Web.Controllers {
 			return nStatus;
 		} // ValidateUser
 
-		#endregion method ValidateUser
-
-		#region method IsAutomaticTest
-
 		private bool IsAutomaticTest(string email) {
 			bool isAutomaticTest = false;
 
@@ -993,10 +899,6 @@ namespace EzBob.Web.Controllers {
 
 			return isAutomaticTest;
 		} // IsAutomaticTest
-
-		#endregion method IsAutomaticTest
-
-		#region method GenerateFakeTargetingData
 
 		private static List<CompanyInfo> GenerateFakeTargetingData(string companyName, string postcode) {
 			var data = new List<CompanyInfo>();
@@ -1024,10 +926,6 @@ namespace EzBob.Web.Controllers {
 			return data;
 		} // GenerateFakeTargetingData
 
-		#endregion method GenerateFakeTargetingData
-
-		#region method GetModelStateErrors
-
 		private JsonResult GetModelStateErrors(ModelStateDictionary modelStateDictionary) {
 			return Json(
 				new {
@@ -1040,10 +938,6 @@ namespace EzBob.Web.Controllers {
 				}, JsonRequestBehavior.AllowGet);
 		} // GetModelStateErrors
 
-		#endregion method GetModelStateErrors
-
-		#region enum LogOffMode
-
 		private enum LogOffMode {
 			[UsedImplicitly]
 			WebProd = 0,
@@ -1053,10 +947,6 @@ namespace EzBob.Web.Controllers {
 			SignUpOfEnv = 2
 		} // enum LogOffMode
 
-		#endregion enum LogOffMode
-
-		#region method RemoteIp
-
 		private string RemoteIp() {
 			string ip = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
 
@@ -1065,10 +955,6 @@ namespace EzBob.Web.Controllers {
 
 			return ip;
 		} // RemoteIp
-
-		#endregion method RemoteIp
-
-		#region method EndSession
 
 		private void EndSession(string comment) {
 			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId)) {
@@ -1092,10 +978,6 @@ namespace EzBob.Web.Controllers {
 			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
 		} // EndSession
 
-		#endregion method EndSession
-
-		#region fields
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(AccountController));
 
 		private readonly IUsersRepository m_oUsers;
@@ -1112,8 +994,5 @@ namespace EzBob.Web.Controllers {
 		private readonly AConnection m_oDB;
 		private readonly WhiteLabelProviderRepository _whiteLabelProviderRepository;
 
-		#endregion fields
-
-		#endregion private
 	} // class AccountController
 } // namespace

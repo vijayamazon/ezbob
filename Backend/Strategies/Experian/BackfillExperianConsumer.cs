@@ -12,23 +12,14 @@
 	using System.IO;
 
 	public class BackfillExperianConsumer : AStrategy {
-		#region constructor
 
 		public BackfillExperianConsumer(AConnection oDB, ASafeLog oLog)
 			: base(oDB, oLog) {
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "BackfillExperianConsumer"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			IEnumerable<SafeReader> lst = DB.ExecuteEnumerable("LoadServiceLogForConsumerBackfill", CommandSpecies.StoredProcedure);
@@ -88,7 +79,6 @@
 							new QueryParameter("@Surname", surname),
 							new QueryParameter("@Postcode", postCode),
 							new QueryParameter("@DateOfBirth", dateOfBirth), };
-							
 
 						if (p != null && p.Result != null) {
 							updateParams.Add(new QueryParameter("@Score", p.Result.BureauScore));
@@ -104,8 +94,6 @@
 				}
 			}
 		} // Execute
-
-		#endregion method Execute
 
 		private int? GetConsumerCaisBalance(IEnumerable<ExperianConsumerDataCais> cais) {
 			if (cais != null) {

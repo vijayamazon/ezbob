@@ -1,6 +1,5 @@
-using System;
+﻿using System;
 using System.Web.Services.Protocols;
-
 
 namespace com.yodlee.sampleapps
 {
@@ -17,7 +16,7 @@ namespace com.yodlee.sampleapps
             registerService.EnableDecompression = true;
             registerService.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + registerService.GetType().FullName;
 		}
-		
+
 		public void UnregisterUser(UserContext user)
 		{
 			registerService.unregister(user);
@@ -33,7 +32,6 @@ namespace com.yodlee.sampleapps
 
             // Create UserProfile
             UserProfile up = new UserProfile();
-            
 
             Entry[] upEntries = new Entry[4];
 
@@ -52,15 +50,14 @@ namespace com.yodlee.sampleapps
             Entry upEntry4 = new Entry();
             upEntry4.key = "COUNTRY";
             upEntry4.value = "US";
-            
-            
+
             upEntries[0] = upEntry1;
             upEntries[1] = upEntry2;
             upEntries[2] = upEntry3;
             upEntries[3] = upEntry4;
 
             up.values = upEntries;
-            
+
             NVPair singlePref = null;
             singlePref = new NVPair();
             singlePref.name = "com.yodlee.userprofile.LOCALE";
@@ -77,7 +74,6 @@ namespace com.yodlee.sampleapps
             obj1[0] = (object)"33444";
             pincodePref.values = obj1;
 
-
             NVPair[] nvPairs =  new NVPair[2];
 
             nvPairs[0] = singlePref;
@@ -90,7 +86,7 @@ namespace com.yodlee.sampleapps
             UserInfo1 ui = registerService.register3(getCobrandContext(), pc, up, nvPairs);            
             return ui.userContext;
         }
-        
+
 		/// <summary>
 		/// Obtains and changes the email of the registered user.
 		/// </summary>
@@ -108,7 +104,7 @@ namespace com.yodlee.sampleapps
 			newEmail.value           = newEmailAddress;
 			newEmail.displayName     = "EMAIL";
 			newEmail.isOptional      = false;
-			
+
 			registerService.updateEmail(userContext, newEmail);
 		}
 
@@ -126,7 +122,7 @@ namespace com.yodlee.sampleapps
             {
                 System.Console.WriteLine(soapEx.StackTrace);
                 throw new Exception("Error unregistering user: " + soapEx.Message);
-              
+
             }
 		}
 	}

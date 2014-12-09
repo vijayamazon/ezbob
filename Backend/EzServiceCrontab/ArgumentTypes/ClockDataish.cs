@@ -5,8 +5,6 @@
 	internal class ClockDataish : AType<DateTime?> {
 		public ClockDataish() : base("DateTime") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			DateTime nResult;
 
@@ -16,6 +14,5 @@
 			return Activator.CreateInstance(UnderlyingType);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class ClockDataish
 } // namespace

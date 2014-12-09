@@ -6,9 +6,6 @@
 	using OfficeOpenXml;
 
 	class Funnel : IAlibaba {
-		#region public
-
-		#region constructor
 
 		// ReSharper disable UnusedParameter.Local
 		// oDateEnd: for future use.
@@ -25,10 +22,6 @@
 			m_sBatchName = sBatchName;
 		} // constructor
 		// ReSharper restore UnusedParameter.Local
-
-		#endregion constructor
-
-		#region method Generate
 
 		public void Generate() {
 			m_oFunnel = new List<FunnelRow>();
@@ -63,15 +56,7 @@
 			CreateOneSheet(m_oRejectReasons, sPrefix + "Decline reasons", "Decline reason", "Count", "% of total");
 		} // Generate
 
-		#endregion method Generate
-
 		public ExcelPackage Report { get; private set; }
-
-		#endregion public
-
-		#region private
-
-		#region method CreateOneSheet
 
 		private void CreateOneSheet<T>(IEnumerable<T> oData, string sSheetName, params string[] aryColumnNames) where T : StrInt {
 			ExcelWorksheet oSheet = Report.CreateSheet(sSheetName, false, aryColumnNames);
@@ -82,12 +67,8 @@
 			oSheet.View.ShowGridLines = false;
 		} // CreateOneSheetName
 
-		#endregion method CreateOneSheet
-
 		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
-
-		#region method ProcessRow
 
 		private void ProcessRow(SafeReader sr) {
 			string sRowType = sr["RowType"];
@@ -115,8 +96,6 @@
 			} // switch
 		} // ProcessRow
 
-		#endregion method ProcessRow
-
 		private List<FunnelRow> m_oFunnel;
 		private List<RejectReasonRow> m_oRejectReasons;
 
@@ -124,15 +103,10 @@
 
 		private double m_nRejectReasonTotal;
 
-		#region enum RowTypes
-
 		private enum RowTypes {
 			Funnel,
 			RejectReason,
 		} // enum RowTypes
 
-		#endregion enum RowTypes
-
-		#endregion private
 	} // class Funnel
 } // namespace

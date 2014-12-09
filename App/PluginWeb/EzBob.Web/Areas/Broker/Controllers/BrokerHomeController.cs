@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
-	#region using
 
 	using System;
 	using System.Collections.Generic;
@@ -31,21 +30,13 @@
 	using PaymentServices.Calculators;
 	using EzBob.Web.Models;
 
-	#endregion using
-
 	public partial class BrokerHomeController : Controller {
-
-		#region constructor
 
 		public BrokerHomeController() {
 			m_oServiceClient = new ServiceClient();
 			m_oHelper = new BrokerHelper(m_oServiceClient, ms_oLog);
 
 		} // constructor
-
-		#endregion constructor
-
-		#region action Index (default)
 
 		// GET: /Broker/BrokerHome/
 		public ViewResult Index(string sourceref = "") {
@@ -81,10 +72,6 @@
 
 			return View("Index", oModel);
 		} // Index
-
-		#endregion action Index (default)
-
-		#region action Signup
 
 		[HttpPost]
 		[Ajax]
@@ -192,10 +179,6 @@
 			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties) { antiforgery_token = AntiForgery.GetHtml().ToString() };
 		} // Signup
 
-		#endregion action Signup
-
-		#region action Logoff
-
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -218,10 +201,6 @@
 			return new BrokerForJsonResult(bExplicitSuccess: false);
 		} // Logoff
 
-		#endregion action Logoff
-
-		#region action Login
-
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -242,10 +221,6 @@
 
 			return new PropertiesBrokerForJsonResult(oProperties: bp) { antiforgery_token = AntiForgery.GetHtml().ToString() };
 		} // Login
-
-		#endregion action Login
-
-		#region action AcceptTerms
 
 		[HttpPost]
 		[Ajax]
@@ -268,10 +243,6 @@
 
 			return new BrokerForJsonResult();
 		} // AcceptTerms
-
-		#endregion action AcceptTerms
-
-		#region action LoadSignedTerms
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -296,10 +267,6 @@
 			return new SignedTermsBrokerForJsonResult(sTerms: slar.Records[0], sSignedTime: slar.Records[1]);
 		} // LoadSignedTerms
 
-		#endregion action LoadSignedTerms
-
-		#region action RestorePassword
-
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -322,10 +289,6 @@
 
 			return new BrokerForJsonResult();
 		} // RestorePassword
-
-		#endregion action RestorePassword
-
-		#region action LoadProperties
 
 		[HttpGet]
 		[Ajax]
@@ -351,10 +314,6 @@
 			return new PropertiesBrokerForJsonResult(oProperties: oResult.Properties);
 		} // LoadProperties
 
-		#endregion action LoadProperties
-
-		#region action LoadCustomers
-
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -379,10 +338,6 @@
 			return new CustomerListBrokerForJsonResult(oCustomers: oResult.Customers);
 		} // LoadCustomers
 
-		#endregion action LoadCustomers
-
-		#region action LoadCustomerDetails
-
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -406,10 +361,6 @@
 
 			return new CustomerDetailsBrokerForJsonResult(oDetails: oDetails.Data, oPotentialSigners: oDetails.PotentialSigners);
 		} // LoadCustomerDetails
-
-		#endregion action LoadCustomerDetails
-
-		#region action LoadStaticData
 
 		[HttpGet]
 		[Ajax]
@@ -437,10 +388,6 @@
 
 			return Json(new { success = true, data = oResult, }, JsonRequestBehavior.AllowGet);
 		} // LoadStaticData
-
-		#endregion action LoadStaticData
-
-		#region action SaveCrmEntry
 
 		[HttpPost]
 		[Ajax]
@@ -495,10 +442,6 @@
 			return new BrokerForJsonResult(oResult.Value);
 		} // SaveCrmEntry
 
-		#endregion action SaveCrmEntry
-
-		#region action LoadCustomerFiles
-
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -522,10 +465,6 @@
 
 			return new FileListBrokerForJsonResult(oFileList: oFiles.Files);
 		} // LoadCustomerFiles
-
-		#endregion action LoadCustomerFiles
-
-		#region action HandleUploadFile
 
 		[HttpPost]
 		public JsonResult HandleUploadFile() {
@@ -591,10 +530,6 @@
 			return new BrokerForJsonResult(oErrorList.Count == 0 ? string.Empty : string.Join(" ", oErrorList));
 		} // HandleUploadFile
 
-		#endregion action HandleUploadFile
-
-		#region action DownloadCustomerFile
-
 		[HttpGet]
 		public FileResult DownloadCustomerFile(string sCustomerID, string sContactEmail, int nFileID) {
 			ms_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
@@ -630,10 +565,6 @@
 				FileDownloadName = oFile.Name,
 			};
 		} // DownloadCustomerFile
-
-		#endregion action DownloadCustomerFile
-
-		#region action DeleteCustomerFiles
 
 		[HttpPost]
 		[Ajax]
@@ -672,10 +603,6 @@
 			return new BrokerForJsonResult();
 		} // DeleteCustomerFiles
 
-		#endregion action DeleteCustomerFiles
-
-		#region action AddLead
-
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -698,10 +625,6 @@
 			return new BrokerForJsonResult();
 		} // AddLead
 
-		#endregion action AddLead
-
-		#region action SendInvitation
-
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -723,10 +646,6 @@
 
 			return new BrokerForJsonResult();
 		} // SendInvitation
-
-		#endregion action SendInvitation
-
-		#region action FillWizard
 
 		[HttpGet]
 		public System.Web.Mvc.ActionResult FillWizard(int? nLeadID, string sLeadEmail, string sContactEmail) {
@@ -794,10 +713,6 @@
 			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
 		} // FillWizard
 
-		#endregion action FillWizard
-
-		#region action FinishWizardLater
-
 		[HttpGet]
 		public System.Web.Mvc.ActionResult FinishWizardLater() {
 			var blm = new WizardBrokerLeadModel(Session);
@@ -832,10 +747,6 @@
 			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
 		} // FinishWizardLater
 
-		#endregion action FinishWizardLater
-
-		#region action DownloadFile
-
 		public System.Web.Mvc.ActionResult DownloadFile(string fid) {
 			if (string.IsNullOrWhiteSpace(fid)) {
 				ms_oLog.Warn("Broker download file request: file with no id.");
@@ -862,10 +773,6 @@
 
 			return HttpNotFound();
 		} // DownloadFile
-
-		#endregion action DownloadFile
-
-		#region action UpdatePassword
 
 		[HttpPost]
 		[Ajax]
@@ -914,10 +821,6 @@
 
 			return new BrokerForJsonResult();
 		} // UpdatePassword
-
-		#endregion action UpdatePassword
-
-		#region action SaveExperianDirector
 
 		[Ajax]
 		[HttpPost]
@@ -979,10 +882,6 @@
 			return new BrokerForJsonResult();
 		} // SaveExperianDirector
 
-		#endregion action SaveExperianDirector
-
-		#region action GetOffer
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -1036,9 +935,6 @@
 			return Json(loanOffer, JsonRequestBehavior.AllowGet);
 		}
 
-		#endregion action GetOffer
-
-		#region action TargetBusiness
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
@@ -1077,6 +973,6 @@
 				throw;
 			} // try
 		}
-		#endregion action TargetBusiness
+
 	} // class BrokerHomeController
 } // namespace

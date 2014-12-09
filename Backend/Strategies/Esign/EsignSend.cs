@@ -6,22 +6,13 @@
 	using Ezbob.Logger;
 
 	public class EsignSend : AStrategy {
-		#region constructor
 
 		public EsignSend(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "EsignSend"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			if (Package == null) {
@@ -67,13 +58,7 @@
 			} // switch
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public string Result { get; private set; }
-
-		#endregion property Result
 
 		public EchoSignEnvelope[] Package;
 	} // class EsignSend

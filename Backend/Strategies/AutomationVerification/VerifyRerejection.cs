@@ -4,7 +4,6 @@
 	using Ezbob.Logger;
 
 	public class VerifyRerejection : AVerificationBase {
-		#region public
 
 		public VerifyRerejection(
 			int nTopCount,
@@ -14,19 +13,9 @@
 		) : base(nTopCount, nLastCheckedCustomerID, oDB, oLog) {
 		} // constructor
 
-		#endregion public
-
-		#region protected
-
-		#region property DecisionName
-
 		protected override string DecisionName {
 			get { return "Auto re-rejection"; }
 		} // DecisionName
-
-		#endregion property DecisionName
-
-		#region method MakeAndVerifyDecision
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
 			return new ReRejection(
@@ -36,8 +25,5 @@
 			).MakeAndVerifyDecision();
 		} // MakeAndVerifyDecision
 
-		#endregion method MakeAndVerifyDecision
-
-		#endregion protected
 	} // class VerifyRerejection
 } // namespace

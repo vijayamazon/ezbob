@@ -7,18 +7,11 @@
 	using Ezbob.Logger;
 
 	public class StrategyRunningTime {
-		#region public
-
-		#region constructor
 
 		public StrategyRunningTime(AConnection oDB, ASafeLog oLog) {
 			m_oDB = oDB;
 			m_oLog = oLog ?? new SafeLog();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Run
 
 		public KeyValuePair<ReportQuery, DataTable> Run(Report report, DateTime from, DateTime to) {
 			m_oAsyncData = new SortedDictionary<int, StrategyData>();
@@ -46,19 +39,11 @@
 			return new KeyValuePair<ReportQuery, DataTable>(reprortQuery, ToTable());
 		} // Run
 
-		#endregion method Run
-
-		#endregion public
-
-		#region private
-
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 
 		private SortedDictionary<int, StrategyData> m_oSyncData;
 		private SortedDictionary<int, StrategyData> m_oAsyncData;
-
-		#region method ProcessRow
 
 		private ActionResult ProcessRow(SafeReader sr, bool bRowsetStart) {
 			SortedDictionary<int, StrategyData> oTarget = sr["IsSync"] ? m_oSyncData : m_oAsyncData;
@@ -72,10 +57,6 @@
 
 			return ActionResult.Continue;
 		} // ProcessRow
-
-		#endregion method ProcessRow
-
-		#region method ToTable
 
 		private DataTable ToTable() {
 			var tbl = new DataTable();
@@ -114,8 +95,6 @@
 			return tbl;
 		} // ToTable
 
-		#endregion method ToTable
-
 		private static void AddColumns(DataTable tbl, string sPrefix) {
 			tbl.Columns.Add(sPrefix + "Count", typeof (int));
 
@@ -131,6 +110,5 @@
 			tbl.Columns.Add(sPrefix + "MaxTime", typeof (DateTime));
 		} // AddColumns
 
-		#endregion private
 	} // class StrategyRunningTime
 } // namespace

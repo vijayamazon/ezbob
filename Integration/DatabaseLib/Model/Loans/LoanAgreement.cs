@@ -27,11 +27,9 @@ namespace EZBob.DatabaseLib.Model.Loans
 		public virtual int Id { get; set; }
 		public virtual string Name { get; set; }
 
-		
 		public virtual Database.Loans.Loan Loan { get; set; }
 		public virtual string FilePath { get; set; }
 		public virtual LoanAgreementTemplate TemplateRef { get; set; }
-
 
 		public virtual string ShortFilename()
 		{
@@ -72,9 +70,9 @@ namespace EZBob.DatabaseLib.Model.Loans
 		public LoanAgreementRepository(ISession session)
 			: base(session)
 		{
-			
+
 		}
-		
+
 		public IQueryable<LoanAgreement> GetByLoanId(int loanId)
 		{
 			return GetAll().Where(l => l.Loan.Id == loanId);

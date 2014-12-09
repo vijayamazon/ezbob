@@ -2,12 +2,9 @@
 {
    static  class TestMethod
     {
-        #region Netwise Biztalk sprint1 transactions
 
 		//private static BiztalkServiceNS.Header header = new BiztalkServiceNS.Header();
 		//private static BiztalkServiceNS.ServiceClient client = new BiztalkServiceNS.ServiceClient();
-       
-        
 
 		//public static string testCheckEntrust(string req, out string hdr, out BiztalkServiceNS.Header hdrObj)
 		//{
@@ -19,7 +16,6 @@
 
 		//}
 
-        #endregion
 	   private static StasEzService.EzServiceClient client;
 	   public static StasEzService.EzServiceClient CreateProxy(string endpointName)
 		{
@@ -30,13 +26,10 @@
 			}
 		}
 
-
 		internal static StasEzService.EzServiceClient GetStasServiceProxyInstance(string endpointName)
 		{
 			//Get Client Endpoint from App.Config
 			return new StasEzService.EzServiceClient(endpointName);
-
-			#region Old Code - create new binding and Endpoint (not from app.config)
 
 			//BasicHttpBinding binding = new BasicHttpBinding();
 			//binding.SendTimeout = TimeSpan.FromMinutes(1);
@@ -66,12 +59,11 @@
 			//binding.Security.Message.AlgorithmSuite = SecurityAlgorithmSuite.Default;
 			////binding.Security.Message.ClientCredentialType = BasicHttpMessageCredentialType.No;
 
-
 			//return new FBNServiceNS.ServiceClient(binding,
 			//  new EndpointAddress("http://192.168.234.96/IntegrationServices/Services.svc"));
 			////return new FBNServiceNS.ServiceClient(binding,
 			////    new EndpointAddress("http://41.223.146.69/IntegrationServices/Services.svc")); 
-			#endregion
+
 		}
 
     }

@@ -9,18 +9,16 @@
 	using System.Text;
 	public class HMLRBGMessageInspector : IClientMessageInspector
 	{
-		#region Member Variables
+
 		private string m_Username = "";
 		private string m_Password = "";
-		#endregion
-		#region Constructor
+
 		public HMLRBGMessageInspector(string username, string password)
 		{
 			m_Username = username;
 			m_Password = password;
 		}
-		#endregion
-		#region IClientMessageInspector Methods
+
 		public void AfterReceiveReply(ref Message reply, object correlationState)
 		{
 		}
@@ -36,8 +34,6 @@
 			return null;
 		}
 
-		#endregion
-		#region Private Methods
 		private MessageHeader CreateWsseSecurityHeader()
 		{
 			XmlDocument doc = new XmlDocument();
@@ -59,22 +55,19 @@
 			doc.LoadXml("<locale xmlns=\"http://www.w3.org/2005/09/ws-i18n\">en</locale>");
 			return MessageHeader.CreateHeader("international", "http://www.w3.org/2005/09/ws-i18n", doc.DocumentElement);
 		}
-		#endregion
+
 	}
 	public class HMLRBGMessageEndpointBehavior : Attribute, IEndpointBehavior, IOperationBehavior, IContractBehavior
 	{
-		#region Member Variables
+
 		private string m_Username = "";
 		private string m_Password = "";
-		#endregion
-		#region Constructor
+
 		public HMLRBGMessageEndpointBehavior(string username, string password)
 		{
 			m_Username = username;
 			m_Password = password;
 		}
-		#endregion
-		#region IEndpointBehavior Methods
 
 		void IEndpointBehavior.AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
 		{
@@ -89,8 +82,7 @@
 		void IEndpointBehavior.Validate(ServiceEndpoint endpoint)
 		{
 		}
-		#endregion
-		#region IOperationBehavior Members
+
 		void IOperationBehavior.AddBindingParameters(OperationDescription operationDescription, BindingParameterCollection bindingParameters)
 		{
 		}
@@ -106,8 +98,6 @@
 		{
 			// throw new NotImplementedException();
 		}
-		#endregion
-		#region IContractBehavior Members
 
 		void IContractBehavior.AddBindingParameters(ContractDescription contractDescription, ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
 		{
@@ -124,6 +114,6 @@
 		{
 			//throw new NotImplementedException();
 		}
-		#endregion
+
 	}
 }

@@ -24,17 +24,10 @@
 	using Coin = Ezbob.HmrcHarvester.Coin;
 
 	public class HmrcManualAccountManager {
-		#region public
-
-		#region static method CreateJsonNoError
 
 		public static JsonResult CreateJsonNoError() {
 			return CreateJsonError(null);
 		} // CreateJsonNoError
-
-		#endregion static method CreateJsonNoError
-
-		#region static method CreateJsonError
 
 		public static JsonResult CreateJsonError(string sFormat, params object[] args) {
 			string sErrorMessage = string.IsNullOrWhiteSpace(sFormat) ? null : string.Format(sFormat, args);
@@ -52,10 +45,6 @@
 			};
 		} // CreateJsonError
 
-		#endregion static method CreateJsonError
-
-		#region static method CreateJson
-
 		public static JsonResult CreateJson(VatReturnPeriod[] oPeriods) {
 			return new JsonResult {
 				Data = new { aaData = oPeriods, },
@@ -64,10 +53,6 @@
 				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
 			};
 		} // CreateJsonError
-
-		#endregion static method CreateJson
-
-		#region constructor
 
 		public HmrcManualAccountManager(
 			CustomerRepository customers,
@@ -97,10 +82,6 @@
 			m_oServiceClient = new ServiceClient();
 		} // constructor
 
-		#endregion constructor
-
-		#region method SaveUploadedFiles
-
 		public JsonResult SaveUploadedFiles(HttpFileCollectionBase oFiles, int nCustomerID, string sControllerName, string sActionName) {
 			Customer oCustomer = m_oCustomers.ReallyTryGet(nCustomerID);
 
@@ -122,10 +103,6 @@
 				oCustomer
 			);
 		} // SaveUploadedFiles
-
-		#endregion method SaveUploadedFiles
-
-		#region method SaveNewManuallyEntered
 
 		public JsonResult SaveNewManuallyEntered(string sData) {
 			if (string.IsNullOrWhiteSpace(sData))
@@ -157,10 +134,6 @@
 			return DoSave(oSeeds, "Failed to save manual VAT return data.", oCustomer);
 		} // SaveNewManuallyEntered
 
-		#endregion method SaveNewManuallyEntered
-
-		#region method LoadPeriods
-
 		public JsonResult LoadPeriods(int nCustomerID) {
 			try {
 				VatReturnPeriodsActionResult vrpar = m_oServiceClient.Instance.LoadManualVatReturnPeriods(nCustomerID);
@@ -172,10 +145,6 @@
 			} // try
 		} // LoadPeriods
 
-		#endregion method LoadPeriods
-
-		#region method RemovePeriod
-
 		public JsonResult RemovePeriod(string sPeriod) {
 			try {
 				m_oServiceClient.Instance.RemoveManualVatReturnPeriod(Guid.Parse(sPeriod));
@@ -186,14 +155,6 @@
 				return CreateJsonError("Failed to remove period.");
 			} // try
 		} // RemovePeriod
-
-		#endregion method RemovePeriod
-
-		#endregion public
-
-		#region private
-
-		#region method ThrashManualData
 
 		private Hopper ThrashManualData(HmrcManualDataModel oData, out string sStateError) {
 			sStateError = null;
@@ -248,10 +209,6 @@
 			return oResult;
 		} // ThrashManualData
 
-		#endregion method ThrashManualData
-
-		#region method DoSave
-
 		private JsonResult DoSave(Hopper oHopper, string sNoAccountError, Customer oCustomer) {
 			IDatabaseCustomerMarketPlace mp = FindOrCreateMarketplace(oCustomer);
 
@@ -273,10 +230,6 @@
 			return CreateJsonNoError();
 		} // DoSave
 
-		#endregion method DoSave
-
-		#region method FindMarketplace
-
 		private IDatabaseCustomerMarketPlace FindMarketplace(Customer oCustomer) {
 			MP_CustomerMarketPlace oMp = oCustomer.CustomerMarketPlaces.FirstOrDefault(mp => {
 				if (mp.Marketplace.InternalId != m_oVendorInfo.Guid())
@@ -295,10 +248,6 @@
 
 			return null;
 		} // FindMarketplace
-
-		#endregion method FindMarketplace
-
-		#region method FindOrCreateMarketplace
 
 		private IDatabaseCustomerMarketPlace FindOrCreateMarketplace(Customer oCustomer) {
 			IDatabaseCustomerMarketPlace oMp = FindMarketplace(oCustomer);
@@ -331,10 +280,6 @@
 			} // lock
 		} // FindOrCreateMarketplace
 
-		#endregion method FindOrCreateMarketplace
-
-		#region class AddAccountState
-
 		private class AddAccountState {
 			public IMarketplaceType Marketplace;
 			public HmrcManualAccountManagerException Error;
@@ -346,10 +291,6 @@
 				CustomerMarketPlace = null;
 			} // constructor
 		} // class AddAccountState
-
-		#endregion class AddAccountState
-
-		#region method ValidateMpUniqueness
 
 		private AddAccountState ValidateMpUniqueness(AccountModel model, Customer oCustomer) {
 			var oResult = new AddAccountState();
@@ -371,10 +312,6 @@
 
 			return oResult;
 		} // ValidateMpUniqueness
-
-		#endregion method ValidateMpUniqueness
-
-		#region method SaveMarketplace
 
 		private void SaveMarketplace(AddAccountState oState, AccountModel model, Customer oCustomer) {
 			try {
@@ -417,10 +354,6 @@
 			} // try
 		} // SaveMarketplace
 
-		#endregion method SaveMarketplace
-
-		#region fields
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcManualAccountManager));
 
 		private readonly MarketPlaceRepository m_oMpTypes;
@@ -436,8 +369,5 @@
 
 		private static readonly object ms_oLockCreateMarketplace = new object();
 
-		#endregion fields
-
-		#endregion private
 	} // class HmrcManualAccountManager
 } // namespace

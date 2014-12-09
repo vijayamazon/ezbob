@@ -1,4 +1,4 @@
-namespace PayPal.Platform.SDK
+﻿namespace PayPal.Platform.SDK
 {
 	/// <summary>
 	/// Summary description for Constants.
@@ -19,7 +19,6 @@ namespace PayPal.Platform.SDK
 		 * that only authorized individuals may view or modify them.               *
 		 *                                                                         *
 		 */
-               					
 
         public const string XPAYPALREQUESTDATAFORMAT = "X-PAYPAL-REQUEST-DATA-FORMAT";
         public const string XPAYPALRESPONSEDATAFORMAT = "X-PAYPAL-RESPONSE-DATA-FORMAT";

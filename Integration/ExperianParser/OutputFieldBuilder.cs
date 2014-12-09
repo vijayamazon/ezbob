@@ -5,12 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ezbob.ExperianParser {
-	#region class OutputFieldBuilder
 
 	public class OutputFieldBuilder {
-		#region public
-
-		#region constructor
 
 		public OutputFieldBuilder(Target oTarget) {
 			m_oValues = new SortedDictionary<int, string>();
@@ -18,10 +14,6 @@ namespace Ezbob.ExperianParser {
 			m_oTargets[oTarget.Position] = oTarget;
 			oTarget.SetBuilder(this);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Add
 
 		public void Add(Target oTarget) {
 			if (m_oTargets.ContainsKey(oTarget.Position)) {
@@ -35,25 +27,13 @@ namespace Ezbob.ExperianParser {
 			oTarget.SetBuilder(this);
 		} // Add
 
-		#endregion method Add
-
-		#region method Clear
-
 		public void Clear() {
 			m_oValues.Clear();
 		} // Clear
 
-		#endregion method Clear
-
-		#region method Set
-
 		public void Set(Target oTarget, string sValue) {
 			m_oValues[oTarget.Position] = sValue;
 		} // Set
-
-		#endregion method Set
-
-		#region method Build
 
 		public string Build() {
 			var sb = new StringBuilder();
@@ -73,17 +53,9 @@ namespace Ezbob.ExperianParser {
 			return sb.ToString();
 		} // Build
 
-		#endregion method Build
-
-		#endregion public
-
-		#region private
-
 		private readonly SortedDictionary<int, Target> m_oTargets;
 		private readonly SortedDictionary<int, string> m_oValues;
 
-		#endregion private
 	} // class OutputFieldBuilder
 
-	#endregion class OutputFieldBuilder
 } // namespace Ezbob.ExperianParser

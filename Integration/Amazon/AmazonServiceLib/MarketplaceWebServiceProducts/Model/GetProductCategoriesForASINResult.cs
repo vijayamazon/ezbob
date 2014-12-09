@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,9 +25,8 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class GetProductCategoriesForASINResult
     {
-    
-        private  List<Categories> selfField;
 
+        private  List<Categories> selfField;
 
         /// <summary>
         /// Gets and sets the Self property.
@@ -48,8 +45,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.selfField =  value; }
         }
 
-
-
         /// <summary>
         /// Sets the Self property
         /// </summary>
@@ -63,8 +58,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return this;
         }          
- 
-
 
         /// <summary>
         /// Checks if Self property is set
@@ -75,9 +68,6 @@ namespace MarketplaceWebServiceProducts.Model
             return (Self.Count > 0);
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -86,7 +76,6 @@ namespace MarketplaceWebServiceProducts.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -132,8 +121,6 @@ namespace MarketplaceWebServiceProducts.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

@@ -56,7 +56,7 @@
 		public decimal TangibleEquity { get; set; }
 		public decimal FreeCashFlow { get; set; }
 		public string InnerFlowName { get; set; }
-		
+
 		// Weights, grades, scores
 		public decimal BusinessScoreWeight { get; set; }
 		public decimal BusinessScoreGrade { get; set; }
@@ -97,7 +97,7 @@
 		public decimal PositiveFeedbacksWeight { get; set; }
 		public decimal PositiveFeedbacksGrade { get; set; }
 		public decimal PositiveFeedbacksScore { get; set; }
-		
+
 		public decimal EzbobSeniorityWeight { get; set; }
 		public decimal EzbobSeniorityGrade { get; set; }
 		public decimal EzbobSeniorityScore { get; set; }
@@ -335,8 +335,6 @@
 							"-".PadRight(10),
 							weight.Grade.ToString(CultureInfo.InvariantCulture).PadRight(10),
 							ToShort(weight.Score).PadRight(10), weight.Value);
-
-
 
 			if (summary == null) summary = weight;
 			else

@@ -102,7 +102,7 @@
 			}
 			customerModel.BusinessTypeReduced = customerModel.CustomerPersonalInfo == null ?
 				TypeOfBusinessReduced.Personal.ToString() : customer.PersonalInfo.TypeOfBusiness.Reduce().ToString();
-			
+
 			customerModel.bankAccountAdded = customer.HasBankAccount;
 
 			if (customer.HasBankAccount) {
@@ -233,7 +233,6 @@
 					LoanId = x.LoanSchedule.Loan.Id,
 					RolloverPayValue = GetRolloverPayValue(x.LoanSchedule.Loan)
 				});
-
 
 			customerModel.IsDisabled = !customer.CollectionStatus.CurrentStatus.IsEnabled;
 			customerModel.CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;

@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 using Ezbob.Logger;
 
 namespace ez1091 {
-	#region class RequestedTransactionsLibrary
 
 	class RequestedTransactionsLibrary {
-		#region public
-
-		#region constructor
 
 		public RequestedTransactionsLibrary(ASafeLog log) {
 			m_oLog = new SafeLog(log);
@@ -22,10 +18,6 @@ namespace ez1091 {
 			LoanIDs = string.Empty;
 			Count = 0;
 		} // constructor
-
-		#endregion constructor
-
-		#region property LoanIDs
 
 		public string LoanIDs {
 			get {
@@ -42,15 +34,7 @@ namespace ez1091 {
 
 		private string m_sLoanIDs;
 
-		#endregion property LoanIDs
-
-		#region property Count
-
 		public int Count { get; private set; }
-
-		#endregion property Count
-
-		#region method Add
 
 		public RequestedTransactionsLibrary Add(string sRawData) {
 			var rt = new RequestedTransaction(sRawData, m_oLog);
@@ -72,21 +56,10 @@ namespace ez1091 {
 			return this;
 		} // Add
 
-		#endregion method Add
-
-		#endregion public
-
-		#region protected
-		#endregion protected
-
-		#region private
-
 		private readonly SortedDictionary<DateTime, List<RequestedTransaction>> m_oByDate;
 		private readonly SortedDictionary<int, List<RequestedTransaction>> m_oByLoan;
 		private readonly SafeLog m_oLog;
 
-		#endregion private
 	} // class RequestedTransactionsLibrary
 
-	#endregion class RequestedTransactionsLibrary
 } // namespace ez1091

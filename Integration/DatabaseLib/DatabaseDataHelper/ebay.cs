@@ -1,5 +1,4 @@
 ﻿namespace EZBob.DatabaseLib {
-	#region using
 
 	using System;
 	using System.Collections.Concurrent;
@@ -22,8 +21,6 @@
 	using Repository;
 	using Iesi.Collections.Generic;
 
-	#endregion using
-
 	public partial class DatabaseDataHelper {
 		private readonly EbayUserAddressDataRepository _EbayUserAddressDataRepository;
 		private readonly EBayOrderItemInfoRepository _EBayOrderItemInfoRepository;
@@ -34,8 +31,6 @@
 		private readonly ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
 		private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
 
-
-		#region Terapeak
 		public void StoretoDatabaseTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TeraPeakDatabaseSellerData data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			if (data == null) {
 				WriteToLog("StoreTeraPeakUserData: invalid data to store", WriteLogType.Error);
@@ -58,10 +53,6 @@
 		public TeraPeakDatabaseSellerData GetAllTeraPeakDataWithFullRange(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			return _CustomerMarketplaceRepository.GetAllTeraPeakDataWithFullRange(submittedDate, databaseCustomerMarketPlace);
 		}
-
-		#endregion
-
-		
 
 		public void AddEbayOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EbayDatabaseOrdersList data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
@@ -476,7 +467,6 @@
 				};
 			}));
 
-
 			return orders;
 		}
 
@@ -657,10 +647,6 @@
 		}
 	} // class DatabaseDataHelper
 
-	
-
-	#region class eBayFindOrderItemInfoData
-
 	public class eBayFindOrderItemInfoData
 	{
 		public eBayFindOrderItemInfoData(string itemId)
@@ -671,10 +657,6 @@
 		public string ItemId { get; private set; }
 	} // class eBayFindOrderItemInfoData
 
-	#endregion class eBayFindOrderItemInfoData
-
-	#region class eBayCategoryInfo
-
 	public class eBayCategoryInfo
 	{
 		public string CategoryId { get; set; }
@@ -683,5 +665,4 @@
 		//public string[] ParentIdList { get; set; }
 	} // class eBayCategoryInfo
 
-	#endregion class eBayCategoryInfo
 } // namespace EZBob.DatabaseLib

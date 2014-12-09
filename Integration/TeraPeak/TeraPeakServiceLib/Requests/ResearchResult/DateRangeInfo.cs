@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace EzBob.TeraPeakServiceLib.Requests.ResearchResult
 {
@@ -18,14 +18,12 @@ namespace EzBob.TeraPeakServiceLib.Requests.ResearchResult
 			_DateRange = "1";
 		}
 
-
 		public string EndDate
 		{
 			get { return _EndDate.HasValue ? _EndDate.Value.ToString("yyyy-MM-dd") : null; }
 			set { }
 		}
 
-		
 		public string DateRange
 		{
 			get { return _EndDate.HasValue? _DateRange: null; }

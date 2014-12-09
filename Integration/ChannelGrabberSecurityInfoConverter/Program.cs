@@ -11,7 +11,6 @@ using SqlConnection = Ezbob.Database.SqlConnection;
 
 namespace Integration.ChannelGrabberSecurityInfoConverter {
 	class Program {
-		#region Main
 
 		static void Main(string[] args) {
 			string sContext = string.Empty;
@@ -26,10 +25,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 
 			app.Done();
 		} // Main
-
-		#endregion Main
-
-		#region method Init
 
 		private bool Init(string sContext) {
 			m_oLog = new ConsoleLog(new LegacyLog());
@@ -48,10 +43,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 
 			return true;
 		} // Init
-
-		#endregion method Init
-
-		#region method GetConnectionString
 
 		private string GetConnectionString(string sContext) {
 			if (sContext == string.Empty)
@@ -75,10 +66,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 				throw new Exception(sMsg, e);
 			} // try
 		} // GetConnectionString
-
-		#endregion method GetConnectionString
-
-		#region method Run
 
 		private void Run() {
 			DataTable tbl = m_oDB.ExecuteReader(RetrieveSecurityDataQuery);
@@ -122,15 +109,11 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 			tbl.Dispose();
 		} // Run
 
-		#endregion method Run
-
-		#region method ConvertSecurityInfo
-
 		private AccountModel ConvertSecurityInfo(byte[] oOldData, string sAccountTypeName) {
 			string sXml = System.Text.Encoding.Default.GetString(oOldData);
 
 			m_oLog.Debug("Old security info: {0}", sXml);
-			
+
 			XmlDocument doc = new XmlDocument();
 
 			try {
@@ -162,10 +145,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 			} // switch
 		} // ConvertSecurityInfo
 
-		#endregion method ConvertSecurityInfo
-
-		#region method ToModel
-
 		private AccountModel ToModel(XmlDocument doc, string sAccountTypeName, params AccountModel.NodeNames[] aryNodeNames) {
 			var am = new AccountModel();
 
@@ -186,10 +165,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 
 			return am;
 		} // ToModel
-
-		#endregion method ToModel
-
-		#region method SecurityInfoToModel
 
 		private AccountModel SecurityInfoToModel(XmlDocument doc, string sAccountTypeName) {
 			var am = new AccountModel();
@@ -222,10 +197,6 @@ namespace Integration.ChannelGrabberSecurityInfoConverter {
 			return am;
 		} // SecurityInfoToModel
 
-		#endregion method SecurityInfoToModel
-
-		#region property RetrieveSecurityDataQuery
-
 		private string RetrieveSecurityDataQuery {
 			get { return @"SELECT
 	m.Id,
@@ -239,14 +210,8 @@ FROM
 			} // get
 		} // RetrieveSecurityDataQuery
 
-		#endregion property RetrieveSecurityDataQuery
-
-		#region method Done
-
 		private void Done() {
 		} // Done
-
-		#endregion method Done
 
 		private IConnection m_oDB;
 		private ASafeLog m_oLog;

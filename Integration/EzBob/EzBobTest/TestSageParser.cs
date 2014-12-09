@@ -19,7 +19,6 @@
 			Assert.NotNull(deserializedResponse);
 		}
 
-
 		[Test]
 		public void TestInvoicesDesializer()
 		{

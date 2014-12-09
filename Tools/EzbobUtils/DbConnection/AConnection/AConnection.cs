@@ -14,9 +14,6 @@
 	using Utils;
 
 	public abstract partial class AConnection : SafeLog {
-		#region public
-
-		#region method TakeFromPool
 
 		public ConnectionWrapper TakeFromPool() {
 			PooledConnection pc = ms_oPool.Give();
@@ -53,10 +50,6 @@
 			return new ConnectionWrapper(pc);
 		} // TakeFromPool
 
-		#endregion method TakeFromPool
-
-		#region method DisposeAfterOneUsage
-
 		public virtual void DisposeAfterOneUsage(bool bAllesInOrdnung, ConnectionWrapper oConnection) {
 			if (oConnection == null)
 				return;
@@ -67,17 +60,9 @@
 				ms_oPool.Drop(oConnection.Pooled);
 		} // DisposeAfterOneUsage
 
-		#endregion method InitEvents
-
-		#region method UpdateConnectionPoolMaxSize
-
 		public static void UpdateConnectionPoolMaxSize(int nMaxSize) {
 			ms_oPool.MaxSize = nMaxSize;
 		} // UpdateConnectionPoolMaxSize
-
-		#endregion method UpdateConnectionPoolMaxSize
-
-		#region method GetPersistent
 
 		public virtual ConnectionWrapper GetPersistent() {
 			var pc = new PooledConnection {
@@ -92,10 +77,6 @@
 
 			return new ConnectionWrapper(pc).Open();
 		} // GetPersistent
-
-		#endregion method GetPersistent
-
-		#region method ExecuteScalar
 
 		public virtual T ExecuteScalar<T>(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteScalar<T>(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
@@ -118,10 +99,6 @@
 			return (T)oRes;
 		} // ExecuteScalar
 
-		#endregion method ExecuteScalar
-
-		#region method ExecuteNonQuery
-
 		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteNonQuery(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
 		} // ExecuteNonQuery
@@ -138,10 +115,6 @@
 			return (int)Run(oConnectionToUse, ExecMode.NonQuery, nSpecies, sQuery, aryParams);
 		} // ExecuteNonQuery
 
-		#endregion method ExecuteNonQuery
-
-		#region method ExecuteEnumerable
-
 		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteEnumerable(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
 		} // ExecuteEnumerable
@@ -157,10 +130,6 @@
 		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			return (IEnumerable<SafeReader>)Run(oConnectionToUse, null, ExecMode.Enumerable, nSpecies, sQuery, aryParams);
 		} // ExecuteEnumerable
-
-		#endregion method ExecuteEnumerable
-
-		#region method Fill
 
 		public List<T> Fill<T>(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) where T : new() {
 			return Fill<T>(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
@@ -190,10 +159,6 @@
 
 			return oResult;
 		} // Fill
-
-		#endregion method Fill
-
-		#region method FillFirst
 
 		public virtual T FillFirst<T>(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) where T : new() {
 			return FillFirst<T>(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
@@ -238,7 +203,7 @@
 				// Assignment to temp variable is a workaround to suppress the warning.
 				// And if we are already here then T is not a value type so it can be null.
 				object obj = oInstance;
-				
+
 				if (obj == null)
 					throw new NullReferenceException("Cannot FillFirst of type " + typeof (T) + ": no instance specified.");
 			} // if
@@ -254,10 +219,6 @@
 				aryParams
 			);
 		} // FillFirst
-
-		#endregion method FillFirst
-
-		#region method GetFirst
 
 		public virtual SafeReader GetFirst(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
 			return GetFirst(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
@@ -288,10 +249,6 @@
 			return oResult ?? SafeReader.CreateEmpty();
 		} // GetFirst
 
-		#endregion method GetFirst
-
-		#region method CreateVectorParameter
-
 		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues) {
 			return CreateVectorParameter<T>(sFieldName, (IEnumerable<T>)oValues);
 		} // CreateVectorParameter
@@ -303,10 +260,6 @@
 		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues) {
 			return CreateTableParameter<VectorToTableParameter<T>>(sFieldName, oValues, oOneValue => new object[] {oOneValue});
 		} // CreateVectorParameter
-
-		#endregion method CreateVectorParameter
-
-		#region method CreateTableParameter
 
 		public virtual QueryParameter CreateTableParameter<T>(string sFieldName, params T[] aryValues) {
 			return CreateTableParameter<T>(sFieldName, (IEnumerable<T>)aryValues);
@@ -359,13 +312,9 @@
 			return BuildTableParameter(sFieldName, tbl);
 		} // CreateTableParameter
 
-		#endregion method CreateTableParameter
-
 		public abstract QueryParameter BuildTableParameter(string sFieldName, DataTable oValues);
 
 		public abstract string DateToString(DateTime oDate);
-
-		#region property CommandTimeout
 
 		public virtual int CommandTimeout {
 			get { return m_nCommandTimeout; }
@@ -374,24 +323,12 @@
 
 		private int m_nCommandTimeout;
 
-		#endregion property CommandTimeout
-
-		#region property LogVerbosityLevel
-
 		public virtual LogVerbosityLevel LogVerbosityLevel {
 			get { return m_nLogVerbosityLevel; }
 			set { m_nLogVerbosityLevel = value; }
 		} // LogVerbosityLevel
 
 		private LogVerbosityLevel m_nLogVerbosityLevel;
-
-		#endregion property LogVerbosityLevel
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
 
 		protected AConnection(ASafeLog log = null, string sConnectionString = null) : base(log) {
 			Env = new Ezbob.Context.Environment(log);
@@ -410,25 +347,13 @@
 			ms_oPool.Log.SetInternal(log);
 		} // Env
 
-		#endregion constructor
-
-		#region abstract methods
-
 		protected abstract DbConnection CreateConnection();
 		protected abstract DbCommand CreateCommand(string sCommand);
 		protected abstract void AppendParameter(DbCommand cmd, QueryParameter prm);
 
 		protected abstract ARetryer CreateRetryer();
 
-		#endregion abstract methods
-
-		#region property Env
-
 		protected virtual Ezbob.Context.Environment Env { get; private set; }
-
-		#endregion property Env
-
-		#region property ConnectionString
 
 		protected virtual string ConnectionString {
 			get {
@@ -460,10 +385,6 @@
 
 		private string m_sConnectionString;
 
-		#endregion property ConnectionString
-
-		#region enum ExecMode
-
 		protected enum ExecMode {
 			Scalar,
 			Reader,
@@ -471,10 +392,6 @@
 			ForEachRow,
 			Enumerable,
 		} // Enum ExecMode
-
-		#endregion enum ExecMode
-
-		#region method Run
 
 		protected virtual object Run(
 			ConnectionWrapper cw,
@@ -546,10 +463,6 @@
 			} // try
 		} // Run
 
-		#endregion method Run
-
-		#region method PublishRunningTime
-
 		protected void PublishRunningTime(
 			string sPooledConnectionID,
 			LogVerbosityLevel nLogVerbosityLevel,
@@ -588,10 +501,6 @@
 			} // switch
 		} // PublishRunnigTime
 
-		#endregion method PublishRunningTime
-
-		#region method BuildCommand
-
 		protected virtual DbCommand BuildCommand(string spName, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			DbCommand command = CreateCommand(spName);
 
@@ -623,10 +532,6 @@
 
 			return command;
 		} // BuildCommand
-
-		#endregion method BuildCommand
-
-		#region method RunOnce
 
 		protected virtual object RunOnce(
 			ConnectionWrapper oConnectionToUse,
@@ -734,14 +639,6 @@
 			} // try
 		} // RunOnce
 
-		#endregion method RunOnce
-
-		#endregion protected
-
-		#region private
-
-		#region method AddColumn
-
 		private static void AddColumn(DataTable tbl, Type oType) {
 			bool bIsNullable = TypeUtils.IsNullable(oType);
 
@@ -751,13 +648,10 @@
 			);
 		} // AddColumn
 
-		#endregion method AddColumn
-
 		private static readonly DbConnectionPool ms_oPool = new DbConnectionPool();
 
 		private static ulong ms_nFreeConnectionGenerator = 0;
 		private static readonly object ms_oFreeConnectionLock = new object();
 
-		#endregion private
 	} // AConnection
 } // namespace Ezbob.Database

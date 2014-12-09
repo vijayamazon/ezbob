@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 
 namespace Integration.ChannelGrabberConfig {
-	#region class VendorInfo
 
 	public class VendorInfo {
-		#region public
 
 		public const string TopSecret = "topsecret";
-
-		#region constructor
 
 		public VendorInfo() {
 			Behaviour = Behaviour.Default;
@@ -24,10 +20,6 @@ namespace Integration.ChannelGrabberConfig {
 			m_oGuid = new Guid();
 		} // constructor
 
-		#endregion constructor
-
-		#region properties
-
 		public string Name { get; set; }
 		public string DisplayName { get; set; }
 		public string Description { get; set; }
@@ -41,10 +33,6 @@ namespace Integration.ChannelGrabberConfig {
 		public List<AggregatorInfo> Aggregators { get; set; }
 
 		public ClientSide ClientSide { get; set; }
-
-		#endregion properties
-
-		#region method Parse
 
 		public void Parse() {
 			Name = (Name ?? "").Trim();
@@ -77,17 +65,9 @@ namespace Integration.ChannelGrabberConfig {
 			ClientSide.Parse();
 		} // Parse
 
-		#endregion method Parse
-
-		#region method Guid
-
 		public Guid Guid() {
 			return m_oGuid; 
 		} // Guid
-
-		#endregion method Guid
-
-		#region method ToString
 
 		public override string ToString() {
 			return string.Format("Unique name: {0}\nBehaviour: {7}\nDisplay name: {1}\nDescription: {2}\nHas expenses: {6}\nInternal ID: {3}\n{4}\nAggregators:\n\t{5}",
@@ -98,24 +78,12 @@ namespace Integration.ChannelGrabberConfig {
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region protected
-
 		protected void SetGuid(Guid v) {
 			m_oGuid = v;
 		} // SetGuid
 
-		#endregion protected
-
-		#region private
-
 		private Guid m_oGuid;
 
-		#endregion private
 	} // class VendorInfo
 
-	#endregion class VendorInfo
 } // namespace Integration.ChannelGrabberConfig

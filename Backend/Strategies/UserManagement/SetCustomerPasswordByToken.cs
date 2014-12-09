@@ -6,9 +6,6 @@
 	using JetBrains.Annotations;
 
 	public class SetCustomerPasswordByToken : AStrategy {
-		#region public
-
-		#region constructor
 
 		public SetCustomerPasswordByToken(
 			string sEmail,
@@ -33,17 +30,9 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "SetCustomerPasswordByToken"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Log.Debug("Trying to set a password for token '{0}': {1}...", m_oSp.TokenID, m_oSp.EzPassword);
@@ -56,22 +45,10 @@
 			Log.Debug("Setting a password for token '{0}' success: {1}.", m_oSp.TokenID, CustomerID > 0 ? "yes" : "no");
 		} // Execute
 
-		#endregion method Execute
-
-		#region property CustomerID
-
 		public int CustomerID { get; private set; }
-
-		#endregion property CustomerID
-
-		#endregion public
-
-		#region private
 
 		private readonly SpSetCustomerPasswordByToken m_oSp;
 		private readonly UserSecurityData m_oData;
-
-		#region class SpSetCustomerPasswordByToken
 
 		private class SpSetCustomerPasswordByToken : AStoredProc {
 			public SpSetCustomerPasswordByToken(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
@@ -104,8 +81,5 @@
 			} // Now
 		} // class SpSetCustomerPasswordByToken
 
-		#endregion class SpSetCustomerPasswordByToken
-
-		#endregion private
 	} // class SetCustomerPasswordByToken
 } // namespace

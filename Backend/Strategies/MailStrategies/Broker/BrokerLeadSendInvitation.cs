@@ -5,9 +5,6 @@
 	using Ezbob.Logger;
 
 	public class BrokerLeadSendInvitation : AMailStrategyBase {
-		#region public
-
-		#region constructor
 
 		public BrokerLeadSendInvitation(
 			int nLeadID,
@@ -19,19 +16,7 @@
 			m_oSp = new BrokerLeadSaveInvitationToken(DB, Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name { get { return "Broker lead send invitation"; } } // Name
-
-		#endregion property Name
-
-		#endregion public
-
-		#region protected
-
-		#region method LoadRecipientData
 
 		protected override void LoadRecipientData() {
 			Log.Debug("Loading broker lead data...");
@@ -41,10 +26,6 @@
 
 			Log.Debug("Loading broker lead complete.");
 		} // LoadRecipientData
-
-		#endregion method LoadRecipientData
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			m_oSp.Token = Guid.NewGuid();
@@ -61,10 +42,6 @@
 			};
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
-
-		#region method ActionAtEnd
-
 		protected override void ActionAtEnd() {
 			DB.ExecuteNonQuery("BrokerLeadSetInvitationSetDate",
 				CommandSpecies.StoredProcedure,
@@ -72,10 +49,6 @@
 				new QueryParameter("@DateInvitationSent", DateTime.UtcNow)
 			);
 		} // ActionAtEnd
-
-		#endregion method ActionAtEnd
-
-		#region properties
 
 		protected virtual BrokerLeadData LeadData {
 			get { return (BrokerLeadData)CustomerData; } // get
@@ -87,16 +60,8 @@
 			set { CustomerId = value; } // set
 		} // LeadID
 
-		#endregion properties
-
-		#endregion protected
-
-		#region private
-
 		private readonly string m_sBrokerContactEmail;
 		private readonly BrokerLeadSaveInvitationToken m_oSp;
-
-		#region class BrokerLeadSaveInvitationToken
 
 		private class BrokerLeadSaveInvitationToken : AStoredProcedure {
 			public BrokerLeadSaveInvitationToken(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -115,8 +80,5 @@
 			} // HasValidParameters
 		} // BrokerLeadSaveInvitationToken
 
-		#endregion class BrokerLeadSaveInvitationToken
-
-		#endregion private
 	} // class BrokerLeadSendInvitation
 } // namespace

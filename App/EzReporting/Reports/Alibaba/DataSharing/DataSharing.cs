@@ -7,9 +7,6 @@
 	using OfficeOpenXml;
 
 	public class DataSharing : IAlibaba {
-		#region public
-
-		#region constructor
 
 		public DataSharing(bool bIncludeTestCustomers, AConnection oDB, ASafeLog oLog) {
 			if (oDB == null)
@@ -24,10 +21,6 @@
 
 			m_oAlibabaIDs = new SortedSet<string>();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Generate
 
 		public void Generate() {
 			Report = new ExcelPackage();
@@ -49,15 +42,7 @@
 			Report.AutoFitColumns();
 		} // Generate
 
-		#endregion method Generate
-
 		public ExcelPackage Report { get; private set; }
-
-		#endregion public
-
-		#region private
-
-		#region method ProcessRow
 
 		private void ProcessRow(SafeReader sr) {
 			string sRowType = sr[CustomerData.RowType];
@@ -128,10 +113,6 @@
 			} // switch
 		} // ProcessRow
 
-		#endregion method ProcessRow
-
-		#region method ExtractAlibabaID
-
 		private void ExtractAlibabaID(string sSource) {
 			if (string.IsNullOrWhiteSpace(sSource))
 				return;
@@ -150,10 +131,6 @@
 			m_oAlibabaIDs.Add(sAlibabaID);
 		} // ExtractAlibabaID
 
-		#endregion method ExtractAlibabaID
-
-		#region method SaveAlibabaIDs
-
 		private void SaveAlibabaIDs() {
 			ExcelWorksheet oSheet = Report.FindOrCreateSheet("Unique Alibaba ID on LP", false, "Alibaba ID");
 
@@ -163,8 +140,6 @@
 				oSheet.SetCellValue(nRow++, 1, sAlibabaID);
 		} // SaveAlibabaIDs
 
-		#endregion method SaveAlibabaIDs
-
 		private readonly SortedDictionary<int, CustomerData> m_oData;
 		private readonly SortedSet<int> m_oLateLoans;
 		private readonly SortedSet<string> m_oAlibabaIDs;
@@ -172,8 +147,6 @@
 		private readonly RptAlibabaDataSharing m_oSp;
 
 		private const string AlibabaID = "alibaba_id=";
-
-		#region class RptAlibabaDataSharing
 
 		private class RptAlibabaDataSharing : AStoredProcedure {
 			public enum RowTypes {
@@ -197,8 +170,5 @@
 			public bool IncludeTest { get; set; }
 		} // class RptAlibabaDataSharing 
 
-		#endregion class RptAlibabaDataSharing
-
-		#endregion private
 	} // class DataSharing
 } // namespace

@@ -11,7 +11,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMain));
 		public UserContext UserContext = null;
 		private int numOfRetriesForGetItemSummary;
-		
+
 		public LoginUser LoginUser(string userName, string password)
 		{
 			try
@@ -185,7 +185,7 @@
 			displayname = itemSummary.itemDisplayName;
 
 			Log.InfoFormat("Received yodlee item id: '{0}' display name: {1}", itemSummary.itemId, displayname);
-			
+
 			lu.logoutUser(UserContext);
 
 			return itemSummary.itemId;
@@ -211,7 +211,7 @@
 				Log.InfoFormat("No items were found for the user '{0}'", username);
 				return null;
 			}
-			
+
 			foreach (ItemSummary item in oa)
 			{
 				if(customerItems != null && customerItems.Contains(item.itemId)){ continue; }
@@ -258,7 +258,6 @@
 			// Poll for the refresh status and display the item summary if refresh succeeds
 			return refreshItem.PollRefreshStatus(UserContext, itemId);
 		}
-
 
 		public void RemoveItem(long itemId)
 		{

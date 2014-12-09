@@ -8,9 +8,6 @@
 	using JetBrains.Annotations;
 
 	public class UserSignup : AStrategy {
-		#region public
-
-		#region constructor
 
 		// Create a user for Customer
 		public UserSignup(
@@ -45,7 +42,7 @@
 		// Create a user for Underwriter
 		public UserSignup(string sEmail, string sPassword, string sRoleName, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
             b_isUW = true;
-            
+
             m_oResult = null;
 
 			m_oData = new UserSecurityData(this) {
@@ -63,17 +60,9 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Create user"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oResult = MembershipCreateStatus.ProviderError;
@@ -118,31 +107,16 @@
 			} // try
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public string Result {
 			get { return m_oResult.HasValue ? m_oResult.Value.ToString() : string.Empty; } // get
 		} // Result
 
-		#endregion property Result
-
-		#region property SessionID
-
 		public int SessionID { get; private set; } // SessionID
-
-		#endregion property SessionID
-
-		#endregion public
-
-		#region private
 
 		private MembershipCreateStatus? m_oResult;
 		private readonly UserSecurityData m_oData;
 		private readonly CreateWebUser m_oSp;
         private bool b_isUW;
-		#region class CreateWebUser
 
 		private class CreateWebUser : AStoredProcedure {
 			public CreateWebUser(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -189,8 +163,5 @@
 			} // Now
 		} // class CreateWebUser
 
-		#endregion class CreateWebUser
-
-		#endregion private
 	} // class UserSignup
 } // namespace EzBob.Backend.Strategies.UserManagement

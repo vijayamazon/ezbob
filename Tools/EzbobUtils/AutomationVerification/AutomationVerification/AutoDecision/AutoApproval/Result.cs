@@ -5,17 +5,12 @@
 	/// Auto approval result.
 	/// </summary>
 	public class Result {
-		#region constructor
 
 		public Result(int nApprovedAmount, int nOfferLength, bool bIsEmailSendingBanned) {
 			ApprovedAmount = nApprovedAmount;
 			OfferLength = nOfferLength;
 			IsEmailSendingBanned = bIsEmailSendingBanned;
 		} // constructor
-
-		#endregion constructor
-
-		#region method ToString
 
 		public override string ToString() {
 			return string.Format(
@@ -25,8 +20,6 @@
 				IsEmailSendingBanned ? "yes" : "no"
 			);
 		} // ToString
-
-		#endregion method ToString
 
 		public int ApprovedAmount { get; private set; }
 

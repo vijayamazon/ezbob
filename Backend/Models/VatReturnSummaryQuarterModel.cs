@@ -12,8 +12,6 @@
 		[DataMember]
 		public DateTime DateTo { get; set; }
 
-		#region method ToString
-
 		public override string ToString() {
 			return ToString("");
 		} // ToString
@@ -34,6 +32,5 @@
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
 	} // class VatReturnQuarter
 } // namespace Ezbob.Backend.Models

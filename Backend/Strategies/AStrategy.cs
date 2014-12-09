@@ -10,16 +10,11 @@
 	using StructureMap;
 
 	public abstract class AStrategy {
-		#region static constructor
 
 		static AStrategy() {
 			ms_oLock = new object();
 			ms_bDefaultsAreReady = false;
 		} // static constructor
-
-		#endregion static constructor
-
-		#region public
 
 		public abstract string Name { get; }
 
@@ -27,12 +22,6 @@
 
 		public AConnection DB { get; private set; }
 		public StrategyLog Log { get; private set; }
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
 
 		protected AStrategy(AConnection oDB, ASafeLog oLog) {
 			if (ReferenceEquals(oDB, null))
@@ -44,26 +33,14 @@
 			InitDefaults(); // should not be moved to static constructor
 		} // constructor
 
-		#endregion constructor
-
-		#region method GetMpModelBuilder
-
 		protected static IMarketplaceModelBuilder GetMpModelBuilder(MP_CustomerMarketPlace mp) {
 			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
 			return builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
 		} // GetMpModelBuilder
 
-		#endregion method GetMpModelBuilder
-
-		#region property DbHelper
-
 		protected static DatabaseDataHelper DbHelper {
 			get { return ObjectFactory.GetInstance<DatabaseDataHelper>(); }
 		} // DbHelper
-
-		#endregion property DbHelper
-
-		#region property CustomerSite
 
 		protected virtual string CustomerSite {
 			get {
@@ -71,19 +48,11 @@
 			} // get
 		} // CustomerSite
 
-		#endregion property CustomerSite
-
-		#region property BrokerSite
-
 		protected virtual string BrokerSite {
 			get {
 				return RemoveLastSlash(CurrentValues.Instance.BrokerSite);
 			} // get
 		} // BrokerSite
-
-		#endregion property BrokerSite
-
-		#region property UnderwriterSite
 
 		protected virtual string UnderwriterSite {
 			get {
@@ -91,24 +60,12 @@
 			} // get
 		} // UnderwriterSite
 
-		#endregion property UnderwriterSite
-
-		#endregion protected
-
-		#region private
-
-		#region method RemoveLastSlash
-
 		private string RemoveLastSlash(string sResult) {
 			while (sResult.EndsWith("/"))
 				sResult = sResult.Substring(0, sResult.Length - 1);
 
 			return sResult;
 		} // RemoveLastSlash
-
-		#endregion method RemoveLastSlash
-
-		#region method InitDefaults
 
 		private static void InitDefaults() {
 			if (ms_bDefaultsAreReady)
@@ -126,11 +83,8 @@
 			} // lock
 		} // InitDefaults
 
-		#endregion method InitDefaults
-
 		private static readonly object ms_oLock;
 		private static bool ms_bDefaultsAreReady;
 
-		#endregion private
 	} // class AStrategy
 } // namespace EzBob.Backend.Strategies

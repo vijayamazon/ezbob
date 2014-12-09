@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -20,14 +20,13 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
     [XmlRootAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/", IsNullable = false)]
     public class Error
     {
-    
+
         private String typeField;
 
         private String codeField;
@@ -46,8 +45,6 @@ namespace MarketplaceWebService.Model
             set { this.typeField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the Type property
         /// </summary>
@@ -59,8 +56,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Type property is set
         /// </summary>
@@ -71,7 +66,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Code property.
         /// </summary>
@@ -81,8 +75,6 @@ namespace MarketplaceWebService.Model
             get { return this.codeField ; }
             set { this.codeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Code property
@@ -95,8 +87,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Code property is set
         /// </summary>
@@ -107,7 +97,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Message property.
         /// </summary>
@@ -117,8 +106,6 @@ namespace MarketplaceWebService.Model
             get { return this.messageField ; }
             set { this.messageField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the Message property
@@ -131,8 +118,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Message property is set
         /// </summary>
@@ -143,7 +128,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the Detail property.
         /// </summary>
@@ -153,8 +137,6 @@ namespace MarketplaceWebService.Model
             get { return this.detailField ; }
             set { this.detailField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the Detail property
@@ -167,8 +149,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if Detail property is set
         /// </summary>
@@ -178,11 +158,6 @@ namespace MarketplaceWebService.Model
             return this.detailField != null;
         }
 
-
-
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -191,7 +166,6 @@ namespace MarketplaceWebService.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -250,8 +224,6 @@ namespace MarketplaceWebService.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

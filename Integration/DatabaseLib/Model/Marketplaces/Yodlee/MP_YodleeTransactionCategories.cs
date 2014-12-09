@@ -1,4 +1,4 @@
-namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
+﻿namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
     using System;
     using System.Collections.Generic;
@@ -26,17 +26,17 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
         public MP_YodleeTransactionCategoriesRepository(ISession session)
             : base(session)
         {
-			
+
         }
 
         public MP_YodleeTransactionCategories GetYodleeTransactionCategoryByCategoryId(string categoryId)
         {
             MP_YodleeTransactionCategories category;
-            
+
                 category = _session
                 .Query<MP_YodleeTransactionCategories>()
                 .FirstOrDefault(t => t.CategoryId == categoryId);
-            
+
 			if(category == null)
 			{
                 category = _session
@@ -54,5 +54,4 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 
     }
 
-   
 }

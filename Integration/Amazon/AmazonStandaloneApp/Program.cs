@@ -40,7 +40,7 @@
 
                 var connectionInfo = ObjectFactory.GetInstance<IAmazonMarketPlaceTypeConnection>();
                 var connection = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
-                
+
                 int umi = int.Parse(args[0]);
                 int days = int.Parse(args[1]);
                 bool isReporting = int.Parse(args[2]) == 1;
@@ -52,7 +52,6 @@
                 DisplayOrders(elapsedTimeInfo, orders);
             }
         }
-
 
         private static List<OrderItemTwo> GetOrders(int umi, ElapsedTimeInfo elapsedTimeInfo, AmazonServiceConnectionInfo _ConnectionInfo, int days, bool useReporting)
         {
@@ -70,7 +69,7 @@
 			errorRetryingInfo.Info = new ErrorRetryingItemInfo[2];
 			errorRetryingInfo.Info[0] = new ErrorRetryingItemInfo(CurrentValues.Instance.AmazonIterationSettings1Index, CurrentValues.Instance.AmazonIterationSettings1CountRequestsExpectError, CurrentValues.Instance.AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes);
 			errorRetryingInfo.Info[1] = new ErrorRetryingItemInfo(CurrentValues.Instance.AmazonIterationSettings2Index, CurrentValues.Instance.AmazonIterationSettings2CountRequestsExpectError, CurrentValues.Instance.AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes);
-		
+
             var amazonOrdersRequestInfo = new AmazonOrdersRequestInfo
                 {
                     StartDate = startDate,
@@ -79,7 +78,6 @@
                     MerchantId = securityInfo.MerchantId,
 					ErrorRetryingInfo = errorRetryingInfo
                 };
-
 
             List<OrderItemTwo> orders;
 

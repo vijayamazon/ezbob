@@ -2,8 +2,6 @@
 	internal class Money : AType<decimal> {
 		public Money() : base("decimal") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			decimal nResult;
 
@@ -13,6 +11,5 @@
 			throw GetError(sValue);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class Money
 } // namespace

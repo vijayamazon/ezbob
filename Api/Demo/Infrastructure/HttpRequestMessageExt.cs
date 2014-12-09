@@ -21,8 +21,6 @@
 			return string.Empty;
 		} // GetUserName
 
-		#region method GetRemoteIp
-
 		public static string GetRemoteIp(this HttpRequestMessage request) {
 			if (request == null)
 				return "UNKNOWN REMOTE HOST (request is null)";
@@ -36,6 +34,5 @@
 			return "UNKNOWN REMOTE HOST";
 		} // GetRemoteIp
 
-		#endregion method GetRemoteIp
 	} // class HttpRequestMessageExt
 } // namespace

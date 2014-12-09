@@ -1,4 +1,4 @@
-namespace Ezbob.Backend.ModelsWithDB.Experian {
+﻿namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System.Runtime.Serialization;
 	using Attributes;
 	using Logger;
@@ -16,8 +16,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		[LenderDetails("LENDERNAME", "Lender name")]
 		public string LenderName { get; set; }
 
-		#region property ExperianLtdID
-
 		/// <summary>
 		/// Do not remove.
 		/// The only usage of this field is to hide from traversing corresponding field in the base class.
@@ -28,10 +26,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			set { base.ExperianLtdID = value; }
 		} // ExperianLtdID
 
-		#endregion property ExperianLtdID
-
-		#region property ParentID
-
 		[DataMember]
 		[NonTraversable]
 		public override long ParentID {
@@ -39,6 +33,5 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			set { DL65ID = value; }
 		} // ParentID
 
-		#endregion property ParentID
 	} // class ExperianLtdLenderDetails
 } // namespace

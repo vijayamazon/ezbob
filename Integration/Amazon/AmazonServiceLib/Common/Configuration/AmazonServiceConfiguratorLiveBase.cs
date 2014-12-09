@@ -1,4 +1,4 @@
-using System.Security.Policy;
+﻿using System.Security.Policy;
 
 namespace EzBob.AmazonServiceLib.Common.Configuration
 {
@@ -18,5 +18,4 @@ namespace EzBob.AmazonServiceLib.Common.Configuration
 
 	}
 
-	
 }

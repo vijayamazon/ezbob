@@ -1,8 +1,6 @@
 ﻿namespace EzService {
 	using System.Runtime.Serialization;
 
-	#region class BrokerLeadDetailsActionResult
-
 	[DataContract]
 	public class BrokerLeadDetailsActionResult : ActionResult {
 		[DataMember]
@@ -21,5 +19,4 @@
 		public string LastName { get; set; }
 	} // class BrokerLeadDetailsActionResult
 
-	#endregion class BrokerLeadDetailsActionResult
 } // namespace EzService

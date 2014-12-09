@@ -4,9 +4,6 @@
 	using Ezbob.Logger;
 
 	public class UserUpdateSecurityQuestion : AStrategy {
-		#region public
-
-		#region constructor
 
 		public UserUpdateSecurityQuestion(
 			string sEmail,
@@ -35,23 +32,11 @@
 			};
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "User update security question"; }
 		} // Name
 
-		#endregion property Name
-
-		#region property ErrorMessage
-
 		public string ErrorMessage { get; set; } // ErrorMessage
-
-		#endregion property ErrorMessage
-
-		#region method Execute
 
 		public override void Execute() {
 			ErrorMessage = null;
@@ -84,17 +69,9 @@
 			Log.Debug("User '{0}' security question has{1} been changed.", m_oData.Email, string.IsNullOrWhiteSpace(ErrorMessage) ? "" : " NOT");
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly UserSecurityData m_oData;
 		private readonly UserDataForLogin m_oSpLoad;
 		private readonly SpUserUpdateSecurityQuestion m_oSpUpdate;
-
-		#region class SpUserUpdateSecurityQuestion
 
 		private class SpUserUpdateSecurityQuestion : AStoredProc {
 			public SpUserUpdateSecurityQuestion(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -110,8 +87,5 @@
 			public string Answer { get; set; }
 		} // class SpUserUpdateSecurityQuestion
 
-		#endregion class SpUserUpdateSecurityQuestion
-
-		#endregion private
 	} // class UserUpdateSecurityQuestion
 } // namespace EzBob.Backend.Strategies.UserManagement

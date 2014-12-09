@@ -22,12 +22,7 @@
 	using Ezbob.Utils.Serialization;
 	using StructureMap;
 
-	#region class RetrieveDataHelper
-
 	public class RetrieveDataHelper : MarketplaceRetrieveDataHelperBase<FunctionType> {
-		#region public
-
-		#region constructor
 
 		public RetrieveDataHelper(
 			DatabaseDataHelper helper,
@@ -36,10 +31,6 @@
 		) : base(helper, marketplace) {
 			m_oVendorInfo = oVendorInfo;
 		} // constructor
-
-		#endregion constructor
-
-		#region method RetrieveCustomerSecurityInfo
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(
 			int customerMarketPlaceId
@@ -54,14 +45,6 @@
 					account.DisplayName, account.Id), e);
 			}
 		} // RetrieveSecurityInfo
-
-		#endregion method RetrieveCustomerSecurityInfo
-
-		#endregion public
-
-		#region protected
-
-		#region method RetrieveAndAggregate
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -100,7 +83,7 @@
 			} // try
 
 			AccountData ad = oSecInfo.Fill();
-			
+
 			var ctr = new Connector(
 				ad,
 				ms_oLog,
@@ -150,23 +133,11 @@
 			throw new ApiException("Failed to initialise CG connector.");
 		} // RetrieveAndAggregate
 
-		#endregion method RetrieveAndAggregate
-
-		#region method AddAnalysisValues
-
 		protected override void AddAnalysisValues(
 			IDatabaseCustomerMarketPlace marketPlace,
 			AnalysisDataInfo data
 		) {
 		} // AddAnalysisValues
-
-		#endregion method AddAnalysisValues
-
-		#endregion protected
-
-		#region private
-
-		#region method ProcessRetrieved
 
 		private ElapsedTimeInfo ProcessRetrieved(
 			IHarvester oHarvester,
@@ -231,10 +202,6 @@
 			return elapsedTimeInfo;
 		} // ProcessRetrieved
 
-		#endregion method ProcessRetrieved
-
-		#region method HmrcVatReturnConversion
-
 		private VatReturnRawData[] HmrcVatReturnConversion(IHarvester oHarvester) {
 			var oVatRecords = new List<VatReturnRawData>();
 
@@ -263,10 +230,6 @@
 
 			return oVatRecords.ToArray();
 		} // HmrcVatReturnConversion
- 
-		#endregion method HmrcVatReturnConversion
-
-		#region method HmrcRtiTaxMonthConversion
 
 		private RtiTaxMonthRawData[] HmrcRtiTaxMonthConversion(IHarvester oHarvester) {
 			var oOutput = new List<RtiTaxMonthRawData>();
@@ -286,10 +249,6 @@
 
 			return oOutput.ToArray();
 		} // HmrcRtiTaxMonthConversion
- 
-		#endregion method HmrcVatReturnConversion
-
-		#region method CreateOrdersAggregationInfo
 
 		private IEnumerable<IWriteDataInfo<FunctionType>> CreateOrdersAggregationInfo(
 			InternalDataList orders,
@@ -315,13 +274,9 @@
 			return aggData;
 		} // CreateOrdersAggreationInfo
 
-		#endregion method CreateOrdersAggregationInfo
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(RetrieveDataHelper));
 		private readonly VendorInfo m_oVendorInfo;
 
-		#endregion private
 	} // class RetrieveDataHelper
 
-	#endregion class RetrieveDataHelper
 } // namespace

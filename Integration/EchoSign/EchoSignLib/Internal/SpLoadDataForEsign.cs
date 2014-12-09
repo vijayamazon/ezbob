@@ -7,24 +7,15 @@
 	using JetBrains.Annotations;
 
 	internal class SpLoadDataForEsign : AStoredProc {
-		#region constructor
 
 		public SpLoadDataForEsign(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 		} // constructor
-
-		#endregion constructor
-
-		#region method HasValidParameters
 
 		public override bool HasValidParameters() {
 			return
 				(CustomerID > 0) &&
 				(TemplateID > 0);
 		} // HasValidParameters
-
-		#endregion method HasValidParameters
-
-		#region DB arguments
 
 		[UsedImplicitly]
 		public int CustomerID { get; set; }
@@ -40,10 +31,6 @@
 		[FieldName("ExperianDirectors")]
 		public List<int> ExperianDirectorIDs { get; set; }
 
-		#endregion DB arguments
-
-		#region Loaded data
-
 		public bool IsReady { get; private set; }
 
 		public Person Customer { get; private set; }
@@ -55,10 +42,6 @@
 		public List<Person> ExperianDirectors { get; private set; }
 
 		public Template Template { get; private set; }
-
-		#endregion Loaded data
-
-		#region method Load
 
 		public void Load() {
 			IsReady = false;
@@ -121,12 +104,6 @@
 			FillTemplate();
 		} // Load
 
-		#endregion method Load
-
-		#region private
-
-		#region enum RowType
-
 		private enum RowType {
 			Customer,
 			Company,
@@ -134,10 +111,6 @@
 			ExperianDirector,
 			Template,
 		} // RowType
-
-		#endregion enum RowType
-
-		#region method FillTemplate
 
 		private void FillTemplate() {
 			IsReady = false;
@@ -163,8 +136,5 @@
 			IsReady = true;
 		} // FillTemplate
 
-		#endregion method FillTemplate
-
-		#endregion private
 	} // class SpLoadDataForEsign
 } // namespace

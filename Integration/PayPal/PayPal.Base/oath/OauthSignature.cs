@@ -1,15 +1,13 @@
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using System.Collections;
 using System.Text;
-
-
 
 namespace com.paypal.sdk.core
 {
     public class OauthSignature
     {
-        
+
        private static  String PARAM_DELIMETER = "&";
 	   private static  String PARAM_SEPERATOR = "=";
 
@@ -145,9 +143,8 @@ namespace com.paypal.sdk.core
 			    key += PARAM_DELIMETER;
                 string tokenSec = System.Text.Encoding.GetEncoding("ASCII").GetString(tokenSecret);
                 key += PayPalURLEncoder.encode(tokenSec,"ASCII");
-    			
+
 			    ArrayList params1 = queryParams;
-                
 
 			    params1.Add(new Parameter("oauth_consumer_key", consumerKey));
 			    params1.Add(new Parameter("oauth_version", "1.0"));
@@ -157,13 +154,11 @@ namespace com.paypal.sdk.core
 
                 params1.Sort();      
 
-			   
 			    String signatureBase = this.httpMethod + PARAM_DELIMETER;
-			    
+
                 signatureBase += PayPalURLEncoder.encode(requestURI, "ASCII");
 			    signatureBase += PARAM_DELIMETER;
-                
-    			
+
 			    string paramString = "";
 			    int Elements = params1.Count - 1;
 
@@ -181,16 +176,14 @@ namespace com.paypal.sdk.core
 
 			    signatureBase += PayPalURLEncoder.encode(paramString, "ASCII");
 
-
                 Encoding encoding = System.Text.Encoding.ASCII;
                 byte[] keyByte = encoding.GetBytes(key);
-
 
                 HMACSHA1 hmacsha1 = new HMACSHA1(keyByte);
                 Encoding encoding1 = System.Text.Encoding.ASCII;
                 byte[] SignBase = encoding1.GetBytes(signatureBase);
                 byte[] digest = hmacsha1.ComputeHash(SignBase);
-                
+
                 signature = System.Convert.ToBase64String(digest);
 
 		    } catch (Exception e) {
@@ -298,8 +291,6 @@ namespace com.paypal.sdk.core
 	    private string httpMethod;
 	    private ArrayList queryParams;
 
-	      
-
 	    /**
 	     * Inner class for representing Parameter
 	     * 
@@ -331,7 +322,6 @@ namespace com.paypal.sdk.core
 		    private String m_name;
 		    private String m_value;
 
-            
             public int CompareTo(Object obj)
             {
                 if (!(obj is Parameter))
@@ -356,7 +346,7 @@ namespace com.paypal.sdk.core
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
-		
+
 	/**
 	 * getAuthHeader accepts the required parameters and Provides OAuth signature and TimeStamp.
 	 * 
@@ -380,7 +370,7 @@ namespace com.paypal.sdk.core
 			    String accessToken, String tokenSecret, HTTPMethod httpMethod,
 			    String scriptURI,Hashtable queryParams)
         {
-    		
+
 		    Hashtable headers=new Hashtable();
 		    String consumerKey = apiUserName;
 		    String consumerSecretStr = apiPsw;
@@ -391,7 +381,7 @@ namespace com.paypal.sdk.core
 		    String uri = scriptURI;
 
             string time = GenerateTimeStamp();
-            
+
             OauthSignature oauth = new OauthSignature(consumerKey, consumerSecret);
 			if(httpMethod == HTTPMethod.GET && queryParams != null) {		      
                   foreach(string name in queryParams.Keys){
@@ -399,9 +389,9 @@ namespace com.paypal.sdk.core
                   }
 			  }	
 		    oauth.setToken(authToken);
-		   
+
 		    oauth.setHTTPMethod(httpMethod);
-		   
+
 		    oauth.setTokenSecret(tokSecret);
 		    oauth.setTokenTimestamp(time);
 		    oauth.setRequestURI(uri);
@@ -413,9 +403,9 @@ namespace com.paypal.sdk.core
 
             headers.Add("Signature", sig);
             headers.Add("TimeStamp", time);
-		    
+
 		    return headers;
-    		
+
 	    }
 
     }

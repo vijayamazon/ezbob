@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -44,7 +44,6 @@ namespace PayPal.Platform.SDK
                 serializer = null;
             }
 
-
         }
         public static object Decode(string xmlEnvelope, Type toType)
         {
@@ -70,7 +69,6 @@ namespace PayPal.Platform.SDK
                 //StringReader strrdr = new StringReader(xmlEnvelope);
                 //XmlTextReader reader = new XmlTextReader(strrdr);
                 //return (object)serializer.Deserialize(reader);
-
 
             }
             catch (FATALException)

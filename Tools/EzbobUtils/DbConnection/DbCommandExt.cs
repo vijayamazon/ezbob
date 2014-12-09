@@ -4,9 +4,6 @@
 	using System.Data.Common;
 
 	public static class DbCommandExt {
-		#region public
-
-		#region method ForEachRow
 
 		public static void ForEachRow(this DbCommand cmd, Action<DbDataReader> oAction, Action oLogExecution = null) {
 			if (ReferenceEquals(oAction, null))
@@ -26,10 +23,6 @@
 
 			Run(cmd, oAction, oLogExecution);
 		} // ForEachRow
-
-		#endregion method ForEachRow
-
-		#region method ForEachRowSafe
 
 		public static void ForEachRowSafe(this DbCommand cmd, Action<SafeReader> oAction, Action oLogExecution = null) {
 			if (ReferenceEquals(oAction, null))
@@ -54,10 +47,6 @@
 			);
 		} // ForEachRowSafe
 
-		#endregion method ForEachRowSafe
-
-		#region method ForEachResult
-
 		public static void ForEachResult<T>(this DbCommand cmd, Action<T> oAction, Action oLogExecution = null) where T : IResultRow, new() {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachResult' call.");
@@ -66,7 +55,7 @@
 				oAction(r);
 				return ActionResult.Continue;
 			};
-			
+
 			cmd.ForEachResult(oFunc, oLogExecution);
 		} // ForEachResult
 
@@ -85,10 +74,6 @@
 				oLogExecution
 			);
 		} // ForEachResult
-
-		#endregion method ForEachResult
-
-		#region method ExecuteEnumerable
 
 		public static IEnumerable<SafeReader> ExecuteEnumerable(
 			this DbCommand command,
@@ -124,12 +109,6 @@
 			} // try
 		} // ExecuteEnumerable
 
-		#endregion method ExecuteEnumerable
-
-		#endregion public
-
-		#region private
-
 		private static void Run(DbCommand command, Func<DbDataReader, bool, ActionResult> oAction, Action oLogExecution) {
 			DbDataReader oReader = command.ExecuteReader();
 
@@ -162,6 +141,5 @@
 			oReader.Close();
 		} // Run
 
-		#endregion private
 	} // class DbCommandExt
 } // namespace Ezbob.Database

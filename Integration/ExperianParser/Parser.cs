@@ -7,9 +7,6 @@
 	using ConfigManager;
 
 	public class Parser : SafeLog {
-		#region public
-
-		#region constructor
 
 		public Parser(string sConfiguration = "", ASafeLog log = null) : base(log) {
 			m_oGroups = null;
@@ -18,10 +15,6 @@
 				InitConfiguration(sConfiguration);
 		} // constructor
 
-		#endregion constructor
-
-		#region method LoadConfiguration
-
 		public void LoadConfiguration(string sFileName) {
 			Info("Experian parser: request to load configuration from {0}", sFileName ?? "--null--");
 
@@ -29,10 +22,6 @@
 
 			Info("Experian parser: loading configuration from {0} complete.", sFileName);
 		} // LoadConfiguration
-
-		#endregion method LoadConfiguration
-
-		#region method NamedParse
 
 		public Dictionary<string, ParsedData> NamedParse(string sFileName) {
 			Info("Experian parser: request to read data from {0}", sFileName ?? "--null--");
@@ -51,7 +40,7 @@
 		public Dictionary<string, ParsedData> NamedParse(XmlNode oRoot) {
 			if (oRoot == null)
 				throw new OwnException("XML root node is not specified.");
-				
+
 			var oResult = new Dictionary<string, ParsedData>();
 
 			m_oGroups.ForEach(grp => {
@@ -63,14 +52,6 @@
 
 			return oResult;
 		} // NamedParse
-
-		#endregion method NamedParse
-
-		#endregion public
-
-		#region private
-
-		#region method InitConfiguration
 
 		private void InitConfiguration(string sConfiguration) {
 			if (string.IsNullOrWhiteSpace(sConfiguration))
@@ -98,10 +79,6 @@
 			Debug("Experian parser: parsing configuration complete.");
 		} // InitConfiguration
 
-		#endregion method InitConfiguration
-
-		#region ReadFile
-
 		private string ReadFile(string sFileName, string sFileTitle) {
 			if (string.IsNullOrWhiteSpace(sFileName))
 				throw new OwnException("Name of {0} not specified.", sFileTitle);
@@ -118,10 +95,7 @@
 			return sOutput;
 		} // ReadFile
 
-		#endregion ReadFile
-
 		private List<FieldGroup> m_oGroups;
 
-		#endregion private
 	} // class Parser
 } // namespace Ezbob.ExperianParser

@@ -7,9 +7,6 @@
 	using MailBee.Mime;
 
 	public class Processor : SafeLog {
-		#region public
-
-		#region constructor
 
 		public Processor(Conf cfg, ASafeLog oLog = null)
 			: base(oLog) {
@@ -26,10 +23,6 @@
 			Debug("\n\n***\n*** End of Pacnet.Processor configuration\n***\n");
 		} // constructor
 
-		#endregion constructor
-
-		#region method Init
-
 		public bool Init() {
 			// Licensing IMAP component. If the license key is invalid, it'll throw MailBeeLicenseException
 			try {
@@ -42,10 +35,6 @@
 
 			return true;
 		} // Init
-
-		#endregion method Init
-
-		#region method Run
 
 		public void Run() {
 			DateTime oStartTime = DateTime.UtcNow;
@@ -138,23 +127,12 @@
 			} // for
 		} // Run
 
-		#endregion method Run
-
-		#region method Done
-
 		public void Done() {
 
 		} // Done
 
-		#endregion method Done
-
-		#endregion public
-
-		#region private
-
 		private readonly TimeSpan m_oTotalWaitingTime;
 		private readonly Conf m_oConf;
 
-		#endregion private
 	} // class Processor
 } // namespace PacnetBalance

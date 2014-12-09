@@ -4,8 +4,6 @@ namespace EZBob.DatabaseLib.Model.Database
 {
 	using System;
 
-	#region class ScoringResult
-
 	public class ScoringResult
 	{
 		public virtual int Id { get; set; }
@@ -19,8 +17,6 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual double ScorePoints { get; set; }
 		public virtual double ScoreResult { get; set; }
 	} // class ScoringResult
-
-	#endregion class ScoringResult
 
     public class ScoringResultMap : ClassMap<ScoringResult>
     {
@@ -40,7 +36,6 @@ namespace EZBob.DatabaseLib.Model.Database
         }
     }
 }
-
 
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {

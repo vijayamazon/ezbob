@@ -6,7 +6,6 @@
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
-		#region method CustomerSignup
 
 		public UserLoginActionResult CustomerSignup(
 			string sEmail,
@@ -28,17 +27,9 @@
 			};
 		} // CustomerSignup
 
-		#endregion method CustomerSignup
-
-		#region method UnderwriterSignup
-
 		public ActionMetaData UnderwriterSignup(string name, Password password, string roleName) {
 			return ExecuteSync<UserSignup>(null, null, name, password.Primary, roleName);
 		} // UnderwriterSignup
-
-		#endregion method UnderwriterSignup
-
-		#region method UserLogin
 
 		public UserLoginActionResult UserLogin(string sEmail, Password oPassword, string sRemoteIp) {
 			UserLogin oInstance;
@@ -52,10 +43,6 @@
 			};
 		} // UserLogin
 
-		#endregion method UserLogin
-
-		#region method UserResetPassword
-
 		public StringActionResult UserResetPassword(string sEmail) {
 			UserResetPassword oInstance;
 
@@ -66,10 +53,6 @@
 				Value = oInstance.Success ? oInstance.Password.Encrypted : string.Empty,
 			};
 		} // UserResetPassword
-
-		#endregion method UserResetPassword
-
-		#region method UserChangePassword
 
 		public StringActionResult UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword) {
 			UserChangePassword oInstance;
@@ -82,10 +65,6 @@
 			};
 		} // UserChangePassword
 
-		#endregion method UserChangePassword
-
-		#region method CustomerChangePassword
-
 		public StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword) {
 			CustomerChangePassword oInstance;
 
@@ -96,10 +75,6 @@
 				Value = oInstance.ErrorMessage,
 			};
 		} // CustomerChangePassword
-
-		#endregion method CustomerChangePassword
-
-		#region method UserUpdateSecurityQuestion
 
 		public StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer) {
 			UserUpdateSecurityQuestion oInstance;
@@ -112,10 +87,6 @@
 			};
 		} // UserUpdateSecurityQuestion
 
-		#endregion method UserUpdateSecurityQuestion
-
-		#region method UserChangeEmail
-
 		public StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail) {
 			UserChangeEmail oInstance;
 
@@ -127,18 +98,10 @@
 			};
 		} // UserChangeEmail
 
-		#endregion method UserChangeEmail
-
-		#region method MarkSessionEnded
-
 		public ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId)
 		{
 			return Execute<MarkSessionEnded>(nCustomerId, null, nSessionID, sComment);
 		} // MarkSessionEnded
-
-		#endregion method MarkSessionEnded
-
-		#region method LoadCustomerByCreatePasswordToken
 
 		public CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken) {
 			LoadCustomerByCreatePasswordToken oInstance;
@@ -151,10 +114,6 @@
 			};
 		} // LoadCustomerByCreatePasswordToken
 
-		#endregion method LoadCustomerByCreatePasswordToken
-
-		#region method SetCustomerPasswordByToken
-
 		public IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead) {
 			SetCustomerPasswordByToken oInstance;
 
@@ -166,17 +125,9 @@
 			};
 		} // SetCustomerPasswordByToken
 
-		#endregion method SetCustomerPasswordByToken
-
-		#region method ResetPassword123456
-
 		public ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget) {
 			return Execute<ResetPassword123456>(null, nUnderwriterID, nTargetID, nTarget);
 		} // ResetPassword123456
-
-		#endregion method ResetPassword123456
-
-		#region method EmailConfirmationGenerate
 
 		public EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID) {
 			EmailConfirmationGenerate oInstance;
@@ -190,10 +141,6 @@
 			};
 		} // EmailConfirmationGenerate
 
-		#endregion method EmailConfirmationGenerate
-
-		#region method EmailConfirmationGenerateAndSend
-
 		public ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, int underwriterId) {
 			EmailConfirmationGenerate oInstance;
 
@@ -204,10 +151,6 @@
 
 			return Execute<SendEmailVerification>(nUserID, null, nUserID, oInstance.Address);
 		} // EmailConfirmationGenerateAndSend
-
-		#endregion method EmailConfirmationGenerateAndSend
-
-		#region method EmailConfirmationCheckOne
 
 		public IntActionResult EmailConfirmationCheckOne(Guid oToken) {
 			EmailConfirmationCheckOne oInstance;
@@ -220,22 +163,13 @@
 			};
 		} // EmailConfirmationCheckOne
 
-		#endregion method EmailConfirmationCheckOne
-
-		#region method EmailConfirmationConfirmUser
-
 		public ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID) {
 			return Execute<EmailConfirmationConfirmUser>(nUserID, nUnderwriterID, nUserID);
 		} // EmailConfirmationConfirmUser
-
-		#endregion method EmailConfirmationConfirmUser
-
-		#region method AddCciHistory
 
 		public ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
 			return Execute<AddCciHistory>(nCustomerID, nUnderwriterID, nCustomerID, nUnderwriterID, bCciMark);
 		} // AddCciHistory
 
-		#endregion method AddCciHistory
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -1,12 +1,7 @@
 ﻿namespace EzServiceConfiguration {
 	using System;
 
-	#region class AConfigurationData
-
 	public abstract class AConfigurationData {
-		#region public
-
-		#region method Init
 
 		public virtual void Init() {
 			LoadFromDB();
@@ -19,18 +14,8 @@
 			WriteToLog();
 		} // Init
 
-		#endregion method Init
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
 		protected AConfigurationData() {
 		} // constructor
-
-		#endregion constructor
 
 		protected abstract void LoadFromDB();
 		protected abstract void WriteToLog();
@@ -40,8 +25,6 @@
 
 		protected abstract bool IsValid();
 
-		#endregion protected
 	} // class AConfigurationData
 
-	#endregion class AConfigurationData
 } // namespace EzServiceConfiguration

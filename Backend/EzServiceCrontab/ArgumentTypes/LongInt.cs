@@ -2,8 +2,6 @@
 	internal class LongInt : AType<long> {
 		public LongInt() : base("long") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			long nResult;
 
@@ -13,6 +11,5 @@
 			throw GetError(sValue);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class LongInt
 } // namespace

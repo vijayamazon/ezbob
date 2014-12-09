@@ -5,18 +5,11 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Logger;
 
-	#region class ExperianUtils
-
 	class ExperianUtils {
-		#region constructor
 
 		public ExperianUtils(ASafeLog oLog) {
 			Log = new SafeLog(oLog);
 		} // constructor
-
-		#endregion constructor
-
-		#region method IsDirector
 
 		public bool IsDirector(ExperianLtd oExperianLtd, string sFirstName, string sLastName) {
 			sFirstName = sFirstName.Trim().ToLowerInvariant();
@@ -34,10 +27,6 @@
 
 			return false;
 		} // IsDirector
-
-		#endregion method IsDirector
-
-		#region method DetectTangibleEquity
 
 		public void DetectTangibleEquity(ExperianLtd oExperianLtd, out decimal nResultTangibleEquity, out decimal nResultTotalCurrentAssets) {
 			nResultTangibleEquity = -1;
@@ -99,14 +88,8 @@
 			nResultTotalCurrentAssets = nTotalCurrentAssets;
 		} // DetectTangibleEquity
 
-		#endregion method DetectTangibleEquity
-
-		#region private
-
 		private SafeLog Log { get; set; } // Log
 
-		#endregion private
 	} // class ExperianUtils
 
-	#endregion class ExperianUtils
 } // namespace EzBob.Backend.Strategies

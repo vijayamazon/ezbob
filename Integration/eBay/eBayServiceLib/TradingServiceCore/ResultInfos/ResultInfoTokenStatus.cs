@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using EzBob.eBayServiceLib.TradingServiceCore.DataInfos;
 using EzBob.eBayServiceLib.com.ebay.developer.soap;
 
@@ -21,8 +21,6 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 
 	}
 
-	
-
 	public class ResultInfoTokenStatus : ResultInfoByServerResponseBase
 	{
 		private readonly GetTokenStatusResponseType _Response;
@@ -30,7 +28,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 		public ResultInfoTokenStatus(GetTokenStatusResponseType response) : base(response)
 		{
 			_Response = response;
-			
+
 		}
 
 		public DateTime? Expred

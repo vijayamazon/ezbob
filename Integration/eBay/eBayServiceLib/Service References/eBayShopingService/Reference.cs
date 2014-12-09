@@ -9,89 +9,88 @@
 //------------------------------------------------------------------------------
 
 namespace EzBob.eBayServiceLib.eBayShopingService {
-    
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:ebay:apis:eBLBaseComponents", ConfigurationName="eBayShopingService.ShoppingInterface")]
     public interface ShoppingInterface {
-        
+
         // CODEGEN: Generating message contract since the operation FindHalfProducts is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsResponse FindHalfProducts(EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation FindPopularItems is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsResponse FindPopularItems(EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation FindPopularSearches is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesResponse FindPopularSearches(EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation FindProducts is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.FindProductsResponse FindProducts(EzBob.eBayServiceLib.eBayShopingService.FindProductsRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation FindReviewsAndGuides is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesResponse FindReviewsAndGuides(EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation GetCategoryInfo is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoResponse GetCategoryInfo(EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation GetItemStatus is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.GetItemStatusResponse GetItemStatus(EzBob.eBayServiceLib.eBayShopingService.GetItemStatusRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation GetMultipleItems is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsResponse GetMultipleItems(EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation GetShippingCosts is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsResponse GetShippingCosts(EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation GetSingleItem is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.GetSingleItemResponse GetSingleItem(EzBob.eBayServiceLib.eBayShopingService.GetSingleItemRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation GetUserProfile is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractResponseType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.GetUserProfileResponse GetUserProfile(EzBob.eBayServiceLib.eBayShopingService.GetUserProfileRequest request);
-        
+
         // CODEGEN: Generating message contract since the operation GeteBayTime is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -99,7 +98,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRequestType))]
         EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeResponse GeteBayTime(EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeRequest request);
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -107,37 +106,37 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindHalfProductsRequestType : AbstractRequestType {
-        
+
         private string includeSelectorField;
-        
+
         private bool availableItemsOnlyField;
-        
+
         private bool availableItemsOnlyFieldSpecified;
-        
+
         private string[] domainNameField;
-        
+
         private ProductIDType productIDField;
-        
+
         private string queryKeywordsField;
-        
+
         private string sellerIDField;
-        
+
         private ProductSortCodeType productSortField;
-        
+
         private bool productSortFieldSpecified;
-        
+
         private SortOrderCodeType sortOrderField;
-        
+
         private bool sortOrderFieldSpecified;
-        
+
         private int maxEntriesField;
-        
+
         private bool maxEntriesFieldSpecified;
-        
+
         private int pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string IncludeSelector {
@@ -149,7 +148,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("IncludeSelector");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public bool AvailableItemsOnly {
@@ -161,7 +160,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AvailableItemsOnly");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AvailableItemsOnlySpecified {
@@ -173,7 +172,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AvailableItemsOnlySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DomainName", Order=2)]
         public string[] DomainName {
@@ -185,7 +184,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DomainName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public ProductIDType ProductID {
@@ -197,7 +196,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string QueryKeywords {
@@ -209,7 +208,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QueryKeywords");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string SellerID {
@@ -221,7 +220,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SellerID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public ProductSortCodeType ProductSort {
@@ -233,7 +232,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductSort");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ProductSortSpecified {
@@ -245,7 +244,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductSortSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public SortOrderCodeType SortOrder {
@@ -257,7 +256,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SortOrder");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SortOrderSpecified {
@@ -269,7 +268,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SortOrderSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public int MaxEntries {
@@ -281,7 +280,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxEntries");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MaxEntriesSpecified {
@@ -293,7 +292,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxEntriesSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public int PageNumber {
@@ -305,7 +304,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified {
@@ -318,7 +317,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -326,13 +325,13 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ProductIDType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private ProductIDCodeType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public ProductIDCodeType type {
@@ -344,7 +343,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("type");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool typeSpecified {
@@ -356,7 +355,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("typeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
@@ -368,9 +367,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -378,38 +377,38 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum ProductIDCodeType {
-        
+
         /// <remarks/>
         ISBN,
-        
+
         /// <remarks/>
         EAN,
-        
+
         /// <remarks/>
         UPC,
-        
+
         /// <remarks/>
         MPN,
-        
+
         /// <remarks/>
         Keywords,
-        
+
         /// <remarks/>
         CatalogItem,
-        
+
         /// <remarks/>
         Reference,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -417,59 +416,59 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FeedbackDetailType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string commentingUserField;
-        
+
         private int commentingUserScoreField;
-        
+
         private bool commentingUserScoreFieldSpecified;
-        
+
         private string commentTextField;
-        
+
         private System.DateTime commentTimeField;
-        
+
         private bool commentTimeFieldSpecified;
-        
+
         private CommentTypeCodeType commentTypeField;
-        
+
         private bool commentTypeFieldSpecified;
-        
+
         private string feedbackResponseField;
-        
+
         private string followUpField;
-        
+
         private string itemIDField;
-        
+
         private TradingRoleCodeType roleField;
-        
+
         private bool roleFieldSpecified;
-        
+
         private string itemTitleField;
-        
+
         private AmountType itemPriceField;
-        
+
         private string feedbackIDField;
-        
+
         private string transactionIDField;
-        
+
         private bool commentReplacedField;
-        
+
         private bool commentReplacedFieldSpecified;
-        
+
         private bool responseReplacedField;
-        
+
         private bool responseReplacedFieldSpecified;
-        
+
         private bool followUpReplacedField;
-        
+
         private bool followUpReplacedFieldSpecified;
-        
+
         private bool countableField;
-        
+
         private bool countableFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string CommentingUser {
@@ -481,7 +480,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentingUser");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int CommentingUserScore {
@@ -493,7 +492,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentingUserScore");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CommentingUserScoreSpecified {
@@ -505,7 +504,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentingUserScoreSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string CommentText {
@@ -517,7 +516,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentText");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public System.DateTime CommentTime {
@@ -529,7 +528,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CommentTimeSpecified {
@@ -541,7 +540,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public CommentTypeCodeType CommentType {
@@ -553,7 +552,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentType");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CommentTypeSpecified {
@@ -565,7 +564,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentTypeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string FeedbackResponse {
@@ -577,7 +576,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackResponse");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string FollowUp {
@@ -589,7 +588,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FollowUp");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public string ItemID {
@@ -601,7 +600,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public TradingRoleCodeType Role {
@@ -613,7 +612,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Role");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RoleSpecified {
@@ -625,7 +624,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RoleSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public string ItemTitle {
@@ -637,7 +636,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemTitle");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public AmountType ItemPrice {
@@ -649,7 +648,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public string FeedbackID {
@@ -661,7 +660,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=12)]
         public string TransactionID {
@@ -673,7 +672,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TransactionID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=13)]
         public bool CommentReplaced {
@@ -685,7 +684,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentReplaced");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CommentReplacedSpecified {
@@ -697,7 +696,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CommentReplacedSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=14)]
         public bool ResponseReplaced {
@@ -709,7 +708,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ResponseReplaced");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ResponseReplacedSpecified {
@@ -721,7 +720,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ResponseReplacedSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=15)]
         public bool FollowUpReplaced {
@@ -733,7 +732,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FollowUpReplaced");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FollowUpReplacedSpecified {
@@ -745,7 +744,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FollowUpReplacedSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=16)]
         public bool Countable {
@@ -757,7 +756,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Countable");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CountableSpecified {
@@ -769,7 +768,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CountableSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=17)]
         public System.Xml.XmlElement[] Any {
@@ -781,9 +780,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -791,48 +790,48 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum CommentTypeCodeType {
-        
+
         /// <remarks/>
         Positive,
-        
+
         /// <remarks/>
         Neutral,
-        
+
         /// <remarks/>
         Negative,
-        
+
         /// <remarks/>
         Withdrawn,
-        
+
         /// <remarks/>
         IndependentlyWithdrawn,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum TradingRoleCodeType {
-        
+
         /// <remarks/>
         Buyer,
-        
+
         /// <remarks/>
         Seller,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -840,11 +839,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class AmountType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private CurrencyCodeType currencyIDField;
-        
+
         private double valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public CurrencyCodeType currencyID {
@@ -856,7 +855,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("currencyID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public double Value {
@@ -868,9 +867,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -878,542 +877,542 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum CurrencyCodeType {
-        
+
         /// <remarks/>
         AFA,
-        
+
         /// <remarks/>
         ALL,
-        
+
         /// <remarks/>
         DZD,
-        
+
         /// <remarks/>
         ADP,
-        
+
         /// <remarks/>
         AOA,
-        
+
         /// <remarks/>
         ARS,
-        
+
         /// <remarks/>
         AMD,
-        
+
         /// <remarks/>
         AWG,
-        
+
         /// <remarks/>
         AZM,
-        
+
         /// <remarks/>
         BSD,
-        
+
         /// <remarks/>
         BHD,
-        
+
         /// <remarks/>
         BDT,
-        
+
         /// <remarks/>
         BBD,
-        
+
         /// <remarks/>
         BYR,
-        
+
         /// <remarks/>
         BZD,
-        
+
         /// <remarks/>
         BMD,
-        
+
         /// <remarks/>
         BTN,
-        
+
         /// <remarks/>
         INR,
-        
+
         /// <remarks/>
         BOV,
-        
+
         /// <remarks/>
         BOB,
-        
+
         /// <remarks/>
         BAM,
-        
+
         /// <remarks/>
         BWP,
-        
+
         /// <remarks/>
         BRL,
-        
+
         /// <remarks/>
         BND,
-        
+
         /// <remarks/>
         BGL,
-        
+
         /// <remarks/>
         BGN,
-        
+
         /// <remarks/>
         BIF,
-        
+
         /// <remarks/>
         KHR,
-        
+
         /// <remarks/>
         CAD,
-        
+
         /// <remarks/>
         CVE,
-        
+
         /// <remarks/>
         KYD,
-        
+
         /// <remarks/>
         XAF,
-        
+
         /// <remarks/>
         CLF,
-        
+
         /// <remarks/>
         CLP,
-        
+
         /// <remarks/>
         CNY,
-        
+
         /// <remarks/>
         COP,
-        
+
         /// <remarks/>
         KMF,
-        
+
         /// <remarks/>
         CDF,
-        
+
         /// <remarks/>
         CRC,
-        
+
         /// <remarks/>
         HRK,
-        
+
         /// <remarks/>
         CUP,
-        
+
         /// <remarks/>
         CYP,
-        
+
         /// <remarks/>
         CZK,
-        
+
         /// <remarks/>
         DKK,
-        
+
         /// <remarks/>
         DJF,
-        
+
         /// <remarks/>
         DOP,
-        
+
         /// <remarks/>
         TPE,
-        
+
         /// <remarks/>
         ECV,
-        
+
         /// <remarks/>
         ECS,
-        
+
         /// <remarks/>
         EGP,
-        
+
         /// <remarks/>
         SVC,
-        
+
         /// <remarks/>
         ERN,
-        
+
         /// <remarks/>
         EEK,
-        
+
         /// <remarks/>
         ETB,
-        
+
         /// <remarks/>
         FKP,
-        
+
         /// <remarks/>
         FJD,
-        
+
         /// <remarks/>
         GMD,
-        
+
         /// <remarks/>
         GEL,
-        
+
         /// <remarks/>
         GHC,
-        
+
         /// <remarks/>
         GIP,
-        
+
         /// <remarks/>
         GTQ,
-        
+
         /// <remarks/>
         GNF,
-        
+
         /// <remarks/>
         GWP,
-        
+
         /// <remarks/>
         GYD,
-        
+
         /// <remarks/>
         HTG,
-        
+
         /// <remarks/>
         HNL,
-        
+
         /// <remarks/>
         HKD,
-        
+
         /// <remarks/>
         HUF,
-        
+
         /// <remarks/>
         ISK,
-        
+
         /// <remarks/>
         IDR,
-        
+
         /// <remarks/>
         IRR,
-        
+
         /// <remarks/>
         IQD,
-        
+
         /// <remarks/>
         ILS,
-        
+
         /// <remarks/>
         JMD,
-        
+
         /// <remarks/>
         JPY,
-        
+
         /// <remarks/>
         JOD,
-        
+
         /// <remarks/>
         KZT,
-        
+
         /// <remarks/>
         KES,
-        
+
         /// <remarks/>
         AUD,
-        
+
         /// <remarks/>
         KPW,
-        
+
         /// <remarks/>
         KRW,
-        
+
         /// <remarks/>
         KWD,
-        
+
         /// <remarks/>
         KGS,
-        
+
         /// <remarks/>
         LAK,
-        
+
         /// <remarks/>
         LVL,
-        
+
         /// <remarks/>
         LBP,
-        
+
         /// <remarks/>
         LSL,
-        
+
         /// <remarks/>
         LRD,
-        
+
         /// <remarks/>
         LYD,
-        
+
         /// <remarks/>
         CHF,
-        
+
         /// <remarks/>
         LTL,
-        
+
         /// <remarks/>
         MOP,
-        
+
         /// <remarks/>
         MKD,
-        
+
         /// <remarks/>
         MGF,
-        
+
         /// <remarks/>
         MWK,
-        
+
         /// <remarks/>
         MYR,
-        
+
         /// <remarks/>
         MVR,
-        
+
         /// <remarks/>
         MTL,
-        
+
         /// <remarks/>
         EUR,
-        
+
         /// <remarks/>
         MRO,
-        
+
         /// <remarks/>
         MUR,
-        
+
         /// <remarks/>
         MXN,
-        
+
         /// <remarks/>
         MXV,
-        
+
         /// <remarks/>
         MDL,
-        
+
         /// <remarks/>
         MNT,
-        
+
         /// <remarks/>
         XCD,
-        
+
         /// <remarks/>
         MZM,
-        
+
         /// <remarks/>
         MMK,
-        
+
         /// <remarks/>
         ZAR,
-        
+
         /// <remarks/>
         NAD,
-        
+
         /// <remarks/>
         NPR,
-        
+
         /// <remarks/>
         ANG,
-        
+
         /// <remarks/>
         XPF,
-        
+
         /// <remarks/>
         NZD,
-        
+
         /// <remarks/>
         NIO,
-        
+
         /// <remarks/>
         NGN,
-        
+
         /// <remarks/>
         NOK,
-        
+
         /// <remarks/>
         OMR,
-        
+
         /// <remarks/>
         PKR,
-        
+
         /// <remarks/>
         PAB,
-        
+
         /// <remarks/>
         PGK,
-        
+
         /// <remarks/>
         PYG,
-        
+
         /// <remarks/>
         PEN,
-        
+
         /// <remarks/>
         PHP,
-        
+
         /// <remarks/>
         PLN,
-        
+
         /// <remarks/>
         USD,
-        
+
         /// <remarks/>
         QAR,
-        
+
         /// <remarks/>
         ROL,
-        
+
         /// <remarks/>
         RUB,
-        
+
         /// <remarks/>
         RUR,
-        
+
         /// <remarks/>
         RWF,
-        
+
         /// <remarks/>
         SHP,
-        
+
         /// <remarks/>
         WST,
-        
+
         /// <remarks/>
         STD,
-        
+
         /// <remarks/>
         SAR,
-        
+
         /// <remarks/>
         SCR,
-        
+
         /// <remarks/>
         SLL,
-        
+
         /// <remarks/>
         SGD,
-        
+
         /// <remarks/>
         SKK,
-        
+
         /// <remarks/>
         SIT,
-        
+
         /// <remarks/>
         SBD,
-        
+
         /// <remarks/>
         SOS,
-        
+
         /// <remarks/>
         LKR,
-        
+
         /// <remarks/>
         SDD,
-        
+
         /// <remarks/>
         SRG,
-        
+
         /// <remarks/>
         SZL,
-        
+
         /// <remarks/>
         SEK,
-        
+
         /// <remarks/>
         SYP,
-        
+
         /// <remarks/>
         TWD,
-        
+
         /// <remarks/>
         TJS,
-        
+
         /// <remarks/>
         TZS,
-        
+
         /// <remarks/>
         THB,
-        
+
         /// <remarks/>
         XOF,
-        
+
         /// <remarks/>
         TOP,
-        
+
         /// <remarks/>
         TTD,
-        
+
         /// <remarks/>
         TND,
-        
+
         /// <remarks/>
         TRL,
-        
+
         /// <remarks/>
         TMM,
-        
+
         /// <remarks/>
         UGX,
-        
+
         /// <remarks/>
         UAH,
-        
+
         /// <remarks/>
         AED,
-        
+
         /// <remarks/>
         GBP,
-        
+
         /// <remarks/>
         USS,
-        
+
         /// <remarks/>
         USN,
-        
+
         /// <remarks/>
         UYU,
-        
+
         /// <remarks/>
         UZS,
-        
+
         /// <remarks/>
         VUV,
-        
+
         /// <remarks/>
         VEB,
-        
+
         /// <remarks/>
         VND,
-        
+
         /// <remarks/>
         MAD,
-        
+
         /// <remarks/>
         YER,
-        
+
         /// <remarks/>
         YUM,
-        
+
         /// <remarks/>
         ZMK,
-        
+
         /// <remarks/>
         ZWD,
-        
+
         /// <remarks/>
         ATS,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1421,21 +1420,21 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class AverageRatingDetailsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private FeedbackRatingDetailCodeType ratingDetailField;
-        
+
         private bool ratingDetailFieldSpecified;
-        
+
         private double ratingField;
-        
+
         private bool ratingFieldSpecified;
-        
+
         private long ratingCountField;
-        
+
         private bool ratingCountFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public FeedbackRatingDetailCodeType RatingDetail {
@@ -1447,7 +1446,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RatingDetail");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RatingDetailSpecified {
@@ -1459,7 +1458,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RatingDetailSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public double Rating {
@@ -1471,7 +1470,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Rating");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RatingSpecified {
@@ -1483,7 +1482,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RatingSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public long RatingCount {
@@ -1495,7 +1494,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RatingCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RatingCountSpecified {
@@ -1507,7 +1506,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RatingCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=3)]
         public System.Xml.XmlElement[] Any {
@@ -1519,9 +1518,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1529,29 +1528,29 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum FeedbackRatingDetailCodeType {
-        
+
         /// <remarks/>
         ItemAsDescribed,
-        
+
         /// <remarks/>
         Communication,
-        
+
         /// <remarks/>
         ShippingTime,
-        
+
         /// <remarks/>
         ShippingAndHandlingCharges,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1559,17 +1558,17 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FeedbackPeriodType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private int periodInDaysField;
-        
+
         private bool periodInDaysFieldSpecified;
-        
+
         private long countField;
-        
+
         private bool countFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int PeriodInDays {
@@ -1581,7 +1580,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PeriodInDays");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PeriodInDaysSpecified {
@@ -1593,7 +1592,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PeriodInDaysSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public long Count {
@@ -1605,7 +1604,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Count");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CountSpecified {
@@ -1617,7 +1616,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -1629,9 +1628,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1639,7 +1638,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1647,37 +1646,37 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FeedbackHistoryType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private FeedbackPeriodType[] bidRetractionFeedbackPeriodsField;
-        
+
         private FeedbackPeriodType[] negativeFeedbackPeriodsField;
-        
+
         private FeedbackPeriodType[] neutralFeedbackPeriodsField;
-        
+
         private FeedbackPeriodType[] positiveFeedbackPeriodsField;
-        
+
         private FeedbackPeriodType[] totalFeedbackPeriodsField;
-        
+
         private long uniqueNegativeFeedbackCountField;
-        
+
         private bool uniqueNegativeFeedbackCountFieldSpecified;
-        
+
         private long uniquePositiveFeedbackCountField;
-        
+
         private bool uniquePositiveFeedbackCountFieldSpecified;
-        
+
         private AverageRatingDetailsType[] averageRatingDetailsField;
-        
+
         private long neutralCommentCountFromSuspendedUsersField;
-        
+
         private bool neutralCommentCountFromSuspendedUsersFieldSpecified;
-        
+
         private long uniqueNeutralFeedbackCountField;
-        
+
         private bool uniqueNeutralFeedbackCountFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BidRetractionFeedbackPeriods", Order=0)]
         public FeedbackPeriodType[] BidRetractionFeedbackPeriods {
@@ -1689,7 +1688,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BidRetractionFeedbackPeriods");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NegativeFeedbackPeriods", Order=1)]
         public FeedbackPeriodType[] NegativeFeedbackPeriods {
@@ -1701,7 +1700,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("NegativeFeedbackPeriods");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NeutralFeedbackPeriods", Order=2)]
         public FeedbackPeriodType[] NeutralFeedbackPeriods {
@@ -1713,7 +1712,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("NeutralFeedbackPeriods");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PositiveFeedbackPeriods", Order=3)]
         public FeedbackPeriodType[] PositiveFeedbackPeriods {
@@ -1725,7 +1724,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PositiveFeedbackPeriods");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("TotalFeedbackPeriods", Order=4)]
         public FeedbackPeriodType[] TotalFeedbackPeriods {
@@ -1737,7 +1736,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalFeedbackPeriods");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public long UniqueNegativeFeedbackCount {
@@ -1749,7 +1748,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UniqueNegativeFeedbackCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UniqueNegativeFeedbackCountSpecified {
@@ -1761,7 +1760,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UniqueNegativeFeedbackCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public long UniquePositiveFeedbackCount {
@@ -1773,7 +1772,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UniquePositiveFeedbackCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UniquePositiveFeedbackCountSpecified {
@@ -1785,7 +1784,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UniquePositiveFeedbackCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AverageRatingDetails", Order=7)]
         public AverageRatingDetailsType[] AverageRatingDetails {
@@ -1797,7 +1796,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AverageRatingDetails");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public long NeutralCommentCountFromSuspendedUsers {
@@ -1809,7 +1808,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("NeutralCommentCountFromSuspendedUsers");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool NeutralCommentCountFromSuspendedUsersSpecified {
@@ -1821,7 +1820,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("NeutralCommentCountFromSuspendedUsersSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public long UniqueNeutralFeedbackCount {
@@ -1833,7 +1832,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UniqueNeutralFeedbackCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UniqueNeutralFeedbackCountSpecified {
@@ -1845,7 +1844,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UniqueNeutralFeedbackCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=10)]
         public System.Xml.XmlElement[] Any {
@@ -1857,9 +1856,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1867,7 +1866,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1875,19 +1874,19 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class TaxJurisdictionType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string jurisdictionIDField;
-        
+
         private float salesTaxPercentField;
-        
+
         private bool salesTaxPercentFieldSpecified;
-        
+
         private bool shippingIncludedInTaxField;
-        
+
         private bool shippingIncludedInTaxFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string JurisdictionID {
@@ -1899,7 +1898,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("JurisdictionID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public float SalesTaxPercent {
@@ -1911,7 +1910,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SalesTaxPercent");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SalesTaxPercentSpecified {
@@ -1923,7 +1922,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SalesTaxPercentSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public bool ShippingIncludedInTax {
@@ -1935,7 +1934,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingIncludedInTax");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ShippingIncludedInTaxSpecified {
@@ -1947,7 +1946,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingIncludedInTaxSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=3)]
         public System.Xml.XmlElement[] Any {
@@ -1959,9 +1958,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1969,7 +1968,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -1977,49 +1976,49 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ShippingServiceOptionType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private AmountType shippingInsuranceCostField;
-        
+
         private string shippingServiceNameField;
-        
+
         private AmountType shippingServiceCostField;
-        
+
         private AmountType shippingServiceAdditionalCostField;
-        
+
         private int shippingServicePriorityField;
-        
+
         private bool shippingServicePriorityFieldSpecified;
-        
+
         private bool expeditedServiceField;
-        
+
         private bool expeditedServiceFieldSpecified;
-        
+
         private int shippingTimeMinField;
-        
+
         private bool shippingTimeMinFieldSpecified;
-        
+
         private int shippingTimeMaxField;
-        
+
         private bool shippingTimeMaxFieldSpecified;
-        
+
         private AmountType shippingSurchargeField;
-        
+
         private string[] shipsToField;
-        
+
         private System.DateTime estimatedDeliveryMinTimeField;
-        
+
         private bool estimatedDeliveryMinTimeFieldSpecified;
-        
+
         private System.DateTime estimatedDeliveryMaxTimeField;
-        
+
         private bool estimatedDeliveryMaxTimeFieldSpecified;
-        
+
         private bool fastAndFreeField;
-        
+
         private bool fastAndFreeFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AmountType ShippingInsuranceCost {
@@ -2031,7 +2030,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingInsuranceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token", Order=1)]
         public string ShippingServiceName {
@@ -2043,7 +2042,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public AmountType ShippingServiceCost {
@@ -2055,7 +2054,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public AmountType ShippingServiceAdditionalCost {
@@ -2067,7 +2066,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceAdditionalCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int ShippingServicePriority {
@@ -2079,7 +2078,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServicePriority");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ShippingServicePrioritySpecified {
@@ -2091,7 +2090,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServicePrioritySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public bool ExpeditedService {
@@ -2103,7 +2102,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ExpeditedService");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ExpeditedServiceSpecified {
@@ -2115,7 +2114,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ExpeditedServiceSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public int ShippingTimeMin {
@@ -2127,7 +2126,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingTimeMin");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ShippingTimeMinSpecified {
@@ -2139,7 +2138,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingTimeMinSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public int ShippingTimeMax {
@@ -2151,7 +2150,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingTimeMax");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ShippingTimeMaxSpecified {
@@ -2163,7 +2162,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingTimeMaxSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public AmountType ShippingSurcharge {
@@ -2175,7 +2174,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingSurcharge");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ShipsTo", Order=9)]
         public string[] ShipsTo {
@@ -2187,7 +2186,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShipsTo");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public System.DateTime EstimatedDeliveryMinTime {
@@ -2199,7 +2198,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EstimatedDeliveryMinTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EstimatedDeliveryMinTimeSpecified {
@@ -2211,7 +2210,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EstimatedDeliveryMinTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public System.DateTime EstimatedDeliveryMaxTime {
@@ -2223,7 +2222,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EstimatedDeliveryMaxTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EstimatedDeliveryMaxTimeSpecified {
@@ -2235,7 +2234,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EstimatedDeliveryMaxTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=12)]
         public bool FastAndFree {
@@ -2247,7 +2246,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FastAndFree");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FastAndFreeSpecified {
@@ -2259,7 +2258,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FastAndFreeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=13)]
         public System.Xml.XmlElement[] Any {
@@ -2271,9 +2270,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2281,7 +2280,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2289,21 +2288,21 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class SalesTaxType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private float salesTaxPercentField;
-        
+
         private bool salesTaxPercentFieldSpecified;
-        
+
         private string salesTaxStateField;
-        
+
         private bool shippingIncludedInTaxField;
-        
+
         private bool shippingIncludedInTaxFieldSpecified;
-        
+
         private AmountType salesTaxAmountField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public float SalesTaxPercent {
@@ -2315,7 +2314,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SalesTaxPercent");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SalesTaxPercentSpecified {
@@ -2327,7 +2326,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SalesTaxPercentSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string SalesTaxState {
@@ -2339,7 +2338,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SalesTaxState");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public bool ShippingIncludedInTax {
@@ -2351,7 +2350,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingIncludedInTax");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ShippingIncludedInTaxSpecified {
@@ -2363,7 +2362,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingIncludedInTaxSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public AmountType SalesTaxAmount {
@@ -2375,7 +2374,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SalesTaxAmount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=4)]
         public System.Xml.XmlElement[] Any {
@@ -2387,9 +2386,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2397,7 +2396,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2405,33 +2404,33 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class InternationalShippingServiceOptionType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private AmountType shippingInsuranceCostField;
-        
+
         private string shippingServiceNameField;
-        
+
         private AmountType shippingServiceAdditionalCostField;
-        
+
         private AmountType shippingServiceCostField;
-        
+
         private int shippingServicePriorityField;
-        
+
         private bool shippingServicePriorityFieldSpecified;
-        
+
         private string[] shipsToField;
-        
+
         private System.DateTime estimatedDeliveryMinTimeField;
-        
+
         private bool estimatedDeliveryMinTimeFieldSpecified;
-        
+
         private System.DateTime estimatedDeliveryMaxTimeField;
-        
+
         private bool estimatedDeliveryMaxTimeFieldSpecified;
-        
+
         private AmountType importChargeField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AmountType ShippingInsuranceCost {
@@ -2443,7 +2442,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingInsuranceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token", Order=1)]
         public string ShippingServiceName {
@@ -2455,7 +2454,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public AmountType ShippingServiceAdditionalCost {
@@ -2467,7 +2466,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceAdditionalCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public AmountType ShippingServiceCost {
@@ -2479,7 +2478,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int ShippingServicePriority {
@@ -2491,7 +2490,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServicePriority");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ShippingServicePrioritySpecified {
@@ -2503,7 +2502,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServicePrioritySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ShipsTo", Order=5)]
         public string[] ShipsTo {
@@ -2515,7 +2514,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShipsTo");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public System.DateTime EstimatedDeliveryMinTime {
@@ -2527,7 +2526,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EstimatedDeliveryMinTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EstimatedDeliveryMinTimeSpecified {
@@ -2539,7 +2538,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EstimatedDeliveryMinTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public System.DateTime EstimatedDeliveryMaxTime {
@@ -2551,7 +2550,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EstimatedDeliveryMaxTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EstimatedDeliveryMaxTimeSpecified {
@@ -2563,7 +2562,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EstimatedDeliveryMaxTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public AmountType ImportCharge {
@@ -2575,7 +2574,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ImportCharge");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=9)]
         public System.Xml.XmlElement[] Any {
@@ -2587,9 +2586,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2597,7 +2596,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2605,39 +2604,39 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ShippingDetailsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private bool getItFastField;
-        
+
         private bool getItFastFieldSpecified;
-        
+
         private AmountType insuranceCostField;
-        
+
         private InsuranceOptionCodeType insuranceOptionField;
-        
+
         private bool insuranceOptionFieldSpecified;
-        
+
         private InternationalShippingServiceOptionType[] internationalShippingServiceOptionField;
-        
+
         private SalesTaxType salesTaxField;
-        
+
         private string shippingRateErrorMessageField;
-        
+
         private ShippingServiceOptionType[] shippingServiceOptionField;
-        
+
         private TaxJurisdictionType[] taxTableField;
-        
+
         private AmountType internationalInsuranceCostField;
-        
+
         private InsuranceOptionCodeType internationalInsuranceOptionField;
-        
+
         private bool internationalInsuranceOptionFieldSpecified;
-        
+
         private AmountType cODCostField;
-        
+
         private string[] excludeShipToLocationField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool GetItFast {
@@ -2649,7 +2648,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GetItFast");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool GetItFastSpecified {
@@ -2661,7 +2660,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GetItFastSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public AmountType InsuranceCost {
@@ -2673,7 +2672,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InsuranceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public InsuranceOptionCodeType InsuranceOption {
@@ -2685,7 +2684,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InsuranceOption");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool InsuranceOptionSpecified {
@@ -2697,7 +2696,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InsuranceOptionSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("InternationalShippingServiceOption", Order=3)]
         public InternationalShippingServiceOptionType[] InternationalShippingServiceOption {
@@ -2709,7 +2708,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InternationalShippingServiceOption");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public SalesTaxType SalesTax {
@@ -2721,7 +2720,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SalesTax");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string ShippingRateErrorMessage {
@@ -2733,7 +2732,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingRateErrorMessage");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ShippingServiceOption", Order=6)]
         public ShippingServiceOptionType[] ShippingServiceOption {
@@ -2745,7 +2744,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceOption");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=7)]
         [System.Xml.Serialization.XmlArrayItemAttribute("TaxJurisdiction", IsNullable=false)]
@@ -2758,7 +2757,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TaxTable");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public AmountType InternationalInsuranceCost {
@@ -2770,7 +2769,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InternationalInsuranceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public InsuranceOptionCodeType InternationalInsuranceOption {
@@ -2782,7 +2781,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InternationalInsuranceOption");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool InternationalInsuranceOptionSpecified {
@@ -2794,7 +2793,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InternationalInsuranceOptionSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public AmountType CODCost {
@@ -2806,7 +2805,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CODCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ExcludeShipToLocation", Order=11)]
         public string[] ExcludeShipToLocation {
@@ -2818,7 +2817,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ExcludeShipToLocation");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=12)]
         public System.Xml.XmlElement[] Any {
@@ -2830,9 +2829,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2840,32 +2839,32 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum InsuranceOptionCodeType {
-        
+
         /// <remarks/>
         Optional,
-        
+
         /// <remarks/>
         Required,
-        
+
         /// <remarks/>
         NotOffered,
-        
+
         /// <remarks/>
         IncludedInShippingHandling,
-        
+
         /// <remarks/>
         NotOfferedOnSite,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -2873,33 +2872,33 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class CategoryType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string categoryIDField;
-        
+
         private int categoryLevelField;
-        
+
         private bool categoryLevelFieldSpecified;
-        
+
         private string categoryNameField;
-        
+
         private string categoryParentIDField;
-        
+
         private string categoryParentNameField;
-        
+
         private int itemCountField;
-        
+
         private bool itemCountFieldSpecified;
-        
+
         private string categoryNamePathField;
-        
+
         private string categoryIDPathField;
-        
+
         private bool leafCategoryField;
-        
+
         private bool leafCategoryFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string CategoryID {
@@ -2911,7 +2910,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int CategoryLevel {
@@ -2923,7 +2922,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryLevel");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CategoryLevelSpecified {
@@ -2935,7 +2934,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryLevelSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string CategoryName {
@@ -2947,7 +2946,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string CategoryParentID {
@@ -2959,7 +2958,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryParentID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string CategoryParentName {
@@ -2971,7 +2970,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryParentName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public int ItemCount {
@@ -2983,7 +2982,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ItemCountSpecified {
@@ -2995,7 +2994,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string CategoryNamePath {
@@ -3007,7 +3006,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryNamePath");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public string CategoryIDPath {
@@ -3019,7 +3018,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryIDPath");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public bool LeafCategory {
@@ -3031,7 +3030,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LeafCategory");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool LeafCategorySpecified {
@@ -3043,7 +3042,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LeafCategorySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=9)]
         public System.Xml.XmlElement[] Any {
@@ -3055,9 +3054,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3065,7 +3064,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3073,25 +3072,25 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ReviewType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string uRLField;
-        
+
         private string titleField;
-        
+
         private int ratingField;
-        
+
         private bool ratingFieldSpecified;
-        
+
         private string textField;
-        
+
         private string userIDField;
-        
+
         private System.DateTime creationTimeField;
-        
+
         private bool creationTimeFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=0)]
         public string URL {
@@ -3103,7 +3102,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("URL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string Title {
@@ -3115,7 +3114,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Title");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int Rating {
@@ -3127,7 +3126,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Rating");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RatingSpecified {
@@ -3139,7 +3138,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RatingSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string Text {
@@ -3151,7 +3150,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Text");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string UserID {
@@ -3163,7 +3162,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public System.DateTime CreationTime {
@@ -3175,7 +3174,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CreationTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CreationTimeSpecified {
@@ -3187,7 +3186,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CreationTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=6)]
         public System.Xml.XmlElement[] Any {
@@ -3199,9 +3198,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3209,7 +3208,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3217,15 +3216,15 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ReviewDetailsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private float averageRatingField;
-        
+
         private bool averageRatingFieldSpecified;
-        
+
         private ReviewType[] reviewField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public float AverageRating {
@@ -3237,7 +3236,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AverageRating");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AverageRatingSpecified {
@@ -3249,7 +3248,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AverageRatingSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Review", Order=1)]
         public ReviewType[] Review {
@@ -3261,7 +3260,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Review");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -3273,9 +3272,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3283,7 +3282,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3291,25 +3290,25 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class BuyingGuideType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string nameField;
-        
+
         private string uRLField;
-        
+
         private string categoryIDField;
-        
+
         private string titleField;
-        
+
         private string textField;
-        
+
         private System.DateTime creationTimeField;
-        
+
         private bool creationTimeFieldSpecified;
-        
+
         private string userIDField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Name {
@@ -3321,7 +3320,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Name");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=1)]
         public string URL {
@@ -3333,7 +3332,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("URL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string CategoryID {
@@ -3345,7 +3344,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string Title {
@@ -3357,7 +3356,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Title");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string Text {
@@ -3369,7 +3368,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Text");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public System.DateTime CreationTime {
@@ -3381,7 +3380,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CreationTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CreationTimeSpecified {
@@ -3393,7 +3392,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CreationTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string UserID {
@@ -3405,7 +3404,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=7)]
         public System.Xml.XmlElement[] Any {
@@ -3417,9 +3416,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3427,7 +3426,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3435,13 +3434,13 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class BuyingGuideDetailsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private BuyingGuideType[] buyingGuideField;
-        
+
         private string buyingGuideHubField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BuyingGuide", Order=0)]
         public BuyingGuideType[] BuyingGuide {
@@ -3453,7 +3452,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BuyingGuide");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=1)]
         public string BuyingGuideHub {
@@ -3465,7 +3464,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BuyingGuideHub");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -3477,9 +3476,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3487,7 +3486,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3495,37 +3494,37 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class CatalogProductType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string domainNameField;
-        
+
         private string detailsURLField;
-        
+
         private bool displayStockPhotosField;
-        
+
         private bool displayStockPhotosFieldSpecified;
-        
+
         private ProductIDType[] productIDField;
-        
+
         private int itemCountField;
-        
+
         private bool itemCountFieldSpecified;
-        
+
         private NameValueListType[] itemSpecificsField;
-        
+
         private int reviewCountField;
-        
+
         private bool reviewCountFieldSpecified;
-        
+
         private string stockPhotoURLField;
-        
+
         private string titleField;
-        
+
         private ProductStateCodeType productStateField;
-        
+
         private bool productStateFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string DomainName {
@@ -3537,7 +3536,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DomainName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=1)]
         public string DetailsURL {
@@ -3549,7 +3548,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DetailsURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public bool DisplayStockPhotos {
@@ -3561,7 +3560,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DisplayStockPhotos");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DisplayStockPhotosSpecified {
@@ -3573,7 +3572,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DisplayStockPhotosSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ProductID", Order=3)]
         public ProductIDType[] ProductID {
@@ -3585,7 +3584,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int ItemCount {
@@ -3597,7 +3596,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ItemCountSpecified {
@@ -3609,7 +3608,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=5)]
         [System.Xml.Serialization.XmlArrayItemAttribute("NameValueList", IsNullable=false)]
@@ -3622,7 +3621,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemSpecifics");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public int ReviewCount {
@@ -3634,7 +3633,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ReviewCountSpecified {
@@ -3646,7 +3645,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=7)]
         public string StockPhotoURL {
@@ -3658,7 +3657,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StockPhotoURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public string Title {
@@ -3670,7 +3669,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Title");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public ProductStateCodeType ProductState {
@@ -3682,7 +3681,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductState");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ProductStateSpecified {
@@ -3694,7 +3693,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductStateSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=10)]
         public System.Xml.XmlElement[] Any {
@@ -3706,9 +3705,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3716,7 +3715,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3724,13 +3723,13 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class NameValueListType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string nameField;
-        
+
         private string[] valueField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Name {
@@ -3742,7 +3741,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Name");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Value", Order=1)]
         public string[] Value {
@@ -3754,7 +3753,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -3766,9 +3765,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3776,32 +3775,32 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum ProductStateCodeType {
-        
+
         /// <remarks/>
         Update,
-        
+
         /// <remarks/>
         UpdateMajor,
-        
+
         /// <remarks/>
         UpdateNoDetails,
-        
+
         /// <remarks/>
         Merge,
-        
+
         /// <remarks/>
         Delete,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3809,23 +3808,23 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class PopularSearchesType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string categoryIDField;
-        
+
         private string categoryParentIDField;
-        
+
         private string queryKeywordsField;
-        
+
         private string alternativeSearchesField;
-        
+
         private string relatedSearchesField;
-        
+
         private string categoryNameField;
-        
+
         private string categoryParentNameField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string CategoryID {
@@ -3837,7 +3836,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string CategoryParentID {
@@ -3849,7 +3848,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryParentID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string QueryKeywords {
@@ -3861,7 +3860,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QueryKeywords");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string AlternativeSearches {
@@ -3873,7 +3872,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AlternativeSearches");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string RelatedSearches {
@@ -3885,7 +3884,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RelatedSearches");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string CategoryName {
@@ -3897,7 +3896,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string CategoryParentName {
@@ -3909,7 +3908,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryParentName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=7)]
         public System.Xml.XmlElement[] Any {
@@ -3921,9 +3920,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3931,7 +3930,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -3939,15 +3938,15 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class UnitInfoType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string unitTypeField;
-        
+
         private int unitQuantityField;
-        
+
         private bool unitQuantityFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string UnitType {
@@ -3959,7 +3958,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UnitType");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int UnitQuantity {
@@ -3971,7 +3970,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UnitQuantity");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UnitQuantitySpecified {
@@ -3983,7 +3982,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UnitQuantitySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -3995,9 +3994,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4005,7 +4004,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4013,13 +4012,13 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class QuantityInfo : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private int minimumRemnantSetField;
-        
+
         private bool minimumRemnantSetFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int MinimumRemnantSet {
@@ -4031,7 +4030,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MinimumRemnantSet");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MinimumRemnantSetSpecified {
@@ -4043,7 +4042,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MinimumRemnantSetSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=1)]
         public System.Xml.XmlElement[] Any {
@@ -4055,9 +4054,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4065,7 +4064,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4073,15 +4072,15 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class VariationSpecificPictureSetType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string variationSpecificValueField;
-        
+
         private string[] pictureURLField;
-        
+
         private string galleryURLField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string VariationSpecificValue {
@@ -4093,7 +4092,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VariationSpecificValue");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PictureURL", DataType="anyURI", Order=1)]
         public string[] PictureURL {
@@ -4105,7 +4104,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PictureURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=2)]
         public string GalleryURL {
@@ -4117,7 +4116,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GalleryURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=3)]
         public System.Xml.XmlElement[] Any {
@@ -4129,9 +4128,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4139,7 +4138,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4147,13 +4146,13 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class PicturesType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string variationSpecificNameField;
-        
+
         private VariationSpecificPictureSetType[] variationSpecificPictureSetField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string VariationSpecificName {
@@ -4165,7 +4164,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VariationSpecificName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("VariationSpecificPictureSet", Order=1)]
         public VariationSpecificPictureSetType[] VariationSpecificPictureSet {
@@ -4177,7 +4176,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VariationSpecificPictureSet");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -4189,9 +4188,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4199,7 +4198,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4207,30 +4206,30 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class DiscountPriceInfoType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private AmountType originalRetailPriceField;
-        
+
         private AmountType minimumAdvertisedPriceField;
-        
+
         private MinimumAdvertisedPriceExposureCodeType minimumAdvertisedPriceExposureField;
-        
+
         private bool minimumAdvertisedPriceExposureFieldSpecified;
-        
+
         private PricingTreatmentCodeType pricingTreatmentField;
-        
+
         private bool pricingTreatmentFieldSpecified;
-        
+
         private bool soldOneBayField;
-        
+
         private bool soldOffeBayField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         public DiscountPriceInfoType() {
             this.soldOneBayField = false;
             this.soldOffeBayField = false;
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AmountType OriginalRetailPrice {
@@ -4242,7 +4241,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("OriginalRetailPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public AmountType MinimumAdvertisedPrice {
@@ -4254,7 +4253,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MinimumAdvertisedPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public MinimumAdvertisedPriceExposureCodeType MinimumAdvertisedPriceExposure {
@@ -4266,7 +4265,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MinimumAdvertisedPriceExposure");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MinimumAdvertisedPriceExposureSpecified {
@@ -4278,7 +4277,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MinimumAdvertisedPriceExposureSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public PricingTreatmentCodeType PricingTreatment {
@@ -4290,7 +4289,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PricingTreatment");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PricingTreatmentSpecified {
@@ -4302,7 +4301,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PricingTreatmentSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -4315,7 +4314,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SoldOneBay");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         [System.ComponentModel.DefaultValueAttribute(false)]
@@ -4328,7 +4327,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SoldOffeBay");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=6)]
         public System.Xml.XmlElement[] Any {
@@ -4340,9 +4339,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4350,45 +4349,45 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum MinimumAdvertisedPriceExposureCodeType {
-        
+
         /// <remarks/>
         PreCheckout,
-        
+
         /// <remarks/>
         DuringCheckout,
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum PricingTreatmentCodeType {
-        
+
         /// <remarks/>
         STP,
-        
+
         /// <remarks/>
         MAP,
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4396,17 +4395,17 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class SellingStatusType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private AmountType convertedCurrentPriceField;
-        
+
         private AmountType currentPriceField;
-        
+
         private int quantitySoldField;
-        
+
         private bool quantitySoldFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AmountType ConvertedCurrentPrice {
@@ -4418,7 +4417,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ConvertedCurrentPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public AmountType CurrentPrice {
@@ -4430,7 +4429,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CurrentPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int QuantitySold {
@@ -4442,7 +4441,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySold");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool QuantitySoldSpecified {
@@ -4454,7 +4453,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySoldSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=3)]
         public System.Xml.XmlElement[] Any {
@@ -4466,9 +4465,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4476,7 +4475,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4484,27 +4483,27 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class VariationType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string sKUField;
-        
+
         private AmountType startPriceField;
-        
+
         private int quantityField;
-        
+
         private bool quantityFieldSpecified;
-        
+
         private NameValueListType[] variationSpecificsField;
-        
+
         private int quantitySoldField;
-        
+
         private bool quantitySoldFieldSpecified;
-        
+
         private SellingStatusType sellingStatusField;
-        
+
         private DiscountPriceInfoType discountPriceInfoField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string SKU {
@@ -4516,7 +4515,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SKU");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public AmountType StartPrice {
@@ -4528,7 +4527,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StartPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int Quantity {
@@ -4540,7 +4539,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Quantity");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool QuantitySpecified {
@@ -4552,7 +4551,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
         [System.Xml.Serialization.XmlArrayItemAttribute("NameValueList", IsNullable=false)]
@@ -4565,7 +4564,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VariationSpecifics");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int QuantitySold {
@@ -4577,7 +4576,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySold");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool QuantitySoldSpecified {
@@ -4589,7 +4588,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySoldSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public SellingStatusType SellingStatus {
@@ -4601,7 +4600,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SellingStatus");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public DiscountPriceInfoType DiscountPriceInfo {
@@ -4613,7 +4612,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DiscountPriceInfo");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=7)]
         public System.Xml.XmlElement[] Any {
@@ -4625,9 +4624,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4635,7 +4634,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4643,15 +4642,15 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class VariationsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private VariationType[] variationField;
-        
+
         private PicturesType[] picturesField;
-        
+
         private NameValueListType[] variationSpecificsSetField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Variation", Order=0)]
         public VariationType[] Variation {
@@ -4663,7 +4662,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Variation");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Pictures", Order=1)]
         public PicturesType[] Pictures {
@@ -4675,7 +4674,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Pictures");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
         [System.Xml.Serialization.XmlArrayItemAttribute("NameValueList", IsNullable=false)]
@@ -4688,7 +4687,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VariationSpecificsSet");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=3)]
         public System.Xml.XmlElement[] Any {
@@ -4700,9 +4699,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4710,7 +4709,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4718,25 +4717,25 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class VATDetailsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private bool businessSellerField;
-        
+
         private bool businessSellerFieldSpecified;
-        
+
         private bool restrictedToBusinessField;
-        
+
         private bool restrictedToBusinessFieldSpecified;
-        
+
         private float vATPercentField;
-        
+
         private bool vATPercentFieldSpecified;
-        
+
         private string vATSiteField;
-        
+
         private string vATIDField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool BusinessSeller {
@@ -4748,7 +4747,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BusinessSeller");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BusinessSellerSpecified {
@@ -4760,7 +4759,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BusinessSellerSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public bool RestrictedToBusiness {
@@ -4772,7 +4771,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RestrictedToBusiness");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RestrictedToBusinessSpecified {
@@ -4784,7 +4783,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RestrictedToBusinessSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public float VATPercent {
@@ -4796,7 +4795,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VATPercent");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool VATPercentSpecified {
@@ -4808,7 +4807,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VATPercentSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string VATSite {
@@ -4820,7 +4819,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VATSite");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string VATID {
@@ -4832,7 +4831,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VATID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=5)]
         public System.Xml.XmlElement[] Any {
@@ -4844,9 +4843,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4854,7 +4853,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -4862,57 +4861,57 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class AddressType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string nameField;
-        
+
         private string streetField;
-        
+
         private string street1Field;
-        
+
         private string street2Field;
-        
+
         private string cityNameField;
-        
+
         private string countyField;
-        
+
         private string stateOrProvinceField;
-        
+
         private string countryNameField;
-        
+
         private string phoneField;
-        
+
         private string phoneCountryPrefixField;
-        
+
         private string phoneAreaOrCityCodeField;
-        
+
         private string phoneLocalNumberField;
-        
+
         private string phone2CountryPrefixField;
-        
+
         private string phone2AreaOrCityCodeField;
-        
+
         private string phone2LocalNumberField;
-        
+
         private string postalCodeField;
-        
+
         private string addressIDField;
-        
+
         private string externalAddressIDField;
-        
+
         private string internationalNameField;
-        
+
         private string internationalStateAndCityField;
-        
+
         private string internationalStreetField;
-        
+
         private string companyNameField;
-        
+
         private string firstNameField;
-        
+
         private string lastNameField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Name {
@@ -4924,7 +4923,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Name");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string Street {
@@ -4936,7 +4935,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Street");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Street1 {
@@ -4948,7 +4947,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Street1");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string Street2 {
@@ -4960,7 +4959,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Street2");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string CityName {
@@ -4972,7 +4971,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CityName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string County {
@@ -4984,7 +4983,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("County");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string StateOrProvince {
@@ -4996,7 +4995,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StateOrProvince");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public string CountryName {
@@ -5008,7 +5007,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CountryName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public string Phone {
@@ -5020,7 +5019,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Phone");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public string PhoneCountryPrefix {
@@ -5032,7 +5031,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PhoneCountryPrefix");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public string PhoneAreaOrCityCode {
@@ -5044,7 +5043,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PhoneAreaOrCityCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public string PhoneLocalNumber {
@@ -5056,7 +5055,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PhoneLocalNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=12)]
         public string Phone2CountryPrefix {
@@ -5068,7 +5067,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Phone2CountryPrefix");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=13)]
         public string Phone2AreaOrCityCode {
@@ -5080,7 +5079,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Phone2AreaOrCityCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=14)]
         public string Phone2LocalNumber {
@@ -5092,7 +5091,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Phone2LocalNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=15)]
         public string PostalCode {
@@ -5104,7 +5103,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PostalCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=16)]
         public string AddressID {
@@ -5116,7 +5115,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AddressID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=17)]
         public string ExternalAddressID {
@@ -5128,7 +5127,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ExternalAddressID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=18)]
         public string InternationalName {
@@ -5140,7 +5139,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InternationalName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=19)]
         public string InternationalStateAndCity {
@@ -5152,7 +5151,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InternationalStateAndCity");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=20)]
         public string InternationalStreet {
@@ -5164,7 +5163,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InternationalStreet");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=21)]
         public string CompanyName {
@@ -5176,7 +5175,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CompanyName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=22)]
         public string FirstName {
@@ -5188,7 +5187,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FirstName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=23)]
         public string LastName {
@@ -5200,7 +5199,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LastName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=24)]
         public System.Xml.XmlElement[] Any {
@@ -5212,9 +5211,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5222,7 +5221,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5230,27 +5229,27 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class BusinessSellerDetailsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private AddressType addressField;
-        
+
         private string faxField;
-        
+
         private string emailField;
-        
+
         private string additionalContactInformationField;
-        
+
         private string tradeRegistrationNumberField;
-        
+
         private bool legalInvoiceField;
-        
+
         private bool legalInvoiceFieldSpecified;
-        
+
         private string termsAndConditionsField;
-        
+
         private VATDetailsType vATDetailsField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AddressType Address {
@@ -5262,7 +5261,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Address");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string Fax {
@@ -5274,7 +5273,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Fax");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Email {
@@ -5286,7 +5285,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Email");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string AdditionalContactInformation {
@@ -5298,7 +5297,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AdditionalContactInformation");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string TradeRegistrationNumber {
@@ -5310,7 +5309,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TradeRegistrationNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public bool LegalInvoice {
@@ -5322,7 +5321,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LegalInvoice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool LegalInvoiceSpecified {
@@ -5334,7 +5333,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LegalInvoiceSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string TermsAndConditions {
@@ -5346,7 +5345,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TermsAndConditions");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public VATDetailsType VATDetails {
@@ -5358,7 +5357,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VATDetails");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=8)]
         public System.Xml.XmlElement[] Any {
@@ -5370,9 +5369,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5380,7 +5379,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5388,27 +5387,27 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ReturnPolicyType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string refundField;
-        
+
         private string returnsWithinField;
-        
+
         private string returnsAcceptedField;
-        
+
         private string descriptionField;
-        
+
         private string warrantyOfferedField;
-        
+
         private string warrantyTypeField;
-        
+
         private string warrantyDurationField;
-        
+
         private string eANField;
-        
+
         private string shippingCostPaidByField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Refund {
@@ -5420,7 +5419,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Refund");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string ReturnsWithin {
@@ -5432,7 +5431,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReturnsWithin");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string ReturnsAccepted {
@@ -5444,7 +5443,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReturnsAccepted");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string Description {
@@ -5456,7 +5455,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Description");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string WarrantyOffered {
@@ -5468,7 +5467,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("WarrantyOffered");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string WarrantyType {
@@ -5480,7 +5479,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("WarrantyType");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string WarrantyDuration {
@@ -5492,7 +5491,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("WarrantyDuration");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public string EAN {
@@ -5504,7 +5503,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EAN");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public string ShippingCostPaidBy {
@@ -5516,7 +5515,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingCostPaidBy");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=9)]
         public System.Xml.XmlElement[] Any {
@@ -5528,9 +5527,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5538,7 +5537,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5546,11 +5545,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class DistanceType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string unitField;
-        
+
         private double valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string unit {
@@ -5562,7 +5561,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("unit");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public double Value {
@@ -5574,9 +5573,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5584,7 +5583,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5592,13 +5591,13 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class StorefrontType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string storeURLField;
-        
+
         private string storeNameField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=0)]
         public string StoreURL {
@@ -5610,7 +5609,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StoreURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string StoreName {
@@ -5622,7 +5621,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StoreName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -5634,9 +5633,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5644,7 +5643,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5652,33 +5651,33 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class CharityType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string charityIDField;
-        
+
         private string charityNameField;
-        
+
         private int charityNumberField;
-        
+
         private bool charityNumberFieldSpecified;
-        
+
         private float donationPercentField;
-        
+
         private bool donationPercentFieldSpecified;
-        
+
         private string missionField;
-        
+
         private string logoURLField;
-        
+
         private bool charityListingField;
-        
+
         private bool charityListingFieldSpecified;
-        
+
         private CharityStatusCodeType statusField;
-        
+
         private bool statusFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string CharityID {
@@ -5690,7 +5689,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CharityID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string CharityName {
@@ -5702,7 +5701,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CharityName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int CharityNumber {
@@ -5714,7 +5713,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CharityNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CharityNumberSpecified {
@@ -5726,7 +5725,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CharityNumberSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public float DonationPercent {
@@ -5738,7 +5737,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DonationPercent");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DonationPercentSpecified {
@@ -5750,7 +5749,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DonationPercentSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string Mission {
@@ -5762,7 +5761,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Mission");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string LogoURL {
@@ -5774,7 +5773,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LogoURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public bool CharityListing {
@@ -5786,7 +5785,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CharityListing");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CharityListingSpecified {
@@ -5798,7 +5797,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CharityListingSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public CharityStatusCodeType Status {
@@ -5810,7 +5809,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Status");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool StatusSpecified {
@@ -5822,7 +5821,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StatusSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=8)]
         public System.Xml.XmlElement[] Any {
@@ -5834,9 +5833,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5844,23 +5843,23 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum CharityStatusCodeType {
-        
+
         /// <remarks/>
         Valid,
-        
+
         /// <remarks/>
         NoLongerValid,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -5868,77 +5867,77 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class SimpleUserType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string userIDField;
-        
+
         private bool feedbackPrivateField;
-        
+
         private bool feedbackPrivateFieldSpecified;
-        
+
         private FeedbackRatingStarCodeType feedbackRatingStarField;
-        
+
         private bool feedbackRatingStarFieldSpecified;
-        
+
         private int feedbackScoreField;
-        
+
         private bool feedbackScoreFieldSpecified;
-        
+
         private bool userAnonymizedField;
-        
+
         private bool userAnonymizedFieldSpecified;
-        
+
         private bool newUserField;
-        
+
         private bool newUserFieldSpecified;
-        
+
         private System.DateTime registrationDateField;
-        
+
         private bool registrationDateFieldSpecified;
-        
+
         private SiteCodeType registrationSiteField;
-        
+
         private bool registrationSiteFieldSpecified;
-        
+
         private UserStatusCodeType statusField;
-        
+
         private bool statusFieldSpecified;
-        
+
         private SellerBusinessCodeType sellerBusinessTypeField;
-        
+
         private bool sellerBusinessTypeFieldSpecified;
-        
+
         private string storeURLField;
-        
+
         private string storeNameField;
-        
+
         private string sellerItemsURLField;
-        
+
         private string aboutMeURLField;
-        
+
         private string myWorldURLField;
-        
+
         private string myWorldSmallImageField;
-        
+
         private string myWorldLargeImageField;
-        
+
         private string reviewsAndGuidesURLField;
-        
+
         private string feedbackDetailsURLField;
-        
+
         private float positiveFeedbackPercentField;
-        
+
         private bool positiveFeedbackPercentFieldSpecified;
-        
+
         private SellerLevelCodeType sellerLevelField;
-        
+
         private bool sellerLevelFieldSpecified;
-        
+
         private bool topRatedSellerField;
-        
+
         private bool topRatedSellerFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string UserID {
@@ -5950,7 +5949,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public bool FeedbackPrivate {
@@ -5962,7 +5961,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackPrivate");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FeedbackPrivateSpecified {
@@ -5974,7 +5973,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackPrivateSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public FeedbackRatingStarCodeType FeedbackRatingStar {
@@ -5986,7 +5985,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackRatingStar");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FeedbackRatingStarSpecified {
@@ -5998,7 +5997,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackRatingStarSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public int FeedbackScore {
@@ -6010,7 +6009,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackScore");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FeedbackScoreSpecified {
@@ -6022,7 +6021,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackScoreSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public bool UserAnonymized {
@@ -6034,7 +6033,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserAnonymized");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UserAnonymizedSpecified {
@@ -6046,7 +6045,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserAnonymizedSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public bool NewUser {
@@ -6058,7 +6057,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("NewUser");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool NewUserSpecified {
@@ -6070,7 +6069,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("NewUserSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public System.DateTime RegistrationDate {
@@ -6082,7 +6081,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RegistrationDate");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RegistrationDateSpecified {
@@ -6094,7 +6093,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RegistrationDateSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public SiteCodeType RegistrationSite {
@@ -6106,7 +6105,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RegistrationSite");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RegistrationSiteSpecified {
@@ -6118,7 +6117,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RegistrationSiteSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public UserStatusCodeType Status {
@@ -6130,7 +6129,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Status");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool StatusSpecified {
@@ -6142,7 +6141,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StatusSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public SellerBusinessCodeType SellerBusinessType {
@@ -6154,7 +6153,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SellerBusinessType");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SellerBusinessTypeSpecified {
@@ -6166,7 +6165,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SellerBusinessTypeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=10)]
         public string StoreURL {
@@ -6178,7 +6177,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StoreURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public string StoreName {
@@ -6190,7 +6189,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StoreName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=12)]
         public string SellerItemsURL {
@@ -6202,7 +6201,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SellerItemsURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=13)]
         public string AboutMeURL {
@@ -6214,7 +6213,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AboutMeURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=14)]
         public string MyWorldURL {
@@ -6226,7 +6225,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MyWorldURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=15)]
         public string MyWorldSmallImage {
@@ -6238,7 +6237,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MyWorldSmallImage");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=16)]
         public string MyWorldLargeImage {
@@ -6250,7 +6249,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MyWorldLargeImage");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=17)]
         public string ReviewsAndGuidesURL {
@@ -6262,7 +6261,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewsAndGuidesURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=18)]
         public string FeedbackDetailsURL {
@@ -6274,7 +6273,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackDetailsURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=19)]
         public float PositiveFeedbackPercent {
@@ -6286,7 +6285,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PositiveFeedbackPercent");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PositiveFeedbackPercentSpecified {
@@ -6298,7 +6297,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PositiveFeedbackPercentSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=20)]
         public SellerLevelCodeType SellerLevel {
@@ -6310,7 +6309,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SellerLevel");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SellerLevelSpecified {
@@ -6322,7 +6321,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SellerLevelSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=21)]
         public bool TopRatedSeller {
@@ -6334,7 +6333,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TopRatedSeller");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TopRatedSellerSpecified {
@@ -6346,7 +6345,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TopRatedSellerSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=22)]
         public System.Xml.XmlElement[] Any {
@@ -6358,9 +6357,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6368,246 +6367,246 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum FeedbackRatingStarCodeType {
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         Yellow,
-        
+
         /// <remarks/>
         Blue,
-        
+
         /// <remarks/>
         Turquoise,
-        
+
         /// <remarks/>
         Purple,
-        
+
         /// <remarks/>
         Red,
-        
+
         /// <remarks/>
         Green,
-        
+
         /// <remarks/>
         YellowShooting,
-        
+
         /// <remarks/>
         TurquoiseShooting,
-        
+
         /// <remarks/>
         PurpleShooting,
-        
+
         /// <remarks/>
         RedShooting,
-        
+
         /// <remarks/>
         GreenShooting,
-        
+
         /// <remarks/>
         SilverShooting,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum SiteCodeType {
-        
+
         /// <remarks/>
         US,
-        
+
         /// <remarks/>
         Canada,
-        
+
         /// <remarks/>
         UK,
-        
+
         /// <remarks/>
         Australia,
-        
+
         /// <remarks/>
         Austria,
-        
+
         /// <remarks/>
         Belgium_French,
-        
+
         /// <remarks/>
         France,
-        
+
         /// <remarks/>
         Germany,
-        
+
         /// <remarks/>
         Italy,
-        
+
         /// <remarks/>
         Belgium_Dutch,
-        
+
         /// <remarks/>
         Netherlands,
-        
+
         /// <remarks/>
         Spain,
-        
+
         /// <remarks/>
         Switzerland,
-        
+
         /// <remarks/>
         Taiwan,
-        
+
         /// <remarks/>
         eBayMotors,
-        
+
         /// <remarks/>
         HongKong,
-        
+
         /// <remarks/>
         Singapore,
-        
+
         /// <remarks/>
         India,
-        
+
         /// <remarks/>
         China,
-        
+
         /// <remarks/>
         Ireland,
-        
+
         /// <remarks/>
         Malaysia,
-        
+
         /// <remarks/>
         Philippines,
-        
+
         /// <remarks/>
         Poland,
-        
+
         /// <remarks/>
         Sweden,
-        
+
         /// <remarks/>
         CustomCode,
-        
+
         /// <remarks/>
         CanadaFrench,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum UserStatusCodeType {
-        
+
         /// <remarks/>
         Unknown,
-        
+
         /// <remarks/>
         Suspended,
-        
+
         /// <remarks/>
         Confirmed,
-        
+
         /// <remarks/>
         Unconfirmed,
-        
+
         /// <remarks/>
         Ghost,
-        
+
         /// <remarks/>
         InMaintenance,
-        
+
         /// <remarks/>
         Deleted,
-        
+
         /// <remarks/>
         CreditCardVerify,
-        
+
         /// <remarks/>
         AccountOnHold,
-        
+
         /// <remarks/>
         Merged,
-        
+
         /// <remarks/>
         RegistrationCodeMailOut,
-        
+
         /// <remarks/>
         TermPending,
-        
+
         /// <remarks/>
         UnconfirmedHalfOptIn,
-        
+
         /// <remarks/>
         CreditCardVerifyHalfOptIn,
-        
+
         /// <remarks/>
         UnconfirmedExpress,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum SellerBusinessCodeType {
-        
+
         /// <remarks/>
         Undefined,
-        
+
         /// <remarks/>
         Private,
-        
+
         /// <remarks/>
         Commercial,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum SellerLevelCodeType {
-        
+
         /// <remarks/>
         Bronze,
-        
+
         /// <remarks/>
         Silver,
-        
+
         /// <remarks/>
         Gold,
-        
+
         /// <remarks/>
         Platinum,
-        
+
         /// <remarks/>
         Titanium,
-        
+
         /// <remarks/>
         Diamond,
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -6615,215 +6614,215 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class SimpleItemType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private bool bestOfferEnabledField;
-        
+
         private bool bestOfferEnabledFieldSpecified;
-        
+
         private AmountType buyItNowPriceField;
-        
+
         private string descriptionField;
-        
+
         private string itemIDField;
-        
+
         private bool buyItNowAvailableField;
-        
+
         private bool buyItNowAvailableFieldSpecified;
-        
+
         private AmountType convertedBuyItNowPriceField;
-        
+
         private System.DateTime endTimeField;
-        
+
         private bool endTimeFieldSpecified;
-        
+
         private System.DateTime startTimeField;
-        
+
         private bool startTimeFieldSpecified;
-        
+
         private string viewItemURLForNaturalSearchField;
-        
+
         private ListingTypeCodeType listingTypeField;
-        
+
         private bool listingTypeFieldSpecified;
-        
+
         private string locationField;
-        
+
         private BuyerPaymentMethodCodeType[] paymentMethodsField;
-        
+
         private string galleryURLField;
-        
+
         private string[] pictureURLField;
-        
+
         private string postalCodeField;
-        
+
         private string primaryCategoryIDField;
-        
+
         private string primaryCategoryNameField;
-        
+
         private int quantityField;
-        
+
         private bool quantityFieldSpecified;
-        
+
         private SimpleUserType sellerField;
-        
+
         private int bidCountField;
-        
+
         private bool bidCountFieldSpecified;
-        
+
         private AmountType convertedCurrentPriceField;
-        
+
         private AmountType currentPriceField;
-        
+
         private SimpleUserType highBidderField;
-        
+
         private ListingStatusCodeType listingStatusField;
-        
+
         private bool listingStatusFieldSpecified;
-        
+
         private int quantitySoldField;
-        
+
         private bool quantitySoldFieldSpecified;
-        
+
         private bool reserveMetField;
-        
+
         private bool reserveMetFieldSpecified;
-        
+
         private string[] shipToLocationsField;
-        
+
         private SiteCodeType siteField;
-        
+
         private bool siteFieldSpecified;
-        
+
         private string timeLeftField;
-        
+
         private string titleField;
-        
+
         private ShippingCostSummaryType shippingCostSummaryField;
-        
+
         private NameValueListType[] itemSpecificsField;
-        
+
         private long hitCountField;
-        
+
         private bool hitCountFieldSpecified;
-        
+
         private string subtitleField;
-        
+
         private string primaryCategoryIDPathField;
-        
+
         private string secondaryCategoryIDField;
-        
+
         private string secondaryCategoryNameField;
-        
+
         private string secondaryCategoryIDPathField;
-        
+
         private CharityType charityField;
-        
+
         private bool germanMotorsSearchableField;
-        
+
         private bool germanMotorsSearchableFieldSpecified;
-        
+
         private bool getItFastField;
-        
+
         private bool getItFastFieldSpecified;
-        
+
         private bool giftField;
-        
+
         private bool giftFieldSpecified;
-        
+
         private bool pictureExistsField;
-        
+
         private bool pictureExistsFieldSpecified;
-        
+
         private bool recentListingField;
-        
+
         private bool recentListingFieldSpecified;
-        
+
         private StorefrontType storefrontField;
-        
+
         private DistanceType distanceFromBuyerField;
-        
+
         private CountryCodeType countryField;
-        
+
         private bool countryFieldSpecified;
-        
+
         private int watchCountField;
-        
+
         private bool watchCountFieldSpecified;
-        
+
         private HalfItemConditionCodeType halfItemConditionField;
-        
+
         private bool halfItemConditionFieldSpecified;
-        
+
         private string sellerCommentsField;
-        
+
         private ReturnPolicyType returnPolicyField;
-        
+
         private AmountType minimumToBidField;
-        
+
         private ProductIDType productIDField;
-        
+
         private bool autoPayField;
-        
+
         private bool autoPayFieldSpecified;
-        
+
         private BusinessSellerDetailsType businessSellerDetailsField;
-        
+
         private SiteCodeType[] paymentAllowedSiteField;
-        
+
         private bool integratedMerchantCreditCardEnabledField;
-        
+
         private bool integratedMerchantCreditCardEnabledFieldSpecified;
-        
+
         private VariationsType variationsField;
-        
+
         private int handlingTimeField;
-        
+
         private bool handlingTimeFieldSpecified;
-        
+
         private int lotSizeField;
-        
+
         private bool lotSizeFieldSpecified;
-        
+
         private int conditionIDField;
-        
+
         private bool conditionIDFieldSpecified;
-        
+
         private string conditionDisplayNameField;
-        
+
         private QuantityAvailableHintCodeType quantityAvailableHintField;
-        
+
         private bool quantityAvailableHintFieldSpecified;
-        
+
         private int quantityThresholdField;
-        
+
         private bool quantityThresholdFieldSpecified;
-        
+
         private DiscountPriceInfoType discountPriceInfoField;
-        
+
         private string[] excludeShipToLocationField;
-        
+
         private bool topRatedListingField;
-        
+
         private bool topRatedListingFieldSpecified;
-        
+
         private string vhrUrlField;
-        
+
         private bool vhrAvailableField;
-        
+
         private bool vhrAvailableFieldSpecified;
-        
+
         private QuantityInfo quantityInfoField;
-        
+
         private UnitInfoType unitInfoField;
-        
+
         private bool globalShippingField;
-        
+
         private bool globalShippingFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         private string conditionDescriptionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool BestOfferEnabled {
@@ -6835,7 +6834,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BestOfferEnabled");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BestOfferEnabledSpecified {
@@ -6847,7 +6846,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BestOfferEnabledSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public AmountType BuyItNowPrice {
@@ -6859,7 +6858,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BuyItNowPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Description {
@@ -6871,7 +6870,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Description");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string ItemID {
@@ -6883,7 +6882,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public bool BuyItNowAvailable {
@@ -6895,7 +6894,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BuyItNowAvailable");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BuyItNowAvailableSpecified {
@@ -6907,7 +6906,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BuyItNowAvailableSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public AmountType ConvertedBuyItNowPrice {
@@ -6919,7 +6918,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ConvertedBuyItNowPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public System.DateTime EndTime {
@@ -6931,7 +6930,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EndTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EndTimeSpecified {
@@ -6943,7 +6942,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("EndTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public System.DateTime StartTime {
@@ -6955,7 +6954,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StartTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool StartTimeSpecified {
@@ -6967,7 +6966,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StartTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=8)]
         public string ViewItemURLForNaturalSearch {
@@ -6979,7 +6978,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ViewItemURLForNaturalSearch");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public ListingTypeCodeType ListingType {
@@ -6991,7 +6990,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ListingType");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ListingTypeSpecified {
@@ -7003,7 +7002,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ListingTypeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public string Location {
@@ -7015,7 +7014,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Location");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PaymentMethods", Order=11)]
         public BuyerPaymentMethodCodeType[] PaymentMethods {
@@ -7027,7 +7026,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PaymentMethods");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=12)]
         public string GalleryURL {
@@ -7039,7 +7038,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GalleryURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PictureURL", DataType="anyURI", Order=13)]
         public string[] PictureURL {
@@ -7051,7 +7050,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PictureURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=14)]
         public string PostalCode {
@@ -7063,7 +7062,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PostalCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=15)]
         public string PrimaryCategoryID {
@@ -7075,7 +7074,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PrimaryCategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=16)]
         public string PrimaryCategoryName {
@@ -7087,7 +7086,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PrimaryCategoryName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=17)]
         public int Quantity {
@@ -7099,7 +7098,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Quantity");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool QuantitySpecified {
@@ -7111,7 +7110,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=18)]
         public SimpleUserType Seller {
@@ -7123,7 +7122,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Seller");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=19)]
         public int BidCount {
@@ -7135,7 +7134,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BidCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BidCountSpecified {
@@ -7147,7 +7146,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BidCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=20)]
         public AmountType ConvertedCurrentPrice {
@@ -7159,7 +7158,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ConvertedCurrentPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=21)]
         public AmountType CurrentPrice {
@@ -7171,7 +7170,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CurrentPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=22)]
         public SimpleUserType HighBidder {
@@ -7183,7 +7182,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("HighBidder");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=23)]
         public ListingStatusCodeType ListingStatus {
@@ -7195,7 +7194,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ListingStatus");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ListingStatusSpecified {
@@ -7207,7 +7206,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ListingStatusSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=24)]
         public int QuantitySold {
@@ -7219,7 +7218,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySold");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool QuantitySoldSpecified {
@@ -7231,7 +7230,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySoldSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=25)]
         public bool ReserveMet {
@@ -7243,7 +7242,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReserveMet");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ReserveMetSpecified {
@@ -7255,7 +7254,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReserveMetSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ShipToLocations", Order=26)]
         public string[] ShipToLocations {
@@ -7267,7 +7266,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShipToLocations");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=27)]
         public SiteCodeType Site {
@@ -7279,7 +7278,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Site");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SiteSpecified {
@@ -7291,7 +7290,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SiteSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="duration", Order=28)]
         public string TimeLeft {
@@ -7303,7 +7302,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TimeLeft");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=29)]
         public string Title {
@@ -7315,7 +7314,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Title");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=30)]
         public ShippingCostSummaryType ShippingCostSummary {
@@ -7327,7 +7326,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingCostSummary");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=31)]
         [System.Xml.Serialization.XmlArrayItemAttribute("NameValueList", IsNullable=false)]
@@ -7340,7 +7339,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemSpecifics");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=32)]
         public long HitCount {
@@ -7352,7 +7351,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("HitCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool HitCountSpecified {
@@ -7364,7 +7363,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("HitCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=33)]
         public string Subtitle {
@@ -7376,7 +7375,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Subtitle");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=34)]
         public string PrimaryCategoryIDPath {
@@ -7388,7 +7387,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PrimaryCategoryIDPath");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=35)]
         public string SecondaryCategoryID {
@@ -7400,7 +7399,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SecondaryCategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=36)]
         public string SecondaryCategoryName {
@@ -7412,7 +7411,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SecondaryCategoryName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=37)]
         public string SecondaryCategoryIDPath {
@@ -7424,7 +7423,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SecondaryCategoryIDPath");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=38)]
         public CharityType Charity {
@@ -7436,7 +7435,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Charity");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=39)]
         public bool GermanMotorsSearchable {
@@ -7448,7 +7447,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GermanMotorsSearchable");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool GermanMotorsSearchableSpecified {
@@ -7460,7 +7459,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GermanMotorsSearchableSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=40)]
         public bool GetItFast {
@@ -7472,7 +7471,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GetItFast");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool GetItFastSpecified {
@@ -7484,7 +7483,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GetItFastSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=41)]
         public bool Gift {
@@ -7496,7 +7495,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Gift");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool GiftSpecified {
@@ -7508,7 +7507,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GiftSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=42)]
         public bool PictureExists {
@@ -7520,7 +7519,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PictureExists");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PictureExistsSpecified {
@@ -7532,7 +7531,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PictureExistsSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=43)]
         public bool RecentListing {
@@ -7544,7 +7543,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RecentListing");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RecentListingSpecified {
@@ -7556,7 +7555,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("RecentListingSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=44)]
         public StorefrontType Storefront {
@@ -7568,7 +7567,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Storefront");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=45)]
         public DistanceType DistanceFromBuyer {
@@ -7580,7 +7579,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DistanceFromBuyer");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=46)]
         public CountryCodeType Country {
@@ -7592,7 +7591,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Country");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CountrySpecified {
@@ -7604,7 +7603,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CountrySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=47)]
         public int WatchCount {
@@ -7616,7 +7615,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("WatchCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool WatchCountSpecified {
@@ -7628,7 +7627,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("WatchCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=48)]
         public HalfItemConditionCodeType HalfItemCondition {
@@ -7640,7 +7639,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("HalfItemCondition");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool HalfItemConditionSpecified {
@@ -7652,7 +7651,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("HalfItemConditionSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=49)]
         public string SellerComments {
@@ -7664,7 +7663,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SellerComments");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=50)]
         public ReturnPolicyType ReturnPolicy {
@@ -7676,7 +7675,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReturnPolicy");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=51)]
         public AmountType MinimumToBid {
@@ -7688,7 +7687,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MinimumToBid");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=52)]
         public ProductIDType ProductID {
@@ -7700,7 +7699,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=53)]
         public bool AutoPay {
@@ -7712,7 +7711,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AutoPay");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AutoPaySpecified {
@@ -7724,7 +7723,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AutoPaySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=54)]
         public BusinessSellerDetailsType BusinessSellerDetails {
@@ -7736,7 +7735,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BusinessSellerDetails");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PaymentAllowedSite", Order=55)]
         public SiteCodeType[] PaymentAllowedSite {
@@ -7748,7 +7747,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PaymentAllowedSite");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=56)]
         public bool IntegratedMerchantCreditCardEnabled {
@@ -7760,7 +7759,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("IntegratedMerchantCreditCardEnabled");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool IntegratedMerchantCreditCardEnabledSpecified {
@@ -7772,7 +7771,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("IntegratedMerchantCreditCardEnabledSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=57)]
         public VariationsType Variations {
@@ -7784,7 +7783,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Variations");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=58)]
         public int HandlingTime {
@@ -7796,7 +7795,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("HandlingTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool HandlingTimeSpecified {
@@ -7808,7 +7807,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("HandlingTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=59)]
         public int LotSize {
@@ -7820,7 +7819,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LotSize");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool LotSizeSpecified {
@@ -7832,7 +7831,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LotSizeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=60)]
         public int ConditionID {
@@ -7844,7 +7843,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ConditionID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ConditionIDSpecified {
@@ -7856,7 +7855,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ConditionIDSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=61)]
         public string ConditionDisplayName {
@@ -7868,7 +7867,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ConditionDisplayName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=62)]
         public QuantityAvailableHintCodeType QuantityAvailableHint {
@@ -7880,7 +7879,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantityAvailableHint");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool QuantityAvailableHintSpecified {
@@ -7892,7 +7891,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantityAvailableHintSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=63)]
         public int QuantityThreshold {
@@ -7904,7 +7903,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantityThreshold");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool QuantityThresholdSpecified {
@@ -7916,7 +7915,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantityThresholdSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=64)]
         public DiscountPriceInfoType DiscountPriceInfo {
@@ -7928,7 +7927,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DiscountPriceInfo");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ExcludeShipToLocation", Order=65)]
         public string[] ExcludeShipToLocation {
@@ -7940,7 +7939,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ExcludeShipToLocation");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=66)]
         public bool TopRatedListing {
@@ -7952,7 +7951,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TopRatedListing");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TopRatedListingSpecified {
@@ -7964,7 +7963,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TopRatedListingSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=67)]
         public string VhrUrl {
@@ -7976,7 +7975,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VhrUrl");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=68)]
         public bool VhrAvailable {
@@ -7988,7 +7987,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VhrAvailable");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool VhrAvailableSpecified {
@@ -8000,7 +7999,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VhrAvailableSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=69)]
         public QuantityInfo QuantityInfo {
@@ -8012,7 +8011,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantityInfo");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=70)]
         public UnitInfoType UnitInfo {
@@ -8024,7 +8023,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UnitInfo");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=71)]
         public bool GlobalShipping {
@@ -8036,7 +8035,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GlobalShipping");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool GlobalShippingSpecified {
@@ -8048,7 +8047,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("GlobalShippingSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=72)]
         public System.Xml.XmlElement[] Any {
@@ -8060,7 +8059,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=73)]
         public string ConditionDescription {
@@ -8072,9 +8071,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ConditionDescription");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8082,166 +8081,166 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum ListingTypeCodeType {
-        
+
         /// <remarks/>
         Unknown,
-        
+
         /// <remarks/>
         Chinese,
-        
+
         /// <remarks/>
         Dutch,
-        
+
         /// <remarks/>
         Live,
-        
+
         /// <remarks/>
         Auction,
-        
+
         /// <remarks/>
         AdType,
-        
+
         /// <remarks/>
         StoresFixedPrice,
-        
+
         /// <remarks/>
         PersonalOffer,
-        
+
         /// <remarks/>
         FixedPriceItem,
-        
+
         /// <remarks/>
         Half,
-        
+
         /// <remarks/>
         LeadGeneration,
-        
+
         /// <remarks/>
         Express,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum BuyerPaymentMethodCodeType {
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         MOCC,
-        
+
         /// <remarks/>
         AmEx,
-        
+
         /// <remarks/>
         PaymentSeeDescription,
-        
+
         /// <remarks/>
         CCAccepted,
-        
+
         /// <remarks/>
         PersonalCheck,
-        
+
         /// <remarks/>
         COD,
-        
+
         /// <remarks/>
         VisaMC,
-        
+
         /// <remarks/>
         PaisaPayAccepted,
-        
+
         /// <remarks/>
         Other,
-        
+
         /// <remarks/>
         PayPal,
-        
+
         /// <remarks/>
         Discover,
-        
+
         /// <remarks/>
         CashOnPickup,
-        
+
         /// <remarks/>
         MoneyXferAccepted,
-        
+
         /// <remarks/>
         MoneyXferAcceptedInCheckout,
-        
+
         /// <remarks/>
         OtherOnlinePayments,
-        
+
         /// <remarks/>
         Escrow,
-        
+
         /// <remarks/>
         PrePayDelivery,
-        
+
         /// <remarks/>
         CODPrePayDelivery,
-        
+
         /// <remarks/>
         PostalTransfer,
-        
+
         /// <remarks/>
         CustomCode,
-        
+
         /// <remarks/>
         LoanCheck,
-        
+
         /// <remarks/>
         CashInPerson,
-        
+
         /// <remarks/>
         ELV,
-        
+
         /// <remarks/>
         PaisaPayEscrowEMI,
-        
+
         /// <remarks/>
         Moneybookers,
-        
+
         /// <remarks/>
         Paymate,
-        
+
         /// <remarks/>
         ProPay,
-        
+
         /// <remarks/>
         StandardPayment,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum ListingStatusCodeType {
-        
+
         /// <remarks/>
         Active,
-        
+
         /// <remarks/>
         Ended,
-        
+
         /// <remarks/>
         Completed,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -8249,31 +8248,31 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ShippingCostSummaryType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string shippingServiceNameField;
-        
+
         private AmountType shippingServiceCostField;
-        
+
         private AmountType insuranceCostField;
-        
+
         private ShippingTypeCodeType shippingTypeField;
-        
+
         private bool shippingTypeFieldSpecified;
-        
+
         private bool localPickupField;
-        
+
         private bool localPickupFieldSpecified;
-        
+
         private InsuranceOptionCodeType insuranceOptionField;
-        
+
         private bool insuranceOptionFieldSpecified;
-        
+
         private AmountType listedShippingServiceCostField;
-        
+
         private AmountType importChargeField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ShippingServiceName {
@@ -8285,7 +8284,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public AmountType ShippingServiceCost {
@@ -8297,7 +8296,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingServiceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public AmountType InsuranceCost {
@@ -8309,7 +8308,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InsuranceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public ShippingTypeCodeType ShippingType {
@@ -8321,7 +8320,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingType");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ShippingTypeSpecified {
@@ -8333,7 +8332,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingTypeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public bool LocalPickup {
@@ -8345,7 +8344,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LocalPickup");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool LocalPickupSpecified {
@@ -8357,7 +8356,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LocalPickupSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public InsuranceOptionCodeType InsuranceOption {
@@ -8369,7 +8368,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InsuranceOption");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool InsuranceOptionSpecified {
@@ -8381,7 +8380,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("InsuranceOptionSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public AmountType ListedShippingServiceCost {
@@ -8393,7 +8392,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ListedShippingServiceCost");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public AmountType ImportCharge {
@@ -8405,7 +8404,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ImportCharge");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=8)]
         public System.Xml.XmlElement[] Any {
@@ -8417,9 +8416,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8427,824 +8426,824 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum ShippingTypeCodeType {
-        
+
         /// <remarks/>
         Flat,
-        
+
         /// <remarks/>
         Calculated,
-        
+
         /// <remarks/>
         Freight,
-        
+
         /// <remarks/>
         Free,
-        
+
         /// <remarks/>
         NotSpecified,
-        
+
         /// <remarks/>
         FlatDomesticCalculatedInternational,
-        
+
         /// <remarks/>
         CalculatedDomesticFlatInternational,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum CountryCodeType {
-        
+
         /// <remarks/>
         AF,
-        
+
         /// <remarks/>
         AL,
-        
+
         /// <remarks/>
         DZ,
-        
+
         /// <remarks/>
         AS,
-        
+
         /// <remarks/>
         AD,
-        
+
         /// <remarks/>
         AO,
-        
+
         /// <remarks/>
         AI,
-        
+
         /// <remarks/>
         AQ,
-        
+
         /// <remarks/>
         AG,
-        
+
         /// <remarks/>
         AR,
-        
+
         /// <remarks/>
         AM,
-        
+
         /// <remarks/>
         AW,
-        
+
         /// <remarks/>
         AU,
-        
+
         /// <remarks/>
         AT,
-        
+
         /// <remarks/>
         AZ,
-        
+
         /// <remarks/>
         BS,
-        
+
         /// <remarks/>
         BH,
-        
+
         /// <remarks/>
         BD,
-        
+
         /// <remarks/>
         BB,
-        
+
         /// <remarks/>
         BY,
-        
+
         /// <remarks/>
         BE,
-        
+
         /// <remarks/>
         BZ,
-        
+
         /// <remarks/>
         BJ,
-        
+
         /// <remarks/>
         BM,
-        
+
         /// <remarks/>
         BT,
-        
+
         /// <remarks/>
         BO,
-        
+
         /// <remarks/>
         BA,
-        
+
         /// <remarks/>
         BW,
-        
+
         /// <remarks/>
         BV,
-        
+
         /// <remarks/>
         BR,
-        
+
         /// <remarks/>
         IO,
-        
+
         /// <remarks/>
         BN,
-        
+
         /// <remarks/>
         BG,
-        
+
         /// <remarks/>
         BF,
-        
+
         /// <remarks/>
         BI,
-        
+
         /// <remarks/>
         KH,
-        
+
         /// <remarks/>
         CM,
-        
+
         /// <remarks/>
         CA,
-        
+
         /// <remarks/>
         CV,
-        
+
         /// <remarks/>
         KY,
-        
+
         /// <remarks/>
         CF,
-        
+
         /// <remarks/>
         TD,
-        
+
         /// <remarks/>
         CL,
-        
+
         /// <remarks/>
         CN,
-        
+
         /// <remarks/>
         CX,
-        
+
         /// <remarks/>
         CC,
-        
+
         /// <remarks/>
         CO,
-        
+
         /// <remarks/>
         KM,
-        
+
         /// <remarks/>
         CG,
-        
+
         /// <remarks/>
         CD,
-        
+
         /// <remarks/>
         CK,
-        
+
         /// <remarks/>
         CR,
-        
+
         /// <remarks/>
         CI,
-        
+
         /// <remarks/>
         HR,
-        
+
         /// <remarks/>
         CU,
-        
+
         /// <remarks/>
         CY,
-        
+
         /// <remarks/>
         CZ,
-        
+
         /// <remarks/>
         DK,
-        
+
         /// <remarks/>
         DJ,
-        
+
         /// <remarks/>
         DM,
-        
+
         /// <remarks/>
         DO,
-        
+
         /// <remarks/>
         TP,
-        
+
         /// <remarks/>
         EC,
-        
+
         /// <remarks/>
         EG,
-        
+
         /// <remarks/>
         SV,
-        
+
         /// <remarks/>
         GQ,
-        
+
         /// <remarks/>
         ER,
-        
+
         /// <remarks/>
         EE,
-        
+
         /// <remarks/>
         ET,
-        
+
         /// <remarks/>
         FK,
-        
+
         /// <remarks/>
         FO,
-        
+
         /// <remarks/>
         FJ,
-        
+
         /// <remarks/>
         FI,
-        
+
         /// <remarks/>
         FR,
-        
+
         /// <remarks/>
         GF,
-        
+
         /// <remarks/>
         PF,
-        
+
         /// <remarks/>
         TF,
-        
+
         /// <remarks/>
         GA,
-        
+
         /// <remarks/>
         GM,
-        
+
         /// <remarks/>
         GE,
-        
+
         /// <remarks/>
         DE,
-        
+
         /// <remarks/>
         GH,
-        
+
         /// <remarks/>
         GI,
-        
+
         /// <remarks/>
         GR,
-        
+
         /// <remarks/>
         GL,
-        
+
         /// <remarks/>
         GD,
-        
+
         /// <remarks/>
         GP,
-        
+
         /// <remarks/>
         GU,
-        
+
         /// <remarks/>
         GT,
-        
+
         /// <remarks/>
         GN,
-        
+
         /// <remarks/>
         GW,
-        
+
         /// <remarks/>
         GY,
-        
+
         /// <remarks/>
         HT,
-        
+
         /// <remarks/>
         HM,
-        
+
         /// <remarks/>
         VA,
-        
+
         /// <remarks/>
         HN,
-        
+
         /// <remarks/>
         HK,
-        
+
         /// <remarks/>
         HU,
-        
+
         /// <remarks/>
         IS,
-        
+
         /// <remarks/>
         IN,
-        
+
         /// <remarks/>
         ID,
-        
+
         /// <remarks/>
         IR,
-        
+
         /// <remarks/>
         IQ,
-        
+
         /// <remarks/>
         IE,
-        
+
         /// <remarks/>
         IL,
-        
+
         /// <remarks/>
         IT,
-        
+
         /// <remarks/>
         JM,
-        
+
         /// <remarks/>
         JP,
-        
+
         /// <remarks/>
         JO,
-        
+
         /// <remarks/>
         KZ,
-        
+
         /// <remarks/>
         KE,
-        
+
         /// <remarks/>
         KI,
-        
+
         /// <remarks/>
         KP,
-        
+
         /// <remarks/>
         KR,
-        
+
         /// <remarks/>
         KW,
-        
+
         /// <remarks/>
         KG,
-        
+
         /// <remarks/>
         LA,
-        
+
         /// <remarks/>
         LV,
-        
+
         /// <remarks/>
         LB,
-        
+
         /// <remarks/>
         LS,
-        
+
         /// <remarks/>
         LR,
-        
+
         /// <remarks/>
         LY,
-        
+
         /// <remarks/>
         LI,
-        
+
         /// <remarks/>
         LT,
-        
+
         /// <remarks/>
         LU,
-        
+
         /// <remarks/>
         MO,
-        
+
         /// <remarks/>
         MK,
-        
+
         /// <remarks/>
         MG,
-        
+
         /// <remarks/>
         MW,
-        
+
         /// <remarks/>
         MY,
-        
+
         /// <remarks/>
         MV,
-        
+
         /// <remarks/>
         ML,
-        
+
         /// <remarks/>
         MT,
-        
+
         /// <remarks/>
         MH,
-        
+
         /// <remarks/>
         MQ,
-        
+
         /// <remarks/>
         MR,
-        
+
         /// <remarks/>
         MU,
-        
+
         /// <remarks/>
         YT,
-        
+
         /// <remarks/>
         MX,
-        
+
         /// <remarks/>
         FM,
-        
+
         /// <remarks/>
         MD,
-        
+
         /// <remarks/>
         MC,
-        
+
         /// <remarks/>
         MN,
-        
+
         /// <remarks/>
         MS,
-        
+
         /// <remarks/>
         MA,
-        
+
         /// <remarks/>
         MZ,
-        
+
         /// <remarks/>
         MM,
-        
+
         /// <remarks/>
         NA,
-        
+
         /// <remarks/>
         NR,
-        
+
         /// <remarks/>
         NP,
-        
+
         /// <remarks/>
         NL,
-        
+
         /// <remarks/>
         AN,
-        
+
         /// <remarks/>
         NC,
-        
+
         /// <remarks/>
         NZ,
-        
+
         /// <remarks/>
         NI,
-        
+
         /// <remarks/>
         NE,
-        
+
         /// <remarks/>
         NG,
-        
+
         /// <remarks/>
         NU,
-        
+
         /// <remarks/>
         NF,
-        
+
         /// <remarks/>
         MP,
-        
+
         /// <remarks/>
         NO,
-        
+
         /// <remarks/>
         OM,
-        
+
         /// <remarks/>
         PK,
-        
+
         /// <remarks/>
         PW,
-        
+
         /// <remarks/>
         PS,
-        
+
         /// <remarks/>
         PA,
-        
+
         /// <remarks/>
         PG,
-        
+
         /// <remarks/>
         PY,
-        
+
         /// <remarks/>
         PE,
-        
+
         /// <remarks/>
         PH,
-        
+
         /// <remarks/>
         PN,
-        
+
         /// <remarks/>
         PL,
-        
+
         /// <remarks/>
         PT,
-        
+
         /// <remarks/>
         PR,
-        
+
         /// <remarks/>
         QA,
-        
+
         /// <remarks/>
         RE,
-        
+
         /// <remarks/>
         RO,
-        
+
         /// <remarks/>
         RU,
-        
+
         /// <remarks/>
         RW,
-        
+
         /// <remarks/>
         SH,
-        
+
         /// <remarks/>
         KN,
-        
+
         /// <remarks/>
         LC,
-        
+
         /// <remarks/>
         PM,
-        
+
         /// <remarks/>
         VC,
-        
+
         /// <remarks/>
         WS,
-        
+
         /// <remarks/>
         SM,
-        
+
         /// <remarks/>
         ST,
-        
+
         /// <remarks/>
         SA,
-        
+
         /// <remarks/>
         SN,
-        
+
         /// <remarks/>
         SC,
-        
+
         /// <remarks/>
         SL,
-        
+
         /// <remarks/>
         SG,
-        
+
         /// <remarks/>
         SK,
-        
+
         /// <remarks/>
         SI,
-        
+
         /// <remarks/>
         SB,
-        
+
         /// <remarks/>
         SO,
-        
+
         /// <remarks/>
         ZA,
-        
+
         /// <remarks/>
         GS,
-        
+
         /// <remarks/>
         ES,
-        
+
         /// <remarks/>
         LK,
-        
+
         /// <remarks/>
         SD,
-        
+
         /// <remarks/>
         SR,
-        
+
         /// <remarks/>
         SJ,
-        
+
         /// <remarks/>
         SZ,
-        
+
         /// <remarks/>
         SE,
-        
+
         /// <remarks/>
         CH,
-        
+
         /// <remarks/>
         SY,
-        
+
         /// <remarks/>
         TW,
-        
+
         /// <remarks/>
         TJ,
-        
+
         /// <remarks/>
         TZ,
-        
+
         /// <remarks/>
         TH,
-        
+
         /// <remarks/>
         TG,
-        
+
         /// <remarks/>
         TK,
-        
+
         /// <remarks/>
         TO,
-        
+
         /// <remarks/>
         TT,
-        
+
         /// <remarks/>
         TN,
-        
+
         /// <remarks/>
         TR,
-        
+
         /// <remarks/>
         TM,
-        
+
         /// <remarks/>
         TC,
-        
+
         /// <remarks/>
         TV,
-        
+
         /// <remarks/>
         UG,
-        
+
         /// <remarks/>
         UA,
-        
+
         /// <remarks/>
         AE,
-        
+
         /// <remarks/>
         GB,
-        
+
         /// <remarks/>
         US,
-        
+
         /// <remarks/>
         UM,
-        
+
         /// <remarks/>
         UY,
-        
+
         /// <remarks/>
         UZ,
-        
+
         /// <remarks/>
         VU,
-        
+
         /// <remarks/>
         VE,
-        
+
         /// <remarks/>
         VN,
-        
+
         /// <remarks/>
         VG,
-        
+
         /// <remarks/>
         VI,
-        
+
         /// <remarks/>
         WF,
-        
+
         /// <remarks/>
         EH,
-        
+
         /// <remarks/>
         YE,
-        
+
         /// <remarks/>
         YU,
-        
+
         /// <remarks/>
         ZM,
-        
+
         /// <remarks/>
         ZW,
-        
+
         /// <remarks/>
         AA,
-        
+
         /// <remarks/>
         QM,
-        
+
         /// <remarks/>
         QN,
-        
+
         /// <remarks/>
         QO,
-        
+
         /// <remarks/>
         QP,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum HalfItemConditionCodeType {
-        
+
         /// <remarks/>
         BrandNew,
-        
+
         /// <remarks/>
         LikeNew,
-        
+
         /// <remarks/>
         VeryGood,
-        
+
         /// <remarks/>
         Good,
-        
+
         /// <remarks/>
         Acceptable,
-        
+
         /// <remarks/>
         Used,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum QuantityAvailableHintCodeType {
-        
+
         /// <remarks/>
         Limited,
-        
+
         /// <remarks/>
         MoreThan,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9252,39 +9251,39 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class HalfCatalogProductType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string titleField;
-        
+
         private string detailsURLField;
-        
+
         private string stockPhotoURLField;
-        
+
         private ShippingCostSummaryType shippingCostSummaryField;
-        
+
         private bool displayStockPhotosField;
-        
+
         private bool displayStockPhotosFieldSpecified;
-        
+
         private int itemCountField;
-        
+
         private bool itemCountFieldSpecified;
-        
+
         private ProductIDType[] productIDField;
-        
+
         private string domainNameField;
-        
+
         private NameValueListType[] itemSpecificsField;
-        
+
         private SimpleItemType[] itemArrayField;
-        
+
         private int reviewCountField;
-        
+
         private bool reviewCountFieldSpecified;
-        
+
         private AmountType minPriceField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Title {
@@ -9296,7 +9295,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Title");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=1)]
         public string DetailsURL {
@@ -9308,7 +9307,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DetailsURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=2)]
         public string StockPhotoURL {
@@ -9320,7 +9319,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("StockPhotoURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public ShippingCostSummaryType ShippingCostSummary {
@@ -9332,7 +9331,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingCostSummary");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public bool DisplayStockPhotos {
@@ -9344,7 +9343,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DisplayStockPhotos");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DisplayStockPhotosSpecified {
@@ -9356,7 +9355,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DisplayStockPhotosSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public int ItemCount {
@@ -9368,7 +9367,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ItemCountSpecified {
@@ -9380,7 +9379,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ProductID", Order=6)]
         public ProductIDType[] ProductID {
@@ -9392,7 +9391,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public string DomainName {
@@ -9404,7 +9403,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DomainName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=8)]
         [System.Xml.Serialization.XmlArrayItemAttribute("NameValueList", IsNullable=false)]
@@ -9417,7 +9416,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemSpecifics");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=9)]
         [System.Xml.Serialization.XmlArrayItemAttribute("Item", IsNullable=false)]
@@ -9430,7 +9429,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemArray");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public int ReviewCount {
@@ -9442,7 +9441,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ReviewCountSpecified {
@@ -9454,7 +9453,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public AmountType MinPrice {
@@ -9466,7 +9465,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MinPrice");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=12)]
         public System.Xml.XmlElement[] Any {
@@ -9478,9 +9477,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9488,7 +9487,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9496,11 +9495,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class HalfProductsType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private HalfCatalogProductType[] productField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Product", Order=0)]
         public HalfCatalogProductType[] Product {
@@ -9512,7 +9511,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Product");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=1)]
         public System.Xml.XmlElement[] Any {
@@ -9524,9 +9523,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9534,7 +9533,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9542,15 +9541,15 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class HistogramEntryType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string nameField;
-        
+
         private int countField;
-        
+
         private bool countFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Name {
@@ -9562,7 +9561,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Name");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int Count {
@@ -9574,7 +9573,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Count");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CountSpecified {
@@ -9586,7 +9585,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=2)]
         public System.Xml.XmlElement[] Any {
@@ -9598,9 +9597,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9608,7 +9607,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9616,11 +9615,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class DomainHistogramType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private HistogramEntryType[] domainField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Domain", Order=0)]
         public HistogramEntryType[] Domain {
@@ -9632,7 +9631,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Domain");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=1)]
         public System.Xml.XmlElement[] Any {
@@ -9644,9 +9643,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9654,7 +9653,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9662,13 +9661,13 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ErrorParameterType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string valueField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         private string paramIDField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Value {
@@ -9680,7 +9679,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Value");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=1)]
         public System.Xml.XmlElement[] Any {
@@ -9692,7 +9691,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string ParamID {
@@ -9704,9 +9703,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ParamID");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9714,7 +9713,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -9722,29 +9721,29 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class ErrorType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string shortMessageField;
-        
+
         private string longMessageField;
-        
+
         private string errorCodeField;
-        
+
         private bool userDisplayHintField;
-        
+
         private bool userDisplayHintFieldSpecified;
-        
+
         private SeverityCodeType severityCodeField;
-        
+
         private bool severityCodeFieldSpecified;
-        
+
         private ErrorParameterType[] errorParametersField;
-        
+
         private ErrorClassificationCodeType errorClassificationField;
-        
+
         private bool errorClassificationFieldSpecified;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ShortMessage {
@@ -9756,7 +9755,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShortMessage");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string LongMessage {
@@ -9768,7 +9767,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("LongMessage");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="token", Order=2)]
         public string ErrorCode {
@@ -9780,7 +9779,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ErrorCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public bool UserDisplayHint {
@@ -9792,7 +9791,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserDisplayHint");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UserDisplayHintSpecified {
@@ -9804,7 +9803,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserDisplayHintSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public SeverityCodeType SeverityCode {
@@ -9816,7 +9815,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SeverityCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SeverityCodeSpecified {
@@ -9828,7 +9827,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SeverityCodeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ErrorParameters", Order=5)]
         public ErrorParameterType[] ErrorParameters {
@@ -9840,7 +9839,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ErrorParameters");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public ErrorClassificationCodeType ErrorClassification {
@@ -9852,7 +9851,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ErrorClassification");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ErrorClassificationSpecified {
@@ -9864,7 +9863,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ErrorClassificationSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=7)]
         public System.Xml.XmlElement[] Any {
@@ -9876,9 +9875,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9886,39 +9885,39 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum SeverityCodeType {
-        
+
         /// <remarks/>
         Warning,
-        
+
         /// <remarks/>
         Error,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum ErrorClassificationCodeType {
-        
+
         /// <remarks/>
         RequestError,
-        
+
         /// <remarks/>
         SystemError,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GeteBayTimeResponseType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetUserProfileResponseType))]
@@ -9938,25 +9937,25 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public abstract partial class AbstractResponseType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private System.DateTime timestampField;
-        
+
         private bool timestampFieldSpecified;
-        
+
         private AckCodeType ackField;
-        
+
         private bool ackFieldSpecified;
-        
+
         private ErrorType[] errorsField;
-        
+
         private string buildField;
-        
+
         private string versionField;
-        
+
         private string correlationIDField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public System.DateTime Timestamp {
@@ -9968,7 +9967,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Timestamp");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TimestampSpecified {
@@ -9980,7 +9979,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TimestampSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public AckCodeType Ack {
@@ -9992,7 +9991,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Ack");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AckSpecified {
@@ -10004,7 +10003,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AckSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Errors", Order=2)]
         public ErrorType[] Errors {
@@ -10016,7 +10015,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Errors");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string Build {
@@ -10028,7 +10027,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Build");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string Version {
@@ -10040,7 +10039,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Version");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string CorrelationID {
@@ -10052,7 +10051,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CorrelationID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=6)]
         public System.Xml.XmlElement[] Any {
@@ -10064,9 +10063,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10074,29 +10073,29 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum AckCodeType {
-        
+
         /// <remarks/>
         Success,
-        
+
         /// <remarks/>
         Failure,
-        
+
         /// <remarks/>
         Warning,
-        
+
         /// <remarks/>
         PartialFailure,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10105,7 +10104,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GeteBayTimeResponseType : AbstractResponseType {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10113,13 +10112,13 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetUserProfileResponseType : AbstractResponseType {
-        
+
         private SimpleUserType userField;
-        
+
         private FeedbackHistoryType feedbackHistoryField;
-        
+
         private FeedbackDetailType[] feedbackDetailsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public SimpleUserType User {
@@ -10131,7 +10130,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("User");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public FeedbackHistoryType FeedbackHistory {
@@ -10143,7 +10142,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("FeedbackHistory");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("FeedbackDetails", Order=2)]
         public FeedbackDetailType[] FeedbackDetails {
@@ -10156,7 +10155,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10164,9 +10163,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetSingleItemResponseType : AbstractResponseType {
-        
+
         private SimpleItemType itemField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public SimpleItemType Item {
@@ -10179,7 +10178,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10187,11 +10186,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetShippingCostsResponseType : AbstractResponseType {
-        
+
         private ShippingDetailsType shippingDetailsField;
-        
+
         private ShippingCostSummaryType shippingCostSummaryField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public ShippingDetailsType ShippingDetails {
@@ -10203,7 +10202,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ShippingDetails");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public ShippingCostSummaryType ShippingCostSummary {
@@ -10216,7 +10215,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10224,9 +10223,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetMultipleItemsResponseType : AbstractResponseType {
-        
+
         private SimpleItemType[] itemField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Item", Order=0)]
         public SimpleItemType[] Item {
@@ -10239,7 +10238,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10247,9 +10246,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetItemStatusResponseType : AbstractResponseType {
-        
+
         private SimpleItemType[] itemField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Item", Order=0)]
         public SimpleItemType[] Item {
@@ -10262,7 +10261,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10270,19 +10269,19 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetCategoryInfoResponseType : AbstractResponseType {
-        
+
         private CategoryType[] categoryArrayField;
-        
+
         private int categoryCountField;
-        
+
         private bool categoryCountFieldSpecified;
-        
+
         private System.DateTime updateTimeField;
-        
+
         private bool updateTimeFieldSpecified;
-        
+
         private string categoryVersionField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("Category", IsNullable=false)]
@@ -10295,7 +10294,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryArray");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int CategoryCount {
@@ -10307,7 +10306,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CategoryCountSpecified {
@@ -10319,7 +10318,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public System.DateTime UpdateTime {
@@ -10331,7 +10330,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UpdateTime");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UpdateTimeSpecified {
@@ -10343,7 +10342,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UpdateTimeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string CategoryVersion {
@@ -10356,7 +10355,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10364,43 +10363,43 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindReviewsAndGuidesResponseType : AbstractResponseType {
-        
+
         private int reviewCountField;
-        
+
         private bool reviewCountFieldSpecified;
-        
+
         private int buyingGuideCountField;
-        
+
         private bool buyingGuideCountFieldSpecified;
-        
+
         private int reviewerRankField;
-        
+
         private bool reviewerRankFieldSpecified;
-        
+
         private int totalHelpfulnessVotesField;
-        
+
         private bool totalHelpfulnessVotesFieldSpecified;
-        
+
         private ProductIDType productIDField;
-        
+
         private string reviewsAndGuidesURLField;
-        
+
         private int pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         private int totalPagesField;
-        
+
         private bool totalPagesFieldSpecified;
-        
+
         private BuyingGuideDetailsType buyingGuideDetailsField;
-        
+
         private ReviewDetailsType reviewDetailsField;
-        
+
         private int positiveHelpfulnessVotesField;
-        
+
         private bool positiveHelpfulnessVotesFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int ReviewCount {
@@ -10412,7 +10411,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ReviewCountSpecified {
@@ -10424,7 +10423,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int BuyingGuideCount {
@@ -10436,7 +10435,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BuyingGuideCount");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BuyingGuideCountSpecified {
@@ -10448,7 +10447,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BuyingGuideCountSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int ReviewerRank {
@@ -10460,7 +10459,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewerRank");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ReviewerRankSpecified {
@@ -10472,7 +10471,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewerRankSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public int TotalHelpfulnessVotes {
@@ -10484,7 +10483,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalHelpfulnessVotes");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TotalHelpfulnessVotesSpecified {
@@ -10496,7 +10495,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalHelpfulnessVotesSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public ProductIDType ProductID {
@@ -10508,7 +10507,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=5)]
         public string ReviewsAndGuidesURL {
@@ -10520,7 +10519,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewsAndGuidesURL");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public int PageNumber {
@@ -10532,7 +10531,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified {
@@ -10544,7 +10543,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumberSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public int TotalPages {
@@ -10556,7 +10555,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalPages");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TotalPagesSpecified {
@@ -10568,7 +10567,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalPagesSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public BuyingGuideDetailsType BuyingGuideDetails {
@@ -10580,7 +10579,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("BuyingGuideDetails");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public ReviewDetailsType ReviewDetails {
@@ -10592,7 +10591,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewDetails");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public int PositiveHelpfulnessVotes {
@@ -10604,7 +10603,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PositiveHelpfulnessVotes");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PositiveHelpfulnessVotesSpecified {
@@ -10617,7 +10616,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10625,33 +10624,33 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindProductsResponseType : AbstractResponseType {
-        
+
         private int approximatePagesField;
-        
+
         private bool approximatePagesFieldSpecified;
-        
+
         private bool moreResultsField;
-        
+
         private bool moreResultsFieldSpecified;
-        
+
         private DomainHistogramType domainHistogramField;
-        
+
         private SimpleItemType[] itemArrayField;
-        
+
         private int pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         private CatalogProductType[] productField;
-        
+
         private int totalProductsField;
-        
+
         private bool totalProductsFieldSpecified;
-        
+
         private bool duplicateItemsField;
-        
+
         private bool duplicateItemsFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int ApproximatePages {
@@ -10663,7 +10662,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ApproximatePages");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ApproximatePagesSpecified {
@@ -10675,7 +10674,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ApproximatePagesSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public bool MoreResults {
@@ -10687,7 +10686,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MoreResults");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MoreResultsSpecified {
@@ -10699,7 +10698,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MoreResultsSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public DomainHistogramType DomainHistogram {
@@ -10711,7 +10710,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DomainHistogram");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
         [System.Xml.Serialization.XmlArrayItemAttribute("Item", IsNullable=false)]
@@ -10724,7 +10723,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemArray");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int PageNumber {
@@ -10736,7 +10735,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified {
@@ -10748,7 +10747,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumberSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Product", Order=5)]
         public CatalogProductType[] Product {
@@ -10760,7 +10759,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Product");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public int TotalProducts {
@@ -10772,7 +10771,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalProducts");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TotalProductsSpecified {
@@ -10784,7 +10783,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalProductsSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public bool DuplicateItems {
@@ -10796,7 +10795,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DuplicateItems");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DuplicateItemsSpecified {
@@ -10809,7 +10808,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10817,17 +10816,17 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindPopularSearchesResponseType : AbstractResponseType {
-        
+
         private PopularSearchesType[] popularSearchResultField;
-        
+
         private int pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         private int totalPagesField;
-        
+
         private bool totalPagesFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PopularSearchResult", Order=0)]
         public PopularSearchesType[] PopularSearchResult {
@@ -10839,7 +10838,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PopularSearchResult");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int PageNumber {
@@ -10851,7 +10850,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified {
@@ -10863,7 +10862,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumberSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int TotalPages {
@@ -10875,7 +10874,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalPages");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TotalPagesSpecified {
@@ -10888,7 +10887,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10896,9 +10895,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindPopularItemsResponseType : AbstractResponseType {
-        
+
         private SimpleItemType[] itemArrayField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("Item", IsNullable=false)]
@@ -10912,7 +10911,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -10920,29 +10919,29 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindHalfProductsResponseType : AbstractResponseType {
-        
+
         private DomainHistogramType domainHistogramField;
-        
+
         private int pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         private int approximatePagesField;
-        
+
         private bool approximatePagesFieldSpecified;
-        
+
         private bool moreResultsField;
-        
+
         private bool moreResultsFieldSpecified;
-        
+
         private int totalProductsField;
-        
+
         private bool totalProductsFieldSpecified;
-        
+
         private HalfProductsType productsField;
-        
+
         private string productSearchURLField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public DomainHistogramType DomainHistogram {
@@ -10954,7 +10953,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DomainHistogram");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int PageNumber {
@@ -10966,7 +10965,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified {
@@ -10978,7 +10977,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumberSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int ApproximatePages {
@@ -10990,7 +10989,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ApproximatePages");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ApproximatePagesSpecified {
@@ -11002,7 +11001,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ApproximatePagesSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public bool MoreResults {
@@ -11014,7 +11013,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MoreResults");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MoreResultsSpecified {
@@ -11026,7 +11025,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MoreResultsSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int TotalProducts {
@@ -11038,7 +11037,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalProducts");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TotalProductsSpecified {
@@ -11050,7 +11049,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("TotalProductsSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public HalfProductsType Products {
@@ -11062,7 +11061,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Products");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI", Order=6)]
         public string ProductSearchURL {
@@ -11075,7 +11074,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GeteBayTimeRequestType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetUserProfileRequestType))]
@@ -11095,11 +11094,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public abstract partial class AbstractRequestType : object, System.ComponentModel.INotifyPropertyChanged {
-        
+
         private string messageIDField;
-        
+
         private System.Xml.XmlElement[] anyField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MessageID {
@@ -11111,7 +11110,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MessageID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute(Order=1)]
         public System.Xml.XmlElement[] Any {
@@ -11123,9 +11122,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("Any");
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -11133,7 +11132,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11142,7 +11141,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GeteBayTimeRequestType : AbstractRequestType {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11150,11 +11149,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetUserProfileRequestType : AbstractRequestType {
-        
+
         private string userIDField;
-        
+
         private string includeSelectorField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string UserID {
@@ -11166,7 +11165,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string IncludeSelector {
@@ -11179,7 +11178,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11187,15 +11186,15 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetSingleItemRequestType : AbstractRequestType {
-        
+
         private string itemIDField;
-        
+
         private string variationSKUField;
-        
+
         private NameValueListType[] variationSpecificsField;
-        
+
         private string includeSelectorField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ItemID {
@@ -11207,7 +11206,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string VariationSKU {
@@ -11219,7 +11218,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VariationSKU");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
         [System.Xml.Serialization.XmlArrayItemAttribute("NameValueList", IsNullable=false)]
@@ -11232,7 +11231,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("VariationSpecifics");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string IncludeSelector {
@@ -11245,7 +11244,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11253,23 +11252,23 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetShippingCostsRequestType : AbstractRequestType {
-        
+
         private string itemIDField;
-        
+
         private int quantitySoldField;
-        
+
         private bool quantitySoldFieldSpecified;
-        
+
         private string destinationPostalCodeField;
-        
+
         private CountryCodeType destinationCountryCodeField;
-        
+
         private bool destinationCountryCodeFieldSpecified;
-        
+
         private bool includeDetailsField;
-        
+
         private bool includeDetailsFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ItemID {
@@ -11281,7 +11280,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int QuantitySold {
@@ -11293,7 +11292,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySold");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool QuantitySoldSpecified {
@@ -11305,7 +11304,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QuantitySoldSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string DestinationPostalCode {
@@ -11317,7 +11316,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DestinationPostalCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public CountryCodeType DestinationCountryCode {
@@ -11329,7 +11328,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DestinationCountryCode");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DestinationCountryCodeSpecified {
@@ -11341,7 +11340,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DestinationCountryCodeSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public bool IncludeDetails {
@@ -11353,7 +11352,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("IncludeDetails");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool IncludeDetailsSpecified {
@@ -11366,7 +11365,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11374,11 +11373,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetMultipleItemsRequestType : AbstractRequestType {
-        
+
         private string[] itemIDField;
-        
+
         private string includeSelectorField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ItemID", Order=0)]
         public string[] ItemID {
@@ -11390,7 +11389,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ItemID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string IncludeSelector {
@@ -11403,7 +11402,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11411,9 +11410,9 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetItemStatusRequestType : AbstractRequestType {
-        
+
         private string[] itemIDField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ItemID", Order=0)]
         public string[] ItemID {
@@ -11426,7 +11425,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11434,11 +11433,11 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class GetCategoryInfoRequestType : AbstractRequestType {
-        
+
         private string categoryIDField;
-        
+
         private string includeSelectorField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string CategoryID {
@@ -11450,7 +11449,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string IncludeSelector {
@@ -11463,7 +11462,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11471,29 +11470,29 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindReviewsAndGuidesRequestType : AbstractRequestType {
-        
+
         private ProductIDType productIDField;
-        
+
         private string userIDField;
-        
+
         private string categoryIDField;
-        
+
         private int maxResultsPerPageField;
-        
+
         private bool maxResultsPerPageFieldSpecified;
-        
+
         private int pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         private ReviewSortCodeType reviewSortField;
-        
+
         private bool reviewSortFieldSpecified;
-        
+
         private SortOrderCodeType sortOrderField;
-        
+
         private bool sortOrderFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public ProductIDType ProductID {
@@ -11505,7 +11504,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string UserID {
@@ -11517,7 +11516,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("UserID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string CategoryID {
@@ -11529,7 +11528,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public int MaxResultsPerPage {
@@ -11541,7 +11540,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxResultsPerPage");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MaxResultsPerPageSpecified {
@@ -11553,7 +11552,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxResultsPerPageSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int PageNumber {
@@ -11565,7 +11564,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified {
@@ -11577,7 +11576,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumberSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public ReviewSortCodeType ReviewSort {
@@ -11589,7 +11588,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewSort");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ReviewSortSpecified {
@@ -11601,7 +11600,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ReviewSortSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public SortOrderCodeType SortOrder {
@@ -11613,7 +11612,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SortOrder");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SortOrderSpecified {
@@ -11626,36 +11625,36 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum ReviewSortCodeType {
-        
+
         /// <remarks/>
         CreationTime,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum SortOrderCodeType {
-        
+
         /// <remarks/>
         Ascending,
-        
+
         /// <remarks/>
         Descending,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11663,41 +11662,41 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindProductsRequestType : AbstractRequestType {
-        
+
         private string includeSelectorField;
-        
+
         private bool availableItemsOnlyField;
-        
+
         private bool availableItemsOnlyFieldSpecified;
-        
+
         private string[] domainNameField;
-        
+
         private ProductIDType productIDField;
-        
+
         private string queryKeywordsField;
-        
+
         private ProductSortCodeType productSortField;
-        
+
         private bool productSortFieldSpecified;
-        
+
         private SortOrderCodeType sortOrderField;
-        
+
         private bool sortOrderFieldSpecified;
-        
+
         private int maxEntriesField;
-        
+
         private bool maxEntriesFieldSpecified;
-        
+
         private int pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         private string categoryIDField;
-        
+
         private bool hideDuplicateItemsField;
-        
+
         private bool hideDuplicateItemsFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string IncludeSelector {
@@ -11709,7 +11708,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("IncludeSelector");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public bool AvailableItemsOnly {
@@ -11721,7 +11720,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AvailableItemsOnly");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AvailableItemsOnlySpecified {
@@ -11733,7 +11732,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("AvailableItemsOnlySpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DomainName", Order=2)]
         public string[] DomainName {
@@ -11745,7 +11744,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("DomainName");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public ProductIDType ProductID {
@@ -11757,7 +11756,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string QueryKeywords {
@@ -11769,7 +11768,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QueryKeywords");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public ProductSortCodeType ProductSort {
@@ -11781,7 +11780,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductSort");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ProductSortSpecified {
@@ -11793,7 +11792,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("ProductSortSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public SortOrderCodeType SortOrder {
@@ -11805,7 +11804,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SortOrder");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool SortOrderSpecified {
@@ -11817,7 +11816,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("SortOrderSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public int MaxEntries {
@@ -11829,7 +11828,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxEntries");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MaxEntriesSpecified {
@@ -11841,7 +11840,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxEntriesSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public int PageNumber {
@@ -11853,7 +11852,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified {
@@ -11865,7 +11864,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumberSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public string CategoryID {
@@ -11877,7 +11876,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public bool HideDuplicateItems {
@@ -11889,7 +11888,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("HideDuplicateItems");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool HideDuplicateItemsSpecified {
@@ -11902,32 +11901,32 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public enum ProductSortCodeType {
-        
+
         /// <remarks/>
         Popularity,
-        
+
         /// <remarks/>
         Rating,
-        
+
         /// <remarks/>
         ReviewCount,
-        
+
         /// <remarks/>
         ItemCount,
-        
+
         /// <remarks/>
         Title,
-        
+
         /// <remarks/>
         CustomCode,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -11935,27 +11934,27 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindPopularSearchesRequestType : AbstractRequestType {
-        
+
         private string[] categoryIDField;
-        
+
         private string[] queryKeywordsField;
-        
+
         private int maxKeywordsField;
-        
+
         private bool maxKeywordsFieldSpecified;
-        
+
         private int maxResultsPerPageField;
-        
+
         private bool maxResultsPerPageFieldSpecified;
-        
+
         private int pageNumberField;
-        
+
         private bool pageNumberFieldSpecified;
-        
+
         private bool includeChildCategoriesField;
-        
+
         private bool includeChildCategoriesFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CategoryID", Order=0)]
         public string[] CategoryID {
@@ -11967,7 +11966,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("QueryKeywords", Order=1)]
         public string[] QueryKeywords {
@@ -11979,7 +11978,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QueryKeywords");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int MaxKeywords {
@@ -11991,7 +11990,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxKeywords");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MaxKeywordsSpecified {
@@ -12003,7 +12002,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxKeywordsSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public int MaxResultsPerPage {
@@ -12015,7 +12014,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxResultsPerPage");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MaxResultsPerPageSpecified {
@@ -12027,7 +12026,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxResultsPerPageSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int PageNumber {
@@ -12039,7 +12038,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumber");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified {
@@ -12051,7 +12050,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("PageNumberSpecified");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public bool IncludeChildCategories {
@@ -12063,7 +12062,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("IncludeChildCategories");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool IncludeChildCategoriesSpecified {
@@ -12076,7 +12075,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
@@ -12084,17 +12083,17 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:ebay:apis:eBLBaseComponents")]
     public partial class FindPopularItemsRequestType : AbstractRequestType {
-        
+
         private string[] categoryIDField;
-        
+
         private string queryKeywordsField;
-        
+
         private string[] categoryIDExcludeField;
-        
+
         private int maxEntriesField;
-        
+
         private bool maxEntriesFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CategoryID", Order=0)]
         public string[] CategoryID {
@@ -12106,7 +12105,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryID");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string QueryKeywords {
@@ -12118,7 +12117,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("QueryKeywords");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CategoryIDExclude", Order=2)]
         public string[] CategoryIDExclude {
@@ -12130,7 +12129,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("CategoryIDExclude");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public int MaxEntries {
@@ -12142,7 +12141,7 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
                 this.RaisePropertyChanged("MaxEntries");
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MaxEntriesSpecified {
@@ -12155,579 +12154,579 @@ namespace EzBob.eBayServiceLib.eBayShopingService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindHalfProductsRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindHalfProductsRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsRequestType FindHalfProductsRequest1;
-        
+
         public FindHalfProductsRequest() {
         }
-        
+
         public FindHalfProductsRequest(EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsRequestType FindHalfProductsRequest1) {
             this.FindHalfProductsRequest1 = FindHalfProductsRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindHalfProductsResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindHalfProductsResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsResponseType FindHalfProductsResponse1;
-        
+
         public FindHalfProductsResponse() {
         }
-        
+
         public FindHalfProductsResponse(EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsResponseType FindHalfProductsResponse1) {
             this.FindHalfProductsResponse1 = FindHalfProductsResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindPopularItemsRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindPopularItemsRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsRequestType FindPopularItemsRequest1;
-        
+
         public FindPopularItemsRequest() {
         }
-        
+
         public FindPopularItemsRequest(EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsRequestType FindPopularItemsRequest1) {
             this.FindPopularItemsRequest1 = FindPopularItemsRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindPopularItemsResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindPopularItemsResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsResponseType FindPopularItemsResponse1;
-        
+
         public FindPopularItemsResponse() {
         }
-        
+
         public FindPopularItemsResponse(EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsResponseType FindPopularItemsResponse1) {
             this.FindPopularItemsResponse1 = FindPopularItemsResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindPopularSearchesRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindPopularSearchesRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesRequestType FindPopularSearchesRequest1;
-        
+
         public FindPopularSearchesRequest() {
         }
-        
+
         public FindPopularSearchesRequest(EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesRequestType FindPopularSearchesRequest1) {
             this.FindPopularSearchesRequest1 = FindPopularSearchesRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindPopularSearchesResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindPopularSearchesResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesResponseType FindPopularSearchesResponse1;
-        
+
         public FindPopularSearchesResponse() {
         }
-        
+
         public FindPopularSearchesResponse(EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesResponseType FindPopularSearchesResponse1) {
             this.FindPopularSearchesResponse1 = FindPopularSearchesResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindProductsRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindProductsRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindProductsRequestType FindProductsRequest1;
-        
+
         public FindProductsRequest() {
         }
-        
+
         public FindProductsRequest(EzBob.eBayServiceLib.eBayShopingService.FindProductsRequestType FindProductsRequest1) {
             this.FindProductsRequest1 = FindProductsRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindProductsResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindProductsResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindProductsResponseType FindProductsResponse1;
-        
+
         public FindProductsResponse() {
         }
-        
+
         public FindProductsResponse(EzBob.eBayServiceLib.eBayShopingService.FindProductsResponseType FindProductsResponse1) {
             this.FindProductsResponse1 = FindProductsResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindReviewsAndGuidesRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindReviewsAndGuidesRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesRequestType FindReviewsAndGuidesRequest1;
-        
+
         public FindReviewsAndGuidesRequest() {
         }
-        
+
         public FindReviewsAndGuidesRequest(EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesRequestType FindReviewsAndGuidesRequest1) {
             this.FindReviewsAndGuidesRequest1 = FindReviewsAndGuidesRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class FindReviewsAndGuidesResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="FindReviewsAndGuidesResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesResponseType FindReviewsAndGuidesResponse1;
-        
+
         public FindReviewsAndGuidesResponse() {
         }
-        
+
         public FindReviewsAndGuidesResponse(EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesResponseType FindReviewsAndGuidesResponse1) {
             this.FindReviewsAndGuidesResponse1 = FindReviewsAndGuidesResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetCategoryInfoRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetCategoryInfoRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoRequestType GetCategoryInfoRequest1;
-        
+
         public GetCategoryInfoRequest() {
         }
-        
+
         public GetCategoryInfoRequest(EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoRequestType GetCategoryInfoRequest1) {
             this.GetCategoryInfoRequest1 = GetCategoryInfoRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetCategoryInfoResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetCategoryInfoResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoResponseType GetCategoryInfoResponse1;
-        
+
         public GetCategoryInfoResponse() {
         }
-        
+
         public GetCategoryInfoResponse(EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoResponseType GetCategoryInfoResponse1) {
             this.GetCategoryInfoResponse1 = GetCategoryInfoResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetItemStatusRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetItemStatusRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetItemStatusRequestType GetItemStatusRequest1;
-        
+
         public GetItemStatusRequest() {
         }
-        
+
         public GetItemStatusRequest(EzBob.eBayServiceLib.eBayShopingService.GetItemStatusRequestType GetItemStatusRequest1) {
             this.GetItemStatusRequest1 = GetItemStatusRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetItemStatusResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetItemStatusResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetItemStatusResponseType GetItemStatusResponse1;
-        
+
         public GetItemStatusResponse() {
         }
-        
+
         public GetItemStatusResponse(EzBob.eBayServiceLib.eBayShopingService.GetItemStatusResponseType GetItemStatusResponse1) {
             this.GetItemStatusResponse1 = GetItemStatusResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetMultipleItemsRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetMultipleItemsRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsRequestType GetMultipleItemsRequest1;
-        
+
         public GetMultipleItemsRequest() {
         }
-        
+
         public GetMultipleItemsRequest(EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsRequestType GetMultipleItemsRequest1) {
             this.GetMultipleItemsRequest1 = GetMultipleItemsRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetMultipleItemsResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetMultipleItemsResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsResponseType GetMultipleItemsResponse1;
-        
+
         public GetMultipleItemsResponse() {
         }
-        
+
         public GetMultipleItemsResponse(EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsResponseType GetMultipleItemsResponse1) {
             this.GetMultipleItemsResponse1 = GetMultipleItemsResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetShippingCostsRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetShippingCostsRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsRequestType GetShippingCostsRequest1;
-        
+
         public GetShippingCostsRequest() {
         }
-        
+
         public GetShippingCostsRequest(EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsRequestType GetShippingCostsRequest1) {
             this.GetShippingCostsRequest1 = GetShippingCostsRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetShippingCostsResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetShippingCostsResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsResponseType GetShippingCostsResponse1;
-        
+
         public GetShippingCostsResponse() {
         }
-        
+
         public GetShippingCostsResponse(EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsResponseType GetShippingCostsResponse1) {
             this.GetShippingCostsResponse1 = GetShippingCostsResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetSingleItemRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetSingleItemRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetSingleItemRequestType GetSingleItemRequest1;
-        
+
         public GetSingleItemRequest() {
         }
-        
+
         public GetSingleItemRequest(EzBob.eBayServiceLib.eBayShopingService.GetSingleItemRequestType GetSingleItemRequest1) {
             this.GetSingleItemRequest1 = GetSingleItemRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetSingleItemResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetSingleItemResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetSingleItemResponseType GetSingleItemResponse1;
-        
+
         public GetSingleItemResponse() {
         }
-        
+
         public GetSingleItemResponse(EzBob.eBayServiceLib.eBayShopingService.GetSingleItemResponseType GetSingleItemResponse1) {
             this.GetSingleItemResponse1 = GetSingleItemResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetUserProfileRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetUserProfileRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetUserProfileRequestType GetUserProfileRequest1;
-        
+
         public GetUserProfileRequest() {
         }
-        
+
         public GetUserProfileRequest(EzBob.eBayServiceLib.eBayShopingService.GetUserProfileRequestType GetUserProfileRequest1) {
             this.GetUserProfileRequest1 = GetUserProfileRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GetUserProfileResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetUserProfileResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GetUserProfileResponseType GetUserProfileResponse1;
-        
+
         public GetUserProfileResponse() {
         }
-        
+
         public GetUserProfileResponse(EzBob.eBayServiceLib.eBayShopingService.GetUserProfileResponseType GetUserProfileResponse1) {
             this.GetUserProfileResponse1 = GetUserProfileResponse1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GeteBayTimeRequest {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GeteBayTimeRequest", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeRequestType GeteBayTimeRequest1;
-        
+
         public GeteBayTimeRequest() {
         }
-        
+
         public GeteBayTimeRequest(EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeRequestType GeteBayTimeRequest1) {
             this.GeteBayTimeRequest1 = GeteBayTimeRequest1;
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class GeteBayTimeResponse {
-        
+
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GeteBayTimeResponse", Namespace="urn:ebay:apis:eBLBaseComponents", Order=0)]
         public EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeResponseType GeteBayTimeResponse1;
-        
+
         public GeteBayTimeResponse() {
         }
-        
+
         public GeteBayTimeResponse(EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeResponseType GeteBayTimeResponse1) {
             this.GeteBayTimeResponse1 = GeteBayTimeResponse1;
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface ShoppingInterfaceChannel : EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface, System.ServiceModel.IClientChannel {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ShoppingInterfaceClient : System.ServiceModel.ClientBase<EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface>, EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface {
-        
+
         public ShoppingInterfaceClient() {
         }
-        
+
         public ShoppingInterfaceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
-        
+
         public ShoppingInterfaceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public ShoppingInterfaceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public ShoppingInterfaceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.FindHalfProducts(EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsRequest request) {
             return base.Channel.FindHalfProducts(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsResponseType FindHalfProducts(EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsRequestType FindHalfProductsRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsRequest();
             inValue.FindHalfProductsRequest1 = FindHalfProductsRequest1;
             EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).FindHalfProducts(inValue);
             return retVal.FindHalfProductsResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.FindPopularItems(EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsRequest request) {
             return base.Channel.FindPopularItems(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsResponseType FindPopularItems(EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsRequestType FindPopularItemsRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsRequest();
             inValue.FindPopularItemsRequest1 = FindPopularItemsRequest1;
             EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).FindPopularItems(inValue);
             return retVal.FindPopularItemsResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.FindPopularSearches(EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesRequest request) {
             return base.Channel.FindPopularSearches(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesResponseType FindPopularSearches(EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesRequestType FindPopularSearchesRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesRequest();
             inValue.FindPopularSearchesRequest1 = FindPopularSearchesRequest1;
             EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).FindPopularSearches(inValue);
             return retVal.FindPopularSearchesResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.FindProductsResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.FindProducts(EzBob.eBayServiceLib.eBayShopingService.FindProductsRequest request) {
             return base.Channel.FindProducts(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.FindProductsResponseType FindProducts(EzBob.eBayServiceLib.eBayShopingService.FindProductsRequestType FindProductsRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.FindProductsRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.FindProductsRequest();
             inValue.FindProductsRequest1 = FindProductsRequest1;
             EzBob.eBayServiceLib.eBayShopingService.FindProductsResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).FindProducts(inValue);
             return retVal.FindProductsResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.FindReviewsAndGuides(EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesRequest request) {
             return base.Channel.FindReviewsAndGuides(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesResponseType FindReviewsAndGuides(EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesRequestType FindReviewsAndGuidesRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesRequest();
             inValue.FindReviewsAndGuidesRequest1 = FindReviewsAndGuidesRequest1;
             EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).FindReviewsAndGuides(inValue);
             return retVal.FindReviewsAndGuidesResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.GetCategoryInfo(EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoRequest request) {
             return base.Channel.GetCategoryInfo(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoResponseType GetCategoryInfo(EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoRequestType GetCategoryInfoRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoRequest();
             inValue.GetCategoryInfoRequest1 = GetCategoryInfoRequest1;
             EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).GetCategoryInfo(inValue);
             return retVal.GetCategoryInfoResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.GetItemStatusResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.GetItemStatus(EzBob.eBayServiceLib.eBayShopingService.GetItemStatusRequest request) {
             return base.Channel.GetItemStatus(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.GetItemStatusResponseType GetItemStatus(EzBob.eBayServiceLib.eBayShopingService.GetItemStatusRequestType GetItemStatusRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.GetItemStatusRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.GetItemStatusRequest();
             inValue.GetItemStatusRequest1 = GetItemStatusRequest1;
             EzBob.eBayServiceLib.eBayShopingService.GetItemStatusResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).GetItemStatus(inValue);
             return retVal.GetItemStatusResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.GetMultipleItems(EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsRequest request) {
             return base.Channel.GetMultipleItems(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsResponseType GetMultipleItems(EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsRequestType GetMultipleItemsRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsRequest();
             inValue.GetMultipleItemsRequest1 = GetMultipleItemsRequest1;
             EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).GetMultipleItems(inValue);
             return retVal.GetMultipleItemsResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.GetShippingCosts(EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsRequest request) {
             return base.Channel.GetShippingCosts(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsResponseType GetShippingCosts(EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsRequestType GetShippingCostsRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsRequest();
             inValue.GetShippingCostsRequest1 = GetShippingCostsRequest1;
             EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).GetShippingCosts(inValue);
             return retVal.GetShippingCostsResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.GetSingleItemResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.GetSingleItem(EzBob.eBayServiceLib.eBayShopingService.GetSingleItemRequest request) {
             return base.Channel.GetSingleItem(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.GetSingleItemResponseType GetSingleItem(EzBob.eBayServiceLib.eBayShopingService.GetSingleItemRequestType GetSingleItemRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.GetSingleItemRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.GetSingleItemRequest();
             inValue.GetSingleItemRequest1 = GetSingleItemRequest1;
             EzBob.eBayServiceLib.eBayShopingService.GetSingleItemResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).GetSingleItem(inValue);
             return retVal.GetSingleItemResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.GetUserProfileResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.GetUserProfile(EzBob.eBayServiceLib.eBayShopingService.GetUserProfileRequest request) {
             return base.Channel.GetUserProfile(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.GetUserProfileResponseType GetUserProfile(EzBob.eBayServiceLib.eBayShopingService.GetUserProfileRequestType GetUserProfileRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.GetUserProfileRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.GetUserProfileRequest();
             inValue.GetUserProfileRequest1 = GetUserProfileRequest1;
             EzBob.eBayServiceLib.eBayShopingService.GetUserProfileResponse retVal = ((EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface)(this)).GetUserProfile(inValue);
             return retVal.GetUserProfileResponse1;
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeResponse EzBob.eBayServiceLib.eBayShopingService.ShoppingInterface.GeteBayTime(EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeRequest request) {
             return base.Channel.GeteBayTime(request);
         }
-        
+
         public EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeResponseType GeteBayTime(EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeRequestType GeteBayTimeRequest1) {
             EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeRequest inValue = new EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeRequest();
             inValue.GeteBayTimeRequest1 = GeteBayTimeRequest1;

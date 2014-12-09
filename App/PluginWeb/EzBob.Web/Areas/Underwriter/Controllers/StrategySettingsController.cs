@@ -589,7 +589,6 @@
 				return Json(new { success = false, errorText = "One or more parameters missing" }, JsonRequestBehavior.AllowGet);
 			}
 
-
 			DateTime startDate = DateTime.ParseExact(campaignStartDate, "dd/MM/yyyy", null);
 			DateTime endDate = DateTime.ParseExact(campaignEndDate, "dd/MM/yyyy", null);
 
@@ -605,7 +604,6 @@
 			campaign.StartDate = startDate;
 			campaign.EndDate = endDate;
 			campaign.Description = campaignDescription;
-
 
 			var campClients = campaign.Clients.ToArray();
 			foreach (var client in campClients)

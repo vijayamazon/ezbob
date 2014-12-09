@@ -11,20 +11,19 @@
 namespace EchoSignLib.EchoSignService {
     using System.Runtime.Serialization;
     using System;
-    
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CancelDocumentResult", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class CancelDocumentResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.Result> resultField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -34,7 +33,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.Result> result {
             get {
@@ -47,9 +46,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -57,75 +56,75 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Result", Namespace="http://dto.api.echosign")]
     public enum Result : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         REMINDER_SENT = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CANCELLED = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALREADY_SIGNED = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALREADY_CANCELLED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserCreationInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class UserCreationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string companyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string customField1Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string customField2Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string customField3Field;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string firstNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string groupKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string lastNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.OptIn> optInField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string passwordField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string phoneField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string titleField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -135,7 +134,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string company {
             get {
@@ -148,7 +147,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string customField1 {
             get {
@@ -161,7 +160,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string customField2 {
             get {
@@ -174,7 +173,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string customField3 {
             get {
@@ -187,7 +186,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -200,7 +199,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string firstName {
             get {
@@ -213,7 +212,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string groupKey {
             get {
@@ -226,7 +225,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string lastName {
             get {
@@ -239,7 +238,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.OptIn> optIn {
             get {
@@ -252,7 +251,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string password {
             get {
@@ -265,7 +264,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string phone {
             get {
@@ -278,7 +277,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string title {
             get {
@@ -291,9 +290,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -301,39 +300,39 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OptIn", Namespace="http://dto.api.echosign")]
     public enum OptIn : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         YES = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UNKNOWN = 2,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AccountCreationInfo", Namespace="http://dto7.api.echosign")]
     [System.SerializableAttribute()]
     public partial class AccountCreationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AccountType> accountTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string companyNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> numSeatsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -343,7 +342,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AccountType> accountType {
             get {
@@ -356,7 +355,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string companyName {
             get {
@@ -369,7 +368,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> numSeats {
             get {
@@ -382,9 +381,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -392,54 +391,54 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AccountType", Namespace="http://dto7.api.echosign")]
     public enum AccountType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FREE = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PRO = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TEAM = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TEAM_TRIAL = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ENTERPRISE = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ENTERPRISE_TRIAL = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GLOBAL = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GLOBAL_TRIAL = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CreateAccountResult", Namespace="http://dto7.api.echosign")]
     [System.SerializableAttribute()]
     public partial class CreateAccountResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.CreateAccountResultCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -449,7 +448,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.CreateAccountResultCode> errorCode {
             get {
@@ -462,7 +461,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -475,7 +474,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -488,9 +487,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -498,54 +497,54 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CreateAccountResultCode", Namespace="http://dto7.api.echosign")]
     public enum CreateAccountResultCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ACCOUNT_CREATION_NOT_ENABLED = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_SEAT_COUNT = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         USER_CREATION_ERROR = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         USER_ALREADY_HAS_ACCOUNT = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SenderInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SenderInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string passwordField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string userKeyField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -555,7 +554,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -568,7 +567,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string password {
             get {
@@ -581,7 +580,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string userKey {
             get {
@@ -594,9 +593,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -604,55 +603,55 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="WidgetCreationInfo", Namespace="http://dto8.api.echosign")]
     [System.SerializableAttribute()]
     public partial class WidgetCreationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.CallbackInfo callbackInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.RecipientInfo[] counterSignersField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.FileInfo[] fileInfosField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.FileInfo[] formFieldLayerTemplatesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string localeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.MergeFieldInfo mergeFieldInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SecurityOptions securityOptionsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SignatureFlow> signatureFlowField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.VaultingInfo vaultingInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.WidgetCompletionInfo widgetAuthFailureInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.WidgetCompletionInfo widgetCompletionInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.RecipientSecurityOption widgetSignerSecurityOptionsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -662,7 +661,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.CallbackInfo callbackInfo {
             get {
@@ -675,7 +674,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.RecipientInfo[] counterSigners {
             get {
@@ -688,7 +687,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.FileInfo[] fileInfos {
             get {
@@ -701,7 +700,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.FileInfo[] formFieldLayerTemplates {
             get {
@@ -714,7 +713,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string locale {
             get {
@@ -727,7 +726,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.MergeFieldInfo mergeFieldInfo {
             get {
@@ -740,7 +739,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -753,7 +752,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SecurityOptions securityOptions {
             get {
@@ -766,7 +765,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SignatureFlow> signatureFlow {
             get {
@@ -779,7 +778,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.VaultingInfo vaultingInfo {
             get {
@@ -792,7 +791,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.WidgetCompletionInfo widgetAuthFailureInfo {
             get {
@@ -805,7 +804,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.WidgetCompletionInfo widgetCompletionInfo {
             get {
@@ -818,7 +817,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.RecipientSecurityOption widgetSignerSecurityOptions {
             get {
@@ -831,9 +830,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -841,19 +840,19 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CallbackInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class CallbackInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string signedDocumentUrlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -863,7 +862,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string signedDocumentUrl {
             get {
@@ -876,9 +875,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -886,19 +885,19 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="MergeFieldInfo", Namespace="http://dto9.api.echosign")]
     [System.SerializableAttribute()]
     public partial class MergeFieldInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.MergeField[] mergeFieldsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -908,7 +907,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.MergeField[] mergeFields {
             get {
@@ -921,9 +920,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -931,37 +930,37 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SecurityOptions", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SecurityOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string externalPasswordField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string internalPasswordField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AppliesTo> kbaProtectionField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string openPasswordField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AppliesTo> passwordProtectionField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool protectOpenField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AppliesTo> webIdentityProtectionField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -971,7 +970,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string externalPassword {
             get {
@@ -984,7 +983,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string internalPassword {
             get {
@@ -997,7 +996,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AppliesTo> kbaProtection {
             get {
@@ -1010,7 +1009,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string openPassword {
             get {
@@ -1023,7 +1022,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AppliesTo> passwordProtection {
             get {
@@ -1036,7 +1035,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool protectOpen {
             get {
@@ -1049,7 +1048,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AppliesTo> webIdentityProtection {
             get {
@@ -1062,9 +1061,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1072,19 +1071,19 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="VaultingInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class VaultingInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool enabledField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1094,7 +1093,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool enabled {
             get {
@@ -1107,9 +1106,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1117,25 +1116,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="WidgetCompletionInfo", Namespace="http://dto8.api.echosign")]
     [System.SerializableAttribute()]
     public partial class WidgetCompletionInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool deframeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int delayField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1145,7 +1144,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool deframe {
             get {
@@ -1158,7 +1157,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int delay {
             get {
@@ -1171,7 +1170,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string url {
             get {
@@ -1184,9 +1183,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1194,25 +1193,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RecipientSecurityOption", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class RecipientSecurityOption : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AuthenticationMethod> authenticationMethodField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string passwordField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.PhoneInfo[] phoneInfosField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1222,7 +1221,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AuthenticationMethod> authenticationMethod {
             get {
@@ -1235,7 +1234,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string password {
             get {
@@ -1248,7 +1247,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.PhoneInfo[] phoneInfos {
             get {
@@ -1261,9 +1260,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1271,28 +1270,28 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RecipientInfo", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class RecipientInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string faxField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.RecipientRole> roleField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.RecipientSecurityOption[] securityOptionsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1302,7 +1301,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -1315,7 +1314,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fax {
             get {
@@ -1328,7 +1327,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.RecipientRole> role {
             get {
@@ -1341,7 +1340,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.RecipientSecurityOption[] securityOptions {
             get {
@@ -1354,9 +1353,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1364,37 +1363,37 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FileInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class FileInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private byte[] fileField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fileNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string formKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string libraryDocumentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string libraryDocumentNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string mimeTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1404,7 +1403,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public byte[] file {
             get {
@@ -1417,7 +1416,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fileName {
             get {
@@ -1430,7 +1429,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string formKey {
             get {
@@ -1443,7 +1442,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string libraryDocumentKey {
             get {
@@ -1456,7 +1455,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string libraryDocumentName {
             get {
@@ -1469,7 +1468,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string mimeType {
             get {
@@ -1482,7 +1481,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string url {
             get {
@@ -1495,9 +1494,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1505,79 +1504,79 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SignatureFlow", Namespace="http://dto.api.echosign")]
     public enum SignatureFlow : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SENDER_SIGNS_LAST = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SENDER_SIGNS_FIRST = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SENDER_SIGNATURE_NOT_REQUIRED = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SENDER_SIGNS_ONLY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SEQUENTIAL = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PARALLEL = 5,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RecipientRole", Namespace="http://dto14.api.echosign")]
     public enum RecipientRole : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         APPROVER = 1,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AuthenticationMethod", Namespace="http://dto18.api.echosign")]
     public enum AuthenticationMethod : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NONE = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INHERITED_FROM_DOCUMENT = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PASSWORD = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WEB_IDENTITY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         KBA = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PHONE = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PhoneInfo", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class PhoneInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string countryCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string phoneField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1587,7 +1586,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string countryCode {
             get {
@@ -1600,7 +1599,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string phone {
             get {
@@ -1613,9 +1612,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1623,22 +1622,22 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="MergeField", Namespace="http://dto9.api.echosign")]
     [System.SerializableAttribute()]
     public partial class MergeField : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string defaultValueField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fieldNameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1648,7 +1647,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string defaultValue {
             get {
@@ -1661,7 +1660,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fieldName {
             get {
@@ -1674,9 +1673,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1684,48 +1683,48 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AppliesTo", Namespace="http://dto.api.echosign")]
     public enum AppliesTo : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NONE = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXTERNAL_USERS = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INTERNAL_USERS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALL_USERS = 3,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EmbeddedWidgetCreationResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class EmbeddedWidgetCreationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.EmbeddedWidgetCreationResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string javascriptField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1735,7 +1734,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string documentKey {
             get {
@@ -1748,7 +1747,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.EmbeddedWidgetCreationResultErrorCode> errorCode {
             get {
@@ -1761,7 +1760,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -1774,7 +1773,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string javascript {
             get {
@@ -1787,7 +1786,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -1800,9 +1799,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1810,51 +1809,51 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EmbeddedWidgetCreationResultErrorCode", Namespace="http://dto8.api.echosign")]
     public enum EmbeddedWidgetCreationResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_JAVASCRIPT = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_SIGNATURE_FLOW = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FormCreationInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class FormCreationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ExternalId externalIdField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.FileInfo[] fileInfosField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.FormType> formTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1864,7 +1863,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ExternalId externalId {
             get {
@@ -1877,7 +1876,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.FileInfo[] fileInfos {
             get {
@@ -1890,7 +1889,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.FormType> formType {
             get {
@@ -1903,7 +1902,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -1916,9 +1915,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -1926,25 +1925,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ExternalId", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class ExternalId : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string groupField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string idField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string namespaceField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1954,7 +1953,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string group {
             get {
@@ -1967,7 +1966,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string id {
             get {
@@ -1980,7 +1979,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string @namespace {
             get {
@@ -1993,9 +1992,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2003,36 +2002,36 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FormType", Namespace="http://dto.api.echosign")]
     public enum FormType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NORMAL = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WIDGET = 1,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FormCreationResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class FormCreationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentKey documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string widgetCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string widgetUrlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2042,7 +2041,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentKey documentKey {
             get {
@@ -2055,7 +2054,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string widgetCode {
             get {
@@ -2068,7 +2067,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string widgetUrl {
             get {
@@ -2081,9 +2080,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2091,22 +2090,22 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentKey", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentKey : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string recipientEmailField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2116,7 +2115,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string documentKey {
             get {
@@ -2129,7 +2128,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string recipientEmail {
             get {
@@ -2142,9 +2141,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2152,28 +2151,28 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CreateGroupResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class CreateGroupResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string groupKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.CreateGroupResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2183,7 +2182,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string groupKey {
             get {
@@ -2196,7 +2195,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public System.Nullable<EchoSignLib.EchoSignService.CreateGroupResultErrorCode> errorCode {
             get {
@@ -2209,7 +2208,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string errorMessage {
             get {
@@ -2222,7 +2221,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool success {
             get {
@@ -2235,9 +2234,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2245,63 +2244,63 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CreateGroupResultErrorCode", Namespace="http://dto15.api.echosign")]
     public enum CreateGroupResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_GROUP_NAME = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_IN_ACCOUNT = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION_TO_EXECUTE_METHOD = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TERMS_NOT_ACCEPTED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LibraryDocumentCreationInfo", Namespace="http://dto9.api.echosign")]
     [System.SerializableAttribute()]
     public partial class LibraryDocumentCreationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.FileInfo[] fileInfosField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.LibrarySharingMode> librarySharingModeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfLibraryTemplateType libraryTemplateTypesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SignatureFlow> signatureFlowField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SignatureType> signatureTypeField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2311,7 +2310,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.FileInfo[] fileInfos {
             get {
@@ -2324,7 +2323,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.LibrarySharingMode> librarySharingMode {
             get {
@@ -2337,7 +2336,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfLibraryTemplateType libraryTemplateTypes {
             get {
@@ -2350,7 +2349,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -2363,7 +2362,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SignatureFlow> signatureFlow {
             get {
@@ -2376,7 +2375,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SignatureType> signatureType {
             get {
@@ -2389,9 +2388,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2399,71 +2398,71 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LibrarySharingMode", Namespace="http://dto9.api.echosign")]
     public enum LibrarySharingMode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         USER = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GROUP = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ACCOUNT = 2,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfLibraryTemplateType", Namespace="http://dto17.api.echosign", ItemName="LibraryTemplateType")]
     [System.SerializableAttribute()]
     public class ArrayOfLibraryTemplateType : System.Collections.Generic.List<System.Nullable<EchoSignLib.EchoSignService.LibraryTemplateType>> {
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SignatureType", Namespace="http://dto.api.echosign")]
     public enum SignatureType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ESIGN = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WRITTEN = 1,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LibraryTemplateType", Namespace="http://dto17.api.echosign")]
     public enum LibraryTemplateType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FORM_FIELD_LAYER = 1,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LibraryDocumentCreationResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class LibraryDocumentCreationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.LibraryDocumentCreationResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2473,7 +2472,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string documentKey {
             get {
@@ -2486,7 +2485,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.LibraryDocumentCreationResultErrorCode> errorCode {
             get {
@@ -2499,7 +2498,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -2512,7 +2511,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -2525,9 +2524,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2535,48 +2534,48 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LibraryDocumentCreationResultErrorCode", Namespace="http://dto9.api.echosign")]
     public enum LibraryDocumentCreationResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 3,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="WidgetPersonalizationInfo", Namespace="http://dto8.api.echosign")]
     [System.SerializableAttribute()]
     public partial class WidgetPersonalizationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<bool> allowManualVerificationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string commentField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime expirationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<bool> reusableField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2586,7 +2585,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<bool> allowManualVerification {
             get {
@@ -2599,7 +2598,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string comment {
             get {
@@ -2612,7 +2611,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -2625,7 +2624,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime expiration {
             get {
@@ -2638,7 +2637,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<bool> reusable {
             get {
@@ -2651,9 +2650,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2661,31 +2660,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UrlWidgetCreationResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class UrlWidgetCreationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.UrlWidgetCreationResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2695,7 +2694,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string documentKey {
             get {
@@ -2708,7 +2707,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.UrlWidgetCreationResultErrorCode> errorCode {
             get {
@@ -2721,7 +2720,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -2734,7 +2733,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -2747,7 +2746,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string url {
             get {
@@ -2760,9 +2759,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2770,45 +2769,45 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UrlWidgetCreationResultErrorCode", Namespace="http://dto8.api.echosign")]
     public enum UrlWidgetCreationResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_URL = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_SIGNATURE_FLOW = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserCredentials", Namespace="http://dto9.api.echosign")]
     [System.SerializableAttribute()]
     public partial class UserCredentials : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string passwordField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2818,7 +2817,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -2831,7 +2830,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string password {
             get {
@@ -2844,9 +2843,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2854,22 +2853,22 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DelegateSigningOptions", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DelegateSigningOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string messageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string newSignerEmailField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2879,7 +2878,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string message {
             get {
@@ -2892,7 +2891,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string newSignerEmail {
             get {
@@ -2905,9 +2904,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2915,25 +2914,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DelegateSigningResult", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DelegateSigningResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DelegateSigningResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -2943,7 +2942,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DelegateSigningResultErrorCode> errorCode {
             get {
@@ -2956,7 +2955,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -2969,7 +2968,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -2982,9 +2981,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -2992,60 +2991,60 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DelegateSigningResultErrorCode", Namespace="http://dto17.api.echosign")]
     public enum DelegateSigningResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_CREDENTIALS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_OPTIONS = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_NEW_SIGNER = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_MESSAGE = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNING_DELEGATION_NOT_ALLOWED = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 9,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DeleteGroupResult", Namespace="http://dto15.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DeleteGroupResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DeleteGroupResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3055,7 +3054,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DeleteGroupResultErrorCode> errorCode {
             get {
@@ -3068,7 +3067,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -3081,7 +3080,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -3094,9 +3093,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3104,63 +3103,63 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DeleteGroupResultErrorCode", Namespace="http://dto15.api.echosign")]
     public enum DeleteGroupResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_GROUP_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GROUP_NOT_EMPTY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CANNOT_DELETE_DEFAULT_GROUP = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TERMS_NOT_ACCEPTED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_IN_ACCOUNT = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION_TO_EXECUTE_METHOD = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 9,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DeliverDocumentResult", Namespace="http://dto13.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DeliverDocumentResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string deliveryURLField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DeliverDocumentResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3170,7 +3169,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string deliveryURL {
             get {
@@ -3183,7 +3182,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DeliverDocumentResultErrorCode> errorCode {
             get {
@@ -3196,7 +3195,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -3209,7 +3208,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -3222,9 +3221,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3232,42 +3231,42 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DeliverDocumentResultErrorCode", Namespace="http://dto13.api.echosign")]
     public enum DeliverDocumentResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FILE_RETRIEVAL_ERROR = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DisableWidgetOptions", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DisableWidgetOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string messageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string redirectUrlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3277,7 +3276,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string message {
             get {
@@ -3290,7 +3289,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string redirectUrl {
             get {
@@ -3303,9 +3302,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3313,25 +3312,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DisableWidgetResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DisableWidgetResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DisableWidgetResultCode> resultCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3341,7 +3340,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -3354,7 +3353,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DisableWidgetResultCode> resultCode {
             get {
@@ -3367,7 +3366,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -3380,9 +3379,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3390,45 +3389,45 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DisableWidgetResultCode", Namespace="http://dto16.api.echosign")]
     public enum DisableWidgetResultCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALREADY_DISABLED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TOO_MANY_ACTIONS_SPECIFIED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_ACTION_SPECIFIED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_URL = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EnableWidgetOptions", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class EnableWidgetOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3438,9 +3437,9 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3448,25 +3447,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EnableWidgetResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class EnableWidgetResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.EnableWidgetResultCode> resultCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3476,7 +3475,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -3489,7 +3488,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.EnableWidgetResultCode> resultCode {
             get {
@@ -3502,7 +3501,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -3515,9 +3514,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3525,48 +3524,48 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EnableWidgetResultCode", Namespace="http://dto16.api.echosign")]
     public enum EnableWidgetResultCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALREADY_ENABLED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AuditTrailResult", Namespace="http://dto9.api.echosign")]
     [System.SerializableAttribute()]
     public partial class AuditTrailResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private byte[] auditTrailPdfField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AuditTrailResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3576,7 +3575,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public byte[] auditTrailPdf {
             get {
@@ -3589,7 +3588,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AuditTrailResultErrorCode> errorCode {
             get {
@@ -3602,7 +3601,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -3615,7 +3614,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -3628,9 +3627,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3638,66 +3637,66 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AuditTrailResultErrorCode", Namespace="http://dto9.api.echosign")]
     public enum AuditTrailResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_DELETED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ComposeDocumentInfo", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class ComposeDocumentInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.ComposeDocumentType> composeDocumentTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DeviceInfo deviceInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private byte[] fileField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fileNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string localeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string messageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.RecipientInfo[] recipientsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SignatureLocation signatureLocationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string titleField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3707,7 +3706,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.ComposeDocumentType> composeDocumentType {
             get {
@@ -3720,7 +3719,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DeviceInfo deviceInfo {
             get {
@@ -3733,7 +3732,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public byte[] file {
             get {
@@ -3746,7 +3745,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fileName {
             get {
@@ -3759,7 +3758,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string locale {
             get {
@@ -3772,7 +3771,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string message {
             get {
@@ -3785,7 +3784,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.RecipientInfo[] recipients {
             get {
@@ -3798,7 +3797,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SignatureLocation signatureLocation {
             get {
@@ -3811,7 +3810,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string title {
             get {
@@ -3824,9 +3823,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3834,31 +3833,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DeviceInfo", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DeviceInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string applicationDescriptionField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string deviceDescriptionField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DeviceLocation deviceLocationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime deviceTimeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> deviceTimeZoneOffsetField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3868,7 +3867,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string applicationDescription {
             get {
@@ -3881,7 +3880,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string deviceDescription {
             get {
@@ -3894,7 +3893,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DeviceLocation deviceLocation {
             get {
@@ -3907,7 +3906,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime deviceTime {
             get {
@@ -3920,7 +3919,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> deviceTimeZoneOffset {
             get {
@@ -3933,9 +3932,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -3943,31 +3942,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SignatureLocation", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SignatureLocation : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<float> bottomField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<float> leftField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> pageNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<float> rightField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<float> topField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3977,7 +3976,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<float> bottom {
             get {
@@ -3990,7 +3989,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<float> left {
             get {
@@ -4003,7 +4002,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> pageNumber {
             get {
@@ -4016,7 +4015,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<float> right {
             get {
@@ -4029,7 +4028,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<float> top {
             get {
@@ -4042,9 +4041,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4052,39 +4051,39 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ComposeDocumentType", Namespace="http://dto17.api.echosign")]
     public enum ComposeDocumentType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGN_THEN_DELIVER = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DELIVER_ONLY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGN_THEN_SEND = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SEND_ONLY = 3,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DeviceLocation", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DeviceLocation : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<float> latitudeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<float> longitudeField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -4094,7 +4093,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<float> latitude {
             get {
@@ -4107,7 +4106,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<float> longitude {
             get {
@@ -4120,9 +4119,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4130,28 +4129,28 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetComposeDocumentUrlResult", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetComposeDocumentUrlResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string composeDocumentUrlField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetComposeDocumentUrlResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -4161,7 +4160,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string composeDocumentUrl {
             get {
@@ -4174,7 +4173,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetComposeDocumentUrlResultErrorCode> errorCode {
             get {
@@ -4187,7 +4186,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -4200,7 +4199,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -4213,9 +4212,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4223,51 +4222,51 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetComposeDocumentUrlResultErrorCode", Namespace="http://dto17.api.echosign")]
     public enum GetComposeDocumentUrlResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_ACCESS_TOKEN = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_ARGUMENTS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FILE_RETRIEVAL_ERROR = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentEventsForUserOptions", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentEventsForUserOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime endDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfAgreementEventType filterEventsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool onlyShowLatestEventField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime startDateField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -4277,7 +4276,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime endDate {
             get {
@@ -4290,7 +4289,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfAgreementEventType filterEvents {
             get {
@@ -4303,7 +4302,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool onlyShowLatestEvent {
             get {
@@ -4316,7 +4315,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime startDate {
             get {
@@ -4329,9 +4328,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4339,136 +4338,136 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfAgreementEventType", Namespace="http://dto18.api.echosign", ItemName="AgreementEventType")]
     [System.SerializableAttribute()]
     public class ArrayOfAgreementEventType : System.Collections.Generic.List<System.Nullable<EchoSignLib.EchoSignService.AgreementEventType>> {
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AgreementEventType", Namespace="http://dto18.api.echosign")]
     public enum AgreementEventType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CREATED = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UPLOADED_BY_SENDER = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FAXED_BY_SENDER = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ESIGNED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         APPROVED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OFFLINE_SYNC = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FAXIN_RECEIVED = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNATURE_REQUESTED = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         APPROVAL_REQUESTED = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         RECALLED = 10,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         REJECTED = 11,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXPIRED = 12,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXPIRED_AUTOMATICALLY = 13,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SHARED = 14,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EMAIL_VIEWED = 15,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AUTO_CANCELLED_CONVERSION_PROBLEM = 16,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_SUGGESTED_CHANGES = 17,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SENDER_CREATED_NEW_REVISION = 18,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PASSWORD_AUTHENTICATION_FAILED = 19,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         KBA_AUTHENTICATION_FAILED = 20,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         KBA_AUTHENTICATED = 21,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WEB_IDENTITY_AUTHENTICATED = 22,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WEB_IDENTITY_SPECIFIED = 23,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EMAIL_BOUNCED = 24,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WIDGET_ENABLED = 25,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WIDGET_DISABLED = 26,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DELEGATED = 27,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         REPLACED_SIGNER = 28,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         VAULTED = 29,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENTS_DELETED = 30,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 31,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentEventsForUserResult", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentEventsForUserResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentEventForUser[] documentEventsForUserField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetDocumentEventsForUserResultCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -4478,7 +4477,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentEventForUser[] documentEventsForUser {
             get {
@@ -4491,7 +4490,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetDocumentEventsForUserResultCode> errorCode {
             get {
@@ -4504,7 +4503,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -4517,7 +4516,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -4530,9 +4529,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4540,25 +4539,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentEventForUser", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentEventForUser : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentHistoryEvent eventField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -4568,7 +4567,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string documentKey {
             get {
@@ -4581,7 +4580,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentHistoryEvent @event {
             get {
@@ -4594,7 +4593,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -4607,9 +4606,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4617,72 +4616,72 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentEventsForUserResultCode", Namespace="http://dto18.api.echosign")]
     public enum GetDocumentEventsForUserResultCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_USER_CREDENTIALS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DATE_RANGE = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERMISSION_DENIED = 6,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentHistoryEvent", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentHistoryEvent : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AgreementEventType> typeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DeviceLocation deviceLocationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentVersionKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string synchronizationKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string actingUserIpAddressField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string actingUserEmailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string commentField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string participantEmailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime dateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string descriptionField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -4692,7 +4691,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AgreementEventType> type {
             get {
@@ -4705,7 +4704,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public EchoSignLib.EchoSignService.DeviceLocation deviceLocation {
             get {
@@ -4718,7 +4717,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string documentVersionKey {
             get {
@@ -4731,7 +4730,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public string synchronizationKey {
             get {
@@ -4744,7 +4743,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public string actingUserIpAddress {
             get {
@@ -4757,7 +4756,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
         public string actingUserEmail {
             get {
@@ -4770,7 +4769,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=6)]
         public string comment {
             get {
@@ -4783,7 +4782,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=7)]
         public string participantEmail {
             get {
@@ -4796,7 +4795,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=8)]
         public System.DateTime date {
             get {
@@ -4809,7 +4808,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=9)]
         public string description {
             get {
@@ -4822,9 +4821,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4832,28 +4831,28 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentImageUrlsOptions", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentImageUrlsOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool attachSupportingDocumentsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.IncludeScalingTypes> includeScalingTypesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string participantEmailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string versionKeyField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -4863,7 +4862,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool attachSupportingDocuments {
             get {
@@ -4876,7 +4875,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.IncludeScalingTypes> includeScalingTypes {
             get {
@@ -4889,7 +4888,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string participantEmail {
             get {
@@ -4902,7 +4901,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string versionKey {
             get {
@@ -4915,9 +4914,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -4925,45 +4924,45 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="IncludeScalingTypes", Namespace="http://dto14.api.echosign")]
     public enum IncludeScalingTypes : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALL = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FIXED_WIDTH = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERCENT_ZOOM = 2,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentImageUrlsResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentImageUrlsResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentImageUrls[] imageUrlsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SupportingDocumentImageUrls[] supportingDocumentImageUrlsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetDocumentImageUrlsErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -4973,7 +4972,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentImageUrls[] imageUrls {
             get {
@@ -4986,7 +4985,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SupportingDocumentImageUrls[] supportingDocumentImageUrls {
             get {
@@ -4999,7 +4998,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public System.Nullable<EchoSignLib.EchoSignService.GetDocumentImageUrlsErrorCode> errorCode {
             get {
@@ -5012,7 +5011,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public string errorMessage {
             get {
@@ -5025,7 +5024,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public bool success {
             get {
@@ -5038,9 +5037,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5048,22 +5047,22 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentImageUrls", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentImageUrls : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.PageImageUrls[] pagesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -5073,7 +5072,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.PageImageUrls[] pages {
             get {
@@ -5086,7 +5085,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public string name {
             get {
@@ -5099,9 +5098,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5109,22 +5108,22 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SupportingDocumentImageUrls", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SupportingDocumentImageUrls : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.PageImageUrls[] pagesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fieldNameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -5134,7 +5133,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.PageImageUrls[] pages {
             get {
@@ -5147,7 +5146,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public string fieldName {
             get {
@@ -5160,9 +5159,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5170,57 +5169,57 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentImageUrlsErrorCode", Namespace="http://dto14.api.echosign")]
     public enum GetDocumentImageUrlsErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_VERSION_KEY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_PARTICIPANT = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_AVAILABLE = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_EXPOSED = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_REMOVED = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_DELETED = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         IMAGES_NOT_AVAILABLE = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INTERNAL_ERROR = 10,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PageImageUrls", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class PageImageUrls : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.PageImageUrl[] imagesField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -5230,7 +5229,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.PageImageUrl[] images {
             get {
@@ -5243,9 +5242,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5253,28 +5252,28 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PageImageUrl", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class PageImageUrl : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.ScalingType> scalingTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> zoomField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> widthField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -5284,7 +5283,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.ScalingType> scalingType {
             get {
@@ -5297,7 +5296,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> zoom {
             get {
@@ -5310,7 +5309,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string url {
             get {
@@ -5323,7 +5322,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public System.Nullable<int> width {
             get {
@@ -5336,9 +5335,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5346,60 +5345,60 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ScalingType", Namespace="http://dto16.api.echosign")]
     public enum ScalingType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FIXED_WIDTH = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERCENT_ZOOM = 1,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentInfo", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ParticipantInfo[] participantsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentHistoryEvent[] eventsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AgreementStatus> statusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string latestDocumentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime expirationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string localeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string messageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.NextParticipantInfo[] nextParticipantInfosField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfSecurityOption securityOptionsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -5409,7 +5408,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ParticipantInfo[] participants {
             get {
@@ -5422,7 +5421,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public EchoSignLib.EchoSignService.DocumentHistoryEvent[] events {
             get {
@@ -5435,7 +5434,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public System.Nullable<EchoSignLib.EchoSignService.AgreementStatus> status {
             get {
@@ -5448,7 +5447,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public string documentKey {
             get {
@@ -5461,7 +5460,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public string latestDocumentKey {
             get {
@@ -5474,7 +5473,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
         public System.DateTime expiration {
             get {
@@ -5487,7 +5486,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=6)]
         public string locale {
             get {
@@ -5500,7 +5499,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=7)]
         public string message {
             get {
@@ -5513,7 +5512,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=8)]
         public string name {
             get {
@@ -5526,7 +5525,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=9)]
         public EchoSignLib.EchoSignService.NextParticipantInfo[] nextParticipantInfos {
             get {
@@ -5539,7 +5538,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=10)]
         public EchoSignLib.EchoSignService.ArrayOfSecurityOption securityOptions {
             get {
@@ -5552,9 +5551,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5562,40 +5561,40 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ParticipantInfo", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class ParticipantInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ParticipantInfo[] alternateParticipantsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfParticipantRole rolesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfParticipantSecurityOption securityOptionsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.UserAgreementStatus> statusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string companyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string titleField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -5605,7 +5604,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ParticipantInfo[] alternateParticipants {
             get {
@@ -5618,7 +5617,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfParticipantRole roles {
             get {
@@ -5631,7 +5630,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfParticipantSecurityOption securityOptions {
             get {
@@ -5644,7 +5643,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.UserAgreementStatus> status {
             get {
@@ -5657,7 +5656,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public string company {
             get {
@@ -5670,7 +5669,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
         public string email {
             get {
@@ -5683,7 +5682,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=6)]
         public string name {
             get {
@@ -5696,7 +5695,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=7)]
         public string title {
             get {
@@ -5709,9 +5708,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5719,87 +5718,87 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AgreementStatus", Namespace="http://dto17.api.echosign")]
     public enum AgreementStatus : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OUT_FOR_SIGNATURE = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_REVIEW = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         APPROVED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ABORTED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_LIBRARY = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WIDGET = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXPIRED = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ARCHIVED = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PREFILL = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AUTHORING = 10,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_FAXIN = 11,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_VERIFICATION = 12,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WIDGET_WAITING_FOR_VERIFICATION = 13,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_PAYMENT = 14,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OUT_FOR_APPROVAL = 15,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 16,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED_IN_ADOBE_ACROBAT = 17,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED_IN_ADOBE_READER = 18,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="NextParticipantInfo", Namespace="http://dto9.api.echosign")]
     [System.SerializableAttribute()]
     public partial class NextParticipantInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime waitingSinceField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -5809,7 +5808,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -5822,7 +5821,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -5835,7 +5834,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime waitingSince {
             get {
@@ -5848,9 +5847,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -5858,180 +5857,180 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfSecurityOption", Namespace="http://dto13.api.echosign", ItemName="SecurityOption")]
     [System.SerializableAttribute()]
     public class ArrayOfSecurityOption : System.Collections.Generic.List<System.Nullable<EchoSignLib.EchoSignService.SecurityOption>> {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfParticipantRole", Namespace="http://dto19.api.echosign", ItemName="ParticipantRole")]
     [System.SerializableAttribute()]
     public class ArrayOfParticipantRole : System.Collections.Generic.List<System.Nullable<EchoSignLib.EchoSignService.ParticipantRole>> {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfParticipantSecurityOption", Namespace="http://dto19.api.echosign", ItemName="ParticipantSecurityOption")]
     [System.SerializableAttribute()]
     public class ArrayOfParticipantSecurityOption : System.Collections.Generic.List<System.Nullable<EchoSignLib.EchoSignService.ParticipantSecurityOption>> {
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserAgreementStatus", Namespace="http://dto17.api.echosign")]
     public enum UserAgreementStatus : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_MY_SIGNATURE = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_MY_APPROVAL = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OUT_FOR_SIGNATURE = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         APPROVED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         RECALLED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         HIDDEN = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_YET_VISIBLE = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_FAXIN = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ARCHIVED = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UNKNOWN = 10,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PARTIAL = 11,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FORM = 12,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_AUTHORING = 13,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OUT_FOR_APPROVAL = 14,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WIDGET = 15,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXPIRED = 16,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_MY_REVIEW = 17,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         IN_REVIEW = 18,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 19,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED_IN_ADOBE_ACROBAT = 20,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED_IN_ADOBE_READER = 21,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ParticipantRole", Namespace="http://dto19.api.echosign")]
     public enum ParticipantRole : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SENDER = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         APPROVER = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CC = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DELEGATE = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SHARE = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WIDGET_SIGNER = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 7,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ParticipantSecurityOption", Namespace="http://dto19.api.echosign")]
     public enum ParticipantSecurityOption : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PASSWORD = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WEB_IDENTITY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         KBA = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PHONE = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 4,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SecurityOption", Namespace="http://dto13.api.echosign")]
     public enum SecurityOption : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OPEN_PROTECTED = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 1,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentInfoList", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentInfoList : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentInfo[] documentInfosField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DocumentInfoListErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6041,7 +6040,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentInfo[] documentInfos {
             get {
@@ -6054,7 +6053,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DocumentInfoListErrorCode> errorCode {
             get {
@@ -6067,7 +6066,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -6080,7 +6079,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -6093,9 +6092,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6103,45 +6102,45 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentInfoListErrorCode", Namespace="http://dto11.api.echosign")]
     public enum DocumentInfoListErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_ACCESS_WITHOUT_CREDENTIAL = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_CREDENTIAL = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_EXTERNAL_ID = 3,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentPagesInfoResult", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentPagesInfoResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentPageInfo[] documentPagesInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetDocumentPagesInfoResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6151,7 +6150,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentPageInfo[] documentPagesInfo {
             get {
@@ -6164,7 +6163,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetDocumentPagesInfoResultErrorCode> errorCode {
             get {
@@ -6177,7 +6176,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -6190,7 +6189,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -6203,9 +6202,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6213,28 +6212,28 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentPageInfo", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentPageInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double heightField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int pageNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int rotationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double widthField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6244,7 +6243,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public double height {
             get {
@@ -6257,7 +6256,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int pageNumber {
             get {
@@ -6270,7 +6269,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int rotation {
             get {
@@ -6283,7 +6282,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public double width {
             get {
@@ -6296,9 +6295,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6306,51 +6305,51 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentPagesInfoResultErrorCode", Namespace="http://dto19.api.echosign")]
     public enum GetDocumentPagesInfoResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_DELETED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentUrlResult", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentUrlResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DocumentUrlErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6360,7 +6359,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DocumentUrlErrorCode> errorCode {
             get {
@@ -6373,7 +6372,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -6386,7 +6385,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -6399,7 +6398,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string url {
             get {
@@ -6412,9 +6411,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6422,48 +6421,48 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentUrlErrorCode", Namespace="http://dto.api.echosign")]
     public enum DocumentUrlErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_VERSION_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_DELETED = 3,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentUrlsOptions", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentUrlsOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool attachSupportingDocumentsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool auditReportField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool combineField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string participantEmailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string versionKeyField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6473,7 +6472,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool attachSupportingDocuments {
             get {
@@ -6486,7 +6485,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool auditReport {
             get {
@@ -6499,7 +6498,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool combine {
             get {
@@ -6512,7 +6511,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string participantEmail {
             get {
@@ -6525,7 +6524,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string versionKey {
             get {
@@ -6538,9 +6537,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6548,31 +6547,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentUrlsResult", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentUrlsResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetDocumentUrlsErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SupportingDocumentUrl[] supportingDocumentUrlsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentUrl[] urlsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6582,7 +6581,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetDocumentUrlsErrorCode> errorCode {
             get {
@@ -6595,7 +6594,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -6608,7 +6607,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -6621,7 +6620,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SupportingDocumentUrl[] supportingDocumentUrls {
             get {
@@ -6634,7 +6633,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentUrl[] urls {
             get {
@@ -6647,9 +6646,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6657,57 +6656,57 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentUrlsErrorCode", Namespace="http://dto14.api.echosign")]
     public enum GetDocumentUrlsErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_VERSION_KEY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_PARTICIPANT = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_AVAILABLE = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_EXPOSED = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_REMOVED = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_DELETED = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INTERNAL_ERROR = 9,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SupportingDocumentUrl", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SupportingDocumentUrl : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fieldNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6717,7 +6716,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fieldName {
             get {
@@ -6730,7 +6729,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string url {
             get {
@@ -6743,9 +6742,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6753,22 +6752,22 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentUrl", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentUrl : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6778,7 +6777,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -6791,7 +6790,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string url {
             get {
@@ -6804,9 +6803,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6814,31 +6813,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentsOptions", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentsOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool attachSupportingDocumentsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool auditReportField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool combineField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string participantEmailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string versionKeyField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6848,7 +6847,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool attachSupportingDocuments {
             get {
@@ -6861,7 +6860,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool auditReport {
             get {
@@ -6874,7 +6873,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool combine {
             get {
@@ -6887,7 +6886,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string participantEmail {
             get {
@@ -6900,7 +6899,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string versionKey {
             get {
@@ -6913,9 +6912,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -6923,31 +6922,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentsResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentsResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SupportingDocument[] supportingDocumentsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentContent[] documentsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetDocumentsErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -6957,7 +6956,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SupportingDocument[] supportingDocuments {
             get {
@@ -6970,7 +6969,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public EchoSignLib.EchoSignService.DocumentContent[] documents {
             get {
@@ -6983,7 +6982,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public System.Nullable<EchoSignLib.EchoSignService.GetDocumentsErrorCode> errorCode {
             get {
@@ -6996,7 +6995,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public string errorMessage {
             get {
@@ -7009,7 +7008,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public bool success {
             get {
@@ -7022,9 +7021,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7032,31 +7031,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SupportingDocument", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SupportingDocument : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string supportingDocumentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private byte[] contentField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string displayLabelField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fieldNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string mimeTypeField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7066,7 +7065,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string supportingDocumentKey {
             get {
@@ -7079,7 +7078,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public byte[] content {
             get {
@@ -7092,7 +7091,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string displayLabel {
             get {
@@ -7105,7 +7104,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public string fieldName {
             get {
@@ -7118,7 +7117,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public string mimeType {
             get {
@@ -7131,9 +7130,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7141,25 +7140,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentContent", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentContent : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private byte[] bytesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string mimetypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7169,7 +7168,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public byte[] bytes {
             get {
@@ -7182,7 +7181,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string mimetype {
             get {
@@ -7195,7 +7194,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -7208,9 +7207,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7218,63 +7217,63 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentsErrorCode", Namespace="http://dto14.api.echosign")]
     public enum GetDocumentsErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_VERSION_KEY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_PARTICIPANT = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_AVAILABLE = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_EXPOSED = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_REMOVED = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_DELETED = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INTERNAL_ERROR = 9,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentsForUserResult", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetDocumentsForUserResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentListItem[] documentListForUserField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetDocumentsForUserResultCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7284,7 +7283,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentListItem[] documentListForUser {
             get {
@@ -7297,7 +7296,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetDocumentsForUserResultCode> errorCode {
             get {
@@ -7310,7 +7309,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -7323,7 +7322,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -7336,9 +7335,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7346,40 +7345,40 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentListItem", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentListItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DocumentListItemUserDocumentStatus> userDocumentStatusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string latestDocumentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime displayDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DisplayUserInfo displayUserInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool esignField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool megaSignField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7389,7 +7388,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DocumentListItemUserDocumentStatus> userDocumentStatus {
             get {
@@ -7402,7 +7401,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public string documentKey {
             get {
@@ -7415,7 +7414,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string latestDocumentKey {
             get {
@@ -7428,7 +7427,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public System.DateTime displayDate {
             get {
@@ -7441,7 +7440,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public EchoSignLib.EchoSignService.DisplayUserInfo displayUserInfo {
             get {
@@ -7454,7 +7453,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
         public bool esign {
             get {
@@ -7467,7 +7466,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=6)]
         public bool megaSign {
             get {
@@ -7480,7 +7479,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=7)]
         public string name {
             get {
@@ -7493,9 +7492,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7503,48 +7502,48 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetDocumentsForUserResultCode", Namespace="http://dto14.api.echosign")]
     public enum GetDocumentsForUserResultCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_USER_CREDENTIALS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_USER_KEY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERMISSION_DENIED = 6,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DisplayUserInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DisplayUserInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string companyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fullNameOrEmailField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7554,7 +7553,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string company {
             get {
@@ -7567,7 +7566,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fullNameOrEmail {
             get {
@@ -7580,9 +7579,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7590,75 +7589,75 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentListItemUserDocumentStatus", Namespace="http://dto17.api.echosign")]
     public enum DocumentListItemUserDocumentStatus : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_MY_SIGNATURE = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_MY_APPROVAL = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OUT_FOR_SIGNATURE = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OUT_FOR_APPROVAL = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         APPROVED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         RECALLED = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_FAXIN = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ARCHIVED = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FORM = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXPIRED = 10,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WIDGET = 11,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WAITING_FOR_AUTHORING = 12,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED_IN_ADOBE_ACROBAT = 13,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNED_IN_ADOBE_READER = 14,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 15,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OnBehalfOfUser", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class OnBehalfOfUser : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string userKeyField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7668,7 +7667,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -7681,7 +7680,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string userKey {
             get {
@@ -7694,9 +7693,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7704,25 +7703,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EmbeddedViewOptions", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class EmbeddedViewOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string embeddedViewObjectField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.EmbeddedViewTarget> embeddedViewTargetField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool noChromeField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7732,7 +7731,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string embeddedViewObject {
             get {
@@ -7745,7 +7744,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.EmbeddedViewTarget> embeddedViewTarget {
             get {
@@ -7758,7 +7757,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool noChrome {
             get {
@@ -7771,9 +7770,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7781,45 +7780,45 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EmbeddedViewTarget", Namespace="http://dto19.api.echosign")]
     public enum EmbeddedViewTarget : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AGREEMENT = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AGREEMENT_LIST = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         USER_PROFILE = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ACCOUNT_SETTINGS = 3,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetEmbeddedViewResult", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetEmbeddedViewResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetEmbeddedViewResultCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7829,7 +7828,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetEmbeddedViewResultCode> errorCode {
             get {
@@ -7842,7 +7841,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -7855,7 +7854,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -7868,7 +7867,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string url {
             get {
@@ -7881,9 +7880,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -7891,57 +7890,57 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetEmbeddedViewResultCode", Namespace="http://dto19.api.echosign")]
     public enum GetEmbeddedViewResultCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_ACCESS_TOKEN = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_ON_BEHALF_OF_USER = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_TARGET = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_TARGET_OBJECT = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERMISSION_DENIED = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetFormDataResult", Namespace="http://dto8.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetFormDataResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetFormDataResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string formDataCsvField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -7951,7 +7950,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetFormDataResultErrorCode> errorCode {
             get {
@@ -7964,7 +7963,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -7977,7 +7976,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string formDataCsv {
             get {
@@ -7990,7 +7989,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -8003,9 +8002,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8013,54 +8012,54 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetFormDataResultErrorCode", Namespace="http://dto8.api.echosign")]
     public enum GetFormDataResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_DELETED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_FORM_DATA = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 6,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetGroupsInAccountResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetGroupsInAccountResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.GroupInfo[] groupListField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetGroupsInAccountResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8070,7 +8069,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.GroupInfo[] groupList {
             get {
@@ -8083,7 +8082,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public System.Nullable<EchoSignLib.EchoSignService.GetGroupsInAccountResultErrorCode> errorCode {
             get {
@@ -8096,7 +8095,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string errorMessage {
             get {
@@ -8109,7 +8108,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool success {
             get {
@@ -8122,9 +8121,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8132,22 +8131,22 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GroupInfo", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GroupInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string groupKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string groupNameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8157,7 +8156,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string groupKey {
             get {
@@ -8170,7 +8169,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string groupName {
             get {
@@ -8183,9 +8182,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8193,54 +8192,54 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetGroupsInAccountResultErrorCode", Namespace="http://dto15.api.echosign")]
     public enum GetGroupsInAccountResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TERMS_NOT_ACCEPTED = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_IN_ACCOUNT = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION_TO_EXECUTE_METHOD = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 6,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentImageList", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentImageList : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DocumentImageListErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentPageImages[] pageImagesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8250,7 +8249,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DocumentImageListErrorCode> errorCode {
             get {
@@ -8263,7 +8262,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -8276,7 +8275,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentPageImages[] pageImages {
             get {
@@ -8289,7 +8288,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -8302,9 +8301,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8312,45 +8311,45 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentImageListErrorCode", Namespace="http://dto.api.echosign")]
     public enum DocumentImageListErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_VERSION_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_DELETED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         IMAGES_NOT_AVAILABLE = 4,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentPageImages", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentPageImages : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string largeImageUrlField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string mediumImageUrlField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string smallImageUrlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8360,7 +8359,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string largeImageUrl {
             get {
@@ -8373,7 +8372,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string mediumImageUrl {
             get {
@@ -8386,7 +8385,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string smallImageUrl {
             get {
@@ -8399,9 +8398,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8409,28 +8408,28 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetLibraryDocumentsForUserResult", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetLibraryDocumentsForUserResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentLibraryItem[] libraryDocumentsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetLibraryDocumentsForUserErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8440,7 +8439,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentLibraryItem[] libraryDocuments {
             get {
@@ -8453,7 +8452,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public System.Nullable<EchoSignLib.EchoSignService.GetLibraryDocumentsForUserErrorCode> errorCode {
             get {
@@ -8466,7 +8465,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string errorMessage {
             get {
@@ -8479,7 +8478,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool success {
             get {
@@ -8492,9 +8491,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8502,31 +8501,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentLibraryItem", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentLibraryItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfLibraryTemplateType libraryTemplateTypesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime modifiedDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DocumentLibraryItemScope> scopeField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8536,7 +8535,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfLibraryTemplateType libraryTemplateTypes {
             get {
@@ -8549,7 +8548,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public string documentKey {
             get {
@@ -8562,7 +8561,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public System.DateTime modifiedDate {
             get {
@@ -8575,7 +8574,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public string name {
             get {
@@ -8588,7 +8587,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public System.Nullable<EchoSignLib.EchoSignService.DocumentLibraryItemScope> scope {
             get {
@@ -8601,9 +8600,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8611,65 +8610,65 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetLibraryDocumentsForUserErrorCode", Namespace="http://dto9.api.echosign")]
     public enum GetLibraryDocumentsForUserErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_USER_CREDENTIALS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERMISSION_DENIED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentLibraryItemScope", Namespace="http://dto9.api.echosign")]
     public enum DocumentLibraryItemScope : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERSONAL = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SHARED = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GLOBAL = 2,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetMegaSignDocumentResult", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetMegaSignDocumentResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentListItem[] documentsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetMegaSignDocumentResultCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8679,7 +8678,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentListItem[] documents {
             get {
@@ -8692,7 +8691,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetMegaSignDocumentResultCode> errorCode {
             get {
@@ -8705,7 +8704,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -8718,7 +8717,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -8731,9 +8730,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8741,57 +8740,57 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetMegaSignDocumentResultCode", Namespace="http://dto.api.echosign")]
     public enum GetMegaSignDocumentResultCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERMISSION_DENIED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_MEGASIGN = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXPIRED = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetWidgetsForUserResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetWidgetsForUserResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.WidgetItem[] widgetsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetWidgetsForUserErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8801,7 +8800,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.WidgetItem[] widgets {
             get {
@@ -8814,7 +8813,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public System.Nullable<EchoSignLib.EchoSignService.GetWidgetsForUserErrorCode> errorCode {
             get {
@@ -8827,7 +8826,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string errorMessage {
             get {
@@ -8840,7 +8839,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool success {
             get {
@@ -8853,9 +8852,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8863,34 +8862,34 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="WidgetItem", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class WidgetItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.ReusableDocumentStatus> reusableDocumentStatusField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string javascriptField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime modifiedDateField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -8900,7 +8899,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string documentKey {
             get {
@@ -8913,7 +8912,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.ReusableDocumentStatus> reusableDocumentStatus {
             get {
@@ -8926,7 +8925,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string javascript {
             get {
@@ -8939,7 +8938,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public System.DateTime modifiedDate {
             get {
@@ -8952,7 +8951,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public string name {
             get {
@@ -8965,7 +8964,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
         public string url {
             get {
@@ -8978,9 +8977,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -8988,56 +8987,56 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetWidgetsForUserErrorCode", Namespace="http://dto10.api.echosign")]
     public enum GetWidgetsForUserErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_USER_CREDENTIALS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PERMISSION_DENIED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 5,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ReusableDocumentStatus", Namespace="http://dto16.api.echosign")]
     public enum ReusableDocumentStatus : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ENABLED = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DISABLED = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 2,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetSignerFormFieldsOptions", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetSignerFormFieldsOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string signerEmailField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -9047,7 +9046,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string signerEmail {
             get {
@@ -9060,9 +9059,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9070,43 +9069,43 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetSignerFormFieldsResult", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetSignerFormFieldsResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetSignerFormFieldsResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.FormValue[] formValuesForConditionalsAndCalculationsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string localeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfString orderedCalculatedFieldNamesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfString orderedConditionalFieldNamesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string signerField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SignerFormField[] signerFormFieldsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -9116,7 +9115,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetSignerFormFieldsResultErrorCode> errorCode {
             get {
@@ -9129,7 +9128,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -9142,7 +9141,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.FormValue[] formValuesForConditionalsAndCalculations {
             get {
@@ -9155,7 +9154,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string locale {
             get {
@@ -9168,7 +9167,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfString orderedCalculatedFieldNames {
             get {
@@ -9181,7 +9180,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfString orderedConditionalFieldNames {
             get {
@@ -9194,7 +9193,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string signer {
             get {
@@ -9207,7 +9206,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SignerFormField[] signerFormFields {
             get {
@@ -9220,7 +9219,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -9233,9 +9232,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9243,63 +9242,63 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetSignerFormFieldsResultErrorCode", Namespace="http://dto19.api.echosign")]
     public enum GetSignerFormFieldsResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_DELETED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_ALREADY_SIGNED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_SIGNABLE = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_SIGNER_EMAIL = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALREADY_CANCELLED = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALREADY_SIGNED = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 10,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FormValue", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class FormValue : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.InputType> fieldInputTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fieldNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fieldValueField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -9309,7 +9308,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.InputType> fieldInputType {
             get {
@@ -9322,7 +9321,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fieldName {
             get {
@@ -9335,7 +9334,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fieldValue {
             get {
@@ -9348,9 +9347,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9358,131 +9357,131 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfString", Namespace="http://api.echosign", ItemName="string")]
     [System.SerializableAttribute()]
     public class ArrayOfString : System.Collections.Generic.List<string> {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SignerFormField", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SignerFormField : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.TextAlignment> alignmentField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AnyAll> anyOrAllField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string backgroundColorField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string borderColorField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.BorderStyle> borderStyleField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private float borderWidthField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string calculatedExpressionField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SignerFormFieldCondition[] conditionsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.ContentType> contentTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string defaultValueField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string displayFormatField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.DisplayFormatType> displayFormatTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string displayLabelField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fontColorField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fontNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private float fontSizeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool hiddenField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfString hiddenOptionsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.InputType> inputTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SignerFormFieldLocation[] locationsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool maskedField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int maxLengthField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double maxNumberValueField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int minLengthField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double minNumberValueField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.RadioCheckType> radioCheckTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool readOnlyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string regularExpressionField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool requiredField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.ShowHide> showOrHideField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string specialErrMsgField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string specialFormulaField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string tooltipField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string validationRuleField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfString visibleOptionsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -9492,7 +9491,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.TextAlignment> alignment {
             get {
@@ -9505,7 +9504,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AnyAll> anyOrAll {
             get {
@@ -9518,7 +9517,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string backgroundColor {
             get {
@@ -9531,7 +9530,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string borderColor {
             get {
@@ -9544,7 +9543,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.BorderStyle> borderStyle {
             get {
@@ -9557,7 +9556,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public float borderWidth {
             get {
@@ -9570,7 +9569,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string calculatedExpression {
             get {
@@ -9583,7 +9582,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SignerFormFieldCondition[] conditions {
             get {
@@ -9596,7 +9595,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.ContentType> contentType {
             get {
@@ -9609,7 +9608,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string defaultValue {
             get {
@@ -9622,7 +9621,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string displayFormat {
             get {
@@ -9635,7 +9634,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.DisplayFormatType> displayFormatType {
             get {
@@ -9648,7 +9647,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string displayLabel {
             get {
@@ -9661,7 +9660,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fontColor {
             get {
@@ -9674,7 +9673,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fontName {
             get {
@@ -9687,7 +9686,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public float fontSize {
             get {
@@ -9700,7 +9699,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool hidden {
             get {
@@ -9713,7 +9712,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfString hiddenOptions {
             get {
@@ -9726,7 +9725,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.InputType> inputType {
             get {
@@ -9739,7 +9738,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SignerFormFieldLocation[] locations {
             get {
@@ -9752,7 +9751,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool masked {
             get {
@@ -9765,7 +9764,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int maxLength {
             get {
@@ -9778,7 +9777,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public double maxNumberValue {
             get {
@@ -9791,7 +9790,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int minLength {
             get {
@@ -9804,7 +9803,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public double minNumberValue {
             get {
@@ -9817,7 +9816,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -9830,7 +9829,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.RadioCheckType> radioCheckType {
             get {
@@ -9843,7 +9842,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool readOnly {
             get {
@@ -9856,7 +9855,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string regularExpression {
             get {
@@ -9869,7 +9868,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool required {
             get {
@@ -9882,7 +9881,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.ShowHide> showOrHide {
             get {
@@ -9895,7 +9894,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string specialErrMsg {
             get {
@@ -9908,7 +9907,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string specialFormula {
             get {
@@ -9921,7 +9920,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string tooltip {
             get {
@@ -9934,7 +9933,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string validationRule {
             get {
@@ -9947,7 +9946,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfString visibleOptions {
             get {
@@ -9960,9 +9959,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -9970,123 +9969,123 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="InputType", Namespace="http://dto19.api.echosign")]
     public enum InputType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TEXT_FIELD = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MULTILINE = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PASSWORD = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         RADIO = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CHECKBOX = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DROP_DOWN = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         LISTBOX = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNATURE = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PDF_SIGNATURE = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         BUTTON = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         BLOCK = 10,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FILE_CHOOSER = 11,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         COMB = 12,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UNSUPPORTED = 13,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="TextAlignment", Namespace="http://dto19.api.echosign")]
     public enum TextAlignment : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         LEFT = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         RIGHT = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CENTER = 2,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AnyAll", Namespace="http://dto19.api.echosign")]
     public enum AnyAll : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ANY = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ALL = 1,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BorderStyle", Namespace="http://dto19.api.echosign")]
     public enum BorderStyle : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SOLID = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DASHED = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         BEVELED = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INSET = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UNDERLINE = 4,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SignerFormFieldCondition", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SignerFormFieldCondition : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fieldNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.Operator> operatorField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string valueField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int whenFieldLocationIndexField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string whenFieldNameField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -10096,7 +10095,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string fieldName {
             get {
@@ -10109,7 +10108,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.Operator> @operator {
             get {
@@ -10122,7 +10121,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string value {
             get {
@@ -10135,7 +10134,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int whenFieldLocationIndex {
             get {
@@ -10148,7 +10147,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string whenFieldName {
             get {
@@ -10161,9 +10160,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10171,98 +10170,98 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ContentType", Namespace="http://dto19.api.echosign")]
     public enum ContentType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DATA = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNATURE_BLOCK = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNATURE = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_NAME = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_FIRST_NAME = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_LAST_NAME = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_INITIALS = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_EMAIL = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_TITLE = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_COMPANY = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNATURE_DATE = 10,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AGREEMENT_NAME = 11,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AGREEMENT_MESSAGE = 12,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TRANSACTION_ID = 13,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNATURE_STAMP = 14,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CALC = 15,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DisplayFormatType", Namespace="http://dto19.api.echosign")]
     public enum DisplayFormatType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DEFAULT = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DATE = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NUMBER = 2,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SignerFormFieldLocation", Namespace="http://dto19.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SignerFormFieldLocation : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double heightField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double leftField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int pageNumberField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double topField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double widthField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -10272,7 +10271,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public double height {
             get {
@@ -10285,7 +10284,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public double left {
             get {
@@ -10298,7 +10297,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int pageNumber {
             get {
@@ -10311,7 +10310,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public double top {
             get {
@@ -10324,7 +10323,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public double width {
             get {
@@ -10337,9 +10336,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10347,103 +10346,103 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RadioCheckType", Namespace="http://dto19.api.echosign")]
     public enum RadioCheckType : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CIRCLE = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CHECK = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CROSS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DIAMOND = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SQUARE = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         STAR = 5,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ShowHide", Namespace="http://dto19.api.echosign")]
     public enum ShowHide : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SHOW = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         HIDE = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DISABLE = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ENABLE = 3,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Operator", Namespace="http://dto19.api.echosign")]
     public enum Operator : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EQUALS = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_EQUALS = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         LESS_THAN = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         LESS_THAN_EQUALS = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GREATER_THAN = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GREATER_THAN_EQUALS = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         IN = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_IN = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CONTAINS = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_CONTAINS = 9,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SigningUrlResult", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SigningUrlResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SigningUrlResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SigningUrl[] signingUrlsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -10453,7 +10452,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SigningUrlResultErrorCode> errorCode {
             get {
@@ -10466,7 +10465,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -10479,7 +10478,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SigningUrl[] signingUrls {
             get {
@@ -10492,7 +10491,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -10505,9 +10504,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10515,60 +10514,60 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SigningUrlResultErrorCode", Namespace="http://dto14.api.echosign")]
     public enum SigningUrlResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_DELETED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_SIGNABLE = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_VISIBLE = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_EXPOSED = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_ALREADY_SIGNED = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 9,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SigningUrl", Namespace="http://dto9.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SigningUrl : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string esignUrlField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string simpleEsignUrlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -10578,7 +10577,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -10591,7 +10590,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string esignUrl {
             get {
@@ -10604,7 +10603,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string simpleEsignUrl {
             get {
@@ -10617,9 +10616,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10627,19 +10626,19 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetSupportingDocumentsOptions", Namespace="http://dto14.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetSupportingDocumentsOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SupportingDocumentContentFormat> documentFormatRequestedField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -10649,7 +10648,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SupportingDocumentContentFormat> documentFormatRequested {
             get {
@@ -10662,9 +10661,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10672,42 +10671,42 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SupportingDocumentContentFormat", Namespace="http://dto14.api.echosign")]
     public enum SupportingDocumentContentFormat : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NONE = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ORIGINAL = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CONVERTED_PDF = 2,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetSupportingDocumentsResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetSupportingDocumentsResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SupportingDocument[] supportingDocumentsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetSupportingDocumentsResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -10717,7 +10716,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SupportingDocument[] supportingDocuments {
             get {
@@ -10730,7 +10729,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public System.Nullable<EchoSignLib.EchoSignService.GetSupportingDocumentsResultErrorCode> errorCode {
             get {
@@ -10743,7 +10742,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string errorMessage {
             get {
@@ -10756,7 +10755,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool success {
             get {
@@ -10769,9 +10768,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10779,54 +10778,54 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetSupportingDocumentsResultErrorCode", Namespace="http://dto14.api.echosign")]
     public enum GetSupportingDocumentsResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_DELETED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_AVAILABLE = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_ORIGINAL_FORMAT_NOT_ALLOWED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TERMS_OF_USE_NOT_ACCEPTED = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION_TO_EXECUTE_METHOD = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 9,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetUserInfoOptions", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetUserInfoOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -10836,7 +10835,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -10849,9 +10848,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10859,28 +10858,28 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetUserInfoResult", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetUserInfoResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.UserData dataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetUserInfoResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -10890,7 +10889,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.UserData data {
             get {
@@ -10903,7 +10902,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.GetUserInfoResultErrorCode> errorCode {
             get {
@@ -10916,7 +10915,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -10929,7 +10928,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -10942,9 +10941,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -10952,61 +10951,61 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserData", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class UserData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string accountField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.AccountType> accountTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfUserCapabilityFlag capabilityFlagsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string channelField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string companyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string firstNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string groupField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string initialsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string lastNameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string localeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime passwordExpirationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string phoneField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfUserRole rolesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string titleField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -11016,7 +11015,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string account {
             get {
@@ -11029,7 +11028,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.AccountType> accountType {
             get {
@@ -11042,7 +11041,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfUserCapabilityFlag capabilityFlags {
             get {
@@ -11055,7 +11054,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string channel {
             get {
@@ -11068,7 +11067,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string company {
             get {
@@ -11081,7 +11080,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string email {
             get {
@@ -11094,7 +11093,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string firstName {
             get {
@@ -11107,7 +11106,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string group {
             get {
@@ -11120,7 +11119,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string initials {
             get {
@@ -11133,7 +11132,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string lastName {
             get {
@@ -11146,7 +11145,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string locale {
             get {
@@ -11159,7 +11158,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime passwordExpiration {
             get {
@@ -11172,7 +11171,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string phone {
             get {
@@ -11185,7 +11184,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfUserRole roles {
             get {
@@ -11198,7 +11197,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string title {
             get {
@@ -11211,9 +11210,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -11221,105 +11220,105 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetUserInfoResultErrorCode", Namespace="http://dto18.api.echosign")]
     public enum GetUserInfoResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_EMAIL = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfUserCapabilityFlag", Namespace="http://dto18.api.echosign", ItemName="UserCapabilityFlag")]
     [System.SerializableAttribute()]
     public class ArrayOfUserCapabilityFlag : System.Collections.Generic.List<System.Nullable<EchoSignLib.EchoSignService.UserCapabilityFlag>> {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfUserRole", Namespace="http://dto18.api.echosign", ItemName="UserRole")]
     [System.SerializableAttribute()]
     public class ArrayOfUserRole : System.Collections.Generic.List<System.Nullable<EchoSignLib.EchoSignService.UserRole>> {
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserCapabilityFlag", Namespace="http://dto18.api.echosign")]
     public enum UserCapabilityFlag : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CAN_SEND = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CAN_SIGN = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CAN_REPLACE_SIGNER = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         VAULT_ENABLED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         VAULT_PER_AGREEMENT = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 5,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserRole", Namespace="http://dto18.api.echosign")]
     public enum UserRole : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         API = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GROUP_ADMIN = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ACCOUNT_ADMIN = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OTHER = 3,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetUsersInAccountResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetUsersInAccountResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.UserInfo[] userListForAccountField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetUsersInAccountResultCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -11329,7 +11328,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.UserInfo[] userListForAccount {
             get {
@@ -11342,7 +11341,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public System.Nullable<EchoSignLib.EchoSignService.GetUsersInAccountResultCode> errorCode {
             get {
@@ -11355,7 +11354,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string errorMessage {
             get {
@@ -11368,7 +11367,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool success {
             get {
@@ -11381,9 +11380,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -11391,31 +11390,31 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserInfo", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class UserInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string groupKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string companyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fullNameOrEmailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string userKeyField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -11425,7 +11424,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string groupKey {
             get {
@@ -11438,7 +11437,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public string company {
             get {
@@ -11451,7 +11450,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string email {
             get {
@@ -11464,7 +11463,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public string fullNameOrEmail {
             get {
@@ -11477,7 +11476,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public string userKey {
             get {
@@ -11490,9 +11489,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -11500,45 +11499,45 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetUsersInAccountResultCode", Namespace="http://dto.api.echosign")]
     public enum GetUsersInAccountResultCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 3,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetUsersInGroupResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class GetUsersInGroupResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.UserInfo[] userListForGroupField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.GetUsersInGroupResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -11548,7 +11547,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.UserInfo[] userListForGroup {
             get {
@@ -11561,7 +11560,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
         public System.Nullable<EchoSignLib.EchoSignService.GetUsersInGroupResultErrorCode> errorCode {
             get {
@@ -11574,7 +11573,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public string errorMessage {
             get {
@@ -11587,7 +11586,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool success {
             get {
@@ -11600,9 +11599,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -11610,99 +11609,99 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="GetUsersInGroupResultErrorCode", Namespace="http://dto15.api.echosign")]
     public enum GetUsersInGroupResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_GROUP_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TERMS_NOT_ACCEPTED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_IN_ACCOUNT = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION_TO_EXECUTE_METHOD = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentCreationInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentCreationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.CallbackInfo callbackInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfString ccsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> daysUntilSigningDeadlineField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ExternalId externalIdField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.FileInfo[] fileInfosField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.FileInfo[] formFieldLayerTemplatesField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string localeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.MergeFieldInfo mergeFieldInfoField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private byte[] mergeFileField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string messageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string nameField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.RecipientInfo[] recipientsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.ReminderFrequency> reminderFrequencyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.SecurityOptions securityOptionsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SignatureFlow> signatureFlowField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SignatureType> signatureTypeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfString tosField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.VaultingInfo vaultingInfoField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -11712,7 +11711,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.CallbackInfo callbackInfo {
             get {
@@ -11725,7 +11724,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfString ccs {
             get {
@@ -11738,7 +11737,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> daysUntilSigningDeadline {
             get {
@@ -11751,7 +11750,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ExternalId externalId {
             get {
@@ -11764,7 +11763,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.FileInfo[] fileInfos {
             get {
@@ -11777,7 +11776,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.FileInfo[] formFieldLayerTemplates {
             get {
@@ -11790,7 +11789,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string locale {
             get {
@@ -11803,7 +11802,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.MergeFieldInfo mergeFieldInfo {
             get {
@@ -11816,7 +11815,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public byte[] mergeFile {
             get {
@@ -11829,7 +11828,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string message {
             get {
@@ -11842,7 +11841,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string name {
             get {
@@ -11855,7 +11854,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.RecipientInfo[] recipients {
             get {
@@ -11868,7 +11867,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.ReminderFrequency> reminderFrequency {
             get {
@@ -11881,7 +11880,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.SecurityOptions securityOptions {
             get {
@@ -11894,7 +11893,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SignatureFlow> signatureFlow {
             get {
@@ -11907,7 +11906,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SignatureType> signatureType {
             get {
@@ -11920,7 +11919,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfString tos {
             get {
@@ -11933,7 +11932,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.VaultingInfo vaultingInfo {
             get {
@@ -11946,9 +11945,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -11956,48 +11955,48 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ReminderFrequency", Namespace="http://dto.api.echosign")]
     public enum ReminderFrequency : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DAILY_UNTIL_SIGNED = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WEEKLY_UNTIL_SIGNED = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NEVER = 2,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="InitiateInteractiveSendDocumentResult", Namespace="http://dto9.api.echosign")]
     [System.SerializableAttribute()]
     public partial class InitiateInteractiveSendDocumentResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentKey1 documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.InitiateInteractiveSendDocumentResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool needsInteractionField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string sendDocumentURLField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12007,7 +12006,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentKey1 documentKey {
             get {
@@ -12020,7 +12019,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.InitiateInteractiveSendDocumentResultErrorCode> errorCode {
             get {
@@ -12033,7 +12032,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -12046,7 +12045,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool needsInteraction {
             get {
@@ -12059,7 +12058,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string sendDocumentURL {
             get {
@@ -12072,7 +12071,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -12085,9 +12084,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12095,22 +12094,22 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DocumentKey", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class DocumentKey1 : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string recipientEmailField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12120,7 +12119,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string documentKey {
             get {
@@ -12133,7 +12132,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string recipientEmail {
             get {
@@ -12146,9 +12145,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12156,42 +12155,42 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="InitiateInteractiveSendDocumentResultErrorCode", Namespace="http://dto9.api.echosign")]
     public enum InitiateInteractiveSendDocumentResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FILE_RETRIEVAL_ERROR = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 4,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UsersToMoveInfo", Namespace="http://dto15.api.echosign")]
     [System.SerializableAttribute()]
     public partial class UsersToMoveInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool preserveGroupAdminsField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.ArrayOfString userEmailsField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12201,7 +12200,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool preserveGroupAdmins {
             get {
@@ -12214,7 +12213,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.ArrayOfString userEmails {
             get {
@@ -12227,9 +12226,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12237,25 +12236,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="MoveUsersToGroupResult", Namespace="http://dto15.api.echosign")]
     [System.SerializableAttribute()]
     public partial class MoveUsersToGroupResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.MoveUsersToGroupResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12265,7 +12264,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.MoveUsersToGroupResultErrorCode> errorCode {
             get {
@@ -12278,7 +12277,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -12291,7 +12290,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -12304,9 +12303,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12314,54 +12313,54 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="MoveUsersToGroupResultErrorCode", Namespace="http://dto15.api.echosign")]
     public enum MoveUsersToGroupResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_GROUP_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_USER_EMAIL = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TERMS_NOT_ACCEPTED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_IN_ACCOUNT = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION_TO_EXECUTE_METHOD = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 8,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="VaultEventInfo", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class VaultEventInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string vaultEventCommentField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string vaultEventIdField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12371,7 +12370,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string vaultEventComment {
             get {
@@ -12384,7 +12383,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string vaultEventId {
             get {
@@ -12397,9 +12396,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12407,25 +12406,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="NotifyDocumentVaultedResult", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class NotifyDocumentVaultedResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.NotifyDocumentVaultedResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12435,7 +12434,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.NotifyDocumentVaultedResultErrorCode> errorCode {
             get {
@@ -12448,7 +12447,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -12461,7 +12460,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -12474,9 +12473,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12484,57 +12483,57 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="NotifyDocumentVaultedResultErrorCode", Namespace="http://dto17.api.echosign")]
     public enum NotifyDocumentVaultedResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_ACCESS_TOKEN = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION_TO_EXECUTE_METHOD = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_VAULT_ID = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_REMOVED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_DELETED = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_NOT_READY_TO_VAULT = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCMENT_VAULTED_ALREADY = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 10,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RejectDocumentOptions", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class RejectDocumentOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string commentField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12544,7 +12543,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string comment {
             get {
@@ -12557,9 +12556,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12567,25 +12566,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RejectDocumentResult", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class RejectDocumentResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.RejectDocumentResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12595,7 +12594,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.RejectDocumentResultErrorCode> errorCode {
             get {
@@ -12608,7 +12607,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -12621,7 +12620,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -12634,9 +12633,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12644,54 +12643,54 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RejectDocumentResultErrorCode", Namespace="http://dto17.api.echosign")]
     public enum RejectDocumentResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_CREDENTIALS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_COMMENT = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_REJECTION_NOT_ALLOWED = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 7,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RemoveDocumentResult", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class RemoveDocumentResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.RemoveDocumentErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12701,7 +12700,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.RemoveDocumentErrorCode> errorCode {
             get {
@@ -12714,7 +12713,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -12727,7 +12726,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -12740,9 +12739,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12750,45 +12749,45 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RemoveDocumentErrorCode", Namespace="http://dto.api.echosign")]
     public enum RemoveDocumentErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOCUMENT_HAS_BEEN_REMOVED = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DYNAMIC_DOCUMENT_EXPIRATION_NOT_ENABLED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         REMOVE_FAILED = 4,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RenameGroupResult", Namespace="http://dto15.api.echosign")]
     [System.SerializableAttribute()]
     public partial class RenameGroupResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.RenameGroupResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12798,7 +12797,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.RenameGroupResultErrorCode> errorCode {
             get {
@@ -12811,7 +12810,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -12824,7 +12823,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -12837,9 +12836,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12847,57 +12846,57 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RenameGroupResultErrorCode", Namespace="http://dto15.api.echosign")]
     public enum RenameGroupResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_GROUP_KEY = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_GROUP_NAME = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TERMS_NOT_ACCEPTED = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NOT_IN_ACCOUNT = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NO_PERMISSION_TO_EXECUTE_METHOD = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 8,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ReplaceSignerOptions", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class ReplaceSignerOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string messageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string newSignerEmailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string originalSignerEmailField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12907,7 +12906,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string message {
             get {
@@ -12920,7 +12919,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string newSignerEmail {
             get {
@@ -12933,7 +12932,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string originalSignerEmail {
             get {
@@ -12946,9 +12945,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -12956,25 +12955,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ReplaceSignerResult", Namespace="http://dto17.api.echosign")]
     [System.SerializableAttribute()]
     public partial class ReplaceSignerResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.ReplaceSignerResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -12984,7 +12983,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.ReplaceSignerResultErrorCode> errorCode {
             get {
@@ -12997,7 +12996,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -13010,7 +13009,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -13023,9 +13022,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -13033,57 +13032,57 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ReplaceSignerResultErrorCode", Namespace="http://dto17.api.echosign")]
     public enum ReplaceSignerResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_CREDENTIALS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_DOCUMENT_KEY = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_OPTIONS = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_ORIGINAL_SIGNER = 5,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_NEW_SIGNER = 6,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_MESSAGE = 7,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SIGNER_REPLACEMENT_NOT_ALLOWED = 8,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 9,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 10,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SearchUserDocumentsOptions", Namespace="http://dto18.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SearchUserDocumentsOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string queryField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -13093,7 +13092,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string query {
             get {
@@ -13106,9 +13105,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -13116,25 +13115,25 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SendDocumentInteractiveOptions", Namespace="http://dto12.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SendDocumentInteractiveOptions : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool authoringRequestedField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool autoLoginUserField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool noChromeField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -13144,7 +13143,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool authoringRequested {
             get {
@@ -13157,7 +13156,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool autoLoginUser {
             get {
@@ -13170,7 +13169,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool noChrome {
             get {
@@ -13183,9 +13182,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -13193,37 +13192,37 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SendDocumentInteractiveResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SendDocumentInteractiveResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentKey documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string embeddedCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SendDocumentInteractiveResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime expirationField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string urlField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -13233,7 +13232,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentKey documentKey {
             get {
@@ -13246,7 +13245,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string embeddedCode {
             get {
@@ -13259,7 +13258,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SendDocumentInteractiveResultErrorCode> errorCode {
             get {
@@ -13272,7 +13271,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -13285,7 +13284,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime expiration {
             get {
@@ -13298,7 +13297,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -13311,7 +13310,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string url {
             get {
@@ -13324,9 +13323,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -13334,54 +13333,54 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SendDocumentInteractiveResultErrorCode", Namespace="http://dto12.api.echosign")]
     public enum SendDocumentInteractiveResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OK = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_API_KEY = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_ARGUMENTS = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AUTOLOGIN_DENIED = 3,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MISC_ERROR = 4,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         EXCEPTION = 5,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SendDocumentMegaSignResult", Namespace="http://dto16.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SendDocumentMegaSignResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentKey documentKeyField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EchoSignLib.EchoSignService.DocumentKey[] documentKeyArrayField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.SendDocumentMegaSignResultErrorCode> errorCodeField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string errorMessageField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool successField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -13391,7 +13390,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentKey documentKey {
             get {
@@ -13404,7 +13403,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public EchoSignLib.EchoSignService.DocumentKey[] documentKeyArray {
             get {
@@ -13417,7 +13416,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.SendDocumentMegaSignResultErrorCode> errorCode {
             get {
@@ -13430,7 +13429,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string errorMessage {
             get {
@@ -13443,7 +13442,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool success {
             get {
@@ -13456,9 +13455,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -13466,30 +13465,30 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SendDocumentMegaSignResultErrorCode", Namespace="http://dto.api.echosign")]
     public enum SendDocumentMegaSignResultErrorCode : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ERROR = 0,
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SendReminderResult", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class SendReminderResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string recipientEmailField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.Result> resultField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -13499,7 +13498,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string recipientEmail {
             get {
@@ -13512,7 +13511,7 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.Result> result {
             get {
@@ -13525,9 +13524,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -13535,19 +13534,19 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Pong", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class Pong : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string messageField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -13557,7 +13556,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string message {
             get {
@@ -13570,9 +13569,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -13580,19 +13579,19 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserVerificationInfo", Namespace="http://dto.api.echosign")]
     [System.SerializableAttribute()]
     public partial class UserVerificationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
+
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
+
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<EchoSignLib.EchoSignService.UserVerificationStatus> userVerificationStatusField;
-        
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -13602,7 +13601,7 @@ namespace EchoSignLib.EchoSignService {
                 this.extensionDataField = value;
             }
         }
-        
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<EchoSignLib.EchoSignService.UserVerificationStatus> userVerificationStatus {
             get {
@@ -13615,9 +13614,9 @@ namespace EchoSignLib.EchoSignService {
                 }
             }
         }
-        
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -13625,1002 +13624,1002 @@ namespace EchoSignLib.EchoSignService {
             }
         }
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserVerificationStatus", Namespace="http://dto.api.echosign")]
     public enum UserVerificationStatus : int {
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         VALID = 0,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DOES_NOT_EXIST = 1,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         INVALID_PASSWORD = 2,
-        
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UNVERIFIED = 3,
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://api.echosign", ConfigurationName="EchoSignService.EchoSignDocumentService19PortType")]
     public interface EchoSignDocumentService19PortType {
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.CancelDocumentResult cancelDocument(string apiKey, string documentKey, string comment, bool notifySigner);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.CancelDocumentResult> cancelDocumentAsync(string apiKey, string documentKey, string comment, bool notifySigner);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.CreateAccountResult createAccount(string apiKey, EchoSignLib.EchoSignService.UserCreationInfo userCreationInfo, EchoSignLib.EchoSignService.AccountCreationInfo accountCreationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.CreateAccountResult> createAccountAsync(string apiKey, EchoSignLib.EchoSignService.UserCreationInfo userCreationInfo, EchoSignLib.EchoSignService.AccountCreationInfo accountCreationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="embeddedWidgetCreationResult")]
         EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult createEmbeddedWidget(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="embeddedWidgetCreationResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult> createEmbeddedWidgetAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="formCreationResult")]
         EchoSignLib.EchoSignService.FormCreationResult createForm(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.FormCreationInfo formInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="formCreationResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.FormCreationResult> createFormAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.FormCreationInfo formInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.CreateGroupResult createGroup(string apiKey, string groupName);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.CreateGroupResult> createGroupAsync(string apiKey, string groupName);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="libraryDocumentCreationResult")]
         EchoSignLib.EchoSignService.LibraryDocumentCreationResult createLibraryDocument(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.LibraryDocumentCreationInfo libraryDocumentCreationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="libraryDocumentCreationResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.LibraryDocumentCreationResult> createLibraryDocumentAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.LibraryDocumentCreationInfo libraryDocumentCreationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="embeddedWidgetCreationResult")]
         EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult createPersonalEmbeddedWidget(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="embeddedWidgetCreationResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult> createPersonalEmbeddedWidgetAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="urlWidgetCreationResult")]
         EchoSignLib.EchoSignService.UrlWidgetCreationResult createPersonalUrlWidget(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="urlWidgetCreationResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.UrlWidgetCreationResult> createPersonalUrlWidgetAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="urlWidgetCreationResult")]
         EchoSignLib.EchoSignService.UrlWidgetCreationResult createUrlWidget(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="urlWidgetCreationResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.UrlWidgetCreationResult> createUrlWidgetAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="userKey")]
         string createUser(string apiKey, EchoSignLib.EchoSignService.UserCreationInfo userInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="userKey")]
         System.Threading.Tasks.Task<string> createUserAsync(string apiKey, EchoSignLib.EchoSignService.UserCreationInfo userInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.DelegateSigningResult delegateSigning(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.DelegateSigningOptions delegateSigningOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DelegateSigningResult> delegateSigningAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.DelegateSigningOptions delegateSigningOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.DeleteGroupResult deleteGroup(string apiKey, string groupKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DeleteGroupResult> deleteGroupAsync(string apiKey, string groupKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="DeliverDocumentResult")]
         EchoSignLib.EchoSignService.DeliverDocumentResult deliverDocument(string apiKey, EchoSignLib.EchoSignService.FileInfo fileInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="DeliverDocumentResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DeliverDocumentResult> deliverDocumentAsync(string apiKey, EchoSignLib.EchoSignService.FileInfo fileInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="out")]
         EchoSignLib.EchoSignService.DisableWidgetResult disableWidget(string apiKey, string documentKey, EchoSignLib.EchoSignService.DisableWidgetOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="out")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DisableWidgetResult> disableWidgetAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.DisableWidgetOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="out")]
         EchoSignLib.EchoSignService.EnableWidgetResult enableWidget(string apiKey, string documentKey, EchoSignLib.EchoSignService.EnableWidgetOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="out")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.EnableWidgetResult> enableWidgetAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.EnableWidgetOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.AuditTrailResult getAuditTrail(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.AuditTrailResult> getAuditTrailAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetComposeDocumentUrlResult getComposeDocumentUrl(string accessToken, EchoSignLib.EchoSignService.ComposeDocumentInfo composeDocumentInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetComposeDocumentUrlResult> getComposeDocumentUrlAsync(string accessToken, EchoSignLib.EchoSignService.ComposeDocumentInfo composeDocumentInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="pdf")]
         byte[] getDocumentByVersion(string apiKey, string versionKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="pdf")]
         System.Threading.Tasks.Task<byte[]> getDocumentByVersionAsync(string apiKey, string versionKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetDocumentEventsForUserResult getDocumentEventsForUser(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, EchoSignLib.EchoSignService.DocumentEventsForUserOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentEventsForUserResult> getDocumentEventsForUserAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, EchoSignLib.EchoSignService.DocumentEventsForUserOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetDocumentImageUrlsResult getDocumentImageUrls(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentImageUrlsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentImageUrlsResult> getDocumentImageUrlsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentImageUrlsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentInfo")]
         EchoSignLib.EchoSignService.DocumentInfo getDocumentInfo(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentInfo")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentInfo> getDocumentInfoAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentInfoList")]
         EchoSignLib.EchoSignService.DocumentInfoList getDocumentInfosByExternalId(string apiKey, string email, string password, EchoSignLib.EchoSignService.ExternalId externalId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentInfoList")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentInfoList> getDocumentInfosByExternalIdAsync(string apiKey, string email, string password, EchoSignLib.EchoSignService.ExternalId externalId);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetDocumentPagesInfoResult getDocumentPagesInfo(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentPagesInfoResult> getDocumentPagesInfoAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentUrlResult")]
         EchoSignLib.EchoSignService.DocumentUrlResult getDocumentUrlByVersion(string apiKey, string versionKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentUrlResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentUrlResult> getDocumentUrlByVersionAsync(string apiKey, string versionKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetDocumentUrlsResult getDocumentUrls(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentUrlsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentUrlsResult> getDocumentUrlsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentUrlsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetDocumentsResult getDocuments(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsResult> getDocumentsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetDocumentsForUserResult getDocumentsForUser(string apiKey, string userKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsForUserResult> getDocumentsForUserAsync(string apiKey, string userKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetEmbeddedViewResult getEmbeddedView(string accessToken, EchoSignLib.EchoSignService.OnBehalfOfUser onBehalfOfUser, EchoSignLib.EchoSignService.EmbeddedViewOptions embeddedViewOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetEmbeddedViewResult> getEmbeddedViewAsync(string accessToken, EchoSignLib.EchoSignService.OnBehalfOfUser onBehalfOfUser, EchoSignLib.EchoSignService.EmbeddedViewOptions embeddedViewOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetFormDataResult getFormData(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetFormDataResult> getFormDataAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetGroupsInAccountResult getGroupsInAccount(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetGroupsInAccountResult> getGroupsInAccountAsync(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentImageList")]
         EchoSignLib.EchoSignService.DocumentImageList getImagesByVersion(string apiKey, string versionKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentImageList")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentImageList> getImagesByVersionAsync(string apiKey, string versionKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="pdf")]
         byte[] getLatestDocument(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="pdf")]
         System.Threading.Tasks.Task<byte[]> getLatestDocumentAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentUrlResult")]
         EchoSignLib.EchoSignService.DocumentUrlResult getLatestDocumentUrl(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentUrlResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentUrlResult> getLatestDocumentUrlAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentImageList")]
         EchoSignLib.EchoSignService.DocumentImageList getLatestImages(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentImageList")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentImageList> getLatestImagesAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetLibraryDocumentsForUserResult getLibraryDocumentsForUser(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetLibraryDocumentsForUserResult> getLibraryDocumentsForUserAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetMegaSignDocumentResult getMegaSignDocument(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetMegaSignDocumentResult> getMegaSignDocumentAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetDocumentsForUserResult getMyDocuments(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsForUserResult> getMyDocumentsAsync(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetLibraryDocumentsForUserResult getMyLibraryDocuments(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetLibraryDocumentsForUserResult> getMyLibraryDocumentsAsync(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetWidgetsForUserResult getMyWidgets(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetWidgetsForUserResult> getMyWidgetsAsync(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetSignerFormFieldsResult getSignerFormFields(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetSignerFormFieldsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetSignerFormFieldsResult> getSignerFormFieldsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetSignerFormFieldsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.SigningUrlResult getSigningUrl(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.SigningUrlResult> getSigningUrlAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetSupportingDocumentsResult getSupportingDocuments(string apiKey, string documentKey, EchoSignLib.EchoSignService.ArrayOfString supportingDocumentKeys, EchoSignLib.EchoSignService.GetSupportingDocumentsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetSupportingDocumentsResult> getSupportingDocumentsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.ArrayOfString supportingDocumentKeys, EchoSignLib.EchoSignService.GetSupportingDocumentsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="getDocumentsForUserResult")]
         EchoSignLib.EchoSignService.GetDocumentsForUserResult getUserDocuments(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="getDocumentsForUserResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsForUserResult> getUserDocumentsAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetUserInfoResult getUserInfo(string apiKey, EchoSignLib.EchoSignService.GetUserInfoOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetUserInfoResult> getUserInfoAsync(string apiKey, EchoSignLib.EchoSignService.GetUserInfoOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetUsersInAccountResult getUsersInAccount(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetUsersInAccountResult> getUsersInAccountAsync(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetUsersInGroupResult getUsersInGroup(string apiKey, string groupKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetUsersInGroupResult> getUsersInGroupAsync(string apiKey, string groupKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetWidgetsForUserResult getWidgetsForUser(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetWidgetsForUserResult> getWidgetsForUserAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.InitiateInteractiveSendDocumentResult initiateInteractiveSendDocument(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo, bool forceSendConfirmation, System.Nullable<bool> authoringRequested);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.InitiateInteractiveSendDocumentResult> initiateInteractiveSendDocumentAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo, bool forceSendConfirmation, System.Nullable<bool> authoringRequested);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.MoveUsersToGroupResult moveUsersToGroup(string apiKey, string groupKey, EchoSignLib.EchoSignService.UsersToMoveInfo usersToMoveInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.MoveUsersToGroupResult> moveUsersToGroupAsync(string apiKey, string groupKey, EchoSignLib.EchoSignService.UsersToMoveInfo usersToMoveInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.NotifyDocumentVaultedResult notifyDocumentVaulted(string accessToken, string documentKey, EchoSignLib.EchoSignService.VaultEventInfo vaultEventInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.NotifyDocumentVaultedResult> notifyDocumentVaultedAsync(string accessToken, string documentKey, EchoSignLib.EchoSignService.VaultEventInfo vaultEventInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="embeddedWidgetCreationResult")]
         EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult personalizeEmbeddedWidget(string apiKey, string widgetJavascript, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="embeddedWidgetCreationResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult> personalizeEmbeddedWidgetAsync(string apiKey, string widgetJavascript, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="urlWidgetCreationResult")]
         EchoSignLib.EchoSignService.UrlWidgetCreationResult personalizeUrlWidget(string apiKey, string widgetUrl, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="urlWidgetCreationResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.UrlWidgetCreationResult> personalizeUrlWidgetAsync(string apiKey, string widgetUrl, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.RejectDocumentResult rejectDocument(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.RejectDocumentOptions rejectDocumentOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.RejectDocumentResult> rejectDocumentAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.RejectDocumentOptions rejectDocumentOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.RemoveDocumentResult removeDocument(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.RemoveDocumentResult> removeDocumentAsync(string apiKey, string documentKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.RenameGroupResult renameGroup(string apiKey, string groupKey, string newGroupName);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.RenameGroupResult> renameGroupAsync(string apiKey, string groupKey, string newGroupName);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.ReplaceSignerResult replaceSigner(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.ReplaceSignerOptions replaceSignerOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.ReplaceSignerResult> replaceSignerAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.ReplaceSignerOptions replaceSignerOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.GetDocumentsForUserResult searchUserDocuments(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, EchoSignLib.EchoSignService.SearchUserDocumentsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsForUserResult> searchUserDocumentsAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, EchoSignLib.EchoSignService.SearchUserDocumentsOptions options);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentKeys")]
         EchoSignLib.EchoSignService.DocumentKey[] sendDocument(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="documentKeys")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentKey[]> sendDocumentAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         EchoSignLib.EchoSignService.SendDocumentInteractiveResult sendDocumentInteractive(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo, EchoSignLib.EchoSignService.SendDocumentInteractiveOptions sendDocumentInteractiveOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.SendDocumentInteractiveResult> sendDocumentInteractiveAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo, EchoSignLib.EchoSignService.SendDocumentInteractiveOptions sendDocumentInteractiveOptions);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="sendMegaSignDocumentResult")]
         EchoSignLib.EchoSignService.SendDocumentMegaSignResult sendDocumentMegaSign(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="sendMegaSignDocumentResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.SendDocumentMegaSignResult> sendDocumentMegaSignAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="sendreminderResult")]
         EchoSignLib.EchoSignService.SendReminderResult sendReminder(string apiKey, string documentKey, string comment);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="sendreminderResult")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.SendReminderResult> sendReminderAsync(string apiKey, string documentKey, string comment);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="outFile")]
         byte[] testEchoFile(string apiKey, byte[] file);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="outFile")]
         System.Threading.Tasks.Task<byte[]> testEchoFileAsync(string apiKey, byte[] file);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="pong")]
         EchoSignLib.EchoSignService.Pong testPing(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="pong")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.Pong> testPingAsync(string apiKey);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="userVerificationInfo")]
         EchoSignLib.EchoSignService.UserVerificationInfo verifyUser(string apiKey, string email, string password);
-        
+
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [return: System.ServiceModel.MessageParameterAttribute(Name="userVerificationInfo")]
         System.Threading.Tasks.Task<EchoSignLib.EchoSignService.UserVerificationInfo> verifyUserAsync(string apiKey, string email, string password);
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface EchoSignDocumentService19PortTypeChannel : EchoSignLib.EchoSignService.EchoSignDocumentService19PortType, System.ServiceModel.IClientChannel {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class EchoSignDocumentService19PortTypeClient : System.ServiceModel.ClientBase<EchoSignLib.EchoSignService.EchoSignDocumentService19PortType>, EchoSignLib.EchoSignService.EchoSignDocumentService19PortType {
-        
+
         public EchoSignDocumentService19PortTypeClient() {
         }
-        
+
         public EchoSignDocumentService19PortTypeClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
-        
+
         public EchoSignDocumentService19PortTypeClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public EchoSignDocumentService19PortTypeClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
-        
+
         public EchoSignDocumentService19PortTypeClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
-        
+
         public EchoSignLib.EchoSignService.CancelDocumentResult cancelDocument(string apiKey, string documentKey, string comment, bool notifySigner) {
             return base.Channel.cancelDocument(apiKey, documentKey, comment, notifySigner);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.CancelDocumentResult> cancelDocumentAsync(string apiKey, string documentKey, string comment, bool notifySigner) {
             return base.Channel.cancelDocumentAsync(apiKey, documentKey, comment, notifySigner);
         }
-        
+
         public EchoSignLib.EchoSignService.CreateAccountResult createAccount(string apiKey, EchoSignLib.EchoSignService.UserCreationInfo userCreationInfo, EchoSignLib.EchoSignService.AccountCreationInfo accountCreationInfo) {
             return base.Channel.createAccount(apiKey, userCreationInfo, accountCreationInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.CreateAccountResult> createAccountAsync(string apiKey, EchoSignLib.EchoSignService.UserCreationInfo userCreationInfo, EchoSignLib.EchoSignService.AccountCreationInfo accountCreationInfo) {
             return base.Channel.createAccountAsync(apiKey, userCreationInfo, accountCreationInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult createEmbeddedWidget(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo) {
             return base.Channel.createEmbeddedWidget(apiKey, senderInfo, widgetInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult> createEmbeddedWidgetAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo) {
             return base.Channel.createEmbeddedWidgetAsync(apiKey, senderInfo, widgetInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.FormCreationResult createForm(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.FormCreationInfo formInfo) {
             return base.Channel.createForm(apiKey, senderInfo, formInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.FormCreationResult> createFormAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.FormCreationInfo formInfo) {
             return base.Channel.createFormAsync(apiKey, senderInfo, formInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.CreateGroupResult createGroup(string apiKey, string groupName) {
             return base.Channel.createGroup(apiKey, groupName);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.CreateGroupResult> createGroupAsync(string apiKey, string groupName) {
             return base.Channel.createGroupAsync(apiKey, groupName);
         }
-        
+
         public EchoSignLib.EchoSignService.LibraryDocumentCreationResult createLibraryDocument(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.LibraryDocumentCreationInfo libraryDocumentCreationInfo) {
             return base.Channel.createLibraryDocument(apiKey, senderInfo, libraryDocumentCreationInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.LibraryDocumentCreationResult> createLibraryDocumentAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.LibraryDocumentCreationInfo libraryDocumentCreationInfo) {
             return base.Channel.createLibraryDocumentAsync(apiKey, senderInfo, libraryDocumentCreationInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult createPersonalEmbeddedWidget(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo) {
             return base.Channel.createPersonalEmbeddedWidget(apiKey, senderInfo, widgetInfo, personalizationInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult> createPersonalEmbeddedWidgetAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo) {
             return base.Channel.createPersonalEmbeddedWidgetAsync(apiKey, senderInfo, widgetInfo, personalizationInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.UrlWidgetCreationResult createPersonalUrlWidget(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo) {
             return base.Channel.createPersonalUrlWidget(apiKey, senderInfo, widgetInfo, personalizationInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.UrlWidgetCreationResult> createPersonalUrlWidgetAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo) {
             return base.Channel.createPersonalUrlWidgetAsync(apiKey, senderInfo, widgetInfo, personalizationInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.UrlWidgetCreationResult createUrlWidget(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo) {
             return base.Channel.createUrlWidget(apiKey, senderInfo, widgetInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.UrlWidgetCreationResult> createUrlWidgetAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.WidgetCreationInfo widgetInfo) {
             return base.Channel.createUrlWidgetAsync(apiKey, senderInfo, widgetInfo);
         }
-        
+
         public string createUser(string apiKey, EchoSignLib.EchoSignService.UserCreationInfo userInfo) {
             return base.Channel.createUser(apiKey, userInfo);
         }
-        
+
         public System.Threading.Tasks.Task<string> createUserAsync(string apiKey, EchoSignLib.EchoSignService.UserCreationInfo userInfo) {
             return base.Channel.createUserAsync(apiKey, userInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.DelegateSigningResult delegateSigning(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.DelegateSigningOptions delegateSigningOptions) {
             return base.Channel.delegateSigning(apiKey, userCredentials, documentKey, delegateSigningOptions);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DelegateSigningResult> delegateSigningAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.DelegateSigningOptions delegateSigningOptions) {
             return base.Channel.delegateSigningAsync(apiKey, userCredentials, documentKey, delegateSigningOptions);
         }
-        
+
         public EchoSignLib.EchoSignService.DeleteGroupResult deleteGroup(string apiKey, string groupKey) {
             return base.Channel.deleteGroup(apiKey, groupKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DeleteGroupResult> deleteGroupAsync(string apiKey, string groupKey) {
             return base.Channel.deleteGroupAsync(apiKey, groupKey);
         }
-        
+
         public EchoSignLib.EchoSignService.DeliverDocumentResult deliverDocument(string apiKey, EchoSignLib.EchoSignService.FileInfo fileInfo) {
             return base.Channel.deliverDocument(apiKey, fileInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DeliverDocumentResult> deliverDocumentAsync(string apiKey, EchoSignLib.EchoSignService.FileInfo fileInfo) {
             return base.Channel.deliverDocumentAsync(apiKey, fileInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.DisableWidgetResult disableWidget(string apiKey, string documentKey, EchoSignLib.EchoSignService.DisableWidgetOptions options) {
             return base.Channel.disableWidget(apiKey, documentKey, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DisableWidgetResult> disableWidgetAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.DisableWidgetOptions options) {
             return base.Channel.disableWidgetAsync(apiKey, documentKey, options);
         }
-        
+
         public EchoSignLib.EchoSignService.EnableWidgetResult enableWidget(string apiKey, string documentKey, EchoSignLib.EchoSignService.EnableWidgetOptions options) {
             return base.Channel.enableWidget(apiKey, documentKey, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.EnableWidgetResult> enableWidgetAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.EnableWidgetOptions options) {
             return base.Channel.enableWidgetAsync(apiKey, documentKey, options);
         }
-        
+
         public EchoSignLib.EchoSignService.AuditTrailResult getAuditTrail(string apiKey, string documentKey) {
             return base.Channel.getAuditTrail(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.AuditTrailResult> getAuditTrailAsync(string apiKey, string documentKey) {
             return base.Channel.getAuditTrailAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetComposeDocumentUrlResult getComposeDocumentUrl(string accessToken, EchoSignLib.EchoSignService.ComposeDocumentInfo composeDocumentInfo) {
             return base.Channel.getComposeDocumentUrl(accessToken, composeDocumentInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetComposeDocumentUrlResult> getComposeDocumentUrlAsync(string accessToken, EchoSignLib.EchoSignService.ComposeDocumentInfo composeDocumentInfo) {
             return base.Channel.getComposeDocumentUrlAsync(accessToken, composeDocumentInfo);
         }
-        
+
         public byte[] getDocumentByVersion(string apiKey, string versionKey) {
             return base.Channel.getDocumentByVersion(apiKey, versionKey);
         }
-        
+
         public System.Threading.Tasks.Task<byte[]> getDocumentByVersionAsync(string apiKey, string versionKey) {
             return base.Channel.getDocumentByVersionAsync(apiKey, versionKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentEventsForUserResult getDocumentEventsForUser(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, EchoSignLib.EchoSignService.DocumentEventsForUserOptions options) {
             return base.Channel.getDocumentEventsForUser(apiKey, userCredentials, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentEventsForUserResult> getDocumentEventsForUserAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, EchoSignLib.EchoSignService.DocumentEventsForUserOptions options) {
             return base.Channel.getDocumentEventsForUserAsync(apiKey, userCredentials, options);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentImageUrlsResult getDocumentImageUrls(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentImageUrlsOptions options) {
             return base.Channel.getDocumentImageUrls(apiKey, documentKey, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentImageUrlsResult> getDocumentImageUrlsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentImageUrlsOptions options) {
             return base.Channel.getDocumentImageUrlsAsync(apiKey, documentKey, options);
         }
-        
+
         public EchoSignLib.EchoSignService.DocumentInfo getDocumentInfo(string apiKey, string documentKey) {
             return base.Channel.getDocumentInfo(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentInfo> getDocumentInfoAsync(string apiKey, string documentKey) {
             return base.Channel.getDocumentInfoAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.DocumentInfoList getDocumentInfosByExternalId(string apiKey, string email, string password, EchoSignLib.EchoSignService.ExternalId externalId) {
             return base.Channel.getDocumentInfosByExternalId(apiKey, email, password, externalId);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentInfoList> getDocumentInfosByExternalIdAsync(string apiKey, string email, string password, EchoSignLib.EchoSignService.ExternalId externalId) {
             return base.Channel.getDocumentInfosByExternalIdAsync(apiKey, email, password, externalId);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentPagesInfoResult getDocumentPagesInfo(string apiKey, string documentKey) {
             return base.Channel.getDocumentPagesInfo(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentPagesInfoResult> getDocumentPagesInfoAsync(string apiKey, string documentKey) {
             return base.Channel.getDocumentPagesInfoAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.DocumentUrlResult getDocumentUrlByVersion(string apiKey, string versionKey) {
             return base.Channel.getDocumentUrlByVersion(apiKey, versionKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentUrlResult> getDocumentUrlByVersionAsync(string apiKey, string versionKey) {
             return base.Channel.getDocumentUrlByVersionAsync(apiKey, versionKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentUrlsResult getDocumentUrls(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentUrlsOptions options) {
             return base.Channel.getDocumentUrls(apiKey, documentKey, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentUrlsResult> getDocumentUrlsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentUrlsOptions options) {
             return base.Channel.getDocumentUrlsAsync(apiKey, documentKey, options);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentsResult getDocuments(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentsOptions options) {
             return base.Channel.getDocuments(apiKey, documentKey, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsResult> getDocumentsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetDocumentsOptions options) {
             return base.Channel.getDocumentsAsync(apiKey, documentKey, options);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentsForUserResult getDocumentsForUser(string apiKey, string userKey) {
             return base.Channel.getDocumentsForUser(apiKey, userKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsForUserResult> getDocumentsForUserAsync(string apiKey, string userKey) {
             return base.Channel.getDocumentsForUserAsync(apiKey, userKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetEmbeddedViewResult getEmbeddedView(string accessToken, EchoSignLib.EchoSignService.OnBehalfOfUser onBehalfOfUser, EchoSignLib.EchoSignService.EmbeddedViewOptions embeddedViewOptions) {
             return base.Channel.getEmbeddedView(accessToken, onBehalfOfUser, embeddedViewOptions);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetEmbeddedViewResult> getEmbeddedViewAsync(string accessToken, EchoSignLib.EchoSignService.OnBehalfOfUser onBehalfOfUser, EchoSignLib.EchoSignService.EmbeddedViewOptions embeddedViewOptions) {
             return base.Channel.getEmbeddedViewAsync(accessToken, onBehalfOfUser, embeddedViewOptions);
         }
-        
+
         public EchoSignLib.EchoSignService.GetFormDataResult getFormData(string apiKey, string documentKey) {
             return base.Channel.getFormData(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetFormDataResult> getFormDataAsync(string apiKey, string documentKey) {
             return base.Channel.getFormDataAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetGroupsInAccountResult getGroupsInAccount(string apiKey) {
             return base.Channel.getGroupsInAccount(apiKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetGroupsInAccountResult> getGroupsInAccountAsync(string apiKey) {
             return base.Channel.getGroupsInAccountAsync(apiKey);
         }
-        
+
         public EchoSignLib.EchoSignService.DocumentImageList getImagesByVersion(string apiKey, string versionKey) {
             return base.Channel.getImagesByVersion(apiKey, versionKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentImageList> getImagesByVersionAsync(string apiKey, string versionKey) {
             return base.Channel.getImagesByVersionAsync(apiKey, versionKey);
         }
-        
+
         public byte[] getLatestDocument(string apiKey, string documentKey) {
             return base.Channel.getLatestDocument(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<byte[]> getLatestDocumentAsync(string apiKey, string documentKey) {
             return base.Channel.getLatestDocumentAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.DocumentUrlResult getLatestDocumentUrl(string apiKey, string documentKey) {
             return base.Channel.getLatestDocumentUrl(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentUrlResult> getLatestDocumentUrlAsync(string apiKey, string documentKey) {
             return base.Channel.getLatestDocumentUrlAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.DocumentImageList getLatestImages(string apiKey, string documentKey) {
             return base.Channel.getLatestImages(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentImageList> getLatestImagesAsync(string apiKey, string documentKey) {
             return base.Channel.getLatestImagesAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetLibraryDocumentsForUserResult getLibraryDocumentsForUser(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials) {
             return base.Channel.getLibraryDocumentsForUser(apiKey, userCredentials);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetLibraryDocumentsForUserResult> getLibraryDocumentsForUserAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials) {
             return base.Channel.getLibraryDocumentsForUserAsync(apiKey, userCredentials);
         }
-        
+
         public EchoSignLib.EchoSignService.GetMegaSignDocumentResult getMegaSignDocument(string apiKey, string documentKey) {
             return base.Channel.getMegaSignDocument(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetMegaSignDocumentResult> getMegaSignDocumentAsync(string apiKey, string documentKey) {
             return base.Channel.getMegaSignDocumentAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentsForUserResult getMyDocuments(string apiKey) {
             return base.Channel.getMyDocuments(apiKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsForUserResult> getMyDocumentsAsync(string apiKey) {
             return base.Channel.getMyDocumentsAsync(apiKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetLibraryDocumentsForUserResult getMyLibraryDocuments(string apiKey) {
             return base.Channel.getMyLibraryDocuments(apiKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetLibraryDocumentsForUserResult> getMyLibraryDocumentsAsync(string apiKey) {
             return base.Channel.getMyLibraryDocumentsAsync(apiKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetWidgetsForUserResult getMyWidgets(string apiKey) {
             return base.Channel.getMyWidgets(apiKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetWidgetsForUserResult> getMyWidgetsAsync(string apiKey) {
             return base.Channel.getMyWidgetsAsync(apiKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetSignerFormFieldsResult getSignerFormFields(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetSignerFormFieldsOptions options) {
             return base.Channel.getSignerFormFields(apiKey, documentKey, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetSignerFormFieldsResult> getSignerFormFieldsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.GetSignerFormFieldsOptions options) {
             return base.Channel.getSignerFormFieldsAsync(apiKey, documentKey, options);
         }
-        
+
         public EchoSignLib.EchoSignService.SigningUrlResult getSigningUrl(string apiKey, string documentKey) {
             return base.Channel.getSigningUrl(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.SigningUrlResult> getSigningUrlAsync(string apiKey, string documentKey) {
             return base.Channel.getSigningUrlAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetSupportingDocumentsResult getSupportingDocuments(string apiKey, string documentKey, EchoSignLib.EchoSignService.ArrayOfString supportingDocumentKeys, EchoSignLib.EchoSignService.GetSupportingDocumentsOptions options) {
             return base.Channel.getSupportingDocuments(apiKey, documentKey, supportingDocumentKeys, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetSupportingDocumentsResult> getSupportingDocumentsAsync(string apiKey, string documentKey, EchoSignLib.EchoSignService.ArrayOfString supportingDocumentKeys, EchoSignLib.EchoSignService.GetSupportingDocumentsOptions options) {
             return base.Channel.getSupportingDocumentsAsync(apiKey, documentKey, supportingDocumentKeys, options);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentsForUserResult getUserDocuments(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials) {
             return base.Channel.getUserDocuments(apiKey, userCredentials);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsForUserResult> getUserDocumentsAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials) {
             return base.Channel.getUserDocumentsAsync(apiKey, userCredentials);
         }
-        
+
         public EchoSignLib.EchoSignService.GetUserInfoResult getUserInfo(string apiKey, EchoSignLib.EchoSignService.GetUserInfoOptions options) {
             return base.Channel.getUserInfo(apiKey, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetUserInfoResult> getUserInfoAsync(string apiKey, EchoSignLib.EchoSignService.GetUserInfoOptions options) {
             return base.Channel.getUserInfoAsync(apiKey, options);
         }
-        
+
         public EchoSignLib.EchoSignService.GetUsersInAccountResult getUsersInAccount(string apiKey) {
             return base.Channel.getUsersInAccount(apiKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetUsersInAccountResult> getUsersInAccountAsync(string apiKey) {
             return base.Channel.getUsersInAccountAsync(apiKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetUsersInGroupResult getUsersInGroup(string apiKey, string groupKey) {
             return base.Channel.getUsersInGroup(apiKey, groupKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetUsersInGroupResult> getUsersInGroupAsync(string apiKey, string groupKey) {
             return base.Channel.getUsersInGroupAsync(apiKey, groupKey);
         }
-        
+
         public EchoSignLib.EchoSignService.GetWidgetsForUserResult getWidgetsForUser(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials) {
             return base.Channel.getWidgetsForUser(apiKey, userCredentials);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetWidgetsForUserResult> getWidgetsForUserAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials) {
             return base.Channel.getWidgetsForUserAsync(apiKey, userCredentials);
         }
-        
+
         public EchoSignLib.EchoSignService.InitiateInteractiveSendDocumentResult initiateInteractiveSendDocument(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo, bool forceSendConfirmation, System.Nullable<bool> authoringRequested) {
             return base.Channel.initiateInteractiveSendDocument(apiKey, senderInfo, documentCreationInfo, forceSendConfirmation, authoringRequested);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.InitiateInteractiveSendDocumentResult> initiateInteractiveSendDocumentAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo, bool forceSendConfirmation, System.Nullable<bool> authoringRequested) {
             return base.Channel.initiateInteractiveSendDocumentAsync(apiKey, senderInfo, documentCreationInfo, forceSendConfirmation, authoringRequested);
         }
-        
+
         public EchoSignLib.EchoSignService.MoveUsersToGroupResult moveUsersToGroup(string apiKey, string groupKey, EchoSignLib.EchoSignService.UsersToMoveInfo usersToMoveInfo) {
             return base.Channel.moveUsersToGroup(apiKey, groupKey, usersToMoveInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.MoveUsersToGroupResult> moveUsersToGroupAsync(string apiKey, string groupKey, EchoSignLib.EchoSignService.UsersToMoveInfo usersToMoveInfo) {
             return base.Channel.moveUsersToGroupAsync(apiKey, groupKey, usersToMoveInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.NotifyDocumentVaultedResult notifyDocumentVaulted(string accessToken, string documentKey, EchoSignLib.EchoSignService.VaultEventInfo vaultEventInfo) {
             return base.Channel.notifyDocumentVaulted(accessToken, documentKey, vaultEventInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.NotifyDocumentVaultedResult> notifyDocumentVaultedAsync(string accessToken, string documentKey, EchoSignLib.EchoSignService.VaultEventInfo vaultEventInfo) {
             return base.Channel.notifyDocumentVaultedAsync(accessToken, documentKey, vaultEventInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult personalizeEmbeddedWidget(string apiKey, string widgetJavascript, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo) {
             return base.Channel.personalizeEmbeddedWidget(apiKey, widgetJavascript, personalizationInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.EmbeddedWidgetCreationResult> personalizeEmbeddedWidgetAsync(string apiKey, string widgetJavascript, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo) {
             return base.Channel.personalizeEmbeddedWidgetAsync(apiKey, widgetJavascript, personalizationInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.UrlWidgetCreationResult personalizeUrlWidget(string apiKey, string widgetUrl, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo) {
             return base.Channel.personalizeUrlWidget(apiKey, widgetUrl, personalizationInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.UrlWidgetCreationResult> personalizeUrlWidgetAsync(string apiKey, string widgetUrl, EchoSignLib.EchoSignService.WidgetPersonalizationInfo personalizationInfo) {
             return base.Channel.personalizeUrlWidgetAsync(apiKey, widgetUrl, personalizationInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.RejectDocumentResult rejectDocument(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.RejectDocumentOptions rejectDocumentOptions) {
             return base.Channel.rejectDocument(apiKey, userCredentials, documentKey, rejectDocumentOptions);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.RejectDocumentResult> rejectDocumentAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.RejectDocumentOptions rejectDocumentOptions) {
             return base.Channel.rejectDocumentAsync(apiKey, userCredentials, documentKey, rejectDocumentOptions);
         }
-        
+
         public EchoSignLib.EchoSignService.RemoveDocumentResult removeDocument(string apiKey, string documentKey) {
             return base.Channel.removeDocument(apiKey, documentKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.RemoveDocumentResult> removeDocumentAsync(string apiKey, string documentKey) {
             return base.Channel.removeDocumentAsync(apiKey, documentKey);
         }
-        
+
         public EchoSignLib.EchoSignService.RenameGroupResult renameGroup(string apiKey, string groupKey, string newGroupName) {
             return base.Channel.renameGroup(apiKey, groupKey, newGroupName);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.RenameGroupResult> renameGroupAsync(string apiKey, string groupKey, string newGroupName) {
             return base.Channel.renameGroupAsync(apiKey, groupKey, newGroupName);
         }
-        
+
         public EchoSignLib.EchoSignService.ReplaceSignerResult replaceSigner(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.ReplaceSignerOptions replaceSignerOptions) {
             return base.Channel.replaceSigner(apiKey, userCredentials, documentKey, replaceSignerOptions);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.ReplaceSignerResult> replaceSignerAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, string documentKey, EchoSignLib.EchoSignService.ReplaceSignerOptions replaceSignerOptions) {
             return base.Channel.replaceSignerAsync(apiKey, userCredentials, documentKey, replaceSignerOptions);
         }
-        
+
         public EchoSignLib.EchoSignService.GetDocumentsForUserResult searchUserDocuments(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, EchoSignLib.EchoSignService.SearchUserDocumentsOptions options) {
             return base.Channel.searchUserDocuments(apiKey, userCredentials, options);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.GetDocumentsForUserResult> searchUserDocumentsAsync(string apiKey, EchoSignLib.EchoSignService.UserCredentials userCredentials, EchoSignLib.EchoSignService.SearchUserDocumentsOptions options) {
             return base.Channel.searchUserDocumentsAsync(apiKey, userCredentials, options);
         }
-        
+
         public EchoSignLib.EchoSignService.DocumentKey[] sendDocument(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo) {
             return base.Channel.sendDocument(apiKey, senderInfo, documentCreationInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.DocumentKey[]> sendDocumentAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo) {
             return base.Channel.sendDocumentAsync(apiKey, senderInfo, documentCreationInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.SendDocumentInteractiveResult sendDocumentInteractive(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo, EchoSignLib.EchoSignService.SendDocumentInteractiveOptions sendDocumentInteractiveOptions) {
             return base.Channel.sendDocumentInteractive(apiKey, senderInfo, documentCreationInfo, sendDocumentInteractiveOptions);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.SendDocumentInteractiveResult> sendDocumentInteractiveAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo, EchoSignLib.EchoSignService.SendDocumentInteractiveOptions sendDocumentInteractiveOptions) {
             return base.Channel.sendDocumentInteractiveAsync(apiKey, senderInfo, documentCreationInfo, sendDocumentInteractiveOptions);
         }
-        
+
         public EchoSignLib.EchoSignService.SendDocumentMegaSignResult sendDocumentMegaSign(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo) {
             return base.Channel.sendDocumentMegaSign(apiKey, senderInfo, documentCreationInfo);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.SendDocumentMegaSignResult> sendDocumentMegaSignAsync(string apiKey, EchoSignLib.EchoSignService.SenderInfo senderInfo, EchoSignLib.EchoSignService.DocumentCreationInfo documentCreationInfo) {
             return base.Channel.sendDocumentMegaSignAsync(apiKey, senderInfo, documentCreationInfo);
         }
-        
+
         public EchoSignLib.EchoSignService.SendReminderResult sendReminder(string apiKey, string documentKey, string comment) {
             return base.Channel.sendReminder(apiKey, documentKey, comment);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.SendReminderResult> sendReminderAsync(string apiKey, string documentKey, string comment) {
             return base.Channel.sendReminderAsync(apiKey, documentKey, comment);
         }
-        
+
         public byte[] testEchoFile(string apiKey, byte[] file) {
             return base.Channel.testEchoFile(apiKey, file);
         }
-        
+
         public System.Threading.Tasks.Task<byte[]> testEchoFileAsync(string apiKey, byte[] file) {
             return base.Channel.testEchoFileAsync(apiKey, file);
         }
-        
+
         public EchoSignLib.EchoSignService.Pong testPing(string apiKey) {
             return base.Channel.testPing(apiKey);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.Pong> testPingAsync(string apiKey) {
             return base.Channel.testPingAsync(apiKey);
         }
-        
+
         public EchoSignLib.EchoSignService.UserVerificationInfo verifyUser(string apiKey, string email, string password) {
             return base.Channel.verifyUser(apiKey, email, password);
         }
-        
+
         public System.Threading.Tasks.Task<EchoSignLib.EchoSignService.UserVerificationInfo> verifyUserAsync(string apiKey, string email, string password) {
             return base.Channel.verifyUserAsync(apiKey, email, password);
         }

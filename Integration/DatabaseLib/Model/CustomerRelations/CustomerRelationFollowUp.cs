@@ -1,4 +1,4 @@
-namespace EZBob.DatabaseLib.Model.CustomerRelations {
+﻿namespace EZBob.DatabaseLib.Model.CustomerRelations {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -6,8 +6,6 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations {
 	using FluentNHibernate.Mapping;
 	using NHibernate;
 	using NHibernate.Type;
-
-	#region class CustomerRelationFollowUp
 
 	public class CustomerRelationFollowUp {
 		public virtual int Id { get; set; }
@@ -19,10 +17,6 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations {
 		public virtual DateTime? CloseDate { get; set; }
 		public virtual bool? IsBroker { get; set; }
 	} // class CustomerRelationFollowUp
-
-	#endregion class CustomerRelationFollowUp
-
-	#region class CustomerRelationFollowUpMap
 
 	public class CustomerRelationFollowUpMap : ClassMap<CustomerRelationFollowUp> {
 		public CustomerRelationFollowUpMap() {
@@ -38,17 +32,9 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations {
 		} // constructor
 	} // class CustomerRelationFollowUpMap
 
-	#endregion class CustomerRelationFollowUpMap
-
-	#region interface ICustomerRelationFollowUpRepository
-
 	public interface ICustomerRelationFollowUpRepository : IRepository<CustomerRelationFollowUp> {
 		IEnumerable<CustomerRelationFollowUp> GetByCustomer(int customerId);
 	} // interface ICustomerRelationFollowUpRepository
-
-	#endregion interface ICustomerRelationFollowUpRepository
-
-	#region class CustomerRelationFollowUpRepository
 
 	public class CustomerRelationFollowUpRepository : NHibernateRepositoryBase<CustomerRelationFollowUp>, ICustomerRelationFollowUpRepository {
 		public CustomerRelationFollowUpRepository(ISession session) : base(session) {} // constructor
@@ -62,5 +48,4 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations {
 		} // GetByCustomer
 	} // class CustomerRelationFollowUpRepository
 
-	#endregion class CustomerRelationFollowUpRepository
 } // namespace

@@ -12,12 +12,12 @@
 	public class OfflineLImitedMedalCalculator : MedalCalculator
 	{
 		public OfflineLImitedMedalCalculator(AConnection db, ASafeLog log):base(db, log) {}
-		
+
 		public override MedalOutputModel CalculateMedal(MedalInputModel model)
 		{
 			var dict = new Dictionary<Parameter, Weight>
 				{
-					
+
 					{Parameter.BusinessScore,      GetBusinessScoreWeight(model.BusinessScore, model.FirstRepaymentDatePassed, model.UseHmrc)},
 					{Parameter.TangibleEquity,     GetTangibleEquityWeight(model.TangibleEquity, model.AnnualTurnover)},
 					{Parameter.BusinessSeniority,  GetBusinessSeniorityWeight(model.BusinessSeniority, model.FirstRepaymentDatePassed, model.UseHmrc)},
@@ -38,8 +38,6 @@
 			return scoreMedal;
 		}
 
-		
-
 		protected override void CalcDelta(MedalInputModel model, Dictionary<Parameter, Weight> dict)
 		{
 
@@ -57,8 +55,6 @@
 			}
 		}
 
-		#region WeightConstants
-		#region Base Weight
 		public override decimal BusinessScoreBaseWeight{get { return 0.30M;}}
 		public override decimal FreeCashFlowBaseWeight{get { return 0.19M;}}
 		public override decimal AnnualTurnoverBaseWeight{get { return 0.10M;}}
@@ -68,23 +64,16 @@
 		public override decimal NetWorthBaseWeight{get { return 0.10M;}}
 		public override decimal MaritalStatusBaseWeight{get { return 0.05M;}}
 
-		#endregion
-		
-		#region No HMRC Weight
 		public override decimal FreeCashFlowNoHmrcWeight{get { return 0;}}
 
 		public override decimal AnnualTurnoverNoHmrcWeightChange{get { return 0.07M;}}
 		public override decimal BusinessScoreNoHmrcWeightChange{get { return 0.05M;}}
 		public override decimal ConsumerScoreNoHmrcWeightChange{get { return 0.03M;}}
 		public override decimal BusinessSeniorityNoHmrcWeightChange{get { return 0.04M;}}
-		#endregion
-		
-		#region Low Score Weight
+
 		public override decimal BusinessScoreLowScoreWeight{get { return 0.4125M;}}
 		public override decimal ConsumerScoreLowScoreWeight{get { return 0.1375M;}}
-		#endregion
-		
-		#region First Repayment Passed Weight
+
 		public override decimal EzbobSeniorityFirstRepaymentWeight{get { return 0.02M;}}
 		public override decimal NumOfOnTimeLoansFirstRepaymentWeight{get { return 0.0333M;}}
 		public override decimal NumOfLateRepaymentsFirstRepaymentWeight{get { return 0.0267M;}}
@@ -93,7 +82,6 @@
 		public override decimal ConsumerScoreFirstRepaymentWeightChange{get { return -0.0208M;}}
 		public override decimal BusinessScoreFirstRepaymentWeightChange{get { return -0.0625M;}}
 		public override decimal BusinessSeniorityFirstRepaymentWeightChange{get { return -0.0167M;} }
-		#endregion
-		#endregion
+
 	}
 }

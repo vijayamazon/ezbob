@@ -39,7 +39,6 @@ namespace ExperianLib.CaisFile
             CompanyPortfolioName = Utils.ToString(data, 31, 30);
             CreditCardBehaviouralSharingFlag = Utils.ToString(data, 89, 1);
 
-
         }
     }
 }

@@ -7,26 +7,15 @@
 	using JetBrains.Annotations;
 
 	public class UpdateLimitedExperianDirectors : AStrategy {
-		#region public
-
-		#region constructor
 
 		public UpdateLimitedExperianDirectors(int nCustomerID, long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
 			m_nServiceLogID = nServiceLogID;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Update limited Experian directors"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Log.Debug("Updating limited Experian directors for customer {0} from service log id {1}...", m_nCustomerID, m_nServiceLogID);
@@ -49,16 +38,8 @@
 			Log.Debug("Updating limited Experian directors for customer {0} from service log id {1} complete.", m_nCustomerID, m_nServiceLogID);
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly int m_nCustomerID;
 		private readonly long m_nServiceLogID;
-
-		#region class SaveExperianDirectors
 
 		private class SaveExperianDirectors : AStoredProcedure {
 			public SaveExperianDirectors(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -70,10 +51,6 @@
 			[UsedImplicitly]
 			public List<ExperianDirector> DirList { get; set; }
 		} // class SaveExperianDirectors
-
-		#endregion class SaveExperianDirectors
-
-		#region method UpdateLimited
 
 		private List<ExperianDirector> UpdateLimited() {
 			Log.Debug("Updating limited Experian directors for customer {0}...", m_nCustomerID);
@@ -168,8 +145,5 @@
 			return oDirectors.Count > 0 ? oDirectors : null;
 		} // UpdateLimited
 
-		#endregion method UpdateLimited
-
-		#endregion private
 	} // class UpdateLimitedExperianDirectors
 } // namespace

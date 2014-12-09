@@ -18,9 +18,6 @@ namespace Reports {
 	using Ezbob.Logger;
 
 	public class ExperianLimitedCompanyReportItem : SafeLog {
-		#region public
-
-		#region method ExtractDate
 
 		public static DateTime? ExtractDate(XmlNode oNode, string sFieldNamePrefix) {
 			XmlNode oYear = oNode.SelectSingleNode(sFieldNamePrefix + "-YYYY");
@@ -30,7 +27,7 @@ namespace Reports {
 			XmlNode oMonth = oNode.SelectSingleNode(sFieldNamePrefix + "-MM");
 			if (oMonth == null)
 				return null;
-			
+
 			XmlNode oDay = oNode.SelectSingleNode(sFieldNamePrefix + "-DD");
 			if (oDay == null)
 				return null;
@@ -42,10 +39,6 @@ namespace Reports {
 
 			return oDate;
 		} // ExtractDate
-
-		#endregion method ExtractDate
-
-		#region constructor
 
 		public ExperianLimitedCompanyReportItem(
 			int nCustomerID,
@@ -69,20 +62,12 @@ namespace Reports {
 			LoadFields(oDL99, oFieldNames);
 		} // constructor
 
-		#endregion constructor
-
-		#region properties
-
 		public int CustomerID { get; private set; }
 		public string RegNumber { get; private set; }
 		public string CompanyName { get; private set; }
 		public DateTime IncorporationDate { get; private set; }
 		public int CompanyScore { get; private set; }
 		public SortedList<DateTime, SortedDictionary<string, string>> Data { get; private set; }
-
-		#endregion properties
-
-		#region method Validate
 
 		public bool Validate() {
 			Debug("\t{0} records before validation", Data.Count);
@@ -97,10 +82,6 @@ namespace Reports {
 
 			return true;
 		} // Validate
-
-		#endregion method Validate
-
-		#region method ToOutput
 
 		public List<string[]> ToOutput(ICollection<string> oFieldNames = null) {
 			if (oFieldNames == null)
@@ -138,14 +119,6 @@ namespace Reports {
 			return oResult;
 		} // ToOutput
 
-		#endregion method ToOutput
-
-		#endregion public
-
-		#region private
-
-		#region method OutputMetaData
-
 		private void OutputMetaData(List<string> oRow) {
 			oRow.Add(RegNumber);
 			oRow.Add('"' + CompanyName + '"');
@@ -153,10 +126,6 @@ namespace Reports {
 			oRow.Add(CompanyScore < 0 ? "" : CompanyScore.ToString());
 			oRow.Add(CustomerID.ToString());
 		} // OutputMetaData
-
-		#endregion method OutputMetaData
-
-		#region method LoadFields
 
 		private void LoadFields(XmlNodeList oDL99, SortedSet<string> oFieldNames) {
 			if (oDL99 == null) {
@@ -181,10 +150,6 @@ namespace Reports {
 			} // foreach
 		} // LoadFields
 
-		#endregion method LoadFields
-
-		#region method LoadOne
-
 		private void LoadOne(XmlNode oDL99, DateTime oRecordDate, SortedSet<string> oIgnoredNames, SortedSet<string> oFieldNames) {
 			var oResult = new SortedDictionary<string, string>();
 
@@ -206,10 +171,6 @@ namespace Reports {
 			Data[oRecordDate] = oResult;
 		} // LoadOne
 
-		#endregion method LoadOne
-
-		#region method MD
-
 		private static string MD(XmlNode oNode) {
 			string s = oNode.InnerText;
 
@@ -218,10 +179,6 @@ namespace Reports {
 
 			return s;
 		} // MD
-
-		#endregion method MD
-
-		#region Relevant field names list
 
 		public static readonly string[] RelevantFieldNames = {
 			"WEEKS", "CURRENCY", "CURRENCYMULT", "COMPANYCLASS", "CONSOLIDATEDACCTS", "DORMANCYIND", "FILEDACCOUNTSTYPE", "RESTATEDIND",
@@ -247,8 +204,5 @@ namespace Reports {
 			"DISCIMPAIRCHARGES", "DISCCONTINGENTLBLTS", "DISCPOSTBALSHEET", "DISCCHARITYFLAG", "DISCCHARITYVALUE",
 		};
 
-		#endregion Relevant field names list
-
-		#endregion private
 	} // class ExperianLimitedCompanyReportItem
 } // namespace Reports

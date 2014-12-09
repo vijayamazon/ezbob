@@ -24,7 +24,6 @@ namespace PaymentServices.Calculators
             _historyRepository = historyRepository;
         }
 
-
         /// <summary>
         /// Заплатить за кредит. Платёж может быть произвольный. Early, Ontime, Late.
         /// </summary>

@@ -6,22 +6,15 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.ParsedValue;
 
-	#region class FieldNameAttribute
-
 	[System.AttributeUsage(
 		System.AttributeTargets.Property,
 		AllowMultiple = false
 	)]
 	public class FieldNameAttribute : Attribute {
-		#region constructor
 
 		public FieldNameAttribute(string sFieldName) {
 			Name = sFieldName;
 		} // constructor
-
-		#endregion constructor
-
-		#region property Name
 
 		public string Name {
 			get { return m_sName; } // get
@@ -30,40 +23,21 @@
 
 		private string m_sName;
 
-		#endregion property Name
 	} // FieldNameAttribute
 
-	#endregion class FieldNameAttribute
-
-	#region class SafeReader
-
 	public class SafeReader {
-		#region public
-
-		#region class SafeReaderFluentInterface
 
 		public class SafeReaderFluentInterface {
-			#region public
-
-			#region constructor
 
 			public SafeReaderFluentInterface(SafeReader oReader) {
 				m_oReader = oReader;
 				Reset();
 			} // constructor
 
-			#endregion constructor
-
-			#region method Reset
-
 			public SafeReaderFluentInterface Reset() {
 				m_nIdx = 0;
 				return this;
 			} // Reset
-
-			#endregion method Reset
-
-			#region method To
 
 			public SafeReaderFluentInterface To<T>(out T v) {
 				v = (T)m_oReader[m_nIdx].ToType(typeof(T));
@@ -71,29 +45,14 @@
 				return this;
 			} // To
 
-			#endregion method To
-
-			#endregion public
-
-			#region private
-
 			private readonly SafeReader m_oReader;
 			private int m_nIdx;
 
-			#endregion private
 		} // SafeReaderFluentInterface
-
-		#endregion class SafeReaderFluentInterface
-
-		#region method CreateEmpty
 
 		public static SafeReader CreateEmpty() {
 			return new SafeReader(null, null, true, false);
 		} // CreateEmpty
-
-		#endregion method CreateEmpty
-
-		#region constructor
 
 		public SafeReader(DataRow oRow) : this(oRow, null, false, false) {
 		} // constructor
@@ -101,17 +60,9 @@
 		public SafeReader(DbDataReader oReader) : this(null, oReader, false, false) {
 		} // constructor
 
-		#endregion constructor
-
-		#region property Read
-
 		public SafeReaderFluentInterface Read {
 			get { return m_oFluent.Reset(); }
 		} // Read
-
-		#endregion property Read
-
-		#region indexer
 
 		public ParsedValue this[string index, object oDefault = null] {
 			get {
@@ -124,10 +75,6 @@
 				return new ParsedValue(ColumnOrDefault(index, oDefault), oDefault);
 			} // get
 		} // indexer
-
-		#endregion indexer
-
-		#region method ColumnOrDefault
 
 		public object ColumnOrDefault(string sIdx, object oDefault = null) {
 			if (!ReferenceEquals(m_oRow, null))
@@ -172,10 +119,6 @@
 
 			throw new NullReferenceException("Neither row nor DB reader specified.");
 		} // ColumnOrDefault
-
-		#endregion method ColumnOrDefault
-
-		#region method ContainsField
 
 		public bool ContainsField(string sIdx) {
 			if (!ReferenceEquals(m_oRow, null))
@@ -228,10 +171,6 @@
 			return false;
 		} // ContainsField
 
-		#endregion method ContainsField
-
-		#region method GetName
-
 		public string GetName(int nIdx) {
 			if (!ContainsField(nIdx))
 				return null;
@@ -248,10 +187,6 @@
 			return null;
 		} // GetName
 
-		#endregion method GetName
-
-		#region method Fill
-
 		public T Fill<T>() where T: new() {
 			var oInstance = new T();
 			Fill(oInstance);
@@ -261,10 +196,6 @@
 		public void Fill(object oInstance) {
 			oInstance.Traverse(FillProperty);
 		} // Fill
-
-		#endregion method Fill
-
-		#region property Count
 
 		public int Count {
 			get {
@@ -284,10 +215,6 @@
 			} // get
 		} // Count
 
-		#endregion property Count
-
-		#region method ToCache
-
 		public SafeReader ToCache() {
 			var sr = new SafeReader(null, null, false, true);
 
@@ -300,10 +227,6 @@
 			return sr;
 		} // ToCache
 
-		#endregion method ToCache
-
-		#region property IsEmpty
-
 		public bool IsEmpty {
 			get { return
 				ReferenceEquals(m_oReader, null) &&
@@ -313,14 +236,6 @@
 			}
 		} // IsEmpty
 
-		#endregion property IsEmpty
-
-		#endregion public
-
-		#region private
-
-		#region constructor
-
 		private SafeReader(DataRow oRow, DbDataReader oReader, bool bAllowNoSource, bool bAllowCache) {
 			m_oReader = oReader;
 			m_oRow = oRow;
@@ -328,10 +243,6 @@
 			m_bAllowNoSource = bAllowNoSource;
 			m_oCache = bAllowCache ? new ParsedValueCache() : null;
 		} // constructor
-
-		#endregion constructor
-
-		#region method FillProperty
 
 		private void FillProperty(object oInstance, PropertyInfo oPropertyInfo) {
 			string sFieldName = oPropertyInfo.Name;
@@ -348,20 +259,12 @@
 			oPropertyInfo.SetValue(oInstance, this[sFieldName].ToType(oPropertyInfo.PropertyType));
 		} // FillProperty
 
-		#endregion method FillProperty
-
-		#region properties
-
 		private readonly DataRow m_oRow;
 		private readonly DbDataReader m_oReader;
 		private readonly SafeReaderFluentInterface m_oFluent;
 		private readonly bool m_bAllowNoSource;
 		private readonly ParsedValueCache m_oCache;
 
-		#endregion properties
-
-		#endregion private
 	} // class SafeReader
 
-	#endregion class SafeReader
 } // namespace

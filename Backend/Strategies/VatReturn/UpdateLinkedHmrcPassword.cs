@@ -10,9 +10,6 @@
 	using Misc;
 
 	public class UpdateLinkedHmrcPassword : AStrategy {
-		#region public
-
-		#region constructor
 
 		public UpdateLinkedHmrcPassword(
 			string sCustomerID,
@@ -28,38 +25,18 @@
 			m_sHash = sHash;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "UpdateLinkedHmrcPassword"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			UpdatePassword(ValidateInput());
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region protected
-
-		#region structure AccountData
-
 		protected class AccountData {
 			public int CustomerMarketplaceID;
 			public AccountModel SecInfo;
 		} // AccountData
-
-		#endregion structure AccountData
-
-		#region method ValidateInput
 
 		protected AccountData ValidateInput() {
 			GetCustomerID();
@@ -85,7 +62,7 @@
 			LoadCustomerMarketplaceSecurityData.ResultRow hmrc = oReader.Result[0];
 
 			AccountModel oSecInfo;
-			
+
 			try {
 				oSecInfo = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(hmrc.SecurityData));
 			}
@@ -106,10 +83,6 @@
 			};
 		} // ValidateInput
 
-		#endregion method ValidateInput
-
-		#region method UpdatePassword
-
 		protected void UpdatePassword(AccountData data) {
 			if (data == null)
 				return;
@@ -124,14 +97,8 @@
 			oSaver.ExecuteNonQuery();
 		} // UpdatePassword
 
-		#endregion method UpdatePassword
-
 		protected int CustomerID { get; set; }
 		protected string Password { get; set; }
-
-		#endregion protected
-
-		#region private
 
 		private string m_sDisplayName;
 
@@ -139,8 +106,6 @@
 		private readonly string m_sRawDisplayName;
 		private readonly string m_sRawPassword;
 		private readonly string m_sHash;
-
-		#region method GetCustomerID
 
 		private void GetCustomerID() {
 			try {
@@ -151,10 +116,6 @@
 			}
 		} // GetCustomerID
 
-		#endregion method GetCustomerID
-
-		#region method GetDisplayName
-
 		private void GetDisplayName() {
 			try {
 				m_sDisplayName = Encrypted.Decrypt(m_sRawDisplayName);
@@ -163,10 +124,6 @@
 				throw new StrategyWarning(this, "Failed to get display name from " + m_sRawDisplayName, e);
 			}
 		} // GetDisplayName
-
-		#endregion method GetDisplayName
-
-		#region method GetPassword
 
 		private void GetPassword() {
 			try {
@@ -177,20 +134,12 @@
 			}
 		} // GetPassword
 
-		#endregion method GetPassword
-
-		#region method ValidateHash
-
 		private void ValidateHash() {
 			string sHash = SecurityUtils.Hash(CustomerID + Password + m_sDisplayName);
 
 			if (sHash != m_sHash)
 				throw new StrategyAlert(this, "Failed to validate hash: " + sHash + " != " + m_sHash);
 		} // ValidateHash
-
-		#endregion method ValidateHash
-
-		#region class UpdateMarketplaceSecurityData
 
 		private class UpdateMarketplaceSecurityData : AStoredProcedure {
 			public UpdateMarketplaceSecurityData(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -206,8 +155,5 @@
 			public byte[] SecurityData { get; set; }
 		} // class UpdateMarketplaceSecurityData
 
-		#endregion class UpdateMarketplaceSecurityData
-
-		#endregion private
 	} // class UpdateLinkedHmrcPassword
 } // namespace

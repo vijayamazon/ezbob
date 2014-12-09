@@ -47,7 +47,7 @@
 				{
 					return GetAverageSoldPrices(postcode.Substring(0, 3), true);
 				}
-				
+
 				int numerOfSales1Year = 0;
 				int.TryParse(x.SelectSingleNode("/response/number_of_sales_1year").InnerText, out numerOfSales1Year);
 				int numerOfSales3Year = 0;
@@ -78,10 +78,8 @@
 			{
 				throw new Exception("Couldn't parse the response");
 			}
-			
-		}
 
-		#region not in use
+		}
 
 		/// <summary>
 		/// Description: Retrieve the average sale price for a particular sub-area type within a particular area.
@@ -129,8 +127,6 @@
 
 			throw new Exception(string.Format("out code {0} not found", outcode));
 		}
-
-		#endregion
 
 		/// <summary>
 		/// Description: Generate a graph of values for an outcode over the previous 3 months and return the URL to the generated image. 

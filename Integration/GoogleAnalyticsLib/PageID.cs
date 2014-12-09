@@ -1,6 +1,5 @@
 ﻿namespace GoogleAnalyticsLib
 {
-	#region enum PageID
 
 	public enum PageID {
 		Other,
@@ -10,5 +9,4 @@
 		GetCash,
 	} // PageID
 
-	#endregion enum PageID
 } // namespace EzAnalyticsConsoleClient

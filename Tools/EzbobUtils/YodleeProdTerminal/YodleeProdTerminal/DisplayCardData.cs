@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using com.yodlee.sampleapps.datatypes;
 
@@ -10,7 +10,7 @@ namespace com.yodlee.sampleapps
 	public class DisplayCardData : ApplicationSuper
 	{
 		DataServiceService dataService;
-		
+
 		public DisplayCardData()
 		{
 			dataService = new DataServiceService();
@@ -32,7 +32,7 @@ namespace com.yodlee.sampleapps
 			ContainerCriteria cc = new ContainerCriteria();
 			cc.dataExtent = dataExtent;
 			cc.containerType = ContainerTypes.CREDIT_CARD;
-			
+
 			// Create a list of Container Criteria
 			object[] list = {cc};
 
@@ -120,7 +120,7 @@ namespace com.yodlee.sampleapps
 						System.Console.WriteLine("\t\tavailableCredit : " + cardData.availableCredit.amount );
 						System.Console.WriteLine("\t\ttotalCreditLine : " + cardData.totalCreditLine.amount );
 						System.Console.WriteLine("\t\tlastUpdated: " + UtcToDateTime(cardData.lastUpdated.Value) );
-						
+
 						// CardStatementData
 						object[] cardStatements = cardData.cardStatements;
 						if (cardStatements == null || cardStatements.Length == 0) 
@@ -163,7 +163,6 @@ namespace com.yodlee.sampleapps
 						}
 						// End CardStatementData
 
-
 						// CardTransactionData
 						object[] cardTransactions = cardData.cardTransactions;
 						if (cardTransactions == null || cardTransactions.Length == 0) 
@@ -185,12 +184,11 @@ namespace com.yodlee.sampleapps
 							}
 						}
 						// End CardTransactionData
-					
+
 					}
 				}
 				// End CardData
 			}
-			
 
 			/*// Get AccountHistory
             object[] acctHistories = itemData.accountHistory;
@@ -236,6 +234,5 @@ namespace com.yodlee.sampleapps
 			// AccountHistory*/
 		}
 	}
-
 
 }

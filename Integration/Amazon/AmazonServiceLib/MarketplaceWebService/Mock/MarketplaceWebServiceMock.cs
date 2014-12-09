@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -36,11 +36,9 @@ namespace MarketplaceWebService.Mock
     /// Note, current Mock Service implementation does not valiadate requests
     /// </remarks>
     public  class MarketplaceWebServiceMock : IMarketplaceWebService {
-    
 
         // Public API ------------------------------------------------------------//
-    
-        
+
         /// <summary>
         /// Get Report 
         /// </summary>
@@ -56,7 +54,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportResponse>("GetReportResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report Schedule Count 
         /// </summary>
@@ -70,7 +68,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportScheduleCountResponse>("GetReportScheduleCountResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report Request List By Next Token 
         /// </summary>
@@ -84,7 +82,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportRequestListByNextTokenResponse>("GetReportRequestListByNextTokenResponse.xml");
         }
-        
+
         /// <summary>
         /// Update Report Acknowledgements 
         /// </summary>
@@ -98,7 +96,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<UpdateReportAcknowledgementsResponse>("UpdateReportAcknowledgementsResponse.xml");
         }
-        
+
         /// <summary>
         /// Submit Feed 
         /// </summary>
@@ -116,7 +114,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<SubmitFeedResponse>("SubmitFeedResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report Count 
         /// </summary>
@@ -132,7 +130,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportCountResponse>("GetReportCountResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Feed Submission List By Next Token 
         /// </summary>
@@ -146,7 +144,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetFeedSubmissionListByNextTokenResponse>("GetFeedSubmissionListByNextTokenResponse.xml");
         }
-        
+
         /// <summary>
         /// Cancel Feed Submissions 
         /// </summary>
@@ -161,7 +159,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<CancelFeedSubmissionsResponse>("CancelFeedSubmissionsResponse.xml");
         }
-        
+
         /// <summary>
         /// Request Report 
         /// </summary>
@@ -175,7 +173,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<RequestReportResponse>("RequestReportResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Feed Submission Count 
         /// </summary>
@@ -189,7 +187,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetFeedSubmissionCountResponse>("GetFeedSubmissionCountResponse.xml");
         }
-        
+
         /// <summary>
         /// Cancel Report Requests 
         /// </summary>
@@ -204,7 +202,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<CancelReportRequestsResponse>("CancelReportRequestsResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report List 
         /// </summary>
@@ -219,7 +217,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportListResponse>("GetReportListResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Feed Submission Result 
         /// </summary>
@@ -233,7 +231,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetFeedSubmissionResultResponse>("GetFeedSubmissionResultResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Feed Submission List 
         /// </summary>
@@ -247,7 +245,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetFeedSubmissionListResponse>("GetFeedSubmissionListResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report Request List 
         /// </summary>
@@ -261,7 +259,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportRequestListResponse>("GetReportRequestListResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report Schedule List By Next Token 
         /// </summary>
@@ -275,7 +273,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportScheduleListByNextTokenResponse>("GetReportScheduleListByNextTokenResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report List By Next Token 
         /// </summary>
@@ -289,7 +287,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportListByNextTokenResponse>("GetReportListByNextTokenResponse.xml");
         }
-        
+
         /// <summary>
         /// Manage Report Schedule 
         /// </summary>
@@ -304,7 +302,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<ManageReportScheduleResponse>("ManageReportScheduleResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report Request Count 
         /// </summary>
@@ -319,7 +317,7 @@ namespace MarketplaceWebService.Mock
         {
             return Invoke<GetReportRequestCountResponse>("GetReportRequestCountResponse.xml");
         }
-        
+
         /// <summary>
         /// Get Report Schedule List 
         /// </summary>

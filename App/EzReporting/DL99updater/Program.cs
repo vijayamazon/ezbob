@@ -7,7 +7,6 @@
 	using Reports;
 
 	class Program {
-		#region method Main
 
 		static void Main(string[] args) {
 			var log = new ConsoleLog(new LegacyLog());
@@ -18,10 +17,6 @@
 			RunExperianLimitedCompanyData(oDB, log);
 			RunLoanDateScore(oDB, log);
 		} // Main
-
-		#endregion method Main
-
-		#region method RunLoanDateScore
 
 		private static void RunLoanDateScore(AConnection oDB, ASafeLog log) {
 			var rpt = new LoanDateScore(oDB, log) { VerboseLogging = true };
@@ -35,10 +30,6 @@
 			log.Debug("Report end");
 		} // RunLoanDateScore
 
-		#endregion method RunLoanDateScore
-
-		#region method RunExperianLimitedCompanyData
-
 		private static void RunExperianLimitedCompanyData(AConnection oDB, ASafeLog log) {
 			var rpt = new ExperianLimitedCompanyData(oDB, log) { VerboseLogging = true };
 
@@ -51,6 +42,5 @@
 			log.Debug("Report end");
 		} // RunExperianLimitedCompanyData
 
-		#endregion method RunExperianLimitedCompanyData
 	} // class Program
 } // namespace

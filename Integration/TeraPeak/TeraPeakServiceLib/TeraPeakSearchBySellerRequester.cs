@@ -1,4 +1,4 @@
-namespace EzBob.TeraPeakServiceLib
+﻿namespace EzBob.TeraPeakServiceLib
 {
 	using System;
 	using System.Collections.Generic;
@@ -50,7 +50,7 @@ namespace EzBob.TeraPeakServiceLib
 			var now = DateTime.UtcNow;
 			var ranges = requestInfo.Ranges;
 			var info = requestInfo.SellerInfo;
-			
+
 			var resultSellerInfo = new ResultSellerInfo
 			{				
 				ReturnDurationData = true,
@@ -82,8 +82,6 @@ namespace EzBob.TeraPeakServiceLib
 			                                                 actionName)
                                                              );
 
-				
-				
 				var isErrorNoData = rez.HasError && rez.Errors.Any( e => e.Error.Id == 1003 );
 
 				if ( rez.HasError && !isErrorNoData )
@@ -93,7 +91,7 @@ namespace EzBob.TeraPeakServiceLib
 					WriteError( info, datesRange, error );
 					break;
 				}
-				
+
 				data.Add(ParseResultData(datesRange, rez));
 
 				queue.Remove(datesRange);

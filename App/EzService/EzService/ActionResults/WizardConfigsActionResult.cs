@@ -1,8 +1,6 @@
-namespace EzService
+﻿namespace EzService
 {
 	using System.Runtime.Serialization;
-
-	#region class WizardConfigsActionResult
 
 	[DataContract]
 	public class WizardConfigsActionResult : ActionResult
@@ -14,5 +12,4 @@ namespace EzService
 		public int NumberOfMobileCodeAttempts { get; set; }
 	} // class WizardConfigsActionResult
 
-	#endregion class WizardConfigsActionResult
 } // namespace EzService

@@ -42,10 +42,9 @@ namespace EzBob.Tests.LoanCreatorTests
                              LoanType = new StandardLoanType()
                          };
 
-
             _customer.CashRequests.Add(cr);
             _customer.BankAccount = new BankAccount(){AccountNumber = "111111", SortCode = "222222"};
-			
+
             var loan = _lc.CreateLoan(_customer, 10000, null, new DateTime(2013, 10, 21));
 
             Assert.That(loan.Schedule.Count, Is.EqualTo(3));
@@ -61,7 +60,6 @@ namespace EzBob.Tests.LoanCreatorTests
                              RepaymentPeriod = 6,
                              LoanType = new StandardLoanType()
                          };
-
 
             var loan = _loanBuilder.CreateLoan(cr, 3000, DateTime.UtcNow);
             var model = _loanDetailsModelBuilder.BuildModel(loan);
@@ -87,7 +85,6 @@ namespace EzBob.Tests.LoanCreatorTests
                              RepaymentPeriod = 6,
                              LoanType = new StandardLoanType()
                          };
-
 
             var loan = _loanBuilder.CreateLoan(cr, 3000, new DateTime(2013, 10, 11));
             var model = _loanDetailsModelBuilder.BuildModel(loan);

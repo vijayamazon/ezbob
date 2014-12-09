@@ -18,7 +18,6 @@
         private ILoanTransactionRepository _transactions;
         private ILoanHistoryRepository _historyRepository;
 
-
         [TestFixtureSetUp]
         public void FixtureSetUp()
         {

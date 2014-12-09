@@ -5,8 +5,6 @@
 	using Ezbob.Logger;
 	using Ezbob.Database;
 
-	#region class UiActionEventModel
-
 	public class UiActionEventModel {
 		public const string NoControl = "no HTML control";
 
@@ -17,8 +15,6 @@
 		public string eventTime { get; set; }
 		public string eventID { get; set; }
 		public string eventArgs { get; set; }
-
-		#region method Save
 
 		public bool Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie) {
 			long nRefNum = 0;
@@ -64,10 +60,6 @@
 			return false;
 		} // Save
 
-		#endregion method Save
-
-		#region method ToString
-
 		public override string ToString() {
 			var os = new StringBuilder();
 
@@ -82,10 +74,7 @@
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(UiActionEventModel));
 	} // class UiActionEventModel
 
-	#endregion class UiActionEventModel
 } // namespace EZBob.DatabaseLib

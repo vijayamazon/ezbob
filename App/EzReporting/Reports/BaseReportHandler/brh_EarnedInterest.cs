@@ -10,9 +10,6 @@
 	using OfficeOpenXml;
 
 	public partial class BaseReportHandler : SafeLog {
-		#region public
-
-		#region method BuildEarnedInterestReport
 
 		public ATag BuildEarnedInterestReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, false, today, tomorrow);
@@ -22,10 +19,6 @@
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildEarnedInterestReport
 
-		#endregion method BuildEarnedInterestReport
-
-		#region method BuildEarnedInterestAllCustomersReport
-
 		public ATag BuildEarnedInterestAllCustomersReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, true, today, tomorrow);
 
@@ -34,33 +27,17 @@
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildEarnedInterestAllCustomersReport
 
-		#endregion method BuildEarnedInterestAllCustomersReport
-
-		#region method BuildEarnedInterestXls
-
 		public ExcelPackage BuildEarnedInterestXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, false, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
 		} // BuildEarnedInterestXls
 
-		#endregion method BuildEarnedInterestXls
-
-		#region method BuildEarnedInterestAllCustomersXls
-
 		public ExcelPackage BuildEarnedInterestAllCustomersXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, true, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
 		} // BuildEarnedInterestXls
-
-		#endregion method BuildEarnedInterestAllCustomersXls
-
-		#endregion public
-
-		#region private
-
-		#region method CreateEarnedInterestReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateEarnedInterestReport(Report report, bool bAccountingMode, DateTime today, DateTime tomorrow) {
 			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ForPeriod, bAccountingMode, today, tomorrow, this);
@@ -113,14 +90,7 @@
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
 		} // CreateEarnedInterestReport
 
-		#endregion method CreateEarnedInterestReport
-
-		#region class EarnedInterestRow
-
 		private class EarnedInterestRow {
-			#region public
-
-			#region fields
 
 			public DateTime IssueDate;
 			public int ClientID;
@@ -137,19 +107,11 @@
 			private readonly CustomerStatus LastInPeriodStatus;
 			private readonly CustomerStatus CurrentStatus;
 
-			#endregion fields
-
-			#region method Compare
-
 			public static int Compare(EarnedInterestRow a, EarnedInterestRow b) {
 				int c = DateTime.Compare(a.IssueDate, b.IssueDate);
 
 				return (c != 0) ? c : string.CompareOrdinal(a.ClientName, b.ClientName);
 			} // Compare
-
-			#endregion method Compare
-
-			#region constructor
 
 			public EarnedInterestRow(bool bBIsTotal, CustomerStatus nLastInPeriodStatus, CustomerStatus nCurrentStatus) {
 				m_bIsTotal = bBIsTotal;
@@ -171,10 +133,6 @@
 				Rollover = 0;
 			} // constructor
 
-			#endregion constructor
-
-			#region method Update
-
 			public void Update(EarnedInterestRow v) {
 				if (m_oClientCount.ContainsKey(v.ClientID))
 					m_oClientCount[v.ClientID]++;
@@ -195,10 +153,6 @@
 				Rollover        += v.Rollover;
 			} // Update
 
-			#endregion method Update
-
-			#region method ToRow
-
 			public void ToRow(DataTable tbl) {
 				if (m_bIsTotal) {
 					ClientID = m_oClientCount.Count;
@@ -214,10 +168,6 @@
 					SetupFees, OtherFees, Rollover, SetupFees + OtherFees + Rollover
 				);
 			} // ToRow
-
-			#endregion method ToRow
-
-			#region method ToTable
 
 			public DataTable ToTable() {
 				var oOutput = new DataTable();
@@ -244,23 +194,13 @@
 				return oOutput;
 			} // ToTable
 
-			#endregion method ToTable
-
-			#endregion public
-
-			#region private
-
 			private readonly SortedDictionary<int, int> m_oClientCount;
 			private readonly SortedDictionary<int, int> m_oLoanCount;
 			private readonly bool m_bIsTotal;
 
 			private static readonly DateTime ms_oLongAgo = new DateTime(1991, 8, 24, 0, 0, 0, DateTimeKind.Utc);
 
-			#endregion private
 		} // class EarnedInterestRow
 
-		#endregion class EarnedInterestRow
-
-		#endregion private
 	} // class BaseReportHandler
 } // namespace Reports

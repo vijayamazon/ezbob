@@ -6,12 +6,8 @@ using Ezbob.Logger;
 using Ezbob.Utils;
 
 namespace Reports {
-	#region class UiReport
 
 	public class UiReport : SafeLog {
-		#region public
-
-		#region constructor
 
 		public UiReport(AConnection oDB, DateTime oDateStart, DateTime oDateEnd, ASafeLog log) : base(log) {
 			VerboseLogging = false;
@@ -32,10 +28,6 @@ namespace Reports {
 			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
 				m_oControlGroups[nItemType] = new SortedDictionary<int, string>();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Run
 
 		public List<UiReportItem> Run() {
 			m_oDB.ForEachRow(
@@ -65,19 +57,7 @@ namespace Reports {
 			return oOut;
 		} // Run
 
-		#endregion method Run
-
-		#region property VerboseLogging
-
 		public bool VerboseLogging { get; set; }
-
-		#endregion property VerboseLogging
-
-		#endregion public
-
-		#region private
-
-		#region method HandleRow
 
 		private ActionResult HandleRow(DbDataReader oRow, bool bRowSetStart) {
 			if (bRowSetStart) {
@@ -148,10 +128,6 @@ namespace Reports {
 			return ActionResult.Continue;
 		} // HandleRow
 
-		#endregion method HandleRow
-
-		#region method SaveUiAction
-
 		private void SaveUiAction(DbDataReader oRow) {
 			int nID = Convert.ToInt32(oRow["UiActionID"]);
 			string sName = Convert.ToString(oRow["UiActionName"]);
@@ -161,10 +137,6 @@ namespace Reports {
 			if (VerboseLogging)
 				Debug("UiReport: UiAction[{0}] = {1}", nID, sName);
 		} // SaveUiAction
-
-		#endregion method SaveUiAction
-
-		#region method SaveUiControl
 
 		private void SaveUiControl(DbDataReader oRow) {
 			int nID = Convert.ToInt32(oRow["UiControlID"]);
@@ -177,10 +149,6 @@ namespace Reports {
 				Debug("UiReport: UiControl[{0}] = {1}", nID, sName);
 		} // SaveUiControl
 
-		#endregion method SaveUiControl
-
-		#region method SaveCustomer
-
 		private void SaveCustomer(DbDataReader oRow) {
 			var oCustomer = new CustomerInfo(oRow, m_oAddresses, m_oDirectors, m_oAccounts);
 
@@ -189,10 +157,6 @@ namespace Reports {
 			if (VerboseLogging)
 				Debug("UiReport: customer {0}", oCustomer);
 		} // SaveCustomer
-
-		#endregion method SaveCustomer
-
-		#region method SaveAddress
 
 		private void SaveAddress(DbDataReader oRow) {
 			int nCustomerID = Convert.ToInt32(oRow["CustomerID"]);
@@ -216,10 +180,6 @@ namespace Reports {
 				Debug("UiReport: {1} address {0}", m_oAddresses[nCustomerID], sLabel);
 		} // SaveAddress
 
-		#endregion method SaveAddress
-
-		#region method SaveDirector
-
 		private void SaveDirector(DbDataReader oRow) {
 			int nID = Convert.ToInt32(oRow["CustomerID"]);
 			int nCount = Convert.ToInt32(oRow["DirectorCount"]);
@@ -230,10 +190,6 @@ namespace Reports {
 				Debug("UiReport: director[{0}] = {1}", nID, nCount);
 		} // SaveDirector
 
-		#endregion method SaveDirector
-
-		#region method SaveLinkedAccounts
-
 		private void SaveLinkedAccounts(DbDataReader oRow) {
 			int nID = Convert.ToInt32(oRow["CustomerID"]);
 			int nCount = Convert.ToInt32(oRow["AccountCount"]);
@@ -243,10 +199,6 @@ namespace Reports {
 			if (VerboseLogging)
 				Debug("UiReport: linked accounts[{0}] = {1}", nID, nCount);
 		} // SaveLinkedAccounts
-
-		#endregion method SaveDirector
-
-		#region method ProcessEvent
 
 		private void ProcessEvent(DbDataReader oRow) {
 			var oEvent = new UiEvent(oRow);
@@ -261,10 +213,6 @@ namespace Reports {
 
 			m_oProgress++;
 		} // ProcessEvent
-
-		#endregion method ProcessEvent
-
-		#region method AddControlToItemGroup
 
 		private void AddControlToItemGroup(int nControlID, string sControlName, int nGroupID) {
 			if (nGroupID == 3) {
@@ -346,10 +294,6 @@ namespace Reports {
 			} // switch
 		} // AddControlToItemGroup
 
-		#endregion method AddControlToItemGroup
-
-		#region properties
-
 		private ProgressCounter m_oProgress;
 
 		private readonly SortedDictionary<int, string> m_oUiActions;
@@ -367,10 +311,6 @@ namespace Reports {
 
 		private readonly SortedDictionary<UiItemGroups, SortedDictionary<int, string>> m_oControlGroups;
 
-		#endregion properties
-
-		#endregion private
 	} // class UiReport
 
-	#endregion class UiReport
 } // namespace Reports

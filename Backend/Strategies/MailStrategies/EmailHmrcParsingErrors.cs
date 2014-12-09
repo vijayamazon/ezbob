@@ -6,9 +6,6 @@
 	using Ezbob.Logger;
 
 	public class EmailHmrcParsingErrors : AMailStrategyBase {
-		#region public
-
-		#region constructor
 
 		public EmailHmrcParsingErrors(
 			int nCustomerID,
@@ -21,19 +18,9 @@
 			m_oErrorsToEmail = oErrorsToEmail;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "EmailHmrcParsingErrors"; }
 		} // Name
-
-		#endregion property Name
-
-		#endregion public
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			StringBuilder os = new StringBuilder();
@@ -57,13 +44,8 @@
 			TemplateName = "Email HMRC parsing errors";
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
-
-		#region private
-
 		private readonly int m_nCustomerMarketplaceID;
 		private readonly SortedDictionary<string, string> m_oErrorsToEmail;
 
-		#endregion private
 	} // class EmailHmrcParsingErrors
 } // namespace

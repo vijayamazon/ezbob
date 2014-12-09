@@ -1,7 +1,5 @@
-namespace EZBob.DatabaseLib.Model.Database {
+﻿namespace EZBob.DatabaseLib.Model.Database {
 	using FluentNHibernate.Mapping;
-
-	#region class LandRegistryOwner
 
 	public class LandRegistryOwner
 	{
@@ -13,9 +11,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string CompanyRegistrationNumber { get; set; }
 	} // class LandRegistryOwner
 
-	#endregion class LandRegistryOwner
-
-	#region LandRegistryOwnerMap
 	public class LandRegistryOwnerMap : ClassMap<LandRegistryOwner>
 	{
 		public LandRegistryOwnerMap()
@@ -31,7 +26,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.CompanyRegistrationNumber).Length(100);
 		} // constructor
 	} // class LandRegistryOwnerMap
-	#endregion
 
 } // namespace EZBob.DatabaseLib.Model.Database
 
@@ -43,6 +37,5 @@ namespace EZBob.DatabaseLib.Repository {
 	public class LandRegistryOwnerRepository : NHibernateRepositoryBase<LandRegistryOwner> {
 		public LandRegistryOwnerRepository(ISession session) : base(session) { } // constructor
 
-		
 	} // class LandRegistryOwnerRepository
 } // namespace EZBob.DatabaseLib.Repository

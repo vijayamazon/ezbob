@@ -123,7 +123,6 @@
 			return model;
 		}
 
-
 		public DashboardModel BuildFakeModel() {
 			LastChanged = DateTime.UtcNow;
 			var model = new DashboardModel {

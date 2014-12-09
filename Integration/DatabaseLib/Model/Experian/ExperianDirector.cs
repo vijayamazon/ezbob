@@ -1,5 +1,4 @@
-#region namespace EZBob.DatabaseLib.Model.Database
-
+﻿
 namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 
@@ -26,18 +25,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 	} // class ExperianDirector
 } // namespace
 
-#endregion namespace EZBob.DatabaseLib.Model.Database
-
-#region namespace EZBob.DatabaseLib.Model.Database.Mapping
-
 namespace EZBob.DatabaseLib.Model.Database.Mapping {
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using FluentNHibernate.Mapping;
 	using NHibernate;
-
-	#region class ExperianDirectorModelMap
 
 	public class ExperianDirectorModelMap : ClassMap<ExperianDirector> {
 		public ExperianDirectorModelMap() {
@@ -68,10 +61,6 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 		} // constructor
 	} // class ExperianDirectorModelMap
 
-	#endregion class ExperianDirectorModelMap
-
-	#region class ExperianDirectorRepository
-
 	public class ExperianDirectorRepository : NHibernateRepositoryBase<ExperianDirector> {
 		public ExperianDirectorRepository(ISession session) : base(session) {
 		} // constructor
@@ -86,7 +75,5 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 		}
 	} // class ExperianDirectorRepository
 
-	#endregion class ExperianDirectorRepository
 } // namespace
 
-#endregion namespace EZBob.DatabaseLib.Model.Database.Mapping

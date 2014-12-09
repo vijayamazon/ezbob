@@ -4,7 +4,6 @@
 
 	[DataContract]
 	public class Coin : IEquatable<Coin> {
-		#region constructor
 
 		public Coin()
 			: this(0, "GBP") {
@@ -14,8 +13,6 @@
 			Amount = nAmount;
 			CurrencyCode = sCurrency;
 		} // constructor
-
-		#endregion constructor
 
 		[DataMember]
 		public decimal Amount { get; set; }
@@ -53,12 +50,9 @@
 			return Amount.GetHashCode();
 		} // GetHashCode
 
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format("{0} {1}", Amount, CurrencyCode);
 		} // ToString
 
-		#endregion method ToString
 	} // class Coin
 } // namespace

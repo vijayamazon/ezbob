@@ -7,7 +7,6 @@
 	{
 		private readonly string underwriterName;
 		private readonly int amount;
-		#region constructor
 
 		public RecordManualPacnetDeposit(string underwriterName, int amount, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
@@ -16,17 +15,9 @@
 			this.amount = amount;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Record Manual Pacnet Deposit"; }
 		} // Name
-
-		#endregion property Name
-		
-		#region property Execute
 
 		public override void Execute() {
 			DB.ExecuteNonQuery("RecordManualPacnetDeposit",
@@ -39,6 +30,5 @@
 			GetAvailableFunds.LoadFromDB();
 		} // Execute
 
-		#endregion property Execute
 	} // class RecordManualPacnetDeposit
 } // namespace

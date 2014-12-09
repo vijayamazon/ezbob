@@ -6,7 +6,6 @@
 	using Ezbob.Logger;
 
 	public class ServiceClient {
-		#region property ServiceClient
 
 		public EzServiceClient Instance {
 			get {
@@ -55,8 +54,6 @@
 
 		private static volatile EzServiceClient ms_oServiceClient;
 		private static readonly object ms_oInstanceLock = new Object();
-
-		#endregion property ServiceClient
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(ServiceClient));
 	} // class ServiceClient

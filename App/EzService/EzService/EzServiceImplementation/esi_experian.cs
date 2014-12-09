@@ -5,39 +5,22 @@
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
-		#region method BackfillCustomerAnalyticsCompany
 
 		public ActionMetaData BackfillCustomerAnalyticsCompany() {
 			return Execute<BackfillCustomerAnalyticsCompany>(null, null);
 		} // BackfillCustomerAnalyticsCompany
 
-		#endregion method BackfillCustomerAnalyticsCompany
-
-		#region method BackfillExperianDirectors
-
 		public ActionMetaData BackfillExperianDirectors(int? nCustomerID) {
 			return Execute<BackfillExperianDirectors>(nCustomerID, null, nCustomerID);
 		} // BackfillExperianDirectors
 
-		#endregion method BackfillExperianDirectors
-
-		#region method ExperianCompanyCheck
-
 		public ActionMetaData ExperianCompanyCheck(int userId, int nCustomerID, bool bForceCheck) {
 			return Execute<ExperianCompanyCheck>(nCustomerID, userId, nCustomerID, bForceCheck);
 		} // ExperianCompanyCheck
-		
-		#endregion method ExperianCompanyCheck
-
-		#region method ExperianConsumerCheck
 
 		public ActionMetaData ExperianConsumerCheck(int userId, int nCustomerID, int? nDirectorID, bool bForceCheck) {
 			return Execute<ExperianConsumerCheck>(nCustomerID, userId, nCustomerID, nDirectorID, bForceCheck);
 		} // ExperianConsumerCheck
-
-		#endregion method ExperianConsumerCheck
-		
-		#region method GetExperianCompanyCacheDate
 
 		public DateTimeActionResult GetExperianCompanyCacheDate(int userId, string refNumber)
 		{
@@ -59,25 +42,14 @@
 				Value = cacheDate
 			};
 		}
-		#endregion method GetExperianCompanyCacheDate
-
-		#region method UpdateExperianDirectorDetails
 
 		public ActionMetaData UpdateExperianDirectorDetails(int? nCustomerID, int? nUnderwriterID, Esigner oDetails) {
 			return ExecuteSync<UpdateExperianDirectorDetails>(nCustomerID, nUnderwriterID, oDetails);
 		} // UpdateExperianDirectorDetails
 
-		#endregion method UpdateExperianDirectorDetails
-
-		#region method DeleteExperianDirector
-
 		public ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID) {
 			return ExecuteSync<DeleteExperianDirector>(null, nUnderwriterID, nDirectorID);
 		} // DeleteExperianDirector
-
-		#endregion method DeleteExperianDirector
-
-		#region method ParseExperianLtd
 
 		public ExperianLtdActionResult ParseExperianLtd(long nServiceLogID) {
 			ParseExperianLtd oInstance;
@@ -90,17 +62,9 @@
 			};
 		} // ParseExperianLtd
 
-		#endregion method ParseExperianLtd
-
-		#region method BackfillExperianLtd
-
 		public ActionMetaData BackfillExperianLtd() {
 			return Execute<BackfillExperianLtd>(null, null);
 		} // BackfillExperianLtd
-
-		#endregion method BackfillExperianLtd
-
-		#region method LoadExperianLtd
 
 		public ExperianLtdActionResult LoadExperianLtd(long nServiceLogID) {
 			LoadExperianLtd oInstance;
@@ -114,10 +78,6 @@
 			};
 		} // LoadExperianLtd
 
-		#endregion method LoadExperianLtd
-
-		#region method CheckLtdCompanyCache
-
 		public ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum) {
 			LoadExperianLtd oInstance;
 
@@ -129,10 +89,6 @@
 				History = oInstance.History
 			};
 		} // CheckLtdCompanyCache
-
-		#endregion method CheckLtdCompanyCache
-
-		#region method ParseExperianConsumer
 
 		public ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId)
 		{
@@ -148,10 +104,6 @@
 
 		}
 
-		#endregion method ParseExperianConsumer
-
-		#region method LoadExperianConsumer
-
 		public ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId)
 		{
 			LoadExperianConsumerData oInstance;
@@ -165,16 +117,10 @@
 			};
 		}
 
-		#endregion method LoadExperianConsumer
-
-		#region method BackfillExperianConsumer
-
 		public ActionMetaData BackfillExperianConsumer()
 		{
 			return Execute<BackfillExperianConsumer>(null, null);
 		}
-
-		#endregion method BackfillExperianConsumer
 
 		public ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId)
 		{

@@ -4,13 +4,10 @@
 	using Logger;
 
 	public class SimpleRetryer : ARetryer {
-		#region constructor
 
 		public SimpleRetryer(int nRetryCount = 3, int nSleepBeforeRetryMilliseconds = 0, ASafeLog oLog = null)
 			: base(nRetryCount, nSleepBeforeRetryMilliseconds, oLog) {
 		} // constructor
-
-		#endregion constructor
 
 		public delegate void ParameterlessEventHandler();
 
@@ -27,8 +24,6 @@
 
 		public event BeforeRetryEventHandler OnBeforeRetry;
 		public event AfterRetryEventHandler OnAfterRetry;
-
-		#region method Retry
 
 		public override void Retry(Action oAction, string sFuncDescription = null) {
 			if (oAction == null)
@@ -87,6 +82,5 @@
 			throw new Exception("Out of retry attempts.", ex);
 		} // Retry
 
-		#endregion method Retry
 	} // class SimpleRetryer
 } // namespace

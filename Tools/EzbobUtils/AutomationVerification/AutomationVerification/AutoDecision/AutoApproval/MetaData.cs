@@ -9,15 +9,10 @@
 	/// One of the outputs of LoadAutoApprovalData sp.
 	/// </summary>
 	public class MetaData {
-		#region constructor
 
 		public MetaData() {
 			ValidationErrors = new List<string>();
 		} // constructor
-
-		#endregion constructor
-
-		#region properties read from DB
 
 		[JsonIgnore]
 		public string RowType { get; set; }
@@ -29,7 +24,7 @@
 		public string LastName { get; set; }
 
 		public bool IsBrokerCustomer { get; set; }
-		
+
 		public int NumOfTodayAutoApproval { get; set; }
 		public decimal TodayLoanSum { get; set; }
 
@@ -70,22 +65,14 @@
 		[JsonIgnore]
 		public string EnteredCompanyName { get; set; }
 
-		#endregion properties read from DB
-
 		public FraudStatus FraudStatus { get; private set; }
 
 		public List<string> ValidationErrors { get; private set; }
-
-		#region property IsEmailSendingBanned
 
 		[JsonIgnore]
 		public bool IsEmailSendingBanned {
 			get { return !EmailSendingBanned.HasValue || EmailSendingBanned.Value; } // get
 		} // IsEmailSendingBanned
-
-		#endregion property IsEmailSendingBanned
-
-		#region property OfferLength
 
 		[JsonIgnore]
 		public double OfferLength {
@@ -97,20 +84,12 @@
 			} // get
 		} // OfferLength
 
-		#endregion property OfferLength
-
-		#region property OutstandingPrincipal
-
 		[JsonIgnore]
 		public decimal OutstandingPrincipal {
 			get {
 				return TakenLoanAmount - RepaidPrincipal - SetupFees;
 			} // get
 		} // OutstandingPrincipal
-
-		#endregion property OutstandingPrincipal
-
-		#region property RepaidRatio
 
 		[JsonIgnore]
 		public decimal RepaidRatio {
@@ -122,10 +101,6 @@
 			} // get
 		} // RepaidRatio
 
-		#endregion property RepaidRatio
-
-		#region method Validate
-
 		public void Validate() {
 			if (string.IsNullOrWhiteSpace(RowType))
 				throw new Exception("Meta data was not loaded.");
@@ -134,6 +109,5 @@
 				ValidationErrors.Add("last offer start time/length not filled");
 		} // Validate
 
-		#endregion method Validate
 	} // class MetaData
 } // namespace

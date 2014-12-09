@@ -3,9 +3,6 @@
 	using System.Data;
 
 	public class CustomerData : Extractor, IComparable<CustomerData> {
-		#region public
-
-		#region constructor
 
 		public CustomerData(IDataRecord oRow) : base(oRow) {
 			ID = Retrieve<int>("CustomerID").Value;
@@ -20,10 +17,6 @@
 			IsOffline = bIsOffline.HasValue && bIsOffline.Value;
 		} // constructor
 
-		#endregion constructor
-
-		#region properties
-
 		public int ID { get; private set; }
 		public string FirstName { get; private set; }
 		public string Surname { get; private set; }
@@ -32,20 +25,12 @@
 		public string WizardStepName { get; private set; }
 		public bool WizardStepIsLast { get; private set; }
 
-		#endregion properties
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format(
 				"{0}: {1} {2} {3} {4}",
 				ID, Value(FirstName), Value(Surname), Segment(), Value(TypeOfBusiness)
 			);
 		} // ToString
-
-		#endregion method ToString
-
-		#region method CompareTo
 
 		public int CompareTo(CustomerData y) {
 			if (ReferenceEquals(y, null))
@@ -60,21 +45,10 @@
 			return this.WizardStepIsLast ? -1 : 1;
 		} // Compare
 
-		#endregion method CompareTo
-
-		#endregion public
-
-		#region protected
-
-		#region method Segment
-
 		protected string Segment() {
 			return IsOffline ? "Offline" : "Online";
 		} // Segment
 
-		#endregion method Segment
-
-		#endregion protected
 	} // class CustomerData
 
 } // namespace Reports

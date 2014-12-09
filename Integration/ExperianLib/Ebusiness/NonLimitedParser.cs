@@ -228,7 +228,6 @@
 						new QueryParameter("Date", historyData.Item1));
 				}
 
-				
 				for (int i = 0; i < Math.Max(sicCodes1992.Count, sicDescs1992.Count); i++) {
 					var sicCode = i < sicCodes1992.Count ? sicCodes1992[i] : null;
 					var sicDesc = i < sicDescs1992.Count ? sicDescs1992[i] : null;
@@ -240,7 +239,6 @@
 						new QueryParameter("Code", sicCode),
 						new QueryParameter("Description", sicDesc));
 				}
-				
 
 				foreach (DN11 dn11 in bankruptcyDetails)
 				{
@@ -831,7 +829,7 @@
 				{
 					return result;
 				}
-				
+
 				return null;
 			}
 

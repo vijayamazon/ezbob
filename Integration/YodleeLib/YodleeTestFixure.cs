@@ -81,7 +81,6 @@
 			Assert.AreEqual(true, containsLiteral);
 		}
 
-
 		[Test]
 		public void test_parse()
 		{

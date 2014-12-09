@@ -2,13 +2,10 @@
 	using System;
 
 	public abstract class BusinessReturnData {
-		#region public
 
 		public virtual bool IsError {
 			get { return !string.IsNullOrEmpty(Error); }
 		} // IsError
-
-		#region property Error
 
 		public virtual string Error {
 			get { return m_sError; }
@@ -17,10 +14,6 @@
 
 		private string m_sError;
 
-		#endregion property Error
-
-		#region property LastCheckDate
-
 		public virtual DateTime? LastCheckDate {
 			get { return m_oLastCheckDate; }
 			protected set { m_oLastCheckDate = value; }
@@ -28,12 +21,8 @@
 
 		private DateTime? m_oLastCheckDate;
 
-		#endregion property LastCheckDate
-
 		public virtual bool IsDataExpired { get; set; }
 		public virtual long ServiceLogID { get; private set; }
-
-		#region property BureauScore
 
 		public virtual decimal BureauScore {
 			get { return m_nBureauScore; }
@@ -41,8 +30,6 @@
 		} // BureauScore
 
 		private decimal m_nBureauScore;
-
-		#endregion property BureauScore
 
 		public virtual decimal MaxBureauScore { get; set; }
 		public virtual decimal CreditLimit { get; set; }
@@ -57,8 +44,6 @@
 
 		public virtual DateTime? IncorporationDate { get; set; }
 
-		#region property CacheHit
-
 		public virtual bool CacheHit {
 			get { return m_bCacheHit; }
 			set { m_bCacheHit = value; }
@@ -66,13 +51,7 @@
 
 		private bool m_bCacheHit;
 
-		#endregion property CacheHit
-
 		public abstract bool IsLimited { get; }
-
-		#endregion public
-
-		#region protected
 
 		protected BusinessReturnData(string sError, decimal nBureauScore) {
 			m_oLastCheckDate = DateTime.UtcNow;
@@ -91,6 +70,5 @@
 			m_bCacheHit = bCacheHit;
 		} // constructor
 
-		#endregion constructors
 	} // class BusinessReturnData
 } // namespace

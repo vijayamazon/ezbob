@@ -3,10 +3,7 @@
 	using System.Text;
 	using Ezbob.Database;
 
-	#region class UiCachePkgModel
-
 	public class UiCachePkgModel {
-		#region class SaveResult
 
 		public class SaveResult {
 			public SaveResult(string sID) {
@@ -29,12 +26,8 @@
 			public int failcount { get; private set; }
 		} // class SaveResult
 
-		#endregion class SaveResult
-
 		public string id { get; set; }
 		public List<UiActionEventModel> data { get; set; }
-
-		#region method Save
 
 		public SaveResult Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie) {
 			var oResult = new SaveResult(id);
@@ -45,10 +38,6 @@
 
 			return oResult;
 		} // Save
-
-		#endregion method Save
-
-		#region method ToString
 
 		public override string ToString() {
 			var os = new StringBuilder();
@@ -67,9 +56,6 @@
 			return os.ToString();
 		} // ToString
 
-		#endregion method ToString
 	} // class UiCachePkgModel
 
-
-	#endregion class UiCachePkgModel
 } // namespace EZBob.DatabaseLib

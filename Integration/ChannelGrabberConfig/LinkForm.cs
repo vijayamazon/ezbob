@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 
 namespace Integration.ChannelGrabberConfig {
-	#region class LinkForm
 
 	public class LinkForm : ICloneable {
-		#region public
-
-		#region constructor
 
 		public LinkForm() {
 			Fields = new List<FieldInfo>();
@@ -17,19 +13,11 @@ namespace Integration.ChannelGrabberConfig {
 			OnBeforeLink = new List<string>();
 		} // constructor
 
-		#endregion constructor
-
-		#region properties
-
 		public List<FieldInfo> Fields { get; set; }
 		public List<string> Notes { get; set; }
 		public bool HasUploadFiles { get; set; }
 		public string UploadFilesHandler { get; set; }
 		public List<string> OnBeforeLink { get; set; }
-
-		#endregion properties
-
-		#region method Validate
 
 		public void Validate() {
 			Fields = Fields ?? new List<FieldInfo>();
@@ -44,10 +32,6 @@ namespace Integration.ChannelGrabberConfig {
 
 		} // Validate
 
-		#endregion method Validate
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format(
 				"Has upload files: {0}{2}\n{1}",
@@ -56,10 +40,6 @@ namespace Integration.ChannelGrabberConfig {
 				HasUploadFiles ? " to " + UploadFilesHandler : ""
 			);
 		} // ToString
-
-		#endregion method ToString
-
-		#region method Clone
 
 		public object Clone() {
 			var oRes = new LinkForm();
@@ -77,10 +57,6 @@ namespace Integration.ChannelGrabberConfig {
 			return oRes;
 		} // Clone
 
-		#endregion method Clone
-
-		#endregion public
 	} // class LinkForm
 
-	#endregion class LinkForm
 } // namespace Integration.ChannelGrabberConfig

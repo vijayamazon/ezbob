@@ -3,11 +3,8 @@ using System.Collections.Generic;
 
 namespace Reports {
 	internal class LoanStatsMarketplaces {
-		#region public
 
 		public static SortedDictionary<int, string> MarketplaceTypes { get; private set; }
-
-		#region constructor
 
 		public LoanStatsMarketplaces(int nMarketplaceTypeID, string sMarketplaceTypeName, DateTime oCreated) {
 			if (MarketplaceTypes == null)
@@ -18,10 +15,6 @@ namespace Reports {
 			Add(nMarketplaceTypeID, sMarketplaceTypeName, oCreated);
 		} // constructor
 
-		#endregion constructor
-
-		#region method Add
-
 		public void Add(int nMarketplaceTypeID, string sMarketplaceTypeName, DateTime oCreated) {
 			if (!MarketplaceTypes.ContainsKey(nMarketplaceTypeID))
 				MarketplaceTypes[nMarketplaceTypeID] = sMarketplaceTypeName;
@@ -31,10 +24,6 @@ namespace Reports {
 
 			m_oMarketplaces[nMarketplaceTypeID].Add(oCreated);
 		} // Add
-
-		#endregion method Add
-
-		#region method Count
 
 		public static SortedDictionary<int, int> Count() {
 			var oCount = new SortedDictionary<int, int>();
@@ -62,14 +51,7 @@ namespace Reports {
 			return oResult;
 		} // Count
 
-		#endregion method Count
-
-		#endregion public
-
-		#region private
-
 		private readonly SortedDictionary<int, SortedSet<DateTime>> m_oMarketplaces;
 
-		#endregion private
 	} // class LoanStatsMarketplaces
 } // namespace

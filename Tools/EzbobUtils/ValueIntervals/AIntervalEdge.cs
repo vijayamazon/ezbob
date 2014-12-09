@@ -3,14 +3,7 @@
 namespace Ezbob.ValueIntervals {
 	using System.Globalization;
 
-	#region class AIntervalEdge
-
 	public abstract class AIntervalEdge<TFinite> : IComparable<AIntervalEdge<TFinite>>, IOrdinal<AIntervalEdge<TFinite>> where TFinite: IComparable<TFinite> {
-		#region public
-
-		#region comparison operators
-
-		#region operator ==
 
 		public static bool operator ==(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
 			if (ReferenceEquals(a, b))
@@ -25,17 +18,9 @@ namespace Ezbob.ValueIntervals {
 			return false;
 		} // operator ==
 
-		#endregion operator ==
-
-		#region operator !=
-
 		public static bool operator !=(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
 			return !(a == b);
 		} // operator !=
-
-		#endregion operator !=
-
-		#region operator <
 
 		public static bool operator <(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
 			if (ReferenceEquals(a, b))
@@ -56,35 +41,17 @@ namespace Ezbob.ValueIntervals {
 			return false;
 		} // operator <
 
-		#endregion operator <
-
-		#region operator <=
-
 		public static bool operator <=(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
 			return (a == b) || (a < b);
 		} // operator <=
-
-		#endregion operator <=
-
-		#region operator >=
 
 		public static bool operator >=(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
 			return !(a < b);
 		} // operator >=
 
-		#endregion operator >=
-
-		#region operator >
-
 		public static bool operator >(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
 			return !(a <= b);
 		} // operator >
-
-		#endregion operator >
-
-		#endregion comparison operators
-
-		#region method Min
 
 		public virtual AIntervalEdge<TFinite> Min(AIntervalEdge<TFinite> other) {
 			if (ReferenceEquals(other, null))
@@ -93,10 +60,6 @@ namespace Ezbob.ValueIntervals {
 			return this < other ? this : other;
 		} // Min
 
-		#endregion method Min
-
-		#region method Max
-
 		public virtual AIntervalEdge<TFinite> Max(AIntervalEdge<TFinite> other) {
 			if (ReferenceEquals(other, null))
 				throw new ArgumentNullException();
@@ -104,45 +67,21 @@ namespace Ezbob.ValueIntervals {
 			return this > other ? this : other;
 		} // Max
 
-		#endregion method Max
-
-		#region enum EdgeType
-
 		public enum EdgeType {
 			NegativeInfinity,
 			Finite,
 			PositiveInfinity,
 		} // EdgeType
 
-		#endregion enum EdgeType
-
-		#region property Type
-
 		public virtual EdgeType Type { get; protected set; }
-
-		#endregion property Type
-
-		#region property IsFinite
 
 		public virtual bool IsFinite { get { return Type == EdgeType.Finite; } } // IsFinite
 
-		#endregion property IsFinite
-
-		#region property Value
-
 		public virtual TFinite Value { get; protected set; }
-
-		#endregion property Value
-
-		#region method Equals
 
 		public override bool Equals(object obj) {
 			return this == (AIntervalEdge<TFinite>)obj;
 		}// Equals
-
-		#endregion method Equals
-
-		#region method GetHashCode
 
 		public override int GetHashCode() {
 			switch (Type) {
@@ -157,10 +96,6 @@ namespace Ezbob.ValueIntervals {
 				throw new ArgumentOutOfRangeException();
 			} // switch
 		} // GetHashCode
-
-		#endregion method GetHashCode
-
-		#region method CompareTo
 
 		public virtual int CompareTo(AIntervalEdge<TFinite> other) {
 			if (other == null)
@@ -184,10 +119,6 @@ namespace Ezbob.ValueIntervals {
 			} // switch
 		} // CompareTo
 
-		#endregion method CompareTo
-
-		#region method ToString
-
 		public override string ToString() {
 			return ToString(null, CultureInfo.InvariantCulture);
 		} // ToString
@@ -208,37 +139,21 @@ namespace Ezbob.ValueIntervals {
 			} // switch
 		} // ToString
 
-		#endregion method ToString
-
 		public abstract AIntervalEdge<TFinite> Previous();
 		public abstract AIntervalEdge<TFinite> Next();
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
 
 		protected AIntervalEdge(EdgeType nType = default(EdgeType), TFinite oValue = default(TFinite)) {
 			Type = nType;
 			Value = oValue;
 		} // constructor
 
-		#endregion constructor
-
 		protected abstract bool IsValueEqualTo(AIntervalEdge<TFinite> other);
 
 		protected abstract bool IsValueLessThan(AIntervalEdge<TFinite> other);
 
-		#region method InfinityToString
-
 		protected virtual string InfinityToString(bool bPositive, CultureInfo oCultureInfo) {
 			return (bPositive ? "+" : "-") + "inf";
 		} // InfinityToString
-
-		#endregion method InfinityToString
-
-		#region method ValueToString
 
 		protected virtual string ValueToString() {
 			return ValueToString(null, CultureInfo.InvariantCulture);
@@ -248,10 +163,6 @@ namespace Ezbob.ValueIntervals {
 			return Value.ToString();
 		} // ValueToString
 
-		#endregion method ValueToString
-
-		#endregion protected
 	} // class AIntervalEdge
 
-	#endregion class AIntervalEdge
 } // namespace Ezbob.ValueIntervals

@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Utils {
 	public static class OrdinalNumber {
-		#region method ToOrdinal
 
 		public static string ToOrdinal(this int num) {
 			if (num <= 0)
@@ -28,6 +27,5 @@
 			} // switch
 		} // ToOrdinal
 
-		#endregion method ToOrdinal
 	} // class OrdinalNumber
 } // namespace

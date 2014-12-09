@@ -34,7 +34,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public List<string> ErrorList { get; set; }
 
-
 		public ExperianConsumerDataApplicant Applicant { get; set; }
 		public ExperianConsumerDataLocation Location { get; set; }
 
@@ -51,7 +50,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string ScoreAlign { get; set; } 
 		public string ScoreValuePosition { get; set; } 
 		public int? CII { get; set; } 
-		
+
 		public AccountInfo[] AccountsInformation { get; set; }
 		public ConsumerAccountsOverview ConsumerAccountsOverview { get; set; }
 
@@ -109,7 +108,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int TotalCurLimits_Total { get; set; } 
 		public int Balance_Total { get; set; } 
 	}
-	
 
 	public class AccountInfo
 	{
@@ -179,7 +177,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public decimal NameScore { get; set; }
 		public decimal AddressScore { get; set; }
 	}
-	
+
 	public class Summary
 	{
 		public int? Score { get; set; }

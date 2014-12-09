@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 
 namespace EzService {
-	#region class StringListActionResult
 
 	[DataContract]
 	public class StringListActionResult : ActionResult {
@@ -10,5 +9,4 @@ namespace EzService {
 		public List<string> Records { get; set; }
 	} // struct ActionResult
 
-	#endregion class StringListActionResult
 } // namespace EzService

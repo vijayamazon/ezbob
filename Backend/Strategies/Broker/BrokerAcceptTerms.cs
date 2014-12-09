@@ -5,39 +5,20 @@
 	using JetBrains.Annotations;
 
 	public class BrokerAcceptTerms : AStrategy {
-		#region public
-
-		#region constructor
 
 		public BrokerAcceptTerms(int nTermsID, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpBrokerAcceptTerms(nTermsID, sContactEmail, DB, Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "BrokerAcceptTerms"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly SpBrokerAcceptTerms m_oSp;
-
-		#region class SpBrokerAcceptTerms
 
 		private class SpBrokerAcceptTerms : AStoredProc {
 			public SpBrokerAcceptTerms(int nTermsID, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
@@ -64,8 +45,5 @@
 			} // Now
 		} // class SpBrokerAcceptTerms
 
-		#endregion class SpBrokerAcceptTerms
-
-		#endregion private
 	} // class BrokerAcceptTerms
 } // namespace

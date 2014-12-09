@@ -102,7 +102,7 @@
 				return Json(new List<MarketPlaceModel>(), JsonRequestBehavior.AllowGet); 
 			}
 		}
-		
+
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetAffordabilityData(int id) {
@@ -127,7 +127,6 @@
 			return (long)duration.TotalSeconds * 1000;
 		}
 
-
 		[HttpGet]
 		public JsonResult GetCustomerMarketplacesHistory(int customerId)
 		{
@@ -135,7 +134,6 @@
 			var models = _marketPlaces.GetMarketPlaceHistoryModel(customer);
 			return Json(models, JsonRequestBehavior.AllowGet);
 		}
-
 
 		[Ajax]
 		[HttpGet]
@@ -341,7 +339,6 @@
 
 				Response.AppendHeader("Content-Disposition", cd.ToString());
 
-
 				if (fileMetaData.FileContentType.Contains("image") || 
 					fileMetaData.FileContentType.Contains("pdf") || 
 					fileMetaData.FileContentType.Contains("html") ||
@@ -372,11 +369,10 @@
 			if (parsed.NumOfTransactions == 0) {
 				return Json(new { error = "File contains 0 transactions" });
 			}
-			
+
 			var customer = _customers.Get(customerId);
 			var yodlee = new YodleeServiceInfo();
 			var yodleeMp = customer.CustomerMarketPlaces.FirstOrDefault(mp => mp.Marketplace.InternalId == yodlee.InternalId && mp.DisplayName == "ParsedBank");
-
 
 			if (yodleeMp != null) {
 				var data = Serialized.Deserialize<YodleeSecurityInfo>(yodleeMp.SecurityData);
@@ -397,7 +393,7 @@
 
 				var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
 				var mp = _helper.SaveOrUpdateCustomerMarketplace("ParsedBank", yodleeDatabaseMarketPlace, securityData, customer);
-				
+
 				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, false, _context.UserId);
 			}
 			return Json(new {});
@@ -415,7 +411,7 @@
 
 			OneUploadLimitation oLimitations = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
 			var customer = _customers.Get(customerId);
-			
+
 			try {
 				new Transactional(() => {
 					var serviceInfo = new CompanyFilesServiceInfo();
@@ -461,8 +457,6 @@
 			return error.Length > 0 ? Json(new {error = error.ToString()}) : Json(new {success = true});
 		} // UploadedFiles
 
-		#region action GetCustomerManualAnnualRevenue
-
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetCustomerManualAnnualRevenue(int nCustomerID) {
@@ -500,10 +494,6 @@
 				value = cmarar.Value,
 			}, JsonRequestBehavior.AllowGet);
 		} // GetCustomerManualAnnualRevenue
-
-		#endregion action GetCustomerManualAnnualRevenue
-
-		#region action SetCustomerManualAnnualRevenue
 
 		[Ajax]
 		[HttpPost]
@@ -546,6 +536,5 @@
 			});
 		} // SetCustomerManualAnnualRevenue
 
-		#endregion action SetCustomerManualAnnualRevenue
 	} // class MarketPlacesController
 } // namespace

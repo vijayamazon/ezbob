@@ -3,15 +3,12 @@
 	using Ezbob.Database;
 
 	internal class JobArgument {
-		#region constructor
 
 		public JobArgument(SafeReader sr, TypeRepository oTypeRepo) {
 			sr.Fill(this);
 
 			UnderlyingType = oTypeRepo.Find(TypeName, CanBeNull, TypeHint);
 		} // constructor
-
-		#endregion constructor
 
 		[FieldName("ArgumentID")]
 		public long ID { get; set; }
@@ -38,8 +35,6 @@
 			);
 		} // ToString
 
-		#region method Differs
-
 		public bool Differs(JobArgument oPrevious) {
 			if (this.ID != oPrevious.ID)
 				return true;
@@ -53,6 +48,5 @@
 			return false;
 		} // Differs
 
-		#endregion method Differs
 	} // class JobArgument
 } // namespace

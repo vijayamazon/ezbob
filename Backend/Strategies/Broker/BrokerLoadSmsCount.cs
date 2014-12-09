@@ -3,36 +3,19 @@
 	using Ezbob.Logger;
 
 	public class BrokerLoadSmsCount : AStrategy {
-		#region constructor
 
 		public BrokerLoadSmsCount(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			MaxPerNumber = 0;
 			MaxPerPage = 0;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Broker load SMS count"; }
 		} // Name
 
-		#endregion property Name
-
-		#region property MaxPerNumber
-
 		public int MaxPerNumber { get; private set; } // MaxPerNumber
 
-		#endregion property MaxPerNumber
-
-		#region property MaxPerPage
-
 		public int MaxPerPage { get; private set; } // MaxPerPage
-
-		#endregion property MaxPerPage
-
-		#region method Execute
 
 		public override void Execute() {
 			DB.ForEachRowSafe(
@@ -56,6 +39,5 @@
 			);
 		} // Execute
 
-		#endregion method Execute
 	} // class BrokerLoadSmsCount
 } // namespace EzBob.Backend.Strategies.Broker

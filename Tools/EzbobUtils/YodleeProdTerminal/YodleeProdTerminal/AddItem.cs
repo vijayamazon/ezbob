@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.IO;
 using System.Web.Services.Protocols;
@@ -72,7 +72,6 @@ namespace com.yodlee.sampleapps
         {
             return itemManagement.getLoginFormForContentService(userContext, csId, true);
         }
-
 
         /**
          * Add the item
@@ -171,13 +170,13 @@ namespace com.yodlee.sampleapps
             System.Console.WriteLine(SEPARATOR);
             FormUtil.PrintFormStructureAsText(form);
         }
-        
+
         //constructs ItemData for bank container
         private ItemData getBankItemData()
         {
             ItemData itemData = new ItemData();
             ArrayList accounts = new ArrayList();
-            
+
             BankData bankData = new BankData();            
             System.Console.WriteLine("\nEnter account holder name");
             String acctHolder = IOUtils.readStr();

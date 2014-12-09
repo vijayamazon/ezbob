@@ -5,8 +5,6 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils.Security;
 
-	#region enum ParsedFieldNames
-
 	internal enum ParsedFieldNames {
 		AddressLine1,
 		AddressLine2,
@@ -33,14 +31,7 @@
 
 	// enum ParsedFieldNames
 
-	#endregion enum ParsedFieldNames
-
-	#region class ExperianDirector
-
 	internal class ExperianDirector {
-		#region constructor
-
-		#region constructor for limited director
 
 		public ExperianDirector(ExperianLtdDL72 oItem, int nCustomerID) {
 			IsValid = false;
@@ -106,10 +97,6 @@
 			IsValid = true;
 		} // constructor
 
-		#endregion constructor for limited director
-
-		#region constructor for limited shareholder
-
 		public ExperianDirector(ExperianLtdDLB5 oItem, int nCustomerID) {
 			IsValid = false;
 
@@ -148,10 +135,6 @@
 
 			IsValid = true;
 		} // constructor
-
-		#endregion constructor for limited shareholder
-
-		#region constructor for limited shareholder
 
 		public ExperianDirector(string sFullName, int nCustomerID) {
 			IsValid = false;
@@ -205,23 +188,9 @@
 			IsValid = true;
 		} // constructor
 
-		#endregion constructor for limited shareholder
-
-		#endregion constructor
-
-		#region property IsValid
-
 		public bool IsValid { get; private set; } // IsValid
 
-		#endregion property IsValid
-
-		#region property FullName
-
 		public string FullName { get { return FirstName + " " + LastName; } } // FullName
-
-		#endregion property FullName
-
-		#region method ToString
 
 		public override string ToString() {
 			string sType = string.Empty;
@@ -236,13 +205,7 @@
 			return sType + FullName;
 		} // ToString
 
-		#endregion method ToString
-
-		#region DB fields
-
 		public int CustomerID { get; set; }
-
-		#region property RefNum
 
 		public string RefNum {
 			get {
@@ -262,8 +225,6 @@
 
 		private string m_sRefNum;
 
-		#endregion property RefNum
-
 		public string FirstName { get; set; }
 		public string MiddleName { get; set; }
 		public string LastName { get; set; }
@@ -282,10 +243,6 @@
 		public string County { get; set; }
 		public string Postcode { get; set; }
 
-		#endregion DB fields
-
-		#region private
-
 		private static readonly DateTime ms_oLongAgo = new DateTime(1775, 5, 7);
 
 		private static string TwoString(string a, string b) {
@@ -296,8 +253,6 @@
 			return CultureInfo.InvariantCulture.TextInfo.ToTitleCase((a ?? string.Empty).Trim().ToLowerInvariant());
 		} // Ti
 
-		#endregion private
 	} // class ExperianDirector
 
-	#endregion class ExperianDirector
 } // namespace

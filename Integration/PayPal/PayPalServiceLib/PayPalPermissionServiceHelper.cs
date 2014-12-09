@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -46,7 +46,6 @@ namespace EzBob.PayPalServiceLib
 			                            		verifier = verificationCode
 			                            	};
 
-
 			var per = InternalCreateService();
 
 			var response = per.getAccessToken( getAccessTokenRequest );
@@ -86,9 +85,7 @@ namespace EzBob.PayPalServiceLib
 			                         		        		"TRANSACTION_DETAILS"
 			                         		        	}
 			                         	};
-			
-			
-			
+
 			var pResponse = per.requestPermissions( permissionsRequest );
 
 			if ( per.isSuccess.ToUpper() == "FAILURE" )
@@ -121,7 +118,6 @@ namespace EzBob.PayPalServiceLib
 				requestEnvelope = GetRequestEnvelope(),
 				attributeList = Enum.GetValues( typeof( PersonalAttribute ) ).OfType<PersonalAttribute>().ToArray()
 			};
-
 
 			var responseAdvanced = per.getAdvancedPersonalData( getAdvancedPersonalDataRequest );
 			if ( per.isSuccess.ToUpper() == "FAILURE" )

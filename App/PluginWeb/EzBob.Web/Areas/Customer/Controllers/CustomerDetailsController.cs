@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
-	#region using
 
 	using System;
 	using System.Collections.Generic;
@@ -29,12 +28,7 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
-	#endregion using
-
 	public class CustomerDetailsController : Controller {
-		#region public
-
-		#region static method AddDirectorToCustomer
 
 		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate) {
 			if (customer.Company == null)
@@ -79,10 +73,6 @@
 			return new { success = true };
 		} // AddDirectorToCustomer
 
-		#endregion static method AddDirectorToCustomer
-
-		#region constructor
-
 		public CustomerDetailsController(
 			IEzbobWorkplaceContext oContext,
 			DatabaseDataHelper oDatabaseHelper,
@@ -105,10 +95,6 @@
 			this.customerPhoneRepository = customerPhoneRepository;
 			this.customerAddressRepository = customerAddressRepository;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Dashboard
 
 		[HttpGet]
 		public System.Web.Mvc.ActionResult Dashboard() {
@@ -145,10 +131,6 @@
 			return RedirectToAction("Index", "Profile", new { Area = "Customer" });
 		} // Dashboard
 
-		#endregion method ToProfile
-
-		#region method TakeQuickOffer
-
 		[Transactional]
 		[Ajax]
 		[HttpPost]
@@ -177,10 +159,6 @@
 
 			return Json(new { });
 		} // TakeQuickOffer
-
-		#endregion method TakeQuickOffer
-
-		#region method SaveCompany
 
 		[Ajax]
 		[HttpPost]
@@ -265,10 +243,6 @@
 			return Json(new { });
 		}
 
-		#endregion method SaveCompany
-
-		#region method Save
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -310,10 +284,6 @@
 			return Json(new { });
 		} // Save
 
-		#endregion method Save
-
-		#region method AddDirector
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -325,10 +295,6 @@
 
 			return Json(AddDirectorToCustomer(director, customer, m_oSession, true));
 		} // AddDirector
-
-		#endregion method AddDirector
-
-		#region method Edit
 
 		[Ajax]
 		[HttpPost]
@@ -363,7 +329,7 @@
 				addressInfo.PersonalAddress,
 				CustomerAddressType.PersonalAddress
 			);
-			
+
 			var toBeRemoved = new List<CustomerAddress>();
 			foreach (CustomerAddress previouslyDefinedOtherProperty in customer.AddressInfo.OtherPropertiesAddresses)
 			{
@@ -461,10 +427,6 @@
 			return Json(new { });
 		} // Edit
 
-		#endregion method Edit
-
-		#region method SaveEditHistory
-
 		[NonAction]
 		public void SaveEditHistory(PersonalInfoHistoryParameter oldPersonalInfo, PersonalInfoHistoryParameter newPersonalInfo) {
 			var customer = m_oContext.Customer;
@@ -533,11 +495,6 @@
 			AddAddressInfoToHistory(oldPersonalInfo.OtherPropertiesAddresses, newPersonalInfo.OtherPropertiesAddresses, customer, "Other Properties Addresses");
 		} // SaveEditHistory
 
-
-		#endregion method SaveEditHistory
-
-		#region method SaveExperianDirector
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -592,14 +549,6 @@
 			return Json(new { success = true, error = string.Empty, });
 		} // SaveExperianDirector
 
-		#endregion method SaveExperianDirector
-
-		#endregion public
-
-		#region private
-
-		#region static method UpdateAddresses
-
 		private static void UpdateAddresses(
 			Customer customer,
 			IEnumerable<CustomerAddress> oNewAddressList,
@@ -631,10 +580,6 @@
 				} // if
 			} // if
 		} // UpdateAddresses
-
-		#endregion static method UpdateAddresses
-
-		#region static method ProcessCompanyInfoTemporary
 
 		private string ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
@@ -739,10 +684,6 @@
 
 			return null;
 		} // ProcessCompanyInfoTemporary
-
-		#endregion static method ProcessCompanyInfoTemporary
-
-		#region static method ProcessCompanyInfo
 
 		private static string ProcessCompanyInfo(
 			CompanyInfoMap companyData,
@@ -852,10 +793,6 @@
 			return null;
 		} // ProcessCompanyInfo
 
-		#endregion static method ProcessCompanyInfo
-
-		#region method WizardComplete
-
 		private void WizardComplete() {
 			Session["WizardComplete"] = true;
 			TempData["WizardComplete"] = true;
@@ -889,10 +826,6 @@
 			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 
 		} // WizardComplete
-
-		#endregion method WizardComplete
-
-		#region method SaveCustomerToDB
 
 		/// <summary>
 		/// Saves customer's details to DB.
@@ -978,10 +911,6 @@
 			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
 		}
 
-		#endregion method SaveCustomerToDB
-
-		#region method SavePhones
-
 		private void SavePhones(int customerId, string mobilePhone, string daytimePhone) {
 			var customerMobilePhoneEntry = new CustomerPhone {
 				CustomerId = customerId,
@@ -999,10 +928,6 @@
 			};
 			customerPhoneRepository.SaveOrUpdate(customerDaytimePhoneEntry);
 		} // SavePhones
-
-		#endregion method SavePhones
-
-		#region method MakeAddress
 
 		private void MakeAddress(
 			IEnumerable<CustomerAddress> newAddress,
@@ -1036,10 +961,6 @@
 			currentAddress.Clear();
 			currentAddress.Add(curAddress);
 		} // MakeAddress
-
-		#endregion method MakeAddress
-
-		#region method AddAddressInfoToHistory
 
 		private void AddAddressInfoToHistory(
 			IEnumerable<CustomerAddress> oldAddress,
@@ -1080,10 +1001,6 @@
 			} // for each added address
 		} // AddressInfoToHistory
 
-		#endregion method AddAddressInfoToHistory
-
-		#region method PersonalInfoEditHistoryParametersBuilder
-
 		private PersonalInfoHistoryParameter PersonalInfoEditHistoryParametersBuilder(Customer customer) {
 			string businessPhone = "";
 			IList<CustomerAddress> companyAddress = null;
@@ -1108,10 +1025,6 @@
 
 			return personalInfo;
 		} // PersonalInfoEditHistoryParametersBuilder
-
-		#endregion method PersonalInfoEditHistoryParametersBuilder
-
-		#region method DetailsToKey
 
 		private static string DetailsToKey(Director oDir) {
 			CustomerAddress addr = oDir.DirectorAddressInfo.AllAddresses.FirstOrDefault();
@@ -1149,10 +1062,6 @@
 			return string.Format("f:{0}|l:{1}|b:{2}|g:{3}|p:{4}", sFirstName, sLastName, sBirthDate, nGender, sPostCode);
 		} // DetailsToKey
 
-		#endregion method DetailsToKey
-
-		#region private fields
-
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly IPersonalInfoHistoryRepository m_oPersonalInfoHistoryRepository;
 		private readonly ServiceClient m_oServiceClient;
@@ -1166,8 +1075,5 @@
 		private readonly CustomerAddressRepository customerAddressRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CustomerDetailsController));
 
-		#endregion private fields
-
-		#endregion private
 	} // class CustomerDetailsController
 } // namespace EzBob.Web.Areas.Customer.Controllers

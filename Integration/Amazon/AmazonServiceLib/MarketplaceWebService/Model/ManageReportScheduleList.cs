@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008 Amazon Technologies, Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -24,16 +24,14 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
     [XmlRootAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/", IsNullable = false)]
     public class ManageReportScheduleList
     {
-    
-        private  List<ReportSchedule> reportScheduleField;
 
+        private  List<ReportSchedule> reportScheduleField;
 
         /// <summary>
         /// Gets and sets the ReportSchedule property.
@@ -52,8 +50,6 @@ namespace MarketplaceWebService.Model
             set { this.reportScheduleField =  value; }
         }
 
-
-
         /// <summary>
         /// Sets the ReportSchedule property
         /// </summary>
@@ -67,8 +63,6 @@ namespace MarketplaceWebService.Model
             }
             return this;
         }          
- 
-
 
         /// <summary>
         /// Checks if ReportSchedule property is set
@@ -79,9 +73,6 @@ namespace MarketplaceWebService.Model
             return (ReportSchedule.Count > 0);
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -90,7 +81,6 @@ namespace MarketplaceWebService.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -134,8 +124,6 @@ namespace MarketplaceWebService.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

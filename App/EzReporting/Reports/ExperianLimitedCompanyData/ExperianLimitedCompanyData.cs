@@ -21,9 +21,6 @@ namespace Reports {
 	using Ezbob.Logger;
 
 	public class ExperianLimitedCompanyData : SafeLog {
-		#region public
-
-		#region method ToOutput
 
 		public static void ToOutput(string sFileName, Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>> oData) {
 			List<ExperianLimitedCompanyReportItem> oReportItems = oData.Item1;
@@ -67,18 +64,10 @@ namespace Reports {
 			fout.Close();
 		} // ToOutput
 
-		#endregion method ToOutput
-
-		#region constructor
-
 		public ExperianLimitedCompanyData(AConnection oDB, ASafeLog log = null) : base(log) {
 			m_oDB = oDB;
 			VerboseLogging = false;
 		} // constructor
-
-		#endregion constructor
-
-		#region method Run
 
 		public Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>> Run() {
 			m_oResult = new List<ExperianLimitedCompanyReportItem>();
@@ -93,19 +82,7 @@ namespace Reports {
 			return new Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>>(m_oResult, m_oFieldNames);
 		} // Run
 
-		#endregion method Run
-
-		#region property VerboseLogging
-
 		public bool VerboseLogging { get; set; }
-
-		#endregion property VerboseLogging
-
-		#endregion public
-
-		#region private
-
-		#region method HandleRow
 
 		private ActionResult HandleRow(DbDataReader oRow, bool bStartOfRowset) {
 			int nCustomerID = Convert.ToInt32(oRow["Id"]);
@@ -178,12 +155,9 @@ namespace Reports {
 			return ActionResult.Continue;
 		} // HandleRow
 
-		#endregion method HandleRow
-
 		private readonly AConnection m_oDB;
 		private List<ExperianLimitedCompanyReportItem> m_oResult;
 		private SortedSet<string> m_oFieldNames;
 
-		#endregion private
 	} // class ExperianLimitedCompanyData
 } // namespace Reports

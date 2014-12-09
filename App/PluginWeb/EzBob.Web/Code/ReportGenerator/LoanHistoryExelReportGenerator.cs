@@ -34,7 +34,6 @@ namespace EzBob.Web.Code.ExelReportGenarator
                 row++;
                 worksheet.Cells[row, 0].PutValue(loan.RefNumber);
 
-
                 worksheet.Cells[row, 1].PutValue(FormattingUtils.NumericFormats(loan.LoanAmount));
                 worksheet.Cells[row, 2].PutValue(FormattingUtils.NumericFormats(loan.Repayments));
                 worksheet.Cells[row, 3].PutValue(loan.Date.ToString("MMM dd yyyy", CultureInfo.CreateSpecificCulture("en-gb")));

@@ -1,10 +1,7 @@
-#region namespace EZBob.DatabaseLib.Model.Database
-
+﻿
 namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 	using Iesi.Collections.Generic;
-
-	#region class Director
 
 	public class Director {
 		public virtual int Id { get; set; }
@@ -23,12 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual int? ExperianConsumerScore { get; set; }
 	} // class Director
 
-	#endregion class Director
-
-	#region class DirectorAddressInfo
-
 	public class DirectorAddressInfo {
-		#region property NonLimitedDirectorHomeAddressPrev
 
 		public virtual ISet<CustomerAddress> NonLimitedDirectorHomeAddressPrev {
 			get { return m_oNonLimitedDirectorHomeAddressPrev; }
@@ -37,20 +29,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		private ISet<CustomerAddress> m_oNonLimitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
 
-		#endregion property NonLimitedDirectorHomeAddressPrev
-
-		#region property LimitedDirectorHomeAddress
-
 		public virtual ISet<CustomerAddress> LimitedDirectorHomeAddress {
 			get { return m_oLimitedDirectorHomeAddress; }
 			set { m_oLimitedDirectorHomeAddress = value; }
 		}  // LimitedDirectorHomeAddress
 
 		private ISet<CustomerAddress> m_oLimitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
-
-		#endregion property LimitedDirectorHomeAddress
-
-		#region property NonLimitedDirectorHomeAddress
 
 		public virtual ISet<CustomerAddress> NonLimitedDirectorHomeAddress {
 			get { return m_oNonLimitedDirectorHomeAddress; }
@@ -59,20 +43,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		private ISet<CustomerAddress> m_oNonLimitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
 
-		#endregion property NonLimitedDirectorHomeAddress
-
-		#region property LimitedDirectorHomeAddressPrev
-
 		public ISet<CustomerAddress> LimitedDirectorHomeAddressPrev {
 			get { return m_oLimitedDirectorHomeAddressPrev; }
 			set { m_oLimitedDirectorHomeAddressPrev = value; }
 		} // LimitedDirectorHomeAddressPrev
 
 		private ISet<CustomerAddress> m_oLimitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
-
-		#endregion property LimitedDirectorHomeAddressPrev
-
-		#region property AllAddresses
 
 		public virtual ISet<CustomerAddress> AllAddresses {
 			get { return m_oAllAddresses; }
@@ -81,23 +57,15 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		private ISet<CustomerAddress> m_oAllAddresses = new HashedSet<CustomerAddress>();
 
-		#endregion property AllAddresses
 	} // class DirectorAddressInfo
 
-	#endregion class DirectorAddressInfo
 } // namespace
-
-#endregion namespace EZBob.DatabaseLib.Model.Database
-
-#region namespace EZBob.DatabaseLib.Model.Database.Mapping
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping {
 	using System;
 	using ApplicationMng.Repository;
 	using FluentNHibernate.Mapping;
 	using NHibernate;
-
-	#region class DirectorModelMap
 
 	public class DirectorModelMap : ClassMap<Director> {
 		public DirectorModelMap() {
@@ -163,16 +131,10 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 		} // constructor
 	} // class DirectorModelMap
 
-	#endregion class DirectorModelMap
-
-	#region class DirectorRepository
-
 	public class DirectorRepository : NHibernateRepositoryBase<Director> {
 		public DirectorRepository(ISession session) : base(session) {
 		} // constructor
 	} // class DirectorRepository
 
-	#endregion class DirectorRepository
 } // namespace
 
-#endregion namespace EZBob.DatabaseLib.Model.Database.Mapping

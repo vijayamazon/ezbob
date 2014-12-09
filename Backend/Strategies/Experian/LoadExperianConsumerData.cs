@@ -6,9 +6,6 @@
 	using Ezbob.Logger;
 
 	public class LoadExperianConsumerData : AStrategy {
-		#region public
-
-		#region constructor
 
 		public LoadExperianConsumerData(int customerId, int? directorId, long? nServiceLogId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Result = new ExperianConsumerData();
@@ -28,17 +25,9 @@
 			m_nServiceLogID = nServiceLogId;
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "LoadExperianConsumerData"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			IEnumerable<SafeReader> data;
@@ -78,7 +67,7 @@
 
 			foreach (SafeReader sr in data) {
 				string sType = sr["DatumType"];
-				
+
 				switch (sType) {
 				case "ExperianConsumerData":
 					sr.Fill(Result);
@@ -143,7 +132,7 @@
 
 			if (!Result.Cais.Any())
 				return;
-			
+
 			foreach (var c in Result.Cais)
 				Log.Debug("caisid {0}", c.Id);
 
@@ -167,17 +156,7 @@
 			}
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Result
-
 		public ExperianConsumerData Result { get; private set; }
-
-		#endregion property Result
-
-		#endregion public
-
-		#region private
 
 		private enum WorkMode {
 			ServiceLog,
@@ -191,6 +170,5 @@
 		private readonly int m_nCustomerId;
 		private readonly int? m_nDirectorId;
 
-		#endregion private
 	} // class LoadExperianConsumerData
 } // namespace

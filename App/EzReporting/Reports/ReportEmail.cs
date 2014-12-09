@@ -3,12 +3,7 @@
 	using Ezbob.Utils.Html.Attributes;
 	using Ezbob.Utils.Html.Tags;
 
-	#region class ReportEmail
-
 	public class ReportEmail {
-		#region public
-
-		#region constructor
 
 		public ReportEmail() {
 			HtmlBody = new Body().Add<Class>("Body");
@@ -43,14 +38,10 @@
 			HtmlBody.Append(ReportBody);
 		} // constructor
 
-		#endregion constructor
-
 		public ATag HtmlBody { get; private set; }
 		public ATag Title { get; private set; }
 		public ATag ReportBody { get; private set; }
 
-		#endregion public
 	} // class ReportEmail
 
-	#endregion class ReportEmail
 } // namespace Reports

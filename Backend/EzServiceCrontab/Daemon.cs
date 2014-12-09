@@ -8,9 +8,6 @@
 	using Ezbob.Utils.Lingvo;
 
 	public class Daemon {
-		#region public
-
-		#region constructor
 
 		public Daemon(EzServiceInstanceRuntimeData oData, AConnection oDB, ASafeLog oLog) {
 			if (oDB == null)
@@ -31,10 +28,6 @@
 
 			m_oTypeRepo = new TypeRepository(m_oLog);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Execute
 
 		public void Execute() {
 			for ( ; ; ) {
@@ -63,21 +56,9 @@
 			} // while
 		} // Execute
 
-		#endregion method Execute
-
-		#region method Shutdown
-
 		public void Shutdown() {
 			StopFlag = true;
 		} // Shutdown
-
-		#endregion method Shutdown
-
-		#endregion public
-
-		#region private
-
-		#region method Reinit
 
 		private void Reinit() {
 			try {
@@ -122,10 +103,6 @@
 			} // try
 		} // Reinit
 
-		#endregion method Reinit
-
-		#region property StopFlag
-
 		private bool StopFlag {
 			get {
 				lock (m_oStopLock)
@@ -140,10 +117,6 @@
 
 		private bool m_bStopFlag;
 		private readonly object m_oStopLock;
-
-		#endregion property StopFlag
-
-		#region property IsNewMinute
 
 		private bool IsNewMinute {
 			get {
@@ -169,10 +142,6 @@
 
 		private DateTime? m_oLastCheckedMinute;
 
-		#endregion property IsNewMinute
-
-		#region method StartAll
-
 		private void StartAll(DateTime oNow) {
 			try {
 				m_oLog.Debug("Crontab.StartAll started with {0} in the crontab.", Grammar.Number(m_oJobs.Count, "job"));
@@ -185,10 +154,6 @@
 				m_oLog.Alert(e, "Exception caught during starting a task via crontab daemon.");
 			} // try
 		} // StartAll
-
-		#endregion method StartAll
-
-		#region method StartOne
 
 		private void StartOne(Job oJob, DateTime oNow) {
 			try {
@@ -212,8 +177,6 @@
 			} // try
 		} // StartOne
 
-		#endregion method StartOne
-
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 		private readonly TypeRepository m_oTypeRepo;
@@ -221,6 +184,5 @@
 
 		private JobSet m_oJobs;
 
-		#endregion private
 	} // class Daemon
 } // namespace

@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -20,14 +20,13 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
     [XmlRootAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/", IsNullable = false)]
     public class FeedSubmissionInfo
     {
-    
+
         private String feedSubmissionIdField;
 
         private String feedTypeField;
@@ -40,7 +39,6 @@ namespace MarketplaceWebService.Model
 
         private DateTime? completedProcessingDateField;
 
-
         /// <summary>
         /// Gets and sets the FeedSubmissionId property.
         /// </summary>
@@ -50,8 +48,6 @@ namespace MarketplaceWebService.Model
             get { return this.feedSubmissionIdField ; }
             set { this.feedSubmissionIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the FeedSubmissionId property
@@ -64,8 +60,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FeedSubmissionId property is set
         /// </summary>
@@ -76,7 +70,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the FeedType property.
         /// </summary>
@@ -86,8 +79,6 @@ namespace MarketplaceWebService.Model
             get { return this.feedTypeField ; }
             set { this.feedTypeField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the FeedType property
@@ -100,8 +91,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FeedType property is set
         /// </summary>
@@ -112,7 +101,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the SubmittedDate property.
         /// </summary>
@@ -122,8 +110,6 @@ namespace MarketplaceWebService.Model
             get { return this.submittedDateField ; }
             set { this.submittedDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the SubmittedDate property
@@ -136,8 +122,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SubmittedDate property is set
         /// </summary>
@@ -148,7 +132,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the FeedProcessingStatus property.
         /// </summary>
@@ -158,8 +141,6 @@ namespace MarketplaceWebService.Model
             get { return this.feedProcessingStatusField ; }
             set { this.feedProcessingStatusField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the FeedProcessingStatus property
@@ -172,8 +153,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if FeedProcessingStatus property is set
         /// </summary>
@@ -184,7 +163,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the StartedProcessingDate property.
         /// </summary>
@@ -194,8 +172,6 @@ namespace MarketplaceWebService.Model
             get { return this.startedProcessingDateField.GetValueOrDefault() ; }
             set { this.startedProcessingDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the StartedProcessingDate property
@@ -208,8 +184,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if StartedProcessingDate property is set
         /// </summary>
@@ -220,7 +194,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the CompletedProcessingDate property.
         /// </summary>
@@ -230,8 +203,6 @@ namespace MarketplaceWebService.Model
             get { return this.completedProcessingDateField.GetValueOrDefault() ; }
             set { this.completedProcessingDateField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the CompletedProcessingDate property
@@ -244,8 +215,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if CompletedProcessingDate property is set
         /// </summary>
@@ -256,9 +225,6 @@ namespace MarketplaceWebService.Model
 
         }
 
-
-
-
         /// <summary>
         /// XML fragment representation of this object
         /// </summary>
@@ -267,7 +233,6 @@ namespace MarketplaceWebService.Model
         /// Name for outer tag expected to be set by calling method. 
         /// This fragment returns inner properties representation only
         /// </remarks>
-
 
         protected internal String ToXMLFragment() {
             StringBuilder xml = new StringBuilder();
@@ -335,8 +300,6 @@ namespace MarketplaceWebService.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

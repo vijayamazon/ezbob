@@ -9,9 +9,6 @@
 	using Ezbob.Utils.Exceptions;
 
 	partial class EzServiceImplementation {
-		#region public
-
-		#region IEzService exposed methods
 
 		public QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
 			try {
@@ -55,12 +52,6 @@
 			} // try
 		} // QuickOfferWithPrerequisites
 
-		#endregion IEzService exposed methods
-
-		#endregion public
-
-		#region private
-
 		private QuickOfferActionResult QuickOfferProcedure(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, QuickOfferConfigurationData oCfg) {
 			QuickOffer oStrategy;
 
@@ -73,6 +64,5 @@
 			};
 		} // QuickOfferProcedure
 
-		#endregion private
 	} // class EzServiceImplementation
 } // namespace EzService

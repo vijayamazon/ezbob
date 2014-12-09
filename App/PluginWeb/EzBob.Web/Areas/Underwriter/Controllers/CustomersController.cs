@@ -25,9 +25,6 @@
 	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class CustomersController : Controller {
-		#region public
-
-		#region constructor
 
 		public CustomersController(
 			ISession session,
@@ -56,10 +53,6 @@
 			_rejectReasonRepository = rejectReasonRepository;
 			} // constructor
 
-		#endregion constructor
-
-		#region method Index
-
 		public ViewResult Index() {
 			var grids = new LoansGrids {
 				IsEscalated = _context.User.Roles.Any(r => r.Name == "manager"),
@@ -70,10 +63,6 @@
 
 			return View(grids);
 		} // Index
-
-		#endregion method Index
-
-		#region method AddLogbookEntry
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -106,10 +95,6 @@
 			return Json(new { success = bSuccess, msg = sMsg });
 		} // AddLogbookEntry
 
-		#endregion method AddLogbookEntry
-
-		#region method LoadLogbookEntryTypeList
-
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
@@ -141,12 +126,6 @@
 			return j;
 		} // LoadLogbookEntryTypeList
 
-		#endregion method LoadLogbookEntryTypeList
-
-		#region underwriter grids
-
-		#region enum GridActions
-
 		private enum GridActions {
 			UwGridWaiting,
 			UwGridPending,
@@ -163,10 +142,6 @@
 			UwGridSales,
 			UwGridBrokers,
 		} // enum GridActions
-
-		#endregion enum GridActions
-
-		#region method GetGrid
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -241,10 +216,6 @@
 			} // switch
 		} // GetGrid
 
-		#endregion method GetGrid
-
-		#region method LoadGrid
-
 		private ContentResult LoadGrid(GridActions nSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, IEnumerable<QueryParameter> oMoreSpArgs = null) {
 			return LoadGrid(nSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers: null, oMoreSpArgs: oMoreSpArgs);
 		} // LoadGrid
@@ -306,12 +277,6 @@
 			};
 		} // LoadGrid
 
-		#endregion method LoadGrid
-
-		#endregion underwriter grids
-
-		#region method ChangeStatus
-
 		[Transactional]
 		[HttpPost]
 		[Ajax]
@@ -369,7 +334,6 @@
 				_historyRepository.LogAction(DecisionActions.Approve, model.reason, user, customer);
 
 				bool bSendBrokerForceResetCustomerPassword = false;
-				
 
 				if (customer.FilledByBroker) {
 					if (numOfPreviousApprovals == 0)
@@ -470,10 +434,6 @@
 			return Json(new { warning = sWarning });
 		} // ChangeStatus
 
-		#endregion method ChangeStatus
-
-		#region method CheckCustomer
-
 		[HttpGet]
 		[Ajax]
 		public JsonResult CheckCustomer(int customerId) {
@@ -490,20 +450,12 @@
 			return Json(new { State = nState.ToString() }, JsonRequestBehavior.AllowGet);
 		} // CheckCustomer
 
-		#endregion method CheckCustomer
-
-		#region method SetRecentCustomer
-
 		[HttpPost]
 		[Ajax]
 		public JsonResult SetRecentCustomer(int id) {
 			underwriterRecentCustomersRepository.Add(id, User.Identity.Name);
 			return GetRecentCustomers();
 		} // SetRecentCustomer
-
-		#endregion method SetRecentCustomer
-
-		#region method GetRecentCustomers
 
 		[HttpGet]
 		[Ajax]
@@ -523,10 +475,6 @@
 
 			return Json(new { RecentCustomers = recentCustomersMap }, JsonRequestBehavior.AllowGet);
 		} // GetRecentCustomers
-
-		#endregion method GetRecentCustomers
-
-		#region method GetCounters
 
 		[HttpGet]
 		[Ajax]
@@ -558,7 +506,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@isTest", isTest)
 			);
-			
+
 			return Json(new List<CustomersCountersModel> {
 				new CustomersCountersModel { Count = nWaiting,    Name = "waiting" },
 				new CustomersCountersModel { Count = nPending,    Name = "pending" },
@@ -567,10 +515,6 @@
 				new CustomersCountersModel { Count = nSignature,  Name = "signature" },
 			}, JsonRequestBehavior.AllowGet);
 		} // GetCounters
-
-		#endregion method GetCounters
-
-		#region method FindCustomer
 
 		[HttpGet]
 		[Ajax]
@@ -594,32 +538,18 @@
 			return Json(retVal.Take(15), JsonRequestBehavior.AllowGet);
 		} // FindCustomer
 
-		#endregion method FindCustomer
-
-		#region RejectReason
 		[Ajax]
 		[HttpGet]
 		public JsonResult RejectReasons()
 		{
 			return Json(new {reasons = _rejectReasonRepository.GetAll().ToList()}, JsonRequestBehavior.AllowGet);
 		}
-		#endregion
-
-		#endregion public
-
-		#region private
-
-		#region enum CustomerState
 
 		private enum CustomerState {
 			NotSuccesfullyRegistred,
 			NotFound,
 			Ok
 		} // enum CustomerState
-
-		#endregion enum CustomerState
-
-		#region properties
 
 		private readonly ISession _session;
 		private readonly CustomerRepository _customers;
@@ -635,8 +565,5 @@
 		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
 
-		#endregion properties
-
-		#endregion private
 	} // class CustomersController
 } // namespace

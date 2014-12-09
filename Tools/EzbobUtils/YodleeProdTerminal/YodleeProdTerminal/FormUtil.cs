@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 //using com.yodlee.common;
 //using com.yodlee.soap.core.accountmanagement;
@@ -543,7 +543,6 @@ namespace com.yodlee.sampleapps.util
                 fieldInfos[i] = (FieldInfo)fieldInfoList[i];
             }
 
-
             return fieldInfoList;
         }
 
@@ -599,7 +598,6 @@ namespace com.yodlee.sampleapps.util
             return inValue;
 
         }
-
 
     }
 }

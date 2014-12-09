@@ -1,12 +1,9 @@
-using System;
+﻿using System;
 using System.Text;
-
-
-
 
 namespace com.paypal.sdk.core
 {
-    
+
     public class PayPalURLEncoder
     {
         public const string digits = "0123456789abcdef";
@@ -23,7 +20,7 @@ namespace com.paypal.sdk.core
 			   char ch = s[i];
 		       if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')
 		            || (ch >= '0' && ch <= '9') || " _".IndexOf(ch) > -1) { //removed "." and "-" and "*"
-		    	   
+
 		    	   if (start >= 0) {
 		    		   convert(s.Substring(start, (i-start)), buf, enc);
 		                         start = -1;
@@ -42,14 +39,14 @@ namespace com.paypal.sdk.core
 	       if (start >= 0) {
 	           convert(s.Substring(start, (s.Length-start)), buf, enc);
 	       }
-	       
+
 	       return buf.ToString(0,buf.Length);
 	  }
         private static void convert(string s, StringBuilder buf, string enc)
         {
             Encoding encoding = System.Text.Encoding.GetEncoding(enc);
             byte[] bytes = encoding.GetBytes(s);
-  
+
             for (int j = 0; j < bytes.Length; j++)
             {
                 buf.Append('%');
@@ -59,6 +56,5 @@ namespace com.paypal.sdk.core
         }
 
     }
-
 
 }

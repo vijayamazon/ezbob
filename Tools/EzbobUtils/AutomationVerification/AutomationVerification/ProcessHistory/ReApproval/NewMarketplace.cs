@@ -3,14 +3,9 @@
 	using System.Globalization;
 
 	public class NewMarketplace : ATrace {
-		#region constructor
 
 		public NewMarketplace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
-
-		#endregion constructor
-
-		#region method Init
 
 		public void Init(bool newMpWasAdded) {
 			Comment = newMpWasAdded
@@ -36,8 +31,6 @@
 				);
 			} // if
 		} // Init
-
-		#endregion method Init
 
 		public int MpID { get; private set; }
 		public string MpName { get; private set; }

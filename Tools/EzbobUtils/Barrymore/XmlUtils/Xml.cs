@@ -4,7 +4,6 @@
 	using Exceptions;
 
 	public static class Xml {
-		#region method Parse
 
 		public static XmlDocument Parse(string sXml) {
 			if (string.IsNullOrWhiteSpace(sXml))
@@ -25,14 +24,9 @@
 			return doc;
 		} // Parse
 
-		#endregion method Parse
-
-		#region method ParseRoot
-
 		public static XmlNode ParseRoot(string sXml) {
 			return Parse(sXml).DocumentElement;
 		} // ParseRoot
 
-		#endregion method ParseRoot
 	} // class Xml
 } // namespace

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using EzBob.CommonLib;
 using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
@@ -653,11 +653,10 @@ namespace EzBob.TeraPeakServiceLib
 </GetSellerResearchResults>
 ";
 
-
 			var rezEmpty = Serialized.Deserialize<GetSellerResearchResults>( resultStringEmpty );
 
 			Assert.NotNull( rezEmpty );
-			
+
 		}
 
 		[Test]
@@ -748,7 +747,7 @@ namespace EzBob.TeraPeakServiceLib
 			DateTime dRightOut2 = new DateTime( 2012, 4, 25 );
 			DateTime d1 = new DateTime( 2012, 2, 20 );
 			DateTime d2 = new DateTime( 2012, 3, 1 );
-			
+
 			var r1 = new SearchQueryDatesRange( dLeftOut1, dLeftOut2, RangeMarkerType.Temporary);
 			var r2 = new SearchQueryDatesRange( dLeftOut2, d1, RangeMarkerType.Temporary);
 			var r3 = new SearchQueryDatesRange( d2, dRightOut1, RangeMarkerType.Temporary);
@@ -792,7 +791,7 @@ namespace EzBob.TeraPeakServiceLib
 
 			var rez6 = service.RequestData( r6 );
 			Assert.IsNull( rez6.ModifiedQuery );
-			
+
 		}
 
 		[Test]
@@ -828,7 +827,7 @@ namespace EzBob.TeraPeakServiceLib
 
 			var modifiedRange1 = new ModifiedDateQuery
 				{
-				
+
 					Dates = new ModifiedDateRange
 					{
 						StartDate = new DateTime( 2011, 6, 10 ),
@@ -871,7 +870,6 @@ namespace EzBob.TeraPeakServiceLib
 			queue.RemoveAndCorrectQueue( r3, modifiedRange2 );
 			Assert.AreEqual( queue.Count, 0 );
 
-
 		}
 
 		[Test]
@@ -907,7 +905,7 @@ namespace EzBob.TeraPeakServiceLib
 
 			var modifiedRange1 = new ModifiedDateQuery
 				{
-				
+
 					Dates = new ModifiedDateRange
 					{
 						StartDate = new DateTime( 2011, 4, 21 ),
@@ -939,7 +937,6 @@ namespace EzBob.TeraPeakServiceLib
 
 			queue.RemoveAndCorrectQueue( r2, modifiedRange2 );
 			Assert.AreEqual( queue.Count, 0 );
-
 
 		}
 
@@ -976,7 +973,7 @@ namespace EzBob.TeraPeakServiceLib
 
 			var modifiedRange1 = new ModifiedDateQuery
 				{
-				
+
 					Dates = new ModifiedDateRange
 					{
 						StartDate = new DateTime( 2011, 4, 21 ),
@@ -994,7 +991,6 @@ namespace EzBob.TeraPeakServiceLib
 		{
 			var serviseFirstDate = new DateTime( 2011, 12, 30 );
 			var serviceLastDate = new DateTime( 2012, 03, 15 );
-
 
 			var startRequestsDate = new DateTime( 2011, 8, 23 );
 			var allQieriesWithData = TestQueryDataRangeCorrection( serviseFirstDate, serviceLastDate, startRequestsDate );
@@ -1016,7 +1012,6 @@ namespace EzBob.TeraPeakServiceLib
 			var serviseFirstDate = new DateTime( 2012, 1, 2 );
 			var serviceLastDate = new DateTime( 2012, 1, 7 );
 
-
 			var startRequestsDate = new DateTime( 2011, 8, 23 );
 			var allQieriesWithData = TestQueryDataRangeCorrection( serviseFirstDate, serviceLastDate, startRequestsDate );
 			// Queries:
@@ -1031,7 +1026,7 @@ namespace EzBob.TeraPeakServiceLib
 		private List<SearchQueryDatesRange> TestQueryDataRangeCorrection( DateTime serviseFirstDate, DateTime serviceLastDate, DateTime startRequestsDate )
 		{
 			var allQueries = new List<SearchQueryDatesRange>();
-			
+
 			var service = new TeraPearServiceMock( serviseFirstDate, serviceLastDate );
 
 			var peakRequestDataInfo = new TeraPeakRequestDataInfo
@@ -1111,7 +1106,7 @@ namespace EzBob.TeraPeakServiceLib
 			Assert.AreEqual( ranges[7].StartDate, new DateTime( 2012, 8, 1 ) );Assert.AreEqual( ranges[7].EndDate, new DateTime( 2012, 8, 31 , 23, 59 , 59) );
 			Assert.AreEqual( ranges[8].StartDate, new DateTime( 2012, 9, 1 ) );Assert.AreEqual( ranges[8].EndDate, new DateTime( 2012, 9, 30 , 23, 59 , 59) );
 			Assert.AreEqual( ranges[9].StartDate, new DateTime( 2012, 10, 1 ) );Assert.AreEqual( ranges[9].EndDate, new DateTime( 2012, 10, 31 , 23, 59 , 59) );
-			
+
 		}
 
 	}

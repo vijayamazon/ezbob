@@ -8,25 +8,14 @@
 	using YodleeLib.connector;
 
 	public class DisplayMarketplaceSecurityData : AStrategy {
-		#region public
-
-		#region constructor
 
 		public DisplayMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oStra = new LoadCustomerMarketplaceSecurityData(nCustomerID, DB, Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "Display customer marketplace security data"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			Integration.ChannelGrabberConfig.Configuration oCgCfg = Integration.ChannelGrabberConfig.Configuration.GetInstance(Log);
@@ -66,15 +55,7 @@
 			} // for each result
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly LoadCustomerMarketplaceSecurityData m_oStra;
-
-		#region method TryDecrypt
 
 		private string TryDecrypt(byte[] oEncoded) {
 			try {
@@ -85,8 +66,5 @@
 			} // try
 		} // TryDecrypt
 
-		#endregion method TryDecrypt
-
-		#endregion private
 	} // class DisplayMarketplaceSecurityData
 } // namespace EzBob.Backend.Strategies.Misc

@@ -3,7 +3,6 @@
 	using Ezbob.Database;
 
 	class ActionData {
-		#region constructor
 
 		public ActionData(Guid oActionID, SafeReader sr) {
 			m_bHasValue = false;
@@ -17,14 +16,10 @@
 			LoadTime(sr);
 		} // constructor
 
-		#endregion constructor
-
 		public Guid ID { get; private set; }
 		public DateTime? StartTime { get; private set; }
 		public DateTime? EndTime { get; private set; }
 		public bool? IsSuccess { get; private set; }
-
-		#region method LoadTime
 
 		public void LoadTime(SafeReader sr) {
 			int nStatusID = sr["ActionStatusID"];
@@ -36,10 +31,6 @@
 				EndTime = sr["EntryTime"];
 			} // if
 		} // LoadTime
-
-		#endregion method LoadTime
-
-		#region property Length
 
 		public double? Length {
 			get {
@@ -58,6 +49,5 @@
 		private double? m_nLength;
 		private bool m_bHasValue;
 
-		#endregion method Length
 	} // class ActionData
 } // namespace

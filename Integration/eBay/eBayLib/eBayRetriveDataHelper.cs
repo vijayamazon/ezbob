@@ -35,7 +35,6 @@
 
 	public class eBayRetriveDataHelper : MarketplaceRetrieveDataHelperBase<eBayDatabaseFunctionType>
 	{
-		#region Nested Types
 
 		internal enum UpdateStrategyType
 		{
@@ -105,24 +104,20 @@
 				Helper.UpdateTeraPeakOrdersThenEbayOrders(databaseCustomerMarketPlace, info, databaseCustomerMarketPlace.DisplayName, historyRecord);
 			}
 		}
-		#endregion
 
-		#region Fields
 		private static readonly int MaxPossibleRetriveMonthsFromTeraPeak = 12;
 
 		private readonly EbayServiceConnectionInfo _EbayConnectionInfo;
 		private readonly IEbayMarketplaceSettings _Settings;
 		private readonly UpdateStaretagy _UpdateStaretagy;
-		#endregion
 
-		#region .ctor
 		public eBayRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<eBayDatabaseFunctionType> marketplace)
 			:base(helper, marketplace)
         {
 			_Settings = ObjectFactory.GetInstance<IEbayMarketplaceSettings>();
 
 			var ebayConnectionInfo = ObjectFactory.GetInstance<IEbayMarketplaceTypeConnection>();
-			
+
 			_EbayConnectionInfo = eBayServiceHelper.CreateConnection( ebayConnectionInfo );
 
 			_UpdateStaretagy = UpdateStaretagy.CreateStrategy(this,
@@ -130,7 +125,6 @@
 				                                                  ? UpdateStrategyType.OnlyTeraPeak
 				                                                  : UpdateStrategyType.EbayGetOrdersAfterTeraPeak);
         }
-		#endregion
 
 		public override void Update(int nCustomerMarketplaceID) {
 			UpdateCustomerMarketplaceFirst(nCustomerMarketplaceID);
@@ -153,7 +147,6 @@
 
 		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
 		{
-			#region FeedBack
 
             var feedbacks = Helper.GetEbayFeedback()
                 .Where(f => f.CustomerMarketPlace.Id == marketPlace.Id && f.HistoryRecord.UpdatingStart != null && f.HistoryRecord.UpdatingEnd != null)
@@ -162,7 +155,6 @@
 
 			if ( feedbacks.Any() )
 			{
-				
 
 				feedbacks.ForEach( fb =>
 				{
@@ -178,7 +170,7 @@
 						    f.ForEach( afp =>
 						    {
 							    var timePeriod = TimePeriodFactory.CreateById( afp.TimePeriod.InternalId );
-							
+
 							    var g = new AnalysisDataParameterInfo("Negative Feedback rate", timePeriod, DatabaseValueType.Integer, afp.Negative);
 							    var n = new AnalysisDataParameterInfo("Neutral Feedback rate", timePeriod, DatabaseValueType.Integer, afp.Neutral);
 							    var p = new AnalysisDataParameterInfo("Positive Feedback Rate", timePeriod, DatabaseValueType.Integer, afp.Positive);
@@ -206,9 +198,9 @@
 						}
                     }
 				} );
-                    
+
 			}
-			#endregion
+
 		}
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
@@ -242,7 +234,6 @@
 					};
 				}
 			);
-
 
 			return resultInfo;
 		}
@@ -286,7 +277,7 @@
 									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => account.GetAccount() );
-					
+
 					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreDataToDatabase, 
@@ -302,8 +293,6 @@
 				}
 			);
 		}
-
-		
 
 		private void SaveAccountInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, ResultInfoEbayAccount accountInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
@@ -326,7 +315,7 @@
 									() => SaveFeedbackInfo( databaseCustomerMarketPlace, resultInfo, historyRecord ) );
 
 					var ebayRaitingInfo = resultInfo == null? null: resultInfo.GetRaitingData(FeedbackSummaryPeriodCodeType.FiftyTwoWeeks, FeedbackRatingDetailCodeType.ShippingAndHandlingCharges);					
-					
+
 					return new UpdateActionResultInfo
 					{
 						Name = UpdateActionResultType.FeedbackRaiting,
@@ -336,7 +325,7 @@
 					};
 				}
 			);
-			
+
 		}
 
 		private void SaveFeedbackInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, ResultInfoEbayFeedBack feedbackInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord)
@@ -376,7 +365,6 @@
 						Positive = feedbackInfo.GetPositiveFeedbackByPeriod( timePeriod ),
 					} );
 
-				
 			}
 
 			var timePeriodsRaiting = new[]
@@ -524,7 +512,7 @@
 					}
 	            );	        
 	    }
-		
+
 		private void UpdateTeraPeakOrders( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 												string ebayUserID, 
 												MP_CustomerMarketplaceUpdatingHistory historyRecord )
@@ -535,7 +523,7 @@
 													() =>
 					{
 						var elapsedTimeInfo = new ElapsedTimeInfo();
-						
+
 						// по-умолчанию берем данные за 12 месяцев (на данный момент TeraPeak отдает информация только за 1 год)
 						int countMonthsForRetrieveData = MaxPossibleRetriveMonthsFromTeraPeak;
 
@@ -554,7 +542,7 @@
 
 							countMonthsForRetrieveData = lastDate.GetCountMonthsToByEntire(now);
 						}
-						
+
 						var ranges = new SearchQueryDatesRangeListData();
 
 						if(countMonthsForRetrieveData > 0)
@@ -587,12 +575,11 @@
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => TeraPeakService.SearchBySeller(requestInfoByRange));
 
-						
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 								databaseCustomerMarketPlace.Id,
 								ElapsedDataMemberType.StoreDataToDatabase,
 								() => Helper.StoretoDatabaseTeraPeakOrdersData(databaseCustomerMarketPlace, teraPeakDatabaseSellerDataByRange, historyRecord));
-                        
+
 						var agInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
 									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.AggregateData,
@@ -602,7 +589,7 @@
 										{
 											allTeraPeakData = new TeraPeakDatabaseSellerData( now );
 										}
-										
+
 										allTeraPeakData.AddRange( teraPeakDatabaseSellerDataByRange );
 
 										var receivedDataList = new MixedReceivedDataList( now, allTeraPeakData.Select( t => new MixedReceivedDataItem( t ) ) );
@@ -650,7 +637,7 @@
 							var countMonths = 10;
 							var now = DateTime.UtcNow;
 							startDate = now.Date.AddYears( -1 ).AddDays( -1 );
-			
+
 							var peakRequestDataInfo = new TeraPeakRequestDataInfo
 							{
 								StepType = TeraPeakRequestStepEnum.ByMonth,
@@ -658,7 +645,6 @@
 								StartDate = startDate.Value,				
 							};
 
-			
 							var ranges = TerapeakRequestsQueue.CreateQueriesDates( peakRequestDataInfo, now );
 
                             var requestInfo = new TeraPeakRequestInfo(sellerInfo, ranges, _Settings.ErrorRetryingInfo);
@@ -671,7 +657,7 @@
 	                        if (teraPeakDatabaseSellerData != null && teraPeakDatabaseSellerData.Any())
 	                        {
 	                            startDate = teraPeakDatabaseSellerData.Max(o => o.EndDate);
-								
+
 	                        }
 
 							ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
@@ -698,7 +684,7 @@
 									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetLastEbayOrdersRequest( databaseCustomerMarketPlace ) );
-							
+
 	                        return new UpdateActionResultInfo
 	                            {
 	                                Name = UpdateActionResultType.TeraPeakOrdersCount,
@@ -822,7 +808,7 @@
 
 						item.ExternalTransactionData.Add( exItem );
 					}
-					
+
 				}
 
 				if ( o.TransactionArray != null && o.TransactionArray.Length > 0 )
@@ -853,7 +839,6 @@
 						item.TransactionData.Add( trItem );
 					}
 				}
-
 
 				rez.Add( item );
 			}
@@ -961,8 +946,6 @@
 					throw new NotImplementedException();
 			}
 		}
-
-		
 
 		public ResultInfoEbayUser GetCustomerUserInfo(eBaySecurityInfo data)
 		{

@@ -7,7 +7,6 @@
 
 	public partial class CalculateVatReturnSummary : AStrategy {
 		private class BusinessDataEntry : BusinessDataOutput {
-			#region constructor
 
 			public BusinessDataEntry(LoadDataForVatReturnSummary.ResultRow oRaw) {
 				Boxes = new SortedDictionary<int, decimal>();
@@ -18,17 +17,9 @@
 				Add(oRaw);
 			} // constructor
 
-			#endregion constructor
-
-			#region method Add
-
 			public void Add(LoadDataForVatReturnSummary.ResultRow oRaw) {
 				Boxes[oRaw.BoxNum] = oRaw.Amount; // TODO: if oRaw.CurrencyCode is not GBP apply currency conversion.
 			} // Add
-
-			#endregion method Add
-
-			#region method ForEachBox
 
 			public void ForEachBox(Func<int, decimal, bool> oCallback) {
 				if (oCallback == null)
@@ -42,17 +33,9 @@
 				} // for each
 			} // ForEachBox
 
-			#endregion method ForEachBox
-
-			#region method BoxValue
-
 			public decimal BoxValue(int nBoxNum) {
 				return Boxes.ContainsKey(nBoxNum) ? Boxes[nBoxNum] : 0;
 			} // BoxValue
-
-			#endregion method BoxValue
-
-			#region method ToString
 
 			public override string ToString() {
 				return ToString("");
@@ -77,19 +60,11 @@
 				return os.ToString();
 			} // ToString
 
-			#endregion method ToString
-
-			#region method MonthCount
-
 			public override int MonthCount() {
 				return DateFrom.Year == DateTo.Year
 					? DateTo.Month - DateFrom.Month + 1
 					: 13 - DateFrom.Month + DateTo.Month;
 			} // MonthCount
-
-			#endregion method MonthCount
-
-			#region method CalculateOutput
 
 			public void CalculateOutput(bool bDoPctOfAnnualRevenues, decimal? nTotalRevenues) {
 				Revenues = BoxValue(6);
@@ -116,10 +91,6 @@
 				FreeCashFlow = Ebida - ActualLoanRepayment;
 			} // CalculateOutput
 
-			#endregion method CalculateOutput
-
-			#region method SetSalary
-
 			public void SetSalary(decimal? nOneMonthSalary, SortedDictionary<DateTime, decimal> oRtiSalary) {
 				if (nOneMonthSalary.HasValue) {
 					Salaries = nOneMonthSalary.Value * MonthCount();
@@ -135,23 +106,14 @@
 				} // for each
 			} // SetSalary
 
-			#endregion method SetSalary
-
-			#region properties saved in DB
-
 			[UsedImplicitly]
 			public DateTime DateFrom { get; set; }
 
 			[UsedImplicitly]
 			public DateTime DateTo { get; set; }
 
-			#endregion properties saved in DB
-
-			#region private
-
 			private SortedDictionary<int, decimal> Boxes { get; set; }
 
-			#endregion private
 		} // BusinessDataEntry
 	} // class CalculateVatReturnSummary
 } // namespace

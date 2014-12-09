@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2009 Amazon Services.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -20,14 +20,13 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace MarketplaceWebService.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/")]
     [XmlRootAttribute(Namespace = "http://mws.amazonaws.com/doc/2009-01-01/", IsNullable = false)]
     public class GetReportResponse
     {
-    
+
         private  GetReportResult getReportResultField;
         private  ResponseMetadata responseMetadataField;
 
@@ -41,8 +40,6 @@ namespace MarketplaceWebService.Model
             set { this.getReportResultField = value; }
         }
 
-
-
         /// <summary>
         /// Sets the GetReportResult property
         /// </summary>
@@ -54,8 +51,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if GetReportResult property is set
         /// </summary>
@@ -64,9 +59,6 @@ namespace MarketplaceWebService.Model
         {
             return this.getReportResultField != null;
         }
-
-
-
 
         /// <summary>
         /// Gets and sets the ResponseMetadata property.
@@ -77,8 +69,6 @@ namespace MarketplaceWebService.Model
             get { return this.responseMetadataField ; }
             set { this.responseMetadataField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ResponseMetadata property
@@ -91,8 +81,6 @@ namespace MarketplaceWebService.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ResponseMetadata property is set
         /// </summary>
@@ -101,11 +89,6 @@ namespace MarketplaceWebService.Model
         {
             return this.responseMetadataField != null;
         }
-
-
-
-
-
 
         /// <summary>
         /// XML Representation for this object
@@ -162,8 +145,6 @@ namespace MarketplaceWebService.Model
             }
             return sb.ToString();
         }
-
-
 
     }
 

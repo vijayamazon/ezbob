@@ -8,9 +8,6 @@
 	using Ezbob.Logger;
 
 	public class QuickOffer : AStrategy {
-		#region public
-
-		#region method LoadConfiguration
 
 		public static QuickOfferConfigurationData LoadConfiguration(AConnection oDB, ASafeLog oLog) {
 			try {
@@ -24,10 +21,6 @@
 			} // try
 		} // LoadConfiguration
 
-		#endregion method LoadConfiguration
-
-		#region constructor
-
 		public QuickOffer(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, QuickOfferConfigurationData oCfg, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
 			m_bSaveOfferToDB = bSaveOfferToDB;
@@ -36,15 +29,7 @@
 			m_oCfg = oCfg ?? LoadConfiguration(DB, Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name { get { return "Quick offer"; } } // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			// * Except brokers' clients (source ref is liqcen).
@@ -111,19 +96,7 @@
 			Log.Debug("QuickOffer.Execute complete for customer {0}: offer is {1}.", m_nCustomerID, ReferenceEquals(Offer, null) ? "alas, nothing" : Offer.Amount.ToString());
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Offer
-
 		public QuickOfferModel Offer { get; private set; } // Offer
-
-		#endregion property Offer
-
-		#endregion public
-
-		#region private
-
-		#region method HackForTest
 
 		private void HackForTest() {
 			Log.Debug("QuickOffer.HackForTest for customer {0} started...", m_nCustomerID);
@@ -181,13 +154,10 @@
 			Log.Debug("QuickOffer.HackForTest for customer {0} complete.", m_nCustomerID);
 		} // HackForTest
 
-		#endregion method HackForTest
-
 		private readonly int m_nCustomerID;
 		private readonly bool m_bSaveOfferToDB;
 		private readonly bool m_bHackForTest;
 		private readonly QuickOfferConfigurationData m_oCfg;
 
-		#endregion private
 	} // class QuickOffer
 } // namespace EzBob.Backend.Strategies.QuickOffer

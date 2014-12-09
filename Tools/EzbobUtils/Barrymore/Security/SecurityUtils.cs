@@ -2,7 +2,6 @@
 	using System.Text;
 
 	public static class SecurityUtils {
-		#region method MD5
 
 		public static string MD5(string input) {
 			// step 1, calculate MD5 hash from input
@@ -20,10 +19,6 @@
 			return sb.ToString().ToLowerInvariant();
 		} // MD5
 
-		#endregion method MD5
-
-		#region method HashPassword
-
 		public static string HashPassword(string sUserName, string sPassword) {
 			return Hash(sUserName + sPassword);
 		} // HashPassword
@@ -31,10 +26,6 @@
 		public static string HashPassword(string sPassword) {
 			return Hash(sPassword);
 		} // HashPassword
-
-		#endregion method HashPassword
-
-		#region method Hash
 
 		public static string Hash(string sPassword) {
 			var sha = System.Security.Cryptography.SHA512.Create();
@@ -53,6 +44,5 @@
 			return sb.ToString().ToLowerInvariant();
 		} // Hash
 
-		#endregion method Hash
 	} // class SecurityUtils
 } // namespace

@@ -4,15 +4,10 @@
 	using EzBob.Backend.Strategies;
 
 	public class ExecuteArguments {
-		#region constructor
 
 		public ExecuteArguments(params object[] oStrategyArgs) {
 			StrategyArguments = new List<object>(oStrategyArgs);
 		} // constructor
-
-		#endregion constructor
-
-		#region property StrategyType
 
 		public virtual Type StrategyType {
 			get {
@@ -25,8 +20,6 @@
 		} // StrategyType
 
 		private Type m_oStrategyType;
-
-		#endregion property StrategyType
 
 		public int? CustomerID { get; set; }
 		public int? UserID { get; set; }
@@ -42,12 +35,9 @@
 
 		public List<object> StrategyArguments { get; private set; }
 
-		#region property StrategyArgumentsStr
-
 		public string StrategyArgumentsStr {
 			get { return string.Join("; ", StrategyArguments); }
 		} // StrategyArgumentsStr
 
-		#endregion property StrategyArgumentsStr
 	} // class ExecuteArguments
 } // namespace

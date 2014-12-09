@@ -8,7 +8,6 @@
 	using NHibernate;
 
 	public class UploadHmrcController : Controller {
-		#region constructor
 
 		public UploadHmrcController(
 			DatabaseDataHelper helper,
@@ -21,10 +20,6 @@
 
 		// constructor
 
-		#endregion constructor
-
-		#region action SaveFile
-
 		[HttpPost]
 		public JsonResult SaveFile() {
 			int nCustomerID;
@@ -35,39 +30,22 @@
 			return m_oAccountManager.SaveUploadedFiles(Request.Files, nCustomerID, "UploadHmrcController", "SaveFile");
 		} // SaveFile
 
-		#endregion action SaveFile
-
-		#region action SaveNewManuallyEntered
-
 		[HttpPost]
 		public JsonResult SaveNewManuallyEntered(string sData) {
 			return m_oAccountManager.SaveNewManuallyEntered(sData);
 		} // SaveNewManuallyEntered
-
-		#endregion action SaveNewManuallyEntered
-
-		#region action LoadPeriods
 
 		[HttpGet]
 		public JsonResult LoadPeriods([Bind(Prefix = "customerId")] int nCustomerID) {
 			return m_oAccountManager.LoadPeriods(nCustomerID);
 		} // LoadPeriods
 
-		#endregion action LoadPeriods
-
-		#region action RemovePeriod
-
 		[HttpPost]
 		public JsonResult RemovePeriod(string period) {
 			return m_oAccountManager.RemovePeriod(period);
 		} // RemovePeriod
 
-		#endregion action RemovePeriod
-
-		#region private
-
 		private readonly HmrcManualAccountManager m_oAccountManager;
 
-		#endregion private
 	} // class UploadHmrcController
 } // namespace

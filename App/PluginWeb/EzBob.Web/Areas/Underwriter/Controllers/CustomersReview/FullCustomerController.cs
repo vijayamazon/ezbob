@@ -23,7 +23,6 @@
 	using System;
 
 	public class FullCustomerController : Controller {
-		#region constructor
 
 		public FullCustomerController(
 			ICustomerRepository customers,
@@ -63,10 +62,6 @@
 			serviceClient = new ServiceClient();
 
 		} // constructor
-
-		#endregion constructor
-
-		#region action Index
 
 		[HttpGet]
 		public JsonResult Index(int id, string history = null) {
@@ -188,11 +183,6 @@
 			return Json(model, JsonRequestBehavior.AllowGet);
 		} // Index
 
-		#endregion action Index
-
-		#region private
-
-		#region class FullCustomerModel
 		// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 		private class FullCustomerModel {
@@ -220,7 +210,6 @@
 		} // class FullCustomerModel
 
 		// ReSharper restore UnusedAutoPropertyAccessor.Local
-		#endregion class FullCustomerModel
 
 		private readonly ICustomerRepository _customers;
 		private readonly ISession _session;
@@ -242,6 +231,5 @@
 		private readonly IWorkplaceContext _context;
 		private static readonly ASafeLog Log = new SafeILog(typeof(FullCustomerController));
 
-		#endregion private
 	} // class FullCustomerController
 } // namespace

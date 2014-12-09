@@ -20,7 +20,6 @@ namespace ez1091 {
 
 			// if (oRequested.Count > 1)
 
-
 			log.Dispose();
 		} // Main
 

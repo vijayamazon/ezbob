@@ -1,7 +1,6 @@
 ﻿using System;
 
 namespace Reports {
-	#region enum ValueType
 
 	public enum ValueType {
 		Currency,
@@ -13,14 +12,7 @@ namespace Reports {
 		BrokerID,
 	} // enum ValueType
 
-	#endregion enum ValueType
-
-	#region class ColumnInfo
-
 	public class ColumnInfo {
-		#region public
-
-		#region constructor
 
 		public ColumnInfo(string sCaption, string sFieldName) {
 			ValueType = ValueType.Other;
@@ -43,7 +35,7 @@ namespace Reports {
 				FieldName = FieldName.Substring(1);
 				ValueType = ValueType.UserID;
 				break;
-			
+
 			case '^':
 				FieldName = FieldName.Substring(1);
 				ValueType = ValueType.BrokerID;
@@ -69,35 +61,15 @@ namespace Reports {
 				throw new Exception("Field name is not specified.");
 		} // constructor
 
-		#endregion constructor
-
-		#region property Caption
-
 		public string Caption { get; private set; }
-
-		#endregion property Caption
-
-		#region property FieldName
 
 		public string FieldName { get; private set; }
 
-		#endregion property FieldName
-
-		#region property ValueType
-
 		public ValueType ValueType { get; private set; }
-
-		#endregion property ValueType
-
-		#region property IsVisible
 
 		public bool IsVisible {
 			get { return ValueType != ValueType.CssClass; }
 		} // IsVisible
-
-		#endregion property IsVisible
-
-		#region property Format
 
 		public string Format(int nPrecision) {
 			switch (ValueType) {
@@ -120,10 +92,7 @@ namespace Reports {
 				throw new ArgumentOutOfRangeException();
 			} // switch
 		} // Format
-		#endregion property Format
 
-		#endregion public
 	} // class ColumnInfo
 
-	#endregion class ColumnInfo
 } // namespace Reports

@@ -33,5 +33,4 @@ namespace EZBob.DatabaseLib.Model.Database
 		}
 	}
 
-
 }

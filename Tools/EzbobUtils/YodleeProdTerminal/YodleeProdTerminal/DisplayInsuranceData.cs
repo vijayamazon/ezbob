@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using com.yodlee.sampleapps.datatypes;
 
@@ -10,7 +10,7 @@ namespace com.yodlee.sampleapps
 	public class DisplayInsuranceData : ApplicationSuper
 	{
 		DataServiceService dataService;
-		
+
 		public DisplayInsuranceData()
 		{
 			dataService = new DataServiceService();
@@ -33,7 +33,7 @@ namespace com.yodlee.sampleapps
 			ContainerCriteria cc = new ContainerCriteria();
 			cc.dataExtent = dataExtent;
 			cc.containerType = ContainerTypes.INSURANCE;
-			
+
 			// Create a list of Container Criteria
 			object[] list = {cc};
 
@@ -45,7 +45,7 @@ namespace com.yodlee.sampleapps
 
 			// Get ItemSummary
 			object[] itemSummaries = dataService.getItemSummaries1(userContext, sr);
-			
+
 			// Verify that there is an ItemSummary
 			if(itemSummaries == null || itemSummaries.Length == 0) 
 			{
@@ -116,7 +116,7 @@ namespace com.yodlee.sampleapps
 					{
 						InsuranceLoginAccountData ilad = (InsuranceLoginAccountData) accounts[i];
 						System.Console.WriteLine("\t\tInsuranceLoginAccountData.lastUpdated: " + UtcToDateTime(ilad.lastUpdated.Value) );
-						
+
 						// InsuranceData
 						object[] insurancePolicys = ilad.insurancePolicys;
 						if (insurancePolicys == null || insurancePolicys.Length == 0) 
@@ -140,8 +140,7 @@ namespace com.yodlee.sampleapps
 				// End InsuranceLoginAccountData
 			}
 
-
 		}
-		
+
 	}
 }

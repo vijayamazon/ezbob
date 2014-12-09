@@ -3,46 +3,21 @@
 	using System.Collections.Generic;
 
 	public static class Constants {
-		#region AutoReRejection
-
-		#region New Client Rules
 
 		public static readonly bool ManualyRejected = true;
 		public static readonly int ManualDecisionDateRangeDays = 30;
 		public static readonly bool NoNewDataSources = true;
 
-		#endregion
-
-		#region Old Client Rules
-
 		//all new client rules plus
 		public static readonly int MinNumOfLoans = 1;
 		public static readonly decimal MinRepaidPrincipalPercent = 0.5M;
-
-		#endregion
-
-		#endregion
-
-		#region AutoReApproval
-
-		#region New Client
 
 		public static readonly int NewMinReApproveAmount = 1000;
 		public static readonly int MissedPaymentCalendarDays = 5; //no need?
 		public static readonly int NewReApprovePeriodDays = 30;
 
-		#endregion
-
-		#region Old Client
-
 		public static readonly int OldReApprovePeriodDays = 28;
 		public static readonly int OldMinReApproveAmount = 500;
-
-		#endregion
-
-		#endregion
-
-		#region AutoApproval
 
 		public static readonly int ApprovalMinCreditScore = 900;
 		public static readonly int ApprovalMinAnnualTurnover = 10000;
@@ -57,13 +32,7 @@
 		public static readonly int ApprovalMaxOutstandingOffersAmountPerDay = 200000;
 		public static readonly int ApprovalMaxIssuedAmountPerDay = 150000;
 
-		#region New Client
-
 		public static readonly int ApprovalNewMaxDelaysDaysOnCaisAccount = 60;
-
-		#endregion
-
-		#region Old Client
 
 		public static readonly int ApprovalOldMaxDelaysDaysOnCaisAccount = 90;
 		public static readonly decimal ApprovalOldMaxDecreaseOfTurnoverPercent = 0.15M;
@@ -71,13 +40,9 @@
 		public static readonly int ApprovalOldMaxNumOfOutstandingLoans = 1;
 		public static readonly decimal ApprovalOldMaxOutstandingPrincipalPercent = 0.5M;
 
-		#endregion
-
-		#endregion
 	}
 
 	public static class MedalRangesConstats {
-		#region Grade Ranges
 
 		public static readonly List<RangeGrage> BusinessScoreRanges = new List<RangeGrage>
 			{
@@ -206,10 +171,6 @@
 				new RangeGrage {MinValue = 50000, MaxValue = null,  Grade = 5},
 			};
 
-		#endregion Grade Ranges
-
-		#region Medal Range
-
 		public static readonly List<RangeMedal> MedalRanges = new List<RangeMedal>
 			{
 				new RangeMedal {MinValue = null,MaxValue = 0.4M, Medal = Medal.Silver },
@@ -218,6 +179,5 @@
 				new RangeMedal {MinValue = 0.84M,MaxValue = null,Medal = Medal.Diamond},
 			};
 
-		#endregion Medal Range
 	}
 }

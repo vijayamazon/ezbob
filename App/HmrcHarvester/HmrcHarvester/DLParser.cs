@@ -7,15 +7,11 @@ using Ezbob.Logger;
 using HtmlAgilityPack;
 
 namespace Ezbob.HmrcHarvester {
-	#region class DLParser
 
 	/// <summary>
 	/// See DL-parser.png for logic.
 	/// </summary>
 	class DLParser : SafeLog {
-		#region public
-
-		#region constructor
 
 		public DLParser(HtmlNode oDL, bool bFailOnEmptyDT = true, bool bVerboseLogging = false, ASafeLog oLog = null) : base(oLog) {
 			Data = new SortedDictionary<string, string>();
@@ -30,31 +26,11 @@ namespace Ezbob.HmrcHarvester {
 			Parse(oDL, bFailOnEmptyDT);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Data
-
 		public SortedDictionary<string, string> Data { get; private set; }
-
-		#endregion property Data
-
-		#region property Success
 
 		public bool Success { get; private set; }
 
-		#endregion property Success
-
-		#endregion public
-
-		#region private
-
-		#region property VerboseLogging
-
 		private bool VerboseLogging { get; set; }
-
-		#endregion property VerboseLogging
-
-		#region method Parse
 
 		private void Parse(HtmlNode oDL, bool bFailOnEmptyDT) {
 			Debug("DL parser started, fail on empty DT: {0}", bFailOnEmptyDT ? "yes" : "no");
@@ -178,10 +154,6 @@ namespace Ezbob.HmrcHarvester {
 			} // while
 		} // Parse
 
-		#endregion method Parse
-
-		#region fields
-
 		private HtmlNode m_oCurChild;
 
 		private enum FsmState {
@@ -192,10 +164,6 @@ namespace Ezbob.HmrcHarvester {
 
 		private string m_sCurKey;
 
-		#endregion fields
-
-		#endregion private
 	} // class DLParser
 
-	#endregion class DLParser
 } // namespace Ezbob.HmrcHarvester

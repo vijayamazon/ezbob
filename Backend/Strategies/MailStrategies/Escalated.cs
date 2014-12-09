@@ -7,17 +7,12 @@
 	using Exceptions;
 
 	public class Escalated : AMailStrategyBase {
-		#region constructor
 
 		public Escalated(int customerId, AConnection oDb, ASafeLog oLog)
 			: base(customerId, false, oDb, oLog) {
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get { return "Escalated"; } } // Name
-
-		#region method SetTemplateAndSubjectAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - User was escalated";
@@ -50,6 +45,5 @@
 			};
 		} //  SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
 	} // class Escalated
 } // namespace

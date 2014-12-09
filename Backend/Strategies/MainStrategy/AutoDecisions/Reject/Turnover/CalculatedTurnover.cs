@@ -4,9 +4,6 @@
 	using Ezbob.Logger;
 
 	public class CalculatedTurnover {
-		#region public
-
-		#region constructor
 
 		public CalculatedTurnover() {
 			m_nAnnual = null;
@@ -17,10 +14,6 @@
 			m_oHmrc = new GroupTurnover<HmrcPeriodValue>();
 			m_oYodlee = new GroupTurnover<YodleePeriodValue>();
 		} // constructor
-
-		#endregion constructor
-
-		#region method Add
 
 		public void Add(SafeReader sr, ASafeLog oLog) {
 			Row r = sr.Fill<Row>();
@@ -38,10 +31,6 @@
 			m_nAnnual = null;
 			m_nQuarter = null;
 		} // Add
-
-		#endregion method Add
-
-		#region property Annual
 
 		public decimal Annual {
 			get {
@@ -61,10 +50,6 @@
 
 		private decimal? m_nAnnual;
 
-		#endregion property Annual
-
-		#region property Quarter
-
 		public decimal Quarter {
 			get {
 				if (m_nQuarter != null)
@@ -83,18 +68,10 @@
 
 		private decimal? m_nQuarter;
 
-		#endregion property Quarter
-
-		#endregion public
-
-		#region private
-
 		private readonly GroupTurnover<EcommPeriodValue> m_oEcomm;
 		private readonly GroupTurnover<AccountingPeriodValue> m_oAccounting;
 		private readonly GroupTurnover<HmrcPeriodValue> m_oHmrc;
 		private readonly GroupTurnover<YodleePeriodValue> m_oYodlee;
-
-		#region method Max
 
 		private static decimal Max(params decimal[] args) {
 			if (args.Length < 1)
@@ -108,8 +85,5 @@
 			return nMax;
 		} // Max
 
-		#endregion method Max
-
-		#endregion private
 	} // class CalculatedTurnover
 } // namespace

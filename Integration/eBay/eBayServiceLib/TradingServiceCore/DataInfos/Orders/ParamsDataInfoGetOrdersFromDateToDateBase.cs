@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 
 namespace EzBob.eBayServiceLib.TradingServiceCore.DataInfos.Orders
@@ -15,12 +15,10 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.DataInfos.Orders
 		public DateTime FromDate { get; private set; }
 		public DateTime ToDate { get; private set; }
 
-
 		public override bool HasData
 		{
 			get { return true; }
 		}
 
-		
 	}
 }

@@ -12,9 +12,6 @@
 	/// This class is used to communicate with UI using json.
 	/// </summary>
 	public class AccountModel : IMarketPlaceSecurityInfo {
-		#region static
-
-		#region method ToModel
 
 		public static AccountModel ToModel(MP_CustomerMarketPlace account) {
 			try {
@@ -38,12 +35,6 @@
 			}
 		} // ToModel
 
-		#endregion method ToModel
-
-		#endregion static
-
-		#region properties
-
 		public int id { get; set; }
 		public string name { get; set; }
 		public string url { get; set; }
@@ -56,10 +47,6 @@
 		public string accountTypeName { get; set; }
 
 		public string displayName { get; set; }
-
-		#endregion properties
-
-		#region method Fill
 
 		public AccountData Fill() {
 			var oData = new AccountData(Configuration.Instance.GetVendorInfo(accountTypeName)) {
@@ -76,6 +63,5 @@
 			return oData;
 		} // FillIn
 
-		#endregion method Fill
 	} // class AccountModel
 } //aadd namespace Integration.ChannelGrabberFrontend

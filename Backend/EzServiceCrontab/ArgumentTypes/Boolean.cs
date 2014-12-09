@@ -2,8 +2,6 @@
 	internal class Boolean : AType<bool> {
 		public Boolean() : base("bool") {}
 
-		#region method CreateInstance
-
 		public override object CreateInstance(string sValue) {
 			bool nResult;
 
@@ -13,6 +11,5 @@
 			throw GetError(sValue);
 		} // CreateInstance
 
-		#endregion method CreateInstance
 	} // class Boolean
 } // namespace

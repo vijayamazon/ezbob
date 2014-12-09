@@ -5,7 +5,6 @@ namespace EzBob.Web.Infrastructure
 {
     public class XFrameOptionsModule : IHttpModule
     {
-        #region IHttpModule Members
 
         public void Dispose()
         {
@@ -15,8 +14,6 @@ namespace EzBob.Web.Infrastructure
         {
             context.PreSendRequestHeaders += new EventHandler(context_PreSendRequestHeaders);
         }
-
-        #endregion
 
         private void context_PreSendRequestHeaders(object sender, EventArgs e)
         {

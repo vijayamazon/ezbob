@@ -8,16 +8,11 @@
 	using UserManagement;
 
 	public class ThreeInvalidAttempts : AMailStrategyBase {
-		#region constructor
 
 		public ThreeInvalidAttempts(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
-		#endregion constructor
-
 		public override string Name { get {return "Three Invalid Attempts"; } } // Name
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			var oNewPassGenerator = new UserResetPassword(CustomerData.Mail, DB, Log);
@@ -37,6 +32,5 @@
 			};
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
 	} // class ThreeInvalidAttempts
 } // namespace

@@ -1,4 +1,4 @@
-using ApplicationMng.Repository;
+﻿using ApplicationMng.Repository;
 using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database {
@@ -8,13 +8,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual int? OfflineProgressBarPct { get; set; }
 		public virtual WizardStep WizardStep { get; set; }
 
-		#region method Name
-
 		public virtual string Name() {
 			return WizardStep.Name;
 		} // Name
 
-		#endregion method Name
 	} // class WizardStepSequence
 
 	public class WizardStepSequenceRepository : NHibernateRepositoryBase<WizardStepSequence> {

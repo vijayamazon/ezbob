@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,7 +54,6 @@ namespace com.yodlee.sampleapps
         /**public static String formatNumber(Double number){
             return formatNumber(number.longValue()) ;
         }*/
-
 
         /**
          * Format a number but adding commas

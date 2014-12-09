@@ -3,20 +3,13 @@
 	using ApplicationMng.Repository;
 	using NHibernate;
 
-	#region enum TrustPilotStauses
-
 	public enum TrustPilotStauses {
 		Neither,
 		Claims,
 		Done,
 	} // enum TrustPilotStauses
 
-	#endregion enum TrustPilotStauses
-
-	#region class TrustPilotStatus
-
 	public class TrustPilotStatus {
-		#region public
 
 		public virtual int ID { get; set; }
 		public virtual string Name { get; set; }
@@ -26,12 +19,7 @@
 			return nStatus.ToString() == Name;
 		} // IsMe
 
-		#endregion public
 	} // class TrustPilotStatus
-
-	#endregion class TrustPilotStatus
-
-	#region class TrustPilotStatusMap
 
 	public class TrustPilotStatusMap : ClassMap<TrustPilotStatus> {
 		public TrustPilotStatusMap() {
@@ -43,10 +31,6 @@
 			Map(x => x.Description, "TrustPilotStatusDescription").Length(255);
 		} // constructor
 	} // class TrustPilotStatusMap
-
-	#endregion class TrustPilotStatusMap
-
-	#region class TrustPilotStatusRepository
 
 	public class TrustPilotStatusRepository : NHibernateRepositoryBase<TrustPilotStatus> {
 		public TrustPilotStatusRepository(ISession session) : base(session) {} // constructor
@@ -60,5 +44,4 @@
 		} // Find
 	} // class TrustPilotStatusRepository
 
-	#endregion class TrustPilotStatusRepository
 } // namespace EZBob.DatabaseLib.Model.Database

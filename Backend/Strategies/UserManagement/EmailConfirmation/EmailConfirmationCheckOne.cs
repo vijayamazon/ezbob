@@ -6,9 +6,6 @@
 	using JetBrains.Annotations;
 
 	public class EmailConfirmationCheckOne : AStrategy {
-		#region public
-
-		#region constructor
 
 		public EmailConfirmationCheckOne(Guid oToken, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Response = EmailConfirmationResponse.NotDone;
@@ -16,17 +13,9 @@
 			m_oSp = new SpEmailConfirmationCheckOne(oToken, DB, Log);
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name {
 			get { return "EmailConfirmationCheckOne"; }
 		} // Name
-
-		#endregion property Name
-
-		#region method Execute
 
 		public override void Execute() {
 			int nResult = m_oSp.ExecuteScalar<int>();
@@ -37,21 +26,10 @@
 				Response = (EmailConfirmationResponse)nResult;
 		} // Execute
 
-		#endregion method Execute
-
-		#region property Response
-
 		public EmailConfirmationResponse Response { get; private set; }
-
-		#endregion property Response
-
-		#endregion public
-
-		#region private
 
 		private readonly SpEmailConfirmationCheckOne m_oSp;
 
-		#region class SpEmailConfirmationCheckOne
 		// ReSharper disable ValueParameterNotUsed
 
 		private class SpEmailConfirmationCheckOne : AStoredProc {
@@ -80,8 +58,6 @@
 		} // class SpEmailConfirmationCheckOne
 
 		// ReSharper restore ValueParameterNotUsed
-		#endregion class SpEmailConfirmationCheckOne
 
-		#endregion private
 	} // class EmailConfirmationCheckOne
 } // namespace

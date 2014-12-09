@@ -61,7 +61,6 @@ namespace FraudChecker
 															 )));
 		}
 
-
 		private void ExternalPhoneCheck(Customer customer, List<FraudDetection> fraudDetections)
 		{
 			var phone = string.Empty;
@@ -127,7 +126,7 @@ namespace FraudChecker
 			{
 				companyName = company.CompanyName;
 			}
-			
+
 			if (string.IsNullOrEmpty(companyName)) return;
 
 			var companyRegNum = company.ExperianRefNum ?? company.CompanyNumber;

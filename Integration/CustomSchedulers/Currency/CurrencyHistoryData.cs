@@ -1,4 +1,4 @@
-namespace CustomSchedulers.Currency
+﻿namespace CustomSchedulers.Currency
 {
 	using System;
 	using System.Collections.Generic;
@@ -9,7 +9,6 @@ namespace CustomSchedulers.Currency
 		{
 			History = new List<CurrencyHistoryItemData>();
 		}
-
 
 		public CurrencyHistoryData( string currencyName )
 			:this()

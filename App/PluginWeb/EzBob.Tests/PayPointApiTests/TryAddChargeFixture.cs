@@ -31,7 +31,6 @@ namespace EzBob.Tests.PayPointApiTests
 
         }
 
-
         //LatePaymentCharge, AdministrationCharge, PartialPaymentCharge
         [Test]
         public void charges_can_be_added_to_different_installments()
@@ -63,7 +62,7 @@ namespace EzBob.Tests.PayPointApiTests
             Assert.That(loan.Charges.Count, Is.EqualTo(2));
 
         }
-        
+
         [Test]
         public void cannot_add_charge_of_the_same_type_to_one_installment()
         {

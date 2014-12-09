@@ -9,9 +9,6 @@
 	using MailApi;
 
 	public class StrategiesMailer {
-		#region public
-
-		#region constructor
 
 		public StrategiesMailer(AConnection oDb, ASafeLog oLog) {
 			DB = oDb;
@@ -29,10 +26,6 @@
 				CommandSpecies.StoredProcedure
 			);
 		} // constructor
-
-		#endregion constructor
-
-		#region method Send
 
 		public void Send(string templateName, Dictionary<string, string> variables, params Addressee[] aryRecipients)
 		{
@@ -54,10 +47,6 @@
 
 			SendMailViaMandrill(meta);
 		}
-
-		#endregion method Send
-
-		#region method SendMailViaMandrill
 
 		public void SendMailViaMandrill(MailMetaData oMeta) {
 			foreach (Addressee addr in oMeta) {
@@ -82,14 +71,6 @@
 			} // foreach
 		} // SendMailViaMandrill
 
-		#endregion method SendMailViaMandrill
-
-		#endregion public
-
-		#region private
-
-		#region method HtmlToDocxBinary
-
 		private byte[] HtmlToDocxBinary(string html) {
 			if (html == null)
 			{
@@ -105,10 +86,6 @@
 			} // using
 		} // HtmlToDocxBinary
 
-		#endregion method HtmlToDocxBinary
-
-		#region properties
-
 		private readonly Mail m_oMail;
 		private string m_sEzbobCopyTo;
 		private string m_sEzbobCopyCc;
@@ -116,8 +93,5 @@
 		private AConnection DB { get; set; }
 		private SafeLog Log { get; set; }
 
-		#endregion properties
-
-		#endregion private
 	} // class StrategiesMailer
 } // namespace

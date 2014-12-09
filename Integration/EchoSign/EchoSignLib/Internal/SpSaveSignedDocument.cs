@@ -6,12 +6,9 @@
 	using Ezbob.Logger;
 
 	internal class SpSaveSignedDocument : AStoredProc {
-		#region constructor
 
 		public SpSaveSignedDocument(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 		} // constructor
-
-		#endregion constructor
 
 		public override bool HasValidParameters() {
 			var oErrors = new List<string>();
@@ -47,17 +44,11 @@
 
 		public List<HistoryEvent> HistoryEvents { get; set; }
 
-		#region class EsignerStatus
-
 		public class EsignerStatus {
 			public int EsignerID { get; set; }
 			public int StatusID { get; set; }
 			public DateTime? SignatureTime { get; set; }
 		} // class EsignerStatus
-
-		#endregion class EsignerStatus
-
-		#region class HistoryEvent
 
 		public class HistoryEvent {
 			public HistoryEvent(DocumentHistoryEvent oEvent) {
@@ -87,6 +78,5 @@
 			public string SynchronizationKey { get; set; }
 		} // class HistoryEvent
 
-		#endregion class HistoryEvent
 	} // class SpSaveSignedDocument
 } // namespace

@@ -146,7 +146,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
             var table = new TagBuilder("table");
             table.AddCssClass("table");
 
-            
             table.InnerHtml += FormThead(model);
             IEnumerable<ReportTableColumn> columns = GetValueColumns(model.Columns);
             table.InnerHtml += FormBody(model, columns, withTotal);
@@ -173,7 +172,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
             }
             return columns;
         }
-
 
         //Временное быстрое решения расчитанное на 2 уровня
         //При большем уровне вложенности необходимо переделать

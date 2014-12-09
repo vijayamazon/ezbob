@@ -4,28 +4,16 @@ using System.Linq;
 using System.Reflection;
 
 namespace Integration.ChannelGrabberConfig {
-	#region class SecurityData
 
 	public class SecurityData : ICloneable {
-		#region public
-
-		#region constructor
 
 		public SecurityData() {
 			Fields = new List<FieldInfo>();
 			ToStringArguments = new List<string>();
 		} // SecurityData
 
-		#endregion constructor
-
-		#region properties
-
 		public List<FieldInfo> Fields { get; set; }
 		public List<string> ToStringArguments { get; set; }
-
-		#endregion properties
-
-		#region method Validate
 
 		public void Validate() {
 			Fields = Fields ?? new List<FieldInfo>();
@@ -62,10 +50,6 @@ namespace Integration.ChannelGrabberConfig {
 					throw new ConfigException("Unknown property in ToString arguments: " + ToStringArguments[i]);
 		} // Validate
 
-		#endregion method Validate
-
-		#region method AccountDataToString
-
 		public string AccountDataToString(AccountData oAccountData) {
 			var oValues = new List<object>();
 
@@ -77,10 +61,6 @@ namespace Integration.ChannelGrabberConfig {
 			return string.Format(ToStringArguments[0], oValues.ToArray());
 		} // AccountDataToString
 
-		#endregion method AccountDataToString
-
-		#region method ToString
-
 		public override string ToString() {
 			var fld = new List<string>();
 
@@ -91,10 +71,6 @@ namespace Integration.ChannelGrabberConfig {
 				string.Join(", ", ToStringArguments)
 			);
 		} // ToString
-
-		#endregion method ToString
-
-		#region method Clone
 
 		public object Clone() {
 			var oRes = new SecurityData {
@@ -111,10 +87,6 @@ namespace Integration.ChannelGrabberConfig {
 			return oRes;
 		} // Clone
 
-		#endregion method Clone
-
-		#endregion public
 	} // class SecurityData
 
-	#endregion class SecurityData
 } // namespace Integration.ChannelGrabberConfig

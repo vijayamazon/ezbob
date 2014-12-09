@@ -1,4 +1,4 @@
-namespace EzBobTest
+﻿namespace EzBobTest
 {
 	using System;
 	using EzBob.CommonLib;
@@ -36,7 +36,7 @@ namespace EzBobTest
 					new ErrorRetryingItemInfo( 2, 3, 60),
 					new ErrorRetryingItemInfo( 3, 3, 60),
 				}
-				
+
 			};
 			var retryingController = new WaitBeforeRetryController( new TestErrorRetryingWaiter( 60 ), info );
 
@@ -207,34 +207,33 @@ namespace EzBobTest
 			Assert.IsFalse( waiter.IsRegularWaiterRaised.HasValue );
 		}
 
-
 		private void WaitAndIncrease( ErrorRetryingInfo info, WaitBeforeRetryHelper errRetrying, TestErrorRetryingWaiter waiter )
 		{
-			
+
 			bool needRetrying = false;
 			Assert.AreEqual( errRetrying.CountIteration, 0 );
 			Assert.AreEqual( errRetrying.CountRetrying, 0 );
 			Assert.IsTrue( waiter.IsRegularWaiterRaised == null );
-			
+
 			//var info = new ErrorRetryingInfo( 3, 3, 60 );
-			
+
 			//------------------- Iteration I
 			needRetrying = errRetrying.IncreaseAndWait( info );
-			
+
 			Assert.IsTrue( needRetrying );
 			Assert.AreEqual( errRetrying.CountIteration, 0 );
 			Assert.AreEqual( errRetrying.CountRetrying, 1 );
 			Assert.IsTrue( waiter.IsRegularWaiterRaised.HasValue && waiter.IsRegularWaiterRaised.Value );
 
 			needRetrying = errRetrying.IncreaseAndWait( info );
-			
+
 			Assert.IsTrue( needRetrying );
 			Assert.AreEqual( errRetrying.CountIteration, 0 );
 			Assert.AreEqual( errRetrying.CountRetrying, 2 );
 			Assert.IsTrue( waiter.IsRegularWaiterRaised.HasValue && waiter.IsRegularWaiterRaised.Value );
 
 			needRetrying = errRetrying.IncreaseAndWait( info );
-			
+
 			Assert.IsTrue( needRetrying );
 			Assert.AreEqual( errRetrying.CountIteration, 0 );
 			Assert.AreEqual( errRetrying.CountRetrying, 3 );
@@ -242,21 +241,21 @@ namespace EzBobTest
 
 			//------------------- Iteration II
 			needRetrying = errRetrying.IncreaseAndWait( info );
-			
+
 			Assert.IsTrue( needRetrying );
 			Assert.AreEqual( errRetrying.CountIteration, 1 );
 			Assert.AreEqual( errRetrying.CountRetrying, 1 );
 			Assert.IsTrue( waiter.IsRegularWaiterRaised.HasValue && waiter.IsRegularWaiterRaised.Value );
 
 			needRetrying = errRetrying.IncreaseAndWait( info );
-			
+
 			Assert.IsTrue( needRetrying );
 			Assert.AreEqual( errRetrying.CountIteration, 1 );
 			Assert.AreEqual( errRetrying.CountRetrying, 2);
 			Assert.IsTrue( waiter.IsRegularWaiterRaised.HasValue && waiter.IsRegularWaiterRaised.Value );
 
 			needRetrying = errRetrying.IncreaseAndWait( info );
-			
+
 			Assert.IsTrue( needRetrying );
 			Assert.AreEqual( errRetrying.CountIteration, 1 );
 			Assert.AreEqual( errRetrying.CountRetrying, 3 );
@@ -264,14 +263,14 @@ namespace EzBobTest
 
 			//------------------- Iteration I
 			needRetrying = errRetrying.IncreaseAndWait( info );
-			
+
 			Assert.IsTrue( needRetrying );
 			Assert.AreEqual( errRetrying.CountIteration, 2 );
 			Assert.AreEqual( errRetrying.CountRetrying, 1 );
 			Assert.IsTrue( waiter.IsRegularWaiterRaised.HasValue && waiter.IsRegularWaiterRaised.Value );
 
 			needRetrying = errRetrying.IncreaseAndWait( info );
-			
+
 			Assert.IsTrue( needRetrying );
 			Assert.AreEqual( errRetrying.CountIteration, 2 );
 			Assert.AreEqual( errRetrying.CountRetrying, 2 );

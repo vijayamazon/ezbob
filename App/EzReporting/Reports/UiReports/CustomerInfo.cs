@@ -6,12 +6,7 @@ namespace Reports {
 	using EZBob.DatabaseLib.Model.Database;
 	using MainAppReferences;
 
-	#region class CustomerInfo
-
 	public class CustomerInfo : CustomerData {
-		#region public
-
-		#region constructor
 
 		public CustomerInfo(
 			IDataRecord oRow,
@@ -27,7 +22,6 @@ namespace Reports {
 			TimeAtAddress = Retrieve<int>("TimeAtAddress");
 			PropertyStatusDescription = Retrieve("Description");
 			CompanyName = Retrieve("CompanyName");
-			
 
 			WizardStep = Retrieve<int>("WizardStep").Value;
 
@@ -35,10 +29,6 @@ namespace Reports {
 			DirectorCount = oDirectorCountList.ContainsKey(ID) ? oDirectorCountList[ID] : 0;
 			AccountCount = oAccountCountList.ContainsKey(ID) ? oAccountCountList[ID] : 0;
 		} // constructor
-
-		#endregion constructor
-
-		#region properties
 
 		public string Gender { get; private set; }
 		public DateTime? DateOfBirth { get; private set; }
@@ -53,10 +43,6 @@ namespace Reports {
 		public AddressInfo AddressInfo { get; private set; }
 		public int DirectorCount { get; private set; }
 		public int AccountCount { get; private set; }
-
-		#endregion properties
-
-		#region method HasAllData
 
 		public bool HasAllData(UiItemGroups nItemGroup) {
 			switch (nItemGroup) {
@@ -85,10 +71,6 @@ namespace Reports {
 			throw new ArgumentOutOfRangeException("nItemGroup");
 		} // HasAllData
 
-		#endregion method HasAllData
-
-		#region method ToString
-
 		public override string ToString() {
 			return string.Format(
 				"{13}: {12} {0} {1} {2}, born on {3}, currently {4}, available at {5} or {6}, " +
@@ -114,14 +96,6 @@ namespace Reports {
 			);
 		} // ToString
 
-		#endregion method ToString
-
-		#endregion public
-
-		#region private
-
-		#region method NameTitle
-
 		private string NameTitle() {
 			switch (Gender) {
 			case "M":
@@ -132,10 +106,6 @@ namespace Reports {
 				return "some";
 			} // switch
 		} // NameTitle
-
-		#endregion method NameTitle
-
-		#region method HasCompanyDetails
 
 		private bool HasCompanyDetails() {
 			TypeOfBusiness bt;
@@ -159,10 +129,6 @@ namespace Reports {
 			} // switch
 		} // HasCompanyDetails
 
-		#endregion method HasCompanyDetails
-
-		#region method HasHomeAddress
-
 		private bool HasHomeAddress() {
 			if (AddressInfo == null)
 				return false;
@@ -179,10 +145,6 @@ namespace Reports {
 			return true;
 		} // HasHomeAddress
 
-		#endregion method HasHomeAddress
-
-		#endregion private
 	} // class CustomerInfo
 
-	#endregion class CustomerInfo
 } // namespace Reports

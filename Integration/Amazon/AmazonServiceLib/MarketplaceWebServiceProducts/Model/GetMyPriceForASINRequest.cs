@@ -1,4 +1,4 @@
-/******************************************************************************* 
+﻿/******************************************************************************* 
  *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  
@@ -14,12 +14,10 @@
  * 
  */
 
-
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace MarketplaceWebServiceProducts.Model
 {
@@ -27,7 +25,7 @@ namespace MarketplaceWebServiceProducts.Model
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
     public class GetMyPriceForASINRequest
     {
-    
+
         private String sellerIdField;
 
         private String marketplaceIdField;
@@ -44,8 +42,6 @@ namespace MarketplaceWebServiceProducts.Model
             set { this.sellerIdField= value; }
         }
 
-
-
         /// <summary>
         /// Sets the SellerId property
         /// </summary>
@@ -57,8 +53,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if SellerId property is set
         /// </summary>
@@ -69,7 +63,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the MarketplaceId property.
         /// </summary>
@@ -79,8 +72,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.marketplaceIdField ; }
             set { this.marketplaceIdField= value; }
         }
-
-
 
         /// <summary>
         /// Sets the MarketplaceId property
@@ -93,8 +84,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if MarketplaceId property is set
         /// </summary>
@@ -105,7 +94,6 @@ namespace MarketplaceWebServiceProducts.Model
 
         }
 
-
         /// <summary>
         /// Gets and sets the ASINList property.
         /// </summary>
@@ -115,8 +103,6 @@ namespace MarketplaceWebServiceProducts.Model
             get { return this.ASINListField ; }
             set { this.ASINListField = value; }
         }
-
-
 
         /// <summary>
         /// Sets the ASINList property
@@ -129,8 +115,6 @@ namespace MarketplaceWebServiceProducts.Model
             return this;
         }
 
-
-
         /// <summary>
         /// Checks if ASINList property is set
         /// </summary>
@@ -139,12 +123,6 @@ namespace MarketplaceWebServiceProducts.Model
         {
             return this.ASINListField != null;
         }
-
-
-
-
-
-
 
     }
 

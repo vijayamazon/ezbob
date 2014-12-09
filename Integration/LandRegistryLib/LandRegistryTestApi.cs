@@ -9,7 +9,7 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LandRegistryApi));
 		private readonly LandRegistryModelBuilder _builder = new LandRegistryModelBuilder();
-		
+
 		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string buildingName = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Enquiry };
@@ -65,9 +65,9 @@
 					};
 
 				model.Request = XmlHelper.SerializeObject(request);
-				
+
 				LREnquiryServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type response;
-				
+
 				try
 				{
 					response = client.searchProperties(request);
@@ -86,7 +86,7 @@
 				return model;
 			}
 		}
-		
+
 		public LandRegistryDataModel EnquiryByPropertyDescriptionPoll(string pollId)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryPoll };
@@ -164,7 +164,7 @@
 				try
 				{
 					LRRESServiceTestNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
-					
+
 					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 					try
 					{
@@ -209,8 +209,6 @@
 			}
 			return model;
 		}
-
-		
 
 		public LandRegistryDataModel ResPoll(string pollId)
 		{
