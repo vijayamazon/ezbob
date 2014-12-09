@@ -59,9 +59,7 @@
 			Log.Debug(
 				"Secondary: checking if auto re-reject should take place for customer {0} complete; {1}", Args.CustomerID, Trail
 			);
-		}
-
-// MakeDecision
+		} // MakeDecision
 
 		#endregion method MakeDecision
 

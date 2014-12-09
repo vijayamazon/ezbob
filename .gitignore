@@ -1,4 +1,5 @@
 *.ReSharper.user
+*.cs.with-regions
 *.csproj.DotSettings.user
 *.csproj.user
 *.less.squishit.debug.css
