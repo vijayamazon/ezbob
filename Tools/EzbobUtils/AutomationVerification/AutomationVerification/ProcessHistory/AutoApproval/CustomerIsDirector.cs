@@ -11,6 +11,10 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 		{
 		} // constructor
 
+		public void Init(bool isLimited) {
+			Comment = string.Format("Customer has {0}limited  company", isLimited ? "" : "non-");
+		} // Init
+
 		public void Init(string customerName) {
 			Comment = string.Format("Customer name is '{0}', no directors received from Experian.", customerName);
 		} // Init

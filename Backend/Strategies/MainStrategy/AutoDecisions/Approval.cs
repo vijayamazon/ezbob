@@ -330,6 +330,7 @@
 
 				ExperianCompanyName = (customer != null) && (customer.Company != null) ? customer.Company.ExperianCompanyName : null,
 				EnteredCompanyName = (customer != null) && (customer.Company != null) ? customer.Company.CompanyName : null,
+				IsLimitedCompanyType =  (this.customer != null) && (this.customer.PersonalInfo != null) && this.customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
 			});
 
 			FindOutstandingLoans();
@@ -438,6 +439,11 @@
 		} // CheckDefaultAccounts
 
 		private void CheckIsDirector() {
+			if (!m_oTrail.MyInputData.MetaData.IsLimitedCompanyType) {
+				StepDone<CustomerIsDirector>().Init(m_oTrail.MyInputData.MetaData.IsLimitedCompanyType);
+				return;
+			}
+
 			bool isDirector = false;
 
 			if (m_oTrail.MyInputData.DirectorNames.Count < 1) {
