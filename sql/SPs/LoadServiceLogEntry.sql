@@ -17,7 +17,8 @@ BEGIN
 		InsertDate,
 		ResponseData,
 		CustomerId,
-		DirectorId
+		DirectorId,
+		CompanyRefNum
 	FROM
 		MP_ServiceLog
 	WHERE
