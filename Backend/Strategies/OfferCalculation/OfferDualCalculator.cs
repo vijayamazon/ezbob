@@ -95,7 +95,7 @@
 			new Mail().Send(ConfigManager.CurrentValues.Instance.AutomationExplanationMailReciever, null, message,
 			                             ConfigManager.CurrentValues.Instance.MailSenderEmail,
 			                             ConfigManager.CurrentValues.Instance.MailSenderName,
-			                             "Mismatch in offer calculation for customer " + customerId);
+			                             "#Mismatch in offer calculation for customer " + customerId);
 		}
 	}
 }

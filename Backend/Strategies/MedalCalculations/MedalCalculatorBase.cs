@@ -568,24 +568,26 @@
 
 		private void CalculateEzbobSeniorityGrade()
 		{
-			int ezbobSeniorityMonthsOnly, ezbobSeniorityYearsOnly;
-			MiscUtils.GetFullYearsAndMonths(Results.EzbobSeniority, out ezbobSeniorityYearsOnly, out ezbobSeniorityMonthsOnly);
-			decimal ezbobSeniorityMonths = ezbobSeniorityMonthsOnly + 12 * ezbobSeniorityYearsOnly;
-			if (ezbobSeniorityMonths > 17)
-			{
-				Results.EzbobSeniorityGrade = 4;
+			if (!Results.EzbobSeniority.HasValue) {
+				Results.EzbobSeniority = Results.CalculationTime;
 			}
-			else if (ezbobSeniorityMonths > 5)
+
+			decimal ezbobSeniorityMonths = (decimal) (Results.CalculationTime - Results.EzbobSeniority.Value).TotalDays/(365.0M/12.0M);
+			if (ezbobSeniorityMonths < 1)
 			{
-				Results.EzbobSeniorityGrade = 3;
+				Results.EzbobSeniorityGrade = 0;
 			}
-			else if (ezbobSeniorityMonths > 0)
+			else if (ezbobSeniorityMonths < 6)
 			{
 				Results.EzbobSeniorityGrade = 2;
 			}
+			else if (ezbobSeniorityMonths < 18)
+			{
+				Results.EzbobSeniorityGrade = 3;
+			}
 			else
 			{
-				Results.EzbobSeniorityGrade = 0;
+				Results.EzbobSeniorityGrade = 4;
 			}
 		}
 
