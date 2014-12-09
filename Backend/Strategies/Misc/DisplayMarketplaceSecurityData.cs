@@ -1,7 +1,5 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using Integration.ChannelGrabberConfig;
@@ -9,8 +7,8 @@
 
 	public class DisplayMarketplaceSecurityData : AStrategy {
 
-		public DisplayMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_oStra = new LoadCustomerMarketplaceSecurityData(nCustomerID, DB, Log);
+		public DisplayMarketplaceSecurityData(int nCustomerID) {
+			m_oStra = new LoadCustomerMarketplaceSecurityData(nCustomerID);
 		} // constructor
 
 		public override string Name {
@@ -67,4 +65,4 @@
 		} // TryDecrypt
 
 	} // class DisplayMarketplaceSecurityData
-} // namespace EzBob.Backend.Strategies.Misc
+} // namespace Ezbob.Backend.Strategies.Misc

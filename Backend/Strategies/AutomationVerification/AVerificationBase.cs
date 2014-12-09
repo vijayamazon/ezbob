@@ -1,8 +1,6 @@
-﻿namespace EzBob.Backend.Strategies.AutomationVerification {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
 	using System;
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public abstract class AVerificationBase : AStrategy {
 
@@ -35,7 +33,7 @@
 			} // for
 		} // Execute
 
-		protected AVerificationBase(int nTopCount, int nLastCheckedCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		protected AVerificationBase(int nTopCount, int nLastCheckedCustomerID) {
 			m_nTopCount = nTopCount;
 			m_nLastCheckedCustomerID = nLastCheckedCustomerID;
 		} // constructor

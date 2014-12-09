@@ -16,4 +16,4 @@
 		[DataMember]
 		public string Comment { get; set; }
 	} // class BrokerCustomerCrmEntry
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

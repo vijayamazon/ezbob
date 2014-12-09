@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker
+﻿namespace Ezbob.Backend.Strategies.Broker
 {
 	using System;
 	using EZBob.DatabaseLib.Model.Database;

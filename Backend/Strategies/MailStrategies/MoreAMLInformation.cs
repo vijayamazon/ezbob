@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class MoreAmlInformation : ABrokerMailToo {
-		public MoreAmlInformation(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(customerId, true, oDb, oLog)
+		public MoreAmlInformation(int customerId)
+			: base(customerId, true)
 		{
 		} // constructor
 

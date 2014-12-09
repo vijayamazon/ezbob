@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Globalization;
 	using ConfigManager;
@@ -24,8 +24,7 @@
 			get { return "Experian consumer check"; }
 		}
 
-		public ExperianConsumerCheck(int customerId, int? directorId, bool bForceCheck, AConnection db, ASafeLog log)
-			: base(db, log) {
+		public ExperianConsumerCheck(int customerId, int? directorId, bool bForceCheck) {
 			this.customerId = customerId;
 			this.directorId = directorId.HasValue && directorId.Value == 0 ? null : directorId;
 			forceCheck = bForceCheck;

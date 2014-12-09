@@ -15,4 +15,4 @@
 		[DataMember]
 		public BrokerCustomerPersonalData PersonalData { get; set; }
 	} // class BrokerCustomerDetails
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

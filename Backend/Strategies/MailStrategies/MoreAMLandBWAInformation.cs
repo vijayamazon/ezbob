@@ -1,12 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class MoreAmlAndBwaInformation : ABrokerMailToo {
-		public MoreAmlAndBwaInformation(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(customerId, true, oDb, oLog)
-		{
+		public MoreAmlAndBwaInformation(int customerId)
+			: base(customerId, true) {
 		} // constructor
 
 		public override string Name { get { return "More AML and BWA Information"; } } // Name

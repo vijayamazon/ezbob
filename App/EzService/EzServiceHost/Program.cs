@@ -16,7 +16,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.AmazonLib;
-	using EzBob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.Misc;
 	using EzBob.CommonLib;
 	using EzBob.PayPal;
 	using EzBob.PayPalServiceLib.Common;
@@ -192,13 +192,12 @@
 			if (!InitInstanceName())
 				return false;
 
-			EzServiceAccessorShort.Set(m_oDB, m_oLog);
-
 			m_oCfg = new Configuration(m_sInstanceName, m_oDB, m_oLog);
 
 			m_oCfg.Init();
 
 			var oRuntimeData = new EzServiceInstanceRuntimeData {
+				Env = m_oEnv,
 				Host = this,
 				Log = m_oLog,
 				DB = m_oDB,

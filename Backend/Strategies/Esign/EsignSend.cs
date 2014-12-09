@@ -1,15 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Esign {
+﻿namespace Ezbob.Backend.Strategies.Esign {
 	using System;
 	using System.Linq;
 	using EchoSignLib;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class EsignSend : AStrategy {
-
-		public EsignSend(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-		} // constructor
-
 		public override string Name {
 			get { return "EsignSend"; }
 		} // Name

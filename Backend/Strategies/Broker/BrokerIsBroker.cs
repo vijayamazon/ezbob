@@ -1,10 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerIsBroker : AStrategy {
-
-		public BrokerIsBroker(string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerIsBroker(string sContactEmail) {
 			m_sContactEmail = (sContactEmail ?? string.Empty).Trim();
 			IsBroker = false;
 		} // constructor
@@ -29,7 +27,5 @@
 		} // Execute
 
 		private readonly string m_sContactEmail;
-
 	} // class BrokerIsBroker
-
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

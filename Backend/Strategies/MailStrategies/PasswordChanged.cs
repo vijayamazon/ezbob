@@ -1,24 +1,22 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using UserManagement.EmailConfirmation;
 
 	public class PasswordChanged : AMailStrategyBase {
 
-		public PasswordChanged(int customerId, Password oPassword, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public PasswordChanged(int customerId, Password oPassword) : base(customerId, true) {
 			m_sPassword = oPassword.Primary;
 		} // constructor
 
-		internal PasswordChanged(int customerId, string sPassword, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		internal PasswordChanged(int customerId, string sPassword) : base(customerId, true) {
 			m_sPassword = sPassword;
 		} // constructor
 
 		public override string Name { get { return "Password Changed"; } } // Name
 
 		protected override void SetTemplateAndVariables() {
-			var ecl = new EmailConfirmationLoad(CustomerData.UserID, DB, Log);
+			var ecl = new EmailConfirmationLoad(CustomerData.UserID);
 			ecl.Execute();
 
 			if (!ecl.IsConfirmed) {

@@ -3,9 +3,9 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ActionResults;
-	using EzBob.Backend.Strategies.Broker;
-	using EzBob.Backend.Strategies.MailStrategies;
-	using EzBob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.Broker;
+	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 

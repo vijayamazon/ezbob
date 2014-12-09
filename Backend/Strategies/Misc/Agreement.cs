@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.IO;
 	using Aspose.Words;
 	using EzBob.Backend.Models;
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Nustache.Core;
 
 	public class SaveAgreement : AStrategy {
@@ -16,10 +14,8 @@
 			string name,
 			TemplateModel template,
 			string path1,
-			string path2,
-			AConnection oDb,
-			ASafeLog oLog
-		) : base(oDb, oLog) {
+			string path2
+		) {
 			_name = name;
 			_template = template;
 			_path1 = path1;

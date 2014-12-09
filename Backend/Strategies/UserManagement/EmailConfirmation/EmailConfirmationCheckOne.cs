@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement.EmailConfirmation {
+﻿namespace Ezbob.Backend.Strategies.UserManagement.EmailConfirmation {
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -7,7 +7,7 @@
 
 	public class EmailConfirmationCheckOne : AStrategy {
 
-		public EmailConfirmationCheckOne(Guid oToken, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public EmailConfirmationCheckOne(Guid oToken) {
 			Response = EmailConfirmationResponse.NotDone;
 
 			m_oSp = new SpEmailConfirmationCheckOne(oToken, DB, Log);

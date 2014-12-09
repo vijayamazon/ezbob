@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions
 {
 	using System;
 	using System.Collections.Generic;
@@ -73,12 +73,12 @@
 		private DateTime startTimeForVatCheck;
 		private decimal minLoanAmount;
 
-		public BankBasedApproval(int customerId, AConnection db, ASafeLog log)
+		public BankBasedApproval(int customerId)
 		{
-			this.db = db;
-			this.log = log;
+			this.db = Library.Instance.DB;
+			this.log = Library.Instance.Log;
 			this.customerId = customerId;
-			mailer = new StrategiesMailer(db, log);
+			mailer = new StrategiesMailer();
 		}
 
 		private void GetPersonalInfo()
@@ -235,7 +235,7 @@
 				int roundedLoanOffer = (int) (Math.Round(loanOffer/minLoanAmount, 0, MidpointRounding.AwayFromZero)*minLoanAmount);
 				response.BankBasedAutoApproveAmount = roundedLoanOffer;
 				
-				var instance = new GetAvailableFunds(db, log);
+				var instance = new GetAvailableFunds();
 				instance.Execute();
 				decimal availableFunds = instance.AvailableFunds;
 				if (availableFunds >= response.BankBasedAutoApproveAmount)

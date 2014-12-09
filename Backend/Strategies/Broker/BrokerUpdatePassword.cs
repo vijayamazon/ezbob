@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -12,10 +12,8 @@
 		public BrokerUpdatePassword(
 			string sContactEmail,
 			Password oOldPassword,
-			Password oNewPassword,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			Password oNewPassword
+		) {
 			m_oSp = new SpBrokerUpdatePassword(DB, Log) {
 				ContactEmail = sContactEmail,
 				OldPassword = oOldPassword.Primary,
@@ -88,4 +86,4 @@
 		} // class SpBrokerUpdatePassword
 
 	} // class BrokerUpdatePassword
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

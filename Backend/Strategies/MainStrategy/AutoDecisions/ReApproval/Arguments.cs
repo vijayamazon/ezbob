@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
 	public class Arguments {
 
 		public Arguments(int nCustomerID) {

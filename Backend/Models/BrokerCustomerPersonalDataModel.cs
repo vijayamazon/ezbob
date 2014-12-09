@@ -32,4 +32,4 @@
 		public string address { get; set; }
 	} // class BrokerCustomerPersonalData
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

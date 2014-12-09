@@ -1,14 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.PricingModel
-{
+﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using System.Collections.Generic;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class GetPricingModelScenarios : AStrategy
-	{
-		public GetPricingModelScenarios(AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+	public class GetPricingModelScenarios : AStrategy {
+		public GetPricingModelScenarios() {
 			Scenarios = new List<string>();
 		}
 
@@ -17,9 +12,8 @@
 		}
 
 		public List<string> Scenarios { get; private set; }
-		
-		public override void Execute()
-		{
+
+		public override void Execute() {
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				Scenarios.Add(sr["ScenarioName"]);
 				return ActionResult.Continue;

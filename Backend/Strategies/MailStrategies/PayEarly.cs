@@ -1,13 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Globalization;
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class PayEarly : AMailStrategyBase {
-
-		public PayEarly(int customerId, decimal amount, string loanRefNumber, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public PayEarly(int customerId, decimal amount, string loanRefNumber) : base(customerId, true) {
 			this.amount = amount;
 			this.loanRefNumber = loanRefNumber;
 		} // constructor

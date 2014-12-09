@@ -1,11 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
-	using Ezbob.Database;
-	using Ezbob.Logger;
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using MailStrategies;
 
 	public class BrokerCustomerWizardComplete : AStrategy {
-
-		public BrokerCustomerWizardComplete(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerCustomerWizardComplete(int nCustomerID) {
 			m_nCustomerID = nCustomerID;
 		} // constructor
 
@@ -14,7 +11,7 @@
 		} // Name
 
 		public override void Execute() {
-			new EmailUnderReview(m_nCustomerID, DB, Log).Execute();
+			new EmailUnderReview(m_nCustomerID).Execute();
 
 			new BrokerDeleteCustomerLead(DB, Log) {
 				CustomerID = m_nCustomerID,
@@ -25,4 +22,4 @@
 		private readonly int m_nCustomerID;
 
 	} // class BrokerCustomerWizardComplete
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

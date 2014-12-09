@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Database;

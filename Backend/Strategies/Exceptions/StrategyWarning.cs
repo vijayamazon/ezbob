@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Exceptions {
+﻿namespace Ezbob.Backend.Strategies.Exceptions {
 	using System;
 	using Ezbob.Utils.Exceptions;
 

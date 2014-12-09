@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using global::FraudChecker;
 
 	public class FraudChecker : AStrategy {
-		public FraudChecker(int customerId, FraudMode mode, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+		public FraudChecker(int customerId, FraudMode mode) {
 			this.customerId = customerId;
 			this.mode = mode;
 		} // constructor

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -7,16 +7,10 @@
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
 	using System.IO;
 
 	public class BackfillExperianConsumer : AStrategy {
-
-		public BackfillExperianConsumer(AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog) {
-		} // constructor
-
 		public override string Name {
 			get { return "BackfillExperianConsumer"; }
 		} // Name
@@ -27,7 +21,7 @@
 			foreach (SafeReader sr in lst) {
 				try {
 					serviceLogId = sr["Id"];
-					var p = new ParseExperianConsumerData(serviceLogId, DB, Log);
+					var p = new ParseExperianConsumerData(serviceLogId);
 					p.Execute();
 					if (p.Result != null) {
 						DB.ExecuteNonQuery("SaveExperianHistory", CommandSpecies.StoredProcedure,

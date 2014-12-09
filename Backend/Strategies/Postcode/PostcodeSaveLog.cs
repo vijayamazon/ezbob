@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Postcode {
+﻿namespace Ezbob.Backend.Strategies.Postcode {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -11,10 +11,8 @@
 			string sStatus,
 			string sResponseData,
 			string sErrorMessage,
-			int nUserID,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			int nUserID
+		) {
 			m_oSp = new SpPostcodeSaveLog(DB, Log) {
 				RequestType = sRequestType,
 				Url = sUrl,
@@ -68,4 +66,4 @@
 		} // class SpPostcodeSaveLog
 
 	} // class PostcodeSaveLog
-} // namespace EzBob.Backend.Strategies.Postcode
+} // namespace Ezbob.Backend.Strategies.Postcode

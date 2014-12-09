@@ -1,5 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using EzBob.Backend.Strategies.PricingModel;
+	using Ezbob.Backend.Strategies.PricingModel;
 
 	partial class EzServiceImplementation 
 	{

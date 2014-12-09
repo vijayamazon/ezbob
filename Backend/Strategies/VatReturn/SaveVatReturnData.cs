@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -18,10 +18,8 @@
 			int nHistoryRecordID,
 			int nSourceID,
 			IEnumerable<VatReturnRawData> oVatReturn,
-			IEnumerable<RtiTaxMonthRawData> oRtiMonths,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			IEnumerable<RtiTaxMonthRawData> oRtiMonths
+		) {
 			m_oStopper = new Stopper();
 
 			m_oSp = new SpSaveVatReturnData(this, DB, Log) {
@@ -33,7 +31,7 @@
 			};
 			m_oSp.InitEntries((VatReturnSourceType)nSourceID);
 
-			m_oRaw = new LoadVatReturnRawData(nCustomerMarketplaceID, DB, Log);
+			m_oRaw = new LoadVatReturnRawData(nCustomerMarketplaceID);
 		} // constructor
 
 		public override string Name {
@@ -83,7 +81,7 @@
 
 			Log.Debug("\n{0}\n", os);
 
-			var oSummary = new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID, DB, Log);
+			var oSummary = new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID);
 			oSummary.Execute();
 
 			ElapsedTimeInfo.MergeData(oSummary.Stopper.ElapsedTimeInfo);
@@ -340,4 +338,4 @@
 		// ReSharper restore ValueParameterNotUsed
 
 	} // class SaveVatReturnData
-} // namespace EzBob.Backend.Strategies.VatReturn
+} // namespace Ezbob.Backend.Strategies.VatReturn

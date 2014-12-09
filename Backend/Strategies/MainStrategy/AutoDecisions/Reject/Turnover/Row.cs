@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover {
 	using System;
 	using System.Globalization;
 	using Ezbob.Logger;

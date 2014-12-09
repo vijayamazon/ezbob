@@ -1,14 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using ExperianLib.Ebusiness;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BackfillCustomerAnalyticsCompany : AStrategy {
-
-		public BackfillCustomerAnalyticsCompany(AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog) {
-		} // constructor
-
 		public override string Name {
 			get { return "BackfillCustomerAnalyticsCompany"; }
 		} // Name

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Linq;
 	using ExperianLib.Ebusiness;
@@ -13,13 +13,12 @@
 		private bool isLimited;
 		private string experianRefNum;
 
-		public ExperianCompanyCheck(int customerId, bool forceCheck, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog) {
+		public ExperianCompanyCheck(int customerId, bool forceCheck) {
 			this.customerId = customerId;
 			this.forceCheck = forceCheck;
 			foundCompany = false;
 
-			oDb.ForEachRowSafe(
+			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					foundCompany = true;
 
@@ -36,7 +35,7 @@
 			);
 
 			if (!foundCompany)
-				oLog.Info("Can't find company data for customer {0} (is the customer an entrepreneur?).", this.customerId);
+				Log.Info("Can't find company data for customer {0} (is the customer an entrepreneur?).", this.customerId);
 		}
 
 		public override string Name {
@@ -104,7 +103,7 @@
 			} // if
 
 			if (oExperianData.IsLimited)
-				new UpdateLimitedExperianDirectors(customerId, oExperianData.ServiceLogID, DB, Log).Execute();
+				new UpdateLimitedExperianDirectors(customerId, oExperianData.ServiceLogID).Execute();
 
 			if (oExperianData.CacheHit) {
 				// This check is required to allow multiple customers have the same company

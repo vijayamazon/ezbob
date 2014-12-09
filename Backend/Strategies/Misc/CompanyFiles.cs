@@ -1,57 +1,44 @@
-﻿namespace EzBob.Backend.Strategies.Misc
-{
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using ConfigManager;
 	using Ezbob.Database;
-	using Ezbob.Logger;
-	using EZBob.DatabaseLib;
 	using System.IO;
 
-	public class SaveCompanyFile : AStrategy
-	{
+	public class SaveCompanyFile : AStrategy {
 		private int customerId;
 		private string fileName;
 		private byte[] fileContent;
 		private string fileContentType;
 
-		public SaveCompanyFile(int customerId, string fileName, byte[] fileContent, string fileContentType, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		public SaveCompanyFile(int customerId, string fileName, byte[] fileContent, string fileContentType) {
 			this.customerId = customerId;
 			this.fileName = fileName;
 			this.fileContent = fileContent;
 			this.fileContentType = fileContentType;
 		}
 
-		public override string Name
-		{
+		public override string Name {
 			get { return "Company Files Upload"; }
 		}
 
-		public override void Execute()
-		{
-			try
-			{
+		public override void Execute() {
+			try {
 				Log.Debug("Saving file {0} to disc...", fileName);
 
 				string sPath = CurrentValues.Instance.CompanyFilesSavePath;
 				DirectoryInfo customerDirectory = null;
 				if (string.IsNullOrWhiteSpace(sPath))
 					Log.Debug("Not saving: operation is disabled (CompanyFilesSavePath is empty).");
-				else
-				{
-					try
-					{
+				else {
+					try {
 						var mainDirectory = Directory.CreateDirectory(sPath);
 						customerDirectory = mainDirectory.CreateSubdirectory(customerId.ToString());
 					}
-					catch (Exception e)
-					{
+					catch (Exception e) {
 						Log.Warn("Error while creating directory: ", e);
 					} // try
 
-					if (customerDirectory != null)
-					{
+					if (customerDirectory != null) {
 						string sFileName = Path.Combine(customerDirectory.FullName, Guid.NewGuid().ToString("N") + "." + customerId + "." + fileName);
 
 						Log.Info("Saving file {0} as {1}...", fileName, sFileName);
@@ -70,44 +57,35 @@
 
 				Log.Debug("Saving file {0} to disc complete.", fileName);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Log.Error("Error saving file {0} to disc \n {1}", fileName, e);
 			} // try
 		}
 	}
 
-	public class GetCompanyFile : AStrategy
-	{
+	public class GetCompanyFile : AStrategy {
 		private int companyFileId;
 
-		public GetCompanyFile(int companyFileId, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		public GetCompanyFile(int companyFileId) {
 			this.companyFileId = companyFileId;
 		}
 
-		public override string Name
-		{
+		public override string Name {
 			get { return "Company File Retrieve"; }
 		}
 
 		public byte[] FileContext { get; private set; }
 
-		public override void Execute()
-		{
-			try
-			{
+		public override void Execute() {
+			try {
 				var path = DB.ExecuteScalar<string>("GetCompanyFileMetadata", CommandSpecies.StoredProcedure,
 							new QueryParameter("CompanyFileId", companyFileId));
 
-				if (path != null)
-				{
+				if (path != null) {
 					FileContext = File.ReadAllBytes(path);
 				}
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Log.Error("Error retrieving file for company, file id: {0} \n {1}", companyFileId, e);
 			} // try
 		}

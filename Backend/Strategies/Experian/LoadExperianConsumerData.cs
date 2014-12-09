@@ -1,24 +1,20 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class LoadExperianConsumerData : AStrategy {
 
-		public LoadExperianConsumerData(int customerId, int? directorId, long? nServiceLogId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadExperianConsumerData(int customerId, int? directorId, long? nServiceLogId) {
 			Result = new ExperianConsumerData();
 
-			if (nServiceLogId.HasValue) {
+			if (nServiceLogId.HasValue)
 				m_nWorkMode = WorkMode.ServiceLog;
-			}
-			else if (directorId.HasValue && directorId.Value != 0) {
+			else if (directorId.HasValue && directorId.Value != 0)
 				m_nWorkMode = WorkMode.CacheDirector;
-			}
-			else {
+			else
 				m_nWorkMode = WorkMode.CacheCustomer;
-			}
 
 			m_nCustomerId = customerId;
 			m_nDirectorId = directorId;

@@ -1,10 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class BrokerLeadCanFillWizard: AStrategy {
-
-		public BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
 			m_nRequestedLeadID = nLeadID;
 			m_sRequestedLeadEmail = sLeadEmail;
 			m_sContactEmail = sContactEmail;
@@ -91,4 +90,4 @@
 
 	} // class BrokerLeadCanFillWizard
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

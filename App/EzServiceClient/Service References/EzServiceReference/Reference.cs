@@ -1666,7 +1666,7 @@ namespace ServiceClientProxy.EzServiceReference {
 
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PricingModelModel", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PricingModelModel", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel")]
     [System.SerializableAttribute()]
     public partial class PricingModelModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
 
@@ -2334,7 +2334,7 @@ namespace ServiceClientProxy.EzServiceReference {
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetTarget", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.UserManagement")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetTarget", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement")]
     public enum PasswordResetTarget : int {
 
         [System.Runtime.Serialization.EnumMemberAttribute()]

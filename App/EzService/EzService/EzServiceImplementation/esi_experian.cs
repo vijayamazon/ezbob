@@ -1,6 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
-	using EzBob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 

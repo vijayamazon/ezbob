@@ -1,23 +1,18 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils.Serialization;
 	using LandRegistryLib;
 
 	public class LandRegistryEnquiry : AStrategy {
-
 		public LandRegistryEnquiry(
 			int customerId,
 			string buildingNumber,
 			string buildingName,
 			string streetName,
 			string cityName,
-			string postCode,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			string postCode
+		) {
 			m_nCustomerID = customerId;
 			m_sBuildingNumber = buildingNumber;
 			m_sBuildingName = buildingName;
@@ -44,12 +39,10 @@
 		private readonly string m_sStreetName;
 		private readonly string m_sCityName;
 		private readonly string m_sPostCode;
-
 	} // LandRegistryEnquiry
 
 	public class LandRegistryRes : AStrategy {
-
-		public LandRegistryRes(int customerId, string titleNumber, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LandRegistryRes(int customerId, string titleNumber) {
 			m_nCustomerID = customerId;
 			m_sTitleNumber = titleNumber;
 		} // constructor
@@ -69,7 +62,5 @@
 
 		private readonly int m_nCustomerID;
 		private readonly string m_sTitleNumber;
-
 	} // class LandRegistryRes
-
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace

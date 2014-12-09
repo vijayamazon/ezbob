@@ -1,18 +1,16 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using EzBob.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
 	using ExperianLib.CaisFile;
-	using EzBob.Backend.Strategies.MailStrategies.API;
+	using Ezbob.Backend.Strategies.MailStrategies.API;
 
 	public class CaisGenerate : AStrategy {
-		public CaisGenerate(int underwriterId, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+		public CaisGenerate(int underwriterId) {
+			mailer = new StrategiesMailer();
 
 			SafeReader sr = DB.GetFirst("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
 			caisPath = sr["CaisPath"];

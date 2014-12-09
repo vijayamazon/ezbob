@@ -1,7 +1,6 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerSaveCrmEntry : AStrategy {
 
@@ -11,10 +10,8 @@
 			int nStatusID,
 			string sComment,
 			string sCustomerRefNum,
-			string sContactEmail,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			string sContactEmail
+		) {
 			m_sType = sType;
 			m_nActionID = nActionID;
 			m_nStatusID = nStatusID;
@@ -72,4 +69,4 @@
 
 	} // class BrokerSaveCrmEntry
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

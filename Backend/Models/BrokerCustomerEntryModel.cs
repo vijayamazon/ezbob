@@ -100,4 +100,4 @@
 		private readonly SortedDictionary<string, int> m_oMps;
 
 	} // class BrokerCustomerEntry
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

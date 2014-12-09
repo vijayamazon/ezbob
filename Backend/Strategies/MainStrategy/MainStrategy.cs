@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -17,22 +17,13 @@
 	using Ezbob.Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using EzBob.Models;
 	using StructureMap;
 
 	public class MainStrategy : AStrategy {
 		public override string Name { get { return "Main strategy"; } }
 
-		public MainStrategy(
-			int customerId,
-			NewCreditLineOption newCreditLine,
-			int avoidAutoDecision,
-			AConnection oDb,
-			ASafeLog oLog
-		)
-			: base(oDb, oLog) {
-
+		public MainStrategy(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDecision) {
 			_session = ObjectFactory.GetInstance<ISession>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
 			_decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
@@ -42,7 +33,7 @@
 
 			medalScoreCalculator = new MedalScoreCalculator(DB, Log);
 
-			mailer = new StrategiesMailer(DB, Log);
+			mailer = new StrategiesMailer();
 			this.customerId = customerId;
 			newCreditLineOption = newCreditLine;
 			avoidAutomaticDecision = avoidAutoDecision;
@@ -92,7 +83,7 @@
 
 			//check for fraud
 			if (!dataGatherer.IsTest) {
-				var fraudChecker = new FraudChecker(customerId, FraudMode.FullCheck, DB, Log);
+				var fraudChecker = new FraudChecker(customerId, FraudMode.FullCheck);
 				fraudChecker.Execute();
 			}
 
@@ -132,7 +123,7 @@
 		} // Execute
 
 		private void CalculateNewMedal() {
-			var instance = new CalculateMedal(DB, Log, customerId, dataGatherer.TypeOfBusiness, dataGatherer.MaxExperianConsumerScore, dataGatherer.MaxCompanyScore, dataGatherer.NumOfHmrcMps,
+			var instance = new CalculateMedal(customerId, dataGatherer.TypeOfBusiness, dataGatherer.MaxExperianConsumerScore, dataGatherer.MaxCompanyScore, dataGatherer.NumOfHmrcMps,
 				dataGatherer.NumOfYodleeMps, dataGatherer.NumOfEbayAmazonPayPalMps, dataGatherer.EarliestHmrcLastUpdateDate, dataGatherer.EarliestYodleeLastUpdateDate);
 			instance.Execute();
 
@@ -160,7 +151,7 @@
 
 		private void SendEmails() {
 			if (autoDecisionResponse.DecidedToReject) {
-				new RejectUser(customerId, true, DB, Log).Execute();
+				new RejectUser(customerId, true).Execute();
 			}
 			else if (autoDecisionResponse.IsAutoApproval) {
 				SendApprovalMails();
@@ -238,7 +229,7 @@
 				Log.Debug("Not processed auto approval: it is currently disabled in configuration or decision has already been made earlier.");
 
 			if (CurrentValues.Instance.BankBasedApprovalIsEnabled && bContinue) {
-				new BankBasedApproval(customerId, DB, Log).MakeDecision(autoDecisionResponse);
+				new BankBasedApproval(customerId).MakeDecision(autoDecisionResponse);
 
 				bContinue = !autoDecisionResponse.SystemDecision.HasValue;
 
@@ -292,7 +283,7 @@
 		} // ProcessRejections
 
 		private void GetLandRegistry() {
-			var customerAddressesHelper = new CustomerAddressHelper(customerId, DB, Log);
+			var customerAddressesHelper = new CustomerAddressHelper(customerId);
 			customerAddressesHelper.Execute();
 			try {
 				strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.OwnedAddresses);

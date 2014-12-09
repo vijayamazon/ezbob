@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.PricingModel
+﻿namespace Ezbob.Backend.Strategies.PricingModel
 {
 	using System;
 	using System.Collections.Generic;
@@ -82,7 +82,7 @@
 
 			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
 
-			var scoreStrat = new GetExperianConsumerScore(customerId, db, log);
+			var scoreStrat = new GetExperianConsumerScore(customerId);
 			scoreStrat.Execute();
 
 			int consumerScore = scoreStrat.Score;

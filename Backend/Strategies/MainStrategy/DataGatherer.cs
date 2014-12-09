@@ -1,5 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy
-{
+﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using System;
 	using System.Collections.Generic;
 	using ConfigManager;
@@ -11,8 +10,7 @@
 	using Ezbob.Logger;
 	using Misc;
 
-	public class DataGatherer
-	{
+	public class DataGatherer {
 		private readonly int customerId;
 		private readonly AConnection db;
 		private readonly ASafeLog log;
@@ -111,15 +109,13 @@
 		public int ManualSetupFeeAmount { get; private set; }
 		public decimal ManualSetupFeePercent { get; private set; }
 
-		public DataGatherer(int customerId, AConnection db, ASafeLog log)
-		{
+		public DataGatherer(int customerId, AConnection db, ASafeLog log) {
 			this.customerId = customerId;
 			this.db = db;
 			this.log = log;
 		}
 
-		public void Gather()
-		{
+		public void Gather() {
 			ReadConfigurations();
 			GetPersonalInfo();
 			GetCompanySeniorityDays();
@@ -132,16 +128,13 @@
 			GetWorstCaisStatuses();
 		}
 
-		private void GetWorstCaisStatuses()
-		{
+		private void GetWorstCaisStatuses() {
 			ConsumerCaisDetailWorstStatuses = new List<string>();
 
-			db.ForEachRowSafe((sr, bRowsetStart) =>
-				{
+			db.ForEachRowSafe((sr, bRowsetStart) => {
 					string worstStatus = sr["WorstStatus"];
 
-					if (!string.IsNullOrEmpty(worstStatus))
-					{
+					if (!string.IsNullOrEmpty(worstStatus)) {
 						ConsumerCaisDetailWorstStatuses.Add(worstStatus);
 					}
 
@@ -149,8 +142,7 @@
 				}, "GetWorstCaisStatuses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 		}
 
-		public void GatherPreliminaryData()
-		{
+		public void GatherPreliminaryData() {
 			BwaBusinessCheck = CurrentValues.Instance.BWABusinessCheck;
 
 			SafeReader results = db.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
@@ -161,8 +153,7 @@
 			TypeOfBusiness = results["TypeOfBusiness"];
 		}
 
-		private void ReadConfigurations()
-		{
+		private void ReadConfigurations() {
 			RejectDefaultsCreditScore = CurrentValues.Instance.Reject_Defaults_CreditScore;
 			RejectDefaultsAccountsNum = CurrentValues.Instance.Reject_Defaults_AccountsNum;
 			RejectMinimalSeniority = CurrentValues.Instance.Reject_Minimal_Seniority;
@@ -179,8 +170,7 @@
 			LimitedMedalMinOffer = CurrentValues.Instance.MedalMinOffer;
 		}
 
-		private void GetPersonalInfo()
-		{
+		private void GetPersonalInfo() {
 			log.Info("Getting personal info for customer:{0}", customerId);
 			SafeReader results = db.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
@@ -207,15 +197,13 @@
 			IsTest = results["IsTest"];
 		}
 
-		private void GetCompanySeniorityDays()
-		{
-			var getCompanySeniority = new GetCompanySeniority(customerId, Utils.IsLimitedCompany(TypeOfBusiness), db, log);
+		private void GetCompanySeniorityDays() {
+			var getCompanySeniority = new GetCompanySeniority(customerId, Utils.IsLimitedCompany(TypeOfBusiness));
 			getCompanySeniority.Execute();
 			CompanyIncorporationDate = getCompanySeniority.CompanyIncorporationDate;
 		}
 
-		private void GetCompanyScore()
-		{
+		private void GetCompanyScore() {
 			SafeReader sr = db.GetFirst(
 				"GetCompanyScore",
 				CommandSpecies.StoredProcedure,
@@ -226,30 +214,26 @@
 			MinCompanyScore = sr["MinScore"];
 		}
 
-		private void GetCurrentExperianScore()
-		{
-			var scoreStrat = new GetExperianConsumerScore(customerId, db, log);
+		private void GetCurrentExperianScore() {
+			var scoreStrat = new GetExperianConsumerScore(customerId);
 			scoreStrat.Execute();
 			ExperianConsumerScore = scoreStrat.Score;
 		}
 
-		private void GetMinMaxExperianScore()
-		{
+		private void GetMinMaxExperianScore() {
 			SafeReader sr = db.GetFirst(
 				"GetExperianMinMaxConsumerDirectorsScore",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 				);
 
-			if (!sr.IsEmpty)
-			{
+			if (!sr.IsEmpty) {
 				MinExperianConsumerScore = sr["MinExperianScore"];
 				MaxExperianConsumerScore = sr["MaxExperianScore"];
 			}
 		}
 
-		private void GatherOnlineMedalData()
-		{
+		private void GatherOnlineMedalData() {
 			log.Info("Starting to calculate score and medal");
 
 			var scoreCardResults = db.GetFirst(
@@ -262,8 +246,7 @@
 			string maritalStatusStr = scoreCardResults["MaritalStatus"];
 			MaritalStatus maritalStatusTmp;
 
-			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatusTmp))
-			{
+			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatusTmp)) {
 				log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
 				maritalStatusTmp = MaritalStatus.Other;
 			}
@@ -280,14 +263,12 @@
 			FirstRepaymentDatePassed = false;
 
 			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
-			if (modelFirstRepaymentDate != default(DateTime))
-			{
+			if (modelFirstRepaymentDate != default(DateTime)) {
 				FirstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
 			}
 		}
 
-		private void GatherTurnoversAndSeniority()
-		{
+		private void GatherTurnoversAndSeniority() {
 			log.Info("Getting turnovers and seniority");
 			MpsTotals totals = strategyHelper.GetMpsTotals(customerId);
 			TotalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
@@ -301,8 +282,7 @@
 			EzbobSeniorityMonths = (decimal)ModelEzbobSeniority * 12 / 365; // It is done this way to fit to the excel
 		}
 
-		private void GetLastCashRequestData()
-		{
+		private void GetLastCashRequestData() {
 			var lastOfferResults = db.GetFirst(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
@@ -310,8 +290,7 @@
 				new QueryParameter("Now", DateTime.UtcNow)
 			);
 
-			if (!lastOfferResults.IsEmpty)
-			{
+			if (!lastOfferResults.IsEmpty) {
 				LoanOfferReApprovalFullAmount = lastOfferResults["ReApprovalFullAmountNew"];
 				LoanOfferReApprovalRemainingAmount = lastOfferResults["ReApprovalRemainingAmount"];
 				LoanOfferReApprovalFullAmountOld = lastOfferResults["ReApprovalFullAmountOld"];

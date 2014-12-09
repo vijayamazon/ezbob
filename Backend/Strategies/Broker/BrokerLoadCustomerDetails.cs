@@ -1,13 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerLoadCustomerDetails : AStrategy {
 
-		public BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			Result = new BrokerCustomerDetails();
@@ -92,4 +91,4 @@
 
 	} // class BrokerLoadCustomerDetails
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

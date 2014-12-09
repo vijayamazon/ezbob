@@ -1,41 +1,34 @@
-﻿namespace EzBob.Backend.Strategies.Misc 
-{
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using MailStrategies.API;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using PaymentServices.PayPoint;
 
-	public class AutoPaymentResult 
-	{
+	public class AutoPaymentResult {
 		public decimal ActualAmountCharged { get; set; }
 		public bool PaymentFailed { get; set; }
 		public bool PaymentCollectedSuccessfully { get; set; }
 		public bool IsException { get; set; }
 	}
 
-	public class PayPointCharger : AStrategy
-	{
+	public class PayPointCharger : AStrategy {
 		private readonly int amountToChargeFrom;
 		private readonly StrategiesMailer mailer;
 		private readonly PayPointApi payPointApi = new PayPointApi();
 
-		public PayPointCharger(AConnection db, ASafeLog oLog) : base(db, oLog)
-		{
-			mailer = new StrategiesMailer(DB, Log);
+		public PayPointCharger() {
+			mailer = new StrategiesMailer();
 
 			SafeReader sr = DB.GetFirst("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
 			amountToChargeFrom = sr["AmountToChargeFrom"];
 		}
 
-		public override void Execute()
-		{
+		public override void Execute() {
 			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => 
-				{
+				(sr, bRowsetStart) => {
 					HandleOnePayment(sr);
 					return ActionResult.Continue;
 				},
@@ -46,8 +39,7 @@
 
 		public override string Name { get { return "PayPoint Charger"; } }
 
-		private void HandleOnePayment(SafeReader sr)
-		{
+		private void HandleOnePayment(SafeReader sr) {
 			int loanScheduleId = sr["LoanScheduleId"];
 			int loanId = sr["LoanId"];
 			string firstName = sr["FirstName"];
@@ -60,10 +52,9 @@
 
 			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
 
-			if (!ShouldCharge(lastInstallment, amountDue))
-			{
+			if (!ShouldCharge(lastInstallment, amountDue)) {
 				Log.Info("Will not charge loan schedule id {0} (amount {1}): the minimal amount for collection is {2}.",
-				         loanScheduleId, amountDue, amountToChargeFrom);
+						 loanScheduleId, amountDue, amountToChargeFrom);
 				return;
 			}
 
@@ -78,83 +69,68 @@
 				reductionFee
 				);
 
-			if (autoPaymentResult.IsException || autoPaymentResult.PaymentFailed)
-			{
+			if (autoPaymentResult.IsException || autoPaymentResult.PaymentFailed) {
 				Log.Warn("Failed collection from customer:{0} amount:{1}", customerId, initialAmountDue);
 				return;
 			} // if
 
-			if (autoPaymentResult.PaymentCollectedSuccessfully)
-			{
+			if (autoPaymentResult.PaymentCollectedSuccessfully) {
 				SendConfirmationMail(firstName, autoPaymentResult.ActualAmountCharged, refNum, customerMail);
 				SendLoanStatusMail(loanId, firstName, refNum, customerMail); // Will send mail for paid off loans
 			}
 		}
 
-		private AutoPaymentResult TryToMakeAutoPayment(int loanScheduleId, decimal initialAmountDue, int customerId, string customerMail, string fullname, bool reductionFee)
-		{
+		private AutoPaymentResult TryToMakeAutoPayment(int loanScheduleId, decimal initialAmountDue, int customerId, string customerMail, string fullname, bool reductionFee) {
 			var result = new AutoPaymentResult();
 			decimal actualAmountCharged = initialAmountDue;
 
 			int counter = 0;
 
-			while (counter <= 4)
-			{
+			while (counter <= 4) {
 				PayPointReturnData payPointReturnData;
 
-				if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData))
-				{
-					if (IsNotEnoughMoney(payPointReturnData))
-					{
-						if (!reductionFee)
-						{
+				if (MakeAutoPayment(loanScheduleId, actualAmountCharged, out payPointReturnData)) {
+					if (IsNotEnoughMoney(payPointReturnData)) {
+						if (!reductionFee) {
 							result.PaymentFailed = true;
 							return result;
 						}
 
 						counter++;
 
-						if (counter > 4)
-						{
+						if (counter > 4) {
 							result.PaymentFailed = true;
 							return result;
 						}
 
-						if (counter == 1)
-						{
+						if (counter == 1) {
 							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.75), 2);
 							Log.Info("Trying to charge 75% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
 						}
-						else if (counter == 2)
-						{
+						else if (counter == 2) {
 							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.5), 2);
 							Log.Info("Trying to charge 50% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
 						}
-						else if (counter == 3)
-						{
+						else if (counter == 3) {
 							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.25), 2);
 							Log.Info("Trying to charge 25% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
 						}
-						else if (counter == 4)
-						{
+						else if (counter == 4) {
 							actualAmountCharged = Math.Round((initialAmountDue * (decimal)0.1), 2);
 							Log.Info("Trying to charge 10% (Attempt #{0}). Customer:{1} Original amount:{2} Calculated amount:{3}", counter + 1, customerId, initialAmountDue, actualAmountCharged);
 						}
 					}
-					else if (IsCollectionSuccessful(payPointReturnData))
-					{
+					else if (IsCollectionSuccessful(payPointReturnData)) {
 						result.PaymentCollectedSuccessfully = true;
 						result.ActualAmountCharged = actualAmountCharged;
 						return result;
 					}
-					else
-					{
+					else {
 						result.PaymentFailed = true;
 						return result;
 					}
 				}
-				else
-				{
+				else {
 					SendExceptionMail(initialAmountDue, customerId, customerMail, fullname);
 					result.IsException = true;
 					return result;
@@ -164,8 +140,7 @@
 			return result;
 		}
 
-		private void SendConfirmationMail(string firstName, decimal amountDue, string refNum, string customerMail)
-		{
+		private void SendConfirmationMail(string firstName, decimal amountDue, string refNum, string customerMail) {
 			var variables = new Dictionary<string, string>
 			{
 				{"AMOUNT", amountDue.ToString(CultureInfo.InvariantCulture)},
@@ -177,8 +152,7 @@
 			mailer.Send("Mandrill - Repayment confirmation", variables, new Addressee(customerMail));
 		}
 
-		private void SendLoanStatusMail(int loanId, string firstName, string refNum, string customerMail)
-		{
+		private void SendLoanStatusMail(int loanId, string firstName, string refNum, string customerMail) {
 			SafeReader sr = DB.GetFirst(
 				"GetLoanStatus",
 				CommandSpecies.StoredProcedure,
@@ -187,8 +161,7 @@
 
 			string loanStatus = sr["Status"];
 
-			if (loanStatus == "PaidOff")
-			{
+			if (loanStatus == "PaidOff") {
 				var variables = new Dictionary<string, string>
 					{
 						{"FirstName", firstName},
@@ -199,8 +172,7 @@
 			}
 		}
 
-		private void SendExceptionMail(decimal initialAmountDue, int customerId, string customerMail, string fullName)
-		{
+		private void SendExceptionMail(decimal initialAmountDue, int customerId, string customerMail, string fullName) {
 			mailer.Send("Mandrill - PayPoint Script Exception", new Dictionary<string, string> {
 				{"UserID", customerId.ToString(CultureInfo.InvariantCulture)},
 				{"Email", customerMail},
@@ -209,33 +181,27 @@
 			});
 		}
 
-		private bool ShouldCharge(bool lastInstallment, decimal amountDue)
-		{
+		private bool ShouldCharge(bool lastInstallment, decimal amountDue) {
 			return (lastInstallment && amountDue > 0) || amountDue >= amountToChargeFrom;
 		}
 
-		private bool MakeAutoPayment(int loanScheduleId, decimal amountDue, out PayPointReturnData result)
-		{
-			try
-			{
+		private bool MakeAutoPayment(int loanScheduleId, decimal amountDue, out PayPointReturnData result) {
+			try {
 				result = payPointApi.MakeAutomaticPayment(loanScheduleId, amountDue);
 				return true;
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				Log.Error("Failed making auto payment for loan schedule id:{0} exception:{1}", loanScheduleId, ex);
 				result = null;
 				return false;
 			}
 		}
 
-		private static bool IsCollectionSuccessful(PayPointReturnData payPointReturnData)
-		{
+		private static bool IsCollectionSuccessful(PayPointReturnData payPointReturnData) {
 			return payPointReturnData.Code == "A";
 		}
 
-		private bool IsNotEnoughMoney(PayPointReturnData payPointReturnData)
-		{
+		private bool IsNotEnoughMoney(PayPointReturnData payPointReturnData) {
 			bool isNotEnoughMoney = payPointReturnData.Code == "N" && payPointReturnData.Error == "INSUFF FUNDS";
 			Log.Debug("Checking if not enough money. Code:{0} Message:{1} AuthCode:{2} RespCode:{3} Error:{4}. Result:{5}",
 				payPointReturnData.Code, payPointReturnData.Message, payPointReturnData.AuthCode, payPointReturnData.RespCode, payPointReturnData.Error, isNotEnoughMoney);

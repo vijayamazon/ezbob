@@ -1,16 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class SendEmailVerification : AMailStrategyBase {
-
-		public SendEmailVerification(
-			int nCustomerID,
-			string sAddress,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(nCustomerID, true, oDB, oLog) {
+		public SendEmailVerification(int nCustomerID, string sAddress) : base(nCustomerID, true) {
 			m_sAddress = sAddress;
 		} // constructor
 

@@ -1,19 +1,14 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using ConfigManager;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using MailApi;
 
-	public class VerifyEnoughAvailableFunds : AStrategy
-	{
+	public class VerifyEnoughAvailableFunds : AStrategy {
 		private readonly decimal deductAmount;
 
-		public VerifyEnoughAvailableFunds(decimal deductAmount, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		public VerifyEnoughAvailableFunds(decimal deductAmount) {
 			this.deductAmount = deductAmount;
 		} // constructor
 
@@ -24,7 +19,7 @@
 		public bool HasEnoughFunds { get; private set; }
 
 		public override void Execute() {
-			var getAvailableFunds = new GetAvailableFunds(DB, Log);
+			var getAvailableFunds = new GetAvailableFunds();
 			getAvailableFunds.Execute();
 			decimal availableFunds = getAvailableFunds.AvailableFunds;
 
@@ -32,14 +27,12 @@
 			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
 
 			Log.Info("AvailableFunds:{0} Required:{1} Deducted:{2}", availableFunds, relevantLimit, deductAmount);
-			if (availableFunds - deductAmount < relevantLimit)
-			{
+			if (availableFunds - deductAmount < relevantLimit) {
 				SendMail(availableFunds - deductAmount, relevantLimit);
 			}
 		} // Execute
 
-		private void SendMail(decimal currentFunds, int requiredFunds)
-		{
+		private void SendMail(decimal currentFunds, int requiredFunds) {
 			var mail = new Mail();
 			var vars = new Dictionary<string, string>
 				{
@@ -48,12 +41,10 @@
 				};
 
 			var result = mail.Send(vars, CurrentValues.Instance.NotEnoughFundsToAddress, CurrentValues.Instance.NotEnoughFundsTemplateName);
-			if (result == "OK")
-			{
+			if (result == "OK") {
 				Log.Info("Sent mail - not enough funds");
 			}
-			else
-			{
+			else {
 				Log.Error("Failed sending alert mail - not enough funds. Result:{0}", result);
 			}
 		}

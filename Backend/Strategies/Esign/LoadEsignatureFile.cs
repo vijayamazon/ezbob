@@ -1,10 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Esign {
+﻿namespace Ezbob.Backend.Strategies.Esign {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class LoadEsignatureFile : AStrategy {
 
-		public LoadEsignatureFile(long nEsignatureID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadEsignatureFile(long nEsignatureID) {
 			m_nEsignatureID = nEsignatureID;
 		} // constructor
 

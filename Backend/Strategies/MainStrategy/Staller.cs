@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy
+﻿namespace Ezbob.Backend.Strategies.MainStrategy
 {
 	using ConfigManager;
 	using Ezbob.Backend.Models;

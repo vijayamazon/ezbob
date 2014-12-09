@@ -1,18 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.PricingModel
-{
+﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using Exceptions;
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	
-	public class PricingModelCalculate : AStrategy
-	{
+
+	public class PricingModelCalculate : AStrategy {
 		private readonly PricingModelCalculator pricingModelCalculator;
 
-		public PricingModelCalculate(int customerId, PricingModelModel model, AConnection db, ASafeLog log)
-			: base(db, log)
-		{
+		public PricingModelCalculate(int customerId, PricingModelModel model) {
 			Model = model;
-			pricingModelCalculator = new PricingModelCalculator(customerId, model, db, log);
+			pricingModelCalculator = new PricingModelCalculator(customerId, model, DB, Log);
 		}
 
 		public override string Name {
@@ -21,13 +15,12 @@
 
 		public PricingModelModel Model { get; private set; }
 
-		public override void Execute()
-		{
+		public override void Execute() {
 			pricingModelCalculator.Calculate();
+
 			if (!string.IsNullOrEmpty(pricingModelCalculator.Error))
-			{
 				throw new StrategyWarning(this, pricingModelCalculator.Error);
-			}
+
 			Model = pricingModelCalculator.Model;
 		}
 	}

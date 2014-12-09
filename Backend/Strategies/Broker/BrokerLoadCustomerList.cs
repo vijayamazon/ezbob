@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -8,7 +8,7 @@
 
 	public class BrokerLoadCustomerList : AStrategy {
 
-		public BrokerLoadCustomerList(string sContactEmail, int nBrokerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadCustomerList(string sContactEmail, int nBrokerID) {
 			m_oSpCustomers = new SpBrokerLoadCustomerList(DB, Log) {
 				ContactEmail = sContactEmail,
 				BrokerID = nBrokerID,
@@ -138,4 +138,4 @@
 
 	} // class BrokerLoadCustomerList
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

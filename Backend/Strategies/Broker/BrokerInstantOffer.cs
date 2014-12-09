@@ -1,16 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using System.Collections.Generic;
-	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using MedalCalculations;
 
 	public class BrokerInstantOffer : AStrategy {
-
-		public BrokerInstantOffer(BrokerInstantOfferRequest request, AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog) {
+		public BrokerInstantOffer(BrokerInstantOfferRequest request) {
 			_request = request;
 		} // constructor
 

@@ -1,15 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Misc
-{
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Twilio;
 	using System.Collections.Generic;
 
 	public class SendSms : AStrategy {
-		public SendSms(int userId, int underwriterId, string sMobilePhone, string content, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog) {
+		public SendSms(int userId, int underwriterId, string sMobilePhone, string content) {
 			m_nUserId = userId;
 			m_nUnderwriterId = underwriterId;
 
@@ -17,8 +14,7 @@
 			m_sContent = content;
 
 			DB.ForEachRowSafe(
-				(sr, bRowsetStart) =>
-				{
+				(sr, bRowsetStart) => {
 					m_sAccountSid = sr["TwilioAccountSid"];
 					m_sAuthToken = sr["TwilioAuthToken"];
 					m_sFromNumber = sr["TwilioSendingNumber"];
@@ -62,8 +58,7 @@
 				Log.Error("Failed saving twilio SMS send response to DB: {0}", ex.Message);
 			}
 
-			if (message.Status == null)
-			{
+			if (message.Status == null) {
 				Result = false;
 				Log.Warn("Failed sending SMS to number:{0}", _sendMobilePhone);
 				return;
@@ -74,7 +69,7 @@
 
 		}
 
-// Execute
+		// Execute
 
 		public bool Result { get; private set; }
 		private readonly int m_nUserId;

@@ -1,10 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class RequestCashWithoutTakenLoan : AMailStrategyBase {
-		public RequestCashWithoutTakenLoan(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public RequestCashWithoutTakenLoan(int customerId) : base(customerId, true) {
 		} // constructor
 
 		public override string Name { get {return "RequestCashWithoutTakenLoan"; } } // Name

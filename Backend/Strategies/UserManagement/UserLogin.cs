@@ -1,15 +1,15 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Web.Security;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
-	using MailStrategies;
 
 	public class UserLogin : AStrategy {
 
-		public UserLogin(string sEmail, Password oPassword, string sRemoteIp, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UserLogin(string sEmail, Password oPassword, string sRemoteIp) {
 			m_oResult = null;
 
 			m_oData = new UserSecurityData(this) {
@@ -126,7 +126,7 @@
 			Log.Debug("User '{0}' is{1} logged in ({2}).", m_oData.Email, m_oResult == MembershipCreateStatus.Success ? "" : " NOT", Result);
 
 			if (m_oSpResult.LoginFailedCount.HasValue && (m_oSpResult.LoginFailedCount >= m_oData.Cfg.NumOfInvalidPasswordAttempts))
-				new ThreeInvalidAttempts(m_oSpResult.UserID, DB, Log).Execute();
+				new ThreeInvalidAttempts(m_oSpResult.UserID).Execute();
 		} // Execute
 
 		public string Result {
@@ -182,4 +182,4 @@
 		} // class UserLoginCheckResult
 
 	} // class UserLogin
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

@@ -1,12 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class GetCompanyDataForCompanyScore : AStrategy {
-
-		public GetCompanyDataForCompanyScore(AConnection oDb, ASafeLog oLog, string refNumber) : base(oDb, oLog) {
+		public GetCompanyDataForCompanyScore(string refNumber) {
 			this.refNumber = refNumber;
 		} // constructor
 

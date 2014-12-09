@@ -1,15 +1,14 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
 	using API;
 	using ConfigManager;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class NotifySalesOnNewCustomer : AMailStrategyBase {
 
-		public NotifySalesOnNewCustomer(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(nCustomerID, false, oDB, oLog) {
+		public NotifySalesOnNewCustomer(int nCustomerID)
+			: base(nCustomerID, false) {
 		} // constructor
 
 		public override string Name {
@@ -43,4 +42,4 @@
 
 	} // class NotifySalesOnNewCustomer
 
-} // namespace EzBob.Backend.Strategies.MailStrategies
+} // namespace Ezbob.Backend.Strategies.MailStrategies

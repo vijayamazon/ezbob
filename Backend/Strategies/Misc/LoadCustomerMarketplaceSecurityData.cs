@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Database;
@@ -7,16 +7,14 @@
 
 	public class LoadCustomerMarketplaceSecurityData : AStrategy {
 
-		public LoadCustomerMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : this(nCustomerID, "", null, oDB, oLog) {
+		public LoadCustomerMarketplaceSecurityData(int nCustomerID) : this(nCustomerID, "", null) {
 		} // constructor
 
 		public LoadCustomerMarketplaceSecurityData(
 			int nCustomerID,
 			string sDisplayName,
-			Guid? oInternalID,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			Guid? oInternalID
+		)  {
 			Result = new List<ResultRow>();
 
 			m_oSp = new SpLoadCustomerMarketplaceSecurityData(nCustomerID, DB, Log) {

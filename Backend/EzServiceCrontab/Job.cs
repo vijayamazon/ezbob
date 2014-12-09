@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using ArgumentTypes;
-	using EzBob.Backend.Strategies;
+	using Ezbob.Backend.Strategies;
 	using EzService;
 	using EzService.EzServiceImplementation;
 	using Ezbob.Database;

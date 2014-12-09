@@ -1,15 +1,14 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using ConfigManager;
-	using Ezbob.Database;
 	using Ezbob.Logger;
 	using GoogleAnalyticsLib;
 
 	public class UpdateGoogleAnalytics : AStrategy {
 
-		public UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate) {
 			if ((oBackfillStartDate != null) && (oBackfillEndDate != null)) {
 				if (oBackfillStartDate.Value <= oBackfillEndDate.Value) {
 					m_oBackfillStartDate = oBackfillStartDate;

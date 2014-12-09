@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System.Globalization;
 	using System.Text.RegularExpressions;
 	using Exceptions;
@@ -80,4 +80,4 @@
 		} // RegexValidate
 
 	} // class UserSecurityData
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

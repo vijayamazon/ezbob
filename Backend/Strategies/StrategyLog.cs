@@ -1,9 +1,8 @@
-﻿namespace EzBob.Backend.Strategies {
+﻿namespace Ezbob.Backend.Strategies {
 	using System;
 	using Ezbob.Logger;
 
 	public class StrategyLog : ASafeLog {
-
 		public StrategyLog(AStrategy oStrategy, ASafeLog oLog) : base(null) {
 			if (ReferenceEquals(oStrategy, null))
 				throw new Exception("Cannot initialise logger", new ArgumentNullException("oStrategy"));
@@ -22,7 +21,5 @@
 
 		private readonly AStrategy m_oStrategy;
 		private readonly SafeLog m_oLog;
-
 	} // class StrategyLog
-
-} // namespace EzBob.Backend.Strategies
+} // namespace Ezbob.Backend.Strategies

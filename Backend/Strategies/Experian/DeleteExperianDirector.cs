@@ -1,10 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class DeleteExperianDirector : AStrategy {
-
-		public DeleteExperianDirector(int nDirectorID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public DeleteExperianDirector(int nDirectorID) {
 			m_nDirectorID = nDirectorID;
 		} // constructor
 
@@ -17,6 +15,5 @@
 		} // Execute
 
 		private readonly int m_nDirectorID;
-
 	} // class DeleteExperianDirector
 } // namespace

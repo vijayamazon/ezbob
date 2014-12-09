@@ -1,12 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
 	public class BrokerAcceptTerms : AStrategy {
-
-		public BrokerAcceptTerms(int nTermsID, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerAcceptTerms(int nTermsID, string sContactEmail) {
 			m_oSp = new SpBrokerAcceptTerms(nTermsID, sContactEmail, DB, Log);
 		} // constructor
 

@@ -1,12 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Globalization;
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class PayPointNameValidationFailed : AMailStrategyBase {
 
-		public PayPointNameValidationFailed(int customerId, string cardHodlerName, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
+		public PayPointNameValidationFailed(int customerId, string cardHodlerName) : base(customerId, false) {
 			this.cardHodlerName = cardHodlerName;
 		} // constructor
 

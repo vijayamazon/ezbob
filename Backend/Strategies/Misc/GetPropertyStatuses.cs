@@ -1,17 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.Misc 
+﻿namespace Ezbob.Backend.Strategies.Misc 
 {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class GetPropertyStatuses : AStrategy
 	{
-		public GetPropertyStatuses(AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
-		}
-
 		public override string Name {
 			get { return "GetPropertyStatuses"; }
 		}

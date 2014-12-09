@@ -1,14 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Text.RegularExpressions;
 	using System.Xml;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class ParseExperianLtd : AStrategy {
-
-		public ParseExperianLtd(long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public ParseExperianLtd(long nServiceLogID) {
 			Result = new ExperianLtd();
 
 			m_nServiceLogID = nServiceLogID;
@@ -120,7 +118,7 @@
 			// From XML spec valid chars: 
 			// #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
 			// any Unicode character, excluding the surrogate blocks, FFFE, and FFFF.
-			return Regex.Replace(sXml ?? string.Empty, @"[^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]", string.Empty); 
+			return Regex.Replace(sXml ?? string.Empty, @"[^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]", string.Empty);
 		} // CleanInvalidChars
 
 	} // class ParseExperianLtd

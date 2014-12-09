@@ -10,7 +10,7 @@
 			var session = ObjectFactory.GetInstance<ISession>();
 			if (isMainStrategy)
 			{
-				strategyName = "EzBob.Backend.Strategies.MainStrategy";
+				strategyName = "Ezbob.Backend.Strategies.MainStrategy";
 			}
 			var status = (bool)session.CreateSQLQuery(string.Format("EXEC IsStrategyRunning @CustomerId={0}, @ActionName='{1}'", customerId, strategyName)).UniqueResult();
 			return status;

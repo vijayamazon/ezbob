@@ -81,4 +81,4 @@
 			);
 		} // ToString
 	} // class BrokerProperties
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

@@ -1,16 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class RecordManualPacnetDeposit : AStrategy
-	{
+	public class RecordManualPacnetDeposit : AStrategy {
 		private readonly string underwriterName;
 		private readonly int amount;
 
-		public RecordManualPacnetDeposit(string underwriterName, int amount, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		public RecordManualPacnetDeposit(string underwriterName, int amount) {
 			this.underwriterName = underwriterName;
 			this.amount = amount;
 		} // constructor

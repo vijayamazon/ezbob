@@ -1,19 +1,14 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
 	using System.Text;
 	using ConfigManager;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class EmailHmrcParsingErrors : AMailStrategyBase {
-
 		public EmailHmrcParsingErrors(
 			int nCustomerID,
 			int nCustomerMarketplaceID,
-			SortedDictionary<string, string> oErrorsToEmail,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(nCustomerID, false, oDB, oLog) {
+			SortedDictionary<string, string> oErrorsToEmail
+		) : base(nCustomerID, false) {
 			m_nCustomerMarketplaceID = nCustomerMarketplaceID;
 			m_oErrorsToEmail = oErrorsToEmail;
 		} // constructor

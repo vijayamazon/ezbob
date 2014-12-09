@@ -1,6 +1,6 @@
 ﻿namespace EzBobTest 
 {
-	using EzBob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -11,13 +11,12 @@
 	public class AddressHelperTestFixture
 	{
 		private readonly List<CustomerAddressModel> _list = new List<CustomerAddressModel>();
-		private AConnection _db;
 		private ConsoleLog _log;
 
 		[Test]
 		public void TestAddress()
 		{
-			var helper = new CustomerAddressHelper(0, _db, _log);
+			var helper = new CustomerAddressHelper(0);
 			helper.Execute();
 			foreach (var addr in helper.OwnedAddresses)
 			{
@@ -31,7 +30,11 @@
 		public void Init()
 		{
 			_log = new ConsoleLog();
-			_db = new SqlConnection(new Ezbob.Context.Environment(), _log);
+
+			var env = new Ezbob.Context.Environment();
+
+			Ezbob.Backend.Strategies.Library.Initialize(env, new SqlConnection(env, _log), _log);
+
 			_list.Add(new CustomerAddressModel
 			{
 				Line1 = "Summer Cottage",
@@ -50,7 +53,7 @@
 					County = "County Down",
 					PostCode = "BT34 5NA"
 				});
-			;
+
 			_list.Add(new CustomerAddressModel
 				{
 					Line1 = "42 Church Street",
@@ -60,7 +63,7 @@
 					County = "Cambridgeshire",
 					PostCode = "PE7 3LH"
 				});
-			;
+
 			_list.Add(new CustomerAddressModel
 				{
 					Line1 = "Holbear House",

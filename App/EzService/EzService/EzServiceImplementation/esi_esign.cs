@@ -1,7 +1,7 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System.Collections.Generic;
 	using EchoSignLib;
-	using EzBob.Backend.Strategies.Esign;
+	using Ezbob.Backend.Strategies.Esign;
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {

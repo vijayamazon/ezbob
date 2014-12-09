@@ -1,15 +1,13 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Globalization;
 	using System.Collections.Generic;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Exceptions;
 
 	public class Escalated : AMailStrategyBase {
 
-		public Escalated(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(customerId, false, oDb, oLog) {
+		public Escalated(int customerId) : base(customerId, false) {
 		} // constructor
 
 		public override string Name { get { return "Escalated"; } } // Name

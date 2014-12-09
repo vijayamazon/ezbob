@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MedalCalculations
+﻿namespace Ezbob.Backend.Strategies.MedalCalculations
 {
 	using System;
 	using ConfigManager;

@@ -1,10 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using JetBrains.Annotations;
 
 	public class BrokerBackFromCustomerWizard : AStrategy {
-
-		public BrokerBackFromCustomerWizard(int nLeadID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerBackFromCustomerWizard(int nLeadID) {
 			m_oSp = new BrokerLeadLoadBroker(DB, Log) {
 				LeadID = nLeadID,
 			};
@@ -34,15 +34,20 @@
 				return LeadID > 0;
 			} // HasValidParameters
 
+			[UsedImplicitly]
 			public int LeadID { get; set; } // LeadID
 
 			public class ResultRow : AResultRow {
+				[UsedImplicitly]
 				public int BrokerID { get; set; } // BrokerID
+				[UsedImplicitly]
 				public string BrokerContactEmail { get; set; } // BrokerContactEmail
+				[UsedImplicitly]
 				public int CustomerID { get; set; } // CustomerID
+				[UsedImplicitly]
 				public bool IsAtLastWizardStep { get; set; } // IsAtLastWizardStep
 			} // class ResultRow
 		} // BrokerLeadLoadBroker
 
 	} // class BrokerBackFromCustomerWizard
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

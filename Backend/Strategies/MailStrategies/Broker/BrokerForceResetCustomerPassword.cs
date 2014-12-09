@@ -1,17 +1,14 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
 	using ConfigManager;
-	using Exceptions;
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using StoredProcs;
-	using UserManagement;
+	using Ezbob.Backend.Strategies.Exceptions;
+	using Ezbob.Backend.Strategies.StoredProcs;
+	using Ezbob.Backend.Strategies.UserManagement;
 
 	public class BrokerForceResetCustomerPassword : AMailStrategyBase {
-
 		public static string GetFromDB(AMailStrategyBase oStrategy) {
-			var oNewPassGenerator = new UserResetPassword(oStrategy.CustomerData.Mail, oStrategy.DB, oStrategy.Log);
+			var oNewPassGenerator = new UserResetPassword(oStrategy.CustomerData.Mail);
 			oNewPassGenerator.Execute();
 
 			if (!oNewPassGenerator.Success)
@@ -25,11 +22,7 @@
 			return CurrentValues.Instance.CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N");
 		} // GetFromDB
 
-		public BrokerForceResetCustomerPassword(
-			int nCustomerID,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(nCustomerID, true, oDB, oLog) {
+		public BrokerForceResetCustomerPassword(int nCustomerID) : base(nCustomerID, true) {
 		} // constructor
 
 		public override string Name { get { return "Broker force reset customer password"; } } // Name
@@ -44,4 +37,4 @@
 		} // SetTemplateAndVariables
 
 	} // class BrokerForceResetCustomerPassword
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

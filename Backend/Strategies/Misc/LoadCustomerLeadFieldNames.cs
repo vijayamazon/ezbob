@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System.Collections.Generic;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class LoadCustomerLeadFieldNames : AStrategy {
-
-		public LoadCustomerLeadFieldNames(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadCustomerLeadFieldNames() {
 			Result = new SortedDictionary<string, string>();
 		} // constructor
 
@@ -24,6 +22,5 @@
 		} // Execute
 
 		public SortedDictionary<string, string> Result { get; private set; }
-
 	} // class LoadCustomerLeadFieldNames
 } // namespace

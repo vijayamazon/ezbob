@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -11,8 +11,8 @@
 	using ConfigManager;
 	using DbConstants;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Backend.Strategies.Experian;
-	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover;
+	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -115,14 +115,14 @@
 		} // LoadData
 
 		protected virtual ExperianConsumerData LoadConsumerData() {
-			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, null, DB, Log);
+			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, null);
 			lcd.Execute();
 
 			return lcd.Result;
 		} // LoadConsumerData
 
 		protected virtual ExperianLtd LoadCompanyData() {
-			var ltd = new LoadExperianLtd(MetaData.CompanyRefNum, 0, DB, Log);
+			var ltd = new LoadExperianLtd(MetaData.CompanyRefNum, 0);
 			ltd.Execute();
 
 			return ltd.Result;

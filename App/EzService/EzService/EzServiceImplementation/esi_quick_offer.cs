@@ -1,9 +1,9 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.ServiceModel;
-	using EzBob.Backend.Strategies.Experian;
-	using EzBob.Backend.Strategies.Misc;
-	using EzBob.Backend.Strategies.QuickOffer;
+	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.QuickOffer;
 	using EzServiceConfiguration;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Exceptions;
@@ -22,7 +22,7 @@
 
 		public QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB) {
 			try {
-				var oCfg = EzBob.Backend.Strategies.QuickOffer.QuickOffer.LoadConfiguration(DB, Log);
+				var oCfg = Ezbob.Backend.Strategies.QuickOffer.QuickOffer.LoadConfiguration();
 
 				if (ReferenceEquals(oCfg, null))
 					throw new Alert(Log, "Failed to load quick offer configuration.");
@@ -36,10 +36,10 @@
 				} // if
 
 				Log.Debug("QuickOfferWithPrerequisites: performing company check for customer {0}...", customerId);
-				new ExperianCompanyCheck(customerId, false, DB, Log).Execute();
+				new ExperianCompanyCheck(customerId, false).Execute();
 
 				Log.Debug("QuickOfferWithPrerequisites: performing fraud check for customer {0}...", customerId);
-				new FraudChecker(customerId, FraudMode.CompanyDetailsCheck, DB, Log).Execute();
+				new FraudChecker(customerId, FraudMode.CompanyDetailsCheck).Execute();
 
 				Log.Debug("QuickOfferWithPrerequisites: performing quick offer calculation for customer {0}...", customerId);
 				return QuickOfferProcedure(customerId, saveOfferToDB, true, oCfg);

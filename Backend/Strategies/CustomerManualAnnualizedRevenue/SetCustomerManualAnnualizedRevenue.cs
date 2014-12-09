@@ -1,12 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.CustomerManualAnnualizedRevenue {
+﻿namespace Ezbob.Backend.Strategies.CustomerManualAnnualizedRevenue {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using CmarModel = Ezbob.Backend.Models.CustomerManualAnnualizedRevenue;
 
 	public class SetCustomerManualAnnualizedRevenue : AStrategy {
 
-		public SetCustomerManualAnnualizedRevenue(int nCustomerID, decimal nRevenue, string sComment, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public SetCustomerManualAnnualizedRevenue(int nCustomerID, decimal nRevenue, string sComment) {
 			Result = new CmarModel {
 				Comment = sComment,
 				EntryTime = DateTime.UtcNow,

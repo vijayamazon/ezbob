@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies {
+﻿namespace Ezbob.Backend.Strategies {
 	using System;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
@@ -6,11 +6,9 @@
 	using Exceptions;
 	using EzBob.Models.Marketplaces.Builders;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using StructureMap;
 
 	public abstract class AStrategy {
-
 		static AStrategy() {
 			ms_oLock = new object();
 			ms_bDefaultsAreReady = false;
@@ -23,12 +21,12 @@
 		public AConnection DB { get; private set; }
 		public StrategyLog Log { get; private set; }
 
-		protected AStrategy(AConnection oDB, ASafeLog oLog) {
-			if (ReferenceEquals(oDB, null))
-				throw new FailedToInitStrategyException(this, new ArgumentNullException("oDB", "DB connection is not specified for mail strategy."));
+		protected AStrategy() {
+			if (ReferenceEquals(Library.Instance.DB, null))
+				throw new FailedToInitStrategyException(this, new Exception("DB connection is not specified for strategy."));
 
-			DB = oDB;
-			Log = new StrategyLog(this, oLog);
+			DB = Library.Instance.DB;
+			Log = new StrategyLog(this, Library.Instance.Log);
 
 			InitDefaults(); // should not be moved to static constructor
 		} // constructor
@@ -85,6 +83,5 @@
 
 		private static readonly object ms_oLock;
 		private static bool ms_bDefaultsAreReady;
-
 	} // class AStrategy
-} // namespace EzBob.Backend.Strategies
+} // namespace Ezbob.Backend.Strategies

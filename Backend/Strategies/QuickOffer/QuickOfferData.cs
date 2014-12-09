@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.QuickOffer {
+﻿namespace Ezbob.Backend.Strategies.QuickOffer {
 	using System;
 	using System.Data;
 	using System.Globalization;
@@ -67,7 +67,7 @@
 			if (!nOffer.HasValue)
 				return null;
 
-			int nOfferID = default (int);
+			int nOfferID = default(int);
 
 			decimal nRequestedAmount = RequestedAmount.Min(Cfg.PotentialMaxAmount);
 
@@ -231,7 +231,7 @@
 			if (IsThinFile())
 				return;
 
-			var oLoader = new LoadExperianLtd(CompanyRefNum, 0, DB, Log);
+			var oLoader = new LoadExperianLtd(CompanyRefNum, 0);
 			oLoader.Execute();
 
 			if (oLoader.Result.RegisteredNumber != CompanyRefNum)
@@ -335,7 +335,7 @@
 		} // AreLoadedValid
 
 		private bool IsThinFile() {
-			var experianConsumer = new LoadExperianConsumerData(CustomerID, null, null, DB, Log);
+			var experianConsumer = new LoadExperianConsumerData(CustomerID, null, null);
 			experianConsumer.Execute();
 
 			if ((experianConsumer.Result.ServiceLogId == null) || (experianConsumer.Result.Cais.Count < 1)) {
@@ -351,4 +351,4 @@
 
 	} // class QuickOfferData
 
-} // namespace EzBob.Backend.Strategies.QuickOffer
+} // namespace Ezbob.Backend.Strategies.QuickOffer

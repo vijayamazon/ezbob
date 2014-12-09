@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
 	using UserManagement.EmailConfirmation;
 
 	public class BrokerGreeting : ABrokerMailToo {
-
-		public BrokerGreeting(int nBrokerID, AConnection oDb, ASafeLog oLog) : base(nBrokerID, true, oDb, oLog) {
+		public BrokerGreeting(int nBrokerID) : base(nBrokerID, true) {
 		} // constructor
 
 		public override string Name { get { return "Broker greeting"; } } // Name
@@ -15,7 +11,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Broker greeting";
 
-			var ecg = new EmailConfirmationGenerate(BrokerData.UserID, DB, Log);
+			var ecg = new EmailConfirmationGenerate(BrokerData.UserID);
 			ecg.Execute();
 
 			Variables = new Dictionary<string, string> {

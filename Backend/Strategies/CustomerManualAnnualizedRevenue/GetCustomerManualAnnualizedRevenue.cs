@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.CustomerManualAnnualizedRevenue {
+﻿namespace Ezbob.Backend.Strategies.CustomerManualAnnualizedRevenue {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using CmarModel = Ezbob.Backend.Models.CustomerManualAnnualizedRevenue;
 
 	public class GetCustomerManualAnnualizedRevenue : AStrategy {
-
-		public GetCustomerManualAnnualizedRevenue(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public GetCustomerManualAnnualizedRevenue(int nCustomerID) {
 			Result = new CmarModel();
 			m_nCustomerID = nCustomerID;
 		} // constructor

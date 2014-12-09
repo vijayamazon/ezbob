@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -7,7 +7,7 @@
 
 	public class LoadManualVatReturnPeriods : AStrategy {
 
-		public LoadManualVatReturnPeriods(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadManualVatReturnPeriods(int nCustomerID) {
 			m_oSp = new SpLoadManualVatReturnPeriods(nCustomerID, DB, Log);
 			Periods = new List<VatReturnPeriod>();
 		} // constructor
@@ -38,4 +38,4 @@
 		} // class SpLoadManualVatReturnPeriods
 
 	} // class LoadManualVatReturnPeriods
-} // namespace EzBob.Backend.Strategies.VatReturn
+} // namespace Ezbob.Backend.Strategies.VatReturn

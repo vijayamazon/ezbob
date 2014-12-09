@@ -1,13 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class CrmLoadLookups : AStrategy {
 
-		public CrmLoadLookups(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public CrmLoadLookups() {
 			Actions = new List<IdNameModel>();
 			Statuses = new List<CrmStatusGroup>();
 			Ranks = new List<IdNameModel>();
@@ -81,4 +80,4 @@
 		} // Execute
 
 	} // class CrmLoadLookups
-} // namespace EzBob.Backend.Strategies
+} // namespace Ezbob.Backend.Strategies

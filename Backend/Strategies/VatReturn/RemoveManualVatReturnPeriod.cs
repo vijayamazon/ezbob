@@ -1,12 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
 	public class RemoveManualVatReturnPeriod : AVatReturnStrategy {
-
-		public RemoveManualVatReturnPeriod(Guid oPeriodID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public RemoveManualVatReturnPeriod(Guid oPeriodID) {
 			m_oSp = new SpRemoveManualVatReturnPeriod(oPeriodID, DB, Log);
 		} // constructor
 
@@ -18,7 +17,7 @@
 			int nCustomerMarketplaceID = m_oSp.ExecuteScalar<int>();
 
 			if (nCustomerMarketplaceID > 0)
-				new CalculateVatReturnSummary(nCustomerMarketplaceID, DB, Log).Execute();
+				new CalculateVatReturnSummary(nCustomerMarketplaceID).Execute();
 		} // Execute
 
 		private readonly SpRemoveManualVatReturnPeriod m_oSp;
@@ -53,4 +52,4 @@
 		// ReSharper restore ValueParameterNotUsed
 
 	} // class RemoveManualVatReturnPeriod
-} // namespace EzBob.Backend.Strategies.VatReturn
+} // namespace Ezbob.Backend.Strategies.VatReturn

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement.EmailConfirmation {
+﻿namespace Ezbob.Backend.Strategies.UserManagement.EmailConfirmation {
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -7,7 +7,7 @@
 
 	public class EmailConfirmationConfirmUser : AStrategy {
 
-		public EmailConfirmationConfirmUser(int nUserID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public EmailConfirmationConfirmUser(int nUserID) {
 			m_oSp = new SpEmailConfirmationConfirmUser(nUserID, DB, Log);
 		} // constructor
 

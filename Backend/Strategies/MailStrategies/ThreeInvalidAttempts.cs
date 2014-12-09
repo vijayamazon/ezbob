@@ -1,21 +1,19 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
 	using Exceptions;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using StoredProcs;
 	using UserManagement;
 
 	public class ThreeInvalidAttempts : AMailStrategyBase {
 
-		public ThreeInvalidAttempts(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public ThreeInvalidAttempts(int customerId) : base(customerId, true) {
 		} // constructor
 
 		public override string Name { get {return "Three Invalid Attempts"; } } // Name
 
 		protected override void SetTemplateAndVariables() {
-			var oNewPassGenerator = new UserResetPassword(CustomerData.Mail, DB, Log);
+			var oNewPassGenerator = new UserResetPassword(CustomerData.Mail);
 			oNewPassGenerator.Execute();
 
 			if (!oNewPassGenerator.Success)

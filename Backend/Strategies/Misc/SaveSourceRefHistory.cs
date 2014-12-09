@@ -1,11 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Web;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class SaveSourceRefHistory : AStrategy {
 
@@ -13,10 +12,8 @@
 			int nUserID,
 			string sSourceRefList,
 			string sVisitTimeList,
-			CampaignSourceRef campaignSourceRef,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			CampaignSourceRef campaignSourceRef
+		) {
 			m_nUserID = nUserID;
 			m_sSourceRefList = (sSourceRefList ?? string.Empty).Trim();
 			m_sVisitTimeList = (sVisitTimeList ?? string.Empty).Trim();

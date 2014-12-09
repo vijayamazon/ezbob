@@ -1,16 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.AutomationVerification {
-	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
-	using Ezbob.Database;
-	using Ezbob.Logger;
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
 
 	public class VerifyRerejection : AVerificationBase {
 
 		public VerifyRerejection(
 			int nTopCount,
-			int nLastCheckedCustomerID,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(nTopCount, nLastCheckedCustomerID, oDB, oLog) {
+			int nLastCheckedCustomerID
+		) : base(nTopCount, nLastCheckedCustomerID) {
 		} // constructor
 
 		protected override string DecisionName {

@@ -1,15 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using Ezbob.Database;
-	using Ezbob.Logger;
-	using EzBob.Backend.Strategies.MailStrategies.API;
+	using Ezbob.Backend.Strategies.MailStrategies.API;
 
 	public class LateBy14Days : AStrategy {
-		public LateBy14Days(AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+		public LateBy14Days() {
+			mailer = new StrategiesMailer();
 		} // constructor
 
 		public override string Name { get { return "Late by 14 days"; } } // Name

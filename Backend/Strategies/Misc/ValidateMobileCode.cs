@@ -1,10 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class ValidateMobileCode : AStrategy {
 
-		public ValidateMobileCode(string sMobilePhone, string sMobileCode, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+		public ValidateMobileCode(string sMobilePhone, string sMobileCode) {
 			m_sMobilePhone = sMobilePhone;
 			m_sMobileCode = sMobileCode;
 

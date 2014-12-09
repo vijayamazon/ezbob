@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies.API {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies.API {
 	using System.Collections;
 	using System.Collections.Generic;
 
@@ -50,4 +50,4 @@
 		} // Normalise
 
 	} // class MailMetaData
-} // namespace EzBob.Backend.Strategies.MailStrategies.API
+} // namespace Ezbob.Backend.Strategies.MailStrategies.API

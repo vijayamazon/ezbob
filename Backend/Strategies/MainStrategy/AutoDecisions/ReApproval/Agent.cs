@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -9,7 +9,7 @@
 	using ConfigManager;
 	using DbConstants;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -101,7 +101,7 @@
 				new QueryParameter("CustomerID", Args.CustomerID)
 			);
 
-			var availFunds = new GetAvailableFunds(DB, Log);
+			var availFunds = new GetAvailableFunds();
 			availFunds.Execute();
 
 			MetaData.Validate();

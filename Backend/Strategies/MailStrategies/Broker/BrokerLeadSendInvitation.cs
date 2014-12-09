@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Database;
@@ -6,12 +6,7 @@
 
 	public class BrokerLeadSendInvitation : AMailStrategyBase {
 
-		public BrokerLeadSendInvitation(
-			int nLeadID,
-			string sBrokerContactEmail,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(nLeadID, true, oDB, oLog) {
+		public BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail) : base(nLeadID, true) {
 			m_sBrokerContactEmail = sBrokerContactEmail;
 			m_oSp = new BrokerLeadSaveInvitationToken(DB, Log);
 		} // constructor

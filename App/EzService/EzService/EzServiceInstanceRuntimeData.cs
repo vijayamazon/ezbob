@@ -3,6 +3,8 @@
 	using Ezbob.Logger;
 
 	public class EzServiceInstanceRuntimeData {
+		public Ezbob.Context.Environment Env { get; set; }
+
 		public IHost Host { get; set; }
 
 		public ASafeLog Log { get; set; }

@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
 	using Exceptions;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using API;
 	using Ezbob.Utils.Exceptions;
 
@@ -55,9 +53,9 @@
 
 		private bool m_bSendToCustomer;
 
-		protected AMailStrategyBase(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		protected AMailStrategyBase(int customerId, bool bSendToCustomer) {
 			ToTrustPilot = false;
-			m_oMailer = new StrategiesMailer(DB, Log);
+			m_oMailer = new StrategiesMailer();
 
 			CustomerId = customerId;
 			m_bSendToCustomer = bSendToCustomer;

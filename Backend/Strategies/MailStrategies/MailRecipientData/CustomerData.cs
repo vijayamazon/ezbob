@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using Exceptions;
 	using Ezbob.Database;
 

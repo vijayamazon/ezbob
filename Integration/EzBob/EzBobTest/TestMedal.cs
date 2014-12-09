@@ -2,14 +2,14 @@ namespace EzBobTest
 {
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Backend.Strategies.MedalCalculations;
+	using Ezbob.Backend.Strategies.MedalCalculations;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using NUnit.Framework;
 	using StructureMap;
-	using MedalType = EzBob.Backend.Strategies.MedalCalculations.MedalType;
+	using MedalType = Ezbob.Backend.Strategies.MedalCalculations.MedalType;
 
 	public class LimitedMedalCalculator1NoGathering : LimitedMedalCalculator1
 	{
@@ -36,7 +36,7 @@ namespace EzBobTest
 
 			ObjectFactory.Configure(x => x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>());
 
-			EzServiceAccessorShort.Set(m_oDB, m_oLog);
+			Ezbob.Backend.Strategies.Library.Initialize(m_oEnv, m_oDB, m_oLog);
 		} // Init
 
 		[Test]

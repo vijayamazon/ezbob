@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -6,9 +6,8 @@
 
 	public class BrokerLoadMarketingFiles : AStrategy {
 
-		public BrokerLoadMarketingFiles(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadMarketingFiles() {
 			m_oSp = new SpBrokerLoadMarketingFiles(DB, Log);
-
 			Files = new List<FileDescription>();
 		} // constructor
 
@@ -33,4 +32,4 @@
 		} // class SpBrokerLoadMarketingFiles
 
 	} // class BrokerLoadMarketingFiles
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

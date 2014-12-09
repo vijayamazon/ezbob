@@ -2,10 +2,10 @@
 	using System;
 	using System.Collections.Generic;
 	using EzBob.Backend.Models;
-	using EzBob.Backend.Strategies.Experian;
-	using EzBob.Backend.Strategies.MedalCalculations;
-	using EzBob.Backend.Strategies.Misc;
-	using EzBob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.MedalCalculations;
+	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 
@@ -126,7 +126,7 @@
 			string res = string.Empty;
 			try
 			{
-				var instance = new GetAvailableFunds(DB, Log);
+				var instance = new GetAvailableFunds();
 				instance.Execute();
 				decimal availableFunds = instance.AvailableFunds;
 

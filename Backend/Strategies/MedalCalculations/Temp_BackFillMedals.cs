@@ -1,18 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.MedalCalculations 
+﻿namespace Ezbob.Backend.Strategies.MedalCalculations 
 {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	// This strategy assumes that the table MedalCalculations is empty
 	// It will go over all the customers in the DB and fill the medal for them
 	public class Temp_BackFillMedals : AStrategy
 	{
-		public Temp_BackFillMedals(AConnection db, ASafeLog log)
-			: base(db, log)
-		{
-		}
-
 		public override string Name {
 			get { return "Temp_BackFillMedals"; }
 		}
@@ -36,7 +30,7 @@
 					
 					try
 					{
-						var instance = new CalculateMedal(DB, Log, customerId, typeOfBusiness, consumerScore, companyScore, numOfHmrcMps, numOfYodleeMps, numOfEbayAmazonPayPalMps, earliestHmrcLastUpdateDate, earliestYodleeLastUpdateDate);
+						var instance = new CalculateMedal(customerId, typeOfBusiness, consumerScore, companyScore, numOfHmrcMps, numOfYodleeMps, numOfEbayAmazonPayPalMps, earliestHmrcLastUpdateDate, earliestYodleeLastUpdateDate);
 						instance.Execute();
 					}
 					catch (Exception e)

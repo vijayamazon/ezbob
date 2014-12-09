@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -9,10 +9,8 @@
 		public BrokerAttachCustomer(
 			int nCustomerID,
 			int? nBrokerID,
-			int nUnderwriterID,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			int nUnderwriterID
+		) {
 			m_oSp = new AttachCustomerToBroker(DB, Log) {
 				CustomerID = nCustomerID,
 				ToBrokerID = nBrokerID,

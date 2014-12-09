@@ -1,12 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
 	public class UpdateExperianDirectorDetails : AStrategy {
-
-		public UpdateExperianDirectorDetails(Esigner oDetails, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UpdateExperianDirectorDetails(Esigner oDetails) {
 			m_oSp = new SpUpdateExperianDirectorDetails(DB, Log) {
 				DirectorID = oDetails.DirectorID,
 				Email = oDetails.Email,

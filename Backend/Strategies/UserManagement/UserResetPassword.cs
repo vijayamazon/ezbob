@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -6,8 +6,7 @@
 	using JetBrains.Annotations;
 
 	public class UserResetPassword : AStrategy {
-
-		public UserResetPassword(string sEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UserResetPassword(string sEmail) {
 			Password = new SimplePassword(8, sEmail);
 
 			m_oData = new UserSecurityData(this) {
@@ -62,4 +61,4 @@
 		} // class SpUserResetPassword
 
 	} // class UserResetPassword
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

@@ -1,18 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
 	using System.Globalization;
 	using API;
 	using ConfigManager;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class RejectUser : ABrokerMailToo {
-		public RejectUser(
-			int customerId,
-			bool bSendToCustomer,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(customerId, bSendToCustomer, oDB, oLog) {
+		public RejectUser(int customerId, bool bSendToCustomer) : base(customerId, bSendToCustomer) {
 		} // constructor
 
 		public override string Name { get { return "Reject User"; } } // Name

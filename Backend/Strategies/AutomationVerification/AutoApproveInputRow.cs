@@ -1,8 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.AutomationVerification {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
 	using System;
 	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Backend.Strategies.MedalCalculations;
+	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 
 	public class AutoApproveInputRow {

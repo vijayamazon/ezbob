@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc 
+﻿namespace Ezbob.Backend.Strategies.Misc 
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,8 +11,7 @@
 
 	public class AmlChecker : AStrategy 
 	{
-		public AmlChecker(int customerId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) 
-		{
+		public AmlChecker(int customerId) {
 			this.customerId = customerId;
 			GetPersonalInfo();
 			customerAddress = new GetCustomerAddresses(this.customerId, null, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
@@ -26,11 +25,8 @@
 			string idhubDistrict,
 			string idhubTown,
 			string idhubCounty,
-			string idhubPostCode,
-			AConnection oDb,
-			ASafeLog oLog
-		) : base(oDb, oLog) 
-		{
+			string idhubPostCode
+		) {
 			isCustom = true;
 			this.customerId = customerId;
 			GetPersonalInfo();

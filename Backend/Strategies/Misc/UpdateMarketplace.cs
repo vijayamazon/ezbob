@@ -1,16 +1,15 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using EZBob.DatabaseLib.Common;
-	using AmazonLib;
+	using EzBob.AmazonLib;
+	using EzBob.PayPal;
+	using EzBob.eBayLib;
 	using MailStrategies.API;
-	using PayPal;
-	using eBayLib;
 	using DbConstants;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using EKM;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
 	using PayPoint;
@@ -19,8 +18,8 @@
 
 	public class UpdateMarketplace : AStrategy {
 
-		public UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+		public UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+			mailer = new StrategiesMailer();
 			this.customerId = customerId;
 			this.marketplaceId = marketplaceId;
 			m_bDoUpdateWizardStep = doUpdateWizardStep;
@@ -65,7 +64,7 @@
 
 			int tokenExpired = 0;
 
-			var oMpUpdateTimesSetter = new MarketplaceInstantUpdate(marketplaceId, DB, Log);
+			var oMpUpdateTimesSetter = new MarketplaceInstantUpdate(marketplaceId);
 
 			Log.Info("Start Update Data for Customer Market Place: id: {0}, name: {1} ", marketplaceId, marketplaceDisplayName);
 

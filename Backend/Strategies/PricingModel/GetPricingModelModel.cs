@@ -1,10 +1,7 @@
-﻿namespace EzBob.Backend.Strategies.PricingModel
-{
+﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class GetPricingModelModel : AStrategy
-	{
+	public class GetPricingModelModel : AStrategy {
 		private readonly int customerId;
 		private decimal tenurePercents;
 		private decimal setupFee;
@@ -19,22 +16,18 @@
 		private decimal cogs;
 		private decimal brokerSetupFee;
 
-		public GetPricingModelModel(int customerId, string scenarioName, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		public GetPricingModelModel(int customerId, string scenarioName) {
 			this.customerId = customerId;
 			ReadConfigurations(scenarioName);
 		}
 
-		private void ReadConfigurations(string scenarioName)
-		{
+		private void ReadConfigurations(string scenarioName) {
 			SafeReader sr = DB.GetFirst(
 				   "GetPricingModelConfigsForScenario",
 				   CommandSpecies.StoredProcedure,
 				   new QueryParameter("ScenarioName", scenarioName)
 			   );
-			if (!sr.IsEmpty)
-			{
+			if (!sr.IsEmpty) {
 				tenurePercents = sr["TenurePercents"];
 				setupFee = sr["SetupFee"];
 				profitMarkupPercentsOfRevenue = sr["ProfitMarkupPercentsOfRevenue"];
@@ -55,41 +48,38 @@
 		}
 
 		public PricingModelModel Model { get; private set; }
-		
-		public override void Execute()
-		{
+
+		public override void Execute() {
 			decimal defaultRateCustomerShare;
 			decimal defaultRate = GetDefaultRate(out defaultRateCustomerShare);
 			int loanAmount, loanTerm;
 			GetDataFromCashRequest(out loanAmount, out loanTerm);
 			decimal tenureMonths = tenurePercents * loanTerm;
-			
-			Model = new PricingModelModel
-				{
-					LoanAmount = loanAmount,
-					DefaultRate = defaultRate,
-					DefaultRateCompanyShare = defaultRateCompanyShare,
-					DefaultRateCustomerShare = defaultRateCustomerShare,
-					SetupFeePounds = setupFee * loanAmount,
-					SetupFeePercents = setupFee,
-					BrokerSetupFeePounds = brokerSetupFee * loanAmount,
-					BrokerSetupFeePercents = brokerSetupFee,
-					LoanTerm = loanTerm,
-					InterestOnlyPeriod = interestOnlyPeriod,
-					TenurePercents = tenurePercents,
-					TenureMonths = tenureMonths,
-					CollectionRate = collectionRate,
-					EuCollectionRate = euCollectionRate,
-					Cogs = cogs,
-					DebtPercentOfCapital = debtPercentOfCapital,
-					CostOfDebt = costOfDebtPA,
-					OpexAndCapex = opexAndCapex,
-					ProfitMarkup = profitMarkupPercentsOfRevenue
-				};
+
+			Model = new PricingModelModel {
+				LoanAmount = loanAmount,
+				DefaultRate = defaultRate,
+				DefaultRateCompanyShare = defaultRateCompanyShare,
+				DefaultRateCustomerShare = defaultRateCustomerShare,
+				SetupFeePounds = setupFee * loanAmount,
+				SetupFeePercents = setupFee,
+				BrokerSetupFeePounds = brokerSetupFee * loanAmount,
+				BrokerSetupFeePercents = brokerSetupFee,
+				LoanTerm = loanTerm,
+				InterestOnlyPeriod = interestOnlyPeriod,
+				TenurePercents = tenurePercents,
+				TenureMonths = tenureMonths,
+				CollectionRate = collectionRate,
+				EuCollectionRate = euCollectionRate,
+				Cogs = cogs,
+				DebtPercentOfCapital = debtPercentOfCapital,
+				CostOfDebt = costOfDebtPA,
+				OpexAndCapex = opexAndCapex,
+				ProfitMarkup = profitMarkupPercentsOfRevenue
+			};
 		}
 
-		private void GetDataFromCashRequest(out int loanAmount, out int loanTerm)
-		{
+		private void GetDataFromCashRequest(out int loanAmount, out int loanTerm) {
 			loanAmount = 0;
 			loanTerm = 12;
 			SafeReader sr = DB.GetFirst(
@@ -98,18 +88,16 @@
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			if (!sr.IsEmpty)
-			{
+			if (!sr.IsEmpty) {
 				loanAmount = sr["ApprovedAmount"];
 				loanTerm = sr["RepaymentPeriod"];
 			}
 		}
 
-		private decimal GetDefaultRate(out decimal defaultRateCustomerShare)
-		{
+		private decimal GetDefaultRate(out decimal defaultRateCustomerShare) {
 			defaultRateCustomerShare = 1 - defaultRateCompanyShare;
 
-			var instance = new GetPricingModelDefaultRate(customerId, defaultRateCompanyShare, DB, Log);
+			var instance = new GetPricingModelDefaultRate(customerId, defaultRateCompanyShare);
 			instance.Execute();
 			return instance.DefaultRate;
 		}

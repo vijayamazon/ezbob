@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.ScoreCalculation {
+﻿namespace Ezbob.Backend.Strategies.ScoreCalculation {
 	public enum MedalMultiplier {
 		NoMedal = 0,
 		Silver = 6,

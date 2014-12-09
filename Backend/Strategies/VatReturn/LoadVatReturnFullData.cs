@@ -1,16 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using Misc;
 
 	public class LoadVatReturnFullData : AStrategy {
-
-		public LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog)
-		{
+		public LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
 			m_nCustomerID = nCustomerID;
 			m_nCustomerMarketplaceID = nCustomerMarketplaceID;
 			BankStatement = new BankStatementDataModel();
@@ -22,8 +16,8 @@
 		} // Name
 
 		public override void Execute() {
-			m_oRaw = new LoadVatReturnRawData(m_nCustomerMarketplaceID, DB, Log);
-			m_oSummary = new LoadVatReturnSummary(m_nCustomerID, m_nCustomerMarketplaceID, DB, Log);
+			m_oRaw = new LoadVatReturnRawData(m_nCustomerMarketplaceID);
+			m_oSummary = new LoadVatReturnSummary(m_nCustomerID, m_nCustomerMarketplaceID);
 			m_oRaw.Execute();
 			m_oSummary.Execute();
 
@@ -90,4 +84,4 @@
 		} // CalculateBankStatements
 
 	} // class LoadVatReturnFullData
-} // namespace EzBob.Backend.Strategies.VatReturn
+} // namespace Ezbob.Backend.Strategies.VatReturn

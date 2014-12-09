@@ -1,5 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using EzBob.Backend.Strategies.MainStrategy;
+	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {

@@ -1,14 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerPasswordChanged : PasswordChanged {
 
-		public BrokerPasswordChanged(int nBrokerID, Password oPassword, AConnection oDB, ASafeLog oLog) : base(nBrokerID, oPassword, oDB, oLog) {
+		public BrokerPasswordChanged(int nBrokerID, Password oPassword) : base(nBrokerID, oPassword) {
 		} // constructor
 
-		public BrokerPasswordChanged(int nBrokerID, string sPassword, AConnection oDB, ASafeLog oLog) : base(nBrokerID, sPassword, oDB, oLog) {
+		public BrokerPasswordChanged(int nBrokerID, string sPassword) : base(nBrokerID, sPassword) {
 		} // constructor
 
 		public override string Name {

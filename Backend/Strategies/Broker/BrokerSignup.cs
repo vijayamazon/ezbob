@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using Exceptions;
 	using Ezbob.Backend.Models;
@@ -25,10 +25,8 @@
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchaEnabled,
 			int nBrokerTermsID,
-			string sReferredBy,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			string sReferredBy
+		) {
 			m_bIsCaptchaEnabled = bIsCaptchaEnabled;
 			m_sMobileCode = sMobileCode;
 
@@ -58,7 +56,7 @@
 
 		public override void Execute() {
 			if (!m_bIsCaptchaEnabled) {
-				var oValidator = new ValidateMobileCode(m_oCreateSp.ContactMobile, m_sMobileCode, DB, Log);
+				var oValidator = new ValidateMobileCode(m_oCreateSp.ContactMobile, m_sMobileCode);
 				oValidator.Execute();
 
 				if (!oValidator.IsValidatedSuccessfully())
@@ -201,4 +199,4 @@
 		} // SpBrokerSignUp
 
 	} // class BrokerSignup
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

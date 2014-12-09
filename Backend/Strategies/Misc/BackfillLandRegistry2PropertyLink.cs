@@ -1,13 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System.Collections.Generic;
 	using EzBob.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BackfillLandRegistry2PropertyLink : AStrategy {
-		public BackfillLandRegistry2PropertyLink(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-		}
-
 		public override string Name { get { return "BackfillLandRegistry2PropertyLink"; } }
 
 		public override void Execute() {

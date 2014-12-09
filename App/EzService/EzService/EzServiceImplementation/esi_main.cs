@@ -5,7 +5,7 @@
 	using System.Reflection;
 	using System.ServiceModel;
 	using System.Threading;
-	using EzBob.Backend.Strategies;
+	using Ezbob.Backend.Strategies;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
@@ -30,6 +30,12 @@
 				throw new FaultException("Cannot create " + InstanceName + " instance: new instances are disabled.");
 
 			m_oData = oData;
+
+			Ezbob.Backend.Strategies.Library.Initialize(
+				ReferenceEquals(m_oData, null) ? null : m_oData.Env,
+				ReferenceEquals(m_oData, null) ? null : m_oData.DB,
+				((m_oData != null) && (m_oData.Log != null)) ? m_oData.Log : new SafeLog()
+			);
 
 			Log.Msg("{0} instance created.", InstanceName);
 		} // constructor
@@ -86,18 +92,16 @@
 					nUserID: oArgs.UserID
 				);
 
-				var oParams = new List<object>(oArgs.StrategyArguments) { DB, Log };
-
-				ConstructorInfo oCreator = oArgs.StrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
+				ConstructorInfo oCreator = oArgs.StrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oArgs.StrategyArguments.Count);
 
 				if (oCreator == null)
-					throw new Alert(Log, "Failed to find a constructor for " + oArgs.StrategyType + " with " + oParams.Count + " arguments.");
+					throw new Alert(Log, "Failed to find a constructor for " + oArgs.StrategyType + " with " + oArgs.StrategyArguments.Count + " arguments.");
 
 				Log.Debug(oArgs.StrategyType + " constructor found, invoking...");
 
 				amd.UnderlyingThread = new Thread(() => {
 					try {
-						AStrategy oInstance = (AStrategy)oCreator.Invoke(oParams.ToArray());
+						AStrategy oInstance = (AStrategy)oCreator.Invoke(oArgs.StrategyArguments.ToArray());
 
 						if (oArgs.OnInit != null) {
 							Log.Debug(oInstance.Name + " instance created, invoking an initialisation action...");
@@ -206,32 +210,15 @@
 
 				amd = NewSync(sStrategyType, comment: string.Join("; ", args), nCustomerID: nCustomerID, nUserID: nUserID);
 
-				int nRequestedParamsCount = args.Length + 2;
-
 				ConstructorInfo oCreator =
-					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == nRequestedParamsCount);
+					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == args.Length);
 
 				if (oCreator == null)
-					throw new Alert(Log, "Failed to find a constructor for " + sStrategyType + " with " + nRequestedParamsCount + " arguments.");
-
-				var aryContructorParamInfos = oCreator.GetParameters();
-
-				bool bStdParamsFirst =
-					aryContructorParamInfos[0].ParameterType.IsAssignableFrom(typeof(AConnection)) &&
-					aryContructorParamInfos[1].ParameterType.IsAssignableFrom(typeof(ASafeLog));
-
-				List<object> oParams;
-
-				if (bStdParamsFirst) {
-					oParams = new List<object> { DB, Log };
-					oParams.AddRange(args);
-				}
-				else
-					oParams = new List<object>(args) { DB, Log };
+					throw new Alert(Log, "Failed to find a constructor for " + sStrategyType + " with " + args.Length + " arguments.");
 
 				Log.Debug(sStrategyType + " constructor found, invoking...");
 
-				oInstance = (T)oCreator.Invoke(oParams.ToArray());
+				oInstance = (T)oCreator.Invoke(args.ToArray());
 
 				if (oInstance == null)
 					throw new NullReferenceException("Failed to create an instance of " + sStrategyType);

@@ -1,11 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class BrokerLeadCheckToken : BrokerLeadCanFillWizard {
 
-		public BrokerLeadCheckToken(string sToken, AConnection oDB, ASafeLog oLog) : base(0, "", "", oDB, oLog) {
+		public BrokerLeadCheckToken(string sToken) : base(0, "", "") {
 			m_sToken = sToken;
 		} // constructor
 
@@ -46,4 +46,4 @@
 		} // class SpBrokerLeadCheckToken
 
 	} // class BrokerLeadCheckToken
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

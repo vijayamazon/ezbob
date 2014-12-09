@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.QuickOffer {
+﻿namespace Ezbob.Backend.Strategies.QuickOffer {
 	using System;
 	using System.Text.RegularExpressions;
 	using EzServiceConfiguration;
@@ -8,25 +8,24 @@
 	using Ezbob.Logger;
 
 	public class QuickOffer : AStrategy {
-
-		public static QuickOfferConfigurationData LoadConfiguration(AConnection oDB, ASafeLog oLog) {
+		public static QuickOfferConfigurationData LoadConfiguration() {
 			try {
-				var qocfg = new QuickOfferConfiguration(oDB, oLog);
+				var qocfg = new QuickOfferConfiguration(Library.Instance.DB, Library.Instance.Log);
 				qocfg.Init();
 				return qocfg;
 			}
 			catch (Exception e) {
-				new SafeLog(oLog).Alert(e, "Failed to load quick offer configuration.");
+				new SafeLog(Library.Instance.Log).Alert(e, "Failed to load quick offer configuration.");
 				return null;
 			} // try
 		} // LoadConfiguration
 
-		public QuickOffer(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, QuickOfferConfigurationData oCfg, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public QuickOffer(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, QuickOfferConfigurationData oCfg) {
 			m_nCustomerID = nCustomerID;
 			m_bSaveOfferToDB = bSaveOfferToDB;
 			m_bHackForTest = bHackForTest;
 			Offer = null;
-			m_oCfg = oCfg ?? LoadConfiguration(DB, Log);
+			m_oCfg = oCfg ?? LoadConfiguration();
 		} // constructor
 
 		public override string Name { get { return "Quick offer"; } } // Name
@@ -160,4 +159,4 @@
 		private readonly QuickOfferConfigurationData m_oCfg;
 
 	} // class QuickOffer
-} // namespace EzBob.Backend.Strategies.QuickOffer
+} // namespace Ezbob.Backend.Strategies.QuickOffer

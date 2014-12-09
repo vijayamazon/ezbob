@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -9,7 +9,7 @@
 
 	public class BrokerLogin : AStrategy {
 
-		public BrokerLogin(string sEmail, Password oPassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLogin(string sEmail, Password oPassword) {
 			m_oSp = new SpBrokerLogin(DB, Log) {
 				Email = sEmail,
 				Password = oPassword.Primary,
@@ -57,4 +57,4 @@
 
 	} // class BrokerLogin
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

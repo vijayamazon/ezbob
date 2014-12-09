@@ -1,23 +1,16 @@
-﻿namespace EzBob.Backend.Strategies.Experian
-{
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class GetCompanyCaisDataForAlerts : AStrategy
-	{
+	public class GetCompanyCaisDataForAlerts : AStrategy {
 		private readonly int customerId;
 
-		public GetCompanyCaisDataForAlerts(AConnection oDb, ASafeLog oLog, int customerId)
-			: base(oDb, oLog)
-		{
+		public GetCompanyCaisDataForAlerts(int customerId) {
 			this.customerId = customerId;
 		}
-		public override string Name
-		{
+		public override string Name {
 			get { return "GetCompanyCaisDataForAlerts"; }
 		}
 
@@ -25,8 +18,7 @@
 		public int NumOfCurrentDefaultAccounts { get; set; }
 		public int NumOfSettledDefaultAccounts { get; set; }
 
-		public override void Execute()
-		{
+		public override void Execute() {
 			Accounts = new List<CompanyCaisAccount>();
 
 			DB.ForEachRowSafe(

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -11,7 +11,7 @@
 
 	public class LoadVatReturnSummary : AStrategy {
 
-		public LoadVatReturnSummary(int nCustomerID, int nMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadVatReturnSummary(int nCustomerID, int nMarketplaceID) {
 			m_oSp = new SpLoadVatReturnSummary(nMarketplaceID, DB, Log);
 			m_nCustomerID = nCustomerID;
 			Summary = new VatReturnSummary[0];
@@ -42,7 +42,7 @@
 			decimal factor = CurrentValues.Instance.FCFFactor;
 
 			if (Math.Abs(factor) > 0.0000001m) {
-				var getExperianAccountsCurrentBalance = new GetExperianAccountsCurrentBalance(m_nCustomerID, DB, Log);
+				var getExperianAccountsCurrentBalance = new GetExperianAccountsCurrentBalance(m_nCustomerID);
 				getExperianAccountsCurrentBalance.Execute();
 				decimal newActualLoansRepayment = 0;
 				if (factor != 0)

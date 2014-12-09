@@ -1,10 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerDownloadCustomerFile : AStrategy {
 
-		public BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			m_nFileID = nFileID;
@@ -46,4 +45,4 @@
 
 	} // class BrokerDownloadCustomerFile 
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

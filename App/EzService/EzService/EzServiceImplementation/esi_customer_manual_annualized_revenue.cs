@@ -1,5 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using EzBob.Backend.Strategies.CustomerManualAnnualizedRevenue;
+	using Ezbob.Backend.Strategies.CustomerManualAnnualizedRevenue;
 
 	partial class EzServiceImplementation {
 

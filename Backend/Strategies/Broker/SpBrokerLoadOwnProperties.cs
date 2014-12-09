@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -21,4 +21,4 @@
 
 		public int BrokerID { get; set; }
 	} // SpBrokerLoadOwnProperties
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

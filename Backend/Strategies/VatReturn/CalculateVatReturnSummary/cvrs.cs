@@ -1,13 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils;
 
 	public partial class CalculateVatReturnSummary : AStrategy {
 
-		public CalculateVatReturnSummary(int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public CalculateVatReturnSummary(int nCustomerMarketplaceID) {
 			m_nCustomerMarketplaceID = nCustomerMarketplaceID;
 
 			m_oSpLoadBusinesses = new LoadBusinessesForVatReturnSummary(m_nCustomerMarketplaceID, DB, Log);

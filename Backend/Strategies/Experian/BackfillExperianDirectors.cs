@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System.Collections.Generic;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BackfillExperianDirectors : AStrategy {
-
-		public BackfillExperianDirectors(int? nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BackfillExperianDirectors(int? nCustomerID) {
 			m_nCustomerID = nCustomerID.HasValue ? (nCustomerID > 0 ? nCustomerID : null) : null;
 		} // constructor
 
@@ -26,7 +24,7 @@
 			);
 
 			foreach (SafeReader sr in lst)
-				new UpdateLimitedExperianDirectors(sr["CustomerID"], sr["Id"], DB, Log).Execute();
+				new UpdateLimitedExperianDirectors(sr["CustomerID"], sr["Id"]).Execute();
 		} // Execute
 
 		private int? m_nCustomerID;

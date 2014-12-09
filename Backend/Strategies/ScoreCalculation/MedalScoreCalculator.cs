@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.ScoreCalculation
+﻿namespace Ezbob.Backend.Strategies.ScoreCalculation
 {
 	using Ezbob.Database;
 	using Ezbob.Logger;

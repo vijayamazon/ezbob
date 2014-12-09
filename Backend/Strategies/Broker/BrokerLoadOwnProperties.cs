@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerLoadOwnProperties : AStrategy {
 
-		public BrokerLoadOwnProperties(string sContactEmail, int nBrokerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadOwnProperties(string sContactEmail, int nBrokerID) {
 			m_oSp = new SpBrokerLoadOwnProperties(DB, Log) {
 				ContactEmail = sContactEmail,
 				BrokerID = nBrokerID,
@@ -27,4 +25,4 @@
 		private readonly SpBrokerLoadOwnProperties m_oSp;
 
 	} // class BrokerLoadOwnProperties
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

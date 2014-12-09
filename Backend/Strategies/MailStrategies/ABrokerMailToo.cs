@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
 	using API;
 	using Ezbob.Database;
@@ -6,21 +6,18 @@
 
 	public abstract class ABrokerMailToo : AMailStrategyBase {
 
-		protected ABrokerMailToo(int nCustomerID, bool bSendToCustomer, AConnection oDB, ASafeLog oLog, bool bSendWhenOneLoan = false)
-			: base(nCustomerID, bSendToCustomer, oDB, oLog)
-		{
+		protected ABrokerMailToo(int nCustomerID, bool bSendToCustomer, bool bSendWhenOneLoan = false) : base(nCustomerID, bSendToCustomer) {
 			m_bSendWhenOneLoan = bSendWhenOneLoan;
 		} // constructor
 
-		protected override Addressee[] GetRecipients()
-		{
+		protected override Addressee[] GetRecipients() {
 			if (CustomerData.NumOfLoans > 1)
 				return base.GetRecipients();
 
 			if (!m_bSendWhenOneLoan && (CustomerData.NumOfLoans == 1))
 				return base.GetRecipients();
 
-			var aryAddresses = new List<Addressee>(); 
+			var aryAddresses = new List<Addressee>();
 
 			aryAddresses.AddRange(base.GetRecipients());
 
@@ -37,7 +34,7 @@
 		private readonly bool m_bSendWhenOneLoan;
 
 		private class BrokerLoadAddressForCustomerMailCC : AStoredProcedure {
-			public BrokerLoadAddressForCustomerMailCC(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+			public BrokerLoadAddressForCustomerMailCC(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
 				return CustomerID > 0;
@@ -48,4 +45,4 @@
 
 	} // class ABrokerMailToo
 
-} // namespace EzBob.Backend.Strategies.MailStrategies
+} // namespace Ezbob.Backend.Strategies.MailStrategies

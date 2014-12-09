@@ -1,17 +1,13 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class AlibabaGreeting : ABrokerMailToo
-	{
+	public class AlibabaGreeting : ABrokerMailToo {
 		private readonly string confirmEmailAddress;
 
-		public AlibabaGreeting(int customerId, string confirmEmailAddress, AConnection oDb, ASafeLog oLog)
-			: base(customerId, true, oDb, oLog)
-		{
+		public AlibabaGreeting(int customerId, string confirmEmailAddress)
+			: base(customerId, true) {
 			this.confirmEmailAddress = confirmEmailAddress;
 		}
 

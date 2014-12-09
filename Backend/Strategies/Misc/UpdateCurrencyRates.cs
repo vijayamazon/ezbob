@@ -1,21 +1,14 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using CustomSchedulers.Currency;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class UpdateCurrencyRates : AStrategy {
-		public UpdateCurrencyRates(AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog) {
-		}
-
 		public override string Name {
 			get { return "Update currency rates"; }
 		} // Name
 
 		public override void Execute() {
 			lock (updateCurrencyRatesLock) {
-				if (isExecuting)
-				{
+				if (isExecuting) {
 					Log.Warn("Update currency rates is already in progress.");
 					return;
 				} // if
@@ -25,8 +18,7 @@
 
 			CurrencyUpdateController.Run();
 
-			lock (updateCurrencyRatesLock)
-			{
+			lock (updateCurrencyRatesLock) {
 				isExecuting = false;
 			} // lock
 		} // Execute

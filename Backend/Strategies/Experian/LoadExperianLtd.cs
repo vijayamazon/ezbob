@@ -1,13 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class LoadExperianLtd : AStrategy {
 
-		public LoadExperianLtd(string sCompanyRefNum, long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadExperianLtd(string sCompanyRefNum, long nServiceLogID) {
 			Result = new ExperianLtd();
 
 			m_nWorkMode = string.IsNullOrWhiteSpace(sCompanyRefNum) ? WorkMode.LoadFull : WorkMode.CheckCache;

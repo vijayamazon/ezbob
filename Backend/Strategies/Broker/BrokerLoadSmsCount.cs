@@ -1,10 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerLoadSmsCount : AStrategy {
 
-		public BrokerLoadSmsCount(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadSmsCount() {
 			MaxPerNumber = 0;
 			MaxPerPage = 0;
 		} // constructor
@@ -40,4 +39,4 @@
 		} // Execute
 
 	} // class BrokerLoadSmsCount
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

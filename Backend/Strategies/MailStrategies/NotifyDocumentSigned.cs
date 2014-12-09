@@ -1,12 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
 	using EchoSignLib;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class NotifyDocumentSigned : AMailStrategyBase {
 
-		public NotifyDocumentSigned(EsignatureStatus oStatus, AConnection oDB, ASafeLog oLog) : base(oStatus.CustomerID, false, oDB, oLog) {
+		public NotifyDocumentSigned(EsignatureStatus oStatus) : base(oStatus.CustomerID, false) {
 			m_oStatus = oStatus;
 		} // constructor
 

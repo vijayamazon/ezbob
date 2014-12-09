@@ -1,7 +1,7 @@
 ﻿namespace EzService {
 	using System;
 	using System.Collections.Generic;
-	using EzBob.Backend.Strategies;
+	using Ezbob.Backend.Strategies;
 
 	public class ExecuteArguments {
 

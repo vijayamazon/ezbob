@@ -1,23 +1,22 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Exceptions;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using StoredProcs;
 	using UserManagement;
 	using UserManagement.EmailConfirmation;
 
 	public class PasswordRestored : AMailStrategyBase {
 
-		public PasswordRestored(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public PasswordRestored(int customerId) : base(customerId, true) {
 		} // constructor
 
 		public override string Name { get { return "Password Restored"; } } // Name
 
 		protected override void SetTemplateAndVariables() {
-			var oNewPassGenerator = new UserResetPassword(CustomerData.Mail, DB, Log);
+			var oNewPassGenerator = new UserResetPassword(CustomerData.Mail);
 			oNewPassGenerator.Execute();
 
 			if (!oNewPassGenerator.Success)
@@ -33,7 +32,7 @@
 				{"FirstName", string.IsNullOrWhiteSpace(CustomerData.FirstName) ? Salutation : CustomerData.FirstName}
 			};
 
-			var ecl = new EmailConfirmationLoad(CustomerData.UserID, DB, Log);
+			var ecl = new EmailConfirmationLoad(CustomerData.UserID);
 			ecl.Execute();
 
 			if (ecl.IsConfirmed)

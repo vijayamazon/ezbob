@@ -1,17 +1,14 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class AddCciHistory : AStrategy {
 
 		public AddCciHistory(
 			int nCustomerID,
 			int nUnderwriterID,
-			bool bCciMark,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			bool bCciMark
+		) {
 			m_bCciMark = bCciMark;
 			m_nCustomerID = nCustomerID;
 			m_nUnderwriterID = nUnderwriterID;

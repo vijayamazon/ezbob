@@ -10,8 +10,8 @@ namespace TestApp {
 	using System.IO;
 	using ConfigManager;
 	using EzBob.Backend.Models;
-	using EzBob.Backend.Strategies.Broker;
-	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
+	using Ezbob.Backend.Strategies.Broker;
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -611,7 +611,7 @@ namespace TestApp {
 		private static void TestReapproval(AConnection oDB, ASafeLog oLog) {
 			var adr = new AutoDecisionResponse();
 
-			var ra = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(339, oDB, oLog).Init();
+			var ra = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(339, oDB, oLog).Init();
 
 			ra.MakeDecision(adr);
 		} // TestReapproval
@@ -656,9 +656,7 @@ namespace TestApp {
 				5, // int nEstimatedMonthlyApplicationCount,
 				true, // bool bIsCaptchaEnabled,
 				6, // int nBrokerTermsID,
-				"Finance Professional Show - Nov 2014", // string sReferredBy,
-				oDB,
-				oLog
+				"Finance Professional Show - Nov 2014" // string sReferredBy
 			);
 
 			stra.Execute();

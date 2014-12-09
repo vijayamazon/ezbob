@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using System.ComponentModel;
 	using Ezbob.Database;
@@ -42,4 +42,4 @@
 		} // DateDeleted
 
 	} // class BrokerDeleteCustomerLead
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

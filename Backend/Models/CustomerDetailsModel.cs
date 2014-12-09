@@ -19,4 +19,4 @@
 			return string.Format("{0} {1} {2} {3}", CustomerID, FirstName, LastName, Email);
 		} // ToString
 	} // class CustomerDetails
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

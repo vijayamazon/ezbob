@@ -1,13 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.Esign {
+﻿namespace Ezbob.Backend.Strategies.Esign {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils;
 
 	public class LoadEsignatures : AStrategy {
-
-		public LoadEsignatures(int? nCustomerID, bool bPollStatus, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadEsignatures(int? nCustomerID, bool bPollStatus) {
 			m_bPollStatus = bPollStatus;
 			Result = new SortedTable<int, long, Esignature>();
 			m_oSp = new LoadCustomerEsignatures(DB, Log) { CustomerID = nCustomerID, };
@@ -20,7 +18,7 @@
 
 		public override void Execute() {
 			if (m_bPollStatus)
-				new EsignProcessPending(m_nCustomerID, DB, Log).Execute();
+				new EsignProcessPending(m_nCustomerID).Execute();
 
 			Result = m_oSp.Load();
 

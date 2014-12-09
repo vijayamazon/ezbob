@@ -49,6 +49,8 @@
 
 			var oLog4NetCfg = new Log4Net().Init();
 
+			m_oEnv = oLog4NetCfg.Environment;
+
 			m_oLog = new ConsoleLog(new SafeILog(this));
 
 			m_oDB = new SqlConnection(oLog4NetCfg.Environment, m_oLog);
@@ -60,5 +62,6 @@
 
 		protected AConnection m_oDB;
 		protected ASafeLog m_oLog;
+		protected Ezbob.Context.Environment m_oEnv;
 	} // class BaseTestFixture
 } // namespace

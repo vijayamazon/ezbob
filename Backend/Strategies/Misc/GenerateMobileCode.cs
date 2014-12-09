@@ -1,15 +1,14 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Globalization;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Twilio;
 	using System.Collections.Generic;
 
 	public class GenerateMobileCode : AStrategy {
 
-		public GenerateMobileCode(string sMobilePhone, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+		public GenerateMobileCode(string sMobilePhone) {
 			m_sMobilePhone = sMobilePhone;
 
 			DB.ForEachRowSafe(

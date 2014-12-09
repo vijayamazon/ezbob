@@ -1,25 +1,23 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzBob.PayPalServiceLib;
 	using Ezbob.Utils;
 	using CompanyFiles;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models.Marketplaces;
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Newtonsoft.Json;
-	using PayPalServiceLib;
 	using StructureMap;
 	using VatReturn;
 	using YodleeLib.connector;
 
 	public class CalculateModelsAndAffordability : AStrategy {
 
-		public CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory) {
 			m_oTimeCounter = new TimeCounter("CalculateModelsAndAffordability elapsed times");
 
 			using (m_oTimeCounter.AddStep("Constructor time")) {
@@ -440,7 +438,7 @@
 			try {
 				if (m_oMundMs.Any(x => x.Model.Name == "HMRC") && m_oMundMs.Any(x => x.Model.Name == "Yodlee")) {
 					foreach (var mp in m_oMundMs.Where(x => x.Model.Name == "HMRC")) {
-						var returnData = new LoadVatReturnFullData(m_nCustomerID, mp.Model.Id, DB, Log);
+						var returnData = new LoadVatReturnFullData(m_nCustomerID, mp.Model.Id);
 						returnData.CalculateBankStatements(mp.Model.HmrcData.VatReturn.LastOrDefault(),
 						                                   m_oMundMs.First(x => x.Model.Name == "Yodlee")
 						                                            .Model.Yodlee.BankStatementDataModel);

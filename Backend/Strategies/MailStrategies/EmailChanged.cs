@@ -1,16 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class EmailChanged : AMailStrategyBase {
 
 		public EmailChanged(
 			int nUserID,
-			string sAddress,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(nUserID, true, oDB, oLog) {
+			string sAddress
+		) : base(nUserID, true) {
 			m_sAddress = sAddress;
 		} // constructor
 

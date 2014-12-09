@@ -1,12 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Database;
-	using Ezbob.Logger;
-	using MailStrategies;
-	using MainStrategy;
 
 	public class FinishWizard : AStrategy {
-		public FinishWizard(FinishWizardArgs oArgs, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+		public FinishWizard(FinishWizardArgs oArgs) {
 			m_oArgs = oArgs;
 		} // constructor
 
@@ -21,20 +20,14 @@
 			);
 
 			if (m_oArgs.DoSendEmail) {
-				new EmailUnderReview(
-					m_oArgs.CustomerID,
-					DB,
-					Log
-				).Execute();
+				new EmailUnderReview(m_oArgs.CustomerID).Execute();
 			} // if
 
 			if (m_oArgs.DoMain) {
 				new MainStrategy(
 					m_oArgs.CustomerID,
 					m_oArgs.NewCreditLineOption,
-					m_oArgs.AvoidAutoDecision,
-					DB,
-					Log
+					m_oArgs.AvoidAutoDecision
 				).SetOverrideApprovedRejected(false).Execute();
 			} // if
 		} // Execute

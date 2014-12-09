@@ -1,17 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.PricingModel
-{
-	using System.Data;
+﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class SavePricingModelSettings : AStrategy
-	{
+	public class SavePricingModelSettings : AStrategy {
 		private readonly string scenarioName;
 		private readonly PricingModelModel model;
 
-		public SavePricingModelSettings(string scenarioName, PricingModelModel model, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		public SavePricingModelSettings(string scenarioName, PricingModelModel model) {
 			this.scenarioName = scenarioName;
 			this.model = model;
 		}
@@ -19,9 +13,8 @@
 		public override string Name {
 			get { return "Save pricing model configs"; }
 		}
-		
-		public override void Execute()
-		{
+
+		public override void Execute() {
 			DB.ExecuteNonQuery(
 				"SavePricingModelConfigsForScenario",
 				CommandSpecies.StoredProcedure,

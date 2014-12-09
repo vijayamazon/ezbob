@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -7,7 +7,7 @@
 
 	public class UserChangePassword : AStrategy {
 
-		public UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword) {
 			m_bForceChangePassword = bForceChangePassword;
 			ErrorMessage = null;
 
@@ -114,4 +114,4 @@
 		} // class SpUserChangePassword
 
 	} // class UserChangePassword
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

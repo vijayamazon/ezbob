@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
 	using System.Reflection;
 	using Ezbob.Database;
 	using Ezbob.Logger;

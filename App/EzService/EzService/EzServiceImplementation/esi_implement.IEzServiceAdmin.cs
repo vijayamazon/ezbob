@@ -4,7 +4,7 @@
 	using System.Linq;
 	using System.ServiceModel;
 	using System.Threading;
-	using EzBob.Backend.Strategies.Admin;
+	using Ezbob.Backend.Strategies.Admin;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
 

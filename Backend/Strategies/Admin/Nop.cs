@@ -1,12 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.Admin {
+﻿namespace Ezbob.Backend.Strategies.Admin {
 	using System.Threading;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
 
 	public class Nop : AStrategy {
 
-		public Nop(int nLengthInSeconds, string sMsg, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public Nop(int nLengthInSeconds, string sMsg) {
 			m_sMsg = (sMsg ?? string.Empty).Trim();
 			m_nLengthInSeconds = nLengthInSeconds;
 
@@ -31,17 +29,13 @@
 
 		private readonly int m_nLengthInSeconds;
 		private readonly string m_sMsg;
-
 	} // class Nop
 
 	public class Noop : Nop {
-
-		public Noop(AConnection oDB, ASafeLog oLog) : base(3, "NOOP: just a 3 seconds NOP", oDB, oLog) {} // constructor
+		public Noop() : base(3, "NOOP: just a 3 seconds NOP") {} // constructor
 
 		public override string Name {
 			get { return "Noop - no operation (for simulating parameterless strategy)"; }
 		} // Name
-
 	} // class Noop
-
 } // namespace

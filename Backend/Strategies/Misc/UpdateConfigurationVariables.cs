@@ -1,23 +1,16 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
-	using Ezbob.Logger;
 
 	public class UpdateConfigurationVariables : AStrategy {
-		public UpdateConfigurationVariables(AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog) {
-		}
-
 		public override string Name {
 			get { return "Update configuration variables"; }
 		} // Name
 
 		public override void Execute() {
-			lock (updateConfigurationVariablesLock)
-			{
-				if (isExecuting)
-				{
+			lock (updateConfigurationVariablesLock) {
+				if (isExecuting) {
 					Log.Warn("Update configuration variables is already in progress.");
 					return;
 				} // if
@@ -29,8 +22,7 @@
 			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 
-			lock (updateConfigurationVariablesLock)
-			{
+			lock (updateConfigurationVariablesLock) {
 				isExecuting = false;
 			} // lock
 		} // Execute

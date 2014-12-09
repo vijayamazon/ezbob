@@ -1,14 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using Ezbob.Backend.Models;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using MailStrategies;
 
 	public class CustomerChangePassword : UserChangePassword {
-
-		public CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, AConnection oDB, ASafeLog oLog)
-			: base(sEmail, oOldPassword, oNewPassword, false, oDB, oLog)
-		{
+		public CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword)
+			: base(sEmail, oOldPassword, oNewPassword, false) {
 		} // constructor
 
 		public override string Name {
@@ -19,8 +15,8 @@
 			base.Execute();
 
 			if (string.IsNullOrWhiteSpace(ErrorMessage))
-				new PasswordChanged(UserID, Password, DB, Log).Execute();
+				new PasswordChanged(UserID, Password).Execute();
 		} // Execute
 
 	} // class CustomerChangePassword
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

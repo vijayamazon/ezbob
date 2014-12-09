@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Text;
 	using Ezbob.Database;
@@ -8,10 +8,6 @@
 	using JetBrains.Annotations;
 
 	public class EncryptChannelGrabberMarketplaces : AStrategy {
-
-		public EncryptChannelGrabberMarketplaces(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-		} // constructor
-
 		public override string Name {
 			get { return "Encrypt Channel Grabber Marketplaces"; }
 		} // Name
@@ -142,4 +138,4 @@
 		} // class LoadMarketplaceSecurityData
 
 	} // class EncryptChannelGrabberMarketplaces
-} // namespace EzBob.Backend.Strategies
+} // namespace Ezbob.Backend.Strategies

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Security.Cryptography;
 	using System.Text;
@@ -89,4 +89,4 @@
 		} // class Result
 
 	} // class UserDataForLogin
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

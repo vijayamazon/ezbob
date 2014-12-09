@@ -1,11 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
+	using EzBob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
-	using Models;
 
 	public class GetConfigTable : AStrategy {
-
-		public GetConfigTable(string sTableName, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public GetConfigTable(string sTableName) {
 			m_sTableName = sTableName;
 			Result = new ConfigTable[0];
 		} // constructor
@@ -25,6 +23,5 @@
 		} // Execute
 
 		private readonly string m_sTableName;
-
 	} // class GetConfigTable
 } // namespace

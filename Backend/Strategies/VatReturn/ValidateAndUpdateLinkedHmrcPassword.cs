@@ -1,7 +1,5 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
 	using MailStrategies;
@@ -12,10 +10,8 @@
 			string sCustomerID,
 			string sDisplayName,
 			string sPassword,
-			string sHash,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(sCustomerID, sDisplayName, sPassword, sHash, oDB, oLog) {
+			string sHash
+		) : base(sCustomerID, sDisplayName, sPassword, sHash) {
 			ErrorMessage = null;
 		} // constructor
 

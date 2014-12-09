@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies.API {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies.API {
 	public sealed class Addressee {
 
 		public Addressee(string sRecipient = "", string sCarbonCopy = "", bool bShouldRegister = true) {
@@ -32,4 +32,4 @@
 		} // Normalise
 
 	} // class Addressee
-} // namespace EzBob.Backend.Strategies.MailStrategies.API
+} // namespace Ezbob.Backend.Strategies.MailStrategies.API

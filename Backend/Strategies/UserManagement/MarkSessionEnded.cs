@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -6,7 +6,7 @@
 
 	public class MarkSessionEnded : AStrategy {
 
-		public MarkSessionEnded(int nSessionID, string sComment, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public MarkSessionEnded(int nSessionID, string sComment) {
 			m_oSp = new SpMarkSessionEnded(nSessionID, sComment, DB, Log);
 		} // constructor
 
@@ -44,4 +44,4 @@
 		} // class SpMarkSessionEnded
 
 	} // class MarkSessionEnded
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

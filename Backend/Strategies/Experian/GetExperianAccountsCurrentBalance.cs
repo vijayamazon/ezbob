@@ -1,15 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.Experian 
-{
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class GetExperianAccountsCurrentBalance : AStrategy
-	{
+	public class GetExperianAccountsCurrentBalance : AStrategy {
 		private readonly int customerId;
 
-		public GetExperianAccountsCurrentBalance(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		public GetExperianAccountsCurrentBalance(int customerId) {
 			this.customerId = customerId;
 		}
 
@@ -18,7 +13,7 @@
 		}
 
 		public int CurrentBalance { get; private set; }
-		
+
 		public override void Execute() {
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {

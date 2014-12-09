@@ -1,16 +1,15 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using MailStrategies.API;
 	using PaymentServices.PayPoint;
 
 	public class SetLateLoanStatus : AStrategy {
 
-		public SetLateLoanStatus(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+		public SetLateLoanStatus() {
+			mailer = new StrategiesMailer();
 
 			SafeReader sr = DB.GetFirst("SetLateLoanStatusGetConfigs", CommandSpecies.StoredProcedure);
 

@@ -6,9 +6,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EchoSignLib;
 	using EzBob.Backend.Models;
-	using EzBob.Backend.Strategies.MedalCalculations;
-	using EzBob.Backend.Strategies.PricingModel;
-	using EzBob.Backend.Strategies.UserManagement;
+	using Ezbob.Backend.Strategies.MedalCalculations;
+	using Ezbob.Backend.Strategies.PricingModel;
+	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 

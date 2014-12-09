@@ -2,7 +2,7 @@
 {
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Backend.Strategies.ScoreCalculation;
+	using Ezbob.Backend.Strategies.ScoreCalculation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.OfferCalculation
+﻿namespace Ezbob.Backend.Strategies.OfferCalculation
 {
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
@@ -57,7 +57,7 @@
 				result.ScenarioName = "Basic Repeating";
 			}
 
-			var getPricingModelModelInstance = new GetPricingModelModel(customerId, result.ScenarioName, db, log);
+			var getPricingModelModelInstance = new GetPricingModelModel(customerId, result.ScenarioName);
 			getPricingModelModelInstance.Execute();
 			PricingModelModel templateModel = getPricingModelModelInstance.Model;
 			templateModel.LoanAmount = amount;

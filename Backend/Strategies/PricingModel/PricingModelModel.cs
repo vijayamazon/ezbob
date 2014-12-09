@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.PricingModel
+﻿namespace Ezbob.Backend.Strategies.PricingModel
 {
 	public class PricingModelModel
 	{

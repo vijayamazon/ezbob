@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Globalization;
 	using System.Threading;
@@ -52,7 +52,7 @@
 			);
 		} // LoadFromDB
 
-		public GetAvailableFunds(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public GetAvailableFunds() {
 			if (ms_oDB == null) {
 				lock (ms_oProcLock) {
 					if (ms_oDB == null) {

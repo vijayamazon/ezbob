@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -19,8 +19,8 @@
 
 	public class FindAccountsToUpdate : AStrategy {
 
-		public FindAccountsToUpdate(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_oStra = new LoadCustomerMarketplaceSecurityData(nCustomerID, DB, Log);
+		public FindAccountsToUpdate(int nCustomerID) {
+			m_oStra = new LoadCustomerMarketplaceSecurityData(nCustomerID);
 			m_oCustomerData = new CustomerData(this, nCustomerID, DB);
 			Result = new AccountsToUpdate();
 		} // constructor

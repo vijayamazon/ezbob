@@ -1,8 +1,8 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
-	using EzBob.Backend.Strategies.MailStrategies;
-	using EzBob.Backend.Strategies.UserManagement;
-	using EzBob.Backend.Strategies.UserManagement.EmailConfirmation;
+	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.UserManagement;
+	using Ezbob.Backend.Strategies.UserManagement.EmailConfirmation;
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {

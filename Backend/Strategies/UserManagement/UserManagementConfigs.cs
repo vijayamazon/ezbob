@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -90,4 +90,4 @@
 		} // GetUserManagementConfiguration
 
 	} // class UserManagementConfigs
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

@@ -1,11 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerSaveUploadedCustomerFile : AStrategy {
 
-		public BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] aryFileContents, string sFileName, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] aryFileContents, string sFileName) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			m_aryFileContents = aryFileContents;
@@ -38,4 +37,4 @@
 
 	} // class BrokerSaveUploadedCustomerFile 
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
 	using System.Reflection;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using Ezbob.Database;

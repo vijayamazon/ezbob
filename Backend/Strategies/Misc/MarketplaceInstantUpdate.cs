@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -6,7 +6,7 @@
 
 	public class MarketplaceInstantUpdate : AStrategy {
 
-		public MarketplaceInstantUpdate(int nMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public MarketplaceInstantUpdate(int nMarketplaceID) {
 			m_oStart = new StartMarketplaceUpdate(DB, Log) { MarketplaceID = nMarketplaceID };
 			m_oEnd = new EndMarketplaceUpdate(DB, Log) { MarketplaceID = nMarketplaceID };
 		} // constructor
@@ -81,4 +81,4 @@
 // ReSharper restore ValueParameterNotUsed
 
 	} // class MarketplaceInstantUpdate
-} // namespace EzBob.Backend.Strategies
+} // namespace Ezbob.Backend.Strategies

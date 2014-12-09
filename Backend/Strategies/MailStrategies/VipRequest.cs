@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
+﻿namespace Ezbob.Backend.Strategies.MailStrategies
 {
 	using API;
 	using Ezbob.Logger;
@@ -13,14 +13,12 @@
 		private MailMetaData _mailMetaData;
 		private readonly StrategiesMailer m_oMailer;
 
-		public VipRequest(int customerId, string fullName, string email, string phone, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		public VipRequest(int customerId, string fullName, string email, string phone) {
 			_customerId = customerId;
 			_fullName = fullName;
 			_email = email;
 			_phone = phone;
-			m_oMailer = new StrategiesMailer(oDb, oLog);
+			m_oMailer = new StrategiesMailer();
 		}
 
 		public override string Name { get { return "VipRequest"; } }

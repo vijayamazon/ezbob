@@ -1,9 +1,9 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Linq;
-	using EzBob.Backend.Strategies.Misc;
-	using EzBob.Backend.Strategies.Postcode;
-	using EzBob.Backend.Strategies.VatReturn;
+	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.Postcode;
+	using Ezbob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;

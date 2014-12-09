@@ -1,18 +1,15 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Globalization;
 	using System.Collections.Generic;
 	using API;
 	using ConfigManager;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Utils;
 	using StructureMap;
 
 	public class CashTransferred : ABrokerMailToo {
-
-		public CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog, true) {
+		public CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst) : base(customerId, true, true) {
 			this.amount = amount;
 			this.loanRefNum = loanRefNum;
 			this.isFirst = isFirst;

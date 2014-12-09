@@ -4,14 +4,14 @@
 	using System.Collections.Generic;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Backend.Strategies.Broker;
-	using EzBob.Backend.Strategies.Experian;
-	using EzBob.Backend.Strategies.MailStrategies;
-	using EzBob.Backend.Strategies.MainStrategy;
-	using EzBob.Backend.Strategies.MainStrategy.AutoDecisions;
-	using EzBob.Backend.Strategies.MedalCalculations;
-	using EzBob.Backend.Strategies.Misc;
-	using EzBob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.Broker;
+	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.MainStrategy;
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
+	using Ezbob.Backend.Strategies.MedalCalculations;
+	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.OfferCalculation;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using Ezbob.Backend.Models;
@@ -33,192 +33,190 @@
 				x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>();
 			});
 
-			EzServiceAccessorShort.Set(m_oDB, m_oLog);
+			Ezbob.Backend.Strategies.Library.Initialize(m_oEnv, m_oDB, m_oLog);
 		} // Init
 
 		[Test]
-		public void test_mainstrat()
-		{
-			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, m_oDB, m_oLog);
+		public void test_mainstrat() {
+			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0);
 			ms.Execute();
 		}
 
 		[Test]
-		public void UpdateCustomerMarketplace()
-		{
-			var s = new UpdateMarketplace(21400, 18364, false, m_oDB, m_oLog);
+		public void UpdateCustomerMarketplace() {
+			var s = new UpdateMarketplace(21400, 18364, false);
 			s.Execute();
 		}
 
 		[Test]
 		public void Greeting()
 		{
-			var s = new Greeting(21401, "stasd+confirm@ezbob.com", m_oDB, m_oLog);
+			var s = new Greeting(21401, "stasd+confirm@ezbob.com");
 			s.Execute();
 		}
 
 		[Test]
 		public void ApprovedUser()
 		{
-			var s = new ApprovedUser(3060, 2500, 24, true, m_oDB, m_oLog);
+			var s = new ApprovedUser(3060, 2500, 24, true);
 			s.Execute();
 		}
 
 		[Test]
 		public void CashTransferred()
 		{
-			var s = new CashTransferred(21340, 2500, "01971847001", true, m_oDB, m_oLog);
+			var s = new CashTransferred(21340, 2500, "01971847001", true);
 			s.Execute();
 		}
 
 		[Test]
 		public void EmailRolloverAdded()
 		{
-			var s = new EmailRolloverAdded(3060, 2500, m_oDB, m_oLog);
+			var s = new EmailRolloverAdded(3060, 2500);
 			s.Execute();
 		}
 
 		[Test]
 		public void EmailUnderReview()
 		{
-			var s = new EmailUnderReview(3060, m_oDB, m_oLog);
+			var s = new EmailUnderReview(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void Escalated()
 		{
-			var s = new Escalated(3060, m_oDB, m_oLog);
+			var s = new Escalated(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void GetCashFailed()
 		{
-			var s = new GetCashFailed(3060, m_oDB, m_oLog);
+			var s = new GetCashFailed(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void LoanFullyPaid()
 		{
-			var s = new LoanFullyPaid(3060, "fdsfdf", m_oDB, m_oLog);
+			var s = new LoanFullyPaid(3060, "fdsfdf");
 			s.Execute();
 		}
 
 		[Test]
 		public void MoreAmlAndBwaInformation()
 		{
-			var s = new MoreAmlAndBwaInformation(3060, m_oDB, m_oLog);
+			var s = new MoreAmlAndBwaInformation(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void MoreAmlInformation()
 		{
-			var s = new MoreAmlInformation(3060, m_oDB, m_oLog);
+			var s = new MoreAmlInformation(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void MoreBwaInformation()
 		{
-			var s = new MoreBwaInformation(3060, m_oDB, m_oLog);
+			var s = new MoreBwaInformation(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void PasswordChanged()
 		{
-			var s = new PasswordChanged(3060, new Password("dfsgfsdg"), m_oDB, m_oLog);
+			var s = new PasswordChanged(3060, new Password("dfsgfsdg"));
 			s.Execute();
 		}
 
 		[Test]
 		public void PasswordRestored()
 		{
-			var s = new PasswordRestored(3060, m_oDB, m_oLog);
+			var s = new PasswordRestored(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void PayEarly()
 		{
-			var s = new PayEarly(3060, 2500, "dfsgfsdg", m_oDB, m_oLog);
+			var s = new PayEarly(3060, 2500, "dfsgfsdg");
 			s.Execute();
 		}
 
 		[Test]
 		public void PayPointAddedByUnderwriter()
 		{
-			var s = new PayPointAddedByUnderwriter(3060, "dfgsdf", "dfsgfsdg", 5, m_oDB, m_oLog);
+			var s = new PayPointAddedByUnderwriter(3060, "dfgsdf", "dfsgfsdg", 5);
 			s.Execute();
 		}
 
 		[Test]
 		public void PayPointNameValidationFailed()
 		{
-			var s = new PayPointNameValidationFailed(3060, "dfgsdf", m_oDB, m_oLog);
+			var s = new PayPointNameValidationFailed(3060, "dfgsdf");
 			s.Execute();
 		}
 
 		[Test]
 		public void RejectUser()
 		{
-			var s = new RejectUser(21370, true, m_oDB, m_oLog);
+			var s = new RejectUser(21370, true);
 			s.Execute();
 		}
 
 		[Test]
 		public void RenewEbayToken()
 		{
-			var s = new RenewEbayToken(3060, "sdfgfgg", "dsfg", m_oDB, m_oLog);
+			var s = new RenewEbayToken(3060, "sdfgfgg", "dsfg");
 			s.Execute();
 		}
 
 		[Test]
 		public void RequestCashWithoutTakenLoan()
 		{
-			var s = new RequestCashWithoutTakenLoan(3060, m_oDB, m_oLog);
+			var s = new RequestCashWithoutTakenLoan(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void SendEmailVerification()
 		{
-			var s = new SendEmailVerification(3060, "dfg", m_oDB, m_oLog);
+			var s = new SendEmailVerification(3060, "dfg");
 			s.Execute();
 		}
 
 		[Test]
 		public void ThreeInvalidAttempts()
 		{
-			var s = new ThreeInvalidAttempts(3060, m_oDB, m_oLog);
+			var s = new ThreeInvalidAttempts(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void TransferCashFailed()
 		{
-			var s = new TransferCashFailed(3060, m_oDB, m_oLog);
+			var s = new TransferCashFailed(3060);
 			s.Execute();
 		}
 
 		[Test]
 		public void TestGetBankModel() {
-			new GetBankModel(234, m_oDB, m_oLog).Execute();
+			new GetBankModel(234).Execute();
 		} // TestGetBankModel
 
 		[Test]
 		public void TestCalculateModelsAndAffordability() {
-			new CalculateModelsAndAffordability(15821, null, m_oDB, m_oLog).Execute();
+			new CalculateModelsAndAffordability(15821, null).Execute();
 		} // TestCalculateModelsAndAffordability
 
 		[Test]
 		public void TestMedalCalculation() {
 			var customers = new[] { 6982, 6840 };
 			foreach (var customer in customers) {
-				new CalculateMedal(m_oDB, m_oLog, customer).Execute();
+				new CalculateMedal(customer).Execute();
 			}
 
 		} // TestCalculateModelsAndAffordability
@@ -227,9 +225,9 @@
 		public void TestAutoReRejection()
 		{
 			var rerejection = new ReRejection(21334, m_oDB, m_oLog);
-			var rejection = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, m_oDB, m_oLog);
-			var approve = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, m_oDB, m_oLog);
-			var reapprove = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, m_oDB, m_oLog);
+			var rejection = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, m_oDB, m_oLog);
+			var approve = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, m_oDB, m_oLog);
+			var reapprove = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, m_oDB, m_oLog);
 
 			//rerejection.MakeDecision(rejectionDecision);
 			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
@@ -253,7 +251,7 @@
 		[Test]
 		public void TestLREnquiry()
 		{
-			var s = new LandRegistryEnquiry(21340, null, "test", null, null, "E12 6AY", m_oDB, m_oLog);
+			var s = new LandRegistryEnquiry(21340, null, "test", null, null, "E12 6AY");
 			s.Execute();
 			Assert.IsNotNullOrEmpty(s.Result);
 		}
@@ -261,7 +259,7 @@
 		[Test]
 		public void TestLRRes()
 		{
-			var s = new LandRegistryRes(21378, "SK310937", m_oDB, m_oLog);
+			var s = new LandRegistryRes(21378, "SK310937");
 			s.Execute();
 			Assert.IsNotNullOrEmpty(s.Result);
 		}
@@ -269,7 +267,7 @@
 		[Test]
 		public void TestParseExperianConsumer()
 		{
-			var s = new ParseExperianConsumerData(110285, m_oDB, m_oLog);
+			var s = new ParseExperianConsumerData(110285);
 			s.Execute();
 			Console.WriteLine(s.Result.ToString());
 			Assert.IsNotNull(s.Result);
@@ -277,7 +275,7 @@
 
 		[Test]
 		public void TestLoadExperianLtd() {
-			var s = new LoadExperianLtd("06357516", 0, m_oDB, m_oLog);
+			var s = new LoadExperianLtd("06357516", 0);
 			s.Execute();
 			Console.WriteLine(s.Result.ToString());
 			Assert.IsNotNull(s.Result);
@@ -287,7 +285,7 @@
 		[Test]
 		public void TestLoadExperianNonLtd()
 		{
-			var s = new GetCompanyDataForCompanyScore(m_oDB, m_oLog, "10732957");
+			var s = new GetCompanyDataForCompanyScore("10732957");
 			s.Execute();
 			Assert.IsNotNull(s.Data);
 		}
@@ -295,17 +293,17 @@
 		[Test]
 		public void TestLoadExperianConsumer()
 		{
-			var s = new LoadExperianConsumerData(20323, null, 110285, m_oDB, m_oLog);
+			var s = new LoadExperianConsumerData(20323, null, 110285);
 			s.Execute();
 			Console.WriteLine(s.Result.ToString());
 			Assert.IsNotNull(s.Result);
 
-			s = new LoadExperianConsumerData(17254, null, null, m_oDB, m_oLog);
+			s = new LoadExperianConsumerData(17254, null, null);
 			s.Execute();
 			Console.WriteLine(s.Result.ToString());
 			Assert.IsNotNull(s.Result);
 
-			s = new LoadExperianConsumerData(110285, 1014, null, m_oDB, m_oLog);
+			s = new LoadExperianConsumerData(110285, 1014, null);
 			s.Execute();
 			Console.WriteLine(s.Result.ToString());
 			Assert.IsNotNull(s.Result);
@@ -314,14 +312,14 @@
 		[Test]
 		public void TestBackfillExperianConsumer()
 		{
-			var s = new BackfillExperianConsumer(m_oDB, m_oLog);
+			var s = new BackfillExperianConsumer();
 			s.Execute();
 		}
 
 		[Test]
 		public void TestLoadExperianConsumerMortagageData()
 		{
-			var s = new LoadExperianConsumerMortgageData(20323, m_oDB, m_oLog);
+			var s = new LoadExperianConsumerMortgageData(20323);
 			s.Execute();
 			Assert.AreEqual(200089, s.Result.MortgageBalance);
 			Assert.AreEqual(1, s.Result.NumMortgages);
@@ -330,23 +328,23 @@
 
 		[Test]
 		public void TestExperianConsumerCheck() {
-			var s = new ExperianConsumerCheck(85, null, false, m_oDB, m_oLog);
+			var s = new ExperianConsumerCheck(85, null, false);
 			s.Execute();
 
-			s = new ExperianConsumerCheck(85, 6, false, m_oDB, m_oLog);
+			s = new ExperianConsumerCheck(85, 6, false);
 			s.Execute();
 		}
 
 		[Test]
 		public void TestGenerateCode() {
 			//http://freesmsreceive.com/+441300452045.php
-			var s = new GenerateMobileCode("01300452045", m_oDB, m_oLog);
+			var s = new GenerateMobileCode("01300452045");
 			s.Execute();
 		}
 
 		[Test]
 		public void testFraud() {
-			var s = new FraudChecker(21340, FraudMode.FullCheck, m_oDB, m_oLog);
+			var s = new FraudChecker(21340, FraudMode.FullCheck);
 			s.Execute();
 		}
 
@@ -404,7 +402,7 @@
 				ExperianCompanyLegalStatus = "L",
 				ExperianCompanyName = "Hren Limited",
 				ExperianCompanyPostcode = "AB10 1BA",
-			}, m_oDB, m_oLog);
+			});
 			s.Execute();
 		}
 

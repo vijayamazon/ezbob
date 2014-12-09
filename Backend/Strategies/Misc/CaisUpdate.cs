@@ -1,13 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using EzBob.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using System.IO;
 	using System.Text;
 
 	public class CaisUpdate : AStrategy {
-		public CaisUpdate(int caisId, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog) {
+		public CaisUpdate(int caisId) {
 			this.caisId = caisId;
 		}
 

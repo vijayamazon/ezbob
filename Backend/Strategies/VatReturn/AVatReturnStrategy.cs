@@ -1,12 +1,5 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
-	using Ezbob.Database;
-	using Ezbob.Logger;
-
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	public abstract class AVatReturnStrategy : AStrategy {
-
-		protected AVatReturnStrategy(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-		} // constructor
-
 		protected enum DeleteReasons {
 			UploadedEqual = 1,
 			UploadedNotEqual = 2,
@@ -18,6 +11,5 @@
 			UploadedRejectedByLinked = 8,
 			LinkedUpdated = 9,
 		} // enum DeleteReasons
-
 	} // class AVatReturnStrategy
-} // namespace EzBob.Backend.Strategies.VatReturn
+} // namespace Ezbob.Backend.Strategies.VatReturn

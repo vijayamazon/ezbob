@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions {
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
@@ -14,7 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzBob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Misc;
 	using EzBob.Models;
@@ -62,7 +62,7 @@
 		} // constructor
 
 		public Approval Init() {
-			var stra = new LoadExperianConsumerData(customerId, null, null, db, log);
+			var stra = new LoadExperianConsumerData(customerId, null, null);
 			stra.Execute();
 
 			m_oConsumerData = stra.Result;
@@ -78,7 +78,7 @@
 			
 			if (customer != null && customer.Company != null) {
 				if(customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited && customer.Company.ExperianRefNum != "NotFound") {
-					var limited = new LoadExperianLtd(customer.Company.ExperianRefNum, 0, db, log);
+					var limited = new LoadExperianLtd(customer.Company.ExperianRefNum, 0);
 					limited.Execute();
 					this.directors = new List<Name>();
 					foreach (var row in limited.Result.Children)
@@ -151,7 +151,7 @@
 		} // Init
 
 		public bool MakeAndVerifyDecision() {
-			var availFunds = new GetAvailableFunds(db, log);
+			var availFunds = new GetAvailableFunds();
 			availFunds.Execute();
 
 			SaveTrailInputData(availFunds);

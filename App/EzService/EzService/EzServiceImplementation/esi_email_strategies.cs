@@ -1,6 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System.Collections.Generic;
-	using EzBob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.MailStrategies;
 
 	partial class EzServiceImplementation {
 

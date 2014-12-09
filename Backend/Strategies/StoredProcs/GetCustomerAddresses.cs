@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.StoredProcs {
+﻿namespace Ezbob.Backend.Strategies.StoredProcs {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;

@@ -1,10 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement.EmailConfirmation {
+﻿namespace Ezbob.Backend.Strategies.UserManagement.EmailConfirmation {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class EmailConfirmationLoad : AStrategy {
-
-		public EmailConfirmationLoad(int nUserID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public EmailConfirmationLoad(int nUserID) {
 			ErrorMessage = "email confirmation state is not yet loaded";
 			m_nUserID = nUserID;
 		} // constructor

@@ -1,16 +1,15 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
-	using EzBob.Backend.Strategies.MailStrategies.API;
+﻿namespace Ezbob.Backend.Strategies.Misc {
+	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class XDaysDue : AStrategy {
 
-		public XDaysDue(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+		public XDaysDue() {
+			mailer = new StrategiesMailer();
 		} // constructor
 
 		public override string Name {

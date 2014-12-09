@@ -1,5 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using EzBob.Backend.Strategies.AutomationVerification;
+	using Ezbob.Backend.Strategies.AutomationVerification;
 
 	partial class EzServiceImplementation {
 

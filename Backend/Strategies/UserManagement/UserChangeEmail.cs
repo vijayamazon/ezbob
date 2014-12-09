@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -8,8 +8,7 @@
 	using MailStrategies;
 
 	public class UserChangeEmail : AStrategy {
-
-		public UserChangeEmail(int nUserID, string sNewEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UserChangeEmail(int nUserID, string sNewEmail) {
 			ErrorMessage = null;
 
 			m_oSpUpdate = new SpUserChangeEmail(DB, Log) {
@@ -48,7 +47,7 @@
 			string sAddress = string.Format("{0}/emailchanged/{1}", CustomerSite, m_oSpUpdate.RequestID);
 
 			new System.Threading.Thread(() =>
-				new EmailChanged(m_oSpUpdate.UserID, sAddress, DB, Log).Execute()
+				new EmailChanged(m_oSpUpdate.UserID, sAddress).Execute()
 			).Start();
 
 			Log.Debug("User '{0}': request to change email to {1} fully processed.", m_oSpUpdate.UserID, m_oData.Email);
@@ -116,4 +115,4 @@
 		} // class SpUserChangePassword
 
 	} // class UserChangeEmail
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

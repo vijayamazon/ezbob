@@ -1,12 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class GetExperianConsumerScore : AStrategy {
 
-		public GetExperianConsumerScore(int customerId, AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog)
-		{
+		public GetExperianConsumerScore(int customerId) {
 			Score = 0;
 			m_nCustomerId = customerId;
 		} // constructor
@@ -17,8 +14,8 @@
 
 		public override void Execute() {
 			Score = DB.ExecuteScalar<int>("GetExperianConsumerScore",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", m_nCustomerId)
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", m_nCustomerId)
 			);
 
 		} // Execute

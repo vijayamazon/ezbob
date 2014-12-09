@@ -1,10 +1,7 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using Ezbob.Database;
-	using Ezbob.Logger;
-
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	public class BrokerPasswordRestored : PasswordRestored {
-
-		public BrokerPasswordRestored(int nBrokerID, AConnection oDb, ASafeLog oLog) : base(nBrokerID, oDb, oLog) {
+		public BrokerPasswordRestored(int nBrokerID)
+			: base(nBrokerID) {
 		} // constructor
 
 		public override string Name { get { return "Broker Password Restored"; } } // Name
@@ -31,6 +28,5 @@
 			get { return (BrokerData)CustomerData; } // get
 			set { CustomerData = value; } // set
 		} // BrokerData
-
 	} // class BrokerPasswordRestored
 } // namespace

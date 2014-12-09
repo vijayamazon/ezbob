@@ -1,13 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using PaymentServices.PacNet;
 	using StructureMap;
 
 	public class UpdateTransactionStatus : AStrategy {
-
-		public UpdateTransactionStatus(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) { } // constructor
-
 		public override string Name {
 			get { return "Update Transaction Status"; }
 		} // Name

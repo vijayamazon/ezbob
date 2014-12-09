@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
@@ -7,12 +7,11 @@
 	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class ParseExperianConsumerData : AStrategy {
 
-		public ParseExperianConsumerData(long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public ParseExperianConsumerData(long nServiceLogID) {
 			Result = null;
 			m_nServiceLogID = nServiceLogID;
 		} // constructor

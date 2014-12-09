@@ -76,10 +76,10 @@
 		} // Execute
 
 		private void DoReject(YesMaamResult ymr) {
-			EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.ManAgainstAMachine.SameDataAgent agent = null;
+			Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.ManAgainstAMachine.SameDataAgent agent = null;
 
 			try {
-				agent = new EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.ManAgainstAMachine.SameDataAgent(
+				agent = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.ManAgainstAMachine.SameDataAgent(
 					ymr.Input.CustomerID,
 					ymr.Input.DecisionTime,
 					this.DB,

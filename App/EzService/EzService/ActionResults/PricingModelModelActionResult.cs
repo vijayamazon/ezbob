@@ -1,6 +1,6 @@
 ﻿namespace EzService {
 	using System.Runtime.Serialization;
-	using EzBob.Backend.Strategies.PricingModel;
+	using Ezbob.Backend.Strategies.PricingModel;
 
 	[DataContract]
 	public class PricingModelModelActionResult : ActionResult

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using Exceptions;
 	using Ezbob.Database;
@@ -15,10 +15,8 @@
 			string sCustomerID,
 			string sDisplayName,
 			string sPassword,
-			string sHash,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			string sHash
+		) {
 			m_sRawCustomerID = sCustomerID;
 			m_sRawDisplayName = sDisplayName;
 			m_sRawPassword = sPassword;
@@ -47,9 +45,7 @@
 			var oReader = new LoadCustomerMarketplaceSecurityData(
 				CustomerID,
 				m_sDisplayName,
-				Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).Hmrc.Guid(),
-				DB,
-				Log
+				Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).Hmrc.Guid()
 			);
 
 			oReader.Execute();

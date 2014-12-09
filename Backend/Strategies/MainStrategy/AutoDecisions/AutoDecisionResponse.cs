@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions {
 	using System;
 	using DbConstants;
 	using EZBob.DatabaseLib.Model.Database;

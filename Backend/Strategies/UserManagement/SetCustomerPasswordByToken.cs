@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -11,10 +11,8 @@
 			string sEmail,
 			Password oPassword,
 			Guid oToken,
-			bool bIsBrokerLead,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			bool bIsBrokerLead
+		) {
 			CustomerID = 0;
 
 			m_oData = new UserSecurityData(this) {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EzBob.Backend.Strategies.ScoreCalculation
+namespace Ezbob.Backend.Strategies.ScoreCalculation
 {
 	public static class Constants
 	{

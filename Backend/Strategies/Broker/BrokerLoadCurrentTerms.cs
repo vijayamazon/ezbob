@@ -1,10 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerLoadCurrentTerms : AStrategy {
-
-		public BrokerLoadCurrentTerms(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadCurrentTerms() {
 			ID = 0;
 			Terms = "";
 		} // constructor
@@ -28,6 +26,5 @@
 		public string Terms { get; private set; } // Terms
 
 		public int ID { get; private set; } // ID
-
 	} // class BrokerLoadCurrentTerms
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

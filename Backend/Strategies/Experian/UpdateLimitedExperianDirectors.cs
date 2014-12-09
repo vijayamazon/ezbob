@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -7,8 +7,7 @@
 	using JetBrains.Annotations;
 
 	public class UpdateLimitedExperianDirectors : AStrategy {
-
-		public UpdateLimitedExperianDirectors(int nCustomerID, long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UpdateLimitedExperianDirectors(int nCustomerID, long nServiceLogID) {
 			m_nCustomerID = nCustomerID;
 			m_nServiceLogID = nServiceLogID;
 		} // constructor
@@ -55,7 +54,7 @@
 		private List<ExperianDirector> UpdateLimited() {
 			Log.Debug("Updating limited Experian directors for customer {0}...", m_nCustomerID);
 
-			var stra = new LoadExperianLtd(null, m_nServiceLogID, DB, Log);
+			var stra = new LoadExperianLtd(null, m_nServiceLogID);
 			stra.Execute();
 
 			var oDirectors = new List<ExperianDirector>();

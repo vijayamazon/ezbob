@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System.Runtime.Serialization;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -16,13 +16,7 @@
 	} // enum PasswordResetTarget
 
 	public class ResetPassword123456 : AStrategy {
-
-		public ResetPassword123456(
-			int nTargetID,
-			PasswordResetTarget nTarget,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+		public ResetPassword123456(int nTargetID, PasswordResetTarget nTarget) {
 			m_nTargetType = nTarget;
 
 			m_oSpLoad = new LoadEmailForPasswordReset(DB, Log) {
@@ -56,11 +50,11 @@
 
 			switch (m_nTargetType) {
 			case PasswordResetTarget.Customer:
-				oEmailSender = new PasswordChanged(m_oSpLoad.TargetID, ThePassword, DB, Log);
+				oEmailSender = new PasswordChanged(m_oSpLoad.TargetID, ThePassword);
 				break;
 
 			case PasswordResetTarget.Broker:
-				oEmailSender = new BrokerPasswordChanged(m_oSpLoad.TargetID, ThePassword, DB, Log);
+				oEmailSender = new BrokerPasswordChanged(m_oSpLoad.TargetID, ThePassword);
 				break;
 			} // switch
 

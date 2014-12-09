@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy
+﻿namespace Ezbob.Backend.Strategies.MainStrategy
 {
 	public class Utils // TODO: move to a generic utils location
 	{

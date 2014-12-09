@@ -1,13 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class AndRecalculateVatReturnSummaryForAll : AStrategy {
-
-		public AndRecalculateVatReturnSummaryForAll(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-		} // constructor
-
 		public override string Name {
 			get { return "Recalculate VAT return summary for all"; }
 		} // Name
@@ -20,7 +15,7 @@
 					Log.Msg("Updating VAT return summary for marketplace {0}...", nMarketplaceID);
 
 					try {
-						new CalculateVatReturnSummary(nMarketplaceID, DB, Log).Execute();
+						new CalculateVatReturnSummary(nMarketplaceID).Execute();
 						Log.Msg("Updated VAT return summary for marketplace {0}.", nMarketplaceID);
 					}
 					catch (Exception e) {

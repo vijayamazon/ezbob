@@ -1,6 +1,6 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.ManAgainstAMachine {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.ManAgainstAMachine {
 	using System;
-	using EzBob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -8,7 +8,7 @@
 	/// <summary>
 	/// Verifies whether the customer should be rejected using customer data that was available on specific date.
 	/// </summary>
-	public class SameDataAgent : EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent {
+	public class SameDataAgent : Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent {
 
 		public SameDataAgent(int nCustomerID, DateTime oNow, AConnection oDB, ASafeLog oLog) : base(nCustomerID, oDB, oLog) {
 			m_oNow = oNow;
@@ -47,14 +47,14 @@
 		} // LoadData
 
 		protected override ExperianConsumerData LoadConsumerData() {
-			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, MetaData.ConsumerServiceLogID, DB, Log);
+			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, MetaData.ConsumerServiceLogID);
 			lcd.Execute();
 
 			return lcd.Result;
 		} // LoadConsumerData
 
 		protected override ExperianLtd LoadCompanyData() {
-			var ltd = new LoadExperianLtd(null, MetaData.CompanyServiceLogID, DB, Log);
+			var ltd = new LoadExperianLtd(null, MetaData.CompanyServiceLogID);
 			ltd.Execute();
 
 			return ltd.Result;

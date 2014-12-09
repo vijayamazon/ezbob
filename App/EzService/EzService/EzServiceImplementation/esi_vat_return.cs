@@ -1,6 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
-	using EzBob.Backend.Strategies.VatReturn;
+	using Ezbob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {

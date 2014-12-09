@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Web.Security;
 	using Ezbob.Backend.Models;
@@ -15,10 +15,8 @@
 			Password oPassword,
 			int nPasswordQuestion,
 			string sPasswordAnswer,
-			string sRemoteIp,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			string sRemoteIp
+		) {
 			m_oResult = null;
 
 			m_oData = new UserSecurityData(this) {
@@ -40,10 +38,10 @@
 		} // constructor
 
 		// Create a user for Underwriter
-		public UserSignup(string sEmail, string sPassword, string sRoleName, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-            b_isUW = true;
+		public UserSignup(string sEmail, string sPassword, string sRoleName) {
+			b_isUW = true;
 
-            m_oResult = null;
+			m_oResult = null;
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
@@ -116,10 +114,10 @@
 		private MembershipCreateStatus? m_oResult;
 		private readonly UserSecurityData m_oData;
 		private readonly CreateWebUser m_oSp;
-        private bool b_isUW;
+		private bool b_isUW;
 
 		private class CreateWebUser : AStoredProcedure {
-			public CreateWebUser(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+			public CreateWebUser(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
 				if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(EzPassword))
@@ -164,4 +162,4 @@
 		} // class CreateWebUser
 
 	} // class UserSignup
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

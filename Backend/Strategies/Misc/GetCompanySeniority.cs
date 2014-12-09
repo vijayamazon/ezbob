@@ -1,12 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class GetCompanySeniority : AStrategy {
 
-		public GetCompanySeniority(int nCustomerID, bool isLimited, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_oSp = new SpGetCompanySeniority(nCustomerID,isLimited, DB, Log);
+		public GetCompanySeniority(int nCustomerID, bool isLimited) {
+			m_oSp = new SpGetCompanySeniority(nCustomerID, isLimited, DB, Log);
 		} // constructor
 
 		public override string Name {

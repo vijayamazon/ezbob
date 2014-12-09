@@ -1,14 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Misc {
 	using System;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models.Marketplaces;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class GetBankModel : AStrategy {
 
-		public GetBankModel(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public GetBankModel(int nCustomerID) {
 			m_nCustomerID = nCustomerID;
 		} // constructor
 

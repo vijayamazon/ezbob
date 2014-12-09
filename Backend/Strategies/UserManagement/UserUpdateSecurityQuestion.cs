@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -9,10 +9,8 @@
 			string sEmail,
 			Password oPassword,
 			int nQuestionID,
-			string sAnswer,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			string sAnswer
+		) {
 			ErrorMessage = null;
 
 			m_oData = new UserSecurityData(this) {
@@ -88,4 +86,4 @@
 		} // class SpUserUpdateSecurityQuestion
 
 	} // class UserUpdateSecurityQuestion
-} // namespace EzBob.Backend.Strategies.UserManagement
+} // namespace Ezbob.Backend.Strategies.UserManagement

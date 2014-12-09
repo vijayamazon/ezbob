@@ -1,16 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies 
-{
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class SendInternalPendingMail : AMailStrategyBase
-	{
+	public class SendInternalPendingMail : AMailStrategyBase {
 		private readonly List<string> internalActionItems;
 
-		public SendInternalPendingMail(int customerId, List<string> internalActionItems, AConnection oDb, ASafeLog oLog)
-			: base(customerId, false, oDb, oLog)
-		{
+		public SendInternalPendingMail(int customerId, List<string> internalActionItems)
+			: base(customerId, false) {
 			this.internalActionItems = internalActionItems;
 		}
 
@@ -18,12 +13,10 @@
 			get { return "SendInternalPendingMail"; }
 		}
 
-		protected override void SetTemplateAndVariables()
-		{
+		protected override void SetTemplateAndVariables() {
 			string internalActionItemsString = string.Empty;
 
-			foreach (string internalActionItem in internalActionItems)
-			{
+			foreach (string internalActionItem in internalActionItems) {
 				internalActionItemsString += internalActionItem + "<br/>";
 			}
 

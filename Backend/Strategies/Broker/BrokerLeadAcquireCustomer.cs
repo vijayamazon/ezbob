@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
@@ -11,10 +11,8 @@
 			int nLeadID,
 			string sFirstName,
 			bool bBrokerFillsForCustomer,
-			string sEmailConfirmationLink,
-			AConnection oDB,
-			ASafeLog oLog
-		) : base(oDB, oLog) {
+			string sEmailConfirmationLink
+		) {
 			m_oSp = new SpBrokerLeadAcquireCustomer(DB, Log) {
 				CustomerID = nCustomerID,
 				LeadID = nLeadID,
@@ -33,7 +31,7 @@
 			m_oSp.ExecuteNonQuery();
 
 			if (!m_oSp.BrokerFillsForCustomer)
-				new Greeting(m_oSp.CustomerID, m_sEmailConfirmationLink, DB, Log).Execute();
+				new Greeting(m_oSp.CustomerID, m_sEmailConfirmationLink).Execute();
 		} // Execute
 
 		private readonly string m_sEmailConfirmationLink;
@@ -59,4 +57,4 @@
 		} // SpBrokerLeadAcquireCustomer
 
 	} // class BrokerLeadAcquireCustomer
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Esign {
+﻿namespace Ezbob.Backend.Strategies.Esign {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;

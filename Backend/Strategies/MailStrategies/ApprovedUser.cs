@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Globalization;
 	using System.Collections.Generic;
@@ -6,13 +6,13 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using StructureMap;
 
 	public class ApprovedUser : ABrokerMailToo {
 
-		public ApprovedUser(int customerId, decimal nLoanAmount, int nValidHours, bool isFirst, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public ApprovedUser(int customerId, decimal nLoanAmount, int nValidHours, bool isFirst)
+			: base(customerId, true) {
 			m_nLoanAmount = nLoanAmount;
 			m_nValidHours = nValidHours;
 			m_bIsFirst = isFirst;
@@ -21,45 +21,38 @@
 
 		public override string Name { get { return "Approved User"; } } // Name
 
-		protected override void LoadRecipientData()
-		{
+		protected override void LoadRecipientData() {
 			base.LoadRecipientData();
 
-			if (CustomerData.IsFilledByBroker)
-			{
+			if (CustomerData.IsFilledByBroker) {
 				SendToCustomer = false;
 			}
 		}
 
-		public class CashRequestRelevantData : AResultRow
-		{
+		public class CashRequestRelevantData : AResultRow {
 			public decimal InterestRate { get; set; }
 			public int ManualSetupFeeAmount { get; set; }
 			public int SystemCalculatedSum { get; set; }
 			public int ManagerApprovedSum { get; set; }
 		}
 
-		protected override void SetTemplateAndVariables()
-		{
+		protected override void SetTemplateAndVariables() {
 			var cashRequestRelevantData = DB.FillFirst<CashRequestRelevantData>(
 				"GetCashRequestData",
 				new QueryParameter("@CustomerId", CustomerData.Id));
 
 			decimal setupFeePercents;
-			if (cashRequestRelevantData.ManagerApprovedSum != 0)
-			{
+			if (cashRequestRelevantData.ManagerApprovedSum != 0) {
 				setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.ManagerApprovedSum;
 			}
-			else if (cashRequestRelevantData.SystemCalculatedSum != 0)
-			{
+			else if (cashRequestRelevantData.SystemCalculatedSum != 0) {
 				setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.SystemCalculatedSum;
 			}
-			else
-			{
+			else {
 				setupFeePercents = 0;
 			}
 
-			decimal interestRatePercents = cashRequestRelevantData.InterestRate*100;
+			decimal interestRatePercents = cashRequestRelevantData.InterestRate * 100;
 			setupFeePercents = MathUtils.Round2DecimalDown(setupFeePercents);
 			decimal remainingPercentsAfterSetupFee = 100 - setupFeePercents;
 
@@ -78,36 +71,29 @@
 				{ "ReportedAnnualTurnover", CustomerData.ReportedAnnualTurnover.ToString("#,#") }
 			};
 
-			if (CustomerData.IsAlibaba)
-			{
+			if (CustomerData.IsAlibaba) {
 				TemplateName = "Mandrill - Alibaba - Approval";
 			}
-			else if (CustomerData.IsCampaign)
-			{
+			else if (CustomerData.IsCampaign) {
 				TemplateName = "Mandrill - Approval Campaign (1st time)";
 			}
-			else if (m_bIsFirst)
-			{
+			else if (m_bIsFirst) {
 				TemplateName = "Mandrill - Approval (1st time)";
 			}
-			else
-			{
+			else {
 				TemplateName = "Mandrill - Approval (not 1st time)";
 			}
 		} // SetTemplateAndVariables
 
-		protected override void ActionAtEnd()
-		{
-			if (CustomerData.IsAlibaba)
-			{
+		protected override void ActionAtEnd() {
+			if (CustomerData.IsAlibaba) {
 				var address = new Addressee(CurrentValues.Instance.AlibabaMailTo, CurrentValues.Instance.AlibabaMailCc);
 				Log.Info("Sending Alibaba internal approval mail");
 				SendCostumeMail("Mandrill - Alibaba - Internal approval email", Variables, new[] { address });
 			}
 		}
 
-		private double CalculateLoanAmountInUsd()
-		{
+		private double CalculateLoanAmountInUsd() {
 			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			double currencyRate = currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
 			double convertedLoanAmount = (double)m_nLoanAmount * currencyRate * CurrentValues.Instance.AlibabaCurrencyConversionCoefficient;

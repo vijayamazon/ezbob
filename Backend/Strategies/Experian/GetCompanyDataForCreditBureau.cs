@@ -1,21 +1,15 @@
-﻿namespace EzBob.Backend.Strategies.Experian
-{
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
-	public class GetCompanyDataForCreditBureau : AStrategy
-	{
+	public class GetCompanyDataForCreditBureau : AStrategy {
 		private readonly string refNumber;
 
-		public GetCompanyDataForCreditBureau(AConnection oDb, ASafeLog oLog, string refNumber)
-			: base(oDb, oLog)
-		{
+		public GetCompanyDataForCreditBureau(string refNumber) {
 			this.refNumber = refNumber;
 		}
 
-		public override string Name
-		{
+		public override string Name {
 			get { return "GetCompanyDataForCreditBureau"; }
 		}
 
@@ -36,6 +30,5 @@
 				Errors = sr["Errors"];
 			}
 		}
-
 	}
 }

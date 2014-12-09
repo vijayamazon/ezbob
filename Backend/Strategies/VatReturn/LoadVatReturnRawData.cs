@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.VatReturn {
+﻿namespace Ezbob.Backend.Strategies.VatReturn {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
@@ -7,8 +7,7 @@
 	using JetBrains.Annotations;
 
 	public class LoadVatReturnRawData : AStrategy {
-
-		public LoadVatReturnRawData(int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadVatReturnRawData(int nCustomerMarketplaceID) {
 			m_oSp = new SpLoadVatReturnRawData(nCustomerMarketplaceID, DB, Log);
 
 			VatReturnRawData = new VatReturnRawData[0];
@@ -76,4 +75,4 @@
 		} // class SpLoadVatReturnRawData
 
 	} // class LoadVatReturnRawData
-} // namespace EzBob.Backend.Strategies.VatReturn
+} // namespace Ezbob.Backend.Strategies.VatReturn

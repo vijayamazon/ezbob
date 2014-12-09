@@ -16,4 +16,4 @@
 		[DataMember]
 		public string FileDescription { get; set; }
 	} // class BrokerCustomerFile
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

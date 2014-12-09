@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
+﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
 	using System.Globalization;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;

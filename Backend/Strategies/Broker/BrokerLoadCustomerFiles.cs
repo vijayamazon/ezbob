@@ -1,12 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerLoadCustomerFiles : AStrategy {
-
-		public BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			Files = new List<BrokerCustomerFile>();
@@ -32,7 +30,5 @@
 
 		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
-
 	} // class BrokerLoadCustomerFiles
-
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

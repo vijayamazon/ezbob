@@ -1,19 +1,16 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using StructureMap;
 
 	public class BackfillExperianLtd : AStrategy {
-
-		public BackfillExperianLtd(AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog) {
-			_experianHistoryRepository = ObjectFactory.GetInstance<ExperianHistoryRepository>();
-			_serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
+		public BackfillExperianLtd() {
+			this.experianHistoryRepository = ObjectFactory.GetInstance<ExperianHistoryRepository>();
+			this.serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 		} // constructor
 
 		public override string Name {
@@ -27,7 +24,7 @@
 				long nServiceLogID = sr["Id"];
 				DateTime oInsertDate = sr["InsertDate"];
 
-				var parser = new ParseExperianLtd(nServiceLogID, DB, Log);
+				var parser = new ParseExperianLtd(nServiceLogID);
 				parser.Execute();
 
 				try {
@@ -35,10 +32,10 @@
 					int? score = parser.Result != null ? parser.Result.CommercialDelphiScore : null;
 					decimal? balance = Utils.GetLimitedCaisBalance(parser.Result);
 
-					var serviceLog = _serviceLogRepository.Get(nServiceLogID);
+					var serviceLog = this.serviceLogRepository.Get(nServiceLogID);
 					serviceLog.CompanyRefNum = sCompanyRefNum;
 
-					_experianHistoryRepository.SaveOrUpdateLimitedHistory(
+					this.experianHistoryRepository.SaveOrUpdateLimitedHistory(
 						nServiceLogID,
 						oInsertDate,
 						sCompanyRefNum,
@@ -52,8 +49,7 @@
 			} // for each
 		} // Execute
 
-		private readonly ExperianHistoryRepository _experianHistoryRepository;
-		private readonly ServiceLogRepository _serviceLogRepository;
-
+		private readonly ExperianHistoryRepository experianHistoryRepository;
+		private readonly ServiceLogRepository serviceLogRepository;
 	} // class BackfillExperianLtd
 } // namespace

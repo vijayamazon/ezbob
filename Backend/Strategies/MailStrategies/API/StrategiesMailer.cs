@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies.API {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies.API {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -10,9 +10,9 @@
 
 	public class StrategiesMailer {
 
-		public StrategiesMailer(AConnection oDb, ASafeLog oLog) {
-			DB = oDb;
-			Log = new SafeLog(oLog);
+		public StrategiesMailer() {
+			DB = Library.Instance.DB;
+			Log = Library.Instance.Log ?? new SafeLog();
 
 			m_oMail = new Mail();
 
@@ -91,7 +91,7 @@
 		private string m_sEzbobCopyCc;
 
 		private AConnection DB { get; set; }
-		private SafeLog Log { get; set; }
+		private ASafeLog Log { get; set; }
 
 	} // class StrategiesMailer
 } // namespace

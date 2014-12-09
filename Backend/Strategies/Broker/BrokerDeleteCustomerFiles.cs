@@ -1,10 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerDeleteCustomerFiles : AStrategy {
 
-		public BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs) {
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			m_aryFileIDs = aryFileIDs;
@@ -33,4 +32,4 @@
 
 	} // class BrokerDeleteCustomerFiles
 
-} // namespace EzBob.Backend.Strategies.Broker
+} // namespace Ezbob.Backend.Strategies.Broker

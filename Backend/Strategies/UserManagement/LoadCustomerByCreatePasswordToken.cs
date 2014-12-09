@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement {
+﻿namespace Ezbob.Backend.Strategies.UserManagement {
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -7,7 +7,7 @@
 
 	public class LoadCustomerByCreatePasswordToken : AStrategy {
 
-		public LoadCustomerByCreatePasswordToken(Guid oToken, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadCustomerByCreatePasswordToken(Guid oToken) {
 			m_oSp = new SpLoadCustomerByCreatePasswordToken(oToken, DB, Log);
 			Result = new CustomerDetails();
 		} // constructor

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.OfferCalculation
+﻿namespace Ezbob.Backend.Strategies.OfferCalculation
 {
 	using System;
 	using AutomationCalculator.Common;

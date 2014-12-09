@@ -181,6 +181,14 @@
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
       <Name>DbConnection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\LibraryGlobals\LibraryGlobals.csproj">
+      <Project>{83A9EFC6-0BD4-46FA-9058-329BEE135BDA}</Project>
+      <Name>LibraryGlobals</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>

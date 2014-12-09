@@ -1,12 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Globalization;
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class PayPointAddedByUnderwriter : AMailStrategyBase {
-
-		public PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
+		public PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId) : base(customerId, false) {
 			this.underwriterId = underwriterId;
 			this.cardno = cardno;
 			this.underwriterName = underwriterName;

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace Ezbob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -92,4 +92,4 @@
 
 	} // class ExperianUtils
 
-} // namespace EzBob.Backend.Strategies
+} // namespace Ezbob.Backend.Strategies

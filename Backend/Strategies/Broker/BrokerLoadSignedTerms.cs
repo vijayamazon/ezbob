@@ -1,12 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.Broker {
+﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using System.Globalization;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class BrokerLoadSignedTerms : AStrategy {
 
-		public BrokerLoadSignedTerms(string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadSignedTerms(string sContactEmail) {
 			Terms = string.Empty;
 			SignedTime = string.Empty;
 

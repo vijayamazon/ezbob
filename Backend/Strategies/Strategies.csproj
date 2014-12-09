@@ -7,7 +7,7 @@
     <ProjectGuid>{7E526927-9849-4E6E-BBFF-D0D780F81A05}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EzBob.Backend.Strategies</RootNamespace>
+    <RootNamespace>Ezbob.Backend.Strategies</RootNamespace>
     <AssemblyName>Strategies</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -112,6 +112,7 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="Broker\LimitedMedalCalculatorForInstantOffer.cs" />
+    <Compile Include="Library.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Agent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Arguments.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Checker.cs" />
@@ -261,7 +262,6 @@
     <Compile Include="Misc\CompanyFiles.cs" />
     <Compile Include="Broker\BrokerDownloadCustomerFile.cs" />
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />
-    <Compile Include="Misc\ExecuteQuery.cs" />
     <Compile Include="Misc\CrmLoadLookups.cs" />
     <Compile Include="Misc\LandRegistry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />
@@ -487,6 +487,14 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
       <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\LibraryGlobals\LibraryGlobals.csproj">
+      <Project>{83a9efc6-0bd4-46fa-9058-329bee135bda}</Project>
+      <Name>LibraryGlobals</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>

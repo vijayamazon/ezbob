@@ -1,8 +1,6 @@
-﻿namespace EzBob.Backend.Strategies.Reports {
+﻿namespace Ezbob.Backend.Strategies.Reports {
 	using System;
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils.Html.Tags;
 	using global::Reports;
 	using global::Reports.Alibaba;
@@ -11,7 +9,7 @@
 
 	public class Alibaba : AStrategy {
 
-		public Alibaba(DateTime? oDateEnd, bool bIncludeTestCustomers, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public Alibaba(DateTime? oDateEnd, bool bIncludeTestCustomers) {
 			m_oDateEnd = oDateEnd;
 			m_bIncludeTestCustomers = bIncludeTestCustomers;
 

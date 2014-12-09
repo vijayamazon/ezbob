@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.UserManagement.EmailConfirmation {
+﻿namespace Ezbob.Backend.Strategies.UserManagement.EmailConfirmation {
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -7,7 +7,7 @@
 
 	public class EmailConfirmationGenerate : AStrategy {
 
-		public EmailConfirmationGenerate(int nUserID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public EmailConfirmationGenerate(int nUserID) {
 			Address = string.Empty;
 
 			m_oSp = new SpEmailConfirmationGenerate(nUserID, DB, Log);

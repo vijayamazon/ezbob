@@ -1,13 +1,10 @@
-﻿using System.Diagnostics;
-using System.IO;
-
-using Ezbob.Logger;
-using Newtonsoft.Json;
-
-namespace Ezbob.Context {
+﻿namespace Ezbob.Context {
+	using System.Diagnostics;
+	using System.IO;
+	using Ezbob.Logger;
+	using Newtonsoft.Json;
 
 	public class Environment : SafeLog {
-
 		public const string CompanyName = "Ezbob";
 		public const string EnvNameFile = "environment.json";
 
@@ -77,7 +74,5 @@ namespace Ezbob.Context {
 			Debug("Detect env: environment is {0}", Name.ToString());
 			Debug("Detect env: variant is {0}", Variant);
 		} // Detect
-
 	} // class Environment
-
 } // namespace Ezbob.Context
