@@ -76,10 +76,10 @@ BEGIN
 	    FROM
 	        LoanScheduleTransaction lst
 	        INNER JOIN Loan l ON lst.LoanId = l.Id AND l.CustomerId = @CustomerID
+	        INNER JOIN LoanSchedule s ON s.Id = lst.ScheduleID
+	        INNER JOIN LoanTransaction t ON t.Id = lst.TransactionID
 	    WHERE
-	        lst.StatusBefore IN ('Late', 'Paid')
-	        OR
-	        lst.StatusAfter IN ('Late', 'Paid')
+	        datediff(day, s.[Date], t.PostDate) > 7 AND (abs(lst.PrincipalDelta)+abs(lst.FeesDelta)+abs(lst.InterestDelta))>2
 	)
 	SELECT
 	    @NumOfOnTimeLoans = ISNULL(COUNT(DISTINCT l.Id), 0)

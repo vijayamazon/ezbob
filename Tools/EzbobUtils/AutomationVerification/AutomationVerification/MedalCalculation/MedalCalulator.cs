@@ -103,8 +103,6 @@
 			var today = calculationDate.HasValue ? calculationDate.Value : DateTime.Today;
 			model.CalculationDate = today;
 
-			
-			
 			model.HasHmrc = dbData.HasHmrc;
 			model.UseHmrc = dbData.HasHmrc;
 			model.BusinessScore = dbData.BusinessScore;
@@ -116,7 +114,7 @@
 			}
 
 			model.ConsumerScore = dbData.ConsumerScore;
-			model.EzbobSeniority = ((today.Year - dbData.RegistrationDate.Year) * 12) + today.Month - dbData.RegistrationDate.Month;
+			model.EzbobSeniority = (decimal)(today - dbData.RegistrationDate).TotalDays / (365.0M / 12.0M);
 			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < today;
 			model.NumOfEarlyPayments = dbData.NumOfEarlyPayments;
 			model.NumOfLatePayments = dbData.NumOfLatePayments;

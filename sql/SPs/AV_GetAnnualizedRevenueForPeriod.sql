@@ -153,7 +153,7 @@ BEGIN
 		SELECT @Revenue1Y = isnull(min(CAST(av.Value AS DECIMAL(18,4))),0) 
 		FROM MP_AnalyisisFunctionValues av INNER JOIN MP_AnalyisisFunction af ON af.Id = av.AnalyisisFunctionId
 		INNER JOIN MP_AnalysisFunctionTimePeriod t ON t.Id = av.AnalysisFunctionTimePeriodId
-		WHERE af.InternalId = '455D0657-4D4F-4494-85F5-F762E67D1B01' --TotalNetInPaymentsAnnualized
+		WHERE af.InternalId = '9370A525-890D-402B-9BAA-5C89E9905CA2' --'TotalNetInPayments'
 		AND av.CustomerMarketPlaceId=@CustomerMarketPlaceId
 		AND av.Updated=@LastCheckDate
 		AND t.InternalId='1F9E6CEF-7251-4E1C-AC35-801265E732CD' -- 1y
@@ -162,4 +162,6 @@ BEGIN
 	
 	SELECT @AnnualizedRevenue1M AS AnnualizedRevenue1M, @AnnualizedRevenue3M AS AnnualizedRevenue3M, @AnnualizedRevenue6M AS AnnualizedRevenue6M, @AnnualizedRevenue1Y AS AnnualizedRevenue1Y, @Revenue1Y AS Revenue1Y
 END
+
 GO
+

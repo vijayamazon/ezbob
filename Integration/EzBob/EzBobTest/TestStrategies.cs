@@ -216,9 +216,12 @@ namespace EzBobTest
 		} // TestCalculateModelsAndAffordability
 
 		[Test]
-		public void TestMedalCalculation()
-		{
-			new CalculateMedal(m_oDB, m_oLog, 18570).Execute();
+		public void TestMedalCalculation() {
+			var customers = new[] { 6982, 6840 };
+			foreach (var customer in customers) {
+				new CalculateMedal(m_oDB, m_oLog, customer).Execute();
+			}
+			
 		} // TestCalculateModelsAndAffordability
 
 		[Test]
