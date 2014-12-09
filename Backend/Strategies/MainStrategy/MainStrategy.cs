@@ -28,9 +28,11 @@
 			int customerId,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDecision,
+			FinishWizardArgs fwa,
 			AConnection oDb,
 			ASafeLog oLog
 		) : base(oDb, oLog) {
+			this.finishWizardArgs = fwa;
 
 			_session = ObjectFactory.GetInstance<ISession>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -56,6 +58,9 @@
 		}
 
 		public override void Execute() {
+			if (this.finishWizardArgs != null)
+				FinishWizard();
+
 			autoDecisionResponse = new AutoDecisionResponse { DecisionName = "Manual" };
 
 			if (newCreditLineOption == NewCreditLineOption.SkipEverything) {
@@ -129,6 +134,15 @@
 
 			SendEmails();
 		} // Execute
+
+		private void FinishWizard() {
+			if (this.finishWizardArgs == null)
+				return;
+
+			this.finishWizardArgs.DoMain = false;
+
+			new FinishWizard(this.finishWizardArgs, DB, Log).Execute();
+		} // FinishWizard
 
 		private void CalculateNewMedal() {
 			var instance = new CalculateMedal(DB, Log, customerId, dataGatherer.TypeOfBusiness, dataGatherer.MaxExperianConsumerScore, dataGatherer.MaxCompanyScore, dataGatherer.NumOfHmrcMps,
@@ -621,5 +635,6 @@
 		private readonly LoanTypeRepository _loanTypeRepository;
 		private readonly LoanSourceRepository _loanSourceRepository;
 		private readonly DiscountPlanRepository _discountPlanRepository;
+		private readonly FinishWizardArgs finishWizardArgs;
 	} // class MainStrategy
 } // namespace

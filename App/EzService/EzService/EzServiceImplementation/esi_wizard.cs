@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using EzBob.Backend.Strategies.MainStrategy;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 
@@ -16,6 +17,17 @@
 		} // GetWizardConfigs
 
 		public ActionMetaData FinishWizard(FinishWizardArgs oArgs, int underwriterId) {
+			if (oArgs.DoMain) {
+				return Execute<MainStrategy>(
+					oArgs.CustomerID,
+					underwriterId,
+					oArgs.CustomerID,
+					oArgs.NewCreditLineOption,
+					oArgs.AvoidAutoDecision,
+					oArgs
+				);
+			} // if
+
 			return Execute<FinishWizard>(oArgs.CustomerID, underwriterId, oArgs);
 		} // FinishWizard
 	} // class EzServiceImplementation

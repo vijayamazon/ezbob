@@ -1,9 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
+	using EzBob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using MailStrategies;
-	using MainStrategy;
 
 	public class FinishWizard : AStrategy {
 		public FinishWizard(FinishWizardArgs oArgs, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
@@ -20,23 +19,12 @@
 				new QueryParameter("CustomerId", m_oArgs.CustomerID)
 			);
 
-			if (m_oArgs.DoSendEmail) {
-				new EmailUnderReview(
-					m_oArgs.CustomerID,
-					DB,
-					Log
-				).Execute();
-			} // if
+			if (m_oArgs.DoSendEmail)
+				new EmailUnderReview(m_oArgs.CustomerID, DB, Log).Execute();
 
-			if (m_oArgs.DoMain) {
-				new MainStrategy(
-					m_oArgs.CustomerID,
-					m_oArgs.NewCreditLineOption,
-					m_oArgs.AvoidAutoDecision,
-					DB,
-					Log
-				).SetOverrideApprovedRejected(false).Execute();
-			} // if
+			// if (m_oArgs.DoMain) - this one is handled in esi_wizard.cs
+			// because when MainStrategy is run from here its times are not
+			// written to EzServiceActionHistory.
 		} // Execute
 
 		private readonly FinishWizardArgs m_oArgs;

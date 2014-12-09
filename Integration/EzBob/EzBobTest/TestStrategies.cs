@@ -38,9 +38,8 @@ namespace EzBobTest
 
 
 		[Test]
-		public void test_mainstrat()
-		{
-			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, m_oDB, m_oLog);
+		public void test_mainstrat() {
+			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null, m_oDB, m_oLog);
 			ms.Execute();
 		}
 
