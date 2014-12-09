@@ -14,5 +14,6 @@
 	<add name="qa-prod-test" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_test;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 
 	<add name="qa-prod-medal" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_medal;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-prod-auto" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_auto;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 </connectionStrings>
 
