@@ -426,7 +426,7 @@ BEGIN
 		LastName               = c.Surname,
 
 		IsBrokerCustomer       = CONVERT(BIT, (CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END)),
-		IsLimitedCompanyType   = CONVERT(BIT, (CASE WHEN c.TypeOfBusiness = 'Limited' THEN 1 WHEN c.TypeOfBusiness = 'LLP' THEN 1 ELSE 0 END)),
+		IsLimitedCompanyType   = CONVERT(BIT, (CASE WHEN c.TypeOfBusiness IN ('Limited', 'LLP') THEN 1 ELSE 0 END)),
 		NumOfTodayAutoApproval = @TodayAutoApprovalCount,
 		TodayLoanSum           = @TodayLoanSum,
 
