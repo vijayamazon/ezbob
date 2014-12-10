@@ -776,7 +776,10 @@
 			if (autoApprovedAmount < 0)
 				autoApprovedAmount = 0;
 
-			StepDone<ReduceOutstandingPrincipal>().Init(m_oTrail.MyInputData.MetaData.OutstandingPrincipal, autoApprovedAmount);
+			if (autoApprovedAmount > 0.00000001m)
+				StepDone<ReduceOutstandingPrincipal>().Init(m_oTrail.MyInputData.MetaData.OutstandingPrincipal, autoApprovedAmount);
+			else
+				StepFailed<ReduceOutstandingPrincipal>().Init(m_oTrail.MyInputData.MetaData.OutstandingPrincipal, autoApprovedAmount);
 		} // ReduceOutstandingPrincipal
 
 		private void CheckAllowedRange() {

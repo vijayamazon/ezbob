@@ -319,7 +319,10 @@
 			if (ApprovedAmount < 0)
 				ApprovedAmount = 0;
 
-			StepDone<ReduceOutstandingPrincipal>().Init(Trail.MyInputData.MetaData.OutstandingPrincipal, ApprovedAmount);
+			if (ApprovedAmount > 0.00000001m)
+				StepDone<ReduceOutstandingPrincipal>().Init(Trail.MyInputData.MetaData.OutstandingPrincipal, ApprovedAmount);
+			else
+				StepFailed<ReduceOutstandingPrincipal>().Init(Trail.MyInputData.MetaData.OutstandingPrincipal, ApprovedAmount);
 		} // ReduceOutstandingPrincipal
 
 		private void AllowedRange() {
