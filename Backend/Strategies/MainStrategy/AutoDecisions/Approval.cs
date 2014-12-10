@@ -773,6 +773,9 @@
 		private void ReduceOutstandingPrincipal() {
 			autoApprovedAmount -= (int)m_oTrail.MyInputData.MetaData.OutstandingPrincipal;
 
+			if (autoApprovedAmount < 0)
+				autoApprovedAmount = 0;
+
 			StepDone<ReduceOutstandingPrincipal>().Init(m_oTrail.MyInputData.MetaData.OutstandingPrincipal, autoApprovedAmount);
 		} // ReduceOutstandingPrincipal
 
