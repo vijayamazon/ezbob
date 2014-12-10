@@ -101,9 +101,8 @@
     <Compile Include="ProcessHistory\AutoApproval\HmrcIsOfBusiness.cs" />
     <Compile Include="ProcessHistory\AutoApproval\CustomerIsDirector.cs" />
     <Compile Include="ProcessHistory\AutoApproval\MedalIsGood.cs" />
-    <Compile Include="ProcessHistory\AutoApproval\OneYearTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\HmrcThreeMonthsTurnover.cs" />
-    <Compile Include="ProcessHistory\AutoApproval\OneMonthTurnover.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\OnlineOneMonthTurnover.cs" />
     <Compile Include="ProcessHistory\AutoRejection\ConsumerDataTooOldPreventer.cs" />
     <Compile Include="ProcessHistory\AutoReRejection\OpenLoans.cs" />
     <Compile Include="ProcessHistory\Common\TotalLoanCount.cs" />
