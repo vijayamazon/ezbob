@@ -162,7 +162,8 @@
     <Compile Include="ProcessHistory\ANumericTrace.cs" />
     <Compile Include="ProcessHistory\ATrail.cs" />
     <Compile Include="ProcessHistory\ATrace.cs" />
-    <Compile Include="ProcessHistory\Trails\ApprovalInputData.cs" />
+    <Compile Include="ProcessHistory\Trails\ApprovalInputData\aid_serialization_model.cs" />
+    <Compile Include="ProcessHistory\Trails\ApprovalInputData\ApprovalInputData.cs" />
     <Compile Include="ProcessHistory\Trails\ApprovalTrail.cs" />
     <Compile Include="ProcessHistory\Trails\ReRejectionTrail.cs" />
     <Compile Include="ProcessHistory\Trails\ReapprovalTrail .cs" />
@@ -210,6 +211,7 @@
   <ItemGroup>
     <None Include="Trace_classes.cd" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

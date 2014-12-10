@@ -9,7 +9,6 @@
 	/// Verifies whether the customer should be rejected using customer data that was available on specific date.
 	/// </summary>
 	public class SameDataAgent : Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent {
-
 		public SameDataAgent(int nCustomerID, DateTime oNow, AConnection oDB, ASafeLog oLog) : base(nCustomerID, oDB, oLog) {
 			m_oNow = oNow;
 		} // constructor
@@ -22,10 +21,10 @@
 			return this;
 		} // Init
 
-		public virtual bool Decide() {
+		public virtual bool Decide(long cashRequestID, string tag) {
 			RunPrimary();
 
-			Trail.Save(DB, null);
+			Trail.Save(DB, null, cashRequestID, tag);
 
 			return Trail.HasDecided;
 		} // Decide

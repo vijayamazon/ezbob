@@ -32,6 +32,8 @@
 			this.Log = oLog ?? new SafeLog();
 
 			medalChooser = new MedalChooser(DB, Log);
+
+			this.tag = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture) + Guid.NewGuid().ToString("N");
 		} // constructor
 
 		public void Execute() {
@@ -88,7 +90,7 @@
 
 				agent.Init();
 
-				ymr.AutoReject.Data = (agent.Decide() ? "Rejected" : "Not rejected") + "<br>" + agent.Trail.UniqueID;
+				ymr.AutoReject.Data = (agent.Decide(ymr.Input.CashRequestID, this.tag) ? "Rejected" : "Not rejected") + "<br>" + agent.Trail.UniqueID;
 			}
 			catch (Exception e) {
 				ymr.AutoReject.Data = "Exception";
@@ -100,7 +102,7 @@
 					e,
 					"Exception thrown while executing Reject(customer {0}, time {1}).",
 					ymr.Input.CustomerID,
-					ymr.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss z", CultureInfo.InvariantCulture)
+					ymr.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
 				);
 			} // try
 		} // DoReject
@@ -126,7 +128,7 @@
 
 				ymr.AutoApprove.Data = (agent.Trail.HasDecided ? "Approved" : "Not approved") + "<br>" + agent.Trail.UniqueID;
 
-				agent.Trail.Save(DB, null);
+				agent.Trail.Save(DB, null, ymr.Input.CashRequestID, this.tag);
 
 				ymr.AutoApprove.Amount = agent.Result == null ? 0 : agent.Result.ApprovedAmount;
 
@@ -296,5 +298,6 @@
 		private readonly int topCount;
 		private readonly int lastCheckedID;
 		private readonly MedalChooser medalChooser;
+		private readonly string tag;
 	} // class YesMaam
 } // namespace

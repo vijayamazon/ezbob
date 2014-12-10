@@ -7,8 +7,7 @@
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
 
-	public class ApprovalInputData : ITrailInputData {
-
+	public partial class ApprovalInputData : ITrailInputData {
 		public static string AdjustCompanyName(string companyName) {
 			if (string.IsNullOrWhiteSpace(companyName))
 				return string.Empty;
@@ -22,21 +21,25 @@
 				.Replace("#049;", "'");
 		} // AdjustCompanyName
 
+		public static ApprovalInputData Deserialize(string json) {
+			var aid = new ApprovalInputData();
+			aid.FromJson(json);
+			return aid;
+		} // Deserialize
+
 		public DateTime DataAsOf { get; private set; }
 
 		public Configuration Configuration { get; private set; }
 		public MetaData MetaData { get; private set; }
+
 		public int CustomerID { get { return m_oArguments.CustomerID; } } // CustomerID
 		public decimal SystemCalculatedAmount { get { return m_oArguments.SystemCalculatedAmount; } } // SystemCalculatedAmount
-
-		[JsonConverter(typeof(StringEnumConverter))]
 		public Medal Medal { get { return m_oArguments.Medal; } } // Medal
 
 		public string WorstStatuses {
 			get { return string.Join(",", WorstStatusList); }
 		} // WorstStatuses
 
-		[JsonIgnore]
 		public List<string> WorstStatusList { get; private set; }
 
 		public int MarketplaceSeniority { get; private set; }
@@ -59,34 +62,17 @@
 		public decimal AvailableFunds { get; private set; }
 		public decimal ReservedFunds { get; private set; }
 
-		public Name CustomerName {
-			get {
-				if (m_oCustomerName == null)
-					m_oCustomerName = new Name(MetaData.FirstName, MetaData.LastName);
-
-				return m_oCustomerName;
-			} // get
-		} // CustomerName
-
-		private Name m_oCustomerName;
-
 		public List<Name> DirectorNames { get; set; }
 		public List<string> HmrcBusinessNames { get; set; }
 
-		public ApprovalInputData() {
-			m_bCompanyNameHasValue = false;
-			LatePayments = new List<Payment>();
-			m_oArguments = new Arguments();
-			DirectorNames = new List<Name>();
-			HmrcBusinessNames = new List<string>();
-			HasHmrc = false;
-			HasOnline = false;
-		} // constructor
+		[JsonIgnore]
+		public Name CustomerName {
+			get {
+				return new Name(MetaData.FirstName, MetaData.LastName);
+			} // get
+		} // CustomerName
 
-		public string Serialize() {
-			return JsonConvert.SerializeObject(this, Formatting.Indented);
-		} // Serialize
-
+		[JsonIgnore]
 		public string CompanyName {
 			get {
 				if (m_bCompanyNameHasValue)
@@ -102,8 +88,17 @@
 			}
 		} // CompanyName
 
-		private bool m_bCompanyNameHasValue;
-		private string m_sCompanyName;
+		public ApprovalInputData() {
+			Clean();
+		} // constructor
+
+		public string Serialize() {
+			return JsonConvert.SerializeObject(new SerializationModel().InitFrom(this), Formatting.Indented);
+		} // Serialize
+
+		public void FromJson(string json) {
+			JsonConvert.DeserializeObject<SerializationModel>(json).FlushTo(this);
+		} // FromJson
 
 		public void FullInit(
 			DateTime oDataAsOf,
@@ -140,7 +135,6 @@
 		public void SetTurnoverData(CalculatedTurnover oTurnover) {
 			SetOnlineTurnover(1, oTurnover.GetOnline(1));
 			SetOnlineTurnover(3, oTurnover.GetOnline(3));
-			SetOnlineTurnover(6, oTurnover.GetOnline(6));
 			SetOnlineTurnover(12, oTurnover.GetOnline(12));
 
 			OnlineUpdateTime = oTurnover.OnlineUpdateTime;
@@ -149,7 +143,6 @@
 			HasHmrc = oTurnover.HasHmrc;
 			HmrcUpdateTime = oTurnover.HmrcUpdateTime;
 
-			SetHmrcTurnover(1, oTurnover.GetHmrc(1));
 			SetHmrcTurnover(3, oTurnover.GetHmrc(3));
 			SetHmrcTurnover(6, oTurnover.GetHmrc(6));
 			SetHmrcTurnover(12, oTurnover.GetHmrc(12));
@@ -264,10 +257,34 @@
 			return IsTurnoverTooOld(HmrcUpdateTime, Configuration.HmrcTurnoverAge);
 		} // IsHmrcTurnoverTooOld
 
-		private Arguments m_oArguments;
+		private void Clean() {
+			m_bCompanyNameHasValue = false;
+			LatePayments = new List<Payment>();
+			m_oArguments = new Arguments();
+			DirectorNames = new List<Name>();
+			HmrcBusinessNames = new List<string>();
+			HasHmrc = false;
+			HasOnline = false;
 
-		private SortedDictionary<int, decimal> m_oOnlineTurnover;
-		private SortedDictionary<int, decimal> m_oHmrcTurnover;
+			DataAsOf = default(DateTime);
+			Configuration = null;
+			MetaData = null;
+			WorstStatusList = null;
+
+			MarketplaceSeniority = 0;
+
+			AvailableFunds = 0;
+			ReservedFunds = 0;
+
+			m_oOnlineTurnover = null;
+			m_oHmrcTurnover = null;
+
+			OnlineUpdateTime = default(DateTime);
+			HasOnline = false;
+
+			HasHmrc = false;
+			HmrcUpdateTime = default(DateTime);
+		} // Clean
 
 		private static decimal GetTurnover(SortedDictionary<int, decimal> dic, int nMonthCount) {
 			if (dic == null)
@@ -313,5 +330,10 @@
 			m_oHmrcTurnover[nMonthCount] = nTurnover;
 		} // SetHmrcTurnover
 
+		private Arguments m_oArguments;
+		private bool m_bCompanyNameHasValue;
+		private string m_sCompanyName;
+		private SortedDictionary<int, decimal> m_oOnlineTurnover;
+		private SortedDictionary<int, decimal> m_oHmrcTurnover;
 	} // class ApprovalInputData
 } // namespace

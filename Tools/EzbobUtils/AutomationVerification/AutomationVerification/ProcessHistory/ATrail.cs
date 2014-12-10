@@ -261,7 +261,7 @@
 
 		private Guid? m_oUniqueID;
 
-		public virtual void Save(AConnection oDB, ATrail oTrail) {
+		public virtual void Save(AConnection oDB, ATrail oTrail, long? cashRequestID = null, string tag = null) {
 			ConnectionWrapper cw = null;
 
 			try {
@@ -270,7 +270,7 @@
 
 				m_oLog.Debug("Transaction has been started, saving primary trail...");
 
-				SaveDecisionTrail sp = new SaveDecisionTrail(this, this.UniqueID, true, oDB, this.m_oLog);
+				SaveDecisionTrail sp = new SaveDecisionTrail(this, this.UniqueID, true, cashRequestID, tag, oDB, this.m_oLog);
 				sp.ExecuteNonQuery(cw);
 
 				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
@@ -278,7 +278,7 @@
 				if (oTrail != null) {
 					m_oLog.Debug("Saving secondary trail...");
 
-					sp = new SaveDecisionTrail(oTrail, this.UniqueID, false, oDB, this.m_oLog);
+					sp = new SaveDecisionTrail(oTrail, this.UniqueID, false, cashRequestID, tag, oDB, this.m_oLog);
 					sp.ExecuteNonQuery(cw);
 
 					m_oLog.Debug("Saving secondary trail done (pending transaction commit).");
@@ -325,8 +325,15 @@
 		protected abstract void UpdateDecision(DecisionStatus nDecisionStatus);
 
 		private class SaveDecisionTrail : AStoredProcedure {
-
-			public SaveDecisionTrail(ATrail oTrail, Guid oDiffID, bool bIsPrimary, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			public SaveDecisionTrail(
+				ATrail oTrail,
+				Guid oDiffID,
+				bool bIsPrimary,
+				long? cashRequestID,
+				string tag,
+				AConnection oDB,
+				ASafeLog oLog
+			) : base(oDB, oLog) {
 				m_oTrail = oTrail;
 				CustomerID = oTrail.CustomerID;
 				DecisionID = (int)oTrail.Decision;
@@ -334,6 +341,9 @@
 				DecisionStatusID = (int)oTrail.DecisionStatus;
 				InputData = oTrail.InputData.Serialize();
 				IsPrimary = bIsPrimary;
+				CashRequestID = cashRequestID;
+				Tag = tag;
+
 				Traces = new List<ATrace.DBModel>();
 
 				for (int i = 0; i < oTrail.Length; i++)
@@ -419,19 +429,14 @@
 				// ReSharper restore ValueParameterNotUsed
 			} // Notes
 
+			[UsedImplicitly]
+			public long? CashRequestID { get; set; }
+
+			[UsedImplicitly]
+			public string Tag { get; set; }
+
 			private readonly ATrail m_oTrail;
-
-		} // SaveDecisionTrail
-
-		private readonly List<string> m_oDiffNotes;
-
-		private readonly List<ATrace> m_oSteps;
-
-		private readonly ASafeLog m_oLog;
-
-		private readonly string m_sToExplanationEmailAddress;
-		private readonly string m_sFromEmailAddress;
-		private readonly string m_sFromEmailName;
+		} // class SaveDecisionTrail
 
 		private T Add<T>(DecisionStatus nDecisionStatus, bool bLockDecisionAfterAddingAStep) where T: ATrace {
 			T oTrace = (T)Activator.CreateInstance(typeof (T), nDecisionStatus);
@@ -481,5 +486,11 @@
 			"</b></h2>verification data:</b></h2>" +
 			"<pre><h3>{6}</h3></pre>";
 
+		private readonly List<string> m_oDiffNotes;
+		private readonly List<ATrace> m_oSteps;
+		private readonly ASafeLog m_oLog;
+		private readonly string m_sToExplanationEmailAddress;
+		private readonly string m_sFromEmailAddress;
+		private readonly string m_sFromEmailName;
 	} // class Trail
 } // namespace

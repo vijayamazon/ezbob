@@ -35,6 +35,8 @@ CREATE PROCEDURE SaveDecisionTrail
 @DecisionStatusID INT,
 @InputData NVARCHAR(MAX),
 @IsPrimary BIT,
+@CashRequestID BIGINT,
+@Tag NVARCHAR(256),
 @Traces DecisionTraceList READONLY,
 @Notes LongStringList READONLY
 AS
@@ -49,10 +51,10 @@ BEGIN
 
 	INSERT INTO DecisionTrail (
 		CustomerID, DecisionID, DecisionTime, UniqueID,
-		DecisionStatusID, InputData, IsPrimary
+		DecisionStatusID, InputData, IsPrimary, CashRequestID, Tag
 	) VALUES (
 		@CustomerID, @DecisionID, @DecisionTime, @UniqueID,
-		@DecisionStatusID, @InputData, @IsPrimary
+		@DecisionStatusID, @InputData, @IsPrimary, @CashRequestID, @Tag
 	)
 
 	------------------------------------------------------------------------------

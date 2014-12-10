@@ -9,18 +9,14 @@
 	/// One of the outputs of LoadAutoApprovalData sp.
 	/// </summary>
 	public class MetaData {
-
 		public MetaData() {
 			ValidationErrors = new List<string>();
 		} // constructor
 
-		[JsonIgnore]
 		public string RowType { get; set; }
 
-		[JsonIgnore]
 		public string FirstName { get; set; }
 
-		[JsonIgnore]
 		public string LastName { get; set; }
 
 		public bool IsBrokerCustomer { get; set; }
@@ -29,7 +25,6 @@
 		public int NumOfTodayAutoApproval { get; set; }
 		public decimal TodayLoanSum { get; set; }
 
-		[JsonIgnore]
 		public int FraudStatusValue {
 			get { return (int)FraudStatus; }
 			set {
@@ -60,14 +55,14 @@
 		public DateTime? OfferStart { get; set; }
 		public bool? EmailSendingBanned { get; set; }
 
-		[JsonIgnore]
 		public string ExperianCompanyName { get; set; }
 
-		[JsonIgnore]
 		public string EnteredCompanyName { get; set; }
 
+		[JsonIgnore]
 		public FraudStatus FraudStatus { get; private set; }
 
+		[JsonIgnore]
 		public List<string> ValidationErrors { get; private set; }
 
 		[JsonIgnore]
@@ -110,5 +105,11 @@
 				ValidationErrors.Add("last offer start time/length not filled");
 		} // Validate
 
+		public void RestoreValidationErrors(IEnumerable<string> errors) {
+			ValidationErrors.Clear();
+
+			if (errors != null)
+				ValidationErrors.AddRange(errors);
+		} // RestoreValidationErrors
 	} // class MetaData
 } // namespace

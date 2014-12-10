@@ -61,8 +61,6 @@
 			set { SaveCaisStatuses(value, m_oAllowedCaisStatusesWithoutLoan); } // set
 		} // AllowedCaisStatusesWithoutLoan
 
-		private readonly List<string> m_oAllowedCaisStatusesWithoutLoan;
-
 		public virtual List<string> GetAllowedCaisStatusesWithLoan() {
 			return m_oAllowedCaisStatusesWithLoan;
 		} // GetAllowedCaisStatusesWithLoan
@@ -122,5 +120,7 @@
 
 			oList.AddRange(sList.Split(','));
 		} // SaveCaisStatuses
+
+		private readonly List<string> m_oAllowedCaisStatusesWithoutLoan;
 	} // class Configuration
 } // namespace
