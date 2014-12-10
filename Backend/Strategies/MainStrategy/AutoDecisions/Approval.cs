@@ -573,7 +573,7 @@
 
 		private void CheckOnlineTurnovers() {
 			if (!m_oTrail.MyInputData.HasOnline && m_oTrail.MyInputData.HasHmrc) {
-				StepDone<OnlineTurnoverAge>().Init(m_oTrail.MyInputData.OnlineUpdateTime, m_oTrail.MyInputData.DataAsOf);
+				StepDone<OnlineTurnoverAge>().Init(m_oTrail.MyInputData.HasOnline);
 				return;
 			} // if
 
@@ -583,19 +583,19 @@
 				StepDone<OnlineTurnoverAge>().Init(m_oTrail.MyInputData.OnlineUpdateTime, m_oTrail.MyInputData.DataAsOf);
 
 			if (m_oTrail.MyInputData.IsOnlineTurnoverGood(1))
-				StepDone<OneMonthTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover1M, m_oTrail.MyInputData.OnlineTurnover1Y);
+				StepDone<OnlineOneMonthTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover1M, m_oTrail.MyInputData.OnlineTurnover1Y, m_oTrail.MyInputData.Configuration.OnlineTurnoverDropMonthRatio);
 			else
-				StepFailed<OneMonthTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover1M, m_oTrail.MyInputData.OnlineTurnover1Y);
+				StepFailed<OnlineOneMonthTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover1M, m_oTrail.MyInputData.OnlineTurnover1Y, m_oTrail.MyInputData.Configuration.OnlineTurnoverDropMonthRatio);
 
 			if (m_oTrail.MyInputData.IsOnlineTurnoverGood(3))
-				StepDone<OnlineThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y);
+				StepDone<OnlineThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y, m_oTrail.MyInputData.Configuration.OnlineTurnoverDropQuarterRatio);
 			else
-				StepFailed<OnlineThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y);
+				StepFailed<OnlineThreeMonthsTurnover>().Init(m_oTrail.MyInputData.OnlineTurnover3M, m_oTrail.MyInputData.OnlineTurnover1Y, m_oTrail.MyInputData.Configuration.OnlineTurnoverDropQuarterRatio);
 		} // CheckOnlineTurnovers
 
 		private void CheckHmrcTurnovers() {
 			if (!m_oTrail.MyInputData.HasHmrc && m_oTrail.MyInputData.HasOnline) {
-				StepDone<HmrcTurnoverAge>().Init(m_oTrail.MyInputData.HmrcUpdateTime, m_oTrail.MyInputData.DataAsOf);
+				StepDone<HmrcTurnoverAge>().Init(m_oTrail.MyInputData.HasHmrc);
 				return;
 			} // if
 
@@ -605,14 +605,14 @@
 				StepDone<HmrcTurnoverAge>().Init(m_oTrail.MyInputData.HmrcUpdateTime, m_oTrail.MyInputData.DataAsOf);
 
 			if (m_oTrail.MyInputData.IsHmrcTurnoverGood(3))
-				StepDone<HmrcThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y);
+				StepDone<HmrcThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y, m_oTrail.MyInputData.Configuration.HmrcTurnoverDropQuarterRatio);
 			else
-				StepFailed<HmrcThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y);
+				StepFailed<HmrcThreeMonthsTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover3M, m_oTrail.MyInputData.HmrcTurnover1Y, m_oTrail.MyInputData.Configuration.HmrcTurnoverDropQuarterRatio);
 
 			if (m_oTrail.MyInputData.IsHmrcTurnoverGood(6))
-				StepDone<HalfYearTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover6M, m_oTrail.MyInputData.HmrcTurnover1Y);
+				StepDone<HalfYearTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover6M, m_oTrail.MyInputData.HmrcTurnover1Y, m_oTrail.MyInputData.Configuration.HmrcTurnoverDropHalfYearRatio);
 			else
-				StepFailed<HalfYearTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover6M, m_oTrail.MyInputData.HmrcTurnover1Y);
+				StepFailed<HalfYearTurnover>().Init(m_oTrail.MyInputData.HmrcTurnover6M, m_oTrail.MyInputData.HmrcTurnover1Y, m_oTrail.MyInputData.Configuration.HmrcTurnoverDropHalfYearRatio);
 		} // CheckHmrcTurnovers
 
 		private void CheckSeniority() {

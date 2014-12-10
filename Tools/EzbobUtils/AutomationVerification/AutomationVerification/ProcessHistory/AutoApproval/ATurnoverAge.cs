@@ -7,6 +7,10 @@
 		public virtual DateTime? UpdateTime { get; private set; }
 		public virtual DateTime Now { get; private set; }
 
+		public virtual void Init(bool haveMp) {
+			Comment = string.Format("customer {0}have any {1} marketplaces", haveMp ? "" : "don't ", TurnoverName);
+		}
+
 		public virtual void Init(DateTime? oUpdateTime, DateTime oNow) {
 			UpdateTime = oUpdateTime;
 			Now = oNow;
