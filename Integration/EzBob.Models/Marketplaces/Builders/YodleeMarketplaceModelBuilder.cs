@@ -196,7 +196,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			YodleeRunningBalanceModel yodleeRunningBalanceModel;
 			sw.Restart();
-			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Customer, directors, out yodleeSearchWordsModel, out yodleeRunningBalanceModel);
+			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Id, mp.Customer, directors, out yodleeSearchWordsModel, out yodleeRunningBalanceModel);
 			model.SearchWordsModel = yodleeSearchWordsModel;
 			model.RunningBalanceModel = yodleeRunningBalanceModel;
 			sw.Stop();
@@ -225,7 +225,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				: (double?)null;
 		} // CurrencyXchg
 
-		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, Customer customer, IEnumerable<string> directors, out YodleeSearchWordsModel yodleeSearchWordsModel, out YodleeRunningBalanceModel yodleeRunningBalanceModel)
+		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, int mpId, Customer customer, IEnumerable<string> directors, out YodleeSearchWordsModel yodleeSearchWordsModel, out YodleeRunningBalanceModel yodleeRunningBalanceModel)
 		{
 			var yodleeCashFlowReportModelBuilder = new YodleeCashFlowReportModelBuilder(_session);
 			var yodleeSearchWordsModelBuilder = new YodleeSearchWordsModelBuilder(_session, customer, directors);
@@ -265,9 +265,17 @@ namespace EzBob.Models.Marketplaces.Builders
 				model.BankStatementDataModel.DateTo = model.banks.Max(x => x.asOfDate);
 				model.BankStatementAnnualizedModel =
 					yodleeCashFlowReportModelBuilder.GetAnualizedBankStatementDataModel(model.BankStatementDataModel);
+
+				Log.Debug("Yodlee data for customer {0} mp {1}: \nDate from:{2} Date to:{3} num of transactions: {4} Revenues:{5} Annualized Revenues: {6}",
+					customer.Id, mpId, model.BankStatementDataModel.DateFrom, 
+					model.BankStatementDataModel.DateTo, 
+					model.banks.SelectMany(x => x.transactions).Count(), 
+					model.BankStatementDataModel.Revenues, 
+					model.BankStatementAnnualizedModel.Revenues);
 			}
 			else {
 				model.BankStatementAnnualizedModel = new BankStatementDataModel();
+				Log.Debug("Yodlee data for customer {0} mp {1}: no data retrieved", customer.Id, mpId);
 			}
 			return yodleeCashFlowReportModelBuilder.GetModel();
 		}
