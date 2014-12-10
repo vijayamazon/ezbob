@@ -316,6 +316,9 @@
 		private void ReduceOutstandingPrincipal() {
 			ApprovedAmount -= Trail.MyInputData.MetaData.OutstandingPrincipal;
 
+			if (ApprovedAmount < 0)
+				ApprovedAmount = 0;
+
 			StepDone<ReduceOutstandingPrincipal>().Init(Trail.MyInputData.MetaData.OutstandingPrincipal, ApprovedAmount);
 		} // ReduceOutstandingPrincipal
 
