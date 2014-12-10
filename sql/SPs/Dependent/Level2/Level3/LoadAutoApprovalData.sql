@@ -286,8 +286,8 @@ BEGIN
 		RepaidPrincipal        = @RepaidPrincipal,
 		SetupFees              = @SetupFees,
 
-		OfferValidUntil        = ValidFor,
-		OfferStart             = ApplyForLoan,
+		OfferValidUntil        = @OfferValidUntil,
+		OfferStart             = @OfferStart,
 		EmailSendingBanned     = @EmailSendingBanned,
 
 		ExperianCompanyName    = co.ExperianCompanyName,
