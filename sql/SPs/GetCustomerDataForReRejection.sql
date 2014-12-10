@@ -42,7 +42,9 @@ BEGIN
 	WHERE
 		cr.IdCustomer = @CustomerId 
 		AND
-		cr.UnderwriterDecisionDate IS NOT NULL
+		cr.UnderwriterDecisionDate IS NOT NULL 
+		AND
+		cr.UnderwriterDecision != 'WaitingForDecision'
 		
 	-- last decision was reject	
 	IF @LastDecisionDate IS NOT NULL
@@ -73,7 +75,6 @@ BEGIN
 	AND lt.Type='PacnetTransaction'
 	AND lt.Status='Done'
 
-	
 	IF @LastDecisionDate IS NOT NULL
 	BEGIN
 		-- added new mp after last decision

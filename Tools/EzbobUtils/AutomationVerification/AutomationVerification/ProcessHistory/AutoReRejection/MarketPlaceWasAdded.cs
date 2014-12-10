@@ -4,7 +4,7 @@
 		public MarketPlaceWasAdded(DecisionStatus nDecisionStatus) : base(nDecisionStatus) { } // constructor
 
 		protected override string PropertyName {
-			get { return "Market place was added after last manual reject"; }
+			get { return "Marketplace was added after last decision date"; }
 		} // PropertyName
 	}  // class 
 } // namespace
