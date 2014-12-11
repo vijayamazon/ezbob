@@ -78,11 +78,13 @@
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetAllYodleeOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace, true, out directors));
 
+
+			DateTime aggregateTime = DateTime.UtcNow;
 			//calculate transactions aggregated data
 			var transactionsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.AggregateData,
-									() => CreateTransactionsAggregationInfo(allOrders, Helper.CurrencyConverter));
+									() => CreateTransactionsAggregationInfo(allOrders, aggregateTime, Helper.CurrencyConverter));
 			// store transactions aggregated data
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 							databaseCustomerMarketPlace.Id,
@@ -93,7 +95,7 @@
 			var accountsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.AggregateData,
-									() => CreateAccountsAggregationInfo(allOrders, Helper.CurrencyConverter));
+									() => CreateAccountsAggregationInfo(allOrders, aggregateTime, Helper.CurrencyConverter));
 			// store accounts aggregated data
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 							databaseCustomerMarketPlace.Id,
@@ -176,7 +178,7 @@
 
 		}
 
-		private IEnumerable<IWriteDataInfo<YodleeDatabaseFunctionType>> CreateTransactionsAggregationInfo(YodleeOrderDictionary orders, ICurrencyConvertor currencyConverter)
+		private IEnumerable<IWriteDataInfo<YodleeDatabaseFunctionType>> CreateTransactionsAggregationInfo(YodleeOrderDictionary orders, DateTime aggregateTime, ICurrencyConvertor currencyConverter)
 		{
 			var aggregateTransactionsArray = new[]
 				{
@@ -186,15 +188,15 @@
 					YodleeDatabaseFunctionType.TotalIncomeAnnualized
 				};
 
-			var updated = DateTime.UtcNow;//todo:use time from server
-			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(YodleeTransactionList.Create(updated, orders), (submittedDate, o) => new YodleeTransactionList(submittedDate, o));
+			
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(YodleeTransactionList.Create(aggregateTime, orders), (submittedDate, o) => new YodleeTransactionList(submittedDate, o));
 
 			var transactionsFactory = new YodleeTransactionsAggregatorFactory();
 
-			return DataAggregatorHelper.AggregateData(transactionsFactory, timePeriodData, aggregateTransactionsArray, updated, currencyConverter);
+			return DataAggregatorHelper.AggregateData(transactionsFactory, timePeriodData, aggregateTransactionsArray, aggregateTime, currencyConverter);
 		}
 
-		private IEnumerable<IWriteDataInfo<YodleeDatabaseFunctionType>> CreateAccountsAggregationInfo(YodleeOrderDictionary orders, ICurrencyConvertor currencyConverter)
+		private IEnumerable<IWriteDataInfo<YodleeDatabaseFunctionType>> CreateAccountsAggregationInfo(YodleeOrderDictionary orders, DateTime aggregateTime, ICurrencyConvertor currencyConverter)
 		{
 			var aggregateAccountsArray = new[]
 				{
@@ -202,11 +204,10 @@
 					YodleeDatabaseFunctionType.AvailableBalance,
 				};
 
-			var updated = DateTime.UtcNow;
-			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(YodleeAccountList.Create(updated, orders), (submittedDate, o) => new YodleeAccountList(submittedDate, o));
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(YodleeAccountList.Create(aggregateTime, orders), (submittedDate, o) => new YodleeAccountList(submittedDate, o));
 
 			var accountsFactory = new YodleeAccountsAggregatorFactory();
-			return DataAggregatorHelper.AggregateData(accountsFactory, timePeriodData, aggregateAccountsArray, updated, currencyConverter);
+			return DataAggregatorHelper.AggregateData(accountsFactory, timePeriodData, aggregateAccountsArray, aggregateTime, currencyConverter);
 		}
 	}
 }

@@ -39,7 +39,7 @@ BEGIN
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN
 		SELECT 
-			@CompanyScore = Score 
+			@CompanyScore = isnull(Score, 0)
 		FROM 
 			CustomerAnalyticsCompany 
 		WHERE 
@@ -49,7 +49,7 @@ BEGIN
 	ELSE
 	BEGIN	
 		SELECT 
-			@CompanyScore = CommercialDelphiScore
+			@CompanyScore = isnull(CommercialDelphiScore, 0)
 		FROM 
 			ExperianNonLimitedResults
 		WHERE
@@ -57,7 +57,7 @@ BEGIN
 			IsActive = 1
 	END
 	
-	SELECT @ConsumerScore = MIN(ExperianConsumerScore)
+	SELECT @ConsumerScore = isnull(MIN(ExperianConsumerScore), 0)
 	FROM
 	(
 		SELECT ExperianConsumerScore
@@ -136,4 +136,3 @@ BEGIN
 END
 
 GO
-
