@@ -1,0 +1,21 @@
+﻿@model Sample.Mvc3.Models.PreAuthorizationModel
+
+@{
+    ViewBag.Title = "PreAuthorizationCallback";
+}
+
+<h2>PreAuthorization callback</h2>
+<h3>resource id:</h3>
+<span>@Model.resource_id @Model.ConfirmResource.ResourceId</span>
+<br/>
+<h3>resource type</h3>
+<span>@Model.resource_type @Model.ConfirmResource.ResourceType</span>
+
+<h3>resource_uri</h3>
+<span>@Model.resource_uri @Model.ConfirmResource.ResourceUri</span>
+
+<h3>signature</h3>
+<span>@Model.signature @Model.ConfirmResource.Signature</span>
+
+<h3>state</h3>
+<span>@Model.state @Model.ConfirmResource.State</span>

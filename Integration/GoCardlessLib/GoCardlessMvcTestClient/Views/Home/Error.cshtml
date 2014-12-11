@@ -1,0 +1,18 @@
+﻿@using GoCardlessSdk
+@using Newtonsoft.Json
+@model dynamic
+@{
+    ViewBag.Title = "Error";
+}
+    <h2>
+        Sorry, an error occurred while processing your request.
+		<br/>
+		@if (TempData.ContainsKey("Exception") && TempData["Exception"] is ApiException) {
+			var exception = ((ApiException)TempData["Exception"]);
+			var content = exception.Content == null ? exception.RawContent : exception.Content.ToString(Formatting.Indented);
+			<br/>
+			@exception.Message
+			<br/>
+			<pre>@content</pre>
+		}
+    </h2>

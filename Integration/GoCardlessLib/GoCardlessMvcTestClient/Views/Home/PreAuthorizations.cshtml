@@ -1,0 +1,15 @@
+﻿@model IEnumerable<GoCardlessSdk.Api.PreAuthorizationResponse>
+
+@{
+    ViewBag.Title = "PreAuthorizations";
+}
+
+<h2>@Html.ActionLink("Post bill", "PostBillRequest", "Home")</h2>
+
+<br/>
+
+<h2>PreAuthorizations</h2>
+@Helpers.Dump(Model)
+
+
+
