@@ -21,9 +21,11 @@
 
 			Ezbob.Backend.Strategies.Library.Initialize(env, DB, Log);
 
-			CompareMaam(args);
+			// CompareMaam(args);
 
 			// LoadFromJson();
+
+			LoadTurnovers(args);
 
 			Log.NotifyStop();
 		} // Main
@@ -48,6 +50,15 @@
 
 			log.Debug("Data read from file:\n{0}", aid.Serialize());
 		} // LoadFromJson
+
+		private static void LoadTurnovers(string[] args) {
+			var oArgs = new Args(AppName, args, Log);
+
+			if (oArgs.IsGood) {
+				CurrentValues.Init(DB, Log);
+				new LoadTurnovers(oArgs, DB, Log).Run();
+			} // if
+		} // LoadTurnovers
 
 		private static string AppName { get; set; }
 		private static ASafeLog Log { get; set; }

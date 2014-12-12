@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Args.cs" />
+    <Compile Include="LoadTurnovers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -53,6 +54,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
+      <Project>{DE254378-4CF8-400C-BCC4-A9AF01550350}</Project>
+      <Name>MailApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj">
       <Project>{D7B3530E-4038-446D-A25A-45D6DF5B6D45}</Project>
       <Name>AutomationCalculator</Name>
@@ -80,6 +85,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\MiniResharper\MiniResharper.csproj">
+      <Project>{805F29C1-D575-49C5-A95D-4D393E65481F}</Project>
+      <Name>MiniResharper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maam\Maam.csproj">
       <Project>{2195d5e3-1077-474b-9bb6-2e5c51e71789}</Project>

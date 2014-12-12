@@ -502,10 +502,7 @@ BEGIN
 	
 	------------------------------------------------------------------------------
 
-	EXECUTE GetCustomerTurnoverData 1, @CustomerID,  1, @Now
-	EXECUTE GetCustomerTurnoverData 1, @CustomerID,  3, @Now
-	EXECUTE GetCustomerTurnoverData 1, @CustomerID,  6, @Now
-	EXECUTE GetCustomerTurnoverData 1, @CustomerID, 12, @Now
+	EXECUTE GetCustomerTurnoverDataForAutoApprove @CustomerID, @Now
 
 	------------------------------------------------------------------------------
 

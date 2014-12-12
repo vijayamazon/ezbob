@@ -6,6 +6,19 @@
 		public int Count { get; private set; }
 		public int LastCheckedID { get; private set; }
 
+		public string Query {
+			get {
+				string top = Count > 0 ? "TOP " + Count : string.Empty;
+				string condition = LastCheckedID > 0 ? string.Format(Condition, LastCheckedID) : string.Empty;
+				return string.Format(queryFormat, top, condition);
+			} // get
+			set {
+				queryFormat = value;
+			}
+		} // Query
+
+		public string Condition { private get; set; }
+
 		public Args(string sName, string[] args, ASafeLog oLog) {
 			Count = -1;
 			LastCheckedID = -1;
@@ -40,5 +53,7 @@
 				oLog.Msg("Specify last checked id 0 or negative to start from the beginning.");
 			} // if
 		} // constructor
+
+		private string queryFormat;
 	} // class Args
 } // namespace

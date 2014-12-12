@@ -11,7 +11,6 @@
 	/// Turnover data is fed via Add method.
 	/// </summary>
 	public class CalculatedTurnover {
-
 		public DateTime? HmrcUpdateTime { get; private set; }
 		public DateTime? OnlineUpdateTime { get; private set; }
 
@@ -85,7 +84,6 @@
 		/// Actual period is between <see cref="DateFrom"/> and <see cref="DateTo"/> inclusive.
 		/// </summary>
 		public class Row {
-
 			/// <summary>
 			/// Marketplace ID (MP_CustomerMarketplace.Id).
 			/// </summary>
@@ -179,7 +177,6 @@
 		} // Row
 
 		private class OneValue {
-
 			public OneValue(Row r) {
 				m_nEbay = 0;
 				m_nOther = 0;
@@ -207,13 +204,11 @@
 
 			private static readonly Guid Ebay   = new Guid("A7120CB7-4C93-459B-9901-0E95E7281B59");
 			private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
-
 		} // OneValue
 
 		private readonly SortedDictionary<int, OneValue> m_oOnline;
 		private readonly SortedDictionary<int, decimal> m_oHmrc;
 
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
-
 	} // class CalculatedTurnover
 } // namespace
