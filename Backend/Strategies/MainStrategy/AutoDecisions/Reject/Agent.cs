@@ -96,6 +96,8 @@
 
 			new Checker(this.Trail, this.Log).Run();
 
+			this.Trail.DecideIfNotDecided();
+
 			Log.Debug("Primary: checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
 		} // RunPrimary
 

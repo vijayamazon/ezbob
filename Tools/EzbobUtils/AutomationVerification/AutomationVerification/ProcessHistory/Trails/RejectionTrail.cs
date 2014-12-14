@@ -18,7 +18,6 @@
 			: base(nCustomerID, DecisionStatus.Dunno, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
 		{
 			MyInputData = new RejectionInputData();
-
 		} // constructor
 
 		public void Init(RejectionInputData data) {
@@ -55,6 +54,11 @@
 
 		public virtual RejectionInputData MyInputData { get; private set; }
 
+		public virtual void DecideIfNotDecided() {
+			if (DecisionStatus == DecisionStatus.Dunno)
+				DecisionStatus = DecisionStatus.Negative;
+		} // DecideIfNotDecided
+
 		protected override void UpdateDecision(DecisionStatus nDecisionStatus)
 		{
 			if (nDecisionStatus == DecisionStatus.Dunno) {
@@ -63,6 +67,5 @@
 
 			DecisionStatus = nDecisionStatus;
 		} // UpdateDecision
-
 	} // class ApprovalTrail
 } // namespace
