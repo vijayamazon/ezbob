@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using ConfigManager;
 	using Ezbob.Database;
@@ -125,16 +126,16 @@
 					hasBothCount++;
 
 				DisplayTurnover online1 = new DisplayTurnover(turnover.OnlineUpdateTime.HasValue, 1, turnover.GetOnline(1), online12, CurrentValues.Instance.AutoApproveOnlineTurnoverDropMonthRatio);
-				online1Total.Add(online1);
+				online1Total.Add(online1, turnover.HmrcUpdateTime.HasValue);
 
 				DisplayTurnover online3 = new DisplayTurnover(turnover.OnlineUpdateTime.HasValue, 3, turnover.GetOnline(3), online12, CurrentValues.Instance.AutoApproveOnlineTurnoverDropQuarterRatio);
-				online3Total.Add(online3);
+				online3Total.Add(online3, turnover.HmrcUpdateTime.HasValue);
 
 				DisplayTurnover hmrc3 = new DisplayTurnover(turnover.HmrcUpdateTime.HasValue, 3, turnover.GetHmrc(3), hmrc12, CurrentValues.Instance.AutoApproveHmrcTurnoverDropQuarterRatio);
-				hmrc3Total.Add(hmrc3);
+				hmrc3Total.Add(hmrc3, turnover.OnlineUpdateTime.HasValue);
 
 				DisplayTurnover hmrc6 = new DisplayTurnover(turnover.HmrcUpdateTime.HasValue, 6, turnover.GetHmrc(6), hmrc12, CurrentValues.Instance.AutoApproveHmrcTurnoverDropHalfYearRatio);
-				hmrc6Total.Add(hmrc6);
+				hmrc6Total.Add(hmrc6, turnover.OnlineUpdateTime.HasValue);
 
 				tbody.Append(AddRow<Td>(
 					new CellValue(cashRequestID),
@@ -233,6 +234,11 @@
 			));
 
 			Email = new Body().Append(tbl);
+
+			online1Total.LogRawActualTurnovers(Log, "Online 1M");
+			online3Total.LogRawActualTurnovers(Log, "Online 3M");
+			hmrc3Total.LogRawActualTurnovers(Log, "HMRC 3M");
+			hmrc6Total.LogRawActualTurnovers(Log, "HMRC 6M");
 		} // Generate
 
 		private void Send() {
@@ -336,23 +342,23 @@
 
 			public decimal ActualTurnoverMedian {
 				get {
-					if (actualTurnoverMedian.HasValue)
-						return actualTurnoverMedian.Value;
+					if (this.actualTurnoverMedian.HasValue)
+						return this.actualTurnoverMedian.Value;
 
-					actualTurnoverMedian = 0;
-					int half = AllCount / 2;
+					this.actualTurnoverMedian = 0;
+					int half = this.actualTurnovers.Sum(pair => pair.Value) / 2;
 
 					int count = 0;
 
-					foreach (KeyValuePair<decimal, int> pair in actualTurnovers) {
+					foreach (KeyValuePair<decimal, int> pair in this.actualTurnovers) {
 						count += pair.Value;
-						actualTurnoverMedian = pair.Key;
+						this.actualTurnoverMedian = pair.Key;
 
 						if (count >= half)
 							break;
 					} // for each
 
-					return actualTurnoverMedian.Value;
+					return this.actualTurnoverMedian.Value;
 				} // get
 			} // ActualTurnoverMedian
 
@@ -364,13 +370,16 @@
 				actualTurnovers = new SortedDictionary<decimal, int>();
 			} // constructor
 
-			public void Add(DisplayTurnover dt) {
-				if (!dt.HasValue)
+			public void Add(DisplayTurnover dt, bool hasOther) {
+				if (!dt.HasValue && hasOther) {
+					AllCount++;
+					GoodCount++;
 					return;
+				} // if
 
 				AllCount++;
 
-				if (dt.IsGood)
+				if (dt.HasValue && dt.IsGood)
 					GoodCount++;
 				else
 					BadCount++;
@@ -383,7 +392,13 @@
 				actualTurnoverMedian = null;
 			} // Add
 
-			private SortedDictionary<decimal, int> actualTurnovers;
+			public void LogRawActualTurnovers(ASafeLog log, string title) {
+				log.Debug("{0} actual turnover data ({1}) - begin", title, actualTurnovers.Sum(pair => pair.Value));
+				log.Debug("\n\t{0}", string.Join("\n\t", actualTurnovers.Select(pair => pair.Key + ": " + pair.Value)));
+				log.Debug("{0} actual turnover data - end", title);
+			} // LogRawActualTurnovers
+
+			private readonly SortedDictionary<decimal, int> actualTurnovers;
 			private decimal? actualTurnoverMedian;
 		} // class DisplayTurnoverTotals
 
@@ -413,7 +428,9 @@
 
 				AnnualizedTurnover = PeriodTurnover / PeriodLength * 12;
 
-				ActualRatio = YearTurnover == 0 ? 0 : AnnualizedTurnover / YearTurnover;
+				ActualRatio = HasValue
+					? (YearTurnover == 0 ? 0 : AnnualizedTurnover / YearTurnover)
+					: 0;
 
 				AnnualizedTurnoverStyle = AnnualizedTurnover < WaterMark ? red : null;
 
@@ -477,8 +494,7 @@ WHERE
 		'AutomationCalculator.ProcessHistory.AutoApproval.HmrcThreeMonthsTurnover',
 		'AutomationCalculator.ProcessHistory.AutoApproval.HalfYearTurnover'
 	)
-	AND
-	tc.DecisionStatusID != 1
+	-- AND tc.DecisionStatusID != 1
 	{1}
 ORDER BY
 	t.CashRequestID DESC";
