@@ -19,7 +19,7 @@ BEGIN
 	
 	SELECT
 		Id,
-		dbo.udfGetLastMarketplaceStatus(@CustomerId, Id) AS CurrentStatus
+		dbo.udfGetLastMarketplaceStatus(Id) AS CurrentStatus
 	FROM
 		MP_CustomerMarketplace
 	WHERE

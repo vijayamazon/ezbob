@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 
 	public class CashRequestBuilder
 	{
@@ -123,7 +124,7 @@
 			return cashRequest;
 		} // CreateQuickOfferCashRequest
 
-		public void ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isSync) {
+		public ActionMetaData ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isSync) {
 			bool bUpdateMarketplaces =
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
@@ -142,9 +143,9 @@
 			} // if
 
 			if (isSync)
-				m_oServiceClient.Instance.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
+				return m_oServiceClient.Instance.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
 			else
-				m_oServiceClient.Instance.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
+				return m_oServiceClient.Instance.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
 		} // ForceEvaluate
 
 		private readonly ILoanTypeRepository _loanTypes;

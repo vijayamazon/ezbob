@@ -432,6 +432,8 @@
 				}
 			}
 
+			customer.LastStartedMainStrategyEndTime = now;
+
 			_customers.SaveOrUpdate(customer);
 
 			if (autoDecisionResponse.Decision.HasValue) {

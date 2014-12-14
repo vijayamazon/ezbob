@@ -92,7 +92,8 @@
 					nUserID: oArgs.UserID
 				);
 
-				ConstructorInfo oCreator = oArgs.StrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oArgs.StrategyArguments.Count);
+				ConstructorInfo oCreator =
+					oArgs.StrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oArgs.StrategyArguments.Count);
 
 				if (oCreator == null)
 					throw new Alert(Log, "Failed to find a constructor for " + oArgs.StrategyType + " with " + oArgs.StrategyArguments.Count + " arguments.");
@@ -152,13 +153,9 @@
 				if (oArgs.OnLaunch != null) {
 					Log.Debug(oArgs.StrategyType + " instance is to be launched, invoking an OnLaunch action...");
 
-					try {
-						oArgs.OnLaunch(amd);
-						Log.Debug(oArgs.StrategyType + " OnLaunch action complete.");
-					}
-					catch (Exception ie) {
-						Log.Alert(ie, "Exception during executing of OnLaunch handler of " + oArgs.StrategyType + " strategy.");
-					} // try
+					oArgs.OnLaunch(amd);
+
+					Log.Debug(oArgs.StrategyType + " OnLaunch action complete.");
 				} // if
 
 				amd.UnderlyingThread.Start();
@@ -197,38 +194,61 @@
 		} // ExecuteSync
 
 		private ActionMetaData ExecuteSync<T>(out T oInstance, int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
-			return ExecuteSync(out oInstance, nCustomerID, nUserID, null, args);
+			return ExecuteSync(out oInstance, new ExecuteArguments(args) { CustomerID = nCustomerID, UserID = nUserID, });
 		} // ExecuteSync
 
-		private ActionMetaData ExecuteSync<T>(out T oInstance, int? nCustomerID, int? nUserID, Action<T> oInitAction, params object[] args) where T : AStrategy {
+		private ActionMetaData ExecuteSync<T>(ExecuteArguments args) where T : AStrategy {
+			T oInstance;
+			return ExecuteSync<T>(out oInstance, args);
+		} // ExecuteSync
+
+		private ActionMetaData ExecuteSync<T>(out T oInstance, ExecuteArguments args) where T : AStrategy {
 			ActionMetaData amd = null;
 
 			try {
 				string sStrategyType = typeof(T).ToString();
 
+				if (args == null)
+					throw new Alert(Log, "No strategy arguments specified for " + sStrategyType + ".");
+
+				args.StrategyType = typeof (T); // just to avoid question which type is used.
+
 				Log.Debug("Executing " + sStrategyType + " started in sync...");
 
-				amd = NewSync(sStrategyType, comment: string.Join("; ", args), nCustomerID: nCustomerID, nUserID: nUserID);
+				amd = NewSync(
+					sStrategyType,
+					comment: args.StrategyArgumentsStr,
+					nCustomerID: args.CustomerID,
+					nUserID: args.UserID
+				);
 
 				ConstructorInfo oCreator =
-					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == args.Length);
+					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == args.StrategyArguments.Count);
 
 				if (oCreator == null)
-					throw new Alert(Log, "Failed to find a constructor for " + sStrategyType + " with " + args.Length + " arguments.");
+					throw new Alert(Log, "Failed to find a constructor for " + sStrategyType + " with " + args.StrategyArguments.Count + " arguments.");
 
 				Log.Debug(sStrategyType + " constructor found, invoking...");
 
-				oInstance = (T)oCreator.Invoke(args.ToArray());
+				oInstance = (T)oCreator.Invoke(args.StrategyArguments.ToArray());
 
 				if (oInstance == null)
 					throw new NullReferenceException("Failed to create an instance of " + sStrategyType);
 
-				if (oInitAction != null) {
+				if (args.OnInit != null) {
 					Log.Debug(oInstance.Name + " instance created, invoking an initialisation action...");
 
-					oInitAction(oInstance);
+					args.OnInit(oInstance, amd);
 
 					Log.Debug(oInstance.Name + " initialisation action complete.");
+				} // if
+
+				if (args.OnLaunch != null) {
+					Log.Debug(args.StrategyType + " instance is to be launched, invoking an OnLaunch action...");
+
+					args.OnLaunch(amd);
+
+					Log.Debug(args.StrategyType + " OnLaunch action complete.");
 				} // if
 
 				Log.Debug(oInstance.Name + " instance is initialised, executing...");
@@ -238,6 +258,14 @@
 				Log.Debug("Executing " + oInstance.Name + " complete in sync.");
 
 				SaveActionStatus(amd, ActionStatus.Done);
+
+				if (args.OnSuccess != null) {
+					Log.Debug(oInstance.Name + " instance running complete, invoking an OnSuccess action...");
+
+					args.OnSuccess(oInstance, amd);
+
+					Log.Debug(oInstance.Name + " OnSuccess action complete.");
+				} // if
 
 				return amd;
 			}
@@ -253,6 +281,18 @@
 
 				if (!(e is AException))
 					Log.Alert(mostInnerException, "Exception during executing " + typeof(T) + " strategy.");
+
+				if ((args != null) && (args.OnException != null)) {
+					Log.Debug(args.StrategyType + " instance running failed, invoking an OnException action...");
+
+					try {
+						args.OnException(amd);
+						Log.Debug(args.StrategyType + " OnException action complete.");
+					}
+					catch (Exception ie) {
+						Log.Alert(ie, "Exception during executing of OnException handler of " + args.StrategyType + " strategy.");
+					} // try
+				} // if
 
 				throw new FaultException(mostInnerException.Message);
 			} // try

@@ -42,7 +42,10 @@
 		public StringActionResult EsignSend(int userId, EchoSignEnvelope[] oPackage) {
 			EsignSend oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, userId, s => s.Package = oPackage);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, new ExecuteArguments {
+				UserID = userId,
+				OnInit = (s, amd) => ((EsignSend)s).Package = oPackage,
+			});
 
 			return new StringActionResult {
 				MetaData = oMetaData,

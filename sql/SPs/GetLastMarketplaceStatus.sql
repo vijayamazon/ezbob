@@ -3,7 +3,6 @@ IF OBJECT_ID('GetLastMarketplaceStatus') IS NULL
 GO
 
 ALTER PROCEDURE GetLastMarketplaceStatus
-@CustomerId INT,
 @MarketplaceId INT
 AS
 BEGIN
@@ -11,6 +10,6 @@ BEGIN
 
 	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 
-	SELECT dbo.udfGetLastMarketplaceStatus(@CustomerId, @MarketplaceId) AS CurrentStatus
+	SELECT dbo.udfGetLastMarketplaceStatus(@MarketplaceId) AS CurrentStatus
 END
 GO

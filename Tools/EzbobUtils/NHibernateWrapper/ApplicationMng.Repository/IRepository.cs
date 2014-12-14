@@ -1,10 +1,7 @@
-using NHibernate;
-using System;
-using System.Linq;
-namespace ApplicationMng.Repository
-{
-	public interface IRepository<T> : System.IDisposable
-	{
+namespace ApplicationMng.Repository {
+	using NHibernate;
+
+	public interface IRepository<T> : System.IDisposable {
 		T Get(object id);
 		System.Linq.IQueryable<T> GetAll();
 		object Save(T val);

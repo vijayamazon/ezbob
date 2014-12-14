@@ -49,6 +49,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             personal: this.personalModel.toJSON()
         };
     },
+
     rotateTable: function () {
         this.$el.find("#affordabilityTable").each(function () {
             var $this = $(this);
@@ -73,6 +74,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
 
         $($("#affordabilityTable tr")[2]).addClass("green-row");
     },
+
     buildJournal: function () {
         this.journal = [];
         if (this.crmModel && this.crmModel.get("CustomerRelations")) {

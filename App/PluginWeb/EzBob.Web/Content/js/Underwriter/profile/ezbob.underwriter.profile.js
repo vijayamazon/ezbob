@@ -80,6 +80,10 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			model: this.summaryInfoModel,
 		});
 
+		EzBob.App.vent.on('newCreditLine:updated', function() {
+			self.changedSystemDecision();
+		});
+
 		EzBob.App.vent.on('newCreditLine:done', function() {
 			self.summaryInfoModel.fetch();
 		});

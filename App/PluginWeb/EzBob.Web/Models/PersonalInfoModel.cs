@@ -285,7 +285,7 @@
 			if (lastMainStrategyStatus == "Finished" || lastMainStrategyStatus == "Failed" ||
 			    lastMainStrategyStatus == "Terminated")
 			{
-				StrategyError = string.Format("Error occured in main strategy, its status is:{0}", lastMainStrategyStatus);
+				StrategyError = string.Format("Error occurred in main strategy, its status is:{0}", lastMainStrategyStatus);
 			}
 
 			BrokerID = customer.Broker == null ? 0 : customer.Broker.ID;

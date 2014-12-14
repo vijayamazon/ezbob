@@ -13,6 +13,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
+	using Ezbob.Logger;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
@@ -23,7 +24,6 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
-	using log4net;
 
 	public class ApplicationInfoController : Controller
 	{
@@ -44,7 +44,7 @@
 		private readonly CustomerPhoneRepository customerPhoneRepository;
 		private readonly LoanScheduleRepository loanScheduleRepository;
 
-		private static readonly ILog Log = LogManager.GetLogger(typeof(ApplicationInfoController));
+		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoController));
 
 		public ApplicationInfoController(
 			ICustomerRepository customerRepository,
@@ -140,7 +140,7 @@
 			cr.LoanTemplate = null;
 			_cashRequestsRepository.SaveOrUpdate(cr);
 
-			Log.DebugFormat("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
+			log.Debug("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
 
 			if (value.HasValue && value.Value > 0)
 			{
@@ -166,7 +166,7 @@
 		[Ajax]
 		public void SaveApproveWithoutAML(int customerId, bool doNotShowAgain)
 		{
-			Log.DebugFormat("Saving approve without AML. Customer:{0} doNotShowAgain = {1}", customerId, doNotShowAgain);
+			log.Debug("Saving approve without AML. Customer:{0} doNotShowAgain = {1}", customerId, doNotShowAgain);
 
 			var entry = new ApprovalsWithoutAML
 			{
@@ -191,7 +191,7 @@
 			cr.RepaymentPeriod = loanT.RepaymentPeriod;
 			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).LoanType = {1}", id, cr.LoanType.Name);
+			log.Debug("CashRequest({0}).LoanType = {1}", id, cr.LoanType.Name);
 		}
 
 		[HttpPost]
@@ -203,7 +203,7 @@
 			var discount = _discounts.Get(discountPlanId);
 			cr.DiscountPlan = discount;
 			//cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).Discount = {1}", id, cr.DiscountPlan.Name);
+			log.Debug("CashRequest({0}).Discount = {1}", id, cr.DiscountPlan.Name);
 			return Json(new { });
 		}
 
@@ -242,7 +242,7 @@
 			cr.InterestRate = interestRate / 100;
 			cr.LoanTemplate = null;
 
-			Log.DebugFormat("CashRequest({0}).InterestRate = {1}", id, cr.InterestRate);
+			log.Debug("CashRequest({0}).InterestRate = {1}", id, cr.InterestRate);
 
 			return Json(true);
 		}
@@ -259,7 +259,7 @@
 			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
 			cr.LoanTemplate = null;
 
-			Log.DebugFormat("CashRequest({0}).RepaymentPeriod = {1}", id, period);
+			log.Debug("CashRequest({0}).RepaymentPeriod = {1}", id, period);
 
 			return Json(true);
 		}
@@ -287,7 +287,7 @@
 			var cr = _cashRequestsRepository.Get(id);
 			cr.UseSetupFee = enabled;
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).UseSetupFee = {1}", id, enabled);
+			log.Debug("CashRequest({0}).UseSetupFee = {1}", id, enabled);
 
 			return Json(new { error = (string)null });
 		}
@@ -299,7 +299,7 @@
 			var cr = _cashRequestsRepository.Get(id);
 			cr.UseBrokerSetupFee = enabled;
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).UseBrokerSetupFee = {1}", id, enabled);
+			log.Debug("CashRequest({0}).UseBrokerSetupFee = {1}", id, enabled);
 			return Json(new { error = (string)null});
 		}
 
@@ -317,7 +317,7 @@
 				cr.ManualSetupFeePercent = null;
 			}
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
+			log.Debug("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
 			return Json(new { });
 		}
 
@@ -328,7 +328,7 @@
 			var cr = _cashRequestsRepository.Get(id);
 			cr.ManualSetupFeeAmount = manualAmount.HasValue && manualAmount.Value > 0 ? manualAmount.Value : (int?)null;
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
+			log.Debug("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
 			return Json(new { });
 		}
 
@@ -340,7 +340,7 @@
 			Customer oCustomer = _customerRepository.Get(id);
 
 			if (oCustomer == null) {
-				Log.DebugFormat("Customer({0}) not found", id);
+				log.Debug("Customer({0}) not found", id);
 				return Json(new { error = "Customer not found.", id = id });
 			} // if
 
@@ -348,7 +348,7 @@
 
 			serviceClient.Instance.AddCciHistory(id, _context.UserId, oCustomer.CciMark);
 
-			Log.DebugFormat("Customer({0}).CciMark set to {1}", id, oCustomer.CciMark);
+			log.Debug("Customer({0}).CciMark set to {1}", id, oCustomer.CciMark);
 
 			return Json(new { error = (string)null, id = id, mark = oCustomer.CciMark });
 		} // ToggleCciMark
@@ -363,12 +363,12 @@
 
 			if (oCustomer == null)
 			{
-				Log.DebugFormat("Customer({0}) not found", id);
+				log.Debug("Customer({0}) not found", id);
 				return Json(new { error = "Customer not found.", id = id });
 			} // if
 
 			oCustomer.IsTest = !oCustomer.IsTest;
-			Log.DebugFormat("Customer({0}).IsTest set to {1}", id, oCustomer.IsTest);
+			log.Debug("Customer({0}).IsTest set to {1}", id, oCustomer.IsTest);
 
 			return Json(new { error = (string)null, id = id, isTest = oCustomer.IsTest });
 		} // ToggleIsTest
@@ -383,7 +383,7 @@
 
 			if (oCustomer == null)
 			{
-				Log.DebugFormat("Customer({0}) not found", id);
+				log.Debug("Customer({0}) not found", id);
 				return Json(new { error = "Customer not found.", id = id, status = status });
 			} // if
 
@@ -393,7 +393,7 @@
 
 			if (!Enum.TryParse<TrustPilotStauses>(status, true, out nStatus))
 			{
-				Log.DebugFormat("Status({0}) not found", status);
+				log.Debug("Status({0}) not found", status);
 				return Json(new { error = "Failed to parse status.", id = id, status = status });
 			} // if
 
@@ -401,12 +401,12 @@
 
 			if (oTsp == null)
 			{
-				Log.DebugFormat("Status({0}) not found in the DB repository.", status);
+				log.Debug("Status({0}) not found in the DB repository.", status);
 				return Json(new { error = "Status not found in the DB repository.", id = id, status = status });
 			} // if
 
 			oCustomer.TrustPilotStatus = oTsp;
-			Log.DebugFormat("Customer({0}).TrustPilotStatus set to {1}", id, status);
+			log.Debug("Customer({0}).TrustPilotStatus set to {1}", id, status);
 
 			return Json(new { error = (string)null, id = id, status = status });
 		} // UpdateTrustPilotStatus
@@ -420,7 +420,7 @@
 		{
 			var cust = _customerRepository.Get(id);
 			cust.IsAvoid = enabled;
-			Log.DebugFormat("Customer({0}).IsAvoided = {1}", id, enabled);
+			log.Debug("Customer({0}).IsAvoided = {1}", id, enabled);
 			return Json(new { error = (string)null, id = id, status = cust.IsAvoid });
 		}
 
@@ -434,7 +434,7 @@
 			var cr = _cashRequestsRepository.Get(id);
 			cr.EmailSendingBanned = !enabled;
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).EmailSendingBanned = {1}", id, cr.EmailSendingBanned);
+			log.Debug("CashRequest({0}).EmailSendingBanned = {1}", id, cr.EmailSendingBanned);
 			return Json(new { error = (string)null, id = id, status = enabled });
 		}
 
@@ -447,7 +447,7 @@
 		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.IsLoanTypeSelectionAllowed = loanTypeSelection;
-			Log.DebugFormat("CashRequest({0}).IsLoanTypeSelectionAllowed = {1}", id, cr.IsLoanTypeSelectionAllowed);
+			log.Debug("CashRequest({0}).IsLoanTypeSelectionAllowed = {1}", id, cr.IsLoanTypeSelectionAllowed);
 		}
 
 		[HttpPost]
@@ -461,7 +461,7 @@
 			if (cust == null)
 				return;
 
-			Log.DebugFormat("CashRequest({0}).OfferValidUntil = {1}", id, date);
+			log.Debug("CashRequest({0}).OfferValidUntil = {1}", id, date);
 
 			var dt = FormattingUtils.ParseDateWithCurrentTime(date);
 			cust.OfferValidUntil = dt;
@@ -481,8 +481,8 @@
 			if (cust == null)
 				return;
 
-			Log.DebugFormat("CashRequest({0}).OfferStart = {1}", id, date);
-			Log.DebugFormat("CashRequest({0}).OfferValidUntil = {1}", id, date);
+			log.Debug("CashRequest({0}).OfferStart = {1}", id, date);
+			log.Debug("CashRequest({0}).OfferValidUntil = {1}", id, date);
 
 			var dt = FormattingUtils.ParseDateWithCurrentTime(date);
 
@@ -501,59 +501,82 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "NewCreditLineButton")]
-		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption)
-		{
-			return Json(new { Message = "Go to new mode" });
-		}
+		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption) {
+			log.Debug("RunNewCreditLine({0}, {1}) start", Id, newCreditLineOption);
 
-		[HttpPost]
-		[Transactional]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		[Permission(Name = "NewCreditLineButton")]
-		public JsonResult RunNewCreditLineNewMode1(int Id, int newCreditLineOption)
-		{
 			var customer = _customerRepository.Get(Id);
 
-			var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.NewCreditLineBtn);
-			cashRequest.LoanType = _loanTypes.GetDefault();
+			new Transactional(() => {
+				var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.NewCreditLineBtn);
+				cashRequest.LoanType = _loanTypes.GetDefault();
 
-			customer.CreditResult = null;
-			customer.OfferStart = cashRequest.OfferStart;
-			customer.OfferValidUntil = cashRequest.OfferValidUntil;
+				customer.CreditResult = null;
+				customer.OfferStart = cashRequest.OfferStart;
+				customer.OfferValidUntil = cashRequest.OfferValidUntil;
 
-			return Json(new { });
-		}
+				_customerRepository.SaveOrUpdate(customer);
+			}).Execute();
 
-		[HttpPost]
-		[Transactional]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		[Permission(Name = "NewCreditLineButton")]
-		public JsonResult RunNewCreditLineNewMode2(int Id, int newCreditLineOption)
-		{
-			var customer = _customerRepository.Get(Id);
-			var typedNewCreditLineOption = (NewCreditLineOption) newCreditLineOption;
-			if (typedNewCreditLineOption == NewCreditLineOption.SkipEverything)
-			{
+			CreditResultStatus? status;
+			string strategyError;
+
+			var typedNewCreditLineOption = (NewCreditLineOption)newCreditLineOption;
+
+			if (typedNewCreditLineOption == NewCreditLineOption.SkipEverything) {
 				customer.CreditResult = CreditResultStatus.WaitingForDecision;
-			}
-			else
-			{
-				var underwriter = _users.GetUserByLogin(User.Identity.Name);
-				_crBuilder.ForceEvaluate(underwriter.Id, customer, typedNewCreditLineOption, true);
-			}
-			return Json(new { });
-		}
+				_customerRepository.SaveOrUpdate(customer);
 
-		[HttpPost, Transactional, Ajax, ValidateJsonAntiForgeryToken]
-		public JsonResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool useBrokerSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed, int discountPlan, decimal? manualSetupFeeAmount, decimal? manualSetupFeePercent)
-		{
-			var cr = _cashRequestsRepository.Get(id);
-			var loanT = _loanTypes.Get(loanType);
+				strategyError = null;
+				status = customer.CreditResult;
+			} else {
+				var underwriter = _users.GetUserByLogin(User.Identity.Name);
+
+				ActionMetaData amd = _crBuilder.ForceEvaluate(underwriter.Id, customer, typedNewCreditLineOption, true);
+
+				// Reload from DB
+				var updatedCustomer = _customerRepository.Load(customer.Id);
+
+				strategyError = amd.Status == ActionStatus.Done ? null : "Error: " + amd.Comment;
+				status = updatedCustomer.CreditResult;
+			} // if
+
+			log.Debug("RunNewCreditLine({0}, {1}) ended; status = {2}, error = '{3}'", Id, newCreditLineOption, status, strategyError);
+
+			return Json(new {
+				status = (status ?? CreditResultStatus.WaitingForDecision).ToString(),
+				strategyError = strategyError,
+			});
+		} // RunNewCreditLine
+
+		[HttpPost]
+		[Transactional]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult ChangeCreditLine(
+			long id,
+			int loanType,
+			double amount,
+			decimal interestRate,
+			int repaymentPeriod,
+			string offerStart,
+			string offerValidUntil,
+			bool useSetupFee,
+			bool useBrokerSetupFee,
+			bool allowSendingEmail,
+			int isLoanTypeSelectionAllowed,
+			int discountPlan,
+			decimal? manualSetupFeeAmount,
+			decimal? manualSetupFeePercent
+		) {
+			CashRequest cr = _cashRequestsRepository.Get(id);
+
+			LoanType loanT = _loanTypes.Get(loanType);
+
 			cr.LoanType = loanT;
+
 			int step = CurrentValues.Instance.GetCashSliderStep;
-			cr.ManagerApprovedSum = cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step; 
+
+			cr.ManagerApprovedSum = cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
 			cr.InterestRate = interestRate;
 			cr.RepaymentPeriod = repaymentPeriod;
 			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
@@ -574,8 +597,11 @@
 			c.OfferStart = cr.OfferStart;
 			c.OfferValidUntil = cr.OfferValidUntil;
 
+			_cashRequestsRepository.SaveOrUpdate(cr);
+			_customerRepository.SaveOrUpdate(c);
+
 			return Json(true);
-		}
+		} // ChangeCreditLine
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ActivateMainStrategy(int customerId)
@@ -634,7 +660,7 @@
 			}
 			catch (Exception e)
 			{
-				Log.Warn("Could not create a hidden loan.", e);
+				log.Warn(e, "Could not create a hidden loan.");
 				return Json(new { success = false, error = e.Message, });
 			} // try
 		}

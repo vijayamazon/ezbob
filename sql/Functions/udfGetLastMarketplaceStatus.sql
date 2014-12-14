@@ -2,47 +2,36 @@ IF OBJECT_ID('dbo.udfGetLastMarketplaceStatus') IS NULL
 	EXECUTE('CREATE FUNCTION dbo.udfGetLastMarketplaceStatus() RETURNS NVARCHAR(255) AS BEGIN RETURN '''' END')
 GO
 
-ALTER FUNCTION dbo.udfGetLastMarketplaceStatus(@CustomerId INT, @MarketplaceId INT)
+ALTER FUNCTION dbo.udfGetLastMarketplaceStatus(@MarketplaceId INT)
 RETURNS NVARCHAR(255)
 AS
 BEGIN
 	DECLARE 		
-		@ActionStatusId INT,
-		@CommentToSearch VARCHAR(25),
-		@CurrentStatus VARCHAR(30),
-		@ActionID UNIQUEIDENTIFIER
+		@UpdStart DATETIME,
+		@UpdEnd DATETIME,
+		@CurrentStatus NVARCHAR(255),
+		@HasError BIT
 
-	SELECT @CommentToSearch = CONVERT(VARCHAR(10), @CustomerId) + '; ' + CONVERT(VARCHAR(10), @MarketplaceId) + '; %'
+	------------------------------------------------------------------------------
 
-	SELECT TOP 1
-		@ActionID = h.ActionID
+	SELECT
+		@UpdStart = UpdatingStart,
+		@UpdEnd = UpdatingEnd,
+		@HasError = CASE WHEN UpdateError IS NULL THEN 1 ELSE 0 END
 	FROM
-		EzServiceActionHistory h INNER JOIN EzServiceActionName a ON h.ActionNameID=a.ActionNameID
-	WHERE 
-		h.CustomerID = @CustomerId AND
-		h.ActionStatusID IN (1, 7) AND
-		a.ActionName IN ('EzBob.Backend.Strategies.UpdateMarketplace', 'EzBob.Backend.Strategies.Misc.UpdateMarketplace') AND
-		CONVERT(VARCHAR(25), h.Comment) LIKE @CommentToSearch
-	ORDER BY
-		h.EntryTime DESC
+		MP_CustomerMarketPlace
+	WHERE
+		Id = @MarketplaceID
 
-	SELECT TOP 1
-		@ActionStatusId = ActionStatusId
-	FROM
-		EzServiceActionHistory
-	WHERE 
-		ActionID = @ActionID
-	ORDER BY
-		EntryTime DESC
+	------------------------------------------------------------------------------
 
-	SELECT 
-		@CurrentStatus = ActionStatusName 
-	FROM 
-		EzServiceActionStatus 
-	WHERE 
-		ActionStatusID = @ActionStatusId
-
-	IF @CurrentStatus IS NULL
+	IF @HasError = 1
+		SET @CurrentStatus = 'Error'
+	ELSE IF @UpdEnd IS NOT NULL
+		SET @CurrentStatus = 'Done'
+	ELSE IF @UpdStart IS NOT NULL
+		SET @CurrentStatus = 'In progress'
+	ELSE
 		SET @CurrentStatus = 'Never Started'
 
 	RETURN @CurrentStatus

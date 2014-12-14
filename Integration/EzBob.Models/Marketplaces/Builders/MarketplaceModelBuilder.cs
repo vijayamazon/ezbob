@@ -44,7 +44,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				Id = mp.Id,
 				Type = mp.DisplayName,
 				Name = mp.Marketplace.Name,
-				LastChecked = FormattingUtils.FormatDateToString(mp.UpdatingEnd.HasValue ? mp.UpdatingEnd.Value : mp.Updated, "-"),
+				LastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress",
 				UpdatingStatus = mp.GetUpdatingStatus(history),
 				UpdateError = mp.GetUpdatingError(history),
 				AnalysisDataInfo = data,

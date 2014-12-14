@@ -1,5 +1,4 @@
-namespace EZBob.DatabaseLib.Model.Database
-{
+namespace EZBob.DatabaseLib.Model.Database {
 	using System.Linq;
 	using Common;
 	using DatabaseWrapper;
@@ -9,15 +8,12 @@ namespace EZBob.DatabaseLib.Model.Database
 	using Marketplaces.Yodlee;
 	using System;
 	using Iesi.Collections.Generic;
-	using NHibernate;
 	using StructureMap;
 
-	public class MP_CustomerMarketPlace : IDatabaseCustomerMarketPlace
-	{
+	public class MP_CustomerMarketPlace : IDatabaseCustomerMarketPlace {
 		private IMarketplaceType _mpType;
 
-		public MP_CustomerMarketPlace()
-		{
+		public MP_CustomerMarketPlace() {
 			PayPalTransactions = new HashedSet<MP_PayPalTransaction>();
 			EbayOrders = new HashedSet<MP_EbayOrder>();
 			AmazonOrders = new HashedSet<MP_AmazonOrder>();
@@ -41,10 +37,8 @@ namespace EZBob.DatabaseLib.Model.Database
 
 		public virtual MP_MarketplaceType Marketplace { get; set; }
 
-		IMarketplaceType IDatabaseCustomerMarketPlace.Marketplace
-		{
-			get
-			{
+		IMarketplaceType IDatabaseCustomerMarketPlace.Marketplace {
+			get {
 				return _mpType;
 			}
 		}
@@ -86,48 +80,31 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual DateTime? OriginationDate { get; set; }
 		public virtual DateTime? LastTransactionDate { get; set; }
 
-		public virtual string GetUpdatingStatus(DateTime? history = null)
-		{
+		public virtual string GetUpdatingStatus(DateTime? history = null) {
 			string status = "Done";
-			if (history.HasValue)
-			{
+			if (history.HasValue) {
 				var mpCustomerMarketplaceUpdatingHistory =
 					UpdatingHistory.FirstOrDefault(h => h.UpdatingStart >= history.Value);
 				if (mpCustomerMarketplaceUpdatingHistory != null &&
-					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error))
-				{
+					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error)) {
 					status = "Error";
 				}
 			}
-			else
-			{
-				var session = ObjectFactory.GetInstance<ISession>();
-				string currentState = (string)session.CreateSQLQuery(string.Format("EXEC GetLastMarketplaceStatus {0}, {1}", Customer.Id, Id)).UniqueResult();
-				if (currentState == "In progress" || currentState == "BG launch")
-				{
-					status = "In progress";
-				}
-				else if (!string.IsNullOrEmpty(UpdateError))
-				{
+			else {
+				if (!string.IsNullOrWhiteSpace(UpdateError))
 					status = "Error";
-				}
-				else if (currentState == "Never Started")
-				{
-					status = "Never Started";
-				}
-				else
-				{
+				else if (UpdatingEnd != null)
 					status = "Done";
-				}
+				else if (UpdatingStart != null)
+					status = "In progress";
+				else
+					status = "Never started";
 			}
 			return status;
-
 		}
 
-		public virtual bool IsNew
-		{
-			get
-			{
+		public virtual bool IsNew {
+			get {
 				return Customer.CashRequests.Count > 0 && Created > Customer.LastCashRequest.CreationDate;
 			}
 		}
@@ -140,21 +117,17 @@ namespace EZBob.DatabaseLib.Model.Database
 
 		public virtual MP_AmazonMarketplaceType AmazonMarketPlace { get; set; }
 
-		public virtual void SetIMarketplaceType(IMarketplaceType marketplaceType)
-		{
+		public virtual void SetIMarketplaceType(IMarketplaceType marketplaceType) {
 			_mpType = marketplaceType;
 		}
 
-		public virtual string GetUpdatingError(DateTime? history)
-		{
+		public virtual string GetUpdatingError(DateTime? history) {
 			string error = null;
-			if (history.HasValue)
-			{
+			if (history.HasValue) {
 				var mpCustomerMarketplaceUpdatingHistory =
 					UpdatingHistory.FirstOrDefault(h => h.UpdatingStart >= history.Value);
 				if (mpCustomerMarketplaceUpdatingHistory != null &&
-					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error))
-				{
+					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error)) {
 					error = mpCustomerMarketplaceUpdatingHistory.Error;
 				}
 			}

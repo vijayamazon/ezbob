@@ -72,10 +72,10 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	onChangeLoanType: function() {
 		var loanTypeId = +this.$el.find("#loan-type option:selected").val();
 
-		var currentLoanType = _.find(this.cloneModel.get("LoanTypes"), function(l) { return l.Id === loanTypeId; });
-
-		if (loanTypeId == null)
+		if (isNaN(loanTypeId) || (loanTypeId <= 0))
 			return;
+
+		var currentLoanType = _.find(this.cloneModel.get("LoanTypes"), function(l) { return l.Id === loanTypeId; });
 
 		this.cloneModel.set("RepaymentPerion", currentLoanType.RepaymentPeriod);
 	}, // onChangeLoanType
@@ -89,7 +89,10 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var post = $.post(action, postData);
 		var self = this;
 
-		post.done(function() { self.close(); });
+		post.done(function() {
+			EzBob.App.vent.trigger('newCreditLine:updated');
+		  	self.close();
+		});
 	}, // save
 
 	getPostData: function() {

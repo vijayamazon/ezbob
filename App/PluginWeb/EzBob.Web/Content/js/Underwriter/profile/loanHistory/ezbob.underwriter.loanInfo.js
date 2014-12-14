@@ -2,43 +2,6 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 (function() {
-	var ModelUpdater = (function() {
-		function ModelUpdater(model, property) {
-			this.model = model;
-			this.property = property;
-			this.start = _.bind(this.start, this);
-		}
-
-		ModelUpdater.prototype.start = function() {
-			var self = this;
-
-			var xhr = this.model.fetch();
-
-			xhr.done(function() {
-				self.check();
-			});
-		};
-
-		ModelUpdater.prototype.check = function() {
-			if (Convert.toBool(this.model.get(this.property))) {
-				BlockUi('off');
-
-				if (this.model.get('CreditResult') !== "WaitingForDecision") {
-					EzBob.App.vent.trigger('newCreditLine:pass');
-					return;
-				} // if
-
-				if (this.model.get('StrategyError') !== null)
-					EzBob.App.vent.trigger('newCreditLine:error', this.model.get('StrategyError'));
-				else
-					EzBob.App.vent.trigger('newCreditLine:done');
-			} else
-				setTimeout(this.start, 1000);
-		};
-
-		return ModelUpdater;
-	})();
-
 	EzBob.Underwriter.LoanInfoView = Backbone.Marionette.ItemView.extend({
 		template: "#profile-loan-info-template",
 
@@ -299,53 +262,33 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			var self = this;
 
 			EzBob.ShowMessage(el, "New Credit Line Option", (function() {
-				self.RunCustomerCheck(el.val());
+				self.createNewCreditLine(el.val());
 			}), "OK", null, "Cancel");
 			return false;
-		},
+		}, // runNewCreditLine
 
-		RunCustomerCheck: function(newCreditLineOption) {
+		createNewCreditLine: function(newCreditLineOption) {
 			var that = this;
 
-			BlockUi("on");
+			BlockUi();
 
-			$.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLine", {
-				Id: this.model.get("CustomerId"),
+			$.post(window.gRootPath + 'Underwriter/ApplicationInfo/RunNewCreditLine', {
+				Id: this.model.get('CustomerId'),
 				NewCreditLineOption: newCreditLineOption
 			}).done(function(response) {
-				if (response.Message === "Go to new mode") {
-					$.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode1", {
-						Id: that.model.get("CustomerId"),
-						NewCreditLineOption: newCreditLineOption
-					}).done(function(innerResponse) {
-						$.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode2", {
-							Id: that.model.get("CustomerId"),
-							NewCreditLineOption: newCreditLineOption
-						}).done(function(innerResponse2) {
-							that.personalInfo.fetch().done(function() {
-								BlockUi('off');
+				if (response.status !== 'WaitingForDecision') {
+					EzBob.App.vent.trigger('newCreditLine:pass');
+					return;
+				} // if
 
-								if (that.personalInfo.get('CreditResult') !== "WaitingForDecision") {
-									EzBob.App.vent.trigger('newCreditLine:pass');
-									return;
-								}
-
-								if (that.personalInfo.get('StrategyError') !== null && that.personalInfo.get('StrategyError') !== '') {
-									EzBob.App.vent.trigger('newCreditLine:error', that.personalInfo.get('StrategyError'));
-								} else {
-									EzBob.App.vent.trigger('newCreditLine:done');
-								}
-							});
-						});
-					});
-				} else {
-					var updater = new ModelUpdater(self.personalInfo, 'IsMainStratFinished');
-					updater.start();
-				}
-			}).fail(function(data) {
-				console.error(data.responseText);
+				if (response.strategyError)
+					EzBob.App.vent.trigger('newCreditLine:error', response.strategyError);
+				else
+					EzBob.App.vent.trigger('newCreditLine:done');
+			}).always(function() {
+				UnBlockUi();
 			});
-		},
+		}, // createNewCreditLine
 
 		isLoanTypeSelectionAllowed: function() {
 			var d = new EzBob.Dialogs.ComboEdit({
@@ -354,15 +297,13 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 				title: "Customer selection",
 				width: 400,
 				postValueName: "loanTypeSelection",
-				comboValues: [
-				  {
-				  	value: 0,
-				  	text: 'Disabled'
-				  }, {
-				  	value: 1,
-				  	text: 'Enabled'
-				  }
-				],
+				comboValues: [{
+					value: 0,
+					text: 'Disabled'
+				}, {
+					value: 1,
+					text: 'Enabled'
+				}],
 				url: "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed",
 				data: {
 					id: this.model.get("CashRequestId")
@@ -378,9 +319,9 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			});
 		},
 
-		LoanTypeSelectionAllowedChanged: function () {
-		    // We used to set the loan type here and the availability of the edit repayment period button here
-		    // Until a logic for that will be defined clearly we'll do nothing in this event
+		LoanTypeSelectionAllowedChanged: function() {
+			// We used to set the loan type here and the availability of the edit repayment period button here
+			// Until a logic for that will be defined clearly we'll do nothing in this event
 		},
 
 		loanType: function() {
@@ -429,7 +370,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			var self = this;
 
-			d.on("done", function () {
+			d.on("done", function() {
 				self.model.fetch();
 			});
 		},
@@ -614,23 +555,22 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		},
 
 		showCreditLineDialog: function() {
-			var xhr,
-			  _this = this;
-			xhr = this.model.fetch();
-			return xhr.done(function() {
-				var dialog;
-				dialog = new EzBob.Underwriter.CreditLineDialog({
-					model: _this.model
+			var self = this;
+
+			this.model.fetch().done(function() {
+				var dialog = new EzBob.Underwriter.CreditLineDialog({
+					model: self.model
 				});
-				return EzBob.App.jqmodal.show(dialog);
+
+				EzBob.App.jqmodal.show(dialog);
 			});
-		},
+		}, // showCreditLineDialog
 
 		showErrorDialog: function(errorMsg) {
 			EzBob.ShowMessage(errorMsg, "Something went wrong");
-		},
+		}, // showErrorDialog
 
-		showNothing: function(errorMsg) { }
+		showNothing: function() { }
 	});
 
 	EzBob.Underwriter.LoanInfoModel = Backbone.Model.extend({
