@@ -4,7 +4,25 @@
 		public virtual VariableValue GreetingMailSendViaMandrill {
 			get { return this[Variables.GreetingMailSendViaMandrill]; } // get
 		} // GreetingMailSendViaMandrill
+		
 
+		public virtual VariableValue GoCardlessAppId {
+			get { return this[Variables.GoCardlessAppId]; } // get
+		} // GoCardlessAppId
+
+		
+		public virtual VariableValue GoCardlessAppSecret {
+			get { return this[Variables.GoCardlessAppSecret]; } // get
+		} // GoCardlessAppSecret
+		
+		public virtual VariableValue GoCardlessAccessToken {
+			get { return this[Variables.GoCardlessAccessToken]; } // get
+		} // GoCardlessAccessToken
+
+		public virtual VariableValue GoCardlessMerchantId {
+			get { return this[Variables.GoCardlessMerchantId]; } // get
+		} // GoCardlessMerchantId
+		
 		public virtual VariableValue GoogleTagManagementProd {
 			get { return this[Variables.GoogleTagManagementProd]; } // get
 		} // GoogleTagManagementProd

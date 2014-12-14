@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Web.Mvc;
 using GoCardlessSdk;
 using GoCardlessSdk.Connect;
@@ -7,7 +6,7 @@ using GoCardlessSdk.Partners;
 
 namespace GoCardlessMvcTestClient.Controllers {
 	public class HomeController : Controller {
-		private readonly string _merchantId = ConfigurationManager.AppSettings["GoCardlessMerchantId"];
+		private readonly string _merchantId = ConfigManager.CurrentValues.Instance.GoCardlessMerchantId;
 
 		[HttpGet]
 		public ActionResult Index() {

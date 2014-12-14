@@ -207,6 +207,10 @@ namespace ConfigManager {
 
 		GetCashSliderStep,
 		GetSatisfactionEnabled,
+		GoCardlessAppId,
+		GoCardlessAppSecret,
+		GoCardlessAccessToken,
+		GoCardlessMerchantId,
 		GoogleAnalyticsCertThumb,
 		GoogleTagManagementProd,
 		GreetingMailSendViaMandrill,

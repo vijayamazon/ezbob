@@ -47,6 +47,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Web.Extensions" />
@@ -85,6 +89,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+    </None>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -130,9 +137,6 @@
     <Content Include="Views\Home\Cancel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GoCardlessAppSettings.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Home\PostBill.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +149,22 @@
     <Content Include="Views\GoCardless\PreAuthorizationCallback.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GoCardlessSdk\GoCardlessSdk.csproj">
       <Project>{36cda1fb-4093-41ed-9879-cd18efcce80b}</Project>
       <Name>GoCardlessSdk</Name>
@@ -185,4 +205,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>copy $(SolutionDir)connection-strings.xml $(ProjectDir)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -86,5 +86,11 @@
     <Compile Include="WebHooks\SignatureValidator.cs" />
     <Compile Include="WebHooks\WebHooksClient.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

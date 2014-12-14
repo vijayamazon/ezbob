@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 
 namespace GoCardlessSdk
 {
@@ -10,7 +9,7 @@ namespace GoCardlessSdk
         {
             get
             {
-                var appId = _appId ?? ConfigurationManager.AppSettings["GoCardlessAppId"];
+                string appId = _appId ?? ConfigManager.CurrentValues.Instance.GoCardlessAppId;
                 if (appId == null)
                 {
                     throw new ArgumentException("Please supply your appId");
@@ -25,7 +24,7 @@ namespace GoCardlessSdk
         {
             get
             {
-                var appSecret = _appSecret ?? ConfigurationManager.AppSettings["GoCardlessAppSecret"];
+                string appSecret = _appSecret ?? ConfigManager.CurrentValues.Instance.GoCardlessAppSecret;
                 if (appSecret == null)
                 {
                     throw new ArgumentException("Please supply your appSecret");
@@ -41,7 +40,7 @@ namespace GoCardlessSdk
         {
             get
             {
-                var accessToken = _token ?? ConfigurationManager.AppSettings["GoCardlessAccessToken"];
+                string accessToken = _token ?? ConfigManager.CurrentValues.Instance.GoCardlessAccessToken;
                 if (accessToken == null)
                 {
                     throw new ArgumentException("Please supply your access token. You can also find this in the developer panel");
