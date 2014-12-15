@@ -162,10 +162,12 @@
 
 				var now = DateTime.UtcNow;
 
-				if (!startDate.HasValue)
-				{
+				if (!startDate.HasValue) {
 					startDate = now.AddYears(-1);
-				}
+					// We want data since the 1st of the month.
+					startDate = startDate.Value.AddDays(-startDate.Value.Day).AddDays(1).Date;
+				} // if
+
 				var fromDate = startDate.Value;
 				var toDate = now;
 

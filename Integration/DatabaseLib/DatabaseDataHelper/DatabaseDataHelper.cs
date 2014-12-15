@@ -948,6 +948,11 @@
 
 			var def = DateTime.Today.AddYears(-1);
 
+			// We want data from the 1st of the month
+			def = def.AddDays(-def.Day)
+				.AddDays(1)
+				.Date;
+
 			try {
 				MP_EkmOrder o = customerMarketPlace.EkmOrders.OrderBy(x => x.Id).AsQueryable().Last();
 				return o == null ? def : o.Created.AddMonths(-1);
