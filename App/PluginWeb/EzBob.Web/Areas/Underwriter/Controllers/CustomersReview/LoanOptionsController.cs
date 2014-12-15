@@ -105,7 +105,7 @@
 
 				// Update customer status
 				int prevStatus = customer.CollectionStatus.CurrentStatus.Id;
-				customer.CollectionStatus.CurrentStatus = customerStatusesRepository.GetByName("Default");
+				customer.CollectionStatus.CurrentStatus = customerStatusesRepository.Get(CollectionStatusNames.Default);
 				customer.CollectionStatus.CollectionDescription = string.Format("Triggered via loan options:{0}", triggeringLoan != null ? triggeringLoan.RefNumber : "unknown");
 
 				// Update status history table

@@ -740,7 +740,7 @@
 				Status = Status.Registered,
 				RefNumber = g.GenerateForCustomer(),
 				WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-				CollectionStatus = new CollectionStatus { CurrentStatus = m_oCustomerStatusesRepository.GetByName("Enabled") },
+				CollectionStatus = new CollectionStatus { CurrentStatus = m_oCustomerStatusesRepository.Get(CollectionStatusNames.Enabled) },
 				IsTest = isAutomaticTest,
 				IsOffline = null,
 				PromoCode = promoCode,

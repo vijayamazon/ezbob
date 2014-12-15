@@ -102,7 +102,6 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	}, // toggleManualDecision
 
 	toggleTheme: function (event, state) {
-	    console.log('toggle', event, state);
 	    $("#main-container").toggleClass("sidebar-light", state.value);
 	    if (state.value) {
 	        $.cookie('sidebar-color', 'light');
@@ -115,7 +114,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	}, // setAlertStatus
 
 	events: {
-		"click button[name=\"changeDisabledState\"]": "changeDisabledState",
+		"click button[name=\"changeCustomerStatus\"]": "changeCustomerStatus",
 		"click button[name=\"editEmail\"]": "editEmail",
 		"click button[name=\"brokerDetails\"]": "brokerDetails",
 		"click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
@@ -172,7 +171,6 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		var oEntry = oDiv.find('.broker-entry').filter('.active');
 
 		if (oEntry.length !== 1) {
-			console.log('No broker entry selected.');
 			oDlg.dialog('close');
 			return;
 		} // if
@@ -363,19 +361,13 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		};
 	}, // serializeData
 
-	changeDisabledState: function() {
+	changeCustomerStatus: function() {
 		var self = this;
 
 		var collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel({
 			customerId: this.model.get('Id'),
-			currentStatus: this.model.get('CustomerStatusId')
+			CurrentStatus: this.model.get('CustomerStatusId')
 		});
-
-		var prevStatus = this.model.get('CustomerStatusId');
-
-		var customerId = this.model.get('Id');
-
-		BlockUi("on");
 
 		collectionStatusModel.fetch().done(function() {
 			var collectionStatusLayout = new EzBob.Underwriter.CollectionStatusLayout({
@@ -383,32 +375,12 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 			});
 
 			collectionStatusLayout.render();
-
 			EzBob.App.jqmodal.show(collectionStatusLayout);
-
-			BlockUi("off");
-
 			collectionStatusLayout.on('saved', function() {
-				var newStatus = collectionStatusModel.get('currentStatus');
-
-				$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/GetIsStatusWarning", {
-					status: newStatus
-				}).done(function() {
-					BlockUi("on");
-
-					self.model.fetch();
-
-					$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/LogStatusChange", {
-						newStatus: newStatus,
-						prevStatus: prevStatus,
-						customerId: customerId,
-					}).done(function() {
-						return BlockUi("off");
-					});
-				});
+				self.model.fetch();
 			});
 		});
-	}, // changeDisabledState
+	}, // changeCustomerStatus
 
 	brokerDetails: function() {
 		this.$el.find('.broker-details-rows').toggle();

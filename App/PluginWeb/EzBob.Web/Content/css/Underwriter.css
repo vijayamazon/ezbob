@@ -201,7 +201,7 @@ td.credit, .yodleeTabTable tr.credit, .yodleeTabTable tr.credit:nth-child(odd) t
 }
 
 .negative, td.debit, .yodleeTabTable tr.debit, .yodleeTabTable tr.debit:nth-child(odd) td {
-    color: #FF0000 !important;
+    color: #f55f60 !important;
 }
 
 tfoot input.search_init {
@@ -329,8 +329,6 @@ table.squeezed tbody tr td {
 }
 
 .view-collection-status .control-label {
-    float: left;
-    width: 130px;
     padding-top: 5px;
 }
 
@@ -735,7 +733,7 @@ table.internal-table {
 }
 
 .vat-return-summary td.not-just-after {
-    border-left: 1px dashed red;
+    border-left: 1px dashed #f55f60;
 }
 
 #hmrc-vat-return-details .r {
@@ -751,12 +749,12 @@ table.internal-table {
 }
 
 .fraud-form-add-values .error, .fraud-form .error {
-    border: 1px solid red;
+    border: 1px solid #f55f60;
 }
 
 .new-freeze-interval-error {
     display: inline-block;
-    color: red;
+    color: #f55f60;
     margin-left: 3em;
 }
 
@@ -791,7 +789,7 @@ table.internal-table {
     display: inline-block;
     padding: 0.2em;
     color: yellow;
-    background-color: red;
+    background-color: #f55f60;
     font-weight: bold;
 }
 
@@ -823,11 +821,6 @@ table.unlimited-width {
         padding: 8px;
     }
 
-.unknown-as-experian-director {
-    color: red;
-    font-weight: bold;
-}
-
 .known-as-experian-director {
     color: #008000;
     font-weight: bold;
@@ -839,9 +832,6 @@ table.unlimited-width {
     font-size: 1.2em;
 }
 
-.default-customer-status-warning {
-    color: red;
-}
 
 div#DecisionNotes {
     text-align: right;
@@ -1007,7 +997,7 @@ textarea.BusinessAddress {
 }
 
 .invalid {
-    border: 1px solid red !important;
+    border: 1px solid #f55f60 !important;
 }
 
 .validation-result.good {
@@ -1015,7 +1005,7 @@ textarea.BusinessAddress {
 }
 
 .validation-result.bad {
-    color: red;
+    color: #f55f60;
 }
 
 .profile-person-info .customer-column-width-50 {
@@ -1235,7 +1225,7 @@ td a.edit-loan {
 }
 
 .unmatched {
-    color: red;
+    color: #f55f60;
 }
 
 .highlight {
@@ -2229,7 +2219,7 @@ ul.alert-list {
 }
 
 .manual-annualized-revenue-section .alibaba-no-revenue {
-	color: red;
+	color: #f55f60;
 	font-weight: bold;
 	margin-bottom: 0.5em;
 }

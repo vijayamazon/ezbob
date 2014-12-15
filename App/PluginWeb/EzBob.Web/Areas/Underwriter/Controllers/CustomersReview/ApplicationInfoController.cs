@@ -35,9 +35,8 @@
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
-		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly IApprovalsWithoutAMLRepository _approvalsWithoutAmlRepository;
-		private readonly ICustomerStatusHistoryRepository _customerStatusHistoryRepository;
+		
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IUsersRepository _users;
 		private readonly IEzbobWorkplaceContext _context;
@@ -49,7 +48,6 @@
 
 		public ApplicationInfoController(
 			ICustomerRepository customerRepository,
-			ICustomerStatusesRepository customerStatusesRepository,
 			ICashRequestsRepository cashRequestsRepository,
 			ILoanTypeRepository loanTypes,
 			LoanLimit limit,
@@ -57,7 +55,6 @@
 			CashRequestBuilder crBuilder,
 			ApplicationInfoModelBuilder infoModelBuilder,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
-			ICustomerStatusHistoryRepository customerStatusHistoryRepository,
 			ILoanSourceRepository loanSources,
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
@@ -72,9 +69,7 @@
 			_discounts = discounts;
 			_crBuilder = crBuilder;
 			_infoModelBuilder = infoModelBuilder;
-			_customerStatusesRepository = customerStatusesRepository;
 			_approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
-			_customerStatusHistoryRepository = customerStatusHistoryRepository;
 			_loanSources = loanSources;
 			_users = users;
 			_context = context;
@@ -95,14 +90,6 @@
 			var cr = customer.LastCashRequest;
 			_infoModelBuilder.InitApplicationInfo(m, customer, cr);
 			return Json(m, JsonRequestBehavior.AllowGet);
-		}
-
-		[Ajax]
-		[OutputCache(VaryByParam = "status", Duration = int.MaxValue)]
-		public JsonResult GetIsStatusWarning(int status)
-		{
-			bool res = _customerStatusesRepository.GetIsWarning(status);
-			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 
 		private void VerifyPhone(CustomerPhone customerPhone, bool verified)
@@ -137,21 +124,6 @@
 		{
 			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Daytime" && x.IsCurrent);
 			VerifyPhone(customerPhone, !verifiedPreviousState);
-		}
-
-		[Ajax]
-		[Transactional]
-		public void LogStatusChange(int newStatus, int prevStatus, int customerId)
-		{
-			var newEntry = new CustomerStatusHistory
-				{
-					Username = User.Identity.Name,
-					Timestamp = DateTime.UtcNow,
-					CustomerId = customerId,
-					PreviousStatus = prevStatus,
-					NewStatus = newStatus
-				};
-			_customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 		}
 
 		[HttpPost]

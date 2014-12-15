@@ -1,103 +1,122 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
+	using System;
+	using System.Globalization;
 	using System.Linq;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using Infrastructure;
 	using Infrastructure.Attributes;
+	using NHibernate;
 	using PaymentServices.Calculators;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
 
-	public class CollectionStatusController : Controller
-	{
-		private readonly ICustomerRepository _customerRepository;
-		private readonly CustomerStatusesRepository _customerStatusesRepository;
+	public class CollectionStatusController : Controller {
+		private readonly ICustomerRepository customerRepository;
+		private readonly CustomerStatusesRepository customerStatusesRepository;
 		private readonly LoanOptionsRepository loanOptionsRepository;
+		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
+		private readonly ISession session;
+		public CollectionStatusController(
+			ICustomerRepository customerRepository,
+			CustomerStatusesRepository customerStatusesRepository,
+			LoanOptionsRepository loanOptionsRepository,
+			ICustomerStatusHistoryRepository customerStatusHistoryRepository, ISession session) {
 
-		public CollectionStatusController(ICustomerRepository customerRepository, CustomerStatusesRepository customerStatusesRepository, LoanOptionsRepository loanOptionsRepository)
-		{
-			_customerRepository = customerRepository;
-			_customerStatusesRepository = customerStatusesRepository;
+			this.customerRepository = customerRepository;
+			this.customerStatusesRepository = customerStatusesRepository;
 			this.loanOptionsRepository = loanOptionsRepository;
+			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
+			this.session = session;
 		}
 
 		[Ajax]
-		public JsonResult GetStatuses()
-		{
-			return Json(_customerStatusesRepository.GetAll().ToList(), JsonRequestBehavior.AllowGet);
+		[HttpGet]
+		public JsonResult GetStatuses() {
+			return Json(this.customerStatusesRepository.GetAll().ToList(), JsonRequestBehavior.AllowGet);
 		}
 
-		public JsonResult Index(int id, int currentStatus)
-		{
-			var customer = _customerRepository.Get(id);
+		[HttpGet]
+		public JsonResult Index(int id) {
+			var customer = this.customerRepository.Get(id);
 
-			var collectionStatus = customer.CollectionStatus.CurrentStatus.Id == currentStatus
-				? customer.CollectionStatus : CreateDefaultCollectionStatusParameter(customer, currentStatus);
+			var collectionStatus = customer.CollectionStatus;
 
 			var loans = customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null))).ToList();
 			var loansNonClosed = loans.Where(l => l.DateClosed == null).ToList();
 
-			var data = new CollectionStatusModel
-						   {
-							   CurrentStatus = collectionStatus.CurrentStatus.Id,
-							   CollectionDescription = collectionStatus.CollectionDescription,
-							   Items = loansNonClosed.Select(loan => new CollectionStatusItem
-							   {
-								   LoanId = loan.Id,
-								   LoanRefNumber = loan.RefNumber
-							   }).ToList()
-						   };
+			var data = new CollectionStatusModel {
+				CurrentStatus = collectionStatus.CurrentStatus.Id,
+				CollectionDescription = collectionStatus.CollectionDescription,
+				Items = loansNonClosed.Select(loan => new CollectionStatusItem {
+					LoanId = loan.Id,
+					LoanRefNumber = loan.RefNumber
+				}).ToList()
+			};
 
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}
 
-		private CollectionStatus CreateDefaultCollectionStatusParameter(Customer customer, int currentStatus)
-		{
-			CustomerStatuses status = _customerStatusesRepository.Get(currentStatus);
-			return new CollectionStatus { CurrentStatus = status };
-		}
-
-		[HttpPost]
-		[Transactional]
 		[Ajax]
+		[HttpPost]
 		[Permission(Name = "CustomerStatus")]
-		public JsonResult Save(int customerId, int currentStatus, CollectionStatusModel collectionStatus)
-		{
-			int minDectForDefault = CurrentValues.Instance.MinDectForDefault;
+		[Transactional]
+		public JsonResult Save(int customerId, CollectionStatusModel collectionStatus) {
+			var customer = this.customerRepository.Get(customerId);
+			var prevStatus = customer.CollectionStatus.CurrentStatus.Id;
 
-			var customer = _customerRepository.Get(customerId);
-			customer.CollectionStatus.CurrentStatus = _customerStatusesRepository.Get(currentStatus);
-			if (customer.CollectionStatus.CurrentStatus.IsDefault)
-			{
-				customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
+			if (prevStatus == collectionStatus.CurrentStatus) {
+				return Json(new {});
+			}
+
+			customer.CollectionStatus.CurrentStatus = this.customerStatusesRepository.Get(collectionStatus.CurrentStatus);
+			customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
+
+			customerRepository.SaveOrUpdate(customer);
+
+			if (customer.CollectionStatus.CurrentStatus.IsDefault) {
+				
 
 				// Update loan options
-				foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= minDectForDefault))
-				{
-					LoanOptions options = loanOptionsRepository.GetByLoanId(loan.Id);
-					if (options == null)
-					{
-						options = new LoanOptions
-							{
-								LoanId = loan.Id,
-								AutoPayment = true,
-								ReductionFee = true,
-								LatePaymentNotification = true,
-								StopSendingEmails = true,
-								ManulCaisFlag = "Calculated value"
-							};
-					}
+				foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
+					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? new LoanOptions {
+						LoanId = loan.Id,
+						AutoPayment = true,
+						ReductionFee = true,
+						LatePaymentNotification = true,
+						StopSendingEmails = true,
+						ManulCaisFlag = "Calculated value",
+					};
 
 					options.CaisAccountStatus = "8";
 					loanOptionsRepository.SaveOrUpdate(options);
 				}
 			}
+
+			this.session.Flush();
+
+			DateTime applyForJudgmentDate;
+			bool hasApplyForJudgmentDate = DateTime.TryParseExact(collectionStatus.ApplyForJudgmentDate, "dd/MM/yyyy",CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out applyForJudgmentDate);
+
+			var newEntry = new CustomerStatusHistory {
+				Username = User.Identity.Name,
+				Timestamp = DateTime.UtcNow,
+				CustomerId = customerId,
+				PreviousStatus = prevStatus,
+				NewStatus = collectionStatus.CurrentStatus,
+				Description = collectionStatus.CollectionDescription,
+				Amount = collectionStatus.Amount,
+				ApplyForJudgmentDate = hasApplyForJudgmentDate ? applyForJudgmentDate : (DateTime?)null,
+				Feedback = collectionStatus.Feedback,
+				Type = collectionStatus.Type
+			};
+
+			this.customerStatusHistoryRepository.SaveOrUpdate(newEntry);
+
 			return Json(new { });
 		}
 	}

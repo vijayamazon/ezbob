@@ -671,40 +671,39 @@
 			var activeLoans = new List<ActiveLoan>();
 			int i = 0;
 			var loans = customer.Loans.OrderBy(l => l.Date);
-			foreach (var loan in loans)
-			{
+			foreach (var loan in loans) {
 				i++;
-				if (!loan.DateClosed.HasValue)
-				{
-					try
-					{
+				if (!loan.DateClosed.HasValue) {
+					int term = 0;
+					try {
 						var agreement = JsonConvert.DeserializeObject<AgreementModel>(loan.AgreementModel);
-						activeLoans.Add(new ActiveLoan
-							{
-								Approved = loan.CashRequest.ManagerApprovedSum,
-								Balance = loan.Principal,
-								LoanAmount = loan.LoanAmount,
-								LoanAmountPercent =
-									loan.CashRequest.ManagerApprovedSum.HasValue && loan.CashRequest.ManagerApprovedSum.Value > 0
-										? loan.LoanAmount/(decimal) loan.CashRequest.ManagerApprovedSum.Value : 0,
-								LoanDate = loan.Date,
-								InterestRate = loan.InterestRate,
-								IsLate = loan.Status == LoanStatus.Late,
-								IsEU = loan.LoanSource.Name == "EU",
-								BalanceWidthPercent = loan.CashRequest.ManagerApprovedSum.HasValue && loan.CashRequest.ManagerApprovedSum.Value > 0
-										? loan.Principal / (decimal)loan.CashRequest.ManagerApprovedSum.Value : 0,
-								BalancePercent = loan.LoanAmount > 0 ? loan.Principal / loan.LoanAmount : 0,
-								Term = agreement.Term,
-								TermApproved = loan.CashRequest.ApprovedRepaymentPeriod.HasValue 
-									? loan.CashRequest.ApprovedRepaymentPeriod.Value : loan.CashRequest.RepaymentPeriod,
-								TotalFee = loan.SetupFee,
-								LoanNumber = i,
-								Comment = loan.CashRequest.UnderwriterComment
-							});
-					}
-					catch (Exception ex)
-					{
+						term = agreement.Term;
+					} catch (Exception ex) {
 						Log.Error("Failed to build current loans model", ex);
+					}
+
+					if (loan.AgreementModel != null) {
+						activeLoans.Add(new ActiveLoan {
+							Approved = loan.CashRequest.ManagerApprovedSum,
+							Balance = loan.Principal,
+							LoanAmount = loan.LoanAmount,
+							LoanAmountPercent =
+								loan.CashRequest.ManagerApprovedSum.HasValue && loan.CashRequest.ManagerApprovedSum.Value > 0
+									? loan.LoanAmount / (decimal)loan.CashRequest.ManagerApprovedSum.Value : 0,
+							LoanDate = loan.Date,
+							InterestRate = loan.InterestRate,
+							IsLate = loan.Status == LoanStatus.Late,
+							IsEU = loan.LoanSource.Name == "EU",
+							BalanceWidthPercent = loan.CashRequest.ManagerApprovedSum.HasValue && loan.CashRequest.ManagerApprovedSum.Value > 0
+								? loan.Principal / (decimal)loan.CashRequest.ManagerApprovedSum.Value : 0,
+							BalancePercent = loan.LoanAmount > 0 ? loan.Principal / loan.LoanAmount : 0,
+							Term = term > 0 ? term : loan.CashRequest.RepaymentPeriod,
+							TermApproved = loan.CashRequest.ApprovedRepaymentPeriod.HasValue
+								? loan.CashRequest.ApprovedRepaymentPeriod.Value : loan.CashRequest.RepaymentPeriod,
+							TotalFee = loan.SetupFee,
+							LoanNumber = i,
+							Comment = loan.CashRequest.UnderwriterComment
+						});
 					}
 				}
 			}

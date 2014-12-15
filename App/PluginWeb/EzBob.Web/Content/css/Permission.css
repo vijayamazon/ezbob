@@ -1,6 +1,6 @@
 ﻿/* Permissions */
 [name="editEmail"],
-[name="changeDisabledState"],
+[name="changeCustomerStatus"],
 [name="isTestEditButton"],
 [name="newCreditLineBtn"],
 [name="loanType"],
@@ -79,7 +79,7 @@ a[data-bug-type],
 
 /*Customer Status*/
 
-.permission-CustomerStatus [name="changeDisabledState"] {
+.permission-CustomerStatus [name="changeCustomerStatus"] {
     display: inline-block;
     visibility: visible;
 }

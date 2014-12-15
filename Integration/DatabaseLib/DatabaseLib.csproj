@@ -136,9 +136,7 @@
     <Compile Include="Model\Database\WhatsNewCustomerMap.cs" />
     <Compile Include="Model\Database\WhatsNew.cs" />
     <Compile Include="Model\Database\WizardStepSequence.cs" />
-    <Compile Include="Model\Database\CustomerStatusHistoryMap.cs" />
     <Compile Include="Model\Database\CustomerStatusHistory.cs" />
-    <Compile Include="Model\Database\CustomerStatusesMap.cs" />
     <Compile Include="Model\Database\CustomerStatuses.cs" />
     <Compile Include="Model\Database\Customer\CustomerInviteFriend.cs" />
     <Compile Include="Model\Database\Customer\CustomerRequestedLoan.cs" />

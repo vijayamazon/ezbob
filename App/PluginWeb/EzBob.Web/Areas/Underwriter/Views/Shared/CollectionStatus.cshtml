@@ -1,0 +1,57 @@
+﻿<script id="collection-status-layout-template" type="text/template">
+	<form id="collection-status-dialog" class="view-collection-status" action="/" method="POST">
+		<input name="customerId" type="hidden" />
+		<select id="collection-status-items" class="selectheight form-control">
+			<%_.each(statuses, function(status){%>
+				<option value="<%=status.Id%>"><%=status.Name%></option>
+			<%});%>
+		</select>
+		<div id="collection-view">
+		</div>
+	</form>
+</script>
+
+<script id="collection-status-template" type="text/template">
+	<div class="control-group">
+		<label class="control-label">Description:</label>
+		<div class="controls">
+			<textarea class="form-control" id="collectionDescription" name="collectionDescription" />
+		</div>
+	</div>
+	
+	<div class="control-group amount_status" style="display: none">
+		<label class="control-label">Amount:</label>
+		<div class="controls">
+			<input type="text" class="form-control" id="collectionAmount" name="Amount" value="0"/>
+		</div>
+	</div>
+
+	<div class="control-group type_status" style="display: none">
+		<label class="control-label">Type:(court/sheriff for bailiff, home/salary for charging order)</label>
+		<div class="controls">
+			<input type="text" class="form-control" id="collectionType" name="Type" />
+		</div>
+	</div>
+
+	<div class="control-group apply_for_judgment_status" style="display: none">
+		<label class="control-label">Apply for judgment date:</label>
+		<div class="controls">
+			<input type="text" class="form-control" id="collectionApplyForJudgmentDate" name="ApplyForJudgmentDate" />
+		</div>
+	</div>
+
+	<div class="control-group feedback_status" style="display: none">
+		<label class="control-label">Feedback:</label>
+		<div class="controls">
+			<textarea class="form-control" id="collectionFeedback" name="Feedback" />
+		</div>
+	</div>
+
+	<label class="default_status red_cell" style="display: none">
+		Saving this status will also effect the loan options
+	</label>
+	<br/>
+	<a href="#" class="uploadFiles btn btn-primary">Upload files</a>
+</script>
+
+

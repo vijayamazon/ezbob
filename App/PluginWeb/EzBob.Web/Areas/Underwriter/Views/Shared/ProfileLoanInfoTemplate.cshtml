@@ -301,7 +301,7 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            @RowCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
+            @RowCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeCustomerStatus", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
 
             <tr>
                 <td>
@@ -519,7 +519,6 @@
     </div>
 </script>
 
-
 <script id="credit-line-edit-dialog-template" type="text/template">
     <div class="modal-body">
         <form id="credit-line-form">
@@ -592,26 +591,6 @@
     </div>
 </script>
 
-<script id="collection-status-layout-template" type="text/template">
-
-    <form id="collection-status-dialog" class="view-collection-status" action="/" method="POST">
-        <input name="currentStatus" type="hidden" />
-        <input name="customerId" type="hidden" />
-        <div id="list-items">
-        </div>
-        <div id="collection-view">
-        </div>
-    </form>
-</script>
-
-<script id="collection-status-items-template" type="text/template">
-    <select id="collection-status-items" class="selectheight form-control">
-        <%_.each(statuses, function(status){%>
-            <option value="<%=status.Id%>"><%=status.Name%></option>
-        <%});%>
-    </select>
-</script>
-
 <script id="fraud-status-layout-template" type="text/template">
     <form id="fraud-status-dialog" class="view-fraud-status" action="/" method="POST">
         <input name="currentStatus" type="hidden" />
@@ -633,19 +612,6 @@
         <option value="4">Fraud Done</option>
         <option value="5">Identity/details theft</option>
     </select>
-</script>
-
-<script id="collection-status-template" type="text/template">
-    <div class="control-group">
-        <label class="control-label">Description:</label>
-        <div class="controls">
-            <textarea class="form-control" id="collectionDescription" name="collectionDescription" />
-        </div>
-    </div>
-    <label class="default-customer-status-warning">
-        Saving this status will also effect the loan options
-    </label>
-    <a href="#" class="uploadFiles btn btn-primary">Upload files</a>
 </script>
 
 <script id="manual-setup-fee-template" type="text/template">
