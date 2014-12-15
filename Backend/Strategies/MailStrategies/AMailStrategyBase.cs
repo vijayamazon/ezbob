@@ -3,12 +3,11 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using Exceptions;
-	using API;
+	using Ezbob.Backend.Strategies.Exceptions;
+	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Utils.Exceptions;
 
 	public abstract class AMailStrategyBase : AStrategy {
-
 		public override void Execute() {
 			try {
 				Log.Debug("Execute() started...");
@@ -26,7 +25,7 @@
 				Addressee[] aryRecipients = GetRecipients() ?? new Addressee[0];
 
 				Log.Debug("Sending an email to staff{0}...", aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty);
-				m_oMailer.Send(TemplateName, Variables, aryRecipients);
+				this.mailer.Send(TemplateName, Variables, aryRecipients);
 				Log.Debug("Sending an email to staff{0} complete.", aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty);
 
 				Log.Debug("Performing ActionAtEnd()...");
@@ -44,33 +43,37 @@
 		} // Execute
 
 		public virtual CustomerData CustomerData { get; set; }
-		public virtual int CustomerId { get; set; }
+
+		public virtual int CustomerId {
+			get { return this.customerID; }
+			set { this.customerID = value; }
+		} // CustomerId
 
 		public virtual bool SendToCustomer {
-			get { return m_bSendToCustomer; }
-			set { m_bSendToCustomer = value; }
+			get { return this.sendToCustomer; }
+			set { this.sendToCustomer = value; }
 		} // SendToCustomer
 
-		private bool m_bSendToCustomer;
+		protected abstract void SetTemplateAndVariables();
 
 		protected AMailStrategyBase(int customerId, bool bSendToCustomer) {
-			ToTrustPilot = false;
-			m_oMailer = new StrategiesMailer();
+			this.toTrustPilot = false;
+			this.mailer = new StrategiesMailer();
 
-			CustomerId = customerId;
-			m_bSendToCustomer = bSendToCustomer;
-			Log.Debug("initialisation complete.");
+			this.customerID = customerId;
+			this.sendToCustomer = bSendToCustomer;
 		} // constructor
 
-		protected bool ToTrustPilot { get; set; }
+		protected virtual bool ToTrustPilot {
+			get { return this.toTrustPilot; }
+			set { this.toTrustPilot = value; }
+		} // ToTrustPilot
 
 		protected virtual Addressee[] GetRecipients() {
 			return SendToCustomer
 				? new[] { new Addressee(CustomerData.Mail, ToTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "") }
 				: new Addressee[0];
 		} // GetRecipients
-
-		protected abstract void SetTemplateAndVariables();
 
 		protected virtual void ActionAtEnd() {
 			Log.Debug("default action - nothing to do.");
@@ -85,16 +88,17 @@
 			Log.Debug("Loading customer data complete.");
 		} // LoadRecipientData
 
-		protected void SendCostumeMail(string templateName, Dictionary<string, string> variables, Addressee[] addresses)
-		{
+		protected void SendCostumeMail(string templateName, Dictionary<string, string> variables, Addressee[] addresses) {
 			var meta = new MailMetaData(templateName);
-			m_oMailer.Send(meta, variables, addresses);
-		}
+			this.mailer.Send(meta, variables, addresses);
+		} // SendCostumeMail
 
 		protected virtual string TemplateName { get; set; }
 		protected virtual Dictionary<string, string> Variables { get; set; }
 
-		private readonly StrategiesMailer m_oMailer;
-
+		private readonly StrategiesMailer mailer;
+		private bool sendToCustomer;
+		private bool toTrustPilot;
+		private int customerID;
 	} // class MailStrategyBase
 } // namespace
