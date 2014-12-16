@@ -46,11 +46,11 @@
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				HandleCollectionLogic(sr);
 				return ActionResult.Continue;
-			}, "GetLateForCollection", CommandSpecies.StoredProcedure); // foreach
+			}, "GetLateForCollection", CommandSpecies.StoredProcedure); 
 		}
 
 		/// <summary>
-		/// For each loan schedule marks it as late, it's loan as late and 
+		/// For each loan schedule marks it as late, it's loan as late and if custom installment present updates it too
 		/// </summary>
 		/// <param name="sr"></param>
 		private void MarkLoanAsLate(SafeReader sr) {
