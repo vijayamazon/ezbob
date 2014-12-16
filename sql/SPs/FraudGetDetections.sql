@@ -73,7 +73,7 @@ BEGIN
 	OR cc.BusinessPhone IN (SELECT Phone FROM #tmpCustomerPhones)
 	OR c.AccountNumber = @AccountNumber
 	OR c.SortCode = @SortCode
-	OR (cc.ExperianRefNum IS NOT NULL AND cc.ExperianRefNum = @CompanyRefNum)
+	OR (cc.ExperianRefNum IS NOT NULL AND cc.ExperianRefNum = @CompanyRefNum AND @CompanyRefNum <> 'NotFound')
 	)
 
 	UNION
@@ -130,7 +130,7 @@ BEGIN
 	DROP TABLE #tmpCustomerAddresses
 	DROP TABLE #tmpCustomerYodlees
 END
-
 GO
+
 
 

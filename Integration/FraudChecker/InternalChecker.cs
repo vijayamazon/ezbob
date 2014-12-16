@@ -30,12 +30,17 @@
 			var customer = _session.Get<Customer>(customerId);
 			if (customer == null)
 				throw new Exception("Customer not found");
-			//if (!customer.WizardStep.TheLastOne)
-			//	throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
 
 			var fraudDetections = new List<FraudDetection>();
 
-			var customerIds = _session.CreateSQLQuery("EXEC FraudGetDetections " + customerId).List<int>().ToArray();
+			int[] customerIds = _session.CreateSQLQuery("EXEC FraudGetDetections " + customerId).List<int>().ToArray();
+			Log.DebugFormat("Num of potential fraud customer ids: {0}", customerIds.Count());
+			
+			//fixing exception of too many input parameters if too many potential fraud detections returned
+			if (customerIds.Count() > 2000) {
+				customerIds = customerIds.Take(2000).ToArray();
+			}
+
 			var customers = _session.QueryOver<Customer>().Where(x => x.Id.IsIn(customerIds)).List<Customer>();
 			if (customers.Any())
 			{
@@ -265,7 +270,7 @@
 									null, string.Format("{0}: {1}", ca.Postcode, customer.PersonalInfo.Surname)));
 		}
 
-		private void InternalShopCheck(Customer customer, List<FraudDetection> fraudDetections, IEnumerable<Customer> customers)
+		private void InternalShopCheck(Customer customer, List<FraudDetection> fraudDetections, IList<Customer> customers)
 		{
 			//Shop ID
 			var customerMps = customer.CustomerMarketPlaces.Select(m => m.DisplayName).ToList();
