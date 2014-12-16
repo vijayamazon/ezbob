@@ -6,7 +6,8 @@
 		public EmailChanged(
 			int nUserID,
 			string sAddress
-		) : base(nUserID, true) {
+		)
+			: base(nUserID, true) {
 			m_sAddress = sAddress;
 		} // constructor
 
@@ -20,7 +21,7 @@
 			Variables = new Dictionary<string, string> {
 				{ "FirstName", CustomerData.FirstName },
 				{ "Email", CustomerData.Mail },
-				{ "Link", m_sAddress }
+				{ "Link", m_sAddress },
 			};
 		} // SetTemplateAndVariables
 

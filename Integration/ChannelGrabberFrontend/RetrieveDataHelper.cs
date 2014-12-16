@@ -4,12 +4,12 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
-	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
+	using Ezbob.Database;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -23,13 +23,10 @@
 	using StructureMap;
 
 	public class RetrieveDataHelper : MarketplaceRetrieveDataHelperBase<FunctionType> {
-
 		public RetrieveDataHelper(
 			DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<FunctionType> marketplace,
-			VendorInfo oVendorInfo
+			DatabaseMarketplaceBase<FunctionType> marketplace
 		) : base(helper, marketplace) {
-			m_oVendorInfo = oVendorInfo;
 		} // constructor
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(
@@ -43,7 +40,7 @@
 			catch (Exception e) {
 				throw new ApiException(string.Format("Failed to de-serialise security data for marketplace {0} ({1})",
 					account.DisplayName, account.Id), e);
-			}
+			} // try
 		} // RetrieveSecurityInfo
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
@@ -175,28 +172,11 @@
 					oHarvester.SourceID
 			));
 
-			// retrieve ALL the orders from DB
-			InternalDataList allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-				elapsedTimeInfo,
-				databaseCustomerMarketPlace.Id,
-				ElapsedDataMemberType.RetrieveDataFromDatabase,
-				() => Helper.GetAllChannelGrabberOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace)
-			);
-
-			// calculate aggregated
-			IEnumerable<IWriteDataInfo<FunctionType>> aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-				elapsedTimeInfo,
-				databaseCustomerMarketPlace.Id,
-				ElapsedDataMemberType.AggregateData,
-				() => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter)
-			);
-
-			// Store aggregated
-			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-				elapsedTimeInfo,
-				databaseCustomerMarketPlace.Id,
-				ElapsedDataMemberType.StoreAggregatedData,
-				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
+			DbConnectionGenerator.Get().ExecuteNonQuery(
+				"UpdateMpTotalsChaGra",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
+				new QueryParameter("HistoryID", historyRecord.Id)
 			);
 
 			return elapsedTimeInfo;
@@ -250,33 +230,6 @@
 			return oOutput.ToArray();
 		} // HmrcRtiTaxMonthConversion
 
-		private IEnumerable<IWriteDataInfo<FunctionType>> CreateOrdersAggregationInfo(
-			InternalDataList orders,
-			ICurrencyConvertor currencyConverter
-		) {
-			var oFunctionTypes = new List<FunctionType>();
-			m_oVendorInfo.Aggregators.ForEach(a => oFunctionTypes.Add(a.FunctionType()));
-
-			var updated = orders.SubmittedDate;
-
-			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(orders, (submittedDate, o) => new InternalDataList(submittedDate, o));
-
-			var factory = new OrdersAggregatorFactory();
-
-			var aggData = DataAggregatorHelper.AggregateData(
-				factory,
-				timePeriodData,
-				oFunctionTypes.ToArray(),
-				updated,
-				currencyConverter
-			);
-
-			return aggData;
-		} // CreateOrdersAggreationInfo
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(RetrieveDataHelper));
-		private readonly VendorInfo m_oVendorInfo;
-
 	} // class RetrieveDataHelper
-
 } // namespace

@@ -75,11 +75,10 @@
 				var vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName);
 
 				if (null != vi)
-					oRetrieveDataHelper = new RetrieveDataHelper(DbHelper, new DatabaseMarketPlace(marketplaceName), vi);
+					oRetrieveDataHelper = new RetrieveDataHelper(DbHelper, new DatabaseMarketPlace(marketplaceName));
 				else {
 					switch (marketplaceName) {
 					case "eBay":
-						// TODO: make all the constructors empty, create helper and mp inside if needed
 						oRetrieveDataHelper = new eBayRetriveDataHelper(DbHelper, new eBayDatabaseMarketPlace());
 						break;
 

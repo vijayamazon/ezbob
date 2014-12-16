@@ -9,12 +9,12 @@ using Integration.ChannelGrabberConfig;
 namespace Integration.ChannelGrabberFrontend {
 
 	class OrdersAggregator
-		: DataAggregatorBase<ReceivedDataListTimeDependentInfo<AInternalOrderItem>, AInternalOrderItem, FunctionType>
-	{
+		: DataAggregatorBase<ReceivedDataListTimeDependentInfo<AInternalOrderItem>, AInternalOrderItem, FunctionType> {
 
 		public OrdersAggregator(
 			ReceivedDataListTimeDependentInfo<AInternalOrderItem> orders, ICurrencyConvertor currencyConvertor
-		) : base(orders, currencyConvertor) {
+		)
+			: base(orders, currencyConvertor) {
 		} // constructor
 
 		protected override object InternalCalculateAggregatorValue(
@@ -59,18 +59,15 @@ namespace Integration.ChannelGrabberFrontend {
 			return count == 0 ? 0 : sum / count;
 		} // GetAverageSumOfOrders
 
-		private double GetTotalSumOfOrders(IEnumerable<AInternalOrderItem> orders)
-		{
+		private double GetTotalSumOfOrders(IEnumerable<AInternalOrderItem> orders) {
 			return orders
 				.Where(o => ChannelGrabberTypeName(o) == ChannelGrabberOrderItem.TypeName.Order)
 				.Sum(o => ChannelGrabberConvert(o));
 		} // GetTotalSumOfOrders
 
-		private double GetTotalSumOfOrdersAnnualized(IEnumerable<AInternalOrderItem> orders)
-		{
+		private double GetTotalSumOfOrdersAnnualized(IEnumerable<AInternalOrderItem> orders) {
 			var ordersWithExtraInfo = orders as ReceivedDataListTimeDependentInfo<AInternalOrderItem>;
-			if (ordersWithExtraInfo == null)
-			{
+			if (ordersWithExtraInfo == null) {
 				return 0;
 			}
 
