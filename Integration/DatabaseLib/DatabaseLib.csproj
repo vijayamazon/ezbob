@@ -318,7 +318,6 @@
     <Compile Include="Model\Experian\ExperianConsentAgreement.cs" />
     <Compile Include="Model\Experian\ExperianConsentAgreementMap.cs" />
     <Compile Include="Model\Database\LoanOptions.cs" />
-    <Compile Include="Model\Database\LoanOptionsMap.cs" />
     <Compile Include="Model\Database\Request\DecisionHistory.cs" />
     <Compile Include="Model\Fraud\FraudAddress.cs" />
     <Compile Include="Model\Fraud\FraudBankAccount.cs" />

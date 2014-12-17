@@ -1,3 +1,4 @@
+
 IF OBJECT_ID('RptCustomerStatus') IS NULL
 	EXECUTE('CREATE PROCEDURE RptCustomerStatus AS SELECT 1')
 GO
@@ -37,7 +38,7 @@ BEGIN
 		WHERE c.IsTest=0 AND c.CollectionStatus<>0 AND a.addressType IN (3,5)
 	)
 
-	SELECT C.Id CustomerId,C.Fullname,CS.Name Status,sum(L.Principal) AS Principal, 
+	SELECT C.Id CustomerId,C.Fullname,CS.Name Status,sum(L.Principal) AS Principal,  sum(L.Balance) AS Balance,
 		CASE WHEN LS.LoanSourceName = 'EU' THEN 'EU' ELSE '' END AS EU,
 		C.TypeOfBusiness,CP.Description ResidentialStatus, FirstNotRepaidLoan.FirstMissedRepaymentDate, pa.Address AS PersonalAddress, ca.Address AS CompanyAddress
 	FROM Customer C INNER JOIN CustomerStatuses CS ON C.CollectionStatus=CS.Id 

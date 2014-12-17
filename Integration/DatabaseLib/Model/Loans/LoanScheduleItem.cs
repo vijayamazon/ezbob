@@ -83,6 +83,7 @@
 		/// </summary>
 		public virtual DateTime PrevInstallmentDate { get; set; }
 
+		[Obsolete("Was added to solve some fake loan generation issues that are no longer reproduce")]
 		public virtual DateTime? CustomInstallmentDate { get; set; }
 
 		public virtual bool LastNoticeSent { get; set; }
@@ -219,7 +220,6 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.Fees);
 			Map(x => x.FeesPaid);
 			Map(x => x.LastNoticeSent);
-			Map(x => x.CustomInstallmentDate).Nullable().CustomType<DateType>();
 			References(x => x.Loan, "LoanId");
 			HasMany(x => x.Rollovers)
 			   .AsSet()

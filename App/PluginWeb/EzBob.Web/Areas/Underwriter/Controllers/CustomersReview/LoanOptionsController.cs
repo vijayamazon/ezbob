@@ -47,7 +47,9 @@
 								  AutoPayment = true,
 								  LatePaymentNotification = true,
 								  ReductionFee = true,
-								  StopSendingEmails = true,
+								  EmailSendingAllowed = false,
+								  MailSendingAllowed = false,
+								  SmsSendingAllowed = false,
 								  CaisAccountStatus = "Calculated value",
 								  LoanId = loanid
 							  };
@@ -60,8 +62,8 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Save(LoanOptions options)
 		{
-			if (options.ManulCaisFlag == "T")
-				options.ManulCaisFlag = "Calculated value";
+			if (options.ManualCaisFlag == "T")
+				options.ManualCaisFlag = "Calculated value";
 
 			_loanOptionsRepository.SaveOrUpdate(options);
 
@@ -94,8 +96,10 @@
 							AutoPayment = true,
 							ReductionFee = true,
 							LatePaymentNotification = true,
-							StopSendingEmails = true,
-							ManulCaisFlag = "Calculated value"
+							EmailSendingAllowed = false,
+							MailSendingAllowed = false,
+							SmsSendingAllowed = false,
+							ManualCaisFlag = "Calculated value"
 						};
 					}
 
@@ -105,7 +109,7 @@
 
 				// Update customer status
 				int prevStatus = customer.CollectionStatus.CurrentStatus.Id;
-				customer.CollectionStatus.CurrentStatus = customerStatusesRepository.Get(CollectionStatusNames.Default);
+				customer.CollectionStatus.CurrentStatus = customerStatusesRepository.Get((int)CollectionStatusNames.Default);
 				customer.CollectionStatus.CollectionDescription = string.Format("Triggered via loan options:{0}", triggeringLoan != null ? triggeringLoan.RefNumber : "unknown");
 
 				// Update status history table

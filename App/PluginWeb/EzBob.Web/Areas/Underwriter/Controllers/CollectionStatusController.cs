@@ -88,8 +88,10 @@
 						AutoPayment = true,
 						ReductionFee = true,
 						LatePaymentNotification = true,
-						StopSendingEmails = true,
-						ManulCaisFlag = "Calculated value",
+						EmailSendingAllowed = false,
+						MailSendingAllowed = false,
+						SmsSendingAllowed = false,
+						ManualCaisFlag = "Calculated value",
 					};
 
 					options.CaisAccountStatus = "8";
