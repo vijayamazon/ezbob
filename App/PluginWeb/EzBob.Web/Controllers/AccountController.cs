@@ -934,7 +934,7 @@ namespace EzBob.Web.Controllers {
 			if (reqCookie != null) {
 				var cookie = new HttpCookie(cookieName, "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
-				return reqCookie.Value;
+				return HttpUtility.UrlDecode(reqCookie.Value);
 			} // if
 
 			return null;
