@@ -740,7 +740,7 @@
 				Status = Status.Registered,
 				RefNumber = g.GenerateForCustomer(),
 				WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-				CollectionStatus = new CollectionStatus { CurrentStatus = m_oCustomerStatusesRepository.Get(CollectionStatusNames.Enabled) },
+				CollectionStatus = new CollectionStatus { CurrentStatus = m_oCustomerStatusesRepository.Get((int)CollectionStatusNames.Enabled) },
 				IsTest = isAutomaticTest,
 				IsOffline = null,
 				PromoCode = promoCode,
@@ -851,7 +851,7 @@
 			if (reqCookie != null) {
 				var cookie = new HttpCookie(cookieName, "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
-				return reqCookie.Value;
+				return HttpUtility.UrlDecode(reqCookie.Value);
 			} // if
 
 			return null;
