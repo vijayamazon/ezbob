@@ -1,5 +1,6 @@
 <connectionStrings>
 	<add name="dev-alexbo" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-alexbo-prod-auto" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=prod_auto;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-stasd" connectionString="Server=localhost;Database=ezbob;User Id=stas;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-yarons" connectionString="Server=localhost;Database=ezbob;User Id=sa;Password=123456;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 
