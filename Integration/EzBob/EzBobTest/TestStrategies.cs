@@ -4,6 +4,8 @@
 	using System.Collections.Generic;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies;
@@ -31,6 +33,9 @@
 
 			ObjectFactory.Configure(x => {
 				x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>();
+				x.For<ILoanRepository>().Use<LoanRepository>();
+				x.For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
+				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 			});
 
 			Ezbob.Backend.Strategies.Library.Initialize(m_oEnv, m_oDB, m_oLog);
@@ -40,6 +45,12 @@
 		public void test_mainstrat() {
 			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null);
 			ms.Execute();
+		}
+
+		[Test]
+		public void TestSetLateLoanStatus() {
+			var stra = new SetLateLoanStatus();
+			stra.Execute();
 		}
 
 		[Test]
@@ -157,6 +168,12 @@
 		public void PayPointNameValidationFailed()
 		{
 			var s = new PayPointNameValidationFailed(3060, "dfgsdf");
+			s.Execute();
+		}
+
+		[Test]
+		public void TestPayPointCharger() {
+			var s = new PayPointCharger();
 			s.Execute();
 		}
 

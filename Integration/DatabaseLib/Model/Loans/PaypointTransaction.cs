@@ -45,23 +45,8 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
         public virtual bool InterestOnly { get; set; }
 
-		public virtual void SetTransactionMethod(LoanTransactionMethodRepository oRepo, string sManualPaymentMethod) {
-			if (LoanTransactionMethod != null)
-				return;
+		public const string Manual = "--- manual ---";
 
-			if (!string.IsNullOrWhiteSpace(PaypointId)) {
-				LoanTransactionMethod = (PaypointId == Manual)
-					? oRepo.FindOrDefault(sManualPaymentMethod, "Manual")
-					: oRepo.FindOrDefault(sManualPaymentMethod, "Auto");
-
-				return;
-			} // if
-
-			if (LoanTransactionMethod == null)
-				LoanTransactionMethod = LoanTransactionMethod.GetDefault();
-		} // SetTransactionMethod
-
-	    public const string Manual = "--- manual ---";
     }
 
     public interface IPaypointTransactionRepository : IRepository<PaypointTransaction>

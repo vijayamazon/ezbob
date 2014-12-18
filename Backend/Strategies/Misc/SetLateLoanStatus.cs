@@ -26,8 +26,9 @@
 
 		public override void Execute() {
 			now = DateTime.UtcNow;
+
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
-				MarkLoanAsLate(sr, now);
+				MarkLoanAsLate(sr);
 				return ActionResult.Continue;
 			}, "GetLoansToCollect", CommandSpecies.StoredProcedure, new QueryParameter("Now", now));
 
@@ -42,7 +43,7 @@
 		/// For each loan schedule marks it as late, it's loan as late, applies fee if needed
 		/// </summary>
 		/// <param name="sr"></param>
-		private void MarkLoanAsLate(SafeReader sr, DateTime now) {
+		private void MarkLoanAsLate(SafeReader sr) {
 			int id = sr["id"];
 			int loanId = sr["LoanId"];
 			int customerId = sr["CustomerId"];
@@ -100,10 +101,10 @@
 		/// </summary>
 		private void HandleCollectionLogic(SafeReader sr) {
 			DateTime scheduleDate = sr["ScheduleDate"];
-
 			int loanId = sr["LoanID"];
 			string dayPhone = sr["DaytimePhone"];
 			string mobilePhone = sr["MobilePhone"];
+			int lateDays = (int)(now - scheduleDate).TotalDays;
 
 			var model = new CollectionDataModel {
 				CustomerID = sr["CustomerID"],
@@ -118,6 +119,7 @@
 				FeeAmount = sr["Fees"],
 				Email = sr["email"],
 				DueDate = scheduleDate,
+				LateDays = lateDays,
 				PhoneNumber = string.IsNullOrEmpty(dayPhone) ? mobilePhone : dayPhone,
 				BusinessAddress = "", //todo
 				PersonalAddress = "", //todo
@@ -128,49 +130,49 @@
 
 			Log.Info(model.ToString());
 
-			int daysBetween = (int)(now - scheduleDate).TotalDays;
 
-			if (daysBetween == 0) {
-				CollectionDay0(model);
+
+			if (lateDays == 0) {
+				CollectionDay0(model, CollectionType.CollectionDay0);
 			}
 
-			if (daysBetween >= 1 && daysBetween <= 6) {
-				CollectionDay1to6(model);
+			if (lateDays >= 1 && lateDays <= 6) {
+				CollectionDay1to6(model, CollectionType.CollectionDay1to6);
 			}
 
-			if (daysBetween == 7) {
-				CollectionDay7(model);
+			if (lateDays == 7) {
+				CollectionDay7(model, CollectionType.CollectionDay7);
 			}
 
-			if (daysBetween >= 8 && daysBetween <= 14) {
-				CollectionDay8to14(model);
+			if (lateDays >= 8 && lateDays <= 14) {
+				CollectionDay8to14(model, CollectionType.CollectionDay8to14);
 			}
 
-			if (daysBetween == 15) {
-				CollectionDay15(model);
+			if (lateDays == 15) {
+				CollectionDay15(model, CollectionType.CollectionDay15);
 			}
 
-			if (daysBetween == 21) {
-				CollectionDay21(model);
+			if (lateDays == 21) {
+				CollectionDay21(model, CollectionType.CollectionDay21);
 			}
 
-			if (daysBetween == 31) {
-				CollectionDay31(model);
+			if (lateDays == 31) {
+				CollectionDay31(model, CollectionType.CollectionDay31);
 			}
 
-			if (daysBetween == 46) {
-				CollectionDay46(model);
+			if (lateDays == 46) {
+				CollectionDay46(model, CollectionType.CollectionDay46);
 			}
 
-			if (daysBetween == 60) {
-				CollectionDay60(model);
+			if (lateDays == 60) {
+				CollectionDay60(model, CollectionType.CollectionDay60);
 			}
 
-			if (daysBetween == 90) {
-				CollectionDay90(model);
+			if (lateDays == 90) {
+				CollectionDay90(model, CollectionType.CollectionDay90);
 			}
 
-			UpdateLoanStats(loanId, daysBetween, model.AmountDue);
+			UpdateLoanStats(loanId, lateDays, model.AmountDue);
 		}// HandleCollectionLogic
 
 		/// <summary>
@@ -235,96 +237,106 @@
 		} // CalculateFee
 
 
-		private void CollectionDay0(CollectionDataModel model) {
+		private void CollectionDay0(CollectionDataModel model, CollectionType type) {
 			//send email Default Template0
 			const string templateName = "Mandrill - ezbob - you missed your payment";
-			SendCollectionEmail(templateName, model);
+			SendCollectionEmail(templateName, model, type);
+
 			//send sms Default SMS0
 			string smsTemplate = string.Format("{0} This is a courtesy message to remind you that a payment of {1} is overdue with ezbob. Please call Emma at 02033711842 to arrange your payment ASAP.",
 				model.FirstName, model.AmountDue);
-			SendCollectionSms(smsTemplate, model);
+			SendCollectionSms(smsTemplate, model, type);
 		}//CollectionDay0
 
-		private void CollectionDay1to6(CollectionDataModel model) {
-			ChangeStatus(model.CustomerID, CollectionStatusNames.DaysMissed1To14);
+		private void CollectionDay1to6(CollectionDataModel model, CollectionType type) {
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed1To14, type);
 
 			//send email Default Template1-6
 			const string templateName = "Mandrill - ezbob - missed payment";
-			SendCollectionEmail(templateName, model);
+			SendCollectionEmail(templateName, model, type);
+
 			//send sms Default SMS1-6
 			string smsTemplate = string.Format("{0} the outstanding balance of {1} with ezbob has not been settled. Failure to settle the account will result in additional late payment fees being added to your account balance. Emma 02033711842",
 				model.FirstName, model.AmountDue);
-			SendCollectionSms(smsTemplate, model);
+			SendCollectionSms(smsTemplate, model, type);
 		}//CollectionDay1to6
 
-		private void CollectionDay7(CollectionDataModel model) {
+		private void CollectionDay7(CollectionDataModel model, CollectionType type) {
 			//send email Default Template7
 			const string templateName = "Mandrill - ezbob - £20 late fee was added to your account";
-			SendCollectionEmail(templateName, model);
+			SendCollectionEmail(templateName, model, type);
+
 			//send imail DefaulttemplateComm7 for limited loan
-			SendCollectionImail("DefaulttemplateComm7", model);
+			SendCollectionImail("DefaulttemplateComm7", model, type);
+
 			//send sms Default SMS7
 			string smsTemplate = string.Format("{0}, the outstanding balance of {1}, including a late payment of £20 on your account with ezbob has not been settled. Failure to settle the account within 2 days will result in debt collection proceedings being taken to retrieve the debt. Emma 02033711842",
 				model.FirstName, model.AmountDue);
-			SendCollectionSms(smsTemplate, model);
+			SendCollectionSms(smsTemplate, model, type);
 		}//CollectionDay7
 
-		private void CollectionDay8to14(CollectionDataModel model) {
+		private void CollectionDay8to14(CollectionDataModel model, CollectionType type) {
 			//send email Default Template8-13
 			const string templateName = "Mandrill - ezbob - Last warning - Debt recovery agency";
-			SendCollectionEmail(templateName, model);
+			SendCollectionEmail(templateName, model, type);
+
 			//send sms Default SMS8-13
 			string smsTemplate = string.Format("Warning – {0} late fees and daily interest has been added to your ezbob account. If you don’t do something quickly, ezbob can take actions against you. Please call Emma 02033711842 to arrange your payment ASAP.", model.FirstName);
-			SendCollectionSms(smsTemplate, model);
+			SendCollectionSms(smsTemplate, model, type);
 		}//CollectionDay8to14
 
-		private void CollectionDay15(CollectionDataModel model) {
+		private void CollectionDay15(CollectionDataModel model, CollectionType type) {
 			//change status to 15-30 days missed
-			ChangeStatus(model.CustomerID, CollectionStatusNames.DaysMissed15To30);
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed15To30, type);
+
 			//send email Default Template14-29
 			const string templateName = "Mandrill - Warning notice - ezbob - £40 late fee";
-			SendCollectionEmail(templateName, model);
+			SendCollectionEmail(templateName, model, type);
+
 			//send imail DefaulttemplateConsumer14
-			SendCollectionImail("DefaulttemplateConsumer14", model);
+			SendCollectionImail("DefaulttemplateConsumer14", model, type);
+
 			//send sms Default SMS14
 			string smsTemplate = string.Format("{0} final reminder that your account in the amount of {1} on your account was due on {2}. If we do not receive the payment in full ezbob will submit your action to our legal department.",
 				model.FirstName, model.AmountDue, model.DueDate.ToString("dd/MM/yyyy"));
-			SendCollectionSms(smsTemplate, model);
+			SendCollectionSms(smsTemplate, model, type);
 		}//CollectionDay15
 
-		private void CollectionDay21(CollectionDataModel model) {
+		private void CollectionDay21(CollectionDataModel model, CollectionType type) {
 			//send sms Default SMS21
 			string smsTemplate = string.Format("{0} you have failed to settle your payment. Ezbob has submitted your account for legal proceedings. Emma 02033711842",
 				model.FirstName);
-			SendCollectionSms(smsTemplate, model);
+			SendCollectionSms(smsTemplate, model, type);
 		}//CollectionDay21
 
-		private void CollectionDay31(CollectionDataModel model) {
-			ChangeStatus(model.CustomerID, CollectionStatusNames.DaysMissed31To45);
+		private void CollectionDay31(CollectionDataModel model, CollectionType type) {
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed31To45, type);
 			//send email Default Template30
 			const string templateName = "Mandrill - ezbob - legal process starting";
-			SendCollectionEmail(templateName, model);
+			SendCollectionEmail(templateName, model, type);
+
 			//send imail DefaulttemplateConsumer31
-			SendCollectionImail("DefaulttemplateConsumer31", model);
+			SendCollectionImail("DefaulttemplateConsumer31", model, type);
+
 			//send sms Default SMS31
 			string smsTemplate = string.Format("{0} you have failed to settle your payment. Ezbob has submitted your account for legal proceedings. Emma 02033711842",
 				model.FirstName);
-			SendCollectionSms(smsTemplate, model);
+			SendCollectionSms(smsTemplate, model, type);
 		}//CollectionDay31
 
-		private void CollectionDay46(CollectionDataModel model) {
-			ChangeStatus(model.CustomerID, CollectionStatusNames.DaysMissed46To60);
+		private void CollectionDay46(CollectionDataModel model, CollectionType type) {
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed46To60, type);
 		}
 
-		private void CollectionDay60(CollectionDataModel model) {
-			ChangeStatus(model.CustomerID, CollectionStatusNames.DaysMissed61To90);
+		private void CollectionDay60(CollectionDataModel model, CollectionType type) {
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed61To90, type);
 		}
 
-		private void CollectionDay90(CollectionDataModel model) {
-			ChangeStatus(model.CustomerID, CollectionStatusNames.DaysMissed90Plus);
+		private void CollectionDay90(CollectionDataModel model, CollectionType type) {
+			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed90Plus, type);
 		}
 
-		private void SendCollectionEmail(string emailTemplateName, CollectionDataModel model) {
+		private void SendCollectionEmail(string emailTemplateName, CollectionDataModel model, CollectionType type) {
 			if (model.EmailSendingAllowed) {
 				var variables = new Dictionary<string, string> {
 					{"FirstName", model.FirstName}, 
@@ -334,37 +346,58 @@
 					{"ScheduledAmount", model.AmountDue.ToString(CultureInfo.InvariantCulture)},
 				};
 				mailer.Send(emailTemplateName, variables, new Addressee(model.Email));
+				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Email);
 			}
 			else {
 				Log.Debug("Collection sending email is not allowed, email is not sent to customer {0}\n email template {1}", model.CustomerID, emailTemplateName);
 			}
 		}//SendCollectionEmail
 
-		private void SendCollectionSms(string smsTemplate, CollectionDataModel model) {
-			if (model.SmsSendingAllowed) {
+		private void SendCollectionSms(string smsTemplate, CollectionDataModel model, CollectionType type) {
+			if (model.SmsSendingAllowed && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
 				new SendSms(model.CustomerID, 1, model.PhoneNumber, smsTemplate).Execute();
 			}
+			else if (model.SmsSendingAllowed) {
+				Log.Debug("Collection sending sms is in test mode, sms is not sent to customer {0} phone number {1}\n content {2}",
+					model.CustomerID, model.PhoneNumber, smsTemplate);
+				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Sms);
+			}
 			else {
-				Log.Debug("Collection sending sms is not allowed, sms is not sent to customer {0}\n content {1}", model.CustomerID, smsTemplate);
+				Log.Debug("Collection sending sms is not allowed, sms is not sent to customer {0} phone number {1}\n content {2}",
+					model.CustomerID, model.PhoneNumber, smsTemplate);
 			}
 		}//SendCollectionSms
 
-		private void SendCollectionImail(string mailTemplate, CollectionDataModel model) {
+		private void SendCollectionImail(string mailTemplate, CollectionDataModel model, CollectionType type) {
 			if (model.ImailSendingAllowed) {
 				//TODO implement
+				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
 			}
 			else {
 				Log.Debug("Collection sending mail is not allowed, mail is not sent to customer {0}\n template {1}", model.CustomerID, mailTemplate);
 			}
+
 		} //SendCollectionImail
 
-		private void ChangeStatus(int customerID, CollectionStatusNames status) {
+		private void ChangeStatus(int customerID, int loanID, CollectionStatusNames status, CollectionType type) {
 			DB.ExecuteNonQuery("UpdateCollectionStatus",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerID),
-				new QueryParameter("CollectionStatus", (int)status));
+				new QueryParameter("CollectionStatus", (int)status),
+				new QueryParameter("Now", now));
+
+			AddCollectionLog(customerID, loanID, type, CollectionMethod.ChangeStatus);
 		} //ChangeStatus
 
+		private void AddCollectionLog(int customerID, int loanID, CollectionType type, CollectionMethod method) {
+			DB.ExecuteNonQuery("AddCollectionLog",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", customerID),
+				new QueryParameter("LoanID", loanID),
+				new QueryParameter("Type", type.ToString()),
+				new QueryParameter("Method", method.ToString()),
+				new QueryParameter("Now", now));
+		}
 		private readonly StrategiesMailer mailer;
 		private DateTime now;
 
@@ -397,6 +430,7 @@
 			public decimal Interest { get; set; }
 			public string LoanRefNum { get; set; }
 			public DateTime DueDate { get; set; }
+			public int LateDays { get; set; }
 			public bool EmailSendingAllowed { get; set; }
 			public bool SmsSendingAllowed { get; set; }
 			public bool ImailSendingAllowed { get; set; }
@@ -405,12 +439,33 @@
 				return string.Format(@"Collection model for CustomerID:{0}
 LoanID:{1},ScheduleID:{2},LoanRefNum:{11}
 FirstName:{3}, Surname:{4}, FullName:{5}, Email:{6}, PhoneNumber:{7}
-AmountDue:{8}, FeeAmount:{9}, Interest:{10}, DueDate:{12}
-EmailSendingAllowed:{13}, SmsSendingAllowed: {14}, ImailSendingAllowed: {15}",
+AmountDue:{8}, FeeAmount:{9}, Interest:{10}, DueDate:{12}, LateDays: {13}
+EmailSendingAllowed:{14}, SmsSendingAllowed: {15}, ImailSendingAllowed: {16}",
 					CustomerID, LoanID, ScheduleID,
-					FirstName, Surname, FullName, Email, PhoneNumber, AmountDue, FeeAmount, Interest, LoanRefNum, DueDate,
+					FirstName, Surname, FullName, Email, PhoneNumber, AmountDue, FeeAmount, Interest, LoanRefNum, DueDate, LateDays,
 					EmailSendingAllowed, SmsSendingAllowed, ImailSendingAllowed);
 			}
 		}//class
+
+		public enum CollectionType {
+			CollectionDay0,
+			CollectionDay1to6,
+			CollectionDay7,
+			CollectionDay8to14,
+			CollectionDay15,
+			CollectionDay21,
+			CollectionDay31,
+			CollectionDay46,
+			CollectionDay60,
+			CollectionDay90
+		}
+
+		public enum CollectionMethod {
+			Email,
+			Mail,
+			Sms,
+			ChangeStatus
+		}
+
 	}// class 
 } // namespace

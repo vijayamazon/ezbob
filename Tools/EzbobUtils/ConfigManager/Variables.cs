@@ -377,6 +377,7 @@ namespace ConfigManager {
 		SkipCodeGenerationNumberCode,
 		SkipServiceOnNewCreditLine,
 		SmallLoanScenarioLimit,
+		SmsTestModeEnabled,
 
 		TaboolaPixelEnabled,
 		TargetsEnabled,

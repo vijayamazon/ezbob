@@ -215,7 +215,7 @@
 
 				if (!isValidCard)
 				{
-					message = "Card is not valid";
+					message = "Card is not valid debug mode";
 					code = "B";
 					isValid = false;
 				}
@@ -223,18 +223,19 @@
 				{
 					if (enableCardLimit && amount > cardLimitAmount)
 					{
-						message = "Amount more than card amount";
+						message = "Amount more than card amount debug mode";
 						code = "P:A";
 						isValid = false;
 					}
 				}
 
-				if (enableDebugErrorCodeN)
+				Random r = new Random();
+				var rand = r.Next(10);
+				if (enableDebugErrorCodeN && rand>6)
 				{
 					isValid = false;
-					transactionId = "1b333df7-03a4-4092-81d9-72a686794d362013-05-20_09:41:39";
 					code = "N";
-					message = "DECLINED";
+					message = "INSUFF FUNDS";
 					respCode = 5;
 				}
 

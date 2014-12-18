@@ -29,7 +29,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
 			_loan = new Loan();
 			// _configurationVariablesRepository = config.Object;
-			_facade = new LoanPaymentFacade(null);
+			_facade = new LoanPaymentFacade(null, null);
 			_calculator = new LoanScheduleCalculator() { Interest = 0.06M };
 
 			_customer = new Customer();

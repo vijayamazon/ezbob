@@ -367,6 +367,11 @@
 			get { return this[Variables.SkipCodeGenerationNumberCode]; } // get
 		} // SkipCodeGenerationNumberCode
 
+		public virtual VariableValue SmsTestModeEnabled {
+			get { return this[Variables.SmsTestModeEnabled]; } // get
+		} // SmsTestModeEnabled
+		
+
 		public virtual VariableValue TotalAnnualTurnover {
 			get { return this[Variables.TotalAnnualTurnover]; } // get
 		} // TotalAnnualTurnover
