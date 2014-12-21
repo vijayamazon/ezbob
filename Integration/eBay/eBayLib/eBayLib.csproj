@@ -66,8 +66,6 @@
     <Compile Include="eBayServiceHelper.cs" />
     <Compile Include="eBayTest.cs" />
     <Compile Include="Config\IEbayMarketplaceTypeConnection.cs" />
-    <Compile Include="EBayOrdersAggregator.cs" />
-    <Compile Include="MixedOrdersAggregator.cs" />
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
@@ -83,6 +81,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
       <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
       <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}</Project>
+      <Name>DbConnection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>

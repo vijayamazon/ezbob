@@ -63,7 +63,6 @@
     <Compile Include="AccountModel.cs" />
     <Compile Include="Connector.cs" />
     <Compile Include="exceptions.cs" />
-    <Compile Include="OrdersAggregatorFactory.cs" />
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="ServiceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,7 +73,6 @@
     <Compile Include="DatabaseFunctionFactory.cs" />
     <Compile Include="DatabaseMarketPlace.cs" />
     <Compile Include="RetrieveDataHelper.cs" />
-    <Compile Include="OrdersAggregator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\App\HmrcHarvester\HmrcHarvester\HmrcHarvester.csproj">

@@ -6,13 +6,11 @@
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.DatabaseWrapper.EbayFeedbackData;
-	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 	using EZBob.DatabaseLib.Model.Database;
 	using CommonLib;
 	using CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
-	using CommonLib.ReceivedDataListLogic;
 	using CommonLib.TimePeriodLogic;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -28,13 +26,15 @@
 	using eBayServiceLib.TradingServiceCore.ResultInfos;
 	using eBayServiceLib.TradingServiceCore.TokenProvider;
 	using eBayServiceLib.com.ebay.developer.soap;
+	using Ezbob.Database;
 	using StructureMap;
 
 	public class eBayRetriveDataHelper : MarketplaceRetrieveDataHelperBase<eBayDatabaseFunctionType> {
 		public eBayRetriveDataHelper(
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBase<eBayDatabaseFunctionType> marketplace
-		) : base(helper, marketplace) {
+		)
+			: base(helper, marketplace) {
 			_Settings = ObjectFactory.GetInstance<IEbayMarketplaceSettings>();
 
 			var ebayConnectionInfo = ObjectFactory.GetInstance<IEbayMarketplaceTypeConnection>();
@@ -100,8 +100,7 @@
 							if (data.Data != null && data.Data.Count > 0) {
 								DateTime lastDate = data.Data.Keys.Max();
 								data.Data[lastDate].AddRange(feedBackParams);
-							}
-							else
+							} else
 								data.AddData(afDate.Value, feedBackParams);
 						} // if
 					} // if
@@ -374,28 +373,11 @@
 						() => Helper.StoretoDatabaseTeraPeakOrdersData(databaseCustomerMarketPlace, teraPeakDatabaseSellerDataByRange, historyRecord)
 					);
 
-					var agInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-						elapsedTimeInfo,
-						databaseCustomerMarketPlace.Id,
-						ElapsedDataMemberType.AggregateData,
-						() => {
-							if (allTeraPeakData == null)
-								allTeraPeakData = new TeraPeakDatabaseSellerData(now);
-
-							allTeraPeakData.AddRange(teraPeakDatabaseSellerDataByRange);
-
-							var receivedDataList = new MixedReceivedDataList(now, allTeraPeakData.Select(t => new MixedReceivedDataItem(t)));
-
-							return CreateAggregationInfo(receivedDataList, Helper.CurrencyConverter);
-						}
-					);
-
-					// Save aggregated info
-					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-						elapsedTimeInfo,
-						databaseCustomerMarketPlace.Id,
-						ElapsedDataMemberType.StoreAggregatedData,
-						() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, agInfo, historyRecord)
+					DbConnectionGenerator.Get().ExecuteNonQuery(
+						"UpdateMpTotalsEbay",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
+						new QueryParameter("HistoryID", historyRecord.Id)
 					);
 
 					return new UpdateActionResultInfo {
@@ -416,32 +398,6 @@
 				.Take(countTopItems)
 				.Where(a => a.ItemId != null).Select(a => a.ItemId).ToList();
 		} // GetTopSealedProductItems
-
-		private IEnumerable<IWriteDataInfo<eBayDatabaseFunctionType>> CreateAggregationInfo(
-			MixedReceivedDataList orders,
-			ICurrencyConvertor currencyConverter
-		) {
-			var aggregateFunctionArray = new[] {
-				eBayDatabaseFunctionType.AverageItemsPerOrder,
-				eBayDatabaseFunctionType.AverageSumOfOrder, 
-				eBayDatabaseFunctionType.CancelledOrdersCount,
-				eBayDatabaseFunctionType.NumOfOrders,
-				eBayDatabaseFunctionType.TotalItemsOrdered,
-				eBayDatabaseFunctionType.TotalSumOfOrders,
-				eBayDatabaseFunctionType.TotalSumOfOrdersAnnualized,
-				eBayDatabaseFunctionType.OrdersCancellationRate,
-				eBayDatabaseFunctionType.TopCategories
-			};
-
-			DateTime updated = orders.SubmittedDate;
-
-			Dictionary<TimePeriodEnum, ReceivedDataListTimeDependentInfo<MixedReceivedDataItem>> timePeriodData =
-				DataAggregatorHelper.GetOrdersForPeriodsEbay(orders);
-
-			var factory = new MixedOrdersAggregatorFactory();
-
-			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
-		} // CreateAggregationInfo
 
 		public ResultInfoEbayUser GetCustomerUserInfo(eBaySecurityInfo data) {
 			DataProviderCreationInfo info = CreateProviderCreationInfo(data);
@@ -472,6 +428,6 @@
 
 		private readonly EbayServiceConnectionInfo _EbayConnectionInfo;
 		private readonly IEbayMarketplaceSettings _Settings;
-		private static readonly ASafeLog log = new SafeILog(typeof (eBayRetriveDataHelper));
+		private static readonly ASafeLog log = new SafeILog(typeof(eBayRetriveDataHelper));
 	} // class eBayRetriveDataHelper
 } // namespace

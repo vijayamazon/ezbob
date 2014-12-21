@@ -54,7 +54,6 @@
   <ItemGroup>
     <Compile Include="AmazonDatabaseMarketPlace.cs" />
     <Compile Include="AmazonDatabaseTypeConverter.cs" />
-    <Compile Include="AmazonOrdersAgregator.cs" />
     <Compile Include="AmazonRetriveDataHelper.cs" />
     <Compile Include="AmazonTest.cs" />
     <Compile Include="PluginRegistry.cs" />
