@@ -11,8 +11,8 @@
 		public virtual string Username { get; set; }
 		public virtual DateTime Timestamp { get; set; }
 		public virtual int CustomerId { get; set; }
-		public virtual int PreviousStatus { get; set; }
-		public virtual int NewStatus { get; set; }
+		public virtual CustomerStatuses PreviousStatus { get; set; }
+		public virtual CustomerStatuses NewStatus { get; set; }
 		public virtual decimal? Amount { get; set; }
 		public virtual DateTime? ApplyForJudgmentDate { get; set; }
 		public virtual string Type { get; set; }
@@ -29,8 +29,8 @@
 			Map(x => x.Username).Length(100);
 			Map(x => x.Timestamp).CustomType<UtcDateTimeType>();
 			Map(x => x.CustomerId);
-			Map(x => x.PreviousStatus);
-			Map(x => x.NewStatus);
+			References(x => x.PreviousStatus, "PreviousStatus");
+			References(x => x.NewStatus, "NewStatus");
 			Map(x => x.Amount);
 			Map(x => x.ApplyForJudgmentDate).CustomType<UtcDateTimeType>();
 			Map(x => x.Type).Length(20);

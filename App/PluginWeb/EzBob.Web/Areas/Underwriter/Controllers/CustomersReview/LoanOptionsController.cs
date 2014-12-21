@@ -108,7 +108,7 @@
 				}
 
 				// Update customer status
-				int prevStatus = customer.CollectionStatus.CurrentStatus.Id;
+				CustomerStatuses prevStatus = customer.CollectionStatus.CurrentStatus;
 				customer.CollectionStatus.CurrentStatus = customerStatusesRepository.Get((int)CollectionStatusNames.Default);
 				customer.CollectionStatus.CollectionDescription = string.Format("Triggered via loan options:{0}", triggeringLoan != null ? triggeringLoan.RefNumber : "unknown");
 
@@ -119,7 +119,7 @@
 						Timestamp = DateTime.UtcNow,
 						CustomerId = customer.Id,
 						PreviousStatus = prevStatus,
-						NewStatus = customer.CollectionStatus.CurrentStatus.Id
+						NewStatus = customer.CollectionStatus.CurrentStatus,
 					};
 				customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 			}

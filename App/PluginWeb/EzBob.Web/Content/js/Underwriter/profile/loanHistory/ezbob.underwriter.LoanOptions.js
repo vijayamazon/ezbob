@@ -29,24 +29,30 @@ EzBob.Underwriter.LoanOptionsView = Backbone.Marionette.ItemView.extend({
 	},
 
 	bindings: {
-		Id: {
-			selector: "input[name='Id']"
-		},
-		LoanId: {
-			selector: "input[name='LoanId']"
-		},
-		AutoPayment: {
-			selector: "input[name='AutoPayment']"
-		},
-		ReductionFee: {
-			selector: "input[name='ReductionFee']"
-		},
-		LatePaymentNotification: {
-			selector: "input[name='LatePaymentNotification']"
-		},
-		StopSendingEmails: {
-			selector: "input[name='StopSendingEmails']"
-		}
+	    Id: {
+	        selector: "input[name='Id']"
+	    },
+	    LoanId: {
+	        selector: "input[name='LoanId']"
+	    },
+	    AutoPayment: {
+	        selector: "input[name='AutoPayment']"
+	    },
+	    ReductionFee: {
+	        selector: "input[name='ReductionFee']"
+	    },
+	    LatePaymentNotification: {
+	        selector: "input[name='LatePaymentNotification']"
+	    },
+	    EmailSendingAllowed: {
+	        selector: "#EmailSendingAllowed"
+	    },
+	    MailSendingAllowed: {
+	        selector: "#MailSendingAllowed"
+	    },
+	    SmsSendingAllowed: {
+	        selector: "#SmsSendingAllowed"
+	    }
 	},
 
 	events: {
@@ -56,7 +62,7 @@ EzBob.Underwriter.LoanOptionsView = Backbone.Marionette.ItemView.extend({
 	},
 
 	changeFlags: function() {
-		this.loanOptions.set('ManulCaisFlag', this.$el.find("#cais-flags option:selected").val());
+		this.loanOptions.set('ManualCaisFlag', this.$el.find("#cais-flags option:selected").val());
 		var index = this.$el.find("#cais-flags option:selected").attr('data-id');
 		var curentFlag = this.model.get('ManualCaisFlags')[index];
 		this.$el.find('.cais-comment').html('<h5>' + curentFlag.ValidForRecordType + '</h5>' + curentFlag.Comment);
@@ -97,7 +103,7 @@ EzBob.Underwriter.LoanOptionsView = Backbone.Marionette.ItemView.extend({
 
 		this.modelBinder.bind(this.loanOptions, this.el, this.bindings);
 		this.$el.find("#CaisAccountStatus option[value='" + (this.loanOptions.get('CaisAccountStatus')) + "']").attr('selected', 'selected');
-		this.$el.find("#cais-flags option[value='" + (this.loanOptions.get('ManulCaisFlag')) + "']").attr('selected', 'selected');
+		this.$el.find("#cais-flags option[value='" + (this.loanOptions.get('ManualCaisFlag')) + "']").attr('selected', 'selected');
 		this.changeFlags();
 	}
 });

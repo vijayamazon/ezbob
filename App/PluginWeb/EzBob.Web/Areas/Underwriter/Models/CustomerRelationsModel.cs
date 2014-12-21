@@ -4,6 +4,7 @@
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using System;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public class CrmModel
@@ -84,7 +85,12 @@
 				{
 					User = "System",
 					Action = "Took a Loan",
-					Comment = string.Format("Amount: {0}, Repayments: {1}, Type: {2}, Discount Plan: {3}, Source: {4}", loan.LoanAmount, loan.Repayments, loan.LoanType.Description, loan.CashRequest.DiscountPlan.ValuesStr, loan.LoanSource.Name),
+					Comment = string.Format("Amount: {0}, Repayments: {1}, Type: {2}, Discount Plan: {3}, Source: {4}", 
+                        loan.LoanAmount, 
+                        loan.Repayments, 
+                        loan.LoanType.Description, 
+                        loan.CashRequest.DiscountPlan.ValuesStr,
+                        loan.LoanSource.Name),
 					DateTime = loan.Date,
 					Status = loan.Status.ToString()
 				};
@@ -96,10 +102,45 @@
 			{
 				User = "System",
 				Action = "Repaid a Loan",
-				Comment = string.Format("Amount: {0}, Repayments: {1}, Type: {2}, Discount Plan: {3}, Source: {4}", loan.LoanAmount, loan.Repayments, loan.LoanType.Description, loan.CashRequest.DiscountPlan.ValuesStr, loan.LoanSource.Name),
-				DateTime = loan.DateClosed.Value,
+				Comment = string.Format("Amount: {0}, Repayments: {1}, Type: {2}, Discount Plan: {3}, Source: {4}",
+                    loan.LoanAmount, 
+                    loan.Repayments, 
+                    loan.LoanType.Description,
+                    loan.CashRequest.DiscountPlan.ValuesStr,
+                    loan.LoanSource.Name),
+				DateTime = loan.DateClosed ?? default(DateTime),
 				Status = loan.Status.ToString()
 			};
 		}
+
+	    public static CustomerRelationsModel CreateChangeStatus(CustomerStatusHistory customerStatusHistory) {
+            return new CustomerRelationsModel
+            {
+                User = customerStatusHistory.Username == "se" ? "System" : customerStatusHistory.Username,
+                Action = "Change Status",
+                Comment = string.Format("description:{0}, previous status:{1}, current status:{2}{3}{4}{5}",
+                    customerStatusHistory.Description, 
+                    customerStatusHistory.PreviousStatus.Name,
+                    customerStatusHistory.NewStatus.Name, 
+                    string.IsNullOrEmpty(customerStatusHistory.Feedback) ? "" : ", feedback:" + customerStatusHistory.Feedback,
+                    customerStatusHistory.Amount.HasValue ? ", amount:" + customerStatusHistory.Amount.Value : "",
+                    customerStatusHistory.ApplyForJudgmentDate.HasValue ? ", apply for judgment date: " + customerStatusHistory.ApplyForJudgmentDate.Value.ToString("dd/MM/yyyy") : ""),
+                DateTime = customerStatusHistory.Timestamp,
+                Status = customerStatusHistory.NewStatus.Name
+            };
+	    }
+
+	    public static CustomerRelationsModel CreateCollectionLog(CollectionLog collectionLog) {
+            return new CustomerRelationsModel
+            {
+                User = "System",
+                Action = collectionLog.Method,
+                Comment = string.Format("{0} was sent to customer because of loan {1}", 
+                    collectionLog.Method, 
+                    collectionLog.LoanID),
+                DateTime = collectionLog.TimeStamp,
+                Type = collectionLog.Type,
+            };
+	    }
 	}
 }

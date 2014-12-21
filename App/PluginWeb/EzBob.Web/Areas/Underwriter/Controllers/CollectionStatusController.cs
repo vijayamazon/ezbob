@@ -67,9 +67,9 @@
 		[Transactional]
 		public JsonResult Save(int customerId, CollectionStatusModel collectionStatus) {
 			var customer = this.customerRepository.Get(customerId);
-			var prevStatus = customer.CollectionStatus.CurrentStatus.Id;
+			var prevStatus = customer.CollectionStatus.CurrentStatus;
 
-			if (prevStatus == collectionStatus.CurrentStatus) {
+			if (prevStatus.Id == collectionStatus.CurrentStatus) {
 				return Json(new {});
 			}
 
@@ -109,7 +109,7 @@
 				Timestamp = DateTime.UtcNow,
 				CustomerId = customerId,
 				PreviousStatus = prevStatus,
-				NewStatus = collectionStatus.CurrentStatus,
+				NewStatus = customer.CollectionStatus.CurrentStatus,
 				Description = collectionStatus.CollectionDescription,
 				Amount = collectionStatus.Amount,
 				ApplyForJudgmentDate = hasApplyForJudgmentDate ? applyForJudgmentDate : (DateTime?)null,

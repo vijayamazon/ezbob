@@ -20,6 +20,8 @@
 			customerPhoneRepository = new CustomerPhoneRepository(session);
 			frequentActionItemsRepository = new FrequentActionItemsRepository(session);
 			frequentActionItemsForCustomerRepository = new FrequentActionItemsForCustomerRepository(session);
+		    collectionStatusHistory = new CustomerStatusHistoryRepository(session);
+		    collectionLogRepository = new CollectionLogRepository(session);
 		} // constructor
 
 		public CrmModel Create(int customerId) {
@@ -35,12 +37,25 @@
 
 			var repaidLoan = _loanRepository
 				.ByCustomer(customerId)
-				.Where(l => l.DateClosed.HasValue)
+				.Where(l => l.Status == LoanStatus.PaidOff)
 				.Select(CustomerRelationsModel.CreateRepaidLoan)
 				.ToList();
 
+		    var changeCustomerStatus = collectionStatusHistory
+                .GetAll()
+		        .Where(x => x.CustomerId == customerId)
+		        .Select(CustomerRelationsModel.CreateChangeStatus)
+		        .ToList();
+
+		    var collectionLog = collectionLogRepository
+                .GetForCustomer(customerId)
+		        .Select(CustomerRelationsModel.CreateCollectionLog)
+		        .ToList();
+                
 			crm.AddRange(tookLoan);
 			crm.AddRange(repaidLoan);
+		    crm.AddRange(changeCustomerStatus);
+            crm.AddRange(collectionLog);
 
 			var crmModel = new CrmModel {
 				CustomerRelations = crm.OrderByDescending(x => x.DateTime)
@@ -143,5 +158,7 @@
 		private readonly CustomerPhoneRepository customerPhoneRepository;
 		private readonly FrequentActionItemsRepository frequentActionItemsRepository;
 		private readonly FrequentActionItemsForCustomerRepository frequentActionItemsForCustomerRepository;
+	    private readonly CustomerStatusHistoryRepository collectionStatusHistory;
+	    private readonly CollectionLogRepository collectionLogRepository;
 	} // class CustomerRelationsModelBuilder
 } // namespace
