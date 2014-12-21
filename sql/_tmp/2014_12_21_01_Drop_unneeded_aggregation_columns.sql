@@ -7,10 +7,14 @@ FROM
 	syscolumns c
 	INNER JOIN sysobjects o ON 1 = 0
 
+-------------------------------------------------------------------------------
+
 INSERT INTO #cols_to_drop (TableName, ColumnName) VALUES
 	('EbayAggregation', 'InventoryTotalItems'),
 	('EbayAggregation', 'InventoryTotalValue'),
 	('EbayAggregation', 'TopCategories')
+
+-------------------------------------------------------------------------------
 
 DECLARE @TableName sysname
 DECLARE @ColumnName NVARCHAR(128)
@@ -38,8 +42,12 @@ DEALLOCATE drop_cur
 DROP TABLE #cols_to_drop
 GO
 
+-------------------------------------------------------------------------------
+
 SET QUOTED_IDENTIFIER ON
 GO
+
+-------------------------------------------------------------------------------
 
 IF OBJECT_ID('EbayAggregationCategories') IS NULL
 BEGIN
@@ -54,4 +62,55 @@ BEGIN
 		CONSTRAINT FK_EbayAggregationCategories_CustomerMarketplaceUpdatingHistory FOREIGN KEY (CustomerMarketPlaceUpdatingHistoryID) REFERENCES MP_CustomerMarketPlaceUpdatingHistory (Id)
 	)
 END
+GO
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+SELECT
+	o.name AS TableName,
+	c.name AS ColumnName,
+	c.name AS NewName
+INTO
+	#cols_to_rename
+FROM
+	syscolumns c
+	INNER JOIN sysobjects o ON 1 = 0
+
+-------------------------------------------------------------------------------
+
+INSERT INTO #cols_to_rename (TableName, ColumnName, NewName) VALUES
+	('FreeAgentAggregation', 'SumOfAdminExpensesCatery', 'SumOfAdminExpensesCategory'),
+	('FreeAgentAggregation', 'SumOfCostOfSalesExpensesCatery', 'SumOfCostOfSalesExpensesCategory'),
+	('FreeAgentAggregation', 'SumOfGeneralExpensesCatery', 'SumOfGeneralExpensesCategory')
+
+-------------------------------------------------------------------------------
+
+DECLARE @TableName sysname
+DECLARE @ColumnName NVARCHAR(128)
+DECLARE @NewName NVARCHAR(128)
+DECLARE @Query NVARCHAR(1024)
+
+DECLARE rename_cur CURSOR FOR SELECT TableName, ColumnName, NewName FROM #cols_to_rename
+
+OPEN rename_cur
+
+FETCH NEXT FROM rename_cur INTO @TableName, @ColumnName, @NewName
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	SET @Query = 'IF EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID(''' + @TableName + ''') AND name = ''' + @ColumnName + ''')' + CHAR(13) + CHAR(10) +
+		'EXECUTE sp_rename ''' + @TableName + '.' + @ColumnName + ''', ''' + @NewName + ''''
+
+	EXECUTE(@Query)
+
+	FETCH NEXT FROM rename_cur INTO @TableName, @ColumnName, @NewName
+END
+
+CLOSE rename_cur
+DEALLOCATE rename_cur
+
+DROP TABLE #cols_to_rename
 GO
