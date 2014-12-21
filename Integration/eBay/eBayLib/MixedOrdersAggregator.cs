@@ -38,7 +38,7 @@ namespace EzBob.eBayLib
 			{
 				case eBayDatabaseFunctionType.TopCategories:
 			        var agg = new TopCategoriesAggregator();
-                    return agg.GetTopCategories(GetTeraPeakOrders(orders));
+                    return agg.GetTopCategories(ordersTeraPeak);
 
                 case eBayDatabaseFunctionType.NumOfOrders:
                     return GetNumOfOrders(orders, ordersTeraPeak);
@@ -64,8 +64,8 @@ namespace EzBob.eBayLib
 
 				case eBayDatabaseFunctionType.OrdersCancellationRate:
                     var canceled = GetCancelledOrdersCount(orders, ordersTeraPeak);
-                    var numOfOrder = GetNumOfOrders(orders, ordersTeraPeak);
-                    return numOfOrder == 0 ? 0 : canceled / ((double)numOfOrder + canceled);
+                    int numOfOrder = GetNumOfOrders(orders, ordersTeraPeak);
+                    return numOfOrder == 0 ? 0 : canceled / ((double)numOfOrder);
 
 				case eBayDatabaseFunctionType.TotalItemsOrdered:
 					return GetTotalItemsOrdered(orders, ordersTeraPeak);
@@ -150,24 +150,11 @@ namespace EzBob.eBayLib
 			return orders.Sum( to => to.Revenue.HasValue? to.Revenue.Value: 0 );
 		}
 
-		private int GetCancelledOrdersCount( IEnumerable<TeraPeakDatabaseSellerDataItem> orders )
-		{
-			//Wrong calculation : Successful is Number of closed listings that closed successfully in the result set. 
-			//                    Transactions is Number of transactions.
-			//if ( !orders.Any() )
-			//{
-			//	return 0;
-			//}
-			//return orders.Sum( to =>
-			//					{
-			//						if (!to.Successful.HasValue || !to.Transactions.HasValue)
-			//						{
-			//							return 0;
-			//						}
+		private int GetCancelledOrdersCount( IEnumerable<TeraPeakDatabaseSellerDataItem> orders ) {
+			if (orders == null)
+				return 0;
 
-			//						return to.Transactions.Value - to.Successful.Value;
-			//					});
-			return 0;
+			return orders.Where(oi => oi.Listings.HasValue && oi.Successful.HasValue).Sum(oi => oi.Listings.Value - oi.Successful.Value);
 		}
 
 	}
