@@ -6,9 +6,9 @@ BEGIN
 END	
 GO
 
-IF EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('LoanOptions') AND name = 'StopSendingEmails')
+IF EXISTS (SELECT 1 FROM syscolumns WHERE id = OBJECT_ID('LoanOptions') AND name = 'StopSendingEmails')
 BEGIN
-	UPDATE LoanOptions SET EmailSendingAllowed = 1-StopSendingEmails, MailSendingAllowed=1-StopSendingEmails,SmsSendingAllowed=1-StopSendingEmails
-	ALTER TABLE LoanOptions DROP COLUMN StopSendingEmails
+	EXECUTE('UPDATE LoanOptions SET EmailSendingAllowed = 1-StopSendingEmails, MailSendingAllowed=1-StopSendingEmails,SmsSendingAllowed=1-StopSendingEmails')
+	EXECUTE('ALTER TABLE LoanOptions DROP COLUMN StopSendingEmails')
 END	
 GO
