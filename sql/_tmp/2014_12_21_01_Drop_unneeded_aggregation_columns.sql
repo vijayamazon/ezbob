@@ -12,7 +12,15 @@ FROM
 INSERT INTO #cols_to_drop (TableName, ColumnName) VALUES
 	('EbayAggregation', 'InventoryTotalItems'),
 	('EbayAggregation', 'InventoryTotalValue'),
-	('EbayAggregation', 'TopCategories')
+	('EbayAggregation', 'TopCategories'),
+	('HmrcAggregation', 'AverageSumOfExpensesDenominator'),
+	('HmrcAggregation', 'AverageSumOfExpensesNumerator'),
+	('HmrcAggregation', 'AverageSumOfOrdersDenominator'),
+	('HmrcAggregation', 'AverageSumOfOrdersNumerator'),
+	('HmrcAggregation', 'NumOfExpenses'),
+	('HmrcAggregation', 'NumOfOrders'),
+	('HmrcAggregation', 'TotalSumOfExpenses'),
+	('HmrcAggregation', 'TotalSumOfOrders')
 
 -------------------------------------------------------------------------------
 
@@ -113,4 +121,13 @@ CLOSE rename_cur
 DEALLOCATE rename_cur
 
 DROP TABLE #cols_to_rename
+GO
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('Business') and name = 'BelongsToCustomer')
+	ALTER TABLE Business ADD BelongsToCustomer BIT NULL
 GO

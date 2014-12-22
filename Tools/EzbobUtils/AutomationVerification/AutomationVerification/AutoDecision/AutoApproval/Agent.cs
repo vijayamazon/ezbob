@@ -186,7 +186,7 @@
 				break;
 
 			case RowType.HmrcBusinessName:
-				HmrcBusinessNames.Add(ApprovalInputData.AdjustCompanyName(sr["Name"]));
+				HmrcBusinessNames.Add(AutomationCalculator.Utils.AdjustCompanyName(sr["Name"]));
 				break;
 
 			default:

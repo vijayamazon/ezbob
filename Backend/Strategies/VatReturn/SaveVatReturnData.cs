@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using System.Text;
 	using Exceptions;
@@ -9,10 +10,8 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
-	using JetBrains.Annotations;
 
 	public class SaveVatReturnData : AVatReturnStrategy {
-
 		public SaveVatReturnData(
 			int nCustomerMarketplaceID,
 			int nHistoryRecordID,
@@ -59,7 +58,6 @@
 
 			int nRowNum = 0;
 
-			// ReSharper disable ConvertToLambdaExpression
 			m_oStopper.Execute(ElapsedDataMemberType.StoreDataToDatabase, () => {
 				m_oSp.ForEachRow((oReader, bRowsetStart) => {
 					var vals = new object[oReader.FieldCount];
@@ -75,7 +73,6 @@
 					return ActionResult.Continue;
 				});
 			});
-			// ReSharper restore ConvertToLambdaExpression
 
 			os.AppendLine("SaveVatReturnData output - end.");
 
@@ -89,14 +86,10 @@
 
 		public ElapsedTimeInfo ElapsedTimeInfo { get { return m_oStopper.ElapsedTimeInfo; } } // ElapsedTimeInfo
 
-		private readonly Stopper m_oStopper;
-		private readonly SpSaveVatReturnData m_oSp;
-		private readonly LoadVatReturnRawData m_oRaw;
-
-		// ReSharper disable ValueParameterNotUsed
-
+		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local")]
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class SpSaveVatReturnData : AStoredProc {
-
 			public SpSaveVatReturnData(AStrategy oStrategy, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				HistoryItems = new List<HistoryItem>();
 				m_oOldDeletedItems = new SortedSet<int>();
@@ -115,15 +108,6 @@
 			public bool IsEmptyInput() {
 				return (VatReturnRecords.Count < 1) && (RtiTaxMonthRawData.Count < 1);
 			} // IsEmptyInput
-
-			private void AddHistoryItem(VatReturnRawData oDeletedItem) {
-				oDeletedItem.IsDeleted = true;
-
-				HistoryItems.Add(new HistoryItem {
-					DeleteRecordInternalID = oDeletedItem.InternalID,
-					ReasonID = (int)DeleteReasons.ManualDeleted,
-				});
-			} // AddHistoryItem
 
 			public void AddHistoryItem(VatReturnRawData oOld, VatReturnRawData oNew) {
 				// At this point oOld and oNew have overlapping date intervals and same registration # and oNew is not deleted.
@@ -208,40 +192,29 @@
 				});
 			} // AddHistoryItem
 
-			[UsedImplicitly]
 			public int CustomerMarketplaceID { get; set; } // CustomerMarketplaceID
 
-			[UsedImplicitly]
 			public int HistoryRecordID { get; set; } // HistoryRecordID
 
-			[UsedImplicitly]
 			public int SourceID { get; set; } // SourceID
 
-			[UsedImplicitly]
 			public DateTime Now {
 				get { return DateTime.UtcNow; } // get
 				set { } // set, !!! DO NOT REMOVE, DO NOT MAKE PRIVATE !!!
 			} // Now
 
-			[UsedImplicitly]
 			public List<VatReturnRawData> VatReturnRecords { get; set; } // VatReturnRecords
 
-			[UsedImplicitly]
 			public List<Entry> VatReturnEntries { get; set; } // VatReturnEntries
 
-			[UsedImplicitly]
 			public List<RtiTaxMonthRawData> RtiTaxMonthRawData { get; set; } // RtiTaxMonthRawData
 
-			[UsedImplicitly]
 			public List<HistoryItem> HistoryItems { get; set; } // HistoryItems
 
-			[UsedImplicitly]
 			public List<int> OldDeletedItems {
 				get { return m_oOldDeletedItems.ToList(); }
 				set { }
 			} // HistoryItems
-
-			private readonly SortedSet<int> m_oOldDeletedItems; 
 
 			public override string ToString() {
 				var os = new StringBuilder();
@@ -289,16 +262,12 @@
 			} // InitEntries
 
 			public class Entry {
-				[UsedImplicitly]
 				public Guid RecordInternalID { get; set; }
 
-				[UsedImplicitly]
 				public string BoxName { get; set; }
 
-				[UsedImplicitly]
 				public decimal Amount { get; set; }
 
-				[UsedImplicitly]
 				public string CurrencyCode { get; set; }
 
 				public override string ToString() {
@@ -307,13 +276,10 @@
 			} // class Entry
 
 			public class HistoryItem {
-				[UsedImplicitly]
 				public Guid DeleteRecordInternalID { get; set; }
 
-				[UsedImplicitly]
 				public Guid? ReasonRecordInternalID { get; set; }
 
-				[UsedImplicitly]
 				public int ReasonID { get; set; }
 
 				public override string ToString() {
@@ -326,16 +292,26 @@
 				} // ToString
 			} // HistoryItem
 
-			private readonly AStrategy m_oStrategy;
-
 			private VatReturnRawData Delete(VatReturnRawData oItem) {
 				m_oOldDeletedItems.Add(oItem.RecordID);
 				return oItem;
 			} // Delete
 
+			private void AddHistoryItem(VatReturnRawData oDeletedItem) {
+				oDeletedItem.IsDeleted = true;
+
+				HistoryItems.Add(new HistoryItem {
+					DeleteRecordInternalID = oDeletedItem.InternalID,
+					ReasonID = (int)DeleteReasons.ManualDeleted,
+				});
+			} // AddHistoryItem
+
+			private readonly AStrategy m_oStrategy;
+			private readonly SortedSet<int> m_oOldDeletedItems; 
 		} // class SpSaveVatReturnData
 
-		// ReSharper restore ValueParameterNotUsed
-
+		private readonly Stopper m_oStopper;
+		private readonly SpSaveVatReturnData m_oSp;
+		private readonly LoadVatReturnRawData m_oRaw;
 	} // class SaveVatReturnData
 } // namespace Ezbob.Backend.Strategies.VatReturn

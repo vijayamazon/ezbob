@@ -98,7 +98,7 @@
 			this.hmrcNames = new List<string>();
 
 			db.ForEachRowSafe((names, hren) => {
-				string name = ApprovalInputData.AdjustCompanyName(names["BusinessName"]);
+				string name = AutomationCalculator.Utils.AdjustCompanyName(names["BusinessName"]);
 				if (name != string.Empty)
 					this.hmrcNames.Add(name);
 				return ActionResult.Continue;

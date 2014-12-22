@@ -5,22 +5,8 @@
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Common;
 	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
 
 	public partial class ApprovalInputData : ITrailInputData {
-		public static string AdjustCompanyName(string companyName) {
-			if (string.IsNullOrWhiteSpace(companyName))
-				return string.Empty;
-
-			return companyName.Trim()
-				.ToLowerInvariant()
-				.Replace("limited", "ltd")
-				.Replace("the ", string.Empty)
-				.Replace("&amp;", "&")
-				.Replace(".", string.Empty)
-				.Replace("#049;", "'");
-		} // AdjustCompanyName
-
 		public static ApprovalInputData Deserialize(string json) {
 			var aid = new ApprovalInputData();
 			aid.FromJson(json);
@@ -80,9 +66,9 @@
 
 				m_bCompanyNameHasValue = true;
 
-				m_sCompanyName = AdjustCompanyName(MetaData.ExperianCompanyName);
+				m_sCompanyName = Utils.AdjustCompanyName(MetaData.ExperianCompanyName);
 				if (m_sCompanyName == string.Empty)
-					m_sCompanyName = AdjustCompanyName(MetaData.EnteredCompanyName);
+					m_sCompanyName = Utils.AdjustCompanyName(MetaData.EnteredCompanyName);
 
 				return m_sCompanyName;
 			}

@@ -234,6 +234,7 @@
     <Compile Include="Exceptions\StrategyWarning.cs" />
     <Compile Include="Exceptions\StrategyAlert.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_TimedBusinessID.cs" />
+    <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_UpdateBusinessRelevanceAndTotals.cs" />
     <Compile Include="VatReturn\ValidateAndUpdateLinkedHmrcPassword.cs" />
     <Compile Include="VatReturn\LoadManualVatReturnPeriods.cs" />
     <Compile Include="VatReturn\LoadVatReturnFullData.cs" />

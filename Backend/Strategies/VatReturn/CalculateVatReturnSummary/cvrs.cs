@@ -5,7 +5,6 @@
 	using Ezbob.Utils;
 
 	public partial class CalculateVatReturnSummary : AStrategy {
-
 		public CalculateVatReturnSummary(int nCustomerMarketplaceID) {
 			m_nCustomerMarketplaceID = nCustomerMarketplaceID;
 
@@ -114,6 +113,8 @@
 			} // if
 
 			Log.Debug("Summary data - end.");
+
+			UpdateBusinessRelevanceAndTotals();
 		} // Execute
 
 		public Stopper Stopper { get; private set; } // Stopper
@@ -157,6 +158,5 @@
 			return x.Value / y.Value;
 			// ReSharper restore PossibleInvalidOperationException
 		} // Div
-
 	} // class CalculateVatReturnSummary
 } // namespace
