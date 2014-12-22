@@ -1,0 +1,1 @@
+-- Placeholder file, see UpdateHmrcBusinessRelevance stored procedure for type definition.

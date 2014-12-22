@@ -43,13 +43,13 @@ namespace EzBob.PayPal
 		{
 			switch (type)
 			{
-				case PayPalDatabaseFunctionType.TotalNetInPayments:
+				case PayPalDatabaseFunctionType.TotalNetInPayments: // formula 101 (not in the original Excel)
 					return GetTotalNetInPayments(data);
 				case PayPalDatabaseFunctionType.TotalNetInPaymentsAnnualized:
 					return GetTotalNetInPaymentsAnnualized(data);
-				case PayPalDatabaseFunctionType.TotalNetOutPayments:
+				case PayPalDatabaseFunctionType.TotalNetOutPayments: // formula 102 (not in the original Excel)
 					return GetTotalNetOutPayments(data);
-				case PayPalDatabaseFunctionType.TransactionsNumber:
+				case PayPalDatabaseFunctionType.TransactionsNumber: // formula 103 (not in the original Excel)
 					return GetTransactionsNumber(data);
 				case PayPalDatabaseFunctionType.TotalNetRevenues://formula 1
 					return GetTotalNetRevenues(data);
@@ -82,7 +82,7 @@ namespace EzBob.PayPal
 					return GetOutstandingBalance(data);
 				case PayPalDatabaseFunctionType.NumTransfersOut:// Formula 6a
 					return GetNumTransfersOut(data);
-				case PayPalDatabaseFunctionType.AmountPerTransferOut:// Formula 6 / Formual 6a
+				case PayPalDatabaseFunctionType.AmountPerTransferOut:// Formula 6 / Formula 6a
 					return GetAmountPerTransferOut(data);
 				case PayPalDatabaseFunctionType.NumTransfersIn://formula 7a
 					return GetNumTransfersIn(data);
