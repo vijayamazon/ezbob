@@ -123,7 +123,7 @@
                 <value>True</value>
             </setting>
             <setting name="Formatting_CommentWrapColumn" serializeAs="String">
-                <value>120</value>
+                <value>125</value>
             </setting>
             <setting name="Cleaning_IncludeCPlusPlus" serializeAs="String">
                 <value>True</value>
