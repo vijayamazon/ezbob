@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Words">
+      <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -54,6 +57,7 @@
     <Compile Include="AttachmentModel.cs" />
     <Compile Include="IMailApi.cs" />
     <Compile Include="IMailTestFixture.cs" />
+    <Compile Include="PrepareMail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\IMailApiNS\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -66,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EmbeddedResource Include="Aspose.Total.lic" />
     <None Include="Properties\DataSources\System.Xml.XmlNode.datasource" />
     <None Include="Service References\IMailApiNS\IMailLib.IMailApiNS.MailmergeLetterheadPDFAuthResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>

@@ -14,16 +14,13 @@
 			client = new IMailApiNS.imail_apiSoapClient("imail_apiSoap");
 		}
 
-
-		// Authentication
-
 		public bool Authenticate(string username, string password) {
 			resetErrorMessage();
 			XmlNode apiResponse = client.Authenticate(username, password);
 			bool success = parseXmlResponse(apiResponse);
 			Console.WriteLine("Authenticate response:\n{0}", apiResponse.ToString(4));
 			return success;
-		}
+		}// Authenticate
 
 		public bool SetEmailPreview(string emailAddress) {
 			resetErrorMessage();
@@ -32,7 +29,6 @@
 			Console.WriteLine("SetEmailPreview response:\n{0}", apiResponse.ToString(4));
 			return success;
 		}
-
 
 		public bool MailMerge(byte[] csvData, string pdfAttachmentName, bool is2DayService) {
 			bool success = false;
@@ -49,60 +45,56 @@
 			return success;
 		}
 
-		public bool ProcessPrintReadyPDF(string filename, string backgroundFilename, bool bIs2DayService) {
+		public bool ProcessPrintReadyPDF(string filename, string backgroundFilename, bool is2DayService) {
 			bool success = false;
 			resetErrorMessage();
 
-			if (filename == null) {
-				ProcessPrintReadyPDFResponse apiResponse = client.ProcessPrintReadyPDF(new ProcessPrintReadyPDFRequest {
-					letterData = null,
-					backgroundFilename = backgroundFilename,
-					Is2DayService = bIs2DayService
-				});
-				
-				Console.WriteLine("ProcessPrintReadyPDF response:\n{0}", apiResponse.ProcessPrintReadyPDFResult.ToString(4));
-				success = parseXmlResponse(apiResponse.ProcessPrintReadyPDFResult);
-			} else {
+			if (System.IO.File.Exists(filename)) {
+				FileInfo fInfo = new FileInfo(filename);
+				long numBytes = fInfo.Length;
+				long MBsize = numBytes / 1000000;
 
-
-				if (System.IO.File.Exists(filename)) {
-					FileInfo fInfo = new FileInfo(filename);
-					long numBytes = fInfo.Length;
-					long MBsize = numBytes / 1000000;
-
-					if (MBsize <= 8) // server has an 8MB file upload limit
+				if (MBsize <= 8) // server has an 8MB file upload limit
 					{
-						FileStream fStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
-						BinaryReader br = new BinaryReader(fStream);
+					FileStream fStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
+					BinaryReader br = new BinaryReader(fStream);
 
-						// convert the file to a byte array
-						byte[] filedata = br.ReadBytes((int)numBytes);
-						br.Close();
+					// convert the file to a byte array
+					byte[] filedata = br.ReadBytes((int)numBytes);
+					br.Close();
 
-						// pass the filename and data to the web service
-						ProcessPrintReadyPDFResponse apiResponse = client.ProcessPrintReadyPDF(new ProcessPrintReadyPDFRequest {
-							letterData = filedata,
-							backgroundFilename = backgroundFilename,
-							Is2DayService = bIs2DayService
-						});
-						//client.Abort();
+					// pass the filename and data to the web service
+					success = ProcessPrintReadyPDF(filedata, backgroundFilename, is2DayService);
 
-						// tidy up
-						fStream.Close();
-						fStream.Dispose();
-						Console.WriteLine("ProcessPrintReadyPDF response:\n{0}", apiResponse.ProcessPrintReadyPDFResult.ToString(4));
-						success = parseXmlResponse(apiResponse.ProcessPrintReadyPDFResult);
-					} else {
-						errorMessage = string.Format("File '{0}' is too big for the API method ProcessPrintReadyPDF", filename);
-					}
+					// tidy up
+					fStream.Close();
+					fStream.Dispose();
+					
 				} else {
-					errorMessage = string.Format("The file '{0}' does not exist", filename);
+					errorMessage = string.Format("File '{0}' is too big for the API method ProcessPrintReadyPDF", filename);
 				}
+			} else {
+				errorMessage = string.Format("The file '{0}' does not exist", filename);
 			}
+
 			return success;
 		}
 
-		// Attachment methods
+		public bool ProcessPrintReadyPDF(byte[] pdfData, string backgroundFilename, bool is2DayService) {
+			bool success = false;
+			resetErrorMessage();
+			
+			ProcessPrintReadyPDFResponse apiResponse = client.ProcessPrintReadyPDF(new ProcessPrintReadyPDFRequest {
+				letterData = pdfData,
+				backgroundFilename = backgroundFilename,
+				Is2DayService = is2DayService
+			});
+
+			Console.WriteLine("ProcessPrintReadyPDF response:\n{0}", apiResponse.ProcessPrintReadyPDFResult.ToString(4));
+			success = parseXmlResponse(apiResponse.ProcessPrintReadyPDFResult);
+			return success;
+		}
+	
 
 		public bool UpdateAttachment(string filePath, string fileName) {
 			resetErrorMessage();
@@ -138,7 +130,6 @@
 				} else
 					errorMessage = string.Format("File '{0}' is too big to use as an attachment", filePath);
 			}
-
 			return success;
 		}
 
@@ -153,7 +144,6 @@
 			if (success) {
 				filenames = namesList;
 			}
-
 			return success;
 		}
 
@@ -162,8 +152,6 @@
 			XmlNode apiResponse = client.DeleteAttachment(attachmentFilename);
 			return (parseXmlResponse(apiResponse));
 		}
-
-		// Backgrounds
 
 		public bool UpdateBackground(string filePath, string fileName) {
 			resetErrorMessage();
@@ -184,7 +172,7 @@
 					br.Close();
 
 					// pass the filename and data to the web service
-					UpdateBackgroundResponse apiResponse = client.UpdateBackground(new UpdateBackgroundRequest() { backgroundPDFfilename = fileName,backgroundPDFdata = fileData } );
+					UpdateBackgroundResponse apiResponse = client.UpdateBackground(new UpdateBackgroundRequest() { backgroundPDFfilename = fileName, backgroundPDFdata = fileData });
 					Console.WriteLine("UpdateBackground response:\n{0}", apiResponse.UpdateBackgroundResult.ToString(4));
 
 					// tidy up
@@ -198,7 +186,6 @@
 
 			return success;
 		}
-
 		public bool GetReturns(out string returns) {
 			resetErrorMessage();
 			var response = client.GetReturns(DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd"), DateTime.Today.ToString("yyyy-MM-dd"));
@@ -225,13 +212,9 @@
 			return (parseXmlResponse(apiResponse));
 		}
 
-		// ends Backgrounds
-
 		public string GetErrorMessage() {
 			return errorMessage;
 		}
-
-		// Private functions
 
 		private void resetErrorMessage() {
 			errorMessage = "";
@@ -299,9 +282,8 @@
 				}
 			}
 		}
-
 		public bool MailmergeLetterheadPDF(byte[] pdfData, byte[] csvData, string bodyHtml, bool is2DayService) {
-			MailmergeLetterheadPDFResponse response = client.MailmergeLetterheadPDF(new MailmergeLetterheadPDFRequest() {
+			MailmergeLetterheadPDFResponse response = client.MailmergeLetterheadPDF(new MailmergeLetterheadPDFRequest {
 				PDFdata = pdfData,
 				CSVdata = csvData,
 				bodyHTML = bodyHtml,
@@ -314,7 +296,7 @@
 			return success;
 		}
 
-
+		
 		/*
 		public bool Authenticate() {
 
@@ -387,6 +369,6 @@
 		
 		 */
 
-		
+
 	}
 }
