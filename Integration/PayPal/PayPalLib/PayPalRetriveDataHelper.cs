@@ -19,7 +19,7 @@ namespace EzBob.PayPal {
 
 	public class PayPalRetriveDataHelper : MarketplaceRetrieveDataHelperBase<PayPalDatabaseFunctionType> {
 		public PayPalRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPalDatabaseFunctionType> marketplace)
-			: base(helper, marketplace) {}
+			: base(helper, marketplace) { }
 
 		public PayPalPermissionsGranted GetAccessToken(string requestToken, string verificationCode) {
 			return PayPalServiceHelper.GetAccessToken(requestToken, verificationCode);
@@ -42,7 +42,7 @@ namespace EzBob.PayPal {
 			UpdateAccountInfo(databaseCustomerMarketPlace);
 		}
 
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {}
+		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) { }
 
 		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			if (!databaseCustomerMarketPlace.Created.HasValue || (databaseCustomerMarketPlace.Created.Value.Date == DateTime.Today)) {
@@ -117,11 +117,12 @@ namespace EzBob.PayPal {
 				})
 				);
 
-			DbConnectionGenerator.Get().ExecuteNonQuery(
-				"UpdateMpTotalsPayPal",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
-				new QueryParameter("HistoryID", historyRecord.Id)
+			DbConnectionGenerator.Get()
+				.ExecuteNonQuery(
+					"UpdateMpTotalsPayPal",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
+					new QueryParameter("HistoryID", historyRecord.Id)
 				);
 
 			return new UpdateActionResultInfo {
@@ -132,6 +133,6 @@ namespace EzBob.PayPal {
 			};
 		}
 
-		private static readonly ILog Log = LogManager.GetLogger(typeof (PayPalRetriveDataHelper));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPalRetriveDataHelper));
 	} // class PayPalRetriveDataHelper
 } // namespace
