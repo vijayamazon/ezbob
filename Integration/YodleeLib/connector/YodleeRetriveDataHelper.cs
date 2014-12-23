@@ -1,109 +1,37 @@
-﻿namespace YodleeLib.connector
-{
+﻿namespace YodleeLib.connector {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using BankTransactionsParser;
-	using EzBob.CommonLib;
+	using Ezbob.Database;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
+	using Ezbob.Utils.Serialization;
+	using EzBob.CommonLib;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
-	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
-	using System.Collections.Generic;
-	using Ezbob.Utils.Serialization;
 
-	public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase<YodleeDatabaseFunctionType>
-	{
+	public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase<YodleeDatabaseFunctionType> {
 		public YodleeRetriveDataHelper(DatabaseDataHelper helper,
-									   DatabaseMarketplaceBase<YodleeDatabaseFunctionType> marketplace)
-			: base(helper, marketplace) {
-		}
+			DatabaseMarketplaceBase<YodleeDatabaseFunctionType> marketplace)
+			: base(helper, marketplace) { }
+
+		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
+			return Serialized.Deserialize<YodleeSecurityInfo>(GetDatabaseCustomerMarketPlace(customerMarketPlaceId)
+				.SecurityData);
+		} // RetrieveCustomerSecurityInfo
+
+		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) { }
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-												   MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+			MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			var securityInfo = (YodleeSecurityInfo)RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
 
-			return UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
-		}
-
-		private ElapsedTimeInfo UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			Dictionary<BankData, List<BankTransactionData>> ordersList;
-
-			if (databaseCustomerMarketPlace.DisplayName == "ParsedBank") {
-				//retrieve data from file
-				var fileInfo = Helper.GetFileInfo((int)securityInfo.ItemId);
-				var lastTransactionId = Helper.GetLastTransactionId();
-				if(fileInfo == null) throw new Exception("file not found");
-				
-				var parser = new TransactionsParser();
-				var parsedData = parser.ParseFile(fileInfo.FilePath);
-				
-				if(parsedData == null) throw new Exception(string.Format("failed to parse the file {0}", fileInfo.FileName));
-				if (!string.IsNullOrEmpty(parsedData.Error)) {
-					throw new Exception(string.Format("failed to parse the file {0} \n {1}", fileInfo.FileName, parsedData.Error));
-				}
-
-				ordersList = ConvertData(parsedData, fileInfo.FileName, securityInfo.ItemId, lastTransactionId);
-			}
-			else {
-				//retrieve data from Yodlee API
-				ordersList = YodleeConnector.GetOrders(securityInfo.Name, Encrypted.Decrypt(securityInfo.Password),
-				                                       securityInfo.ItemId);
-			}
-
-			var elapsedTimeInfo = new ElapsedTimeInfo();
-
-			if (ordersList != null)
-			{
-				var newOrders = new YodleeOrderDictionary { Data = ordersList };
-
-				//save orders data
-				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-																				databaseCustomerMarketPlace.Id,
-																			   ElapsedDataMemberType.StoreDataToDatabase,
-																			   () => Helper.StoreYodleeOrdersData(
-																				   databaseCustomerMarketPlace,
-																				   newOrders,
-																				   historyRecord)
-					);
-			}
-			// retrieve orders
-			List<string> directors;
-			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									databaseCustomerMarketPlace.Id,
-									ElapsedDataMemberType.RetrieveDataFromDatabase,
-									() => Helper.GetAllYodleeOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace, true, out directors));
-
-
-			DateTime aggregateTime = DateTime.UtcNow;
-			//calculate transactions aggregated data
-			var transactionsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									databaseCustomerMarketPlace.Id,
-									ElapsedDataMemberType.AggregateData,
-									() => CreateTransactionsAggregationInfo(allOrders, aggregateTime, Helper.CurrencyConverter));
-			// store transactions aggregated data
-			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-							databaseCustomerMarketPlace.Id,
-							ElapsedDataMemberType.StoreAggregatedData,
-							() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, transactionsAggregatedData, historyRecord));
-
-			//calculate accounts aggregated data
-			var accountsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									databaseCustomerMarketPlace.Id,
-									ElapsedDataMemberType.AggregateData,
-									() => CreateAccountsAggregationInfo(allOrders, aggregateTime, Helper.CurrencyConverter));
-			// store accounts aggregated data
-			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-							databaseCustomerMarketPlace.Id,
-							ElapsedDataMemberType.StoreAggregatedData,
-							() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, accountsAggregatedData, historyRecord));
-
-			return elapsedTimeInfo;
-		}
+			return UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, historyRecord);
+		} // RetrieveAndAggregate
 
 		private Dictionary<BankData, List<BankTransactionData>> ConvertData(ParsedBankAccount parsedData, string fileName, long fileId, int lastTransactionId) {
 			var data = new Dictionary<BankData, List<BankTransactionData>>();
@@ -116,7 +44,7 @@
 				},
 				currentBalance =
 					new YMoney() {
-						amount = (double?) parsedData.Balance,
+						amount = (double?)parsedData.Balance,
 						currencyCode = "GBP",
 						amountSpecified = parsedData.Balance.HasValue
 					},
@@ -158,56 +86,65 @@
 					transactionBaseTypeId = trn.IsCredit ? (int)datatypes.TransactionBaseType.Credit : (int)datatypes.TransactionBaseType.Debit,
 					bankTransactionId = lastTransactionId + (++i)
 				});
-
 			}
-			
+
 			data.Add(bankData, transactionsData);
 
 			return data;
-		}
+		} // ConvertData
 
-		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
-		{
-			return Serialized.Deserialize<YodleeSecurityInfo>(
-				GetDatabaseCustomerMarketPlace(customerMarketPlaceId).SecurityData);
+		private ElapsedTimeInfo UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+			Dictionary<BankData, List<BankTransactionData>> ordersList;
 
-		}
+			if (databaseCustomerMarketPlace.DisplayName == "ParsedBank") {
+				//retrieve data from file
+				var fileInfo = Helper.GetFileInfo((int)securityInfo.ItemId);
+				var lastTransactionId = Helper.GetLastTransactionId();
+				if (fileInfo == null)
+					throw new Exception("file not found");
 
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
-		{
+				var parser = new TransactionsParser();
+				var parsedData = parser.ParseFile(fileInfo.FilePath);
 
-		}
+				if (parsedData == null)
+					throw new Exception(string.Format("failed to parse the file {0}", fileInfo.FileName));
+				if (!string.IsNullOrEmpty(parsedData.Error))
+					throw new Exception(string.Format("failed to parse the file {0} \n {1}", fileInfo.FileName, parsedData.Error));
 
-		private IEnumerable<IWriteDataInfo<YodleeDatabaseFunctionType>> CreateTransactionsAggregationInfo(YodleeOrderDictionary orders, DateTime aggregateTime, ICurrencyConvertor currencyConverter)
-		{
-			var aggregateTransactionsArray = new[]
-				{
-					YodleeDatabaseFunctionType.TotalExpense,
-					YodleeDatabaseFunctionType.TotalIncome,
-					YodleeDatabaseFunctionType.NumberOfTransactions,
-					YodleeDatabaseFunctionType.TotalIncomeAnnualized
+				ordersList = ConvertData(parsedData, fileInfo.FileName, securityInfo.ItemId, lastTransactionId);
+			} else {
+				//retrieve data from Yodlee API
+				ordersList = YodleeConnector.GetOrders(securityInfo.Name, Encrypted.Decrypt(securityInfo.Password),
+					securityInfo.ItemId);
+			}
+
+			var elapsedTimeInfo = new ElapsedTimeInfo();
+
+			if (ordersList != null) {
+				var newOrders = new YodleeOrderDictionary {
+					Data = ordersList
 				};
 
-			
-			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(YodleeTransactionList.Create(aggregateTime, orders), (submittedDate, o) => new YodleeTransactionList(submittedDate, o));
+				//save orders data
+				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+					databaseCustomerMarketPlace.Id,
+					ElapsedDataMemberType.StoreDataToDatabase,
+					() => Helper.StoreYodleeOrdersData(
+						databaseCustomerMarketPlace,
+						newOrders,
+						historyRecord)
+					);
+			}
 
-			var transactionsFactory = new YodleeTransactionsAggregatorFactory();
+			DbConnectionGenerator.Get()
+				.ExecuteNonQuery(
+					"UpdateMpTotalsYodlee",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
+					new QueryParameter("HistoryID", historyRecord.Id)
+				);
 
-			return DataAggregatorHelper.AggregateData(transactionsFactory, timePeriodData, aggregateTransactionsArray, aggregateTime, currencyConverter);
-		}
-
-		private IEnumerable<IWriteDataInfo<YodleeDatabaseFunctionType>> CreateAccountsAggregationInfo(YodleeOrderDictionary orders, DateTime aggregateTime, ICurrencyConvertor currencyConverter)
-		{
-			var aggregateAccountsArray = new[]
-				{
-					YodleeDatabaseFunctionType.CurrentBalance,
-					YodleeDatabaseFunctionType.AvailableBalance,
-				};
-
-			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(YodleeAccountList.Create(aggregateTime, orders), (submittedDate, o) => new YodleeAccountList(submittedDate, o));
-
-			var accountsFactory = new YodleeAccountsAggregatorFactory();
-			return DataAggregatorHelper.AggregateData(accountsFactory, timePeriodData, aggregateAccountsArray, aggregateTime, currencyConverter);
-		}
-	}
-}
+			return elapsedTimeInfo;
+		} // UpdateClientsOrderInfo
+	} // class YodleeRetrieveDAtaHelper
+} // namespace
