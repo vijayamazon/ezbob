@@ -1,6 +1,9 @@
 ﻿namespace IMailLib {
 	using System;
+	using System.IO;
 	using System.Text;
+	using Ezbob.Utils.XmlUtils;
+	using IMailLib.IMailApiNS;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -72,26 +75,44 @@
 
 		[Test]
 		public void TestMergeMail() {
+			//TestAuthenticate();
 			TestSetPrintPreviewEmailAddress();
-			bool success = api.UpdateAttachment(@"c:\ezbob\test-data\imail\test2.pdf", "tesstattachment.pdf");
+			bool success = api.UpdateAttachment(@"c:\ezbob\test-data\imail\test4.pdf", "tesstattachment3.pdf");
 			if (success) {
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Name,Address1,Address2,Address3,Address4,Address5,Postcode,Variable1,Date");
-				sb.AppendLine("Stas,Flat 1,6 Upperkirkgate,,Aberdeen,,AB10 1BA,Hello," + DateTime.Today.ToString("dd/MM/yyyy"));
-				string csvStr = sb.ToString();
-				byte[] data = System.Text.Encoding.ASCII.GetBytes(csvStr);
-				string dataStr = Convert.ToBase64String(data);
-				byte[] csvData = System.Text.Encoding.ASCII.GetBytes(dataStr);
-				success = api.MailMerge(csvData, "tesstattachment.pdf", false);
-				if (success) {
-					success = api.ProcessPrintReadyPDF(@"c:\ezbob\test-data\imail\test2.pdf", null, false);
+				//StringBuilder sb = new StringBuilder();
+				//sb.AppendLine("Name,Address1,Address2,Address3,Address4,Address5,Postcode,Variable1,Date");
+				//sb.AppendLine("Stas,Flat 1,6 Upperkirkgate,,Aberdeen,,AB10 1BA,Hello," + DateTime.Today.ToString("dd/MM/yyyy"));
+				//string csvStr = sb.ToString();
+				//byte[] data = System.Text.Encoding.ASCII.GetBytes(csvStr);
+				//string dataStr = Convert.ToBase64String(data);
+				//byte[] csvData = System.Text.Encoding.ASCII.GetBytes(dataStr);
+				
+				var csvPath = @"c:\ezbob\test-data\imail\test3.csv";
+				if (System.IO.File.Exists(csvPath)) {
+					FileInfo fInfo = new FileInfo(csvPath);
+					long numBytes = fInfo.Length;
+					FileStream fStream = new FileStream(csvPath, FileMode.Open, FileAccess.Read);
+					BinaryReader br = new BinaryReader(fStream);
+
+					// convert the file to a byte array
+					byte[] csvData = br.ReadBytes((int)numBytes);
+					Console.WriteLine("data:");
+					foreach (var data in csvData) {
+						Console.Write(data);
+					}
+					Console.WriteLine();
+					br.Close();
+
+					// tidy up
+					fStream.Close();
+					fStream.Dispose();
+
+
+					success = api.MailMerge(csvData, "tesstattachment3.pdf", false);
 					if (!success) {
 						Console.WriteLine(api.GetErrorMessage());
 					}
-				} else {
-					Console.WriteLine(api.GetErrorMessage());
 				}
-
 			} else {
 				Console.WriteLine(api.GetErrorMessage());
 			}
