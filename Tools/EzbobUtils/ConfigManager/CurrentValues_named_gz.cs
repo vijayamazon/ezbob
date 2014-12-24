@@ -207,57 +207,9 @@
 			get { return this[Variables.PasswordValidity]; } // get
 		} // PasswordValidity
 
-		public virtual VariableValue PayPointCardLimitAmount {
-			get { return this[Variables.PayPointCardLimitAmount]; } // get
-		} // PayPointCardLimitAmount
-
-		public virtual VariableValue PayPointDebugMode {
-			get { return this[Variables.PayPointDebugMode]; } // get
-		} // PayPointDebugMode
-
-		public virtual VariableValue PayPointEnableCardLimit {
-			get { return this[Variables.PayPointEnableCardLimit]; } // get
-		} // PayPointEnableCardLimit
-
-		public virtual VariableValue PayPointEnableDebugErrorCodeN {
-			get { return this[Variables.PayPointEnableDebugErrorCodeN]; } // get
-		} // PayPointEnableDebugErrorCodeN
-
-		public virtual VariableValue PayPointIsValidCard {
-			get { return this[Variables.PayPointIsValidCard]; } // get
-		} // PayPointIsValidCard
-
-		public virtual VariableValue PayPointMid {
-			get { return this[Variables.PayPointMid]; } // get
-		} // PayPointMid
-
-		public virtual VariableValue PayPointOptions {
-			get { return this[Variables.PayPointOptions]; } // get
-		} // PayPointOptions
-
-		public virtual VariableValue PayPointRemotePassword {
-			get { return this[Variables.PayPointRemotePassword]; } // get
-		} // PayPointRemotePassword
-
-		public virtual VariableValue PayPointServiceUrl {
-			get { return this[Variables.PayPointServiceUrl]; } // get
-		} // PayPointServiceUrl
-
-		public virtual VariableValue PayPointTemplateUrl {
-			get { return this[Variables.PayPointTemplateUrl]; } // get
-		} // PayPointTemplateUrl
-
 		public virtual VariableValue PayPointValidateName {
 			get { return this[Variables.PayPointValidateName]; } // get
 		} // PayPointValidateName
-
-		public virtual VariableValue PayPointVpnPassword {
-			get { return this[Variables.PayPointVpnPassword]; } // get
-		} // PayPointVpnPassword
-
-		public virtual VariableValue PayPointCardExpiryMonths {
-			get { return this[Variables.PayPointCardExpiryMonths]; } // get
-		} // PayPointCardExpiryMonths
 
 		public virtual VariableValue RecentCustomersToKeep {
 			get { return this[Variables.RecentCustomersToKeep]; } // get

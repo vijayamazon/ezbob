@@ -5,6 +5,7 @@
 	using global::PayPoint;
 	using System;
 	using System.Globalization;
+	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -17,39 +18,23 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointApi));
 		private readonly SECVPNService _service = new SECVPNService();
 		private readonly ILoanRepository _loans;
-		private readonly string mid;
-		private readonly string vpnPassword;
-		private readonly string remotePassword;
-		private readonly bool debugMode;
-		private readonly bool isValidCard;
-		private readonly bool enableCardLimit;
-		private readonly bool enableDebugErrorCodeN;
-		private readonly int cardLimitAmount;
 
 		public PayPointApi()
 		{
 			_loans = ObjectFactory.GetInstance<ILoanRepository>();
-			_service.Url = CurrentValues.Instance.PayPointServiceUrl;
-			mid = CurrentValues.Instance.PayPointMid;
-			vpnPassword = CurrentValues.Instance.PayPointVpnPassword;
-			remotePassword = CurrentValues.Instance.PayPointRemotePassword;
-			debugMode = CurrentValues.Instance.PayPointDebugMode;
-			isValidCard = CurrentValues.Instance.PayPointIsValidCard;
-			enableCardLimit = CurrentValues.Instance.PayPointEnableCardLimit;
-			enableDebugErrorCodeN = CurrentValues.Instance.PayPointEnableDebugErrorCodeN;
-			cardLimitAmount = CurrentValues.Instance.PayPointCardLimitAmount;
 		}
 
-		public void PayPointPayPal(string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false)
+		public void PayPointPayPal(PayPointAccount account, string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false)
 		{
 			try
 			{
 				string transactionId = "TRAN" + Guid.NewGuid();
 				string options = string.Format("notificationurl={0},returnurl={1},cancelurl={2}", notificationUrl, returnUrl, cancelUrl);
 				if (isTest) options += ",test_status=true";
+				_service.Url = account.ServiceUrl;
 
 				var str = _service.
-					performTransactionViaAlternatePaymentMethod(mid, vpnPassword, "PayPal",
+					performTransactionViaAlternatePaymentMethod(account.Mid, account.VpnPassword, "PayPal",
 																			   "ExpressCheckout", "Initialise", "Transaction",
 																			   transactionId,
 																			   amount.ToString(CultureInfo.InvariantCulture),
@@ -68,10 +53,10 @@
 			}
 		}
 		//-----------------------------------------------------------------------------------
-		public PayPointReturnData RefundCard(string cardHolder, string cardNumber, decimal amount, DateTime expiryDate, string issueNumber, DateTime startDate, string order, string cv2, bool isTest)
+		public PayPointReturnData RefundCard(PayPointAccount account, string cardHolder, string cardNumber, decimal amount, DateTime expiryDate, string issueNumber, DateTime startDate, string order, string cv2, bool isTest)
 		{
 			Log.InfoFormat("RefundCard: cardHolder={0}, cardNumber={1}, amount = {2}, expiryDate = {3}, issueNumber={4}, startDate={5}, order={6}, cv2={7}, isTest = {8}", cardHolder, cardNumber, amount, expiryDate, issueNumber, startDate, order, cv2, isTest);
-
+			_service.Url = account.ServiceUrl;
 			try
 			{
 				string transactionId = "TRAN" + Guid.NewGuid();
@@ -81,7 +66,7 @@
 				string startDateStr = startDate.ToString("MMyy");
 				string expiryDateStr = expiryDate.ToString("MMyy");
 
-				var str = _service.validateCardFull(mid, vpnPassword, transactionId,
+				var str = _service.validateCardFull(account.Mid, account.VpnPassword, transactionId,
 												   "127.0.0.1", cardHolder, cardNumber,
 												   amount.ToString(CultureInfo.InvariantCulture),
 												   expiryDateStr, issueNumber, startDateStr, order,
@@ -91,7 +76,7 @@
 
 				if (!ret.HasError)
 				{
-					str = _service.refundCardFull(mid, vpnPassword, transactionId, amount.ToString(CultureInfo.InvariantCulture), remotePassword, transactionIdNew);
+					str = _service.refundCardFull(account.Mid, account.VpnPassword, transactionId, amount.ToString(CultureInfo.InvariantCulture), account.RemotePassword, transactionIdNew);
 					ret = new PayPointReturnData(str);
 					Log.Debug("refundCardFull result: " + str);
 				}
@@ -106,12 +91,12 @@
 		}
 
 		//-----------------------------------------------------------------------------------
-		public string GetReport(string reportType, string filterType, string filter, string currency)
-		{
+		public string GetReport(PayPointAccount account, string reportType, string filterType, string filter, string currency) {
+			_service.Url = account.ServiceUrl;
 			Log.InfoFormat("GetReport: reportType={0}, filterType={1}, filter = {2}, currency = {3}", reportType, filterType, filter, currency);
 			try
 			{
-				var report = _service.getReport(mid, vpnPassword, remotePassword, reportType, filterType, filter, currency, String.Empty, false, false);
+				var report = _service.getReport(account.Mid, account.VpnPassword, account.RemotePassword, reportType, filterType, filter, currency, String.Empty, false, false);
 
 				if (report.Length > 1000) Log.Debug("GetReport result (first 1000 symbols): " + report.Substring(0, 1000));
 				else Log.Debug("GetReport result: " + report);
@@ -152,13 +137,20 @@
 				Log.InfoFormat("Making automatic repayment for customer {0}(#{1}) for amount {2} for loan# {3}({4})",
 							   customer.PersonalInfo.Fullname, customer.RefNumber, amount, loan.RefNumber, loan.Id);
 
-				var payPointTransactionId = customer.PayPointTransactionId;
+				PayPointCard defaultCard = customer.PayPointCards.FirstOrDefault(x => x.IsDefaultCard);
+				if (defaultCard == null && customer.PayPointCards.Any()) {
+					defaultCard = customer.PayPointCards.First();
+				}
+				if (defaultCard == null) {
+					throw new Exception("Debit card not found");
+				}
 
+				var payPointTransactionId = defaultCard.TransactionId;
 				var now = DateTime.UtcNow;
 
 				try
 				{
-					payPointReturnData = RepeatTransactionEx(payPointTransactionId, amount);
+					payPointReturnData = RepeatTransactionEx(defaultCard.PayPointAccount, payPointTransactionId, amount);
 				}
 				catch (PayPointException ex)
 				{
@@ -197,7 +189,7 @@
 			return payPointReturnData;
 		}
 
-		public PayPointReturnData RepeatTransactionEx(string transactionId, decimal amount)
+		public PayPointReturnData RepeatTransactionEx(PayPointAccount account, string transactionId, decimal amount)
 		{
 
 			var newTransactionId = transactionId + DateTime.Now.ToString("yyyy-MM-dd_hh:mm:ss");
@@ -206,14 +198,14 @@
 
 			Log.InfoFormat("RepeatTransaction: for transactionId='{0}', amount='{1}', newTransactionId='{2}'", transactionId, amount, newTransactionId);
 
-			if (debugMode)
+			if (account.DebugModeEnabled)
 			{
 				var code = "A";
 				var isValid = true;
 				var message = "debug mode";
 				var respCode = 0;
 
-				if (!isValidCard)
+				if (!account.DebugModeIsValidCard)
 				{
 					message = "Card is not valid debug mode";
 					code = "B";
@@ -221,7 +213,7 @@
 				}
 				else
 				{
-					if (enableCardLimit && amount > cardLimitAmount)
+					if (account.EnableCardLimit && amount > account.CardLimitAmount)
 					{
 						message = "Amount more than card amount debug mode";
 						code = "P:A";
@@ -231,7 +223,7 @@
 
 				Random r = new Random();
 				var rand = r.Next(10);
-				if (enableDebugErrorCodeN && rand>6)
+				if (account.DebugModeErrorCodeNEnabled && rand>6)
 				{
 					isValid = false;
 					code = "N";
@@ -244,8 +236,8 @@
 			}
 			else
 			{
-				str = _service.repeatCardFullAddr(mid, vpnPassword, transactionId,
-												  amount.ToString(CultureInfo.InvariantCulture), remotePassword,
+				str = _service.repeatCardFullAddr(account.Mid, account.VpnPassword, transactionId,
+												  amount.ToString(CultureInfo.InvariantCulture),account.RemotePassword,
 												  newTransactionId, null, null, null, null, "repeat=true");
 				ret = new PayPointReturnData(str);
 			}

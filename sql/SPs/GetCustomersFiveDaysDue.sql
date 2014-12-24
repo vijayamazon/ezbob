@@ -1,11 +1,12 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetCustomersFiveDaysDue]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetCustomersFiveDaysDue]
+IF OBJECT_ID('GetCustomersFiveDaysDue') IS NULL
+	EXECUTE('CREATE PROCEDURE GetCustomersFiveDaysDue AS SELECT 1')
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetCustomersFiveDaysDue]
+
+ALTER PROCEDURE [dbo].[GetCustomersFiveDaysDue]
 (@Now DATETIME)
 AS
 BEGIN
@@ -15,7 +16,7 @@ BEGIN
 		c.FirstName, 
 		c.Name AS Email, 
 		convert(date, ls.Date) AS SceduledDate, 
-		c.CreditCardNo
+		p.CardNo AS CreditCardNo
 	FROM 
 		Customer c 
 		JOIN Loan l ON 
@@ -33,10 +34,12 @@ BEGIN
 				ls.FiveDaysDueMailSent IS NULL OR 
 				ls.FiveDaysDueMailSent = 0
 			)
+		LEFT JOIN PayPointCard p ON p.CustomerId=c.Id AND p.IsDefaultCard=1	
 		LEFT JOIN LoanOptions lo ON 
 			lo.LoanId = l.Id
 	WHERE 
 		lo.AutoPayment IS NULL OR 
 		lo.AutoPayment = 1
 END
+
 GO

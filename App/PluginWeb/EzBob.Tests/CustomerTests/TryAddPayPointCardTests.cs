@@ -12,7 +12,8 @@ namespace EzBob.Tests.CustomerTests
         public void adds_new_credit_card_after_callback()
         {
             var customer = new EZBob.DatabaseLib.Model.Database.Customer();
-            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "3917", "1014", null);
+			var paypointAccount = new PayPointAccount();
+            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "3917", "1014", null,paypointAccount);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(1));
             Assert.That(card.ExpireDate.Value.Year, Is.EqualTo(2014));
@@ -25,7 +26,8 @@ namespace EzBob.Tests.CustomerTests
         public void adds_new_test_credit_card_after_callback()
         {
             var customer = new EZBob.DatabaseLib.Model.Database.Customer();
-            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", null, null, null);
+			var paypointAccount = new PayPointAccount();
+            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", null, null, null,paypointAccount);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(1));
             Assert.That(card.ExpireDate.HasValue, Is.False);
@@ -38,7 +40,7 @@ namespace EzBob.Tests.CustomerTests
         public void if_new_card_expire_date_and_cardno_equal_to_existing_overwrite_it()
         {
             var customer = new EZBob.DatabaseLib.Model.Database.Customer();
-
+			var paypointAccount = new PayPointAccount();
             var payPointCard = new PayPointCard()
                                    {
                                        CardNo = "1234",
@@ -46,11 +48,12 @@ namespace EzBob.Tests.CustomerTests
                                        DateAdded = new DateTime(2012, 10, 10),
                                        ExpireDate = new DateTime(2014, 10, 1),
                                        Id = 1,
-                                       TransactionId = "0f22b1c-e8ec-4299-83c2-ed9f9443abf3"
+                                       TransactionId = "0f22b1c-e8ec-4299-83c2-ed9f9443abf3",
+									   PayPointAccount = paypointAccount
                                    };
             customer.PayPointCards.Add(payPointCard);
 
-            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "1234", "1014", null);
+            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "1234", "1014", null, paypointAccount);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(1));
             Assert.That(customer.PayPointCards.First().TransactionId, Is.EqualTo("0f22b1c-e8ec-4299-83c2-ed9f9443abf2"));
@@ -60,17 +63,18 @@ namespace EzBob.Tests.CustomerTests
         public void tes_card_does_not_override()
         {
             var customer = new EZBob.DatabaseLib.Model.Database.Customer();
-
+	        var paypointAccount = new PayPointAccount();
             var payPointCard = new PayPointCard()
                                    {
                                        Customer = customer,
                                        DateAdded = new DateTime(2012, 10, 10),
                                        Id = 1,
-                                       TransactionId = "0f22b1c-e8ec-4299-83c2-ed9f9443abf3"
+                                       TransactionId = "0f22b1c-e8ec-4299-83c2-ed9f9443abf3",
+									   PayPointAccount = paypointAccount
                                    };
             customer.PayPointCards.Add(payPointCard);
 
-            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", null, null, null);
+            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", null, null, null, paypointAccount);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(2));
         }

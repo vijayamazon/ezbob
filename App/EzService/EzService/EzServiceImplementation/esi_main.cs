@@ -9,6 +9,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
+	using log4net;
 
 	[ServiceBehavior(
 		InstanceContextMode = InstanceContextMode.PerCall,
@@ -83,6 +84,7 @@
 				if (oArgs == null)
 					throw new Alert(Log, "No ExecuteArguments specified.");
 
+				SetLogThreadProperties(oArgs);
 				Log.Debug("Executing " + oArgs.StrategyType + " started...");
 
 				amd = NewAsync(
@@ -102,6 +104,7 @@
 
 				amd.UnderlyingThread = new Thread(() => {
 					try {
+						SetLogThreadProperties(oArgs);
 						AStrategy oInstance = (AStrategy)oCreator.Invoke(oArgs.StrategyArguments.ToArray());
 
 						if (oArgs.OnInit != null) {
@@ -212,6 +215,8 @@
 					throw new Alert(Log, "No strategy arguments specified for " + sStrategyType + ".");
 
 				args.StrategyType = typeof (T); // just to avoid question which type is used.
+
+				SetLogThreadProperties(args);
 
 				Log.Debug("Executing " + sStrategyType + " started in sync...");
 
@@ -358,6 +363,12 @@
 		private int InstanceID {
 			get { return ReferenceEquals(m_oData, null) ? 0 : m_oData.InstanceID; } // get
 		} // InstanceID
+
+		private void SetLogThreadProperties(ExecuteArguments args) {
+			ThreadContext.Properties["UserId"] = args.UserID;
+			ThreadContext.Properties["CustomerId"] = args.CustomerID;
+			ThreadContext.Properties["StrategyType"] = args.StrategyType.Name;
+		}
 
 		private static readonly SortedDictionary<Guid, ActionMetaData> ms_oActiveActions;
 		private static readonly object ms_oLockActiveActions;

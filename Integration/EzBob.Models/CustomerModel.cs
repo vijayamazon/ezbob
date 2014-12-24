@@ -72,8 +72,6 @@ namespace EzBob.Models {
 
 		public int ApplyCount { get; set; }
 
-		public string CreditCardNo { get; set; }
-
 		public string Email { get; set; }
 
 		public decimal TotalEarlyPayment { get; set; }

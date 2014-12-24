@@ -21,7 +21,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			References(x => x.CurrentCard, "CurrentDebitCard").Cascade.All();
 			Map(x => x.IsWasLate);
-			Map(x => x.PayPointTransactionId, "PayPointTransactionId").Length(250);
 			Map(x => x.LastStartedMainStrategyEndTime).CustomType<UtcDateTimeType>();
 			Map(x => x.CreditResult).CustomType<CreditResultStatusType>();
 			Map(x => x.CreditSum);
@@ -47,7 +46,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			Map(x => x.OfferValidUntil, "ValidFor").CustomType<UtcDateTimeType>();
 			Map(x => x.OfferStart, "ApplyForLoan").CustomType<UtcDateTimeType>();
-			Map(x => x.CreditCardNo).Length(50);
+			
 			Map(x => x.RefNumber).Length(8);
 			Map(x => x.PayPointErrorsCount).Nullable();
 			Map(x => x.BWAResult).Length(100);

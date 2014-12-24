@@ -9,6 +9,7 @@
 	using NUnit.Framework;
 	using PayPoint;
 	using Ezbob.RegistryScanner;
+	using EZBob.DatabaseLib.Model;
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using global::PayPoint;
@@ -35,9 +36,10 @@
 		public void Test1()
 		{
 			PayPointApi papi = new PayPointApi();
-			papi.RefundCard("Mr Cardholder", "4444333322221111", 50.99M, new DateTime(2015, 1, 1), "1", new DateTime(2009, 1, 1), "product=ezbob", "123", true);
+			PayPointAccount account = new PayPointAccount();
+			papi.RefundCard(account, "Mr Cardholder", "4444333322221111", 50.99M, new DateTime(2015, 1, 1), "1", new DateTime(2009, 1, 1), "product=ezbob", "123", true);
 
-			string repo = papi.GetReport("CSV", "Date", DateTime.Now.ToString("yyyyMMdd"), "GBP");
+			string repo = papi.GetReport(account, "CSV", "Date", DateTime.Now.ToString("yyyyMMdd"), "GBP");
 			/*SECVPNService service = new SECVPNService();
 			service.
 
@@ -53,7 +55,8 @@
 		public void PayPointPayPal()
 		{
 			var papi = new PayPointApi();
-			papi.PayPointPayPal("www.google.com", "www.google.com", "www.google.com", 5.0M, "GBP", true);
+			PayPointAccount account = new PayPointAccount();
+			papi.PayPointPayPal(account, "www.google.com", "www.google.com", "www.google.com", 5.0M, "GBP", true);
 		}
 
 	}

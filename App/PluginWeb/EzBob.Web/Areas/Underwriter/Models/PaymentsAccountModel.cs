@@ -25,11 +25,6 @@
 
 		public PaymentsAccountModel(Customer customer)
 		{
-			if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())
-			{
-				customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
-			}
-
 			PayPointCards.AddRange(customer.PayPointCards.Select(PayPointCardModel.FromCard));
 
 			CurrentBankAccount = BankAccountModel.FromCard(customer.CurrentCard);

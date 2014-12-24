@@ -8,6 +8,7 @@
 	using CustomerRelations;
 	using Loans;
 	using Iesi.Collections.Generic;
+	using NHibernate.Linq;
 	using NHibernate.Type;
 	using NHibernateWrapper.NHibernate.Types;
 
@@ -296,7 +297,10 @@
 			return Loans.Single(l => l.Id == loanId);
 		} // GetLoan
 
+		[Obsolete("Don't use it, use PaypointCards -> IsDefaultCard")]
 		public virtual string PayPointTransactionId { get; set; }
+		[Obsolete("Don't use it, use PayPointCards -> IsDefaultCard")]
+		public virtual string CreditCardNo { get; set; }
 
 		private Iesi.Collections.Generic.ISet<PayPointCard> _payPointCards = new HashedSet<PayPointCard>();
 		public virtual Iesi.Collections.Generic.ISet<PayPointCard> PayPointCards {
@@ -356,11 +360,6 @@
 		/// Date untill offer is considered as valid
 		/// </summary>
 		public virtual DateTime? OfferValidUntil { get; set; }
-
-		/// <summary>
-		/// Last 4 digits for credit card number
-		/// </summary>
-		public virtual string CreditCardNo { get; set; }
 
 		public virtual IEnumerable<Loans.Loan> ActiveLoans {
 			get {
@@ -438,14 +437,16 @@
 		/// <param name="cardNo">Last digits of credit card. null for test card</param>
 		/// <param name="expiry">Format: MMYY</param>
 		/// <returns></returns>
-		public virtual PayPointCard TryAddPayPointCard(string transId, string cardNo, string expiry, string cardHolder) {
+		public virtual PayPointCard TryAddPayPointCard(string transId, string cardNo, string expiry, string cardHolder, PayPointAccount account) {
 			var card = new PayPointCard {
 				Customer = this,
 				DateAdded = DateTime.UtcNow,
 				CardNo = cardNo,
 				TransactionId = transId,
 				ExpireDateString = expiry,
-				CardHolder = cardHolder
+				CardHolder = cardHolder,
+				PayPointAccount = account,
+				IsDefaultCard = true
 			};
 
 			if (!string.IsNullOrEmpty(expiry) && expiry.Length == 4) {
@@ -468,6 +469,11 @@
 			//		return existing;
 			//	} // if
 			//} // if
+			if (PayPointCards.Any()) {
+				foreach (var payPointCard in PayPointCards) {
+					payPointCard.IsDefaultCard = false;
+				}
+			}
 
 			PayPointCards.Add(card);
 

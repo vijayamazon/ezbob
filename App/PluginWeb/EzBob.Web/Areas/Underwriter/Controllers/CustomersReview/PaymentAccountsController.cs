@@ -13,6 +13,7 @@
 	using Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Customer.Models;
+	using EZBob.DatabaseLib.Model;
 	using ServiceClientProxy;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -24,12 +25,14 @@
 		private readonly IPayPointFacade _payPointFacade;
 		private readonly IWorkplaceContext _context;
 		private readonly ServiceClient m_oServiceClient;
+		private readonly PayPointAccountRepository payPointAccountRepository;
 
 		public PaymentAccountsController(
 			CustomerRepository customers,
 			ICustomerMarketPlaceRepository customerMarketplaces,
 			IPayPointFacade payPointFacade,
-			IWorkplaceContext context
+			IWorkplaceContext context,
+			PayPointAccountRepository payPointAccountRepository
 		)
 		{
 			_customers = customers;
@@ -42,6 +45,7 @@
 
 			_payPointFacade = payPointFacade;
 			_context = context;
+			this.payPointAccountRepository = payPointAccountRepository;
 		}
 
 		[Ajax]
@@ -142,7 +146,7 @@
 		public RedirectResult AddPayPoint(int id)
 		{
 			var oCustomer = _customers.Get(id);
-			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
+			int payPointCardExpiryMonths = payPointAccountRepository.GetDefaultAccount().CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "PaymentAccounts", new { Area = "Underwriter", customerId = id, cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate), hideSteps = true }, "https");
 			var url = _payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
@@ -196,15 +200,9 @@
 			return Json(new { });
 		}
 
-		private void AddPayPointCardToCustomer(string transactionid, string cardno, EZBob.DatabaseLib.Model.Database.Customer customer, string expiry)
-		{
-			customer.TryAddPayPointCard(transactionid, cardno, expiry, customer.PersonalInfo.Fullname);
-
-			if (string.IsNullOrEmpty(customer.PayPointTransactionId))
-			{
-				SetPaypointDefaultCard(transactionid, customer.Id, cardno);
-			}
-
+		private void AddPayPointCardToCustomer(string transactionid, string cardno, EZBob.DatabaseLib.Model.Database.Customer customer, string expiry) {
+			var defaultPaypointAccount = payPointAccountRepository.GetDefaultAccount();
+			customer.TryAddPayPointCard(transactionid, cardno, expiry, customer.PersonalInfo.Fullname, defaultPaypointAccount);
 			m_oServiceClient.Instance.PayPointAddedByUnderwriter(customer.Id, cardno, _context.User.FullName, _context.User.Id);
 		}
 
@@ -214,8 +212,15 @@
 		public void SetPaypointDefaultCard(string transactionid, int customerId, string cardNo)
 		{
 			var customer = _customers.GetChecked(customerId);
-			customer.PayPointTransactionId = transactionid;
-			customer.CreditCardNo = cardNo;
+			var defaultCard = customer.PayPointCards.FirstOrDefault(x => x.TransactionId == transactionid);
+			if(defaultCard == null){
+				throw new Exception("Paypoint card not found");
+			}
+
+			foreach (var card in customer.PayPointCards) {
+				card.IsDefaultCard = false;
+			}
+			defaultCard.IsDefaultCard = true;
 		}
 
 		[Ajax]

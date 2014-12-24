@@ -195,11 +195,19 @@
 				}
 
 				string payPointTransactionId = PaypointTransaction.Manual;
+				
+				if (model.ChargeClient) {
+					var paypointCard = customer.PayPointCards.FirstOrDefault(x => x.IsDefaultCard);	
+					if(paypointCard == null && customer.PayPointCards.Any()) {
+						paypointCard = customer.PayPointCards.First();
+					}
 
-				if (model.ChargeClient)
-				{
-					payPointTransactionId = customer.PayPointTransactionId;
-					_paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
+					if (paypointCard == null) {
+						throw new Exception("No Debit card found");
+					}
+
+					payPointTransactionId = paypointCard.TransactionId;
+					_paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
 				}
 
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
