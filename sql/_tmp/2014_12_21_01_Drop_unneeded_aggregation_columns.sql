@@ -20,7 +20,9 @@ INSERT INTO #cols_to_drop (TableName, ColumnName) VALUES
 	('HmrcAggregation', 'NumOfExpenses'),
 	('HmrcAggregation', 'NumOfOrders'),
 	('HmrcAggregation', 'TotalSumOfExpenses'),
-	('HmrcAggregation', 'TotalSumOfOrders')
+	('HmrcAggregation', 'TotalSumOfOrders'),
+	('YodleeAggregation', 'AvailableBalance'),
+	('YodleeAggregation', 'CurrentBalance')
 
 -------------------------------------------------------------------------------
 
@@ -92,7 +94,8 @@ FROM
 INSERT INTO #cols_to_rename (TableName, ColumnName, NewName) VALUES
 	('FreeAgentAggregation', 'SumOfAdminExpensesCatery', 'SumOfAdminExpensesCategory'),
 	('FreeAgentAggregation', 'SumOfCostOfSalesExpensesCatery', 'SumOfCostOfSalesExpensesCategory'),
-	('FreeAgentAggregation', 'SumOfGeneralExpensesCatery', 'SumOfGeneralExpensesCategory')
+	('FreeAgentAggregation', 'SumOfGeneralExpensesCatery', 'SumOfGeneralExpensesCategory'),
+	('YodleeAggregation', 'TotlaIncome', 'TotalIncome')
 
 -------------------------------------------------------------------------------
 
