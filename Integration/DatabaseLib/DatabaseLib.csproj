@@ -348,6 +348,7 @@
     <Compile Include="Model\Database\DailyReportRowMap.cs" />
     <Compile Include="Model\Database\ExportResult.cs" />
     <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
+    <Compile Include="Model\PayPointAccount.cs" />
     <Compile Include="Model\PayPointCard.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrder.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderItem.cs" />

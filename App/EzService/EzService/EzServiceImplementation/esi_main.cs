@@ -9,6 +9,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
+	using log4net;
 
 	[ServiceBehavior(
 		InstanceContextMode = InstanceContextMode.PerCall,
@@ -100,6 +101,7 @@
 				if (oArgs == null)
 					throw new Alert(Log, "No ExecuteArguments specified.");
 
+				SetLogThreadProperties(oArgs);
 				Log.Debug("Executing " + oArgs.StrategyType + " started...");
 
 				amd = NewAsync(
@@ -120,6 +122,7 @@
 
 				amd.UnderlyingThread = new Thread(() => {
 					try {
+						SetLogThreadProperties(oArgs);
 						AStrategy oInstance = (AStrategy)oCreator.Invoke(oParams.ToArray());
 
 						if (oArgs.OnInit != null) {
@@ -232,6 +235,11 @@
 
 			try {
 				string sStrategyType = typeof(T).ToString();
+
+				ThreadContext.Properties["UserId"] = nUserID;
+				ThreadContext.Properties["CustomerId"] = nCustomerID;
+				ThreadContext.Properties["StrategyType"] = typeof(T).Name;
+
 
 				Log.Debug("Executing " + sStrategyType + " started in sync...");
 
@@ -392,6 +400,12 @@
 		private int InstanceID {
 			get { return ReferenceEquals(m_oData, null) ? 0 : m_oData.InstanceID; } // get
 		} // InstanceID
+
+		private void SetLogThreadProperties(ExecuteArguments args) {
+			ThreadContext.Properties["UserId"] = args.UserID;
+			ThreadContext.Properties["CustomerId"] = args.CustomerID;
+			ThreadContext.Properties["StrategyType"] = args.StrategyType.Name;
+		}
 
 		#endregion property InstanceID
 

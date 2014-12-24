@@ -370,81 +370,41 @@
 
 		#region property PayPointCardLimitAmount
 
-		public virtual VariableValue PayPointCardLimitAmount {
-			get { return this[Variables.PayPointCardLimitAmount]; } // get
-		} // PayPointCardLimitAmount
-
 		#endregion property PayPointCardLimitAmount
 
 		#region property PayPointDebugMode
-
-		public virtual VariableValue PayPointDebugMode {
-			get { return this[Variables.PayPointDebugMode]; } // get
-		} // PayPointDebugMode
 
 		#endregion property PayPointDebugMode
 
 		#region property PayPointEnableCardLimit
 
-		public virtual VariableValue PayPointEnableCardLimit {
-			get { return this[Variables.PayPointEnableCardLimit]; } // get
-		} // PayPointEnableCardLimit
-
 		#endregion property PayPointEnableCardLimit
 
 		#region property PayPointEnableDebugErrorCodeN
-
-		public virtual VariableValue PayPointEnableDebugErrorCodeN {
-			get { return this[Variables.PayPointEnableDebugErrorCodeN]; } // get
-		} // PayPointEnableDebugErrorCodeN
 
 		#endregion property PayPointEnableDebugErrorCodeN
 
 		#region property PayPointIsValidCard
 
-		public virtual VariableValue PayPointIsValidCard {
-			get { return this[Variables.PayPointIsValidCard]; } // get
-		} // PayPointIsValidCard
-
 		#endregion property PayPointIsValidCard
 
 		#region property PayPointMid
-
-		public virtual VariableValue PayPointMid {
-			get { return this[Variables.PayPointMid]; } // get
-		} // PayPointMid
 
 		#endregion property PayPointMid
 
 		#region property PayPointOptions
 
-		public virtual VariableValue PayPointOptions {
-			get { return this[Variables.PayPointOptions]; } // get
-		} // PayPointOptions
-
 		#endregion property PayPointOptions
 
 		#region property PayPointRemotePassword
-
-		public virtual VariableValue PayPointRemotePassword {
-			get { return this[Variables.PayPointRemotePassword]; } // get
-		} // PayPointRemotePassword
 
 		#endregion property PayPointRemotePassword
 
 		#region property PayPointServiceUrl
 
-		public virtual VariableValue PayPointServiceUrl {
-			get { return this[Variables.PayPointServiceUrl]; } // get
-		} // PayPointServiceUrl
-
 		#endregion property PayPointServiceUrl
 
 		#region property PayPointTemplateUrl
-
-		public virtual VariableValue PayPointTemplateUrl {
-			get { return this[Variables.PayPointTemplateUrl]; } // get
-		} // PayPointTemplateUrl
 
 		#endregion property PayPointTemplateUrl
 
@@ -458,17 +418,9 @@
 
 		#region property PayPointVpnPassword
 
-		public virtual VariableValue PayPointVpnPassword {
-			get { return this[Variables.PayPointVpnPassword]; } // get
-		} // PayPointVpnPassword
-
 		#endregion property PayPointVpnPassword
 
 		#region property PayPointCardExpiryMonths
-
-		public virtual VariableValue PayPointCardExpiryMonths {
-			get { return this[Variables.PayPointCardExpiryMonths]; } // get
-		} // PayPointCardExpiryMonths
 
 		#endregion property PayPointVpnPassword
 

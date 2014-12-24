@@ -20,6 +20,7 @@
 	using StructureMap;
 	using log4net;
 	using ConfigManager;
+	using EZBob.DatabaseLib.Model;
 
 	public class GetCashController : Controller {
 		private readonly ServiceClient m_oServiceClient;
@@ -30,6 +31,7 @@
 		private readonly IPacnetPaypointServiceLogRepository _logRepository;
 		private readonly ICustomerRepository _customerRepository;
 		private readonly ILoanCreator _loanCreator;
+		private readonly PayPointAccountRepository payPointAccountRepository;
 
 		public GetCashController(
 			IEzbobWorkplaceContext context,
@@ -37,7 +39,8 @@
 			ICustomerNameValidator validator,
 			IPacnetPaypointServiceLogRepository logRepository,
 			ICustomerRepository customerRepository,
-			ILoanCreator loanCreator
+			ILoanCreator loanCreator,
+			PayPointAccountRepository payPointAccountRepository
 		) {
 			_context = context;
 			_payPointFacade = payPointFacade;
@@ -46,6 +49,7 @@
 			_logRepository = logRepository;
 			_customerRepository = customerRepository;
 			_loanCreator = loanCreator;
+			this.payPointAccountRepository = payPointAccountRepository;
 		}
 
 		[NoCache]
@@ -67,7 +71,7 @@
 				cr.RepaymentPeriod = repaymentPeriod;
 				cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
 			} // if
-			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
+			int payPointCardExpiryMonths = payPointAccountRepository.GetDefaultAccount().CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 
 			var fee = (new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent)).Calculate(loan_amount);
@@ -185,18 +189,15 @@
 				ValidateCustomerName(customer, cus);
 
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
-
-
-				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer);
+				var defaultAccount = payPointAccountRepository.GetDefaultAccount();
+				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, defaultAccount);
 
 				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
 
 				RebatePayment(amount, loan, trans_id, now);
 
 				cus.PayPointErrorsCount = 0;
-				cus.PayPointTransactionId = trans_id;
-				cus.CreditCardNo = card_no;
-
+				
 				TempData["amount"] = loan_amount;
 				TempData["bankNumber"] = cus.BankAccount.AccountNumber;
 				TempData["card_no"] = card_no;

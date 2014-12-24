@@ -22,6 +22,7 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Linq;
+	using EZBob.DatabaseLib.Model;
 
 	#endregion using
 
@@ -35,7 +36,8 @@
 			IEzbobWorkplaceContext oContext,
 			CashRequestBuilder oCashRequestBuilder,
 			ISession oSession,
-			IPayPointFacade oPayPointFacade
+			IPayPointFacade oPayPointFacade,
+			PayPointAccountRepository payPointAccountRepository
 		) {
 			m_oCustomerModelBuilder = oCustomerModelBuilder;
 			m_oContext = oContext;
@@ -43,6 +45,7 @@
 			m_oCashRequestBuilder = oCashRequestBuilder;
 			m_oSession = oSession;
 			m_oPayPointFacade = oPayPointFacade;
+			this.payPointAccountRepository = payPointAccountRepository;
 		} // constructor
 
 		#endregion constructor
@@ -235,7 +238,7 @@
 		public JsonResult SetDefaultCard(int cardId) {
 			var customer = m_oContext.Customer;
 
-			if (!customer.DefaultCardSelectionAllowed && customer.PayPointTransactionId != null)
+			if (!customer.DefaultCardSelectionAllowed)
 				return Json(new { error = "Default card selection is not allowed" });
 
 			var card = customer.PayPointCards.SingleOrDefault(c => c.Id == cardId);
@@ -243,8 +246,10 @@
 			if (card == null)
 				return Json(new { error = "Card not found" });
 
-			customer.PayPointTransactionId = card.TransactionId;
-			customer.CreditCardNo = card.CardNo;
+			foreach (var paypointCard in customer.PayPointCards) {
+				paypointCard.IsDefaultCard = false;
+			}
+			card.IsDefaultCard = true;
 
 			return Json(new { });
 		} // SetDefaultCard
@@ -255,7 +260,7 @@
 
 		public RedirectResult AddPayPoint() {
 			var oCustomer = m_oContext.Customer;
-			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
+			int payPointCardExpiryMonths = payPointAccountRepository.GetDefaultAccount().CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "Profile",
 				new
@@ -298,11 +303,9 @@
 				return View(new { error = "Failed to add debit card" });
 
 			var cust = m_oContext.Customer;
-			var card = cust.TryAddPayPointCard(trans_id, card_no, expiry, cust.PersonalInfo.Fullname);
-
-			if (string.IsNullOrEmpty(cust.PayPointTransactionId))
-				SetDefaultCard(card.Id);
-
+			var defaultPaypointAccount = payPointAccountRepository.GetDefaultAccount();
+			var card = cust.TryAddPayPointCard(trans_id, card_no, expiry, cust.PersonalInfo.Fullname, defaultPaypointAccount);
+			
 			return View(new { success = true });
 		} // PayPointCallback
 
@@ -349,7 +352,7 @@
 		private readonly CashRequestBuilder m_oCashRequestBuilder;
 		private readonly ISession m_oSession;
 		private readonly IPayPointFacade m_oPayPointFacade;
-
+		private readonly PayPointAccountRepository payPointAccountRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
 
 		#endregion fields

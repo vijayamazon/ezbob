@@ -8,7 +8,10 @@
 	using System.Text.RegularExpressions;
 	using System.Web;
 	using ConfigManager;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
+	using StructureMap;
+
 	public interface IPayPointFacade
 	{
 		bool CheckHash(string hash, Uri url);
@@ -23,12 +26,13 @@
 		private readonly string templateUrl;
 		private readonly string paypointOptions;
 
-		public PayPointFacade()
-		{
-			remotePassword = CurrentValues.Instance.PayPointRemotePassword;
-			mid = CurrentValues.Instance.PayPointMid;
-			templateUrl = CurrentValues.Instance.PayPointTemplateUrl;
-			paypointOptions = CurrentValues.Instance.PayPointOptions;
+		public PayPointFacade() {
+			var payPointAccountRepository = ObjectFactory.GetInstance<PayPointAccountRepository>();
+			var defaultPayPoint = payPointAccountRepository.GetDefaultAccount();
+			remotePassword = defaultPayPoint.RemotePassword;
+			mid = defaultPayPoint.Mid;
+			templateUrl = defaultPayPoint.TemplateUrl;
+			paypointOptions = defaultPayPoint.Options;
 		}
 
 		public virtual bool CheckHash(string hash, Uri url)

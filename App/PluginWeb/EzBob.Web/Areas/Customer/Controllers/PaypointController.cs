@@ -4,11 +4,11 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Backend.Models;
+	using EZBob.DatabaseLib.Model;
 	using Infrastructure.Attributes;
 	using Models;
 	using Infrastructure;
@@ -25,12 +25,13 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly PayPointFacade _payPointFacade;
 		private readonly ServiceClient m_oServiceClient;
-		private static readonly ILog Log = LogManager.GetLogger("PaypointController");
+		private static readonly ILog Log = LogManager.GetLogger(typeof(PaypointController));
 		private readonly LoanPaymentFacade _loanRepaymentFacade;
 		private readonly IPacnetPaypointServiceLogRepository _logRepository;
 		private readonly IPaypointTransactionRepository _paypointTransactionRepository;
 		private readonly PayPointApi _paypoint;
 		private readonly ICustomerRepository _customerRepository;
+		private readonly PayPointAccountRepository payPointAccountRepository;
 
 		public PaypointController(
 			IEzbobWorkplaceContext context,
@@ -39,8 +40,8 @@
 			IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository,
 			IPaypointTransactionRepository paypointTransactionRepository,
 			PayPointApi paypoint,
-			ICustomerRepository customerRepository
-		)
+			ICustomerRepository customerRepository, 
+			PayPointAccountRepository payPointAccountRepository)
 		{
 			_context = context;
 			_payPointFacade = payPointFacade;
@@ -50,6 +51,7 @@
 			_loanRepaymentFacade = loanPaymentFacade;
 			_paypoint = paypoint;
 			_customerRepository = customerRepository;
+			this.payPointAccountRepository = payPointAccountRepository;
 		}
 
 		[NoCache]
@@ -60,13 +62,13 @@
 				Log.InfoFormat("Payment request for customer id {0}, amount {1}", _context.Customer.Id, amount);
 
 				amount = CalculateRealAmount(type, loanId, amount);
-
+				var paypointAccount = payPointAccountRepository.GetDefaultAccount();
 				if (amount < 0)
 				{
 					return View("Error");
 				}
-
-				int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
+				var oCustomer = _context.Customer;
+				int payPointCardExpiryMonths = paypointAccount.CardExpiryMonths;
 				DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 
 				var callback = Url.Action("Callback", "Paypoint", new
@@ -80,7 +82,7 @@
 						payEarly = true
 					}, "https");
 
-				var oCustomer = _context.Customer;
+				
 				var url = _payPointFacade.GeneratePaymentUrl(oCustomer, amount, callback);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to " + url, "Successful", "");
 
@@ -187,8 +189,8 @@
 			}
 
 			if (string.IsNullOrEmpty(customer)) customer = customerContext.PersonalInfo.Fullname;
-
-			customerContext.TryAddPayPointCard(trans_id, card_no, expiry, customer);
+			var account = payPointAccountRepository.GetDefaultAccount();
+			customerContext.TryAddPayPointCard(trans_id, card_no, expiry, customer, account);
 
 			var confirmation = new PaymentConfirmationModel
 				{
@@ -233,12 +235,14 @@
 
 				var card = customer.PayPointCards.FirstOrDefault(c => c.Id == cardId);
 
-				var payPointTransactionId = card == null ? customer.PayPointTransactionId : card.TransactionId;
+				if (card == null) {
+					throw new Exception("Card not found");
+				}
 
-				_paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
+				_paypoint.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount);
 
-				var payFastModel = _loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "manual payment from customer", paymentType, "CustomerAuto");
-				payFastModel.CardNo = card == null ? customer.CreditCardNo : card.CardNo;
+				var payFastModel = _loanRepaymentFacade.MakePayment(card.TransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "manual payment from customer", paymentType, "CustomerAuto");
+				payFastModel.CardNo = card.CardNo;
 
 				SendEmails(loanId, realAmount, customer);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Successful", "");

@@ -21,7 +21,7 @@ namespace EzBob.Models
 			        DateAdded = card.DateAdded,
 			        ExpireDate = card.ExpireDate,
 			        TransactionId = card.TransactionId,
-			        IsDefault = card.Customer.PayPointTransactionId == card.TransactionId
+			        IsDefault = card.IsDefaultCard
 		        };
         }
     }

@@ -81,9 +81,9 @@
 			GlobalContext.Properties["MailSubject"] = MailSubject;
 			GlobalContext.Properties["ErrorEmailRecipient"] = ErrorMailRecipient;
 			GlobalContext.Properties["ErrorEmailHashtag"] = ErrorMailHashtag;
-
+			
 			log4net.Config.XmlConfigurator.Configure();
-
+			log4net.Util.SystemInfo.NullText = string.Empty;
 			return this;
 		} // Init
 	} // class Log4Net
