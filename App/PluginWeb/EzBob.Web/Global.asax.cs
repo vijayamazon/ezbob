@@ -10,24 +10,24 @@
 	using System.Web.Routing;
 	using Aspose.Cells;
 	using ConfigManager;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Database;
-	using Areas.Underwriter.Models.Reports;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
-	using Infrastructure;
-	using Infrastructure.Filters;
-	using Models;
-	using ServiceClientProxy;
-	using SquishIt.Less;
-	using SquishIt.MsIeCoffeeScript;
-	using SquishIt.Framework;
-	using StructureMap;
+	using EzBob.Web.Areas.Underwriter.Models.Reports;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Filters;
+	using EzBob.Web.Models;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using log4net;
 	using NHibernate;
 	using NHibernateWrapper.NHibernate;
-	using log4net;
+	using ServiceClientProxy;
+	using SquishIt.Framework;
+	using SquishIt.Less;
+	using SquishIt.MsIeCoffeeScript;
+	using StructureMap;
 
 	public class Iso8601DateTimeBinder : DefaultModelBinder {
 		public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext) {
@@ -57,10 +57,12 @@
 					ISession curSession = null;
 
 					if (HttpContext.Current.Items.Contains(CurrentSessionKey))
-						curSession = HttpContext.Current.Items["current.session"] as ISession;
+						curSession = HttpContext.Current.Items[CurrentSessionKey] as ISession;
 
-					if (curSession == null)
-						HttpContext.Current.Items["current.session"] = NHibernateManager.OpenSession();
+					if (curSession == null) {
+						curSession = NHibernateManager.OpenSession();
+						HttpContext.Current.Items[CurrentSessionKey] = curSession;
+					} // if
 
 					return curSession;
 				} catch (Exception ex) {
@@ -89,7 +91,10 @@
 		} // constructor
 
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters) {
-			var underwriterRoles = string.Join(", ", ObjectFactory.GetInstance<IRolesRepository>().GetAll().Where(x => x.Name != "Web").Select(x => x.Name));
+			var underwriterRoles = string.Join(", ", ObjectFactory.GetInstance<IRolesRepository>()
+				.GetAll()
+				.Where(x => x.Name != "Web")
+				.Select(x => x.Name));
 
 			if (CurrentValues.Instance.LandingPageEnabled)
 				filters.Add(new WhiteListFilter(), 0);
@@ -107,23 +112,40 @@
 			routes.MapRoute(
 				"EmailChanged", // Route name
 				"emailchanged/{code}", // URL with parameters
-				new { controller = "ConfirmEmail", action = "EmailChanged" } // Parameter defaults
-			);
+				new {
+					controller = "ConfirmEmail",
+					action = "EmailChanged"
+				} // Parameter defaults
+				);
 
 			routes.MapRoute(
 				"EmailConfirmation", // Route name
 				"confirm/{code}", // URL with parameters
-				new { controller = "ConfirmEmail", action = "Index" } // Parameter defaults
-			);
+				new {
+					controller = "ConfirmEmail",
+					action = "Index"
+				} // Parameter defaults
+				);
 
 			routes.MapRoute(
 				"Default", // Route name
 				"{controller}/{action}/{id}", // URL with parameters
-				new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-			);
+				new {
+					controller = "Home",
+					action = "Index",
+					id = UrlParameter.Optional
+				} // Parameter defaults
+				);
 
-			routes.Insert(0, new Route("pie.htc", new RouteValueDictionary(new { controller = "Pie", action = "Index" }), new MvcRouteHandler()));
-			routes.Insert(0, new Route("{area}/pie.htc", new RouteValueDictionary(new { controller = "Pie", action = "Index", area = "" }), new MvcRouteHandler()));
+			routes.Insert(0, new Route("pie.htc", new RouteValueDictionary(new {
+				controller = "Pie",
+				action = "Index"
+			}), new MvcRouteHandler()));
+			routes.Insert(0, new Route("{area}/pie.htc", new RouteValueDictionary(new {
+				controller = "Pie",
+				action = "Index",
+				area = ""
+			}), new MvcRouteHandler()));
 			//routes.MapRoute(null, "{Area}/{c}/{a}/pie.htc", new {controller = "Pie", action = "Index", c = "", a="", Area=""});
 		}
 
@@ -163,26 +185,27 @@
 		}
 
 		protected void ConfigureStructureMap(IContainer container) {
-			container.Configure(x => x.For<IWorkplaceContext>().Use(GetContext));
+			container.Configure(x => x.For<IWorkplaceContext>()
+				.Use(GetContext));
 			container.Configure(x => x.AddRegistry<PluginWebRegistry>());
 			container.Configure(x => x.AddRegistry<PaymentServices.PacNet.PacnetRegistry>());
-			container.Configure(x => x.For<ISession>().Use(() => CurrentSession));
+			container.Configure(x => x.For<ISession>()
+				.Use(() => CurrentSession));
 		} // ConfigureStructureMap
 
 		protected void Session_End(object sender, EventArgs e) {
 			string userSessionIdStr = Session["UserSessionId"] == null ? null : Session["UserSessionId"].ToString();
 			int sessionId = 0;
-			if (int.TryParse(userSessionIdStr, out sessionId) && sessionId > 0) {
+			if (int.TryParse(userSessionIdStr, out sessionId) && sessionId > 0)
 				new ServiceClient().Instance.MarkSessionEnded(sessionId, "Session time out", null);
-			}
 		} // SessionEnd
 
 		private static SafeILog Log {
 			get {
-				if (MvcApplication.log == null)
-					MvcApplication.log = new SafeILog(typeof(MvcApplication));
+				if (log == null)
+					log = new SafeILog(typeof(MvcApplication));
 
-				return MvcApplication.log;
+				return log;
 			} // get
 		} // Log
 
@@ -207,10 +230,11 @@
 			return context;
 		}
 
-		static void InitAspose() {
+		private static void InitAspose() {
 			var license = new License();
 
-			using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("EzBob.Web.Aspose.Total.lic")) {
+			using (var s = Assembly.GetExecutingAssembly()
+				.GetManifestResourceStream("EzBob.Web.Aspose.Total.lic")) {
 				if (s != null) {
 					s.Position = 0;
 					license.SetLicense(s);
@@ -231,7 +255,7 @@
 		}
 
 		private void InitOnStart() {
-			base.Init();
+			Init();
 
 			if (_isInitialized)
 				return;
@@ -253,7 +277,7 @@
 						db,
 						Log,
 						oLimitations => oLimitations.UpdateWebSiteCfg("Ezbob.Web")
-					);
+						);
 
 					DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 					AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
