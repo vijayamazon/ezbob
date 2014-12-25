@@ -6,7 +6,6 @@
 	public class PluginRegistry : Registry {
 		public PluginRegistry() {
 			For<IMarketplaceType>().Use<EkmDatabaseMarketPlace>().Named("EKM");
-			For<DatabaseMarketplaceBase<EkmDatabaseFunctionType>>().Use<EkmDatabaseMarketPlace>();
 			For<IMarketplaceRetrieveDataHelper>().Use<EkmRetriveDataHelper>().Named("EKM");
 		}
 	}

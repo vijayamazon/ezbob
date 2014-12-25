@@ -1,15 +1,15 @@
-using EZBob.DatabaseLib.DatabaseWrapper;
-
 namespace EZBob.DatabaseLib.Common {
-	public interface IMarketplaceRetrieveDataHelper {
-		void Update(int nCustomerMarketplaceID);
-		void CustomerMarketplaceUpdateAction(int nCustomerMarketplaceID);
-		void UpdateCustomerMarketplaceFirst(int customerMarketPlaceId);
-		void UpdateCustomerMarketplaceRegular(int customerMarketPlaceId);
+	using EZBob.DatabaseLib.DatabaseWrapper;
 
+	public interface IMarketplaceRetrieveDataHelper {
 		IMarketplaceType Marketplace { get; }
-		IAnalysisDataInfo GetAnalysisValuesByCustomerMarketPlace(int customerMarketPlaceId);
+
+		void CustomerMarketplaceUpdateAction(int nCustomerMarketplaceID);
 
 		IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId);
+
+		void Update(int nCustomerMarketplaceID);
+		void UpdateCustomerMarketplaceFirst(int customerMarketPlaceId);
+		void UpdateCustomerMarketplaceRegular(int customerMarketPlaceId);
 	}
 }

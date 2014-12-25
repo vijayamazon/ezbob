@@ -7,7 +7,6 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.DatabaseWrapper.EbayFeedbackData;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
-	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 	using EZBob.DatabaseLib.Model.Database;
 	using CommonLib;
 	using CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
@@ -16,7 +15,6 @@
 	using Ezbob.Utils;
 	using TeraPeakServiceLib;
 	using TeraPeakServiceLib.Requests.SellerResearch;
-	using eBayDbLib;
 	using Config;
 	using eBayServiceLib;
 	using eBayServiceLib.Common;
@@ -29,10 +27,10 @@
 	using Ezbob.Database;
 	using StructureMap;
 
-	public class eBayRetriveDataHelper : MarketplaceRetrieveDataHelperBase<eBayDatabaseFunctionType> {
+	public class eBayRetriveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public eBayRetriveDataHelper(
 			DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<eBayDatabaseFunctionType> marketplace
+			DatabaseMarketplaceBaseBase marketplace
 		)
 			: base(helper, marketplace) {
 			_Settings = ObjectFactory.GetInstance<IEbayMarketplaceSettings>();
@@ -69,47 +67,6 @@
 			EbayGetOrdersAfterTeraPeak
 		}
 
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
-			var feedbacks = Helper.GetEbayFeedback()
-				.Where(f => f.CustomerMarketPlace.Id == marketPlace.Id && f.HistoryRecord.UpdatingStart != null && f.HistoryRecord.UpdatingEnd != null)
-				.Select(feedback => new { feedback, updatestart = feedback.HistoryRecord.UpdatingStart })
-				.ToList();
-
-			if (feedbacks.Any()) {
-				feedbacks.ForEach(fb => {
-					var af = fb.feedback;
-
-					if (af != null) {
-						var feedBackParams = new List<IAnalysisDataParameterInfo>();
-						DateTime? afDate = fb.updatestart;
-						var f = af.FeedbackByPeriodItems.ToList();
-						if (f.Count > 0) {
-							f.ForEach(afp => {
-								var timePeriod = TimePeriodFactory.CreateById(afp.TimePeriod.InternalId);
-
-								var g = new AnalysisDataParameterInfo("Negative Feedback rate", timePeriod, DatabaseValueType.Integer, afp.Negative);
-								var n = new AnalysisDataParameterInfo("Neutral Feedback rate", timePeriod, DatabaseValueType.Integer, afp.Neutral);
-								var p = new AnalysisDataParameterInfo("Positive Feedback Rate", timePeriod, DatabaseValueType.Integer, afp.Positive);
-
-								if (timePeriod.TimePeriodType == TimePeriodEnum.Year)
-									feedBackParams.Add(new AnalysisDataParameterInfo("Positive %", timePeriod, DatabaseValueType.Double, (afp.Positive + afp.Neutral + afp.Neutral) != 0 ? (afp.Positive * 100) / (afp.Positive + afp.Neutral + afp.Neutral) : 0));
-
-								feedBackParams.AddRange(new[] { n, g, p, });
-							});
-						} // if
-
-						if (feedBackParams.Count > 0) {
-							if (data.Data != null && data.Data.Count > 0) {
-								DateTime lastDate = data.Data.Keys.Max();
-								data.Data[lastDate].AddRange(feedBackParams);
-							} else
-								data.AddData(afDate.Value, feedBackParams);
-						} // if
-					} // if
-				});
-			} // if
-		}
-
 		protected override void InternalUpdateInfo(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
@@ -130,12 +87,6 @@
 			// This method is not implemented here because elapsed time is got from over source.
 			throw new NotImplementedException();
 		}
-
-		// InternalUpdateInfo
-
-		// AddAnalysisValues
-
-		// RetrieveCustomerSecurityInfo
 
 		private void CheckTokenStatus(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -428,26 +379,6 @@
 				}
 			);
 		} // UpdateUserInfo
-
-		// CheckTokenStatus
-
-		// UpdateAccountInfo
-
-		// UpdateFeedbackInfo
-
-		// SaveFeedbackInfo
-
-		// UpdateTeraPeakOrders
-
-		// GetTopSealedProductItems
-
-		// GetCustomerUserInfo
-
-		// GetCustomerUserInfo
-
-		// CreateProviderCreationInfo
-
-		// enum UpdateStrategyType
 
 		private const int MaxPossibleRetriveMonthsFromTeraPeak = 12;
 

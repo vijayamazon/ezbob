@@ -10,19 +10,16 @@
 	using Ezbob.Utils.Serialization;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 
-	public class SageRetrieveDataHelper : MarketplaceRetrieveDataHelperBase<SageDatabaseFunctionType> {
+	public class SageRetrieveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public SageRetrieveDataHelper(
 			DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<SageDatabaseFunctionType> marketplace
+			DatabaseMarketplaceBaseBase marketplace
 			)
 			: base(helper, marketplace) {
 		}
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			return null;
-		}
-
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
 		}
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(

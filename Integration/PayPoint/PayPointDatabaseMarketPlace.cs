@@ -1,24 +1,15 @@
-﻿namespace PayPoint
-{
-    using EZBob.DatabaseLib;
-    using EZBob.DatabaseLib.Common;
-    using EZBob.DatabaseLib.DatabaseWrapper;
+﻿namespace PayPoint {
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
 
-    public class PayPointDatabaseMarketPlace : DatabaseMarketplaceBase<PayPointDatabaseFunctionType>
-    {
-        public PayPointDatabaseMarketPlace()
-            : base(new PayPointServiceInfo())
-        {
-        }
+	public class PayPointDatabaseMarketPlace : DatabaseMarketplaceBaseBase {
+		public PayPointDatabaseMarketPlace()
+			: base(new PayPointServiceInfo()) {
+		}
 
-        public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper)
-        {
-            return new PayPointRetrieveDataHelper( helper, this );
-        }
-
-        public override IDatabaseFunctionFactory<PayPointDatabaseFunctionType> FunctionFactory
-        {
-            get { return new PayPointDatabaseFunctionFactory(); }
-        }
-    }
+		public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper) {
+			return new PayPointRetrieveDataHelper(helper, this);
+		}
+	}
 }

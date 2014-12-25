@@ -110,10 +110,6 @@
       <Project>{6CD378FB-00A9-4644-965B-21A16956DED0}</Project>
       <Name>TeraPeakServiceLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\eBayDbLib\eBayDbLib.csproj">
-      <Project>{FB3EAC65-AB2B-4A7E-ADA5-AAE0651CAAF6}</Project>
-      <Name>eBayDbLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\eBayServiceLib\eBayServiceLib.csproj">
       <Project>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</Project>
       <Name>eBayServiceLib</Name>

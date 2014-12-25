@@ -55,8 +55,6 @@
     <Compile Include="FreeAgentUsers.cs" />
     <Compile Include="FreeAgentCompany.cs" />
     <Compile Include="FreeAgentConnector.cs" />
-    <Compile Include="FreeAgentDatabaseFunctionFactory.cs" />
-    <Compile Include="FreeAgentDatabaseFunctionStorage.cs" />
     <Compile Include="FreeAgentDatabaseMarketPlace.cs" />
     <Compile Include="FreeAgentRegistry.cs" />
     <Compile Include="FreeAgentRetrieveDataHelper.cs" />

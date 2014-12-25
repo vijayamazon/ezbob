@@ -5,22 +5,20 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Utils;
 
-	public class CompanyFilesRetriveDataHelper : MarketplaceRetrieveDataHelperBase<CompanyFilesDatabaseFunctionType> {
+	public class CompanyFilesRetriveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public CompanyFilesRetriveDataHelper(
 			DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<CompanyFilesDatabaseFunctionType> marketplace
-		) : base(helper, marketplace) {
-		}
-
-		protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			return new ElapsedTimeInfo();
-		}
-
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
+			DatabaseMarketplaceBaseBase marketplace
+		)
+			: base(helper, marketplace) {
 		}
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			return null;
+		}
+
+		protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+			return new ElapsedTimeInfo();
 		}
 	}
 }

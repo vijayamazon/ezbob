@@ -1,34 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using EzBob.CommonLib;
-using Integration.ChannelGrabberConfig;
+﻿namespace Integration.ChannelGrabberFrontend {
+	using System;
+	using EzBob.CommonLib;
+	using Integration.ChannelGrabberConfig;
 
-namespace Integration.ChannelGrabberFrontend {
 	public class ServiceInfo : VendorInfo, IMarketplaceServiceInfo {
 		public Guid InternalId { get { return Guid(); } }
 
 		public ServiceInfo(string sAccountTypeName) {
 			VendorInfo vi = Configuration.Instance.GetVendorInfo(sAccountTypeName);
 
-			if (vi != null) {
-				Name = (string)vi.Name.Clone();
-				DisplayName = (string)vi.DisplayName.Clone();
-				Description = (string)vi.Description.Clone();
-				InternalID = (string)vi.InternalID.Clone();
+			if (vi == null)
+				return;
 
-				SecurityData = (SecurityData)vi.SecurityData.Clone();
+			Name = (string)vi.Name.Clone();
+			DisplayName = (string)vi.DisplayName.Clone();
+			Description = (string)vi.Description.Clone();
+			InternalID = (string)vi.InternalID.Clone();
 
-				Aggregators = new List<AggregatorInfo>();
+			SecurityData = (SecurityData)vi.SecurityData.Clone();
 
-				foreach (AggregatorInfo ai in vi.Aggregators)
-					Aggregators.Add((AggregatorInfo)ai.Clone());
+			ClientSide = (ClientSide)vi.ClientSide.Clone();
 
-				ClientSide = (ClientSide)vi.ClientSide.Clone();
-
-				SetGuid(new Guid(vi.Guid().ToString()));
-				IsPaymentAccount = vi.HasExpenses;
-
-			} // if
+			SetGuid(new Guid(vi.Guid().ToString()));
+			IsPaymentAccount = vi.HasExpenses;
 		} // constructor
 	} // ServiceInfo
 } // namespace Integration.ChannelGrabberFrontend

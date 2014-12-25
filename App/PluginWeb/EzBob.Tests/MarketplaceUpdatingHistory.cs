@@ -1,5 +1,5 @@
-﻿namespace EzBob.Tests
-{
+﻿namespace EzBob.Tests {
+
 	using System.Linq;
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database;
@@ -7,39 +7,38 @@
 	using NUnit.Framework;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 
-	public class MarketplaceUpdatingHistory : InMemoryDbTestFixtureBase
-    {
-        private ISession _session;
+	public class MarketplaceUpdatingHistory : InMemoryDbTestFixtureBase {
+		[Test]
+		public void can_query_updating_history() {
+			var mp = new MP_CustomerMarketPlace();
+			mp.SecurityData = Encoding.UTF8.GetBytes("no data");
+			_session.Save(mp);
+			var tx = _session.BeginTransaction();
+			tx.Commit();
 
-        [TestFixtureSetUp]
-        public void FixtureSetUp()
-        {
-            InitialiseNHibernate(typeof(MP_CustomerMarketPlace).Assembly, typeof(User).Assembly);
-        }
+			_session.Clear();
 
-        [SetUp]
-        public void SetUp()
-        {
-            _session = CreateSession();
-        }
+			var mp2 = _session.Get<MP_CustomerMarketPlace>(mp.Id);
 
-        [Test]
-        public void can_query_updating_history()
-        {
+			var r1 = mp2.UpdatingHistory.Where(h => h.UpdatingStart != null && h.UpdatingEnd != null)
+				.Select(h => h.EbayFeedback)
+				.ToList();
+			var r3 = mp2.UpdatingHistory.Where(h => h.UpdatingStart != null && h.UpdatingEnd != null)
+				.Select(h => h.AmazonFeedback)
+				.ToList();
+		}
 
-            var mp = new MP_CustomerMarketPlace();
-            mp.SecurityData = Encoding.UTF8.GetBytes("no data");
-            _session.Save(mp);
-            var tx = _session.BeginTransaction();
-            tx.Commit();
+		[TestFixtureSetUp]
+		public void FixtureSetUp() {
+			InitialiseNHibernate(typeof(MP_CustomerMarketPlace).Assembly, typeof(User).Assembly);
+		}
 
-            _session.Clear();
+		[SetUp]
+		public void SetUp() {
+			_session = CreateSession();
+		}
 
-            var mp2 = _session.Get<MP_CustomerMarketPlace>(mp.Id);
+		private ISession _session;
+	}
 
-            var r1 = mp2.UpdatingHistory.Where(h => h.UpdatingStart != null && h.UpdatingEnd != null).Select(h => h.EbayFeedback).ToList();
-            var r2 = mp2.UpdatingHistory.Where(h => h.UpdatingStart != null && h.UpdatingEnd != null).Select(h => h.AnalyisisFunctionValue).ToList();
-            var r3 = mp2.UpdatingHistory.Where(h => h.UpdatingStart != null && h.UpdatingEnd != null).Select(h => h.AmazonFeedback).ToList();
-        }
-    }
 }

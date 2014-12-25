@@ -163,6 +163,8 @@
     <Compile Include="MedalCalculations\CalculateMedal.cs" />
     <Compile Include="Misc\ChangeBrokerEmail.cs" />
     <Compile Include="MailStrategies\SendPendingMail.cs" />
+    <Compile Include="Misc\FirstOfMonthStatusStrategyHelper.cs" />
+    <Compile Include="Misc\GetCurrentCustomerAnnualTurnover.cs" />
     <Compile Include="Misc\SendPendingMails.cs" />
     <Compile Include="Misc\GetConfigTable.cs" />
     <Compile Include="Misc\LoadCustomerLeadFieldNames.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
     <Compile Include="Misc\SaveSourceRefHistory.cs" />
+    <Compile Include="Misc\ZooplaStub.cs" />
     <Compile Include="OfferCalculation\CalculateOffer.cs" />
     <Compile Include="OfferCalculation\OfferCalculator1.cs" />
     <Compile Include="OfferCalculation\OfferDualCalculator.cs" />
@@ -186,6 +189,7 @@
     <Compile Include="Reports\Alibaba.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="Misc\UpdateGoogleAnalytics.cs" />
+    <Compile Include="StrategyHelper.cs" />
     <Compile Include="Tasks\DailyFetchGoogleAnalyticsAndRunDependent.cs" />
     <Compile Include="UserManagement\AddCciHistory.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
@@ -365,10 +369,6 @@
       <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
       <Name>EzServiceConfiguration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
-      <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
-      <Name>AmazonDbLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
       <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
       <Name>AmazonLib</Name>
@@ -404,10 +404,6 @@
     <ProjectReference Include="..\..\Integration\DbConstants\DbConstants.csproj">
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\eBay\eBayDbLib\eBayDbLib.csproj">
-      <Project>{fb3eac65-ab2b-4a7e-ada5-aae0651caaf6}</Project>
-      <Name>eBayDbLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\eBay\eBayLib\eBayLib.csproj">
       <Project>{ac296ac1-dd5a-4aa4-a299-dd708e5f1a10}</Project>
@@ -472,6 +468,10 @@
     <ProjectReference Include="..\..\Integration\YodleeLib\YodleeLib.csproj">
       <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
       <Name>YodleeLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\ZooplaLib\ZooplaLib.csproj">
+      <Project>{0b829475-8239-498a-8454-ac5d91272235}</Project>
+      <Name>ZooplaLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj">
       <Project>{d7b3530e-4038-446d-a25a-45d6df5b6d45}</Project>

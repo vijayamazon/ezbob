@@ -68,9 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalysisDataInfo.cs" />
-    <Compile Include="AnalysisDataParameterInfo.cs" />
-    <Compile Include="AnalysisDataParameterInfoBase.cs" />
-    <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
     <Compile Include="Common\Coin.cs" />
     <Compile Include="Common\FileInfo.cs" />
     <Compile Include="DatabaseDataHelper\amazon.cs" />
@@ -271,8 +268,6 @@
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeOrderItemMap.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeOrderMap.cs" />
     <Compile Include="DistinctOrders.cs" />
-    <Compile Include="Common\DatabaseFunction.cs" />
-    <Compile Include="Common\DatabaseFunctionStorage.cs" />
     <Compile Include="Common\IMarketplaceRetrieveDataHelper.cs" />
     <Compile Include="Common\IMarketPlaceSecurityInfo.cs" />
     <Compile Include="Common\MarketplaceRetrieveDataHelperBase.cs" />
@@ -290,11 +285,6 @@
     <Compile Include="DatabaseWrapper\EbayFeedbackData\DataByPeriodBase.cs" />
     <Compile Include="DatabaseWrapper\EbayFeedbackData\EbayRaitingInfo.cs" />
     <Compile Include="DatabaseWrapper\FindDatabaseCustomerInfo.cs" />
-    <Compile Include="DatabaseWrapper\Functions\IDatabaseFunction.cs" />
-    <Compile Include="DatabaseWrapper\FunctionValues\DatabaseAnalysisFunctionValueInfo.cs" />
-    <Compile Include="DatabaseWrapper\FunctionValues\DatabaseFunctionValuesWriterHelper.cs" />
-    <Compile Include="DatabaseWrapper\FunctionValues\IDatabaseAnalysisFunctionValues.cs" />
-    <Compile Include="DatabaseWrapper\FunctionValues\WriteDataInfo.cs" />
     <Compile Include="DatabaseWrapper\IDatabaseCustomerMarketPlace.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrderItemDetailsList.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrdersList.cs" />
@@ -402,7 +392,6 @@
     <Compile Include="Tests\TestRegistry.cs" />
     <Compile Include="Tests\TimeDependentDataTest.cs" />
     <Compile Include="DatabaseWrapper\UsersData\IDatabaseEbayUserData.cs" />
-    <Compile Include="DatabaseWrapper\IDatabaseFunctionFactory.cs" />
     <Compile Include="DatabaseWrapper\Inventory\DatabaseInvetory.cs" />
     <Compile Include="DatabaseWrapper\Order\EbayDatabaseOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\DatabaseShipingAddress.cs" />
@@ -453,10 +442,6 @@
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackMap.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrder.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderMap.cs" />
-    <Compile Include="Model\Marketplaces\MP_AnalyisisFunction.cs" />
-    <Compile Include="Model\Marketplaces\MP_AnalyisisFunctionMap.cs" />
-    <Compile Include="Model\Marketplaces\MP_AnalyisisFunctionValue.cs" />
-    <Compile Include="Model\Marketplaces\MP_AnalyisisFunctionValueMap.cs" />
     <Compile Include="Model\Marketplaces\MP_AnalysisFunctionTimePeriod.cs" />
     <Compile Include="Model\Marketplaces\MP_AnalysisFunctionTimePeriodMap.cs" />
     <Compile Include="Model\Database\Customer.cs" />
@@ -498,8 +483,6 @@
     <Compile Include="Model\Database\PerformencePerUnderwriterDataRowMap.cs" />
     <Compile Include="Model\Database\PersonalInfoHistory.cs" />
     <Compile Include="Model\Database\PersonalInfoHistoryMap.cs" />
-    <Compile Include="Repository\AnalyisisFunctionRepository.cs" />
-    <Compile Include="Repository\AnalyisisFunctionValueRepository.cs" />
     <Compile Include="Repository\AnalysisFunctionTimePeriodRepository.cs" />
     <Compile Include="Repository\ExperianBankCacheRepository.cs" />
     <Compile Include="Repository\ExposurePerUnderwriterReportRepository.cs" />

@@ -12,20 +12,16 @@
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
 
-	public class EkmRetriveDataHelper : MarketplaceRetrieveDataHelperBase<EkmDatabaseFunctionType> {
+	public class EkmRetriveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public EkmRetriveDataHelper(
 			DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<EkmDatabaseFunctionType> marketplace
+			DatabaseMarketplaceBaseBase marketplace
 		)
 			: base(helper, marketplace) { } // constructor
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			return null;
 		} // RetrieveCustomerSecurityInfo
-
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
-			// Nothing here.
-		} // AddAnalysisValues
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,

@@ -14,17 +14,15 @@
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
 
-	public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase<YodleeDatabaseFunctionType> {
+	public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public YodleeRetriveDataHelper(DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<YodleeDatabaseFunctionType> marketplace)
+			DatabaseMarketplaceBaseBase marketplace)
 			: base(helper, marketplace) { }
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			return Serialized.Deserialize<YodleeSecurityInfo>(GetDatabaseCustomerMarketPlace(customerMarketPlaceId)
 				.SecurityData);
 		} // RetrieveCustomerSecurityInfo
-
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) { }
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord) {

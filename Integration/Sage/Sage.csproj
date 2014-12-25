@@ -58,8 +58,6 @@
     <Compile Include="SageConfig.cs" />
     <Compile Include="SageDeserializer.cs" />
     <Compile Include="SageConnector.cs" />
-    <Compile Include="SageDatabaseFunctionFactory.cs" />
-    <Compile Include="SageDatabaseFunctionStorage.cs" />
     <Compile Include="SageDatabaseMarketPlace.cs" />
     <Compile Include="SageDeserializeHelper.cs" />
     <Compile Include="SageRegistry.cs" />

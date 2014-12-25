@@ -78,8 +78,6 @@
     <Compile Include="GetRequestPermissionsUrlResponse.cs" />
     <Compile Include="Models\PayPalPermissionsGranted.cs" />
     <Compile Include="PayPalAdaptiveAccountsServiceHelper.cs" />
-    <Compile Include="PayPalDatabaseFunctionFactory.cs" />
-    <Compile Include="PayPalDatabaseFunctionStorage.cs" />
     <Compile Include="PayPalException.cs" />
     <Compile Include="PayPalPermissionServiceHelper.cs" />
     <Compile Include="Common\PayPalRequestInfo.cs" />

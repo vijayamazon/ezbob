@@ -5,7 +5,6 @@ namespace EzBob.PayPal {
 	using Ezbob.Database;
 	using Ezbob.Utils;
 	using EzBob.CommonLib;
-	using EzBob.PayPalDbLib;
 	using EzBob.PayPalDbLib.Models;
 	using EzBob.PayPalServiceLib;
 	using EzBob.PayPalServiceLib.Common;
@@ -17,8 +16,8 @@ namespace EzBob.PayPal {
 	using EZBob.DatabaseLib.Model.Database;
 	using log4net;
 
-	public class PayPalRetriveDataHelper : MarketplaceRetrieveDataHelperBase<PayPalDatabaseFunctionType> {
-		public PayPalRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPalDatabaseFunctionType> marketplace)
+	public class PayPalRetriveDataHelper : MarketplaceRetrieveDataHelperBase {
+		public PayPalRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBaseBase marketplace)
 			: base(helper, marketplace) { }
 
 		public PayPalPermissionsGranted GetAccessToken(string requestToken, string verificationCode) {
@@ -41,8 +40,6 @@ namespace EzBob.PayPal {
 			var databaseCustomerMarketPlace = Helper.GetDatabaseCustomerMarketPlace(Marketplace, umi);
 			UpdateAccountInfo(databaseCustomerMarketPlace);
 		}
-
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) { }
 
 		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			if (!databaseCustomerMarketPlace.Created.HasValue || (databaseCustomerMarketPlace.Created.Value.Date == DateTime.Today)) {

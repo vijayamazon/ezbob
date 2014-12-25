@@ -52,8 +52,6 @@
   <ItemGroup>
     <Compile Include="EkmConnector.cs" />
     <Compile Include="EkmRetriveDataHelper.cs" />
-    <Compile Include="EKMDatabaseFunctionFactory.cs" />
-    <Compile Include="EKMDatabaseFunctionStorage.cs" />
     <Compile Include="EkmDatabaseMarketPlace.cs" />
     <Compile Include="EKMRegistry.cs" />
     <Compile Include="EkmSecurityInfo.cs" />

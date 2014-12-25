@@ -1,121 +1,77 @@
-﻿namespace EzBob.Models.Marketplaces.Builders
-{
+﻿namespace EzBob.Models.Marketplaces.Builders {
 	using System;
-	using NHibernate;
-	using NHibernate.Linq;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Models;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Marketplaces.Sage;
-	using Marketplaces;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using Web.Areas.Customer.Models;
+	using NHibernate;
+	using NHibernate.Linq;
 
-	class SageMarketplaceModelBuilder : MarketplaceModelBuilder
-	{
-		readonly Dictionary<string, string> _invoiceStatuses = new Dictionary<string, string>();
-
+	class SageMarketplaceModelBuilder : MarketplaceModelBuilder {
 		public SageMarketplaceModelBuilder(MP_SagePaymentStatusRepository sagePaymentStatusRepository, ISession session)
-			: base(session)
-		{
-			foreach (var status in sagePaymentStatusRepository.GetAll())
-			{
+			: base(session) {
+			foreach (var status in sagePaymentStatusRepository.GetAll()) {
 				_invoiceStatuses.Add(status.SageId.ToString(), status.name);
 			}
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
-		{
-			var paymentAccountModel = new PaymentAccountsModel();
-			MP_AnalyisisFunctionValue earliestNumOfSalesInvoices = GetEarliestValueFor(mp, "NumOfOrders");
-			MP_AnalyisisFunctionValue earliestNumOfPurchaseInvoices = GetEarliestValueFor(mp, "NumOfPurchaseInvoices");
-			MP_AnalyisisFunctionValue earliestNumOfIncomes = GetEarliestValueFor(mp, "NumOfIncomes");
-			MP_AnalyisisFunctionValue earliestNumOfExpenditures = GetEarliestValueFor(mp, "NumOfExpenditures");
-			MP_AnalyisisFunctionValue earliestSumOfSalesInvoices = GetEarliestValueFor(mp, "TotalSumOfOrders");
-			MP_AnalyisisFunctionValue earliestSumOfPurchaseInvoices = GetEarliestValueFor(mp, "TotalSumOfPurchaseInvoices");
-			MP_AnalyisisFunctionValue earliestSumOfIncomes = GetEarliestValueFor(mp, "TotalSumOfIncomes");
-			MP_AnalyisisFunctionValue earliestSumOfExpenditures = GetEarliestValueFor(mp, "TotalSumOfExpenditures");
-			MP_AnalyisisFunctionValue monthSumOfSalesInvoices = GetMonthValueFor(mp, "TotalSumOfOrders");
-			MP_AnalyisisFunctionValue monthSumOfIncomes = GetMonthValueFor(mp, "TotalSumOfIncomes");
+		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp) {
+			DateTime? salesInvoices = null;
+			DateTime? purchaseInvoices = null;
+			DateTime? incomes = null;
+			DateTime? expenditures = null;
+			var dates = new List<DateTime?>();
 
-			paymentAccountModel.MonthInPayments = 0;
-			if (monthSumOfSalesInvoices != null && monthSumOfSalesInvoices.ValueFloat.HasValue)
-			{
-				paymentAccountModel.MonthInPayments += monthSumOfSalesInvoices.ValueFloat.Value;
-			}
-			if (monthSumOfIncomes != null && monthSumOfIncomes.ValueFloat.HasValue)
-			{
-				paymentAccountModel.MonthInPayments += monthSumOfIncomes.ValueFloat.Value;
+			var tmpSalesInvoices = _session.Query<MP_SageSalesInvoice>()
+				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.date != null);
+
+			if (tmpSalesInvoices.Count() != 0) {
+				salesInvoices = tmpSalesInvoices.Max(oi => oi.date);
 			}
 
-			paymentAccountModel.TransactionsNumber = 0;
-			if (earliestNumOfSalesInvoices != null && earliestNumOfSalesInvoices.ValueInt.HasValue)
-			{
-				paymentAccountModel.TransactionsNumber += earliestNumOfSalesInvoices.ValueInt.Value;
-			}
-			if (earliestNumOfPurchaseInvoices != null && earliestNumOfPurchaseInvoices.ValueInt.HasValue)
-			{
-				paymentAccountModel.TransactionsNumber += earliestNumOfPurchaseInvoices.ValueInt.Value;
-			}
-			if (earliestNumOfIncomes != null && earliestNumOfIncomes.ValueInt.HasValue)
-			{
-				paymentAccountModel.TransactionsNumber += earliestNumOfIncomes.ValueInt.Value;
-			}
-			if (earliestNumOfExpenditures != null && earliestNumOfExpenditures.ValueInt.HasValue)
-			{
-				paymentAccountModel.TransactionsNumber += earliestNumOfExpenditures.ValueInt.Value;
+			var tmpPurchaseInvoices = _session.Query<MP_SagePurchaseInvoice>()
+				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.date != null);
+
+			if (tmpPurchaseInvoices.Count() != 0) {
+				purchaseInvoices = tmpPurchaseInvoices.Max(oi => oi.date);
 			}
 
-			paymentAccountModel.TotalNetInPayments = 0;
-			if (earliestSumOfSalesInvoices != null && earliestSumOfSalesInvoices.ValueFloat.HasValue)
-			{
-				paymentAccountModel.TotalNetInPayments += earliestSumOfSalesInvoices.ValueFloat.Value;
-			}
-			if (earliestSumOfIncomes != null && earliestSumOfIncomes.ValueFloat.HasValue)
-			{
-				paymentAccountModel.TotalNetInPayments += earliestSumOfIncomes.ValueFloat.Value;
+			var tmpIncomes = _session.Query<MP_SageIncome>()
+				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.date != null);
+
+			if (tmpIncomes.Count() != 0) {
+				incomes = tmpIncomes.Max(oi => oi.date);
 			}
 
-			paymentAccountModel.TotalNetOutPayments = 0;
-			if (earliestSumOfPurchaseInvoices != null && earliestSumOfPurchaseInvoices.ValueFloat.HasValue)
-			{
-				paymentAccountModel.TotalNetOutPayments += earliestSumOfPurchaseInvoices.ValueFloat.Value;
-			}
-			if (earliestSumOfExpenditures != null && earliestSumOfExpenditures.ValueFloat.HasValue)
-			{
-				paymentAccountModel.TotalNetOutPayments += earliestSumOfExpenditures.ValueFloat.Value;
+			var tmpExpenditures = _session.Query<MP_SageExpenditure>()
+				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.date != null);
+
+			if (tmpExpenditures.Count() != 0) {
+				expenditures = tmpExpenditures.Max(oi => oi.date);
 			}
 
+			dates.Add(salesInvoices);
+			dates.Add(purchaseInvoices);
+			dates.Add(incomes);
+			dates.Add(expenditures);
+
+			return dates.Max();
+		}
+
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
+			var paymentAccountModel = new SagePaymentAccountsModel();
+			paymentAccountModel.Load(mp.Id, history, Library.Instance.DB);
 			return paymentAccountModel;
 		}
 
-		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
-		{
-			model.Sage = BuildSage(mp);
-		}
-
-		private SageModel BuildSage(MP_CustomerMarketPlace mp)
-		{
-			var dbSalesInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.SalesInvoices).OrderByDescending(salesInvoice => salesInvoice.Request.Id).Distinct(new SageSalesInvoiceComparer()).OrderByDescending(salesInvoice => salesInvoice.date);
-			var dbPurchaseInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.PurchaseInvoices).OrderByDescending(purchaseInvoice => purchaseInvoice.Request.Id).Distinct(new SagePurchaseInvoiceComparer()).OrderByDescending(purchaseInvoice => purchaseInvoice.date);
-			var dbIncomes = mp.SageRequests.SelectMany(sageRequest => sageRequest.Incomes).OrderByDescending(income => income.Request.Id).Distinct(new SageIncomeComparer()).OrderByDescending(income => income.date);
-			var dbExpenditures = mp.SageRequests.SelectMany(sageRequest => sageRequest.Expenditures).OrderByDescending(expenditure => expenditure.Request.Id).Distinct(new SageExpenditureComparer()).OrderByDescending(expenditure => expenditure.date);
-
-			var model = new SageModel
-			{
-				SalesInvoices = SageSalesInvoicesConverter.GetSageSalesInvoices(dbSalesInvoices),
-				PurchaseInvoices = SagePurchaseInvoicesConverter.GetSagePurchaseInvoices(dbPurchaseInvoices),
-				Incomes = SageIncomesConverter.GetSageIncomes(dbIncomes),
-				Expenditures = SageExpendituresConverter.GetSageExpenditures(dbExpenditures),
-				InvoicesStatuses = _invoiceStatuses
-			};
-
-			return model;
-		}
-
-		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
-		{
+		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
 			var salesInvoices = _session.Query<MP_SageSalesInvoice>()
 				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
 				.Where(oi => oi.date != null)
@@ -134,31 +90,24 @@
 				.Select(oi => oi.date);
 
 			DateTime? result = null;
-			if (salesInvoices.Any())
-			{
+			if (salesInvoices.Any()) {
 				result = salesInvoices.Min();
 			}
-			if (purchaseInvoices.Any())
-			{
+			if (purchaseInvoices.Any()) {
 				DateTime? tmp = purchaseInvoices.Min();
-				if (result == null || (tmp.HasValue && result.Value > tmp.Value))
-				{
+				if (result == null || (tmp.HasValue && result.Value > tmp.Value)) {
 					result = tmp;
 				}
 			}
-			if (incomes.Any())
-			{
+			if (incomes.Any()) {
 				DateTime? tmp = incomes.Min();
-				if (result == null || (tmp.HasValue && result.Value > tmp.Value))
-				{
+				if (result == null || (tmp.HasValue && result.Value > tmp.Value)) {
 					result = tmp;
 				}
 			}
-			if (expenditures.Any())
-			{
+			if (expenditures.Any()) {
 				DateTime? tmp = expenditures.Min();
-				if (result == null || (tmp.HasValue && result.Value > tmp.Value))
-				{
+				if (result == null || (tmp.HasValue && result.Value > tmp.Value)) {
 					result = tmp;
 				}
 			}
@@ -166,56 +115,27 @@
 			return result;
 		}
 
-		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
-		{
-			DateTime? salesInvoices = null;
-			DateTime? purchaseInvoices = null;
-			DateTime? incomes = null;
-			DateTime? expenditures = null;
-			var dates = new List<DateTime?>();
-
-			var tmpSalesInvoices = _session.Query<MP_SageSalesInvoice>()
-				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null);
-
-			if (tmpSalesInvoices.Count() != 0)
-			{
-				salesInvoices = tmpSalesInvoices.Max(oi => oi.date);
-			}
-
-			var tmpPurchaseInvoices = _session.Query<MP_SagePurchaseInvoice>()
-				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null);
-
-			if (tmpPurchaseInvoices.Count() != 0)
-			{
-				purchaseInvoices = tmpPurchaseInvoices.Max(oi => oi.date);
-			}
-
-			var tmpIncomes = _session.Query<MP_SageIncome>()
-				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null);
-
-			if (tmpIncomes.Count() != 0)
-			{
-				incomes = tmpIncomes.Max(oi => oi.date);
-			}
-
-			var tmpExpenditures = _session.Query<MP_SageExpenditure>()
-				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null);
-
-			if (tmpExpenditures.Count() != 0)
-			{
-				expenditures = tmpExpenditures.Max(oi => oi.date);
-			}
-
-			dates.Add(salesInvoices);
-			dates.Add(purchaseInvoices);
-			dates.Add(incomes);
-			dates.Add(expenditures);
-
-			return dates.Max();
+		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
+			model.Sage = BuildSage(mp);
 		}
+
+		private SageModel BuildSage(MP_CustomerMarketPlace mp) {
+			var dbSalesInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.SalesInvoices).OrderByDescending(salesInvoice => salesInvoice.Request.Id).Distinct(new SageSalesInvoiceComparer()).OrderByDescending(salesInvoice => salesInvoice.date);
+			var dbPurchaseInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.PurchaseInvoices).OrderByDescending(purchaseInvoice => purchaseInvoice.Request.Id).Distinct(new SagePurchaseInvoiceComparer()).OrderByDescending(purchaseInvoice => purchaseInvoice.date);
+			var dbIncomes = mp.SageRequests.SelectMany(sageRequest => sageRequest.Incomes).OrderByDescending(income => income.Request.Id).Distinct(new SageIncomeComparer()).OrderByDescending(income => income.date);
+			var dbExpenditures = mp.SageRequests.SelectMany(sageRequest => sageRequest.Expenditures).OrderByDescending(expenditure => expenditure.Request.Id).Distinct(new SageExpenditureComparer()).OrderByDescending(expenditure => expenditure.date);
+
+			var model = new SageModel {
+				SalesInvoices = SageSalesInvoicesConverter.GetSageSalesInvoices(dbSalesInvoices),
+				PurchaseInvoices = SagePurchaseInvoicesConverter.GetSagePurchaseInvoices(dbPurchaseInvoices),
+				Incomes = SageIncomesConverter.GetSageIncomes(dbIncomes),
+				Expenditures = SageExpendituresConverter.GetSageExpenditures(dbExpenditures),
+				InvoicesStatuses = _invoiceStatuses
+			};
+
+			return model;
+		}
+
+		readonly Dictionary<string, string> _invoiceStatuses = new Dictionary<string, string>();
 	}
 }

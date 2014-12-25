@@ -55,8 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PayPointConnector.cs" />
-    <Compile Include="PayPointDatabaseFunctionFactory.cs" />
-    <Compile Include="PayPointDatabaseFunctionStorage.cs" />
     <Compile Include="PayPointDatabaseMarketPlace.cs" />
     <Compile Include="PayPointDataSet.cs">
       <SubType>Component</SubType>

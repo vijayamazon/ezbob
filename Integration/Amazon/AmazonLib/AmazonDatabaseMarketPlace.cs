@@ -1,33 +1,16 @@
-﻿using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EzBob.AmazonDbLib;
-using EzBob.AmazonServiceLib;
-using StructureMap;
+﻿namespace EzBob.AmazonLib {
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EzBob.AmazonServiceLib;
 
-namespace EzBob.AmazonLib
-{
-	public class AmazonDatabaseMarketPlace : DatabaseMarketplaceBase<AmazonDatabaseFunctionType>
-	{
-		/*static AmazonDatabaseMarketPlace()
-		{
-			InitDatabaseMarketplace<AmazonDatabaseMarketPlace>();				
-		}*/
-
-		public AmazonDatabaseMarketPlace() 
-			: base(new AmazonServiceInfo())
-		{
+	public class AmazonDatabaseMarketPlace : DatabaseMarketplaceBaseBase {
+		public AmazonDatabaseMarketPlace()
+			: base(new AmazonServiceInfo()) {
 		}
 
-		public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper)
-		{
-			return new AmazonRetriveDataHelper( helper, this );
+		public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper) {
+			return new AmazonRetriveDataHelper(helper, this);
 		}
-		
-		public override IDatabaseFunctionFactory<AmazonDatabaseFunctionType> FunctionFactory
-		{
-			get { return new AmazonDatabaseFunctionFactory(); }
-		}
-
 	}
 }

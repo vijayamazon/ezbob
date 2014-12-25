@@ -62,7 +62,6 @@
     <Compile Include="ReceivedDataListLogic\ReceivedDataListTimeDependentBase.cs" />
     <Compile Include="ReceivedDataListLogic\ReceivedDataListTimeMarketTimeDependentBase.cs" />
     <Compile Include="Tests\ExtensionsFixture.cs" />
-    <Compile Include="TimePeriodLogic\AnnualizeHelper.cs" />
     <Compile Include="TimePeriodLogic\ReceivedDataListTimeDependentInfo.cs" />
     <Compile Include="TimePeriodLogic\TimePeriodEnum.cs" />
     <Compile Include="ErrorRetryingInfo.cs" />

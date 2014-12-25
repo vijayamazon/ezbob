@@ -1,13 +1,13 @@
 ﻿namespace PayPoint {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
 	using EzBob.CommonLib;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Serialization;
 
@@ -22,10 +22,10 @@
 		}
 	}
 
-	public class PayPointRetrieveDataHelper : MarketplaceRetrieveDataHelperBase<PayPointDatabaseFunctionType> {
+	public class PayPointRetrieveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public PayPointRetrieveDataHelper(
 			DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<PayPointDatabaseFunctionType> marketplace
+			DatabaseMarketplaceBaseBase marketplace
 		)
 			: base(helper, marketplace) {
 		}
@@ -33,9 +33,6 @@
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
 			return Serialized.Deserialize<PayPointSecurityInfo>(customerMarketPlace.SecurityData);
-		}
-
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
 		}
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(

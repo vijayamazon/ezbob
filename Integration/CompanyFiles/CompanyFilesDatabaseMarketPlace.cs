@@ -1,24 +1,15 @@
-﻿using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
+﻿namespace CompanyFiles {
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
 
-namespace CompanyFiles
-{
-	public class CompanyFilesDatabaseMarketPlace : DatabaseMarketplaceBase<CompanyFilesDatabaseFunctionType>
-	{
+	public class CompanyFilesDatabaseMarketPlace : DatabaseMarketplaceBaseBase {
 		public CompanyFilesDatabaseMarketPlace()
-			: base(new CompanyFilesServiceInfo())
-		{
+			: base(new CompanyFilesServiceInfo()) {
 		}
 
-		public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper)
-		{
+		public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper) {
 			return new CompanyFilesRetriveDataHelper(helper, this);
-		}
-
-		public override IDatabaseFunctionFactory<CompanyFilesDatabaseFunctionType> FunctionFactory
-		{
-			get { return new CompanyFilesDatabaseFunctionFactory(); }
 		}
 	}
 }

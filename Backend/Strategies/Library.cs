@@ -4,6 +4,17 @@
 	using Ezbob.LibraryGlobals;
 
 	public class Library : GloLib {
+		public static Library Instance {
+			get {
+				Library lib;
+
+				lock (lockInstance)
+					lib = Library.instance;
+
+				return lib;
+			} // get
+		} // Instance
+
 		static Library() {
 			instance = new Library();
 			lockInstance = new object();
@@ -20,24 +31,15 @@
 					} // if
 				} // lock
 			} // if
+
+			Ezbob.Models.Library.Initialize(env, db, log);
 		} // Initialize
-
-		public static Library Instance {
-			get {
-				Library lib;
-
-				lock (lockInstance)
-					lib = Library.instance;
-
-				return lib;
-			} // get
-		} // Instance
 
 		private Library() {
 		} // constructor
 
-		private static Library instance;
 		private static readonly object lockInstance;
+		private static Library instance;
 		private static bool isInitialized;
 	} // class Library
 } // namespace

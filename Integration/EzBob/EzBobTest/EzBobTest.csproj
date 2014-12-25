@@ -175,10 +175,6 @@
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Amazon\AmazonDbLib\AmazonDbLib.csproj">
-      <Project>{FD263EB4-A3EF-4447-94B1-DE1B308C604B}</Project>
-      <Name>AmazonDbLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Amazon\AmazonLib\AmazonLib.csproj">
       <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
       <Name>AmazonLib</Name>
@@ -218,10 +214,6 @@
     <ProjectReference Include="..\..\DbConstants\DbConstants.csproj">
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\eBay\eBayDbLib\eBayDbLib.csproj">
-      <Project>{FB3EAC65-AB2B-4A7E-ADA5-AAE0651CAAF6}</Project>
-      <Name>eBayDbLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\eBay\eBayLib\eBayLib.csproj">
       <Project>{AC296AC1-DD5A-4AA4-A299-DD708E5F1A10}</Project>

@@ -22,10 +22,10 @@
 	using Ezbob.Utils.Serialization;
 	using StructureMap;
 
-	public class RetrieveDataHelper : MarketplaceRetrieveDataHelperBase<FunctionType> {
+	public class RetrieveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public RetrieveDataHelper(
 			DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<FunctionType> marketplace
+			DatabaseMarketplaceBaseBase marketplace
 		)
 			: base(helper, marketplace) {
 		} // constructor
@@ -42,12 +42,6 @@
 					account.DisplayName, account.Id), e);
 			} // try
 		} // RetrieveSecurityInfo
-
-		protected override void AddAnalysisValues(
-			IDatabaseCustomerMarketPlace marketPlace,
-			AnalysisDataInfo data
-		) {
-		}
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,

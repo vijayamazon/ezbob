@@ -47,8 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompanyFilesDatabaseFunctionFactory.cs" />
-    <Compile Include="CompanyFilesDatabaseFunctionStorage.cs" />
     <Compile Include="CompanyFilesDatabaseMarketPlace.cs" />
     <Compile Include="CompanyFilesRegistry.cs" />
     <Compile Include="CompanyFilesRetriveDataHelper.cs" />

@@ -1,22 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using Experian;
-	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Misc;
 
 	public class AdditionalStrategiesCaller {
-		private readonly int customerId;
-		private readonly AConnection db;
-		private readonly ASafeLog log;
-		private readonly bool wasMainStrategyExecutedBefore;
-		private readonly string typeOfBusiness;
-		private readonly string bwaBusinessCheck;
-		private readonly string appBankAccountType;
-		private readonly string appAccountNumber;
-		private readonly string appSortCode;
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-
 		public AdditionalStrategiesCaller(int customerId,
 										  bool wasMainStrategyExecutedBefore, string typeOfBusiness, string bwaBusinessCheck,
 										  string appBankAccountType, string appAccountNumber, string appSortCode,
@@ -68,18 +56,6 @@
 			GetZooplaData();
 		}
 
-		private void GetBwa() {
-			if (ShouldRunBwa()) {
-				log.Info("Getting BWA for customer: {0}", customerId);
-				var bwaChecker = new BwaChecker(customerId);
-				bwaChecker.Execute();
-			}
-		}
-
-		private bool ShouldRunBwa() {
-			return appBankAccountType == "Personal" && bwaBusinessCheck == "1" && appSortCode != null && appAccountNumber != null;
-		}
-
 		private void GetAml() {
 			if (wasMainStrategyExecutedBefore) {
 				log.Info("Getting AML for customer: {0}", customerId);
@@ -88,9 +64,32 @@
 			}
 		}
 
+		private void GetBwa() {
+			if (ShouldRunBwa()) {
+				log.Info("Getting BWA for customer: {0}", customerId);
+				var bwaChecker = new BwaChecker(customerId);
+				bwaChecker.Execute();
+			}
+		}
+
 		private void GetZooplaData() {
 			log.Info("Getting zoopla data for customer:{0}", customerId);
 			strategyHelper.GetZooplaData(customerId);
 		}
+
+		private bool ShouldRunBwa() {
+			return appBankAccountType == "Personal" && bwaBusinessCheck == "1" && appSortCode != null && appAccountNumber != null;
+		}
+
+		private readonly string appAccountNumber;
+		private readonly string appBankAccountType;
+		private readonly string appSortCode;
+		private readonly string bwaBusinessCheck;
+		private readonly int customerId;
+		private readonly AConnection db;
+		private readonly ASafeLog log;
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly string typeOfBusiness;
+		private readonly bool wasMainStrategyExecutedBefore;
 	}
 }

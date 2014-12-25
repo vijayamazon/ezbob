@@ -14,41 +14,88 @@
 	using Utils;
 
 	public abstract partial class AConnection : SafeLog {
+		public virtual int CommandTimeout {
+			get { return m_nCommandTimeout; }
+			set { m_nCommandTimeout = value; }
+		} // CommandTimeout
 
-		public ConnectionWrapper TakeFromPool() {
-			PooledConnection pc = ms_oPool.Give();
+		public virtual Ezbob.Context.Environment Env { get; private set; }
 
-			if (pc == null)
-				throw new NullReferenceException("Cannot create a DB connection.");
+		public virtual LogVerbosityLevel LogVerbosityLevel {
+			get { return m_nLogVerbosityLevel; }
+			set { m_nLogVerbosityLevel = value; }
+		} // LogVerbosityLevel
 
-			if (pc.Connection == null)
-				pc.Connection = CreateConnection();
+		public class VectorToTableParameter<T> {
+			public T Value { get; set; } // Value
+		} // class VectorToTableParameter
 
-			uint nReminder = pc.OutOfPoolCount % 10;
+		public static void UpdateConnectionPoolMaxSize(int nMaxSize) {
+			ms_oPool.MaxSize = nMaxSize;
+		} // UpdateConnectionPoolMaxSize
 
-			string sSuffix = "th";
+		public abstract QueryParameter BuildTableParameter(string sFieldName, DataTable oValues);
 
-			switch (nReminder) {
-			case 1:
-				sSuffix = "st";
-				break;
-			case 2:
-				sSuffix = "nd";
-				break;
-			case 3:
-				sSuffix = "rd";
-				break;
-			} // switch
+		public virtual QueryParameter CreateTableParameter<T>(string sFieldName, params T[] aryValues) {
+			return CreateTableParameter<T>(sFieldName, (IEnumerable<T>)aryValues);
+		} // CreateTableParameter
 
-			Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
-				pc.OutOfPoolCount,
-				sSuffix,
-				pc.PoolItemID,
-				pc.Name
-			);
+		public virtual QueryParameter CreateTableParameter<T>(string sFieldName, IEnumerable<T> oValues) {
+			return CreateTableParameter<T>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(T)));
+		} // CreateTableParameter
 
-			return new ConnectionWrapper(pc);
-		} // TakeFromPool
+		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, params TSource[] aryValues) {
+			return CreateTableParameter<TColumnInfo>(sFieldName, aryValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)));
+		} // CreateTableParameter
+
+		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, IEnumerable<TSource> oValues) {
+			return CreateTableParameter<TColumnInfo>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)));
+		} // CreateTableParameter
+
+		public virtual QueryParameter CreateTableParameter<TColumnInfo>(
+			string sFieldName,
+			IEnumerable oValues,
+			Func<object, object[]> oValueToRow
+		) {
+			return CreateTableParameter(typeof(TColumnInfo), sFieldName, oValues, oValueToRow);
+		} // CreateTableParameter
+
+		public virtual QueryParameter CreateTableParameter(
+			Type oColumnInfo,
+			string sFieldName,
+			IEnumerable oValues,
+			Func<object, object[]> oValueToRow,
+			IEnumerable<Type> oCustomTypeOrder = null
+		) {
+			var tbl = new DataTable();
+
+			if (TypeUtils.IsSimpleType(oColumnInfo))
+				AddColumn(tbl, oColumnInfo);
+			else {
+				if (oCustomTypeOrder == null)
+					PropertyTraverser.Traverse(oColumnInfo, (i, oPropertyInfo) => AddColumn(tbl, oPropertyInfo.PropertyType));
+				else {
+					foreach (Type t in oCustomTypeOrder)
+						AddColumn(tbl, t);
+				} // if
+			} // if
+
+			if (oValues != null)
+				foreach (object v in oValues)
+					tbl.Rows.Add(oValueToRow(v));
+
+			return BuildTableParameter(sFieldName, tbl);
+		} // CreateTableParameter
+
+		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues) {
+			return CreateVectorParameter<T>(sFieldName, (IEnumerable<T>)oValues);
+		} // CreateVectorParameter
+
+		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues) {
+			return CreateTableParameter<VectorToTableParameter<T>>(sFieldName, oValues, oOneValue => new object[] { oOneValue });
+		} // CreateVectorParameter
+
+		public abstract string DateToString(DateTime oDate);
 
 		public virtual void DisposeAfterOneUsage(bool bAllesInOrdnung, ConnectionWrapper oConnection) {
 			if (oConnection == null)
@@ -60,23 +107,37 @@
 				ms_oPool.Drop(oConnection.Pooled);
 		} // DisposeAfterOneUsage
 
-		public static void UpdateConnectionPoolMaxSize(int nMaxSize) {
-			ms_oPool.MaxSize = nMaxSize;
-		} // UpdateConnectionPoolMaxSize
+		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
+			return ExecuteEnumerable(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
+		} // ExecuteEnumerable
 
-		public virtual ConnectionWrapper GetPersistent() {
-			var pc = new PooledConnection {
-				IsPooled = false,
-				Connection = CreateConnection()
-			};
+		public virtual IEnumerable<SafeReader> ExecuteEnumerable(string sQuery, params QueryParameter[] aryParams) {
+			return ExecuteEnumerable(null, sQuery, CommandSpecies.Auto, aryParams);
+		} // ExecuteEnumerable
 
-			lock (ms_oFreeConnectionLock)
-				pc.PoolItemID = ++ms_nFreeConnectionGenerator;
+		public virtual IEnumerable<SafeReader> ExecuteEnumerable(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			return ExecuteEnumerable(null, sQuery, nSpecies, aryParams);
+		} // ExecuteEnumerable
 
-			Debug("A non-pooled connection {0} has been created.", pc.Name);
+		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			return (IEnumerable<SafeReader>)Run(oConnectionToUse, null, ExecMode.Enumerable, nSpecies, sQuery, aryParams);
+		} // ExecuteEnumerable
 
-			return new ConnectionWrapper(pc).Open();
-		} // GetPersistent
+		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
+			return ExecuteNonQuery(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
+		} // ExecuteNonQuery
+
+		public virtual int ExecuteNonQuery(string sQuery, params QueryParameter[] aryParams) {
+			return ExecuteNonQuery(null, sQuery, CommandSpecies.Auto, aryParams);
+		} // ExecuteNonQuery
+
+		public virtual int ExecuteNonQuery(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			return ExecuteNonQuery(null, sQuery, nSpecies, aryParams);
+		} // ExecuteNonQuery
+
+		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			return (int)Run(oConnectionToUse, ExecMode.NonQuery, nSpecies, sQuery, aryParams);
+		} // ExecuteNonQuery
 
 		public virtual T ExecuteScalar<T>(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteScalar<T>(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
@@ -98,38 +159,6 @@
 
 			return (T)oRes;
 		} // ExecuteScalar
-
-		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
-			return ExecuteNonQuery(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
-		} // ExecuteNonQuery
-
-		public virtual int ExecuteNonQuery(string sQuery, params QueryParameter[] aryParams) {
-			return ExecuteNonQuery(null, sQuery, CommandSpecies.Auto, aryParams);
-		} // ExecuteNonQuery
-
-		public virtual int ExecuteNonQuery(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			return ExecuteNonQuery(null, sQuery, nSpecies, aryParams);
-		} // ExecuteNonQuery
-
-		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			return (int)Run(oConnectionToUse, ExecMode.NonQuery, nSpecies, sQuery, aryParams);
-		} // ExecuteNonQuery
-
-		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
-			return ExecuteEnumerable(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
-		} // ExecuteEnumerable
-
-		public virtual IEnumerable<SafeReader> ExecuteEnumerable(string sQuery, params QueryParameter[] aryParams) {
-			return ExecuteEnumerable(null, sQuery, CommandSpecies.Auto, aryParams);
-		} // ExecuteEnumerable
-
-		public virtual IEnumerable<SafeReader> ExecuteEnumerable(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			return ExecuteEnumerable(null, sQuery, nSpecies, aryParams);
-		} // ExecuteEnumerable
-
-		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			return (IEnumerable<SafeReader>)Run(oConnectionToUse, null, ExecMode.Enumerable, nSpecies, sQuery, aryParams);
-		} // ExecuteEnumerable
 
 		public List<T> Fill<T>(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) where T : new() {
 			return Fill<T>(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
@@ -198,14 +227,14 @@
 		} // FillFirst
 
 		public virtual void FillFirst<T>(ConnectionWrapper oConnectionToUse, T oInstance, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			if (!typeof (T).IsValueType) {
+			if (!typeof(T).IsValueType) {
 				// Plain comparison "oInstance == null" fires warning "possible compare of value type with null".
 				// Assignment to temp variable is a workaround to suppress the warning.
 				// And if we are already here then T is not a value type so it can be null.
 				object obj = oInstance;
 
 				if (obj == null)
-					throw new NullReferenceException("Cannot FillFirst of type " + typeof (T) + ": no instance specified.");
+					throw new NullReferenceException("Cannot FillFirst of type " + typeof(T) + ": no instance specified.");
 			} // if
 
 			ForEachRowSafe(
@@ -222,15 +251,15 @@
 
 		public virtual SafeReader GetFirst(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
 			return GetFirst(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
-		} // FillFirst
+		} // GetFirst
 
 		public virtual SafeReader GetFirst(string sQuery, params QueryParameter[] aryParams) {
 			return GetFirst(null, sQuery, CommandSpecies.Auto, aryParams);
-		} // FillFirst
+		} // GetFirst
 
 		public virtual SafeReader GetFirst(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			return GetFirst(null, sQuery, nSpecies, aryParams);
-		} // FillFirst
+		} // GetFirst
 
 		public virtual SafeReader GetFirst(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			SafeReader oResult = null;
@@ -249,111 +278,62 @@
 			return oResult ?? SafeReader.CreateEmpty();
 		} // GetFirst
 
-		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues) {
-			return CreateVectorParameter<T>(sFieldName, (IEnumerable<T>)oValues);
-		} // CreateVectorParameter
+		public virtual ConnectionWrapper GetPersistent() {
+			var pc = new PooledConnection {
+				IsPooled = false,
+				Connection = CreateConnection()
+			};
 
-		public class VectorToTableParameter<T> {
-			public T Value { get; set; } // Value
-		} // class VectorToTableParameter
+			lock (ms_oFreeConnectionLock)
+				pc.PoolItemID = ++ms_nFreeConnectionGenerator;
 
-		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues) {
-			return CreateTableParameter<VectorToTableParameter<T>>(sFieldName, oValues, oOneValue => new object[] {oOneValue});
-		} // CreateVectorParameter
+			Debug("A non-pooled connection {0} has been created.", pc.Name);
 
-		public virtual QueryParameter CreateTableParameter<T>(string sFieldName, params T[] aryValues) {
-			return CreateTableParameter<T>(sFieldName, (IEnumerable<T>)aryValues);
-		} // CreateTableParameter
+			return new ConnectionWrapper(pc).Open();
+		} // GetPersistent
 
-		public virtual QueryParameter CreateTableParameter<T>(string sFieldName, IEnumerable<T> oValues) {
-			return CreateTableParameter<T>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(T)));
-		} // CreateTableParameter
+		public ConnectionWrapper TakeFromPool() {
+			PooledConnection pc = ms_oPool.Give();
 
-		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, params TSource[] aryValues) {
-			return CreateTableParameter<TColumnInfo>(sFieldName, aryValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)));
-		} // CreateTableParameter
+			if (pc == null)
+				throw new NullReferenceException("Cannot create a DB connection.");
 
-		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, IEnumerable<TSource> oValues) {
-			return CreateTableParameter<TColumnInfo>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)));
-		} // CreateTableParameter
+			if (pc.Connection == null)
+				pc.Connection = CreateConnection();
 
-		public virtual QueryParameter CreateTableParameter<TColumnInfo>(
-			string sFieldName,
-			IEnumerable oValues,
-			Func<object, object[]> oValueToRow
-		) {
-			return CreateTableParameter(typeof (TColumnInfo), sFieldName, oValues, oValueToRow);
-		} // CreateTableParameter
+			uint nReminder = pc.OutOfPoolCount % 10;
 
-		public virtual QueryParameter CreateTableParameter(
-			Type oColumnInfo,
-			string sFieldName,
-			IEnumerable oValues,
-			Func<object, object[]> oValueToRow,
-			IEnumerable<Type> oCustomTypeOrder = null
-		) {
-			var tbl = new DataTable();
+			string sSuffix = "th";
 
-			if (TypeUtils.IsSimpleType(oColumnInfo))
-				AddColumn(tbl, oColumnInfo);
-			else {
-				if (oCustomTypeOrder == null)
-					PropertyTraverser.Traverse(oColumnInfo, (i, oPropertyInfo) => AddColumn(tbl, oPropertyInfo.PropertyType));
-				else {
-					foreach (Type t in oCustomTypeOrder)
-						AddColumn(tbl, t);
-				} // if
-			} // if
+			switch (nReminder) {
+			case 1:
+				sSuffix = "st";
+				break;
+			case 2:
+				sSuffix = "nd";
+				break;
+			case 3:
+				sSuffix = "rd";
+				break;
+			} // switch
 
-			if (oValues != null)
-				foreach (object v in oValues)
-					tbl.Rows.Add(oValueToRow(v));
+			Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
+				pc.OutOfPoolCount,
+				sSuffix,
+				pc.PoolItemID,
+				pc.Name
+			);
 
-			return BuildTableParameter(sFieldName, tbl);
-		} // CreateTableParameter
+			return new ConnectionWrapper(pc);
+		} // TakeFromPool
 
-		public abstract QueryParameter BuildTableParameter(string sFieldName, DataTable oValues);
-
-		public abstract string DateToString(DateTime oDate);
-
-		public virtual int CommandTimeout {
-			get { return m_nCommandTimeout; }
-			set { m_nCommandTimeout = value; }
-		} // CommandTimeout
-
-		private int m_nCommandTimeout;
-
-		public virtual LogVerbosityLevel LogVerbosityLevel {
-			get { return m_nLogVerbosityLevel; }
-			set { m_nLogVerbosityLevel = value; }
-		} // LogVerbosityLevel
-
-		private LogVerbosityLevel m_nLogVerbosityLevel;
-
-		protected AConnection(ASafeLog log = null, string sConnectionString = null) : base(log) {
-			Env = new Ezbob.Context.Environment(log);
-			m_sConnectionString = sConnectionString;
-			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
-			m_nCommandTimeout = 30;
-
-			ms_oPool.Log.SetInternal(log);
-		} // constructor
-
-		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) : base(log) {
-			Env = oEnv;
-			m_sConnectionString = null;
-			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
-
-			ms_oPool.Log.SetInternal(log);
-		} // Env
-
-		protected abstract DbConnection CreateConnection();
-		protected abstract DbCommand CreateCommand(string sCommand);
-		protected abstract void AppendParameter(DbCommand cmd, QueryParameter prm);
-
-		protected abstract ARetryer CreateRetryer();
-
-		protected virtual Ezbob.Context.Environment Env { get; private set; }
+		protected enum ExecMode {
+			Scalar,
+			Reader,
+			NonQuery,
+			ForEachRow,
+			Enumerable,
+		} // enum ExecMode
 
 		protected virtual string ConnectionString {
 			get {
@@ -362,8 +342,7 @@
 
 				try {
 					m_sConnectionString = ConfigurationManager.ConnectionStrings[Env.Context.ToLower()].ConnectionString;
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					string sMsg = string.Format(
 						"Failed to load connection string from configuration file using name {0}",
 						Env.Context.ToLower()
@@ -383,15 +362,102 @@
 			} // set
 		} // ConnectionString
 
-		private string m_sConnectionString;
+		protected AConnection(ASafeLog log = null, string sConnectionString = null)
+			: base(log) {
+			Env = new Ezbob.Context.Environment(log);
+			m_sConnectionString = sConnectionString;
+			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
+			m_nCommandTimeout = 30;
 
-		protected enum ExecMode {
-			Scalar,
-			Reader,
-			NonQuery,
-			ForEachRow,
-			Enumerable,
-		} // Enum ExecMode
+			ms_oPool.Log.SetInternal(log);
+		} // constructor
+
+		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null)
+			: base(log) {
+			Env = oEnv;
+			m_sConnectionString = null;
+			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
+
+			ms_oPool.Log.SetInternal(log);
+		} // constructor
+
+		protected abstract void AppendParameter(DbCommand cmd, QueryParameter prm);
+
+		protected virtual DbCommand BuildCommand(string spName, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			DbCommand command = CreateCommand(spName);
+
+			switch (nSpecies) {
+			case CommandSpecies.Auto:
+				command.CommandType = aryParams.Length == 0 ? CommandType.Text : CommandType.StoredProcedure;
+				break;
+
+			case CommandSpecies.StoredProcedure:
+				command.CommandType = CommandType.StoredProcedure;
+				break;
+
+			case CommandSpecies.Text:
+				command.CommandType = CommandType.Text;
+				break;
+
+			case CommandSpecies.TableDirect:
+				command.CommandType = CommandType.TableDirect;
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException("nSpecies");
+			} // switch
+
+			command.CommandTimeout = CommandTimeout;
+
+			foreach (var prm in aryParams)
+				AppendParameter(command, prm);
+
+			return command;
+		} // BuildCommand
+
+		protected abstract DbCommand CreateCommand(string sCommand);
+
+		protected abstract DbConnection CreateConnection();
+
+		protected abstract ARetryer CreateRetryer();
+
+		protected void PublishRunningTime(
+			string sPooledConnectionID,
+			LogVerbosityLevel nLogVerbosityLevel,
+			string sSpName,
+			string sArgsForLog,
+			Guid guid,
+			Stopwatch sw,
+			long nPrevStopwatchValue = -1,
+			string sMsg = "completed",
+			string sAuxMsg = ""
+		) {
+			long nCurStopwatchValue = sw.ElapsedMilliseconds;
+
+			sAuxMsg = (sAuxMsg ?? string.Empty).Trim();
+			if (sAuxMsg != string.Empty)
+				sAuxMsg = " " + sAuxMsg;
+
+			switch (nLogVerbosityLevel) {
+			case LogVerbosityLevel.Compact:
+				string sTime;
+
+				if (nPrevStopwatchValue == -1)
+					sTime = nCurStopwatchValue + "ms";
+				else
+					sTime = nPrevStopwatchValue + "ms / " + (nCurStopwatchValue - nPrevStopwatchValue) + "ms";
+
+				Debug("Query {0} in {1}{2} on connection {5}. Request: {3}{4}", sMsg, sTime, sAuxMsg, sSpName, sArgsForLog, sPooledConnectionID);
+				break;
+
+			case LogVerbosityLevel.Verbose:
+				Debug("Query {1} {2} in {0}ms{3} since query start on connection {4}.", nCurStopwatchValue, guid, sMsg, sAuxMsg, sPooledConnectionID);
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException("nLogVerbosityLevel");
+			} // switch
+		} // PublishRunningTime
 
 		protected virtual object Run(
 			ConnectionWrapper cw,
@@ -444,16 +510,14 @@
 				); // Retry
 
 				return oResult;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
 					Error(e, "Error while executing query {0}", guid);
 				else
 					Error(e, "Error while executing query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
 
 				throw;
-			}
-			finally {
+			} finally {
 				if (oCmdToDispose != null) {
 					oCmdToDispose.Dispose();
 
@@ -463,80 +527,10 @@
 			} // try
 		} // Run
 
-		protected void PublishRunningTime(
-			string sPooledConnectionID,
-			LogVerbosityLevel nLogVerbosityLevel,
-			string sSpName,
-			string sArgsForLog,
-			Guid guid,
-			Stopwatch sw,
-			long nPrevStopwatchValue = -1,
-			string sMsg = "completed",
-			string sAuxMsg = ""
-		) {
-			long nCurStopwatchValue = sw.ElapsedMilliseconds;
-
-			sAuxMsg = (sAuxMsg ?? string.Empty).Trim();
-			if (sAuxMsg != string.Empty)
-				sAuxMsg = " " + sAuxMsg;
-
-			switch (nLogVerbosityLevel) {
-			case LogVerbosityLevel.Compact:
-				string sTime;
-
-				if (nPrevStopwatchValue == -1)
-					sTime = nCurStopwatchValue + "ms";
-				else
-					sTime = nPrevStopwatchValue + "ms / " + (nCurStopwatchValue - nPrevStopwatchValue) + "ms";
-
-				Debug("Query {0} in {1}{2} on connection {5}. Request: {3}{4}", sMsg, sTime, sAuxMsg, sSpName, sArgsForLog, sPooledConnectionID);
-				break;
-
-			case LogVerbosityLevel.Verbose:
-				Debug("Query {1} {2} in {0}ms{3} since query start on connection {4}.", nCurStopwatchValue, guid, sMsg, sAuxMsg, sPooledConnectionID);
-				break;
-
-			default:
-				throw new ArgumentOutOfRangeException("nLogVerbosityLevel");
-			} // switch
-		} // PublishRunnigTime
-
-		protected virtual DbCommand BuildCommand(string spName, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			DbCommand command = CreateCommand(spName);
-
-			switch (nSpecies) {
-			case CommandSpecies.Auto:
-				command.CommandType = aryParams.Length == 0 ? CommandType.Text : CommandType.StoredProcedure;
-				break;
-
-			case CommandSpecies.StoredProcedure:
-				command.CommandType = CommandType.StoredProcedure;
-				break;
-
-			case CommandSpecies.Text:
-				command.CommandType = CommandType.Text;
-				break;
-
-			case CommandSpecies.TableDirect:
-				command.CommandType = CommandType.TableDirect;
-				break;
-
-			default:
-				throw new ArgumentOutOfRangeException("nSpecies");
-			} // switch
-
-			command.CommandTimeout = CommandTimeout;
-
-			foreach (var prm in aryParams)
-				AppendParameter(command, prm);
-
-			return command;
-		} // BuildCommand
-
 		protected virtual object RunOnce(
 			ConnectionWrapper oConnectionToUse,
 			Func<DbDataReader, bool, ActionResult> oAction,
-			ExecMode nMode, 
+			ExecMode nMode,
 			DbCommand command,
 			LogVerbosityLevel nLogVerbosityLevel,
 			string spName,
@@ -628,12 +622,10 @@
 				default:
 					throw new ArgumentOutOfRangeException("nMode");
 				} // switch
-			}
-			catch (Exception) {
+			} catch (Exception) {
 				bAllesInOrdnung = false;
 				throw;
-			}
-			finally {
+			} finally {
 				if (bDropAfterUse && (nMode != ExecMode.Enumerable))
 					DisposeAfterOneUsage(bAllesInOrdnung, oConnection);
 			} // try
@@ -648,10 +640,14 @@
 			);
 		} // AddColumn
 
-		private static readonly DbConnectionPool ms_oPool = new DbConnectionPool();
-
-		private static ulong ms_nFreeConnectionGenerator = 0;
 		private static readonly object ms_oFreeConnectionLock = new object();
+		private static readonly DbConnectionPool ms_oPool = new DbConnectionPool();
+		private static ulong ms_nFreeConnectionGenerator = 0;
 
+		private int m_nCommandTimeout;
+
+		private LogVerbosityLevel m_nLogVerbosityLevel;
+
+		private string m_sConnectionString;
 	} // AConnection
 } // namespace Ezbob.Database

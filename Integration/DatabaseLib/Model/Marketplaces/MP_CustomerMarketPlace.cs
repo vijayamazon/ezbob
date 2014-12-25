@@ -10,8 +10,106 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using Iesi.Collections.Generic;
 	using StructureMap;
 
+	public static class MP_CustomerMarketPlaceExt {
+		public static IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(this MP_CustomerMarketPlace mp) {
+			return ObjectFactory
+				.GetNamedInstance<IMarketplaceType>(mp.Marketplace.Name)
+				.GetRetrieveDataHelper(ObjectFactory.GetInstance<DatabaseDataHelper>());
+		}
+
+		public static string Stringify(this MP_CustomerMarketPlace mp) {
+			if (mp == null)
+				return "-- null --";
+
+			return string.Format("{1} ({0} of type {2})", mp.Id, mp.DisplayName, mp.Marketplace == null ? "unknown" : mp.Marketplace.Name);
+		} // Stringify
+
+		// GetRetrieveDataHelper
+	}
+
 	public class MP_CustomerMarketPlace : IDatabaseCustomerMarketPlace {
-		private IMarketplaceType _mpType;
+		public virtual ISet<MP_AmazonFeedback> AmazonFeedback { get; set; }
+
+		public virtual MP_AmazonMarketplaceType AmazonMarketPlace { get; set; }
+
+		public virtual ISet<MP_AmazonOrder> AmazonOrders { get; set; }
+
+		public virtual ISet<MP_ChannelGrabberOrder> ChannelGrabberOrders { get; set; }
+
+		public virtual DateTime? Created { get; set; }
+
+		public virtual Customer Customer { get; set; }
+
+		/// <summary>
+		/// True if marketplace is disabled. Do not show totals, seniority and other
+		/// stuff for such marketplaces.
+		/// </summary>
+		public virtual bool Disabled { get; set; }
+
+		public virtual string DisplayName { get; set; }
+
+		public virtual ISet<MP_EbayFeedback> EbayFeedback { get; set; }
+
+		public virtual ISet<MP_EbayOrder> EbayOrders { get; set; }
+
+		public virtual ISet<MP_EbayUserAccountData> EbayUserAccountData { get; set; }
+
+		public virtual ISet<MP_EbayUserData> EbayUserData { get; set; }
+
+		public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
+
+		public virtual ISet<MP_FreeAgentRequest> FreeAgentRequests { get; set; }
+
+		public virtual int Id { get; set; }
+
+		IMarketplaceType IDatabaseCustomerMarketPlace.Marketplace {
+			get {
+				return _mpType;
+			}
+		}
+
+		public virtual bool IsNew {
+			get {
+				return Customer.CashRequests.Count > 0 && Created > Customer.LastCashRequest.CreationDate;
+			}
+		}
+
+		public virtual DateTime? LastTransactionDate { get; set; }
+
+		public virtual MP_MarketplaceType Marketplace { get; set; }
+
+		/// <summary>
+		/// Date of the first order/transaction for marketplace
+		/// </summary>
+		public virtual DateTime? OriginationDate { get; set; }
+
+		public virtual ISet<MP_PayPalTransaction> PayPalTransactions { get; set; }
+
+		public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
+
+		public virtual MP_PayPalPersonalInfo PersonalInfo { get; set; }
+
+		public virtual ISet<MP_RtiTaxMonthRecord> RtiTaxMonthRecords { get; set; }
+
+		public virtual ISet<MP_SageRequest> SageRequests { get; set; }
+
+		public virtual byte[] SecurityData { get; set; }
+
+		public virtual ISet<MP_TeraPeakOrder> TeraPeakOrders { get; set; }
+
+		public virtual DateTime? Updated { get; set; }
+
+		public virtual string UpdateError { get; set; }
+
+		public virtual DateTime? UpdatingEnd { get; set; }
+
+		public virtual ISet<MP_CustomerMarketplaceUpdatingHistory> UpdatingHistory { get; set; }
+
+		public virtual DateTime? UpdatingStart { get; set; }
+
+		public virtual ISet<MP_VatReturnRecord> VatReturnRecords { get; set; }
+
+		public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
 
 		public MP_CustomerMarketPlace() {
 			PayPalTransactions = new HashedSet<MP_PayPalTransaction>();
@@ -23,7 +121,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			EbayFeedback = new HashedSet<MP_EbayFeedback>();
 			AmazonFeedback = new HashedSet<MP_AmazonFeedback>();
 			TeraPeakOrders = new HashedSet<MP_TeraPeakOrder>();
-			AnalysysFunctionValues = new HashedSet<MP_AnalyisisFunctionValue>();
 			EkmOrders = new HashedSet<MP_EkmOrder>();
 			FreeAgentRequests = new HashedSet<MP_FreeAgentRequest>();
 			SageRequests = new HashedSet<MP_SageRequest>();
@@ -33,52 +130,19 @@ namespace EZBob.DatabaseLib.Model.Database {
 			PayPointOrders = new HashedSet<MP_PayPointOrder>();
 			YodleeOrders = new HashedSet<MP_YodleeOrder>();
 		}
-		public virtual int Id { get; set; }
 
-		public virtual MP_MarketplaceType Marketplace { get; set; }
-
-		IMarketplaceType IDatabaseCustomerMarketPlace.Marketplace {
-			get {
-				return _mpType;
-			}
+		public virtual string GetUpdatingError(DateTime? history) {
+			string error = null;
+			if (history.HasValue) {
+				var mpCustomerMarketplaceUpdatingHistory =
+					UpdatingHistory.FirstOrDefault(h => h.UpdatingStart >= history.Value);
+				if (mpCustomerMarketplaceUpdatingHistory != null &&
+					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error)) {
+					error = mpCustomerMarketplaceUpdatingHistory.Error;
+				}
+			} else { error = UpdateError; }
+			return error;
 		}
-
-		public virtual Customer Customer { get; set; }
-		public virtual byte[] SecurityData { get; set; }
-		public virtual string DisplayName { get; set; }
-		public virtual MP_PayPalPersonalInfo PersonalInfo { get; set; }
-
-		public virtual DateTime? Created { get; set; }
-		public virtual DateTime? Updated { get; set; }
-		public virtual DateTime? UpdatingStart { get; set; }
-		public virtual DateTime? UpdatingEnd { get; set; }
-		public virtual string UpdateError { get; set; }
-
-		public virtual ISet<MP_PayPalTransaction> PayPalTransactions { get; set; }
-		public virtual ISet<MP_EbayOrder> EbayOrders { get; set; }
-		public virtual ISet<MP_AmazonOrder> AmazonOrders { get; set; }
-		public virtual ISet<MP_CustomerMarketplaceUpdatingHistory> UpdatingHistory { get; set; }
-		public virtual ISet<MP_EbayUserData> EbayUserData { get; set; }
-		public virtual ISet<MP_EbayUserAccountData> EbayUserAccountData { get; set; }
-		public virtual ISet<MP_EbayFeedback> EbayFeedback { get; set; }
-		public virtual ISet<MP_AmazonFeedback> AmazonFeedback { get; set; }
-		public virtual ISet<MP_TeraPeakOrder> TeraPeakOrders { get; set; }
-		public virtual ISet<MP_AnalyisisFunctionValue> AnalysysFunctionValues { get; set; }
-
-		public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
-		public virtual ISet<MP_FreeAgentRequest> FreeAgentRequests { get; set; }
-		public virtual ISet<MP_SageRequest> SageRequests { get; set; }
-		public virtual ISet<MP_ChannelGrabberOrder> ChannelGrabberOrders { get; set; }
-		public virtual ISet<MP_VatReturnRecord> VatReturnRecords { get; set; }
-		public virtual ISet<MP_RtiTaxMonthRecord> RtiTaxMonthRecords { get; set; }
-		public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
-		public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
-
-		/// <summary>
-		/// Date of the first order/transaction for marketplace
-		/// </summary>
-		public virtual DateTime? OriginationDate { get; set; }
-		public virtual DateTime? LastTransactionDate { get; set; }
 
 		public virtual string GetUpdatingStatus(DateTime? history = null) {
 			string status = "Done";
@@ -89,8 +153,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error)) {
 					status = "Error";
 				}
-			}
-			else {
+			} else {
 				if (!string.IsNullOrWhiteSpace(UpdateError))
 					status = "Error";
 				else if (UpdatingEnd != null)
@@ -103,51 +166,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 			return status;
 		}
 
-		public virtual bool IsNew {
-			get {
-				return Customer.CashRequests.Count > 0 && Created > Customer.LastCashRequest.CreationDate;
-			}
-		}
-
-		/// <summary>
-		/// True if marketplace is disabled. Do not show totals, seniority and other
-		/// stuff for such marketplaces.
-		/// </summary>
-		public virtual bool Disabled { get; set; }
-
-		public virtual MP_AmazonMarketplaceType AmazonMarketPlace { get; set; }
-
 		public virtual void SetIMarketplaceType(IMarketplaceType marketplaceType) {
 			_mpType = marketplaceType;
 		}
 
-		public virtual string GetUpdatingError(DateTime? history) {
-			string error = null;
-			if (history.HasValue) {
-				var mpCustomerMarketplaceUpdatingHistory =
-					UpdatingHistory.FirstOrDefault(h => h.UpdatingStart >= history.Value);
-				if (mpCustomerMarketplaceUpdatingHistory != null &&
-					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error)) {
-					error = mpCustomerMarketplaceUpdatingHistory.Error;
-				}
-			}
-			else { error = UpdateError; }
-			return error;
-		}
+		private IMarketplaceType _mpType;
 	}
-
-	public static class MP_CustomerMarketPlaceExt {
-		public static string Stringify(this MP_CustomerMarketPlace mp) {
-			if (mp == null)
-				return "-- null --";
-
-			return string.Format("{1} ({0} of type {2})", mp.Id, mp.DisplayName, mp.Marketplace == null ? "unknown" : mp.Marketplace.Name);
-		} // Stringify
-
-		public static IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(this MP_CustomerMarketPlace mp) {
-			return ObjectFactory
-				.GetNamedInstance<IMarketplaceType>(mp.Marketplace.Name)
-				.GetRetrieveDataHelper(ObjectFactory.GetInstance<DatabaseDataHelper>());
-		} // GetRetrieveDataHelper
-	} // class MP_CustomerMarketPlaceExt
 }

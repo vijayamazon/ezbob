@@ -1,18 +1,8 @@
-using Iesi.Collections.Generic;
-
-namespace EZBob.DatabaseLib.Model.Database 
-{
-    
-    public class MP_ValueType 
-	{
-        public MP_ValueType() 
-		{
-			AnalyisisFunctions = new HashedSet<MP_AnalyisisFunction>();
-        }
-        public virtual int Id { get; set; }
-        public virtual ISet<MP_AnalyisisFunction> AnalyisisFunctions { get; set; }
-        public virtual string Name { get; set; }
-        public virtual System.Guid InternalId { get; set; }
-        public virtual string Description { get; set; }
-    }
+namespace EZBob.DatabaseLib.Model.Database {
+	public class MP_ValueType {
+		public virtual string Description { get; set; }
+		public virtual int Id { get; set; }
+		public virtual System.Guid InternalId { get; set; }
+		public virtual string Name { get; set; }
+	}
 }

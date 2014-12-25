@@ -1513,10 +1513,6 @@
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
       <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
-      <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
-      <Name>AmazonDbLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
       <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
       <Name>AmazonLib</Name>
@@ -1557,10 +1553,6 @@
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Integration\eBay\eBayDbLib\eBayDbLib.csproj">
-      <Project>{fb3eac65-ab2b-4a7e-ada5-aae0651caaf6}</Project>
-      <Name>eBayDbLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\eBay\eBayLib\eBayLib.csproj">
       <Project>{AC296AC1-DD5A-4AA4-A299-DD708E5F1A10}</Project>
       <Name>eBayLib</Name>
@@ -1582,7 +1574,7 @@
       <Name>ExperianLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EzBob.Models\EzBob.Models.csproj">
-      <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
+      <Project>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</Project>
       <Name>EzBob.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
@@ -1652,6 +1644,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
       <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
       <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\LibraryGlobals\LibraryGlobals.csproj">
+      <Project>{83A9EFC6-0BD4-46FA-9058-329BEE135BDA}</Project>
+      <Name>LibraryGlobals</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>

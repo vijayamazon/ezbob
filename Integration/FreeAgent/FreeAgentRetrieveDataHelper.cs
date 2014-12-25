@@ -13,10 +13,10 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Serialization;
 
-	public class FreeAgentRetrieveDataHelper : MarketplaceRetrieveDataHelperBase<FreeAgentDatabaseFunctionType> {
+	public class FreeAgentRetrieveDataHelper : MarketplaceRetrieveDataHelperBase {
 		public FreeAgentRetrieveDataHelper(
 			DatabaseDataHelper helper,
-			DatabaseMarketplaceBase<FreeAgentDatabaseFunctionType> marketplace
+			DatabaseMarketplaceBaseBase marketplace
 		)
 			: base(helper, marketplace) {
 			expenseCategories = Helper.GetExpenseCategories();
@@ -24,9 +24,6 @@
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			return null;
-		}
-
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
 		}
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
@@ -206,10 +203,6 @@
 				() => Helper.StoreFreeAgentUsersData(mpFreeAgentUsersList)
 			);
 		} // StoreUsersData
-
-		// AddAnalysisValues
-
-		// RetrieveCustomerSecurityInfo
 
 		private static readonly ASafeLog log = new SafeILog(typeof(FreeAgentRetrieveDataHelper));
 		private readonly Dictionary<string, FreeAgentExpenseCategory> expenseCategories;

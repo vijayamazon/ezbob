@@ -3,9 +3,9 @@
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
+	using EzBob.Web.Areas.Customer.Models;
 	using Infrastructure;
 	using Infrastructure.Attributes;
-	using Models;
 	using Infrastructure.csrf;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -16,34 +16,6 @@
 			m_oContext = context;
 			m_oServiceClient = new ServiceClient();
 		} // constructor
-
-		[Ajax]
-		[HttpPost]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult UpdateSecurityQuestion(SecurityQuestionModel model, string password) {
-			string sErrorMsg = null;
-			bool bSuccess = false;
-
-			try {
-				StringActionResult sar = m_oServiceClient.Instance.UserUpdateSecurityQuestion(
-					m_oContext.User.Name,
-					new Password(password),
-					model.Question,
-					model.Answer
-				);
-
-				sErrorMsg = sar.Value;
-
-				bSuccess = string.IsNullOrWhiteSpace(sErrorMsg);
-			}
-			catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to update security question for customer '{0}'.", m_oContext.User.Name);
-				sErrorMsg = "Failed to update security question.";
-				bSuccess = false;
-			} // try
-
-			return Json(new { success = bSuccess, error = sErrorMsg, });
-		} // UpdateSecurityQuestion
 
 		[Ajax]
 		[HttpPost]
@@ -65,20 +37,46 @@
 
 				if (bSuccess)
 					m_oContext.User.IsPasswordRestored = false;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to update password for customer '{0}'.", m_oContext.User.Name);
 				sErrorMsg = "Failed to update password.";
 				bSuccess = false;
 			} // try
 
 			return Json(new { success = bSuccess, error = sErrorMsg, });
-		} // ChangePassword
+		}
 
-		private readonly IWorkplaceContext m_oContext;
-		private readonly ServiceClient m_oServiceClient;
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult UpdateSecurityQuestion(SecurityQuestionModel model, string password) {
+			string sErrorMsg = null;
+			bool bSuccess = false;
+
+			try {
+				StringActionResult sar = m_oServiceClient.Instance.UserUpdateSecurityQuestion(
+					m_oContext.User.Name,
+					new Password(password),
+					model.Question,
+					model.Answer
+				);
+
+				sErrorMsg = sar.Value;
+
+				bSuccess = string.IsNullOrWhiteSpace(sErrorMsg);
+			} catch (Exception e) {
+				ms_oLog.Alert(e, "Failed to update security question for customer '{0}'.", m_oContext.User.Name);
+				sErrorMsg = "Failed to update security question.";
+				bSuccess = false;
+			} // try
+
+			return Json(new { success = bSuccess, error = sErrorMsg, });
+		} // UpdateSecurityQuestion
+
+		// ChangePassword
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(AccountSettingsController));
-
+		private readonly IWorkplaceContext m_oContext;
+		private readonly ServiceClient m_oServiceClient;
 	} // class AccountSettingsController
 } // namespace

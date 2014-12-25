@@ -9,8 +9,6 @@
 	using Model.Database.Broker;
 	using Model.Database.Loans;
 	using DatabaseWrapper;
-	using DatabaseWrapper.FunctionValues;
-	using DatabaseWrapper.Functions;
 	using DatabaseWrapper.Order;
 	using Model;
 	using Model.Database;
@@ -82,15 +80,8 @@
 			_MarketPlaceRepository = new MarketPlaceRepository(session);
 			_CustomerMarketplaceRepository = new CustomerMarketPlaceRepository(session);
 			_AnalysisFunctionTimePeriodRepository = new AnalysisFunctionTimePeriodRepository(session);
-			_AnalyisisFunctionRepository = new AnalyisisFunctionRepository(session);
-			_AnalyisisFunctionValueRepository = new AnalyisisFunctionValueRepository(session);
 			_CustomerRepository = new CustomerRepository(session);
 			_EbayUserAddressDataRepository = new EbayUserAddressDataRepository(session);
-			_FunctionValuesWriterHelper = new DatabaseFunctionValuesWriterHelper(
-				_AnalyisisFunctionValueRepository,
-				_CustomerMarketplaceRepository,
-				_AnalysisFunctionTimePeriodRepository,
-				_AnalyisisFunctionRepository);
 
 			_CurrencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			_CurrencyConvertor = new CurrencyConvertor(_CurrencyRateRepository);
@@ -376,37 +367,6 @@
 			salesInvoices.AddRange(SageSalesInvoicesConverter.GetSageSalesInvoices(dbSalesInvoices));
 
 			return salesInvoices;
-		}
-
-		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			var lst = new List<AnalysisFunctionData>();
-
-			try {
-				var analysisVals = _session.CreateSQLQuery("EXEC GetFunctionAnalysisValuesByCustomerMarketPlace " + databaseCustomerMarketPlace.Id).List<object[]>();
-				if (analysisVals != null) {
-					lst.AddRange(analysisVals.Select(analysisVal => new AnalysisFunctionData(analysisVal)));
-				} // if readers is not null
-			} catch (Exception e) {
-				_Log.Error(string.Format("Failed to GetAnalyisisFunctions(for mp {0})", databaseCustomerMarketPlace.Id), e);
-			} // try
-
-			var oResult = new Dictionary<DateTime, List<IAnalysisDataParameterInfo>>();
-
-			foreach (var afd in lst) {
-				List<IAnalysisDataParameterInfo> paramsList;
-
-				if (!oResult.TryGetValue(afd.afDate, out paramsList)) {
-					paramsList = new List<IAnalysisDataParameterInfo>();
-					oResult.Add(afd.afDate, paramsList);
-				} // if
-
-				IDatabaseFunction oFunc = databaseCustomerMarketPlace.Marketplace.GetDatabaseFunctionById(afd.fid);
-				ITimePeriod oTimePeriod = TimePeriodFactory.CreateById(afd.fpid);
-
-				paramsList.Add(new AnalysisFunctionDataParameterInfo(oFunc, oTimePeriod, afd.value));
-			} // while
-
-			return oResult;
 		}
 
 		public Customer GetCustomerInfo(int clientId) { return _CustomerRepository.Get(clientId); }
@@ -997,10 +957,6 @@
 			}
 		}
 
-		public void StoreToDatabaseAggregatedData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IEnumerable<IWriteDataInfo<TEnum>> dataInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			_FunctionValuesWriterHelper.SetRangeOfData(databaseCustomerMarketPlace, dataInfo, historyRecord);
-		}
-
 		public void WriteToLog(string message, WriteLogType messageType = WriteLogType.Info, Exception ex = null) {
 			WriteLoggerHelper.Write(message, messageType, null, ex);
 			Debug.WriteLine(message);
@@ -1103,8 +1059,6 @@
 
 		private static readonly ILog _Log = LogManager.GetLogger(typeof(DatabaseDataHelper));
 
-		private readonly AnalyisisFunctionRepository _AnalyisisFunctionRepository;
-		private readonly AnalyisisFunctionValueRepository _AnalyisisFunctionValueRepository;
 		private readonly AnalysisFunctionTimePeriodRepository _AnalysisFunctionTimePeriodRepository;
 		private readonly BrokerRepository _brokerRepository;
 		private readonly ICurrencyConvertor _CurrencyConvertor;
@@ -1114,7 +1068,6 @@
 		private readonly MP_FreeAgentCompanyRepository _FreeAgentCompanyRepository;
 		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
-		private readonly DatabaseFunctionValuesWriterHelper _FunctionValuesWriterHelper;
 		private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
 		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
 		private readonly ILoanTypeRepository _LoanTypeRepository;

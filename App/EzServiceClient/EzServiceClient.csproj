@@ -79,10 +79,10 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.PricingModel.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.PricingModel1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.UserManagement.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.UserManagement1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database.xsd">

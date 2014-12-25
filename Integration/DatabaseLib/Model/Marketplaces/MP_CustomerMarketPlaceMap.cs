@@ -1,12 +1,9 @@
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
 
-namespace EZBob.DatabaseLib.Model.Database
-{
-	public class MP_CustomerMarketPlaceMap : ClassMap<MP_CustomerMarketPlace>
-	{
-		public MP_CustomerMarketPlaceMap()
-		{
+namespace EZBob.DatabaseLib.Model.Database {
+	public class MP_CustomerMarketPlaceMap : ClassMap<MP_CustomerMarketPlace> {
+		public MP_CustomerMarketPlaceMap() {
 			Table("MP_CustomerMarketPlace");
 			Id(x => x.Id);
 			Map(x => x.SecurityData).Not.Nullable().Length(int.MaxValue);
@@ -57,10 +54,6 @@ namespace EZBob.DatabaseLib.Model.Database
 				.Cascade.All();
 
 			HasMany(x => x.TeraPeakOrders).
-				KeyColumn("CustomerMarketPlaceId")
-				.Cascade.All();
-
-			HasMany(x => x.AnalysysFunctionValues).
 				KeyColumn("CustomerMarketPlaceId")
 				.Cascade.All();
 

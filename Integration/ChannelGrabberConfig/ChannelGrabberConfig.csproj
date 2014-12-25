@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountData.cs" />
-    <Compile Include="AggregatorInfo.cs" />
     <Compile Include="Behaviour.cs" />
     <Compile Include="InvalidCredentialsException.cs" />
     <Compile Include="ErrorMessage.cs" />

@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web {
-
 	using System;
 	using System.Globalization;
 	using System.Linq;
@@ -30,16 +29,41 @@
 	using NHibernateWrapper.NHibernate;
 	using log4net;
 
+	public class Iso8601DateTimeBinder : DefaultModelBinder {
+		public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext) {
+			var name = bindingContext.ModelName;
+
+			var value = bindingContext.ValueProvider.GetValue(name);
+
+			if (value == null)
+				return null;
+
+			return parseIso8601Date(value) ?? base.BindModel(controllerContext, bindingContext);
+		} // BindModel
+
+		private DateTime? parseIso8601Date(ValueProviderResult value) {
+			DateTime date;
+			const string format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
+			return DateTime.TryParseExact(value.AttemptedValue, format, null, DateTimeStyles.RoundtripKind, out date) ? date : null as DateTime?;
+		} // parseIso8601Date
+	}
+
 	public class MvcApplication : HttpApplication {
 		public static ISession CurrentSession {
 			get {
+				const string CurrentSessionKey = "current.session";
+
 				try {
-					if (HttpContext.Current.Items["current.session"] as ISession == null)
+					ISession curSession = null;
+
+					if (HttpContext.Current.Items.Contains(CurrentSessionKey))
+						curSession = HttpContext.Current.Items["current.session"] as ISession;
+
+					if (curSession == null)
 						HttpContext.Current.Items["current.session"] = NHibernateManager.OpenSession();
 
-					return HttpContext.Current.Items["current.session"] as ISession;
-				}
-				catch (Exception ex) {
+					return curSession;
+				} catch (Exception ex) {
 					Log.Alert(ex, "Failed to fetch current session.");
 					throw;
 				} // try
@@ -64,38 +88,6 @@
 			InitOnStart();
 		} // constructor
 
-		private void InitOnStart() {
-			base.Init();
-
-			if (_isInitialized)
-				return;
-
-			lock (this) {
-				if (_isInitialized)
-					return;
-
-				try {
-					new Log4Net().Init();
-
-					Log.NotifyStart();
-
-					CurrentValues.Init(DbConnectionGenerator.Get(Log), Log, oLimitations => oLimitations.UpdateWebSiteCfg("Ezbob.Web"));
-					DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
-					AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
-
-					Ezbob.RegistryScanner.Scanner.Register();
-
-					ConfigureStructureMap(ObjectFactory.Container);
-				}
-				catch (Exception ex) {
-					Log.Error(ex);
-					throw;
-				} // try
-
-				_isInitialized = true;
-			} // lock
-		} // InitOnStart
-
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters) {
 			var underwriterRoles = string.Join(", ", ObjectFactory.GetInstance<IRolesRepository>().GetAll().Where(x => x.Name != "Web").Select(x => x.Name));
 
@@ -106,7 +98,7 @@
 			filters.Add(new GlobalAreaAuthorizationFilter("Customer", "Web", false, true), 1);
 			filters.Add(new EzBobHandleErrorAttribute());
 			filters.Add(new LoggingContextFilter(), 1);
-		} // RegisterGlobalFilters
+		}
 
 		public static void RegisterRoutes(RouteCollection routes) {
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -133,7 +125,15 @@
 			routes.Insert(0, new Route("pie.htc", new RouteValueDictionary(new { controller = "Pie", action = "Index" }), new MvcRouteHandler()));
 			routes.Insert(0, new Route("{area}/pie.htc", new RouteValueDictionary(new { controller = "Pie", action = "Index", area = "" }), new MvcRouteHandler()));
 			//routes.MapRoute(null, "{Area}/{c}/{a}/pie.htc", new {controller = "Pie", action = "Index", c = "", a="", Area=""});
-		} // RegisterRoutes
+		}
+
+		protected void Application_BeginRequest(Object sender, EventArgs e) {
+			CheckForCSSPIE();
+		}
+
+		protected void Application_End() {
+			Log.NotifyStop();
+		}
 
 		protected void Application_Start() {
 			MvcHandler.DisableMvcResponseHeader = true;
@@ -160,42 +160,41 @@
 			bs.InitDatabaseMarketPlaceTypes();
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
-		} // Application_Start
+		}
 
-		protected void Application_End() {
-			Log.NotifyStop();
-		} // Application_End
+		protected void ConfigureStructureMap(IContainer container) {
+			container.Configure(x => x.For<IWorkplaceContext>().Use(GetContext));
+			container.Configure(x => x.AddRegistry<PluginWebRegistry>());
+			container.Configure(x => x.AddRegistry<PaymentServices.PacNet.PacnetRegistry>());
+			container.Configure(x => x.For<ISession>().Use(() => CurrentSession));
+		} // ConfigureStructureMap
 
 		protected void Session_End(object sender, EventArgs e) {
 			string userSessionIdStr = Session["UserSessionId"] == null ? null : Session["UserSessionId"].ToString();
 			int sessionId = 0;
-			if (int.TryParse(userSessionIdStr, out sessionId) && sessionId > 0)
-			{
+			if (int.TryParse(userSessionIdStr, out sessionId) && sessionId > 0) {
 				new ServiceClient().Instance.MarkSessionEnded(sessionId, "Session time out", null);
 			}
-		}
+		} // SessionEnd
+
+		private static SafeILog Log {
+			get {
+				if (MvcApplication.log == null)
+					MvcApplication.log = new SafeILog(typeof(MvcApplication));
+
+				return MvcApplication.log;
+			} // get
+		} // Log
 
 		private static void ConfigureSquishIt() {
 			if (HttpContext.Current.IsDebuggingEnabled) {
 				Bundle.RegisterScriptPreprocessor(new CachingPreprocessor<CoffeeScriptPreprocessor>());
 				Bundle.RegisterScriptPreprocessor(new CachingPreprocessor<LessPreprocessor>());
-			}
-			else {
+			} else {
 				Bundle.RegisterScriptPreprocessor(new CoffeeScriptPreprocessor());
 				Bundle.RegisterScriptPreprocessor(new LessPreprocessor());
 			} // if
-		} // ConfigureSquishIt
-
-		static void InitAspose() {
-			var license = new License();
-
-			using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("EzBob.Web.Aspose.Total.lic")) {
-				if (s != null) {
-					s.Position = 0;
-					license.SetLicense(s);
-				} // if
-			} // using
-		} // InitAspose
+		}
 
 		private static IWorkplaceContext GetContext() {
 			var context = HttpContext.Current.Items["current.context"] as IWorkplaceContext;
@@ -206,18 +205,18 @@
 			context = ObjectFactory.GetInstance<EzBobContext>();
 			HttpContext.Current.Items["current.context"] = context;
 			return context;
-		} // GetContext
+		}
 
-		protected void ConfigureStructureMap(IContainer container) {
-			container.Configure(x => x.For<IWorkplaceContext>().Use(GetContext));
-			container.Configure(x => x.AddRegistry<PluginWebRegistry>());
-			container.Configure(x => x.AddRegistry<PaymentServices.PacNet.PacnetRegistry>());
-			container.Configure(x => x.For<ISession>().Use(() => CurrentSession));
-		} // ConfigureStructureMap
+		static void InitAspose() {
+			var license = new License();
 
-		protected void Application_BeginRequest(Object sender, EventArgs e) {
-			CheckForCSSPIE();
-		} // Application_BeginRequest
+			using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("EzBob.Web.Aspose.Total.lic")) {
+				if (s != null) {
+					s.Position = 0;
+					license.SetLicense(s);
+				} // if
+			} // using
+		}
 
 		private void CheckForCSSPIE() {
 			if (!Regex.IsMatch(Request.Url.ToString(), "CSS3PIE"))
@@ -229,41 +228,52 @@
 			Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
 			Response.RedirectLocation = path;
 			Response.End();
-		} // CheckForCSSPIE
+		}
+
+		private void InitOnStart() {
+			base.Init();
+
+			if (_isInitialized)
+				return;
+
+			lock (this) {
+				if (_isInitialized)
+					return;
+
+				try {
+					new Log4Net().Init();
+
+					Log.NotifyStart();
+
+					var db = DbConnectionGenerator.Get(Log);
+
+					Ezbob.Models.Library.Initialize(db.Env, db, Log);
+
+					CurrentValues.Init(
+						db,
+						Log,
+						oLimitations => oLimitations.UpdateWebSiteCfg("Ezbob.Web")
+					);
+
+					DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
+					AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
+
+					Ezbob.RegistryScanner.Scanner.Register();
+
+					ConfigureStructureMap(ObjectFactory.Container);
+				} catch (Exception ex) {
+					Log.Error(ex);
+					throw;
+				} // try
+
+				_isInitialized = true;
+			} // lock
+		} // InitOnStart
 
 		// ReSharper disable RedundantDefaultFieldInitializer
 		private static bool _isInitialized = false;
 		// ReSharper restore RedundantDefaultFieldInitializer
 
-		private static SafeILog Log {
-			get {
-				if (ms_oLog == null)
-					ms_oLog = new SafeILog(typeof(MvcApplication));
-
-				return ms_oLog;
-			} // get
-		} // Log
-
-		private static SafeILog ms_oLog;
+		private static SafeILog log;
 	} // class MvcApplication
-
-	public class Iso8601DateTimeBinder : DefaultModelBinder {
-		public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext) {
-			var name = bindingContext.ModelName;
-
-			var value = bindingContext.ValueProvider.GetValue(name);
-
-			if (value == null)
-				return null;
-
-			return parseIso8601Date(value) ?? base.BindModel(controllerContext, bindingContext);
-		} // BindModel
-
-		private DateTime? parseIso8601Date(ValueProviderResult value) {
-			DateTime date;
-			const string format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
-			return DateTime.TryParseExact(value.AttemptedValue, format, null, DateTimeStyles.RoundtripKind, out date) ? date : null as DateTime?;
-		} // parseIso8601Date
-	} // class Iso8601DateTimeBinder
-
 } // namespace
