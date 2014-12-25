@@ -277,8 +277,6 @@
     <Compile Include="Common\IMarketPlaceSecurityInfo.cs" />
     <Compile Include="Common\MarketplaceRetrieveDataHelperBase.cs" />
     <Compile Include="CompositeServiceRequestException.cs" />
-    <Compile Include="DataAggregatorBase.cs" />
-    <Compile Include="DataAggregatorHelper.cs" />
     <Compile Include="DatabaseCustomerMarketplaceUpdateActionData.cs" />
     <Compile Include="DatabaseDataHelper\DatabaseDataHelper.cs" />
     <Compile Include="DatabaseWrapper\AccountInfo\IDatabaseEbayAccountInfo.cs" />
@@ -305,7 +303,6 @@
     <Compile Include="DatabaseWrapper\Order\EkmOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EBayDatabaseExternalTransactionList.cs" />
     <Compile Include="DatabaseWrapper\Products\AmazonProductsList.cs" />
-    <Compile Include="IDataAggregatorFactory.cs" />
     <Compile Include="IUpdateActionResultInfo.cs" />
     <Compile Include="MarketPlacesBootstrap.cs" />
     <Compile Include="Model\ConfigurationVariable.cs" />

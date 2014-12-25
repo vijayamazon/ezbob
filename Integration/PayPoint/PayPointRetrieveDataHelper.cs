@@ -1,147 +1,131 @@
-﻿namespace PayPoint
-{
-    using EzBob.CommonLib;
-    using EZBob.DatabaseLib;
-    using EZBob.DatabaseLib.Common;
-    using EZBob.DatabaseLib.DatabaseWrapper;
-    using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-    using EZBob.DatabaseLib.DatabaseWrapper.Order;
-    using EZBob.DatabaseLib.Model.Database;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Ezbob.Utils;
-    using Ezbob.Utils.Serialization;
+﻿namespace PayPoint {
+	using EzBob.CommonLib;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using EZBob.DatabaseLib.Model.Database;
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using Ezbob.Utils;
+	using Ezbob.Utils.Serialization;
 
-	public static class StringToStreamExtension
-    {
-        public static Stream ToStream(this string str)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(str);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-    }
+	public static class StringToStreamExtension {
+		public static Stream ToStream(this string str) {
+			var stream = new MemoryStream();
+			var writer = new StreamWriter(stream);
+			writer.Write(str);
+			writer.Flush();
+			stream.Position = 0;
+			return stream;
+		}
+	}
 
-    public class PayPointRetrieveDataHelper : MarketplaceRetrieveDataHelperBase<PayPointDatabaseFunctionType>
-    {
-        public PayPointRetrieveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPointDatabaseFunctionType> marketplace)
-            : base(helper, marketplace)
-        {
-        }
+	public class PayPointRetrieveDataHelper : MarketplaceRetrieveDataHelperBase<PayPointDatabaseFunctionType> {
+		public PayPointRetrieveDataHelper(
+			DatabaseDataHelper helper,
+			DatabaseMarketplaceBase<PayPointDatabaseFunctionType> marketplace
+		)
+			: base(helper, marketplace) {
+		}
 
-        protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-                                                   MP_CustomerMarketplaceUpdatingHistory historyRecord)
-        {
-            var securityInfo = (PayPointSecurityInfo)RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
+		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
+			IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
+			return Serialized.Deserialize<PayPointSecurityInfo>(customerMarketPlace.SecurityData);
+		}
 
-            return UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
-        }
+		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
+		}
 
-        private ElapsedTimeInfo UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-        {
+		protected override ElapsedTimeInfo RetrieveAndAggregate(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord
+		) {
+			var securityInfo = (PayPointSecurityInfo)RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
+
+			return UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, historyRecord);
+		}
+
+		private ElapsedTimeInfo UpdateClientOrdersInfo(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			PayPointSecurityInfo securityInfo,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord
+		) {
 			string condition = Helper.GetPayPointDeltaPeriod(databaseCustomerMarketPlace);
-	        var payPointTransactions = PayPointConnector.GetOrders(condition, securityInfo.Mid, securityInfo.VpnPassword, securityInfo.RemotePassword);
-            var payPointOrders = new List<PayPointOrderItem>();
-			foreach (PayPointDataSet.TransactionRow x in payPointTransactions)
-            {
-                var order = new PayPointOrderItem
-                    {
-                        acquirer = x.acquirer,
-                        amount = x.amount,
-                        auth_code = x.auth_code,
-                        authorised = x.authorised,
-                        card_type = x.card_type,
-                        cid = x.cid,
-                        classType = x._class,
-                        company_no = x.company_no,
-                        country = x.country,
-                        currency = x.currency,
-                        cv2avs = x.cv2avs,
-                        deferred = x.deferred,
-                        emvValue = x.emvValue,
-                        fraud_code = x.fraud_code,
-                        FraudScore = x.FraudScore,
-                        ip = x.ip,
-                        lastfive = x.lastfive,
-                        merchant_no = x.merchant_no,
-                        message = x.message,
-                        MessageType = x.MessageType,
-                        mid = x.mid,
-                        name = x.name,
-                        options = x.options,
-                        status = x.status,
-                        tid = x.tid,
-                        trans_id = x.trans_id
-                    };
 
-                DateTime result;
-                order.date = !DateTime.TryParse(x.date, out result) ? (DateTime?)null : result;
-                order.ExpiryDate = !DateTime.TryParse(x.ExpiryDate, out result) ? (DateTime?)null : result;
-                order.start_date = !DateTime.TryParse(x.start_date, out result) ? (DateTime?)null : result;
-                payPointOrders.Add(order);
-            }
+			var payPointTransactions = PayPointConnector.GetOrders(
+				condition,
+				securityInfo.Mid,
+				securityInfo.VpnPassword,
+				securityInfo.RemotePassword
+			);
 
-            var elapsedTimeInfo = new ElapsedTimeInfo();
+			var payPointOrders = new List<PayPointOrderItem>();
 
-            ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									databaseCustomerMarketPlace.Id,
-                                    ElapsedDataMemberType.StoreDataToDatabase,
-                                    () => Helper.StorePayPointOrdersData(databaseCustomerMarketPlace, new PayPointOrdersList(DateTime.UtcNow, payPointOrders), historyRecord));
+			foreach (PayPointDataSet.TransactionRow x in payPointTransactions) {
+				var order = new PayPointOrderItem {
+					acquirer = x.acquirer,
+					amount = x.amount,
+					auth_code = x.auth_code,
+					authorised = x.authorised,
+					card_type = x.card_type,
+					cid = x.cid,
+					classType = x._class,
+					company_no = x.company_no,
+					country = x.country,
+					currency = x.currency,
+					cv2avs = x.cv2avs,
+					deferred = x.deferred,
+					emvValue = x.emvValue,
+					fraud_code = x.fraud_code,
+					FraudScore = x.FraudScore,
+					ip = x.ip,
+					lastfive = x.lastfive,
+					merchant_no = x.merchant_no,
+					message = x.message,
+					MessageType = x.MessageType,
+					mid = x.mid,
+					name = x.name,
+					options = x.options,
+					status = x.status,
+					tid = x.tid,
+					trans_id = x.trans_id
+				};
 
-			// retrieve orders
-			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									databaseCustomerMarketPlace.Id,
-									ElapsedDataMemberType.RetrieveDataFromDatabase,
-									() => Helper.GetAllPayPointOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
+				DateTime result;
+				order.date = !DateTime.TryParse(x.date, out result) ? (DateTime?)null : result;
+				order.ExpiryDate = !DateTime.TryParse(x.ExpiryDate, out result) ? (DateTime?)null : result;
+				order.start_date = !DateTime.TryParse(x.start_date, out result) ? (DateTime?)null : result;
+				payPointOrders.Add(order);
+			}
 
-            // Calculate aggregated
-            var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									databaseCustomerMarketPlace.Id,
-                                    ElapsedDataMemberType.AggregateData,
-                                    () => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter));
+			var elapsedTimeInfo = new ElapsedTimeInfo();
 
-            // Store aggregated
-            ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-							databaseCustomerMarketPlace.Id,
-                            ElapsedDataMemberType.StoreAggregatedData,
-                            () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
+				ElapsedDataMemberType.StoreDataToDatabase,
+				() => Helper.StorePayPointOrdersData(
+					databaseCustomerMarketPlace,
+					new PayPointOrdersList(DateTime.UtcNow, payPointOrders),
+					historyRecord
+				)
+			);
 
-	        return elapsedTimeInfo;
-        }
+			/*
 
-        protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
-        {
+			This stored procedure does not exist as of today (December 25 2014, Merry Xmas!).
+			It should be created similarly to other UpdateMpTotals*** procedures based on PayPointOrdersAggregator.cs.
 
-        }
+			DbConnectionGenerator.Get().ExecuteNonQuery(
+				"UpdateMpTotalsPayPoint",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("HistoryID", historyRecord.Id)
+			);
+			*/
 
-        public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
-        {
-            IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
-            return Serialized.Deserialize<PayPointSecurityInfo>(customerMarketPlace.SecurityData);
-        }
-
-        private IEnumerable<IWriteDataInfo<PayPointDatabaseFunctionType>> CreateOrdersAggregationInfo(PayPointOrdersList orders, ICurrencyConvertor currencyConverter)
-        {
-            var aggregateFunctionArray = new[]
-                {
-                    PayPointDatabaseFunctionType.NumOfOrders,
-                    PayPointDatabaseFunctionType.SumOfAuthorisedOrders,
-                    PayPointDatabaseFunctionType.OrdersAverage,
-                    PayPointDatabaseFunctionType.NumOfFailures,
-                    PayPointDatabaseFunctionType.CancellationRate,
-                    PayPointDatabaseFunctionType.CancellationValue
-                };
-
-            var updated = orders.SubmittedDate;
-			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(orders, (submittedDate, o) => new PayPointOrdersList(submittedDate, o));
-
-            var factory = new PayPointOrdersAggregatorFactory();
-
-            return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
-        }
-    }
+			return elapsedTimeInfo;
+		}
+	}
 }

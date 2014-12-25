@@ -17,15 +17,15 @@
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBase<EkmDatabaseFunctionType> marketplace
 		)
-			: base(helper, marketplace) { }
+			: base(helper, marketplace) { } // constructor
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
 			return null;
-		}
+		} // RetrieveCustomerSecurityInfo
 
 		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
 			// Nothing here.
-		}
+		} // AddAnalysisValues
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -66,16 +66,8 @@
 			);
 
 			return elapsedTimeInfo;
-		}
+		} // RetrieveAndAggregate
 
 		private static readonly ASafeLog log = new SafeILog(typeof(EkmRetriveDataHelper));
-
-		// constructor
-
-		// RetrieveAndAggregate
-
-		// AddAnalysisValues
-
-		// RetrieveCustomerSecurityInfo
 	} // class EkmRetriveDataHelper
 } // namespace
