@@ -8,23 +8,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE UpdateMpTotalsPayPal
-@MpID INT,
 @HistoryID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	------------------------------------------------------------------------------
-	--
-	-- Find last history id (for backfills).
-	--
-	------------------------------------------------------------------------------
 
-	DECLARE @LastHistoryID INT
+	DECLARE @MpID INT
 
-	EXECUTE GetLastCustomerMarketplaceUpdatingHistoryID 'Pay Pal', @MpID, @HistoryID, @LastHistoryID OUTPUT
+	EXECUTE GetMarketplaceFromHistoryID 'Pay Pal', @HistoryID, @MpID OUTPUT
 
-	IF @LastHistoryID IS NULL
+	IF @MpID IS NULL
 		RETURN
 
 	------------------------------------------------------------------------------
@@ -48,75 +43,49 @@ BEGIN
 
 	-- Step 1. Find relevant transactions.
 
-	IF @HistoryID IS NULL
-	BEGIN
-		INSERT INTO #trn (Id, IsChosen)
-		SELECT
-			o.Id,
-			NULL -- not used in this flow
-		FROM
-			MP_PayPalTransaction o
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
+	INSERT INTO #trn (Id, IsChosen)
+	SELECT
+		o.Id,
+		CASE WHEN o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID THEN 1 ELSE 0 END
+	FROM
+		MP_PayPalTransaction o
+	WHERE
+		o.CustomerMarketPlaceId = @MpID
 
-		-----------------------------------------------------------------------------
+	-----------------------------------------------------------------------------
 
-		INSERT INTO @order_items (Id, Created, NetAmount, Type, Status)
-		SELECT
-			i.Id,
-			i.Created,
-			i.NetAmount * dbo.udfGetCurrencyRateByID(i.Created, i.CurrencyId, @GbpID),
-			i.Type,
-			i.Status
-		FROM
-			MP_PayPalTransactionItem2 i
-			INNER JOIN #trn o ON i.TransactionId = o.Id
-	END
-	ELSE BEGIN
-		INSERT INTO #trn (Id, IsChosen)
-		SELECT
-			o.Id,
-			CASE WHEN o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID THEN 1 ELSE 0 END
-		FROM
-			MP_PayPalTransaction o
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
+	DECLARE @MinDate DATETIME
+	DECLARE @MaxDate DATETIME
 
-		-----------------------------------------------------------------------------
+	-----------------------------------------------------------------------------
 
-		DECLARE @MinDate DATETIME
-		DECLARE @MaxDate DATETIME
+	SELECT
+		@MinDate = dbo.udfMonthStart(MIN(i.Created)),
+		@MaxDate = dbo.udfMonthStart(MAX(i.Created))
+	FROM
+		MP_PayPalTransactionItem2 i
+		INNER JOIN #trn o
+			ON i.TransactionId = o.Id
+			AND o.IsChosen = 1
 
-		-----------------------------------------------------------------------------
+	-----------------------------------------------------------------------------
 
-		SELECT
-			@MinDate = dbo.udfMonthStart(MIN(i.Created)),
-			@MaxDate = dbo.udfMonthStart(MAX(i.Created))
-		FROM
-			MP_PayPalTransactionItem2 i
-			INNER JOIN #trn o
-				ON i.TransactionId = o.Id
-				AND o.IsChosen = 1
+	SET @MaxDate = DATEADD(second, -1, DATEADD(month, 1, @MaxDate))
 
-		-----------------------------------------------------------------------------
+	-----------------------------------------------------------------------------
 
-		SET @MaxDate = DATEADD(second, -1, DATEADD(month, 1, @MaxDate))
-
-		-----------------------------------------------------------------------------
-
-		INSERT INTO @order_items (Id, Created, NetAmount, Type, Status)
-		SELECT
-			i.Id,
-			i.Created,
-			i.NetAmount * dbo.udfGetCurrencyRateByID(i.Created, i.CurrencyId, @GbpID),
-			i.Type,
-			i.Status
-		FROM
-			MP_PayPalTransactionItem2 i
-			INNER JOIN #trn o
-				ON i.TransactionId = o.Id
-				AND i.Created BETWEEN @MinDate AND @MaxDate
-	END
+	INSERT INTO @order_items (Id, Created, NetAmount, Type, Status)
+	SELECT
+		i.Id,
+		i.Created,
+		i.NetAmount * dbo.udfGetCurrencyRateByID(i.Created, i.CurrencyId, @GbpID),
+		i.Type,
+		i.Status
+	FROM
+		MP_PayPalTransactionItem2 i
+		INNER JOIN #trn o
+			ON i.TransactionId = o.Id
+			AND i.Created BETWEEN @MinDate AND @MaxDate
 
 	------------------------------------------------------------------------------
 	--
@@ -204,7 +173,7 @@ BEGIN
 	SELECT DISTINCT
 		dbo.udfMonthStart(Created),
 		'Jul 1 1976', -- Magic number because column ain't no allows null. It is replaced with the real value in the next query.
-		@LastHistoryID,
+		@HistoryID,
 		0, -- Turnover,
 		0, -- GrossIncome,
 		0, -- NetNumOfRefundsAndReturns,

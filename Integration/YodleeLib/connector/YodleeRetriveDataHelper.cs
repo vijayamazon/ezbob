@@ -140,7 +140,6 @@
 				.ExecuteNonQuery(
 					"UpdateMpTotalsYodlee",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
 					new QueryParameter("HistoryID", historyRecord.Id)
 				);
 

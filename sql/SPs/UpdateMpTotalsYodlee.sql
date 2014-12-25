@@ -8,23 +8,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE UpdateMpTotalsYodlee
-@MpID INT,
 @HistoryID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	------------------------------------------------------------------------------
-	--
-	-- Find last history id (for backfills).
-	--
-	------------------------------------------------------------------------------
 
-	DECLARE @LastHistoryID INT
+	DECLARE @MpID INT
 
-	EXECUTE GetLastCustomerMarketplaceUpdatingHistoryID 'Yodlee', @MpID, @HistoryID, @LastHistoryID OUTPUT
+	EXECUTE GetMarketplaceFromHistoryID 'Yodlee', @HistoryID, @MpID OUTPUT
 
-	IF @LastHistoryID IS NULL
+	IF @MpID IS NULL
 		RETURN
 
 	------------------------------------------------------------------------------
@@ -50,8 +45,6 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	-- Step 2. Load relevant orders (not order items!).
-	-- For parsed bank relevant orders are either the one by history ID or the last one.
-	-- For linked bank relevant orders are either the one by history ID or all.
 
 	------------------------------------------------------------------------------
 
@@ -59,48 +52,13 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @ParsedBank = 1
-	BEGIN -- #orders for parsed bank
-		IF @HistoryID IS NULL
-		BEGIN
-			INSERT INTO #orders
-			SELECT TOP 1
-				o.Id
-			FROM
-				MP_YodleeOrder o
-				INNER JOIN MP_CustomerMarketPlaceUpdatingHistory h
-					ON o.CustomerMarketPlaceUpdatingHistoryRecordId = h.Id
-			WHERE
-				o.CustomerMarketPlaceId = @MpID
-			ORDER BY
-				h.UpdatingEnd DESC,
-				h.Id DESC
-		END
-		ELSE BEGIN
-			INSERT INTO #orders
-			SELECT
-				o.Id
-			FROM
-				MP_YodleeOrder o
-			WHERE
-				o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
-		END
-	END -- #orders for parsed bank
-	ELSE BEGIN -- #orders for linked bank
-		INSERT INTO #orders
-		SELECT
-			o.Id
-		FROM
-			MP_YodleeOrder o
-		WHERE
-			(
-				@HistoryID IS NOT NULL
-				AND
-				o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
-			)
-			OR
-			o.CustomerMarketPlaceId = @MpID
-	END -- #orders for linked bank
+	INSERT INTO #orders
+	SELECT
+		o.Id
+	FROM
+		MP_YodleeOrder o
+	WHERE
+		o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
 
 	------------------------------------------------------------------------------
 
@@ -222,7 +180,8 @@ BEGIN
 		Turnover,
 		NumberOfTransactions,
 		TotalExpense,
-		TotalIncome
+		TotalIncome,
+		NetCashFlow
 	INTO
 		#months
 	FROM
@@ -261,16 +220,18 @@ BEGIN
 		Turnover,
 		NumberOfTransactions,
 		TotalExpense,
-		TotalIncome
+		TotalIncome,
+		NetCashFlow
 	)
 	SELECT DISTINCT
 		dbo.udfMonthStart(theDate),
 		'Jul 1 1976', -- Magic number because column ain't no allows null. It is replaced with the real value in the next query.
-		@LastHistoryID,
+		@HistoryID,
 		0, -- Turnover,
 		0, -- NumberOfTransactions,
 		0, -- TotalExpense,
-		0  -- TotalIncome
+		0, -- TotalIncome,
+		0  -- NetCashFlow
 	FROM
 		@order_items
 
@@ -341,6 +302,11 @@ BEGIN
 	UPDATE #months SET
 		TotalIncome = dbo.udfYodleeFormula(@order_items, TheMonth, NextMonth, NULL, @Credit),
 		TotalExpense = dbo.udfYodleeFormula(@order_items, TheMonth, NextMonth, NULL, @Debit)
+
+	------------------------------------------------------------------------------
+
+	UPDATE #months SET
+		NetCashFlow = TotalIncome - TotalExpense
 
 	------------------------------------------------------------------------------
 	--
@@ -451,7 +417,8 @@ BEGIN
 		Turnover,
 		NumberOfTransactions,
 		TotalExpense,
-		TotalIncome
+		TotalIncome,
+		NetCashFlow
 	)
 	SELECT
 		TheMonth,
@@ -460,7 +427,8 @@ BEGIN
 		Turnover,
 		NumberOfTransactions,
 		TotalExpense,
-		TotalIncome
+		TotalIncome,
+		NetCashFlow
 	FROM
 		#months
 

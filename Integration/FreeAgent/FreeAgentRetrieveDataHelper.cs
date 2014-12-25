@@ -17,9 +17,17 @@
 		public FreeAgentRetrieveDataHelper(
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBase<FreeAgentDatabaseFunctionType> marketplace
-		) : base(helper, marketplace) {
+		)
+			: base(helper, marketplace) {
 			expenseCategories = Helper.GetExpenseCategories();
 		} // constructor
+
+		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
+			return null;
+		}
+
+		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
+		}
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -103,7 +111,6 @@
 			DbConnectionGenerator.Get().ExecuteNonQuery(
 				"UpdateMpTotalsFreeAgent",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
 				new QueryParameter("HistoryID", historyRecord.Id)
 			);
 
@@ -200,12 +207,9 @@
 			);
 		} // StoreUsersData
 
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
-		} // AddAnalysisValues
+		// AddAnalysisValues
 
-		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
-			return null;
-		} // RetrieveCustomerSecurityInfo
+		// RetrieveCustomerSecurityInfo
 
 		private static readonly ASafeLog log = new SafeILog(typeof(FreeAgentRetrieveDataHelper));
 		private readonly Dictionary<string, FreeAgentExpenseCategory> expenseCategories;

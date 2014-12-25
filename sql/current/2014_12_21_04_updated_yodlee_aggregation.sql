@@ -158,3 +158,20 @@ BEGIN
 	)
 END
 GO
+
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('YodleeAggregation') AND name = 'NetCashFlow')
+BEGIN
+	ALTER TABLE YodleeAggregation DROP COLUMN TimestampCounter
+
+	ALTER TABLE YodleeAggregation ADD NetCashFlow NUMERIC(18, 2) NOT NULL CONSTRAINT DF_YodleeAggreagtion_NetCashFlow DEFAULT (0)
+
+	ALTER TABLE YodleeAggregation ADD TimestampCounter ROWVERSION
+END
+GO
+
+UPDATE YodleeAggregation SET NetCashFlow = TotalIncome - TotalExpense
+GO
+
+IF OBJECT_ID('DF_YodleeAggreagtion_NetCashFlow') IS NOT NULL
+	ALTER TABLE YodleeAggregation DROP CONSTRAINT DF_YodleeAggreagtion_NetCashFlow
+GO

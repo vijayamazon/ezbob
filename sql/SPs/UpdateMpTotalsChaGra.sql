@@ -6,23 +6,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE UpdateMpTotalsChaGra
-@MpID INT,
 @HistoryID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	------------------------------------------------------------------------------
-	--
-	-- Find last history id (for backfills).
-	--
-	------------------------------------------------------------------------------
 
-	DECLARE @LastHistoryID INT
+	DECLARE @MpID INT
 
-	EXECUTE GetLastCustomerMarketplaceUpdatingHistoryID 'Channel Grabber', @MpID, @HistoryID, @LastHistoryID OUTPUT
+	EXECUTE GetMarketplaceFromHistoryID 'Channel Grabber', @HistoryID, @MpID OUTPUT
 
-	IF @LastHistoryID IS NULL
+	IF @MpID IS NULL
 		RETURN
 
 	------------------------------------------------------------------------------
@@ -36,59 +31,41 @@ BEGIN
 		Id INT
 	)
 
-	-- Step 1. Find all the relevant internal ids.
+	-- 1. Load list of months that are going to be updated.
+	SELECT DISTINCT
+		TheMonth = dbo.udfMonthStart(i.PaymentDate),
+		NextMonth = CONVERT(DATETIME, NULL)
+	INTO
+		#month_list
+	FROM
+		MP_ChannelGrabberOrder o
+		INNER JOIN MP_ChannelGrabberOrderItem i ON o.Id = i.OrderId
+	WHERE
+		o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
 
-	IF @HistoryID IS NULL
-	BEGIN
-		INSERT INTO #chagra_id (NativeOrderId, Id)
-		SELECT
-			i.NativeOrderId,
-			MAX(i.Id) AS Id
-		FROM
-			MP_ChannelGrabberOrder o
-			INNER JOIN MP_ChannelGrabberOrderItem i ON o.Id = i.OrderId
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
-		GROUP BY
-			i.NativeOrderId
-	END
-	ELSE BEGIN
-		-- 1. Load list of months that are going to be updated.
-		SELECT DISTINCT
-			TheMonth = dbo.udfMonthStart(i.PaymentDate),
-			NextMonth = CONVERT(DATETIME, NULL)
-		INTO
-			#month_list
-		FROM
-			MP_ChannelGrabberOrder o
-			INNER JOIN MP_ChannelGrabberOrderItem i ON o.Id = i.OrderId
-		WHERE
-			o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
+	-- 2. Establish one month range for every row, this completes list of months that are going to be updated.
+	UPDATE #month_list SET
+		NextMonth = dbo.udfMonthEnd(TheMonth)
 
-		-- 2. Establish one month range for every row, this completes list of months that are going to be updated.
-		UPDATE #month_list SET
-			NextMonth = dbo.udfMonthEnd(TheMonth)
+	-- 3. Select internal ids of order items that belong to the months that are going to be updated.
+	--    Apply uniqueness rule.
+	INSERT INTO #chagra_id (NativeOrderId, Id)
+	SELECT
+		i.NativeOrderId,
+		MAX(i.Id) AS Id
+	FROM
+		MP_ChannelGrabberOrder o
+		INNER JOIN MP_ChannelGrabberOrderItem i
+			ON o.Id = i.OrderId
+		INNER JOIN #month_list ml
+			ON i.PaymentDate BETWEEN ml.TheMonth AND ml.NextMonth
+	WHERE
+		o.CustomerMarketPlaceId = @MpID
+	GROUP BY
+		i.NativeOrderId
 
-		-- 3. Select internal ids of order items that belong to the months that are going to be updated.
-		--    Apply uniqueness rule.
-		INSERT INTO #chagra_id (NativeOrderId, Id)
-		SELECT
-			i.NativeOrderId,
-			MAX(i.Id) AS Id
-		FROM
-			MP_ChannelGrabberOrder o
-			INNER JOIN MP_ChannelGrabberOrderItem i
-				ON o.Id = i.OrderId
-			INNER JOIN #month_list ml
-				ON i.PaymentDate BETWEEN ml.TheMonth AND ml.NextMonth
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
-		GROUP BY
-			i.NativeOrderId
-
-		-- 4. Clean up for this step.
-		DROP TABLE #month_list
-	END
+	-- 4. Clean up for this step.
+	DROP TABLE #month_list
 
 	------------------------------------------------------------------------------
 
@@ -154,7 +131,7 @@ BEGIN
 	SELECT DISTINCT
 		dbo.udfMonthStart(PaymentDate),
 		'Jul 1 1976', -- Magic number because column ain't no allows null. It is replaced with the real value in the next query.
-		@LastHistoryID,
+		@HistoryID,
 		0, -- Turnover,
 		0, -- AverageSumOfExpensesDenominator,
 		0, -- AverageSumOfExpensesNumerator,

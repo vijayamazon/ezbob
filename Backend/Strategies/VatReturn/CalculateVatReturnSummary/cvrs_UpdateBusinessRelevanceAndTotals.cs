@@ -6,16 +6,29 @@
 	using Ezbob.Utils;
 
 	public partial class CalculateVatReturnSummary : AStrategy {
-		private void UpdateBusinessRelevanceAndTotals() {
-			UpdateBusinessRelevance();
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local")]
+		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+		private class BusinessRelevance : IParametrisable {
+			public bool? BelongsToCustomer { get; set; }
 
-			DB.ExecuteNonQuery(
-				"UpdateMpTotalsHmrc",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("MpID", m_nCustomerMarketplaceID),
-				new QueryParameter("HistoryID")
-			);
-		} // UpdateBusinessRelevanceAndTotals
+			public int BusinessID { get; set; }
+			public string Name { get; set; }
+
+			public static Type[] StructToSave() {
+				return new Type[] { typeof(int), typeof(bool?), };
+			}
+
+			public void SetBelongs(string companyName) {
+				BelongsToCustomer = !string.IsNullOrWhiteSpace(companyName) && (Name ?? string.Empty).Equals(companyName);
+			} // SetBelongs
+
+			public object[] ToParameter() {
+				return new object[] { BusinessID, BelongsToCustomer, };
+			} // ToParameter
+
+			// StructToSave
+		}
 
 		private void UpdateBusinessRelevance() {
 			string experianCompanyName = null;
@@ -71,29 +84,20 @@
 					BusinessRelevance.StructToSave()
 				)
 			);
-		} // UpdateBusinessRelevance
+		}
 
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
-		[SuppressMessage("ReSharper", "UnusedMember.Local")]
-		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-		private class BusinessRelevance : IParametrisable {
-			public int BusinessID { get; set; }
+		private void UpdateBusinessRelevanceAndTotals() {
+			UpdateBusinessRelevance();
 
-			public bool? BelongsToCustomer { get; set; }
+			DB.ExecuteNonQuery(
+				"UpdateMpTotalsHmrc",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("HistoryID")
+			);
+		} // UpdateBusinessRelevanceAndTotals
 
-			public string Name { get; set; }
+		// UpdateBusinessRelevance
 
-			public void SetBelongs(string companyName) {
-				BelongsToCustomer = !string.IsNullOrWhiteSpace(companyName) && (Name ?? string.Empty).Equals(companyName);
-			} // SetBelongs
-
-			public object[] ToParameter() {
-				return new object[] { BusinessID, BelongsToCustomer, };
-			} // ToParameter
-
-			public static Type[] StructToSave() {
-				return new Type[] { typeof(int), typeof(bool?), };
-			} // StructToSave
-		} // class BusinessRelevance
+		// class BusinessRelevance
 	} // class CalculateVatReturnSummary
 } // namespace

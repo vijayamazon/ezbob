@@ -6,23 +6,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE UpdateMpTotalsFreeAgent
-@MpID INT,
 @HistoryID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	------------------------------------------------------------------------------
-	--
-	-- Find last history id (for backfills).
-	--
-	------------------------------------------------------------------------------
 
-	DECLARE @LastHistoryID INT
+	DECLARE @MpID INT
 
-	EXECUTE GetLastCustomerMarketplaceUpdatingHistoryID 'FreeAgent', @MpID, @HistoryID, @LastHistoryID OUTPUT
+	EXECUTE GetMarketplaceFromHistoryID 'FreeAgent', @HistoryID, @MpID OUTPUT
 
-	IF @LastHistoryID IS NULL
+	IF @MpID IS NULL
 		RETURN
 
 	------------------------------------------------------------------------------
@@ -41,101 +36,67 @@ BEGIN
 
 	-- Step 1. Find all the relevant internal ids.
 	
-	IF @HistoryID IS NULL
-	BEGIN
-		INSERT INTO #fa_id(url, Id, IsInvoice)
-		SELECT
-			i.url,
-			MAX(i.Id) AS Id,
-			1 -- IsInvoice
-		FROM
-			MP_FreeAgentInvoice i
-			INNER JOIN MP_FreeAgentRequest o
-				ON i.RequestId = o.Id
-				AND o.CustomerMarketPlaceId = @MpID
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
-		GROUP BY
-			i.url
+	CREATE TABLE #month_list (
+		TheMonth DATETIME,
+		NextMonth DATETIME
+	)
 
-		INSERT INTO #fa_id(url, Id, IsInvoice)
-		SELECT
-			i.url,
-			MAX(i.Id) AS Id,
-			0 -- IsInvoice
-		FROM
-			MP_FreeAgentExpense i
-			INNER JOIN MP_FreeAgentRequest o
-				ON i.RequestId = o.Id
-				AND o.CustomerMarketPlaceId = @MpID
-		WHERE
-			o.CustomerMarketPlaceId = @MpID
-		GROUP BY
-			i.url
-	END
-	ELSE BEGIN
-		CREATE TABLE #month_list (
-			TheMonth DATETIME,
-			NextMonth DATETIME
-		)
+	-- 1. Load list of months that are going to be updated.
+	INSERT INTO #month_list(TheMonth, NextMonth)
+	SELECT DISTINCT
+		dbo.udfMonthStart(i.dated_on),
+		CONVERT(DATETIME, NULL)
+	FROM
+		MP_FreeAgentRequest o
+		INNER JOIN MP_FreeAgentInvoice i ON o.Id = i.RequestId
+	WHERE
+		o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
+	UNION
+	SELECT DISTINCT
+		dbo.udfMonthStart(i.dated_on),
+		CONVERT(DATETIME, NULL)
+	FROM
+		MP_FreeAgentRequest o
+		INNER JOIN MP_FreeAgentExpense i ON o.Id = i.RequestId
+	WHERE
+		o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
 
-		-- 1. Load list of months that are going to be updated.
-		INSERT INTO #month_list(TheMonth, NextMonth)
-		SELECT DISTINCT
-			dbo.udfMonthStart(i.dated_on),
-			CONVERT(DATETIME, NULL)
-		FROM
-			MP_FreeAgentRequest o
-			INNER JOIN MP_FreeAgentInvoice i ON o.Id = i.RequestId
-		WHERE
-			o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
-		UNION
-		SELECT DISTINCT
-			dbo.udfMonthStart(i.dated_on),
-			CONVERT(DATETIME, NULL)
-		FROM
-			MP_FreeAgentRequest o
-			INNER JOIN MP_FreeAgentExpense i ON o.Id = i.RequestId
-		WHERE
-			o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
+	-- 2. Establish one month range for every row, this completes list of months that are going to be updated.
+	UPDATE #month_list SET
+		NextMonth = dbo.udfMonthEnd(TheMonth)
 
-		-- 2. Establish one month range for every row, this completes list of months that are going to be updated.
-		UPDATE #month_list SET
-			NextMonth = dbo.udfMonthEnd(TheMonth)
+	-- 3. Select internal ids of order items that belong to the months that are going to be updated.
+	--    Apply uniqueness rule.
+	INSERT INTO #fa_id(url, Id, IsInvoice)
+	SELECT
+		i.url,
+		MAX(i.Id) AS Id,
+		1 -- IsInvoice
+	FROM
+		MP_FreeAgentRequest o
+		INNER JOIN MP_FreeAgentInvoice i
+			ON o.Id = i.RequestId
+		INNER JOIN #month_list ml
+			ON i.dated_on BETWEEN ml.TheMonth AND ml.NextMonth
+	GROUP BY
+		i.url
 
-		-- 3. Select internal ids of order items that belong to the months that are going to be updated.
-		--    Apply uniqueness rule.
-		INSERT INTO #fa_id(url, Id, IsInvoice)
-		SELECT
-			i.url,
-			MAX(i.Id) AS Id,
-			1 -- IsInvoice
-		FROM
-			MP_FreeAgentRequest o
-			INNER JOIN MP_FreeAgentInvoice i
-				ON o.Id = i.RequestId
-			INNER JOIN #month_list ml
-				ON i.dated_on BETWEEN ml.TheMonth AND ml.NextMonth
-		GROUP BY
-			i.url
+	INSERT INTO #fa_id(url, Id, IsInvoice)
+	SELECT
+		i.url,
+		MAX(i.Id) AS Id,
+		0 -- IsInvoice
+	FROM
+		MP_FreeAgentRequest o
+		INNER JOIN MP_FreeAgentExpense i
+			ON o.Id = i.RequestId
+		INNER JOIN #month_list ml
+			ON i.dated_on BETWEEN ml.TheMonth AND ml.NextMonth
+	GROUP BY
+		i.url
 
-		INSERT INTO #fa_id(url, Id, IsInvoice)
-		SELECT
-			i.url,
-			MAX(i.Id) AS Id,
-			0 -- IsInvoice
-		FROM
-			MP_FreeAgentRequest o
-			INNER JOIN MP_FreeAgentExpense i
-				ON o.Id = i.RequestId
-			INNER JOIN #month_list ml
-				ON i.dated_on BETWEEN ml.TheMonth AND ml.NextMonth
-		GROUP BY
-			i.url
-
-		-- 4. Clean up for this step.
-		DROP TABLE #month_list
-	END
+	-- 4. Clean up for this step.
+	DROP TABLE #month_list
 
 	------------------------------------------------------------------------------
 
@@ -234,7 +195,7 @@ BEGIN
 	SELECT DISTINCT
 		dbo.udfMonthStart(dated_on),
 		'Jul 1 1976', -- Magic number because column ain't no allows null. It is replaced with the real value in the next query.
-		@LastHistoryID,
+		@HistoryID,
 		0, -- Turnover,
 		0, -- NumOfExpenses,
 		0, -- NumOfOrders,

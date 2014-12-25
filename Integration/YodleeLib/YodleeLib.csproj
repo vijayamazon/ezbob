@@ -56,12 +56,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="connector\YodleeAccountsAggregator.cs" />
     <Compile Include="connector\YodleeConnector.cs" />
     <Compile Include="connector\YodleeDatabaseFunctionFactory.cs" />
     <Compile Include="connector\YodleeDatabaseFunctionStorage.cs" />
     <Compile Include="connector\YodleeDatabaseMarketPlace.cs" />
-    <Compile Include="connector\YodleeTransactionsAggregator.cs" />
     <Compile Include="connector\YodleeRegistry.cs" />
     <Compile Include="connector\YodleeRetriveDataHelper.cs" />
     <Compile Include="connector\YodleeSecurityInfo.cs" />

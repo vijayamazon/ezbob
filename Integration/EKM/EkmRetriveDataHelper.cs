@@ -13,12 +13,19 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public class EkmRetriveDataHelper : MarketplaceRetrieveDataHelperBase<EkmDatabaseFunctionType> {
-		private static readonly ASafeLog log = new SafeILog(typeof (EkmRetriveDataHelper));
-
 		public EkmRetriveDataHelper(
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBase<EkmDatabaseFunctionType> marketplace
-		) : base(helper, marketplace) {} // constructor
+		)
+			: base(helper, marketplace) { }
+
+		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
+			return null;
+		}
+
+		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
+			// Nothing here.
+		}
 
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -55,19 +62,20 @@
 			DbConnectionGenerator.Get().ExecuteNonQuery(
 				"UpdateMpTotalsEkm",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
 				new QueryParameter("HistoryID", historyRecord.Id)
 			);
 
 			return elapsedTimeInfo;
-		} // RetrieveAndAggregate
+		}
 
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
-			// Nothing here.
-		} // AddAnalysisValues
+		private static readonly ASafeLog log = new SafeILog(typeof(EkmRetriveDataHelper));
 
-		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId) {
-			return null;
-		} // RetrieveCustomerSecurityInfo
+		// constructor
+
+		// RetrieveAndAggregate
+
+		// AddAnalysisValues
+
+		// RetrieveCustomerSecurityInfo
 	} // class EkmRetriveDataHelper
 } // namespace

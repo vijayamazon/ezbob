@@ -56,15 +56,11 @@
   <ItemGroup>
     <Compile Include="AccessTokenContainer.cs" />
     <Compile Include="SageConfig.cs" />
-    <Compile Include="SageExpenditureAggregator.cs" />
-    <Compile Include="SagePurchaseInvoiceAggregator.cs" />
-    <Compile Include="SageIncomeAggregator.cs" />
     <Compile Include="SageDeserializer.cs" />
     <Compile Include="SageConnector.cs" />
     <Compile Include="SageDatabaseFunctionFactory.cs" />
     <Compile Include="SageDatabaseFunctionStorage.cs" />
     <Compile Include="SageDatabaseMarketPlace.cs" />
-    <Compile Include="SageSalesInvoiceAggregator.cs" />
     <Compile Include="SageDeserializeHelper.cs" />
     <Compile Include="SageRegistry.cs" />
     <Compile Include="SageRetrieveDataHelper.cs" />
@@ -83,6 +79,14 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
       <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
       <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>

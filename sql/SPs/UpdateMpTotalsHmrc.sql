@@ -6,23 +6,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE UpdateMpTotalsHmrc
-@MpID INT,
 @HistoryID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	------------------------------------------------------------------------------
-	--
-	-- Find last history id (for backfills).
-	--
-	------------------------------------------------------------------------------
 
-	DECLARE @LastHistoryID INT
+	DECLARE @MpID INT
 
-	EXECUTE GetLastCustomerMarketplaceUpdatingHistoryID 'HMRC', @MpID, @HistoryID, @LastHistoryID OUTPUT
+	EXECUTE GetMarketplaceFromHistoryID 'HMRC', @HistoryID, @MpID OUTPUT
 
-	IF @LastHistoryID IS NULL
+	IF @MpID IS NULL
 		RETURN
 
 	------------------------------------------------------------------------------
@@ -143,7 +138,7 @@ BEGIN
 		SELECT
 			dbo.udfMonthStart(@CurDate),
 			'Jul 1 1976', -- Magic number because column ain't no allows null. It is replaced with the real value right after the loop.
-			@LastHistoryID,
+			@HistoryID,
 			0 -- Turnover
 
 		SET @CurDate = DATEADD(month, 1, @CurDate)

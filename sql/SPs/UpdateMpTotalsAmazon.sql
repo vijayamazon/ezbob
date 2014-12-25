@@ -1,28 +1,23 @@
-IF OBJECT_ID('UpdateMpTotalsEbay') IS NULL
-	EXECUTE('CREATE PROCEDURE UpdateMpTotalsEbay AS SELECT 1')
+IF OBJECT_ID('UpdateMpTotalsAmazon') IS NULL
+	EXECUTE('CREATE PROCEDURE UpdateMpTotalsAmazon AS SELECT 1')
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE UpdateMpTotalsEbay
-@MpID INT,
+ALTER PROCEDURE UpdateMpTotalsAmazon
 @HistoryID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	------------------------------------------------------------------------------
-	--
-	-- Find last history id (for backfills).
-	--
-	------------------------------------------------------------------------------
 
-	DECLARE @LastHistoryID INT
+	DECLARE @MpID INT
 
-	EXECUTE GetLastCustomerMarketplaceUpdatingHistoryID 'eBay', @MpID, @HistoryID, @LastHistoryID OUTPUT
+	EXECUTE GetMarketplaceFromHistoryID 'Amazon', @HistoryID, @MpID OUTPUT
 
-	IF @LastHistoryID IS NULL
+	IF @MpID IS NULL
 		RETURN
 
 	------------------------------------------------------------------------------
@@ -31,71 +26,42 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	-- 1. Select all the full months.
+	SELECT DISTINCT
+		TheMonth = dbo.udfMonthStart(i.LastUpdateDate),
+		NextMonth = CONVERT(DATETIME, NULL)
+	INTO
+		#month_list
+	FROM
+		MP_AmazonOrder o
+		INNER JOIN MP_AmazonOrderItem i
+			ON o.Id = i.AmazonOrderId
+	WHERE
+		o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
+
+	------------------------------------------------------------------------------
+
+	UPDATE #month_list SET
+		NextMonth = DATEADD(second, -1, DATEADD(month, 1, TheMonth))
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		i.Id,
-		i.RangeMarker,
-		i.StartDate,
-		i.Transactions,
-		i.Listings,
-		i.Successful,
-		i.ItemsSold,
-		i.Revenue
+		i.OrderStatus,
+		i.NumberOfItemsShipped,
+		i.PurchaseDate,
+		i.LastUpdateDate,
+		OrderTotal = i.OrderTotal * dbo.udfGetCurrencyRate(i.LastUpdateDate, i.OrderTotalCurrency)
 	INTO
 		#order_items
 	FROM
-		MP_TeraPeakOrderItem i
-		INNER JOIN MP_TeraPeakOrder o ON i.TeraPeakOrderId = o.Id
+		MP_AmazonOrder o
+		INNER JOIN MP_AmazonOrderItem i
+			ON o.Id = i.AmazonOrderId
+		INNER JOIN #month_list ml
+			ON i.LastUpdateDate BETWEEN ml.TheMonth AND ml.NextMonth
 	WHERE
-		i.RangeMarker = 0
-		AND (
-			(
-				@HistoryID IS NOT NULL
-				AND
-				o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
-			)
-			OR
-			o.CustomerMarketPlaceId = @MpID
-		)
-
-	-- 2. Append the last partial month which is greater than any existing full month.
-
-	DECLARE @MaxFull DATETIME
-
-	SELECT
-		@MaxFull = MAX(StartDate)
-	FROM
-		#order_items
-
-	INSERT INTO #order_items(Id, RangeMarker, StartDate, Transactions, Listings, Successful, ItemsSold, Revenue)
-	SELECT TOP 1
-		i.Id,
-		i.RangeMarker,
-		i.StartDate,
-		i.Transactions,
-		i.Listings,
-		i.Successful,
-		i.ItemsSold,
-		i.Revenue
-	FROM
-		MP_TeraPeakOrderItem i
-		INNER JOIN MP_TeraPeakOrder o ON i.TeraPeakOrderId = o.Id
-	WHERE
-		i.RangeMarker = 1
-		AND
-		i.StartDate > @MaxFull
-		AND (
-			(
-				@HistoryID IS NOT NULL
-				AND
-				o.CustomerMarketPlaceUpdatingHistoryRecordId = @HistoryID
-			)
-			OR
-			o.CustomerMarketPlaceId = @MpID
-		)
-	ORDER BY
-		o.Created DESC
+		o.CustomerMarketPlaceId = @MpID
 
 	------------------------------------------------------------------------------
 	--
@@ -122,7 +88,7 @@ BEGIN
 	INTO
 		#months
 	FROM
-		EbayAggregation
+		AmazonAggregation
 	WHERE
 		1 = 0
 
@@ -149,19 +115,19 @@ BEGIN
 		TotalSumOfOrders
 	)
 	SELECT DISTINCT
-		dbo.udfMonthStart(StartDate),
+		dbo.udfMonthStart(LastUpdateDate),
 		'Jul 1 1976', -- Magic number because column ain't no allows null. It is replaced with the real value in the next query.
-		@LastHistoryID,
-		0, -- Turnover,
-		0, -- AverageItemsPerOrderDenominator,
-		0, -- AverageItemsPerOrderNumerator,
-		0, -- AverageSumOfOrderDenominator,
-		0, -- AverageSumOfOrderNumerator,
-		0, -- CancelledOrdersCount,
-		0, -- NumOfOrders,
-		0, -- OrdersCancellationRateDenominator,
-		0, -- OrdersCancellationRateNumerator,
-		0, -- TotalItemsOrdered,
+		@HistoryID,
+		0, -- Turnover
+		0, -- AverageItemsPerOrderDenominator
+		0, -- AverageItemsPerOrderNumerator
+		0, -- AverageSumOfOrderDenominator
+		0, -- AverageSumOfOrderNumerator
+		0, -- CancelledOrdersCount
+		0, -- NumOfOrders
+		0, -- OrdersCancellationRateDenominator
+		0, -- OrdersCancellationRateNumerator
+		0, -- TotalItemsOrdered
 		0  -- TotalSumOfOrders
 	FROM
 		#order_items
@@ -173,146 +139,155 @@ BEGIN
 
 	------------------------------------------------------------------------------
 	--
-	-- Calculate Turnover, TotalSumOfOrders, and AverageSumOfOrderNumerator.
+	-- Calculate turnover.
 	--
 	------------------------------------------------------------------------------
 
 	UPDATE #months SET
-		Turnover = ISNULL(d.Value, 0),
-		TotalSumOfOrders = ISNULL(d.Value, 0),
-		AverageSumOfOrdersNumerator = ISNULL(d.Value, 0)
+		Turnover = ISNULL(d.Value, 0)
 	FROM
 		#months m
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.Revenue, 0))
+				Value = SUM(ISNULL(i.OrderTotal, 0))
 			FROM
 				#months im
 				INNER JOIN #order_items i
-					ON i.StartDate BETWEEN im.TheMonth AND im.NextMonth
+					ON i.LastUpdateDate BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus = 'Shipped'
 			GROUP BY
 				im.TheMonth
 		) d ON m.TheMonth = d.TheMonth
 
 	------------------------------------------------------------------------------
 	--
-	-- Calculate NumOfOrders, AverageItemsPerOrderDenominator,
-	--           AverageSumOfOrderDenominator, and OrdersCancellationRateDenominator.
+	-- Calculate NumOfOrders
 	--
 	------------------------------------------------------------------------------
 
 	UPDATE #months SET
-		NumOfOrders = ISNULL(d.Value, 0),
-		AverageItemsPerOrderDenominator = ISNULL(d.Value, 0),
-		AverageSumOfOrderDenominator = ISNULL(d.Value, 0),
-		OrdersCancellationRateDenominator = ISNULL(d.Value, 0)
+		NumOfOrders = ISNULL(d.Value, 0)
 	FROM
 		#months m
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.Transactions, 0))
+				Value = COUNT(*)
 			FROM
 				#months im
 				INNER JOIN #order_items i
-					ON i.StartDate BETWEEN im.TheMonth AND im.NextMonth
+					ON i.LastUpdateDate BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus = 'Shipped'
 			GROUP BY
 				im.TheMonth
 		) d ON m.TheMonth = d.TheMonth
 
 	------------------------------------------------------------------------------
 	--
-	-- Calculate TotalItemsOrdered and AverageItemsPerOrderNumerator.
+	-- Calculate CancelledOrdersCount
 	--
 	------------------------------------------------------------------------------
 
 	UPDATE #months SET
-		TotalItemsOrdered = ISNULL(d.Value, 0),
-		AverageItemsPerOrderNumerator = ISNULL(d.Value, 0)
+		CancelledOrdersCount = ISNULL(d.Value, 0)
 	FROM
 		#months m
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.ItemsSold, 0))
+				Value = COUNT(*)
 			FROM
 				#months im
 				INNER JOIN #order_items i
-					ON i.StartDate BETWEEN im.TheMonth AND im.NextMonth
+					ON i.LastUpdateDate BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus = 'Canceled'
 			GROUP BY
 				im.TheMonth
 		) d ON m.TheMonth = d.TheMonth
 
 	------------------------------------------------------------------------------
 	--
-	-- Calculate CancelledOrdersCount and OrdersCancellationRateNumerator.
+	-- Calculate TotalItemsOrdered
 	--
 	------------------------------------------------------------------------------
 
 	UPDATE #months SET
-		CancelledOrdersCount = ISNULL(d.Value, 0),
+		TotalItemsOrdered = ISNULL(d.Value, 0)
+	FROM
+		#months m
+		INNER JOIN (
+			SELECT
+				im.TheMonth,
+				Value = SUM(ISNULL(i.NumberOfItemsShipped, 0))
+			FROM
+				#months im
+				INNER JOIN #order_items i
+					ON i.LastUpdateDate BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus = 'Shipped'
+					AND i.NumberOfItemsShipped IS NOT NULL
+			GROUP BY
+				im.TheMonth
+		) d ON m.TheMonth = d.TheMonth
+
+	------------------------------------------------------------------------------
+	--
+	-- Calculate TotalSumOfOrders
+	--
+	------------------------------------------------------------------------------
+
+	UPDATE #months SET
+		TotalSumOfOrders = ISNULL(d.Value, 0)
+	FROM
+		#months m
+		INNER JOIN (
+			SELECT
+				im.TheMonth,
+				Value = SUM(ISNULL(i.OrderTotal, 0))
+			FROM
+				#months im
+				INNER JOIN #order_items i
+					ON i.LastUpdateDate BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus = 'Shipped'
+			GROUP BY
+				im.TheMonth
+		) d ON m.TheMonth = d.TheMonth
+
+	------------------------------------------------------------------------------
+	--
+	-- Calculate OrdersCancellationRate (must be after NumOfOrders)
+	--
+	------------------------------------------------------------------------------
+
+	UPDATE #months SET
 		OrdersCancellationRateNumerator = ISNULL(d.Value, 0)
 	FROM
 		#months m
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.Listings - i.Successful, 0))
+				Value = COUNT(*)
 			FROM
 				#months im
 				INNER JOIN #order_items i
-					ON i.StartDate BETWEEN im.TheMonth AND im.NextMonth
+					ON i.LastUpdateDate BETWEEN im.TheMonth AND im.NextMonth
+					AND i.OrderStatus = 'Canceled'
 			GROUP BY
 				im.TheMonth
 		) d ON m.TheMonth = d.TheMonth
 
 	------------------------------------------------------------------------------
-	--
-	-- Calculate TopCategories
-	--
-	------------------------------------------------------------------------------
 
-	-- 1. Select all the full months of the marketplace.
-
-	SELECT
-		i.Id
-	INTO
-		#all_ids
-	FROM
-		MP_TeraPeakOrderItem i
-		INNER JOIN MP_TeraPeakOrder o ON i.TeraPeakOrderId = o.Id
-	WHERE
-		i.RangeMarker = 0
-		AND
-		o.CustomerMarketPlaceId = @MpID
-
-	-- 2. Append the last partial month of the marketplace.
-
-	SELECT
-		Id
-	FROM
-		#order_items
-	WHERE
-		RangeMarker = 1
-
-	-- 3. Create statistics.
-
-	SELECT
-		s.CategoryId,
-		SUM(s.Listings) AS Listings
-	INTO
-		#cat
-	FROM
-		MP_TeraPeakCategoryStatistics s
-		INNER JOIN #all_ids a ON s.OrderItemId = a.Id
-	GROUP BY
-		s.CategoryId
+	UPDATE #months SET
+		OrdersCancellationRateDenominator = NumOfOrders,
+		AverageItemsPerOrderDenominator = NumOfOrders,
+		AverageItemsPerOrderNumerator = TotalItemsOrdered,
+		AverageSumOfOrderDenominator = NumOfOrders,
+		AverageSumOfOrderNumerator = TotalSumOfOrders
 
 	------------------------------------------------------------------------------
 	--
-	-- At this point table #months contains new aggregated data and table #cat
-	-- contains updated category statistics.
+	-- At this point table #months contains new data.
 	--
 	------------------------------------------------------------------------------
 
@@ -324,10 +299,10 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	UPDATE EbayAggregation SET
+	UPDATE AmazonAggregation SET
 		IsActive = 0
 	FROM
-		EbayAggregation a
+		AmazonAggregation a
 		INNER JOIN MP_CustomerMarketPlaceUpdatingHistory h
 			ON a.CustomerMarketplaceUpdatingHistoryID = h.Id
 			AND h.CustomerMarketplaceID = @MpID
@@ -337,7 +312,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO EbayAggregation (
+	INSERT INTO AmazonAggregation (
 		TheMonth,
 		IsActive,
 		CustomerMarketPlaceUpdatingHistoryID,
@@ -373,34 +348,6 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	UPDATE EbayAggregationCategories SET
-		IsActive = 0
-	FROM
-		EbayAggregationCategories a
-		INNER JOIN MP_CustomerMarketPlaceUpdatingHistory h
-			ON a.CustomerMarketplaceUpdatingHistoryID = h.Id
-			AND h.CustomerMarketplaceID = @MpID
-	WHERE
-		a.IsActive = 1
-
-	------------------------------------------------------------------------------
-
-	INSERT INTO EbayAggregationCategories (
-		CustomerMarketPlaceUpdatingHistoryID,
-		IsActive,
-		CategoryID,
-		Listings
-	)
-	SELECT
-		@LastHistoryID,
-		1, -- IsActive
-		CategoryId,
-		Listings
-	FROM
-		#cat
-
-	------------------------------------------------------------------------------
-
 	COMMIT TRANSACTION
 
 	------------------------------------------------------------------------------
@@ -409,9 +356,8 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	DROP TABLE #cat
-	DROP TABLE #all_ids
 	DROP TABLE #months
 	DROP TABLE #order_items
+	DROP TABLE #month_list
 END
 GO

@@ -31,7 +31,8 @@
 		public AmazonRetriveDataHelper(
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBase<AmazonDatabaseFunctionType> marketplace
-		) : base(helper, marketplace) {
+		)
+			: base(helper, marketplace) {
 			this.connectionInfo = AmazonServiceConnectionFactory.CreateConnection(ObjectFactory.GetInstance<IAmazonMarketPlaceTypeConnection>());
 
 			this.amazonSettings = new ErrorRetryingInfo((bool)CurrentValues.Instance.AmazonEnableRetrying, CurrentValues.Instance.AmazonMinorTimeoutInSeconds, CurrentValues.Instance.AmazonUseLastTimeOut) {
@@ -46,34 +47,8 @@
 			return RetrieveCustomerSecurityInfo<AmazonSecurityInfo>(GetDatabaseCustomerMarketPlace(customerMarketPlaceId));
 		} // RetrieveCustomerSecurityInfo
 
-		protected override void InternalUpdateInfoFirst(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			log.DebugFormat("InternalUpdateInfoFirst customer {0} amazon mp {1}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName);
-			var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>(databaseCustomerMarketPlace);
-
-			UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
-			//UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord );
-			UpdateClientFeedbackInfo(databaseCustomerMarketPlace, securityInfo, historyRecord);
-		}
-
 		public override void Update(int nCustomerMarketplaceID) {
 			UpdateCustomerMarketplaceFirst(nCustomerMarketplaceID);
-		} // Update
-
-		protected override ElapsedTimeInfo RetrieveAndAggregate(
-			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-			MP_CustomerMarketplaceUpdatingHistory historyRecord
-		) {
-			// This method is not implemented here because elapsed time is got from over source.
-			throw new NotImplementedException();
-		}
-
-		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			log.DebugFormat("InternalUpdateInfo customer {0} amazon mp {1}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName);
-			var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>(databaseCustomerMarketPlace);
-
-			UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Limit, historyRecord);
-			//UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Limit, historyRecord );
-			UpdateClientFeedbackInfo(databaseCustomerMarketPlace, securityInfo, historyRecord);
 		}
 
 		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
@@ -123,28 +98,78 @@
 				if (data.Data != null && data.Data.Count > 0) {
 					DateTime lastDate = data.Data.Keys.Max();
 					data.Data[lastDate].AddRange(feedBackParams);
-				}
-				else {
+				} else {
 					data.AddData(oLatestFeedback.HistoryRecord.UpdatingStart.Value, feedBackParams);
 				}
 			} // if
-		} // AddAnalysisValues
+		}
 
-		private void UpdateClientOrdersInfo(
+		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+			log.DebugFormat("InternalUpdateInfo customer {0} amazon mp {1}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName);
+			var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>(databaseCustomerMarketPlace);
+
+			UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Limit, historyRecord);
+			//UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Limit, historyRecord );
+			UpdateClientFeedbackInfo(databaseCustomerMarketPlace, securityInfo, historyRecord);
+		}
+
+		protected override void InternalUpdateInfoFirst(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+			log.DebugFormat("InternalUpdateInfoFirst customer {0} amazon mp {1}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName);
+			var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>(databaseCustomerMarketPlace);
+
+			UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
+			//UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord );
+			UpdateClientFeedbackInfo(databaseCustomerMarketPlace, securityInfo, historyRecord);
+		}
+
+		// Update
+
+		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-			AmazonSecurityInfo securityInfo,
-			ActionAccessType access,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			log.DebugFormat("UpdateClientOrdersInfo customer {0}, amazon mp {1}, access {2}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName, access);
+			// This method is not implemented here because elapsed time is got from over source.
+			throw new NotImplementedException();
+		}
+		// AddAnalysisValues
 
-			Helper.CustomerMarketplaceUpdateAction(
-				CustomerMarketplaceUpdateActionType.UpdateOrdersInfo,
-				databaseCustomerMarketPlace,
-				historyRecord,
-				() => CustomerMarketplaceUpdateAction(databaseCustomerMarketPlace, securityInfo, access, historyRecord)
-			);
-		} // UpdateClientOrdersInfo
+		private IEnumerable<AmazonOrderItem> AnalyseOrder(AmazonOrdersList orders, int maxNumberOfItems = 10) {
+			if (orders == null) {
+				return null;
+			}
+
+			var shippedOrders = orders.Where(o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped).ToList();
+
+			if (shippedOrders.Count() <= maxNumberOfItems) {
+				return orders;
+			}
+
+			var rez =
+				shippedOrders.GroupBy(x => new { x.OrderTotal.Value, x.OrderTotal.CurrencyCode, x.NumberOfItemsShipped },
+									  (key, group) =>
+									  new {
+										  Price = key.Value,
+										  key.CurrencyCode,
+										  key.NumberOfItemsShipped,
+										  Counter = group.Count()
+									  }).OrderByDescending(x => x.Counter).Take(maxNumberOfItems);
+
+			return rez.Select(x => shippedOrders.First(oi => oi.OrderTotal.Value == x.Price &&
+														oi.NumberOfItemsShipped == x.NumberOfItemsShipped &&
+														oi.OrderTotal.CurrencyCode == x.CurrencyCode)).ToList();
+		}
+
+		private int? ConvertToNumber(int? percent, int? count) {
+			if (!percent.HasValue || !count.HasValue)
+				return null;
+
+			double percentValue = percent.Value;
+			double countValue = count.Value;
+
+			double rez = percentValue / 100 * countValue;
+
+			return (int)Math.Round(rez, MidpointRounding.AwayFromZero);
+		}
 
 		private UpdateActionResultInfo CustomerMarketplaceUpdateAction(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -253,7 +278,6 @@
 			DbConnectionGenerator.Get().ExecuteNonQuery(
 				"UpdateMpTotalsAmazon",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("MpID", databaseCustomerMarketPlace.Id),
 				new QueryParameter("HistoryID", historyRecord.Id)
 			);
 
@@ -263,7 +287,60 @@
 				RequestsCounter = allOrders.RequestsCounter,
 				ElapsedTime = elapsedTimeInfo
 			};
-		} // CustomerMarketplaceUpdateAction
+		}
+
+		private MP_EbayAmazonCategory[] GetAndSaveAmazonProcuctCategory(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			AmazonProductsRequestInfoBySellerSku requestInfo,
+			ActionAccessType access,
+			RequestsCounterData requestCounter,
+			ElapsedTimeInfo elapsedTimeInfo
+		) {
+			MP_EbayAmazonCategory[] categories = null;
+
+			AmazonProductItemBase productItem = null;
+
+			try {
+				productItem = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+					elapsedTimeInfo,
+					databaseCustomerMarketPlace.Id,
+					ElapsedDataMemberType.RetrieveDataFromExternalService,
+					() => AmazonServiceHelper.GetProductCategories(this.connectionInfo, requestInfo, access, requestCounter)
+				);
+			} catch (MarketplaceWebServiceProductsException) {
+				// Product not found or cannot be retrieved.
+			} // try
+
+			if (productItem != null) {
+				var marketplace = databaseCustomerMarketPlace.Marketplace;
+				categories = Helper.AddAmazonCategories(marketplace, productItem, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
+			} // if
+
+			return categories;
+		}
+
+		private MP_EbayAmazonCategory[] GetAndSaveAmazonProcuctCategoryByProductSellerSku(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			AmazonSecurityInfo securityInfo,
+			string sellerSku,
+			ActionAccessType access,
+			RequestsCounterData requestCounter,
+			ElapsedTimeInfo elapsedTimeInfo
+		) {
+			var categories = Helper.FindAmazonCategoryByProductSellerSKU(sellerSku, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
+
+			if (categories == null) {
+				var requestInfo = new AmazonProductsRequestInfoBySellerSku {
+					MarketplaceId = securityInfo.MarketplaceId,
+					MerchantId = securityInfo.MerchantId,
+					SellerSku = sellerSku,
+					ErrorRetryingInfo = this.amazonSettings
+				};
+				categories = GetAndSaveAmazonProcuctCategory(databaseCustomerMarketPlace, requestInfo, access, requestCounter, elapsedTimeInfo);
+			}
+
+			return categories;
+		}
 
 		private AmazonOrderItemDetailsList GetOrderItems(
 			AmazonSecurityInfo securityInfo,
@@ -289,116 +366,7 @@
 			);
 
 			return orderItems;
-		} // GetOrderItems
-
-		private IEnumerable<AmazonOrderItem> AnalyseOrder(AmazonOrdersList orders, int maxNumberOfItems = 10) {
-			if (orders == null) {
-				return null;
-			}
-
-			var shippedOrders = orders.Where(o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped).ToList();
-
-			if (shippedOrders.Count() <= maxNumberOfItems) {
-				return orders;
-			}
-
-			var rez =
-				shippedOrders.GroupBy(x => new { x.OrderTotal.Value, x.OrderTotal.CurrencyCode, x.NumberOfItemsShipped },
-									  (key, group) =>
-									  new {
-										  Price = key.Value,
-										  key.CurrencyCode,
-										  key.NumberOfItemsShipped,
-										  Counter = group.Count()
-									  }).OrderByDescending(x => x.Counter).Take(maxNumberOfItems);
-
-			return rez.Select(x => shippedOrders.First(oi => oi.OrderTotal.Value == x.Price &&
-														oi.NumberOfItemsShipped == x.NumberOfItemsShipped &&
-														oi.OrderTotal.CurrencyCode == x.CurrencyCode)).ToList();
 		}
-
-		private MP_EbayAmazonCategory[] GetAndSaveAmazonProcuctCategory(
-			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-			AmazonProductsRequestInfoBySellerSku requestInfo,
-			ActionAccessType access,
-			RequestsCounterData requestCounter,
-			ElapsedTimeInfo elapsedTimeInfo
-		) {
-			MP_EbayAmazonCategory[] categories = null;
-
-			AmazonProductItemBase productItem = null;
-
-			try {
-				productItem = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-					elapsedTimeInfo,
-					databaseCustomerMarketPlace.Id,
-					ElapsedDataMemberType.RetrieveDataFromExternalService,
-					() => AmazonServiceHelper.GetProductCategories(this.connectionInfo, requestInfo, access, requestCounter)
-				);
-			}
-			catch (MarketplaceWebServiceProductsException) {
-				// Product not found or cannot be retrieved.
-			} // try
-
-			if (productItem != null) {
-				var marketplace = databaseCustomerMarketPlace.Marketplace;
-				categories = Helper.AddAmazonCategories(marketplace, productItem, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
-			} // if
-
-			return categories;
-		} // GetAndSaveAmazonProcuctCategory
-
-		private MP_EbayAmazonCategory[] GetAndSaveAmazonProcuctCategoryByProductSellerSku(
-			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-			AmazonSecurityInfo securityInfo,
-			string sellerSku,
-			ActionAccessType access,
-			RequestsCounterData requestCounter,
-			ElapsedTimeInfo elapsedTimeInfo
-		) {
-			var categories = Helper.FindAmazonCategoryByProductSellerSKU(sellerSku, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
-
-			if (categories == null) {
-				var requestInfo = new AmazonProductsRequestInfoBySellerSku {
-					MarketplaceId = securityInfo.MarketplaceId,
-					MerchantId = securityInfo.MerchantId,
-					SellerSku = sellerSku,
-					ErrorRetryingInfo = this.amazonSettings
-				};
-				categories = GetAndSaveAmazonProcuctCategory(databaseCustomerMarketPlace, requestInfo, access, requestCounter, elapsedTimeInfo);
-			}
-
-			return categories;
-		} // GetAndSaveAmazonProcuctCategoryByProductSellerSku
-
-		private void UpdateClientFeedbackInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonSecurityInfo securityInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			Helper.CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType.UpdateFeedbackInfo, databaseCustomerMarketPlace, historyRecord, () => {
-				var elapsedTimeInfo = new ElapsedTimeInfo();
-
-				var request = new AmazonUserInfo {
-					MerchantId = securityInfo.MerchantId,
-				};
-
-				var amazonUserRatingInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-					databaseCustomerMarketPlace.Id,
-					ElapsedDataMemberType.RetrieveDataFromExternalService,
-					() => AmazonServiceHelper.GetUserStatisticsInfo(request)
-				);
-
-				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-					databaseCustomerMarketPlace.Id,
-					ElapsedDataMemberType.StoreDataToDatabase,
-					() => ParceAndSaveUserFeedbackInfo(databaseCustomerMarketPlace, amazonUserRatingInfo, historyRecord)
-				);
-
-				return new UpdateActionResultInfo {
-					Name = UpdateActionResultType.FeedbackRaiting,
-					Value = amazonUserRatingInfo == null ? null : (object)amazonUserRatingInfo.Rating,
-					RequestsCounter = amazonUserRatingInfo == null ? null : amazonUserRatingInfo.RequestsCounter,
-					ElapsedTime = elapsedTimeInfo
-				};
-			});
-		} // UpdateClientFeedbackInfo
 
 		private void ParceAndSaveUserFeedbackInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonUserRatingInfo ratingInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			var submittedDate = ratingInfo.SubmittedDate;
@@ -437,22 +405,65 @@
 			}
 
 			Helper.StoreAmazonFeedbackData(databaseCustomerMarketPlace, data, historyRecord);
-		} // ParceAndSaveUserFeedbackInfo
-
-		private int? ConvertToNumber(int? percent, int? count) {
-			if (!percent.HasValue || !count.HasValue)
-				return null;
-
-			double percentValue = percent.Value;
-			double countValue = count.Value;
-
-			double rez = percentValue / 100 * countValue;
-
-			return (int)Math.Round(rez, MidpointRounding.AwayFromZero);
 		}
 
+		private void UpdateClientFeedbackInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonSecurityInfo securityInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+			Helper.CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType.UpdateFeedbackInfo, databaseCustomerMarketPlace, historyRecord, () => {
+				var elapsedTimeInfo = new ElapsedTimeInfo();
+
+				var request = new AmazonUserInfo {
+					MerchantId = securityInfo.MerchantId,
+				};
+
+				var amazonUserRatingInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+					databaseCustomerMarketPlace.Id,
+					ElapsedDataMemberType.RetrieveDataFromExternalService,
+					() => AmazonServiceHelper.GetUserStatisticsInfo(request)
+				);
+
+				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+					databaseCustomerMarketPlace.Id,
+					ElapsedDataMemberType.StoreDataToDatabase,
+					() => ParceAndSaveUserFeedbackInfo(databaseCustomerMarketPlace, amazonUserRatingInfo, historyRecord)
+				);
+
+				return new UpdateActionResultInfo {
+					Name = UpdateActionResultType.FeedbackRaiting,
+					Value = amazonUserRatingInfo == null ? null : (object)amazonUserRatingInfo.Rating,
+					RequestsCounter = amazonUserRatingInfo == null ? null : amazonUserRatingInfo.RequestsCounter,
+					ElapsedTime = elapsedTimeInfo
+				};
+			});
+		}
+
+		private void UpdateClientOrdersInfo(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			AmazonSecurityInfo securityInfo,
+			ActionAccessType access,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord
+		) {
+			log.DebugFormat("UpdateClientOrdersInfo customer {0}, amazon mp {1}, access {2}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName, access);
+
+			Helper.CustomerMarketplaceUpdateAction(
+				CustomerMarketplaceUpdateActionType.UpdateOrdersInfo,
+				databaseCustomerMarketPlace,
+				historyRecord,
+				() => CustomerMarketplaceUpdateAction(databaseCustomerMarketPlace, securityInfo, access, historyRecord)
+			);
+		} // UpdateClientOrdersInfo
+
+		// CustomerMarketplaceUpdateAction
+
+		// GetOrderItems
+		// GetAndSaveAmazonProcuctCategory
+
+		// GetAndSaveAmazonProcuctCategoryByProductSellerSku
+
+		// UpdateClientFeedbackInfo
+
+		// ParceAndSaveUserFeedbackInfo
 		private static readonly ILog log = LogManager.GetLogger(typeof(AmazonRetriveDataHelper));
-		private readonly AmazonServiceConnectionInfo connectionInfo;
 		private readonly ErrorRetryingInfo amazonSettings;
+		private readonly AmazonServiceConnectionInfo connectionInfo;
 	} // class AmazonRetrieveDataHelper
 } // namespace
