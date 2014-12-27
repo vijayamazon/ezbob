@@ -7,56 +7,7 @@
 	using Newtonsoft.Json;
 
 	public partial class ApprovalInputData : ITrailInputData {
-		public static ApprovalInputData Deserialize(string json) {
-			var aid = new ApprovalInputData();
-			aid.FromJson(json);
-			return aid;
-		} // Deserialize
-
-		public DateTime DataAsOf { get; private set; }
-
-		public Configuration Configuration { get; private set; }
-		public MetaData MetaData { get; private set; }
-
-		public int CustomerID { get { return m_oArguments.CustomerID; } } // CustomerID
-		public decimal SystemCalculatedAmount { get { return m_oArguments.SystemCalculatedAmount; } } // SystemCalculatedAmount
-		public Medal Medal { get { return m_oArguments.Medal; } } // Medal
-
-		public string WorstStatuses {
-			get { return string.Join(",", WorstStatusList); }
-		} // WorstStatuses
-
-		public List<string> WorstStatusList { get; private set; }
-
-		public int MarketplaceSeniority { get; private set; }
-		public List<Payment> LatePayments { get; private set; }
-
-		public decimal OnlineTurnover1M { get { return GetTurnover(m_oOnlineTurnover, 1); } }
-		public decimal OnlineTurnover3M { get { return GetTurnover(m_oOnlineTurnover, 3); } }
-		public decimal OnlineTurnover1Y { get { return GetTurnover(m_oOnlineTurnover, 12); } }
-
-		public DateTime? OnlineUpdateTime { get; private set; }
-		public bool HasOnline { get; private set; }
-
-		public bool HasHmrc { get; private set; }
-		public DateTime? HmrcUpdateTime { get; private set; }
-
-		public decimal HmrcTurnover3M { get { return GetTurnover(m_oHmrcTurnover, 3); } }
-		public decimal HmrcTurnover6M { get { return GetTurnover(m_oHmrcTurnover, 6); } }
-		public decimal HmrcTurnover1Y { get { return GetTurnover(m_oHmrcTurnover, 12); } }
-
 		public decimal AvailableFunds { get; private set; }
-		public decimal ReservedFunds { get; private set; }
-
-		public List<Name> DirectorNames { get; set; }
-		public List<string> HmrcBusinessNames { get; set; }
-
-		[JsonIgnore]
-		public Name CustomerName {
-			get {
-				return new Name(MetaData.FirstName, MetaData.LastName);
-			} // get
-		} // CustomerName
 
 		[JsonIgnore]
 		public string CompanyName {
@@ -72,19 +23,124 @@
 
 				return m_sCompanyName;
 			}
-		} // CompanyName
+		}
+
+		public Configuration Configuration { get; private set; }
+
+		public int CustomerID {
+			get {
+				return m_oArguments.CustomerID;
+			}
+		}
+
+		[JsonIgnore]
+		public Name CustomerName {
+			get {
+				return new Name(MetaData.FirstName, MetaData.LastName);
+			} // get
+		}
+
+		public DateTime DataAsOf { get; private set; }
+
+		public List<Name> DirectorNames { get; set; }
+
+		public bool HasHmrc { get; private set; }
+
+		public bool HasOnline { get; private set; }
+
+		public List<string> HmrcBusinessNames { get; set; }
+
+		public decimal HmrcTurnover1Y {
+			get {
+				return GetTurnover(m_oHmrcTurnover, 12);
+			}
+		}
+
+		public decimal HmrcTurnover3M {
+			get {
+				return GetTurnover(m_oHmrcTurnover, 3);
+			}
+		}
+
+		public decimal HmrcTurnover6M {
+			get {
+				return GetTurnover(m_oHmrcTurnover, 6);
+			}
+		}
+
+		public DateTime? HmrcUpdateTime { get; private set; }
+
+		public List<Payment> LatePayments { get; private set; }
+
+		public int MarketplaceSeniority { get; private set; }
+
+		public Medal Medal {
+			get {
+				return m_oArguments.Medal;
+			}
+		}
+
+		public MedalType MedalType {
+			get {
+				return m_oArguments.MedalType;
+			}
+		}
+
+		public MetaData MetaData { get; private set; }
+
+		public decimal OnlineTurnover1M {
+			get {
+				return GetTurnover(m_oOnlineTurnover, 1);
+			}
+		}
+
+		public decimal OnlineTurnover1Y {
+			get {
+				return GetTurnover(m_oOnlineTurnover, 12);
+			}
+		}
+
+		public decimal OnlineTurnover3M {
+			get {
+				return GetTurnover(m_oOnlineTurnover, 3);
+			}
+		}
+
+		public DateTime? OnlineUpdateTime { get; private set; }
+
+		public decimal ReservedFunds { get; private set; }
+
+		public decimal SystemCalculatedAmount {
+			get {
+				return m_oArguments.SystemCalculatedAmount;
+			}
+		}
+		public string WorstStatuses {
+			get {
+				return string.Join(",", WorstStatusList);
+			}
+		}
+
+		public List<string> WorstStatusList { get; private set; }
 
 		public ApprovalInputData() {
 			Clean();
-		} // constructor
+		}
 
-		public string Serialize() {
-			return JsonConvert.SerializeObject(new SerializationModel().InitFrom(this), Formatting.Indented);
-		} // Serialize
+		public static ApprovalInputData Deserialize(string json) {
+			var aid = new ApprovalInputData();
+			aid.FromJson(json);
+			return aid;
+		} // Deserialize
+
+		public void AddLatePayment(Payment oPayment) {
+			LatePayments.Add(oPayment);
+		}
 
 		public void FromJson(string json) {
-			JsonConvert.DeserializeObject<SerializationModel>(json).FlushTo(this);
-		} // FromJson
+			JsonConvert.DeserializeObject<SerializationModel>(json)
+				.FlushTo(this);
+		}
 
 		public void FullInit(
 			DateTime oDataAsOf,
@@ -98,7 +154,7 @@
 			AvailableFunds oFunds,
 			List<Name> oDirectorNames,
 			List<string> oHmrcBusinessNames
-		) {
+			) {
 			SetDataAsOf(oDataAsOf);
 			SetConfiguration(oCfg);
 			m_oArguments = oArgs;
@@ -116,103 +172,7 @@
 			SetHmrcBusinessNames(oHmrcBusinessNames);
 
 			SetTurnoverData(oTurnover);
-		} // FullInit
-
-		public void SetTurnoverData(CalculatedTurnover oTurnover) {
-			SetOnlineTurnover(1, oTurnover.GetOnline(1));
-			SetOnlineTurnover(3, oTurnover.GetOnline(3));
-			SetOnlineTurnover(12, oTurnover.GetOnline(12));
-
-			OnlineUpdateTime = oTurnover.OnlineUpdateTime;
-			HasOnline = oTurnover.HasOnline;
-
-			HasHmrc = oTurnover.HasHmrc;
-			HmrcUpdateTime = oTurnover.HmrcUpdateTime;
-
-			SetHmrcTurnover(3, oTurnover.GetHmrc(3));
-			SetHmrcTurnover(6, oTurnover.GetHmrc(6));
-			SetHmrcTurnover(12, oTurnover.GetHmrc(12));
-		} // SetTurnoverData
-
-		public void AddLatePayment(Payment oPayment) {
-			LatePayments.Add(oPayment);
-		} // AddLatePayment
-
-		public void SetWorstStatuses(IEnumerable<string> oWorstStatuses) {
-			if (WorstStatusList == null)
-				WorstStatusList = new List<string>();
-
-			if (oWorstStatuses != null)
-				WorstStatusList.AddRange(oWorstStatuses);
-		} // SetWorstStatuses
-
-		public void SetSeniority(int v) {
-			MarketplaceSeniority = v;
-		} // SetSeniority
-
-		public void SetArgs(int nCustomerID, decimal nAmount, Medal nMedal) {
-			m_oArguments = new Arguments(nCustomerID, nAmount, nMedal);
-		} // SetArgs
-
-		public void SetDataAsOf(DateTime v) {
-			DataAsOf = v;
-		} // SetDataAsOf
-
-		public void SetAvailableFunds(decimal nTotalAvailable, decimal nReserved) {
-			AvailableFunds = nTotalAvailable - nReserved;
-			ReservedFunds = nReserved;
-		} // SetAvailableFunds
-
-		public void SetConfiguration(Configuration oCfg) {
-			Configuration = oCfg;
-		} // SetConfiguration
-
-		public void SetMetaData(MetaData oMetaData) {
-			MetaData = oMetaData;
-		} // SetMetaData
-
-		public void SetDirectorNames(List<Name> oDirectorNames) {
-			DirectorNames.Clear();
-
-			if (oDirectorNames != null)
-				DirectorNames.AddRange(oDirectorNames.Where(n => !n.IsEmpty));
-		} // SetDirectorNames
-
-		public void SetHmrcBusinessNames(List<string> oHmrcBusinessNames) {
-			HmrcBusinessNames.Clear();
-
-			if (oHmrcBusinessNames != null)
-				HmrcBusinessNames.AddRange(oHmrcBusinessNames.Where(n => n != string.Empty));
-		} // SetHmrcBusinessNames
-
-		public bool IsOnlineTurnoverTooOld() {
-			return IsTurnoverTooOld(OnlineUpdateTime, Configuration.OnlineTurnoverAge);
-		} // IsOnlineTurnoverTooOld
-
-		public bool IsOnlineTurnoverGood(int nMonthCount) {
-			decimal nRatio;
-
-			switch (nMonthCount) {
-			case 1:
-				nRatio = Configuration.OnlineTurnoverDropMonthRatio;
-				break;
-
-			case 3:
-				nRatio = Configuration.OnlineTurnoverDropQuarterRatio;
-				break;
-
-			default:
-				return false;
-			} // switch
-
-			return IsTurnoverGood(
-				GetTurnover(m_oOnlineTurnover, nMonthCount),
-				nMonthCount,
-				GetTurnover(m_oOnlineTurnover, 12),
-				12,
-				nRatio
-			);
-		} // IsOnlineTurnoverGood
+		}
 
 		public bool IsHmrcTurnoverGood(int nMonthCount) {
 			decimal nRatio;
@@ -236,12 +196,131 @@
 				GetTurnover(m_oHmrcTurnover, 12),
 				12,
 				nRatio
-			);
-		} // IsHmrcTurnoverGood
+				);
+		}
 
 		public bool IsHmrcTurnoverTooOld() {
 			return IsTurnoverTooOld(HmrcUpdateTime, Configuration.HmrcTurnoverAge);
-		} // IsHmrcTurnoverTooOld
+		}
+
+		public bool IsOnlineTurnoverGood(int nMonthCount) {
+			decimal nRatio;
+
+			switch (nMonthCount) {
+			case 1:
+				nRatio = Configuration.OnlineTurnoverDropMonthRatio;
+				break;
+
+			case 3:
+				nRatio = Configuration.OnlineTurnoverDropQuarterRatio;
+				break;
+
+			default:
+				return false;
+			} // switch
+
+			return IsTurnoverGood(
+				GetTurnover(m_oOnlineTurnover, nMonthCount),
+				nMonthCount,
+				GetTurnover(m_oOnlineTurnover, 12),
+				12,
+				nRatio
+				);
+		}
+
+		public bool IsOnlineTurnoverTooOld() {
+			return IsTurnoverTooOld(OnlineUpdateTime, Configuration.OnlineTurnoverAge);
+		}
+
+		public string Serialize() {
+			return JsonConvert.SerializeObject(new SerializationModel().InitFrom(this), Formatting.Indented);
+		} // Serialize
+
+		public void SetArgs(int nCustomerID, decimal nAmount, Medal nMedal, MedalType medalType) {
+			m_oArguments = new Arguments(nCustomerID, nAmount, nMedal, medalType);
+		}
+
+		public void SetAvailableFunds(decimal nTotalAvailable, decimal nReserved) {
+			AvailableFunds = nTotalAvailable - nReserved;
+			ReservedFunds = nReserved;
+		}
+
+		public void SetConfiguration(Configuration oCfg) {
+			Configuration = oCfg;
+		}
+
+		public void SetDataAsOf(DateTime v) {
+			DataAsOf = v;
+		}
+
+		public void SetDirectorNames(List<Name> oDirectorNames) {
+			DirectorNames.Clear();
+
+			if (oDirectorNames != null)
+				DirectorNames.AddRange(oDirectorNames.Where(n => !n.IsEmpty));
+		}
+
+		public void SetHmrcBusinessNames(List<string> oHmrcBusinessNames) {
+			HmrcBusinessNames.Clear();
+
+			if (oHmrcBusinessNames != null)
+				HmrcBusinessNames.AddRange(oHmrcBusinessNames.Where(n => n != string.Empty));
+		}
+
+		public void SetMetaData(MetaData oMetaData) {
+			MetaData = oMetaData;
+		}
+
+		public void SetSeniority(int v) {
+			MarketplaceSeniority = v;
+		}
+
+		public void SetTurnoverData(CalculatedTurnover oTurnover) {
+			SetOnlineTurnover(1, oTurnover.GetOnline(1));
+			SetOnlineTurnover(3, oTurnover.GetOnline(3));
+			SetOnlineTurnover(12, oTurnover.GetOnline(12));
+
+			OnlineUpdateTime = oTurnover.OnlineUpdateTime;
+			HasOnline = oTurnover.HasOnline;
+
+			HasHmrc = oTurnover.HasHmrc;
+			HmrcUpdateTime = oTurnover.HmrcUpdateTime;
+
+			SetHmrcTurnover(3, oTurnover.GetHmrc(3));
+			SetHmrcTurnover(6, oTurnover.GetHmrc(6));
+			SetHmrcTurnover(12, oTurnover.GetHmrc(12));
+		} // SetTurnoverData
+
+		public void SetWorstStatuses(IEnumerable<string> oWorstStatuses) {
+			if (WorstStatusList == null)
+				WorstStatusList = new List<string>();
+
+			if (oWorstStatuses != null)
+				WorstStatusList.AddRange(oWorstStatuses);
+		} // SetWorstStatuses
+
+		private static decimal GetTurnover(SortedDictionary<int, decimal> dic, int nMonthCount) {
+			if (dic == null)
+				return 0;
+
+			if (!dic.ContainsKey(nMonthCount))
+				return 0;
+
+			return dic[nMonthCount];
+		}
+
+		private static bool IsTurnoverGood(
+			decimal nPeriodTurnover,
+			int nPeriodLength,
+			decimal nYearTurnover,
+			int nYearLength,
+			decimal nDropRatio
+			) {
+			if (nPeriodLength == 0)
+				return false;
+
+			return nPeriodTurnover / nPeriodLength * nYearLength > nYearTurnover * nDropRatio;
+		}
 
 		private void Clean() {
 			m_bCompanyNameHasValue = false;
@@ -272,16 +351,6 @@
 			HmrcUpdateTime = default(DateTime);
 		} // Clean
 
-		private static decimal GetTurnover(SortedDictionary<int, decimal> dic, int nMonthCount) {
-			if (dic == null)
-				return 0;
-
-			if (!dic.ContainsKey(nMonthCount))
-				return 0;
-
-			return dic[nMonthCount];
-		} // GetTurnover
-
 		private bool IsTurnoverTooOld(DateTime? oDate, int nMonthCount) {
 			if (oDate == null)
 				return true;
@@ -289,18 +358,12 @@
 			return oDate.Value < DataAsOf.AddMonths(-nMonthCount);
 		} // IsTurnoverTooOld
 
-		private static bool IsTurnoverGood(
-			decimal nPeriodTurnover,
-			int nPeriodLength,
-			decimal nYearTurnover,
-			int nYearLength,
-			decimal nDropRatio
-		) {
-			if (nPeriodLength == 0)
-				return false;
+		private void SetHmrcTurnover(int nMonthCount, decimal nTurnover) {
+			if (m_oHmrcTurnover == null)
+				m_oHmrcTurnover = new SortedDictionary<int, decimal>();
 
-			return nPeriodTurnover / nPeriodLength * nYearLength > nYearTurnover * nDropRatio;
-		} // IsTurnoverGood
+			m_oHmrcTurnover[nMonthCount] = nTurnover;
+		}
 
 		private void SetOnlineTurnover(int nMonthCount, decimal nTurnover) {
 			if (m_oOnlineTurnover == null)
@@ -309,17 +372,10 @@
 			m_oOnlineTurnover[nMonthCount] = nTurnover;
 		} // SetOnlineTurnover
 
-		private void SetHmrcTurnover(int nMonthCount, decimal nTurnover) {
-			if (m_oHmrcTurnover == null)
-				m_oHmrcTurnover = new SortedDictionary<int, decimal>();
-
-			m_oHmrcTurnover[nMonthCount] = nTurnover;
-		} // SetHmrcTurnover
-
-		private Arguments m_oArguments;
 		private bool m_bCompanyNameHasValue;
-		private string m_sCompanyName;
-		private SortedDictionary<int, decimal> m_oOnlineTurnover;
+		private Arguments m_oArguments;
 		private SortedDictionary<int, decimal> m_oHmrcTurnover;
+		private SortedDictionary<int, decimal> m_oOnlineTurnover;
+		private string m_sCompanyName;
 	} // class ApprovalInputData
 } // namespace

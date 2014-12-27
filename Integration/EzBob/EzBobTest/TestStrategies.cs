@@ -1,5 +1,4 @@
-﻿namespace EzBobTest
-{
+﻿namespace EzBobTest {
 	using System;
 	using System.Collections.Generic;
 	using ConfigManager;
@@ -25,8 +24,49 @@
 	using StructureMap;
 
 	[TestFixture]
-	public class TestStrategies : BaseTestFixtue
-	{
+	public class TestStrategies : BaseTestFixtue {
+		[Test]
+		public void ApprovedUser() {
+			var s = new ApprovedUser(3060, 2500, 24, true);
+			s.Execute();
+		}
+
+		[Test]
+		public void CashTransferred() {
+			var s = new CashTransferred(21340, 2500, "01971847001", true);
+			s.Execute();
+		}
+
+		[Test]
+		public void EmailRolloverAdded() {
+			var s = new EmailRolloverAdded(3060, 2500);
+			s.Execute();
+		}
+
+		[Test]
+		public void EmailUnderReview() {
+			var s = new EmailUnderReview(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void Escalated() {
+			var s = new Escalated(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void GetCashFailed() {
+			var s = new GetCashFailed(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void Greeting() {
+			var s = new Greeting(21401, "stasd+confirm@ezbob.com");
+			s.Execute();
+		}
+
 		[SetUp]
 		public void Init() {
 			base.Init();
@@ -42,208 +82,94 @@
 		} // Init
 
 		[Test]
+		public void LoanFullyPaid() {
+			var s = new LoanFullyPaid(3060, "fdsfdf");
+			s.Execute();
+		}
+
+		[Test]
+		public void MoreAmlAndBwaInformation() {
+			var s = new MoreAmlAndBwaInformation(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void MoreAmlInformation() {
+			var s = new MoreAmlInformation(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void MoreBwaInformation() {
+			var s = new MoreBwaInformation(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void PasswordChanged() {
+			var s = new PasswordChanged(3060, new Password("dfsgfsdg"));
+			s.Execute();
+		}
+
+		[Test]
+		public void PasswordRestored() {
+			var s = new PasswordRestored(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void PayEarly() {
+			var s = new PayEarly(3060, 2500, "dfsgfsdg");
+			s.Execute();
+		}
+
+		[Test]
+		public void PayPointAddedByUnderwriter() {
+			var s = new PayPointAddedByUnderwriter(3060, "dfgsdf", "dfsgfsdg", 5);
+			s.Execute();
+		}
+
+		[Test]
+		public void PayPointNameValidationFailed() {
+			var s = new PayPointNameValidationFailed(3060, "dfgsdf");
+			s.Execute();
+		}
+
+		[Test]
+		public void RejectUser() {
+			var s = new RejectUser(21370, true);
+			s.Execute();
+		}
+
+		[Test]
+		public void RenewEbayToken() {
+			var s = new RenewEbayToken(3060, "sdfgfgg", "dsfg");
+			s.Execute();
+		}
+
+		[Test]
+		public void RequestCashWithoutTakenLoan() {
+			var s = new RequestCashWithoutTakenLoan(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void SendEmailVerification() {
+			var s = new SendEmailVerification(3060, "dfg");
+			s.Execute();
+		}
+
+		[Test]
 		public void test_mainstrat() {
 			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null);
 			ms.Execute();
 		}
 
 		[Test]
-		public void TestSetLateLoanStatus() {
-			var stra = new SetLateLoanStatus();
-			stra.Execute();
-		}
-
-		[Test]
-		public void UpdateCustomerMarketplace() {
-			var s = new UpdateMarketplace(21400, 18364, false);
-			s.Execute();
-		}
-
-		[Test]
-		public void Greeting()
-		{
-			var s = new Greeting(21401, "stasd+confirm@ezbob.com");
-			s.Execute();
-		}
-
-		[Test]
-		public void ApprovedUser()
-		{
-			var s = new ApprovedUser(3060, 2500, 24, true);
-			s.Execute();
-		}
-
-		[Test]
-		public void CashTransferred()
-		{
-			var s = new CashTransferred(21340, 2500, "01971847001", true);
-			s.Execute();
-		}
-
-		[Test]
-		public void EmailRolloverAdded()
-		{
-			var s = new EmailRolloverAdded(3060, 2500);
-			s.Execute();
-		}
-
-		[Test]
-		public void EmailUnderReview()
-		{
-			var s = new EmailUnderReview(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void Escalated()
-		{
-			var s = new Escalated(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void GetCashFailed()
-		{
-			var s = new GetCashFailed(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void LoanFullyPaid()
-		{
-			var s = new LoanFullyPaid(3060, "fdsfdf");
-			s.Execute();
-		}
-
-		[Test]
-		public void MoreAmlAndBwaInformation()
-		{
-			var s = new MoreAmlAndBwaInformation(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void MoreAmlInformation()
-		{
-			var s = new MoreAmlInformation(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void MoreBwaInformation()
-		{
-			var s = new MoreBwaInformation(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void PasswordChanged()
-		{
-			var s = new PasswordChanged(3060, new Password("dfsgfsdg"));
-			s.Execute();
-		}
-
-		[Test]
-		public void PasswordRestored()
-		{
-			var s = new PasswordRestored(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void PayEarly()
-		{
-			var s = new PayEarly(3060, 2500, "dfsgfsdg");
-			s.Execute();
-		}
-
-		[Test]
-		public void PayPointAddedByUnderwriter()
-		{
-			var s = new PayPointAddedByUnderwriter(3060, "dfgsdf", "dfsgfsdg", 5);
-			s.Execute();
-		}
-
-		[Test]
-		public void PayPointNameValidationFailed()
-		{
-			var s = new PayPointNameValidationFailed(3060, "dfgsdf");
-			s.Execute();
-		}
-
-		[Test]
-		public void TestPayPointCharger() {
-			var s = new PayPointCharger();
-			s.Execute();
-		}
-
-		[Test]
-		public void RejectUser()
-		{
-			var s = new RejectUser(21370, true);
-			s.Execute();
-		}
-
-		[Test]
-		public void RenewEbayToken()
-		{
-			var s = new RenewEbayToken(3060, "sdfgfgg", "dsfg");
-			s.Execute();
-		}
-
-		[Test]
-		public void RequestCashWithoutTakenLoan()
-		{
-			var s = new RequestCashWithoutTakenLoan(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void SendEmailVerification()
-		{
-			var s = new SendEmailVerification(3060, "dfg");
-			s.Execute();
-		}
-
-		[Test]
-		public void ThreeInvalidAttempts()
-		{
-			var s = new ThreeInvalidAttempts(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void TransferCashFailed()
-		{
-			var s = new TransferCashFailed(3060);
-			s.Execute();
-		}
-
-		[Test]
-		public void TestGetBankModel() {
-			new GetBankModel(234).Execute();
-		} // TestGetBankModel
-
-		[Test]
-		public void TestCalculateModelsAndAffordability() {
-			new CalculateModelsAndAffordability(15821, null).Execute();
-		} // TestCalculateModelsAndAffordability
-
-		[Test]
-		public void TestMedalCalculation() {
-			var customers = new[] { 6982, 6840 };
-			foreach (var customer in customers) {
-				new CalculateMedal(customer).Execute();
-			}
-
-		} // TestCalculateModelsAndAffordability
-
-		[Test]
-		public void TestAutoReRejection()
-		{
+		public void TestAutoReRejection() {
 			var rerejection = new ReRejection(21334, m_oDB, m_oLog);
 			var rejection = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, m_oDB, m_oLog);
-			var approve = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, m_oDB, m_oLog);
+			var approve = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, AutomationCalculator.Common.MedalType.Limited, m_oDB, m_oLog);
 			var reapprove = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, m_oDB, m_oLog);
 
 			//rerejection.MakeDecision(rejectionDecision);
@@ -263,146 +189,12 @@
 			bool bSuccess = reapprove.Trail.EqualsTo(oSecondary.Trail);
 
 			Assert.AreEqual(false, decision.IsAutoApproval);
-		} // TestCalculateModelsAndAffordability
-
-		[Test]
-		public void TestLREnquiry()
-		{
-			var s = new LandRegistryEnquiry(21340, null, "test", null, null, "E12 6AY");
-			s.Execute();
-			Assert.IsNotNullOrEmpty(s.Result);
 		}
 
 		[Test]
-		public void TestLRRes()
-		{
-			var s = new LandRegistryRes(21378, "SK310937");
-			s.Execute();
-			Assert.IsNotNullOrEmpty(s.Result);
-		}
-
-		[Test]
-		public void TestParseExperianConsumer()
-		{
-			var s = new ParseExperianConsumerData(110285);
-			s.Execute();
-			Console.WriteLine(s.Result.ToString());
-			Assert.IsNotNull(s.Result);
-		}
-
-		[Test]
-		public void TestLoadExperianLtd() {
-			var s = new LoadExperianLtd("06357516", 0);
-			s.Execute();
-			Console.WriteLine(s.Result.ToString());
-			Assert.IsNotNull(s.Result);
-			Assert.IsNotNull(s.History);
-		}
-
-		[Test]
-		public void TestLoadExperianNonLtd()
-		{
-			var s = new GetCompanyDataForCompanyScore("10732957");
-			s.Execute();
-			Assert.IsNotNull(s.Data);
-		}
-
-		[Test]
-		public void TestLoadExperianConsumer()
-		{
-			var s = new LoadExperianConsumerData(20323, null, 110285);
-			s.Execute();
-			Console.WriteLine(s.Result.ToString());
-			Assert.IsNotNull(s.Result);
-
-			s = new LoadExperianConsumerData(17254, null, null);
-			s.Execute();
-			Console.WriteLine(s.Result.ToString());
-			Assert.IsNotNull(s.Result);
-
-			s = new LoadExperianConsumerData(110285, 1014, null);
-			s.Execute();
-			Console.WriteLine(s.Result.ToString());
-			Assert.IsNotNull(s.Result);
-		}
-
-		[Test]
-		public void TestBackfillExperianConsumer()
-		{
+		public void TestBackfillExperianConsumer() {
 			var s = new BackfillExperianConsumer();
 			s.Execute();
-		}
-
-		[Test]
-		public void TestLoadExperianConsumerMortagageData()
-		{
-			var s = new LoadExperianConsumerMortgageData(20323);
-			s.Execute();
-			Assert.AreEqual(200089, s.Result.MortgageBalance);
-			Assert.AreEqual(1, s.Result.NumMortgages);
-			Console.WriteLine("{0} {1}", s.Result.NumMortgages, s.Result.MortgageBalance);
-		}
-
-		[Test]
-		public void TestExperianConsumerCheck() {
-			var s = new ExperianConsumerCheck(85, null, false);
-			s.Execute();
-
-			s = new ExperianConsumerCheck(85, 6, false);
-			s.Execute();
-		}
-
-		[Test]
-		public void TestGenerateCode() {
-			//http://freesmsreceive.com/+441300452045.php
-			var s = new GenerateMobileCode("01300452045");
-			s.Execute();
-		}
-
-		[Test]
-		public void testFraud() {
-			var s = new FraudChecker(21340, FraudMode.FullCheck);
-			s.Execute();
-		}
-
-		[Test]
-		public void TestOfferCalculation() {
-			var calc = new OfferDualCalculator(m_oDB, m_oLog);
-
-			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
-			Assert.AreEqual(5.5M, offer1.SetupFee);
-			Assert.AreEqual(4.5M, offer1.InterestRate);
-			return;
-			int calculatedOffers = 0;
-			int failedVerificationOffers = 0;
-			m_oDB.ForEachRowSafe(sr => {
-				int customerId = sr["CustomerId"];
-				EZBob.DatabaseLib.Model.Database.Medal medal = (EZBob.DatabaseLib.Model.Database.Medal)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Medal), sr["Medal"]);
-				int offeredLoanAmount = sr["OfferedLoanAmount"];
-				int numOfLoans = sr["NumOfLoans"];
-				int zooplaValue = sr["ZooplaValue"];
-
-				int roundedAmount = (int)Math.Truncate((decimal)offeredLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
-				int cappedAmount = 0;
-
-				if (zooplaValue>0)
-				{
-					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapHomeOwner);
-				}
-				else
-				{
-					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapNotHomeOwner);
-				} // if
-
-				var offer = calc.CalculateOffer(customerId, DateTime.UtcNow, cappedAmount, numOfLoans>0, medal);
-				calculatedOffers++;
-				if (offer == null || !string.IsNullOrEmpty(offer.Error)) {
-					failedVerificationOffers++;
-				}
-			}, "SELECT CustomerId, Medal, OfferedLoanAmount, NumOfLoans, ZooplaValue FROM MedalCalculations WHERE IsActive=1 AND Medal<>'NoMedal' AND OfferedLoanAmount>0", CommandSpecies.Text);
-
-			m_oLog.Debug("Calculated offer for {0} customers failed {1}", calculatedOffers, failedVerificationOffers);
-			Assert.AreEqual(0, failedVerificationOffers);
 		}
 
 		[Test]
@@ -421,6 +213,11 @@
 				ExperianCompanyPostcode = "AB10 1BA",
 			});
 			s.Execute();
+		}
+
+		[Test]
+		public void TestCalculateModelsAndAffordability() {
+			new CalculateModelsAndAffordability(15821, null).Execute();
 		}
 
 		[Test]
@@ -457,5 +254,178 @@
 			Console.WriteLine(sOutDec);
 			Assert.IsNotNullOrEmpty(sOutDec);
 		}
+
+		[Test]
+		public void TestExperianConsumerCheck() {
+			var s = new ExperianConsumerCheck(85, null, false);
+			s.Execute();
+
+			s = new ExperianConsumerCheck(85, 6, false);
+			s.Execute();
+		}
+
+		[Test]
+		public void testFraud() {
+			var s = new FraudChecker(21340, FraudMode.FullCheck);
+			s.Execute();
+		}
+
+		[Test]
+		public void TestGenerateCode() {
+			//http://freesmsreceive.com/+441300452045.php
+			var s = new GenerateMobileCode("01300452045");
+			s.Execute();
+		}
+
+		[Test]
+		public void TestGetBankModel() {
+			new GetBankModel(234).Execute();
+		}
+
+		[Test]
+		public void TestLoadExperianConsumer() {
+			var s = new LoadExperianConsumerData(20323, null, 110285);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+
+			s = new LoadExperianConsumerData(17254, null, null);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+
+			s = new LoadExperianConsumerData(110285, 1014, null);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+		}
+
+		[Test]
+		public void TestLoadExperianConsumerMortagageData() {
+			var s = new LoadExperianConsumerMortgageData(20323);
+			s.Execute();
+			Assert.AreEqual(200089, s.Result.MortgageBalance);
+			Assert.AreEqual(1, s.Result.NumMortgages);
+			Console.WriteLine("{0} {1}", s.Result.NumMortgages, s.Result.MortgageBalance);
+		}
+
+		[Test]
+		public void TestLoadExperianLtd() {
+			var s = new LoadExperianLtd("06357516", 0);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+			Assert.IsNotNull(s.History);
+		}
+
+		[Test]
+		public void TestLoadExperianNonLtd() {
+			var s = new GetCompanyDataForCompanyScore("10732957");
+			s.Execute();
+			Assert.IsNotNull(s.Data);
+		}
+
+		[Test]
+		public void TestLREnquiry() {
+			var s = new LandRegistryEnquiry(21340, null, "test", null, null, "E12 6AY");
+			s.Execute();
+			Assert.IsNotNullOrEmpty(s.Result);
+		}
+
+		// TestCalculateModelsAndAffordability
+		[Test]
+		public void TestLRRes() {
+			var s = new LandRegistryRes(21378, "SK310937");
+			s.Execute();
+			Assert.IsNotNullOrEmpty(s.Result);
+		}
+
+		[Test]
+		public void TestMedalCalculation() {
+			var customers = new[] { 6982, 6840 };
+			foreach (var customer in customers) {
+				new CalculateMedal(customer).Execute();
+			}
+
+		}
+
+		[Test]
+		public void TestOfferCalculation() {
+			var calc = new OfferDualCalculator(m_oDB, m_oLog);
+
+			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
+			Assert.AreEqual(5.5M, offer1.SetupFee);
+			Assert.AreEqual(4.5M, offer1.InterestRate);
+			return;
+			int calculatedOffers = 0;
+			int failedVerificationOffers = 0;
+			m_oDB.ForEachRowSafe(sr => {
+				int customerId = sr["CustomerId"];
+				EZBob.DatabaseLib.Model.Database.Medal medal = (EZBob.DatabaseLib.Model.Database.Medal)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Medal), sr["Medal"]);
+				int offeredLoanAmount = sr["OfferedLoanAmount"];
+				int numOfLoans = sr["NumOfLoans"];
+				int zooplaValue = sr["ZooplaValue"];
+
+				int roundedAmount = (int)Math.Truncate((decimal)offeredLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
+				int cappedAmount = 0;
+
+				if (zooplaValue > 0) {
+					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapHomeOwner);
+				} else {
+					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapNotHomeOwner);
+				} // if
+
+				var offer = calc.CalculateOffer(customerId, DateTime.UtcNow, cappedAmount, numOfLoans > 0, medal);
+				calculatedOffers++;
+				if (offer == null || !string.IsNullOrEmpty(offer.Error)) {
+					failedVerificationOffers++;
+				}
+			}, "SELECT CustomerId, Medal, OfferedLoanAmount, NumOfLoans, ZooplaValue FROM MedalCalculations WHERE IsActive=1 AND Medal<>'NoMedal' AND OfferedLoanAmount>0", CommandSpecies.Text);
+
+			m_oLog.Debug("Calculated offer for {0} customers failed {1}", calculatedOffers, failedVerificationOffers);
+			Assert.AreEqual(0, failedVerificationOffers);
+		}
+
+		// TestCalculateModelsAndAffordability
+		[Test]
+		public void TestParseExperianConsumer() {
+			var s = new ParseExperianConsumerData(110285);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+		}
+
+		[Test]
+		public void TestPayPointCharger() {
+			var s = new PayPointCharger();
+			s.Execute();
+		}
+
+		[Test]
+		public void TestSetLateLoanStatus() {
+			var stra = new SetLateLoanStatus();
+			stra.Execute();
+		}
+
+		[Test]
+		public void ThreeInvalidAttempts() {
+			var s = new ThreeInvalidAttempts(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void TransferCashFailed() {
+			var s = new TransferCashFailed(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void UpdateCustomerMarketplace() {
+			var s = new UpdateMarketplace(21400, 18364, false);
+			s.Execute();
+		}
+		// TestGetBankModel
+
+		// TestCalculateModelsAndAffordability
 	}
 }

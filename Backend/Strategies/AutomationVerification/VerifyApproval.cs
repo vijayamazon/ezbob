@@ -2,11 +2,11 @@
 	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
 
 	public class VerifyApproval : AVerificationBase {
-
 		public VerifyApproval(
 			int nTopCount,
 			int nLastCheckedCustomerID
-		) : base(nTopCount, nLastCheckedCustomerID) {
+		)
+			: base(nTopCount, nLastCheckedCustomerID) {
 		} // constructor
 
 		protected override string DecisionName {
@@ -18,6 +18,7 @@
 				oRow.CustomerId,
 				oRow.OfferedLoanAmount,
 				oRow.GetMedal(),
+				oRow.GetMedalType(),
 				DB,
 				Log
 			).Init().MakeAndVerifyDecision();

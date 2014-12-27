@@ -11,10 +11,54 @@
 	public partial class ApprovalInputData : ITrailInputData {
 		private class SerializationModel {
 			[UsedImplicitly]
-			public DateTime DataAsOf { get; set; }
+			public decimal AvailableFunds { get; set; }
 
 			[UsedImplicitly]
 			public Configuration Configuration { get; set; }
+
+			[UsedImplicitly]
+			public int CustomerID { get; set; }
+
+			[UsedImplicitly]
+			public DateTime DataAsOf { get; set; }
+
+			[UsedImplicitly]
+			public List<Tuple<string, string>> DirectorNames { get; set; }
+
+			[UsedImplicitly]
+			public bool HasHmrc { get; set; }
+
+			[UsedImplicitly]
+			public bool HasOnline { get; set; }
+
+			[UsedImplicitly]
+			public List<string> HmrcBusinessNames { get; set; }
+
+			[UsedImplicitly]
+			public decimal HmrcTurnover1Y { get; set; }
+
+			[UsedImplicitly]
+			public decimal HmrcTurnover3M { get; set; }
+
+			[UsedImplicitly]
+			public decimal HmrcTurnover6M { get; set; }
+
+			[UsedImplicitly]
+			public DateTime? HmrcUpdateTime { get; set; }
+
+			[UsedImplicitly]
+			public List<Payment> LatePayments { get; set; }
+
+			[UsedImplicitly]
+			public int MarketplaceSeniority { get; set; }
+
+			[UsedImplicitly]
+			[JsonConverter(typeof(StringEnumConverter))]
+			public Medal Medal { get; set; }
+
+			[UsedImplicitly]
+			[JsonConverter(typeof(StringEnumConverter))]
+			public MedalType MedalType { get; set; }
 
 			[UsedImplicitly]
 			public MetaData MetaData { get; set; }
@@ -23,58 +67,60 @@
 			public List<string> MetaDataValidationErrors { get; set; }
 
 			[UsedImplicitly]
-			public int CustomerID { get; set; }
+			public decimal OnlineTurnover1M { get; set; }
+
+			[UsedImplicitly]
+			public decimal OnlineTurnover1Y { get; set; }
+
+			[UsedImplicitly]
+			public decimal OnlineTurnover3M { get; set; }
+
+			[UsedImplicitly]
+			public DateTime? OnlineUpdateTime { get; set; }
+
+			[UsedImplicitly]
+			public decimal ReservedFunds { get; set; }
 
 			[UsedImplicitly]
 			public decimal SystemCalculatedAmount { get; set; }
 
 			[UsedImplicitly]
-			[JsonConverter(typeof(StringEnumConverter))]
-			public Medal Medal { get; set; }
-
-			[UsedImplicitly]
 			public List<string> WorstStatusList { get; set; }
 
-			[UsedImplicitly]
-			public int MarketplaceSeniority { get; set; }
+			public void FlushTo(ApprovalInputData dst) {
+				dst.Clean();
 
-			[UsedImplicitly]
-			public List<Payment> LatePayments { get; set; }
+				dst.SetDataAsOf(DataAsOf);
+				dst.SetConfiguration(Configuration);
+				dst.SetMetaData(MetaData);
+				dst.MetaData.RestoreValidationErrors(MetaDataValidationErrors);
+				dst.SetArgs(CustomerID, SystemCalculatedAmount, Medal, MedalType);
+				dst.SetWorstStatuses(WorstStatusList);
+				dst.SetSeniority(MarketplaceSeniority);
+				dst.LatePayments = new List<Payment>(LatePayments);
 
-			[UsedImplicitly]
-			public decimal OnlineTurnover1M { get; set; }
-			[UsedImplicitly]
-			public decimal OnlineTurnover3M { get; set; }
-			[UsedImplicitly]
-			public decimal OnlineTurnover1Y { get; set; }
+				dst.SetOnlineTurnover(1, OnlineTurnover1M);
+				dst.SetOnlineTurnover(3, OnlineTurnover3M);
+				dst.SetOnlineTurnover(12, OnlineTurnover1Y);
 
-			[UsedImplicitly]
-			public DateTime? OnlineUpdateTime { get; set; }
-			[UsedImplicitly]
-			public bool HasOnline { get; set; }
+				dst.OnlineUpdateTime = OnlineUpdateTime;
+				dst.HasOnline = HasOnline;
 
-			[UsedImplicitly]
-			public bool HasHmrc { get; set; }
-			[UsedImplicitly]
-			public DateTime? HmrcUpdateTime { get; set; }
+				dst.HasHmrc = HasHmrc;
+				dst.HmrcUpdateTime = HmrcUpdateTime;
 
-			[UsedImplicitly]
-			public decimal HmrcTurnover3M { get; set; }
-			[UsedImplicitly]
-			public decimal HmrcTurnover6M { get; set; }
-			[UsedImplicitly]
-			public decimal HmrcTurnover1Y { get; set; }
+				dst.SetHmrcTurnover(3, HmrcTurnover3M);
+				dst.SetHmrcTurnover(6, HmrcTurnover6M);
+				dst.SetHmrcTurnover(12, HmrcTurnover1Y);
 
-			[UsedImplicitly]
-			public decimal AvailableFunds { get; set; }
-			[UsedImplicitly]
-			public decimal ReservedFunds { get; set; }
+				dst.AvailableFunds = AvailableFunds;
+				dst.ReservedFunds = ReservedFunds;
 
-			[UsedImplicitly]
-			public List<Tuple<string, string>> DirectorNames { get; set; }
+				dst.DirectorNames.Clear();
+				dst.DirectorNames.AddRange(DirectorNames.Select(t => new Name(t.Item1, t.Item2)));
 
-			[UsedImplicitly]
-			public List<string> HmrcBusinessNames { get; set; }
+				dst.SetHmrcBusinessNames(HmrcBusinessNames);
+			} // FlushTo
 
 			public SerializationModel InitFrom(ApprovalInputData src) {
 				DataAsOf = src.DataAsOf;
@@ -89,6 +135,7 @@
 				CustomerID = src.CustomerID;
 				SystemCalculatedAmount = src.SystemCalculatedAmount;
 				Medal = src.Medal;
+				MedalType = src.MedalType;
 
 				WorstStatusList = new List<string>();
 				if (src.WorstStatusList != null)
@@ -127,41 +174,6 @@
 
 				return this;
 			} // InitFrom
-
-			public void FlushTo(ApprovalInputData dst) {
-				dst.Clean();
-
-				dst.SetDataAsOf(DataAsOf);
-				dst.SetConfiguration(Configuration);
-				dst.SetMetaData(MetaData);
-				dst.MetaData.RestoreValidationErrors(MetaDataValidationErrors);
-				dst.SetArgs(CustomerID, SystemCalculatedAmount, Medal);
-				dst.SetWorstStatuses(WorstStatusList);
-				dst.SetSeniority(MarketplaceSeniority);
-				dst.LatePayments = new List<Payment>(LatePayments);
-
-				dst.SetOnlineTurnover(1, OnlineTurnover1M);
-				dst.SetOnlineTurnover(3, OnlineTurnover3M);
-				dst.SetOnlineTurnover(12, OnlineTurnover1Y);
-
-				dst.OnlineUpdateTime = OnlineUpdateTime;
-				dst.HasOnline = HasOnline;
-
-				dst.HasHmrc = HasHmrc;
-				dst.HmrcUpdateTime = HmrcUpdateTime;
-
-				dst.SetHmrcTurnover(3, HmrcTurnover3M);
-				dst.SetHmrcTurnover(6, HmrcTurnover6M);
-				dst.SetHmrcTurnover(12, HmrcTurnover1Y);
-
-				dst.AvailableFunds = AvailableFunds;
-				dst.ReservedFunds = ReservedFunds;
-
-				dst.DirectorNames.Clear();
-				dst.DirectorNames.AddRange(DirectorNames.Select(t => new Name(t.Item1, t.Item2)));
-
-				dst.SetHmrcBusinessNames(HmrcBusinessNames);
-			} // FlushTo
 		} // class SerializationModel
 	} // class ApprovalInputData
 } // namespace

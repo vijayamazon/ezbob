@@ -3,33 +3,36 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using ConfigManager;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.MailStrategies.API;
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
+	using Ezbob.Backend.Strategies.MedalCalculations;
+	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.ScoreCalculation;
+	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
-	using MailStrategies;
-	using MailStrategies.API;
-	using AutoDecisions;
-	using MedalCalculations;
-	using Misc;
 	using NHibernate;
-	using ScoreCalculation;
-	using Ezbob.Backend.Models;
-	using EZBob.DatabaseLib.Model.Database;
-	using Ezbob.Database;
-	using EzBob.Models;
 	using StructureMap;
 
 	public class MainStrategy : AStrategy {
-		public override string Name { get { return "Main strategy"; } }
+		public override string Name {
+			get {
+				return "Main strategy";
+			}
+		}
 
 		public MainStrategy(
 			int customerId,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDecision,
 			FinishWizardArgs fwa
-		) {
-			this.finishWizardArgs = fwa;
+			) {
+			finishWizardArgs = fwa;
 
 			_session = ObjectFactory.GetInstance<ISession>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -49,16 +52,13 @@
 			dataGatherer = new DataGatherer(customerId, DB, Log);
 		}
 
-		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
-			overrideApprovedRejected = bOverrideApprovedRejected;
-			return this;
-		}
-
 		public override void Execute() {
-			if (this.finishWizardArgs != null)
+			if (finishWizardArgs != null)
 				FinishWizard();
 
-			autoDecisionResponse = new AutoDecisionResponse { DecisionName = "Manual" };
+			autoDecisionResponse = new AutoDecisionResponse {
+				DecisionName = "Manual"
+			};
 
 			if (newCreditLineOption == NewCreditLineOption.SkipEverything) {
 				Log.Alert("MainStrategy was activated in SkipEverything mode. Nothing is done. Avoid such calls!");
@@ -85,7 +85,7 @@
 					dataGatherer.AppSortCode,
 					DB,
 					Log
-				).Call();
+					).Call();
 			} // if
 
 			// Gather Raw Data - most data is gathered here
@@ -111,7 +111,7 @@
 			// Gather LR data - must be done after rejection decisions
 			bool bSkip =
 				newCreditLineOption == NewCreditLineOption.SkipEverything ||
-				newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
+					newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
 
 			if (!bSkip)
 				GetLandRegistryDataIfNotRejected();
@@ -130,16 +130,23 @@
 			UpdateCustomerAndCashRequest();
 
 			SendEmails();
-		} // Execute
+		}
 
-		private void FinishWizard() {
-			if (this.finishWizardArgs == null)
-				return;
+		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
+			overrideApprovedRejected = bOverrideApprovedRejected;
+			return this;
+		}
 
-			this.finishWizardArgs.DoMain = false;
+		// Execute
 
-			new FinishWizard(this.finishWizardArgs).Execute();
-		} // FinishWizard
+		private void AdjustOfferredCreditLine() {
+			if (autoDecisionResponse.IsAutoReApproval || autoDecisionResponse.IsAutoApproval)
+				offeredCreditLine = RoundOfferedAmount(autoDecisionResponse.AutoApproveAmount);
+			else if (autoDecisionResponse.IsAutoBankBasedApproval)
+				offeredCreditLine = RoundOfferedAmount(autoDecisionResponse.BankBasedAutoApproveAmount);
+			else if (autoDecisionResponse.DecidedToReject)
+				offeredCreditLine = 0;
+		}
 
 		private void CalculateNewMedal() {
 			var instance = new CalculateMedal(customerId, dataGatherer.TypeOfBusiness, dataGatherer.MaxExperianConsumerScore, dataGatherer.MaxCompanyScore, dataGatherer.NumOfHmrcMps,
@@ -148,41 +155,108 @@
 
 			medalClassification = instance.Result.MedalClassification;
 			medalScore = instance.Result.TotalScoreNormalized;
+			medalType = instance.Result.MedalType;
 
 			modelLoanOffer = RoundOfferedAmount(instance.Result.OfferedLoanAmount);
 		}
 
-		private int RoundOfferedAmount(decimal amount) {
-			return (int)Math.Truncate(amount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
+		private ScoreMedalOffer CalculateScoreAndMedal() {
+			Log.Info("Calculating score & medal");
+
+			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(
+				dataGatherer.TotalSumOfOrdersForLoanOffer,
+				dataGatherer.MinExperianConsumerScore,
+				dataGatherer.MarketplaceSeniorityYears,
+				dataGatherer.ModelMaxFeedback,
+				dataGatherer.MaritalStatus,
+				dataGatherer.AppGender == "M" ? Gender.M : Gender.F,
+				dataGatherer.NumOfEbayAmazonPayPalMps,
+				dataGatherer.FirstRepaymentDatePassed,
+				dataGatherer.EzbobSeniorityMonths,
+				dataGatherer.ModelOnTimeLoans,
+				dataGatherer.ModelLatePayments,
+				dataGatherer.ModelEarlyPayments
+				);
+
+			// Save online medal
+			DB.ExecuteNonQuery(
+				"CustomerScoringResult_Insert",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("pCustomerId", customerId),
+				new QueryParameter("pAC_Parameters", scoringResult.AcParameters),
+				new QueryParameter("AC_Descriptors", scoringResult.AcDescriptors),
+				new QueryParameter("Result_Weight", scoringResult.ResultWeigts),
+				new QueryParameter("pResult_MAXPossiblePoints", scoringResult.ResultMaxPoints),
+				new QueryParameter("pMedal", scoringResult.Medal.ToString()),
+				new QueryParameter("pScorePoints", scoringResult.ScorePoints),
+				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
+				);
+
+			// Update CustomerAnalyticsLocalData
+			DB.ExecuteNonQuery(
+				"CustomerAnalyticsUpdateLocalData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", customerId),
+				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
+				new QueryParameter("AnnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
+				new QueryParameter("TotalSumOfOrdersForLoanOffer", dataGatherer.TotalSumOfOrdersForLoanOffer),
+				new QueryParameter("MarketplaceSeniorityYears", dataGatherer.MarketplaceSeniorityYears),
+				new QueryParameter("MaxFeedback", dataGatherer.ModelMaxFeedback),
+				new QueryParameter("MPsNumber", dataGatherer.NumOfEbayAmazonPayPalMps),
+				new QueryParameter("FirstRepaymentDatePassed", dataGatherer.FirstRepaymentDatePassed),
+				new QueryParameter("EzbobSeniorityMonths", dataGatherer.EzbobSeniorityMonths),
+				new QueryParameter("OnTimeLoans", dataGatherer.ModelOnTimeLoans),
+				new QueryParameter("LatePayments", dataGatherer.ModelLatePayments),
+				new QueryParameter("EarlyPayments", dataGatherer.ModelEarlyPayments)
+				);
+			return scoringResult;
 		}
 
-		private void AdjustOfferredCreditLine() {
-			if (autoDecisionResponse.IsAutoReApproval || autoDecisionResponse.IsAutoApproval) {
-				offeredCreditLine = RoundOfferedAmount(autoDecisionResponse.AutoApproveAmount);
-			}
-			else if (autoDecisionResponse.IsAutoBankBasedApproval) {
-				offeredCreditLine = RoundOfferedAmount(autoDecisionResponse.BankBasedAutoApproveAmount);
-			}
-			else if (autoDecisionResponse.DecidedToReject) {
-				offeredCreditLine = 0;
+		private void CapOffer() {
+			Log.Info("Finalizing and capping offer");
+
+			offeredCreditLine = modelLoanOffer;
+
+			bool isHomeOwnerAccordingToLandRegistry = DB.ExecuteScalar<bool>(
+				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+				);
+
+			if (isHomeOwnerAccordingToLandRegistry) {
+				Log.Info("Capped for home owner according to land registry");
+				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapHomeOwner);
+			} else {
+				Log.Info("Capped for not home owner");
+				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapNotHomeOwner);
+			} // if
+		}
+
+		private void FinishWizard() {
+			if (finishWizardArgs == null)
+				return;
+
+			finishWizardArgs.DoMain = false;
+
+			new FinishWizard(finishWizardArgs).Execute();
+		} // FinishWizard
+
+		private void GetLandRegistry() {
+			var customerAddressesHelper = new CustomerAddressHelper(customerId);
+			customerAddressesHelper.Execute();
+			try {
+				strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.OwnedAddresses);
+			} catch (Exception e) {
+				Log.Error("Error while getting land registry data: {0}", e);
 			}
 		}
 
-		private void SendEmails() {
-			if (autoDecisionResponse.DecidedToReject) {
-				new RejectUser(customerId, true).Execute();
-			}
-			else if (autoDecisionResponse.IsAutoApproval) {
-				SendApprovalMails();
-			}
-			else if (autoDecisionResponse.IsAutoBankBasedApproval) {
-				SendBankBasedApprovalMails();
-			}
-			else if (autoDecisionResponse.IsAutoReApproval) {
-				SendReApprovalMails();
-			}
-			else if (!autoDecisionResponse.HasAutomaticDecision)
-				SendWaitingForDecisionMail();
+		private void GetLandRegistryDataIfNotRejected() {
+			if (!autoDecisionResponse.DecidedToReject && isHomeOwner) {
+				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.DecisionName, dataGatherer.PropertyStatusDescription);
+				GetLandRegistry();
+			} else
+				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.DecisionName, dataGatherer.PropertyStatusDescription);
 		}
 
 		private void ProcessApprovals() {
@@ -220,14 +294,14 @@
 					customerId,
 					DB,
 					Log
-				).Init().MakeDecision(autoDecisionResponse);
+					).Init()
+					.MakeDecision(autoDecisionResponse);
 
 				bContinue = !autoDecisionResponse.SystemDecision.HasValue;
 
 				if (!bContinue)
 					Log.Debug("Auto re-approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
-			}
-			else
+			} else
 				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
 
 			if (dataGatherer.EnableAutomaticApproval && bContinue) {
@@ -235,9 +309,11 @@
 					customerId,
 					offeredCreditLine,
 					medalClassification,
+					(AutomationCalculator.Common.MedalType)medalType,
 					DB,
 					Log
-				).Init().MakeDecision(autoDecisionResponse);
+					).Init()
+					.MakeDecision(autoDecisionResponse);
 
 				bContinue = !autoDecisionResponse.SystemDecision.HasValue;
 
@@ -254,8 +330,7 @@
 
 				if (!bContinue)
 					Log.Debug("Bank based approval has reached decision: {0}.", autoDecisionResponse.SystemDecision);
-			}
-			else
+			} else
 				Log.Debug("Not processed bank based approval: it is currently disabled in configuration or decision has already been made earlier.");
 
 			if (bContinue) { // No decision is made so far
@@ -265,18 +340,9 @@
 
 				Log.Debug("Not approval has reached decision: setting it to be 'waiting for decision'.");
 			} // if
-		} // ProcessApprovals
-
-		private void GetLandRegistryDataIfNotRejected() {
-			if (!autoDecisionResponse.DecidedToReject && isHomeOwner) {
-				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.DecisionName, dataGatherer.PropertyStatusDescription);
-				GetLandRegistry();
-			}
-			else {
-				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.DecisionName, dataGatherer.PropertyStatusDescription);
-			}
 		}
 
+		// ProcessApprovals
 		private void ProcessRejections() {
 			if (newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision)
 				return;
@@ -298,40 +364,189 @@
 
 			new AutoDecisions.Reject.Agent(
 				customerId, DB, Log
-			).Init().MakeDecision(autoDecisionResponse);
-		} // ProcessRejections
-
-		private void GetLandRegistry() {
-			var customerAddressesHelper = new CustomerAddressHelper(customerId);
-			customerAddressesHelper.Execute();
-			try {
-				strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.OwnedAddresses);
-			}
-			catch (Exception e) {
-				Log.Error("Error while getting land registry data: {0}", e);
-			}
+				).Init()
+				.MakeDecision(autoDecisionResponse);
 		}
 
-		private void CapOffer() {
-			Log.Info("Finalizing and capping offer");
+		private int RoundOfferedAmount(decimal amount) {
+			return (int)Math.Truncate(amount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
+		}
 
-			offeredCreditLine = modelLoanOffer;
+		private void SendApprovalMails() {
+			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
+				{
+					"ApprovedReApproved", "Approved"
+				}, {
+					"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"userID", customerId.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"Name", dataGatherer.AppEmail
+				}, {
+					"FirstName", dataGatherer.AppFirstName
+				}, {
+					"Surname", dataGatherer.AppSurname
+				}, {
+					"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"MedalType", medalClassification.ToString()
+				}, {
+					"SystemDecision", autoDecisionResponse.SystemDecision.ToString()
+				}, {
+					"ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"InterestRate", autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
+						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+						: string.Empty
+				}
+			});
 
-			bool isHomeOwnerAccordingToLandRegistry = DB.ExecuteScalar<bool>(
-				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
+			var customerMailVariables = new Dictionary<string, string> {
+				{
+					"FirstName", dataGatherer.AppFirstName
+				}, {
+					"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty
+				}
+			};
 
-			if (isHomeOwnerAccordingToLandRegistry) {
-				Log.Info("Capped for home owner according to land registry");
-				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapHomeOwner);
-			}
-			else {
-				Log.Info("Capped for not home owner");
-				offeredCreditLine = Math.Min(offeredCreditLine, dataGatherer.MaxCapNotHomeOwner);
-			} // if
-		} // CappOffer
+			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
+		}
+
+		private void SendBankBasedApprovalMails() {
+			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
+				{
+					"ApprovedReApproved", "Approved"
+				}, {
+					"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"userID", customerId.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"Name", dataGatherer.AppEmail
+				}, {
+					"FirstName", dataGatherer.AppFirstName
+				}, {
+					"Surname", dataGatherer.AppSurname
+				}, {
+					"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"MedalType", medalClassification.ToString()
+				}, {
+					"SystemDecision", autoDecisionResponse.SystemDecision.ToString()
+				}, {
+					"ApprovalAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
+						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+						: string.Empty
+				}
+			});
+
+			var customerMailVariables = new Dictionary<string, string> {
+				{
+					"FirstName", dataGatherer.AppFirstName
+				}, {
+					"LoanAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty
+				}
+			};
+
+			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
+		}
+
+		private void SendEmails() {
+			if (autoDecisionResponse.DecidedToReject)
+				new RejectUser(customerId, true).Execute();
+			else if (autoDecisionResponse.IsAutoApproval)
+				SendApprovalMails();
+			else if (autoDecisionResponse.IsAutoBankBasedApproval)
+				SendBankBasedApprovalMails();
+			else if (autoDecisionResponse.IsAutoReApproval)
+				SendReApprovalMails();
+			else if (!autoDecisionResponse.HasAutomaticDecision)
+				SendWaitingForDecisionMail();
+		}
+
+		// ProcessRejections
+		// CappOffer
+
+		private void SendReApprovalMails() {
+			mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
+				{
+					"ApprovedReApproved", "Re-Approved"
+				}, {
+					"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"userID", customerId.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"Name", dataGatherer.AppEmail
+				}, {
+					"FirstName", dataGatherer.AppFirstName
+				}, {
+					"Surname", dataGatherer.AppSurname
+				}, {
+					"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"MedalType", medalClassification.ToString()
+				}, {
+					"SystemDecision", autoDecisionResponse.SystemDecision.ToString()
+				}, {
+					"ApprovalAmount", offeredCreditLine.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
+						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+						: string.Empty
+				}
+			});
+
+			var customerMailVariables = new Dictionary<string, string> {
+				{
+					"FirstName", dataGatherer.AppFirstName
+				}, {
+					"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty
+				}
+			};
+
+			mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
+		}
+
+		private void SendWaitingForDecisionMail() {
+			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
+				{
+					"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"userID", customerId.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"Name", dataGatherer.AppEmail
+				}, {
+					"FirstName", dataGatherer.AppFirstName
+				}, {
+					"Surname", dataGatherer.AppSurname
+				}, {
+					"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)
+				}, {
+					"MedalType", medalClassification.ToString()
+				}, {
+					"SystemDecision", "WaitingForDecision"
+				}
+			});
+		}
 
 		private void UpdateCustomerAndCashRequest() {
 			var now = DateTime.UtcNow;
@@ -349,8 +564,7 @@
 				repaymentPeriodToUse = autoDecisionResponse.RepaymentPeriod;
 				isEuToUse = autoDecisionResponse.IsEu;
 				loanTypeIdToUse = _loanTypeRepository.Get(autoDecisionResponse.LoanTypeId) ?? _loanTypeRepository.GetDefault();
-			}
-			else {
+			} else {
 				interestRateToUse = dataGatherer.LoanOfferInterestRate;
 				setupFeePercentToUse = dataGatherer.ManualSetupFeePercent;
 				setupFeeAmountToUse = dataGatherer.ManualSetupFeeAmount;
@@ -439,201 +653,61 @@
 			if (autoDecisionResponse.Decision.HasValue) {
 				_decisionHistory.LogAction(
 					autoDecisionResponse.Decision.Value, autoDecisionResponse.DecisionName, _session.Get<User>(1), customer
-				);
+					);
 			}
 		}
 
-		private void SendWaitingForDecisionMail() {
-			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
-				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", dataGatherer.AppEmail},
-				{"FirstName", dataGatherer.AppFirstName},
-				{"Surname", dataGatherer.AppSurname},
-				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", "WaitingForDecision"}
-			});
-		}
+		private readonly CustomerRepository _customers;
 
-		private void SendReApprovalMails() {
-			mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
-				{"ApprovedReApproved", "Re-Approved"},
-				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", dataGatherer.AppEmail},
-				{"FirstName", dataGatherer.AppFirstName},
-				{"Surname", dataGatherer.AppSurname},
-				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
-				{"ApprovalAmount", offeredCreditLine.ToString(CultureInfo.InvariantCulture)},
-				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
-				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
-						: string.Empty
-				}
-			});
+		private readonly DecisionHistoryRepository _decisionHistory;
 
-			var customerMailVariables = new Dictionary<string, string> {
-				{"FirstName", dataGatherer.AppFirstName},
-				{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-			};
+		private readonly DiscountPlanRepository _discountPlanRepository;
 
-			mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
-		}
+		private readonly LoanSourceRepository _loanSourceRepository;
 
-		private void SendApprovalMails() {
-			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
-				{"ApprovedReApproved", "Approved"},
-				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", dataGatherer.AppEmail},
-				{"FirstName", dataGatherer.AppFirstName},
-				{"Surname", dataGatherer.AppSurname},
-				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
-				{"ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture)},
-				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
-						: string.Empty
-				}
-			});
+		private readonly LoanTypeRepository _loanTypeRepository;
 
-			var customerMailVariables = new Dictionary<string, string> {
-				{"FirstName", dataGatherer.AppFirstName},
-				{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-			};
+		private readonly ISession _session;
 
-			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
-		}
-
-		private void SendBankBasedApprovalMails() {
-			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
-				{"ApprovedReApproved", "Approved"},
-				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", dataGatherer.AppEmail},
-				{"FirstName", dataGatherer.AppFirstName},
-				{"Surname", dataGatherer.AppSurname},
-				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
-				{"ApprovalAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
-				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
-						: string.Empty
-				}
-			});
-
-			var customerMailVariables = new Dictionary<string, string> {
-				{"FirstName", dataGatherer.AppFirstName},
-				{"LoanAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-			};
-
-			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
-		}
-
-		private ScoreMedalOffer CalculateScoreAndMedal() {
-			Log.Info("Calculating score & medal");
-
-			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(
-				dataGatherer.TotalSumOfOrdersForLoanOffer,
-				dataGatherer.MinExperianConsumerScore,
-				dataGatherer.MarketplaceSeniorityYears,
-				dataGatherer.ModelMaxFeedback,
-				dataGatherer.MaritalStatus,
-				dataGatherer.AppGender == "M" ? Gender.M : Gender.F,
-				dataGatherer.NumOfEbayAmazonPayPalMps,
-				dataGatherer.FirstRepaymentDatePassed,
-				dataGatherer.EzbobSeniorityMonths,
-				dataGatherer.ModelOnTimeLoans,
-				dataGatherer.ModelLatePayments,
-				dataGatherer.ModelEarlyPayments
-			);
-
-			// Save online medal
-			DB.ExecuteNonQuery(
-				"CustomerScoringResult_Insert",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("pCustomerId", customerId),
-				new QueryParameter("pAC_Parameters", scoringResult.AcParameters),
-				new QueryParameter("AC_Descriptors", scoringResult.AcDescriptors),
-				new QueryParameter("Result_Weight", scoringResult.ResultWeigts),
-				new QueryParameter("pResult_MAXPossiblePoints", scoringResult.ResultMaxPoints),
-				new QueryParameter("pMedal", scoringResult.Medal.ToString()),
-				new QueryParameter("pScorePoints", scoringResult.ScorePoints),
-				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
-			);
-
-			// Update CustomerAnalyticsLocalData
-			DB.ExecuteNonQuery(
-				"CustomerAnalyticsUpdateLocalData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerId),
-				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
-				new QueryParameter("AnnualTurnover", dataGatherer.TotalSumOfOrders1YTotal),
-				new QueryParameter("TotalSumOfOrdersForLoanOffer", dataGatherer.TotalSumOfOrdersForLoanOffer),
-				new QueryParameter("MarketplaceSeniorityYears", dataGatherer.MarketplaceSeniorityYears),
-				new QueryParameter("MaxFeedback", dataGatherer.ModelMaxFeedback),
-				new QueryParameter("MPsNumber", dataGatherer.NumOfEbayAmazonPayPalMps),
-				new QueryParameter("FirstRepaymentDatePassed", dataGatherer.FirstRepaymentDatePassed),
-				new QueryParameter("EzbobSeniorityMonths", dataGatherer.EzbobSeniorityMonths),
-				new QueryParameter("OnTimeLoans", dataGatherer.ModelOnTimeLoans),
-				new QueryParameter("LatePayments", dataGatherer.ModelLatePayments),
-				new QueryParameter("EarlyPayments", dataGatherer.ModelEarlyPayments)
-			);
-			return scoringResult;
-		}
-
-		// Helpers
-		private readonly StrategiesMailer mailer;
-		private readonly Staller staller;
-		private readonly DataGatherer dataGatherer;
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		private readonly MedalScoreCalculator medalScoreCalculator;
+		private readonly int avoidAutomaticDecision;
 
 		// Inputs
 		private readonly int customerId;
-		private readonly NewCreditLineOption newCreditLineOption;
-		private readonly int avoidAutomaticDecision;
 
-		/// <summary>
-		/// Default: true. However when Main strategy is executed as a part of
-		/// Finish Wizard strategy and customer is already approved/rejected
-		/// then customer's status should not change.
-		/// </summary>
-		private bool overrideApprovedRejected;
+		private readonly DataGatherer dataGatherer;
+
+		private readonly FinishWizardArgs finishWizardArgs;
+
+		// Helpers
+		private readonly StrategiesMailer mailer;
+		private readonly MedalScoreCalculator medalScoreCalculator;
+		private readonly NewCreditLineOption newCreditLineOption;
+		private readonly Staller staller;
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		private AutoDecisionResponse autoDecisionResponse;
+
+		private bool isFirstLoan;
 
 		// Calculated based on raw data
 		private bool isHomeOwner;
-		private bool isFirstLoan;
-		private bool wasMainStrategyExecutedBefore;
 
-		private AutoDecisionResponse autoDecisionResponse;
-		private int offeredCreditLine;
-		private int modelLoanOffer;
 		private Medal medalClassification;
+
 		private decimal medalScore;
 
-		private readonly CustomerRepository _customers;
-		private readonly DecisionHistoryRepository _decisionHistory;
-		private readonly ISession _session;
-		private readonly LoanTypeRepository _loanTypeRepository;
-		private readonly LoanSourceRepository _loanSourceRepository;
-		private readonly DiscountPlanRepository _discountPlanRepository;
-		private readonly FinishWizardArgs finishWizardArgs;
+		private Ezbob.Backend.Strategies.MedalCalculations.MedalType medalType;
+
+		private int modelLoanOffer;
+
+		private int offeredCreditLine;
+
+		/// <summary>
+		///     Default: true. However when Main strategy is executed as a part of
+		///     Finish Wizard strategy and customer is already approved/rejected
+		///     then customer's status should not change.
+		/// </summary>
+		private bool overrideApprovedRejected;
+
+		private bool wasMainStrategyExecutedBefore;
 	} // class MainStrategy
 } // namespace

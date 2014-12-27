@@ -8,8 +8,8 @@
 	using Ezbob.Logger;
 
 	/// <summary>
-	/// Executes auto approval logic. Based on customer data and system calculated amount
-	/// decides whether this amount should be approved.
+	///     Executes auto approval logic. Based on customer data and system calculated amount
+	///     decides whether this amount should be approved.
 	/// </summary>
 	public class Agent {
 		public virtual decimal ApprovedAmount { get; set; }
@@ -20,12 +20,19 @@
 
 		public virtual ApprovalTrail Trail { get; private set; }
 
-		public Agent(int nCustomerID, decimal nSystemCalculatedAmount, AutomationCalculator.Common.Medal nMedal, AConnection oDB, ASafeLog oLog) {
+		public Agent(
+			int nCustomerID,
+			decimal nSystemCalculatedAmount,
+			AutomationCalculator.Common.Medal nMedal,
+			AutomationCalculator.Common.MedalType medalType,
+			AConnection oDB,
+			ASafeLog oLog
+			) {
 			Result = null;
 
 			DB = oDB;
 			Log = oLog ?? new SafeLog();
-			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal);
+			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal, medalType);
 			m_oCheck = new Checker(this);
 		} // constructor
 
@@ -59,10 +66,10 @@
 			try {
 				GatherData();
 				m_oCheck.Run();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Log.Error(e, "Exception during auto approval.");
-				m_oCheck.StepFailed<ExceptionThrown>().Init(e);
+				m_oCheck.StepFailed<ExceptionThrown>()
+					.Init(e);
 			} // try
 
 			if (Trail.HasDecided)
@@ -73,40 +80,38 @@
 				Args.CustomerID,
 				Trail,
 				Result == null ? string.Empty : "Approved " + Result + "."
-			);
+				);
 		} // MakeDecision
 
-		protected virtual AConnection DB { get; private set; }
-		protected virtual ASafeLog Log { get; private set; }
-
-		protected virtual Configuration Cfg { get; private set; }
 		protected virtual Arguments Args { get; private set; }
 
-		protected virtual MetaData MetaData { get; private set; }
-		protected virtual List<Payment> Payments { get; private set; }
+		protected virtual Configuration Cfg { get; private set; }
 
-		protected virtual SortedSet<string> WorstStatuses { get; private set; }
-
-		protected virtual OriginationTime OriginationTime { get; private set; }
-
-		protected virtual CalculatedTurnover Turnover { get; private set; }
+		protected virtual AConnection DB { get; private set; }
+		protected virtual List<Name> DirectorNames { get; private set; }
 
 		protected virtual AvailableFunds Funds { get; private set; }
 
-		protected virtual List<Name> DirectorNames { get; private set; }
 		protected virtual List<string> HmrcBusinessNames { get; private set; }
 
-		protected virtual Configuration InitCfg() {
-			return new Configuration(DB, Log);
-		} // InitCfg
+		protected virtual ASafeLog Log { get; private set; }
+		protected virtual MetaData MetaData { get; private set; }
+		protected virtual OriginationTime OriginationTime { get; private set; }
+
+		protected virtual List<Payment> Payments { get; private set; }
+
+		protected virtual CalculatedTurnover Turnover { get; private set; }
+
+		protected virtual SortedSet<string> WorstStatuses { get; private set; }
 
 		protected virtual void GatherAvailableFunds() {
-			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(Funds);
-		} // GatherAvailableFunds
+			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure)
+				.Fill(Funds);
+		}
 
 		/// <summary>
-		/// Collects customer data from DB. Can be overridden to provide
-		/// specific customer data instead of the current one.
+		///     Collects customer data from DB. Can be overridden to provide
+		///     specific customer data instead of the current one.
 		/// </summary>
 		protected virtual void GatherData() {
 			Cfg.Load();
@@ -117,7 +122,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", Args.CustomerID),
 				new QueryParameter("Now", Now)
-			);
+				);
 
 			OriginationTime.FromExperian(MetaData.IncorporationDate);
 
@@ -135,10 +140,18 @@
 				Funds,
 				DirectorNames,
 				HmrcBusinessNames
-			);
+				);
 
 			MetaData.Validate();
-		} // GatherData
+		}
+
+		protected virtual Configuration InitCfg() {
+			return new Configuration(DB, Log);
+		} // InitCfg
+
+		// GatherAvailableFunds
+
+		// GatherData
 
 		private enum RowType {
 			MetaData,

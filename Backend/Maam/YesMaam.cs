@@ -226,6 +226,7 @@
 					ymr.Input.CustomerID,
 					CapOffer(ymr.Input.CustomerID, medal.OfferedLoanAmount),
 					medal.Medal,
+					medal.MedalType,
 					ymr.Input.DecisionTime,
 					DB,
 					Log
