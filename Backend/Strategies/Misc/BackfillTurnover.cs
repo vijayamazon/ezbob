@@ -98,6 +98,11 @@ FROM
 	MP_CustomerMarketPlaceUpdatingHistory h
 	INNER JOIN MP_CustomerMarketPlace m ON h.CustomerMarketPlaceId = m.Id
 	INNER JOIN MP_MarketplaceType t ON m.MarketPlaceId = t.Id
+WHERE
+	t.InternalId NOT IN (
+		'1c077670-6d6c-4ce9-bebc-c1f9a9723908', -- Company files
+		'fc8f2710-aeda-481d-86ff-539dd1fb76e0'  -- PayPoint
+	)
 ORDER BY
 	h.Id";
 
