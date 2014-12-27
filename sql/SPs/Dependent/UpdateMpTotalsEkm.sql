@@ -155,7 +155,7 @@ BEGIN
 		TotalSumOfOtherOrders
 	)
 	SELECT DISTINCT
-		dbo.udfMonthStart(PaymentDate),
+		dbo.udfMonthStart(OrderDate),
 		'Jul 1 1976', -- Magic number because column ain't no allows null. It is replaced with the real value in the next query.
 		@HistoryID,
 		0, -- Turnover,

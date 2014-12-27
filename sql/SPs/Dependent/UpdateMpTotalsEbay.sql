@@ -161,7 +161,7 @@ BEGIN
 	UPDATE #months SET
 		Turnover = ISNULL(d.Value, 0),
 		TotalSumOfOrders = ISNULL(d.Value, 0),
-		AverageSumOfOrdersNumerator = ISNULL(d.Value, 0)
+		AverageSumOfOrderNumerator = ISNULL(d.Value, 0)
 	FROM
 		#months m
 		INNER JOIN (
@@ -270,6 +270,7 @@ BEGIN
 
 	-- 2. Append the last partial month of the marketplace.
 
+	INSERT INTO #all_ids (Id)
 	SELECT
 		Id
 	FROM

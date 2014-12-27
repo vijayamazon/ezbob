@@ -9,6 +9,42 @@
 	using Ezbob.Maam;
 
 	class Program {
+		private static string AppName { get; set; }
+
+		private static AConnection DB { get; set; }
+
+		private static ASafeLog Log { get; set; }
+
+		private static void CompareMaam(string[] args) {
+			var oArgs = new Args(AppName, args, Log);
+
+			if (oArgs.IsGood) {
+				CurrentValues.Init(DB, Log);
+
+				var stra = new YesMaam(oArgs.Count, oArgs.LastCheckedID, DB, Log);
+				stra.Execute();
+			} // if
+		}
+
+		private static void LoadFromJson() {
+			var log = new ConsoleLog(Log);
+
+			string json = File.ReadAllText(@"c:\ezbob\test-data\automation\approval-data.json", Encoding.UTF8);
+
+			ApprovalInputData aid = ApprovalInputData.Deserialize(json);
+
+			log.Debug("Data read from file:\n{0}", aid.Serialize());
+		}
+
+		private static void LoadTurnovers(string[] args) {
+			var oArgs = new Args(AppName, args, Log);
+
+			if (oArgs.IsGood) {
+				CurrentValues.Init(DB, Log);
+				new LoadTurnovers(oArgs, DB, Log).Run();
+			} // if
+		}
+
 		static void Main(string[] args) {
 			AppName = Assembly.GetExecutingAssembly().GetName().Name;
 
@@ -21,47 +57,19 @@
 
 			Ezbob.Backend.Strategies.Library.Initialize(env, DB, Log);
 
-			// CompareMaam(args);
+			CompareMaam(args);
 
 			// LoadFromJson();
 
-			LoadTurnovers(args);
+			// LoadTurnovers(args);
 
 			Log.NotifyStop();
 		} // Main
 
-		private static void CompareMaam(string[] args) {
-			var oArgs = new Args(AppName, args, Log);
+		// CompareMaam
 
-			if (oArgs.IsGood) {
-				CurrentValues.Init(DB, Log);
+		// LoadFromJson
 
-				var stra = new YesMaam(oArgs.Count, oArgs.LastCheckedID, DB, Log);
-				stra.Execute();
-			} // if
-		} // CompareMaam
-
-		private static void LoadFromJson() {
-			var log = new ConsoleLog(Log);
-
-			string json = File.ReadAllText(@"c:\ezbob\test-data\automation\approval-data.json", Encoding.UTF8);
-
-			ApprovalInputData aid = ApprovalInputData.Deserialize(json);
-
-			log.Debug("Data read from file:\n{0}", aid.Serialize());
-		} // LoadFromJson
-
-		private static void LoadTurnovers(string[] args) {
-			var oArgs = new Args(AppName, args, Log);
-
-			if (oArgs.IsGood) {
-				CurrentValues.Init(DB, Log);
-				new LoadTurnovers(oArgs, DB, Log).Run();
-			} // if
-		} // LoadTurnovers
-
-		private static string AppName { get; set; }
-		private static ASafeLog Log { get; set; }
-		private static AConnection DB { get; set; }
+		// LoadTurnovers
 	} // class Program
 } // namespace

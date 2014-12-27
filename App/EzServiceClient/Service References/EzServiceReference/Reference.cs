@@ -184,6 +184,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ConfigTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult))]
@@ -221,7 +222,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerInstantOfferResponseActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -261,6 +261,29 @@ namespace ServiceClientProxy.EzServiceReference {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="NullableDateTimeActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class NullableDateTimeActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
             }
         }
     }
@@ -1598,29 +1621,6 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="NullableDateTimeActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class NullableDateTimeActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<System.DateTime> ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<System.DateTime> Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((this.ValueField.Equals(value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BrokerInstantOfferResponseActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
     [System.SerializableAttribute()]
     public partial class BrokerInstantOfferResponseActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -2514,6 +2514,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyRerejection", ReplyAction="http://tempuri.org/IEzService/VerifyRerejectionResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData VerifyRerejection(int nCustomerCount, int nLastCheckedCustomerID);
         
@@ -2531,6 +2537,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> XDaysDueAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanySeniority", ReplyAction="http://tempuri.org/IEzService/GetCompanySeniorityResponse")]
+        ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanySeniority", ReplyAction="http://tempuri.org/IEzService/GetCompanySeniorityResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult> GetCompanySeniorityAsync(int customerId, bool isLimited, int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetConfigTable", ReplyAction="http://tempuri.org/IEzService/GetConfigTableResponse")]
         ServiceClientProxy.EzServiceReference.ConfigTableActionResult GetConfigTable(int nUnderwriterID, string sTableName);
@@ -3036,12 +3048,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
@@ -3101,6 +3107,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillNonLimitedCompanies", ReplyAction="http://tempuri.org/IEzService/BackfillNonLimitedCompaniesResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillNonLimitedCompaniesAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillTurnover", ReplyAction="http://tempuri.org/IEzService/BackfillTurnoverResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillTurnover();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillTurnover", ReplyAction="http://tempuri.org/IEzService/BackfillTurnoverResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillTurnoverAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillZooplaValue", ReplyAction="http://tempuri.org/IEzService/BackfillZooplaValueResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BackfillZooplaValue();
@@ -3545,12 +3557,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
         System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanySeniority", ReplyAction="http://tempuri.org/IEzService/GetCompanySeniorityResponse")]
-        ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanySeniority", ReplyAction="http://tempuri.org/IEzService/GetCompanySeniorityResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult> GetCompanySeniorityAsync(int customerId, bool isLimited, int underwriterId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3580,6 +3586,14 @@ namespace ServiceClientProxy.EzServiceReference {
                 base(binding, remoteAddress) {
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReject(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyRejectAsync(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyRerejection(int nCustomerCount, int nLastCheckedCustomerID) {
             return base.Channel.VerifyRerejection(nCustomerCount, nLastCheckedCustomerID);
         }
@@ -3602,6 +3616,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> XDaysDueAsync() {
             return base.Channel.XDaysDueAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId) {
+            return base.Channel.GetCompanySeniority(customerId, isLimited, underwriterId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult> GetCompanySeniorityAsync(int customerId, bool isLimited, int underwriterId) {
+            return base.Channel.GetCompanySeniorityAsync(customerId, isLimited, underwriterId);
         }
         
         public ServiceClientProxy.EzServiceReference.ConfigTableActionResult GetConfigTable(int nUnderwriterID, string sTableName) {
@@ -4276,14 +4298,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.VerifyReapprovalAsync(nCustomerCount, nLastCheckedCustomerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyReject(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyRejectAsync(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
             return base.Channel.AddCciHistory(nCustomerID, nUnderwriterID, bCciMark);
         }
@@ -4362,6 +4376,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillNonLimitedCompaniesAsync() {
             return base.Channel.BackfillNonLimitedCompaniesAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillTurnover() {
+            return base.Channel.BackfillTurnover();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillTurnoverAsync() {
+            return base.Channel.BackfillTurnoverAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillZooplaValue() {
@@ -4954,14 +4976,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId) {
             return base.Channel.GetCompanyFileAsync(userId, companyFileId);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId) {
-            return base.Channel.GetCompanySeniority(customerId, isLimited, underwriterId);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult> GetCompanySeniorityAsync(int customerId, bool isLimited, int underwriterId) {
-            return base.Channel.GetCompanySeniorityAsync(customerId, isLimited, underwriterId);
         }
     }
 }

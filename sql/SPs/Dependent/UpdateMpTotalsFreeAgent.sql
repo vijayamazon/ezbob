@@ -103,7 +103,7 @@ BEGIN
 	-- Step 2. Load relevant data to temp table.
 
 	CREATE TABLE #order_items (
-		is_invoice BIT,
+		IsInvoice BIT,
 		value NUMERIC(18, 2),
 		dated_on DATETIME,
 		status_or_cat NVARCHAR(250)
@@ -111,10 +111,10 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO #order_items (is_invoice, value, dated_on, status_or_cat)
+	INSERT INTO #order_items (IsInvoice, value, dated_on, status_or_cat)
 	SELECT
 		f.IsInvoice,
-		i.currency * dbo.udfGetCurrencyRate(i.dated_on, i.currency),
+		i.net_value * dbo.udfGetCurrencyRate(i.dated_on, i.currency),
 		i.dated_on,
 		i.status
 	FROM
@@ -125,7 +125,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO #order_items (is_invoice, value, dated_on, status_or_cat)
+	INSERT INTO #order_items (IsInvoice, value, dated_on, status_or_cat)
 	SELECT
 		f.IsInvoice,
 		i.gross_value * dbo.udfGetCurrencyRate(i.dated_on, i.currency),
