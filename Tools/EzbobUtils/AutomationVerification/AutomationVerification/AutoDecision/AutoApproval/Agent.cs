@@ -48,7 +48,7 @@
 			Funds = new AvailableFunds();
 			WorstStatuses = new SortedSet<string>();
 
-			Turnover = new CalculatedTurnover();
+			Turnover = new CalculatedTurnover(Args.TurnoverType, Log);
 
 			OriginationTime = new OriginationTime(Log);
 
@@ -188,7 +188,7 @@
 				break;
 
 			case RowType.Turnover:
-				Turnover.Add(sr, Log);
+				Turnover.Add(sr.Fill<TurnoverDbRow>());
 				break;
 
 			case RowType.DirectorName:

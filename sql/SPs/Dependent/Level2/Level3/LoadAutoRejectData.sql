@@ -322,10 +322,7 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	EXECUTE GetCustomerTurnoverData 0, @CustomerID,  1, @Now
-	EXECUTE GetCustomerTurnoverData 0, @CustomerID,  3, @Now
-	EXECUTE GetCustomerTurnoverData 0, @CustomerID,  6, @Now
-	EXECUTE GetCustomerTurnoverData 0, @CustomerID, 12, @Now
+	EXECUTE GetCustomerTurnoverForAutoDecision 0, @CustomerID, @Now
 
 	------------------------------------------------------------------------------
 	--

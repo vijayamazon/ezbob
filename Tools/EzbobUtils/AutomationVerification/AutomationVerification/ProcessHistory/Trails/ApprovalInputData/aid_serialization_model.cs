@@ -26,25 +26,13 @@
 			public List<Tuple<string, string>> DirectorNames { get; set; }
 
 			[UsedImplicitly]
-			public bool HasHmrc { get; set; }
-
-			[UsedImplicitly]
-			public bool HasOnline { get; set; }
-
-			[UsedImplicitly]
 			public List<string> HmrcBusinessNames { get; set; }
 
 			[UsedImplicitly]
-			public decimal HmrcTurnover1Y { get; set; }
+			public decimal Turnover1Y { get; set; }
 
 			[UsedImplicitly]
-			public decimal HmrcTurnover3M { get; set; }
-
-			[UsedImplicitly]
-			public decimal HmrcTurnover6M { get; set; }
-
-			[UsedImplicitly]
-			public DateTime? HmrcUpdateTime { get; set; }
+			public decimal Turnover3M { get; set; }
 
 			[UsedImplicitly]
 			public List<Payment> LatePayments { get; set; }
@@ -68,18 +56,6 @@
 
 			[UsedImplicitly]
 			public List<string> MetaDataValidationErrors { get; set; }
-
-			[UsedImplicitly]
-			public decimal OnlineTurnover1M { get; set; }
-
-			[UsedImplicitly]
-			public decimal OnlineTurnover1Y { get; set; }
-
-			[UsedImplicitly]
-			public decimal OnlineTurnover3M { get; set; }
-
-			[UsedImplicitly]
-			public DateTime? OnlineUpdateTime { get; set; }
 
 			[UsedImplicitly]
 			public decimal ReservedFunds { get; set; }
@@ -108,19 +84,8 @@
 				dst.SetSeniority(MarketplaceSeniority);
 				dst.LatePayments = new List<Payment>(LatePayments);
 
-				dst.SetOnlineTurnover(1, OnlineTurnover1M);
-				dst.SetOnlineTurnover(3, OnlineTurnover3M);
-				dst.SetOnlineTurnover(12, OnlineTurnover1Y);
-
-				dst.OnlineUpdateTime = OnlineUpdateTime;
-				dst.HasOnline = HasOnline;
-
-				dst.HasHmrc = HasHmrc;
-				dst.HmrcUpdateTime = HmrcUpdateTime;
-
-				dst.SetHmrcTurnover(3, HmrcTurnover3M);
-				dst.SetHmrcTurnover(6, HmrcTurnover6M);
-				dst.SetHmrcTurnover(12, HmrcTurnover1Y);
+				dst.SetTurnover(3, Turnover3M);
+				dst.SetTurnover(12, Turnover1Y);
 
 				dst.AvailableFunds = AvailableFunds;
 				dst.ReservedFunds = ReservedFunds;
@@ -157,19 +122,8 @@
 				if (src.LatePayments != null)
 					LatePayments.AddRange(src.LatePayments);
 
-				OnlineTurnover1M = src.OnlineTurnover1M;
-				OnlineTurnover3M = src.OnlineTurnover3M;
-				OnlineTurnover1Y = src.OnlineTurnover1Y;
-
-				OnlineUpdateTime = src.OnlineUpdateTime;
-				HasOnline = src.HasOnline;
-
-				HasHmrc = src.HasHmrc;
-				HmrcUpdateTime = src.HmrcUpdateTime;
-
-				HmrcTurnover3M = src.HmrcTurnover3M;
-				HmrcTurnover6M = src.HmrcTurnover6M;
-				HmrcTurnover1Y = src.HmrcTurnover1Y;
+				Turnover1Y = src.Turnover1Y;
+				Turnover3M = src.Turnover3M;
 
 				AvailableFunds = src.AvailableFunds;
 				ReservedFunds = src.ReservedFunds;

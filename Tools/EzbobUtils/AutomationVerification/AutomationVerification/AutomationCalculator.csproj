@@ -57,6 +57,7 @@
     <Compile Include="AutoDecision\AutoApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
     <Compile Include="AutoDecision\AutoApproval\Name.cs" />
+    <Compile Include="AutoDecision\TurnoverDbRow.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Agent.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Arguments.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Configuration.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ATurnoverAge.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OnlineThreeMonthsTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\HmrcTurnoverAge.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OnlineTurnoverAge.cs" />

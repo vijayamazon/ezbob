@@ -54,6 +54,169 @@
 			Send();
 		} // Run
 
+		private SortedDictionary<long, CalculatedTurnover> Result { get; set; }
+
+		private SortedDictionary<long, CrCuTi> Input { get; set; }
+
+		private ATag Email { get; set; }
+
+		private ASafeLog Log { get; set; }
+
+		private AConnection DB { get; set; }
+
+		private Args Args { get; set; }
+
+		private class CrCuTi {
+			public long CashRequestID { get; [UsedImplicitly] set; }
+			public int CustomerID { get; [UsedImplicitly] set; }
+			public DateTime DecisionTime { get; [UsedImplicitly] set; }
+			public string UnderwriterDecision { get; [UsedImplicitly] set; }
+		}
+
+		// class CrCuTi
+		private class DisplayTurnoverTotals {
+			public int AllCount { get; private set; }
+			public int GoodCount { get; private set; }
+			public int BadCount { get; private set; }
+
+			public decimal ActualTurnoverMedian {
+				get {
+					if (this.actualTurnoverMedian.HasValue)
+						return this.actualTurnoverMedian.Value;
+
+					this.actualTurnoverMedian = 0;
+					int half = this.actualTurnovers.Sum(pair => pair.Value) / 2;
+
+					int count = 0;
+
+					foreach (KeyValuePair<decimal, int> pair in this.actualTurnovers) {
+						count += pair.Value;
+						this.actualTurnoverMedian = pair.Key;
+
+						if (count >= half)
+							break;
+					} // for each
+
+					return this.actualTurnoverMedian.Value;
+				} // get
+			} // ActualTurnoverMedian
+
+			public DisplayTurnoverTotals() {
+				AllCount = 0;
+				GoodCount = 0;
+				BadCount = 0;
+
+				actualTurnovers = new SortedDictionary<decimal, int>();
+			} // constructor
+
+			public void Add(DisplayTurnover dt, bool hasOther) {
+				if (!dt.HasValue && hasOther) {
+					AllCount++;
+					GoodCount++;
+					return;
+				} // if
+
+				AllCount++;
+
+				if (dt.HasValue && dt.IsGood)
+					GoodCount++;
+				else
+					BadCount++;
+
+				if (actualTurnovers.ContainsKey(dt.ActualRatio))
+					actualTurnovers[dt.ActualRatio]++;
+				else
+					actualTurnovers[dt.ActualRatio] = 1;
+
+				actualTurnoverMedian = null;
+			} // Add
+
+			public void LogRawActualTurnovers(ASafeLog log, string title) {
+				log.Debug("{0} actual turnover data ({1}) - begin", title, actualTurnovers.Sum(pair => pair.Value));
+				log.Debug("\n\t{0}", string.Join("\n\t", actualTurnovers.Select(pair => pair.Key + ": " + pair.Value)));
+				log.Debug("{0} actual turnover data - end", title);
+			} // LogRawActualTurnovers
+
+			private readonly SortedDictionary<decimal, int> actualTurnovers;
+			private decimal? actualTurnoverMedian;
+		}
+
+		private class DisplayTurnover {
+			public bool HasValue { get; private set; }
+			public decimal RequestedRatio { get; private set; }
+			public decimal PeriodTurnover { get; private set; }
+			public decimal AnnualizedTurnover { get; private set; }
+			public decimal WaterMark { get; private set; }
+			public decimal ActualRatio { get; private set; }
+
+			public string AnnualizedTurnoverStyle { get; private set; }
+			public string ActualRatioStyle { get; private set; }
+			public decimal YearTurnover { get; private set; }
+
+			public bool IsGood { get { return ActualRatio >= RequestedRatio; } } // IsGood
+
+			public DisplayTurnover(bool hasValue, int periodLen, decimal periodTurnover, decimal yearTurnover, decimal ratio) {
+				HasValue = hasValue;
+
+				PeriodLength = periodLen;
+				PeriodTurnover = periodTurnover;
+				YearTurnover = yearTurnover;
+				RequestedRatio = ratio;
+
+				WaterMark = YearTurnover * RequestedRatio;
+
+				AnnualizedTurnover = PeriodTurnover / PeriodLength * 12;
+
+				ActualRatio = HasValue
+					? (YearTurnover == 0 ? 0 : AnnualizedTurnover / YearTurnover)
+					: 0;
+
+				AnnualizedTurnoverStyle = AnnualizedTurnover < WaterMark ? red : null;
+
+				ActualRatioStyle = ActualRatio < RequestedRatio ? red : null;
+			} // constructor
+
+			private int PeriodLength { get; set; }
+			private const string red = "color:red;";
+		}
+
+		private class CellValue {
+			public string ValueStr {
+				get {
+					if (storedValue is int)
+						return ((int)storedValue).Stringify();
+
+					if (storedValue is long)
+						return ((long)storedValue).Stringify();
+
+					if (storedValue is decimal)
+						return ((decimal)storedValue).Stringify();
+
+					if (storedValue is DateTime)
+						return ((DateTime)storedValue).Stringify();
+
+					return storedValue == null ? "&nbsp;" : storedValue.ToString();
+				}
+			} // ValueStr
+
+			public string Style { get; private set; }
+
+			public bool AlignRight { get; private set; }
+
+			public int Colspan { get; private set; }
+
+			public CellValue(object v, string s = null, int colspan = 1) {
+				storedValue = v;
+				Style = s;
+				Colspan = colspan;
+
+				AlignRight = (v is int) || (v is long) || (v is decimal) || (v is DateTime);
+			}
+
+			private readonly object storedValue;
+			// constructor
+		}
+
 		private void Generate() {
 			const string header = "background-color:blue;color:yellow;";
 			const string blueish = "background-color:#D6F8FF;";
@@ -113,7 +276,7 @@
 
 			Tbody tbody = new Tbody();
 			tbl.Append(tbody);
-
+			/*
 			foreach (KeyValuePair<long, CalculatedTurnover> pair in Result) {
 				long cashRequestID = pair.Key;
 				CalculatedTurnover turnover = pair.Value;
@@ -174,7 +337,7 @@
 					new CellValue(hmrc6.ActualRatio, hmrc6.ActualRatioStyle)
 				));
 			} // for each pair
-
+			*/
 			totalsBody.Append(AddTotalRow<Td>(
 				new CellValue("Total cash requests", colspan: 3),
 				new CellValue(Result.Count),
@@ -293,187 +456,34 @@
 			Result = new SortedDictionary<long, CalculatedTurnover>();
 			Input = new SortedDictionary<long, CrCuTi>();
 
-			Args.Query = QueryFormat;
-			Args.Condition = "AND t.CashRequestID > {0}";
+			/*
+		Args.Query = QueryFormat;
+		Args.Condition = "AND t.CashRequestID > {0}";
 
-			List<CrCuTi> lst = DB.Fill<CrCuTi>(Args.Query, CommandSpecies.Text);
+		List<CrCuTi> lst = DB.Fill<CrCuTi>(Args.Query, CommandSpecies.Text);
 
-			var pc = new ProgressCounter("{0} of " + lst.Count + " cash requests processed.", this.Log, 10);
+		var pc = new ProgressCounter("{0} of " + lst.Count + " cash requests processed.", this.Log, 10);
 
-			foreach (CrCuTi crcuti in lst) {
-				Input[crcuti.CashRequestID] = crcuti;
-				var turnover = new CalculatedTurnover();
+		foreach (CrCuTi crcuti in lst) {
+			Input[crcuti.CashRequestID] = crcuti;
+			var turnover = new CalculatedTurnover();
 
-				Result[crcuti.CashRequestID] = turnover;
+			Result[crcuti.CashRequestID] = turnover;
 
-				DB.ForEachRowSafe(
-					sr => turnover.Add(sr, Log),
-					"GetCustomerTurnoverDataForAutoApprove",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", crcuti.CustomerID),
-					new QueryParameter("Now", crcuti.DecisionTime)
-				);
+			DB.ForEachRowSafe(
+				sr => turnover.Add(sr, Log),
+				"GetCustomerTurnoverDataForAutoApprove",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", crcuti.CustomerID),
+				new QueryParameter("Now", crcuti.DecisionTime)
+			);
 
-				pc++;
-			} // for each
+			pc++;
+		} // for each
 
-			pc.Log();
+		pc.Log();
+			*/
 		} // Load
-
-		private class CrCuTi {
-			public long CashRequestID { get; [UsedImplicitly] set; }
-			public int CustomerID { get; [UsedImplicitly] set; }
-			public DateTime DecisionTime { get; [UsedImplicitly] set; }
-			public string UnderwriterDecision { get; [UsedImplicitly] set; }
-		} // class CrCuTi
-
-		private SortedDictionary<long, CalculatedTurnover> Result { get; set; }
-		private SortedDictionary<long, CrCuTi> Input { get; set; }
-		private ATag Email { get; set; }
-
-		private ASafeLog Log { get; set; }
-		private AConnection DB { get; set; }
-		private Args Args { get; set; }
-
-		private class DisplayTurnoverTotals {
-			public int AllCount { get; private set; }
-			public int GoodCount { get; private set; }
-			public int BadCount { get; private set; }
-
-			public decimal ActualTurnoverMedian {
-				get {
-					if (this.actualTurnoverMedian.HasValue)
-						return this.actualTurnoverMedian.Value;
-
-					this.actualTurnoverMedian = 0;
-					int half = this.actualTurnovers.Sum(pair => pair.Value) / 2;
-
-					int count = 0;
-
-					foreach (KeyValuePair<decimal, int> pair in this.actualTurnovers) {
-						count += pair.Value;
-						this.actualTurnoverMedian = pair.Key;
-
-						if (count >= half)
-							break;
-					} // for each
-
-					return this.actualTurnoverMedian.Value;
-				} // get
-			} // ActualTurnoverMedian
-
-			public DisplayTurnoverTotals() {
-				AllCount = 0;
-				GoodCount = 0;
-				BadCount = 0;
-
-				actualTurnovers = new SortedDictionary<decimal, int>();
-			} // constructor
-
-			public void Add(DisplayTurnover dt, bool hasOther) {
-				if (!dt.HasValue && hasOther) {
-					AllCount++;
-					GoodCount++;
-					return;
-				} // if
-
-				AllCount++;
-
-				if (dt.HasValue && dt.IsGood)
-					GoodCount++;
-				else
-					BadCount++;
-
-				if (actualTurnovers.ContainsKey(dt.ActualRatio))
-					actualTurnovers[dt.ActualRatio]++;
-				else
-					actualTurnovers[dt.ActualRatio] = 1;
-
-				actualTurnoverMedian = null;
-			} // Add
-
-			public void LogRawActualTurnovers(ASafeLog log, string title) {
-				log.Debug("{0} actual turnover data ({1}) - begin", title, actualTurnovers.Sum(pair => pair.Value));
-				log.Debug("\n\t{0}", string.Join("\n\t", actualTurnovers.Select(pair => pair.Key + ": " + pair.Value)));
-				log.Debug("{0} actual turnover data - end", title);
-			} // LogRawActualTurnovers
-
-			private readonly SortedDictionary<decimal, int> actualTurnovers;
-			private decimal? actualTurnoverMedian;
-		} // class DisplayTurnoverTotals
-
-		private class DisplayTurnover {
-			public bool HasValue { get; private set; }
-			public decimal RequestedRatio { get; private set; }
-			public decimal PeriodTurnover { get; private set; }
-			public decimal AnnualizedTurnover { get; private set; }
-			public decimal WaterMark { get; private set; }
-			public decimal ActualRatio { get; private set; }
-
-			public string AnnualizedTurnoverStyle { get; private set; }
-			public string ActualRatioStyle { get; private set; }
-			public decimal YearTurnover { get; private set; }
-
-			public bool IsGood { get { return ActualRatio >= RequestedRatio; } } // IsGood
-
-			public DisplayTurnover(bool hasValue, int periodLen, decimal periodTurnover, decimal yearTurnover, decimal ratio) {
-				HasValue = hasValue;
-
-				PeriodLength = periodLen;
-				PeriodTurnover = periodTurnover;
-				YearTurnover = yearTurnover;
-				RequestedRatio = ratio;
-
-				WaterMark = YearTurnover * RequestedRatio;
-
-				AnnualizedTurnover = PeriodTurnover / PeriodLength * 12;
-
-				ActualRatio = HasValue
-					? (YearTurnover == 0 ? 0 : AnnualizedTurnover / YearTurnover)
-					: 0;
-
-				AnnualizedTurnoverStyle = AnnualizedTurnover < WaterMark ? red : null;
-
-				ActualRatioStyle = ActualRatio < RequestedRatio ? red : null;
-			} // constructor
-
-			private int PeriodLength { get; set; }
-			private const string red = "color:red;";
-		} // class DisplayTurnover
-
-		private class CellValue {
-			public string ValueStr {
-				get {
-					if (storedValue is int)
-						return ((int)storedValue).Stringify();
-
-					if (storedValue is long)
-						return ((long)storedValue).Stringify();
-
-					if (storedValue is decimal)
-						return ((decimal)storedValue).Stringify();
-
-					if (storedValue is DateTime)
-						return ((DateTime)storedValue).Stringify();
-
-					return storedValue == null ? "&nbsp;" : storedValue.ToString();
-				}
-			} // ValueStr
-
-			private readonly object storedValue;
-
-			public string Style { get; private set; }
-			public bool AlignRight { get; private set; }
-			public int Colspan { get; private set; }
-
-			public CellValue(object v, string s = null, int colspan = 1) {
-				storedValue = v;
-				Style = s;
-				Colspan = colspan;
-
-				AlignRight = (v is int) || (v is long) || (v is decimal) || (v is DateTime);
-			} // constructor
-		} // class CellValue
 
 		private const string QueryFormat = @"
 SELECT DISTINCT {0}

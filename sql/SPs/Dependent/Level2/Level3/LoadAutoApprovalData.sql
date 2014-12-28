@@ -502,7 +502,7 @@ BEGIN
 	
 	------------------------------------------------------------------------------
 
-	EXECUTE GetCustomerTurnoverDataForAutoApprove @CustomerID, @Now
+	EXECUTE GetCustomerTurnoverForAutoDecision 1, @CustomerID, @Now
 
 	------------------------------------------------------------------------------
 

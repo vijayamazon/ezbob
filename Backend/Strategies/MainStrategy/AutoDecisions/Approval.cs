@@ -4,6 +4,7 @@
 	using System.Data;
 	using System.Linq;
 	using System.Web;
+	using AutomationCalculator.AutoDecision;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
@@ -33,6 +34,8 @@
 			AConnection db,
 			ASafeLog log
 			) {
+			Now = DateTime.UtcNow;
+
 			this.db = db;
 			this.log = log ?? new SafeLog();
 
@@ -63,7 +66,7 @@
 				log
 				);
 
-			this.m_oTurnover = new CalculatedTurnover();
+			this.m_oTurnover = new CalculatedTurnover(this.turnoverType, this.log);
 		} // constructor
 
 		public Approval Init() {
@@ -228,7 +231,7 @@
 							response.SystemDecision = SystemDecision.Manual;
 						} else {
 							var offerDualCalculator = new OfferDualCalculator(this.db, this.log);
-							OfferResult offerResult = offerDualCalculator.CalculateOffer(this.customerId, DateTime.UtcNow, response.AutoApproveAmount, this.hasLoans, this.medalClassification);
+							OfferResult offerResult = offerDualCalculator.CalculateOffer(this.customerId, Now, response.AutoApproveAmount, this.hasLoans, this.medalClassification);
 							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
 								this.log.Alert("Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}", offerResult != null ? offerResult.Error : "", this.customerId);
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
@@ -241,7 +244,7 @@
 								response.SystemDecision = SystemDecision.Approve;
 								response.LoanOfferUnderwriterComment = "Auto Approval";
 								response.DecisionName = "Approval";
-								response.AppValidFor = DateTime.UtcNow.AddDays(this.m_oTrail.MyInputData.MetaData.OfferLength);
+								response.AppValidFor = Now.AddDays(this.m_oTrail.MyInputData.MetaData.OfferLength);
 								response.Decision = DecisionActions.Approve;
 								response.LoanOfferEmailSendingBannedNew = this.m_oTrail.MyInputData.MetaData.IsEmailSendingBanned;
 
@@ -261,6 +264,8 @@
 			} // try
 		} // MakeDecision
 
+		private DateTime Now { get; set; }
+
 		private int CalculateRollovers() {
 			return this.loanRepository.ByCustomer(this.customerId)
 				.SelectMany(loan => loan.Schedule)
@@ -272,13 +277,13 @@
 		}
 
 		private int CalculateTodaysApprovals() {
-			DateTime today = DateTime.UtcNow;
+			DateTime today = Now;
 			return this.cashRequestsRepository.GetAll()
 				.Count(cr => cr.CreationDate.HasValue && cr.CreationDate.Value.Year == today.Year && cr.CreationDate.Value.Month == today.Month && cr.CreationDate.Value.Day == today.Day && cr.UnderwriterComment == "Auto Approval");
 		}
 
 		private decimal CalculateTodaysLoans() {
-			DateTime today = DateTime.UtcNow;
+			DateTime today = Now;
 
 			var todayLoans = this.loanRepository.GetAll()
 				.Where(l => l.Date.Year == today.Year && l.Date.Month == today.Month && l.Date.Day == today.Day);
@@ -299,7 +304,7 @@
 				StepFailed<Age>()
 					.Init(-1, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
 			} else {
-				DateTime now = DateTime.UtcNow;
+				DateTime now = Now;
 
 				int customerAge = now.Year - this.customer.PersonalInfo.DateOfBirth.Value.Year;
 
@@ -361,8 +366,7 @@
 				CheckBusinessScore();
 				CheckExperianScore();
 				CheckAge();
-				CheckOnlineTurnovers();
-				CheckHmrcTurnovers();
+				CheckTurnovers();
 				CheckSeniority();
 				CheckDefaultAccounts();
 				CheckIsDirector();
@@ -491,35 +495,13 @@
 			} // if
 		}
 
-		private void CheckHmrcTurnovers() {
-			if (!this.m_oTrail.MyInputData.HasHmrc && this.m_oTrail.MyInputData.HasOnline) {
-				StepDone<HmrcTurnoverAge>()
-					.Init(this.m_oTrail.MyInputData.HasHmrc);
-				return;
-			} // if
-
-			if (this.m_oTrail.MyInputData.IsHmrcTurnoverTooOld()) {
-				StepFailed<HmrcTurnoverAge>()
-					.Init(this.m_oTrail.MyInputData.HmrcUpdateTime, this.m_oTrail.MyInputData.DataAsOf);
+		private void CheckTurnovers() {
+			if (this.m_oTrail.MyInputData.IsTurnoverGood()) {
+				StepDone<ThreeMonthsTurnover>()
+					.Init(this.m_oTrail.MyInputData.Turnover3M, this.m_oTrail.MyInputData.Turnover1Y, this.m_oTrail.MyInputData.Configuration.TurnoverDropQuarterRatio);
 			} else {
-				StepDone<HmrcTurnoverAge>()
-					.Init(this.m_oTrail.MyInputData.HmrcUpdateTime, this.m_oTrail.MyInputData.DataAsOf);
-			}
-
-			if (this.m_oTrail.MyInputData.IsHmrcTurnoverGood(3)) {
-				StepDone<HmrcThreeMonthsTurnover>()
-					.Init(this.m_oTrail.MyInputData.HmrcTurnover3M, this.m_oTrail.MyInputData.HmrcTurnover1Y, this.m_oTrail.MyInputData.Configuration.HmrcTurnoverDropQuarterRatio);
-			} else {
-				StepFailed<HmrcThreeMonthsTurnover>()
-					.Init(this.m_oTrail.MyInputData.HmrcTurnover3M, this.m_oTrail.MyInputData.HmrcTurnover1Y, this.m_oTrail.MyInputData.Configuration.HmrcTurnoverDropQuarterRatio);
-			}
-
-			if (this.m_oTrail.MyInputData.IsHmrcTurnoverGood(6)) {
-				StepDone<HalfYearTurnover>()
-					.Init(this.m_oTrail.MyInputData.HmrcTurnover6M, this.m_oTrail.MyInputData.HmrcTurnover1Y, this.m_oTrail.MyInputData.Configuration.HmrcTurnoverDropHalfYearRatio);
-			} else {
-				StepFailed<HalfYearTurnover>()
-					.Init(this.m_oTrail.MyInputData.HmrcTurnover6M, this.m_oTrail.MyInputData.HmrcTurnover1Y, this.m_oTrail.MyInputData.Configuration.HmrcTurnoverDropHalfYearRatio);
+				StepFailed<ThreeMonthsTurnover>()
+					.Init(this.m_oTrail.MyInputData.Turnover3M, this.m_oTrail.MyInputData.Turnover1Y, this.m_oTrail.MyInputData.Configuration.TurnoverDropQuarterRatio);
 			}
 		}
 
@@ -596,7 +578,7 @@
 
 			if (this.m_oTrail.MyInputData.LatePayments.Count < 1) {
 				StepDone<LatePayment>()
-					.Init(0, 0, DateTime.UtcNow, 0, DateTime.UtcNow, autoApproveMaxAllowedDaysLate);
+					.Init(0, 0, Now, 0, Now, autoApproveMaxAllowedDaysLate);
 				return;
 			} // if
 
@@ -618,38 +600,6 @@
 			} else {
 				StepDone<MedalIsGood>()
 					.Init((AutomationCalculator.Common.Medal)this.medalClassification);
-			}
-		}
-
-		private void CheckOnlineTurnovers() {
-			if (!this.m_oTrail.MyInputData.HasOnline && this.m_oTrail.MyInputData.HasHmrc) {
-				StepDone<OnlineTurnoverAge>()
-					.Init(this.m_oTrail.MyInputData.HasOnline);
-				return;
-			} // if
-
-			if (this.m_oTrail.MyInputData.IsOnlineTurnoverTooOld()) {
-				StepFailed<OnlineTurnoverAge>()
-					.Init(this.m_oTrail.MyInputData.OnlineUpdateTime, this.m_oTrail.MyInputData.DataAsOf);
-			} else {
-				StepDone<OnlineTurnoverAge>()
-					.Init(this.m_oTrail.MyInputData.OnlineUpdateTime, this.m_oTrail.MyInputData.DataAsOf);
-			}
-
-			if (this.m_oTrail.MyInputData.IsOnlineTurnoverGood(1)) {
-				StepDone<OnlineOneMonthTurnover>()
-					.Init(this.m_oTrail.MyInputData.OnlineTurnover1M, this.m_oTrail.MyInputData.OnlineTurnover1Y, this.m_oTrail.MyInputData.Configuration.OnlineTurnoverDropMonthRatio);
-			} else {
-				StepFailed<OnlineOneMonthTurnover>()
-					.Init(this.m_oTrail.MyInputData.OnlineTurnover1M, this.m_oTrail.MyInputData.OnlineTurnover1Y, this.m_oTrail.MyInputData.Configuration.OnlineTurnoverDropMonthRatio);
-			}
-
-			if (this.m_oTrail.MyInputData.IsOnlineTurnoverGood(3)) {
-				StepDone<OnlineThreeMonthsTurnover>()
-					.Init(this.m_oTrail.MyInputData.OnlineTurnover3M, this.m_oTrail.MyInputData.OnlineTurnover1Y, this.m_oTrail.MyInputData.Configuration.OnlineTurnoverDropQuarterRatio);
-			} else {
-				StepFailed<OnlineThreeMonthsTurnover>()
-					.Init(this.m_oTrail.MyInputData.OnlineTurnover3M, this.m_oTrail.MyInputData.OnlineTurnover1Y, this.m_oTrail.MyInputData.Configuration.OnlineTurnoverDropQuarterRatio);
 			}
 		}
 
@@ -856,7 +806,7 @@
 		}
 
 		private void SaveTrailInputData(GetAvailableFunds availFunds) {
-			this.m_oTrail.MyInputData.SetDataAsOf(DateTime.UtcNow);
+			this.m_oTrail.MyInputData.SetDataAsOf(Now);
 
 			this.m_oTrail.MyInputData.SetConfiguration(new Configuration {
 				ExperianScoreThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold,
@@ -910,7 +860,7 @@
 				CompanyScore = this.minCompanyScore,
 				ConsumerScore = this.minExperianScore,
 				IncorporationDate = this.strategyHelper.GetCustomerIncorporationDate(this.customer),
-				DateOfBirth = ((this.customer != null) && (this.customer.PersonalInfo != null) && this.customer.PersonalInfo.DateOfBirth.HasValue) ? this.customer.PersonalInfo.DateOfBirth.Value : DateTime.UtcNow,
+				DateOfBirth = ((this.customer != null) && (this.customer.PersonalInfo != null) && this.customer.PersonalInfo.DateOfBirth.HasValue) ? this.customer.PersonalInfo.DateOfBirth.Value : Now,
 				NumOfDefaultAccounts = FindNumOfDefaultAccounts(),
 				NumOfRollovers = CalculateRollovers(),
 				TotalLoanCount = this.loanRepository.ByCustomer(this.customerId)
@@ -926,7 +876,7 @@
 				"GetLastOfferDataForApproval",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", this.customerId),
-				new QueryParameter("Now", DateTime.UtcNow)
+				new QueryParameter("Now", Now)
 				);
 
 			this.m_oTrail.MyInputData.MetaData.EmailSendingBanned = sr["EmailSendingBanned"];
@@ -941,15 +891,13 @@
 			this.m_oTrail.MyInputData.SetSeniority(CalculateSeniority());
 			this.m_oTrail.MyInputData.SetAvailableFunds(availFunds.AvailableFunds, availFunds.ReservedAmount);
 
-			foreach (int nMonthCount in ms_oTurnoverMonths) {
-				this.db.ForEachRowSafe(
-					r => this.m_oTurnover.Add(r, this.log),
-					"GetCustomerTurnoverData",
-					new QueryParameter("OnlineOnly", true),
-					new QueryParameter("CustomerID", this.customerId),
-					new QueryParameter("MonthCount", nMonthCount)
-					);
-			} // for each
+			this.db.ForEachResult<TurnoverDbRow>(
+				r => this.m_oTurnover.Add(r),
+				"GetCustomerTurnoverForAutoDecision",
+				new QueryParameter("IsForApprove", true),
+				new QueryParameter("CustomerID", this.customerId),
+				new QueryParameter("Now", Now)
+				);
 
 			this.m_oTrail.MyInputData.SetTurnoverData(this.m_oTurnover);
 
@@ -958,19 +906,12 @@
 
 		private T StepDone<T>() where T : ATrace {
 			return this.m_oTrail.Affirmative<T>(false);
-		}
+		} // StepDone
 
 		private T StepFailed<T>() where T : ATrace {
 			this.autoApprovedAmount = 0;
 			return this.m_oTrail.Negative<T>(false);
 		} // StepFailed
-
-		private static readonly SortedSet<int> ms_oTurnoverMonths = new SortedSet<int> {
-			1,
-			3,
-			6,
-			12,
-		};
 
 		private readonly CashRequestsRepository cashRequestsRepository;
 		private readonly List<string> consumerCaisDetailWorstStatuses;

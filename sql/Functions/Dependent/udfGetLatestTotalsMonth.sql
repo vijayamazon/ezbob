@@ -61,7 +61,7 @@ BEGIN
 		WHERE
 			h.CustomerMarketPlaceId = @MpID
 			AND
-			h.UpdatingEnd IS NOT NULL
+			h.UpdatingEnd <= @Now
 		ORDER BY
 			h.UpdatingEnd DESC,
 			h.Id DESC

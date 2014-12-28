@@ -8,7 +8,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Maam;
 
-	class Program {
+	internal class Program {
 		private static string AppName { get; set; }
 
 		private static AConnection DB { get; set; }
@@ -24,7 +24,7 @@
 				var stra = new YesMaam(oArgs.Count, oArgs.LastCheckedID, DB, Log);
 				stra.Execute();
 			} // if
-		}
+		} // CompareMaam
 
 		private static void LoadFromJson() {
 			var log = new ConsoleLog(Log);
@@ -34,7 +34,7 @@
 			ApprovalInputData aid = ApprovalInputData.Deserialize(json);
 
 			log.Debug("Data read from file:\n{0}", aid.Serialize());
-		}
+		} // LoadFromJson
 
 		private static void LoadTurnovers(string[] args) {
 			var oArgs = new Args(AppName, args, Log);
@@ -43,10 +43,12 @@
 				CurrentValues.Init(DB, Log);
 				new LoadTurnovers(oArgs, DB, Log).Run();
 			} // if
-		}
+		} // LoadTurnovers
 
-		static void Main(string[] args) {
-			AppName = Assembly.GetExecutingAssembly().GetName().Name;
+		private static void Main(string[] args) {
+			AppName = Assembly.GetExecutingAssembly()
+				.GetName()
+				.Name;
 
 			Log = new FileLog(AppName);
 			Log.NotifyStart();
@@ -65,11 +67,5 @@
 
 			Log.NotifyStop();
 		} // Main
-
-		// CompareMaam
-
-		// LoadFromJson
-
-		// LoadTurnovers
 	} // class Program
 } // namespace

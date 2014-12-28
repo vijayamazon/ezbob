@@ -1,214 +1,176 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
-	using Ezbob.Database;
+	using AutomationCalculator.Common;
 	using Ezbob.Logger;
-	using JetBrains.Annotations;
+	using Ezbob.Utils.Lingvo;
 
-	/// <summary>
-	/// Contains customer turnover based on all customer marketplaces.
-	/// Turnover data is fed via Add method.
-	/// </summary>
 	public class CalculatedTurnover {
-		public DateTime? HmrcUpdateTime { get; private set; }
-		public DateTime? OnlineUpdateTime { get; private set; }
+		public decimal this[int monthCount] {
+			get {
+				decimal res = Math.Max(this.getRelevantTurnover(monthCount), 0);
 
-		public bool HasHmrc { get; private set; }
-		public bool HasOnline { get; private set; }
+				this.log.Debug("turnover[{0}, '{1}'] = {2}", Grammar.Number(monthCount, "month"), this.turnoverType, res);
 
-		public CalculatedTurnover() {
-			HasHmrc = false;
-			HasOnline = false;
+				return res;
+			} // get
+		} // indexer
 
-			HmrcUpdateTime = null;
-			OnlineUpdateTime = null;
+		public CalculatedTurnover(TurnoverType? turnoverType, ASafeLog log) {
+			this.log = log ?? new SafeLog();
 
-			m_oOnline = new SortedDictionary<int, OneValue>();
-			m_oHmrc = new SortedDictionary<int, decimal>();
+			this.turnoverType = turnoverType;
+
+			switch (this.turnoverType) {
+			case TurnoverType.HMRC:
+				this.getRelevantTurnover = GetHmrc;
+				break;
+			case TurnoverType.Bank:
+				this.getRelevantTurnover = GetYodlee;
+				break;
+			case TurnoverType.Online:
+				this.getRelevantTurnover = GetOnline;
+				break;
+			case null:
+				this.getRelevantTurnover = GetZero;
+				break;
+			default:
+				throw new ArgumentOutOfRangeException("turnoverType");
+			} // switch
+
+			this.online = new SortedDictionary<int, OneValue>();
+			this.hmrc = new SortedDictionary<int, decimal>();
+			this.yodlee = new SortedDictionary<int, decimal>();
 		} // constructor
 
-		/// <summary>
-		/// Feeds turnover for one marketplace and one period.
-		/// </summary>
-		/// <param name="sr">Turnover data. See <see cref="Row"/> for row format.</param>
-		/// <param name="oLog">Log, to write turnover data for debugging.</param>
-		public void Add(SafeReader sr, ASafeLog oLog) {
-			Row r = sr.Fill<Row>();
+		public void Add(TurnoverDbRow r) {
+			r.WriteToLog(this.log);
 
-			r.WriteToLog(oLog);
-
-			if (!r.IsTotal)
-				return;
-
-			if (r.MpTypeInternalID == Hmrc) {
-				HasHmrc = true;
-
-				m_oHmrc[r.MonthCount] = r.Turnover;
-
-				if (r.LastUpdateTime != null) {
-					if (HmrcUpdateTime == null)
-						HmrcUpdateTime = r.LastUpdateTime;
-					else if (r.LastUpdateTime.Value < HmrcUpdateTime.Value)
-						HmrcUpdateTime = r.LastUpdateTime;
-				} // if
-			}
-			else {
-				HasOnline = true;
-
-				if (r.LastUpdateTime != null) {
-					if (OnlineUpdateTime == null)
-						OnlineUpdateTime = r.LastUpdateTime;
-					else if (r.LastUpdateTime.Value < OnlineUpdateTime.Value)
-						OnlineUpdateTime = r.LastUpdateTime;
-				} // if
-
-				if (m_oOnline.ContainsKey(r.MonthCount))
-					m_oOnline[r.MonthCount].Add(r);
-				else
-					m_oOnline[r.MonthCount] = new OneValue(r);
+			if (r.MpTypeID == Hmrc) {
+				AddTo(this.hmrc, r, 3);
+				AddTo(this.hmrc, r, 12);
+			} else if (r.MpTypeID == Yodlee) {
+				AddTo(this.yodlee, r, 3);
+				AddTo(this.yodlee, r, 12);
+			} else {
+				Add(r, 1);
+				Add(r, 3);
+				Add(r, 6);
+				Add(r, 12);
 			} // if
 		} // Add
 
-		public decimal GetOnline(int nMonthCount) {
-			return m_oOnline.ContainsKey(nMonthCount) ? m_oOnline[nMonthCount].Value : 0;
-		} // indexer
-
-		public decimal GetHmrc(int nMonthCount) {
-			return m_oHmrc.ContainsKey(nMonthCount) ? m_oHmrc[nMonthCount] : 0;
-		} // indexer
-
-		/// <summary>
-		/// Input turnover data for one marketplace and one period.
-		/// Requested period length is <see cref="MonthCount"/>.
-		/// Actual period is between <see cref="DateFrom"/> and <see cref="DateTo"/> inclusive.
-		/// </summary>
-		public class Row {
-			/// <summary>
-			/// Marketplace ID (MP_CustomerMarketplace.Id).
-			/// </summary>
-			[UsedImplicitly]
-			public int MpID { get; set; }
-
-			/// <summary>
-			/// Marketplace type (MP_MarketplaceType.InternalId).
-			/// </summary>
-			[UsedImplicitly]
-			public Guid MpTypeInternalID { get; set; }
-
-			/// <summary>
-			/// Turnover type, usually is 'Total'.
-			/// For eBay there can be other values which describe the 'Total' parts.
-			/// Only 'Total' is used for turnover calculation, others are for debug purposes.
-			/// </summary>
-			[UsedImplicitly]
-			public string TurnoverType { get; set; }
-
-			/// <summary>
-			/// Actual turnover value.
-			/// </summary>
-			[UsedImplicitly]
-			public decimal Turnover { get; set; }
-
-			/// <summary>
-			/// Requested period length in months.
-			/// </summary>
-			[UsedImplicitly]
-			public int MonthCount { get; set; }
-
-			/// <summary>
-			/// Actual number of days having transactions.
-			/// </summary>
-			[UsedImplicitly]
-			public int DayCount { get; set; }
-
-			/// <summary>
-			/// The first day having a transaction in this period.
-			/// </summary>
-			[UsedImplicitly]
-			public DateTime DateFrom { get; set; }
-
-			/// <summary>
-			/// The last day having a transaction in this period.
-			/// </summary>
-			[UsedImplicitly]
-			public DateTime DateTo { get; set; }
-
-			/// <summary>
-			/// Time when last marketplace update has completed.
-			/// </summary>
-			public DateTime? LastUpdateTime { get; set; }
-
-			/// <summary>
-			/// Returns 'true' if this row should be included in total period calculation.
-			/// </summary>
-			public bool IsTotal {
-				get { return TurnoverType == Total; } // get
-			} // IsTotal
-
-			/// <summary>
-			/// Writes this instance to log.
-			/// </summary>
-			/// <param name="oLog"></param>
-			public void WriteToLog(ASafeLog oLog) {
-				if (oLog == null)
-					return;
-
-				oLog.Debug(
-					"Turnover for customer marketplace (last updated on '{9}'):\n" +
-					"\tmarketplace: id {1}, type {2}\n" +
-					"\t{0} (because of type {4})\n" +
-					"\tturnover: {3}, month count: {5}, day count: {6}\n" +
-					"\tdata from: {7} to {8} inclusive",
-					IsTotal ? "Accepted" : "Ignored",
-					MpID,
-					MpTypeInternalID,
-					Turnover,
-					TurnoverType,
-					MonthCount,
-					DayCount,
-					DateFrom.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
-					DateTo.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
-					LastUpdateTime == null ? "never" : LastUpdateTime.Value.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture)
-				);
-			} // WriteToLog
-
-			private const string Total = "Total";
-		} // Row
-
 		private class OneValue {
-			public OneValue(Row r) {
-				m_nEbay = 0;
-				m_nOther = 0;
-				m_nPayPal = 0;
+			public decimal Value {
+				get {
+					return Math.Max(this.ebay, this.payPal) + this.amazon;
+				} // get
+			} // Value
+
+			public OneValue(TurnoverDbRow r) {
+				this.ebay = 0;
+				this.amazon = 0;
+				this.payPal = 0;
 
 				Add(r);
 			} // constructor
 
-			public void Add(Row r) {
-				if (r.MpTypeInternalID == Ebay)
-					m_nEbay += r.Turnover;
-				else if (r.MpTypeInternalID == PayPal)
-					m_nPayPal += r.Turnover;
-				else
-					m_nOther += r.Turnover;
+			public void Add(TurnoverDbRow r) {
+				if (r.MpTypeID == Ebay)
+					this.ebay += r.Turnover;
+				else if (r.MpTypeID == PayPal)
+					this.payPal += r.Turnover;
+				else if (r.MpTypeID == Amazon)
+					this.amazon += r.Turnover;
 			} // Add
 
-			public decimal Value {
-				get { return Math.Max(m_nEbay, m_nPayPal) + m_nOther; } // get
-			} // Value
+			private decimal ebay;
+			private decimal payPal;
+			private decimal amazon;
+		} // class OneValue
 
-			private decimal m_nEbay;
-			private decimal m_nPayPal;
-			private decimal m_nOther;
+		private static void AddTo(SortedDictionary<int, decimal> dic, TurnoverDbRow r, int monthCount) {
+			if (r.MonthCount > monthCount)
+				return;
 
-			private static readonly Guid Ebay   = new Guid("A7120CB7-4C93-459B-9901-0E95E7281B59");
-			private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
-		} // OneValue
+			if (dic.ContainsKey(monthCount))
+				dic[monthCount] += r.Turnover;
+			else
+				dic[monthCount] = r.Turnover;
+		} // AddTo
 
-		private readonly SortedDictionary<int, OneValue> m_oOnline;
-		private readonly SortedDictionary<int, decimal> m_oHmrc;
+		private static decimal PositiveMin(params decimal[] args) {
+			decimal? res = null;
 
+			for (int i = 0; i < args.Length; i++) {
+				decimal cur = args[i];
+
+				if (cur <= 0)
+					continue;
+
+				if (res == null) {
+					res = cur;
+					continue;
+				} // if
+
+				res = Math.Min(res.Value, cur);
+			} // for
+
+			return res ?? 0;
+		} // PositiveMin
+
+		private void Add(TurnoverDbRow r, int monthCount) {
+			if (r.MonthCount > monthCount)
+				return;
+
+			if (this.online.ContainsKey(monthCount))
+				this.online[monthCount].Add(r);
+			else
+				this.online[monthCount] = new OneValue(r);
+		} // Add
+
+		private decimal GetHmrc(int monthCount) {
+			return this.hmrc.ContainsKey(monthCount) ? this.hmrc[monthCount] : 0;
+		} // GetHmrc
+
+		private decimal GetOneOnline(int monthCount) {
+			return this.online.ContainsKey(monthCount) ? this.online[monthCount].Value : 0;
+		} // GetOneOnline
+
+		private decimal GetOnline(int monthCount) {
+			if (monthCount != 12)
+				return GetOneOnline(monthCount);
+
+			return PositiveMin(
+				GetOneOnline(1) * 12,
+				GetOneOnline(3) * 4,
+				GetOneOnline(6) * 2,
+				GetOneOnline(12)
+				);
+		} // GetOnline
+
+		private decimal GetYodlee(int monthCount) {
+			return this.yodlee.ContainsKey(monthCount) ? this.yodlee[monthCount] : 0;
+		} // GetYodlee
+
+		private decimal GetZero(int monthCount) {
+			return 0;
+		} // GetZero
+
+		private static readonly Guid Ebay = new Guid("A7120CB7-4C93-459B-9901-0E95E7281B59");
+		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
+		private static readonly Guid Amazon = new Guid("A4920125-411F-4BB9-A52D-27E8A00D0A3B");
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+		private static readonly Guid Yodlee = new Guid("107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF");
+
+		private readonly TurnoverType? turnoverType;
+
+		private readonly ASafeLog log;
+
+		private readonly Func<int, decimal> getRelevantTurnover;
+
+		private readonly SortedDictionary<int, OneValue> online;
+		private readonly SortedDictionary<int, decimal> hmrc;
+		private readonly SortedDictionary<int, decimal> yodlee;
 	} // class CalculatedTurnover
 } // namespace

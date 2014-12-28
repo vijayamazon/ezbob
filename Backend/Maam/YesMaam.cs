@@ -52,7 +52,7 @@
 				var ymr = new YesMaamResult(row);
 				oResult.Add(ymr);
 
-				DoReject(ymr);
+				// DoReject(ymr);
 				DoApprove(ymr);
 
 				pc++;

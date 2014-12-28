@@ -44,31 +44,19 @@
 
 		public List<Name> DirectorNames { get; set; }
 
-		public bool HasHmrc { get; private set; }
-
-		public bool HasOnline { get; private set; }
-
 		public List<string> HmrcBusinessNames { get; set; }
 
-		public decimal HmrcTurnover1Y {
+		public decimal Turnover1Y {
 			get {
-				return GetTurnover(this.m_oHmrcTurnover, 12);
+				return GetTurnover(12);
 			}
 		}
 
-		public decimal HmrcTurnover3M {
+		public decimal Turnover3M {
 			get {
-				return GetTurnover(this.m_oHmrcTurnover, 3);
+				return GetTurnover(3);
 			}
 		}
-
-		public decimal HmrcTurnover6M {
-			get {
-				return GetTurnover(this.m_oHmrcTurnover, 6);
-			}
-		}
-
-		public DateTime? HmrcUpdateTime { get; private set; }
 
 		public List<Payment> LatePayments { get; private set; }
 
@@ -93,26 +81,6 @@
 		}
 
 		public MetaData MetaData { get; private set; }
-
-		public decimal OnlineTurnover1M {
-			get {
-				return GetTurnover(this.m_oOnlineTurnover, 1);
-			}
-		}
-
-		public decimal OnlineTurnover1Y {
-			get {
-				return GetTurnover(this.m_oOnlineTurnover, 12);
-			}
-		}
-
-		public decimal OnlineTurnover3M {
-			get {
-				return GetTurnover(this.m_oOnlineTurnover, 3);
-			}
-		}
-
-		public DateTime? OnlineUpdateTime { get; private set; }
 
 		public decimal ReservedFunds { get; private set; }
 
@@ -181,63 +149,9 @@
 			SetTurnoverData(oTurnover);
 		}
 
-		public bool IsHmrcTurnoverGood(int nMonthCount) {
-			decimal nRatio;
-
-			switch (nMonthCount) {
-			case 6:
-				nRatio = Configuration.HmrcTurnoverDropHalfYearRatio;
-				break;
-
-			case 3:
-				nRatio = Configuration.HmrcTurnoverDropQuarterRatio;
-				break;
-
-			default:
-				return false;
-			} // switch
-
-			return IsTurnoverGood(
-				GetTurnover(this.m_oHmrcTurnover, nMonthCount),
-				nMonthCount,
-				GetTurnover(this.m_oHmrcTurnover, 12),
-				12,
-				nRatio
-				);
-		}
-
-		public bool IsHmrcTurnoverTooOld() {
-			return IsTurnoverTooOld(HmrcUpdateTime, Configuration.HmrcTurnoverAge);
-		}
-
-		public bool IsOnlineTurnoverGood(int nMonthCount) {
-			decimal nRatio;
-
-			switch (nMonthCount) {
-			case 1:
-				nRatio = Configuration.OnlineTurnoverDropMonthRatio;
-				break;
-
-			case 3:
-				nRatio = Configuration.OnlineTurnoverDropQuarterRatio;
-				break;
-
-			default:
-				return false;
-			} // switch
-
-			return IsTurnoverGood(
-				GetTurnover(this.m_oOnlineTurnover, nMonthCount),
-				nMonthCount,
-				GetTurnover(this.m_oOnlineTurnover, 12),
-				12,
-				nRatio
-				);
-		}
-
-		public bool IsOnlineTurnoverTooOld() {
-			return IsTurnoverTooOld(OnlineUpdateTime, Configuration.OnlineTurnoverAge);
-		}
+		public bool IsTurnoverGood() {
+			return GetTurnover(3) * 4 > GetTurnover(12) * Configuration.TurnoverDropQuarterRatio;
+		} // IsTurnoverGood
 
 		public string Serialize() {
 			return JsonConvert.SerializeObject(new SerializationModel().InitFrom(this), Formatting.Indented);
@@ -283,19 +197,8 @@
 		}
 
 		public void SetTurnoverData(CalculatedTurnover oTurnover) {
-			SetOnlineTurnover(1, oTurnover.GetOnline(1));
-			SetOnlineTurnover(3, oTurnover.GetOnline(3));
-			SetOnlineTurnover(12, oTurnover.GetOnline(12));
-
-			OnlineUpdateTime = oTurnover.OnlineUpdateTime;
-			HasOnline = oTurnover.HasOnline;
-
-			HasHmrc = oTurnover.HasHmrc;
-			HmrcUpdateTime = oTurnover.HmrcUpdateTime;
-
-			SetHmrcTurnover(3, oTurnover.GetHmrc(3));
-			SetHmrcTurnover(6, oTurnover.GetHmrc(6));
-			SetHmrcTurnover(12, oTurnover.GetHmrc(12));
+			SetTurnover(3, oTurnover[3]);
+			SetTurnover(12, oTurnover[12]);
 		} // SetTurnoverData
 
 		public void SetWorstStatuses(IEnumerable<string> oWorstStatuses) {
@@ -306,27 +209,14 @@
 				WorstStatusList.AddRange(oWorstStatuses);
 		} // SetWorstStatuses
 
-		private static decimal GetTurnover(SortedDictionary<int, decimal> dic, int nMonthCount) {
-			if (dic == null)
+		private decimal GetTurnover(int nMonthCount) {
+			if (this.turnover == null)
 				return 0;
 
-			if (!dic.ContainsKey(nMonthCount))
+			if (!this.turnover.ContainsKey(nMonthCount))
 				return 0;
 
-			return dic[nMonthCount];
-		}
-
-		private static bool IsTurnoverGood(
-			decimal nPeriodTurnover,
-			int nPeriodLength,
-			decimal nYearTurnover,
-			int nYearLength,
-			decimal nDropRatio
-			) {
-			if (nPeriodLength == 0)
-				return false;
-
-			return nPeriodTurnover / nPeriodLength * nYearLength > nYearTurnover * nDropRatio;
+			return this.turnover[nMonthCount];
 		}
 
 		private void Clean() {
@@ -335,8 +225,6 @@
 			this.m_oArguments = new Arguments();
 			DirectorNames = new List<Name>();
 			HmrcBusinessNames = new List<string>();
-			HasHmrc = false;
-			HasOnline = false;
 
 			DataAsOf = default(DateTime);
 			Configuration = null;
@@ -348,41 +236,19 @@
 			AvailableFunds = 0;
 			ReservedFunds = 0;
 
-			this.m_oOnlineTurnover = null;
-			this.m_oHmrcTurnover = null;
-
-			OnlineUpdateTime = default(DateTime);
-			HasOnline = false;
-
-			HasHmrc = false;
-			HmrcUpdateTime = default(DateTime);
+			this.turnover = null;
 		} // Clean
 
-		private bool IsTurnoverTooOld(DateTime? oDate, int nMonthCount) {
-			if (oDate == null)
-				return true;
+		private void SetTurnover(int nMonthCount, decimal nTurnover) {
+			if (this.turnover == null)
+				this.turnover = new SortedDictionary<int, decimal>();
 
-			return oDate.Value < DataAsOf.AddMonths(-nMonthCount);
-		} // IsTurnoverTooOld
-
-		private void SetHmrcTurnover(int nMonthCount, decimal nTurnover) {
-			if (this.m_oHmrcTurnover == null)
-				this.m_oHmrcTurnover = new SortedDictionary<int, decimal>();
-
-			this.m_oHmrcTurnover[nMonthCount] = nTurnover;
-		}
-
-		private void SetOnlineTurnover(int nMonthCount, decimal nTurnover) {
-			if (this.m_oOnlineTurnover == null)
-				this.m_oOnlineTurnover = new SortedDictionary<int, decimal>();
-
-			this.m_oOnlineTurnover[nMonthCount] = nTurnover;
-		} // SetOnlineTurnover
+			this.turnover[nMonthCount] = nTurnover;
+		} // SetTurnover
 
 		private bool m_bCompanyNameHasValue;
 		private Arguments m_oArguments;
-		private SortedDictionary<int, decimal> m_oHmrcTurnover;
-		private SortedDictionary<int, decimal> m_oOnlineTurnover;
+		private SortedDictionary<int, decimal> turnover;
 		private string m_sCompanyName;
 	} // class ApprovalInputData
 } // namespace
