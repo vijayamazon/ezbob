@@ -34,6 +34,7 @@ SELECT L.CustomerId,
                    L.[Date] AS LoanDate,
                    L.LoanAmount,
                    L.InterestRate,
+                   L.SetupFee,
                    R.RepaymentPeriod,
                    R.ManualSetupFeeAmount,
                    R.ManualSetupFeePercent,
@@ -70,76 +71,7 @@ SELECT T.CustomerId,
                    T.InterestRate,
                    T.RepaymentPeriod,
                    T.OutstandingPrincipal,
-                   T.ManualSetupFeeAmount,
-                   (T.ManualSetupFeePercent*T.LoanAmount) AS SetupFee,
-                   T.LoanNumber,
-                   CASE
-                   WHEN T.LoanNumber = 1 THEN R.Amount
-                   END AS CustomerRequestedAmount,
-                   C.ReferenceSource,
-                   CASE
- 
-                                   WHEN C.ReferenceSource LIKE 'eBay%'                              THEN 'eBay'
-                                   WHEN C.ReferenceSource LIKE 'Amazon%'       THEN 'Amazon'
-                                   WHEN C.ReferenceSource LIKE 'Ekm%'                               THEN 'EKM'
-                                   WHEN C.ReferenceSource LIKE 'adwords%'      THEN 'Google'
-                                   WHEN C.ReferenceSource LIKE 'Google%'         THEN 'Google'
-                                   WHEN C.ReferenceSource LIKE 'bros%'                               THEN 'Google'
-                                   WHEN C.ReferenceSource LIKE '%mobile%'      THEN 'Google'
-                                   WHEN C.ReferenceSource LIKE 'comp-%'                           THEN 'Google'
-                                   WHEN C.ReferenceSource LIKE 'ezbob-real%' THEN 'Google'
-                                   WHEN C.ReferenceSource LIKE 'adroll%'            THEN 'Adroll'
-                                   WHEN C.ReferenceSource LIKE 'Bing%'                               THEN 'Bing'
-                                   WHEN C.ReferenceSource LIKE 'tam%'                                THEN 'Tamebay'
-                                   WHEN C.ReferenceSource LIKE 'ChannelG%'    THEN 'ChannelGrabber'
-                                   WHEN C.ReferenceSource LIKE 'm.co.uk'           THEN 'Money.co.uk'
-                                   WHEN C.ReferenceSource LIKE 'Money.co.uk' THEN 'Money.co.uk'
-                                   WHEN C.ReferenceSource LIKE 'money_co_uk' THEN 'Money.co.uk'
-                                   WHEN C.ReferenceSource LIKE 'm-co-uk%'       THEN 'Money.co.uk'
-                                   WHEN C.ReferenceSource LIKE 'm_co_uk'        THEN 'Money.co.uk'
-                                   WHEN C.ReferenceSource LIKE 'Moneycouk%'               THEN 'Money.co.uk'
-                                   WHEN C.ReferenceSource LIKE 'msm%'                              THEN 'MoneySuperMarket'
-                                   WHEN C.ReferenceSource LIKE 'Broker'                              THEN 'Broker'
-                                   WHEN C.ReferenceSource IS NULL                                        THEN 'No SourceRef'
-                                   ELSE 'Other'
-                   END AS SourceRefGroup,
-                   C.IsOffline,
-                   CASE
-                   WHEN T.LoanSourceID = 1 THEN 'Standard'
-                   ELSE 'EU'
-                   END AS Loan_Type,
-                   CASE
-                   WHEN C.BrokerID IS NOT NULL THEN 'BrokerClient'
-                   ELSE 'NonBroker'
-                   END AS BrokerOrNot,
-                   CASE
-                                                WHEN T.LoanDate BETWEEN '2012-07-01' AND '2013-01-01' THEN 'Q4-2012'
-                                                WHEN T.LoanDate BETWEEN '2013-01-01' AND '2013-04-01' THEN 'Q1-2013'
-                                                WHEN T.LoanDate BETWEEN '2013-04-01' AND '2013-07-01' THEN 'Q2-2013'
-                                                WHEN T.LoanDate BETWEEN '2013-07-01' AND '2013-10-01' THEN 'Q3-2013'
-                                                WHEN T.LoanDate BETWEEN '2013-10-01' AND '2014-01-01' THEN 'Q4-2013'
-                                                WHEN T.LoanDate BETWEEN '2014-01-01' AND '2014-04-01' THEN 'Q1-2014'
-                                                WHEN T.LoanDate BETWEEN '2014-04-01' AND '2014-07-01' THEN 'Q2-2014'
-                                                WHEN T.LoanDate BETWEEN '2014-07-01' AND '2014-10-01' THEN 'Q3-2014'
-                                                WHEN T.LoanDate BETWEEN '2014-10-01' AND '2015-01-01' THEN 'Q4-2014'
-                                                ELSE 'No Q'
-                                END AS Quarter
- 
-                  
-INTO #temp2       
-FROM #temp1 T
-JOIN Customer C ON T.CustomerId = C.Id
-LEFT JOIN CustomerRequestedLoan R ON R.CustomerId = T.CustomerId
-ORDER BY 1,10
- 
------------------ GET 1ST LOAN DATE -----------------
- 
-SELECT L.CustomerId,min(L.[Date]) AS FirstLoanDate
-INTO #temp3
-FROM Loan L
-WHERE L.CustomerId NOT IN
-                                                                                                  ( SELECT C.Id
-                                                                                                                FROM Customer C
+                   T.SetupFee,
                                                                                                                 WHERE Name LIKE '%ezbob%'
                                                                                                                 OR Name LIKE '%liatvanir%'
                                                                                                                 OR Name LIKE '%q@q%'
@@ -155,8 +87,8 @@ SELECT T.CustomerId,
                    T.InterestRate,
                    T.RepaymentPeriod,
                    T.OutstandingPrincipal,
-                   T.ManualSetupFeeAmount,
                    T.SetupFee,
+
                    T.LoanNumber,
                    T.CustomerRequestedAmount,
                    T.ReferenceSource,
@@ -176,4 +108,3 @@ JOIN #temp3 T3 ON T3.CustomerId = T.CustomerId
  
 END;
 GO
-
