@@ -376,7 +376,7 @@
 			customer.SystemDecision = autoDecisionResponse.SystemDecision;
 			customer.Medal = medalClassification;
 			customer.CreditSum = offeredCreditLine;
-			customer.LastStatus = autoDecisionResponse.CreditResult.HasValue ? autoDecisionResponse.CreditResult.ToString() : null ;
+			customer.LastStatus = autoDecisionResponse.CreditResult.HasValue ? autoDecisionResponse.CreditResult.ToString() : "N/A";
 			customer.SystemCalculatedSum = modelLoanOffer;
 
 			if (autoDecisionResponse.DecidedToReject) {
