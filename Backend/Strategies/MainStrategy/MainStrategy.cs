@@ -111,7 +111,7 @@
 			// Gather LR data - must be done after rejection decisions
 			bool bSkip =
 				newCreditLineOption == NewCreditLineOption.SkipEverything ||
-					newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
+				newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
 
 			if (!bSkip)
 				GetLandRegistryDataIfNotRejected();
@@ -587,7 +587,7 @@
 			customer.SystemDecision = autoDecisionResponse.SystemDecision;
 			customer.Medal = medalClassification;
 			customer.CreditSum = offeredCreditLine;
-			customer.LastStatus = autoDecisionResponse.CreditResult.HasValue ? autoDecisionResponse.CreditResult.ToString() : null;
+			customer.LastStatus = autoDecisionResponse.CreditResult.HasValue ? autoDecisionResponse.CreditResult.ToString() : "N/A";
 			customer.SystemCalculatedSum = modelLoanOffer;
 
 			if (autoDecisionResponse.DecidedToReject) {
