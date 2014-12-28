@@ -33,8 +33,8 @@
     <Reference Include="Aspose.Words">
       <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\Lib\3rdparty\itextsharp\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
@@ -55,6 +55,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AttachmentModel.cs" />
+    <Compile Include="CollectionMail.cs" />
+    <Compile Include="CollectionMailModel.cs" />
+    <Compile Include="Helpers\FormattingHelper.cs" />
+    <Compile Include="Helpers\XmlNodeExtensions.cs" />
     <Compile Include="IMailApi.cs" />
     <Compile Include="IMailTestFixture.cs" />
     <Compile Include="PrepareMail.cs" />
@@ -71,6 +75,14 @@
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="Aspose.Total.lic" />
+    <EmbeddedResource Include="CollectionTemplates\default-notice-to-borrowers.docx" />
+    <EmbeddedResource Include="CollectionTemplates\default-notice.docx" />
+    <EmbeddedResource Include="CollectionTemplates\information-sheet-arrears.pdf" />
+    <EmbeddedResource Include="CollectionTemplates\information-sheet-default.pdf" />
+    <EmbeddedResource Include="CollectionTemplates\notice-of-default-to-business.docx" />
+    <EmbeddedResource Include="CollectionTemplates\notice-to-guarantor.docx" />
+    <EmbeddedResource Include="CollectionTemplates\sums-of-arrears.docx" />
+    <EmbeddedResource Include="CollectionTemplates\warning-letter-to-guarantors.docx" />
     <None Include="Properties\DataSources\System.Xml.XmlNode.datasource" />
     <None Include="Service References\IMailApiNS\IMailLib.IMailApiNS.MailmergeLetterheadPDFAuthResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -121,16 +133,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
-      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
-      <Name>Barrymore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
-      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
-      <Name>Logger</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
