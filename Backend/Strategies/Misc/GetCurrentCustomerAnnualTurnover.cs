@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
+	using System;
 	using Ezbob.Database;
 
 	public class GetCurrentCustomerAnnualTurnover : AStrategy {
@@ -19,7 +20,8 @@
 			Turnover = DB.ExecuteScalar<decimal>(
 				"GetCustomerAnnualTurnover",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerID)
+				new QueryParameter("CustomerID", this.customerID),
+				new QueryParameter("Now", DateTime.UtcNow)
 				);
 		} // Execute
 

@@ -8,15 +8,17 @@
 		public int CustomerID { get; private set; }
 		public Medal Medal { get; private set; }
 		public MedalType MedalType { get; private set; }
+		public TurnoverType? TurnoverType { get; private set; }
 		public decimal SystemCalculatedAmount { get; private set; }
 
-		public Arguments() { }
+		public Arguments() {}
 
-		public Arguments(int nCustomerID, decimal nSystemCalculatedAmount, Medal nMedal, MedalType medalType) {
+		public Arguments(int nCustomerID, decimal nSystemCalculatedAmount, Medal nMedal, MedalType medalType, TurnoverType? turnoverType) {
 			CustomerID = nCustomerID;
 			SystemCalculatedAmount = nSystemCalculatedAmount;
 			Medal = nMedal;
 			MedalType = medalType;
+			TurnoverType = turnoverType;
 		} // constructor
 	} // Arguments
 } // namespace

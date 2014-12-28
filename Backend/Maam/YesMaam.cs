@@ -25,22 +25,22 @@
 			AConnection oDB,
 			ASafeLog oLog
 			) {
-			topCount = nTopCount;
-			lastCheckedID = nLastCheckedID;
+			this.topCount = nTopCount;
+			this.lastCheckedID = nLastCheckedID;
 
 			DB = oDB;
 			Log = oLog ?? new SafeLog();
 
-			medalChooser = new MedalChooser(DB, Log);
+			this.medalChooser = new MedalChooser(DB, Log);
 
-			tag = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture) + Guid.NewGuid()
+			this.tag = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture) + Guid.NewGuid()
 				.ToString("N");
 		} // constructor
 
 		public void Execute() {
 			Log.Debug("Loading relevant cash requests...");
 
-			List<YesMaamInputRow> lst = YesMaamInputRow.Load(DB, topCount, lastCheckedID);
+			List<YesMaamInputRow> lst = YesMaamInputRow.Load(DB, this.topCount, this.lastCheckedID);
 
 			Log.Debug("Loading relevant cash requests complete, {0} loaded.", Grammar.Number(lst.Count, "row"));
 
@@ -220,13 +220,14 @@
 			AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent agent = null;
 
 			try {
-				MedalOutputModel medal = medalChooser.GetMedal(ymr.Input.CustomerID, ymr.Input.DecisionTime);
+				MedalOutputModel medal = this.medalChooser.GetMedal(ymr.Input.CustomerID, ymr.Input.DecisionTime);
 
 				agent = new SameDataAgent(
 					ymr.Input.CustomerID,
 					CapOffer(ymr.Input.CustomerID, medal.OfferedLoanAmount),
 					medal.Medal,
 					medal.MedalType,
+					medal.TurnoverType,
 					ymr.Input.DecisionTime,
 					DB,
 					Log
@@ -238,7 +239,7 @@
 
 				ymr.AutoApprove.Data = (agent.Trail.HasDecided ? "Approved" : "Not approved") + "<br>" + agent.Trail.UniqueID;
 
-				agent.Trail.Save(DB, null, ymr.Input.CashRequestID, tag);
+				agent.Trail.Save(DB, null, ymr.Input.CashRequestID, this.tag);
 
 				ymr.AutoApprove.Amount = agent.Result == null ? 0 : agent.Result.ApprovedAmount;
 
@@ -275,7 +276,7 @@
 
 				agent.Init();
 
-				ymr.AutoReject.Data = (agent.Decide(ymr.Input.CashRequestID, tag) ? "Rejected" : "Not rejected") + "<br>" + agent.Trail.UniqueID;
+				ymr.AutoReject.Data = (agent.Decide(ymr.Input.CashRequestID, this.tag) ? "Rejected" : "Not rejected") + "<br>" + agent.Trail.UniqueID;
 			} catch (Exception e) {
 				ymr.AutoReject.Data = "Exception";
 

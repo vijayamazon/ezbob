@@ -61,6 +61,9 @@
 			public MedalType MedalType { get; set; }
 
 			[UsedImplicitly]
+			public string TurnoverTypeStr { get; set; }
+
+			[UsedImplicitly]
 			public MetaData MetaData { get; set; }
 
 			[UsedImplicitly]
@@ -94,7 +97,13 @@
 				dst.SetConfiguration(Configuration);
 				dst.SetMetaData(MetaData);
 				dst.MetaData.RestoreValidationErrors(MetaDataValidationErrors);
-				dst.SetArgs(CustomerID, SystemCalculatedAmount, Medal, MedalType);
+
+				AutomationCalculator.Common.TurnoverType turnoverType;
+				if (Enum.TryParse(TurnoverTypeStr, out turnoverType))
+					dst.SetArgs(CustomerID, SystemCalculatedAmount, Medal, MedalType, turnoverType);
+				else
+					dst.SetArgs(CustomerID, SystemCalculatedAmount, Medal, MedalType, null);
+
 				dst.SetWorstStatuses(WorstStatusList);
 				dst.SetSeniority(MarketplaceSeniority);
 				dst.LatePayments = new List<Payment>(LatePayments);
@@ -136,6 +145,7 @@
 				SystemCalculatedAmount = src.SystemCalculatedAmount;
 				Medal = src.Medal;
 				MedalType = src.MedalType;
+				TurnoverTypeStr = src.TurnoverType == null ? string.Empty : src.TurnoverType.ToString();
 
 				WorstStatusList = new List<string>();
 				if (src.WorstStatusList != null)

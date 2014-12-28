@@ -8,6 +8,7 @@
 		public int CustomerId { get; set; }
 		public string MedalStr { get; set; }
 		public string MedalTypeStr { get; set; }
+		public string TurnoverType { get; set; }
 		public int OfferedLoanAmount { get; set; }
 
 		public static List<AutoApproveInputRow> Load(
@@ -26,13 +27,15 @@ SELECT {0}
 	mc.CustomerId,
 	MedalStr = mc.Medal,
 	MedalTypeStr = mc.MedalType,
+	TurnoverType = mc.InnerFlowName,
 	ISNULL(mc.OfferedLoanAmount, 0) as OfferedLoanAmount
 FROM
-	MedalCalculationsAV mc
+	MedalCalculations mc
 WHERE
 	mc.IsActive = 1
 	{1}
-ORDER BY mc.CustomerId DESC";
+ORDER BY
+	mc.CustomerId DESC";
 
 			return oDB.Fill<AutoApproveInputRow>(
 				string.Format(sQueryFormat, sTop, sCondition),
@@ -56,6 +59,15 @@ ORDER BY mc.CustomerId DESC";
 				nMedalType = AutomationCalculator.Common.MedalType.NoMedal;
 
 			return nMedalType;
+		} // GetMedalType
+
+		public AutomationCalculator.Common.TurnoverType? GetTurnoverType() {
+			AutomationCalculator.Common.TurnoverType nTurnoverType;
+
+			if (Enum.TryParse(TurnoverType, out nTurnoverType))
+				return nTurnoverType;
+
+			return null;
 		} // GetMedalType
 	} // class AutoApproveInputRow
 } // namespace

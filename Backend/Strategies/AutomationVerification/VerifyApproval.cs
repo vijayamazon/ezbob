@@ -5,12 +5,13 @@
 		public VerifyApproval(
 			int nTopCount,
 			int nLastCheckedCustomerID
-		)
-			: base(nTopCount, nLastCheckedCustomerID) {
-		} // constructor
+			)
+			: base(nTopCount, nLastCheckedCustomerID) {} // constructor
 
 		protected override string DecisionName {
-			get { return "Auto approval"; }
+			get {
+				return "Auto approval";
+			}
 		} // DecisionName
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
@@ -19,10 +20,11 @@
 				oRow.OfferedLoanAmount,
 				oRow.GetMedal(),
 				oRow.GetMedalType(),
+				oRow.GetTurnoverType(),
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision();
+				).Init()
+				.MakeAndVerifyDecision();
 		} // MakeAndVerifyDecision
-
 	} // class VerifyApproval
 } // namespace

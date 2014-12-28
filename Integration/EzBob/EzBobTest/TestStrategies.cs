@@ -1,10 +1,8 @@
 ﻿namespace EzBobTest {
 	using System;
-	using System.Collections.Generic;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Loans;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies;
@@ -13,13 +11,13 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
-	using EzServiceAccessor;
-	using EzServiceShortcut;
-	using Ezbob.Backend.Models;
-	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
+	using EzServiceAccessor;
+	using EzServiceShortcut;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
 	using NUnit.Framework;
 	using StructureMap;
 
@@ -72,13 +70,17 @@
 			base.Init();
 
 			ObjectFactory.Configure(x => {
-				x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>();
-				x.For<ILoanRepository>().Use<LoanRepository>();
-				x.For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
-				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
+				x.For<IEzServiceAccessor>()
+					.Use<EzServiceAccessorShort>();
+				x.For<ILoanRepository>()
+					.Use<LoanRepository>();
+				x.For<ILoanScheduleRepository>()
+					.Use<LoanScheduleRepository>();
+				x.For<ILoanHistoryRepository>()
+					.Use<LoanHistoryRepository>();
 			});
 
-			Ezbob.Backend.Strategies.Library.Initialize(m_oEnv, m_oDB, m_oLog);
+			Ezbob.Backend.Strategies.Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
 		[Test]
@@ -167,10 +169,10 @@
 
 		[Test]
 		public void TestAutoReRejection() {
-			var rerejection = new ReRejection(21334, m_oDB, m_oLog);
-			var rejection = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, m_oDB, m_oLog);
-			var approve = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, AutomationCalculator.Common.MedalType.Limited, m_oDB, m_oLog);
-			var reapprove = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, m_oDB, m_oLog);
+			var rerejection = new ReRejection(21334, this.m_oDB, this.m_oLog);
+			var rejection = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, this.m_oDB, this.m_oLog);
+			var approve = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, AutomationCalculator.Common.MedalType.Limited, AutomationCalculator.Common.TurnoverType.HMRC, this.m_oDB, this.m_oLog);
+			var reapprove = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, this.m_oDB, this.m_oLog);
 
 			//rerejection.MakeDecision(rejectionDecision);
 			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
@@ -181,9 +183,10 @@
 			var decision = new AutoDecisionResponse();
 			//approve.Init().MakeDecision(decision);
 			//Assert.AreEqual(false, decision.IsAutoApproval);
-			reapprove.Init().MakeDecision(decision);
+			reapprove.Init()
+				.MakeDecision(decision);
 
-			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(m_oDB, m_oLog, 21334, reapprove.Trail.InputData.DataAsOf);
+			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(this.m_oDB, this.m_oLog, 21334, reapprove.Trail.InputData.DataAsOf);
 			oSecondary.MakeDecision(oSecondary.GetInputData());
 
 			bool bSuccess = reapprove.Trail.EqualsTo(oSecondary.Trail);
@@ -342,16 +345,16 @@
 
 		[Test]
 		public void TestMedalCalculation() {
-			var customers = new[] { 6982, 6840 };
-			foreach (var customer in customers) {
+			var customers = new[] {
+				6982, 6840
+			};
+			foreach (var customer in customers)
 				new CalculateMedal(customer).Execute();
-			}
-
 		}
 
 		[Test]
 		public void TestOfferCalculation() {
-			var calc = new OfferDualCalculator(m_oDB, m_oLog);
+			var calc = new OfferDualCalculator(this.m_oDB, this.m_oLog);
 
 			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
 			Assert.AreEqual(5.5M, offer1.SetupFee);
@@ -359,7 +362,7 @@
 			return;
 			int calculatedOffers = 0;
 			int failedVerificationOffers = 0;
-			m_oDB.ForEachRowSafe(sr => {
+			this.m_oDB.ForEachRowSafe(sr => {
 				int customerId = sr["CustomerId"];
 				EZBob.DatabaseLib.Model.Database.Medal medal = (EZBob.DatabaseLib.Model.Database.Medal)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Medal), sr["Medal"]);
 				int offeredLoanAmount = sr["OfferedLoanAmount"];
@@ -369,20 +372,18 @@
 				int roundedAmount = (int)Math.Truncate((decimal)offeredLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
 				int cappedAmount = 0;
 
-				if (zooplaValue > 0) {
+				if (zooplaValue > 0)
 					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapHomeOwner);
-				} else {
+				else
 					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapNotHomeOwner);
-				} // if
 
 				var offer = calc.CalculateOffer(customerId, DateTime.UtcNow, cappedAmount, numOfLoans > 0, medal);
 				calculatedOffers++;
-				if (offer == null || !string.IsNullOrEmpty(offer.Error)) {
+				if (offer == null || !string.IsNullOrEmpty(offer.Error))
 					failedVerificationOffers++;
-				}
 			}, "SELECT CustomerId, Medal, OfferedLoanAmount, NumOfLoans, ZooplaValue FROM MedalCalculations WHERE IsActive=1 AND Medal<>'NoMedal' AND OfferedLoanAmount>0", CommandSpecies.Text);
 
-			m_oLog.Debug("Calculated offer for {0} customers failed {1}", calculatedOffers, failedVerificationOffers);
+			this.m_oLog.Debug("Calculated offer for {0} customers failed {1}", calculatedOffers, failedVerificationOffers);
 			Assert.AreEqual(0, failedVerificationOffers);
 		}
 
@@ -424,6 +425,7 @@
 			var s = new UpdateMarketplace(21400, 18364, false);
 			s.Execute();
 		}
+
 		// TestGetBankModel
 
 		// TestCalculateModelsAndAffordability

@@ -16,7 +16,7 @@
             </setting>
             <setting name="Cleaning_UpdateAccessorsToBothBeSingleLineOrMultiLine"
                 serializeAs="String">
-                <value>False</value>
+                <value>True</value>
             </setting>
             <setting name="Cleaning_InsertBlankLinePaddingBeforeNamespaces"
                 serializeAs="String">
@@ -107,7 +107,7 @@
                 <value>Indexers||3||Indexers</value>
             </setting>
             <setting name="Progressing_ShowBuildProgressOnBuildStart" serializeAs="String">
-                <value>True</value>
+                <value>False</value>
             </setting>
             <setting name="Cleaning_InsertBlankLinePaddingBeforeRegionTags"
                 serializeAs="String">
@@ -150,7 +150,7 @@
                 <value>True</value>
             </setting>
             <setting name="ThirdParty_OtherCleaningCommandsExpression" serializeAs="String">
-                <value />
+                <value>ReSharper_SilentCleanupCode||</value>
             </setting>
             <setting name="Collapsing_KeepSoloProjectExpanded" serializeAs="String">
                 <value>True</value>
@@ -218,7 +218,7 @@
                 <value>True</value>
             </setting>
             <setting name="Digging_PrimarySortOrder" serializeAs="String">
-                <value>2</value>
+                <value>1</value>
             </setting>
             <setting name="Cleaning_RunVisualStudioSortUsingStatements" serializeAs="String">
                 <value>True</value>
@@ -248,7 +248,7 @@
             </setting>
             <setting name="Reorganizing_AlphabetizeMembersOfTheSameGroup"
                 serializeAs="String">
-                <value>True</value>
+                <value>False</value>
             </setting>
             <setting name="Cleaning_InsertExplicitAccessModifiersOnProperties"
                 serializeAs="String">
@@ -275,7 +275,7 @@
             </setting>
             <setting name="Cleaning_InsertBlankLinePaddingBetweenPropertiesMultiLineAccessors"
                 serializeAs="String">
-                <value>False</value>
+                <value>True</value>
             </setting>
             <setting name="Digging_CenterOnWhole" serializeAs="String">
                 <value>True</value>
@@ -358,7 +358,7 @@
                 <value>True</value>
             </setting>
             <setting name="ThirdParty_UseJetBrainsReSharperCleanup" serializeAs="String">
-                <value>True</value>
+                <value>False</value>
             </setting>
             <setting name="Cleaning_InsertBlankLinePaddingBeforeCaseStatements"
                 serializeAs="String">

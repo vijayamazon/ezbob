@@ -15,8 +15,8 @@
 		/// <param name="db">DB</param>
 		/// <param name="log">Log</param>
 		public MedalChooser(AConnection db, ASafeLog log) {
-			DB = db;
-			Log = log;
+			this.DB = db;
+			this.Log = log;
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@
 		/// <param name="calculationDate">optional if want to calculate medal based on historical data</param>
 		/// <returns></returns>
 		public MedalOutputModel GetMedal(int customerId, DateTime? calculationDate = null) {
-			var dbHelper = new DbHelper(DB, Log);
+			var dbHelper = new DbHelper(this.DB, this.Log);
 			var medalChooserData = dbHelper.GetMedalChooserData(customerId);
 			DateTime today = calculationDate.HasValue ? calculationDate.Value : DateTime.Today;
 
@@ -52,6 +52,7 @@
 				return new MedalOutputModel {
 					MedalType = MedalType.NoMedal,
 					Medal = Medal.NoClassification,
+					TurnoverType = null,
 					Error = "Bank or Hmrc data is too old",
 					NumOfHmrcMps = medalChooserData.NumOfHmrc,
 					CustomerId = customerId,
@@ -62,6 +63,7 @@
 				return new MedalOutputModel {
 					MedalType = MedalType.NoMedal,
 					Medal = Medal.NoClassification,
+					TurnoverType = null,
 					Error = string.Format("Customer has {0} HMRC MPs", medalChooserData.NumOfHmrc),
 					NumOfHmrcMps = medalChooserData.NumOfHmrc,
 					CustomerId = customerId,
@@ -87,35 +89,36 @@
 			IMedalCalulator medalCalulator;
 			switch (type) {
 			case MedalType.Limited:
-				medalCalulator = new OfflineLImitedMedalCalculator(DB, Log);
+				medalCalulator = new OfflineLImitedMedalCalculator(this.DB, this.Log);
 				break;
 			case MedalType.NonLimited:
-				medalCalulator = new NonLimitedMedalCalculator(DB, Log);
+				medalCalulator = new NonLimitedMedalCalculator(this.DB, this.Log);
 				break;
 			case MedalType.OnlineLimited:
-				medalCalulator = new OnlineLImitedMedalCalculator(DB, Log);
+				medalCalulator = new OnlineLImitedMedalCalculator(this.DB, this.Log);
 				break;
 			case MedalType.SoleTrader:
-				medalCalulator = new SoleTraderMedalCalculator(DB, Log);
+				medalCalulator = new SoleTraderMedalCalculator(this.DB, this.Log);
 				break;
 			case MedalType.OnlineNonLimitedNoBusinessScore:
-				medalCalulator = new OnlineNonLimitedNoBusinessScoreMedalCalculator(DB, Log);
+				medalCalulator = new OnlineNonLimitedNoBusinessScoreMedalCalculator(this.DB, this.Log);
 				break;
 			case MedalType.OnlineNonLimitedWithBusinessScore:
-				medalCalulator = new OnlineNonLimitedWithBusinessScoreMedalCalculator(DB, Log);
+				medalCalulator = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.DB, this.Log);
 				break;
 			default:
 				return new MedalOutputModel {
 					MedalType = type,
 					Medal = Medal.NoClassification,
+					TurnoverType = null,
 					Error = "None of the medals match the criteria for medal calculation",
 					NumOfHmrcMps = medalChooserData.NumOfHmrc,
 					CustomerId = customerId
 				};
 			}
 
-			var data = medalCalulator.GetInputParameters(customerId, calculationDate);
-			var medal = medalCalulator.CalculateMedal(data);
+			MedalInputModel data = medalCalulator.GetInputParameters(customerId, calculationDate);
+			MedalOutputModel medal = medalCalulator.CalculateMedal(data);
 			medal.OfferedLoanAmount = GetOfferedAmount(medal, medalChooserData.MinApprovalAmount);
 			return medal;
 		}
@@ -124,7 +127,7 @@
 		protected ASafeLog Log;
 
 		private int GetOfferedAmount(MedalOutputModel medal, int minApprovalAmount) {
-			var dbHelper = new DbHelper(DB, Log);
+			var dbHelper = new DbHelper(this.DB, this.Log);
 			var medalCoefficients = dbHelper.GetMedalCoefficients();
 			var coefficients = medalCoefficients.First(x => x.Medal == medal.Medal);
 			var annualTurnoverOffer = decimal.Parse(medal.WeightsDict[Parameter.AnnualTurnover].Value) *

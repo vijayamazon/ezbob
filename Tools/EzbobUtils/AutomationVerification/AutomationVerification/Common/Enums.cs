@@ -28,8 +28,10 @@
 	public enum LoanType {
 		[Description("Standard")]
 		StandardLoanType,
+
 		[Description("Half Way")]
 		HalfWayLoanType,
+
 		[Description("Alibaba")]
 		AlibabaLoanType
 	}
@@ -62,6 +64,12 @@
 		SoleTrader,
 	}
 
+	public enum TurnoverType {
+		HMRC,
+		Bank,
+		Online,
+	}
+
 	public enum OfferCalculationType {
 		Seek,
 		Boundaries
@@ -84,8 +92,8 @@
 		/*online only*/
 		NumOfStores,
 		PositiveFeedbacks,
-
 	}
+
 	public enum TimePeriodEnum {
 		Month = 1,
 		Month3 = 2,

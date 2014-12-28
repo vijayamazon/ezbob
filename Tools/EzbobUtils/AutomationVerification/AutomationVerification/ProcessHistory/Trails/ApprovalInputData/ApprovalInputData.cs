@@ -12,16 +12,16 @@
 		[JsonIgnore]
 		public string CompanyName {
 			get {
-				if (m_bCompanyNameHasValue)
-					return m_sCompanyName;
+				if (this.m_bCompanyNameHasValue)
+					return this.m_sCompanyName;
 
-				m_bCompanyNameHasValue = true;
+				this.m_bCompanyNameHasValue = true;
 
-				m_sCompanyName = Utils.AdjustCompanyName(MetaData.ExperianCompanyName);
-				if (m_sCompanyName == string.Empty)
-					m_sCompanyName = Utils.AdjustCompanyName(MetaData.EnteredCompanyName);
+				this.m_sCompanyName = Utils.AdjustCompanyName(MetaData.ExperianCompanyName);
+				if (this.m_sCompanyName == string.Empty)
+					this.m_sCompanyName = Utils.AdjustCompanyName(MetaData.EnteredCompanyName);
 
-				return m_sCompanyName;
+				return this.m_sCompanyName;
 			}
 		}
 
@@ -29,7 +29,7 @@
 
 		public int CustomerID {
 			get {
-				return m_oArguments.CustomerID;
+				return this.m_oArguments.CustomerID;
 			}
 		}
 
@@ -52,19 +52,19 @@
 
 		public decimal HmrcTurnover1Y {
 			get {
-				return GetTurnover(m_oHmrcTurnover, 12);
+				return GetTurnover(this.m_oHmrcTurnover, 12);
 			}
 		}
 
 		public decimal HmrcTurnover3M {
 			get {
-				return GetTurnover(m_oHmrcTurnover, 3);
+				return GetTurnover(this.m_oHmrcTurnover, 3);
 			}
 		}
 
 		public decimal HmrcTurnover6M {
 			get {
-				return GetTurnover(m_oHmrcTurnover, 6);
+				return GetTurnover(this.m_oHmrcTurnover, 6);
 			}
 		}
 
@@ -76,13 +76,19 @@
 
 		public Medal Medal {
 			get {
-				return m_oArguments.Medal;
+				return this.m_oArguments.Medal;
 			}
 		}
 
 		public MedalType MedalType {
 			get {
-				return m_oArguments.MedalType;
+				return this.m_oArguments.MedalType;
+			}
+		}
+
+		public TurnoverType? TurnoverType {
+			get {
+				return this.m_oArguments.TurnoverType;
 			}
 		}
 
@@ -90,19 +96,19 @@
 
 		public decimal OnlineTurnover1M {
 			get {
-				return GetTurnover(m_oOnlineTurnover, 1);
+				return GetTurnover(this.m_oOnlineTurnover, 1);
 			}
 		}
 
 		public decimal OnlineTurnover1Y {
 			get {
-				return GetTurnover(m_oOnlineTurnover, 12);
+				return GetTurnover(this.m_oOnlineTurnover, 12);
 			}
 		}
 
 		public decimal OnlineTurnover3M {
 			get {
-				return GetTurnover(m_oOnlineTurnover, 3);
+				return GetTurnover(this.m_oOnlineTurnover, 3);
 			}
 		}
 
@@ -112,9 +118,10 @@
 
 		public decimal SystemCalculatedAmount {
 			get {
-				return m_oArguments.SystemCalculatedAmount;
+				return this.m_oArguments.SystemCalculatedAmount;
 			}
 		}
+
 		public string WorstStatuses {
 			get {
 				return string.Join(",", WorstStatusList);
@@ -157,7 +164,7 @@
 			) {
 			SetDataAsOf(oDataAsOf);
 			SetConfiguration(oCfg);
-			m_oArguments = oArgs;
+			this.m_oArguments = oArgs;
 			SetMetaData(oMetaData);
 			SetWorstStatuses(oWorstStatuses);
 
@@ -191,9 +198,9 @@
 			} // switch
 
 			return IsTurnoverGood(
-				GetTurnover(m_oHmrcTurnover, nMonthCount),
+				GetTurnover(this.m_oHmrcTurnover, nMonthCount),
 				nMonthCount,
-				GetTurnover(m_oHmrcTurnover, 12),
+				GetTurnover(this.m_oHmrcTurnover, 12),
 				12,
 				nRatio
 				);
@@ -220,9 +227,9 @@
 			} // switch
 
 			return IsTurnoverGood(
-				GetTurnover(m_oOnlineTurnover, nMonthCount),
+				GetTurnover(this.m_oOnlineTurnover, nMonthCount),
 				nMonthCount,
-				GetTurnover(m_oOnlineTurnover, 12),
+				GetTurnover(this.m_oOnlineTurnover, 12),
 				12,
 				nRatio
 				);
@@ -236,8 +243,8 @@
 			return JsonConvert.SerializeObject(new SerializationModel().InitFrom(this), Formatting.Indented);
 		} // Serialize
 
-		public void SetArgs(int nCustomerID, decimal nAmount, Medal nMedal, MedalType medalType) {
-			m_oArguments = new Arguments(nCustomerID, nAmount, nMedal, medalType);
+		public void SetArgs(int nCustomerID, decimal nAmount, Medal nMedal, MedalType medalType, TurnoverType? turnoverType) {
+			this.m_oArguments = new Arguments(nCustomerID, nAmount, nMedal, medalType, turnoverType);
 		}
 
 		public void SetAvailableFunds(decimal nTotalAvailable, decimal nReserved) {
@@ -323,9 +330,9 @@
 		}
 
 		private void Clean() {
-			m_bCompanyNameHasValue = false;
+			this.m_bCompanyNameHasValue = false;
 			LatePayments = new List<Payment>();
-			m_oArguments = new Arguments();
+			this.m_oArguments = new Arguments();
 			DirectorNames = new List<Name>();
 			HmrcBusinessNames = new List<string>();
 			HasHmrc = false;
@@ -341,8 +348,8 @@
 			AvailableFunds = 0;
 			ReservedFunds = 0;
 
-			m_oOnlineTurnover = null;
-			m_oHmrcTurnover = null;
+			this.m_oOnlineTurnover = null;
+			this.m_oHmrcTurnover = null;
 
 			OnlineUpdateTime = default(DateTime);
 			HasOnline = false;
@@ -359,17 +366,17 @@
 		} // IsTurnoverTooOld
 
 		private void SetHmrcTurnover(int nMonthCount, decimal nTurnover) {
-			if (m_oHmrcTurnover == null)
-				m_oHmrcTurnover = new SortedDictionary<int, decimal>();
+			if (this.m_oHmrcTurnover == null)
+				this.m_oHmrcTurnover = new SortedDictionary<int, decimal>();
 
-			m_oHmrcTurnover[nMonthCount] = nTurnover;
+			this.m_oHmrcTurnover[nMonthCount] = nTurnover;
 		}
 
 		private void SetOnlineTurnover(int nMonthCount, decimal nTurnover) {
-			if (m_oOnlineTurnover == null)
-				m_oOnlineTurnover = new SortedDictionary<int, decimal>();
+			if (this.m_oOnlineTurnover == null)
+				this.m_oOnlineTurnover = new SortedDictionary<int, decimal>();
 
-			m_oOnlineTurnover[nMonthCount] = nTurnover;
+			this.m_oOnlineTurnover[nMonthCount] = nTurnover;
 		} // SetOnlineTurnover
 
 		private bool m_bCompanyNameHasValue;

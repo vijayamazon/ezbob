@@ -25,6 +25,7 @@
 			decimal nSystemCalculatedAmount,
 			AutomationCalculator.Common.Medal nMedal,
 			AutomationCalculator.Common.MedalType medalType,
+			AutomationCalculator.Common.TurnoverType? turnoverType,
 			AConnection oDB,
 			ASafeLog oLog
 			) {
@@ -32,8 +33,8 @@
 
 			DB = oDB;
 			Log = oLog ?? new SafeLog();
-			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal, medalType);
-			m_oCheck = new Checker(this);
+			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal, medalType, turnoverType);
+			this.m_oCheck = new Checker(this);
 		} // constructor
 
 		public virtual Agent Init() {
@@ -65,10 +66,10 @@
 
 			try {
 				GatherData();
-				m_oCheck.Run();
+				this.m_oCheck.Run();
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto approval.");
-				m_oCheck.StepFailed<ExceptionThrown>()
+				this.m_oCheck.StepFailed<ExceptionThrown>()
 					.Init(e);
 			} // try
 
@@ -143,15 +144,11 @@
 				);
 
 			MetaData.Validate();
-		}
+		} // GatherData
 
 		protected virtual Configuration InitCfg() {
 			return new Configuration(DB, Log);
 		} // InitCfg
-
-		// GatherAvailableFunds
-
-		// GatherData
 
 		private enum RowType {
 			MetaData,

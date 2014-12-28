@@ -22,14 +22,14 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SET @CurrentMonthEnd = dbo.MonthEnd(dbo.udfGetLatestTotalsMonth(@MpID, @Now))
+	SET @CurrentMonthEnd = dbo.udfMonthEnd(dbo.udfGetLatestTotalsMonth(@MpID, @Now))
 
 	------------------------------------------------------------------------------
 
-	SET @CurrentMonthStart = dbo.MonthStart(@CurrentMonthEnd)
+	SET @CurrentMonthStart = dbo.udfMonthStart(@CurrentMonthEnd)
 
 	------------------------------------------------------------------------------
 
-	SET @YearAgo = dbo.MonthStart(DATEADD(month, -11, @CurrentMonthEnd))	
+	SET @YearAgo = dbo.udfMonthStart(DATEADD(month, -11, @CurrentMonthEnd))	
 END
 GO

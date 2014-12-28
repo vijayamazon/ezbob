@@ -9,18 +9,19 @@
 			decimal nSystemCalculatedAmount,
 			AutomationCalculator.Common.Medal nMedal,
 			AutomationCalculator.Common.MedalType nMedalType,
+			AutomationCalculator.Common.TurnoverType? turnoverType,
 			DateTime now,
 			AConnection oDB,
 			ASafeLog oLog
 			)
-			: base(nCustomerID, nSystemCalculatedAmount, nMedal, nMedalType, oDB, oLog) {
+			: base(nCustomerID, nSystemCalculatedAmount, nMedal, nMedalType, turnoverType, oDB, oLog) {
 			this.now = now;
 		} // constructor
 
 		public override Agent Init() {
 			base.Init();
 
-			Now = now;
+			Now = this.now;
 
 			return this;
 		} // Init
