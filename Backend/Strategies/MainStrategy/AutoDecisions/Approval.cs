@@ -87,17 +87,14 @@
 				if (this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited && this.customer.Company.ExperianRefNum != "NotFound") {
 					var limited = new LoadExperianLtd(this.customer.Company.ExperianRefNum, 0);
 					limited.Execute();
+
 					this.directors = new List<Name>();
-					foreach (var row in limited.Result.Children) {
-						if (row.GetType() == typeof(ExperianLtdDL72)) {
-							var dataRow = (ExperianLtdDL72)row;
-							this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
-						}
-						if (row.GetType() == typeof(ExperianLtdDLB5)) {
-							var dataRow = (ExperianLtdDLB5)row;
-							this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
-						}
-					} // for each
+
+					foreach (ExperianLtdDL72 dataRow in limited.Result.GetChildren<ExperianLtdDL72>())
+						this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
+
+					foreach (ExperianLtdDLB5 dataRow in limited.Result.GetChildren<ExperianLtdDLB5>())
+						this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
 				}
 			}
 
@@ -113,7 +110,8 @@
 			SafeReader sr = this.db.GetFirst(
 				"GetExperianMinMaxConsumerDirectorsScore",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId)
+				new QueryParameter("CustomerId", this.customerId),
+				new QueryParameter("Now", Now)
 				);
 
 			if (!sr.IsEmpty)

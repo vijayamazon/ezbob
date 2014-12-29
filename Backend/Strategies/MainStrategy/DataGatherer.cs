@@ -2,13 +2,12 @@
 	using System;
 	using System.Collections.Generic;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database;
-	using Experian;
-	using EzBob.Models;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Misc;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class DataGatherer {
 		public int AllMPsNum { get; private set; }
@@ -201,7 +200,7 @@
 		public void GatherPreliminaryData() {
 			BwaBusinessCheck = CurrentValues.Instance.BWABusinessCheck;
 
-			SafeReader results = db.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			SafeReader results = this.db.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", this.customerId));
 			AppBankAccountType = results["BankAccountType"];
 			LastStartedMainStrategyEndTime = results["LastStartedMainStrategyEndTime"];
 			AppAccountNumber = results["AccountNumber"];
@@ -210,20 +209,20 @@
 		}
 
 		private void GatherOnlineMedalData() {
-			log.Info("Starting to calculate score and medal");
+			this.log.Info("Starting to calculate score and medal");
 
-			var scoreCardResults = db.GetFirst(
+			var scoreCardResults = this.db.GetFirst(
 				"GetScoreCardData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("CustomerId", this.customerId),
 				new QueryParameter("Today", DateTime.Today)
-			);
+				);
 
 			string maritalStatusStr = scoreCardResults["MaritalStatus"];
 			MaritalStatus maritalStatusTmp;
 
 			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatusTmp)) {
-				log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
+				this.log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
 				maritalStatusTmp = MaritalStatus.Other;
 			}
 			MaritalStatus = maritalStatusTmp;
@@ -239,13 +238,12 @@
 			FirstRepaymentDatePassed = false;
 
 			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
-			if (modelFirstRepaymentDate != default(DateTime)) {
+			if (modelFirstRepaymentDate != default(DateTime))
 				FirstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
-			}
 		}
 
 		private void GatherTurnoversAndSeniority() {
-			log.Info("Getting turnovers and seniority");
+			this.log.Info("Getting turnovers and seniority");
 			MpsTotals totals = new MpsTotals(); // TODO: load marketplace totals by customer id
 			TotalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
 			TotalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
@@ -259,35 +257,35 @@
 		}
 
 		private void GetCompanyScore() {
-			SafeReader sr = db.GetFirst(
+			SafeReader sr = this.db.GetFirst(
 				"GetCompanyScore",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
+				new QueryParameter("CustomerId", this.customerId)
+				);
 
 			MaxCompanyScore = sr["MaxScore"];
 			MinCompanyScore = sr["MinScore"];
 		}
 
 		private void GetCompanySeniorityDays() {
-			var getCompanySeniority = new GetCompanySeniority(customerId, Utils.IsLimitedCompany(TypeOfBusiness));
+			var getCompanySeniority = new GetCompanySeniority(this.customerId, Utils.IsLimitedCompany(TypeOfBusiness));
 			getCompanySeniority.Execute();
 			CompanyIncorporationDate = getCompanySeniority.CompanyIncorporationDate;
 		}
 
 		private void GetCurrentExperianScore() {
-			var scoreStrat = new GetExperianConsumerScore(customerId);
+			var scoreStrat = new GetExperianConsumerScore(this.customerId);
 			scoreStrat.Execute();
 			ExperianConsumerScore = scoreStrat.Score;
 		}
 
 		private void GetLastCashRequestData() {
-			var lastOfferResults = db.GetFirst(
+			var lastOfferResults = this.db.GetFirst(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("CustomerId", this.customerId),
 				new QueryParameter("Now", DateTime.UtcNow)
-			);
+				);
 
 			if (!lastOfferResults.IsEmpty) {
 				LoanOfferReApprovalFullAmount = lastOfferResults["ReApprovalFullAmountNew"];
@@ -310,10 +308,11 @@
 		}
 
 		private void GetMinMaxExperianScore() {
-			SafeReader sr = db.GetFirst(
+			SafeReader sr = this.db.GetFirst(
 				"GetExperianMinMaxConsumerDirectorsScore",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
+				new QueryParameter("CustomerId", this.customerId),
+				new QueryParameter("Now", DateTime.UtcNow)
 				);
 
 			if (!sr.IsEmpty) {
@@ -323,8 +322,8 @@
 		}
 
 		private void GetPersonalInfo() {
-			log.Info("Getting personal info for customer:{0}", customerId);
-			SafeReader results = db.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			this.log.Info("Getting personal info for customer:{0}", this.customerId);
+			SafeReader results = this.db.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", this.customerId));
 
 			CustomerStatusIsEnabled = results["CustomerStatusIsEnabled"];
 			CustomerStatusIsWarning = results["CustomerStatusIsWarning"];
@@ -352,15 +351,14 @@
 		private void GetWorstCaisStatuses() {
 			ConsumerCaisDetailWorstStatuses = new List<string>();
 
-			db.ForEachRowSafe((sr, bRowsetStart) => {
+			this.db.ForEachRowSafe((sr, bRowsetStart) => {
 				string worstStatus = sr["WorstStatus"];
 
-				if (!string.IsNullOrEmpty(worstStatus)) {
+				if (!string.IsNullOrEmpty(worstStatus))
 					ConsumerCaisDetailWorstStatuses.Add(worstStatus);
-				}
 
 				return ActionResult.Continue;
-			}, "GetWorstCaisStatuses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			}, "GetWorstCaisStatuses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", this.customerId));
 		}
 
 		private void ReadConfigurations() {
