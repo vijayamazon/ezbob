@@ -38,6 +38,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -63,21 +67,18 @@
     <Compile Include="AutoDecision\AutoReRejection\Configuration.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Marketplace.cs" />
     <Compile Include="AutoDecision\AutoReRejection\MetaData.cs" />
+    <Compile Include="AutomationTestFixure.cs" />
     <Compile Include="Common\OriginationTime.cs" />
     <Compile Include="AutoDecision\AutoApproval\Payment.cs" />
     <Compile Include="AutoDecision\AutoApproval\CalculatedTurnover.cs" />
     <Compile Include="AutoDecision\AutoApproval\Result.cs" />
     <Compile Include="AutoDecision\AutoReApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoReApproval\AutoReApprovalModels.cs" />
-    <Compile Include="AutoDecision\AutoRejectionCalculator.cs" />
     <Compile Include="AutoDecision\AutoRejection\Agent.cs" />
     <Compile Include="AutoDecision\AutoRejection\AutoRejectModels.cs" />
     <Compile Include="AutoDecision\AutoRejection\CaisStatusesCalculation.cs" />
     <Compile Include="AutoDecision\AutoReRejection\ReRejectInputData.cs" />
     <Compile Include="Common\Constants.cs" />
-    <Compile Include="AutoDecision\AutoReRejectionCalculator.cs" />
-    <Compile Include="AutoDecision\AutoApprovalCalculator.cs" />
-    <Compile Include="AutoDecision\AutoReApprovalCalculator.cs" />
     <Compile Include="MedalCalculation\OnlineNonLimitedWithBusinessScoreMedalCalculator.cs" />
     <Compile Include="MedalCalculation\OnlineNonLimitedNoBusinessScoreMedalCalculator.cs" />
     <Compile Include="MedalCalculation\MedalChooser.cs" />

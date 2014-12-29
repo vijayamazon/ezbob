@@ -1,5 +1,4 @@
-﻿namespace AutomationVerification
-{
+﻿namespace AutomationVerification {
 	using System;
 	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision;
@@ -12,21 +11,16 @@
 	using NUnit.Framework;
 
 	[TestFixture]
-	class AutomationTestFixure
-	{
-		public static readonly ASafeLog Log = new ConsoleLog();
-		private AConnection _db;
+	class AutomationTestFixure {
 		[SetUp]
 		public void Init() {
 			_db = DbConnectionGenerator.Get(Log);
 		}
 
 		[Test]
-		public void TestMedalCalculation()
-		{
+		public void TestMedalCalculation() {
 			var msc = new OfflineLImitedMedalCalculator(_db, Log);
-			var data = new MedalInputModel
-			{
+			var data = new MedalInputModel {
 				AnnualTurnover = 125000,
 				BusinessScore = 55,
 				MaritalStatus = MaritalStatus.Married,
@@ -49,8 +43,7 @@
 		}
 
 		[Test]
-		public void TestMedalCalculation2()
-		{
+		public void TestMedalCalculation2() {
 			var msc = new OfflineLImitedMedalCalculator(_db, Log);
 			var data = msc.GetInputParameters(14223);
 			var medal = msc.CalculateMedal(data);
@@ -59,48 +52,7 @@
 		}
 
 		[Test]
-		public void TestAutoRerejetion()
-		{
-			var arr = new AutoReRejectionCalculator(_db, Log);
-			string reason;
-			var des = arr.IsAutoReRejected(10144, 150232, out reason);
-			Assert.AreEqual(true, des);
-		}
-
-		[Test]
-		public void TestAutoRejetion()
-		{
-			var db = new DbHelper(_db, Log);
-			var rejectionConstants = db.GetRejectionConfigs();
-			var arr = new AutoRejectionCalculator(_db, Log, rejectionConstants);
-			string reason;
-			var des = arr.IsAutoRejected(5894, out reason);
-			Assert.AreEqual(false, des);
-		}
-
-		[Test]
-		public void TestAutoReapproval()
-		{
-			var arr = new AutoReApprovalCalculator(_db, Log);
-			string reason;
-			int amount = 0;
-			var des = arr.IsAutoReApproved(14223, 0, out reason, out amount);
-			Assert.AreEqual(false, des);
-		}
-
-		[Test]
-		public void TestAutoApproval()
-		{
-			var arr = new AutoApprovalCalculator(_db, Log);
-			string reason;
-			int amount = 0;
-			var des = arr.IsAutoApproved(14223, out reason, out amount);
-			Assert.AreEqual(false, des);
-		}
-
-		[Test]
-		public void TestIsOffline()
-		{
+		public void TestIsOffline() {
 			var db = new DbHelper(_db, Log);
 			var isOffline = db.IsOffline(25);
 			Assert.AreEqual(false, isOffline);
@@ -110,8 +62,7 @@
 		}
 
 		[Test]
-		public void TestJoin()
-		{
+		public void TestJoin() {
 			var db = new DbHelper(_db, Log);
 			var mps = db.GetCustomerPaymentMarketPlaces(16241);
 			var s = string.Join(",", mps);
@@ -119,8 +70,7 @@
 		}
 
 		[Test]
-		public void TestFeedbacks()
-		{
+		public void TestFeedbacks() {
 			var mpHelper = new MarketPlacesHelper(_db, Log);
 			var feedbacks = mpHelper.GetPositiveFeedbacks(14166);
 			Assert.AreEqual(33885, feedbacks);
@@ -128,52 +78,14 @@
 		}
 
 		[Test]
-		public void TestOnlineTurnover()
-		{
-			var mpHelper = new MarketPlacesHelper(_db, Log);
-			//var turnover = mpHelper.GetOnlineTurnoverAnnualized(15689);
-			//Assert.IsTrue(Math.Abs(turnover - 45299.52M) < 1);
-
-			//turnover = mpHelper.GetOnlineTurnoverAnnualized(15898);
-			//Assert.IsTrue(Math.Abs(turnover - 125762.575M) < 1);
-
-			//turnover = mpHelper.GetOnlineTurnoverAnnualized(16305);
-			//Assert.IsTrue(Math.Abs(turnover - 107665.91M) < 1);
-
-			//turnover = mpHelper.GetOnlineTurnoverAnnualized(16387);
-			//Assert.IsTrue(Math.Abs(turnover - 140229.9M) < 1);
-
-			//turnover = mpHelper.GetOnlineTurnoverAnnualized(16448);
-			//Assert.IsTrue(Math.Abs(turnover - 390054.541935M) < 1);
-
-			var turnover = mpHelper.GetOnlineTurnoverAnnualized(15885);
-			Assert.IsTrue(Math.Abs(turnover - 11826.403198M) < 1);
-
-			turnover = mpHelper.GetOnlineTurnoverAnnualized(16254);
-			Assert.IsTrue(Math.Abs(turnover - 98838.020323M) < 1);
-
-			turnover = mpHelper.GetOnlineTurnoverAnnualized(16620);
-			Assert.IsTrue(Math.Abs(turnover - 42177.345988M) < 1);
-
-			turnover = mpHelper.GetOnlineTurnoverAnnualized(16717);
-			Assert.IsTrue(Math.Abs(turnover - 625.526154M) < 1);
-
-			turnover = mpHelper.GetOnlineTurnoverAnnualized(17322);
-			Assert.IsTrue(Math.Abs(turnover - 261.676923M) < 1);
-
-		}
-
-		[Test]
-		public void TestMedalChooser()
-		{
+		public void TestMedalChooser() {
 			var medalChooser = new MedalChooser(_db, Log);
 			var medal = medalChooser.GetMedal(18539, new DateTime(2014, 11, 10));
 			Assert.AreEqual(Medal.Gold, medal.Medal);
 		}
 
 		[Test]
-		public void TestTestMedal()
-		{
+		public void TestTestMedal() {
 			var medalTests = new MedalTests(_db, Log);
 			var passed = medalTests.TestMedalCalculation();
 			Assert.AreEqual(true, passed);
@@ -183,22 +95,19 @@
 		}
 
 		[Test]
-		public void TestTestDataGatherForMedal()
-		{
+		public void TestTestDataGatherForMedal() {
 			var medalTests = new MedalTests(_db, Log);
 			medalTests.TestMedalDataGathering();
 		}
 
 		[Test]
-		public void TestMedal()
-		{
+		public void TestMedal() {
 			var medalChooser = new MedalChooser(_db, Log);
 			medalChooser.GetMedal(18626);
 		}
 
 		[Test]
-		public void TestOfferCalculator()
-		{
+		public void TestOfferCalculator() {
 			var db = _db;
 			var offerCalculator = new OfferCalculator(db, Log);
 			var input = new OfferInputModel {
@@ -221,24 +130,21 @@
 		}
 
 		[Test]
-		public void TestOriginationTime()
-		{
+		public void TestOriginationTime() {
 			var db = new DbHelper(_db, Log);
 			var origTime = db.GetCustomerMarketPlacesOriginationTimes(14223);
 			Assert.NotNull(origTime.Since);
 		}
 
 		[Test]
-		public void TestReApprovalData()
-		{
+		public void TestReApprovalData() {
 			var db = new DbHelper(_db, Log);
 			var model = db.GetAutoReApprovalInputData(14223);
 			Assert.AreEqual(900, model.ApprovedAmount);
 		}
 
 		[Test]
-		public void TestReApprovalAgent()
-		{
+		public void TestReApprovalAgent() {
 			var agent = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(_db, Log, 14223);
 			var data = agent.GetInputData();
 			agent.MakeDecision(data);
@@ -246,8 +152,7 @@
 		}
 
 		[Test]
-		public void GetRejectionConfigs()
-		{
+		public void GetRejectionConfigs() {
 			var db = new DbHelper(_db, Log);
 			var conf = db.GetRejectionConfigs();
 			Assert.GreaterOrEqual(250000, conf.AutoRejectionException_AnualTurnover);
@@ -301,7 +206,7 @@
 
 		[Test]
 		public void TestRejectionTurnover() {
-			int[] customerIds = new int[]{25,26,27,28,29,30,14210,14214,14215,14216,14217,14218,14219,14220,14221,14222,14223,14226,14227,14228,14229,15227,15228,15230,15231,15232,16232,16236,16237,16238,16240,16241,16242,16243,16244,16245,16246,16247,16248,16249,16250,17250,17251,17252,17253,17254,17256,17258,17259,17260,17261,17262,17263,17264,17265,17266,17267,18268,18269,18270,18271,18273,18274,18275,18285,18286,18287,18289,18290,20290,20291,20292,20302,20304,20319,20321,21322,21323,21327,21333,21335,21336,21337,21338,21340,21341,21342,21343,21344,21345,21364,21370,21371,21372,21377,21378,21387,21388,21389,21390,21394,21399,21400,21402,21403,21404};
+			int[] customerIds = new int[] { 25, 26, 27, 28, 29, 30, 14210, 14214, 14215, 14216, 14217, 14218, 14219, 14220, 14221, 14222, 14223, 14226, 14227, 14228, 14229, 15227, 15228, 15230, 15231, 15232, 16232, 16236, 16237, 16238, 16240, 16241, 16242, 16243, 16244, 16245, 16246, 16247, 16248, 16249, 16250, 17250, 17251, 17252, 17253, 17254, 17256, 17258, 17259, 17260, 17261, 17262, 17263, 17264, 17265, 17266, 17267, 18268, 18269, 18270, 18271, 18273, 18274, 18275, 18285, 18286, 18287, 18289, 18290, 20290, 20291, 20292, 20302, 20304, 20319, 20321, 21322, 21323, 21327, 21333, 21335, 21336, 21337, 21338, 21340, 21341, 21342, 21343, 21344, 21345, 21364, 21370, 21371, 21372, 21377, 21378, 21387, 21388, 21389, 21390, 21394, 21399, 21400, 21402, 21403, 21404 };
 			var mpHelper = new MarketPlacesHelper(_db, Log);
 			foreach (var customerId in customerIds) {
 				mpHelper.GetTurnoverForRejection(customerId);
@@ -309,8 +214,7 @@
 		}
 
 		[Test]
-		public void TestAutoRejection()
-		{
+		public void TestAutoRejection() {
 			int[] customerIds = new int[] { 25, 26, 27, 28, 29, 30, 14210, 14214, 14215, 14216, 14217, 14218, 14219, 14220, 14221, 14222, 14223, 14226, 14227, 14228, 14229, 15227, 15228, 15230, 15231, 15232, 16232, 16236, 16237, 16238, 16240, 16241, 16242, 16243, 16244, 16245, 16246, 16247, 16248, 16249, 16250, 17250, 17251, 17252, 17253, 17254, 17256, 17258, 17259, 17260, 17261, 17262, 17263, 17264, 17265, 17266, 17267, 18268, 18269, 18270, 18271, 18273, 18274, 18275, 18285, 18286, 18287, 18289, 18290, 20290, 20291, 20292, 20302, 20304, 20319, 20321, 21322, 21323, 21327, 21333, 21335, 21336, 21337, 21338, 21340, 21341, 21342, 21343, 21344, 21345, 21364, 21370, 21371, 21372, 21377, 21378, 21387, 21388, 21389, 21390, 21394, 21399, 21400, 21402, 21403, 21404 };
 			var dbHelper = new DbHelper(_db, Log);
 			var rejectionConfigs = dbHelper.GetRejectionConfigs();
@@ -329,5 +233,8 @@
 			Assert.Greater(autoRejected, 0);
 			Assert.Greater(notAutoRejected, 0);
 		}
+
+		public static readonly ASafeLog Log = new ConsoleLog();
+		private AConnection _db;
 	}
 }

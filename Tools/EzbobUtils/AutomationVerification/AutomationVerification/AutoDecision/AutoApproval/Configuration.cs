@@ -9,55 +9,30 @@
 	/// </summary>
 	public class Configuration {
 		public virtual int ExperianScoreThreshold { get; set; }
-
 		public virtual int CustomerMinAge { get; set; }
-
 		public virtual int CustomerMaxAge { get; set; }
-
 		public virtual int MinTurnover1M { get; set; }
-
 		public virtual int MinTurnover3M { get; set; }
-
 		public virtual int MinTurnover1Y { get; set; }
-
 		public virtual int MinMPSeniorityDays { get; set; }
-
 		public virtual int MaxOutstandingOffers { get; set; }
-
 		public virtual int MaxTodayLoans { get; set; }
-
 		public virtual int MaxDailyApprovals { get; set; }
-
 		public virtual int MaxAllowedDaysLate { get; set; }
-
 		public virtual int MaxNumOfOutstandingLoans { get; set; }
-
 		public virtual decimal MinRepaidPortion { get; set; }
-
 		public virtual int MinAmount { get; set; }
-
 		public virtual int MaxAmount { get; set; }
-
 		public virtual bool IsSilent { get; set; }
-
 		public virtual string SilentTemplateName { get; set; }
-
 		public virtual string SilentToAddress { get; set; }
-
 		public virtual int BusinessScoreThreshold { get; set; }
-
 		public virtual decimal TurnoverDropQuarterRatio { get; set; }
-
 		public virtual int OnlineTurnoverAge { get; set; }
-
 		public virtual decimal OnlineTurnoverDropQuarterRatio { get; set; }
-
 		public virtual decimal OnlineTurnoverDropMonthRatio { get; set; }
-
 		public virtual int HmrcTurnoverAge { get; set; }
-
 		public virtual decimal HmrcTurnoverDropQuarterRatio { get; set; }
-
 		public virtual decimal HmrcTurnoverDropHalfYearRatio { get; set; }
 
 		public virtual string AllowedCaisStatusesWithLoan {
@@ -128,15 +103,15 @@
 
 				switch ((sValue ?? string.Empty).Trim()
 					.ToLowerInvariant()) {
-					case "1":
-					case "true":
-					case "yes":
-						pi.SetValue(this, true);
-						break;
+				case "1":
+				case "true":
+				case "yes":
+					pi.SetValue(this, true);
+					break;
 
-					default:
-						pi.SetValue(this, false);
-						break;
+				default:
+					pi.SetValue(this, false);
+					break;
 				} // switch
 			} else
 				pi.SetValue(this, sr["Value"].ToType(pi.PropertyType));

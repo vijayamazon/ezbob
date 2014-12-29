@@ -28,16 +28,12 @@
 		public Configuration Configuration { get; private set; }
 
 		public int CustomerID {
-			get {
-				return this.m_oArguments.CustomerID;
-			}
+			get { return this.m_oArguments.CustomerID; }
 		}
 
 		[JsonIgnore]
 		public Name CustomerName {
-			get {
-				return new Name(MetaData.FirstName, MetaData.LastName);
-			} // get
+			get { return new Name(MetaData.FirstName, MetaData.LastName); } // get
 		}
 
 		public DateTime DataAsOf { get; private set; }
@@ -47,15 +43,11 @@
 		public List<string> HmrcBusinessNames { get; set; }
 
 		public decimal Turnover1Y {
-			get {
-				return GetTurnover(12);
-			}
+			get { return GetTurnover(12); }
 		}
 
 		public decimal Turnover3M {
-			get {
-				return GetTurnover(3);
-			}
+			get { return GetTurnover(3); }
 		}
 
 		public List<Payment> LatePayments { get; private set; }
@@ -63,21 +55,15 @@
 		public int MarketplaceSeniority { get; private set; }
 
 		public Medal Medal {
-			get {
-				return this.m_oArguments.Medal;
-			}
+			get { return this.m_oArguments.Medal; }
 		}
 
 		public MedalType MedalType {
-			get {
-				return this.m_oArguments.MedalType;
-			}
+			get { return this.m_oArguments.MedalType; }
 		}
 
 		public TurnoverType? TurnoverType {
-			get {
-				return this.m_oArguments.TurnoverType;
-			}
+			get { return this.m_oArguments.TurnoverType; }
 		}
 
 		public MetaData MetaData { get; private set; }
@@ -85,15 +71,11 @@
 		public decimal ReservedFunds { get; private set; }
 
 		public decimal SystemCalculatedAmount {
-			get {
-				return this.m_oArguments.SystemCalculatedAmount;
-			}
+			get { return this.m_oArguments.SystemCalculatedAmount; }
 		}
 
 		public string WorstStatuses {
-			get {
-				return string.Join(",", WorstStatusList);
-			}
+			get { return string.Join(",", WorstStatusList); }
 		}
 
 		public List<string> WorstStatusList { get; private set; }
