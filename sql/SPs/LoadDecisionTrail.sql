@@ -34,6 +34,7 @@ BEGIN
 		d.DecisionName,
 		trl.DecisionTime,
 		trl.UniqueID,
+		trl.IsPrimary,
 		trl.DecisionStatusID,
 		s.DecisionStatus,
 		trl.InputData

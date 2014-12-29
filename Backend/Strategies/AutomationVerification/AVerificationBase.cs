@@ -33,13 +33,12 @@
 			} // for
 		} // Execute
 
+		protected abstract string DecisionName { get; }
+
 		protected AVerificationBase(int nTopCount, int nLastCheckedCustomerID) {
 			m_nTopCount = nTopCount;
 			m_nLastCheckedCustomerID = nLastCheckedCustomerID;
 		} // constructor
-
-		protected abstract string DecisionName { get; }
-
 		protected abstract bool MakeAndVerifyDecision(AutoApproveInputRow oRow);
 
 		private string VerifyOne(AutoApproveInputRow oRow) {
@@ -49,15 +48,13 @@
 				if (MakeAndVerifyDecision(oRow)) {
 					sResult = "match";
 					m_nMatchCount++;
-				}
-				else {
+				} else {
 					sResult = "mismatch";
 					m_nMismatchCount++;
 				} // if
 
 				return sResult;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Log.Debug(e, "Exception caught.");
 				m_nExceptionCount++;
 				return "exception";

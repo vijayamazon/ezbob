@@ -80,7 +80,7 @@ BEGIN
 				AND
 				l.[Date] < @Now
 				AND
-				l.DateClosed > @Now
+				(l.DateClosed IS NULL OR l.DateClosed > @Now)
 			)
 		)
 
