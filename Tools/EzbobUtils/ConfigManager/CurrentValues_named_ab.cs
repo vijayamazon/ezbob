@@ -1,304 +1,391 @@
 ﻿namespace ConfigManager {
 	public partial class CurrentValues {
+		public virtual VariableValue AddSageIntervalMinutes {
+			get { return this[Variables.AddSageIntervalMinutes]; }
+		}
 
 		public virtual VariableValue AdministrationCharge {
-			get { return this[Variables.AdministrationCharge]; } // get
-		} // AdministrationCharge
+			get { return this[Variables.AdministrationCharge]; }
+		}
+
+		public virtual VariableValue AgreementPdfConsentPath1 {
+			get { return this[Variables.AgreementPdfConsentPath1]; }
+		}
+
+		public virtual VariableValue AgreementPdfConsentPath2 {
+			get { return this[Variables.AgreementPdfConsentPath2]; }
+		}
+
+		public virtual VariableValue AgreementPdfLoanPath1 {
+			get { return this[Variables.AgreementPdfLoanPath1]; }
+		}
+
+		public virtual VariableValue AgreementPdfLoanPath2 {
+			get { return this[Variables.AgreementPdfLoanPath2]; }
+		}
+
+		public virtual VariableValue AlibabaCurrencyConversionCoefficient {
+			get { return this[Variables.AlibabaCurrencyConversionCoefficient]; }
+		}
+
+		public virtual VariableValue AlibabaMailCc {
+			get { return this[Variables.AlibabaMailCc]; }
+		}
+
+		public virtual VariableValue AlibabaMailTo {
+			get { return this[Variables.AlibabaMailTo]; }
+		}
 
 		public virtual VariableValue AllowFinishOfflineWizardWithoutMarketplaces {
-			get { return this[Variables.AllowFinishOfflineWizardWithoutMarketplaces]; } // get
-		} // AllowFinishOfflineWizardWithoutMarketplaces
+			get { return this[Variables.AllowFinishOfflineWizardWithoutMarketplaces]; }
+		}
 
 		public virtual VariableValue AllowFinishOnlineWizardWithoutMarketplaces {
-			get { return this[Variables.AllowFinishOnlineWizardWithoutMarketplaces]; } // get
-		} // AllowFinishOnlineWizardWithoutMarketplaces
+			get { return this[Variables.AllowFinishOnlineWizardWithoutMarketplaces]; }
+		}
+
+		public virtual VariableValue AmazonAskvilleLogin {
+			get { return this[Variables.AmazonAskvilleLogin]; }
+		}
+
+		public virtual VariableValue AmazonAskvillePassword {
+			get { return this[Variables.AmazonAskvillePassword]; }
+		}
+
+		public virtual VariableValue AmazonEnableRetrying {
+			get { return this[Variables.AmazonEnableRetrying]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings1CountRequestsExpectError {
+			get { return this[Variables.AmazonIterationSettings1CountRequestsExpectError]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings1Index {
+			get { return this[Variables.AmazonIterationSettings1Index]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes {
+			get { return this[Variables.AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings2CountRequestsExpectError {
+			get { return this[Variables.AmazonIterationSettings2CountRequestsExpectError]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings2Index {
+			get { return this[Variables.AmazonIterationSettings2Index]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes {
+			get { return this[Variables.AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes]; }
+		}
+
+		public virtual VariableValue AmazonMinorTimeoutInSeconds {
+			get { return this[Variables.AmazonMinorTimeoutInSeconds]; }
+		}
+
+		public virtual VariableValue AmazonUseLastTimeOut {
+			get { return this[Variables.AmazonUseLastTimeOut]; }
+		}
 
 		public virtual VariableValue AmountToChargeFrom {
-			get { return this[Variables.AmountToChargeFrom]; } // get
-		} // AmountToChargeFrom
+			get { return this[Variables.AmountToChargeFrom]; }
+		}
+
+		public virtual VariableValue AskvilleEnabled {
+			get { return this[Variables.AskvilleEnabled]; }
+		}
+
+		public virtual VariableValue AspireToMinSetupFee {
+			get { return this[Variables.AspireToMinSetupFee]; }
+		}
 
 		public virtual VariableValue AutoApproveAllowedCaisStatusesWithLoan {
-			get { return this[Variables.AutoApproveAllowedCaisStatusesWithLoan]; } // get
-		} // AutoApproveAllowedCaisStatusesWithLoan
+			get { return this[Variables.AutoApproveAllowedCaisStatusesWithLoan]; }
+		}
 
 		public virtual VariableValue AutoApproveAllowedCaisStatusesWithoutLoan {
-			get { return this[Variables.AutoApproveAllowedCaisStatusesWithoutLoan]; } // get
-		} // AutoApproveAllowedCaisStatusesWithoutLoan
+			get { return this[Variables.AutoApproveAllowedCaisStatusesWithoutLoan]; }
+		}
 
 		public virtual VariableValue AutoApproveBusinessScoreThreshold {
-			get { return this[Variables.AutoApproveBusinessScoreThreshold]; } // get
-		} // AutoApproveBusinessScoreThreshold
+			get { return this[Variables.AutoApproveBusinessScoreThreshold]; }
+		}
 
 		public virtual VariableValue AutoApproveCustomerMaxAge {
-			get { return this[Variables.AutoApproveCustomerMaxAge]; } // get
-		} // AutoApproveCustomerMaxAge
+			get { return this[Variables.AutoApproveCustomerMaxAge]; }
+		}
 
 		public virtual VariableValue AutoApproveCustomerMinAge {
-			get { return this[Variables.AutoApproveCustomerMinAge]; } // get
-		} // AutoApproveCustomerMinAge
+			get { return this[Variables.AutoApproveCustomerMinAge]; }
+		}
 
 		public virtual VariableValue AutoApproveExperianScoreThreshold {
-			get { return this[Variables.AutoApproveExperianScoreThreshold]; } // get
-		} // AutoApproveExperianScoreThreshold
+			get { return this[Variables.AutoApproveExperianScoreThreshold]; }
+		}
 
 		public virtual VariableValue AutoApproveHmrcTurnoverAge {
-			get { return this[Variables.AutoApproveHmrcTurnoverAge]; } // get
-		} // AutoApproveHmrcTurnoverAge
+			get { return this[Variables.AutoApproveHmrcTurnoverAge]; }
+		}
 
 		public virtual VariableValue AutoApproveHmrcTurnoverDropHalfYearRatio {
-			get { return this[Variables.AutoApproveHmrcTurnoverDropHalfYearRatio]; } // get
-		} // AutoApproveHmrcTurnoverDropHalfYearRatio
+			get { return this[Variables.AutoApproveHmrcTurnoverDropHalfYearRatio]; }
+		}
 
 		public virtual VariableValue AutoApproveHmrcTurnoverDropQuarterRatio {
-			get { return this[Variables.AutoApproveHmrcTurnoverDropQuarterRatio]; } // get
-		} // AutoApproveHmrcTurnoverDropQuarterRatio
+			get { return this[Variables.AutoApproveHmrcTurnoverDropQuarterRatio]; }
+		}
 
 		public virtual VariableValue AutoApproveIsSilent {
-			get { return this[Variables.AutoApproveIsSilent]; } // get
-		} // AutoApproveIsSilent
+			get { return this[Variables.AutoApproveIsSilent]; }
+		}
 
 		public virtual VariableValue AutoApproveMaxAllowedDaysLate {
-			get { return this[Variables.AutoApproveMaxAllowedDaysLate]; } // get
-		} // AutoApproveMaxAllowedDaysLate
+			get { return this[Variables.AutoApproveMaxAllowedDaysLate]; }
+		}
 
 		public virtual VariableValue AutoApproveMaxAmount {
-			get { return this[Variables.AutoApproveMaxAmount]; } // get
-		} // AutoApproveMaxAmount
+			get { return this[Variables.AutoApproveMaxAmount]; }
+		}
 
 		public virtual VariableValue AutoApproveMaxDailyApprovals {
-			get { return this[Variables.AutoApproveMaxDailyApprovals]; } // get
-		} // AutoApproveMaxDailyApprovals
+			get { return this[Variables.AutoApproveMaxDailyApprovals]; }
+		}
 
 		public virtual VariableValue AutoApproveMaxNumOfOutstandingLoans {
-			get { return this[Variables.AutoApproveMaxNumOfOutstandingLoans]; } // get
-		} // AutoApproveMaxNumOfOutstandingLoans
+			get { return this[Variables.AutoApproveMaxNumOfOutstandingLoans]; }
+		}
 
 		public virtual VariableValue AutoApproveMaxOutstandingOffers {
-			get { return this[Variables.AutoApproveMaxOutstandingOffers]; } // get
-		} // AutoApproveMaxOutstandingOffers
+			get { return this[Variables.AutoApproveMaxOutstandingOffers]; }
+		}
 
 		public virtual VariableValue AutoApproveMaxTodayLoans {
-			get { return this[Variables.AutoApproveMaxTodayLoans]; } // get
-		} // AutoApproveMaxTodayLoans
+			get { return this[Variables.AutoApproveMaxTodayLoans]; }
+		}
 
 		public virtual VariableValue AutoApproveMinAmount {
-			get { return this[Variables.AutoApproveMinAmount]; } // get
-		} // AutoApproveMinAmount
+			get { return this[Variables.AutoApproveMinAmount]; }
+		}
 
 		public virtual VariableValue AutoApproveMinMPSeniorityDays {
-			get { return this[Variables.AutoApproveMinMPSeniorityDays]; } // get
-		} // AutoApproveMinMPSeniorityDays
+			get { return this[Variables.AutoApproveMinMPSeniorityDays]; }
+		}
 
 		public virtual VariableValue AutoApproveMinRepaidPortion {
-			get { return this[Variables.AutoApproveMinRepaidPortion]; } // get
-		} // AutoApproveMinRepaidPortion
+			get { return this[Variables.AutoApproveMinRepaidPortion]; }
+		}
 
 		public virtual VariableValue AutoApproveMinTurnover1M {
-			get { return this[Variables.AutoApproveMinTurnover1M]; } // get
-		} // AutoApproveMinTurnover1M
+			get { return this[Variables.AutoApproveMinTurnover1M]; }
+		}
 
 		public virtual VariableValue AutoApproveMinTurnover1Y {
-			get { return this[Variables.AutoApproveMinTurnover1Y]; } // get
-		} // AutoApproveMinTurnover1Y
+			get { return this[Variables.AutoApproveMinTurnover1Y]; }
+		}
 
 		public virtual VariableValue AutoApproveMinTurnover3M {
-			get { return this[Variables.AutoApproveMinTurnover3M]; } // get
-		} // AutoApproveMinTurnover3M
+			get { return this[Variables.AutoApproveMinTurnover3M]; }
+		}
 
 		public virtual VariableValue AutoApproveOnlineTurnoverAge {
-			get { return this[Variables.AutoApproveOnlineTurnoverAge]; } // get
-		} // AutoApproveOnlineTurnoverAge
+			get { return this[Variables.AutoApproveOnlineTurnoverAge]; }
+		}
 
 		public virtual VariableValue AutoApproveOnlineTurnoverDropMonthRatio {
-			get { return this[Variables.AutoApproveOnlineTurnoverDropMonthRatio]; } // get
-		} // AutoApproveOnlineTurnoverDropMonthRatio
+			get { return this[Variables.AutoApproveOnlineTurnoverDropMonthRatio]; }
+		}
 
 		public virtual VariableValue AutoApproveOnlineTurnoverDropQuarterRatio {
-			get { return this[Variables.AutoApproveOnlineTurnoverDropQuarterRatio]; } // get
-		} // AutoApproveOnlineTurnoverDropQuarterRatio
+			get { return this[Variables.AutoApproveOnlineTurnoverDropQuarterRatio]; }
+		}
 
 		public virtual VariableValue AutoApproveSilentTemplateName {
-			get { return this[Variables.AutoApproveSilentTemplateName]; } // get
-		} // AutoApproveSilentTemplateName
+			get { return this[Variables.AutoApproveSilentTemplateName]; }
+		}
 
 		public virtual VariableValue AutoApproveSilentToAddress {
-			get { return this[Variables.AutoApproveSilentToAddress]; } // get
-		} // AutoApproveSilentToAddress
+			get { return this[Variables.AutoApproveSilentToAddress]; }
+		}
+
+		public virtual VariableValue AutoApproveTurnoverDropQuarterRatio {
+			get { return this[Variables.AutoApproveTurnoverDropQuarterRatio]; }
+		}
 
 		public virtual VariableValue AutomaticTestBrokerMark {
-			get { return this[Variables.AutomaticTestBrokerMark]; } // get
-		} // AutomaticTestBrokerMark
+			get { return this[Variables.AutomaticTestBrokerMark]; }
+		}
 
 		public virtual VariableValue AutomaticTestCustomerMark {
-			get { return this[Variables.AutomaticTestCustomerMark]; } // get
-		} // AutomaticTestCustomerMark
+			get { return this[Variables.AutomaticTestCustomerMark]; }
+		}
 
 		public virtual VariableValue AutomationExplanationMailReciever {
-			get { return this[Variables.AutomationExplanationMailReciever]; } // get
-		} // AutomationExplanationMailReciever
+			get { return this[Variables.AutomationExplanationMailReciever]; }
+		}
 
 		public virtual VariableValue AutoReApproveMaxLacrAge {
-			get { return this[Variables.AutoReApproveMaxLacrAge]; } // get
-		} // AutoReApproveMaxLacrAge
+			get { return this[Variables.AutoReApproveMaxLacrAge]; }
+		}
 
 		public virtual VariableValue AutoReApproveMaxLatePayment {
-			get { return this[Variables.AutoReApproveMaxLatePayment]; } // get
-		} // AutoReApproveMaxLatePayment
+			get { return this[Variables.AutoReApproveMaxLatePayment]; }
+		}
 
 		public virtual VariableValue AutoReApproveMaxNumOfOutstandingLoans {
-			get { return this[Variables.AutoReApproveMaxNumOfOutstandingLoans]; } // get
-		} // AutoReApproveMaxNumOfOutstandingLoans
+			get { return this[Variables.AutoReApproveMaxNumOfOutstandingLoans]; }
+		}
 
 		public virtual VariableValue AutoRejectConsumerCheckAge {
-			get { return this[Variables.AutoRejectConsumerCheckAge]; } // get
-		} // AutoRejectConsumerCheckAge
+			get { return this[Variables.AutoRejectConsumerCheckAge]; }
+		}
 
 		public virtual VariableValue AutoRejectionException_AnualTurnover {
-			get { return this[Variables.AutoRejectionException_AnualTurnover]; } // get
-		} // AutoRejectionException_AnualTurnover
+			get { return this[Variables.AutoRejectionException_AnualTurnover]; }
+		}
 
 		public virtual VariableValue AutoRejectionException_CreditScore {
-			get { return this[Variables.AutoRejectionException_CreditScore]; } // get
-		} // AutoRejectionException_CreditScore
+			get { return this[Variables.AutoRejectionException_CreditScore]; }
+		}
 
-		public virtual VariableValue AutoReRejectMaxAllowedLoans
-		{
-			get { return this[Variables.AutoReRejectMaxAllowedLoans]; } // get
-		} // AutoReRejectMaxAllowedLoans
+		public virtual VariableValue AutoReRejectMaxAllowedLoans {
+			get { return this[Variables.AutoReRejectMaxAllowedLoans]; }
+		}
 
-		public virtual VariableValue AutoReRejectMaxLRDAge
-		{
-			get { return this[Variables.AutoReRejectMaxLRDAge]; } // get
-		} // AutoReRejectMaxLRDAge
+		public virtual VariableValue AutoReRejectMaxLRDAge {
+			get { return this[Variables.AutoReRejectMaxLRDAge]; }
+		}
 
-		public virtual VariableValue AutoReRejectMinRepaidPortion
-		{
-			get { return this[Variables.AutoReRejectMinRepaidPortion]; } // get
-		} // AutoReRejectMinRepaidPortion
+		public virtual VariableValue AutoReRejectMinRepaidPortion {
+			get { return this[Variables.AutoReRejectMinRepaidPortion]; }
+		}
+
+		public virtual VariableValue AvailableFundsRefreshInterval {
+			get { return this[Variables.AvailableFundsRefreshInterval]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalBelowAverageRiskMaxBusinessScore {
-			get { return this[Variables.BankBasedApprovalBelowAverageRiskMaxBusinessScore]; } // get
-		} // BankBasedApprovalBelowAverageRiskMaxBusinessScore
+			get { return this[Variables.BankBasedApprovalBelowAverageRiskMaxBusinessScore]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalBelowAverageRiskMaxPersonalScore {
-			get { return this[Variables.BankBasedApprovalBelowAverageRiskMaxPersonalScore]; } // get
-		} // BankBasedApprovalBelowAverageRiskMaxPersonalScore
+			get { return this[Variables.BankBasedApprovalBelowAverageRiskMaxPersonalScore]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalBelowAverageRiskMinBusinessScore {
-			get { return this[Variables.BankBasedApprovalBelowAverageRiskMinBusinessScore]; } // get
-		} // BankBasedApprovalBelowAverageRiskMinBusinessScore
+			get { return this[Variables.BankBasedApprovalBelowAverageRiskMinBusinessScore]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalBelowAverageRiskMinPersonalScore {
-			get { return this[Variables.BankBasedApprovalBelowAverageRiskMinPersonalScore]; } // get
-		} // BankBasedApprovalBelowAverageRiskMinPersonalScore
+			get { return this[Variables.BankBasedApprovalBelowAverageRiskMinPersonalScore]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalEuCap {
-			get { return this[Variables.BankBasedApprovalEuCap]; } // get
-		} // BankBasedApprovalEuCap
+			get { return this[Variables.BankBasedApprovalEuCap]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalHomeOwnerCap {
-			get { return this[Variables.BankBasedApprovalHomeOwnerCap]; } // get
-		} // BankBasedApprovalHomeOwnerCap
+			get { return this[Variables.BankBasedApprovalHomeOwnerCap]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalIsEnabled {
-			get { return this[Variables.BankBasedApprovalIsEnabled]; } // get
-		} // BankBasedApprovalIsEnabled
+			get { return this[Variables.BankBasedApprovalIsEnabled]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalIsSilent {
-			get { return this[Variables.BankBasedApprovalIsSilent]; } // get
-		} // BankBasedApprovalIsSilent
+			get { return this[Variables.BankBasedApprovalIsSilent]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalMinAge {
-			get { return this[Variables.BankBasedApprovalMinAge]; } // get
-		} // BankBasedApprovalMinAge
+			get { return this[Variables.BankBasedApprovalMinAge]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalMinAmlScore {
-			get { return this[Variables.BankBasedApprovalMinAmlScore]; } // get
-		} // BankBasedApprovalMinAmlScore
+			get { return this[Variables.BankBasedApprovalMinAmlScore]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalMinAnnualizedTurnover {
-			get { return this[Variables.BankBasedApprovalMinAnnualizedTurnover]; } // get
-		} // BankBasedApprovalMinAnnualizedTurnover
+			get { return this[Variables.BankBasedApprovalMinAnnualizedTurnover]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalMinBusinessScore {
-			get { return this[Variables.BankBasedApprovalMinBusinessScore]; } // get
-		} // BankBasedApprovalMinBusinessScore
+			get { return this[Variables.BankBasedApprovalMinBusinessScore]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalMinCompanySeniorityDays {
-			get { return this[Variables.BankBasedApprovalMinCompanySeniorityDays]; } // get
-		} // BankBasedApprovalMinCompanySeniorityDays
+			get { return this[Variables.BankBasedApprovalMinCompanySeniorityDays]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalMinNumberOfDays {
-			get { return this[Variables.BankBasedApprovalMinNumberOfDays]; } // get
-		} // BankBasedApprovalMinNumberOfDays
+			get { return this[Variables.BankBasedApprovalMinNumberOfDays]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalMinNumberOfPayers {
-			get { return this[Variables.BankBasedApprovalMinNumberOfPayers]; } // get
-		} // BankBasedApprovalMinNumberOfPayers
+			get { return this[Variables.BankBasedApprovalMinNumberOfPayers]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalMinOffer {
-			get { return this[Variables.BankBasedApprovalMinOffer]; } // get
-		} // BankBasedApprovalMinOffer
+			get { return this[Variables.BankBasedApprovalMinOffer]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalNotHomeOwnerCap {
-			get { return this[Variables.BankBasedApprovalNotHomeOwnerCap]; } // get
-		} // BankBasedApprovalNotHomeOwnerCap
-
-		public virtual VariableValue BankBasedApprovalNumOfMonthsToLookForDefaults {
-			get { return this[Variables.BankBasedApprovalNumOfMonthsToLookForDefaults]; } // get
-		} // BankBasedApprovalNumOfMonthsToLookForDefaults
+			get { return this[Variables.BankBasedApprovalNotHomeOwnerCap]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalNumOfMonthBackForVatCheck {
-			get { return this[Variables.BankBasedApprovalNumOfMonthBackForVatCheck]; } // get
-		} // BankBasedApprovalNumOfMonthBackForVatCheck
+			get { return this[Variables.BankBasedApprovalNumOfMonthBackForVatCheck]; }
+		}
+
+		public virtual VariableValue BankBasedApprovalNumOfMonthsToLookForDefaults {
+			get { return this[Variables.BankBasedApprovalNumOfMonthsToLookForDefaults]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalPersonalScoreThreshold {
-			get { return this[Variables.BankBasedApprovalPersonalScoreThreshold]; } // get
-		} // BankBasedApprovalPersonalScoreThreshold
+			get { return this[Variables.BankBasedApprovalPersonalScoreThreshold]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalPersonalScoreThresholdWhenNoCompanyScore {
-			get { return this[Variables.BankBasedApprovalPersonalScoreThresholdWhenNoCompanyScore]; } // get
-		} // BankBasedApprovalPersonalScoreThresholdWhenNoCompanyScore
+			get { return this[Variables.BankBasedApprovalPersonalScoreThresholdWhenNoCompanyScore]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalSilentTemplateName {
-			get { return this[Variables.BankBasedApprovalSilentTemplateName]; } // get
-		} // BankBasedApprovalSilentTemplateName
+			get { return this[Variables.BankBasedApprovalSilentTemplateName]; }
+		}
 
 		public virtual VariableValue BankBasedApprovalSilentToAddress {
-			get { return this[Variables.BankBasedApprovalSilentToAddress]; } // get
-		} // BankBasedApprovalSilentToAddress
+			get { return this[Variables.BankBasedApprovalSilentToAddress]; }
+		}
 
 		public virtual VariableValue BrokerCommissionEnabled {
-			get { return this[Variables.BrokerCommissionEnabled]; } // get
-		} // BrokerCommissionEnabled
+			get { return this[Variables.BrokerCommissionEnabled]; }
+		}
 
 		public virtual VariableValue BrokerForceCaptcha {
-			get { return this[Variables.BrokerForceCaptcha]; } // get
-		} // BrokerForceCaptcha
+			get { return this[Variables.BrokerForceCaptcha]; }
+		}
 
 		public virtual VariableValue BrokerInstantOfferEnabled {
-			get { return this[Variables.BrokerInstantOfferEnabled]; } // get
-		} // BrokerInstantOfferEnabled
+			get { return this[Variables.BrokerInstantOfferEnabled]; }
+		}
 
 		public virtual VariableValue BrokerMaxPerNumber {
-			get { return this[Variables.BrokerMaxPerNumber]; } // get
-		} // BrokerMaxPerNumber
+			get { return this[Variables.BrokerMaxPerNumber]; }
+		}
 
 		public virtual VariableValue BrokerMaxPerPage {
-			get { return this[Variables.BrokerMaxPerPage]; } // get
-		} // BrokerMaxPerPage
+			get { return this[Variables.BrokerMaxPerPage]; }
+		}
 
 		public virtual VariableValue BrokerSetupFeeRate {
-			get { return this[Variables.BrokerSetupFeeRate]; } // get
-		} // BrokerSetupFeeRate
+			get { return this[Variables.BrokerSetupFeeRate]; }
+		}
 
 		public virtual VariableValue BrokerSite {
-			get { return this[Variables.BrokerSite]; } // get
-		} // BrokerSite
+			get { return this[Variables.BrokerSite]; }
+		}
 
 		public virtual VariableValue BWABusinessCheck {
-			get { return this[Variables.BWABusinessCheck]; } // get
-		} // BWABusinessCheck
-
+			get { return this[Variables.BWABusinessCheck]; }
+		}
 	} // class CurrentValues
 } // namespace

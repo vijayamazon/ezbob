@@ -50,10 +50,12 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CurrentValues_named_gz.cs" />
-    <Compile Include="CurrentValues_named_cf.cs" />
-    <Compile Include="CurrentValues_named_unsorted.cs" />
+    <Compile Include="CurrentValues_named_fl.cs" />
+    <Compile Include="CurrentValues_named_ce.cs" />
+    <Compile Include="CurrentValues_named_mp.cs" />
     <Compile Include="CurrentValues.cs" />
+    <Compile Include="CurrentValues_named_rt.cs" />
+    <Compile Include="CurrentValues_named_uz.cs" />
     <Compile Include="Log4Net.cs" />
     <Compile Include="CurrentValues_named_ab.cs" />
     <Compile Include="OneUploadLimitation.cs" />

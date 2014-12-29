@@ -59,6 +59,7 @@ namespace ConfigManager {
 		AutoApproveOnlineTurnoverDropQuarterRatio,
 		AutoApproveSilentTemplateName,
 		AutoApproveSilentToAddress,
+		AutoApproveTurnoverDropQuarterRatio,
 		AutomationExplanationMailReciever,
 		AutoReApproveMaxLacrAge,
 		AutoReApproveMaxLatePayment,
@@ -174,20 +175,26 @@ namespace ConfigManager {
 
 		[Description("Alias Of Joint Applicant")]
 		FinancialAccounts_AliasOfJointApplicant,
+
 		[Description("Alias Of Main Applicant")]
 		FinancialAccounts_AliasOfMainApplicant,
+
 		[Description("Association Of Joint Applicant")]
 		FinancialAccounts_AssociationOfJointApplicant,
+
 		[Description("Association Of Main Applicant")]
 		FinancialAccounts_AssociationOfMainApplicant,
+
 		[Description("Joint Applicant")]
 		FinancialAccounts_JointApplicant,
+
 		[Description("Main Applicant")]
 		FinancialAccounts_MainApplicant,
+
 		[Description("No Match")]
 		FinancialAccounts_No_Match,
-		[Description("Spare")]
 
+		[Description("Spare")]
 		FinancialAccounts_Spare,
 		FinishWizardForApproved,
 		FirstOfMonthEnableCustomerMail,

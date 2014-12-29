@@ -836,6 +836,7 @@
 				HmrcTurnoverAge = CurrentValues.Instance.AutoApproveHmrcTurnoverAge,
 				HmrcTurnoverDropQuarterRatio = CurrentValues.Instance.AutoApproveHmrcTurnoverDropQuarterRatio,
 				HmrcTurnoverDropHalfYearRatio = CurrentValues.Instance.AutoApproveHmrcTurnoverDropHalfYearRatio,
+				TurnoverDropQuarterRatio = CurrentValues.Instance.AutoApproveTurnoverDropQuarterRatio,
 			});
 
 			this.m_oTrail.MyInputData.SetArgs(
