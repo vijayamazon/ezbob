@@ -65,7 +65,7 @@
 
 				DateTime calculationTime = DateTime.UtcNow;
 
-				var primary = new MedalCalculator1(
+				MedalResult result1 = new MedalCalculator1(
 					this.customerId,
 					calculationTime,
 					this.typeOfBusiness,
@@ -78,8 +78,7 @@
 					this.earliestYodleeLastUpdateDate,
 					DB,
 					Log
-					);
-				MedalResult result1 = primary.CalculateMedal();
+					).CalculateMedal();
 
 				var verification = new MedalChooser(DB, Log);
 				MedalOutputModel result2 = verification.GetMedal(this.customerId, calculationTime);
