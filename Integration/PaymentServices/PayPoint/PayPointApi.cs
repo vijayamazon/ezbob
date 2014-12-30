@@ -156,7 +156,7 @@
 				{
 					loan.Transactions.Add(new PaypointTransaction {
 						Amount = amount,
-						Description = ex.PaypointData.Message,
+						Description = ex.PaypointData.Message ?? "Exception:" + ex.Message,
 						PostDate = now,
 						Status = LoanTransactionStatus.Error,
 						PaypointId = payPointTransactionId,
@@ -198,8 +198,8 @@
 
 			Log.InfoFormat("RepeatTransaction: for transactionId='{0}', amount='{1}', newTransactionId='{2}'", transactionId, amount, newTransactionId);
 
-			if (account.DebugModeEnabled)
-			{
+			if (account.DebugModeEnabled) {
+				Log.InfoFormat("Paypoint RepeatTransactionEx Debug Mode - not invoking the service call");
 				var code = "A";
 				var isValid = true;
 				var message = "debug mode";

@@ -38,6 +38,7 @@ namespace PaymentServices.PayPoint
         public PayPointReturnData(string outStr)
         {
             OutStr = outStr;
+	        Message = string.Empty;
             if (String.IsNullOrEmpty(outStr))
             {
                 Error = "Response is null";
@@ -48,7 +49,7 @@ namespace PaymentServices.PayPoint
 
             if (dict.ContainsKey("code"))
             {
-                Message = string.Concat(PayPointStatusTranslator.TranslateStatusCode(dict["code"]));
+				Message = string.Concat(PayPointStatusTranslator.TranslateStatusCode(dict["code"]));
                 Code = dict["code"];
                 if (Code != "A") Error = Message;
             }
