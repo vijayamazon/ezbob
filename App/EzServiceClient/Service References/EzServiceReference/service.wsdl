@@ -132,6 +132,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_VerifyReapproval_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyReapproval" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_VerifyReapproval_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyReapprovalResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_VerifyReject_InputMessage">
     <wsdl:part name="parameters" element="tns:VerifyReject" />
   </wsdl:message>
@@ -155,6 +161,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_XDaysDue_OutputMessage">
     <wsdl:part name="parameters" element="tns:XDaysDueResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyFile" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyFileResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetCompanySeniority_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanySeniority" />
@@ -660,12 +672,6 @@
   <wsdl:message name="IEzService_VerifyEnoughAvailableFunds_OutputMessage">
     <wsdl:part name="parameters" element="tns:VerifyEnoughAvailableFundsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_VerifyReapproval_InputMessage">
-    <wsdl:part name="parameters" element="tns:VerifyReapproval" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_VerifyReapproval_OutputMessage">
-    <wsdl:part name="parameters" element="tns:VerifyReapprovalResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
@@ -713,6 +719,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillExperianLtd_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillExperianLtdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillHmrcBusinessRelevance_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillHmrcBusinessRelevance" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillHmrcBusinessRelevance_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillHmrcBusinessRelevanceResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillLandRegistry2PropertyLink_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillLandRegistry2PropertyLink" />
@@ -1170,12 +1182,6 @@
   <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureauResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyFile" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyFile_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyFileResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1211,6 +1217,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="VerifyReapproval">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyReapproval" message="tns:IEzService_VerifyReapproval_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyReapprovalResponse" message="tns:IEzService_VerifyReapproval_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="VerifyReject">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyReject" message="tns:IEzService_VerifyReject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyRejectResponse" message="tns:IEzService_VerifyReject_OutputMessage" />
@@ -1226,6 +1236,10 @@
     <wsdl:operation name="XDaysDue">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/XDaysDue" message="tns:IEzService_XDaysDue_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/XDaysDueResponse" message="tns:IEzService_XDaysDue_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCompanySeniority">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanySeniority" message="tns:IEzService_GetCompanySeniority_InputMessage" />
@@ -1563,10 +1577,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" message="tns:IEzService_VerifyEnoughAvailableFunds_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse" message="tns:IEzService_VerifyEnoughAvailableFunds_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="VerifyReapproval">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyReapproval" message="tns:IEzService_VerifyReapproval_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyReapprovalResponse" message="tns:IEzService_VerifyReapproval_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
@@ -1598,6 +1608,10 @@
     <wsdl:operation name="BackfillExperianLtd">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtd" message="tns:IEzService_BackfillExperianLtd_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtdResponse" message="tns:IEzService_BackfillExperianLtd_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BackfillHmrcBusinessRelevance">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevance" message="tns:IEzService_BackfillHmrcBusinessRelevance_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevanceResponse" message="tns:IEzService_BackfillHmrcBusinessRelevance_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackfillLandRegistry2PropertyLink">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLink" message="tns:IEzService_BackfillLandRegistry2PropertyLink_InputMessage" />
@@ -1903,10 +1917,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" message="tns:IEzService_GetCompanyDataForCreditBureau_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse" message="tns:IEzService_GetCompanyDataForCreditBureau_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetCompanyFile">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1989,6 +1999,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="VerifyReapproval">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyReapproval" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="VerifyReject">
       <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyReject" style="document" />
       <wsdl:input>
@@ -2018,6 +2037,15 @@
     </wsdl:operation>
     <wsdl:operation name="XDaysDue">
       <soap12:operation soapAction="http://tempuri.org/IEzService/XDaysDue" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyFile">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyFile" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2781,15 +2809,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="VerifyReapproval">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyReapproval" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
       <wsdl:input>
@@ -2855,6 +2874,15 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillExperianLtd">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianLtd" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillHmrcBusinessRelevance">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevance" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3539,15 +3567,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetCompanyDataForCreditBureau">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyFile">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyFile" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

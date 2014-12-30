@@ -155,6 +155,7 @@
     <Compile Include="MainStrategy\Utils.cs" />
     <Compile Include="MainStrategy\DataGatherer.cs" />
     <Compile Include="MainStrategy\Staller.cs" />
+    <Compile Include="Misc\BackfillHmrcBusinessRelevance.cs" />
     <Compile Include="Misc\BackfillTurnover.cs" />
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
     <Compile Include="Misc\BackfillAml.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Exceptions\StrategyAlert.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_TimedBusinessID.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_UpdateBusinessRelevanceAndTotals.cs" />
+    <Compile Include="VatReturn\UpdateHmrcBusinessRelevance.cs" />
     <Compile Include="VatReturn\ValidateAndUpdateLinkedHmrcPassword.cs" />
     <Compile Include="VatReturn\LoadManualVatReturnPeriods.cs" />
     <Compile Include="VatReturn\LoadVatReturnFullData.cs" />

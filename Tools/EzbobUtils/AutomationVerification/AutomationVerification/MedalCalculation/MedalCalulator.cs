@@ -7,8 +7,7 @@
 	using Ezbob.Logger;
 
 	/// <summary>
-	///     Medal calcultor interface two method - get data to retrieve data from db (can be populated from another sources)
-	///     and the Calculate medal method
+	///     Medal calculator interface.
 	/// </summary>
 	public interface IMedalCalulator {
 		/// <summary>
@@ -25,7 +24,7 @@
 		/// <param name="model">Medal input model</param>
 		/// <returns>medal output model</returns>
 		MedalOutputModel CalculateMedal(MedalInputModel model);
-	}
+	} // interface IMedalCalulator
 
 	/// <summary>
 	///     Medal weight constants interface containing all the medal weight constants overridden in each medal
@@ -81,9 +80,7 @@
 		public abstract decimal AnnualTurnoverBaseWeight { get; }
 
 		public virtual decimal TangibleEquityBaseWeight {
-			get {
-				return 0;
-			}
+			get { return 0; }
 		}
 
 		//only for limited
@@ -96,44 +93,32 @@
 		public abstract decimal MaritalStatusBaseWeight { get; }
 
 		public virtual decimal NumOfStoresBaseWeight {
-			get {
-				return 0;
-			}
+			get { return 0; }
 		}
 
 		//only for online
 		public virtual decimal PositiveFeedbacksBaseWeight {
-			get {
-				return 0;
-			}
+			get { return 0; }
 		}
 
 		//only for online
 		public virtual decimal EzbobSeniorityBaseWeight {
-			get {
-				return 0;
-			}
+			get { return 0; }
 		}
 
 		//common
 		public virtual decimal NumOfOnTimeLoansBaseWeight {
-			get {
-				return 0;
-			}
+			get { return 0; }
 		}
 
 		//common
 		public virtual decimal NumOfLateRepaymentsBaseWeight {
-			get {
-				return 0;
-			}
+			get { return 0; }
 		}
 
 		//common
 		public virtual decimal NumOfEarlyRepaymentsBaseWeight {
-			get {
-				return 0;
-			}
+			get { return 0; }
 		}
 
 		//common
@@ -148,16 +133,12 @@
 		public abstract decimal BusinessSeniorityNoHmrcWeightChange { get; }
 
 		public virtual int LowBusinessScore {
-			get {
-				return 30;
-			}
+			get { return 30; }
 		}
 
 		//common
 		public virtual int LowConsumerScore {
-			get {
-				return 800;
-			}
+			get { return 800; }
 		}
 
 		//common
@@ -166,27 +147,19 @@
 		public abstract decimal ConsumerScoreLowScoreWeight { get; }
 
 		public virtual decimal EzbobSeniorityFirstRepaymentWeight {
-			get {
-				return 0.02M;
-			}
+			get { return 0.02M; }
 		}
 
 		public virtual decimal NumOfOnTimeLoansFirstRepaymentWeight {
-			get {
-				return 0.0333M;
-			}
+			get { return 0.0333M; }
 		}
 
 		public virtual decimal NumOfLateRepaymentsFirstRepaymentWeight {
-			get {
-				return 0.0267M;
-			}
+			get { return 0.0267M; }
 		}
 
 		public virtual decimal NumOfEarlyRepaymentsFirstRepaymentWeight {
-			get {
-				return 0.02M;
-			}
+			get { return 0.02M; }
 		}
 
 		public abstract decimal ConsumerScoreFirstRepaymentWeightChange { get; }
@@ -196,9 +169,7 @@
 		public abstract decimal BusinessSeniorityFirstRepaymentWeightChange { get; }
 
 		public virtual decimal NetWorthFirstRepaymentWeightChange {
-			get {
-				return 0;
-			}
+			get { return 0; }
 		}
 
 		public virtual MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null) {

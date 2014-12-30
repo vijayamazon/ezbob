@@ -2514,6 +2514,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID);
         
@@ -2537,6 +2543,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> XDaysDueAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
+        byte[] GetCompanyFile(int userId, int companyFileId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
+        System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanySeniority", ReplyAction="http://tempuri.org/IEzService/GetCompanySeniorityResponse")]
         ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId);
@@ -3042,12 +3054,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds", ReplyAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyEnoughAvailableFundsAsync(int underwriterId, decimal deductAmount);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
         
@@ -3095,6 +3101,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianLtd", ReplyAction="http://tempuri.org/IEzService/BackfillExperianLtdResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianLtdAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevance", ReplyAction="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevanceResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillHmrcBusinessRelevance();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevance", ReplyAction="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevanceResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillHmrcBusinessRelevanceAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLink", ReplyAction="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLinkResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BackfillLandRegistry2PropertyLink();
@@ -3551,12 +3563,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
-        byte[] GetCompanyFile(int userId, int companyFileId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
-        System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3584,6 +3590,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReapproval(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReapprovalAsync(nCustomerCount, nLastCheckedCustomerID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID) {
@@ -3616,6 +3630,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> XDaysDueAsync() {
             return base.Channel.XDaysDueAsync();
+        }
+        
+        public byte[] GetCompanyFile(int userId, int companyFileId) {
+            return base.Channel.GetCompanyFile(userId, companyFileId);
+        }
+        
+        public System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId) {
+            return base.Channel.GetCompanyFileAsync(userId, companyFileId);
         }
         
         public ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId) {
@@ -4290,14 +4312,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.VerifyEnoughAvailableFundsAsync(underwriterId, deductAmount);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyReapproval(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyReapprovalAsync(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
             return base.Channel.AddCciHistory(nCustomerID, nUnderwriterID, bCciMark);
         }
@@ -4360,6 +4374,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianLtdAsync() {
             return base.Channel.BackfillExperianLtdAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillHmrcBusinessRelevance() {
+            return base.Channel.BackfillHmrcBusinessRelevance();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillHmrcBusinessRelevanceAsync() {
+            return base.Channel.BackfillHmrcBusinessRelevanceAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillLandRegistry2PropertyLink() {
@@ -4968,14 +4990,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber) {
             return base.Channel.GetCompanyDataForCreditBureauAsync(underwriterId, refNumber);
-        }
-        
-        public byte[] GetCompanyFile(int userId, int companyFileId) {
-            return base.Channel.GetCompanyFile(userId, companyFileId);
-        }
-        
-        public System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId) {
-            return base.Channel.GetCompanyFileAsync(userId, companyFileId);
         }
     }
 }

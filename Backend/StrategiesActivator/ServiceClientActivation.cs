@@ -79,7 +79,7 @@
 			string sKey = strategyName.ToLower();
 
 			if (methodList.ContainsKey(sKey))
-				methodList[sKey].Invoke(this, new object[] {});
+				methodList[sKey].Invoke(this, new object[] { });
 			else {
 				log.Msg("Strategy {0} is not supported", strategyName);
 				ListSupported();
@@ -208,6 +208,11 @@
 		[Activation]
 		private void BackfillExperianLtd() {
 			serviceClient.BackfillExperianLtd();
+		}
+
+		[Activation]
+		private void BackfillHmrcBusinessRelevance() {
+			serviceClient.BackfillHmrcBusinessRelevance();
 		}
 
 		[Activation]

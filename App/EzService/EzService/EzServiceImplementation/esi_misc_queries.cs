@@ -29,6 +29,10 @@
 			return Execute<BackfillTurnover>(null, null);
 		}
 
+		public ActionMetaData BackfillHmrcBusinessRelevance() {
+			return Execute<BackfillHmrcBusinessRelevance>(null, null);
+		}
+
 		public ActionMetaData BackfillZooplaValue() {
 			BackfillZooplaValue instance;
 			return ExecuteSync(out instance, 0, 0);
