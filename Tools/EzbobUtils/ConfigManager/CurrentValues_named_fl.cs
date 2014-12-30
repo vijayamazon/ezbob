@@ -138,6 +138,27 @@
 		public virtual VariableValue HmrcUploadedFilesSavePath {
 			get { return this[Variables.HmrcUploadedFilesSavePath]; }
 		}
+
+		public virtual VariableValue ImailUserName {
+			get { return this[Variables.ImailUserName]; } // get
+		} 
+
+		public virtual VariableValue IMailPassword {
+			get { return this[Variables.IMailPassword]; } // get
+		} 
+
+		public virtual VariableValue IMailDebugModeEnabled {
+			get { return this[Variables.IMailDebugModeEnabled]; } // get
+		} 
+
+		public virtual VariableValue IMailDebugModeEmail {
+			get { return this[Variables.IMailDebugModeEmail]; } // get
+		} 
+
+		public virtual VariableValue IMailSavePath {
+			get { return this[Variables.IMailSavePath]; } // get
+		} 
+
 		public virtual VariableValue IntervalWaitForAmlCheck {
 			get { return this[Variables.IntervalWaitForAmlCheck]; }
 		}
