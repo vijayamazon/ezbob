@@ -35,7 +35,6 @@
 
 		public bool FirstRepaymentDatePassed { get; set; }
 		public int OfferedLoanAmount { get; set; }
-		public int NumOfHmrcMps { get; set; }
 		public DateTime? EarliestHmrcLastUpdateDate { get; set; }
 		public DateTime? EarliestYodleeLastUpdateDate { get; set; }
 		public int AmazonPositiveFeedbacks { get; set; }
@@ -287,7 +286,6 @@
 		public bool HasCompanyScore { get; set; }
 		public bool HasPersonalScore { get; set; }
 		public bool HasBank { get; set; }
-		public int NumOfHmrc { get; set; }
 		public DateTime? LastBankHmrcUpdateDate { get; set; }
 		public int MedalDaysOfMpRelevancy { get; set; }
 		public int MinApprovalAmount { get; set; }
@@ -416,21 +414,15 @@
 		public DateTime CalculationTime { get; set; }
 
 		public int RepaymentPeriod {
-			get {
-				return 12;
-			}
+			get { return 12; }
 		} //Currently Hard coded
 
 		public LoanSource LoanSource {
-			get {
-				return LoanSource.Standard;
-			}
+			get { return LoanSource.Standard; }
 		} //Currently Hard coded
 
 		public LoanType LoanType {
-			get {
-				return LoanType.StandardLoanType;
-			}
+			get { return LoanType.StandardLoanType; }
 		} //Currently Hard coded
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
@@ -438,9 +430,7 @@
 		public string ScenarioName { get; set; }
 
 		public bool IsEu {
-			get {
-				return false;
-			}
+			get { return false; }
 		}
 
 		public string Error { get; set; }

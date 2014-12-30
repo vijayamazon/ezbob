@@ -11,13 +11,19 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @eBay   UNIQUEIDENTIFIER = 'A7120CB7-4C93-459B-9901-0E95E7281B59'
+	DECLARE @Amazon UNIQUEIDENTIFIER = 'A4920125-411F-4BB9-A52D-27E8A00D0A3B'
+	DECLARE @PayPal UNIQUEIDENTIFIER = '3FA5E327-FCFD-483B-BA5A-DC1815747A28'
+	DECLARE @Yodlee UNIQUEIDENTIFIER = '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'
+	DECLARE @HMRC   UNIQUEIDENTIFIER = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
+
 	DECLARE @IsLimited BIT = 0
 	DECLARE @HasOnline BIT = 0
 	DECLARE @HasHmrc BIT = 0
 	DECLARE @HasBank BIT = 0
+	DECLARE @NumOfHmrc INT = 0
 	DECLARE @HasCompanyScore BIT = 0
 	DECLARE @HasPersonalScore BIT = 0
-	DECLARE @NumOfHmrc INT = 0
 	DECLARE @LastBankHmrcUpdateDate DATETIME
 	DECLARE @TypeOfBusiness NVARCHAR(30)
 	DECLARE @CompanyRefNum NVARCHAR(30)
@@ -75,7 +81,7 @@ BEGIN
 		INNER JOIN MP_MarketplaceType t ON t.Id = m.MarketPlaceId
 		WHERE m.CustomerId = @CustomerId
 		AND m.Disabled = 0 AND
-		t.InternalId IN ('A7120CB7-4C93-459B-9901-0E95E7281B59', 'A4920125-411F-4BB9-A52D-27E8A00D0A3B', '3FA5E327-FCFD-483B-BA5A-DC1815747A28')
+		t.InternalId IN (@eBay, @Amazon, @PayPal)
 	)
 	BEGIN
 		SET @HasOnline = 1
@@ -87,25 +93,34 @@ BEGIN
 		INNER JOIN MP_MarketplaceType t ON t.Id = m.MarketPlaceId
 		WHERE m.CustomerId = @CustomerId
 		AND m.Disabled = 0
-		AND t.InternalId = '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'
+		AND t.InternalId = @Yodlee
 	)
 	BEGIN
 		SET @HasBank = 1
 	END
 
+	DECLARE @LastHmrcUpdateDate DATETIME
+
 	SELECT
-		@NumOfHmrc = COUNT(*)
+		@NumOfHmrc = COUNT(*),
+		@LastHmrcUpdateDate = MIN(m.UpdatingEnd)
 	FROM
 		MP_CustomerMarketPlace m
 		INNER JOIN MP_MarketplaceType t ON t.Id = m.MarketPlaceId
+		INNER JOIN MP_VatReturnRecords r ON m.Id = r.CustomerMarketPlaceId
+		INNER JOIN Business b
+			ON r.BusinessId = b.Id
+			AND b.BelongsToCustomer = 1
 	WHERE
 		m.CustomerId = @CustomerId
 		AND
 		m.Disabled = 0
 		AND
-		t.InternalId = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
+		t.InternalId = @HMRC
+		AND
+		m.UpdatingEnd IS NOT NULL
 
-	IF @NumOfHmrc > 0
+	IF ISNULL(@NumOfHmrc, 0) > 0
 		SET @HasHmrc = 1
 
 	SELECT
@@ -118,9 +133,11 @@ BEGIN
 		AND
 		m.Disabled = 0
 		AND
-		t.InternalId IN ('AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA', '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF')
+		t.InternalId = @Yodlee
 		AND
 		m.UpdatingEnd IS NOT NULL
+
+	SET @LastBankHmrcUpdateDate = dbo.udfMinDate(@LastBankHmrcUpdateDate, @LastHmrcUpdateDate)
 
 	DECLARE @MinApprovalAmount INT = (
 		SELECT CAST(Value AS INT)
@@ -141,7 +158,6 @@ BEGIN
 		@HasBank AS HasBank,
 		@HasCompanyScore AS HasCompanyScore,
 		@HasPersonalScore AS HasPersonalScore,
-		@NumOfHmrc AS NumOfHmrc,
 		@LastBankHmrcUpdateDate AS LastBankHmrcUpdateDate,
 		@MedalDaysOfMpRelevancy AS MedalDaysOfMpRelevancy,
 		@MinApprovalAmount AS MinApprovalAmount

@@ -309,7 +309,6 @@
 				FreeCashflow = inputModel.FreeCashFlowValue,
 				FirstRepaymentDatePassed = inputModel.FirstRepaymentDatePassed,
 				ValueAdded = inputModel.ValueAdded,
-				NumOfHmrcMps = inputModel.HasHmrc ? 1 : 0,
 				CustomerId = inputModel.CustomerId,
 				CalculationDate = inputModel.CalculationDate,
 				UseHmrc = inputModel.UseHmrc,

@@ -10,173 +10,98 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public class DataGatherer {
-		public int AllMPsNum { get; private set; }
-
-		public string AppAccountNumber { get; private set; }
-
-		public string AppBankAccountType { get; private set; }
-
-		public string AppEmail { get; private set; }
-
-		public string AppFirstName { get; private set; }
-
-		public string AppGender { get; private set; }
-
-		public DateTime AppRegistrationDate { get; private set; }
-
-		public string AppSortCode { get; private set; }
-
-		public string AppSurname { get; private set; }
-
-		public int? BrokerId { get; private set; }
-
 		// Preliminary
 		public string BwaBusinessCheck { get; private set; }
-
-		public DateTime? CompanyIncorporationDate { get; private set; }
-
-		public List<string> ConsumerCaisDetailWorstStatuses { get; private set; }
-
-		// Customer info
-		public bool CustomerStatusIsEnabled { get; private set; }
-
-		public bool CustomerStatusIsWarning { get; private set; }
-
-		public string CustomerStatusName { get; private set; }
-
-		public int DefaultFeedbackValue { get; private set; }
-
-		public DateTime? EarliestHmrcLastUpdateDate { get; private set; }
-
-		public DateTime? EarliestYodleeLastUpdateDate { get; private set; }
-
-		public bool EnableAutomaticApproval { get; private set; }
-
-		public bool EnableAutomaticReApproval { get; private set; }
-
-		public bool EnableAutomaticRejection { get; private set; }
-
-		public bool EnableAutomaticReRejection { get; private set; }
-
-		public int ExperianConsumerScore { get; private set; }
-
-		public decimal EzbobSeniorityMonths { get; private set; }
-
-		public bool FirstRepaymentDatePassed { get; private set; }
-
-		public bool IsAlibaba { get; private set; }
-
-		public int IsCustomerRepaymentPeriodSelectionAllowed { get; private set; }
-
-		public bool IsOffline { get; private set; }
-
-		public bool IsOwnerOfMainAddress { get; private set; }
-
-		public bool IsOwnerOfOtherProperties { get; private set; }
-
-		public bool IsTest { get; private set; }
-
+		public string AppBankAccountType { get; private set; }
+		public string AppAccountNumber { get; private set; }
+		public string AppSortCode { get; private set; }
 		public DateTime? LastStartedMainStrategyEndTime { get; private set; }
-
-		public int LimitedMedalMinOffer { get; private set; }
-
-		public decimal LoanOfferApr { get; private set; }
-
-		public int LoanOfferDiscountPlanId { get; private set; }
-
-		public decimal LoanOfferInterestRate { get; private set; }
-
-		public int LoanOfferIsLoanTypeSelectionAllowed { get; private set; }
-
-		public int LoanOfferLoanTypeId { get; private set; }
-
-		// Last cash request
-		public decimal LoanOfferReApprovalFullAmount { get; private set; }
-
-		public decimal LoanOfferReApprovalFullAmountOld { get; private set; }
-
-		public decimal LoanOfferReApprovalRemainingAmount { get; private set; }
-
-		public decimal LoanOfferReApprovalRemainingAmountOld { get; private set; }
-
-		public int LoanOfferRepaymentPeriod { get; private set; }
-
-		public int LoanOfferUseSetupFee { get; private set; }
-
-		public int LoanSourceId { get; private set; }
-
-		public int LowCreditScore { get; private set; }
-
-		public int LowTotalAnnualTurnover { get; private set; }
-
-		public int LowTotalThreeMonthTurnover { get; private set; }
-
-		public int ManualSetupFeeAmount { get; private set; }
-
-		public decimal ManualSetupFeePercent { get; private set; }
-
-		public MaritalStatus MaritalStatus { get; private set; }
-
-		public double MarketplaceSeniorityDays { get; private set; }
-
-		public decimal MarketplaceSeniorityYears { get; private set; }
-
-		public int MaxCapHomeOwner { get; private set; }
-
-		public int MaxCapNotHomeOwner { get; private set; }
-
-		public int MaxCompanyScore { get; private set; }
-
-		public int MaxExperianConsumerScore { get; private set; }
-
-		public int MinCompanyScore { get; private set; }
-
-		public int MinExperianConsumerScore { get; private set; }
-
-		public int ModelEarlyPayments { get; private set; }
-
-		// Online medal
-		public int ModelEzbobSeniority { get; private set; }
-
-		public int ModelLatePayments { get; private set; }
-
-		public int ModelMaxFeedback { get; private set; }
-
-		public int ModelOnTimeLoans { get; private set; }
-
-		public int NumOfEbayAmazonPayPalMps { get; private set; }
-
-		public int NumOfHmrcMps { get; private set; }
-
-		public int NumOfLoans { get; private set; }
-
-		public int NumOfYodleeMps { get; private set; }
-
-		public string PropertyStatusDescription { get; private set; }
-
-		public int RejectDefaultsAccountsNum { get; private set; }
 
 		// Config values
 		public int RejectDefaultsCreditScore { get; private set; }
-
+		public int RejectDefaultsAccountsNum { get; private set; }
 		public int RejectMinimalSeniority { get; private set; }
+		public bool EnableAutomaticReRejection { get; private set; }
+		public bool EnableAutomaticReApproval { get; private set; }
+		public bool EnableAutomaticApproval { get; private set; }
+		public bool EnableAutomaticRejection { get; private set; }
+		public int MaxCapHomeOwner { get; private set; }
+		public int MaxCapNotHomeOwner { get; private set; }
+		public int LowCreditScore { get; private set; }
+		public int LowTotalAnnualTurnover { get; private set; }
+		public int LowTotalThreeMonthTurnover { get; private set; }
+		public int DefaultFeedbackValue { get; private set; }
+		public int LimitedMedalMinOffer { get; private set; }
+
+		// Customer info
+		public bool CustomerStatusIsEnabled { get; private set; }
+		public bool CustomerStatusIsWarning { get; private set; }
+		public string CustomerStatusName { get; private set; }
+		public bool IsOffline { get; private set; }
+		public bool IsTest { get; private set; }
+		public string AppEmail { get; private set; }
+		public string AppFirstName { get; private set; }
+		public string AppSurname { get; private set; }
+		public string AppGender { get; private set; }
+		public bool IsOwnerOfMainAddress { get; private set; }
+		public bool IsOwnerOfOtherProperties { get; private set; }
+		public string PropertyStatusDescription { get; private set; }
+		public int AllMPsNum { get; private set; }
+		public DateTime AppRegistrationDate { get; private set; }
+		public string TypeOfBusiness { get; private set; }
+		public int NumOfLoans { get; private set; }
+		public int NumOfHmrcMps { get; private set; }
+		public bool IsAlibaba { get; private set; }
+		public int? BrokerId { get; private set; }
+		public DateTime? CompanyIncorporationDate { get; private set; }
+		public int MaxCompanyScore { get; private set; }
+		public int MinCompanyScore { get; private set; }
+		public int ExperianConsumerScore { get; private set; }
+		public int MinExperianConsumerScore { get; private set; }
+		public int MaxExperianConsumerScore { get; private set; }
+		public int NumOfEbayAmazonPayPalMps { get; private set; }
+		public int NumOfYodleeMps { get; private set; }
+		public DateTime? EarliestHmrcLastUpdateDate { get; private set; }
+		public DateTime? EarliestYodleeLastUpdateDate { get; private set; }
+		public List<string> ConsumerCaisDetailWorstStatuses { get; private set; }
+
+		// Online medal
+		public int ModelEzbobSeniority { get; private set; }
+		public MaritalStatus MaritalStatus { get; private set; }
+		public int ModelMaxFeedback { get; private set; }
+		public int ModelOnTimeLoans { get; private set; }
+		public int ModelLatePayments { get; private set; }
+		public int ModelEarlyPayments { get; private set; }
+		public bool FirstRepaymentDatePassed { get; private set; }
 
 		// Turnovers and seniority
 		public double TotalSumOfOrders1YTotal { get; private set; }
-
 		public double TotalSumOfOrders1YTotalForRejection { get; private set; }
-
 		public double TotalSumOfOrders3MTotalForRejection { get; private set; }
-
-		public decimal TotalSumOfOrdersForLoanOffer { get; private set; }
-
-		public string TypeOfBusiness { get; private set; }
-
-		public bool UseBrokerSetupFee { get; private set; }
-
 		public double Yodlee1YForRejection { get; private set; }
-
 		public double Yodlee3MForRejection { get; private set; }
+		public double MarketplaceSeniorityDays { get; private set; }
+		public decimal TotalSumOfOrdersForLoanOffer { get; private set; }
+		public decimal MarketplaceSeniorityYears { get; private set; }
+		public decimal EzbobSeniorityMonths { get; private set; }
+
+		// Last cash request
+		public decimal LoanOfferReApprovalFullAmount { get; private set; }
+		public decimal LoanOfferReApprovalRemainingAmount { get; private set; }
+		public decimal LoanOfferReApprovalFullAmountOld { get; private set; }
+		public decimal LoanOfferReApprovalRemainingAmountOld { get; private set; }
+		public decimal LoanOfferApr { get; private set; }
+		public int LoanOfferRepaymentPeriod { get; private set; }
+		public decimal LoanOfferInterestRate { get; private set; }
+		public int LoanOfferUseSetupFee { get; private set; }
+		public int LoanOfferLoanTypeId { get; private set; }
+		public int LoanOfferIsLoanTypeSelectionAllowed { get; private set; }
+		public int LoanOfferDiscountPlanId { get; private set; }
+		public int LoanSourceId { get; private set; }
+		public int IsCustomerRepaymentPeriodSelectionAllowed { get; private set; }
+		public bool UseBrokerSetupFee { get; private set; }
+		public int ManualSetupFeeAmount { get; private set; }
+		public decimal ManualSetupFeePercent { get; private set; }
 
 		public DataGatherer(int customerId, AConnection db, ASafeLog log) {
 			this.customerId = customerId;
@@ -200,7 +125,11 @@
 		public void GatherPreliminaryData() {
 			BwaBusinessCheck = CurrentValues.Instance.BWABusinessCheck;
 
-			SafeReader results = this.db.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", this.customerId));
+			SafeReader results = this.db.GetFirst(
+				"GetPersonalInfo",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerId)
+				);
 			AppBankAccountType = results["BankAccountType"];
 			LastStartedMainStrategyEndTime = results["LastStartedMainStrategyEndTime"];
 			AppAccountNumber = results["AccountNumber"];
@@ -323,7 +252,12 @@
 
 		private void GetPersonalInfo() {
 			this.log.Info("Getting personal info for customer:{0}", this.customerId);
-			SafeReader results = this.db.GetFirst("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", this.customerId));
+
+			SafeReader results = this.db.GetFirst(
+				"GetPersonalInfo",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerId)
+				);
 
 			CustomerStatusIsEnabled = results["CustomerStatusIsEnabled"];
 			CustomerStatusIsWarning = results["CustomerStatusIsWarning"];

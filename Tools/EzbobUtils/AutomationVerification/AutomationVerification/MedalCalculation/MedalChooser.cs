@@ -46,21 +46,9 @@
 					Medal = Medal.NoClassification,
 					TurnoverType = null,
 					Error = "Bank or Hmrc data is too old",
-					NumOfHmrcMps = medalChooserData.NumOfHmrc,
 					CustomerId = customerId,
 				};
 			} // if
-
-			if (medalChooserData.NumOfHmrc > 1) {
-				return new MedalOutputModel {
-					MedalType = MedalType.NoMedal,
-					Medal = Medal.NoClassification,
-					TurnoverType = null,
-					Error = string.Format("Customer has {0} HMRC MPs", medalChooserData.NumOfHmrc),
-					NumOfHmrcMps = medalChooserData.NumOfHmrc,
-					CustomerId = customerId,
-				};
-			}
 
 			var type = MedalType.NoMedal;
 
@@ -71,49 +59,58 @@
 			else if (medalChooserData.HasOnline)
 				type = MedalType.OnlineNonLimitedNoBusinessScore;
 
-			if (
-				type == MedalType.NoMedal &&
-					medalChooserData.HasPersonalScore &&
-					(medalChooserData.HasBank || medalChooserData.HasHmrc)
-				)
+			bool isSoleTrader = type == MedalType.NoMedal &&
+				medalChooserData.HasPersonalScore &&
+				(medalChooserData.HasBank || medalChooserData.HasHmrc);
+
+			if (isSoleTrader)
 				type = MedalType.SoleTrader;
 
 			IMedalCalulator medalCalulator;
+
 			switch (type) {
 			case MedalType.Limited:
 				medalCalulator = new OfflineLImitedMedalCalculator(this.DB, this.Log);
 				break;
+
 			case MedalType.NonLimited:
 				medalCalulator = new NonLimitedMedalCalculator(this.DB, this.Log);
 				break;
+
 			case MedalType.OnlineLimited:
 				medalCalulator = new OnlineLImitedMedalCalculator(this.DB, this.Log);
 				break;
+
 			case MedalType.SoleTrader:
 				medalCalulator = new SoleTraderMedalCalculator(this.DB, this.Log);
 				break;
+
 			case MedalType.OnlineNonLimitedNoBusinessScore:
 				medalCalulator = new OnlineNonLimitedNoBusinessScoreMedalCalculator(this.DB, this.Log);
 				break;
+
 			case MedalType.OnlineNonLimitedWithBusinessScore:
 				medalCalulator = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.DB, this.Log);
 				break;
+
 			default:
 				return new MedalOutputModel {
 					MedalType = type,
 					Medal = Medal.NoClassification,
 					TurnoverType = null,
 					Error = "None of the medals match the criteria for medal calculation",
-					NumOfHmrcMps = medalChooserData.NumOfHmrc,
 					CustomerId = customerId
 				};
-			}
+			} // switch
 
 			MedalInputModel data = medalCalulator.GetInputParameters(customerId, calculationDate);
+
 			MedalOutputModel medal = medalCalulator.CalculateMedal(data);
+
 			medal.OfferedLoanAmount = GetOfferedAmount(medal, medalChooserData.MinApprovalAmount);
+
 			return medal;
-		}
+		} // GetMeal
 
 		protected AConnection DB;
 		protected ASafeLog Log;
@@ -133,6 +130,6 @@
 			var positiveOffers = offers.Where(x => x >= minApprovalAmount)
 				.ToList();
 			return positiveOffers.Any() ? positiveOffers.Min(x => (int)x) : 0;
-		}
-	}
-}
+		} // GetOfferedAmount
+	} // class MedalChooser
+} // namespace

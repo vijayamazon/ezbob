@@ -21,9 +21,7 @@
 
 	public class MainStrategy : AStrategy {
 		public override string Name {
-			get {
-				return "Main strategy";
-			}
+			get { return "Main strategy"; }
 		}
 
 		public MainStrategy(
@@ -121,14 +119,12 @@
 			UpdateCustomerAndCashRequest();
 
 			SendEmails();
-		}
+		} // Execute
 
 		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
 			this.overrideApprovedRejected = bOverrideApprovedRejected;
 			return this;
 		}
-
-		// Execute
 
 		private void AdjustOfferredCreditLine() {
 			if (this.autoDecisionResponse.IsAutoReApproval || this.autoDecisionResponse.IsAutoApproval)
@@ -140,7 +136,17 @@
 		}
 
 		private void CalculateNewMedal() {
-			var instance = new CalculateMedal(this.customerId, this.dataGatherer.TypeOfBusiness, this.dataGatherer.MaxExperianConsumerScore, this.dataGatherer.MaxCompanyScore, this.dataGatherer.NumOfHmrcMps, this.dataGatherer.NumOfYodleeMps, this.dataGatherer.NumOfEbayAmazonPayPalMps, this.dataGatherer.EarliestHmrcLastUpdateDate, this.dataGatherer.EarliestYodleeLastUpdateDate);
+			var instance = new CalculateMedal(
+				this.customerId,
+				this.dataGatherer.TypeOfBusiness,
+				this.dataGatherer.MaxExperianConsumerScore,
+				this.dataGatherer.MaxCompanyScore,
+				this.dataGatherer.NumOfHmrcMps,
+				this.dataGatherer.NumOfYodleeMps,
+				this.dataGatherer.NumOfEbayAmazonPayPalMps,
+				this.dataGatherer.EarliestHmrcLastUpdateDate,
+				this.dataGatherer.EarliestYodleeLastUpdateDate
+				);
 			instance.Execute();
 
 			this.medalClassification = instance.Result.MedalClassification;
@@ -154,7 +160,19 @@
 		private ScoreMedalOffer CalculateScoreAndMedal() {
 			Log.Info("Calculating score & medal");
 
-			ScoreMedalOffer scoringResult = this.medalScoreCalculator.CalculateMedalScore(this.dataGatherer.TotalSumOfOrdersForLoanOffer, this.dataGatherer.MinExperianConsumerScore, this.dataGatherer.MarketplaceSeniorityYears, this.dataGatherer.ModelMaxFeedback, this.dataGatherer.MaritalStatus, this.dataGatherer.AppGender == "M" ? Gender.M : Gender.F, this.dataGatherer.NumOfEbayAmazonPayPalMps, this.dataGatherer.FirstRepaymentDatePassed, this.dataGatherer.EzbobSeniorityMonths, this.dataGatherer.ModelOnTimeLoans, this.dataGatherer.ModelLatePayments, this.dataGatherer.ModelEarlyPayments
+			ScoreMedalOffer scoringResult = this.medalScoreCalculator.CalculateMedalScore(
+				this.dataGatherer.TotalSumOfOrdersForLoanOffer,
+				this.dataGatherer.MinExperianConsumerScore,
+				this.dataGatherer.MarketplaceSeniorityYears,
+				this.dataGatherer.ModelMaxFeedback,
+				this.dataGatherer.MaritalStatus,
+				this.dataGatherer.AppGender == "M" ? Gender.M : Gender.F,
+				this.dataGatherer.NumOfEbayAmazonPayPalMps,
+				this.dataGatherer.FirstRepaymentDatePassed,
+				this.dataGatherer.EzbobSeniorityMonths,
+				this.dataGatherer.ModelOnTimeLoans,
+				this.dataGatherer.ModelLatePayments,
+				this.dataGatherer.ModelEarlyPayments
 				);
 
 			// Save online medal
@@ -562,7 +580,7 @@
 			customer.SystemDecision = this.autoDecisionResponse.SystemDecision;
 			customer.Medal = this.medalClassification;
 			customer.CreditSum = this.offeredCreditLine;
-			customer.LastStatus = autoDecisionResponse.CreditResult.HasValue ? autoDecisionResponse.CreditResult.ToString() : "N/A";
+			customer.LastStatus = this.autoDecisionResponse.CreditResult.HasValue ? this.autoDecisionResponse.CreditResult.ToString() : "N/A";
 			customer.SystemCalculatedSum = this.modelLoanOffer;
 
 			if (this.autoDecisionResponse.DecidedToReject) {

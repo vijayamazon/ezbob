@@ -4,7 +4,24 @@
 
 	public class BrokerData : CustomerData {
 
-		public BrokerData(AStrategy oStrategy, int nBrokerID, AConnection oDB) : base(oStrategy, nBrokerID, oDB) {} // constructor
+		public override int BrokerID {
+			get { return Id; } // get
+			protected set { Id = value; } // set
+		}
+
+		public virtual string LastName {
+			get { return Surname; } // get
+			protected set { Surname = value; } // set
+		}
+
+		public virtual string Email {
+			get { return Mail; } // get
+			protected set { Mail = value; } // set
+		}
+
+		public virtual string FirmName { get; set; }
+
+		public BrokerData(AStrategy oStrategy, int nBrokerID, AConnection oDB) : base(oStrategy, nBrokerID, oDB) { } // constructor
 
 		public override void Load() {
 			BrokerID = 0;
@@ -31,22 +48,13 @@
 				throw new StrategyWarning(Strategy, "Failed to find a broker by id " + RequestedID);
 		} // Load
 
-		public virtual int BrokerID {
-			get { return Id; } // get
-			protected set { Id = value; } // set
-		} // BrokerID
+		// BrokerID
 
-		public virtual string LastName {
-			get { return Surname; } // get
-			protected set { Surname = value; } // set
-		} // LeadID
+		// LeadID
 
-		public virtual string Email {
-			get { return Mail; } // get
-			protected set { Mail = value; } // set
-		} // LeadID
+		// LeadID
 
-		public virtual string FirmName { get; set; } // FirmName
+		// FirmName
 
 	} // class CustomerData
 } // namespace

@@ -6,9 +6,21 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE GetCustomerDataForMedalCalculation
-	@CustomerId INT
+@CustomerId INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
+	------------------------------------------------------------------------------
+
+	DECLARE @eBay   UNIQUEIDENTIFIER = 'A7120CB7-4C93-459B-9901-0E95E7281B59'
+	DECLARE @Amazon UNIQUEIDENTIFIER = 'A4920125-411F-4BB9-A52D-27E8A00D0A3B'
+	DECLARE @PayPal UNIQUEIDENTIFIER = '3FA5E327-FCFD-483B-BA5A-DC1815747A28'
+	DECLARE @Yodlee UNIQUEIDENTIFIER = '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'
+	DECLARE @HMRC   UNIQUEIDENTIFIER = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
+
+	------------------------------------------------------------------------------
+
 	DECLARE		
 		@TypeOfBusiness NVARCHAR(50),
 		@NumOfHmrcMps INT,
@@ -20,109 +32,124 @@ BEGIN
 		@EarliestYodleeLastUpdateDate DATETIME,
 		@RefNumber NVARCHAR(50)
 		
-	SELECT 
+	------------------------------------------------------------------------------
+
+	SELECT
 		@TypeOfBusiness = TypeOfBusiness
-	FROM 
-		Customer 
-	WHERE 
+	FROM
+		Customer
+	WHERE
 		Id = @CustomerId
-		
+
+	------------------------------------------------------------------------------
+
 	SELECT
 		@RefNumber = ExperianRefNum
 	FROM
-		Customer,
-		Company
+		Customer
+		INNER JOIN Company ON Customer.CompanyId = Company.Id
 	WHERE
-		Customer.Id = @CustomerId AND
-		Customer.CompanyId = Company.Id
-		
+		Customer.Id = @CustomerId
+
+	------------------------------------------------------------------------------
+
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN
 		SELECT 
-			@CompanyScore = isnull(Score, 0)
+			@CompanyScore = ISNULL(Score, 0)
 		FROM 
 			CustomerAnalyticsCompany 
 		WHERE 
-			CustomerID = @CustomerId AND
+			CustomerID = @CustomerId
+			AND
 			IsActive = 1
 	END
-	ELSE
-	BEGIN	
+	ELSE BEGIN	
 		SELECT 
-			@CompanyScore = isnull(CommercialDelphiScore, 0)
+			@CompanyScore = ISNULL(CommercialDelphiScore, 0)
 		FROM 
 			ExperianNonLimitedResults
 		WHERE
-			RefNumber = @RefNumber AND
+			RefNumber = @RefNumber
+			AND
 			IsActive = 1
 	END
 	
-	SELECT @ConsumerScore = isnull(MIN(ExperianConsumerScore), 0)
-	FROM
-	(
-		SELECT ExperianConsumerScore
-		FROM Customer
-		WHERE Id = @CustomerId AND ExperianConsumerScore IS NOT NULL
+	------------------------------------------------------------------------------
+
+	SELECT
+		@ConsumerScore = ISNULL(MIN(ExperianConsumerScore), 0)
+	FROM	(
+		SELECT
+			ExperianConsumerScore
+		FROM
+			Customer
+		WHERE
+			Id = @CustomerId
+		AND
+			ExperianConsumerScore IS NOT NULL
+		--
 		UNION
-		SELECT ExperianConsumerScore
-		FROM Director
-		WHERE CustomerId = @CustomerId AND ExperianConsumerScore IS NOT NULL
+		--
+		SELECT
+			ExperianConsumerScore
+		FROM
+			Director
+		WHERE
+			CustomerId = @CustomerId
+		AND
+			ExperianConsumerScore IS NOT NULL
 	) AS X
 	
+	------------------------------------------------------------------------------
+
 	SELECT
-		@NumOfHmrcMps = COUNT(1)
+		@NumOfHmrcMps = COUNT(1),
+		@EarliestHmrcLastUpdateDate = MIN(m.UpdatingEnd)
 	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
+		MP_CustomerMarketPlace m
+		INNER JOIN MP_MarketplaceType t
+			ON m.MarketPlaceId = t.Id
+			AND t.InternalId = @HMRC
+		INNER JOIN MP_VatReturnRecords r ON m.Id = r.CustomerMarketPlaceId
+		INNER JOIN Business b
+			ON r.BusinessId = b.Id
+			AND b.BelongsToCustomer = 1
 	WHERE
-		MP_MarketplaceType.Name = 'HMRC' AND
-		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
-		MP_CustomerMarketPlace.Disabled = 0
-	
+		m.CustomerId = @CustomerId
+		AND
+		m.Disabled = 0
+
+	------------------------------------------------------------------------------
+
 	SELECT
-		@NumOfYodleeMps = COUNT(1)
+		@NumOfYodleeMps = COUNT(1),
+		@EarliestYodleeLastUpdateDate = MIN(m.UpdatingEnd)
 	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
+		MP_CustomerMarketPlace m
+		INNER JOIN MP_MarketplaceType t
+			ON m.MarketPlaceId = t.Id
+			AND t.InternalId = @Yodlee
 	WHERE
-		MP_MarketplaceType.Name = 'Yodlee' AND
-		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
-		MP_CustomerMarketPlace.Disabled = 0
-		
+		m.CustomerId = @CustomerId
+		AND
+		m.Disabled = 0
+
+	------------------------------------------------------------------------------
+
 	SELECT
 		@NumOfEbayAmazonPayPalMps = COUNT(1) 
 	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
+		MP_CustomerMarketPlace m
+		INNER JOIN MP_MarketplaceType t
+			ON m.MarketPlaceId = t.Id
+			AND t.InternalId IN (@eBay, @Amazon, @PayPal)
 	WHERE
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
-		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
-		MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal') AND 
-		MP_CustomerMarketPlace.Disabled = 0
-		
-	SELECT
-		@EarliestHmrcLastUpdateDate = MIN(UpdatingEnd)
-	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
-	WHERE
-		MP_MarketplaceType.Name = 'HMRC' AND
-		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
-		MP_CustomerMarketPlace.Disabled = 0
-		
-	SELECT
-		@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
-	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
-	WHERE
-		MP_MarketplaceType.Name = 'Yodlee' AND
-		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
-		MP_CustomerMarketPlace.Disabled = 0
+		m.CustomerId = @CustomerId
+		AND
+		m.Disabled = 0
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		@TypeOfBusiness AS TypeOfBusiness,
@@ -134,5 +161,4 @@ BEGIN
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
 		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate
 END
-
 GO
