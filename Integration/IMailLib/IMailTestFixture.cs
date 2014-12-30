@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Text;
+	using log4net;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -11,10 +12,8 @@
 		[Test]
 		public void Concatinate2Pdfs() {
 			var fileData = PrepareMail.GetPdfData(@"c:\ezbob\test-data\imail\output.pdf");
-			PrepareMail.SaveFile(PrepareMail.ConcatinatePdfFiles(new List<byte[]>() {
-				fileData,
-				fileData
-			}), @"c:\ezbob\test-data\imail\concatoutput.pdf");
+			var concatData = PrepareMail.ConcatinatePdfFiles(new List<byte[]> {fileData,fileData});
+			PrepareMail.SaveFile(concatData, @"c:\ezbob\test-data\imail\concatoutput.pdf");
 		}
 
 		[SetUp]
@@ -81,27 +80,27 @@
 			try {
 				cm.SendDefaultNoticeComm7Borrower(model);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				Log.InfoFormat(ex.ToString());
 			}
 			try {
 				cm.SendDefaultTemplateComm7(model);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				Log.InfoFormat(ex.ToString());
 			}
 			try {
 				// cm.SendDefaultTemplateConsumer14(model);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				Log.InfoFormat(ex.ToString());
 			}
 			try {
 				// cm.SendDefaultTemplateConsumer31(model);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				Log.InfoFormat(ex.ToString());
 			}
 			try {
 				cm.SendDefaultWarningComm7Guarantor(model);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				Log.InfoFormat(ex.ToString());
 			}
 		}
 
@@ -110,7 +109,7 @@
 			TestAuthenticate();
 			string returns;
 			var success = api.GetReturns(out returns);
-			Console.WriteLine("returns:\n{0}", returns);
+			Log.InfoFormat("returns:\n{0}", returns);
 			Assert.AreEqual(true, success);
 		}
 
@@ -119,7 +118,7 @@
 			TestAuthenticate();
 			string attachments;
 			bool success = api.ListAttachments(out attachments);
-			Console.WriteLine("attachments: {0}", attachments);
+			Log.InfoFormat("attachments: {0}", attachments);
 			Assert.AreEqual(true, success);
 		}
 
@@ -133,7 +132,7 @@
 			byte[] csvData = System.Text.Encoding.ASCII.GetBytes(csvStr);
 			bool success = api.MailmergeLetterheadPDF(PrepareMail.GetPdfData(@"c:\ezbob\test-data\imail\test4.pdf"), csvData, "<u><h3>@Variable1@ @Name@</h3><br /><h4>this is a test mail</h4></u>", false);
 			if (!success)
-				Console.WriteLine(api.GetErrorMessage());
+				Log.InfoFormat(api.GetErrorMessage());
 			Assert.AreEqual(true, success);
 		}
 
@@ -148,33 +147,13 @@
 				sb.Append("Stas,Flat 1,6 Upperkirkgate,,Aberdeen,,AB10 1BA,22/12/2014,AccountNumber,AccountDate,BalanceDate,BalanceAmount,RepAmount,DueDate,Arrears");
 				string csvStr = sb.ToString();
 				byte[] csvData = System.Text.Encoding.ASCII.GetBytes(csvStr);
-				Console.WriteLine("data0:");
-				foreach (var data in csvData)
-					Console.Write(data);
-				Console.WriteLine();
-
-				//byte[] csvData2;
-				//var csvPath = @"c:\ezbob\test-data\imail\test3.csv";
-				//if (System.IO.File.Exists(csvPath)) {
-				//	FileInfo fInfo = new FileInfo(csvPath);
-				//	long numBytes = fInfo.Length;
-				//	FileStream fStream = new FileStream(csvPath, FileMode.Open, FileAccess.Read);
-				//	BinaryReader br = new BinaryReader(fStream);
-
-				// // convert the file to a byte array csvData2 = br.ReadBytes((int)numBytes); Console.WriteLine("data2:");
-				// foreach (var data in csvData2) { Console.Write(data); } Console.WriteLine(); br.Close();
-
-				//	// tidy up
-				//	fStream.Close();
-				//	fStream.Dispose();
-				//}
-
+				
 				success = api.MailMerge(csvData, "tesstattachment3.pdf", false);
 				if (!success)
-					Console.WriteLine(api.GetErrorMessage());
+					Log.InfoFormat(api.GetErrorMessage());
 				//}
 			} else
-				Console.WriteLine(api.GetErrorMessage());
+				Log.InfoFormat(api.GetErrorMessage());
 
 			Assert.AreEqual(true, success);
 		}
@@ -202,9 +181,9 @@
 			if (success) {
 				success = api.ProcessPrintReadyPDF(@"c:\ezbob\test-data\imail\test1.pdf", null, false);
 				if (!success)
-					Console.WriteLine(api.GetErrorMessage());
+					Log.InfoFormat(api.GetErrorMessage());
 			} else
-				Console.WriteLine(api.GetErrorMessage());
+				Log.InfoFormat(api.GetErrorMessage());
 			Assert.AreEqual(true, success);
 		}
 
@@ -226,7 +205,7 @@
 
 			bool success = api.ProcessPrintReadyPDF(data, null, false);
 			if (!success)
-				Console.WriteLine(api.GetErrorMessage());
+				Log.InfoFormat(api.GetErrorMessage());
 
 			Assert.AreEqual(true, success);
 		}
@@ -245,5 +224,6 @@
 		}
 
 		private IMailApi api;
+		private readonly ILog Log = LogManager.GetLogger(typeof (IMailTestFixture));
 	}
 }

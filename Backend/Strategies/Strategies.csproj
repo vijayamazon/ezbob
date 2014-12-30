@@ -446,6 +446,10 @@
       <Project>{47a4a5a8-ac7c-4f76-acab-be61eaee1f50}</Project>
       <Name>GoogleAnalyticsLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\IMailLib\IMailLib.csproj">
+      <Project>{18bd5614-c801-4869-b5e5-d993f6754671}</Project>
+      <Name>IMailLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\LandRegistryLib\LandRegistryLib.csproj">
       <Project>{637833c1-b500-4310-be16-f157f15b17c1}</Project>
       <Name>LandRegistryLib</Name>

@@ -3,14 +3,16 @@
 	using System.Collections.Generic;
 	using System.IO;
 	using IMailLib.Helpers;
+	using log4net;
 
 	public class CollectionMail {
-		public CollectionMail(string userName, string password, bool isDebugMode = false, string debugModeEmail = null) {
+		public CollectionMail(string userName, string password, bool isDebugMode = false, string debugModeEmail = null, string savePath = null) {
 			api = new IMailApi();
 			this.userName = userName;
 			this.password = password;
 			this.isDebugMode = isDebugMode;
 			this.debugModeEmail = debugModeEmail;
+			this.savePath = savePath;
 		}
 
 		public void SendDefaultNoticeComm7Borrower(CollectionMailModel model) {
@@ -45,7 +47,7 @@
 			SetAddress(model.CustomerAddress, ref variables);
 			Stream template = PrepareMail.ExtractResourceAsStream(DefaultnoticeComm7BorrowerTemplateName);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			SendMail(pdfData);
+			SendMail(pdfData, model.CustomerId, DefaultnoticeComm7BorrowerTemplateName);
 		}
 
 		public void SendDefaultTemplateComm7(CollectionMailModel model) {
@@ -75,8 +77,8 @@
 				},
 			};
 
-			SendDefaultTemplateComm7Personal(variables, model.CustomerAddress);
-			SendDefaultTemplateComm7Business(variables, model.CompanyAddress);
+			SendDefaultTemplateComm7Personal(model.CustomerId, variables, model.CustomerAddress);
+			SendDefaultTemplateComm7Business(model.CustomerId, variables, model.CompanyAddress);
 		}
 
 		public void SendDefaultTemplateConsumer14(CollectionMailModel model) {
@@ -118,7 +120,7 @@
 				pdfAttachment
 			});
 
-			SendMail(concatinatedMail);
+			SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer14TemplateName);
 		}
 
 		public void SendDefaultTemplateConsumer31(CollectionMailModel model) {
@@ -168,7 +170,7 @@
 				pdfAttachment
 			});
 
-			SendMail(concatinatedMail);
+			SendMail(concatinatedMail, model.CustomerId, DefaulttemplateConsumer31TemplateName);
 		}
 
 		public void SendDefaultWarningComm7Guarantor(CollectionMailModel model) {
@@ -203,24 +205,25 @@
 			SetAddress(model.GuarantorAddress, ref variables);
 			Stream template = PrepareMail.ExtractResourceAsStream(DefaultwarningComm7GuarantorTemplateName);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			SendMail(pdfData);
+			SendMail(pdfData, model.CustomerId, DefaultwarningComm7GuarantorTemplateName);
 		}
 
-		private void SendDefaultTemplateComm7Business(Dictionary<string, string> variables, Address companyAddress) {
+		private void SendDefaultTemplateComm7Business(int customerID, Dictionary<string, string> variables, Address companyAddress) {
 			SetAddress(companyAddress, ref variables);
 			Stream template = PrepareMail.ExtractResourceAsStream(DefaulttemplateComm7BusinessTemplateName);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			SendMail(pdfData);
+			SendMail(pdfData, customerID, DefaulttemplateComm7BusinessTemplateName);
 		}
 
-		private void SendDefaultTemplateComm7Personal(Dictionary<string, string> variables, Address customerAddress) {
+		private void SendDefaultTemplateComm7Personal(int customerID, Dictionary<string, string> variables, Address customerAddress) {
 			SetAddress(customerAddress, ref variables);
 			Stream template = PrepareMail.ExtractResourceAsStream(DefaulttemplateComm7PersonalTemplateName);
 			byte[] pdfData = PrepareMail.ReplaceParametersAndConvertToPdf(template, variables);
-			SendMail(pdfData);
+			SendMail(pdfData, customerID, DefaulttemplateComm7PersonalTemplateName);
 		}
 
-		private void SendMail(byte[] pdfData) {
+		private void SendMail(byte[] pdfData, int customerID, string templateName) {
+			Log.InfoFormat("Sending mail to customer {0} template {1}", customerID, templateName);
 			bool success = false;
 			success = api.Authenticate(userName, password);
 			if (!success)
@@ -237,6 +240,14 @@
 			success = api.ProcessPrintReadyPDF(pdfData, null, false);
 			if (!success)
 				throw new Exception(api.GetErrorMessage());
+
+			if (!string.IsNullOrEmpty(savePath)) {
+				try {
+					PrepareMail.SaveFile(pdfData, savePath, customerID, templateName);
+				} catch(Exception ex) {
+					Log.WarnFormat("Failed to save mail copy for {0} for customer {1}\n{2}", templateName, customerID, ex);
+				}
+			}
 		}
 
 		private void SetAddress(Address address, ref Dictionary<string, string> variables) {
@@ -261,5 +272,7 @@
 		private readonly bool isDebugMode;
 		private readonly string password;
 		private readonly string userName;
+		private readonly string savePath;
+		private readonly ILog Log = LogManager.GetLogger(typeof (CollectionMail));
 	}
 }

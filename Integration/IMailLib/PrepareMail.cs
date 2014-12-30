@@ -6,6 +6,7 @@
 	using Aspose.Words;
 	using iTextSharp.text;
 	using iTextSharp.text.pdf;
+	using log4net;
 
 	public static class PrepareMail {
 		static PrepareMail() {
@@ -96,7 +97,7 @@
 				}
 			}
 
-			Console.WriteLine("File {0}  is not found or too big", filePath);
+			Log.InfoFormat("File {0}  is not found or too big", filePath);
 			return null;
 		}
 
@@ -106,7 +107,7 @@
 			foreach (var variable in variables) {
 				string parameter = string.Format("@{0}@", variable.Key);
 				int result = doc.Range.Replace(parameter, variable.Value, false, false);
-				Console.WriteLine("Replace {0} to {1} result: {2}", parameter, variable.Value, result);
+				Log.InfoFormat("Replace {0} to {1} result: {2}", parameter, variable.Value, result);
 			}
 
 			foreach (Aspose.Words.Section section in doc.Sections)
@@ -124,7 +125,7 @@
 				string parameter = string.Format("@{0}@", variable.Key);
 				string value = string.IsNullOrEmpty(variable.Value) ? " " : variable.Value;
 				int result = doc.Range.Replace(parameter, value, false, false);
-				Console.WriteLine("Replace {0} to {1} result: {2}", parameter, variable.Value, result);
+				Log.InfoFormat("Replace {0} to {1} result: {2}", parameter, variable.Value, result);
 			}
 
 			foreach (Aspose.Words.Section section in doc.Sections)
@@ -135,8 +136,17 @@
 			return ms.ToArray();
 		}
 
+		public static void SaveFile(byte[] data, string filePath, int customerID, string templateName) {
+			var mainDirectory = Directory.CreateDirectory(filePath);
+			var customerDirectory = mainDirectory.CreateSubdirectory(customerID.ToString());
+			string fileName = Path.Combine(customerDirectory.FullName, templateName + "." + customerID +"."+ DateTime.Today.ToString("yyyyMMdd") + ".pdf");
+			File.WriteAllBytes(fileName, data);
+		}
+
 		public static void SaveFile(byte[] data, string filePath) {
 			File.WriteAllBytes(filePath, data);
 		}
+
+		private static readonly ILog Log = LogManager.GetLogger(typeof(PrepareMail));
 	}
 }

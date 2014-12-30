@@ -36,6 +36,9 @@
     <Reference Include="itextsharp">
       <HintPath>..\..\Lib\3rdparty\itextsharp\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>

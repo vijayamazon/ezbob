@@ -4,6 +4,7 @@
 	using System.Xml;
 	using IMailLib.IMailApiNS;
 	using IMailLib.Helpers;
+	using log4net;
 
 	public class IMailApi {
 		public IMailApi() {
@@ -14,7 +15,7 @@
 			resetErrorMessage();
 			XmlNode apiResponse = client.Authenticate(username, password);
 			bool success = parseXmlResponse(apiResponse);
-			Console.WriteLine("Authenticate response:\n{0}", apiResponse.ToString(4));
+			Log.InfoFormat("Authenticate response:\n{0}", apiResponse.ToString(4));
 			return success;
 		}
 
@@ -48,7 +49,7 @@
 			resetErrorMessage();
 			filenames = "";
 			XmlNode apiResponse = client.ListAttachments();
-			Console.WriteLine("ListAttachments response:\n{0}", apiResponse.ToString(4));
+			Log.InfoFormat("ListAttachments response:\n{0}", apiResponse.ToString(4));
 
 			bool success = parseXmlResponse(apiResponse);
 
@@ -77,7 +78,7 @@
 				PDFattachmentFilename = pdfAttachmentName,
 				Is2DayService = is2DayService
 			});
-			Console.WriteLine("MailMergeResult response:\n{0}", apiResponse.MailMergeResult.ToString(4));
+			Log.InfoFormat("MailMergeResult response:\n{0}", apiResponse.MailMergeResult.ToString(4));
 			success = parseXmlResponse(apiResponse.MailMergeResult);
 
 			return success;
@@ -92,7 +93,7 @@
 			});
 
 			bool success = parseXmlResponse(response.MailmergeLetterheadPDFResult);
-			Console.WriteLine("MailmergeLetterheadPDF response:\n{0}", response.MailmergeLetterheadPDFResult.ToString(4));
+			Log.InfoFormat("MailmergeLetterheadPDF response:\n{0}", response.MailmergeLetterheadPDFResult.ToString(4));
 
 			return success;
 		}
@@ -139,7 +140,7 @@
 				Is2DayService = is2DayService
 			});
 
-			Console.WriteLine("ProcessPrintReadyPDF response:\n{0}", apiResponse.ProcessPrintReadyPDFResult.ToString(4));
+			Log.InfoFormat("ProcessPrintReadyPDF response:\n{0}", apiResponse.ProcessPrintReadyPDFResult.ToString(4));
 			success = parseXmlResponse(apiResponse.ProcessPrintReadyPDFResult);
 			return success;
 		}
@@ -148,7 +149,7 @@
 			resetErrorMessage();
 			XmlNode apiResponse = client.SetPrintPreviewEmailAddress(emailAddress);
 			bool success = parseXmlResponse(apiResponse);
-			Console.WriteLine("SetEmailPreview response:\n{0}", apiResponse.ToString(4));
+			Log.InfoFormat("SetEmailPreview response:\n{0}", apiResponse.ToString(4));
 			return success;
 		}
 
@@ -176,7 +177,7 @@
 						attachmentPDFdata = filedata
 					});
 
-					Console.WriteLine("UpdateAttachment response:\n{0}", apiResponse.UpdateAttachmentResult.ToString(4));
+					Log.InfoFormat("UpdateAttachment response:\n{0}", apiResponse.UpdateAttachmentResult.ToString(4));
 
 					// tidy up
 					fStream.Close();
@@ -212,7 +213,7 @@
 						backgroundPDFfilename = fileName,
 						backgroundPDFdata = fileData
 					});
-					Console.WriteLine("UpdateBackground response:\n{0}", apiResponse.UpdateBackgroundResult.ToString(4));
+					Log.InfoFormat("UpdateBackground response:\n{0}", apiResponse.UpdateBackgroundResult.ToString(4));
 
 					// tidy up
 					fStream.Close();
@@ -296,5 +297,6 @@
 		private string _csvData = "";
 		private string errorMessage = "";
 		private string namesList = "";
+		private readonly ILog Log = LogManager.GetLogger(typeof(CollectionMail));
 	}
 }

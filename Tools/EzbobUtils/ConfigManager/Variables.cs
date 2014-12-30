@@ -225,6 +225,11 @@ namespace ConfigManager {
 		HmrcSalariesMultiplier,
 		HmrcUploadedFilesSavePath,
 
+		ImailUserName,
+		IMailPassword,
+		IMailDebugModeEnabled,
+		IMailDebugModeEmail,
+		IMailSavePath,
 		IntervalWaitForAmlCheck,
 		IntervalWaitForExperianCompanyCheck,
 		IntervalWaitForExperianConsumerCheck,
