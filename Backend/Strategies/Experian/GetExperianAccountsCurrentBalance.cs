@@ -2,28 +2,25 @@
 	using Ezbob.Database;
 
 	public class GetExperianAccountsCurrentBalance : AStrategy {
-		private readonly int customerId;
-
-		public GetExperianAccountsCurrentBalance(int customerId) {
-			this.customerId = customerId;
-		}
-
 		public override string Name {
 			get { return "Get experian accounts current balance"; }
-		}
+		} // Name
 
 		public int CurrentBalance { get; private set; }
 
+		public GetExperianAccountsCurrentBalance(int customerId) {
+			this.customerId = customerId;
+		} // constructor
+
 		public override void Execute() {
 			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					CurrentBalance = sr["CurrentBalance"];
-					return ActionResult.SkipAll;
-				},
+				sr => { CurrentBalance = sr["CurrentBalance"]; },
 				"GetExperianAccountsCurrentBalance",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-		}
-	}
-}
+				new QueryParameter("CustomerId", this.customerId)
+				);
+		} // Execute
+
+		private readonly int customerId;
+	} // class GetExperianAccountsCurrentBalance
+} // namespace

@@ -1,4 +1,4 @@
-namespace AutomationCalculator.AutoDecision {
+namespace AutomationCalculator.Turnover {
 	using System;
 	using System.Globalization;
 	using Ezbob.Database;
@@ -29,9 +29,7 @@ namespace AutomationCalculator.AutoDecision {
 		public bool IsPaymentAccount { get; set; }
 
 		public int MonthCount {
-			get {
-				return Distance + 1;
-			} // get
+			get { return Distance + 1; } // get
 		} // MonthCount
 
 		public void WriteToLog(ASafeLog oLog) {

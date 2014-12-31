@@ -4,6 +4,7 @@
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
+	using AutomationCalculator.Turnover;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -48,7 +49,9 @@
 			Funds = new AvailableFunds();
 			WorstStatuses = new SortedSet<string>();
 
-			Turnover = new CalculatedTurnover(Args.TurnoverType, Log);
+			Turnover = new AutoApprovalTurnover {
+				TurnoverType = Args.TurnoverType,
+			};
 			Turnover.Init();
 
 			OriginationTime = new OriginationTime(Log);
@@ -102,7 +105,7 @@
 
 		protected virtual List<Payment> Payments { get; private set; }
 
-		protected virtual CalculatedTurnover Turnover { get; private set; }
+		protected virtual AutoApprovalTurnover Turnover { get; private set; }
 
 		protected virtual SortedSet<string> WorstStatuses { get; private set; }
 

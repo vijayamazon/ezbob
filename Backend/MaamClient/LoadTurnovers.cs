@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using AutomationCalculator.AutoDecision.AutoApproval;
+	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -53,7 +53,7 @@
 			Send();
 		} // Run
 
-		private SortedDictionary<long, CalculatedTurnover> Result { get; set; }
+		private SortedDictionary<long, ACalculatedTurnoverBase> Result { get; set; }
 
 		private SortedDictionary<long, CrCuTi> Input { get; set; }
 
@@ -465,7 +465,7 @@
 		} // AddRow
 
 		private void Load() {
-			Result = new SortedDictionary<long, CalculatedTurnover>();
+			Result = new SortedDictionary<long, ACalculatedTurnoverBase>();
 			Input = new SortedDictionary<long, CrCuTi>();
 
 			/*

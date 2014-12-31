@@ -1,11 +1,13 @@
-﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
+﻿namespace AutomationCalculator.Turnover {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
 	using TTurnoverType = AutomationCalculator.Common.TurnoverType;
 
-	public class CalculatedTurnover {
+	public abstract class ACalculatedTurnoverBase {
+		public virtual TTurnoverType? TurnoverType { get; set; }
+
 		public virtual decimal this[int monthCount] {
 			get {
 				decimal res = Math.Max(GetRelevantTurnover(monthCount), 0);
@@ -15,16 +17,6 @@
 				return res;
 			} // get
 		} // indexer
-
-		public CalculatedTurnover(TTurnoverType? turnoverType, ASafeLog log) {
-			this.log = log ?? new SafeLog();
-
-			this.turnoverType = turnoverType;
-
-			this.online = new SortedDictionary<int, OneValue>();
-			this.hmrc = new SortedDictionary<int, decimal>();
-			this.yodlee = new SortedDictionary<int, decimal>();
-		} // constructor
 
 		public virtual void Init() {
 			switch (TurnoverType) {
@@ -64,10 +56,13 @@
 
 		protected virtual Func<int, decimal> GetRelevantTurnover { get; set; }
 
-		protected virtual TTurnoverType? TurnoverType {
-			get { return this.turnoverType; }
-			set { this.turnoverType = value; }
-		} // TurnoverType
+		protected ACalculatedTurnoverBase() {
+			this.log = Library.Instance.Log;
+
+			this.online = new SortedDictionary<int, OneValue>();
+			this.hmrc = new SortedDictionary<int, decimal>();
+			this.yodlee = new SortedDictionary<int, decimal>();
+		} // constructor
 
 		protected virtual decimal GetHmrc(int monthCount) {
 			return this.hmrc.ContainsKey(monthCount) ? this.hmrc[monthCount] : 0;
@@ -174,7 +169,5 @@
 		private readonly SortedDictionary<int, OneValue> online;
 		private readonly SortedDictionary<int, decimal> hmrc;
 		private readonly SortedDictionary<int, decimal> yodlee;
-
-		private TTurnoverType? turnoverType;
 	} // class CalculatedTurnover
 } // namespace

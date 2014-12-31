@@ -4,12 +4,12 @@
 	using System.Data;
 	using System.Linq;
 	using System.Web;
-	using AutomationCalculator.AutoDecision;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
+	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -66,7 +66,9 @@
 				log
 				);
 
-			this.m_oTurnover = new CalculatedTurnover(this.turnoverType, this.log);
+			this.m_oTurnover = new AutoApprovalTurnover {
+				TurnoverType = this.turnoverType,
+			};
 			this.m_oTurnover.Init();
 		} // constructor
 
@@ -923,7 +925,7 @@
 		private readonly ASafeLog log;
 		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
 		private readonly ApprovalTrail m_oTrail;
-		private readonly CalculatedTurnover m_oTurnover;
+		private readonly AutoApprovalTurnover m_oTurnover;
 		private readonly Medal medalClassification;
 		private readonly AutomationCalculator.Common.TurnoverType? turnoverType;
 		private readonly AutomationCalculator.Common.MedalType medalType;

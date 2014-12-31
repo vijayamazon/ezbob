@@ -61,7 +61,8 @@
     <Compile Include="AutoDecision\AutoApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
     <Compile Include="AutoDecision\AutoApproval\Name.cs" />
-    <Compile Include="AutoDecision\TurnoverDbRow.cs" />
+    <Compile Include="Turnover\ACalculatedTurnoverBase.cs" />
+    <Compile Include="Turnover\TurnoverDbRow.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Agent.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Arguments.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Configuration.cs" />
@@ -70,7 +71,7 @@
     <Compile Include="AutomationTestFixure.cs" />
     <Compile Include="Common\OriginationTime.cs" />
     <Compile Include="AutoDecision\AutoApproval\Payment.cs" />
-    <Compile Include="AutoDecision\AutoApproval\CalculatedTurnover.cs" />
+    <Compile Include="AutoDecision\AutoApproval\AutoApprovalTurnover.cs" />
     <Compile Include="AutoDecision\AutoApproval\Result.cs" />
     <Compile Include="AutoDecision\AutoReApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoReApproval\AutoReApprovalModels.cs" />

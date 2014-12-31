@@ -107,7 +107,7 @@
 			IEnumerable<string> oWorstStatuses,
 			IEnumerable<Payment> oPayments,
 			OriginationTime oOriginationTime,
-			CalculatedTurnover oTurnover,
+			AutoApprovalTurnover oTurnover,
 			AvailableFunds oFunds,
 			List<Name> oDirectorNames,
 			List<string> oHmrcBusinessNames
@@ -178,7 +178,7 @@
 			MarketplaceSeniority = v;
 		}
 
-		public void SetTurnoverData(CalculatedTurnover oTurnover) {
+		public void SetTurnoverData(AutoApprovalTurnover oTurnover) {
 			SetTurnover(3, oTurnover[3]);
 			SetTurnover(12, oTurnover[12]);
 		} // SetTurnoverData
