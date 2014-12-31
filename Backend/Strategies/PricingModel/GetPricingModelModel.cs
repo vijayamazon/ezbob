@@ -9,12 +9,14 @@
 		private decimal opexAndCapex;
 		private int interestOnlyPeriod;
 		private decimal euCollectionRate;
+		private decimal cosmeCollectionRate;
 		private decimal defaultRateCompanyShare;
 		private decimal debtPercentOfCapital;
 		private decimal costOfDebtPA;
 		private decimal collectionRate;
 		private decimal cogs;
 		private decimal brokerSetupFee;
+		
 
 		public GetPricingModelModel(int customerId, string scenarioName) {
 			this.customerId = customerId;
@@ -34,6 +36,7 @@
 				opexAndCapex = sr["OpexAndCapex"];
 				interestOnlyPeriod = sr["InterestOnlyPeriod"];
 				euCollectionRate = sr["EuCollectionRate"];
+				cosmeCollectionRate = sr["COSMECollectionRate"];
 				defaultRateCompanyShare = sr["DefaultRateCompanyShare"];
 				debtPercentOfCapital = sr["DebtPercentOfCapital"];
 				costOfDebtPA = sr["CostOfDebtPA"];
@@ -71,6 +74,7 @@
 				TenureMonths = tenureMonths,
 				CollectionRate = collectionRate,
 				EuCollectionRate = euCollectionRate,
+				CosmeCollectionRate = cosmeCollectionRate,
 				Cogs = cogs,
 				DebtPercentOfCapital = debtPercentOfCapital,
 				CostOfDebt = costOfDebtPA,

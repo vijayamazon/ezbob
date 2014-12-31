@@ -153,7 +153,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		if (this.fixed)
 			this.$(".cash-question").hide();
 
-		if (!this.isLoanTypeSelectionAllowed in [ 1, '1'] || this.isLoanSourceEU || this.isAlibaba)
+		if (this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU || this.isAlibaba)
 			this.$('.duration-select-allowed').hide();
 
 		if (!this.isLoanSourceEU)
@@ -182,7 +182,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		                max: 12,
 		                start: this.model.get('repaymentPeriod'),
 		                step: 1,
-		                hide: !this.isLoanTypeSelectionAllowed in [1, '1'] || this.isLoanSourceEU,
+		                hide: this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU,
 		            },
 		            callback: function(ignored, sEvent) {
 		                if (sEvent === 'change')

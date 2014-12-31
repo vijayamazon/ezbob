@@ -25,6 +25,7 @@
 				new QueryParameter("OpexAndCapex", model.OpexAndCapex),
 				new QueryParameter("InterestOnlyPeriod", model.InterestOnlyPeriod),
 				new QueryParameter("EuCollectionRate", model.EuCollectionRate),
+				new QueryParameter("COSMECollectionRate", model.CosmeCollectionRate),
 				new QueryParameter("DefaultRateCompanyShare", model.DefaultRateCompanyShare),
 				new QueryParameter("DebtPercentOfCapital", model.DebtPercentOfCapital),
 				new QueryParameter("CostOfDebtPA", model.CostOfDebt),

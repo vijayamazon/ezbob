@@ -6,7 +6,7 @@
 
 		public PricingModelCalculate(int customerId, PricingModelModel model) {
 			Model = model;
-			pricingModelCalculator = new PricingModelCalculator(customerId, model, DB, Log);
+			pricingModelCalculator = new PricingModelCalculator(customerId, model);
 		}
 
 		public override string Name {
@@ -16,7 +16,7 @@
 		public PricingModelModel Model { get; private set; }
 
 		public override void Execute() {
-			pricingModelCalculator.Calculate();
+			pricingModelCalculator.Execute();
 
 			if (!string.IsNullOrEmpty(pricingModelCalculator.Error))
 				throw new StrategyWarning(this, pricingModelCalculator.Error);

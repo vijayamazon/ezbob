@@ -13,6 +13,7 @@ CREATE PROCEDURE [dbo].[SavePricingModelConfigsForScenario]
 	@OpexAndCapex DECIMAL(18,6),
 	@InterestOnlyPeriod DECIMAL(18,6),
 	@EuCollectionRate DECIMAL(18,6),
+	@COSMECollectionRate DECIMAL(18,6),
 	@DefaultRateCompanyShare DECIMAL(18,6),
 	@DebtPercentOfCapital DECIMAL(18,6),
 	@CostOfDebtPA DECIMAL(18,6),
@@ -27,6 +28,7 @@ BEGIN
 	UPDATE PricingModelScenarios SET ConfigValue = @OpexAndCapex WHERE ScenarioName = @ScenarioName AND ConfigName='OpexAndCapex'
 	UPDATE PricingModelScenarios SET ConfigValue = @InterestOnlyPeriod WHERE ScenarioName = @ScenarioName AND ConfigName='InterestOnlyPeriod'
 	UPDATE PricingModelScenarios SET ConfigValue = @EuCollectionRate WHERE ScenarioName = @ScenarioName AND ConfigName='EuCollectionRate'
+	UPDATE PricingModelScenarios SET ConfigValue = @COSMECollectionRate WHERE ScenarioName = @ScenarioName AND ConfigName='COSMECollectionRate'
 	UPDATE PricingModelScenarios SET ConfigValue = @DefaultRateCompanyShare WHERE ScenarioName = @ScenarioName AND ConfigName='DefaultRateCompanyShare'
 	UPDATE PricingModelScenarios SET ConfigValue = @DebtPercentOfCapital WHERE ScenarioName = @ScenarioName AND ConfigName='DebtPercentOfCapital'
 	UPDATE PricingModelScenarios SET ConfigValue = @CostOfDebtPA WHERE ScenarioName = @ScenarioName AND ConfigName='CostOfDebtPA'

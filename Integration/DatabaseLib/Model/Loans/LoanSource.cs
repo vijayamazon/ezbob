@@ -5,6 +5,11 @@ using FluentNHibernate.Mapping;
 using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database.Loans {
+	public enum LoanSourceName {
+		Standard,
+		EU,
+		COSME,
+	}
 
 	public class LoanSource {
 

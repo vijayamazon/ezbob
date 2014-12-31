@@ -26,6 +26,7 @@ BEGIN
 		(SELECT ConfigValue FROM #GetPricingModelConfigsForScenario WHERE ConfigName = 'OpexAndCapex') AS OpexAndCapex,
 		(SELECT ConfigValue FROM #GetPricingModelConfigsForScenario WHERE ConfigName = 'InterestOnlyPeriod') AS InterestOnlyPeriod,
 		(SELECT ConfigValue FROM #GetPricingModelConfigsForScenario WHERE ConfigName = 'EuCollectionRate') AS EuCollectionRate,
+		(SELECT ConfigValue FROM #GetPricingModelConfigsForScenario WHERE ConfigName = 'COSMECollectionRate') AS COSMECollectionRate,
 		(SELECT ConfigValue FROM #GetPricingModelConfigsForScenario WHERE ConfigName = 'DefaultRateCompanyShare') AS DefaultRateCompanyShare,
 		(SELECT ConfigValue FROM #GetPricingModelConfigsForScenario WHERE ConfigName = 'DebtPercentOfCapital') AS DebtPercentOfCapital,
 		(SELECT ConfigValue FROM #GetPricingModelConfigsForScenario WHERE ConfigName = 'CostOfDebtPA') AS CostOfDebtPA,

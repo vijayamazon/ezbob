@@ -112,7 +112,7 @@
 			PricingModelModel lowerBoundaryModel = templateModel.Clone();
 			lowerBoundaryModel.SetupFeePercents = lowerBoundary / 100;
 			lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
-			var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel, db, log);
+			var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel);
 			if (!lowerBoundaryPricingModelCalculator.CalculateInterestRate())
 			{
 				result.Error = lowerBoundaryPricingModelCalculator.Error;
@@ -123,7 +123,7 @@
 			PricingModelModel upperBoundaryModel = templateModel.Clone();
 			upperBoundaryModel.SetupFeePercents = upperBoundary / 100;
 			upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
-			var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel, db, log);
+			var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel);
 			if (!upperBoundaryPricingModelCalculator.CalculateInterestRate())
 			{
 				result.Error = lowerBoundaryPricingModelCalculator.Error;
@@ -156,7 +156,7 @@
 			lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
 
 			do {
-				var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel, db, log);
+				var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel);
 				if (!lowerBoundaryPricingModelCalculator.CalculateInterestRate()) {
 					result.Error = lowerBoundaryPricingModelCalculator.Error;
 					return;
@@ -188,7 +188,7 @@
 			upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
 
 			do {
-				var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel, db, log);
+				var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel);
 				if (!upperBoundaryPricingModelCalculator.CalculateInterestRate()) {
 					result.Error = upperBoundaryPricingModelCalculator.Error;
 					return;
@@ -219,7 +219,7 @@
 			model.SetupFeePercents = setupFee;
 			model.SetupFeePounds = setupFee * model.LoanAmount;
 
-			var pricingModelCalculator = new PricingModelCalculator(result.CustomerId, model, db, log);
+			var pricingModelCalculator = new PricingModelCalculator(result.CustomerId, model);
 			pricingModelCalculator.Calculate();
 
 			decimal roundedInterestRate = Math.Ceiling(pricingModelCalculator.Model.MonthlyInterestRate * 2000)/20;

@@ -8,7 +8,6 @@
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class PricingModelCalculationsController : Controller
@@ -16,9 +15,9 @@
 		private readonly ServiceClient serviceClient;
 		private readonly IWorkplaceContext context;
 
-		public PricingModelCalculationsController()
+		public PricingModelCalculationsController(IWorkplaceContext context)
 		{
-			context = ObjectFactory.GetInstance<IWorkplaceContext>();
+			this.context = context;
 			serviceClient = new ServiceClient();
 		}
 
